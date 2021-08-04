@@ -1,0 +1,109 @@
+.assistantWrapper {
+  width: 100%;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.smallBlockTitle {
+  margin-left: 5px;
+}
+
+.progressLineChartPaper {
+  height: 350px;
+}
+
+.progressLineChart {
+  margin: 20px;
+  //max-width: calc(50% - 40px);
+  max-height: 300px;
+}
+
+.tasksList {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.allTasksButton {
+  align-self: center;
+  justify-self: center;
+  margin: 10px auto;
+  width: calc(100% - 40px);
+}
+
+.tasksItemWrapper {
+  margin-top: 30px;
+}
+
+.testItemWrapper {
+  margin-top: 30px;
+}
+
+.tipItemWrapper {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.tasks {
+  height: 300px;
+}
+
+.testKnowledgePaper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+
+.nmiModalText {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  font-weight: bolder;
+  padding: 0 20px;
+  margin: 0;
+  width: 80%;
+  height: 70px;
+  line-height: 19px;
+}
+.nmiAnswerWrapper {
+  width: 88%;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.nmiAnswerRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 40%;
+  justify-content: space-around;
+}
+.nmiAnswerColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+  height: 80%;
+  text-align: center;
+  font-weight: bolder;
+  border-radius: 6px;
+}
+
+
+.tipOfTheDayWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+  padding-left: 20px;
+  margin: 10px 0 10px 5px;
+  width: calc(100% - 50px);
+  border-left: 3px solid var(--background-primary-main);
+  color: var(--background-primary-text);
+}

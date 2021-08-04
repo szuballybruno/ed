@@ -1,0 +1,146 @@
+
+.lastItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0 10px;
+}
+
+@-webkit-keyframes gradientRotator {
+    0%{background-position:0 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0 50%}
+}
+@-moz-keyframes gradientRotator {
+    0%{background-position:0 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0 50%}
+}
+@keyframes gradientRotator {
+    0%{background-position:0 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0 50%}
+}
+
+.lastItem img {
+    height: 30px;
+    margin: 0 15px 0 10px;
+}
+.switchButton {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+}
+.burgerWrapper {
+    display: block;
+}
+
+.navbarButtonWrapper div {
+
+    color: #777;
+    font-size: 1rem;
+}
+/* Mobile navbar */
+
+.mobileNavbarOuterWrapperOut {
+    width: 100%;
+    height: 60px;
+    z-index: 999;
+}
+
+
+.hamburgerButtonke {
+    margin: 10px 20px;
+    position: absolute;
+    top: 0;
+    float: right;
+}
+.mobileNavbarLogoWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    position: absolute;
+}
+.mobileNavbarLogoWrapper img {
+    height: 100%;
+}
+.mobileNavbarNavLinksWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 150px;
+}
+.mobileNavbarInnerWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    //background-color: var(--navbar-background-transparent);
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 300px;
+}
+.mobileNavbarInnerWrapper button {
+    padding: 14px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-color-1);
+    border: 0;
+    border-radius: 5px;
+    height: 52px;
+    min-width: 190px;
+    margin: 0 10px;
+    background-color: var(--background-highlighted);
+}
+.mobileNavbarInnerWrapper div {
+    color: #777;
+    font-size: 1.3rem;
+}
+.mobileNavbarInnerWrapper a {
+    font-style: normal;
+    text-decoration: none;
+    font-kerning: none;
+    font-weight: bolder;
+}
+.mobileNavbarOuterWrapperIn {
+    //background-color: var(--navbar-background-transparent);
+    width: 100%;
+    height: 60px;
+}
+
+@media only screen and (max-width: 600px) {
+    .mobileNavbarInnerWrapper {
+        flex-direction: column;
+        height: 400px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+ .navbarButtonWrapper {
+     width: 100%;
+ }
+}

@@ -1,0 +1,13 @@
+.coursePageOuterWrapper {
+    height: calc(100vh - 100px);
+    position: relative;
+}
+
+.iframe {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.iframe::-webkit-scrollbar {
+    display: none;
+}

@@ -1,0 +1,26 @@
+@font-face {
+  font-family: 'Poppins';
+  font-style:  normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("configuration/fonts/Poppins-Light.ttf") format("ttf"),
+  url("configuration/fonts/Poppins-Light.ttf") format("ttf");
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+}
+

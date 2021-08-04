@@ -1,0 +1,52 @@
+.carousel .slide {
+  //background: unset;
+}
+
+.carousel {
+  height: 470px;
+}
+
+.carousel-slider {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.bar-wrapper {
+
+}
+
+.bar {
+  width: 50%;
+}
+div.chart-bars div.bar-wrapper {
+  flex-wrap: wrap;
+  padding-left: 0;
+  top: 0;
+}
+div.chart-bars div.bar-wrapper label {
+  min-width: 100%;
+}
+
+div.chart-bars div.bar-wrapper:nth-child(2) {
+  margin-top: 20px;
+}
+
+div.chart-bars div.bar-wrapper:nth-child(2) label {
+  min-width: 100%;
+}
+div.chart-bars div.bar-wrapper label {
+  position: relative;
+  transform: unset;
+  margin-bottom: 10px;
+  text-align: left;
+}

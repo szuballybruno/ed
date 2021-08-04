@@ -1,0 +1,138 @@
+.secondRowArticlesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  flex-shrink: 3;
+  flex-grow: 1;
+  min-height: 600px;
+  max-height: 600px;
+  background-color: var(--background-11);
+}
+
+.secondRowArticlesHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 98%;
+  height: 15%;
+}
+
+.secondRowArticlesHeader h1 {
+  color: var(--article-header-color);
+  font-size: 2.3rem;
+  line-height: 1px;
+  margin-left: 16px;
+}
+
+.carouselWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel {
+
+  width: 96%;
+  height: 100%;
+}
+
+.secondRowArticlesInnerContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.secondRowArticlesInnerContainer img {
+  width: 98%;
+  height: 98%;
+  object-fit: cover;
+  border-radius: 10px;
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+}
+.articleItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: rgba(45,70,90, 0.8);
+  width: 100%;
+  padding: 0 10%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.articleItem h1 {
+  text-align: center;
+  color: white;
+  width: 70%
+}
+
+.articleItem p {
+  text-align: center;
+  color: white;
+}
+
+.ArticleItemTextWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+  width: 70%;
+}
+
+.ArticleItemTextWrapper h2 {
+  color: var(--article-header-color);
+  margin: 10px 10px 0 10px;
+  line-height: 100%;
+}
+.ArticleItemTextWrapper p {
+  color: var(--text-color-2);
+  margin: 10px 10px;
+  font-weight: bolder;
+  line-height: 120%;
+}
+
+.articlesList {
+  background-color: seagreen;
+}
+
+@media only screen and (max-width: 600px) {
+  .secondRowArticlesContainer {
+    max-width: unset;
+    width: 98%;
+    margin: 0 auto 0 auto;
+  }
+}
+
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .secondRowArticlesContainer {
+    max-width: unset;
+    width: 98%;
+    margin: 0 auto 0 auto;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  .secondRowArticlesContainer {
+    max-width: unset;
+    width: 98%;
+    margin: 0 auto 0 auto;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+
+}

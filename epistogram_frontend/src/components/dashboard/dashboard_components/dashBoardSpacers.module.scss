@@ -1,0 +1,50 @@
+.dashBoardLeftSpacerWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 100%;
+  height: 50px;
+}
+
+.dashBoardLeftSpacerWrapper h5 {
+  margin: 0;
+  padding: 0 0 15px 20px;
+  width: 100%;
+  //font-variant: all-petite-caps;
+  font-weight: normal;
+}
+
+.dashBoardLeftBorderWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 90%;
+  height: 3px;
+}
+
+.dashBoardLeftBorder {
+  background-color: rgba(124,192,194,1.0);
+  width: 100%;
+  height: 3px;
+}
+
+.dashBoardRightSpacerWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 170px;
+}
+
+.dashBoardRightSpacerWrapper h4 {
+  margin: 0 0 4px 40px;
+}
+
+.dashBoardRightSpacerWrapperDivider {
+  align-self: center;
+  height: 10px;
+  width: calc(100% - 75px);
+  margin-bottom: 20px;
+}

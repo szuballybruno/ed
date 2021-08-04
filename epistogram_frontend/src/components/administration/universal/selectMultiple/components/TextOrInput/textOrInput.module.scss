@@ -1,0 +1,16 @@
+.textOrInputWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 10px 0 10px;
+}
+
+.buttonsWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

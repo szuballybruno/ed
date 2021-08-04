@@ -1,0 +1,145 @@
+
+
+.playerAndVideoListWrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 1920px;
+    /*background-color: rgba(21,38,56,1.0);*/
+}
+
+.playerContentWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+    ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.playerContentWrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.generatedInfoWrapperOnlyMobile {
+    display: none;
+}
+
+@media only screen and (max-width: 600px) {
+    .playerAndVideoListWrapper {
+        width: 100%;
+        flex-direction: column;
+        min-height: unset;
+
+    }
+    .playerWrapper {
+        width: 100%;
+
+        position: relative;
+        z-index: 0
+    }
+    .playerInnerWrapper {
+        position: relative;
+        min-height: unset;
+        background-color: unset;
+        width: 100%;
+        max-height: 260px;
+
+    }
+    .player {
+        min-height: unset;
+        max-width: unset;
+        position: absolute;
+        z-index: 0;
+        top: 0;
+        left: 0;
+
+    }
+    .generatedInfoWrapperOnlyMobile {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(18,20,29,1.0);
+        width: 97%;
+        height: 30px;
+        padding-left: 10px;
+        border-radius: 7px;
+        order: 0;
+    }
+
+    .generatedInfoWrapperOnlyMobile span {
+        font-family: 'Cabin', sans-serif;
+        font-weight: bolder;
+        font-variant: all-petite-caps;
+        font-size: 3.5vw;
+        color: #AAA;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+    .playerAndVideoListWrapper {
+        width: 100%;
+        flex-direction: column;
+        min-height: unset;
+        height: 100%;
+    }
+    .playerWrapper {
+        width: 100%;
+    }
+    .playerInnerWrapper {
+        position: relative;
+        padding-top: 56.25%;
+        min-height: unset;
+        background-color: unset;
+    }
+    .player {
+        min-height: unset;
+        max-width: unset;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+    .playerAndVideoListWrapper {
+        width: 100%;
+        flex-direction: column;
+        min-height: unset;
+        height: 100%;
+    }
+    .playerWrapper {
+        width: 100%;
+    }
+    .playerInnerWrapper {
+        position: relative;
+        padding-top: 56.25%;
+        min-height: unset;
+        background-color: unset;
+    }
+    .player {
+        min-height: unset;
+        max-width: unset;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .playerAndVideoListWrapper {
+        width: 100%;
+    }
+    .playerWrapper {
+        width: 70%;
+        max-width: 750px;
+    }
+}

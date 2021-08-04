@@ -1,0 +1,79 @@
+.navbarOuterWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  //padding: 0 100%;
+  height: 80px;
+  background-color: #FFFFFF;
+  //background-color: var(--background-primary-dark);
+  z-index:999;
+}
+
+.navbarButtonWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 400px;
+  width: 100%;
+  height: 100%;
+  max-width: 1920px;
+  font-size: 1.3rem;
+  font-weight: bolder;
+}
+.navbarButtonWrapper a {
+  font-style: normal;
+  text-decoration: none;
+  font-kerning: none;
+}
+
+.navbarRightWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 80%;
+  height: 100%;
+}
+
+.navbarRightWrapper img {
+  width: 38px;
+  margin: 0 30px;
+}
+
+.navbarRightWrapper button {
+  height: 40px;
+}
+
+.showSomethingButton {
+  background-color: var(--background-18);
+}
+
+.playButton {
+  max-width: 80px;
+  width: 40px;
+  min-width: unset;
+  padding: 0;
+  margin: 0 0 0 10px;
+  color: var(--background-18)
+}
+
+
+
+.logoWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 200px;
+}
+
+.logo {
+  height: 80%;
+  padding: 0;
+
+}

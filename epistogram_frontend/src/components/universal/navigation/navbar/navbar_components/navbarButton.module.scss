@@ -1,0 +1,19 @@
+.navbarButton p {
+  width: fit-content;
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  font-weight: normal;
+  font-variant: all-petite-caps;
+  letter-spacing: 0.2px;
+}
+.navbarButton p:hover {
+  color: var(--background-primary-main);
+}
+
+.displayNone {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 36%;
+}

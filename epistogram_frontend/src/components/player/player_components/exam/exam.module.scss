@@ -1,0 +1,128 @@
+.examOuterWrapper {
+    width: 100%;
+    height: 500px;
+}
+.examInnerWrapper {
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-12);
+}
+
+
+.quizWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+}
+
+.quizWrapper div {
+    width: 100%;
+    height: 100%;
+}
+
+.startExamWrapper {
+    background-color: var(--background-12);
+    padding: 20px;
+    color: #EEE;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: calc(100% - 20px);
+    height: 100%;
+}
+
+.startExamButton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100px;
+    height: 50px;
+}
+
+.startExamButtonIn {
+    background-color: cornflowerblue;
+    width: 150px;
+    max-width: 150px;
+    max-height: 80px;
+    height: 40px;
+    border: none;
+    color: white;
+}
+
+.endExamWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: calc(100% - 180px);
+}
+
+.endExamWrapper div {
+    box-sizing: border-box;
+    width: calc(100% - 30px);
+    height: 100%;
+    color: white;
+}
+
+.questionWrapper {
+    background-color: var(--background-12);
+    display: flex;
+    align-items: flex-end;
+    height: 130px;
+}
+
+.questionTitle {
+    color: white;
+    padding: 0 20px;
+}
+
+
+.quizFormAnswer {
+    background-color: var(--background-11);
+    border: 2px solid var(--background-12);
+    padding: 20px;
+    color: #EEE;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: calc(100% - 20px);
+    height: 20px;
+    border-left: 3px solid var(--background-18);
+}
+
+.progressWrapper {
+    background-color: #e34242;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 20px;
+}
+
+.progressBar {
+    border-radius: 5px;
+}
+
+.progressBar div {
+    background-color: var(--background-18);
+}
+
+.progressBar:nth-child(1) {
+    background-color: var(--background-10);
+}
+
+.progressPercentage {
+    color: white;
+}

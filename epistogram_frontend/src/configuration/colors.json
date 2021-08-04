@@ -1,0 +1,85 @@
+{
+  "normalTheme": {
+    "--background-10": "rgba(8,26,45,1.0)",
+    "--background-11": "rgba(21,38,56,1.0)",
+    "--background-12": "rgba(45,70,90,1.0)",
+    "--background-12-4": "rgb(42, 90, 117)",
+    "--background-12-5": "rgba(50,80,100,1.0)",
+    "--background-13": "rgb(50, 96, 122)",
+
+
+    "--background-18": "rgba(124,192,194,1.0)",
+    "--background-highlighted": "mediumseagreen",
+
+    "--navbar-background": "rgba(18,20,29,1.0)",
+    "--navbar-background-transparent": "rgba(18,20,29,0.95",
+    "--navbar-item-selected": "rgba(66,131,158,1.0)",
+
+    "--avatar-border": "rgba(124,192,194,1.0)",
+
+    "--text-color-1": "rgba(255,255,255,1.0)",
+    "--text-color-2": "rgba(200,200,200,1.0)",
+
+    "--article-header-color": "rgba(124,192,194,1.0)",
+    "--article-text-color": "rgba(255,91,91,1.0)"
+  },
+  "nextGenTheme": {
+    "--background-10": "rgba(8,26,45,1.0)",
+    "--background-11": "rgba(21,38,56,1.0)",
+    "--background-12": "rgba(45,70,90,1.0)",
+    "--background-13": "rgb(42, 90, 117)",
+    "--background-14": "rgba(50,80,100,1.0)",
+    "--background-15": "rgb(50, 96, 122)",
+    "--background-16": "#547891",
+    "--background-17": "rgb(50, 96, 122)",
+    "--background-18": "rgba(124,192,194,1.0)",
+    "--background-highlighted": "mediumseagreen",
+
+    "--background-primary-light": "#c8e8ff",
+    "--background-primary-main": "#96b6d3",
+    "--background-primary-dark": "#6786a2",
+    "--background-primary-contrastText": "#000000",
+    "--background-secondary-light": "#5495b4",
+    "--background-secondary-main": "#1d6784",
+    "--background-secondary-dark": "#003d57",
+    "--background-secondary-contrastText": "#fff",
+
+
+    "--navbar-background": "rgba(18,20,29,1.0)",
+    "--navbar-background-transparent": "rgba(18,20,29,0.95",
+    "--navbar-item-selected": "rgba(66,131,158,1.0)",
+
+    "--avatar-border": "rgba(124,192,194,1.0)",
+
+    "--text-color-1": "rgba(255,255,255,1.0)",
+    "--text-color-2": "rgba(200,200,200,1.0)",
+    "--text-color-3": "#282828",
+    "--text-color-4": "",
+
+    "--article-header-color": "rgba(124,192,194,1.0)",
+    "--article-text-color": "rgba(255,91,91,1.0)"
+  },
+  "redTheme": {
+    "--background-10": "rgba(124,192,194,1.0)",
+    "--background-11": "rgba(255,255,255,1.0)",
+    "--background-12": "rgb(240, 240, 240)",
+    "--background-12-4": "rgb(210, 210, 210)",
+    "--background-12-5": "rgba(220,220,220,1.0)",
+    "--background-13": "rgba(200,200,200,1.0)",
+
+    "--background-18": "rgba(255,91,91,1.0)",
+    "--background-highlighted": "rgba(255,91,91,1.0)",
+
+    "--navbar-background": "rgba(255,255,255,1.0)",
+    "--navbar-background-transparent": "255,255,255,0.7",
+    "--navbar-item-selected": "rgba(255,91,91,1.0)",
+
+    "--avatar-border": "rgba(66,66,66,1.0)",
+
+    "--text-color-1": "rgba(255,91,91,1.0)",
+    "--text-color-2": "rgba(33,33,33,1.0)",
+
+    "--article-header-color": "rgba(255,91,91,1.0)",
+    "--article-text-color": "rgba(255,91,91,1.0)"
+  }
+}

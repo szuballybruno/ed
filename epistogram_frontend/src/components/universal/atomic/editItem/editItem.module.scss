@@ -1,0 +1,65 @@
+.dataSheetItem {
+  //background-color: var(--background-16);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+.dataSheetItem * {
+}
+.dataSheetItem button {
+  background-color: unset;
+  //color: white;
+  border: none;
+  height: 30px;
+}
+
+.inputItem {
+  //background-color: white;
+  color: black;
+}
+
+.inputField {
+  width: calc(100% - 50px);
+}
+
+.editButtonIcon {
+}
+
+.dataSheetItemTitleWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 200px;
+  height: 40px;
+  text-align: left;
+  box-sizing: border-box;
+  padding-left: 10px;
+  border-left: 3px solid var(--background-18);
+}
+
+.dataSheetItemTitleWrapper label {
+  //color: white;
+  width: 200px;
+}
+
+.dataSheetItem input {
+  //background-color: seagreen;
+  border: 0;
+}
+
+.editButtonsWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.formControl {
+  //background-color: seagreen;
+  width: 100%;
+}
+
+.select {
+  width: calc(100% - 35px);
+}

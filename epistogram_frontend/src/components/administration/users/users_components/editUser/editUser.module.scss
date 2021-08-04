@@ -1,0 +1,43 @@
+.editUserContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: var(--background-16);
+  min-height: 300px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 2px;
+}
+
+.editItemContainer {
+  width: 500px;
+  min-width: 700px;
+  flex-shrink: 1;
+  flex-grow: 1;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: rgb(105, 147, 169);
+}
+
+.editItem {
+  background-color: var(--background-16);
+}
+
+.switchSettingsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: var(--background-16);
+  width: calc(100% - 800px);
+  min-width: 500px;
+  flex-shrink: 1;
+  flex-grow: 1;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.settingsSwitch {
+  width: 100%;
+}

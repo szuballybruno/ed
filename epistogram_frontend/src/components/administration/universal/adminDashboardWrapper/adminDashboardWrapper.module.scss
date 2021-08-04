@@ -1,0 +1,11 @@
+.adminDashboardWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    max-width: 100%;
+    box-sizing: border-box;
+    width: 100%;
+    height: calc(100% - 80px);
+    border-radius: 0 10px 0 10px;
+}

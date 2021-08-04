@@ -1,0 +1,12 @@
+.tasksWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: calc(100% - 50px);
+}
+
+.tasksWrapper * {
+  box-shadow: unset;
+}

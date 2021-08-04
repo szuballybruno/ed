@@ -1,0 +1,103 @@
+
+
+.firstRowStatsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 220px;
+  max-width: 100%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 360px;
+}
+.firstRowStatsInnerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 95%;
+  width: 100%;
+}
+.firstRowStatsContainer h1 {
+  color: var(--text-color-1);
+  margin: 0;
+}
+
+.firstRowStatsAnimation {
+  width: 165px;
+  margin: 0 auto;
+}
+//noinspection ALL
+.firstRowStatsClock {
+  background-color: mediumseagreen;
+
+  border-radius: 50px;
+}
+.firstRowStatsWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 140px;
+}
+
+.firstRowStatsItem {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.firstRowStatsItemHeader {
+  width: 54%;
+  text-align: right;
+  margin-right: 5px;
+}
+.firstRowStatsItemHeader h2 {
+  margin: 0;
+  padding: 0;
+  color: var(--text-color-1);
+  font-size: 1.3rem;
+  width: 100%;
+}
+.firstRowStatsItemImage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 5px;
+  width: 30px;
+}
+.firstRowStatsItemImage img {
+  width: 30px;
+}
+
+@media only screen and (max-width: 600px) {
+  .firstRowStatsContainer {
+    min-width: 80%;
+    width: 98%;
+    margin: 10px 10px 0 10px;
+  }
+}
+
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .firstRowStatsContainer {
+    min-width: 80%;
+    width: 98%;
+    margin: 10px 10px 0 10px;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  .firstRowStatsContainer {
+    min-width: 80%;
+    margin: 10px 10px 0 10px;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+
+}

@@ -1,0 +1,127 @@
+.statisticsOuterWrapper {
+    display: block;
+    min-height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.freeFusionCharts {
+    width:  110px;
+    height: 20px;
+    background-color:  var(--background-18);
+    position: absolute;
+    bottom: 0;
+    z-index: 999;
+    border-radius: 10px;
+}
+
+.statisticsInfoOuterContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 270px;
+    max-height: 540px;
+}
+
+.statisticsInfoInnerContainer {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 96%;
+    min-width: 450px;
+    max-width: 100%;
+    height: 100%;
+
+    .statisticsInfoContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        width: 100%;
+        min-width: 300px;
+        border-radius: 10px;
+    }
+}
+
+
+.chartsRow {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 96%;
+    height: 380px;
+}
+
+.activityPieChartWrapper {
+    position: relative;
+    background-color: var(--background-18);
+    border-radius: 10px;
+    font-weight: bold;
+    box-sizing: border-box;
+    width: 49%;
+    min-width: 450px;
+    height: 100%;
+}
+
+.dateSelectorRow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+
+    .dateSelectorInnerWrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        width: 96%;
+        height: 100%;
+
+        .exportWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 100%;
+        }
+
+        .exportWrapper button {
+            background-color: var(--background-18);
+            width: 170px;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .dateSelectorWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 250px;
+            height: 100%;
+        }
+
+        .dateSelectorWrapper button {
+            background-color: var(--background-18);
+            width: 220px;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: white;
+        }
+    }
+}
+

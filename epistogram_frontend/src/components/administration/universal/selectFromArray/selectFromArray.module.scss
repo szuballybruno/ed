@@ -1,0 +1,12 @@
+.dataRow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 80px;
+}
+
+.formControl {
+    min-width: 100%;
+    height: 200px;
+}

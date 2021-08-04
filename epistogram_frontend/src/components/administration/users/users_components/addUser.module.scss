@@ -1,0 +1,84 @@
+
+.profileImageWrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 160px;
+    position: relative;
+}
+
+.addProfileImage {
+    position: absolute;
+    color: white;
+    width: 100px;
+    height: 43px;
+    top: 86px;
+    left: auto;
+    right: auto;
+    background-color: rgba(91, 91, 91, 0.8);
+    border-bottom-left-radius: 110px;  /* 100px of height + 10px of border */
+    border-bottom-right-radius: 110px; /* 100px of height + 10px of border */
+
+    text-align: center;
+}
+.addProfileImage:hover {
+    text-decoration: underline;
+}
+
+.dataRow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 90px;
+}
+
+.dataRow div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 30px;
+}
+
+.dataRow label {
+    color: white;
+    padding-left: 5px;
+}
+
+
+.dataRow select {
+    border: none;
+    height: 40px;
+    border-radius: 7px;
+}
+
+.submitButton {
+    margin-top: 30px;
+    width: 100%;
+}
+
+@keyframes border-pulsate {
+    0%   { border-color: var(--avatar-border); }
+    50%  { border-color: rgba(124,192,194,0.6); }
+    100% { border-color: var(--avatar-border); }
+}
+.profileImageWrapper img {
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
+    border: 8px solid var(--avatar-border);
+    border-radius: 60px;
+    animation: border-pulsate 2s infinite;
+}
+
+
+
+
+.inputFields {
+    width: 500px;
+}
+
+

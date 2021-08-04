@@ -1,0 +1,136 @@
+
+
+.welcomeWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 150px;
+}
+
+.avatarWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 37%;
+  min-width: 140px;
+  height: 150px;
+}
+@keyframes border-pulsate {
+  0%   { border-color: var(--avatar-border); }
+  50%  { border-color: rgba(124,192,194,0.6); }
+  100% { border-color: var(--avatar-border); }
+}
+.avatarWrapper img {
+  object-fit: cover;
+  width: 80px;
+  height: 80px;
+  border: 8px solid var(--avatar-border);
+  border-radius: 60px;
+  animation: border-pulsate 2s infinite;
+}
+.userDataWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 63%;
+  height: 100%;
+}
+
+.userNameWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  height: 35px;
+  width: 100%;
+}
+.userNameWrapper h2 {
+  color: var(--text-color-1);
+  margin: 0;
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: 0.5px;
+}
+
+.userRoleWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 25px;
+}
+
+.selectProfileWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 35px;
+  text-decoration: none;
+}
+
+/*.selectProfileWrapper button {
+  background-color: var(--background-15);
+  border: 1px solid #AAA;
+  padding: 0px 10px;
+  text-decoration: none;
+  color: #fdc790;
+  font-variant: all-small-caps;
+  letter-spacing: 0.07px;
+  font-size: 15px;
+  text-align: center;
+  height: 25px;
+  border-radius: 2px;
+  font-weight: bold;
+}*/
+
+.epistoCoinWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 78px;
+  height: 30px;
+  margin-left: 20px;
+  font-weight: bold;
+  color: black;
+}
+
+.epistoCoinWrapper img {
+  width: 18px;
+}
+
+@media only screen and (max-width: 600px) {
+  .welcomeWrapper {
+    width: 100%;
+    margin: 10px auto 0 auto;
+  }
+}
+
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .welcomeWrapper {
+    width: 98%;
+    max-width: unset;
+    margin: 10px auto 0 auto;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  .welcomeWrapper {
+    margin: 10px 0 0 10px;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+
+}

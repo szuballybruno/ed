@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="itsfourothree.hu" exclude=".svn;.cvs;;.DS_Store;.git;.hg;*.hprof;*.pyc" autoUploadExternalChanges="true">
+    <serverData>
+      <paths name="itsfourothree.hu">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/backups/projects/epistogram_backend" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/apps/epistogram_backend" local="$PROJECT_DIR$/dist" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/node_modules" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

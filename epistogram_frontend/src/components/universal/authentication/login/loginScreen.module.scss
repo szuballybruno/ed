@@ -1,0 +1,104 @@
+.loginhatter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    min-height: 700px;
+
+    /* Hogy ne legyen kiválasztható */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+.cimek {
+    margin-top: 40px;
+    pointer-events: none;
+}
+.loginfocim {
+    text-align: left;
+    font-size: 31px;
+    line-height: 2.2rem;
+    padding: 0;
+    margin: 0 35px;
+    pointer-events: none;
+
+    /* Hogy ne legyen kiválasztható */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+.loginalcim {
+    color: #AAA;
+    text-align: left;
+    font-size: 31px;
+    line-height: 2.2rem;
+    padding: 0;
+    margin: 0 35px;
+    pointer-events: none;
+
+    /* Hogy ne legyen kiválasztható */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+.formkeret {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    min-height: 450px;
+    border-radius: 10px;
+    background-color: #e2e2e2
+}
+.formitem {
+    width: calc(100% - 50px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 60px;
+    margin-top: 10px;
+}
+
+.formitem div {
+}
+
+
+
+@keyframes example {
+    0%   {border: 1px solid rgba(200,200,200,0.1);}
+    25%  {border: 1px solid rgba(200,200,200,0.3);}
+    50%  {border: 1px solid rgba(200,200,200,0.5);}
+    100% {border: 1px solid rgba(200,200,200,0.8);}
+}
+.formitem input:active {
+    animation-name: example;
+    animation-duration: 0.4s;
+}
+.forgotPassword {
+    width: 100%;
+    align-self: flex-end;
+    color: #AAA;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.errorLabel {
+    color: rgb(227, 66, 66)
+}
+.regisztracio {
+    display: flex;
+    flex-direction: row;
+}
+.regisztracio h3:first-child {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-color-2);
+    margin-right: 0.4rem;
+}
+.regisztracio h3:nth-child(2) {
+    font-weight: 600;
+    font-size: 0.9rem;
+}

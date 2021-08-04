@@ -1,0 +1,108 @@
+.meWrapper {
+  width: 100%;
+  height: 100%;
+}
+.rolamTopWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 65%;
+  min-height:  520px;
+}
+
+.rolamProfileDataWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+  height: 100%;
+}
+
+.rolamProfileDataAvatar {
+  height: 100px;
+  margin-top: 90px;
+}
+
+.rolamProfileDataAvatar img {
+  width: 100px;
+  border: 5px solid var(--avatar-border);
+  border-radius: 60px;
+}
+
+.rolamProfileDataName {
+  height: 40px;
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--text-color-1);
+}
+
+.rolamProfileDataDescription {
+  color: var(--text-color-1);
+  margin-top: 10px;
+  width: 70%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.rolamProfileDataDescription img {
+  width: 28px;
+  margin: 0 10px;
+}
+
+
+.rolamProfileDataViewData {
+  display: flex;
+  flex-direction: row;
+}
+
+.rolamProfileDataViewDataColumn {
+  color: var(--text-color-1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 25px 10px 0 10px
+}
+
+.rolamBottomWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 35%;
+  min-height: 300px;
+}
+
+.badgesInnerContainer {
+  background-color: var(--background-18);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 70%;
+  height: 180px;
+  border-radius: 10px;
+}
+.badgesColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80%;
+}
+
+.badgesColumn img {
+  height: 90px;
+}
+.badgesColumn h2 {
+  color: var(--background-12);
+  font-size: 1.2rem;
+}

@@ -1,0 +1,141 @@
+.searchItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+}
+
+.videoItemTopWrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 280px;
+}
+.videoItemThumbnailImage {
+    object-fit: cover;
+    width: 100%;
+    height: 220px;
+}
+
+
+
+
+
+.videoTitleOuterWrapper {
+    background-color: rgba(0,0,0,0.6);
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
+    width: 100%;
+    height: 130px;
+    box-sizing: border-box;
+}
+
+.videoTitleDivider {
+    border-bottom: 2px solid #333;
+    height: 2px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 2px 0;
+}
+.courseTitleBorder {
+    width: 5px;
+    height: 100%;
+}
+.videoInteractionsWrapper {
+    color: white;
+    width: 100%;
+
+
+}
+
+.videoTitleItem {
+    line-break: strict;
+    line-height: 20px;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0 3px 7px 3px;
+}
+
+.videoTitleItem h3 {
+    margin: 0;
+    padding: 0 0 1px 5px;
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: text-top;
+}
+.videoTitleItem span {
+    margin: 0 0 0 5px;
+}
+
+
+.videoItemBottomWrapper {
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 5px;
+    height: 60px;
+    background-color: #41b0ef;
+}
+
+.videoInfoInnerWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 60px;
+}
+
+.videoInfoInnerWrapper > * {
+    width: 50%;
+    height: 100%;
+    border: none;
+    text-decoration: none;
+}
+.videoInfoInnerWrapper * {
+    color: white;
+    text-decoration: none;
+}
+.videoInfoInnerWrapper button:last-child {
+}
+
+
+@keyframes scale {
+    0% {
+        width: 230px;
+        height: 45px;
+    }
+    100% {
+        width: 240px;
+        height: 47px;
+    }
+}
+
+.courseOptionButton:hover {
+    background-color: var(--background-18);
+    transform: scale(1.02);
+    animation: scale 200ms forwards;
+}
+
+.courseItemFlippedWrapper {
+    background-color: rgba(0,0,0,0.7);
+    width: 92%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    transform: rotateY(180deg);
+}
+

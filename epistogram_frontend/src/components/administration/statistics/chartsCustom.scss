@@ -1,0 +1,69 @@
+.ct-label {
+    fill: white;
+    color: white;
+}
+
+.ct-series-a .ct-bar {
+    /* Set the colour of this series line */
+    stroke: #00FF59;
+    /* Control the thikness of your lines */
+    stroke-width:  30px;
+    /* Create a dashed line with a pattern */
+    stroke-linecap: butt;
+
+}
+.barChart {
+    background-color: var(--background-18);
+    width: 48%;
+    height: 350px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.barTwoChart {
+    background-color: var(--background-18);
+    width: 48%;
+    height: 350px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+
+.ct-grid {
+
+    stroke: none;
+    stroke-dasharray: none;
+}
+
+.pieChartOuter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-18);
+    height: 350px;
+    width: 300px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+.lineChartOuter {
+    background-color: var(--background-18);
+    height: 350px;
+    width: 65%;
+    border-radius: 10px;
+    font-weight: bold;
+}
+.lineTwoChartOuter {
+    background-color: var(--background-18);
+    height: 350px;
+    width: 48%;
+    border-radius: 10px;
+    font-weight: bold;
+}
+.pieTwoChartOuter {
+    background-color: var(--background-18);
+    height: 350px;
+    width: 48%;
+    border-radius: 10px;
+    font-weight: bold;
+}

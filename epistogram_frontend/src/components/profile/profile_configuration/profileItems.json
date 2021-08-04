@@ -1,0 +1,24 @@
+{
+  "sideMenu": [
+    {
+      "menuName": "Tanulás",
+      "route": "/profilom/tanulas"
+    },
+    {
+      "menuName": "Kurzusaim",
+      "route": "/profilom/kurzusaim"
+    },
+    {
+      "menuName": "Vizsgáim",
+      "route": "/profilom/vizsgaim"
+    },
+    {
+      "menuName": "Beállítások",
+      "route": "/profilom/beallitasok"
+    },
+    {
+      "menuName": "Kijelentkezés",
+      "route": "/"
+    }
+  ]
+}
