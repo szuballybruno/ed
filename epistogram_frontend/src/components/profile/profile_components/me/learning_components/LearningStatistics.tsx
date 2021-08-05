@@ -63,6 +63,7 @@ const LearningStatistics = (props: {className?: string}) => {
             },
         },
     };
+
     return <div className={`${classes.learningContainer} ${props.className}`}>
         <div className={classes.learningInnerContainer}>
             <List className={classes.learningList}>

@@ -7,7 +7,7 @@ const tunnelConfig = {
     username: "spenglermanfred",
     host: "80.77.112.163",
     privateKey: require('fs').readFileSync('/Users/spenc/Documents/putty_id_rsa.ppk'),
-    agent : process.env.SSH_AUTH_SOCK,
+    agent: process.env.SSH_AUTH_SOCK,
     passphrase: "MrPeach243Cock*",
     dstPort: 27017,
 }

@@ -8,6 +8,12 @@
   grid-column: auto / span 1;
   grid-row: auto / span 1;
 }
+.gridItemChart {
+  width: 100%;
+  grid-column: auto / span 2;
+  grid-row: auto / span 2
+}
+
 
 .itemDataWrapper {
   //background-color: rosybrown;
