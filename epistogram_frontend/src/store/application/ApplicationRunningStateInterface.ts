@@ -33,7 +33,6 @@ export interface ApplicationRunningStateInterface {
 
     //VIDEO PLAYER
     activeVideoListItem: string
-
     currentSeekSliderValue: number,
     shouldPlayVideo: boolean,
     showPlayerOrExam: boolean
