@@ -1,6 +1,5 @@
-node_modules
-.idea
-/.idea
+/epistogram_frontend/node_modules/
+/epistogram_backend/node_modules/
 /epistrogram_frondend/.idea/
 /epistogram_backend/.idea/
 /epistogram_backend/.history/
