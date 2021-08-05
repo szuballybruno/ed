@@ -1,13 +1,13 @@
 import {createTransport} from 'nodemailer';
-import {config} from "../configuration/config";
+import { mailHost, senderEmail, senderPassword } from '../services/environment';
 
 export const transporter = createTransport({
-    host: config.mailHost,
+    host: mailHost,
     port: 465,
     secure: true,
     auth: {
-        user: config.senderEmail,
-        pass: config.senderPassword
+        user: senderEmail,
+        pass: senderPassword
     },
     tls: {
         rejectUnauthorized: false

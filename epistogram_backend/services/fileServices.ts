@@ -1,8 +1,8 @@
 import fs from "fs"
 const {NodeSSH} = require('node-ssh')
 const ssh = new NodeSSH()
-import {config} from "../configuration/config";
 import {UploadedFile} from "express-fileupload";
+import { vpsSCPConfig } from "./environment";
 
 
 export const getFileExtension = (fileName: string) => {
@@ -22,7 +22,7 @@ export const createFile = (file: UploadedFile, localpath: string, fileName: stri
     }).catch((e) => {
         console.log(e)
     })
-    ssh.connect(config.scpConfig).then(() => {
+    ssh.connect(vpsSCPConfig).then(() => {
         console.log("./temp/" + file.name)
         ssh.putFile("./temp/" + file.name.toLowerCase(), localpath + "/" + fileName + "." + getFileExtension(file.name.toLowerCase()))
             .then(() => {

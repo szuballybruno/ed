@@ -1,4 +1,4 @@
-import {Connection} from "./services/connectMongo";
+import {Connection, connectToMongoDB} from "./services/connectMongo";
 import fileUpload from 'express-fileupload'
 import express from 'express';
 import bodyParser from 'body-parser'
@@ -14,8 +14,9 @@ import {router as overlaysRoutes} from './api/overlays/routes'
 import {router as tasksRoutes} from './api/tasks/routes'
 import {router as tagsRoutes} from './api/tags/routes'
 import {router as groupsRoutes} from './api/groups/routes'
+import { mongodbConfig } from "./services/environment";
 
-Connection.connectToMongo()
+connectToMongoDB(mongodbConfig);
 
 const server = express();
 

@@ -1,7 +1,3 @@
-//import {config} from '../../configuration/config'
-
-//import {verifyFile} from '../files/middlewares/verifyFile'
-//import {createFile, searchImages} from "../../services/fileServices"
 import { Connection } from '../../services/connectMongo'
 import {responseReducer} from '../../services/responseReducer'
 import { ObjectId } from 'mongodb'

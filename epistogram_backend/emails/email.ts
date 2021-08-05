@@ -1,9 +1,9 @@
+import { senderEmail } from '../services/environment'
 import {transporter} from './transporter'
-import {config} from "../configuration/config";
 
 export const emailConfig = {
     message: {
-      from: config.senderEmail
+      from: senderEmail
     },
     send: true,
     transport: transporter,
