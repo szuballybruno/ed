@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eac29372-9f46-4e4e-9418-9ce8d09716e2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/epistogram.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/epistogram.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/epistogram_backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/epistogram_backend/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/epistogram_backend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/epistogram_backend/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/epistogram_frontend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/epistogram_frontend/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/epistogram_frontend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/epistogram_frontend/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,11 +14,27 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev_manfred" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="branchtype_yourname" />
+      </list>
+    </option>
   </component>
   <component name="NamedScopeManager">
     <scope name="frontend" pattern="file[epistogram]:epistogram_frontend/*||file[epistogram]:epistogram_frontend//*" />
     <scope name="backend" pattern="file[epistogram]:epistogram_backend//*" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/epistogram_backend/package.json" />
+    <dismissed value="$PROJECT_DIR$/epistogram_frontend/package.json" />
   </component>
   <component name="ProjectId" id="1wGvke38auGDlnS8wweQHJ3EKNn" />
   <component name="ProjectViewState">
@@ -35,10 +47,11 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="project.scopes" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
     <property name="ts.external.directory.path" value="C:\Users\spenc\Documents\projects\epistogram\epistogram_backend\node_modules\typescript\lib" />
   </component>
   <component name="RunManager" selected="npm.nodemon">
@@ -78,7 +91,9 @@
       <option name="presentableId" value="Default" />
       <updated>1628097889131</updated>
       <workItem from="1628097889336" duration="2698000" />
-      <workItem from="1628153822544" duration="409000" />
+      <workItem from="1628153822544" duration="1640000" />
+      <workItem from="1628155486286" duration="165000" />
+      <workItem from="1628156182608" duration="833000" />
     </task>
     <servers />
   </component>
