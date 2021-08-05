@@ -1,17 +1,14 @@
-import Email from 'email-templates';
-
-import {checkRequest} from '../../../../services/checkRequest'
-import {checkUser} from '../../../../services/checkUser'
-import {config} from '../../../../configuration/config'
-import {Connection} from '../../../../services/connectMongo'
-import {Request, NextFunction, Response} from "express";
-import {responseReducer} from "../../../../services/responseReducer";
-import {ObjectID} from "mongodb";
-import {emailConfig, emailContent} from "../../../../emails/email";
-import {generateToken} from "../../../../services/generateToken";
 import bcrypt from "bcryptjs";
-import {createDirectory} from "jest-util";
-
+import Email from 'email-templates';
+import { NextFunction, Request, Response } from "express";
+import { ObjectID } from "mongodb";
+import { emailConfig, emailContent } from "../../../../emails/email";
+import { checkRequest } from '../../../../services/checkRequest';
+import { checkUser } from '../../../../services/checkUser';
+import { Connection } from '../../../../services/connectMongo';
+import { frontendUrl } from "../../../../services/environment";
+import { generateToken } from "../../../../services/generateToken";
+import { responseReducer } from "../../../../services/responseReducer";
 
 export const signup = (req: Request, res: Response, next: NextFunction) => {
     const registrationData = ["email", "role", "username", "firstName", "lastName", "organizationId", "innerRole"]
@@ -54,7 +51,7 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
         }
         const mailToken = await generateToken(req,res,next, insertedUser.insertedId, createdUser.userData.email)
 
-        await new Email(emailConfig).send(emailContent(req.body.email, `${req.body.lastName} ${req.body.firstName}`, `${config.frontendUrl}/signup`, mailToken)).catch((err: string) => {
+        await new Email(emailConfig).send(emailContent(req.body.email, `${req.body.lastName} ${req.body.firstName}`, `${frontendUrl}/signup`, mailToken)).catch((err: string) => {
             throw new Error('Signing up failed, please try again later.' + err);
         });
 

@@ -1,8 +1,4 @@
-import {checkFile} from "../../../services/checkFile";
-import {NextFunction, Request, Response} from "express";
-import {Connection} from "../../../services/connectMongo";
-import {config} from "../../../configuration/config"
-import {createFile} from "../../../services/fileServices"
+import { NextFunction, Request, Response } from "express";
 
 export const uploadAvatarImage = (req: Request, res: Response, next: NextFunction) => {
     /*checkFile(req,res,next);

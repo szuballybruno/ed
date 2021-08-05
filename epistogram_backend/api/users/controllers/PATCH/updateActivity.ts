@@ -1,11 +1,10 @@
-import {Connection} from '../../../../services/connectMongo'
-import {Request, NextFunction, Response} from "express";
-import {responseReducer} from "../../../../services/responseReducer";
-import {ObjectID} from "mongodb";
-import {checkRequest} from "../../../../services/checkRequest";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import {config} from "../../../../configuration/config";
-import {UploadedFile} from "express-fileupload";
+import { ObjectID } from "mongodb";
+import { checkRequest } from "../../../../services/checkRequest";
+import { Connection } from '../../../../services/connectMongo';
+import { tokenMailSecret } from "../../../../services/environment";
+import { responseReducer } from "../../../../services/responseReducer";
 
 type activity = {
     // MINDEGYIKHEZ KELL
@@ -48,7 +47,7 @@ export const updateActivity = (req: Request, res: Response, next: NextFunction) 
     if (authHeader) {
         const token = authHeader.split(' ')[1];
 
-        jwt.verify(token, config.tokenMailSecret, (err, user) => {
+        jwt.verify(token, tokenMailSecret, (err, user) => {
             if (err) {
                 throw new Error("A token ellenőrzése sikertelen")
             }

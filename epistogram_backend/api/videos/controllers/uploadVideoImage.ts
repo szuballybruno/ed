@@ -1,11 +1,9 @@
-import {Connection} from "../../../services/connectMongo";
-import {createFile, getFileExtension} from "../../../services/fileServices";
-import {responseReducer} from "../../../services/responseReducer";
-import {Request, Response, NextFunction} from 'express'
+import { NextFunction, Request, Response } from 'express';
 import { UploadedFile } from "express-fileupload";
-import {flattenObject} from "../../../services/flattenObject";
 import { ObjectID } from "mongodb";
-import {config} from "../../../configuration/config";
+import { Connection } from "../../../services/connectMongo";
+import { createFile, getFileExtension } from "../../../services/fileServices";
+import { responseReducer } from "../../../services/responseReducer";
 
 export const uploadVideoImage = (req: Request, res: Response, next: NextFunction) => {
     let uploadedFile: UploadedFile

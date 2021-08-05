@@ -1,9 +1,4 @@
-import {checkFile} from "../../../services/checkFile";
-import {NextFunction, Request, Response} from "express";
-import {createFile, searchImages} from "../../../services/fileServices";
-import {config} from "../../../configuration/config";
-import {Connection} from "../../../services/connectMongo";
-import {FileArray, UploadedFile} from "express-fileupload";
+import { NextFunction, Request, Response } from "express";
 
 export const uploadThumbnailImage = (req: Request, res: Response, next: NextFunction) => {
     /*checkFile(req,res,next);

@@ -1,12 +1,11 @@
-import {NextFunction, Request, Response} from "express";
-import {MongoError, ObjectID} from "mongodb";
-import {flattenObject} from "../../../../services/flattenObject";
 import bcrypt from "bcryptjs";
-import {UploadedFile} from "express-fileupload";
-import {checkFile} from "../../../../services/checkFile";
-import {createFile} from "../../../../services/fileServices";
+import { NextFunction, Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
 import jwt from 'jsonwebtoken';
-import {config} from "../../../../configuration/config";
+import { MongoError, ObjectID } from "mongodb";
+import { tokenMailSecret } from "../../../../services/environment";
+import { createFile } from "../../../../services/fileServices";
+import { flattenObject } from "../../../../services/flattenObject";
 
 const {responseReducer} = require('../../../../services/responseReducer')
 const { Connection } = require('../../../../services/connectMongo')
@@ -45,7 +44,7 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
             if (authHeader) {
                 const token = authHeader.split(' ')[1];
 
-                jwt.verify(token, config.tokenMailSecret, (err, user) => {
+                jwt.verify(token, tokenMailSecret, (err, user) => {
                     if (err) {
                         throw new Error("A token ellenőrzése sikertelen")
                     }
