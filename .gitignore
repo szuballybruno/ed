@@ -1,4 +1,8 @@
 node_modules
+.idea
+/.idea
+/epistrogram_frondend/.idea/
+/epistogram_backend/.idea/
 /epistogram_backend/.history/
 /epistogram_backend/.vscode/
 /epistogram_backend/temp/
