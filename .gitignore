@@ -1,8 +1,17 @@
 /epistogram_frontend/node_modules/
 /epistogram_backend/node_modules/
+
 /epistrogram_frondend/.idea/
 /epistogram_backend/.idea/
+
+/epistogram_frontend/.history/
 /epistogram_backend/.history/
+
+/epistogram_frontend/.vscode/
 /epistogram_backend/.vscode/
+
 /epistogram_backend/temp/
+
+.idea
+.idea/
 /.idea/
