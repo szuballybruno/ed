@@ -109,5 +109,3 @@ export class GlobalConfiguration {
         }
     };
 }
-
-// export type MongoConfig = typeof GlobalConfiguration.mongodbConfig;
