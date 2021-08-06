@@ -44,6 +44,7 @@ export const connectToMongoDB = (): Promise<void> => {
         if (dbConfig.isSSHConnection) {
 
             log("Connecting SSH Tunnel...");
+            log(dbConfig.vpsSSHAuthConfig);
             const tunnelInstance = tunnel(dbConfig.vpsSSHAuthConfig, (error: string, server: string) => {
 
                 // SSH failed
