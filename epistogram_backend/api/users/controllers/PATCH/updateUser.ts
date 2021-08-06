@@ -3,11 +3,11 @@ import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import jwt from 'jsonwebtoken';
 import { MongoError, ObjectID } from "mongodb";
-import { tokenMailSecret } from "../../../../services/environment";
+import { globalConfig } from "../../../../server";
 import { createFile } from "../../../../services/fileServices";
 import { flattenObject } from "../../../../services/flattenObject";
 
-const {responseReducer} = require('../../../../services/responseReducer')
+const { responseReducer } = require('../../../../services/responseReducer')
 const { Connection } = require('../../../../services/connectMongo')
 
 const updateUserInDatabase = (userId: string, updateableObject: object) => {
@@ -44,11 +44,11 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
             if (authHeader) {
                 const token = authHeader.split(' ')[1];
 
-                jwt.verify(token, tokenMailSecret, (err, user) => {
+                jwt.verify(token, globalConfig.mail.tokenMailSecret, (err, user) => {
                     if (err) {
                         throw new Error("A token ellenőrzése sikertelen")
                     }
-                    userData = user as {email: string, userId: string}
+                    userData = user as { email: string, userId: string }
                 })
             }
             if (req.files) {
@@ -60,7 +60,7 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
             hashedPassword = await bcrypt.hash(req.body.newPassword, 12);
 
 
-            await updateUserInDatabase(userData != undefined ? userData.userId : "" , {
+            await updateUserInDatabase(userData != undefined ? userData.userId : "", {
                 "userData.phoneNumber": req.body.phoneNumber,
                 "userData.password": hashedPassword
             })
@@ -68,7 +68,7 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
         } else if (req.body.currentPassword && req.body.newPassword) {
             let user;
             try {
-                user = await Connection.db.collection("users").findOne({"_id": new ObjectID(req.params.userId)})
+                user = await Connection.db.collection("users").findOne({ "_id": new ObjectID(req.params.userId) })
             } catch (e) {
                 throw new Error("A jelszó beállítása sikertelen: DB")
             }
@@ -86,11 +86,11 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
 
             hashedPassword = await bcrypt.hash(req.body.newPassword, 12);
 
-           /* await updateUserInDatabase(req.params.userId, {
-                "userData.password": hashedPassword
-            })*/
+            /* await updateUserInDatabase(req.params.userId, {
+                 "userData.password": hashedPassword
+             })*/
         } else {
-           // await updateUserInDatabase(req.params.userId, flattenObject(flatBody))
+            // await updateUserInDatabase(req.params.userId, flattenObject(flatBody))
         }
         return responseReducer(201, "Az adatok frissítése sikeres!")
     }

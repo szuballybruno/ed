@@ -1,8 +1,8 @@
 import fs from "fs"
-const {NodeSSH} = require('node-ssh')
+const { NodeSSH } = require('node-ssh')
 const ssh = new NodeSSH()
-import {UploadedFile} from "express-fileupload";
-import { vpsSCPConfig } from "./environment";
+import { UploadedFile } from "express-fileupload";
+import { globalConfig } from "../server";
 
 
 export const getFileExtension = (fileName: string) => {
@@ -12,17 +12,17 @@ export const getFileExtension = (fileName: string) => {
 
 export const createFile = (file: UploadedFile, localpath: string, fileName: string) => {
     //console.log("Ez a privateKey: " + config.scpConfig.privateKey)
-    if (!fs.existsSync("./temp/")){
-        fs.mkdir("./temp/",{recursive: true}, err => {return err});
+    if (!fs.existsSync("./temp/")) {
+        fs.mkdir("./temp/", { recursive: true }, err => { return err });
     } else {
-        fs.mkdir("./temp/",{recursive: true}, err => {return err});
+        fs.mkdir("./temp/", { recursive: true }, err => { return err });
     }
     file.mv('./temp/' + file.name.toLowerCase()).then(() => {
         console.log("The file moved successfully")
     }).catch((e) => {
         console.log(e)
     })
-    ssh.connect(vpsSCPConfig).then(() => {
+    ssh.connect(globalConfig.vpsSCPConfig).then(() => {
         console.log("./temp/" + file.name)
         ssh.putFile("./temp/" + file.name.toLowerCase(), localpath + "/" + fileName + "." + getFileExtension(file.name.toLowerCase()))
             .then(() => {
