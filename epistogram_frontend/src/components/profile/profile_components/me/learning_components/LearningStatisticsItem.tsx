@@ -1,17 +1,17 @@
 import React from 'react';
 import classes from "./learningStatisticsItem.module.scss";
-import Grid from "@material-ui/core/Grid";
 import {Button, Card, Typography} from "@material-ui/core";
-import {ExpandMore, Fullscreen, More, MoreSharp} from "@material-ui/icons";
+import {Fullscreen, FullscreenExit} from "@material-ui/icons";
 import {useState} from "@hookstate/core";
-import {Line} from "react-chartjs-2";
 
-const LearningStatisticsItem = ({iconPath, suffix, title, value}: {
+const LearningStatisticsItem = (props: {
     iconPath?: string
     suffix: string
     title: string
     value: string
     hasChart?: boolean
+    children?: React.ReactNode
+    chartSize?: string
 }) => {
     const open = useState(false)
 
@@ -29,7 +29,7 @@ const LearningStatisticsItem = ({iconPath, suffix, title, value}: {
         ],
     };
     const options = {
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         plugins: {
             legend: {
                 display: false
@@ -52,43 +52,40 @@ const LearningStatisticsItem = ({iconPath, suffix, title, value}: {
 
 
     return <Card className={classes.itemWrapper} style={{
-        gridColumn: `auto / span ${open.get() ? 2 : 1}`,
+        gridColumn: `auto / span ${open.get() ? (props.chartSize === "large" ? 4 : 2) : 1}`,
         gridRow: `auto / span ${open.get() ? 2 : 1}`
     }}>
-        {open.get() ? <div>
+        {open.get() ? <div className={classes.chartOuterWrapper}>
             <div className={classes.headerTitle}>
-                <Typography>Mely az általam leginkább preferált idősáv?</Typography>
+                <Typography>{props.title}</Typography>
             </div>
             <div className={classes.chartContainer}>
-                <Line className={classes.progressLineChart}
-                      options={options}
-                      type={"line"}
-                      data={data}/>
+                {props.children}
             </div>
             <Button className={classes.expandButton} onClick={() => {open.set(p => !p)}}>
-                <Fullscreen />
+                <FullscreenExit />
             </Button>
-        </div> : <div>
+        </div> : <div className={classes.dataTileWrapper}>
             <div className={classes.iconWrapper}>
                 <div className={classes.fakeIcon} />
             </div>
             <div className={classes.contentWrapper}>
                 <div className={classes.itemTitleWrapper}>
-                    <Typography className={classes.itemTitle}>{title}</Typography>
+                    <Typography className={classes.itemTitle}>{props.title}</Typography>
                 </div>
                 <div className={classes.itemDataWrapper}>
                     <div className={classes.itemValueWrapper}>
-                        <Typography>{value}</Typography>
+                        <Typography variant={"h5"}>{props.value}</Typography>
                     </div>
                     <div className={classes.itemIconWrapper}>
-                        {iconPath ? <img alt={""} src={iconPath} /> : null}
-                        <Typography>{suffix}</Typography>
+                        {props.iconPath ? <img alt={""} src={props.iconPath} /> : null}
+                        <Typography>{props.suffix}</Typography>
                     </div>
                 </div>
             </div>
-            <Button className={classes.expandButton} onClick={() => {open.set(p => !p)}}>
+            {props.children && <Button className={classes.expandButton} onClick={() => {open.set(p => !p)}}>
                 <Fullscreen />
-            </Button>
+            </Button>}
         </div>}
 
 
