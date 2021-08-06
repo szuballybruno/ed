@@ -100,7 +100,7 @@ export class GlobalConfiguration {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         },
-        isSSHConnection: true,
+        // isSSHConnection: true,
         mongoDBCredentials: {
             serverUrl: getEnvConfigEntry("MONGO_DB_SERVER_URL"),
             dbName: getEnvConfigEntry("MONGO_DB_DB_NAME"),
