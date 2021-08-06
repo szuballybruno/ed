@@ -13,8 +13,8 @@ const Learning = () => {
     return <div className={classes.meWrapper}>
         <AdminDashboardHeader titleText={"Feladataim"} />
         <Tasks tasksArray={user.userData.tasks.get()} />
-        <AdminDashboardHeader titleText={"Jegyzetek"} />
-        <Notes />
+        {/*<AdminDashboardHeader titleText={"Jegyzetek"} />
+        <Notes />*/}
         <AdminDashboardHeader titleText={"Statisztikám"} />
         <LearningStatistics />
         <AdminDashboardHeader titleText={"Megszerzett jelvényeim"} />

@@ -1,7 +1,6 @@
 import React from 'react';
 import classes from "./learningStatisticsSection.module.scss";
 import {Divider, Typography} from "@material-ui/core";
-import LearningStatisticsItem from "./LearningStatisticsItem";
 
 export const LearningStatisticsSeciton = (props: {
     title: string,
