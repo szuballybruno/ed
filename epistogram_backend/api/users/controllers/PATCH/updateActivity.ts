@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { ObjectID } from "mongodb";
+import { globalConfig } from "../../../../server";
 import { checkRequest } from "../../../../services/checkRequest";
 import { Connection } from '../../../../services/connectMongo';
-import { tokenMailSecret } from "../../../../services/environment";
 import { responseReducer } from "../../../../services/responseReducer";
 
 type activity = {
@@ -37,7 +37,7 @@ type activity = {
 }
 
 export const updateActivity = (req: Request, res: Response, next: NextFunction) => {
-    checkRequest(req,res,next, ["actionType", "actionTriggererURL", "actionTriggererItemName", "actionTriggererItemLabel", "activityType", "description"])
+    checkRequest(req, res, next, ["actionType", "actionTriggererURL", "actionTriggererItemName", "actionTriggererItemLabel", "activityType", "description"])
 
     const authHeader = req.headers.authorization
     let userData: {
@@ -47,18 +47,18 @@ export const updateActivity = (req: Request, res: Response, next: NextFunction) 
     if (authHeader) {
         const token = authHeader.split(' ')[1];
 
-        jwt.verify(token, tokenMailSecret, (err, user) => {
+        jwt.verify(token, globalConfig.mail.tokenMailSecret, (err, user) => {
             if (err) {
                 throw new Error("A token ellenőrzése sikertelen")
             }
-            userData = user as {email: string, userId: string}
+            userData = user as { email: string, userId: string }
         })
     }
 
     const updateActivity = async () => {
         console.log(req.body)
         try {
-            await Connection.db.collection("users").updateOne({"_id": new ObjectID(userData != undefined ? userData.userId : "")}, {
+            await Connection.db.collection("users").updateOne({ "_id": new ObjectID(userData != undefined ? userData.userId : "") }, {
                 $push: {
                     activities: {
                         createdAt: Date.now(),

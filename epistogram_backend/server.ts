@@ -1,22 +1,27 @@
-import {Connection, connectToMongoDB} from "./services/connectMongo";
+import { Connection, connectToMongoDB } from "./services/connectMongo";
 import fileUpload from 'express-fileupload'
 import express from 'express';
 import bodyParser from 'body-parser'
 import cors from 'cors';
-import {router as articleRoutes} from './api/articles/routes'
-import {router as courseRoutes} from './api/courses/routes'
-import {router as organizationRoutes} from './api/organizations/routes'
-import {router as usersRoutes} from './api/users/routes'
-import {router as videosRoutes} from './api/videos/routes'
-import {router as generalDataRoutes} from './api/votes/routes'
-import {router as filesRoutes} from './api/files/routes'
-import {router as overlaysRoutes} from './api/overlays/routes'
-import {router as tasksRoutes} from './api/tasks/routes'
-import {router as tagsRoutes} from './api/tags/routes'
-import {router as groupsRoutes} from './api/groups/routes'
-import { mongodbConfig } from "./services/environment";
+import { router as articleRoutes } from './api/articles/routes'
+import { router as courseRoutes } from './api/courses/routes'
+import { router as organizationRoutes } from './api/organizations/routes'
+import { router as usersRoutes } from './api/users/routes'
+import { router as videosRoutes } from './api/videos/routes'
+import { router as generalDataRoutes } from './api/votes/routes'
+import { router as filesRoutes } from './api/files/routes'
+import { router as overlaysRoutes } from './api/overlays/routes'
+import { router as tasksRoutes } from './api/tasks/routes'
+import { router as tagsRoutes } from './api/tags/routes'
+import { router as groupsRoutes } from './api/groups/routes'
+import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 
-connectToMongoDB(mongodbConfig);
+// initialize env
+// require is mandatory here, for some unknown reason
+export const globalConfig = initailizeDotEnvEnvironmentConfig();
+
+// connect mongo db
+connectToMongoDB();
 
 const server = express();
 
