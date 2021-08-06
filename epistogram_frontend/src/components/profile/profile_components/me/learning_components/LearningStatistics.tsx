@@ -1,9 +1,9 @@
 import React from 'react';
 import classes from './learningStatistics.module.scss'
 import LearningStatisticsItem from "./LearningStatisticsItem";
-import {List} from "@material-ui/core";
-import {Bar} from "react-chartjs-2";
-import {LearningStatisticsSeciton} from "./LearningStatisticsSeciton";
+import { List } from "@material-ui/core";
+import { Bar } from "react-chartjs-2";
+import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
 
 // The default options that should be included with chartjs data object
 
@@ -28,7 +28,7 @@ export const chartColorSets = {
 // Labels for current charts
 
 export const labels = {
-    timeSections: ['0:00-3:00','3:00-6:00', '6:00-9:00', '9:00-12:00', '12:00-15:00', '15:00-18:00', '18:00-21:00', '21:00-0:00'],
+    timeSections: ['0:00-3:00', '3:00-6:00', '6:00-9:00', '9:00-12:00', '12:00-15:00', '15:00-18:00', '18:00-21:00', '21:00-0:00'],
     daysOfTheWeek: ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap']
 }
 
@@ -53,7 +53,7 @@ export const howActiveIAm = {
             data: [1, 2, 3, 1, 2, 4, 1],
             ...chartDefaultDataOptions,
             ...chartColorSets.colorOne
-        },{
+        }, {
             label: 'Sessiönök hossza naponta (átlag, óra)',
             data: [0.67, 2.2, 4.23, 1.75, 0.5, 2, 4],
             ...chartDefaultDataOptions,
@@ -85,8 +85,7 @@ export const chartDefaultOptions = {
     },
 };
 
-const LearningStatistics = (props: {className?: string}) => {
-
+const LearningStatistics = (props: { className?: string }) => {
 
     return <div className={`${classes.learningContainer} ${props.className}`}>
         <div className={classes.learningInnerContainer}>
@@ -96,15 +95,15 @@ const LearningStatistics = (props: {className?: string}) => {
                     <LearningStatisticsItem value={"32"} suffix={"óra"} title={"Mely a leghatékonyabb idősáv?"} />
                     <LearningStatisticsItem value={"12-15"} suffix={"óra"} title={"Mely az általam leginkább preferált idősáv?"}>
                         <Bar className={classes.progressLineChart}
-                              options={chartDefaultOptions}
-                              type={"bar"}
-                              data={daysWithActivityInTime}/>
+                            options={chartDefaultOptions}
+                            type={"bar"}
+                            data={daysWithActivityInTime} />
                     </LearningStatisticsItem>
                     <LearningStatisticsItem suffix={""} title={"Mely nap(ok)on vagyok a legaktívabb?"} value={"Szerda"} chartSize={"large"}>
                         <Bar className={classes.progressLineChart}
-                             options={chartDefaultOptions}
-                             type={"bar"}
-                             data={howActiveIAm}/>
+                            options={chartDefaultOptions}
+                            type={"bar"}
+                            data={howActiveIAm} />
                     </LearningStatisticsItem>
                     <LearningStatisticsItem value={"32"} suffix={"óra"} title={"Mely az általam leginkább preferált idősáv?"} />
                     <LearningStatisticsItem value={"32"} suffix={"óra"} title={"Mely napokon vagyok a legaktívabb?"} />
@@ -127,6 +126,7 @@ const LearningStatistics = (props: {className?: string}) => {
                     <LearningStatisticsItem value={"32"} suffix={"óra"} title={"Elvégzett vizsgák száma"} />
                     <LearningStatisticsItem value={"32"} suffix={"óra"} title={"Átlagos teljesítmény a vizsgákon"} />
                 </LearningStatisticsSeciton>
+                
                 <LearningStatisticsSeciton title={"Hatékonyság"}>
                     <LearningStatisticsItem value={"32"} suffix={"óra"} title={"Tudás NMI-re adott válaszok"} />
                     <LearningStatisticsItem value={"32"} suffix={"óra"} title={"Megválaszolt kérdések száma"} />

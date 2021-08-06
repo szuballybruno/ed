@@ -15,6 +15,10 @@ import { router as tasksRoutes } from './api/tasks/routes'
 import { router as tagsRoutes } from './api/tags/routes'
 import { router as groupsRoutes } from './api/groups/routes'
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
+import { log } from "./services/logger";
+import jwt from "jsonwebtoken";
+import dayjs from "dayjs";
+import { parseWithoutProcessing } from "handlebars";
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -23,41 +27,101 @@ export const globalConfig = initailizeDotEnvEnvironmentConfig();
 // connect mongo db
 connectToMongoDB();
 
-const server = express();
+const expressServer = express();
+type ExpressRequest = express.Request;
+type ExpressResponse = express.Response;
+type ExpressNext = () => void;
 
-server.use(bodyParser.json());
-server.use(fileUpload());
-server.use(cors());
-
-server.use((req: express.Request, res: express.Response, next: () => void) => {
+const allowAllCorsMiddleware = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
     next();
-});
+}
 
-server.use('/articles', articleRoutes)
-server.use('/courses', courseRoutes)
-server.use('/groups', groupsRoutes)
-server.use('/organizations', organizationRoutes)
-server.use('/tags', tagsRoutes)
-server.use('/tasks', tasksRoutes)
-server.use('/upload', filesRoutes)
-server.use('/overlays', overlaysRoutes)
-server.use('/users', usersRoutes);
-server.use('/videos', videosRoutes);
-server.use('/votes', generalDataRoutes);
+const authMiddleware = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
 
-server.use(() => {
+    next();
+};
+
+class User {
+    email: string;
+    password: string;
+    id: number;
+
+    constructor(email: string, password: string, id: number) {
+        this.email = email;
+        this.password = password;
+        this.id = id;
+    }
+}
+
+const getAccessToken = (user: User) => jwt.sign(JSON.stringify(user), globalConfig.security.jwtSignSecret);
+const validateAccessToken = (token: string) => jwt.verify(token, globalConfig.security.jwtSignSecret);
+
+const setAccessTokenCookie = (res: ExpressResponse, accessToken: string) => {
+    res.cookie("accessToken", accessToken, {
+        secure: false,
+        httpOnly: true,
+        expires: dayjs().add(30, "days").toDate()
+    });
+}
+
+const respondValidationError = (res: ExpressResponse, error: string) =>
+    res.status(400).json({ error: error });
+
+const registerUserAction = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
+
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (!email)
+        respondValidationError(res, "Email is not provided!");
+
+    if (!password)
+        respondValidationError(res, "Password is not provided!");
+
+    // TODO: persist user in DB
+    const user = new User(email, password, 1);
+
+    const accessToken = getAccessToken(user);
+
+    setAccessTokenCookie(res, accessToken);
+
+    res.sendStatus(200);
+}
+
+// add middlewares
+expressServer.use(authMiddleware);
+
+expressServer.use(bodyParser.json());
+expressServer.use(fileUpload());
+expressServer.use(cors());
+expressServer.use(allowAllCorsMiddleware);
+
+expressServer.post('/register-user', registerUserAction);
+
+expressServer.use('/articles', articleRoutes)
+expressServer.use('/courses', courseRoutes)
+expressServer.use('/groups', groupsRoutes)
+expressServer.use('/organizations', organizationRoutes)
+expressServer.use('/tags', tagsRoutes)
+expressServer.use('/tasks', tasksRoutes)
+expressServer.use('/upload', filesRoutes)
+expressServer.use('/overlays', overlaysRoutes)
+expressServer.use('/users', usersRoutes);
+expressServer.use('/videos', videosRoutes);
+expressServer.use('/votes', generalDataRoutes);
+
+expressServer.use(() => {
     throw new Error('Nem létezik ilyen útvonal');
 });
 
-server.use((error: express.Errback, req: express.Request, res: express.Response) => {
+expressServer.use((error: express.Errback, req: express.Request, res: express.Response) => {
     return res.status(500).send(error.toString());
 });
 
-const port = process.env.PORT || 5000;
-server.listen(port, function () {
-    console.log(`A szerver a(z) ${port}-s porton fut`)
-});
+// listen
+expressServer.listen(globalConfig.misc.hostPort, () =>
+    log(`Listening on port '${globalConfig.misc.hostPort}'!`));
 

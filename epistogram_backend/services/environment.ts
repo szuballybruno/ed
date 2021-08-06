@@ -52,10 +52,15 @@ export class GlobalConfiguration {
     // COMPLEX
     // 
 
+    security = {
+        rsaPrivateKey: getEnvConfigEntry("RSA_PRIVATE_KEY"),
+        jwtSignSecret: getEnvConfigEntry("JWT_SIGN_SECRET"),
+    }
+
     misc = {
         uploadFolderPath: getEnvConfigEntry("UPLOAD_FOLDER_PATH"),
         tokenSecret: getEnvConfigEntry("TOKEN_SECRET"),
-        rsaPrivateKey: getEnvConfigEntry("RSA_PRIVATE_KEY")
+        hostPort: getEnvConfigEntry("HOST_PORT")
     }
 
     urls = {
@@ -79,7 +84,7 @@ export class GlobalConfiguration {
 
         dstPort: getEnvConfigEntry("VPS_SSH_DST_PORT"),
         agent: process.env.SSH_AUTH_SOCK,
-        privateKey: this.misc.rsaPrivateKey,
+        privateKey: this.security.rsaPrivateKey,
     };
 
     vpsSCPConfig = {
@@ -89,7 +94,7 @@ export class GlobalConfiguration {
         username: getEnvConfigEntry("VPS_SCP_USERNAME"),
         passphrase: getEnvConfigEntry("VPS_SCP_PASSPHRASE"),
 
-        privateKey: this.misc.rsaPrivateKey
+        privateKey: this.security.rsaPrivateKey
     };
 
     mongodbConfig = {
