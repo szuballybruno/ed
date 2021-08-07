@@ -9,7 +9,7 @@ class RefreshTokenContainer {
     }
 }
 
-const refreshTokens = [] as RefreshTokenContainer[];
+var refreshTokens = [] as RefreshTokenContainer[];
 
 export const getRefreshTokenByUserEmail = (userEmail: string) =>
     refreshTokens.filter(x => x.userEmail == userEmail)[0];
@@ -27,4 +27,9 @@ export const setRefreshToken = (userEmail: string, token: string) => {
 
         refreshTokens.push(new RefreshTokenContainer(userEmail, token));
     }
+}
+
+export const removeRefreshToken = (userEmail: string) => {
+
+    refreshTokens = refreshTokens.filter(x => x.userEmail != userEmail);
 }

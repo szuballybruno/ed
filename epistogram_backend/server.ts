@@ -4,7 +4,7 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import { nextTick } from 'process';
 import { router as articleRoutes } from './api/articles/routes';
-import { getCurrentUser as getCurrentUserAction, logInUserAction, registerUserAction, renewUserSession } from "./api/authenticationActions";
+import { getCurrentUser as getCurrentUserAction, logInUserAction, logOutUserAction, registerUserAction, renewUserSession } from "./api/authenticationActions";
 import { router as courseRoutes } from './api/courses/routes';
 import { router as filesRoutes } from './api/files/routes';
 import { router as groupsRoutes } from './api/groups/routes';
@@ -96,6 +96,9 @@ expressServer.post('/register-user', registerUserAction);
 
 expressServer.options('/renew-user-session', respondOk);
 expressServer.get('/renew-user-session', renewUserSession);
+
+expressServer.options('/log-out-user', respondOk);
+expressServer.post('/log-out-user', logOutUserAction);
 
 expressServer.post('/login-user', logInUserAction);
 expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);

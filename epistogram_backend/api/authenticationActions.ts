@@ -1,7 +1,7 @@
 
 import { globalConfig } from "../server";
-import { accessTokenCookieName, authorizeRequest, getCookie, getRequestAccessTokenMeta, respondValidationError, setAuthCookies, validateToken } from "../services/authentication";
-import { getRefreshTokenByUserEmail } from "../services/authenticationPersistance";
+import { accessTokenCookieName, authorizeRequest, getCookie, getRequestAccessTokenMeta, refreshTokenCookieName, respondValidationError, setAuthCookies, validateToken } from "../services/authentication";
+import { getRefreshTokenByUserEmail, removeRefreshToken } from "../services/authenticationPersistance";
 import { getUser, getUserByEmail, insertUser, User } from "../services/userPersistance";
 import { ExpressNext, ExpressRequest, ExpressResponse, respondOk } from "../utilities/helpers";
 
@@ -86,4 +86,18 @@ export const getCurrentUser = (req: ExpressRequest, res: ExpressResponse, next: 
 
     const tokenMeta = getRequestAccessTokenMeta(req);
     res.status(200).json(getUserByEmail(tokenMeta?.email as string));
+}
+
+export const logOutUserAction = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
+
+    const tokenMeta = getRequestAccessTokenMeta(req);
+
+    // remove refresh token, basically makes it invalid from now on
+    removeRefreshToken(tokenMeta?.email as string);
+
+    // remove browser cookies
+    res.clearCookie(accessTokenCookieName);
+    res.clearCookie(refreshTokenCookieName);
+
+    respondOk(req, res);
 }

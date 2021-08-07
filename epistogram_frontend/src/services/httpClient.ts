@@ -1,14 +1,30 @@
 import axios from "axios";
 import { globalConfig } from "../configuration/config";
 
-export const httpPost = (urlEnding: string, data: any) => {
+export class HTTPResponse {
+    code: number;
+    data: any;
 
-    return axios.post(globalConfig.backendUrl + urlEnding, data, {
-        withCredentials: true
-    });
+    constructor(code: number, data: any) {
+        this.code = code;
+        this.data = data;
+    }
 }
 
-export const httpGet = (urlEnding: string) => {
+export const httpPostAsync = async (urlEnding: string, data?: any) => {
 
-    return axios.get(globalConfig.backendUrl + urlEnding, { withCredentials: true });
+    const axiosResponse = await axios.post(globalConfig.backendUrl + urlEnding, data, {
+        withCredentials: true
+    });
+
+    return new HTTPResponse(axiosResponse.status, axiosResponse.data);
+}
+
+export const httpGetAsync = async (urlEnding: string) => {
+
+    const axiosResponse = await axios.get(globalConfig.backendUrl + urlEnding, {
+        withCredentials: true
+    });
+
+    return new HTTPResponse(axiosResponse.status, axiosResponse.data);
 }
