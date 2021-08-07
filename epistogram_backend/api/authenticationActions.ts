@@ -4,24 +4,32 @@ import dayjs from "dayjs";
 import { log, logError } from "../services/logger";
 import { globalConfig } from "../server";
 import { ExpressResponse, ExpressRequest, ExpressNext, respondOk } from "../utilities/helpers";
+import { getUserByEmail, insertUser, User } from "../services/userPersistance";
+import { getRefreshTokenByUserEmail, setRefreshToken } from "../services/authenticationPersistance";
 
 const accessTokenCookieName = "accessToken";
 const refreshTokenCookieName = "refreshToken";
+const accessTokenLifespanInS = 30;
+const refreshTokenLifespanInS = 60;
 
-export class User {
-    email: string;
-    password: string;
-    id: number;
+const getAccessToken = (user: User) => jwt.sign(
+    { email: user.email },
+    globalConfig.security.jwtSignSecret,
+    { expiresIn: `${accessTokenLifespanInS}s` });
 
-    constructor(email: string, password: string, id: number) {
-        this.email = email;
-        this.password = password;
-        this.id = id;
-    }
+const getRefreshToken = (user: User) => {
+
+    const existingToken = getRefreshTokenByUserEmail(user.email)?.token;
+    const { isValid } = validateToken(existingToken, globalConfig.security.jwtSignSecret);
+
+    if (isValid)
+        return existingToken;
+
+    const refreshToken = jwt.sign({ email: user.email }, globalConfig.security.jwtSignSecret);
+    setRefreshToken(user.email, refreshToken);
+
+    return refreshToken;
 }
-
-const getAccessToken = (user: User) => jwt.sign(JSON.stringify(user), globalConfig.security.jwtSignSecret);
-const getRefreshToken = (user: User) => jwt.sign(JSON.stringify(user), globalConfig.security.jwtSignSecret);
 
 const validateToken = (token: string, secret: string) => {
 
@@ -50,17 +58,17 @@ const validateToken = (token: string, secret: string) => {
 
 const setAccessTokenCookie = (res: ExpressResponse, accessToken: string) => {
     res.cookie(accessTokenCookieName, accessToken, {
-        secure: false,
-        httpOnly: false,
-        expires: dayjs().add(10, "seconds").toDate()
+        secure: true,
+        httpOnly: true,
+        expires: dayjs().add(accessTokenLifespanInS, "seconds").toDate()
     });
 }
 
 const setRefreshTokenCookie = (res: ExpressResponse, refreshToken: string) => {
     res.cookie(refreshTokenCookieName, refreshToken, {
-        secure: false,
-        httpOnly: false,
-        expires: dayjs().add(60, "seconds").toDate()
+        secure: true,
+        httpOnly: true,
+        expires: dayjs().add(refreshTokenLifespanInS, "seconds").toDate()
     });
 }
 
@@ -83,8 +91,6 @@ const getCookie = (req: ExpressRequest, key: string) => getCookies(req).filter(x
 const respondValidationError = (res: ExpressResponse, error: string) =>
     res.status(400).json({ error: error });
 
-const users = [] as User[];
-
 const setAuthCookies = (res: ExpressResponse, user: User) => {
 
     const accessToken = getAccessToken(user);
@@ -96,6 +102,7 @@ const setAuthCookies = (res: ExpressResponse, user: User) => {
 
 export const renewUserSession = (req: ExpressRequest, res: ExpressResponse) => {
 
+    // check if there is a refresh token sent in the request 
     const refreshToken = getCookie(req, "refreshToken")?.value;
     if (!refreshToken) {
 
@@ -103,16 +110,24 @@ export const renewUserSession = (req: ExpressRequest, res: ExpressResponse) => {
         return;
     }
 
+    // check sent refresh token if invalid by signature or expired
     const { isValid, user } = validateToken(refreshToken, globalConfig.security.jwtSignSecret);
-
     if (!isValid && !user) {
 
         res.sendStatus(403);
         return;
     }
 
-    setAuthCookies(res, user as User);
+    // check if this refresh token is associated to the user
+    const existingToken = getRefreshTokenByUserEmail(user?.email as string)?.token;
+    if (refreshToken != existingToken) {
 
+        res.sendStatus(403);
+        return;
+    }
+
+    // all checks passed, return with OK
+    setAuthCookies(res, user as User);
     respondOk(req, res);
 }
 
@@ -135,7 +150,7 @@ export const registerUserAction = (req: ExpressRequest, res: ExpressResponse, ne
 
     // TODO: persist user in DB
     const user = new User(email, password, 1);
-    users.push(user);
+    insertUser(user);
 
     setAuthCookies(res, user);
 
@@ -154,8 +169,7 @@ export const logInUserAction = (req: ExpressRequest, res: ExpressResponse, next:
     if (!password)
         respondValidationError(res, "Password is not provided!");
 
-    // TODO: get user from DB
-    const user = users.filter(x => x.email == email && x.password == password)[0];
+    const user = getUserByEmail(email, password);
     if (!user)
         res.sendStatus(418);
 

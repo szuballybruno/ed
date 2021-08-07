@@ -1,12 +1,15 @@
 import { useQuery } from 'react-query';
 import { httpGet } from './httpClient';
 
+const userFetchingIntervalInS = 15;
+const userSessionRenewIntervalInS = 10;
+
 export const useUserFetching = (nonAutomatic?: boolean) => {
 
     const { data, refetch: refetchUser, isSuccess } = useQuery('getCurrentUser', () => httpGet("get-current-user"), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: nonAutomatic ? false : 15000,
+        refetchInterval: nonAutomatic ? false : userFetchingIntervalInS * 1000,
         refetchIntervalInBackground: true,
     });
 
@@ -20,7 +23,7 @@ export const useRenewUserSessionPooling = () => {
     const { data, refetch: refetchUser, isSuccess } = useQuery('renewUserSession', () => httpGet("renew-user-session"), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: 5000,
+        refetchInterval: userSessionRenewIntervalInS * 1000,
         refetchIntervalInBackground: true,
     });
 
