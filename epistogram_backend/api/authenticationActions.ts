@@ -1,10 +1,14 @@
 
 import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
-import { ExpressNext, ExpressRequest, ExpressResponse, globalConfig } from "../server";
-import { log } from "../services/logger";
+import { log, logError } from "../services/logger";
+import { globalConfig } from "../server";
+import { ExpressResponse, ExpressRequest, ExpressNext, respondOk } from "../utilities/helpers";
 
-class User {
+const accessTokenCookieName = "accessToken";
+const refreshTokenCookieName = "refreshToken";
+
+export class User {
     email: string;
     password: string;
     id: number;
@@ -17,13 +21,46 @@ class User {
 }
 
 const getAccessToken = (user: User) => jwt.sign(JSON.stringify(user), globalConfig.security.jwtSignSecret);
-const validateAccessToken = (token: string) => jwt.verify(token, globalConfig.security.jwtSignSecret);
+const getRefreshToken = (user: User) => jwt.sign(JSON.stringify(user), globalConfig.security.jwtSignSecret);
+
+const validateToken = (token: string, secret: string) => {
+
+    const returnValue = { isValid: false, user: null as User | null };
+
+    log("Verifying token...");
+    try {
+
+        jwt.verify(token, secret);
+        returnValue.isValid = true;
+    }
+    catch (e) {
+
+        logError(e);
+    }
+
+    if (returnValue.isValid) {
+
+        log("Token is valid, decoding...");
+        returnValue.user = jwt.decode(token) as User;
+        log("Token decoded, content: " + JSON.stringify(returnValue.user));
+    }
+
+    return returnValue;
+}
 
 const setAccessTokenCookie = (res: ExpressResponse, accessToken: string) => {
-    res.cookie("accessToken", accessToken, {
+    res.cookie(accessTokenCookieName, accessToken, {
         secure: false,
         httpOnly: false,
-        expires: dayjs().add(30, "days").toDate()
+        expires: dayjs().add(10, "seconds").toDate()
+    });
+}
+
+const setRefreshTokenCookie = (res: ExpressResponse, refreshToken: string) => {
+    res.cookie(refreshTokenCookieName, refreshToken, {
+        secure: false,
+        httpOnly: false,
+        expires: dayjs().add(60, "seconds").toDate()
     });
 }
 
@@ -48,6 +85,37 @@ const respondValidationError = (res: ExpressResponse, error: string) =>
 
 const users = [] as User[];
 
+const setAuthCookies = (res: ExpressResponse, user: User) => {
+
+    const accessToken = getAccessToken(user);
+    setAccessTokenCookie(res, accessToken);
+
+    const refreshToken = getRefreshToken(user);
+    setRefreshTokenCookie(res, refreshToken);
+}
+
+export const renewUserSession = (req: ExpressRequest, res: ExpressResponse) => {
+
+    const refreshToken = getCookie(req, "refreshToken")?.value;
+    if (!refreshToken) {
+
+        res.sendStatus(403);
+        return;
+    }
+
+    const { isValid, user } = validateToken(refreshToken, globalConfig.security.jwtSignSecret);
+
+    if (!isValid && !user) {
+
+        res.sendStatus(403);
+        return;
+    }
+
+    setAuthCookies(res, user as User);
+
+    respondOk(req, res);
+}
+
 export const registerUserAction = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
 
     const email = req.body?.email;
@@ -69,15 +137,11 @@ export const registerUserAction = (req: ExpressRequest, res: ExpressResponse, ne
     const user = new User(email, password, 1);
     users.push(user);
 
-    const accessToken = getAccessToken(user);
-
-    setAccessTokenCookie(res, accessToken);
-
-    // res.setHeader('Access-Control-Allow-Credentials', 'true');
-    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+    setAuthCookies(res, user);
 
     res.sendStatus(200);
 }
+
 
 export const logInUserAction = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
 
@@ -95,19 +159,21 @@ export const logInUserAction = (req: ExpressRequest, res: ExpressResponse, next:
     if (!user)
         res.sendStatus(418);
 
-    const accessToken = getAccessToken(user);
-
-    setAccessTokenCookie(res, accessToken);
+    setAuthCookies(res, user);
 
     res.sendStatus(200);
 }
 
 export const getCurrentUser = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
 
-    log("Getting current user...");
+    const accessToken = getCookie(req, "accessToken")?.value;
+    if (!accessToken) {
 
-    const accessToken = getCookie(req, "accessToken").value;
-    const isValid = validateAccessToken(accessToken);
+        res.sendStatus(403);
+        return;
+    }
+
+    const { isValid, user } = validateToken(accessToken, globalConfig.security.jwtSignSecret);
 
     if (!isValid) {
 
@@ -115,5 +181,5 @@ export const getCurrentUser = (req: ExpressRequest, res: ExpressResponse, next: 
         return;
     }
 
-    res.status(200).json(users[0]);
+    res.status(200).json(user);
 }
