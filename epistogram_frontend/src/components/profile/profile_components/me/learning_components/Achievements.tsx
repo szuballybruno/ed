@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './achievements.module.scss'
 import Cookies from "universal-cookie";
-import {config} from "../../../../../configuration/config";
+import {globalConfig} from "../../../../../configuration/config";
 import {Typography} from "@material-ui/core";
 
 const Achievements = () => {
@@ -17,8 +17,8 @@ const Achievements = () => {
     return (
         <div className={classes.achievementsContainer}>
             <div className={classes.achievementsInnerContainer}>
-                <AchievementItem itemUrl={config.assetStorageUrl + "/users/" + cookies.get("userId") + "/badges/achievement-52-124188.svg"} itemTitle={"Született marketinges"}/>
-                <AchievementItem itemUrl={config.assetStorageUrl + "/users/" + cookies.get("userId") + "/badges/achievement-53-124196.svg"} itemTitle={"A csoport bajnoka"}/>
+                <AchievementItem itemUrl={globalConfig.assetStorageUrl + "/users/" + cookies.get("userId") + "/badges/achievement-52-124188.svg"} itemTitle={"Született marketinges"}/>
+                <AchievementItem itemUrl={globalConfig.assetStorageUrl + "/users/" + cookies.get("userId") + "/badges/achievement-53-124196.svg"} itemTitle={"A csoport bajnoka"}/>
             </div>
         </div>
     );

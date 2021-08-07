@@ -11,7 +11,7 @@ import instance from "../../../../services/axiosInstance";
 import queryString from "query-string";
 import {validatePassword} from "../../../../services/validator";
 import classes from "./signup.module.scss"
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 import {updateActivity} from "../../../../services/updateActivity";
 import {Redirect} from "react-router-dom";
 import {Button, TextField, Typography} from "@material-ui/core";

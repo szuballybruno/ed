@@ -9,7 +9,7 @@ import {Route, Switch} from "react-router-dom";
 import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
 import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
 import {AxiosResponse} from "axios";
-import {config} from "../../../configuration/config";
+import {globalConfig} from "../../../configuration/config";
 import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
 import {AddVote} from "./votes_components/AddVote";
 import {vote} from "../../../store/types/vote";
@@ -66,7 +66,7 @@ export const Votes: React.FunctionComponent = () => {
                                                                  }, {
                                                                      icon: "delete",
                                                                      onClick: () => {
-                                                                         instance.delete(`${config.backendUrl}articles/deletevote?voteId=${vote._id}`).then(() => {
+                                                                         instance.delete(`${globalConfig.backendUrl}articles/deletevote?voteId=${vote._id}`).then(() => {
                                                                              return admin.articles[index].set(none)
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }

@@ -2,13 +2,13 @@ import React from 'react';
 import classes from "./exam.module.scss";
 import Lottie from "lottie-web-react";
 import downArrow from "./download.png"
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 
 const ExamEnd = () => {
     const defaultOptions = {
         loop: true,
         autoplay: true,
-        animationData: `${config.assetStorageUrl}/application/11272-party-popper.json`,
+        animationData: `${globalConfig.assetStorageUrl}/application/11272-party-popper.json`,
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
         }

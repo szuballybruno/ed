@@ -4,7 +4,7 @@ import applicationRunningState from "../../store/application/applicationRunningS
 import userSideState from "../../store/user/userSideState";
 //import {hotjar} from "react-hotjar";
 import setTheme from "../../services/setTheme";
-import {config} from "../../configuration/config";
+import {globalConfig} from "../../configuration/config";
 import {AxiosRequestConfig} from "axios";
 import instance from "../../services/axiosInstance";
 import Cookies from "universal-cookie";
@@ -19,7 +19,7 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     //hotjar.initialize(1954004, 0);
 
     //SET THEME
-    setTheme(config.currentTheme);
+    setTheme(globalConfig.currentTheme);
 
     //LOADING INDICATOR METHODS
     const setLoadingOnRequest = (config: AxiosRequestConfig) => {

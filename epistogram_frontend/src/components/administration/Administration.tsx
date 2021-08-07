@@ -5,7 +5,7 @@ import {useState} from "@hookstate/core";
 import {Users} from "./users/Users";
 import {Redirect, Route, Switch} from "react-router-dom";
 import Courses from "./courses/Courses";
-import {config} from "../../configuration/config";
+import {globalConfig} from "../../configuration/config";
 import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
 import Statistics from "./statistics/Statistics";
 import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
@@ -48,7 +48,7 @@ const Administration = (props: { match: { url: string; }; }) => {
 
                 </div>
                 <div className={classes.adminDashboardLeftItemMenuItems}>
-                    {config.adminMenuItems.map((item,index) => {
+                    {globalConfig.adminMenuItems.map((item,index) => {
                         return <AdminDashboardMenuItem title={item.title}
                                                        index={index}
                                                        key={index}

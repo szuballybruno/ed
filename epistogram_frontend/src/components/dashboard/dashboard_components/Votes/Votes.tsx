@@ -8,7 +8,7 @@ import ReactFC from "react-fusioncharts";
 import FusionCharts from "fusioncharts";
 import Pie2D from "fusioncharts/fusioncharts.charts";
 import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 import {Paper} from "@material-ui/core";
 
 
@@ -140,8 +140,8 @@ const Votes = () => {
                             </div>
                             <div className={classes.voteImagesWrapper}>
                                 <div className={classes.voteImagesInnerWrapper}>
-                                    <img alt={""} className={classes.voteImage} src={config.assetStorageUrl + user.vote.voteFirstAnswerPath.get()} />
-                                    <img alt={""} className={classes.voteImage} src={config.assetStorageUrl + user.vote.voteSecondAnswerPath.get()} />
+                                    <img alt={""} className={classes.voteImage} src={globalConfig.assetStorageUrl + user.vote.voteFirstAnswerPath.get()} />
+                                    <img alt={""} className={classes.voteImage} src={globalConfig.assetStorageUrl + user.vote.voteSecondAnswerPath.get()} />
                                 </div>
                             </div>
                         </div>

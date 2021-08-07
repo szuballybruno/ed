@@ -4,7 +4,7 @@ import classes from './mobileDemo.module.scss'
 import Navbar from "./navigation/navbar/AllNavbar";
 import AllNavbar from "./navigation/navbar/AllNavbar";
 import {useState} from "@hookstate/core";
-import {config} from "../../configuration/config";
+import {globalConfig} from "../../configuration/config";
 
 export const MobileDemo = () => {
     const showNextPage = useState(true)
@@ -22,7 +22,7 @@ export const MobileDemo = () => {
             "menuPath": ""
         }
     }
-    const logoUrl = config.assetStorageUrl + "/application/logo.png"
+    const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
 
     return <div className={classes.mobileDemoWrapper}>
         <div className={classes.navbar}>
@@ -64,10 +64,10 @@ export const MobileDemo = () => {
                         }, 500)
                     }}>ROAS</Button>
         </div> : <div className={classes.nextPageWrapper}>
-            <img className={classes.congrat} src={`${config.assetStorageUrl}/application/welldone.png`} />
+            <img className={classes.congrat} src={`${globalConfig.assetStorageUrl}/application/welldone.png`} />
             <div>
                 <Typography> A kérdés megválaszolásával nem csak tudásodat bővítetted, de 3</Typography>
-                <img className={classes.epistoCoin} alt={""} src={`${config.assetStorageUrl}/application/episto.png`} />
+                <img className={classes.epistoCoin} alt={""} src={`${globalConfig.assetStorageUrl}/application/episto.png`} />
                 <Typography>-al is gazdagodtál. Szép munka volt, így tovább!</Typography>
             </div>
         </div>}

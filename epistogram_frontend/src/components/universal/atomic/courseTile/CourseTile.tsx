@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from "./courseTile.module.scss";
 import {Gradient} from 'react-gradient';
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -37,7 +37,7 @@ const CourseTile = (props: {item: course, itemIndex: number, className?: string}
         return  <animated.div style={anim} className={classes.searchItem}>
             <div className={classes.videoItemTopWrapper}>
                 <animated.img className={classes.videoItemThumbnailImage} style={anim}
-                                    src={config.assetStorageUrl + `/courses/${props.item._id}.${"png" || "jpg"}`}
+                                    src={globalConfig.assetStorageUrl + `/courses/${props.item._id}.${"png" || "jpg"}`}
                                     onError={(e) => {e.currentTarget.src = "https://picsum.photos/500/350"}} />
                 <div className={classes.videoTitleOuterWrapper}>
                     <Gradient className={classes.courseTitleBorder}

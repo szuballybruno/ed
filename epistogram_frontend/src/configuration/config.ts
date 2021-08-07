@@ -1,4 +1,4 @@
-export const config = {
+export const globalConfig = {
     siteUrl: "http://localhost:3000", // Per jel nélkül
     backendUrl: "http://localhost:5000/",
     backendUrlMinimal: "http://localhost:5000/",

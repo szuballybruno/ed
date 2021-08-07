@@ -6,7 +6,7 @@ import {useState} from "@hookstate/core";
 // @ts-ignore
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
 import MobileDropdown from "./navbar_components/MobileDropdown";
 
@@ -32,7 +32,7 @@ interface NavbarIF  {
 }
 
 const Navbar = (props: NavbarIF) => {
-    const logoUrl = config.assetStorageUrl + "/application/logo.png"
+    const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
 
     const app = useState(applicationRunningState)
     const isMobile = useState(0)

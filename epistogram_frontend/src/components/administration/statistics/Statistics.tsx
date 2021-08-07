@@ -13,7 +13,7 @@ import a from "../statistics/charts/configurationFiles/a"
 import FusionCharts from "fusioncharts";
 import charts from "fusioncharts/fusioncharts.charts";
 import ReactFusioncharts from "react-fusioncharts";
-import {config} from "../../../configuration/config";
+import {globalConfig} from "../../../configuration/config";
 
 // Resolves charts dependancy
 charts(FusionCharts);
@@ -25,14 +25,14 @@ const Statistics = () => {
             <div className={classes.statisticsInfoOuterContainer}>
                 <div className={classes.statisticsInfoInnerContainer}>
                     <div className={classes.statisticsInfoContainer}>
-                        <StatisticsInfoItem imageSource={`${config.assetStorageUrl}/application/aktivfelhasznalok.svg`} titleText={"Aktív felhasználók"} dataNumber={319} dataText={""} />
-                        <StatisticsInfoItem imageSource={`${config.assetStorageUrl}/application/atlagosaneltoltottido.svg`} titleText={"Átlagosan eltöltött idő"} dataNumber={79} dataText={" perc"} />
-                        <StatisticsInfoItem imageSource={`${config.assetStorageUrl}/application/legnepszerubbidosav.svg`} titleText={"Legnépszerűbb idősáv"} dataText={"18:00 - 20:00"} />
+                        <StatisticsInfoItem imageSource={`${globalConfig.assetStorageUrl}/application/aktivfelhasznalok.svg`} titleText={"Aktív felhasználók"} dataNumber={319} dataText={""} />
+                        <StatisticsInfoItem imageSource={`${globalConfig.assetStorageUrl}/application/atlagosaneltoltottido.svg`} titleText={"Átlagosan eltöltött idő"} dataNumber={79} dataText={" perc"} />
+                        <StatisticsInfoItem imageSource={`${globalConfig.assetStorageUrl}/application/legnepszerubbidosav.svg`} titleText={"Legnépszerűbb idősáv"} dataText={"18:00 - 20:00"} />
                     </div>
                     <div className={classes.statisticsInfoContainer}>
-                        <StatisticsInfoItem imageSource={`${config.assetStorageUrl}/application/oldalakpermunkamenet.svg`} titleText={"Oldalak/munkamenet "} dataNumber={3.12} dataText={""} />
-                        <StatisticsInfoItem imageSource={`${config.assetStorageUrl}/application/tesztekertekelese.svg`} titleText={"Tesztek értékelése"} dataNumber={92} dataText={"%"} />
-                        <StatisticsInfoItem imageSource={`${config.assetStorageUrl}/application/hetiatlagosbelepesekszama.svg`} titleText={"Heti átlagos belépések száma"} dataNumber={4.16} dataText={""} />
+                        <StatisticsInfoItem imageSource={`${globalConfig.assetStorageUrl}/application/oldalakpermunkamenet.svg`} titleText={"Oldalak/munkamenet "} dataNumber={3.12} dataText={""} />
+                        <StatisticsInfoItem imageSource={`${globalConfig.assetStorageUrl}/application/tesztekertekelese.svg`} titleText={"Tesztek értékelése"} dataNumber={92} dataText={"%"} />
+                        <StatisticsInfoItem imageSource={`${globalConfig.assetStorageUrl}/application/hetiatlagosbelepesekszama.svg`} titleText={"Heti átlagos belépések száma"} dataNumber={4.16} dataText={""} />
                     </div>
                 </div>
             </div>
