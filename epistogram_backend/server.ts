@@ -15,10 +15,11 @@ import { router as tasksRoutes } from './api/tasks/routes';
 import { router as usersRoutes } from './api/users/routes';
 import { router as videosRoutes } from './api/videos/routes';
 import { router as generalDataRoutes } from './api/votes/routes';
+import { authorizeRequest } from './services/authentication';
 import { connectToMongoDB } from "./services/connectMongo";
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
-import { log } from "./services/logger";
-import { ExpressRequest, ExpressResponse, ExpressNext, respondOk } from './utilities/helpers';
+import { log, logError } from "./services/logger";
+import { ExpressRequest, ExpressResponse, ExpressNext, respondOk, respondForbidden } from './utilities/helpers';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -29,31 +30,43 @@ connectToMongoDB();
 
 const expressServer = express();
 
-const allowAllCorsMiddleware = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-    next();
-}
+// const allowAllCorsMiddleware = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
+//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+//     next();
+// }
 
 const authMiddleware = (req: ExpressRequest, res: ExpressResponse, next: ExpressNext) => {
 
-    next();
+    log("Authorizing request...");
+    authorizeRequest(
+        req,
+        tokenMeta => {
+
+            log("Authorization successful, user email: " + tokenMeta.email);
+            next();
+        },
+        () => {
+
+            log("Authorizing request failed.");
+            respondForbidden(req, res);
+        });
 };
 
-const corsMiddleware = cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-    allowedHeaders: [
-        "Origin",
-        "X-Requested-With",
-        "Content-Type",
-        "Accept",
-        "Authorization"
-    ],
-    preflightContinue: false,
-    methods: "DELETE, PATCH"
-});
+// const corsMiddleware = cors({
+//     origin: 'http://localhost:3000',
+//     credentials: true,
+//     allowedHeaders: [
+//         "Origin",
+//         "X-Requested-With",
+//         "Content-Type",
+//         "Accept",
+//         "Authorization"
+//     ],
+//     preflightContinue: false,
+//     methods: "DELETE, PATCH"
+// });
 
 const setCredentialCORSHearders = (res: ExpressResponse) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -85,7 +98,7 @@ expressServer.options('/renew-user-session', respondOk);
 expressServer.get('/renew-user-session', renewUserSession);
 
 expressServer.post('/login-user', logInUserAction);
-expressServer.get('/get-current-user', getCurrentUserAction);
+expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
 
 expressServer.use('/articles', articleRoutes)
 expressServer.use('/courses', courseRoutes)
