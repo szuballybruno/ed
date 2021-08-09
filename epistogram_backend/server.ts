@@ -1,4 +1,4 @@
-import { Connection, connectToMongoDB } from "./services/connectMongo";
+import { connectToMongoDB } from "./services/connectMongo";
 import fileUpload from 'express-fileupload'
 import express from 'express';
 import bodyParser from 'body-parser'
@@ -21,43 +21,45 @@ import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 export const globalConfig = initailizeDotEnvEnvironmentConfig();
 
 // connect mongo db
-connectToMongoDB();
+connectToMongoDB().then(() => {
+    const server = express();
 
-const server = express();
+    server.use(bodyParser.json());
+    server.use(fileUpload());
+    server.use(cors());
 
-server.use(bodyParser.json());
-server.use(fileUpload());
-server.use(cors());
+    server.use((req: express.Request, res: express.Response, next: () => void) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+        next();
+    });
 
-server.use((req: express.Request, res: express.Response, next: () => void) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-    next();
+    server.use('/articles', articleRoutes)
+    server.use('/courses', courseRoutes)
+    server.use('/groups', groupsRoutes)
+    server.use('/organizations', organizationRoutes)
+    server.use('/tags', tagsRoutes)
+    server.use('/tasks', tasksRoutes)
+    server.use('/upload', filesRoutes)
+    server.use('/overlays', overlaysRoutes)
+    server.use('/users', usersRoutes);
+    server.use('/videos', videosRoutes);
+    server.use('/votes', generalDataRoutes);
+
+    server.use(() => {
+        throw new Error('Nem létezik ilyen útvonal');
+    });
+
+    server.use((error: express.Errback, req: express.Request, res: express.Response) => {
+        return res.status(500).send(error.toString());
+    });
+
+    const port = process.env.PORT || 5000;
+    server.listen(port, function () {
+        console.log(`Server listening on port ${port}`)
+    });
 });
 
-server.use('/articles', articleRoutes)
-server.use('/courses', courseRoutes)
-server.use('/groups', groupsRoutes)
-server.use('/organizations', organizationRoutes)
-server.use('/tags', tagsRoutes)
-server.use('/tasks', tasksRoutes)
-server.use('/upload', filesRoutes)
-server.use('/overlays', overlaysRoutes)
-server.use('/users', usersRoutes);
-server.use('/videos', videosRoutes);
-server.use('/votes', generalDataRoutes);
 
-server.use(() => {
-    throw new Error('Nem létezik ilyen útvonal');
-});
-
-server.use((error: express.Errback, req: express.Request, res: express.Response) => {
-    return res.status(500).send(error.toString());
-});
-
-const port = process.env.PORT || 5000;
-server.listen(port, function () {
-    console.log(`A szerver a(z) ${port}-s porton fut`)
-});
 

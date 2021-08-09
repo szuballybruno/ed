@@ -125,14 +125,14 @@ const Statistics = () => {
         <div className={classes.statisticsOuterWrapper}>
             <div className={classes.statisticsInfoOuterContainer}>
                 <LearningStatisticsSeciton title={"Leggyakoribb adatok"}>
-                    <LearningStatisticsItem suffix={""} title={""} value={""} />
-                    <LearningStatisticsItem suffix={""} title={""} value={""} />
-                    <LearningStatisticsItem suffix={""} title={""} value={""} />
-                    <LearningStatisticsItem suffix={""} title={""} value={""} />
-                    <LearningStatisticsItem suffix={""} title={""} value={""} />
-                    <LearningStatisticsItem suffix={""} title={""} value={""} />
-                    <LearningStatisticsItem suffix={""} title={""} value={""} />
-                    <LearningStatisticsItem suffix={""} title={""} value={""} />
+                    <LearningStatisticsItem suffix={"%"} value={"95"} title={"Kurzus teljesítési ráta"} />
+                    <LearningStatisticsItem suffix={"perc"} value={"38"} title={"Átlagosan eltöltött idő/belépés"} />
+                    <LearningStatisticsItem suffix={"óra"} value={"3,15"} title={"Átlagos tanulással töltött idő/hét"} />
+                    <LearningStatisticsItem suffix={"%"} value={"70"} title={"Belépési arány a héten"} />
+                    <LearningStatisticsItem suffix={"%"} value={"54"} title={"Teljesítés a vizsgákon"} />
+                    <LearningStatisticsItem suffix={"%"} value={"80"} title={"Átlagos fókusztartás"} />
+                    <LearningStatisticsItem suffix={"%"} value={"3"} title={"Felejtési görbe javulása"} />
+                    <LearningStatisticsItem suffix={"pont"} value={"8.5"} title={"Munkavállalói feedback"} />
                 </LearningStatisticsSeciton>
             </div>
             <div className={classes.statisticsInfoOuterContainer}>

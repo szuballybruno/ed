@@ -20,10 +20,10 @@
 }
 
 .descriptionTextWrapper {
-    width: 94%;
+    width: calc(100% - 50px);
     line-height: 1.8rem;
     padding-top: 15px;
-    padding-right: 30%;
+    padding-right: 0;
     box-sizing: border-box;
     text-align: justify;
 }

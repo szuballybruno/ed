@@ -16,6 +16,7 @@ import {
 import {useState} from "@hookstate/core";
 import userSideState from "../../../../store/user/userSideState";
 import {Create, MenuBook, PlayCircleFilled} from "@material-ui/icons";
+import { NavLink } from "react-router-dom";
 
 export const Assistant = () => {
     const user = useState(userSideState)
@@ -51,7 +52,7 @@ export const Assistant = () => {
             ],
         },
     };
-    return <Container className={classes.assistantWrapper}>
+    return <div className={classes.assistantWrapper}>
         <Grid container spacing={1}>
             <Grid item xs={8} className={classes.testItemWrapper}>
                 <Typography variant={"overline"} className={classes.smallBlockTitle}>Teszteld a tudásod</Typography>
@@ -105,9 +106,11 @@ export const Assistant = () => {
                             </ListItemIcon>
                             <ListItemText primary="Word kurzus végi vizsga" secondary={"2021.06.19."} />
                         </ListItem>
-                        <Button variant={"outlined"}
-                                className={classes.allTasksButton}
-                                size={"small"}>Összes feladatom</Button>
+                        <NavLink className={classes.allTasksButtonLink} to={"/profilom/tanulas"}>
+                            <Button variant={"outlined"}
+                                    className={classes.allTasksButton}
+                                    size={"small"}>Összes feladatom</Button>
+                        </NavLink>
                     </List>
                 </Paper>
             </Grid>
@@ -133,5 +136,5 @@ export const Assistant = () => {
         </Grid>
 
 
-    </Container>
+    </div>
 };
