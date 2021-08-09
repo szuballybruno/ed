@@ -4,6 +4,19 @@ import {Button, Card, Typography} from "@material-ui/core";
 import {Fullscreen, FullscreenExit} from "@material-ui/icons";
 import {useState} from "@hookstate/core";
 
+/*
+ * Expandable statistics item for CSS Grid container
+ *
+ * Features:
+ * - Variable suffix (and later prefix)
+ * - Multiple size charts as children
+ * - Either shows one number or a complete chart
+ * - (later showChartByDefault)
+ *
+ * TODO: Create a showChartByDefault property for charts
+ * TODO: Move out hard coded data
+ */
+
 const LearningStatisticsItem = (props: {
     iconPath?: string
     suffix: string
@@ -53,7 +66,8 @@ const LearningStatisticsItem = (props: {
 
     return <Card className={classes.itemWrapper} style={{
         gridColumn: `auto / span ${open.get() ? (props.chartSize === "large" ? 4 : 2) : 1}`,
-        gridRow: `auto / span ${open.get() ? 2 : 1}`
+        gridRow: `auto / span ${open.get() ? 2 : 1}`,
+        transition: "all 2s"
     }}>
         {open.get() ? <div className={classes.chartOuterWrapper}>
             <div className={classes.headerTitle}>
@@ -67,7 +81,7 @@ const LearningStatisticsItem = (props: {
             </Button>
         </div> : <div className={classes.dataTileWrapper}>
             <div className={classes.iconWrapper}>
-                <div className={classes.fakeIcon} />
+                {props.iconPath ? <img className={classes.statItemIcon} src={props.iconPath} alt={""} /> : <div className={classes.fakeIcon} />}
             </div>
             <div className={classes.contentWrapper}>
                 <div className={classes.itemTitleWrapper}>
@@ -78,7 +92,6 @@ const LearningStatisticsItem = (props: {
                         <Typography variant={"h5"}>{props.value}</Typography>
                     </div>
                     <div className={classes.itemIconWrapper}>
-                        {props.iconPath ? <img alt={""} src={props.iconPath} /> : null}
                         <Typography>{props.suffix}</Typography>
                     </div>
                 </div>

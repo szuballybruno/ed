@@ -2,6 +2,8 @@ import React from 'react';
 import classes from "./learningStatisticsSection.module.scss";
 import {Divider, Typography} from "@material-ui/core";
 
+// HOC for a user statistics group like e.g.: focus, videos, time management
+
 export const LearningStatisticsSeciton = (props: {
     title: string,
     children: React.ReactNode | React.ReactNode[]

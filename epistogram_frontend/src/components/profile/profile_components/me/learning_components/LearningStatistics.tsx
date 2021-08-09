@@ -4,6 +4,7 @@ import LearningStatisticsItem from "./LearningStatisticsItem";
 import {List} from "@material-ui/core";
 import {Bar} from "react-chartjs-2";
 import {LearningStatisticsSeciton} from "./LearningStatisticsSeciton";
+import {config} from "../../../../../configuration/config";
 
 // The default options that should be included with chartjs data object
 
@@ -63,6 +64,7 @@ export const howActiveIAm = {
 };
 
 // The default configuration option for charts
+
 export const chartDefaultOptions = {
     maintainAspectRatio: false,
     plugins: {
@@ -85,27 +87,22 @@ export const chartDefaultOptions = {
     },
 };
 
+// TODO: Create a map function by local history to awoid code duplication
+
 const LearningStatistics = (props: {className?: string}) => {
-
-
     return <div className={`${classes.learningContainer} ${props.className}`}>
         <div className={classes.learningInnerContainer}>
             <List className={classes.learningList}>
                 <LearningStatisticsSeciton title={"Időbeosztás"}>
-                    <LearningStatisticsItem value={"32"} suffix={"perc"} title={"Session átlagos hossza"} />
-                    <LearningStatisticsItem value={"12-15"} suffix={"óra"} title={"Mely az általam leginkább preferált idősáv?"}>
+                    <LearningStatisticsItem iconPath={config.assetStorageUrl + "/application/stats/1.session.png"} value={"32"} suffix={"perc"} title={"Session átlagos hossza"} />
+                    <LearningStatisticsItem iconPath={config.assetStorageUrl + "/application/stats/2.preferaltidosav.png"} value={"12-15"} suffix={"óra"} title={"Mely az általam leginkább preferált idősáv?"}>
                         <Bar className={classes.progressLineChart}
                              options={chartDefaultOptions}
                              type={"bar"}
                              data={daysWithActivityInTime}/>
                     </LearningStatisticsItem>
-                    <LearningStatisticsItem value={"9-12"} suffix={"óra"} title={"Mely a leghatékonyabb idősáv?"}>
-                        <Bar className={classes.progressLineChart}
-                             options={chartDefaultOptions}
-                             type={"bar"}
-                             data={howActiveIAm}/>
-                    </LearningStatisticsItem>
-                    <LearningStatisticsItem value={"Szerda"} suffix={""} title={"Mely nap(ok)on vagyok a legaktívabb?"}>
+                    <LearningStatisticsItem iconPath={config.assetStorageUrl + "/application/stats/3.leghatekonyabbidosav.png"} value={"9-12"} suffix={"óra"} title={"Mely a leghatékonyabb idősáv?"} />
+                    <LearningStatisticsItem iconPath={config.assetStorageUrl + "/application/stats/4.melynapok.png"} value={"Szerda"} suffix={""} title={"Mely nap(ok)on vagyok a legaktívabb?"}>
                         <Bar className={classes.progressLineChart}
                              options={chartDefaultOptions}
                              type={"bar"}

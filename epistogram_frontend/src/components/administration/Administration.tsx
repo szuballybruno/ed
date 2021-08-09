@@ -21,7 +21,6 @@ import {
 import {ContentWrapper, LeftPanel, MainWrapper, RightPanel} from "../../HOC/mainPanels/MainPanels";
 import menuItems from "../../configuration/menuItems.json";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
-import applicationRunningState from "../../store/application/applicationRunningState";
 import {AdminAddHeader} from "./universal/adminAddHeader/AdminAddHeader";
 
 const Administration = (props: { match: { url: string; }; }) => {
