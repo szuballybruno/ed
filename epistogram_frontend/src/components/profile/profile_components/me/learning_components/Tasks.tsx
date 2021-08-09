@@ -13,6 +13,8 @@ import {
     withStyles
 } from "@material-ui/core";
 
+// Further styling of MUI TableCell component
+
 const StyledTableCell = withStyles((theme: Theme) =>
     createStyles({
         head: {
@@ -26,6 +28,8 @@ const StyledTableCell = withStyles((theme: Theme) =>
     }),
 )(TableCell);
 
+// Further styling of MUI TableRow component
+
 const StyledTableRow = withStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -35,6 +39,22 @@ const StyledTableRow = withStyles((theme: Theme) =>
         },
     }),
 )(TableRow);
+
+// TODO: Migrate to language file
+
+const statuses = [{
+    name: "new",
+    displayedText: "Új"
+},{
+    name: "inProgress",
+    displayedText: "Folyamatban"
+},{
+    name: "done",
+    displayedText: "Kész"
+},{
+    name: "interrupted",
+    displayedText: "Meghiusúlt"
+}]
 
 const Tasks = (props: {
     tasksArray?: {
@@ -63,8 +83,10 @@ const Tasks = (props: {
                                     {task.name}
                                 </StyledTableCell>
                                 <StyledTableCell>{task.addedBy}</StyledTableCell>
-                                <StyledTableCell>{task.status}</StyledTableCell>
-                                <StyledTableCell>{String(new Date(task.due))}</StyledTableCell>
+                                {statuses.map(status => {
+                                    return status.name === task.status ? <StyledTableCell>{status.displayedText}</StyledTableCell> : null
+                                })}
+                                <StyledTableCell>{String(new Date(task.due).toDateString())}</StyledTableCell>
                             </StyledTableRow>
                         )) : <TableRow key={"No task"}>
                             <StyledTableCell component="th">
