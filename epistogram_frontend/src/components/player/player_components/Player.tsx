@@ -79,7 +79,7 @@ const Player = (props: {id: string}) => {
                         url={props.id === user.userData.currentItem._id.get() ? user.userData.currentItem.url.get() : ""}
                         width={"100%"}
                         height={"100%"}
-                        controls={true}
+                        controls={false}
                         playing={app.shouldPlayVideo.get()}
                         onPlay={() => {app.shouldPlayVideo.set(true)}}
                         onProgress={
@@ -123,7 +123,7 @@ const Player = (props: {id: string}) => {
                         <button onClick={(e) => toggleFullScreen()}>
                             <Fullscreen />
                         </button>
-                        <div className={classes.tracksList}>
+                        {/*<div className={classes.tracksList}>
                             <ListItem className={classes.showCaptionSwitchWrapper}>
                                 <Typography className={classes.showCaptionSwitchLabel}>Felirat</Typography>
                                 <Switch className={classes.showCaptionSwitch} />
@@ -134,7 +134,7 @@ const Player = (props: {id: string}) => {
                                     <Typography>{track.label}</Typography>
                                 </ListItem>
                             })}
-                        </div>
+                        </div>*/}
                     </div>
                 </Overlay>
             </div>

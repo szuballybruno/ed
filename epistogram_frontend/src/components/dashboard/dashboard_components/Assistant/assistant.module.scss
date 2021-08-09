@@ -1,5 +1,5 @@
 .assistantWrapper {
-  width: 100%;
+  width: calc(100% - 50px);
   border-radius: 4px;
   box-sizing: border-box;
 }
@@ -25,6 +25,13 @@
 }
 
 .allTasksButton {
+  align-self: center;
+  justify-self: center;
+  margin: 10px auto;
+  width: calc(100%);
+}
+
+.allTasksButtonLink {
   align-self: center;
   justify-self: center;
   margin: 10px auto;

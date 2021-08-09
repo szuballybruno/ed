@@ -180,7 +180,7 @@ const CourseSearch = () => {
 
                     <RightPanel>
                             <AdminDashboardHeader titleText={""} />
-                            <AdminDashboardSearch searchChangeHandler={searchChangeHandler} name={"searchData"} title={"Kurzusok"} />
+                            <AdminDashboardSearch searchChangeHandler={searchChangeHandler} name={"searchData"} title={"Kurzusok"} className={classes.searchBar} />
                             <div className={classes.courseOptionsContainer}>
                                 <div className={classes.courseLeftOptionsContainer}>
                                     <ToggleButtonGroup classes={{
