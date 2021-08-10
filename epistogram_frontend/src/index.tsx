@@ -33,27 +33,26 @@ ReactDOM.render(
                         <Router>
                             <PopupsWrapper>
                                 <Switch>
-                                    <Route path="/login" component={withRouter(LoginScreen)} />
 
+                                    {/* unprotected paths  */}
+                                    <Route path="/login" component={withRouter(LoginScreen)} />
                                     <Route path="/register" component={RegistrationPage} />
 
-                                    <ProtectedRoute path="/kezdolap" component={UserDashBoard} />
-                                    <Route path="/kurzusok" render={() => <CourseSearch />} />
-                                    <Route path="/watch/:courseId/:id" component={withRouter(PlayerMain)} />
-                                    <Route path="/profilom" render={() => <ProfileMain />} />
+                                    {/* protected paths */}
+                                    <ProtectedRoute path="/kezdolap" render={() => <UserDashBoard />} />
+                                    <ProtectedRoute path="/kurzusok" render={() => <CourseSearch />} />
+                                    <ProtectedRoute path="/watch/:courseId/:id" render={() => withRouter(PlayerMain)} />
+                                    <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />
+                                    <ProtectedRoute path="/signup" render={() => withRouter(Signup)} />
+                                    <ProtectedRoute path="/admin" render={() => withRouter(Administration)} />
+                                    <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
+                                    <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
+                                    <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
+                                    
+                                    {/* index path */}
+                                    <ProtectedRoute path="/" render={() => <UserDashBoard />} exact />
 
-                                    <Route path="/signup" component={withRouter(Signup)} />
-
-                                    <Route path="/admin" component={withRouter(Administration)} />
-
-                                    <Route path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
-                                    <Route path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
-                                    <Route path="/mobiledemo" render={() => <MobileDemo />} />
-
-                                    <Route path="/" exact>
-                                        <Redirect to={"/login"} />
-                                    </Route>
-
+                                    {/* wrong path */}
                                     <Route path="*">
                                         <NotFound />
                                     </Route>

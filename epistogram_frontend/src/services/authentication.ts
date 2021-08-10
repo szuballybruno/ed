@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query';
+import { UserInfo } from '../HOC/data_manager_frame/DataManagerFrame';
 import { httpGetAsync, httpPostAsync, HTTPResponse } from './httpClient';
 
 const userFetchingIntervalInS = 15;
@@ -6,16 +7,20 @@ const userSessionRenewIntervalInS = 10;
 
 export const useUserFetching = (nonAutomatic?: boolean) => {
 
-    const { data, refetch: refetchUser, isSuccess } = useQuery('getCurrentUser', () => httpGetAsync("get-current-user"), {
+    const { data, refetch: refetchUser, isLoading, isSuccess } = useQuery('getCurrentUser', () => httpGetAsync("get-current-user"), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: nonAutomatic ? false : userFetchingIntervalInS * 1000,
         refetchIntervalInBackground: true,
     });
 
-    const currentUser = (isSuccess ? data?.data ?? null : null) as any | null;
+    const currentUser = (isSuccess
+        ? data?.data
+            ? new UserInfo(data?.data.email)
+            : null
+        : null) as UserInfo | null;
 
-    return { currentUser, refetchUser };
+    return { currentUser, refetchUser, isLoading };
 }
 
 export const useRenewUserSessionPooling = () => {

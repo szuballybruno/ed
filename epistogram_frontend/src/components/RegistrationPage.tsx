@@ -1,8 +1,8 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { Button, TextField } from "@material-ui/core";
-import { useRef } from "react";
-import { logOutUserAsync, registerUser, useRenewUserSessionPooling, useUserFetching } from "../services/authentication";
-import { httpPostAsync } from "../services/httpClient";
+import { useContext, useRef } from "react";
+import { CurrentUserContext, RefetchUserFunctionContext } from "../HOC/data_manager_frame/DataManagerFrame";
+import { logOutUserAsync, registerUser } from "../services/authentication";
 
 const RegistrationPage = () => {
 
@@ -10,10 +10,8 @@ const RegistrationPage = () => {
 
     const emailRef = useRef<HTMLInputElement>();
     const passwordRef = useRef<HTMLInputElement>();
-
-    const { currentUser, refetchUser } = useUserFetching();
-
-    useRenewUserSessionPooling();
+    const userInfo = useContext(CurrentUserContext);
+    const refetchUser = useContext(RefetchUserFunctionContext);
 
     const register = async () => {
 
@@ -36,7 +34,7 @@ const RegistrationPage = () => {
     return (
 
         <Flex direction="column" p="50px">
-            <Text>{`Logged in user: ${currentUser?.email}`}</Text>
+            <Text>{`Logged in user: ${userInfo?.email}`}</Text>
 
             <TextField label="Email" inputRef={emailRef}></TextField>
             <TextField label="Password" type="password" inputRef={passwordRef}></TextField>
