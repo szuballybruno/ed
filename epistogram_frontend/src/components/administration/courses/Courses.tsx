@@ -7,7 +7,7 @@ import classes from './courses.module.scss'
 import AdminDashboardSearch from "../universal/searchBar/AdminDashboardSearch";
 import {NavLink, Redirect, Route, Switch} from "react-router-dom";
 import AdminDashboardSearchItem from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
-import {config} from "../../../configuration/config";
+import {globalConfig} from "../../../configuration/config";
 import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
 import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
 import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
@@ -66,7 +66,7 @@ const Courses = () => {
                     <AdminDashboardList>
                         {admin.courses.get().map((course, index) => {
                             return <AdminDashboardSearchItem title={course.name}
-                                                             thumbnailUrl={course._id ? `${config.assetStorageUrl}/courses/${course._id}.png` : undefined}
+                                                             thumbnailUrl={course._id ? `${globalConfig.assetStorageUrl}/courses/${course._id}.png` : undefined}
                                                              key={course._id}
                                                              chips={[
                                                                  {label: course.category, icon: "category"},
@@ -92,7 +92,7 @@ const Courses = () => {
                                                                  {
                                                                      icon: "delete",
                                                                      onClick: () => {
-                                                                         instance.delete(`${config.backendUrl}videos/deletevideo?videoId=${course._id}`).then(() => {
+                                                                         instance.delete(`${globalConfig.backendUrl}videos/deletevideo?videoId=${course._id}`).then(() => {
                                                                              return admin.users[index].set(none)
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }

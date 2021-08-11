@@ -13,13 +13,13 @@ import {State, useState} from "@hookstate/core";
 import ArticlesListItem from "./components/ArticlesListItem";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import instance from "../../../../services/axiosInstance";
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 
 const Articles = () => {
     const app = useState(applicationRunningState)
 
     useEffect(() => {
-        instance.get(config.backendUrl + "articles/getarticles").then((res) => {
+        instance.get(globalConfig.backendUrl + "articles/getarticles").then((res) => {
             if (res.data) {
                 app.articles.set(res.data)
                 app.loadingIndicator.set("succeeded")

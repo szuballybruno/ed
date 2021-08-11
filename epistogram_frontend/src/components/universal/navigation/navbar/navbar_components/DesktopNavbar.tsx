@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from "./desktopNavbar.module.scss";
 import {NavLink} from "react-router-dom";
-import {config} from "../../../../../configuration/config";
+import {globalConfig} from "../../../../../configuration/config";
 import MenuItemList from "./MenuItemList";
 import {Button} from "@material-ui/core";
 import {PlayArrow} from "@material-ui/icons";
@@ -31,7 +31,7 @@ const DesktopNavbar = (props: {
     const app = useState(applicationRunningState)
     const user = useState(userSideState)
 
-    const logoUrl = config.assetStorageUrl + "/application/logo.png"
+    const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
 
     return (
         <div style={props.style} className={classes.navbarOuterWrapper}>
@@ -68,7 +68,7 @@ const DesktopNavbar = (props: {
                                         undefined,
                                         undefined,
                                         undefined,
-                                        config.siteUrl + "/watch/"+user.userData.currentCourse._id.get()+"/"+user.userData.currentItem._id.get()
+                                        globalConfig.siteUrl + "/watch/"+user.userData.currentCourse._id.get()+"/"+user.userData.currentItem._id.get()
                                     )
                                 }}
                                 className={classes.playButton}>

@@ -14,7 +14,7 @@ import SelectImage from "../../../universal/selectImage/SelectImage";
 import {SelectMultiple} from "../../../universal/selectMultiple/SelectMultiple";
 import {ColorPicker} from "../../../universal/colorPicker/ColorPicker";
 import {fetchReducer} from "../../../universal/services/fetchReducer";
-import {config} from "../../../../../configuration/config";
+import {globalConfig} from "../../../../../configuration/config";
 import {permissionLevelOptions} from "../../store";
 import EditItem from "../../../../universal/atomic/editItem/EditItem";
 

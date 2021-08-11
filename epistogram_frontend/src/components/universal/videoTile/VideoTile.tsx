@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from "./videoTile.module.scss";
-import {config} from "../../../configuration/config";
+import {globalConfig} from "../../../configuration/config";
 import {  item } from '../../../store/types/item';
 
 const VideoTile = (props: {item: item, itemIndex: number}) => {
@@ -22,15 +22,15 @@ const VideoTile = (props: {item: item, itemIndex: number}) => {
                     </div>
                     <div className={classes.videoInfoOuterWrapper}>
                         <div className={classes.videoInfoItemWrapper}>
-                            <img alt="" src={config.assetStorageUrl + "/application/teacher.svg"} />
+                            <img alt="" src={globalConfig.assetStorageUrl + "/application/teacher.svg"} />
                             <span>Oktató: {props.item.teacherName}</span>
                         </div>
                         <div className={classes.videoInfoItemWrapper}>
-                            <img alt="" src={config.assetStorageUrl + "/application/clock.svg"} />
+                            <img alt="" src={globalConfig.assetStorageUrl + "/application/clock.svg"} />
                             <span>Hossz: {props.item.length + " perc"}</span>
                         </div>
                         <div className={classes.videoInfoItemWrapper}>
-                            <img alt="" src={config.assetStorageUrl + "/application/list.svg"} />
+                            <img alt="" src={globalConfig.assetStorageUrl + "/application/list.svg"} />
                             <span>Kategória: {props.item.teacherName}</span>
                         </div>
                     </div>

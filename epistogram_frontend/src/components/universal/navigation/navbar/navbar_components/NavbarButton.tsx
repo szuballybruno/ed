@@ -3,7 +3,7 @@ import {useState} from "@hookstate/core";
 import {NavLink} from "react-router-dom";
 import React from "react";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
-import {config} from "../../../../../configuration/config";
+import {globalConfig} from "../../../../../configuration/config";
 import {updateActivity} from "../../../../../services/updateActivity";
 import {Button, Typography} from "@material-ui/core";
 
@@ -39,7 +39,7 @@ const NavbarButton = (props: {
                 undefined,
                 undefined,
                 undefined,
-                config.siteUrl + props.menuPath
+                globalConfig.siteUrl + props.menuPath
             )
             app.hamburgerButtonState.set(false)
         }}>
@@ -65,7 +65,7 @@ const NavbarButton = (props: {
                 undefined,
                 undefined,
                 undefined,
-                config.siteUrl + props.menuPath
+                globalConfig.siteUrl + props.menuPath
             )
         }}>
             {props.menuName}

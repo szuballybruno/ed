@@ -12,7 +12,7 @@ import EditItem from "../../../../universal/atomic/editItem/EditItem";
 import {Add} from "@material-ui/icons";
 import {SelectMultiple} from "../../../universal/selectMultiple/SelectMultiple";
 import {fetchReducer} from "../../../universal/services/fetchReducer";
-import {config} from "../../../../../configuration/config";
+import {globalConfig} from "../../../../../configuration/config";
 
 export const EditItemPage = () => {
     const admin = useState(adminSideState)

@@ -11,7 +11,7 @@ import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboard
 import {article} from "../../../store/types/article";
 import {AxiosResponse} from "axios";
 import {AddArticle} from "./articles_components/AddArticle";
-import {config} from "../../../configuration/config";
+import {globalConfig} from "../../../configuration/config";
 import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
 import {Add} from "@material-ui/icons";
 import {Fab} from "@material-ui/core";
@@ -64,7 +64,7 @@ export const ManageArticles: React.FunctionComponent = () => {
                                                            }, {
                                                                icon: "delete",
                                                                onClick: () => {
-                                                                   instance.delete(`${config.backendUrl}articles/deletearticle?articleId=${article._id}`).then(() => {
+                                                                   instance.delete(`${globalConfig.backendUrl}articles/deletearticle?articleId=${article._id}`).then(() => {
                                                                        return admin.articles[index].set(none)
                                                                    }).catch(e => console.error(e.toString()))
                                                                }

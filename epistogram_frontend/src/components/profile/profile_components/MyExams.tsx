@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './myExams.module.scss';
-import {config} from "../../../configuration/config";
+import {globalConfig} from "../../../configuration/config";
 import AdminDashboardHeader from "../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import {Button, Typography} from "@material-ui/core";
 

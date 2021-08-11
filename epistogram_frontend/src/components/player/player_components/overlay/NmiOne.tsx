@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import classes from "./nmiOne.module.scss";
 import {useState} from "@hookstate/core";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 import {Button, Typography} from "@material-ui/core";
 import {ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked} from "@material-ui/icons";
 

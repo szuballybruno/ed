@@ -13,7 +13,7 @@ import adminSideState from '../../../../../store/admin/adminSideState';
 import {SelectMultiple} from "../../../universal/selectMultiple/SelectMultiple";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
 import SelectImage from "../../../universal/selectImage/SelectImage";
-import {config} from "../../../../../configuration/config";
+import {globalConfig} from "../../../../../configuration/config";
 import {Cookies} from "react-cookie";
 import {fetchReducer} from "../../../universal/services/fetchReducer";
 import {useDebouncedCallback} from "use-debounce";
@@ -70,7 +70,7 @@ export const EditCourse = () => {
     useEffect(() => {
         fetchReducer(`courses/course/${courseId}`, (res) => {
             admin.currentlyEdited.course.set(res.data)
-            admin.currentlyEdited.course.uploadedFileUrl.set(`${config.assetStorageUrl}/courses/${admin.currentlyEdited.course._id.get()}.png`)
+            admin.currentlyEdited.course.uploadedFileUrl.set(`${globalConfig.assetStorageUrl}/courses/${admin.currentlyEdited.course._id.get()}.png`)
         })
         fetchReducer(`tags`, (res) => {
             allTags.set(res.data)

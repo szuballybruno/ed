@@ -12,7 +12,7 @@ import {useParams} from "react-router";
 import {updateActivity} from "../../../../services/updateActivity";
 import {DialogFrame} from "../../../../HOC/dialog_frame/DialogFrame";
 import {useHistory} from "react-router-dom";
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 
 const VideoList = () => {
     const user = useState(userSideState)
@@ -141,7 +141,7 @@ const VideoList = () => {
                                           "_id",
                                           item._id,
                                           index.toString(),
-                                              config.siteUrl + "watch/" + user.userData.currentCourse._id.get() + "/" + item._id)
+                                              globalConfig.siteUrl + "watch/" + user.userData.currentCourse._id.get() + "/" + item._id)
                                           //updateActivity("collBasedActive", "selectVideo", "A felhasználó kiválaszt egy másik videót", window.location.href, "VideoList-ListItems-SelectsNewVideo", item.videoMainTitle, "" + index)
                                           setCurrentItem(item)
                                       }}/> :
@@ -163,7 +163,7 @@ const VideoList = () => {
                                               "_id",
                                               item._id,
                                               index.toString(),
-                                              config.siteUrl + "/watch/" + user.userData.currentCourse._id.get() + "/" + item._id)
+                                              globalConfig.siteUrl + "/watch/" + user.userData.currentCourse._id.get() + "/" + item._id)
                                           setCurrentItem(item)
                                       }}/>
                     })}

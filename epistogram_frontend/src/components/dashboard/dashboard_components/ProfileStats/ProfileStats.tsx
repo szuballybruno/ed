@@ -4,7 +4,7 @@ import {useState} from "@hookstate/core";
 import userSideState from "../../../../store/user/userSideState";
 import {NavLink} from 'react-router-dom';
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 import {Button, Typography} from "@material-ui/core";
 
 const ProfileStats: React.FunctionComponent<any> = () => {
@@ -25,7 +25,7 @@ const ProfileStats: React.FunctionComponent<any> = () => {
                     <Button variant={"outlined"}>Profilom</Button>
                     <div className={classes.epistoCoinWrapper}>
                         <Typography variant={"button"}>23.459</Typography>
-                        <img alt={""} src={`${config.assetStorageUrl}/application/episto.png`} />
+                        <img alt={""} src={`${globalConfig.assetStorageUrl}/application/episto.png`} />
                     </div>
                 </NavLink>
 

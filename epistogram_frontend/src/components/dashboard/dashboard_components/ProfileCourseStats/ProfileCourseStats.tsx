@@ -2,7 +2,7 @@ import React from 'react';
 import classes from "./profileCourseStats.module.scss";
 import {useState} from "@hookstate/core";
 import userSideState from "../../../../store/user/userSideState";
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 
 const ProfileCourseStats = (props: { style?: React.CSSProperties }) => {
     const user = useState(userSideState)
@@ -29,10 +29,10 @@ const ProfileCourseStats = (props: { style?: React.CSSProperties }) => {
                 </div>
 
                 <div className={classes.firstRowStatsWrapper}>
-                    <ProfileCourseStatsItem dataCount={182} dataString={" videó"} imageSrc={`${config.assetStorageUrl}/application/statisztikavideo.png`} />
-                    <ProfileCourseStatsItem dataCount={23} dataString={" kurzus"} imageSrc={`${config.assetStorageUrl}/application/courseding.svg`} />
-                    <ProfileCourseStatsItem dataCount={92} dataString={" teszt"} imageSrc={`${config.assetStorageUrl}/application/completed-task.svg`} />
-                    <ProfileCourseStatsItem dataCount={3} dataString={" vizsga"} imageSrc={`${config.assetStorageUrl}/application/online-learning.svg`} />
+                    <ProfileCourseStatsItem dataCount={182} dataString={" videó"} imageSrc={`${globalConfig.assetStorageUrl}/application/statisztikavideo.png`} />
+                    <ProfileCourseStatsItem dataCount={23} dataString={" kurzus"} imageSrc={`${globalConfig.assetStorageUrl}/application/courseding.svg`} />
+                    <ProfileCourseStatsItem dataCount={92} dataString={" teszt"} imageSrc={`${globalConfig.assetStorageUrl}/application/completed-task.svg`} />
+                    <ProfileCourseStatsItem dataCount={3} dataString={" vizsga"} imageSrc={`${globalConfig.assetStorageUrl}/application/online-learning.svg`} />
                 </div>
             </div>
         </div> : <div>barack</div>

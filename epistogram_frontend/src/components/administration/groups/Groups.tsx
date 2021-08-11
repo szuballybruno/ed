@@ -10,7 +10,7 @@ import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDas
 import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
 import {group} from "../../../store/types/group";
 import {AxiosResponse} from "axios";
-import {config} from "../../../configuration/config";
+import {globalConfig} from "../../../configuration/config";
 import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
 import {AddGroup} from "./groups_components/AddGroup";
 import {Add} from "@material-ui/icons";
@@ -65,7 +65,7 @@ export const Groups: React.FunctionComponent = () => {
                                                                  }, {
                                                                      icon: "delete",
                                                                      onClick: () => {
-                                                                         instance.delete(`${config.backendUrl}groups/deletegroup?groupId=${group._id}`).then(() => {
+                                                                         instance.delete(`${globalConfig.backendUrl}groups/deletegroup?groupId=${group._id}`).then(() => {
                                                                              return admin.groups[index].set(none)
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }

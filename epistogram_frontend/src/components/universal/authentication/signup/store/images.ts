@@ -1,12 +1,12 @@
-import {config} from "../../../../../configuration/config";
+import {globalConfig} from "../../../../../configuration/config";
 
 export const images = [
-    config.assetStorageUrl + "/application/indulo.svg",
-    config.assetStorageUrl + "/application/kerdes1.png",
-    config.assetStorageUrl + "/application/kerdes2.png",
-    config.assetStorageUrl + "/application/kerdes3.png",
-    config.assetStorageUrl + "/application/kerdes4.png",
-    config.assetStorageUrl + "/application/kerdes5.png",
-    config.assetStorageUrl + "/application/tanulasi_stilus.png",
-    config.assetStorageUrl + "/application/szemelyes_adatok.png",
+    globalConfig.assetStorageUrl + "/application/indulo.svg",
+    globalConfig.assetStorageUrl + "/application/kerdes1.png",
+    globalConfig.assetStorageUrl + "/application/kerdes2.png",
+    globalConfig.assetStorageUrl + "/application/kerdes3.png",
+    globalConfig.assetStorageUrl + "/application/kerdes4.png",
+    globalConfig.assetStorageUrl + "/application/kerdes5.png",
+    globalConfig.assetStorageUrl + "/application/tanulasi_stilus.png",
+    globalConfig.assetStorageUrl + "/application/szemelyes_adatok.png",
 ]

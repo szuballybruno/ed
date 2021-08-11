@@ -1,4 +1,4 @@
-import {config} from "../../configuration/config";
+import {globalConfig} from "../../configuration/config";
 
 export interface ApplicationRunningStateInterface {
     //GLOBAL

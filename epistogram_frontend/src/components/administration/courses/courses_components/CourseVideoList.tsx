@@ -3,7 +3,7 @@ import classes from "./courseVideoList.module.scss"
 import {none, useState} from "@hookstate/core";
 import instance from "../../../../services/axiosInstance";
 import AdminDashboardSearchItem from "../../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 import UserStatistics from "../../users/users_components/userStatistics/UserStatistics";
 import {Typography} from "@material-ui/core";
 import adminSideState from '../../../../store/admin/adminSideState';
@@ -66,7 +66,7 @@ export const CourseVideoList = (props: {courseId: string}) => {
                                                      }, {
                                                          icon: "delete",
                                                          onClick: () => {
-                                                            instance.delete(`${config.backendUrl}videos/deletevideo?videoId=${item._id}`).then(() => {
+                                                            instance.delete(`${globalConfig.backendUrl}videos/deletevideo?videoId=${item._id}`).then(() => {
                                                                 return items[index].set(none)
                                                             }).catch(e => console.error(e.toString()))
                                                          }

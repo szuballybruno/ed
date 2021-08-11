@@ -9,7 +9,7 @@ import {Route, Switch} from "react-router-dom";
 import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
 import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
 import {AxiosResponse} from "axios";
-import {config} from "../../../configuration/config";
+import {globalConfig} from "../../../configuration/config";
 import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
 import {AddOrganization} from "./organizations_components/AddOrganization";
 import {organization} from "../../../store/types/organization";
@@ -65,7 +65,7 @@ export const Organizations: React.FunctionComponent = () => {
                                                                  }, {
                                                                      icon: "delete",
                                                                      onClick: () => {
-                                                                         instance.delete(`${config.backendUrl}organizations/deleteorganization?organizationId=${organization._id}`).then(() => {
+                                                                         instance.delete(`${globalConfig.backendUrl}organizations/deleteorganization?organizationId=${organization._id}`).then(() => {
                                                                              return admin.organizations[index].set(none)
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }

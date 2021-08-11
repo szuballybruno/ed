@@ -1,4 +1,4 @@
-import {config} from "../../../../../configuration/config";
+import {globalConfig} from "../../../../../configuration/config";
 
 export const questions = [{
     title: "Egy csapatban elvégzendő projekt esetén a következőt preferálom:",
@@ -11,7 +11,7 @@ export const questions = [{
     }],
     section: "",
     variant: "question",
-    imageUrl: config.assetStorageUrl + "/application/kerdes1.png",
+    imageUrl: globalConfig.assetStorageUrl + "/application/kerdes1.png",
 }, {
     title: "Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást: ",
     questionAnswers: [{
@@ -23,7 +23,7 @@ export const questions = [{
     }],
     section: "",
     variant: "question",
-    imageUrl: config.assetStorageUrl + "/application/kerdes2.png",
+    imageUrl: globalConfig.assetStorageUrl + "/application/kerdes2.png",
 }, {
     title: "Jobban preferálom azt a munkában, mikor:",
     questionAnswers: [{
@@ -35,7 +35,7 @@ export const questions = [{
     }],
     section: "",
     variant: "question",
-    imageUrl: config.assetStorageUrl + "/application/kerdes3.png",
+    imageUrl: globalConfig.assetStorageUrl + "/application/kerdes3.png",
 }, {
     title: "Egy előadás esetén hasznosabb számomra, ha:",
     questionAnswers: [{
@@ -47,7 +47,7 @@ export const questions = [{
     }],
     section: "",
     variant: "question",
-    imageUrl: config.assetStorageUrl + "/application/kerdes4.png",
+    imageUrl: globalConfig.assetStorageUrl + "/application/kerdes4.png",
 },
     {
         title: "Az érzéseimet, gondolataimat a következő módokon fejezem ki szívesebben::",
@@ -60,5 +60,5 @@ export const questions = [{
         }],
         section: "",
         variant: "question",
-        imageUrl: config.assetStorageUrl + "/application/kerdes5.png",
+        imageUrl: globalConfig.assetStorageUrl + "/application/kerdes5.png",
     }]
