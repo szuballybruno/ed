@@ -24,7 +24,7 @@ const ProfileImage = (props: {
                    style={{display: "none"}}
                    onChange={props.onChange}/>
             <img alt=""
-                 onError={(e) => {e.currentTarget.src = `${config.assetStorageUrl}/application/avatar.jpg`}}
+                 onError={(e) => {e.currentTarget.src = `${config.assetStorageUrl}/application/avatar.png`}}
                  src={props.imageUrl ? props.imageUrl : `${config.assetStorageUrl}/users/${cookies.get("userId")}/avatar.png`}/>
         </div>
     );
