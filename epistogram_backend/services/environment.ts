@@ -84,6 +84,7 @@ export class GlobalConfiguration {
         passphrase: getEnvConfigEntry("VPS_SSH_PASSPHRASE"),
 
         dstPort: getEnvConfigEntry("VPS_SSH_DST_PORT"),
+        port: getEnvConfigEntry("VPS_SSH_PORT"),
         agent: process.env.SSH_AUTH_SOCK,
         privateKey: this.security.rsaPrivateKey,
     };
@@ -104,7 +105,7 @@ export class GlobalConfiguration {
         options: {
             bufferMaxEntries: 0,
             useNewUrlParser: true,
-            useUnifiedTopology: true,
+            useUnifiedTopology: true
         },
         isSSHConnection: true,
         mongoDBCredentials: {

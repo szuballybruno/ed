@@ -7,6 +7,7 @@ export const globalConfig = {
     // backendUrlMinimal: "https://dev.epistogram.com/",
     // backendUrl: "https://dev.epistogram.com/api/",
 
+    //siteUrl: "http://itsfourothree.tplinkdns.com:3000",
     //backendUrlMinimal: "http://itsfourothree.tplinkdns.com:5000/",
     //backendUrl: "http://itsfourothree.tplinkdns.com:5000/",
 

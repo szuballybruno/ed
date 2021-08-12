@@ -7,7 +7,9 @@
   border-radius: 4px;
   grid-column: auto / span 1;
   grid-row: auto / span 1;
+  transition: all 1s;
 }
+
 .gridItemChart {
   width: 100%;
   grid-column: auto / span 2;
@@ -129,6 +131,11 @@
 }
 
 .headerTitle {
+  margin: 10px;
+}
+
+.statItemIcon {
+  width: 50px;
   margin: 10px;
 }
 

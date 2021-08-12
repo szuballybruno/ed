@@ -1,5 +1,6 @@
 import axios from "axios";
 import { globalConfig } from "../configuration/config";
+import instance from "./axiosInstance";
 
 export class HTTPResponse {
     code: number;
@@ -13,7 +14,7 @@ export class HTTPResponse {
 
 export const httpPostAsync = async (urlEnding: string, data?: any) => {
 
-    const axiosResponse = await axios.post(globalConfig.backendUrl + urlEnding, data, {
+    const axiosResponse = await instance.post(urlEnding, data, {
         withCredentials: true
     });
 
@@ -22,7 +23,7 @@ export const httpPostAsync = async (urlEnding: string, data?: any) => {
 
 export const httpGetAsync = async (urlEnding: string) => {
 
-    const axiosResponse = await axios.get(globalConfig.backendUrl + urlEnding, {
+    const axiosResponse = await instance.get(urlEnding, {
         withCredentials: true
     });
 

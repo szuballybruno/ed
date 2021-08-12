@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import AdminDashboardHeader from "../universal/adminDashboardHeader/AdminDashboardHeader";
+import classes from "./users.module.scss"
 import AdminDashboardSearch from "../universal/searchBar/AdminDashboardSearch";
 import applicationRunningState from "../../../store/application/applicationRunningState";
 import adminSideState from "../../../store/admin/adminSideState";
@@ -18,10 +18,9 @@ import {globalConfig} from "../../../configuration/config";
 import {LoadingFrame} from "../../../HOC/loading_frame/LoadingFrame";
 import {FailedComponent, LoadingComponent, NullComponent} from "../../../HOC/loading_frame/loadingComponents/LoadingComponent";
 import {AxiosRequestConfig} from "axios";
-import {Fab} from "@material-ui/core";
+import {Divider, Fab} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
 import userSideState from "../../../store/user/userSideState";
-import Tasks from "../../profile/profile_components/me/learning_components/Tasks";
 
 export const Users: React.FunctionComponent = () => {
     const app = useState(applicationRunningState)
@@ -64,16 +63,20 @@ export const Users: React.FunctionComponent = () => {
     return (
         <Switch>
             <Route exact path={'/admin/manage/users'}>
+                <Divider style={{
+                    width: "100%"
+                }} />
                 <AdminDashboardWrapper>
-                    <AdminDashboardHeader titleText={""} />
                     <AdminDashboardSearch searchChangeHandler={searchChangeHandler}
                                           name={"searchData"}
-                                          title={"Felhasználók"}/>
+                                          title={"Felhasználók"}
+                                          className={classes.searchBar}/>
                     <LoadingFrame loadingComponent={LoadingComponent()} failedComponent={FailedComponent()} nullComponent={NullComponent()}>
                         <AdminDashboardList>
+
                             {admin.users.get().map((user, index) => {
                                 return <AdminDashboardSearchItem title={`${user.lastName} ${user.firstName}`}
-                                                              profileImageUrl={user._id ? `${globalConfig.assetStorageUrl}/users/${user._id}/avatar.jpg` : ""}
+                                                              profileImageUrl={user._id ? `${globalConfig.assetStorageUrl}/users/${user._id}/avatar.png` : ""}
                                                               chips={[
                                                                   {label: user.email, icon: "email"},
                                                                   {label: user.organizationName, icon: "organization"},

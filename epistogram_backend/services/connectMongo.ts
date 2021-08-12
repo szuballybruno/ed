@@ -24,14 +24,14 @@ export const connectToMongoDB = (): Promise<void> => {
                 dbName: globalConfig.mongodbConfig.mongoDBCredentials.dbName
             }
 
-            log(connectionSettings);
+            log("Trying to connect to: " + connectionSettings.url);
 
             MongoClient.connect(
                 connectionSettings.url,
                 connectionSettings.options,
                 (err: any, client: { db: (databaseName: string) => any; }) => {
 
-                    log("Mongodb csatlakoztatva")
+                    log("Successfully connected to MongoDB")
                     const db = client.db(connectionSettings.dbName);
 
                     // promise resolved
@@ -49,7 +49,6 @@ export const connectToMongoDB = (): Promise<void> => {
 
                 // SSH failed
                 if (error) {
-
                     log("SSH connection error: " + error);
                 }
 
@@ -62,6 +61,7 @@ export const connectToMongoDB = (): Promise<void> => {
                     connectToDB();
                 }
             });
+            console.log("Ez a tunnelInstance" + JSON.stringify(tunnelInstance))
         }
 
         // CONNECT TO MONGO DB

@@ -8,7 +8,6 @@ import menuItems from "../../configuration/menuItems.json";
 //COMPONENTS
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import ProfileStats from "./dashboard_components/ProfileStats/ProfileStats";
-import Articles from "./dashboard_components/Articles/Articles";
 import Votes from "./dashboard_components/Votes/Votes";
 import RecommendedCourses from "./dashboard_components/RecommendedCourses/RecommendedCourses";
 import {LoadingFrame} from "../../HOC/loading_frame/LoadingFrame";

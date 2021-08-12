@@ -6,6 +6,8 @@ const instance = axios.create({
     baseURL: globalConfig.backendUrl
 });
 
+instance.defaults.withCredentials = true
+
 instance.defaults.headers = {
     'Content-Type': 'application/json'
 }

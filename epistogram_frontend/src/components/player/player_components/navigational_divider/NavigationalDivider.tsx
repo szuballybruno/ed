@@ -31,12 +31,6 @@ const NavigationalDivider = () => {
                 name: "Hozzászólások",
                 key: 1,
                 className: [classes.button]
-            },
-            {
-                id: 2,
-                name: "Jegyzetek",
-                key: 2,
-                className: [classes.button]
             }
         ],
     );

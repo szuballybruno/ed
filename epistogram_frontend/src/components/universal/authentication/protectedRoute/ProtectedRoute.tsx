@@ -1,41 +1,10 @@
 import React, { ReactNode } from 'react';
 import { useContext } from 'react';
 import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
-import Cookies from "universal-cookie";
 import { IsAuthenticatedContext as AuthenticationStateContext } from '../../../../HOC/data_manager_frame/DataManagerFrame';
+import {LoadingComponent} from "../../../../HOC/loading_frame/loadingComponents/LoadingComponent";
 
-// interface PrivateRouteProps extends RouteProps {
-//     // tslint:disable-next-line:no-any
-//     component: any;
-//     isSignedIn?: boolean;
-// }
-
-
-// const ProtectedRoute = (props: PrivateRouteProps) => {
-//     const { component: Component, ...rest } = props;
-//     const cookies = new Cookies();
-
-//     return (
-//         <Route
-//             {...rest}
-//             render={(routeProps) =>
-//                 cookies.get("userId") ? (
-//                     <Component {...routeProps} />
-//                 ) : (
-//                     <Redirect
-//                         to={{
-//                             pathname: '/login',
-//                             state: { from: routeProps.location }
-//                         }}
-//                     />
-//                 )
-//             }
-//         />
-//     );
-// };
-
-
-const ProtectedRoute = (props: {
+export const ProtectedRoute = (props: {
     path: string,
     exact?: boolean,
     render: () => ReactNode
@@ -53,17 +22,15 @@ const ProtectedRoute = (props: {
 
                 // if authenticated stay on route 
                 if (authState.isAuthenticated)
+                    //TODO: Implement WithRouter
                     return render();
 
-                // if still loading 
+                // if still loading
                 if (authState.isLoading)
-                    return <div>asd</div>;
+                    return <LoadingComponent />;
 
                 // if not, leave
-                return <Redirect to={{ pathname: "/asd" }} />
+                return <Redirect to={{ pathname: "/login" }} />
             }} />
     );
 };
-
-
-export default ProtectedRoute;

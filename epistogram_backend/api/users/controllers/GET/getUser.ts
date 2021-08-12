@@ -75,9 +75,10 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
         }
 
         const fetchDataForVideos = () => {
-            return [{'$lookup': {
+            return [{
+                '$lookup': {
                 'from': 'videos',
-                    'let': {"localVideos": "$videos"},
+                'let': {"localVideos": "$videos"},
                 'pipeline': [{
                     '$match': {
                         '$expr': {
@@ -372,7 +373,7 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
                         },
                         'currentSeeSomethingNew': '{}',
                         'currentItem': '$currentItem',
-                        'doneCourses': '$doneCourses',
+                        'doneCourses': [],//'$doneCourses',
                         'doneExams': '$doneExams',
                         'email': 1,
                         'epistoCoins': 1,
@@ -457,14 +458,14 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
 
             ...fetchVotes(),
 
-            /* recommendedCourses lekérése {
+            {
                 '$lookup': {
                     'from': 'courses',
                     'localField': 'userStatistics.tags._id',
                     'foreignField': 'tags',
                     'as': 'recommendedCourses'
                 }
-            }*/
+            },
             //...groupByActivities(),
             //...testProjectResult(),
             ...projectResult()
