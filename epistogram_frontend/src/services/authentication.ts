@@ -15,7 +15,7 @@ export const useUserFetching = (nonAutomatic?: boolean) => {
 
     const currentUser = (isSuccess
         ? data?.data
-            ? new UserInfo(data?.data.email)
+            ? new UserInfo(data?.data?.userId, data?.data?.organizationId)
             : null
         : null) as UserInfo | null;
 

@@ -20,7 +20,7 @@ import { connectToMongoDB } from "./services/connectMongo";
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/logger";
 import { Request, Response, NextFunction } from "express"
-import {  respondOk, respondForbidden } from './utilities/helpers';
+import { respondOk, respondForbidden } from './utilities/helpers';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -75,11 +75,11 @@ connectToMongoDB().then(() => {
         res.setHeader('Access-Control-Allow-Credentials', "true");
     }
 
-//
-// add middlewares
-//
+    //
+    // add middlewares
+    //
 
-//  expressServer.use(authMiddleware);
+    //  expressServer.use(authMiddleware);
     expressServer.use(corsMiddleware);
 
     expressServer.use(bodyParser.json());
@@ -90,7 +90,23 @@ connectToMongoDB().then(() => {
         next();
     })
 
-// register user
+    // register user
+    expressServer.use('/fasz', (req, res, next) => {
+
+        const promise = new Promise<void>((resolve, reject) => {
+
+            setTimeout(() => resolve(), 5000);
+        });
+
+        log("sadasdadasds");
+
+        promise.then(() => {
+
+            log("sadadasd");
+            res.sendStatus(200).json("OKEFASZA!");
+        });
+    })
+
     expressServer.options('/register-user', respondOk);
     expressServer.post('/register-user', registerUserAction);
 

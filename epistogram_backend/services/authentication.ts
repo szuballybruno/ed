@@ -1,37 +1,61 @@
 import dayjs from "dayjs";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { User } from "../models/entities/user";
 import { globalConfig } from "../server";
-import { getRefreshTokenByUserEmail, setRefreshToken } from "./authenticationPersistance";
-import { log, logError } from "./logger";
-import {Request, Response, NextFunction} from "express";
+import { IdType } from "../utilities/helpers";
+import { getRefreshTokenByUserId, setUserActiveRefreshToken } from "./authenticationPersistance";
+import { logError } from "./logger";
+import { getUserById } from "./userService";
 
 export const accessTokenCookieName = "accessToken";
 export const refreshTokenCookieName = "refreshToken";
 const accessTokenLifespanInS = 30;
 const refreshTokenLifespanInS = 604800; // one week
 
-export const getAccessToken = (user: {_id: string, organizationId:string, email: string, refreshToken?: string}) => jwt.sign(
-    { _id: user._id, email: user.email },
-    globalConfig.security.jwtSignSecret,
-    { expiresIn: `${accessTokenLifespanInS}s` });
+export class UserInfo {
+    userId: string;
+    organizationId: string;
 
-export const getRefreshToken = (user: {_id: string, organizationId:string, email: string, refreshToken?: string}) => {
-    let isValid
+    constructor(userId: string, organizationId: string) {
+        this.userId = userId;
+        this.organizationId = organizationId;
+    }
+}
 
-    getRefreshTokenByUserEmail(user.email).then(token => {
-        isValid = validateToken(token, globalConfig.security.jwtSignSecret).isValid;
-        if (isValid)
-            return token;
-    }).catch(e => {
-        log("Error getting the token" + e)
-    });
+export const getPlainObjectUserInfoDTO = (user: User) => {
 
-    const refreshToken = jwt.sign({ _id: user._id, email: user.email }, globalConfig.security.jwtSignSecret);
-    setRefreshToken(user.email, refreshToken).then(() => {
-        return refreshToken;
-    });
-    return refreshToken
+    return {
+        userId: user.userId,
+        organizationId: user.organizationId
+    }
+}
 
+export const getAccessToken = (user: User) => {
+
+    const secret = globalConfig.security.jwtSignSecret;
+    const token = jwt
+        .sign(getPlainObjectUserInfoDTO(user), secret, { expiresIn: `${accessTokenLifespanInS}s` });
+
+    return token;
+}
+
+export const getRefreshToken = async (user: User) => {
+
+    // const refreshToken = await getRefreshTokenByUserId(user.userId);
+    // if (!refreshToken)
+    //     throw new Error("Error getting refresh token!");
+
+    // const isValid = validateToken(refreshToken, globalConfig.security.jwtSignSecret).isValid;
+    // if (!isValid)
+    //     throw new Error("Invalid token!");
+
+    const newRefreshToken = jwt.sign(getPlainObjectUserInfoDTO(user), globalConfig.security.jwtSignSecret);
+
+    // save refresh token to DB
+    await setUserActiveRefreshToken(user.userId, newRefreshToken);
+
+    return newRefreshToken;
 }
 
 export const validateToken = (token: string, secret: string) => {
@@ -117,18 +141,16 @@ export const getCookie = (req: Request, key: string) => getCookies(req).filter(x
 export const respondValidationError = (res: Response, error: string) =>
     res.status(400).json({ error: error });
 
-export const setAuthCookies = (res: Response, user: {_id: string, organizationId:string, email: string, refreshToken?: string}) => {
+export const setAuthCookies = async (res: Response, user: User) => {
+
     const accessToken = getAccessToken(user);
     setAccessTokenCookie(res, accessToken);
 
-    const refreshToken = getRefreshToken(user);
+    const refreshToken = await getRefreshToken(user);
     setRefreshTokenCookie(res, refreshToken);
-
-    setUserIdCookie(res, user._id)
-    setOrganizationIdCookie(res, user.organizationId)
 }
 
-export const authorizeRequest = (req: Request, onAuthorized: (user: {_id: string, organizationId:string, email: string, refreshToken?: string}) => void, onError: () => void) => {
+export const authorizeRequest = (req: Request, onAuthorized: (user: { _id: string, organizationId: string, email: string, refreshToken?: string }) => void, onError: () => void) => {
 
     const accessToken = getCookie(req, accessTokenCookieName)?.value;
     if (!accessToken) {
@@ -143,4 +165,26 @@ export const authorizeRequest = (req: Request, onAuthorized: (user: {_id: string
     }
 
     onAuthorized(user as any);
+}
+
+const authenticateUser = async (userId: IdType) => {
+
+    const user = await getUserById(userId);
+    if (!user)
+        throw new Error("User not found!");
+
+    await bcrypt.compare(password as string, user.userData.password);
+
+    let isValidPassword = false;
+    try {
+        isValidPassword =
+    } catch (err) {
+        throw new Error("Invalid credentials")
+    }
+
+    if (!isValidPassword) {
+        throw new Error("Invalid credentials")
+    }
+
+    return { _id: user._id, organizationId: user.userData.organizationId, email: user.userData.email }
 }

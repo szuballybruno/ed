@@ -20,7 +20,6 @@ import { StylesProvider } from "@material-ui/core";
 import { Signup } from "./components/universal/authentication/signup/Signup";
 import { MobileDemo } from "./components/universal/MobileDemo";
 import { QueryClient, QueryClientProvider } from 'react-query'
-import RegistrationPage from "./components/RegistrationPage";
 
 const queryClient = new QueryClient();
 
@@ -36,7 +35,6 @@ ReactDOM.render(
 
                                     {/* unprotected paths  */}
                                     <Route path="/login" component={withRouter(LoginScreen)} />
-                                    <Route path="/register" component={RegistrationPage} />
 
                                     {/* protected paths */}
                                     <ProtectedRoute path="/kezdolap" render={() => <UserDashBoard />} />

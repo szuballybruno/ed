@@ -1,12 +1,13 @@
 
 import { globalConfig } from "../server";
 import { accessTokenCookieName, authorizeRequest, getCookie, getRequestAccessTokenMeta, refreshTokenCookieName, respondValidationError, setAuthCookies, validateToken } from "../services/authentication";
-import { getRefreshTokenByUserEmail, removeRefreshToken } from "../services/authenticationPersistance";
-import {Request, Response, NextFunction} from "express";
-import {respondOk} from "../utilities/helpers";
-import {Connection} from "../services/connectMongo";
-import {responseReducer} from "../services/responseReducer";
+import { getRefreshTokenByUserId, removeRefreshToken } from "../services/authenticationPersistance";
+import { Request, Response, NextFunction } from "express";
+import { respondBadRequest, respondForbidden, respondOk } from "../utilities/helpers";
+import { Connection } from "../services/connectMongo";
+import { responseReducer } from "../services/responseReducer";
 import bcrypt from "bcryptjs";
+import { getUserById } from "../services/userService";
 
 export const renewUserSession = (req: Request, res: Response) => {
     // check if there is a refresh token sent in the request 
@@ -26,7 +27,7 @@ export const renewUserSession = (req: Request, res: Response) => {
     }
 
     // check if this refresh token is associated to the user
-    getRefreshTokenByUserEmail(user?.email as string).then(refreshTokenFromDb => {
+    getRefreshTokenByUserId(user?.email as string).then(refreshTokenFromDb => {
         refreshToken !== refreshTokenFromDb ? new Error("Refresh token is not associated to the user") : null
     });
 
@@ -36,47 +37,27 @@ export const renewUserSession = (req: Request, res: Response) => {
 }
 
 export const registerUserAction = (req: Request, res: Response, next: NextFunction) => {
-    const {email, password} = req.query
 
-    if (!email)
-        respondValidationError(res, "Email is not provided!");
+    // check request 
+    if (!req.body)
+        respondBadRequest(req, res);
 
-    if (!password)
-        respondValidationError(res, "Password is not provided!");
+    // get credentials from request
+    const { email, password } = req.body;
 
-    const authenticateUser = async () => {
-        let existingUser
-        try {
-            existingUser = await Connection.db.collection("users").findOne({"userData.email": email});
-        } catch (e) {
-            throw new Error("Invalid credentials")
-        }
+    // further validate request 
+    if (!email || !password)
+        respondBadRequest(req, res);
 
-
-        if (!existingUser) {
-            throw new Error("Invalid credentials")
-        }
-
-        let isValidPassword = false;
-        try {
-            isValidPassword = await bcrypt.compare(password as string, existingUser.userData.password);
-        } catch (err) {
-            throw new Error("Invalid credentials")        }
-
-        if (!isValidPassword) {
-            throw new Error("Invalid credentials")
-        }
-
-        return {_id: existingUser._id, organizationId: existingUser.userData.organizationId, email: existingUser.userData.email}
-    }
+    // authenticate
     authenticateUser().then(user => {
-        setAuthCookies(res, {_id: user._id, organizationId: user.organizationId, email: user.email});
+        setAuthCookies(res, { _id: user._id, organizationId: user.organizationId, email: user.email });
         res.sendStatus(200);
     })
 }
 
 export const logInUserAction = (req: Request, res: Response, next: NextFunction) => {
-    const {email, password} = req.query
+    const { email, password } = req.query
 
     if (!email)
         respondValidationError(res, "Email is not provided!");
@@ -87,11 +68,10 @@ export const logInUserAction = (req: Request, res: Response, next: NextFunction)
     const authenticateUser = async () => {
         let existingUser
         try {
-            existingUser = await Connection.db.collection("users").findOne({"userData.email": email});
+            existingUser = await Connection.db.collection("users").findOne({ "userData.email": email });
         } catch (e) {
             throw new Error("Invalid credentials")
         }
-
 
         if (!existingUser) {
             throw new Error("Invalid credentials")
@@ -101,41 +81,28 @@ export const logInUserAction = (req: Request, res: Response, next: NextFunction)
         try {
             isValidPassword = await bcrypt.compare(password as string, existingUser.userData.password);
         } catch (err) {
-            throw new Error("Invalid credentials")        }
+            throw new Error("Invalid credentials")
+        }
 
         if (!isValidPassword) {
             throw new Error("Invalid credentials")
         }
 
-        return {_id: existingUser._id, organizationId: existingUser.userData.organizationId, email: existingUser.userData.email}
+        return { _id: existingUser._id, organizationId: existingUser.userData.organizationId, email: existingUser.userData.email }
     }
     authenticateUser().then(user => {
-        setAuthCookies(res, {_id: user._id, organizationId: user.organizationId, email: user.email});
+        setAuthCookies(res, { _id: user._id, organizationId: user.organizationId, email: user.email });
         res.sendStatus(200);
     })
 }
 
 export const getCurrentUser = (req: Request, res: Response, next: NextFunction) => {
+
     const tokenMeta = getRequestAccessTokenMeta(req);
-    const fetchUser = async () => {
-        let user
-        try {
-            user = await Connection.db.collection("users").findOne({"userData.email": tokenMeta?.email});
-        } catch (e) {
-            throw new Error("No user with this email address")
-        }
 
-
-        if (!user) {
-            throw new Error("Couldn't fetch user from db")
-        }
-
-        return user
-    }
-    fetchUser().then(user => {
-        res.status(200).json(user);
-    })
-
+    getUserById(tokenMeta)
+        .then(x => res.sendStatus(200).json(x))
+        .catch(x => res.sendStatus(500).json(x));
 }
 
 export const logOutUserAction = (req: Request, res: Response, next: NextFunction) => {
@@ -143,13 +110,12 @@ export const logOutUserAction = (req: Request, res: Response, next: NextFunction
     const tokenMeta = getRequestAccessTokenMeta(req);
 
     // remove refresh token, basically makes it invalid from now on
-    removeRefreshToken(tokenMeta?.email as string).then(() => {
-        // remove browser cookies
-        res.clearCookie(accessTokenCookieName);
-        res.clearCookie(refreshTokenCookieName);
+    removeRefreshToken(tokenMeta?.email as string)
+        .then(() => {
+            // remove browser cookies
+            res.clearCookie(accessTokenCookieName);
+            res.clearCookie(refreshTokenCookieName);
 
-        respondOk(req, res);
-    });
-
-
+            respondOk(req, res);
+        });
 }

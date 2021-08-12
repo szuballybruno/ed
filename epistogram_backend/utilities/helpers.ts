@@ -6,3 +6,6 @@ export type ExpressNext = () => void;
 
 export const respondOk = (req: ExpressRequest, res: ExpressResponse) => { res.sendStatus(200); };
 export const respondForbidden = (req: ExpressRequest, res: ExpressResponse) => { res.sendStatus(403); };
+export const respondBadRequest = (req: ExpressRequest, res: ExpressResponse) => { res.sendStatus(400); };
+
+export type IdType = string;

@@ -9,12 +9,15 @@ import { AxiosRequestConfig } from "axios";
 import instance from "../../services/axiosInstance";
 import Cookies from "universal-cookie";
 import { useRenewUserSessionPooling, useUserFetching } from "../../services/authentication";
+import { useGetGlobalData, useUserId } from "../../services/dataService";
 
 export class UserInfo {
-    email: string;
+    userId: number;
+    organizationId: number;
 
-    constructor(email: string) {
-        this.email = email;
+    constructor(userId: number, organizationId: number) {
+        this.userId = userId;
+        this.organizationId = organizationId;
     }
 }
 
@@ -37,19 +40,7 @@ export const CurrentUserContext = createContext<UserInfo | null>(null);
 export const RefetchUserFunctionContext = createContext<() => void>(() => { });
 export const IsAuthenticatedContext = createContext<AuthenticationState>(new AuthenticationState(true, false));
 
-
 export const DataManagerFrame: FunctionComponent = (props) => {
-    const { currentUser, refetchUser, isLoading } = useUserFetching();
-    const authState = new AuthenticationState(isLoading, !!currentUser);
-
-    useRenewUserSessionPooling();
-
-    console.log("Authentication state: " + authState.asString());
-
-    const cookies = new Cookies();
-    //STATES
-    const user = useState(userSideState)
-    const app = useState(applicationRunningState)
 
     //DATA COLLECTOR SCRIPTS
     //hotjar.initialize(1954004, 0);
@@ -57,33 +48,31 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     //SET THEME
     setTheme(globalConfig.currentTheme);
 
-    //LOADING INDICATOR METHODS
-    const setLoadingOnRequest = (config: AxiosRequestConfig) => {
-        app.loadingIndicator.set("loading")
-        return config
-    }
+    // get global states 
+    const applicationState = useState(applicationRunningState);
+    const globalDataState = useState(userSideState);
 
+    // fetch current user 
+    const { currentUser, refetchUser, isLoading } = useUserFetching();
+    const authState = new AuthenticationState(isLoading, !!currentUser);
+    console.log("Authentication state: " + authState.asString());
 
-    //FIRST SCRIPTS ON THE PAGE
-    useEffect(() => {
-        const requestInterceptor =  instance.interceptors.request.use(setLoadingOnRequest)
-        //TODO: Normális error handling
-        instance.get(`users/${cookies.get("userId")}`).then((res) => {
-            if (res.data) {
-                user.set(res.data)
-                app.loadingIndicator.set("succeeded")
-            } else {
-                app.loadingIndicator.set("failed")
-            }
-        }).catch((e) => {
-            //app.loadingIndicator.set("failed")
-            return e
-        })
+    // start auth pooling 
+    useRenewUserSessionPooling();
 
-        instance.interceptors.request.eject(requestInterceptor)
+    // get user id and set it to global state 
+    const userId = currentUser?.userId ?? null;
+    applicationState.isLoggedIn.set(authState.isAuthenticated);
 
-        // eslint-disable-next-line
-    },[app.isLoggedIn.get()])
+    // get global data
+    const { resultData, loadingState } = useGetGlobalData(userId);
+
+    // handle global data respones and loading states
+    applicationState.loadingIndicator.set(loadingState);
+
+    if (resultData)
+        globalDataState.set(resultData);
+
     return <IsAuthenticatedContext.Provider value={authState}>
         <RefetchUserFunctionContext.Provider value={refetchUser}>
             <CurrentUserContext.Provider value={currentUser}>
