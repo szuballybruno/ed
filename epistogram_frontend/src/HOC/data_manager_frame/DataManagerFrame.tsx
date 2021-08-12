@@ -37,8 +37,8 @@ export const CurrentUserContext = createContext<UserInfo | null>(null);
 export const RefetchUserFunctionContext = createContext<() => void>(() => { });
 export const IsAuthenticatedContext = createContext<AuthenticationState>(new AuthenticationState(true, false));
 
-export const DataManagerFrame = (props: { children: ReactNode }) => {
 
+export const DataManagerFrame: FunctionComponent = (props) => {
     const { currentUser, refetchUser, isLoading } = useUserFetching();
     const authState = new AuthenticationState(isLoading, !!currentUser);
 
@@ -46,55 +46,49 @@ export const DataManagerFrame = (props: { children: ReactNode }) => {
 
     console.log("Authentication state: " + authState.asString());
 
-    return (
-        <IsAuthenticatedContext.Provider value={authState}>
-            <RefetchUserFunctionContext.Provider value={refetchUser}>
-                <CurrentUserContext.Provider value={currentUser}>
-                    {props.children}
-                </CurrentUserContext.Provider>
-            </RefetchUserFunctionContext.Provider>
-        </IsAuthenticatedContext.Provider>
-    );
+    const cookies = new Cookies();
+    //STATES
+    const user = useState(userSideState)
+    const app = useState(applicationRunningState)
+
+    //DATA COLLECTOR SCRIPTS
+    //hotjar.initialize(1954004, 0);
+
+    //SET THEME
+    setTheme(globalConfig.currentTheme);
+
+    //LOADING INDICATOR METHODS
+    const setLoadingOnRequest = (config: AxiosRequestConfig) => {
+        app.loadingIndicator.set("loading")
+        return config
+    }
+
+
+    //FIRST SCRIPTS ON THE PAGE
+    useEffect(() => {
+        const requestInterceptor =  instance.interceptors.request.use(setLoadingOnRequest)
+        //TODO: Normális error handling
+        instance.get(`users/${cookies.get("userId")}`).then((res) => {
+            if (res.data) {
+                user.set(res.data)
+                app.loadingIndicator.set("succeeded")
+            } else {
+                app.loadingIndicator.set("failed")
+            }
+        }).catch((e) => {
+            //app.loadingIndicator.set("failed")
+            return e
+        })
+
+        instance.interceptors.request.eject(requestInterceptor)
+
+        // eslint-disable-next-line
+    },[app.isLoggedIn.get()])
+    return <IsAuthenticatedContext.Provider value={authState}>
+        <RefetchUserFunctionContext.Provider value={refetchUser}>
+            <CurrentUserContext.Provider value={currentUser}>
+                {props.children}
+            </CurrentUserContext.Provider>
+        </RefetchUserFunctionContext.Provider>
+    </IsAuthenticatedContext.Provider> as JSX.Element
 }
-
-// export const DataManagerFrame: FunctionComponent = (props) => {
-//     const cookies = new Cookies();
-//     //STATES
-//     const user = useState(userSideState)
-//     const app = useState(applicationRunningState)
-
-//     //DATA COLLECTOR SCRIPTS
-//     //hotjar.initialize(1954004, 0);
-
-//     //SET THEME
-//     setTheme(globalConfig.currentTheme);
-
-//     //LOADING INDICATOR METHODS
-//     const setLoadingOnRequest = (config: AxiosRequestConfig) => {
-//         app.loadingIndicator.set("loading")
-//         return config
-//     }
-
-
-//     //FIRST SCRIPTS ON THE PAGE
-//     useEffect(() => {
-//         const requestInterceptor =  instance.interceptors.request.use(setLoadingOnRequest)
-//         //TODO: Normális error handling
-//         instance.get(`users/${cookies.get("userId")}`).then((res) => {
-//             if (res.data) {
-//                 user.set(res.data)
-//                 app.loadingIndicator.set("succeeded")
-//             } else {
-//                 app.loadingIndicator.set("failed")
-//             }
-//         }).catch((e) => {
-//             //app.loadingIndicator.set("failed")
-//             return e
-//         })
-
-//         instance.interceptors.request.eject(requestInterceptor)
-
-//         // eslint-disable-next-line
-//     },[app.isLoggedIn.get()])
-//     return props.children as JSX.Element
-// }

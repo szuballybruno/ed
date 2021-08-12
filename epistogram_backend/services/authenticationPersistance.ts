@@ -1,35 +1,30 @@
+import {Connection} from "./connectMongo";
 
-class RefreshTokenContainer {
-    userEmail: string;
-    token: string;
-
-    constructor(userEmail: string, token: string) {
-        this.userEmail = userEmail;
-        this.token = token;
+export const getRefreshTokenByUserEmail = async (userEmail: string) => {
+    let existingUser
+    try {
+        existingUser = await Connection.db.collection("users").findOne({"userData.email": userEmail});
+    } catch (e) {
+        throw new Error("Invalid credentials " + userEmail)
     }
+
+
+    if (!existingUser) {
+        throw new Error("Invalid credentials" + userEmail)
+    }
+
+    return existingUser.userData.refreshToken
+
 }
 
-var refreshTokens = [] as RefreshTokenContainer[];
-
-export const getRefreshTokenByUserEmail = (userEmail: string) =>
-    refreshTokens.filter(x => x.userEmail == userEmail)[0];
-
-export const setRefreshToken = (userEmail: string, token: string) => {
-
-    const existingTokenContainerForUser = getRefreshTokenByUserEmail(userEmail);
-
-    if (existingTokenContainerForUser) {
-
-        existingTokenContainerForUser.token = token;
-    }
-
-    else {
-
-        refreshTokens.push(new RefreshTokenContainer(userEmail, token));
-    }
+export const setRefreshToken = async (userEmail: string, token: string) => {
+    return Connection.db.collection("users").updateOne({"userData.email": userEmail}, {
+        $set: {
+            "userData.refreshToken": token
+        }
+    })
 }
 
 export const removeRefreshToken = (userEmail: string) => {
-
-    refreshTokens = refreshTokens.filter(x => x.userEmail != userEmail);
+    return Connection.db.collection("users").updateOne({"userData.email": userEmail}, {$unset: "userData.refreshToken"})
 }

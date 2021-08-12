@@ -6,7 +6,6 @@ const userFetchingIntervalInS = 15;
 const userSessionRenewIntervalInS = 10;
 
 export const useUserFetching = (nonAutomatic?: boolean) => {
-
     const { data, refetch: refetchUser, isLoading, isSuccess } = useQuery('getCurrentUser', () => httpGetAsync("get-current-user"), {
         retry: false,
         refetchOnWindowFocus: false,
@@ -40,6 +39,7 @@ export const useRenewUserSessionPooling = () => {
 export const logOutUserAsync = async () => {
 
     const result = await httpPostAsync("log-out-user");
+    //rewrite with instance.post
     validateHttpResponse(result);
 }
 
@@ -55,7 +55,7 @@ export const registerUser = async (email: string, password: string) => {
 
 const validateHttpResponse = (response: HTTPResponse) => {
 
-    if (response.code == 200)
+    if (response.code === 200)
         return;
 
     throw new Error("Logout failed!" + response.data.msg);

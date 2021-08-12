@@ -5,10 +5,9 @@ import instance from "../../../../services/axiosInstance";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import Cookies from 'universal-cookie';
 import SingleInput from "../../../administration/universal/singleInput/SingleInput";
-import {Button, TextField, Typography} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 
 const LoginScreen = (props: { history: any; }): JSX.Element => {
-    const cookies = new Cookies();
     console.warn("[LoginScreen] Started...")
     const app = useState(applicationRunningState)
 
@@ -16,16 +15,16 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
 
     const authenticate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        instance.get(`/users/login?email=${app.currentEmail.get()}&password=${app.currentPassword.get()}`)
+        instance.post(`/login-user?email=${app.currentEmail.get()}&password=${app.currentPassword.get()}`)
             .then(res => {
                 if (res) {
                     if (res.status === 200) {
-                        cookies.set('userId', res.data.userId, { path: '/' });
-                        cookies.set('organizationId', res.data.organizationId, {path: '/'})
-                        app.isLoggedIn.set(true)
+                        //cookies.set('userId', res.data.userId, { path: '/' });
+                        //cookies.set('organizationId', res.data.organizationId, {path: '/'})
+                        console.log(res.data)
                         return props.history.push('/kezdolap');
 
-                    } else if (res.status === 401 || res.status === 500) {
+                    } else if (res.status !== 200) {
                         errorMessage.set("A megadott adatok hibásak");
                     } else {
                         errorMessage.set("Ismeretlen hiba történt");

@@ -14,7 +14,7 @@ import {Cookies} from "react-cookie";
 import UserTasks from "./users_components/userTasks/UserTasks";
 import EditUser from "./users_components/editUser/EditUser";
 import UserStatistics from "./users_components/userStatistics/UserStatistics";
-import {config} from "../../../configuration/config";
+import {globalConfig} from "../../../configuration/config";
 import {LoadingFrame} from "../../../HOC/loading_frame/LoadingFrame";
 import {FailedComponent, LoadingComponent, NullComponent} from "../../../HOC/loading_frame/loadingComponents/LoadingComponent";
 import {AxiosRequestConfig} from "axios";
@@ -76,7 +76,7 @@ export const Users: React.FunctionComponent = () => {
 
                             {admin.users.get().map((user, index) => {
                                 return <AdminDashboardSearchItem title={`${user.lastName} ${user.firstName}`}
-                                                              profileImageUrl={user._id ? `${config.assetStorageUrl}/users/${user._id}/avatar.png` : ""}
+                                                              profileImageUrl={user._id ? `${globalConfig.assetStorageUrl}/users/${user._id}/avatar.png` : ""}
                                                               chips={[
                                                                   {label: user.email, icon: "email"},
                                                                   {label: user.organizationName, icon: "organization"},
@@ -108,7 +108,7 @@ export const Users: React.FunctionComponent = () => {
                                                                   {
                                                                       icon: "delete",
                                                                       onClick: () => {
-                                                                          instance.delete(`${config.backendUrl}users/deleteuser?userId=${user._id}`).then(() => {
+                                                                          instance.delete(`${globalConfig.backendUrl}users/deleteuser?userId=${user._id}`).then(() => {
                                                                               return admin.users[index].set(none)
                                                                           }).catch(e => console.error(e.toString()))
                                                                       }

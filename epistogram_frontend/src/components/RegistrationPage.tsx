@@ -1,5 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react";
-import { Button, TextField } from "@material-ui/core";
+import {Button, TextField, Typography} from "@material-ui/core";
 import { useContext, useRef } from "react";
 import { CurrentUserContext, RefetchUserFunctionContext } from "../HOC/data_manager_frame/DataManagerFrame";
 import { logOutUserAsync, registerUser } from "../services/authentication";
@@ -33,8 +32,8 @@ const RegistrationPage = () => {
 
     return (
 
-        <Flex direction="column" p="50px">
-            <Text>{`Logged in user: ${userInfo?.email}`}</Text>
+        <div >
+            <Typography>{`Logged in user: ${userInfo?.email}`}</Typography>
 
             <TextField label="Email" inputRef={emailRef}></TextField>
             <TextField label="Password" type="password" inputRef={passwordRef}></TextField>
@@ -42,7 +41,7 @@ const RegistrationPage = () => {
             <Button onClick={() => register()}>Register!</Button>
             <Button onClick={() => register()}>Log in!</Button>
             <Button onClick={() => logout()}>Log out!</Button>
-        </Flex>
+        </div>
     )
 }
 
