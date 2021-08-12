@@ -78,6 +78,7 @@ export class GlobalConfiguration {
 
     vpsSSHAuthConfig = {
         host: getEnvConfigEntry("VPS_SSH_HOST"),
+        port: getEnvConfigEntry("VPS_SSH_PORT"),
 
         username: getEnvConfigEntry("VPS_SSH_USERNAME"),
         passphrase: getEnvConfigEntry("VPS_SSH_PASSPHRASE"),
