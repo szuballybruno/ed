@@ -1,18 +1,17 @@
-import React from 'react';
-import classes from './loginScreen.module.scss';
 import { useState } from "@hookstate/core";
-import instance from "../../../../services/axiosInstance";
-import applicationRunningState from "../../../../store/application/applicationRunningState";
-import Cookies from 'universal-cookie';
-import SingleInput from "../../../administration/universal/singleInput/SingleInput";
 import { Button } from "@material-ui/core";
-import { logInUser } from '../../../../services/authenticationService';
+import React from 'react';
+import { useLogInUser } from '../../../../services/authenticationService';
+import applicationRunningState from "../../../../store/application/applicationRunningState";
+import SingleInput from "../../../administration/universal/singleInput/SingleInput";
+import classes from './loginScreen.module.scss';
 
 const LoginScreen = (props: { history: any; }): JSX.Element => {
+
     console.warn("[LoginScreen] Started...")
     const app = useState(applicationRunningState)
-
     const errorMessage = useState("");
+    const logInUser = useLogInUser();
 
     const authenticate = async (e: React.FormEvent<HTMLFormElement>) => {
 
@@ -22,19 +21,29 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
         const password = app.currentPassword.get();
 
         try {
-            const respresonse = await logInUser(email, password);
+            const response = await logInUser(email, password);
 
-            if (respresonse) {
-                if (respresonse.code === 200) {
-                    console.log(respresonse.data)
+            if (response) {
+
+                if (response.code === 200) {
+
+                    console.log("Login successful, naving to home page!");
                     return props.history.push('/kezdolap');
+                }
 
-                } else if (respresonse.code !== 200) {
+                else if (response.code !== 200) {
+
                     errorMessage.set("A megadott adatok hibásak");
-                } else {
+                }
+
+                else {
+
                     errorMessage.set("Ismeretlen hiba történt");
                 }
-            } else {
+            }
+
+            else {
+
                 errorMessage.set("A megadott adatok hibásak");
             }
         } catch (error) {
