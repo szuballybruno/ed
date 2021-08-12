@@ -4,7 +4,7 @@ import { getUserById } from "./userService";
 export const getRefreshTokenByUserId = async (userId: string) => {
 
     const user = await getUserById(userId);
-    return user.activeRefreshToken;
+    return user?.userData.refreshToken;
 }
 
 export const setUserActiveRefreshToken = async (userEmail: string, token: string) => {

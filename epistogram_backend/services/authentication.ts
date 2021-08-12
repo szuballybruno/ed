@@ -1,12 +1,14 @@
 import dayjs from "dayjs";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { User } from "../models/entities/user";
 import { globalConfig } from "../server";
-import { IdType } from "../utilities/helpers";
-import { getRefreshTokenByUserId, setUserActiveRefreshToken } from "./authenticationPersistance";
+import { ExpressRequest, ExpressResponse, IdType, respondBadRequest, respondForbidden, respondInternalServerError, respondOk } from "../utilities/helpers";
+import { getRefreshTokenByUserId, removeRefreshToken, setUserActiveRefreshToken } from "./authenticationPersistance";
 import { logError } from "./logger";
-import { getUserById } from "./userService";
+import { getUserByEmail, getUserById } from "./userService";
+import { TokenMeta } from "../models/DTOs/TokenMeta";
 
 export const accessTokenCookieName = "accessToken";
 export const refreshTokenCookieName = "refreshToken";
@@ -27,7 +29,7 @@ export const getPlainObjectUserInfoDTO = (user: User) => {
 
     return {
         userId: user.userId,
-        organizationId: user.organizationId
+        organizationId: user.userData.organizationId
     }
 }
 
@@ -60,38 +62,32 @@ export const getRefreshToken = async (user: User) => {
 
 export const validateToken = (token: string, secret: string) => {
 
-    const returnValue = { isValid: false, tokenMeta: null as any | null };
-
     try {
         jwt.verify(token, secret);
-        returnValue.isValid = true;
     }
     catch (e) {
 
         logError(e);
+        return null;
     }
 
-    if (returnValue.isValid) {
-        returnValue.tokenMeta = jwt.decode(token) as any;
-    }
-
-    return returnValue;
+    return jwt.decode(token) as TokenMeta;
 }
 
 export const getRequestAccessTokenMeta = (req: Request) => {
 
     const accessToken = getCookie(req, accessTokenCookieName)?.value;
     if (!accessToken)
-        throw new Error("Access token not present in request!");
+        return null;
 
-    const { isValid, tokenMeta } = validateToken(accessToken, globalConfig.security.jwtSignSecret);
-    if (!isValid)
-        throw new Error("Access token invalid or expired!");
+    const tokenMeta = validateToken(accessToken, globalConfig.security.jwtSignSecret);
+    if (!tokenMeta)
+        return null;
 
     return tokenMeta;
 }
 
-export const setAccessTokenCookie = (res: Response, accessToken: string) => {
+const setAccessTokenCookie = (res: Response, accessToken: string) => {
     res.cookie(accessTokenCookieName, accessToken, {
         secure: false, //TODO: Write back to secure
         httpOnly: true,
@@ -99,26 +95,11 @@ export const setAccessTokenCookie = (res: Response, accessToken: string) => {
     });
 }
 
-export const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
+const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
     res.cookie(refreshTokenCookieName, refreshToken, {
         secure: false, //TODO: Write back to secure
         httpOnly: true,
         expires: dayjs().add(refreshTokenLifespanInS, "seconds").toDate()
-    });
-}
-
-export const setUserIdCookie = (res: Response, userId: string) => {
-    res.cookie("userId", userId, {
-        secure: false, //TODO: Write back to secure
-        httpOnly: false,
-        //expires: dayjs().add(refreshTokenLifespanInS, "seconds").toDate()
-    });
-}
-export const setOrganizationIdCookie = (res: Response, organizationId: string) => {
-    res.cookie("organizationId", organizationId, {
-        secure: false, //TODO: Write back to secure
-        httpOnly: false,
-        //expires: dayjs().add(refreshTokenLifespanInS, "seconds").toDate()
     });
 }
 
@@ -150,7 +131,7 @@ export const setAuthCookies = async (res: Response, user: User) => {
     setRefreshTokenCookie(res, refreshToken);
 }
 
-export const authorizeRequest = (req: Request, onAuthorized: (user: { _id: string, organizationId: string, email: string, refreshToken?: string }) => void, onError: () => void) => {
+export const authorizeRequest = (req: Request, onAuthorized: (tokenMeta: TokenMeta) => void, onError: () => void) => {
 
     const accessToken = getCookie(req, accessTokenCookieName)?.value;
     if (!accessToken) {
@@ -158,33 +139,89 @@ export const authorizeRequest = (req: Request, onAuthorized: (user: { _id: strin
         return;
     }
 
-    const { isValid, tokenMeta: user } = validateToken(accessToken, globalConfig.security.jwtSignSecret);
-    if (!isValid) {
+    const tokenMeta = validateToken(accessToken, globalConfig.security.jwtSignSecret);
+    if (!tokenMeta) {
         onError();
         return;
     }
 
-    onAuthorized(user as any);
+    onAuthorized(tokenMeta);
 }
 
-const authenticateUser = async (userId: IdType) => {
+export const getUserByCredentials = async (email: string, password: string) => {
 
-    const user = await getUserById(userId);
+    const user = await getUserByEmail(email);
     if (!user)
-        throw new Error("User not found!");
+        return null;
 
-    await bcrypt.compare(password as string, user.userData.password);
+    const isPasswordCorrect = await bcrypt.compare(password as string, user.userData.password);
+    if (!isPasswordCorrect)
+        return null;
 
-    let isValidPassword = false;
-    try {
-        isValidPassword =
-    } catch (err) {
-        throw new Error("Invalid credentials")
-    }
+    return user;
+}
 
-    if (!isValidPassword) {
-        throw new Error("Invalid credentials")
-    }
+export const renewUserSession = async (req: ExpressRequest, res: ExpressResponse) => {
 
-    return { _id: user._id, organizationId: user.userData.organizationId, email: user.userData.email }
+    // check if there is a refresh token sent in the request 
+    const refreshToken = getCookie(req, "refreshToken")?.value;
+    if (!refreshToken)
+        return respondBadRequest(req, res);
+
+    // check sent refresh token if invalid by signature or expired
+    const tokenMeta = validateToken(refreshToken, globalConfig.security.jwtSignSecret);
+    if (!tokenMeta)
+        return respondForbidden(req, res);
+
+    // check if this refresh token is associated to the user
+    const refreshTokenFromDb = await getRefreshTokenByUserId(tokenMeta.userId);
+    if (!refreshTokenFromDb)
+        return respondForbidden(req, res);
+
+    // get user 
+    const user = await getUserById(tokenMeta.userId);
+    if (!user)
+        return respondInternalServerError(req, res, "User not found by id " + tokenMeta.userId);
+
+    // checks passed OK!
+    setAuthCookies(res, user);
+    respondOk(req, res);
+}
+
+export const logInUser = async (req: ExpressRequest, res: ExpressResponse) => {
+
+    // check request 
+    if (!req.body)
+        respondBadRequest(req, res);
+
+    // get credentials from request
+    const { email, password } = req.body;
+
+    // further validate request 
+    if (!email || !password)
+        respondBadRequest(req, res);
+
+    // authenticate
+    const user = await getUserByCredentials(email, password)
+    if (!user)
+        return respondForbidden(req, res);
+
+    setAuthCookies(res, user as User);
+    respondOk(req, res);
+}
+
+export const logOutUser = async (req: ExpressRequest, res: ExpressResponse) => {
+
+    const tokenMeta = getRequestAccessTokenMeta(req);
+    if (!tokenMeta)
+        return respondForbidden(req, res);
+
+    // remove refresh token, basically makes it invalid from now on
+    await removeRefreshToken(tokenMeta.userId);
+
+    // remove browser cookies
+    res.clearCookie(accessTokenCookieName);
+    res.clearCookie(refreshTokenCookieName);
+
+    respondOk(req, res);
 }

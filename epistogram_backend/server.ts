@@ -1,10 +1,9 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
-import { nextTick } from 'process';
 import { router as articleRoutes } from './api/articles/routes';
-import { getCurrentUser as getCurrentUserAction, logInUserAction, logOutUserAction, registerUserAction, renewUserSession } from "./api/authenticationActions";
+import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { router as courseRoutes } from './api/courses/routes';
 import { router as filesRoutes } from './api/files/routes';
 import { router as groupsRoutes } from './api/groups/routes';
@@ -18,9 +17,8 @@ import { router as generalDataRoutes } from './api/votes/routes';
 import { authorizeRequest } from './services/authentication';
 import { connectToMongoDB } from "./services/connectMongo";
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
-import { log, logError } from "./services/logger";
-import { Request, Response, NextFunction } from "express"
-import { respondOk, respondForbidden } from './utilities/helpers';
+import { log } from "./services/logger";
+import { respondForbidden, respondOk } from './utilities/helpers';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -44,7 +42,7 @@ connectToMongoDB().then(() => {
             req,
             tokenMeta => {
 
-                log("Authorization successful, user email: " + tokenMeta.email);
+                log("Authorization successful, userId: " + tokenMeta.userId);
                 next();
             },
             () => {
@@ -107,11 +105,8 @@ connectToMongoDB().then(() => {
         });
     })
 
-    expressServer.options('/register-user', respondOk);
-    expressServer.post('/register-user', registerUserAction);
-
     expressServer.options('/renew-user-session', respondOk);
-    expressServer.get('/renew-user-session', renewUserSession);
+    expressServer.get('/renew-user-session', renewUserSessionAction);
 
     expressServer.options('/log-out-user', respondOk);
     expressServer.post('/log-out-user', logOutUserAction);
