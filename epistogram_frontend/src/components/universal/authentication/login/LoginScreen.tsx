@@ -1,11 +1,12 @@
 import React from 'react';
 import classes from './loginScreen.module.scss';
-import {useState} from "@hookstate/core";
+import { useState } from "@hookstate/core";
 import instance from "../../../../services/axiosInstance";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import Cookies from 'universal-cookie';
 import SingleInput from "../../../administration/universal/singleInput/SingleInput";
-import {Button} from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import { logInUser } from '../../../../services/authenticationService';
 
 const LoginScreen = (props: { history: any; }): JSX.Element => {
     console.warn("[LoginScreen] Started...")
@@ -13,35 +14,39 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
 
     const errorMessage = useState("");
 
-    const authenticate = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        instance.post(`/login-user?email=${app.currentEmail.get()}&password=${app.currentPassword.get()}`)
-            .then(res => {
-                if (res) {
-                    if (res.status === 200) {
-                        //cookies.set('userId', res.data.userId, { path: '/' });
-                        //cookies.set('organizationId', res.data.organizationId, {path: '/'})
-                        console.log(res.data)
-                        return props.history.push('/kezdolap');
+    const authenticate = async (e: React.FormEvent<HTMLFormElement>) => {
 
-                    } else if (res.status !== 200) {
-                        errorMessage.set("A megadott adatok hibásak");
-                    } else {
-                        errorMessage.set("Ismeretlen hiba történt");
-                    }
+        e.preventDefault();
+
+        const email = app.currentEmail.get();
+        const password = app.currentPassword.get();
+
+        try {
+            const respresonse = await logInUser(email, password);
+
+            if (respresonse) {
+                if (respresonse.code === 200) {
+                    console.log(respresonse.data)
+                    return props.history.push('/kezdolap');
+
+                } else if (respresonse.code !== 200) {
+                    errorMessage.set("A megadott adatok hibásak");
                 } else {
+                    errorMessage.set("Ismeretlen hiba történt");
+                }
+            } else {
+                errorMessage.set("A megadott adatok hibásak");
+            }
+        } catch (error) {
+
+            if (error.response !== undefined) {
+                if (error.response.status === 401 || error.response.status === 500) {
                     errorMessage.set("A megadott adatok hibásak");
                 }
-            }).catch(err => {
-                if (err.response !== undefined) {
-                    if (err.response.status === 401 || err.response.status === 500) {
-                        errorMessage.set( "A megadott adatok hibásak");
-                    }
-                } else {
-                    errorMessage.set( "A szerver nem elérhető" + err);
-                }
-                //logout
-            });
+            } else {
+                errorMessage.set("A szerver nem elérhető" + error);
+            }
+        }
     };
 
     const changeHandler = (e: React.ChangeEvent<{ value: string, name: string }>) => {
@@ -57,11 +62,11 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
                     <h1 className={classes.loginalcim}>Jelentkezz be, és már kezdhetsz is.</h1>
                 </div>
                 <form className={classes.formitem} onSubmit={(e: React.FormEvent<HTMLFormElement>) => authenticate(e)}>
-                    <SingleInput labelText={"E-mail"} name={"currentEmail"} changeHandler={changeHandler} style={{justifySelf: "center"}} />
-                    <SingleInput labelText={"Jelszó"} name={"currentPassword"} type={"password"} changeHandler={changeHandler} style={{justifySelf: "center"}} />
+                    <SingleInput id="email" labelText={"E-mail"} name={"currentEmail"} changeHandler={changeHandler} style={{ justifySelf: "center" }} />
+                    <SingleInput id="password" labelText={"Jelszó"} name={"currentPassword"} type={"password"} changeHandler={changeHandler} style={{ justifySelf: "center" }} />
                     <p className={classes.forgotPassword}>Elfelejtettem a jelszavam</p>
 
-                        <Button type="submit" variant={"outlined"}>Bejelentkezés</Button>
+                    <Button type="submit" variant={"outlined"}>Bejelentkezés</Button>
                     <p className={classes.errorLabel}>{errorMessage.get()}</p>
                 </form>
             </div>

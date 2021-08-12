@@ -17,7 +17,7 @@ import { router as generalDataRoutes } from './api/votes/routes';
 import { authorizeRequest } from './services/authentication';
 import { connectToMongoDB } from "./services/connectMongo";
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
-import { log } from "./services/logger";
+import { log, logError } from "./services/logger";
 import { respondForbidden, respondOk } from './utilities/helpers';
 
 // initialize env
@@ -89,20 +89,10 @@ connectToMongoDB().then(() => {
     })
 
     // register user
-    expressServer.use('/fasz', (req, res, next) => {
+    expressServer.use((req, res, next) => {
 
-        const promise = new Promise<void>((resolve, reject) => {
-
-            setTimeout(() => resolve(), 5000);
-        });
-
-        log("sadasdadasds");
-
-        promise.then(() => {
-
-            log("sadadasd");
-            res.sendStatus(200).json("OKEFASZA!");
-        });
+        log("Request arrived: " + req.path);
+        next();
     })
 
     expressServer.options('/renew-user-session', respondOk);
@@ -131,6 +121,9 @@ connectToMongoDB().then(() => {
     });
 
     expressServer.use((error: express.Errback, req: express.Request, res: express.Response) => {
+
+        logError("Express error middleware.");
+        logError(error);
         return res.status(500).send(error.toString());
     });
 

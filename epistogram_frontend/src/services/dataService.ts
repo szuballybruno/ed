@@ -8,7 +8,7 @@ import { globalConfig } from "../configuration/config";
 import { AxiosRequestConfig } from "axios";
 import instance from "../services/axiosInstance";
 import Cookies from "universal-cookie";
-import { useRenewUserSessionPooling, useUserFetching } from "../services/authentication";
+import { useRenewUserSessionPooling, useUserFetching } from "./authenticationService";
 import { LoadingState } from "../store/application/ApplicationRunningStateInterface";
 import { UserSideStateIF } from "../store/user/UserSideStateIF";
 

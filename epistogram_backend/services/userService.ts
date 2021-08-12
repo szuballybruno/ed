@@ -1,15 +1,27 @@
 import { User } from "../models/entities/user";
-import { ExpressRequest, ExpressResponse, respondOk } from "../utilities/helpers";
+import { UserDTO } from "../models/shared_models/UserDTO";
+import { ExpressRequest, ExpressResponse, respondForbidden, respondOk } from "../utilities/helpers";
 import { getRequestAccessTokenMeta } from "./authentication";
 import { Connection } from "./connectMongo";
 
-export const getUserById = async (userId: string) => {
+export const convertToUserDTO = (user: User) => new UserDTO(user.userId, user.userData.organizationId);
 
-    const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId })
+export const getUserDTOById = async (userId: string) => {
+
+    const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId }) as User;
     if (!userFromDB)
         return null;
 
-    return userFromDB as User;
+    return convertToUserDTO(userFromDB);
+}
+
+export const getUserActiveTokenById = async (userId: string) => {
+
+    const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId }) as User;
+    if (!userFromDB)
+        return null;
+
+    return userFromDB.userData.refreshToken;
 }
 
 export const getUserByEmail = async (email: string) => {
@@ -24,7 +36,10 @@ export const getUserByEmail = async (email: string) => {
 export const getCurrentUser = async (req: ExpressRequest, res: ExpressResponse) => {
 
     const tokenMeta = getRequestAccessTokenMeta(req);
-    const user = await getUserById(tokenMeta.userId);
+    if (!tokenMeta)
+        return respondForbidden(req, res);
+
+    const user = await getUserDTOById(tokenMeta.userId);
 
     respondOk(req, res, user);
 }

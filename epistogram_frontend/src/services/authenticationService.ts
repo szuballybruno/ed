@@ -6,6 +6,7 @@ const userFetchingIntervalInS = 15;
 const userSessionRenewIntervalInS = 10;
 
 export const useUserFetching = (nonAutomatic?: boolean) => {
+
     const { data, refetch: refetchUser, isLoading, isSuccess } = useQuery('getCurrentUser', () => httpGetAsync("get-current-user"), {
         retry: false,
         refetchOnWindowFocus: false,
@@ -43,14 +44,16 @@ export const logOutUserAsync = async () => {
     validateHttpResponse(result);
 }
 
-export const registerUser = async (email: string, password: string) => {
+export const logInUser = async (email: string, password: string) => {
 
-    const result = await httpPostAsync("register-user", {
+    const result = await httpPostAsync("login-user", {
         email: email,
         password: password
     });
 
-    validateHttpResponse(result);
+    // validateHttpResponse(result);
+
+    return result;
 }
 
 const validateHttpResponse = (response: HTTPResponse) => {
