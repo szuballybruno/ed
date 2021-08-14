@@ -1,27 +1,41 @@
 import { User } from "../models/entities/user";
 import { UserDTO } from "../models/shared_models/UserDTO";
-import { ExpressRequest, ExpressResponse, respondForbidden, respondOk } from "../utilities/helpers";
+import { ExpressRequest, ExpressResponse, respondForbidden, respondOk, TypedError } from "../utilities/helpers";
 import { getRequestAccessTokenMeta } from "./authentication";
 import { Connection } from "./connectMongo";
+import { log } from "./logger";
 
-export const convertToUserDTO = (user: User) => new UserDTO(user.userId, user.userData.organizationId);
+export const convertToUserDTO = (user: User) => new UserDTO(user._id, user.userData.organizationId);
+
+export const getUserById = async (userId: string) => {
+
+    // const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId }) as User;
+
+    const cursor = await Connection.db.collection("users").find();
+    const usersFromDB = (await cursor.toArray());
+    const foundUser = usersFromDB.filter((x: any) => x?._id == userId)[0] as User;
+
+    return foundUser;
+}
 
 export const getUserDTOById = async (userId: string) => {
 
-    const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId }) as User;
-    if (!userFromDB)
+    const foundUser = await getUserById(userId);
+    if (!foundUser)
         return null;
 
-    return convertToUserDTO(userFromDB);
+    return convertToUserDTO(foundUser);
 }
 
 export const getUserActiveTokenById = async (userId: string) => {
 
-    const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId }) as User;
-    if (!userFromDB)
+    //const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId }) as User;
+
+    const foundUser = await getUserById(userId);
+    if (!foundUser)
         return null;
 
-    return userFromDB.userData.refreshToken;
+    return foundUser.userData.refreshToken;
 }
 
 export const getUserByEmail = async (email: string) => {
@@ -33,13 +47,11 @@ export const getUserByEmail = async (email: string) => {
     return userFromDB as User;
 }
 
-export const getCurrentUser = async (req: ExpressRequest, res: ExpressResponse) => {
+export const getCurrentUser = async (req: ExpressRequest) => {
 
     const tokenMeta = getRequestAccessTokenMeta(req);
     if (!tokenMeta)
-        return respondForbidden(req, res);
+        throw new TypedError("Token meta is missing!", "forbidden");
 
-    const user = await getUserDTOById(tokenMeta.userId);
-
-    respondOk(req, res, user);
+    return await getUserDTOById(tokenMeta.userId);
 }

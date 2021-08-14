@@ -1,8 +1,8 @@
+import { IdType } from "../models/shared_models/types/sharedTypes";
 import { Connection } from "./connectMongo";
-import { getUserDTOById } from "./userService";
 
-export const setUserActiveRefreshToken = async (userEmail: string, token: string) => {
-    return Connection.db.collection("users").updateOne({ "userData.email": userEmail }, {
+export const setUserActiveRefreshToken = async (userId: IdType, token: string) => {
+    return Connection.db.collection("users").updateOne({ "_id": userId }, {
         $set: {
             "userData.refreshToken": token
         }

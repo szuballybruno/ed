@@ -1,5 +1,6 @@
+import { useContext } from 'react';
 import { useQuery } from 'react-query';
-import { UserInfo } from '../HOC/data_manager_frame/DataManagerFrame';
+import { RefetchUserFunctionContext, UserInfo } from '../HOC/data_manager_frame/DataManagerFrame';
 import { httpGetAsync, httpPostAsync, HTTPResponse } from './httpClient';
 
 const userFetchingIntervalInS = 15;
@@ -7,11 +8,12 @@ const userSessionRenewIntervalInS = 10;
 
 export const useUserFetching = (nonAutomatic?: boolean) => {
 
-    const { data, refetch: refetchUser, isLoading, isSuccess } = useQuery('getCurrentUser', () => httpGetAsync("get-current-user"), {
+    const { data, refetch: refetchUser, isLoading, isFetching, isSuccess } = useQuery('getCurrentUser', () => httpGetAsync("get-current-user"), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: nonAutomatic ? false : userFetchingIntervalInS * 1000,
         refetchIntervalInBackground: true,
+        enabled: true
     });
 
     const currentUser = (isSuccess
@@ -20,7 +22,7 @@ export const useUserFetching = (nonAutomatic?: boolean) => {
             : null
         : null) as UserInfo | null;
 
-    return { currentUser, refetchUser, isLoading };
+    return { currentUser, refetchUser, isLoading, isFetching };
 }
 
 export const useRenewUserSessionPooling = () => {
@@ -44,16 +46,22 @@ export const logOutUserAsync = async () => {
     validateHttpResponse(result);
 }
 
-export const logInUser = async (email: string, password: string) => {
+export const useLogInUser = () => {
 
-    const result = await httpPostAsync("login-user", {
-        email: email,
-        password: password
-    });
+    const refetchUser = useContext(RefetchUserFunctionContext);
 
-    // validateHttpResponse(result);
+    return async (email: string, password: string) => {
 
-    return result;
+        const result = await httpPostAsync("login-user", {
+            email: email,
+            password: password
+        });
+
+        // validateHttpResponse(result);
+        refetchUser();
+
+        return result;
+    }
 }
 
 const validateHttpResponse = (response: HTTPResponse) => {

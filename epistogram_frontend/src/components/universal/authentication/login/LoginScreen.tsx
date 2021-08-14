@@ -1,6 +1,8 @@
 import { useState } from "@hookstate/core";
 import { Button } from "@material-ui/core";
-import React from 'react';
+import React, { useContext } from 'react';
+import { Redirect } from "react-router";
+import { AuthenticationState, AuthenticationStateContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
 import { useLogInUser } from '../../../../services/authenticationService';
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import SingleInput from "../../../administration/universal/singleInput/SingleInput";
@@ -62,6 +64,13 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
         app[e.currentTarget.name as keyof typeof app].set(e.currentTarget.value)
     };
 
+    const authState = useContext(AuthenticationStateContext);
+
+    if (authState.isLoading)
+        return <div>loading...</div>
+
+    if (authState.isAuthenticated)
+        return <Redirect to="/kezdolap"></Redirect>
 
     return (
         <div className={classes.loginhatter}>

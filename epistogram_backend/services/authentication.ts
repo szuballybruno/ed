@@ -5,9 +5,9 @@ import jwt from "jsonwebtoken";
 import { TokenMeta } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { globalConfig } from "../server";
-import { ExpressRequest, ExpressResponse, getCookie, respondBadRequest, respondForbidden, respondInternalServerError, respondOk } from "../utilities/helpers";
+import { ExpressRequest, ExpressResponse, getCookie, respondBadRequest, respondForbidden, respondInternalServerError, respondOk, TypedError } from "../utilities/helpers";
 import { removeRefreshToken, setUserActiveRefreshToken } from "./authenticationPersistance";
-import { log, logError } from "./logger";
+import { log, logError, logWarning } from "./logger";
 import { convertToUserDTO, getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById } from "./userService";
 
 // CONSTS
@@ -30,24 +30,22 @@ export const getRequestAccessTokenMeta = (req: Request) => {
     return tokenMeta;
 }
 
-export const authorizeRequest = (req: Request, onAuthorized: (tokenMeta: TokenMeta) => void, onError: () => void) => {
+export const authorizeRequest = (req: Request) => {
+    return new Promise<TokenMeta>((resolve, reject) => {
 
-    const accessToken = getCookie(req, accessTokenCookieName)?.value;
-    if (!accessToken) {
-        onError();
-        return;
-    }
+        const accessToken = getCookie(req, accessTokenCookieName)?.value;
+        if (!accessToken)
+            throw new TypedError("Access token missing!", "forbidden");
 
-    const tokenMeta = validateToken(accessToken, globalConfig.security.jwtSignSecret);
-    if (!tokenMeta) {
-        onError();
-        return;
-    }
+        const tokenMeta = validateToken(accessToken, globalConfig.security.jwtSignSecret);
+        if (!tokenMeta)
+            throw new TypedError("Invalid token!", "forbidden");
 
-    onAuthorized(tokenMeta);
+        resolve(tokenMeta);
+    });
 }
 
-export const getUserByCredentials = async (email: string, password: string) => {
+export const getUserDTOByCredentials = async (email: string, password: string) => {
 
     const user = await getUserByEmail(email);
     if (!user)
@@ -57,64 +55,82 @@ export const getUserByCredentials = async (email: string, password: string) => {
     if (!isPasswordCorrect)
         return null;
 
-    return user;
+    return convertToUserDTO(user);
 }
 
 export const renewUserSession = async (req: ExpressRequest, res: ExpressResponse) => {
 
+    log("Renewing user session...");
+
     // check if there is a refresh token sent in the request 
     const refreshToken = getCookie(req, "refreshToken")?.value;
     if (!refreshToken)
-        return respondBadRequest(req, res);
+        throw new TypedError("Refresh token not sent.", "bad request");
 
     // check sent refresh token if invalid by signature or expired
     const tokenMeta = validateToken(refreshToken, globalConfig.security.jwtSignSecret);
     if (!tokenMeta)
-        return respondForbidden(req, res);
+        throw new TypedError("Refresh token validation failed.", "forbidden");
 
     // check if this refresh token is associated to the user
     const refreshTokenFromDb = await getActiveTokenByUserId(tokenMeta.userId);
     if (!refreshTokenFromDb)
-        return respondForbidden(req, res);
+        throw new TypedError(`User has no active token, or it's not the same as the one in request! User id '${tokenMeta.userId}', active token '${refreshTokenFromDb}'`, "forbidden");
 
     // get user 
     const user = await getUserDTOById(tokenMeta.userId);
     if (!user)
-        return respondInternalServerError(req, res, "User not found by id " + tokenMeta.userId);
+        throw new TypedError("User not found by id " + tokenMeta.userId, "internal server error");
 
-    // checks passed OK!
-    setAuthCookies(res, user);
-    respondOk(req, res);
+    // get tokens
+    const newAccessToken = getAccessToken(user);
+    const newRefreshToken = getRefreshToken(user);
+
+    // save refresh token to DB
+    await setUserActiveRefreshToken(user.userId, refreshToken);
+
+    await setAuthCookies(res, user, newAccessToken, newRefreshToken);
 }
 
 export const logInUser = async (req: ExpressRequest, res: ExpressResponse) => {
 
+    log("Logging in user...");
+
     // check request 
     if (!req.body)
-        return respondBadRequest(req, res);
+        throw new TypedError("Body is null.", "bad request");
 
     // get credentials from request
     const { email, password } = req.body;
 
     // further validate request 
     if (!email || !password)
-        return respondBadRequest(req, res);
+        throw new TypedError("Email or password is null.", "bad request");
 
     // authenticate
-    const user = await getUserByCredentials(email, password)
+    const user = await getUserDTOByCredentials(email, password)
     if (!user)
-        return respondForbidden(req, res);
+        throw new TypedError("Invalid credentials.", "forbidden");
 
-    await setAuthCookies(res, convertToUserDTO(user));
+    log("User logged in: ");
+    log(user);
 
-    respondOk(req, res);
+    // get tokens
+    const accessToken = getAccessToken(user);
+    const refreshToken = getRefreshToken(user);
+
+    // save refresh token to DB
+    log(`Setting refresh token of user '${user.userId}' to '${refreshToken}'`);
+    await setUserActiveRefreshToken(user.userId, refreshToken);
+
+    await setAuthCookies(res, user, accessToken, refreshToken);
 }
 
 export const logOutUser = async (req: ExpressRequest, res: ExpressResponse) => {
 
     const tokenMeta = getRequestAccessTokenMeta(req);
     if (!tokenMeta)
-        return respondForbidden(req, res);
+        throw new TypedError("Token meta not found.", "internal server error");
 
     // remove refresh token, basically makes it invalid from now on
     await removeRefreshToken(tokenMeta.userId);
@@ -122,8 +138,6 @@ export const logOutUser = async (req: ExpressRequest, res: ExpressResponse) => {
     // remove browser cookies
     res.clearCookie(accessTokenCookieName);
     res.clearCookie(refreshTokenCookieName);
-
-    respondOk(req, res);
 }
 
 // PRIVATES
@@ -144,22 +158,9 @@ const getAccessToken = (user: UserDTO) => {
     return token;
 }
 
-const getRefreshToken = async (user: UserDTO) => {
+const getRefreshToken = (user: UserDTO) => {
 
-    // const refreshToken = await getRefreshTokenByUserId(user.userId);
-    // if (!refreshToken)
-    //     throw new Error("Error getting refresh token!");
-
-    // const isValid = validateToken(refreshToken, globalConfig.security.jwtSignSecret).isValid;
-    // if (!isValid)
-    //     throw new Error("Invalid token!");
-
-    const newRefreshToken = jwt.sign(getPlainObjectUserInfoDTO(user), globalConfig.security.jwtSignSecret);
-
-    // save refresh token to DB
-    await setUserActiveRefreshToken(user.userId, newRefreshToken);
-
-    return newRefreshToken;
+    return jwt.sign(getPlainObjectUserInfoDTO(user), globalConfig.security.jwtSignSecret);
 }
 
 const validateToken = (token: string, secret: string) => {
@@ -193,11 +194,8 @@ const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
     });
 }
 
-const setAuthCookies = async (res: Response, user: UserDTO) => {
+const setAuthCookies = (res: Response, user: UserDTO, accessToken: string, refreshToken: string) => {
 
-    const accessToken = getAccessToken(user);
     setAccessTokenCookie(res, accessToken);
-
-    const refreshToken = await getRefreshToken(user);
     setRefreshTokenCookie(res, refreshToken);
 }

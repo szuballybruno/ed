@@ -38,7 +38,7 @@ export class AuthenticationState {
 
 export const CurrentUserContext = createContext<UserInfo | null>(null);
 export const RefetchUserFunctionContext = createContext<() => void>(() => { });
-export const IsAuthenticatedContext = createContext<AuthenticationState>(new AuthenticationState(true, false));
+export const AuthenticationStateContext = createContext<AuthenticationState>(new AuthenticationState(true, false));
 
 export const DataManagerFrame: FunctionComponent = (props) => {
 
@@ -53,8 +53,8 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     const globalDataState = useState(userSideState);
 
     // fetch current user 
-    const { currentUser, refetchUser, isLoading } = useUserFetching();
-    const authState = new AuthenticationState(isLoading, !!currentUser);
+    const { currentUser, refetchUser, isLoading, isFetching } = useUserFetching();
+    const authState = new AuthenticationState(isLoading || isFetching, !!currentUser);
     console.log("Authentication state: " + authState.asString());
 
     // start auth pooling 
@@ -73,11 +73,11 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     if (resultData)
         globalDataState.set(resultData);
 
-    return <IsAuthenticatedContext.Provider value={authState}>
+    return <AuthenticationStateContext.Provider value={authState}>
         <RefetchUserFunctionContext.Provider value={refetchUser}>
             <CurrentUserContext.Provider value={currentUser}>
                 {props.children}
             </CurrentUserContext.Provider>
         </RefetchUserFunctionContext.Provider>
-    </IsAuthenticatedContext.Provider> as JSX.Element
+    </AuthenticationStateContext.Provider> as JSX.Element
 }

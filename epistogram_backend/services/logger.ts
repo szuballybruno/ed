@@ -1,5 +1,7 @@
 type LogEntryType = "error" | "info" | "warning";
 
+export const logWarning = (content: any) => log(content, "warning");
+
 export const logError = (content: any) => log(content, "error");
 
 export const log = (content: any, entryType?: LogEntryType) => {

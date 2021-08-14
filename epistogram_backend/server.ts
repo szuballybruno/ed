@@ -38,17 +38,17 @@ connectToMongoDB().then(() => {
     const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
         log("Authorizing request...");
-        authorizeRequest(
-            req,
-            tokenMeta => {
+
+        authorizeRequest(req)
+            .then(tokenMeta => {
 
                 log("Authorization successful, userId: " + tokenMeta.userId);
                 next();
-            },
-            () => {
+            })
+            .catch(() => {
 
                 log("Authorizing request failed.");
-                respondForbidden(req, res);
+                respondForbidden(res);
             });
     };
 
