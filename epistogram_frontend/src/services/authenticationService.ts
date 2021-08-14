@@ -6,32 +6,53 @@ import { httpGetAsync, httpPostAsync, HTTPResponse } from './httpClient';
 const userFetchingIntervalInS = 15;
 const userSessionRenewIntervalInS = 10;
 
+export class AuthenticationState {
+    isLoading: boolean;
+    isAuthenticated: boolean;
+
+    constructor(isLoading: boolean, isAuthenticated: boolean) {
+        this.isLoading = isLoading;
+        this.isAuthenticated = isAuthenticated;
+    }
+
+    asString() {
+
+        return this.isLoading ? "loading" : this.isAuthenticated ? "authenticated" : "forbidden";
+    }
+}
+
 export const useUserFetching = (nonAutomatic?: boolean) => {
 
-    const { data, refetch: refetchUser, isLoading, isFetching, isSuccess } = useQuery('getCurrentUser', () => httpGetAsync("get-current-user"), {
+    const { data, refetch: refetchUser, isLoading, isFetching, isSuccess } = useQuery(
+        'getCurrentUser',
+        async () => (await httpGetAsync("get-current-user")).data, {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: nonAutomatic ? false : userFetchingIntervalInS * 1000,
         refetchIntervalInBackground: true,
-        enabled: true
+        enabled: true,
+        notifyOnChangeProps: ['data', 'isSuccess', 'isLoading']
     });
 
     const currentUser = (isSuccess
-        ? data?.data
-            ? new UserInfo(data?.data?.userId, data?.data?.organizationId)
+        ? data
+            ? new UserInfo(data?.userId, data?.organizationId)
             : null
         : null) as UserInfo | null;
 
-    return { currentUser, refetchUser, isLoading, isFetching };
+    const authState = new AuthenticationState(isLoading || isFetching, !!currentUser);
+
+    return { currentUser, authState, refetchUser };
 }
 
 export const useRenewUserSessionPooling = () => {
 
-    const { data, refetch: refetchUser, isSuccess } = useQuery('renewUserSession', () => httpGetAsync("renew-user-session"), {
+    const { isSuccess } = useQuery('renewUserSession', () => httpGetAsync("renew-user-session"), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: userSessionRenewIntervalInS * 1000,
         refetchIntervalInBackground: true,
+        notifyOnChangeProps: ['isSuccess']
     });
 
     isSuccess

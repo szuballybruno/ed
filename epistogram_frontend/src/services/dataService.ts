@@ -1,14 +1,7 @@
-import { createContext, FunctionComponent, ReactNode, useEffect } from "react";
-import { useState } from "@hookstate/core";
-import applicationRunningState from "../store/application/applicationRunningState";
-import userSideState from "../store/user/userSideState";
-//import {hotjar} from "react-hotjar";
-import setTheme from "../services/setTheme";
-import { globalConfig } from "../configuration/config";
 import { AxiosRequestConfig } from "axios";
-import instance from "../services/axiosInstance";
+import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { useRenewUserSessionPooling, useUserFetching } from "./authenticationService";
+import instance from "../services/axiosInstance";
 import { LoadingState } from "../store/application/ApplicationRunningStateInterface";
 import { UserSideStateIF } from "../store/user/UserSideStateIF";
 
@@ -34,6 +27,11 @@ export const useGetGlobalData = (userId: number | null) => {
     }
 
     useEffect(() => {
+
+        // do not query user data if user id is null
+        if (!userId)
+            return;
+
         const requestInterceptor = instance.interceptors.request.use(setLoadingOnRequest)
         //TODO: Normális error handling
         instance.get(`users/${userId}`).then((res) => {

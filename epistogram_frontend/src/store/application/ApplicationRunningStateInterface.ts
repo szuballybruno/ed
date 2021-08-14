@@ -41,7 +41,6 @@ export interface ApplicationRunningStateInterface {
     currentDescriptionComponent: string,
 
     //LOGIN
-    isLoggedIn: boolean,
     currentEmail: string,
     currentPassword: string,
 

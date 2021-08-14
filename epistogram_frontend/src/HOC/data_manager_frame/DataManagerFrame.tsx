@@ -8,7 +8,7 @@ import { globalConfig } from "../../configuration/config";
 import { AxiosRequestConfig } from "axios";
 import instance from "../../services/axiosInstance";
 import Cookies from "universal-cookie";
-import { useRenewUserSessionPooling, useUserFetching } from "../../services/authenticationService";
+import { AuthenticationState, useRenewUserSessionPooling, useUserFetching } from "../../services/authenticationService";
 import { useGetGlobalData, useUserId } from "../../services/dataService";
 
 export class UserInfo {
@@ -18,21 +18,6 @@ export class UserInfo {
     constructor(userId: number, organizationId: number) {
         this.userId = userId;
         this.organizationId = organizationId;
-    }
-}
-
-export class AuthenticationState {
-    isLoading: boolean;
-    isAuthenticated: boolean;
-
-    constructor(isLoading: boolean, isAuthenticated: boolean) {
-        this.isLoading = isLoading;
-        this.isAuthenticated = isAuthenticated;
-    }
-
-    asString() {
-
-        return this.isLoading ? "loading" : this.isAuthenticated ? "authenticated" : "forbidden";
     }
 }
 
@@ -49,12 +34,11 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     setTheme(globalConfig.currentTheme);
 
     // get global states 
-    const applicationState = useState(applicationRunningState);
+    // const applicationState = useState(applicationRunningState);
     const globalDataState = useState(userSideState);
 
     // fetch current user 
-    const { currentUser, refetchUser, isLoading, isFetching } = useUserFetching();
-    const authState = new AuthenticationState(isLoading || isFetching, !!currentUser);
+    const { currentUser, refetchUser, authState } = useUserFetching();
     console.log("Authentication state: " + authState.asString());
 
     // start auth pooling 
@@ -62,13 +46,12 @@ export const DataManagerFrame: FunctionComponent = (props) => {
 
     // get user id and set it to global state 
     const userId = currentUser?.userId ?? null;
-    applicationState.isLoggedIn.set(authState.isAuthenticated);
 
     // get global data
     const { resultData, loadingState } = useGetGlobalData(userId);
 
     // handle global data respones and loading states
-    applicationState.loadingIndicator.set(loadingState);
+    //applicationState.loadingIndicator.set(loadingState);
 
     if (resultData)
         globalDataState.set(resultData);

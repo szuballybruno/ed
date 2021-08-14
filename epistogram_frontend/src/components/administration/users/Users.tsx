@@ -1,25 +1,25 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import classes from "./users.module.scss"
 import AdminDashboardSearch from "../universal/searchBar/AdminDashboardSearch";
 import applicationRunningState from "../../../store/application/applicationRunningState";
 import adminSideState from "../../../store/admin/adminSideState";
 import instance from "../../../services/axiosInstance";
-import {none, useState} from "@hookstate/core";
+import { none, useState } from "@hookstate/core";
 import AdminDashboardSearchItem from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
-import {NavLink, Route, Switch} from "react-router-dom";
+import { NavLink, Route, Switch } from "react-router-dom";
 import AddUser from "./users_components/AddUser";
-import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
-import {Cookies} from "react-cookie";
+import { AdminDashboardWrapper } from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
+import { AdminDashboardList } from "../universal/adminDashboardList/AdminDashboardList";
+import { Cookies } from "react-cookie";
 import UserTasks from "./users_components/userTasks/UserTasks";
 import EditUser from "./users_components/editUser/EditUser";
 import UserStatistics from "./users_components/userStatistics/UserStatistics";
-import {globalConfig} from "../../../configuration/config";
-import {LoadingFrame} from "../../../HOC/loading_frame/LoadingFrame";
-import {FailedComponent, LoadingComponent, NullComponent} from "../../../HOC/loading_frame/loadingComponents/LoadingComponent";
-import {AxiosRequestConfig} from "axios";
-import {Divider, Fab} from "@material-ui/core";
-import {Add} from "@material-ui/icons";
+import { globalConfig } from "../../../configuration/config";
+import { LoadingFrame } from "../../../HOC/loading_frame/LoadingFrame";
+import { FailedComponent, LoadingComponent, NullComponent } from "../../../HOC/loading_frame/loadingComponents/LoadingComponent";
+import { AxiosRequestConfig } from "axios";
+import { Divider, Fab } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
 import userSideState from "../../../store/user/userSideState";
 
 export const Users: React.FunctionComponent = () => {
@@ -35,7 +35,7 @@ export const Users: React.FunctionComponent = () => {
     }
 
     const fetchUser = (name?: string, value?: string) => {
-        const requestInterceptor =  instance.interceptors.request.use(setLoadingOnRequest)
+        const requestInterceptor = instance.interceptors.request.use(setLoadingOnRequest)
         instance.get(`users/?userId=${cookies.get("userId")}&organizationId=${cookies.get("organizationId")}&searchData=${value || ""}`
         ).then((res) => {
             if (res.data) {
@@ -60,6 +60,8 @@ export const Users: React.FunctionComponent = () => {
         fetchUser(name, value)
     }
 
+    const loadingState = useState(applicationRunningState).loadingIndicator.get();
+
     return (
         <Switch>
             <Route exact path={'/admin/manage/users'}>
@@ -68,64 +70,68 @@ export const Users: React.FunctionComponent = () => {
                 }} />
                 <AdminDashboardWrapper>
                     <AdminDashboardSearch searchChangeHandler={searchChangeHandler}
-                                          name={"searchData"}
-                                          title={"Felhasználók"}
-                                          className={classes.searchBar}/>
-                    <LoadingFrame loadingComponent={LoadingComponent()} failedComponent={FailedComponent()} nullComponent={NullComponent()}>
+                        name={"searchData"}
+                        title={"Felhasználók"}
+                        className={classes.searchBar} />
+                    <LoadingFrame
+                        loadingState={loadingState}
+                        loadingComponent={LoadingComponent()}
+                        failedComponent={FailedComponent()}
+                        nullComponent={NullComponent()}>
                         <AdminDashboardList>
 
                             {admin.users.get().map((user, index) => {
                                 return <AdminDashboardSearchItem title={`${user.lastName} ${user.firstName}`}
-                                                              profileImageUrl={user._id ? `${globalConfig.assetStorageUrl}/users/${user._id}/avatar.png` : ""}
-                                                              chips={[
-                                                                  {label: user.email, icon: "email"},
-                                                                  {label: user.organizationName, icon: "organization"},
-                                                                  {label: user.innerRole, icon: "work"}]
-                                                              }
-                                                              key={index}
-                                                              actions={[
-                                                                  {
-                                                                      selectedComponent: "userTasks",
-                                                                      icon: "list",
-                                                                      onClick: () => {
+                                    profileImageUrl={user._id ? `${globalConfig.assetStorageUrl}/users/${user._id}/avatar.png` : ""}
+                                    chips={[
+                                        { label: user.email, icon: "email" },
+                                        { label: user.organizationName, icon: "organization" },
+                                        { label: user.innerRole, icon: "work" }]
+                                    }
+                                    key={index}
+                                    actions={[
+                                        {
+                                            selectedComponent: "userTasks",
+                                            icon: "list",
+                                            onClick: () => {
 
-                                                                      }
-                                                                  },
-                                                                  {
-                                                                      selectedComponent: "editUser",
-                                                                      icon: "edit",
-                                                                      onClick: () => {
+                                            }
+                                        },
+                                        {
+                                            selectedComponent: "editUser",
+                                            icon: "edit",
+                                            onClick: () => {
 
-                                                                      }
-                                                                  },
-                                                                  {
-                                                                      selectedComponent: "userStatistics",
-                                                                      icon: "statistics",
-                                                                      onClick: () => {
+                                            }
+                                        },
+                                        {
+                                            selectedComponent: "userStatistics",
+                                            icon: "statistics",
+                                            onClick: () => {
 
-                                                                      }
-                                                                  },
-                                                                  {
-                                                                      icon: "delete",
-                                                                      onClick: () => {
-                                                                          instance.delete(`${globalConfig.backendUrl}users/deleteuser?userId=${user._id}`).then(() => {
-                                                                              return admin.users[index].set(none)
-                                                                          }).catch(e => console.error(e.toString()))
-                                                                      }
-                                                                  },]
-                                                              }
-                                                              userActionComponents={{
-                                                                     userTasks: <UserTasks user={user} index={index} />,
-                                                                     editUser: <EditUser user={user} index={index} />,
-                                                                     userStatistics: <UserStatistics />
-                                                                 }}
-                                    />
+                                            }
+                                        },
+                                        {
+                                            icon: "delete",
+                                            onClick: () => {
+                                                instance.delete(`${globalConfig.backendUrl}users/deleteuser?userId=${user._id}`).then(() => {
+                                                    return admin.users[index].set(none)
+                                                }).catch(e => console.error(e.toString()))
+                                            }
+                                        },]
+                                    }
+                                    userActionComponents={{
+                                        userTasks: <UserTasks user={user} index={index} />,
+                                        editUser: <EditUser user={user} index={index} />,
+                                        userStatistics: <UserStatistics />
+                                    }}
+                                />
                             })}
                         </AdminDashboardList>
                         <NavLink to={"/admin/manage/users/add"}>
                             <Fab color="primary"
-                                 aria-label="add"
-                                 style={{position: "absolute", bottom: 45, right: 45}}>
+                                aria-label="add"
+                                style={{ position: "absolute", bottom: 45, right: 45 }}>
                                 <Add />
                             </Fab>
                         </NavLink>

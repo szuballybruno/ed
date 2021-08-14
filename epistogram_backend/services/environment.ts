@@ -4,9 +4,9 @@ import { log, logError } from "./logger";
 // Env Init 
 //
 
-type EnvironmentType = "development" | "production" | "demo";
+type EnvironmentType = "development" | "production" | "demo" | "local";
 
-export const currentEnvironmentName = (process.env.NODE_ENV ?? "development") as EnvironmentType;
+export const currentEnvironmentName = (process.env.NODE_ENV ?? "local") as EnvironmentType;
 
 const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
 
@@ -106,7 +106,7 @@ export class GlobalConfiguration {
             useNewUrlParser: true,
             useUnifiedTopology: true
         },
-        isSSHConnection: true,
+        isSSHConnection: getEnvConfigEntry("MONGO_DB_IS_SSH") == "true",
         mongoDBCredentials: {
             serverUrl: getEnvConfigEntry("MONGO_DB_SERVER_URL"),
             dbName: getEnvConfigEntry("MONGO_DB_DB_NAME"),

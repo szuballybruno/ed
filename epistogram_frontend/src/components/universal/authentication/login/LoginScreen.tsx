@@ -2,7 +2,7 @@ import { useState } from "@hookstate/core";
 import { Button } from "@material-ui/core";
 import React, { useContext } from 'react';
 import { Redirect } from "react-router";
-import { AuthenticationState, AuthenticationStateContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
+import { AuthenticationStateContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
 import { useLogInUser } from '../../../../services/authenticationService';
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import SingleInput from "../../../administration/universal/singleInput/SingleInput";
