@@ -36,7 +36,6 @@ const applicationRunningState: State<ApplicationRunningStateInterface> = createS
     showPlayerOrExam: false,
     currentDescriptionComponent: "",
 
-    isLoggedIn: false,
     currentEmail: "",
     currentPassword: "",
 

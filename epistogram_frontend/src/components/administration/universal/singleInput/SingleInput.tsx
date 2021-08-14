@@ -7,6 +7,7 @@ const SingleInput = (props: {
     name: string,
     style?: object,
     type?: string,
+    id?: string,
     changeHandler?: (e: React.ChangeEvent<{ value: string, name: string }>) => void}) => {
     return (
         <div className={classes.dataRow} style={props.style}>
@@ -15,6 +16,7 @@ const SingleInput = (props: {
             </div>
             <TextField variant={"outlined"}
                        type={props.type}
+                       id={props.id}
                        name={props.name}
                        onChange={props.changeHandler}/>
         </div>

@@ -15,7 +15,7 @@ import {
 import SettingsIcon from "@material-ui/icons/Settings"
 import { Typography } from "@material-ui/core";
 import Settings from "./settings/Settings";
-import { logOutUserAsync } from "../../../services/authentication";
+import { logOutUserAsync } from "../../../services/authenticationService";
 
 
 const ProfileWrapper = () => {

@@ -4,9 +4,9 @@ import { log, logError } from "./logger";
 // Env Init 
 //
 
-type EnvironmentType = "development" | "production" | "demo";
+type EnvironmentType = "development" | "production" | "demo" | "local";
 
-export const currentEnvironmentName = (process.env.NODE_ENV ?? "development") as EnvironmentType;
+export const currentEnvironmentName = (process.env.NODE_ENV ?? "local") as EnvironmentType;
 
 const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
 
@@ -78,12 +78,12 @@ export class GlobalConfiguration {
 
     vpsSSHAuthConfig = {
         host: getEnvConfigEntry("VPS_SSH_HOST"),
+        port: getEnvConfigEntry("VPS_SSH_PORT"),
 
         username: getEnvConfigEntry("VPS_SSH_USERNAME"),
         passphrase: getEnvConfigEntry("VPS_SSH_PASSPHRASE"),
 
         dstPort: getEnvConfigEntry("VPS_SSH_DST_PORT"),
-        port: getEnvConfigEntry("VPS_SSH_PORT"),
         agent: process.env.SSH_AUTH_SOCK,
         privateKey: this.security.rsaPrivateKey,
     };
@@ -106,7 +106,7 @@ export class GlobalConfiguration {
             useNewUrlParser: true,
             useUnifiedTopology: true
         },
-        isSSHConnection: true,
+        isSSHConnection: getEnvConfigEntry("MONGO_DB_IS_SSH") == "true",
         mongoDBCredentials: {
             serverUrl: getEnvConfigEntry("MONGO_DB_SERVER_URL"),
             dbName: getEnvConfigEntry("MONGO_DB_DB_NAME"),

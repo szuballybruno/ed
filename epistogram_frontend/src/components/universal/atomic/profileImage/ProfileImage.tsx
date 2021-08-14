@@ -1,6 +1,6 @@
 import React, {useRef} from 'react';
 import classes from "./profileImage.module.scss"
-import {config} from "../../../../configuration/config";
+import {globalConfig} from "../../../../configuration/config";
 import {Cookies} from "react-cookie";
 
 const ProfileImage = (props: {
@@ -24,8 +24,8 @@ const ProfileImage = (props: {
                    style={{display: "none"}}
                    onChange={props.onChange}/>
             <img alt=""
-                 onError={(e) => {e.currentTarget.src = `${config.assetStorageUrl}/application/avatar.png`}}
-                 src={props.imageUrl ? props.imageUrl : `${config.assetStorageUrl}/users/${cookies.get("userId")}/avatar.png`}/>
+                 onError={(e) => {e.currentTarget.src = `${globalConfig.assetStorageUrl}/application/avatar.png`}}
+                 src={props.imageUrl ? props.imageUrl : `${globalConfig.assetStorageUrl}/users/${cookies.get("userId")}/avatar.png`}/>
         </div>
     );
 };
