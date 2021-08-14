@@ -158,11 +158,8 @@ const CourseSearch = () => {
                     <div className={classes.categoriesTitle}>
                         <Typography variant={"h4"}>Kategóriák</Typography>
                     </div>
-                    <LoadingFrame
-                        loadingState={loadingState}
-                        nullComponent={<NullComponent />}
-                        loadingComponent={<LoadingComponent />}
-                        failedComponent={<FailedComponent />}>
+
+                    <LoadingFrame loadingState={loadingState}>
 
                         <ToggleButtonGroup className={classes.categoriesList}>
                             {
@@ -246,11 +243,7 @@ const CourseSearch = () => {
                         </FormControl>
                     </div>
                 </div>
-                <LoadingFrame
-                    loadingState={loadingState}
-                    nullComponent={<NullComponent />}
-                    loadingComponent={<LoadingComponent />}
-                    failedComponent={<FailedComponent />}>
+                <LoadingFrame loadingState={loadingState}>
                     <Grid container spacing={3} className={classes.courseItemsContainer}>
                         {
                             courses.get().map((data: any, index) => {

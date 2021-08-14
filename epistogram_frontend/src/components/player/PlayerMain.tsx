@@ -97,11 +97,7 @@ const PlayerMain = (props: { history: any }) => {
 
     const loadingState = useState(applicationRunningState).loadingIndicator.get();
 
-    return <LoadingFrame
-        loadingState={loadingState}
-        loadingComponent={<LoadingComponent />}
-        failedComponent={<FailedComponent />}
-        nullComponent={<NullComponent />}>
+    return <LoadingFrame loadingState={loadingState}>
         <DialogFrame firstButtonOnClick={setCurrentVideo} secondButtonOnClick={redirectToCourseSearch}>
             <MainWrapper>
                 <Navbar showHighlightedButton={true}

@@ -1,33 +1,38 @@
-import { FunctionComponent, ReactNode } from "react";
-import { useState } from "@hookstate/core";
-import applicationRunningState from "../../store/application/applicationRunningState";
+import { ReactNode } from "react";
 import { LoadingState } from "../../store/application/ApplicationRunningStateInterface";
+import { FailedComponent, LoadingComponent, NullComponent } from "./loadingComponents/LoadingComponent";
 
 type LoadingFrameProps = {
-    nullComponent: ReactNode,
-    loadingComponent: ReactNode,
-    failedComponent: ReactNode,
+    // nullComponent: ReactNode,
+    // loadingComponent: ReactNode,
+    // failedComponent: ReactNode,
     children: ReactNode,
     loadingState: LoadingState
 }
 
 export const LoadingFrame = (props: LoadingFrameProps) => {
 
-    switch (props.loadingState) {
+    const getLoadingComponent = () => {
+        switch (props.loadingState) {
 
-        case "null":
-            return props.nullComponent as JSX.Element
+            case "null":
+                return <NullComponent></NullComponent>
 
-        case "loading":
-            return props.loadingComponent as JSX.Element
+            case "loading":
+                return <LoadingComponent></LoadingComponent>
 
-        case "failed":
-            return props.failedComponent as JSX.Element
+            case "failed":
+                return <FailedComponent></FailedComponent>
 
-        case "succeeded":
-            return props.children as JSX.Element
+            case "succeeded":
+                return props.children;
 
-        default:
-            return props.nullComponent as JSX.Element
+            default:
+                return <NullComponent></NullComponent>
+        }
     }
+
+    return <div>
+        {getLoadingComponent()}
+    </div>;
 }

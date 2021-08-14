@@ -74,10 +74,7 @@ export const Users: React.FunctionComponent = () => {
                         title={"Felhasználók"}
                         className={classes.searchBar} />
                     <LoadingFrame
-                        loadingState={loadingState}
-                        loadingComponent={LoadingComponent()}
-                        failedComponent={FailedComponent()}
-                        nullComponent={NullComponent()}>
+                        loadingState={loadingState}>
                         <AdminDashboardList>
 
                             {admin.users.get().map((user, index) => {

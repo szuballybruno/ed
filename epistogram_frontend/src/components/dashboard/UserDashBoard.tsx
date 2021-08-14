@@ -30,11 +30,7 @@ const UserDashBoard = () => {
     const isThereCurrentCourse: State<item[]> | null = user.userData.currentCourse.items.ornull
     const loadingState = useState(applicationRunningState).loadingIndicator.get();
 
-    return <LoadingFrame
-        loadingState={loadingState}
-        nullComponent={<NullComponent />}
-        loadingComponent={<LoadingComponent />}
-        failedComponent={<FailedComponent />}>
+    return <LoadingFrame loadingState={loadingState}>
         <MainWrapper>
             <Navbar showHighlightedButton={true}
                 menuItems={menuItems["user"]}

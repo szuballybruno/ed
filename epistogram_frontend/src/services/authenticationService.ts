@@ -52,7 +52,7 @@ export const useRenewUserSessionPooling = () => {
         refetchOnWindowFocus: false,
         refetchInterval: userSessionRenewIntervalInS * 1000,
         refetchIntervalInBackground: true,
-        notifyOnChangeProps: ['isSuccess']
+        notifyOnChangeProps: []
     });
 
     isSuccess
