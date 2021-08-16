@@ -1,15 +1,11 @@
-import { createContext, FunctionComponent, ReactNode, useEffect } from "react";
 import { useState } from "@hookstate/core";
-import applicationRunningState from "../../store/application/applicationRunningState";
-import userSideState from "../../store/user/userSideState";
+import { createContext, FunctionComponent } from "react";
+import { globalConfig } from "../../configuration/config";
+import { AuthenticationState, useRenewUserSessionPooling, useUserFetching } from "../../services/authenticationService";
+import { useGetGlobalData } from "../../services/dataService";
 //import {hotjar} from "react-hotjar";
 import setTheme from "../../services/setTheme";
-import { globalConfig } from "../../configuration/config";
-import { AxiosRequestConfig } from "axios";
-import instance from "../../services/axiosInstance";
-import Cookies from "universal-cookie";
-import { AuthenticationState, useRenewUserSessionPooling, useUserFetching } from "../../services/authenticationService";
-import { useGetGlobalData, useUserId } from "../../services/dataService";
+import userSideState from "../../store/user/userSideState";
 
 export class UserInfo {
     userId: number;

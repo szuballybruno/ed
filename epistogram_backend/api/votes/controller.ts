@@ -1,16 +1,18 @@
 import { Connection } from '../../services/connectMongo'
-import {responseReducer} from '../../services/responseReducer'
+import { responseReducer } from '../../services/responseReducer'
 import { ObjectId } from 'mongodb'
-import { checkRequest } from '../../services/checkRequest'
-import {Request, Response, NextFunction} from "express";
+// import { checkRequest } from '../../services/checkRequest'
+import { Request, Response, NextFunction } from "express";
 
 export const getVote = (req: Request, res: Response, next: NextFunction) => {
-    checkRequest(req, res, next, ["_id"])
+    // checkRequest(req, res, next, ["_id"])
     const aszink = async () => {
-        const vote = await  Connection.db.collection("votes").findOne({"active": true});
-        const user = await Connection.db.collection("users").findOne({$and: [
-            {"_id": new ObjectId(req.query._id as string)},
-            {"voteStats.voteId": vote._id}]})
+        const vote = await Connection.db.collection("votes").findOne({ "active": true });
+        const user = await Connection.db.collection("users").findOne({
+            $and: [
+                { "_id": new ObjectId(req.query._id as string) },
+                { "voteStats.voteId": vote._id }]
+        })
         if (!vote) {
             responseReducer(400, "Jelenleg nem érhető el egyetlen szavazás sem")
         } else if (user === null) {

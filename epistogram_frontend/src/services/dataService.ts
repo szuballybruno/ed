@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import instance from "../services/axiosInstance";
-import { LoadingState } from "../store/application/ApplicationRunningStateInterface";
+import { LoadingStateType } from "../store/application/ApplicationRunningStateInterface";
 import { UserSideStateIF } from "../store/user/UserSideStateIF";
 
 export const useUserId = () => {
@@ -17,7 +17,7 @@ export const useUserId = () => {
 export const useGetGlobalData = (userId: number | null) => {
 
     //STATES
-    var loadingState = "loading" as LoadingState;
+    var loadingState = "loading" as LoadingStateType;
     var resultData = null as UserSideStateIF | null;
 
     //LOADING INDICATOR METHODS

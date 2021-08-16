@@ -24,8 +24,8 @@ import { Assistant } from "./dashboard_components/Assistant/Assistant";
 import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import applicationRunningState from '../../store/application/applicationRunningState';
 
-
 const UserDashBoard = () => {
+
     const user = useState(userSideState)
     const isThereCurrentCourse: State<item[]> | null = user.userData.currentCourse.items.ornull
     const loadingState = useState(applicationRunningState).loadingIndicator.get();

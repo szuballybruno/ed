@@ -1,9 +1,9 @@
 import React from 'react';
-import {NavLink, useRouteMatch} from "react-router-dom";
+import { NavLink, useRouteMatch } from "react-router-dom";
 import classes from './adminDashboardSearchItem.module.scss';
 import SearchItemButton from "../buttons/SearchItemButton";
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
-import {Chip, Collapse, Divider, Grid, Typography} from "@material-ui/core";
+import { Chip, Collapse, Divider, Grid, Typography } from "@material-ui/core";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import {
     AccessTimeTwoTone,
@@ -21,9 +21,18 @@ import {
     ThumbsUpDownTwoTone,
     WorkTwoTone
 } from "@material-ui/icons";
-import {useState} from "@hookstate/core";
+import { useState } from "@hookstate/core";
+import { AdminPageUserView } from '../../../../models/shared_models/AdminPageUserDTO';
+
+export type DashboardSearchItemAction = {
+    to?: string,
+    icon: string,
+    selectedComponent?: string,
+    onClick: (user: AdminPageUserView) => void
+}
 
 const AdminDashboardSearchItem = (props: {
+    user: AdminPageUserView,
     title: string,
     profileImageUrl?: string,
     thumbnailUrl?: string,
@@ -31,12 +40,7 @@ const AdminDashboardSearchItem = (props: {
         label: string
         icon: string
     }[],
-    actions: {
-        to?: string,
-        icon: string,
-        selectedComponent?: string
-        onClick: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void)
-    }[],
+    actions: DashboardSearchItemAction[],
     userActionComponents: { [name: string]: JSX.Element }
 }) => {
 
@@ -46,7 +50,7 @@ const AdminDashboardSearchItem = (props: {
         work: <WorkTwoTone />,
         category: <CategoryTwoTone />,
         person: <PersonTwoTone />,
-        video: <OndemandVideoTwoTone/>,
+        video: <OndemandVideoTwoTone />,
         play: <PlayArrowTwoTone />,
         overlay: <PictureInPictureTwoTone />,
         length: <AccessTimeTwoTone />,
@@ -54,29 +58,26 @@ const AdminDashboardSearchItem = (props: {
         vote: <ThumbsUpDownTwoTone />,
     }
 
-    const actionIcons: {[name: string]: JSX.Element} = {
+    const actionIcons: { [name: string]: JSX.Element } = {
         list: <ListTwoTone />,
         edit: <EditTwoToneIcon />,
         statistics: <EqualizerTwoTone />,
-        delete:  <DeleteTwoTone color={"secondary"} />
+        delete: <DeleteTwoTone color={"secondary"} />
     }
 
     const match = useRouteMatch()
-
-
-
     const isOpen = useState(false)
     const currentComponent = useState("")
 
     return <Grid xs={12}>
         <Grid container
-              style={{width: "100%"}}
-              spacing={0}
-              direction={"row"}
-              justify={"center"}
-              alignContent={"center"}
-              xs={12}
-              wrap={"nowrap"}>
+            style={{ width: "100%" }}
+            spacing={0}
+            direction={"row"}
+            justify={"center"}
+            alignContent={"center"}
+            xs={12}
+            wrap={"nowrap"}>
             {props.profileImageUrl ? <Grid lg={1} md={1} xs={1} item className={classes.searchItemAvatar}>
                 <ProfileImage imageUrl={props.profileImageUrl} />
             </Grid> : null}
@@ -88,13 +89,18 @@ const AdminDashboardSearchItem = (props: {
             <Grid lg={9} md={10} xs={10} item>
                 <div className={classes.searchItemInfoTopWrapper}>
                     <Typography variant={"h5"}
-                                className={classes.itemMainTitle}>
+                        className={classes.itemMainTitle}>
                         {props.title}
                     </Typography>
                 </div>
                 <div className={classes.searchItemInfoBottomWrapper}>
                     {props.chips.map((chip, index) => {
-                        return <Chip key={index} label={chip.label} variant={"outlined"} size={"small"} icon={icons[chip.icon as keyof typeof icons]} />
+                        return <Chip
+                            key={index}
+                            label={chip.label}
+                            variant={"outlined"}
+                            size={"small"}
+                            icon={icons[chip.icon as keyof typeof icons]} />
                     })}
                 </div>
             </Grid>
@@ -109,17 +115,17 @@ const AdminDashboardSearchItem = (props: {
                                 {actionIcons[action.icon]}
                             </SearchItemButton>
                         </NavLink> : <SearchItemButton key={index}
-                                                       onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                                                           if (!isOpen.get()) {
-                                                               isOpen.set(true)
-                                                           } else if (isOpen.get() && currentComponent.get() === action.selectedComponent) {
-                                                               isOpen.set(false)
-                                                           } else {
+                            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                                if (!isOpen.get()) {
+                                    isOpen.set(true)
+                                } else if (isOpen.get() && currentComponent.get() === action.selectedComponent) {
+                                    isOpen.set(false)
+                                } else {
 
-                                                           }
-                                                           currentComponent.set(action.selectedComponent || "")
-                                                           action.onClick(e)
-                                                       }}>
+                                }
+                                currentComponent.set(action.selectedComponent || "")
+                                action.onClick(props.user)
+                            }}>
                             {actionIcons[action.icon]}
                         </SearchItemButton>
                     })
@@ -128,7 +134,7 @@ const AdminDashboardSearchItem = (props: {
         </Grid>
         <Divider />
         <Collapse in={isOpen.get()}>
-                <div>{props.userActionComponents[currentComponent.get()]}</div>
+            <div>{props.userActionComponents[currentComponent.get()]}</div>
         </Collapse>
     </Grid>
 };

@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { getEmailConfig, emailContent } from "../../../../emails/email";
 import { globalConfig } from "../../../../server";
-import { checkRequest } from '../../../../services/checkRequest';
+// import { checkRequest } from '../../../../services/checkRequest';
 import { checkUser } from '../../../../services/checkUser';
 import { Connection } from '../../../../services/connectMongo';
 import { generateToken } from "../../../../services/generateToken";
@@ -12,7 +12,7 @@ import { responseReducer } from "../../../../services/responseReducer";
 
 export const signup = (req: Request, res: Response, next: NextFunction) => {
     const registrationData = ["email", "role", "username", "firstName", "lastName", "organizationId", "innerRole"]
-    checkRequest(req, res, next, registrationData)
+    // checkRequest(req, res, next, registrationData)
     const createUser = async () => {
         let insertedId: string
         await checkUser(req, res, next)
