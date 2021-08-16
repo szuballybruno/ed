@@ -1,10 +1,8 @@
 
-import {fetchVimeoAPI} from '../../../../services/fetchVimeoAPI'
-
 import { Connection } from '../../../../services/connectMongo'
 import {responseReducer} from '../../../../services/responseReducer'
 import { ObjectID } from 'mongodb'
-import { checkRequest } from '../../../../services/checkRequest'
+// import { checkRequest } from '../../../../services/checkRequest'
 import {Request, Response, NextFunction} from "express";
 
 

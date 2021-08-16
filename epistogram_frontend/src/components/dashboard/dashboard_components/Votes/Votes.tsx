@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import classes from "./votes.module.scss";
 import {useState} from "@hookstate/core";
 import instance from "../../../../services/axiosInstance";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 
 import ReactFC from "react-fusioncharts";
 import FusionCharts from "fusioncharts";
@@ -14,7 +14,7 @@ import {Paper} from "@material-ui/core";
 
 const Votes = () => {
     const selectedVoteWindow = useState(1);
-    const user = useState(userSideState);
+    const user = useState(userDetailsState);
 
     ReactFC.fcRoot(FusionCharts, Pie2D, FusionTheme);
 

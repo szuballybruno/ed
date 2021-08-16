@@ -1,33 +1,34 @@
 import React from 'react';
 import classes from './administration.module.scss'
-import userSideState from "../../store/user/userSideState";
-import {useState} from "@hookstate/core";
-import {Users} from "./users/Users";
-import {Redirect, Route, Switch} from "react-router-dom";
+import userDetailsState from "../../store/user/userSideState";
+import { useState } from "@hookstate/core";
+import { Users } from "./users/Users";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Courses from "./courses/Courses";
-import {globalConfig} from "../../configuration/config";
+import { globalConfig } from "../../configuration/config";
 import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
 import Statistics from "./statistics/Statistics";
 import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
-import {ManageArticles} from "./articles/ManageArticles";
-import {Votes} from "./votes/Votes";
-import {Groups} from "./groups/Groups";
-import {Organizations} from "./organizations/Organizations";
+import { ManageArticles } from "./articles/ManageArticles";
+import { Votes } from "./votes/Votes";
+import { Groups } from "./groups/Groups";
+import { Organizations } from "./organizations/Organizations";
 import {
     Chip,
     Divider,
     Typography
 } from "@material-ui/core";
-import {ContentWrapper, LeftPanel, MainWrapper, RightPanel} from "../../HOC/mainPanels/MainPanels";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/mainPanels/MainPanels";
 import menuItems from "../../configuration/menuItems.json";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
-import {AdminAddHeader} from "./universal/adminAddHeader/AdminAddHeader";
+import { AdminAddHeader } from "./universal/adminAddHeader/AdminAddHeader";
 
-const Administration = (props: { match: { url: string; }; }) => {
-    const user = useState(userSideState)
+const Administration = (props: { match: { url: string; } }) => {
+
+    const user = useState(userDetailsState)
 
     return <MainWrapper>
-        <Navbar showHighlightedButton={true} menuItems={menuItems["user"]} showLastButton={true} showNavigation={true}/>
+        <Navbar showHighlightedButton={true} menuItems={menuItems["user"]} showLastButton={true} showNavigation={true} />
         <ContentWrapper>
             <LeftPanel>
                 <div className={classes.adminDashboardLeftItemProfile}>
@@ -39,19 +40,19 @@ const Administration = (props: { match: { url: string; }; }) => {
                         <div className={classes.profileNameWrapper}>
                             <Typography variant={"h5"}>{user.userData.lastName.get() + " " + user.userData.firstName.get()}</Typography>
                         </div>
-                        <div  className={classes.profileRoleWrapper}>
+                        <div className={classes.profileRoleWrapper}>
                             <Chip label={user.userData.role.get()} />
                         </div>
-                        <Divider style={{zIndex: 999, marginTop: 20}} />
+                        <Divider style={{ zIndex: 999, marginTop: 20 }} />
                     </div>
 
                 </div>
                 <div className={classes.adminDashboardLeftItemMenuItems}>
-                    {globalConfig.adminMenuItems.map((item,index) => {
+                    {globalConfig.adminMenuItems.map((item, index) => {
                         return <AdminDashboardMenuItem title={item.title}
-                                                       index={index}
-                                                       key={index}
-                                                       url={props.match.url + item.path} />
+                            index={index}
+                            key={index}
+                            url={props.match.url + item.path} />
                     })}
                 </div>
             </LeftPanel>

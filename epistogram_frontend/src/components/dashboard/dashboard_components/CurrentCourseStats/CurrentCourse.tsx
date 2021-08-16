@@ -7,11 +7,11 @@
 import React from 'react';
 import classes from './currentCourseStats.module.scss'
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import ListItem from "../../../universal/atomic/listItem/ListItem";
 
 const CurrentCourseStats = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
     return (
         <div className={classes.coursesContainer}>

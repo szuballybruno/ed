@@ -1,10 +1,9 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
-import { nextTick } from 'process';
 import { router as articleRoutes } from './api/articles/routes';
-import { getCurrentUser as getCurrentUserAction, logInUserAction, logOutUserAction, registerUserAction, renewUserSession } from "./api/authenticationActions";
+import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { router as courseRoutes } from './api/courses/routes';
 import { router as filesRoutes } from './api/files/routes';
 import { router as groupsRoutes } from './api/groups/routes';
@@ -19,8 +18,7 @@ import { authorizeRequest } from './services/authentication';
 import { connectToMongoDB } from "./services/connectMongo";
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/logger";
-import { Request, Response, NextFunction } from "express"
-import {  respondOk, respondForbidden } from './utilities/helpers';
+import { respondForbidden, respondOk } from './utilities/helpers';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -30,27 +28,27 @@ export const globalConfig = initailizeDotEnvEnvironmentConfig();
 connectToMongoDB().then(() => {
     const expressServer = express();
 
-    const allowAllCorsMiddleware = (req: Request, res: Response, next: NextFunction) => {
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-        next();
-    }
+    // const allowAllCorsMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    //     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    //     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+    //     next();
+    // }
 
     const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
         log("Authorizing request...");
-        authorizeRequest(
-            req,
-            tokenMeta => {
 
-                log("Authorization successful, user email: " + tokenMeta.email);
+        authorizeRequest(req)
+            .then(tokenMeta => {
+
+                log("Authorization successful, userId: " + tokenMeta.userId);
                 next();
-            },
-            () => {
+            })
+            .catch(() => {
 
                 log("Authorizing request failed.");
-                respondForbidden(req, res);
+                respondForbidden(res);
             });
     };
 
@@ -69,19 +67,17 @@ connectToMongoDB().then(() => {
     });
 
     const setCredentialCORSHearders = (res: Response) => {
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS, DELETE');
-        res.setHeader('Access-Control-Allow-Credentials', "true");
+        // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+        // res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+        // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS, DELETE');
+        // res.setHeader('Access-Control-Allow-Credentials', "true");
     }
 
-//
-// add middlewares
-//
+    //
+    // add middlewares
+    //
 
-//  expressServer.use(authMiddleware);
     expressServer.use(corsMiddleware);
-
     expressServer.use(bodyParser.json());
     expressServer.use(fileUpload());
     expressServer.use((req, res, next) => {
@@ -90,36 +86,39 @@ connectToMongoDB().then(() => {
         next();
     })
 
-// register user
-    expressServer.options('/register-user', respondOk);
-    expressServer.post('/register-user', registerUserAction);
+    // register user
+    expressServer.use((req, res, next) => {
 
-    expressServer.options('/renew-user-session', respondOk);
-    expressServer.get('/renew-user-session', renewUserSession);
+        log("Request arrived: " + req.path);
+        next();
+    })
 
-    expressServer.options('/log-out-user', respondOk);
+    expressServer.get('/renew-user-session', renewUserSessionAction);
     expressServer.post('/log-out-user', logOutUserAction);
-
     expressServer.post('/login-user', logInUserAction);
-    expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
 
-    expressServer.use('/articles', articleRoutes)
-    expressServer.use('/courses', courseRoutes)
-    expressServer.use('/groups', groupsRoutes)
-    expressServer.use('/organizations', organizationRoutes)
-    expressServer.use('/tags', tagsRoutes)
-    expressServer.use('/tasks', tasksRoutes)
-    expressServer.use('/upload', filesRoutes)
-    expressServer.use('/overlays', overlaysRoutes)
-    expressServer.use('/users', usersRoutes);
-    expressServer.use('/videos', videosRoutes);
-    expressServer.use('/votes', generalDataRoutes);
+    // protected 
+    expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
+    expressServer.use('/articles', authMiddleware, articleRoutes)
+    expressServer.use('/courses', authMiddleware, courseRoutes)
+    expressServer.use('/groups', authMiddleware, groupsRoutes)
+    expressServer.use('/organizations', authMiddleware, organizationRoutes)
+    expressServer.use('/tags', authMiddleware, tagsRoutes)
+    expressServer.use('/tasks', authMiddleware, tasksRoutes)
+    expressServer.use('/upload', authMiddleware, filesRoutes)
+    expressServer.use('/overlays', authMiddleware, overlaysRoutes)
+    expressServer.use('/users', authMiddleware, usersRoutes);
+    expressServer.use('/videos', authMiddleware, videosRoutes);
+    expressServer.use('/votes', authMiddleware, generalDataRoutes);
 
     expressServer.use((req, res) => {
         throw new Error(`Route did not match: ${req.url}`);
     });
 
     expressServer.use((error: express.Errback, req: express.Request, res: express.Response) => {
+
+        logError("Express error middleware.");
+        logError(error);
         return res.status(500).send(error.toString());
     });
 

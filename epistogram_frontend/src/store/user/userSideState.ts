@@ -1,7 +1,8 @@
-import {createState, State} from "@hookstate/core";
-import {UserSideStateIF} from "./UserSideStateIF";
+import { createState, State } from "@hookstate/core";
+import { UserTaskDTO } from "../../models/shared_models/UserTaskDTO";
+import { IUserDetails } from "./UserSideStateIF";
 
-const userSideState: State<UserSideStateIF> = createState<UserSideStateIF>({
+const userDetailsState: State<IUserDetails> = createState<IUserDetails>({
 
     // Ez a szerverről betöltött userData, amely a megjelenítendő adatokért felelős.
 
@@ -243,7 +244,7 @@ const userSideState: State<UserSideStateIF> = createState<UserSideStateIF>({
             addedBy: "",
             status: "",
             due: ""
-        }],
+        } as UserTaskDTO],
         username: "",
         userDescription: "",
         watchedVideosCount: 0
@@ -264,4 +265,4 @@ const userSideState: State<UserSideStateIF> = createState<UserSideStateIF>({
     }
 })
 
-export default userSideState
+export default userDetailsState

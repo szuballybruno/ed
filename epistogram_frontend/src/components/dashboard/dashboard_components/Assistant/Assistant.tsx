@@ -14,12 +14,12 @@ import {
     Typography
 } from "@material-ui/core";
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import {Create, MenuBook, PlayCircleFilled} from "@material-ui/icons";
 import { NavLink } from "react-router-dom";
 
 export const Assistant = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const data = {
         labels: ['30 nap', '45 nap', '60 nap', '75 nap', '90 nap'],
         datasets: [

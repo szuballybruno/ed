@@ -22,7 +22,7 @@ const Articles = () => {
         instance.get(globalConfig.backendUrl + "articles/getarticles").then((res) => {
             if (res.data) {
                 app.articles.set(res.data)
-                app.loadingIndicator.set("succeeded")
+                app.loadingIndicator.set("success")
             } else {
                 app.loadingIndicator.set("failed")
             }

@@ -1,10 +1,10 @@
-import {createState, State} from "@hookstate/core";
-import {ApplicationRunningStateInterface} from "./ApplicationRunningStateInterface";
+import { createState, State } from "@hookstate/core";
+import { ApplicationRunningStateInterface } from "./ApplicationRunningStateInterface";
 
 const applicationRunningState: State<ApplicationRunningStateInterface> = createState<ApplicationRunningStateInterface>({
     modalState: false,
     currentSearchData: "",
-    loadingIndicator: "null",
+    loadingIndicator: "loading",
     selectedPage: 0,
     selectedCourseCategory: "",
     snack: {
@@ -36,7 +36,6 @@ const applicationRunningState: State<ApplicationRunningStateInterface> = createS
     showPlayerOrExam: false,
     currentDescriptionComponent: "",
 
-    isLoggedIn: false,
     currentEmail: "",
     currentPassword: "",
 

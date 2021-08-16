@@ -7,7 +7,7 @@ import {Button} from "@material-ui/core";
 import {PlayArrow} from "@material-ui/icons";
 import {useState} from "@hookstate/core";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
-import userSideState from "../../../../../store/user/userSideState";
+import userDetailsState from "../../../../../store/user/userSideState";
 import {updateActivity} from "../../../../../services/updateActivity";
 
 const DesktopNavbar = (props: {
@@ -29,7 +29,7 @@ const DesktopNavbar = (props: {
 
 }) => {
     const app = useState(applicationRunningState)
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
     const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
 

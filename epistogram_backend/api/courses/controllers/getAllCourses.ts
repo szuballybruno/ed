@@ -2,10 +2,10 @@ import {NextFunction, Request, Response} from "express";
 
 const {responseReducer} = require('../../../services/responseReducer')
 const { Connection } = require('../../../services/connectMongo')
-import {checkRequest} from '../../../services/checkRequest'
+// import {checkRequest} from '../../../services/checkRequest'
 
 export const getAllCourses = (req: Request, res: Response, next: NextFunction) => {
-    checkRequest(req, res, next, ["userId"])
+    // checkRequest(req, res, next, ["userId"])
 
     const fetchCourses = async function() {
         const courses = await Connection.db.collection("courses").aggregate([

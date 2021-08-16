@@ -1,10 +1,11 @@
-import {globalConfig} from "../../configuration/config";
+
+export type LoadingStateType = "idle" | "loading" | "failed" | "success";
 
 export interface ApplicationRunningStateInterface {
     //GLOBAL
     modalState: boolean,
     currentSearchData: string,
-    loadingIndicator: "null" | "loading" | "failed" | "succeeded",
+    loadingIndicator: LoadingStateType,
     hamburgerButtonState?: boolean,
     selectedPage: number
     selectedCourseCategory: string
@@ -39,7 +40,6 @@ export interface ApplicationRunningStateInterface {
     currentDescriptionComponent: string,
 
     //LOGIN
-    isLoggedIn: boolean,
     currentEmail: string,
     currentPassword: string,
 

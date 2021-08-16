@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
 import classes from './playerMain.module.scss';
 
@@ -12,25 +12,25 @@ import GeneratedInfo from "./player_components/GeneratedInfo";
 
 import Descriptions from "./player_components/descriptions/Descriptions";
 
-import {Copyright} from "../universal/footers/copyright/Copyright";
+import { Copyright } from "../universal/footers/copyright/Copyright";
 
 import menuItems from "../../configuration/menuItems.json"
-import {LoadingFrame} from "../../HOC/loading_frame/LoadingFrame";
-import {FailedComponent, LoadingComponent, NullComponent} from "../../HOC/loading_frame/loadingComponents/LoadingComponent";
-import {MainWrapper} from "../../HOC/mainPanels/MainPanels";
-import {useState} from "@hookstate/core";
-import {useParams} from "react-router";
-import userSideState from "../../store/user/userSideState";
+import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
+import { FailedComponent, LoadingComponent, NullComponent } from "../../HOC/loading_frame/loadingComponents/LoadingComponent";
+import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
+import { useState } from "@hookstate/core";
+import { useParams } from "react-router";
+import userDetailsState from "../../store/user/userSideState";
 import applicationRunningState from "../../store/application/applicationRunningState";
 
 import instance from "../../services/axiosInstance";
-import {Cookies} from "react-cookie";
-import {DialogFrame} from "../../HOC/dialog_frame/DialogFrame";
-import {useHistory} from "react-router-dom";
+import { Cookies } from "react-cookie";
+import { DialogFrame } from "../../HOC/dialog_frame/DialogFrame";
+import { useHistory } from "react-router-dom";
 
-const PlayerMain = (props: {history: any}) => {
+const PlayerMain = (props: { history: any }) => {
     console.log("[PlayerMain] Started...")
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
     const cookies = new Cookies();
 
@@ -95,17 +95,15 @@ const PlayerMain = (props: {history: any}) => {
         history.push(`/watch/${user.userData.currentCourse._id.get()}/${user.userData.currentItem._id.get()}`);
     }
 
+    const loadingState = useState(applicationRunningState).loadingIndicator.get();
 
-
-    return <LoadingFrame loadingComponent={<LoadingComponent />}
-                         failedComponent={<FailedComponent />}
-                         nullComponent={<NullComponent />}>
+    return <LoadingFrame loadingState={loadingState}>
         <DialogFrame firstButtonOnClick={setCurrentVideo} secondButtonOnClick={redirectToCourseSearch}>
             <MainWrapper>
                 <Navbar showHighlightedButton={true}
-                        menuItems={menuItems["user"]}
-                        showLastButton={false}
-                        showNavigation={true}/>
+                    menuItems={menuItems["user"]}
+                    showLastButton={false}
+                    showNavigation={true} />
                 <div className={classes.playerAndVideoListWrapper}>
                     <div className={classes.playerContentWrapper} >
                         <Player id={id} />

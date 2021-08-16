@@ -1,13 +1,13 @@
 import React from 'react';
 import classes from './playerDescription.module.scss'
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../../store/user/userSideState";
+import userDetailsState from "../../../../../store/user/userSideState";
 import {Divider, Typography} from "@material-ui/core";
 import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
 
 const PlayerDescription = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
 
 

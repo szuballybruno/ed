@@ -12,6 +12,7 @@ import {
     Theme,
     withStyles
 } from "@material-ui/core";
+import { UserTaskDTO } from '../../../../../models/shared_models/UserTaskDTO';
 
 // Further styling of MUI TableCell component
 
@@ -45,24 +46,19 @@ const StyledTableRow = withStyles((theme: Theme) =>
 const statuses = [{
     name: "new",
     displayedText: "Új"
-},{
+}, {
     name: "inProgress",
     displayedText: "Folyamatban"
-},{
+}, {
     name: "done",
     displayedText: "Kész"
-},{
+}, {
     name: "interrupted",
     displayedText: "Meghiusúlt"
 }]
 
 const Tasks = (props: {
-    tasksArray?: {
-        name: string,
-        addedBy: string,
-        status: string,
-        due: string
-    }[]
+    tasksArray?: UserTaskDTO[]
 }) => {
     return (
         <div className={classes.tasksWrapper}>

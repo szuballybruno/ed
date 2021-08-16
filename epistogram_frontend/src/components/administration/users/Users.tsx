@@ -1,131 +1,112 @@
-import React, {useEffect} from 'react';
-import classes from "./users.module.scss"
+import { Divider, Fab } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
+import React, { useContext } from 'react';
+import { NavLink, Route, Switch } from "react-router-dom";
+import { globalConfig } from "../../../configuration/config";
+import { CurrentUserContext } from '../../../HOC/data_manager_frame/DataManagerFrame';
+import { LoadingFrame } from "../../../HOC/loading_frame/LoadingFrame";
+import { IdType } from '../../../models/shared_models/types/sharedTypes';
+import { useUserListQuery } from "../../../services/adminPageUsersService";
+import { httpDeleteAsync } from "../../../services/httpClient";
+import { AdminDashboardList } from "../universal/adminDashboardList/AdminDashboardList";
+import AdminDashboardSearchItem, { DashboardSearchItemAction } from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
+import { AdminDashboardWrapper } from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
 import AdminDashboardSearch from "../universal/searchBar/AdminDashboardSearch";
-import applicationRunningState from "../../../store/application/applicationRunningState";
-import adminSideState from "../../../store/admin/adminSideState";
-import instance from "../../../services/axiosInstance";
-import {none, useState} from "@hookstate/core";
-import AdminDashboardSearchItem from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
-import {NavLink, Route, Switch} from "react-router-dom";
+import classes from "./users.module.scss";
 import AddUser from "./users_components/AddUser";
-import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
-import {Cookies} from "react-cookie";
-import UserTasks from "./users_components/userTasks/UserTasks";
 import EditUser from "./users_components/editUser/EditUser";
 import UserStatistics from "./users_components/userStatistics/UserStatistics";
-import {globalConfig} from "../../../configuration/config";
-import {LoadingFrame} from "../../../HOC/loading_frame/LoadingFrame";
-import {FailedComponent, LoadingComponent, NullComponent} from "../../../HOC/loading_frame/loadingComponents/LoadingComponent";
-import {AxiosRequestConfig} from "axios";
-import {Divider, Fab} from "@material-ui/core";
-import {Add} from "@material-ui/icons";
-import userSideState from "../../../store/user/userSideState";
+import UserTasks from "./users_components/userTasks/UserTasks";
 
-export const Users: React.FunctionComponent = () => {
-    const app = useState(applicationRunningState)
-    const user = useState(userSideState)
-    const admin = useState(adminSideState)
+const actions = [
+    {
+        selectedComponent: "userTasks",
+        icon: "list",
+        onClick: () => {
 
-    const cookies = new Cookies()
+        }
+    },
+    {
+        selectedComponent: "editUser",
+        icon: "edit",
+        onClick: () => {
 
-    const setLoadingOnRequest = (config: AxiosRequestConfig) => {
-        app.loadingIndicator.set("loading")
-        return config
-    }
+        }
+    },
+    {
+        selectedComponent: "userStatistics",
+        icon: "statistics",
+        onClick: () => {
 
-    const fetchUser = (name?: string, value?: string) => {
-        const requestInterceptor =  instance.interceptors.request.use(setLoadingOnRequest)
-        instance.get(`users/?userId=${cookies.get("userId")}&organizationId=${cookies.get("organizationId")}&searchData=${value || ""}`
-        ).then((res) => {
-            if (res.data) {
-                admin.users.set(res.data)
-                app.loadingIndicator.set("succeeded")
-            } else {
-                //app.loadingIndicator.set("failed")
-            }
+        }
+    },
+    {
+        icon: "delete",
+        onClick: (user) => {
 
-        }).catch((e) => {
-            return e
-        })
-        instance.interceptors.request.eject(requestInterceptor)
-    }
+            const url = `/users/deleteuser?userId=${user._id}`;
+            httpDeleteAsync(url);
+            // TODO delete user 
+            // instance.delete().then(() => {
+            //     return admin.users[index].set(none)
+            // }).catch(e => console.error(e.toString()))
+        }
+    },
+] as DashboardSearchItemAction[];
 
-    useEffect(() => {
-        fetchUser()
-        //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+const getAvatarUrl = (userId: IdType | null) => {
 
-    const searchChangeHandler = (name: string, value: string) => {
-        fetchUser(name, value)
-    }
+    if (!userId)
+        return "";
+
+    return `${globalConfig.assetStorageUrl}/users/${userId}/avatar.png`;
+}
+
+export const Users = () => {
+
+    const user = useContext(CurrentUserContext);
+    const [searchText, setSearchText] = React.useState("");
+    const { users, status } = useUserListQuery(user, searchText);
 
     return (
         <Switch>
             <Route exact path={'/admin/manage/users'}>
-                <Divider style={{
-                    width: "100%"
-                }} />
+                <Divider style={{ width: "100%" }} />
                 <AdminDashboardWrapper>
-                    <AdminDashboardSearch searchChangeHandler={searchChangeHandler}
-                                          name={"searchData"}
-                                          title={"Felhasználók"}
-                                          className={classes.searchBar}/>
-                    <LoadingFrame loadingComponent={LoadingComponent()} failedComponent={FailedComponent()} nullComponent={NullComponent()}>
+
+                    <AdminDashboardSearch
+                        searchChangeHandler={(name, searchText) => setSearchText(searchText)}
+                        name="searchData"
+                        title="Felhasználók"
+                        className={classes.searchBar} />
+
+                    <LoadingFrame loadingState={status}>
                         <AdminDashboardList>
-
-                            {admin.users.get().map((user, index) => {
-                                return <AdminDashboardSearchItem title={`${user.lastName} ${user.firstName}`}
-                                                              profileImageUrl={user._id ? `${globalConfig.assetStorageUrl}/users/${user._id}/avatar.png` : ""}
-                                                              chips={[
-                                                                  {label: user.email, icon: "email"},
-                                                                  {label: user.organizationName, icon: "organization"},
-                                                                  {label: user.innerRole, icon: "work"}]
-                                                              }
-                                                              key={index}
-                                                              actions={[
-                                                                  {
-                                                                      selectedComponent: "userTasks",
-                                                                      icon: "list",
-                                                                      onClick: () => {
-
-                                                                      }
-                                                                  },
-                                                                  {
-                                                                      selectedComponent: "editUser",
-                                                                      icon: "edit",
-                                                                      onClick: () => {
-
-                                                                      }
-                                                                  },
-                                                                  {
-                                                                      selectedComponent: "userStatistics",
-                                                                      icon: "statistics",
-                                                                      onClick: () => {
-
-                                                                      }
-                                                                  },
-                                                                  {
-                                                                      icon: "delete",
-                                                                      onClick: () => {
-                                                                          instance.delete(`${globalConfig.backendUrl}users/deleteuser?userId=${user._id}`).then(() => {
-                                                                              return admin.users[index].set(none)
-                                                                          }).catch(e => console.error(e.toString()))
-                                                                      }
-                                                                  },]
-                                                              }
-                                                              userActionComponents={{
-                                                                     userTasks: <UserTasks user={user} index={index} />,
-                                                                     editUser: <EditUser user={user} index={index} />,
-                                                                     userStatistics: <UserStatistics />
-                                                                 }}
+                            {users
+                                .map((user, index) => {
+                                    return <AdminDashboardSearchItem
+                                        additionalData={user}
+                                        title={`${user.lastName} ${user.firstName}`}
+                                        profileImageUrl={getAvatarUrl(user._id)}
+                                        chips={[
+                                            { label: user.email, icon: "email" },
+                                            { label: user.organizationName, icon: "organization" },
+                                            { label: user.innerRole, icon: "work" }]
+                                        }
+                                        key={index}
+                                        actions={actions}
+                                        userActionComponents={{
+                                            userTasks: <UserTasks user={user} index={index} />,
+                                            editUser: <EditUser user={user} index={index} />,
+                                            userStatistics: <UserStatistics />
+                                        }}
                                     />
-                            })}
+                                })}
                         </AdminDashboardList>
                         <NavLink to={"/admin/manage/users/add"}>
                             <Fab color="primary"
-                                 aria-label="add"
-                                 style={{position: "absolute", bottom: 45, right: 45}}>
+                                aria-label="add"
+                                style={{ position: "absolute", bottom: 45, right: 45 }}>
                                 <Add />
                             </Fab>
                         </NavLink>
@@ -137,6 +118,5 @@ export const Users: React.FunctionComponent = () => {
                 <AddUser />
             </Route>
         </Switch>
-
     );
 };

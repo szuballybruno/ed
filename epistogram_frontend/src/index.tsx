@@ -20,9 +20,36 @@ import { StylesProvider } from "@material-ui/core";
 import { Signup } from "./components/universal/authentication/signup/Signup";
 import { MobileDemo } from "./components/universal/MobileDemo";
 import { QueryClient, QueryClientProvider } from 'react-query'
-import RegistrationPage from "./components/RegistrationPage";
 
 const queryClient = new QueryClient();
+
+const MainSwitch = () => {
+
+    return <Switch>
+
+        {/* unprotected paths  */}
+        <Route path="/login" component={withRouter(LoginScreen)} />
+        <Route path="/signup" component={withRouter(Signup)} />
+
+        {/* protected paths */}
+        <Route path="/watch/:courseId/:id" component={withRouter(PlayerMain)} />
+        <Route path="/admin" component={withRouter(Administration)} />
+        <ProtectedRoute path="/kezdolap" render={() => <UserDashBoard />} />
+        <ProtectedRoute path="/kurzusok" render={() => <CourseSearch />} />
+        <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />
+        <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
+        <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
+        <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
+
+        {/* index path */}
+        <ProtectedRoute path="/" render={() => <UserDashBoard />} exact />
+
+        {/* wrong path */}
+        <Route path="*">
+            <NotFound />
+        </Route>
+    </Switch>
+}
 
 ReactDOM.render(
     <QueryClientProvider client={queryClient}>
@@ -32,31 +59,7 @@ ReactDOM.render(
                     <DataManagerFrame>
                         <Router>
                             <PopupsWrapper>
-                                <Switch>
-
-                                    {/* unprotected paths  */}
-                                    <Route path="/login" component={withRouter(LoginScreen)} />
-                                    <Route path="/register" component={RegistrationPage} />
-
-                                    {/* protected paths */}
-                                    <ProtectedRoute path="/kezdolap" render={() => <UserDashBoard />} />
-                                    <ProtectedRoute path="/kurzusok" render={() => <CourseSearch />} />
-                                    <Route path="/watch/:courseId/:id" render={() => withRouter(PlayerMain)} />
-                                    <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />
-                                    <Route path="/signup" render={() => withRouter(Signup)} />
-                                    <Route path="/admin" render={() => withRouter(Administration)} />
-                                    <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
-                                    <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
-                                    <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
-                                    
-                                    {/* index path */}
-                                    <ProtectedRoute path="/" render={() => <UserDashBoard />} exact />
-
-                                    {/* wrong path */}
-                                    <Route path="*">
-                                        <NotFound />
-                                    </Route>
-                                </Switch>
+                                <MainSwitch />
                             </PopupsWrapper>
                         </Router>
                     </DataManagerFrame>
