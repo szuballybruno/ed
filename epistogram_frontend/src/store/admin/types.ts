@@ -1,24 +1,26 @@
-import {overlay} from "../types/overlay";
+import { overlay } from "../types/overlay";
+
+export type UserType = {
+    _id: string
+    uploadedFileUrl: string
+    email: string
+    username: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    userDescription: string
+    linkedinUrl: string
+    role: string
+    innerRole: string
+    organizationId: string
+    groups: {
+        _id: string
+        groupRole: string
+    }[]
+};
 
 export type currentlyEdited = {
-    user: {
-        _id: string
-        uploadedFileUrl: string
-        email: string
-        username: string
-        firstName: string
-        lastName: string
-        phoneNumber: string
-        userDescription: string
-        linkedinUrl: string
-        role: string
-        innerRole: string
-        organizationId: string
-        groups: {
-            _id: string
-            groupRole: string
-        }[]
-    }
+    user: UserType
     video: {
         _id: string
         title: string
@@ -83,12 +85,12 @@ export type currentlyEdited = {
         _id: string
         groupSupervisorId: string
         groupName: string
-        users: currentlyEdited["user"][]
+        users: UserType[]
     }
     organization: {
         _id: string
         organizationName: string
-        users: currentlyEdited["user"][]
+        users: UserType[]
     }
     exam: {
         _id: string

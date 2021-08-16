@@ -16,7 +16,7 @@ import { DashBoardLeftBorder, DashBoardLeftSpacer, DashBoardRightSpacer } from "
 import CurrentCourseStats from "./dashboard_components/CurrentCourseStats/CurrentCourse";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/mainPanels/MainPanels";
 import { State, useState } from "@hookstate/core";
-import userSideState from "../../store/user/userSideState";
+import userDetailsState from "../../store/user/userSideState";
 import { item } from "../../store/types/item";
 import ListItem from "../universal/atomic/listItem/ListItem";
 import { Divider, Grid } from "@material-ui/core";
@@ -24,12 +24,13 @@ import { Assistant } from "./dashboard_components/Assistant/Assistant";
 import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import applicationRunningState from '../../store/application/applicationRunningState';
 
-
 const UserDashBoard = () => {
-    const user = useState(userSideState)
+
+    const user = useState(userDetailsState)
     const isThereCurrentCourse: State<item[]> | null = user.userData.currentCourse.items.ornull
     const loadingState = useState(applicationRunningState).loadingIndicator.get();
 
+    console.log(loadingState);
     return <LoadingFrame loadingState={loadingState}>
         <MainWrapper>
             <Navbar showHighlightedButton={true}

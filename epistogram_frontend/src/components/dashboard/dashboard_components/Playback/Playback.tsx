@@ -1,6 +1,6 @@
 import React from 'react';
 import {State, useState} from "@hookstate/core";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import ListItem from "../../../universal/atomic/listItem/ListItem";
 import classes from "./playback.module.scss";
 import {item} from "../../../../store/types/item";
@@ -8,7 +8,7 @@ import {item} from "../../../../store/types/item";
 const Playback = (props: {
 
 }) => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
     const stateOrNull: State<item> | null = user.userData.currentItem.ornull
 

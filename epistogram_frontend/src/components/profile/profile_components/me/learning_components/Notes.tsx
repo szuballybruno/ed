@@ -5,11 +5,11 @@ import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import {Button, Fab, Typography} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../../store/user/userSideState";
+import userDetailsState from "../../../../../store/user/userSideState";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
 
 const Notes = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
 
     useEffect(() => {

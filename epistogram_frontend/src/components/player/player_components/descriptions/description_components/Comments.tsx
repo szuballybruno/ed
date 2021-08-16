@@ -2,10 +2,10 @@ import React from 'react';
 import classes from './comments.module.scss';
 import {DiscussionEmbed} from 'disqus-react';
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../../store/user/userSideState";
+import userDetailsState from "../../../../../store/user/userSideState";
 
 const Comments = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     return (
         <div className={classes.commentsWrapper}>
             <div className={classes.commentsInnerWrapper}>

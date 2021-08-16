@@ -2,12 +2,12 @@ import React from "react";
 import classes from './navigationDivider.module.scss';
 import {useState} from "@hookstate/core";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
 import {Divider, Typography} from "@material-ui/core";
 
 const NavigationalDivider = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
     const app = useState(applicationRunningState)
 

@@ -1,11 +1,8 @@
-import { User } from "../models/entities/user";
-import { UserDTO } from "../models/shared_models/UserDTO";
-import { ExpressRequest, ExpressResponse, respondForbidden, respondOk, TypedError } from "../utilities/helpers";
+import { User } from "../models/entities/User";
+import { ExpressRequest, TypedError } from "../utilities/helpers";
 import { getRequestAccessTokenMeta } from "./authentication";
 import { Connection } from "./connectMongo";
-import { log } from "./logger";
-
-export const convertToUserDTO = (user: User) => new UserDTO(user._id, user.userData.organizationId);
+import { toUserDTO } from "./mappings";
 
 export const getUserById = async (userId: string) => {
 
@@ -24,7 +21,7 @@ export const getUserDTOById = async (userId: string) => {
     if (!foundUser)
         return null;
 
-    return convertToUserDTO(foundUser);
+    return toUserDTO(foundUser);
 }
 
 export const getUserActiveTokenById = async (userId: string) => {

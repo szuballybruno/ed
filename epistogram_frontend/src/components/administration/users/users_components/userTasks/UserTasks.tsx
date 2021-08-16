@@ -1,11 +1,10 @@
-import React from 'react';
 import classes from './userTasks.module.scss'
 import Tasks from "../../../../profile/profile_components/me/learning_components/Tasks";
-import { user } from '../../../../../store/types/user';
 import {Add} from "@material-ui/icons";
 import {Fab} from "@material-ui/core";
+import { AdminPageUserView } from '../../../../../models/shared_models/AdminPageUserDTO';
 
-const UserTasks = (props: {user: user, index: number}) => {
+const UserTasks = (props: {user: AdminPageUserView, index: number}) => {
     return (
         <div className={classes.userTasksWrapper}>
             <Tasks tasksArray={props.user.tasks} />

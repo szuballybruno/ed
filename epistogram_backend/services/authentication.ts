@@ -5,10 +5,11 @@ import jwt from "jsonwebtoken";
 import { TokenMeta } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { globalConfig } from "../server";
-import { ExpressRequest, ExpressResponse, getCookie, respondBadRequest, respondForbidden, respondInternalServerError, respondOk, TypedError } from "../utilities/helpers";
+import { ExpressRequest, ExpressResponse, getCookie, TypedError } from "../utilities/helpers";
 import { removeRefreshToken, setUserActiveRefreshToken } from "./authenticationPersistance";
-import { log, logError, logWarning } from "./logger";
-import { convertToUserDTO, getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById } from "./userService";
+import { log, logError } from "./logger";
+import { toUserDTO } from "./mappings";
+import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById } from "./userService";
 
 // CONSTS
 export const accessTokenCookieName = "accessToken";
@@ -55,7 +56,22 @@ export const getUserDTOByCredentials = async (email: string, password: string) =
     if (!isPasswordCorrect)
         return null;
 
-    return convertToUserDTO(user);
+    return toUserDTO(user);
+}
+
+export const getUserIdFromRequest = (req: ExpressRequest) => {
+
+    // check if there is a refresh token sent in the request 
+    const refreshToken = getCookie(req, "refreshToken")?.value;
+    if (!refreshToken)
+        throw new TypedError("Refresh token not sent.", "bad request");
+
+    // check sent refresh token if invalid by signature or expired
+    const tokenMeta = validateToken(refreshToken, globalConfig.security.jwtSignSecret);
+    if (!tokenMeta)
+        throw new TypedError("Refresh token validation failed.", "forbidden");
+
+    return tokenMeta.userId;
 }
 
 export const renewUserSession = async (req: ExpressRequest, res: ExpressResponse) => {
@@ -180,7 +196,7 @@ const validateToken = (token: string, secret: string) => {
 
 const setAccessTokenCookie = (res: Response, accessToken: string) => {
     res.cookie(accessTokenCookieName, accessToken, {
-        secure: false, //TODO: Write back to secure
+        secure: true,
         httpOnly: true,
         expires: dayjs().add(accessTokenLifespanInS, "seconds").toDate()
     });
@@ -188,7 +204,7 @@ const setAccessTokenCookie = (res: Response, accessToken: string) => {
 
 const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
     res.cookie(refreshTokenCookieName, refreshToken, {
-        secure: false, //TODO: Write back to secure
+        secure: true,
         httpOnly: true,
         expires: dayjs().add(refreshTokenLifespanInS, "seconds").toDate()
     });

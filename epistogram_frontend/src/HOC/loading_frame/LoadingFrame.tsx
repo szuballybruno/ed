@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { LoadingState } from "../../store/application/ApplicationRunningStateInterface";
+import { LoadingStateType } from "../../store/application/ApplicationRunningStateInterface";
 import { FailedComponent, LoadingComponent, NullComponent } from "./loadingComponents/LoadingComponent";
 
 type LoadingFrameProps = {
@@ -7,7 +7,7 @@ type LoadingFrameProps = {
     // loadingComponent: ReactNode,
     // failedComponent: ReactNode,
     children: ReactNode,
-    loadingState: LoadingState
+    loadingState: LoadingStateType
 }
 
 export const LoadingFrame = (props: LoadingFrameProps) => {
@@ -15,8 +15,8 @@ export const LoadingFrame = (props: LoadingFrameProps) => {
     const getLoadingComponent = () => {
         switch (props.loadingState) {
 
-            case "null":
-                return <NullComponent></NullComponent>
+            case "idle":
+                return <LoadingComponent></LoadingComponent>
 
             case "loading":
                 return <LoadingComponent></LoadingComponent>
@@ -24,11 +24,11 @@ export const LoadingFrame = (props: LoadingFrameProps) => {
             case "failed":
                 return <FailedComponent></FailedComponent>
 
-            case "succeeded":
+            case "success":
                 return props.children;
 
             default:
-                return <NullComponent></NullComponent>
+                throw new Error(`Loading state is not reckognised: ${props.loadingState}!`);
         }
     }
 

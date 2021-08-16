@@ -63,6 +63,14 @@ const respondError = (res: ExpressResponse, msg: string, type: ErrorType) => {
     }
 }
 
+export const getAsyncActionHandler = (action: (req: ExpressRequest) => Promise<any>) => {
+
+    return (req: ExpressRequest, res: ExpressResponse) => {
+
+        handleAsyncAction(req, res, action);
+    }
+}
+
 export const handleAsyncAction = (req: ExpressRequest, res: ExpressResponse, action: (req: ExpressRequest) => Promise<any>) => {
 
     action(req)

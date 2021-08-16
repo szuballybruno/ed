@@ -1,13 +1,13 @@
 import React from 'react';
 import classes from './myCourses.module.scss'
 import {useState} from "@hookstate/core";
-import userSideState from "../../../store/user/userSideState";
+import userDetailsState from "../../../store/user/userSideState";
 import CourseTile from "../../universal/atomic/courseTile/CourseTile";
 import AdminDashboardHeader from "../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import {Typography} from "@material-ui/core";
 
 const MyCourses = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
     //TODO: Külön kurzus state-ek
 

@@ -29,3 +29,12 @@ export const httpGetAsync = async (urlEnding: string) => {
 
     return new HTTPResponse(axiosResponse.status, axiosResponse.data);
 }
+
+export const httpDeleteAsync = async (urlEnding: string) => {
+
+    const axiosResponse = await instance.delete(urlEnding, {
+        withCredentials: true
+    });
+
+    return new HTTPResponse(axiosResponse.status, axiosResponse.data);
+}

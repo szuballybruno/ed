@@ -10,11 +10,11 @@ import {CloseTwoTone} from "@material-ui/icons";
 import {useState} from "@hookstate/core";
 import applicationRunningState from "../../store/application/applicationRunningState";
 import {TransitionProps} from "@material-ui/core/transitions";
-import userSideState from "../../store/user/userSideState";
+import userDetailsState from "../../store/user/userSideState";
 
 export const PopupsWrapper = (props: { children: JSX.Element; history?: any }) => {
     const app = useState(applicationRunningState)
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
 
     function SlideTransition(props: TransitionProps) {

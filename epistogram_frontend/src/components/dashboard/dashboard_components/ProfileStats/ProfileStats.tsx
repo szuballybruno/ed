@@ -1,14 +1,14 @@
 import React from 'react';
 import classes from './profileStats.module.scss';
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import {NavLink} from 'react-router-dom';
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import {globalConfig} from "../../../../configuration/config";
 import {Button, Typography} from "@material-ui/core";
 
 const ProfileStats: React.FunctionComponent<any> = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
     return <div className={classes.welcomeWrapper}>
             <div className={classes.avatarWrapper}>

@@ -28,12 +28,12 @@ export const globalConfig = initailizeDotEnvEnvironmentConfig();
 connectToMongoDB().then(() => {
     const expressServer = express();
 
-    const allowAllCorsMiddleware = (req: Request, res: Response, next: NextFunction) => {
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-        next();
-    }
+    // const allowAllCorsMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    //     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    //     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+    //     next();
+    // }
 
     const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
@@ -67,19 +67,17 @@ connectToMongoDB().then(() => {
     });
 
     const setCredentialCORSHearders = (res: Response) => {
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS, DELETE');
-        res.setHeader('Access-Control-Allow-Credentials', "true");
+        // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+        // res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+        // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS, DELETE');
+        // res.setHeader('Access-Control-Allow-Credentials', "true");
     }
 
     //
     // add middlewares
     //
 
-    //  expressServer.use(authMiddleware);
     expressServer.use(corsMiddleware);
-
     expressServer.use(bodyParser.json());
     expressServer.use(fileUpload());
     expressServer.use((req, res, next) => {
@@ -95,26 +93,23 @@ connectToMongoDB().then(() => {
         next();
     })
 
-    expressServer.options('/renew-user-session', respondOk);
     expressServer.get('/renew-user-session', renewUserSessionAction);
-
-    expressServer.options('/log-out-user', respondOk);
     expressServer.post('/log-out-user', logOutUserAction);
-
     expressServer.post('/login-user', logInUserAction);
-    expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
 
-    expressServer.use('/articles', articleRoutes)
-    expressServer.use('/courses', courseRoutes)
-    expressServer.use('/groups', groupsRoutes)
-    expressServer.use('/organizations', organizationRoutes)
-    expressServer.use('/tags', tagsRoutes)
-    expressServer.use('/tasks', tasksRoutes)
-    expressServer.use('/upload', filesRoutes)
-    expressServer.use('/overlays', overlaysRoutes)
-    expressServer.use('/users', usersRoutes);
-    expressServer.use('/videos', videosRoutes);
-    expressServer.use('/votes', generalDataRoutes);
+    // protected 
+    expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
+    expressServer.use('/articles', authMiddleware, articleRoutes)
+    expressServer.use('/courses', authMiddleware, courseRoutes)
+    expressServer.use('/groups', authMiddleware, groupsRoutes)
+    expressServer.use('/organizations', authMiddleware, organizationRoutes)
+    expressServer.use('/tags', authMiddleware, tagsRoutes)
+    expressServer.use('/tasks', authMiddleware, tasksRoutes)
+    expressServer.use('/upload', authMiddleware, filesRoutes)
+    expressServer.use('/overlays', authMiddleware, overlaysRoutes)
+    expressServer.use('/users', authMiddleware, usersRoutes);
+    expressServer.use('/videos', authMiddleware, videosRoutes);
+    expressServer.use('/votes', authMiddleware, generalDataRoutes);
 
     expressServer.use((req, res) => {
         throw new Error(`Route did not match: ${req.url}`);

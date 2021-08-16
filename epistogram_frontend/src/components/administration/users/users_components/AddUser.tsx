@@ -11,7 +11,7 @@ import SingleInput from "../../universal/singleInput/SingleInput";
 import SelectFromArray from "../../universal/selectFromArray/SelectFromArray";
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import {Cookies} from "react-cookie";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import {Redirect, useHistory} from "react-router-dom";
 import {Button} from "@material-ui/core";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
@@ -20,7 +20,7 @@ import {DialogFrame} from "../../../../HOC/dialog_frame/DialogFrame";
 
 const AddUser = () => {
     const admin = useState(adminSideState)
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
     const cookies = new Cookies()
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import classes from "./nmiTwo.module.scss";
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import {Button, Typography} from "@material-ui/core";
 
 const NmiTwo = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
 
     const wrongAnswer = useState({

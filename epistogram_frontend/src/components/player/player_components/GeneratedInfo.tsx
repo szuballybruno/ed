@@ -1,10 +1,10 @@
 import React from "react";
 import classes from "../playerMain.module.scss";
 import {useState} from "@hookstate/core";
-import userSideState from "../../../store/user/userSideState"
+import userDetailsState from "../../../store/user/userSideState"
 
 const GeneratedInfo = () => {
-    const user= useState(userSideState);
+    const user= useState(userDetailsState);
     const timer = () => {
         let hours = user.userData.currentItem.length.get() / 3600,
             minutes = (hours % 1) * 60,

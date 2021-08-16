@@ -18,9 +18,10 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { course } from "../../store/types/course";
 
 const CourseSearch = () => {
-    const cookies = new Cookies();
 
-    const app = useState(applicationRunningState)
+    const app = useState(applicationRunningState);
+    const selectedCourseCategory = app.selectedCourseCategory.get();
+    const cookies = new Cookies();
     const courses = useState([{
         _id: "",
         name: "",
@@ -77,7 +78,7 @@ const CourseSearch = () => {
 
     const setLoadingOnResponse = (response: AxiosResponse) => {
         if (response) {
-            app.loadingIndicator.set("succeeded")
+            app.loadingIndicator.set("success")
         } else {
             app.loadingIndicator.set("failed")
         }
@@ -134,7 +135,7 @@ const CourseSearch = () => {
                     app.selectedCourseCategory.set("")
                     return adat = data.category
                 })
-                app.loadingIndicator.set("succeeded")
+                app.loadingIndicator.set("success")
             } else {
                 app.loadingIndicator.set("failed")
             }
@@ -165,7 +166,7 @@ const CourseSearch = () => {
                             {
                                 courseCategories.get().map((data, index) => {
                                     return <ToggleButton name={"category"}
-                                        className={app.selectedCourseCategory.get() === data ? `${classes.categoriesListItem} ${classes.categoriesListItemSelected}` : `${classes.categoriesListItem}`}
+                                        className={selectedCourseCategory === data ? `${classes.categoriesListItem} ${classes.categoriesListItemSelected}` : `${classes.categoriesListItem}`}
                                         value={data}
                                         onClick={(e) => searchChangeHandler(e.currentTarget.name, e.currentTarget.value)}
                                         key={index}>

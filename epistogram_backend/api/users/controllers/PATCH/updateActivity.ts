@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { ObjectID } from "mongodb";
+import { IdType } from "../../../../models/shared_models/types/sharedTypes";
 import { globalConfig } from "../../../../server";
-import { checkRequest } from "../../../../services/checkRequest";
+import { getUserIdFromRequest } from "../../../../services/authentication";
+// import { checkRequest } from "../../../../services/checkRequest";
 import { Connection } from '../../../../services/connectMongo';
 import { responseReducer } from "../../../../services/responseReducer";
 
@@ -36,47 +38,34 @@ type activity = {
     modifiedPropertyNextValue?: string,
 }
 
-export const updateActivity = (req: Request, res: Response, next: NextFunction) => {
-    checkRequest(req, res, next, ["actionType", "actionTriggererURL", "actionTriggererItemName", "actionTriggererItemLabel", "activityType", "description"])
+const updateActivity = async (activity: activity, userId: IdType) => {
 
-    const authHeader = req.headers.authorization
-    let userData: {
-        email: string
-        userId: string
-    } | undefined
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
-
-        jwt.verify(token, globalConfig.mail.tokenMailSecret, (err, user) => {
-            if (err) {
-                throw new Error("A token ellenőrzése sikertelen")
-            }
-            userData = user as { email: string, userId: string }
-        })
-    }
-
-    const updateActivity = async () => {
-        console.log(req.body)
-        try {
-            await Connection.db.collection("users").updateOne({ "_id": new ObjectID(userData != undefined ? userData.userId : "") }, {
-                $push: {
-                    activities: {
-                        createdAt: Date.now(),
-                        ...req.body as activity
-                    }
+    try {
+        await Connection.db.collection("users").updateOne({ "_id": new ObjectID(userId) }, {
+            $push: {
+                activities: {
+                    createdAt: Date.now(),
+                    activity
                 }
-            })
-        } catch (e) {
-            throw new Error("Shit heppönsz" + e.toString())
-        }
-
-        return responseReducer(200, "Adatfrissítés sikeres")
+            }
+        })
+    } catch (e) {
+        throw new Error("Shit heppönsz" + e.toString()) // "XD" by Bence
     }
 
-    updateActivity().then((r) => {
-        res.status(r.responseStatus).send(r.responseText)
-    }).catch((e) => {
-        res.status(400).send(e.toString())
-    })
+    return responseReducer(200, "Adatfrissítés sikeres")
+}
 
+export const updateActivityAction = (req: Request, res: Response, next: NextFunction) => {
+
+    const userId = getUserIdFromRequest(req);
+    const activity = req.body as activity;
+
+    updateActivity(activity, userId)
+        .then((r) => {
+            res.status(r.responseStatus).send(r.responseText)
+        })
+        .catch((e) => {
+            res.status(400).send(e.toString())
+        });
 };

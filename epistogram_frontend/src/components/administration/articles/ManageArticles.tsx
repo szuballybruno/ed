@@ -1,20 +1,20 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import AdminDashboardHeader from "../universal/adminDashboardHeader/AdminDashboardHeader";
 import AdminDashboardSearch from "../universal/searchBar/AdminDashboardSearch";
 import adminSideState from "../../../store/admin/adminSideState";
 import instance from "../../../services/axiosInstance";
-import {none, useState} from "@hookstate/core";
+import { none, useState } from "@hookstate/core";
 import AdminDashboardSearchItem from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
-import {Route, Switch} from "react-router-dom";
-import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
-import {article} from "../../../store/types/article";
-import {AxiosResponse} from "axios";
-import {AddArticle} from "./articles_components/AddArticle";
-import {globalConfig} from "../../../configuration/config";
+import { Route, Switch } from "react-router-dom";
+import { AdminDashboardWrapper } from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
+import { AdminDashboardList } from "../universal/adminDashboardList/AdminDashboardList";
+import { article } from "../../../store/types/article";
+import { AxiosResponse } from "axios";
+import { AddArticle } from "./articles_components/AddArticle";
+import { globalConfig } from "../../../configuration/config";
 import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
-import {Add} from "@material-ui/icons";
-import {Fab} from "@material-ui/core";
+import { Add } from "@material-ui/icons";
+import { Fab } from "@material-ui/core";
 
 export const ManageArticles: React.FunctionComponent = () => {
     const admin = useState(adminSideState)
@@ -39,46 +39,48 @@ export const ManageArticles: React.FunctionComponent = () => {
         <Switch>
             <Route exact path={'/admin/manage/articles'}>
                 <AdminDashboardWrapper>
-                    <AdminDashboardHeader titleText={""}/>
-                    <AdminDashboardSearch searchChangeHandler={searchChangeHandler} name={"searchData"} title={"Cikkek"}/>
+                    <AdminDashboardHeader titleText={""} />
+                    <AdminDashboardSearch searchChangeHandler={searchChangeHandler} name={"searchData"} title={"Cikkek"} />
                     <AdminDashboardList>
                         {admin.articles.get().map((article, index) => {
-                             return <AdminDashboardSearchItem title={article.articleTitle}
-                                                              thumbnailUrl={article.articleCoverImage}
-                                                              key={article._id}
-                                                       chips={[
-                                                           {label: article.articleWatchCount || "0", icon: "read"}]}
-                                                       actions={[
-                                                           {
-                                                               selectedComponent: "editCourse",
-                                                               icon: "edit",
-                                                               onClick: function () {
+                            return <AdminDashboardSearchItem
+                                title={article.articleTitle}
+                                thumbnailUrl={article.articleCoverImage}
+                                key={article._id}
+                                chips={[
+                                    { label: article.articleWatchCount || "0", icon: "read" }]}
+                                actions={[
+                                    {
+                                        selectedComponent: "editCourse",
+                                        icon: "edit",
+                                        onClick: function () {
 
-                                                               }
-                                                           }, {
-                                                               selectedComponent: "userStatistics",
-                                                               icon: "statistics",
-                                                               onClick: () => {
+                                        }
+                                    }, {
+                                        selectedComponent: "userStatistics",
+                                        icon: "statistics",
+                                        onClick: () => {
 
-                                                               }
-                                                           }, {
-                                                               icon: "delete",
-                                                               onClick: () => {
-                                                                   instance.delete(`${globalConfig.backendUrl}articles/deletearticle?articleId=${article._id}`).then(() => {
-                                                                       return admin.articles[index].set(none)
-                                                                   }).catch(e => console.error(e.toString()))
-                                                               }
-                                                           },]
-                                                       }
-                                                       userActionComponents={{
-                                                           editCourse: <div>asd</div>,
-                                                           videoStatistics: <UserStatistics />
-                                                       }}/>})}
+                                        }
+                                    }, {
+                                        icon: "delete",
+                                        onClick: () => {
+                                            instance.delete(`${globalConfig.backendUrl}articles/deletearticle?articleId=${article._id}`).then(() => {
+                                                return admin.articles[index].set(none)
+                                            }).catch(e => console.error(e.toString()))
+                                        }
+                                    },]
+                                }
+                                userActionComponents={{
+                                    editCourse: <div>asd</div>,
+                                    videoStatistics: <UserStatistics />
+                                }} />
+                        })}
 
                     </AdminDashboardList>
                     <Fab color="primary"
-                         aria-label="add"
-                         style={{position: "absolute", bottom: 45, right: 45}}>
+                        aria-label="add"
+                        style={{ position: "absolute", bottom: 45, right: 45 }}>
                         <Add />
                     </Fab>
                 </AdminDashboardWrapper>
