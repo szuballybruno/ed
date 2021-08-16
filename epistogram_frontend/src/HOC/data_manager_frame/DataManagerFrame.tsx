@@ -6,6 +6,7 @@ import { AuthenticationState, useRenewUserSessionPooling, useUserFetching } from
 import { useGetUserDetails } from "../../services/dataService";
 //import {hotjar} from "react-hotjar";
 import setTheme from "../../services/setTheme";
+import applicationRunningState from "../../store/application/applicationRunningState";
 import userDetailsState from "../../store/user/userSideState";
 
 export const CurrentUserContext = createContext<UserDTO | null>(null);
@@ -31,10 +32,12 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     const userId = currentUser?.userId ?? null;
 
     // get global data
-    const { userDetails, loadingState } = useGetUserDetails(userId);
+    const { userDetails, status } = useGetUserDetails(userId);
 
     // handle global data respones and loading states
-    //applicationState.loadingIndicator.set(loadingState);
+    useState(applicationRunningState).loadingIndicator.set(status);
+
+    console.log("asd" + status);
 
     const userDetailsStateHS = useState(userDetailsState);
     if (userDetails)
