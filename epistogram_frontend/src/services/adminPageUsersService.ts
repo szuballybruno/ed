@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
-import { UserInfo } from "../HOC/data_manager_frame/DataManagerFrame";
 import { AdminPageUserView } from "../models/shared_models/AdminPageUserDTO";
+import { UserDTO } from "../models/shared_models/UserDTO";
 import { LoadingStateType } from "../store/application/ApplicationRunningStateInterface";
 import { httpGetAsync } from "./httpClient";
 
-export const useUserListQuery = (user: UserInfo | null, searchText: string) => {
+export const useUserListQuery = (user: UserDTO | null, searchText: string) => {
 
     const userId = user?.userId;
     const organizationId = user?.organizationId;

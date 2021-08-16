@@ -1,9 +1,10 @@
 import { AxiosRequestConfig } from "axios";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
+import { IdType } from "../models/shared_models/types/sharedTypes";
 import instance from "../services/axiosInstance";
 import { LoadingStateType } from "../store/application/ApplicationRunningStateInterface";
-import { UserSideStateIF } from "../store/user/UserSideStateIF";
+import { IUserDetails } from "../store/user/UserSideStateIF";
 
 export const useUserId = () => {
 
@@ -14,11 +15,11 @@ export const useUserId = () => {
 }
 
 //onLoadingStateChanged: (loadingState: LoadingState) => void
-export const useGetGlobalData = (userId: number | null) => {
+export const useGetUserDetails = (userId: IdType | null) => {
 
     //STATES
     var loadingState = "loading" as LoadingStateType;
-    var resultData = null as UserSideStateIF | null;
+    var userDetails = null as IUserDetails | null;
 
     //LOADING INDICATOR METHODS
     const setLoadingOnRequest = (config: AxiosRequestConfig) => {
@@ -36,7 +37,7 @@ export const useGetGlobalData = (userId: number | null) => {
         //TODO: Normális error handling
         instance.get(`users/${userId}`).then((res) => {
             if (res.data) {
-                resultData = (res.data)
+                userDetails = (res.data)
                 loadingState = "success"
             } else {
                 loadingState = "failed"
@@ -52,5 +53,5 @@ export const useGetGlobalData = (userId: number | null) => {
         // eslint-disable-next-line
     }, [userId])
 
-    return { loadingState, resultData };
+    return { loadingState, userDetails };
 }

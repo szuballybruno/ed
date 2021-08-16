@@ -11,13 +11,13 @@ import instance from "../../../../../services/axiosInstance";
 import {Redirect, useHistory} from "react-router-dom";
 import {useState} from "@hookstate/core";
 import adminSideState from "../../../../../store/admin/adminSideState";
-import userSideState from "../../../../../store/user/userSideState";
+import userDetailsState from "../../../../../store/user/userSideState";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
 import {Cookies} from "react-cookie";
 
 export const AddItem = () => {
     const admin = useState(adminSideState)
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
 
     const history = useHistory()

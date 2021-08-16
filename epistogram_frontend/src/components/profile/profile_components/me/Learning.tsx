@@ -4,14 +4,14 @@ import AdminDashboardHeader from "../../../administration/universal/adminDashboa
 import Achievements from "./learning_components/Achievements";
 import Tasks from "./learning_components/Tasks";
 import LearningStatistics from "./learning_components/LearningStatistics";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import {useState} from "@hookstate/core";
 import {LearningRadarChart} from "./learning_components/LearningRadarChart";
 
 // Notes module commented out for demos
 
 const Learning = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     return <div className={classes.meWrapper}>
         <AdminDashboardHeader titleText={"Feladataim"} />
         <Tasks tasksArray={user.userData.tasks.get()} />

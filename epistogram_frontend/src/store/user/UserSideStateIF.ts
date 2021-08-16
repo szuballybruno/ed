@@ -1,9 +1,7 @@
 import { userData } from "../types/userData";
 import { vote } from "../types/vote";
 
-
-
-export interface UserSideStateIF {
+export interface IUserDetails {
     // Minden userrel kapcsolatos adat, amire a UI-ban szükség lehet
     userData: userData
     //userStatistics: userStatistics

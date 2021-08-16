@@ -7,7 +7,7 @@ import { CurrentUserContext } from '../../../HOC/data_manager_frame/DataManagerF
 import { LoadingFrame } from "../../../HOC/loading_frame/LoadingFrame";
 import { IdType } from '../../../models/shared_models/types/sharedTypes';
 import { useUserListQuery } from "../../../services/adminPageUsersService";
-import { httpDeleteAsync, httpPostAsync } from "../../../services/httpClient";
+import { httpDeleteAsync } from "../../../services/httpClient";
 import { AdminDashboardList } from "../universal/adminDashboardList/AdminDashboardList";
 import AdminDashboardSearchItem, { DashboardSearchItemAction } from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
 import { AdminDashboardWrapper } from "../universal/adminDashboardWrapper/AdminDashboardWrapper";

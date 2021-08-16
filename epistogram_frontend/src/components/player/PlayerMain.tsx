@@ -20,7 +20,7 @@ import { FailedComponent, LoadingComponent, NullComponent } from "../../HOC/load
 import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
 import { useState } from "@hookstate/core";
 import { useParams } from "react-router";
-import userSideState from "../../store/user/userSideState";
+import userDetailsState from "../../store/user/userSideState";
 import applicationRunningState from "../../store/application/applicationRunningState";
 
 import instance from "../../services/axiosInstance";
@@ -30,7 +30,7 @@ import { useHistory } from "react-router-dom";
 
 const PlayerMain = (props: { history: any }) => {
     console.log("[PlayerMain] Started...")
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
     const cookies = new Cookies();
 

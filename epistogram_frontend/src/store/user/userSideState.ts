@@ -1,8 +1,8 @@
 import { createState, State } from "@hookstate/core";
-import { UserTaskDTO } from "../../models/UserTaskDTO";
-import { UserSideStateIF } from "./UserSideStateIF";
+import { UserTaskDTO } from "../../models/shared_models/UserTaskDTO";
+import { IUserDetails } from "./UserSideStateIF";
 
-const userSideState: State<UserSideStateIF> = createState<UserSideStateIF>({
+const userDetailsState: State<IUserDetails> = createState<IUserDetails>({
 
     // Ez a szerverről betöltött userData, amely a megjelenítendő adatokért felelős.
 
@@ -265,4 +265,4 @@ const userSideState: State<UserSideStateIF> = createState<UserSideStateIF>({
     }
 })
 
-export default userSideState
+export default userDetailsState

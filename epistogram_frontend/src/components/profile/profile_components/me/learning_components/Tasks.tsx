@@ -12,7 +12,7 @@ import {
     Theme,
     withStyles
 } from "@material-ui/core";
-import { UserTaskDTO } from '../../../../../models/UserTaskDTO';
+import { UserTaskDTO } from '../../../../../models/shared_models/UserTaskDTO';
 
 // Further styling of MUI TableCell component
 

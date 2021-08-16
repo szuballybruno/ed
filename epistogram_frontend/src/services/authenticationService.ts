@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useQuery } from 'react-query';
-import { RefetchUserFunctionContext, UserInfo } from '../HOC/data_manager_frame/DataManagerFrame';
+import { RefetchUserFunctionContext } from '../HOC/data_manager_frame/DataManagerFrame';
+import { UserDTO } from '../models/shared_models/UserDTO';
 import { httpGetAsync, httpPostAsync, HTTPResponse } from './httpClient';
 
 const userFetchingIntervalInS = 15;
@@ -36,9 +37,12 @@ export const useUserFetching = (nonAutomatic?: boolean) => {
 
     const currentUser = (isSuccess
         ? data
-            ? new UserInfo(data?.userId, data?.organizationId)
+            ? {
+                userId: data?.userId,
+                organizationId: data?.organizationId
+            } as UserDTO
             : null
-        : null) as UserInfo | null;
+        : null) as UserDTO | null;
 
     const authState = new AuthenticationState(isLoading || isFetching, !!currentUser);
 

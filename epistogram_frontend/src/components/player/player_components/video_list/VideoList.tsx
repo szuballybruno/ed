@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './videoList.module.scss';
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import instance from "../../../../services/axiosInstance";
 import {Cookies} from "react-cookie";
 import ListItem from "../../../universal/atomic/listItem/ListItem";
@@ -15,7 +15,7 @@ import {useHistory} from "react-router-dom";
 import {globalConfig} from "../../../../configuration/config";
 
 const VideoList = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
     const history = useHistory()
 

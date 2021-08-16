@@ -3,7 +3,7 @@ import classes from "./player.module.scss";
 import ReactPlayer from "react-player";
 import {useState} from "@hookstate/core";
 import Overlay from "./overlay/Overlay";
-import userSideState from "../../../store/user/userSideState";
+import userDetailsState from "../../../store/user/userSideState";
 import applicationRunningState from "../../../store/application/applicationRunningState";
 import Exam from "./exam/Exam";
 import screenfull from "screenfull";
@@ -12,7 +12,7 @@ import {ListItem, Slider, Switch, Typography} from "@material-ui/core";
 
 const Player = (props: {id: string}) => {
     console.log("[Player] Started...")
-    const user = useState(userSideState);
+    const user = useState(userDetailsState);
     const app = useState(applicationRunningState)
     const playerContainerRef = useRef(null);
     const playerRef = useRef<ReactPlayer>(null);

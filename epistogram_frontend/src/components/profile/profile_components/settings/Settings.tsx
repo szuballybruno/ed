@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './settings.module.scss'
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import AdminDashboardHeader from "../../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import SettingsItem from "./settings_components/SettingsItem";
@@ -11,7 +11,7 @@ import instance from "../../../../services/axiosInstance";
 
 
 const Settings = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const cookies = new Cookies()
 
     const dataSheetData = [{

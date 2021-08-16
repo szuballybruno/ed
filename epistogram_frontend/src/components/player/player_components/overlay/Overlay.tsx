@@ -3,12 +3,12 @@ import {useState} from "@hookstate/core";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import NmiOne from "./NmiOne";
 import NmiTwo from './NmiTwo';
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import classes from "./overlay.module.scss"
 import {updateActivity} from "../../../../services/updateActivity";
 
 const Overlay = (props: { children: React.ReactNode; currentSeekSliderValue: number }) => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
 
 

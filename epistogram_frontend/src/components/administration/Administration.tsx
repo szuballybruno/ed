@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './administration.module.scss'
-import userSideState from "../../store/user/userSideState";
+import userDetailsState from "../../store/user/userSideState";
 import { useState } from "@hookstate/core";
 import { Users } from "./users/Users";
 import { Redirect, Route, Switch } from "react-router-dom";
@@ -25,7 +25,7 @@ import { AdminAddHeader } from "./universal/adminAddHeader/AdminAddHeader";
 
 const Administration = (props: { match: { url: string; } }) => {
 
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
     return <MainWrapper>
         <Navbar showHighlightedButton={true} menuItems={menuItems["user"]} showLastButton={true} showNavigation={true} />

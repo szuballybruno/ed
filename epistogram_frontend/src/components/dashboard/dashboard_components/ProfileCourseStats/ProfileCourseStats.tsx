@@ -1,11 +1,11 @@
 import React from 'react';
 import classes from "./profileCourseStats.module.scss";
 import {useState} from "@hookstate/core";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import {globalConfig} from "../../../../configuration/config";
 
 const ProfileCourseStats = (props: { style?: React.CSSProperties }) => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
     const ProfileCourseStatsItem = (props: {dataCount: number, dataString: string, imageSrc: string}) => {
         return <div className={classes.firstRowStatsItem}>

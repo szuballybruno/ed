@@ -16,7 +16,7 @@ import { DashBoardLeftBorder, DashBoardLeftSpacer, DashBoardRightSpacer } from "
 import CurrentCourseStats from "./dashboard_components/CurrentCourseStats/CurrentCourse";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/mainPanels/MainPanels";
 import { State, useState } from "@hookstate/core";
-import userSideState from "../../store/user/userSideState";
+import userDetailsState from "../../store/user/userSideState";
 import { item } from "../../store/types/item";
 import ListItem from "../universal/atomic/listItem/ListItem";
 import { Divider, Grid } from "@material-ui/core";
@@ -26,7 +26,7 @@ import applicationRunningState from '../../store/application/applicationRunningS
 
 const UserDashBoard = () => {
 
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const isThereCurrentCourse: State<item[]> | null = user.userData.currentCourse.items.ornull
     const loadingState = useState(applicationRunningState).loadingIndicator.get();
 

@@ -1,11 +1,12 @@
 import { IdType } from '../models/shared_models/types/sharedTypes';
 import { useCollection } from './persistance';
 import { AdminPageUserView } from '../models/shared_models/AdminPageUserDTO';
+import { User } from '../models/entities/User';
 
 export const getAdminPageUsersList = async (userId: IdType, searchText: string) => {
 
     const { getItemById, collection } = await useCollection("users");
-    const user = await getItemById(userId);
+    const user = await getItemById(userId) as User;
 
     const aggregateAllUsers = async () => {
         const allUsers = await collection.aggregate([

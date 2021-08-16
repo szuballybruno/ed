@@ -2,10 +2,10 @@ import React from 'react';
 import CourseTile from '../../../universal/atomic/courseTile/CourseTile';
 import classes from "./recommendedCourses.module.scss";
 import {useState} from "@hookstate/core"
-import userSideState from '../../../../store/user/userSideState';
+import userDetailsState from '../../../../store/user/userSideState';
 
 const RecommendedCourses = () => {
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
 
     return (
         <div className={classes.recommendedCoursesWrapper}>

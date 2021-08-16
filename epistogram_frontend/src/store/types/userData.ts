@@ -1,4 +1,4 @@
-import { UserTaskDTO } from "../../models/UserTaskDTO";
+import { UserTaskDTO } from "../../models/shared_models/UserTaskDTO";
 import { course } from "./course";
 import { item } from "./item";
 

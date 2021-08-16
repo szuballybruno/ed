@@ -1,4 +1,4 @@
-import { UserTaskDTO } from "../UserTaskDTO";
+import { UserTaskDTO } from "./UserTaskDTO";
 
 export type AdminPageUserView = {
     _id: string;

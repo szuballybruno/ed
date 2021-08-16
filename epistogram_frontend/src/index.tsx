@@ -29,11 +29,11 @@ const MainSwitch = () => {
 
         {/* unprotected paths  */}
         <Route path="/login" component={withRouter(LoginScreen)} />
-        <Route path="/watch/:courseId/:id" component={withRouter(PlayerMain)} />
         <Route path="/signup" component={withRouter(Signup)} />
-        <Route path="/admin" component={withRouter(Administration)} />
 
         {/* protected paths */}
+        <Route path="/watch/:courseId/:id" component={withRouter(PlayerMain)} />
+        <Route path="/admin" component={withRouter(Administration)} />
         <ProtectedRoute path="/kezdolap" render={() => <UserDashBoard />} />
         <ProtectedRoute path="/kurzusok" render={() => <CourseSearch />} />
         <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />

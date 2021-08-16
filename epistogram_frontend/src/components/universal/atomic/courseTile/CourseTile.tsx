@@ -10,7 +10,7 @@ import { NavLink } from "react-router-dom";
 import instance from "../../../../services/axiosInstance";
 import { Cookies } from "react-cookie";
 import { useState } from "@hookstate/core";
-import userSideState from "../../../../store/user/userSideState";
+import userDetailsState from "../../../../store/user/userSideState";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import { course } from "../../../../store/types/course";
 import { Button } from "@material-ui/core";
@@ -18,7 +18,7 @@ import Navbar from "../../navigation/navbar/AllNavbar";
 
 const CourseTile = (props: { item: course, itemIndex: number, className?: string }) => {
     const app = useState(applicationRunningState)
-    const user = useState(userSideState)
+    const user = useState(userDetailsState)
     const anim = useSpring({ opacity: 1, from: { opacity: 0 } })
     const cookies = new Cookies();
     const updateCourse = () => {
