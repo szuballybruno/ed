@@ -85,7 +85,7 @@ export const Users = () => {
                             {users
                                 .map((user, index) => {
                                     return <AdminDashboardSearchItem
-                                        user={user}
+                                        additionalData={user}
                                         title={`${user.lastName} ${user.firstName}`}
                                         profileImageUrl={getAvatarUrl(user._id)}
                                         chips={[

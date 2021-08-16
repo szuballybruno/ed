@@ -28,11 +28,11 @@ export type DashboardSearchItemAction = {
     to?: string,
     icon: string,
     selectedComponent?: string,
-    onClick: (user: AdminPageUserView) => void
+    onClick: (additionalData: any) => void
 }
 
 const AdminDashboardSearchItem = (props: {
-    user: AdminPageUserView,
+    additionalData?: any,
     title: string,
     profileImageUrl?: string,
     thumbnailUrl?: string,
@@ -124,7 +124,7 @@ const AdminDashboardSearchItem = (props: {
 
                                 }
                                 currentComponent.set(action.selectedComponent || "")
-                                action.onClick(props.user)
+                                action.onClick(props.additionalData)
                             }}>
                             {actionIcons[action.icon]}
                         </SearchItemButton>

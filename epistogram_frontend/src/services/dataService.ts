@@ -37,7 +37,7 @@ export const useGetGlobalData = (userId: number | null) => {
         instance.get(`users/${userId}`).then((res) => {
             if (res.data) {
                 resultData = (res.data)
-                loadingState = "succeeded"
+                loadingState = "success"
             } else {
                 loadingState = "failed"
             }

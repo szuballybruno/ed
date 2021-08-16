@@ -1,10 +1,4 @@
-export type AdminPageUserTaskView = {
-    addedDate: number;
-    name: string;
-    addedBy: string;
-    due: number;
-    status: string;
-}
+import { UserTaskDTO } from "../UserTaskDTO";
 
 export type AdminPageUserView = {
     _id: string;
@@ -17,5 +11,5 @@ export type AdminPageUserView = {
     organizationName: string;
     innerRole: string;
     name: string;
-    tasks: AdminPageUserTaskView[];
+    tasks: UserTaskDTO[];
 }

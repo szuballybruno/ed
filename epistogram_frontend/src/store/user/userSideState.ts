@@ -1,5 +1,6 @@
-import {createState, State} from "@hookstate/core";
-import {UserSideStateIF} from "./UserSideStateIF";
+import { createState, State } from "@hookstate/core";
+import { UserTaskDTO } from "../../models/UserTaskDTO";
+import { UserSideStateIF } from "./UserSideStateIF";
 
 const userSideState: State<UserSideStateIF> = createState<UserSideStateIF>({
 
@@ -243,7 +244,7 @@ const userSideState: State<UserSideStateIF> = createState<UserSideStateIF>({
             addedBy: "",
             status: "",
             due: ""
-        }],
+        } as UserTaskDTO],
         username: "",
         userDescription: "",
         watchedVideosCount: 0

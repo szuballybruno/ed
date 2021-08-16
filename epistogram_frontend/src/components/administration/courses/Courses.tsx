@@ -30,7 +30,7 @@ const Courses = () => {
         instance.get("courses?userId="+cookies.get("userId")).then((res) => {
             if (res.data) {
                 admin.courses.set(res.data)
-                app.loadingIndicator.set("succeeded")
+                app.loadingIndicator.set("success")
             } else {
                 app.loadingIndicator.set("failed")
             }
@@ -46,7 +46,7 @@ const Courses = () => {
         instance.get("courses?userId="+cookies.get("userId")+"&searchData="+value).then((res) => {
             if (res.data) {
                 admin.courses.set(res.data as course[])
-                app.loadingIndicator.set("succeeded")
+                app.loadingIndicator.set("success")
             } else {
                 app.loadingIndicator.set("failed")
             }

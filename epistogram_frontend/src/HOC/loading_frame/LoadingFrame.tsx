@@ -15,17 +15,20 @@ export const LoadingFrame = (props: LoadingFrameProps) => {
     const getLoadingComponent = () => {
         switch (props.loadingState) {
 
+            case "idle":
+                return <LoadingComponent></LoadingComponent>
+
             case "loading":
                 return <LoadingComponent></LoadingComponent>
 
             case "failed":
                 return <FailedComponent></FailedComponent>
 
-            case "succeeded":
+            case "success":
                 return props.children;
 
             default:
-                throw new Error("!!");
+                throw new Error(`Loading state is not reckognised: ${props.loadingState}!`);
         }
     }
 

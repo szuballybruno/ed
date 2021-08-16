@@ -1,5 +1,6 @@
-import {course} from "./course";
-import {item} from "./item";
+import { UserTaskDTO } from "../../models/UserTaskDTO";
+import { course } from "./course";
+import { item } from "./item";
 
 
 export type userData = {
@@ -44,12 +45,7 @@ export type userData = {
         newReportAvailable: boolean
         helpRequest: boolean
     },
-    tasks: {
-        name: string,
-        addedBy: string,
-        status: string,
-        due: string
-    }[],
+    tasks: UserTaskDTO[],
     username: string,
     userDescription: string,
     watchedVideosCount: number

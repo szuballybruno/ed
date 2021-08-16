@@ -78,7 +78,7 @@ const CourseSearch = () => {
 
     const setLoadingOnResponse = (response: AxiosResponse) => {
         if (response) {
-            app.loadingIndicator.set("succeeded")
+            app.loadingIndicator.set("success")
         } else {
             app.loadingIndicator.set("failed")
         }
@@ -135,7 +135,7 @@ const CourseSearch = () => {
                     app.selectedCourseCategory.set("")
                     return adat = data.category
                 })
-                app.loadingIndicator.set("succeeded")
+                app.loadingIndicator.set("success")
             } else {
                 app.loadingIndicator.set("failed")
             }

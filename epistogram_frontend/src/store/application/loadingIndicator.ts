@@ -1,7 +1,6 @@
 import {createState} from "@hookstate/core";
+import { LoadingStateType } from "./ApplicationRunningStateInterface";
 
-type loading = "null" | "loading" | "failed" | "succeeded"
-
-const loadingIndicator = createState<loading>("null")
+const loadingIndicator = createState<LoadingStateType>("loading")
 
 export default loadingIndicator

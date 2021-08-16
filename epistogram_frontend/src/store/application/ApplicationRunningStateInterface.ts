@@ -1,5 +1,5 @@
 
-export type LoadingStateType = "loading" | "failed" | "succeeded";
+export type LoadingStateType = "idle" | "loading" | "failed" | "success";
 
 export interface ApplicationRunningStateInterface {
     //GLOBAL

@@ -12,7 +12,7 @@ import {
     Theme,
     withStyles
 } from "@material-ui/core";
-import { AdminPageUserTaskView } from '../../../../../models/shared_models/AdminPageUserDTO';
+import { UserTaskDTO } from '../../../../../models/UserTaskDTO';
 
 // Further styling of MUI TableCell component
 
@@ -58,7 +58,7 @@ const statuses = [{
 }]
 
 const Tasks = (props: {
-    tasksArray?: AdminPageUserTaskView[]
+    tasksArray?: UserTaskDTO[]
 }) => {
     return (
         <div className={classes.tasksWrapper}>
