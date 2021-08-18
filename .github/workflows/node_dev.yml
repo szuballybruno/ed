@@ -27,17 +27,21 @@ jobs:
         cache: 'npm'
   
     # BUILD BACKEND
-    - run: npm install
+    - name: Installing dependencies for backend
+      run: npm install
       working-directory: ./epistogram_backend
       
-    - run: npm run build --if-present
+    - name: Building backend
+      run: npm run build --if-present
       working-directory: ./epistogram_backend
       
     # BUILD FRONTEND
-    - run: npm install
+    - name: Installing dependencies for frontend
+      run: npm install
       working-directory: ./epistogram_frontend
       
-    - run: npm run build --if-present
+    - name: Building frontend
+      run: CI=false npm run build --if-present
       working-directory: ./epistogram_frontend
       
 #    - run: npm test
