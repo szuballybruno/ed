@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: self-hosted
 
     strategy:
@@ -26,6 +25,19 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+  
+    # BUILD BACKEND
     - run: npm install
+      working-directory: ./epistogram_backend
+      
     - run: npm run build --if-present
+      working-directory: ./epistogram_backend
+      
+    # BUILD FRONTEND
+    - run: npm install
+      working-directory: ./epistogram_frontend
+      
+    - run: npm run build --if-present
+      working-directory: ./epistogram_frontend
+      
 #    - run: npm test
