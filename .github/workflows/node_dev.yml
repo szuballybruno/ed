@@ -25,6 +25,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        ref: dev
   
     # BUILD BACKEND
     - name: Installing dependencies for backend
