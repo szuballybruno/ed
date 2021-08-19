@@ -57,7 +57,12 @@ jobs:
       working-directory: ./dev_build/epistogram_backend
 
     # START APPLICATIONS 
+    - name: Downloading node_modules to hosting location
+      run: npm install
+      working-directory: /var/lib/apps/epistogram_backend@development
+
     - name: Starting applications
       run: pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
-# pm2 stop --silent epistogram_backend_dev
+
+      # pm2 stop --silent epistogram_backend_dev
 #         pm2 delete --silent epistogram_backend_dev
