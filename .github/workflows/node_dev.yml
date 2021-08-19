@@ -15,7 +15,6 @@ jobs:
   checkout_and_build:
     name: Checkout and build 'dev'
     runs-on: self-hosted
-
     strategy:
       matrix:
         node-version: [14.x]
@@ -55,6 +54,9 @@ jobs:
   deploy:
     name: Deploy 'dev' application 
     runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [14.x]
 
     # DEPLOY BACKEND
     - name: Deploying backend to hosted location
@@ -74,6 +76,9 @@ jobs:
   run:
     name: Run 'dev' application 
     runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [14.x]
 
     - name: Starting backend
       run: |
