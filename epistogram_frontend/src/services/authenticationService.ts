@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { RefetchUserFunctionContext } from '../HOC/data_manager_frame/DataManagerFrame';
 import { UserDTO } from '../models/shared_models/UserDTO';
@@ -24,16 +24,28 @@ export class AuthenticationState {
 
 export const useUserFetching = (nonAutomatic?: boolean) => {
 
-    const { data, refetch: refetchUser, isLoading, isFetching, isSuccess } = useQuery(
+    const [isBgFetchingEnabled, setIsBgFetchingEnabled] = useState(false);
+
+    const bgFetchingEnabled = !nonAutomatic && isBgFetchingEnabled;
+
+    console.log("Background current user fetching set to: " + bgFetchingEnabled);
+
+    const queryResult = useQuery(
         'getCurrentUser',
         async () => (await httpGetAsync("get-current-user")).data, {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: nonAutomatic ? false : userFetchingIntervalInS * 1000,
-        refetchIntervalInBackground: true,
+        refetchInterval: bgFetchingEnabled ? userFetchingIntervalInS * 1000 : false,
         enabled: true,
-        notifyOnChangeProps: ['data', 'isSuccess', 'isLoading']
+        notifyOnChangeProps: ['data', 'isSuccess', 'isError']
     });
+
+    const { data, refetch: refetchUser, isLoading, isFetching, isSuccess } = queryResult;
+
+    useEffect(() => {
+
+        setIsBgFetchingEnabled(isSuccess);
+    }, [isSuccess]);
 
     const currentUser = (isSuccess
         ? data

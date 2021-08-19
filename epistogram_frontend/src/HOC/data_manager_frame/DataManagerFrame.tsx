@@ -22,8 +22,6 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     //SET THEME
     setTheme(globalConfig.currentTheme);
 
-    console.log(backendUrl);
-
     // fetch current user 
     const { currentUser, refetchUser, authState } = useUserFetching();
     console.log("Authentication state: " + authState.asString());
