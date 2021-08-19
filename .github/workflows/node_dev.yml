@@ -20,10 +20,6 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      
-      - name: Set env variables 
-        run: |
-          export TEST_VAR=TEST_VAL
 
       # INITIALIZE
       - name: Checkout 'dev' branch
