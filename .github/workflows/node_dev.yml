@@ -76,17 +76,7 @@ jobs:
       # RUN BACKEND APPLICATION  
       - run: pm2 delete epistogram_backend_dev
         continue-on-error: true
+        working-directory: /var/lib/apps/epistogram_backend@development
       
       - run: pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
-        # - run: pm2 delete epistogram_backend_dev 2> /dev/null
-        # - run: pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
-      #!/bin/bash
-        # - run: |
-        #     pm2 describe epistogram_backend_dev > /dev/null
-        #     RUNNING=$?
-
-        #     if [ "${RUNNING}" -ne 0 ]; then
-        #       pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
-        #     else
-        #       pm2 restart epistogram_backend_dev
-        #     fi;
+        working-directory: /var/lib/apps/epistogram_backend@development
