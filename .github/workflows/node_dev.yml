@@ -76,5 +76,5 @@ jobs:
       # RUN BACKEND APPLICATION  
       # - run: pm2 delete --silent epistogram_backend_dev
       # - run: pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
-        - run: pm2 delete /var/lib/apps/epistogram_backend@development/main.js 2> /dev/null
+        - run: pm2 delete epistogram_backend_dev 2> /dev/null
         - run: pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
