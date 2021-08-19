@@ -28,7 +28,6 @@ jobs:
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
-      working-directory: ./epistogram_dev/epistogram_backend
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
