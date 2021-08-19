@@ -60,6 +60,10 @@ jobs:
         run: npm install
         working-directory: /var/lib/apps/epistogram_backend@development
 
+      # - name: Deploying '.env.development' file
+      #   run: 
+      #   working-directory: ./dev_build/epistogram_backend
+
       # DEPLOY FRONTEND
       - name: Deploying frontend to hosted location
         run: cp -r ./build/. /var/lib/apps/epistogram@development
