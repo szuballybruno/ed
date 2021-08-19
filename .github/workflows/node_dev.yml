@@ -31,6 +31,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+      working-directory: ./dev_build/epistogram_backend
   
     # BUILD BACKEND
     - name: Installing dependencies for backend
