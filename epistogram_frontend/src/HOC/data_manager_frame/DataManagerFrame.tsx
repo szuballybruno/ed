@@ -37,8 +37,6 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     // handle global data respones and loading states
     useState(applicationRunningState).loadingIndicator.set(status);
 
-    console.log("asd" + status);
-
     const userDetailsStateHS = useState(userDetailsState);
     if (userDetails)
         userDetailsStateHS.set(userDetails);

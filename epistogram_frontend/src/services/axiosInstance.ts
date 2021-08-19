@@ -1,9 +1,9 @@
 import axios from 'axios';
-import {globalConfig} from '../configuration/config'
+import { backendUrl } from '../Environemnt';
 
 const instance = axios.create({
 // .. where we make our configurations
-    baseURL: globalConfig.backendUrl
+    baseURL: backendUrl
 });
 
 instance.defaults.withCredentials = true
