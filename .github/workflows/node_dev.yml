@@ -53,6 +53,9 @@ jobs:
 
   # DEPLOY APPLICATION FILES TO THEIR HOSTED FOLDERS
   deploy:
+    name: Deploy 'dev' application 
+    runs-on: self-hosted
+
     # DEPLOY BACKEND
     - name: Deploying backend to hosted location
       run: cp -r ./dist/. /var/lib/apps/epistogram_backend@development
@@ -69,6 +72,9 @@ jobs:
 
   # RUN APPLICATION  
   run:
+    name: Run 'dev' application 
+    runs-on: self-hosted
+
     - name: Starting backend
       run: |
         pm2 stop --silent epistogram_backend_dev
