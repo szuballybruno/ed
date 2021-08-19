@@ -10,8 +10,10 @@ on:
     branches: [ dev ]
 
 jobs:
-  build:
-    name: Deploy and build 'dev'
+
+  # CHECKOUT REPOSITORY AND BUILD APPLICATIONS
+  checkout_and_build:
+    name: Checkout and build 'dev'
     runs-on: self-hosted
 
     strategy:
@@ -30,8 +32,6 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-      #   cache: 'npm'
-      # working-directory: ./dev_build/epistogram_backend
   
     # BUILD BACKEND
     - name: Installing dependencies for backend
@@ -43,28 +43,34 @@ jobs:
       working-directory: ./dev_build/epistogram_backend
       
     # BUILD FRONTEND
-    # - name: Installing dependencies for frontend
-    #   run: npm install
-    #   working-directory: ./dev_build/epistogram_frontend
+    - name: Installing dependencies for frontend
+      run: npm install
+      working-directory: ./dev_build/epistogram_frontend
       
-    # - name: Building frontend
-    #   run: CI=false npm run build --if-present
-    #   working-directory: ./dev_build/epistogram_frontend
+    - name: Building frontend
+      run: CI=false npm run build --if-present
+      working-directory: ./dev_build/epistogram_frontend
 
-    # DEPLOY TO HOSTED LOCATION
+  # DEPLOY APPLICATION FILES TO THEIR HOSTED FOLDERS
+  deploy:
+    # DEPLOY BACKEND
     - name: Deploying backend to hosted location
       run: cp -r ./dist/. /var/lib/apps/epistogram_backend@development
       working-directory: ./dev_build/epistogram_backend
 
-    # START APPLICATIONS 
     - name: Downloading node_modules to hosting location
       run: npm install
       working-directory: /var/lib/apps/epistogram_backend@development
 
-    - name: Starting applications
+    # DEPLOY FRONTEND
+    - name: Deploying frontend to hosted location
+      run: cp -r ./build/. /var/lib/apps/epistogram@development
+      working-directory: ./dev_build/epistogram_frontend
+
+  # RUN APPLICATION  
+  run:
+    - name: Starting backend
       run: |
         pm2 stop --silent epistogram_backend_dev
         pm2 delete --silent epistogram_backend_dev
         pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
-
-#
