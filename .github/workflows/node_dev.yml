@@ -21,59 +21,58 @@ jobs:
 
     steps:
       
-      - name: Set env variables 
-        run: |
-          export TEST_VAR=TEST_VAL
+      # - name: Set env variables 
+      #   run: |
+      #     export TEST_VAR=TEST_VAL
 
-      # INITIALIZE
-      - name: Checkout 'dev' branch
-        uses: actions/checkout@v2
-        with:
-          ref: dev # references the 'dev' branch
-          path: dev_build # sets a relative folder to checkout to
+      # # INITIALIZE
+      # - name: Checkout 'dev' branch
+      #   uses: actions/checkout@v2
+      #   with:
+      #     ref: dev # references the 'dev' branch
+      #     path: dev_build # sets a relative folder to checkout to
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
+      # - name: Use Node.js ${{ matrix.node-version }}
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: ${{ matrix.node-version }}
     
-      # BUILD BACKEND
-      - name: Installing dependencies for backend
-        run: npm install
-        working-directory: ./dev_build/epistogram_backend
+      # # BUILD BACKEND
+      # - name: Installing dependencies for backend
+      #   run: npm install
+      #   working-directory: ./dev_build/epistogram_backend
         
-      - name: Building backend
-        run: npm run build --if-present
-        working-directory: ./dev_build/epistogram_backend
+      # - name: Building backend
+      #   run: npm run build --if-present
+      #   working-directory: ./dev_build/epistogram_backend
         
-      # BUILD FRONTEND
-      - name: Installing dependencies for frontend
-        run: npm install
-        working-directory: ./dev_build/epistogram_frontend
+      # # BUILD FRONTEND
+      # - name: Installing dependencies for frontend
+      #   run: npm install
+      #   working-directory: ./dev_build/epistogram_frontend
         
-      - name: Building frontend
-        run: CI=false npm run build --if-present
-        working-directory: ./dev_build/epistogram_frontend
+      # - name: Building frontend
+      #   run: CI=false npm run build --if-present
+      #   working-directory: ./dev_build/epistogram_frontend
 
-      # DEPLOY BACKEND
-      - name: Deploying backend to hosted location
-        run: cp -r ./dist/. /var/lib/apps/epistogram_backend@development
-        working-directory: ./dev_build/epistogram_backend
+      # # DEPLOY BACKEND
+      # - name: Deploying backend to hosted location
+      #   run: cp -r ./dist/. /var/lib/apps/epistogram_backend@development
+      #   working-directory: ./dev_build/epistogram_backend
 
-      - name: Downloading node_modules to hosting location
-        run: npm install
-        working-directory: /var/lib/apps/epistogram_backend@development
+      # - name: Downloading node_modules to hosting location
+      #   run: npm install
+      #   working-directory: /var/lib/apps/epistogram_backend@development
 
-      - name: Deploying 'config.dev.env' file
-        run: cp ./config.dev.env /var/lib/apps/epistogram_backend@development/config.env
-        working-directory: ./dev_build/epistogram_backend
+      # - name: Deploying 'config.dev.env' file
+      #   run: cp ./config.dev.env /var/lib/apps/epistogram_backend@development/config.env
+      #   working-directory: ./dev_build/epistogram_backend
 
-      # DEPLOY FRONTEND
-      - name: Deploying frontend to hosted location
-        run: cp -r ./build/. /var/lib/apps/epistogram@development
-        working-directory: ./dev_build/epistogram_frontend
+      # # DEPLOY FRONTEND
+      # - name: Deploying frontend to hosted location
+      #   run: cp -r ./build/. /var/lib/apps/epistogram@development
+      #   working-directory: ./dev_build/epistogram_frontend
 
       # RUN BACKEND APPLICATION  
-      - run: pm2 stop --silent epistogram_backend_dev
       - run: pm2 delete --silent epistogram_backend_dev
       - run: pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
