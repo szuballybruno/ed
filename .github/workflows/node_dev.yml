@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    name: Deploy and build DEV
+    name: Deploy and build 'dev'
     runs-on: self-hosted
 
     strategy:
@@ -24,7 +24,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: dev # references the 'dev' branch
-        path: epistogram_dev # sets a relative folder to checkout to
+        path: dev_build # sets a relative folder to checkout to
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
@@ -35,19 +35,22 @@ jobs:
     # BUILD BACKEND
     - name: Installing dependencies for backend
       run: npm install
-      working-directory: ./epistogram_dev/epistogram_backend
+      working-directory: ./dev_build/epistogram_backend
       
     - name: Building backend
       run: npm run build --if-present
-      working-directory: ./epistogram_dev/epistogram_backend
+      working-directory: ./dev_build/epistogram_backend
       
     # BUILD FRONTEND
-    - name: Installing dependencies for frontend
-      run: npm install
-      working-directory: ./epistogram_dev/epistogram_frontend
+    # - name: Installing dependencies for frontend
+    #   run: npm install
+    #   working-directory: ./dev_build/epistogram_frontend
       
-    - name: Building frontend
-      run: CI=false npm run build --if-present
-      working-directory: ./epistogram_dev/epistogram_frontend
-      
-#    - run: npm test
+    # - name: Building frontend
+    #   run: CI=false npm run build --if-present
+    #   working-directory: ./dev_build/epistogram_frontend
+
+    # DEPLOY TO HOSTED LOCATION
+    - name: Deploying backend to hosted location
+      run: cp -r ./dist /var/lib/apps/epistogram_backend@development
+      working-directory: ./dev_build/epistogram_backend
