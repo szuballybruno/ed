@@ -74,6 +74,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
 
     return (
         <div className={classes.loginhatter}>
+            <div style={{ background: "red" }}>DEEEEEV!</div>
             <div className={classes.formkeret}>
                 <div className={classes.cimek}>
                     <h1 className={classes.loginfocim}>Örülünk, hogy ismét itt vagy velünk!</h1>
