@@ -10,7 +10,7 @@ export const currentEnvironmentName = (process.env.NODE_ENV ?? "local") as Envir
 
 const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
 
-    log("Accessing .env config entry: " + entryName);
+    log("Accessing config.env entry: " + entryName);
     const fullEntryName = entryName;
     const value = process.env[fullEntryName];
 
@@ -20,20 +20,15 @@ const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
     return value ?? "";
 }
 
-export const isEnvironentConfigLoaded = () => getEnvConfigEntry("FRONTEND_URL", true) != "";
-
 export const initailizeDotEnvEnvironmentConfig = () => {
 
-    const environmentName = currentEnvironmentName;
-    const dotEnvFileName = `.env.${environmentName}`;
-
-    log("Initializing .env config from file: " + dotEnvFileName);
-    require('dotenv').config({ path: dotEnvFileName })
+    log("Loading config.env...");
+    require('dotenv').config({ path: "config.env" })
 
     // LOADED SUCCESSFULLY
-    if (isEnvironentConfigLoaded()) {
+    if (!!process.env.ENVIRONMENT_NAME) {
 
-        log("Loaded configuration for environemnt: " + environmentName);
+        log("Loaded configuration for environemnt: " + process.env.ENVIRONMENT_NAME);
         const globalConfig = new GlobalConfiguration();
 
         return globalConfig;
@@ -42,7 +37,7 @@ export const initailizeDotEnvEnvironmentConfig = () => {
     // LOAD FAILED 
     else {
 
-        throw new Error("Failed to load the configuration for environemnt: " + environmentName);
+        throw new Error("Failed to load the configuration!");
     }
 }
 
