@@ -58,7 +58,6 @@ jobs:
 
     # START APPLICATIONS 
     - name: Starting applications
-      run: |
-        pm2 stop --silent epistogram_backend_dev
-        pm2 delete --silent epistogram_backend_dev
-        pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
+      run: pm2 start /var/lib/apps/epistogram_backend@development/main.js --name=epistogram_backend_dev
+# pm2 stop --silent epistogram_backend_dev
+#         pm2 delete --silent epistogram_backend_dev
