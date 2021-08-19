@@ -65,7 +65,7 @@ jobs:
         working-directory: /var/lib/apps/epistogram_backend@development
 
       - name: Deploying 'config.dev.env' file
-        run: cp ./config.dev.env /var/lib/apps/epistogram@development/config.env
+        run: cp ./config.dev.env /var/lib/apps/epistogram_backend@development/config.env
         working-directory: ./dev_build/epistogram_backend
 
       # DEPLOY FRONTEND
