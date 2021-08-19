@@ -18,7 +18,9 @@ jobs:
       matrix:
         node-version: [14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+    env:
+      REACT_APP_IS_DEPLOYED: true 
+    
     steps:
 
       # INITIALIZE
@@ -43,6 +45,8 @@ jobs:
         working-directory: ./dev_build/epistogram_backend
         
       # BUILD FRONTEND
+      - run: echo $REACT_APP_IS_DEPLOYED
+
       - name: Installing dependencies for frontend
         run: npm install
         working-directory: ./dev_build/epistogram_frontend
