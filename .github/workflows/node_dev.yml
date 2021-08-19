@@ -21,6 +21,10 @@ jobs:
 
     steps:
       
+      - name: Set env variables 
+        run: |
+          export TEST_VAR=TEST_VAL
+
       # INITIALIZE
       - name: Checkout 'dev' branch
         uses: actions/checkout@v2

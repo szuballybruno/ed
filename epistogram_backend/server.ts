@@ -97,6 +97,8 @@ connectToMongoDB().then(() => {
     expressServer.post('/log-out-user', logOutUserAction);
     expressServer.post('/login-user', logInUserAction);
 
+    expressServer.get('/test', (req, res) => res.json(process.env.TEST_VAR));
+
     // protected 
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
     expressServer.use('/articles', authMiddleware, articleRoutes)
