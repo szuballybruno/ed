@@ -11,6 +11,7 @@ on:
 
 jobs:
   build:
+    name: Deploy and build DEV
     runs-on: self-hosted
 
     strategy:
@@ -19,12 +20,15 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout 'dev' branch
+      uses: actions/checkout@v2
       with:
-        ref: dev
-        
+        ref: dev # references the 'dev' branch
+        path: epistogram_dev # sets a relative folder to checkout to
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
+      working-directory: ./epistogram_dev/epistogram_backend
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
@@ -32,19 +36,19 @@ jobs:
     # BUILD BACKEND
     - name: Installing dependencies for backend
       run: npm install
-      working-directory: ./epistogram_backend
+      working-directory: ./epistogram_dev/epistogram_backend
       
     - name: Building backend
       run: npm run build --if-present
-      working-directory: ./epistogram_backend
+      working-directory: ./epistogram_dev/epistogram_backend
       
     # BUILD FRONTEND
     - name: Installing dependencies for frontend
       run: npm install
-      working-directory: ./epistogram_frontend
+      working-directory: ./epistogram_dev/epistogram_frontend
       
     - name: Building frontend
       run: CI=false npm run build --if-present
-      working-directory: ./epistogram_frontend
+      working-directory: ./epistogram_dev/epistogram_frontend
       
 #    - run: npm test

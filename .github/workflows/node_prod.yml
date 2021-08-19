@@ -21,7 +21,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: main
+        ref: main # references the 'main' branch
+        path: epistogram_main # sets a relative folder to checkout to
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
