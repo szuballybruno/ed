@@ -1,60 +1,73 @@
 import fs from "fs"
-const { NodeSSH } = require('node-ssh')
-const ssh = new NodeSSH()
 import { UploadedFile } from "express-fileupload";
 import { globalConfig } from "../server";
-
+import { log } from "./logger";
+import { Config, NodeSSH } from "node-ssh";
 
 export const getFileExtension = (fileName: string) => {
-    console.log("FileName: " + fileName)
+
+    log("FileName: " + fileName)
     return (fileName.substr(fileName.lastIndexOf('.') + 1))
 }
 
-export const createFile = (file: UploadedFile, localpath: string, fileName: string) => {
-    //console.log("Ez a privateKey: " + config.scpConfig.privateKey)
-    if (!fs.existsSync("./temp/")) {
-        fs.mkdir("./temp/", { recursive: true }, err => { return err });
-    } else {
-        fs.mkdir("./temp/", { recursive: true }, err => { return err });
-    }
-    file.mv('./temp/' + file.name.toLowerCase()).then(() => {
-        console.log("The file moved successfully")
-    }).catch((e) => {
-        console.log(e)
+const makeDirAsync = async (folderPath: string) => {
+    return new Promise<void>((resolve, reject) => {
+
+        fs.mkdir(folderPath, { recursive: true }, (error) => {
+
+            if (!error) {
+
+                resolve();
+            }
+            else {
+
+                reject(error);
+            }
+        });
     })
+}
 
-    const scpConfig = {
+const deleteDirOrFileAsync = async (filePath: string) => {
+    return new Promise((resolve, reject) => {
+
+        fs.rm(filePath, resolve);
+    });
+}
+
+export const createFile = async (file: UploadedFile, localpath: string, fileName: string) => {
+
+    const lowercaseFileName = file.name.toLowerCase();
+    const tempFolderPath = "./temp/";
+    const tempFilePath = tempFolderPath + lowercaseFileName;
+    const fileNameWithExtension = fileName + "." + getFileExtension(lowercaseFileName);
+
+    // create folder if does not exist
+    if (!fs.existsSync(tempFolderPath))
+        await makeDirAsync(tempFolderPath);
+
+    // move to temp
+    await file.mv(tempFilePath);
+
+    // setup scp
+    const sshClient = new NodeSSH();
+
+    await sshClient.connect({
         host: globalConfig.vps.host,
-        port: globalConfig.vps.scpPort,
-
+        port: parseInt(globalConfig.vps.scpPort),
         username: globalConfig.vps.username,
         passphrase: globalConfig.vps.passphrase,
-
         privateKey: globalConfig.vps.privateKey
-    }
+    });
 
-    ssh.connect(scpConfig).then(() => {
-        console.log("./temp/" + file.name)
-        ssh.putFile("./temp/" + file.name.toLowerCase(), localpath + "/" + fileName + "." + getFileExtension(file.name.toLowerCase()))
-            .then(() => {
-                fs.rm("./temp/" + file.name.toLowerCase(), () => {
-                    console.log("Ideiglenes fájl törölve")
-                })
-                console.log("File feltöltve")
-            })
-            .catch((error: string) => {
-                console.log(error.toString())
-            })
-    }).catch((e: any) => console.log(e))
-    /*if (!fs.existsSync(path)){
-        fs.mkdir(path,{recursive: true}, err => {return err});
-    } else {
-        fs.mkdir(path,{recursive: true}, err => {return err});
-    }
-    file.mv(`${path}/${name}.${extension}`)
-    fs.rename('./',`${path}/${name}.${extension}`, (err) => {
-        throw new Error("A fájl feltöltése sikertelen: " + err)
-    })*/
+    // PUT FILE 
+    log(`Uploading file from: '${tempFilePath}'...`)
+    const uploadFilePath = localpath + "/" + fileNameWithExtension;
+    await sshClient.putFile(tempFilePath, uploadFilePath);
+
+    // DELETE TEMP FILE
+    await deleteDirOrFileAsync(tempFilePath);
+
+    console.log("File feltöltve")
 }
 
 export const searchImages = async (path: string) => {

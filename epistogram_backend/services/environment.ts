@@ -36,6 +36,7 @@ export class GlobalConfiguration {
 
     security = {
         jwtSignSecret: getEnvConfigEntry("JWT_SIGN_SECRET"),
+        passwordHashKey: "abcd"
     }
 
     misc = {

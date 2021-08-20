@@ -8,6 +8,7 @@ export const useCollection = async <TItem>(collectionName: string) => {
 
     const insertItem = (item: TItem) => {
 
+        return collection.insertOne(item);
     }
 
     const getItemById = async (id: IdType) => {

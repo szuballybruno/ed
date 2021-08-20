@@ -4,6 +4,7 @@ import { UploadedFile } from "express-fileupload";
 import jwt from 'jsonwebtoken';
 import { MongoError, ObjectID } from "mongodb";
 import { globalConfig } from "../../../../server";
+import { comparePasswordAsync, hashPasswordAsync } from "../../../../services/crypt";
 import { createFile } from "../../../../services/fileServices";
 import { flattenObject } from "../../../../services/flattenObject";
 
@@ -57,8 +58,7 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
             }
             //checkFile(req, res, next)
             let hashedPassword;
-            hashedPassword = await bcrypt.hash(req.body.newPassword, 12);
-
+            hashedPassword = await hashPasswordAsync(req.body.newPassword);
 
             await updateUserInDatabase(userData != undefined ? userData.userId : "", {
                 "userData.phoneNumber": req.body.phoneNumber,
@@ -74,7 +74,7 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
             }
 
             try {
-                const isMatch = await bcrypt.compare(req.body.currentPassword, user.userData.password);
+                const isMatch = await comparePasswordAsync(req.body.currentPassword, user.userData.password);
                 if (!isMatch) {
                     const err = new Error("A jelszó beállítása sikertelen: Bcrypt")
                     return next(err)
@@ -84,7 +84,7 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
             }
             let hashedPassword;
 
-            hashedPassword = await bcrypt.hash(req.body.newPassword, 12);
+            hashedPassword = await hashPasswordAsync(req.body.newPassword);
 
             /* await updateUserInDatabase(req.params.userId, {
                  "userData.password": hashedPassword

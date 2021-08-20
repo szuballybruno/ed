@@ -2,15 +2,17 @@ import React from "react";
 import classes from "./selectFromArray.module.scss";
 import {FormControl, Select, Typography} from "@material-ui/core";
 
+export type OptionType = {
+    optionValue: string,
+    optionText: string
+};
+
 const SelectFromArray = (props: {
     labelText: string,
     name: string,
     value: string,
     showNull?: boolean,
-    optionValues: {
-        optionValue: string,
-        optionText: string
-    }[]
+    optionValues: OptionType[]
     changeHandler?: (e: React.ChangeEvent<{ value: unknown, name?: string }>) => void
 }) => {
     return <div className={classes.dataRow}>

@@ -7,6 +7,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { globalConfig } from "../server";
 import { ExpressRequest, ExpressResponse, getCookie, TypedError } from "../utilities/helpers";
 import { removeRefreshToken, setUserActiveRefreshToken } from "./authenticationPersistance";
+import { comparePasswordAsync } from "./crypt";
 import { log, logError } from "./logger";
 import { toUserDTO } from "./mappings";
 import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById } from "./userService";
@@ -52,7 +53,7 @@ export const getUserDTOByCredentials = async (email: string, password: string) =
     if (!user)
         return null;
 
-    const isPasswordCorrect = await bcrypt.compare(password as string, user.userData.password);
+    const isPasswordCorrect = await comparePasswordAsync(password as string, user.userData.password);
     if (!isPasswordCorrect)
         return null;
 

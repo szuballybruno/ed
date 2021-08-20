@@ -63,6 +63,17 @@ const respondError = (res: ExpressResponse, msg: string, type: ErrorType) => {
     }
 }
 
+export const withValue = (obj: any, errorFunc?: () => void) => {
+
+    if (!errorFunc)
+        errorFunc = () => { throw new Error("Object has no value!"); };
+
+    if (obj == "" || (!obj && obj != false))
+        errorFunc();
+
+    return obj;
+}
+
 export const getAsyncActionHandler = (action: (req: ExpressRequest) => Promise<any>) => {
 
     return (req: ExpressRequest, res: ExpressResponse) => {

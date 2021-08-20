@@ -1,81 +1,71 @@
-import React, {useEffect, useRef} from 'react';
-
+import { useState } from "@hookstate/core";
+import { Button } from "@material-ui/core";
+import React, { useContext, useEffect, useRef } from 'react';
+import { Redirect, useHistory } from "react-router-dom";
+import { disallowWindowNavigation, getEventValueCallback } from "../../../../frontendHelpers";
+import { AddFrame } from "../../../../HOC/add_frame/AddFrame";
+import { CurrentUserContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
+import { DialogFrame } from "../../../../HOC/dialog_frame/DialogFrame";
+import { organizationDTO } from "../../../../models/shared_models/OrganizationDTO";
+import { UserDTO } from "../../../../models/shared_models/UserDTO";
+import { httpPostAsync } from "../../../../services/httpClient";
+import { useOrganizations } from "../../../../services/organizationsService";
+import applicationRunningState from "../../../../store/application/applicationRunningState";
+import SelectFromArray, { OptionType } from "../../universal/selectFromArray/SelectFromArray";
+import SingleInput from "../../universal/singleInput/SingleInput";
+import DoubleInputs from "../../universal/twoInputs/DoubleInputs";
 import classes from "./addUser.module.scss";
 
-import {useState} from "@hookstate/core";
-import adminSideState from "../../../../store/admin/adminSideState";
+const mapOrganizations = (organizations: organizationDTO[]) => {
+    const organizationOptions = organizations
+        .map(x => ({
+            optionText: x.organizationName,
+            optionValue: x._id
+        } as OptionType));
 
-import instance from "../../../../services/axiosInstance";
-import DoubleInputs from "../../universal/twoInputs/DoubleInputs";
-import SingleInput from "../../universal/singleInput/SingleInput";
-import SelectFromArray from "../../universal/selectFromArray/SelectFromArray";
-import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
-import {Cookies} from "react-cookie";
-import userDetailsState from "../../../../store/user/userSideState";
-import {Redirect, useHistory} from "react-router-dom";
-import {Button} from "@material-ui/core";
-import applicationRunningState from "../../../../store/application/applicationRunningState";
-import {AddFrame} from "../../../../HOC/add_frame/AddFrame";
-import {DialogFrame} from "../../../../HOC/dialog_frame/DialogFrame";
+    return organizationOptions;
+}
+
+const roles = [{
+    optionText: "Adminisztrátor",
+    optionValue: "admin"
+}, {
+    optionText: "Vezető",
+    optionValue: "owner"
+}, {
+    optionText: "Csoportvezető",
+    optionValue: "supervisor"
+}, {
+    optionText: "Felhasználó",
+    optionValue: "user"
+}]
 
 const AddUser = () => {
-    const admin = useState(adminSideState)
-    const user = useState(userDetailsState)
+
+    const user = useContext(CurrentUserContext) as UserDTO;
     const app = useState(applicationRunningState)
-    const cookies = new Cookies()
-
+    const canModifyOrganization = user.role === "admin";
     const history = useHistory()
-
-    const [file, setFile] = React.useState<string | Blob>("")
-    //const hiddenFileInput: React.MutableRefObject<any> = useRef();
-
-    const organizations = useState<{
-        optionText: string,
-        optionValue: string
-    }[]>([{
-        optionText: "",
-        optionValue: ""
-    }])
-
-    const roles = [{
-        optionText: "Adminisztrátor",
-        optionValue: "admin"
-    },{
-        optionText: "Vezető",
-        optionValue: "owner"
-    }, {
-        optionText: "Csoportvezető",
-        optionValue: "supervisor"
-    },{
-        optionText: "Felhasználó",
-        optionValue: "user"
-    }]
-
-    useEffect(() => {
-        instance.get("organizations/getorganizations").then((res) => {
-            if (res.status === 200) {
-                res.data.map((data: {
-                    _id: string,
-                    organizationName: string
-                }, index: number) => {
-                    organizations[index].optionValue.set(data._id)
-                    return organizations[index].optionText.set(data.organizationName)
-                })
-            } else {
-                console.log("fasd")
-            }
-
-        }).catch((e) => {
-            console.log(e)
-        })
-        //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const inputChangeHandler = (e: React.ChangeEvent<{ value: unknown, name?: string }>) => {
-        admin.currentlyEdited.user[e.currentTarget.name as keyof typeof admin.currentlyEdited.user].set(e.currentTarget.value as string)
-    }
-
+    const [firstName, setFirstName] = React.useState("");
+    const [lastName, setLastName] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [role, setRole] = React.useState("");
+    const [organizationId, setOrganizationId] = React.useState("");
+    const { organizations } = useOrganizations();
+    const organizationOptions = mapOrganizations(organizations);
     const unblockHandle = useRef<any>();
+
+    const handleFirstLastNameChange = (changedPropertyName: string, value: string) => {
+
+        if (changedPropertyName == "lastName") {
+
+            setLastName(value);
+        }
+        else {
+
+            setFirstName(value);
+        }
+    }
 
     useEffect(() => {
         unblockHandle.current = history.block((targetLocation: any) => {
@@ -99,7 +89,6 @@ const AddUser = () => {
         }
     })
 
-
     function stopEditing() {
         if (unblockHandle) {
             app.alert.showAlert.set(false)
@@ -118,78 +107,85 @@ const AddUser = () => {
         // history.push("/any/other/path")
     }
 
+    disallowWindowNavigation();
 
-    window.onbeforeunload = (event) => {
-        const e = event || window.event;
-        // Cancel the event
-        e.preventDefault();
-        if (e) {
-            e.returnValue = ''; // Legacy method for cross browser support
-        }
-        return ''; // Legacy method for cross browser support
-    };
+    const sumbmitAddUserRequestAsync = async (formData: FormData) => {
 
-    const submitHandler = (e: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {
-        e.preventDefault();
-        let formdata =  new FormData(e.currentTarget)
-        formdata.append('file', file)
-        formdata.set('firstName', admin.currentlyEdited.user.firstName.get())
-        formdata.set('lastName', admin.currentlyEdited.user.lastName.get())
-        formdata.set('username', admin.currentlyEdited.user.username.get())
-        formdata.set('email', admin.currentlyEdited.user.email.get())
-        formdata.set('role', admin.currentlyEdited.user.role.get())
-        formdata.set('organizationId', cookies.get("organizationId"))
+        formData.set('firstName', firstName);
+        formData.set('lastName', lastName);
+        formData.set('email', email);
+        formData.set('role', role);
 
-        instance.post("users", formdata).then((res) => {
-            if (res.status === 201) {
+        try {
+            const response = await httpPostAsync("users", formData)
+
+            if (response.code === 201) {
                 app.snack.snackTitle.set("Felhasználó sikeresen hozzáadva")
                 app.snack.showSnack.set(true)
 
                 return <Redirect to={"/admin/manage/users"} />
             }
-        }).catch((e) => {
-            app.snack.snackTitle.set("Felhasználó hozzáadása sikertelen " + e)
+        } catch (error) {
+
+            app.snack.snackTitle.set("Felhasználó hozzáadása sikertelen " + error);
             app.snack.showSnack.set(true)
-        })
+        }
     }
 
-    return <DialogFrame firstButtonOnClick={continueEditing} secondButtonOnClick={stopEditing} className={classes.dialogFrameWrapper}>
-        <AddFrame submitHandler={submitHandler}
-                  title={"Új felhasználó hozzáadása"}>
-            <ProfileImage showSelectButton={true}
-                          onChange={(e) => {
-                              if (e.currentTarget.files) {
-                                  admin.currentlyEdited.user.uploadedFileUrl.set(URL.createObjectURL(e.currentTarget.files[0]));
-                                  setFile(e.currentTarget.files[0])
-                              }
-                          }}
-                          imageUrl={admin.currentlyEdited.user.uploadedFileUrl.get()}/>
+    return <DialogFrame
+        firstButtonOnClick={continueEditing}
+        secondButtonOnClick={stopEditing}
+        className={classes.dialogFrameWrapper}>
+        <AddFrame
+            submitHandler={e => {
 
-            <DoubleInputs firstLabelText={"Vezetéknév"}
-                          secondLabelText={"Keresztnév"}
-                          firstLabelName={"lastName"}
-                          secondLabelName={"firstName"}
-                          changeHandler={inputChangeHandler}/>
-            <SingleInput labelText={"Felhasználónév"} name={"username"} changeHandler={inputChangeHandler} />
-            <SingleInput labelText={"E-mail"} name={"email"} changeHandler={inputChangeHandler} />
-            {user.userData.role.get() === "admin" ? <SelectFromArray labelText={"Cég"}
-                                                                     showNull
-                                                                     name={"organizationId"}
-                                                                     value={admin.currentlyEdited.user.organizationId.get()}
-                                                                     optionValues={organizations.get()}
-                                                                     changeHandler={inputChangeHandler} /> : null}
-            <SingleInput labelText={"Beosztás"} name={"innerRole"} changeHandler={inputChangeHandler} />
+                e.preventDefault();
+                sumbmitAddUserRequestAsync(new FormData(e.currentTarget));
+            }}
+            title={"Új felhasználó hozzáadása"}>
 
+            {/* first & last name */}
+            <DoubleInputs
+                firstLabelText={"Vezetéknév"}
+                secondLabelText={"Keresztnév"}
+                firstLabelName={"lastName"}
+                secondLabelName={"firstName"}
+                changeHandler={x => handleFirstLastNameChange(x.currentTarget.name, x.currentTarget.value)} />
+
+            {/* email */}
+            <SingleInput
+                labelText={"E-mail"}
+                name={"email"}
+                changeHandler={getEventValueCallback(setEmail)} />
+
+            {/* organization */}
+            {canModifyOrganization && <SelectFromArray
+                labelText={"Cég"}
+                showNull
+                name={"organizationId"}
+                value={organizationId}
+                optionValues={organizationOptions}
+                changeHandler={getEventValueCallback(setOrganizationId)} />}
+
+            {/* job title */}
+            <SingleInput
+                labelText={"Beosztás"}
+                name={"innerRole"}
+                changeHandler={getEventValueCallback(setRole)} />
+
+            {/* role */}
             <SelectFromArray labelText={"Jogosultsági kör"}
-                             name={"role"}
-                             value={admin.currentlyEdited.user.role.get()}
-                             optionValues={roles}
-                             changeHandler={inputChangeHandler} />
+                name={"role"}
+                value={role}
+                optionValues={roles}
+                changeHandler={getEventValueCallback(setRole)} />
 
-            <Button className={classes.submitButton}
-                    type={"submit"}
-                    variant={"outlined"}
-                    color={"secondary"}>
+            {/* submit button */}
+            <Button
+                className={classes.submitButton}
+                type={"submit"}
+                variant={"outlined"}
+                color={"secondary"}>
                 Feltöltés
             </Button>
         </AddFrame>
