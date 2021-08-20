@@ -27,7 +27,7 @@ jobs:
       - name: Checkout 'prod' branch
         uses: actions/checkout@v2
         with:
-          ref: prod # references the 'prod' branch
+          ref: main # references the 'prod' branch
           path: prod_build # sets a relative folder to checkout to
 
       - name: Use Node.js ${{ matrix.node-version }}
