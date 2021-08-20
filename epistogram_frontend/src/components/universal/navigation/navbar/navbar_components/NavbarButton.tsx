@@ -6,6 +6,7 @@ import applicationRunningState from "../../../../../store/application/applicatio
 import {globalConfig} from "../../../../../configuration/config";
 import {updateActivity} from "../../../../../services/updateActivity";
 import {Button, Typography} from "@material-ui/core";
+import { currentOrigin } from "../../../../../Environemnt";
 
 
 const NavbarButton = (props: {
@@ -39,7 +40,7 @@ const NavbarButton = (props: {
                 undefined,
                 undefined,
                 undefined,
-                globalConfig.siteUrl + props.menuPath
+                currentOrigin + props.menuPath
             )
             app.hamburgerButtonState.set(false)
         }}>
@@ -65,7 +66,7 @@ const NavbarButton = (props: {
                 undefined,
                 undefined,
                 undefined,
-                globalConfig.siteUrl + props.menuPath
+                currentOrigin + props.menuPath
             )
         }}>
             {props.menuName}

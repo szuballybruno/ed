@@ -12,33 +12,32 @@ export const connectToMongoDB = (): Promise<void> => {
 
     log("Connecting to MongoDB...");
 
-    const dbConfig = globalConfig.mongodbConfig;
-
     return new Promise((resolve, reject) => {
 
-        const connectionSettings = {
-            url: dbConfig.connectionUrl,
-            options: dbConfig.options,
-            dbName: globalConfig.mongodbConfig.mongoDBCredentials.dbName
+        const dbName = globalConfig.mongo.dbName;
+        const connectionUrl = globalConfig.mongo.connectionUrl;
+
+        const options = {
+            bufferMaxEntries: 0,
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        };
+
+        const callback = (err: any, client: MongoClientType) => {
+
+            if (!err) {
+
+                log("Successfully connected to MongoDB")
+                Connection.db = client.db(dbName);
+                resolve();
+            }
+            else {
+
+                reject(err);
+            }
         }
 
-        log("Trying to connect to: " + connectionSettings.url);
-
-        MongoClient.connect(
-            connectionSettings.url,
-            connectionSettings.options,
-            (err: any, client: MongoClientType) => {
-
-                if (!err) {
-                    
-                    log("Successfully connected to MongoDB")
-                    Connection.db = client.db(connectionSettings.dbName);
-                    resolve();
-                }
-                else {
-
-                    reject(err);
-                }
-            });
+        log("Trying to connect to: " + connectionUrl);
+        MongoClient.connect(connectionUrl, options, callback);
     })
 }

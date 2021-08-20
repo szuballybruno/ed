@@ -15,6 +15,7 @@ import { globalConfig } from "../../../configuration/config";
 import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
 import { Add } from "@material-ui/icons";
 import { Fab } from "@material-ui/core";
+import { backendUrl } from '../../../Environemnt';
 
 export const ManageArticles: React.FunctionComponent = () => {
     const admin = useState(adminSideState)
@@ -65,7 +66,7 @@ export const ManageArticles: React.FunctionComponent = () => {
                                     }, {
                                         icon: "delete",
                                         onClick: () => {
-                                            instance.delete(`${globalConfig.backendUrl}articles/deletearticle?articleId=${article._id}`).then(() => {
+                                            instance.delete(`${backendUrl}articles/deletearticle?articleId=${article._id}`).then(() => {
                                                 return admin.articles[index].set(none)
                                             }).catch(e => console.error(e.toString()))
                                         }

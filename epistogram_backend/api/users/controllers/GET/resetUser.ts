@@ -11,7 +11,7 @@ export const resetUser = (req: Request, res: Response, next: NextFunction) => {
     const fetchUsers = async () => {
         const user = await Connection.db.collection("users").findOne({ _id: new ObjectID(req.params.userId as string) })
         const mailToken = await generateToken(req, res, next, user._id, user.userData.email)
-        await new Email(getEmailConfig()).send(emailContent(user.userData.email, `${user.userData.lastName} ${user.userData.firstName}`, `${globalConfig.urls.frontendUrl}/regisztracio`, mailToken)).catch((err: string) => {
+        await new Email(getEmailConfig()).send(emailContent(user.userData.email, `${user.userData.lastName} ${user.userData.firstName}`, `${globalConfig.misc.frontendUrl}/regisztracio`, mailToken)).catch((err: string) => {
             throw new Error('Jelszó visszaállító e-mail kiküldése sikertelen' + err);
         });
         return responseReducer(200, "Jelszó visszaállító e-mail kiküldve")

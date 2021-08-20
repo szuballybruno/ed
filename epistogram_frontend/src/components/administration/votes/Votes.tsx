@@ -15,6 +15,7 @@ import {AddVote} from "./votes_components/AddVote";
 import {vote} from "../../../store/types/vote";
 import {Add} from "@material-ui/icons";
 import {Fab} from "@material-ui/core";
+import { backendUrl } from '../../../Environemnt';
 
 export const Votes: React.FunctionComponent = () => {
     const admin = useState(adminSideState)
@@ -66,7 +67,7 @@ export const Votes: React.FunctionComponent = () => {
                                                                  }, {
                                                                      icon: "delete",
                                                                      onClick: () => {
-                                                                         instance.delete(`${globalConfig.backendUrl}articles/deletevote?voteId=${vote._id}`).then(() => {
+                                                                         instance.delete(`${backendUrl}articles/deletevote?voteId=${vote._id}`).then(() => {
                                                                              return admin.articles[index].set(none)
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }

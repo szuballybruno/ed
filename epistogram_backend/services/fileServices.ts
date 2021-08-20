@@ -22,7 +22,18 @@ export const createFile = (file: UploadedFile, localpath: string, fileName: stri
     }).catch((e) => {
         console.log(e)
     })
-    ssh.connect(globalConfig.vpsSCPConfig).then(() => {
+
+    const scpConfig = {
+        host: globalConfig.vps.host,
+        port: globalConfig.vps.scpPort,
+
+        username: globalConfig.vps.username,
+        passphrase: globalConfig.vps.passphrase,
+
+        privateKey: globalConfig.vps.privateKey
+    }
+
+    ssh.connect(scpConfig).then(() => {
         console.log("./temp/" + file.name)
         ssh.putFile("./temp/" + file.name.toLowerCase(), localpath + "/" + fileName + "." + getFileExtension(file.name.toLowerCase()))
             .then(() => {

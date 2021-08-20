@@ -51,7 +51,7 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
         }
         const mailToken = await generateToken(req,res,next, insertedUser.insertedId, createdUser.userData.email)
 
-        await new Email(getEmailConfig()).send(emailContent(req.body.email, `${req.body.lastName} ${req.body.firstName}`, `${globalConfig.urls.frontendUrl}/signup`, mailToken)).catch((err: string) => {
+        await new Email(getEmailConfig()).send(emailContent(req.body.email, `${req.body.lastName} ${req.body.firstName}`, `${globalConfig.misc.frontendUrl}/signup`, mailToken)).catch((err: string) => {
             throw new Error('Signing up failed, please try again later.' + err);
         });
 

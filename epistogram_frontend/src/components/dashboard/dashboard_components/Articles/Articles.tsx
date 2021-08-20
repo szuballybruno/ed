@@ -6,20 +6,21 @@
 *
 */
 
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import classes from "./articles.module.scss";
 import './components/carouselStyles.scss'
-import {State, useState} from "@hookstate/core";
+import { State, useState } from "@hookstate/core";
 import ArticlesListItem from "./components/ArticlesListItem";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import instance from "../../../../services/axiosInstance";
-import {globalConfig} from "../../../../configuration/config";
+import { globalConfig } from "../../../../configuration/config";
+import { backendUrl } from '../../../../Environemnt';
 
 const Articles = () => {
     const app = useState(applicationRunningState)
 
     useEffect(() => {
-        instance.get(globalConfig.backendUrl + "articles/getarticles").then((res) => {
+        instance.get(backendUrl + "articles/getarticles").then((res) => {
             if (res.data) {
                 app.articles.set(res.data)
                 app.loadingIndicator.set("success")
@@ -59,8 +60,8 @@ const Articles = () => {
             <div className={classes.articlesList} >
                 {app.articles.get().map((article, index) => {
                     return <ArticlesListItem articleItem={article}
-                                             articleIndex={index}
-                                             currentArticle={currentArticle} />
+                        articleIndex={index}
+                        currentArticle={currentArticle} />
                 })}
             </div>
         </div>

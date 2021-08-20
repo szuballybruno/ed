@@ -15,6 +15,7 @@ import {AddOrganization} from "./organizations_components/AddOrganization";
 import {organization} from "../../../store/types/organization";
 import {Add} from "@material-ui/icons";
 import {Fab} from "@material-ui/core";
+import { backendUrl } from '../../../Environemnt';
 
 export const Organizations: React.FunctionComponent = () => {
     const admin = useState(adminSideState)
@@ -65,7 +66,7 @@ export const Organizations: React.FunctionComponent = () => {
                                                                  }, {
                                                                      icon: "delete",
                                                                      onClick: () => {
-                                                                         instance.delete(`${globalConfig.backendUrl}organizations/deleteorganization?organizationId=${organization._id}`).then(() => {
+                                                                         instance.delete(`${backendUrl}organizations/deleteorganization?organizationId=${organization._id}`).then(() => {
                                                                              return admin.organizations[index].set(none)
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }

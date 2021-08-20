@@ -23,44 +23,25 @@ const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
 export const initailizeDotEnvEnvironmentConfig = () => {
 
     log("Loading config.env...");
-    require('dotenv').config({ path: "config.env" })
+    require('dotenv').config({ path: "config.env" });
 
-    // LOADED SUCCESSFULLY
-    if (!!process.env.ENVIRONMENT_NAME) {
+    const globalConfig = new GlobalConfiguration();
 
-        log("Loaded configuration for environemnt: " + process.env.ENVIRONMENT_NAME);
-        const globalConfig = new GlobalConfiguration();
+    log(`Started in '${globalConfig.misc.environmentName}' environment!`);
 
-        return globalConfig;
-    }
-
-    // LOAD FAILED 
-    else {
-
-        throw new Error("Failed to load the configuration!");
-    }
+    return globalConfig;
 }
 
 export class GlobalConfiguration {
 
-    // 
-    // COMPLEX
-    // 
-
     security = {
-        rsaPrivateKey: getEnvConfigEntry("RSA_PRIVATE_KEY"),
         jwtSignSecret: getEnvConfigEntry("JWT_SIGN_SECRET"),
     }
 
     misc = {
         uploadFolderPath: getEnvConfigEntry("UPLOAD_FOLDER_PATH"),
-        tokenSecret: getEnvConfigEntry("TOKEN_SECRET"),
-        hostPort: getEnvConfigEntry("HOST_PORT")
-    }
-
-    urls = {
-        backendUrl: getEnvConfigEntry("BACKEND_URL"),
-        backendUrlMinimal: getEnvConfigEntry("BACKEND_URL_MINIMAL"),
+        hostPort: getEnvConfigEntry("HOST_PORT"),
+        environmentName: getEnvConfigEntry("ENVIRONMENT_NAME"),
         frontendUrl: getEnvConfigEntry("FRONTEND_URL")
     }
 
@@ -71,40 +52,20 @@ export class GlobalConfiguration {
         senderPassword: getEnvConfigEntry("MAIL_SENDER_PASSWORD")
     }
 
-    vpsSSHAuthConfig = {
-        host: getEnvConfigEntry("VPS_SSH_HOST"),
-        port: getEnvConfigEntry("VPS_SSH_PORT"),
+    vps = {
+        host: getEnvConfigEntry("VPS_HOST"),
+        scpPort: getEnvConfigEntry("VPS_SCP_PORT"),
 
-        username: getEnvConfigEntry("VPS_SSH_USERNAME"),
-        passphrase: getEnvConfigEntry("VPS_SSH_PASSPHRASE"),
+        username: getEnvConfigEntry("VPS_USERNAME"),
+        passphrase: getEnvConfigEntry("VPS_PASSPHRASE"),
 
-        dstPort: getEnvConfigEntry("VPS_SSH_DST_PORT"),
-        agent: process.env.SSH_AUTH_SOCK,
-        privateKey: this.security.rsaPrivateKey,
-    };
+        privateKey: getEnvConfigEntry("VPS_RSA_PRIVATE_KEY")
+    }
 
-    vpsSCPConfig = {
-        host: getEnvConfigEntry("VPS_SCP_HOST"),
-        port: getEnvConfigEntry("VPS_SCP_PORT"),
-
-        username: getEnvConfigEntry("VPS_SCP_USERNAME"),
-        passphrase: getEnvConfigEntry("VPS_SCP_PASSPHRASE"),
-
-        privateKey: this.security.rsaPrivateKey
-    };
-
-    mongodbConfig = {
+    mongo = {
+        dbName: getEnvConfigEntry("MONGO_DB_DB_NAME"),
+        dbUsername: getEnvConfigEntry("MONGO_DB_DB_USER_NAME"),
+        dbPassword: getEnvConfigEntry("MONGO_DB_DB_PASSWORD"),
         connectionUrl: getEnvConfigEntry("MONGO_DB_CONNECTION_URL"),
-        options: {
-            bufferMaxEntries: 0,
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        },
-        mongoDBCredentials: {
-            serverUrl: getEnvConfigEntry("MONGO_DB_SERVER_URL"),
-            dbName: getEnvConfigEntry("MONGO_DB_DB_NAME"),
-            dbUsername: getEnvConfigEntry("MONGO_DB_DB_USER_NAME"),
-            dbPassword: getEnvConfigEntry("MONGO_DB_DB_PASSWORD")
-        }
-    };
+    }
 }

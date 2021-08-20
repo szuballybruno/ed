@@ -7,6 +7,7 @@ import {globalConfig} from "../../../../configuration/config";
 import UserStatistics from "../../users/users_components/userStatistics/UserStatistics";
 import {Typography} from "@material-ui/core";
 import adminSideState from '../../../../store/admin/adminSideState';
+import { backendUrl } from '../../../../Environemnt';
 
 export const CourseVideoList = (props: {courseId: string}) => {
     const admin = useState(adminSideState)
@@ -66,7 +67,7 @@ export const CourseVideoList = (props: {courseId: string}) => {
                                                      }, {
                                                          icon: "delete",
                                                          onClick: () => {
-                                                            instance.delete(`${globalConfig.backendUrl}videos/deletevideo?videoId=${item._id}`).then(() => {
+                                                            instance.delete(`${backendUrl}videos/deletevideo?videoId=${item._id}`).then(() => {
                                                                 return items[index].set(none)
                                                             }).catch(e => console.error(e.toString()))
                                                          }

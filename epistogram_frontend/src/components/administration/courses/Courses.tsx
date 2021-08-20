@@ -19,6 +19,7 @@ import {Add} from "@material-ui/icons";
 import {Divider, Fab} from "@material-ui/core";
 import {AddItem} from "./courses_components/addItem/AddItem";
 import {EditItemPage} from "./courses_components/editItem/EditItemPage";
+import { backendUrl } from '../../../Environemnt';
 
 
 const Courses = () => {
@@ -92,7 +93,7 @@ const Courses = () => {
                                                                  {
                                                                      icon: "delete",
                                                                      onClick: () => {
-                                                                         instance.delete(`${globalConfig.backendUrl}videos/deletevideo?videoId=${course._id}`).then(() => {
+                                                                         instance.delete(`${backendUrl}videos/deletevideo?videoId=${course._id}`).then(() => {
                                                                              return admin.users[index].set(none)
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }

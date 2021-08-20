@@ -9,6 +9,7 @@ import {useState} from "@hookstate/core";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
 import userDetailsState from "../../../../../store/user/userSideState";
 import {updateActivity} from "../../../../../services/updateActivity";
+import { currentOrigin } from '../../../../../Environemnt';
 
 const DesktopNavbar = (props: {
     desktopClassName?: string
@@ -68,7 +69,7 @@ const DesktopNavbar = (props: {
                                         undefined,
                                         undefined,
                                         undefined,
-                                        globalConfig.siteUrl + "/watch/"+user.userData.currentCourse._id.get()+"/"+user.userData.currentItem._id.get()
+                                        currentOrigin + "/watch/"+user.userData.currentCourse._id.get()+"/"+user.userData.currentItem._id.get()
                                     )
                                 }}
                                 className={classes.playButton}>

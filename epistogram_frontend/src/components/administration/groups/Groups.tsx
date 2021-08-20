@@ -15,6 +15,7 @@ import UserStatistics from "../users/users_components/userStatistics/UserStatist
 import {AddGroup} from "./groups_components/AddGroup";
 import {Add} from "@material-ui/icons";
 import {Fab} from "@material-ui/core";
+import { backendUrl } from '../../../Environemnt';
 
 export const Groups: React.FunctionComponent = () => {
     const admin = useState(adminSideState)
@@ -65,7 +66,7 @@ export const Groups: React.FunctionComponent = () => {
                                                                  }, {
                                                                      icon: "delete",
                                                                      onClick: () => {
-                                                                         instance.delete(`${globalConfig.backendUrl}groups/deletegroup?groupId=${group._id}`).then(() => {
+                                                                         instance.delete(`${backendUrl}groups/deletegroup?groupId=${group._id}`).then(() => {
                                                                              return admin.groups[index].set(none)
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }
