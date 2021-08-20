@@ -1,0 +1,82 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: node_demo CI
+
+on:
+  push:
+    branches: [ demo ]
+  pull_request:
+    branches: [ demo ]
+
+jobs:
+
+  checkout_build_deploy_and_start:
+    name: Checkout and build 'demo'
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    env:
+      REACT_APP_IS_DEPLOYED: true 
+    
+    steps:
+
+      # INITIALIZE
+      - name: Checkout 'demo' branch
+        uses: actions/checkout@v2
+        with:
+          ref: demo # references the 'demo' branch
+          path: demo_build # sets a relative folder to checkout to
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+    
+      # BUILD BACKEND
+      - name: Installing dependencies for backend
+        run: npm install
+        working-directory: ./demo_build/epistogram_backend
+        
+      - name: Building backend
+        run: npm run build --if-present
+        working-directory: ./demo_build/epistogram_backend
+        
+      # BUILD FRONTEND
+      - run: echo $REACT_APP_IS_DEPLOYED
+
+      - name: Installing dependencies for frontend
+        run: npm install
+        working-directory: ./demo_build/epistogram_frontend
+        
+      - name: Building frontend
+        run: CI=false npm run build --if-present
+        working-directory: ./demo_build/epistogram_frontend
+
+      # DEPLOY BACKEND
+      - name: Deploying backend to hosted location
+        run: cp -r ./dist/. /var/lib/apps/epistogram_backend@demo
+        working-directory: ./demo_build/epistogram_backend
+
+      - name: Downloading node_modules to hosting location
+        run: npm install
+        working-directory: /var/lib/apps/epistogram_backend@demo
+
+      - name: Deploying 'config.demo.env' file
+        run: cp ./config.demo.env /var/lib/apps/epistogram_backend@demo/config.env
+        working-directory: ./demo_build/epistogram_backend
+
+      # DEPLOY FRONTEND
+      - name: Deploying frontend to hosted location
+        run: cp -r ./build/. /var/lib/apps/epistogram@demo
+        working-directory: ./demo_build/epistogram_frontend
+
+      # RUN BACKEND APPLICATION  
+      - run: pm2 delete epistogram_backend_demo
+        continue-on-error: true
+        working-directory: /var/lib/apps/epistogram_backend@demo
+      
+      - run: pm2 start /var/lib/apps/epistogram_backend@demo/demo.js --name=epistogram_backend_demo
+        working-directory: /var/lib/apps/epistogram_backend@demo
