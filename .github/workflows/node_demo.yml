@@ -78,5 +78,5 @@ jobs:
         continue-on-error: true
         working-directory: /var/lib/apps/epistogram_backend@demo
       
-      - run: pm2 start /var/lib/apps/epistogram_backend@demo/demo.js --name=epistogram_backend_demo
+      - run: pm2 start /var/lib/apps/epistogram_backend@demo/main.js --name=epistogram_backend_demo
         working-directory: /var/lib/apps/epistogram_backend@demo
