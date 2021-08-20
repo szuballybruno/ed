@@ -94,14 +94,12 @@ export class GlobalConfiguration {
     };
 
     mongodbConfig = {
-        vpsSSHAuthConfig: this.vpsSSHAuthConfig,
         connectionUrl: getEnvConfigEntry("MONGO_DB_CONNECTION_URL"),
         options: {
             bufferMaxEntries: 0,
             useNewUrlParser: true,
             useUnifiedTopology: true
         },
-        isSSHConnection: getEnvConfigEntry("MONGO_DB_IS_SSH") == "true",
         mongoDBCredentials: {
             serverUrl: getEnvConfigEntry("MONGO_DB_SERVER_URL"),
             dbName: getEnvConfigEntry("MONGO_DB_DB_NAME"),
