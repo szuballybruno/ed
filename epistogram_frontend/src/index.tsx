@@ -32,8 +32,8 @@ const MainSwitch = () => {
         <Route path="/signup" component={withRouter(Signup)} />
 
         {/* protected paths */}
-        <Route path="/watch/:courseId/:id" component={withRouter(PlayerMain)} />
-        <Route path="/admin" component={withRouter(Administration)} />
+        <ProtectedRoute path="/watch/:courseId/:id" render={() => <PlayerMain />} />
+        <ProtectedRoute path="/admin" render={() => <Administration />} />
         <ProtectedRoute path="/kezdolap" render={() => <UserDashBoard />} />
         <ProtectedRoute path="/kurzusok" render={() => <CourseSearch />} />
         <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />

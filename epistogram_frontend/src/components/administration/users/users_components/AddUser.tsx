@@ -9,6 +9,8 @@ import { DialogFrame } from "../../../../HOC/dialog_frame/DialogFrame";
 import { organizationDTO } from "../../../../models/shared_models/OrganizationDTO";
 import { UserDTO } from "../../../../models/shared_models/UserDTO";
 import { httpPostAsync } from "../../../../services/httpClient";
+import { useNavigation } from "../../../../services/navigatior";
+import { useShowNotification } from "../../../../services/notifications";
 import { useOrganizations } from "../../../../services/organizationsService";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import SelectFromArray, { OptionType } from "../../universal/selectFromArray/SelectFromArray";
@@ -19,7 +21,7 @@ import classes from "./addUser.module.scss";
 const mapOrganizations = (organizations: organizationDTO[]) => {
     const organizationOptions = organizations
         .map(x => ({
-            optionText: x.organizationName,
+            optionText: x.name,
             optionValue: x._id
         } as OptionType));
 
@@ -45,7 +47,6 @@ const AddUser = () => {
     const user = useContext(CurrentUserContext) as UserDTO;
     const app = useState(applicationRunningState)
     const canModifyOrganization = user.role === "admin";
-    const history = useHistory()
     const [firstName, setFirstName] = React.useState("");
     const [lastName, setLastName] = React.useState("");
     const [email, setEmail] = React.useState("");
@@ -54,6 +55,11 @@ const AddUser = () => {
     const { organizations } = useOrganizations();
     const organizationOptions = mapOrganizations(organizations);
     const unblockHandle = useRef<any>();
+    const showNotification = useShowNotification();
+    const { navigate, history } = useNavigation();
+    const isChanged = useState(false);
+
+    useEffect()
 
     const handleFirstLastNameChange = (changedPropertyName: string, value: string) => {
 
@@ -67,6 +73,7 @@ const AddUser = () => {
         }
     }
 
+    // display unsaved changes alert when user navigates 
     useEffect(() => {
         unblockHandle.current = history.block((targetLocation: any) => {
             // take some custom action here
@@ -89,22 +96,22 @@ const AddUser = () => {
         }
     })
 
-    function stopEditing() {
+    const discardChangesAndNavigate = () => {
         if (unblockHandle) {
             app.alert.showAlert.set(false)
             unblockHandle.current()
         }
-        history.push(app.alert.targetLocation.get())
+
+        // get altert target location, and navigate there
         // navigate to some other page or do some routing action now
         // history.push("/any/other/path")
+        navigate(app.alert.targetLocation.get())
     }
 
-    function continueEditing() {
+    const continueEditing = () => {
         if (unblockHandle) {
             app.alert.showAlert.set(false)
         }
-        // navigate to some other page or do some routing action now
-        // history.push("/any/other/path")
     }
 
     disallowWindowNavigation();
@@ -114,27 +121,23 @@ const AddUser = () => {
         formData.set('firstName', firstName);
         formData.set('lastName', lastName);
         formData.set('email', email);
+        formData.set('organizationId', organizationId);
         formData.set('role', role);
 
         try {
-            const response = await httpPostAsync("users", formData)
+            await httpPostAsync("users", formData)
 
-            if (response.code === 201) {
-                app.snack.snackTitle.set("Felhasználó sikeresen hozzáadva")
-                app.snack.showSnack.set(true)
-
-                return <Redirect to={"/admin/manage/users"} />
-            }
+            showNotification("Felhasználó sikeresen hozzáadva");
+            navigate("/admin/manage/users");
         } catch (error) {
 
-            app.snack.snackTitle.set("Felhasználó hozzáadása sikertelen " + error);
-            app.snack.showSnack.set(true)
+            showNotification("Felhasználó hozzáadása sikertelen " + error, "error");
         }
     }
 
     return <DialogFrame
         firstButtonOnClick={continueEditing}
-        secondButtonOnClick={stopEditing}
+        secondButtonOnClick={discardChangesAndNavigate}
         className={classes.dialogFrameWrapper}>
         <AddFrame
             submitHandler={e => {

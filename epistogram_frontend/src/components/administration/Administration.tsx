@@ -3,7 +3,7 @@ import classes from './administration.module.scss'
 import userDetailsState from "../../store/user/userSideState";
 import { useState } from "@hookstate/core";
 import { Users } from "./users/Users";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import Courses from "./courses/Courses";
 import { globalConfig } from "../../configuration/config";
 import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
@@ -89,4 +89,4 @@ const Administration = (props: { match: { url: string; } }) => {
     </MainWrapper>
 };
 
-export default Administration;
+export default withRouter(Administration);

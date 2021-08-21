@@ -5,4 +5,5 @@ export const toUserDTO = (user: User) => new UserDTO(
     user._id,
     user.userData.organizationId,
     user.userData.firstName,
-    user.userData.lastName);
+    user.userData.lastName,
+    user.userData.role);

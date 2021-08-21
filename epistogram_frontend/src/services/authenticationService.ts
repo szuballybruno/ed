@@ -47,18 +47,13 @@ export const useUserFetching = (nonAutomatic?: boolean) => {
         setIsBgFetchingEnabled(isSuccess);
     }, [isSuccess]);
 
-    const currentUser = (isSuccess
-        ? data
-            ? {
-                userId: data?.userId,
-                organizationId: data?.organizationId
-            } as UserDTO
-            : null
-        : null) as UserDTO | null;
+    const authState = new AuthenticationState(isLoading || isFetching, !!data);
 
-    const authState = new AuthenticationState(isLoading || isFetching, !!currentUser);
-
-    return { currentUser, authState, refetchUser };
+    return {
+        currentUser: data as UserDTO,
+        authState,
+        refetchUser
+    };
 }
 
 export const useRenewUserSessionPooling = () => {

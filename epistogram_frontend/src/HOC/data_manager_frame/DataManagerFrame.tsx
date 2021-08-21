@@ -1,7 +1,6 @@
 import { useState } from "@hookstate/core";
 import { createContext, FunctionComponent } from "react";
 import { globalConfig } from "../../configuration/config";
-import { backendUrl } from "../../Environemnt";
 import { UserDTO } from "../../models/shared_models/UserDTO";
 import { AuthenticationState, useRenewUserSessionPooling, useUserFetching } from "../../services/authenticationService";
 import { useGetUserDetails } from "../../services/dataService";
@@ -25,6 +24,8 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     // fetch current user 
     const { currentUser, refetchUser, authState } = useUserFetching();
     console.log("Authentication state: " + authState.asString());
+    console.log("User: ");
+    console.log(currentUser);
 
     // start auth pooling 
     useRenewUserSessionPooling();

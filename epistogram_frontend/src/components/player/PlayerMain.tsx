@@ -19,7 +19,7 @@ import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
 import { FailedComponent, LoadingComponent, NullComponent } from "../../HOC/loading_frame/loadingComponents/LoadingComponent";
 import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
 import { useState } from "@hookstate/core";
-import { useParams } from "react-router";
+import { useParams, withRouter } from "react-router";
 import userDetailsState from "../../store/user/userSideState";
 import applicationRunningState from "../../store/application/applicationRunningState";
 
@@ -120,4 +120,4 @@ const PlayerMain = (props: { history: any }) => {
     </LoadingFrame>
 };
 
-export default PlayerMain;
+export default withRouter(PlayerMain);

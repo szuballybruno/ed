@@ -1,4 +1,4 @@
 export type organizationDTO = {
     _id: string,
-    organizationName: string
+    name: string
 }

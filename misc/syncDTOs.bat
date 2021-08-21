@@ -1,0 +1,1 @@
+xcopy /s %~dp0..\epistogram_backend\models\shared_models %~dp0..\epistogram_frontend\src\models\shared_models /Y

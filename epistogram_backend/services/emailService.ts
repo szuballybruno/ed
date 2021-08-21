@@ -6,6 +6,9 @@ import { createTransport } from 'nodemailer';
 
 export const sendInvitaitionMailAsync = async (userEmail: string, userFullName: string, userId: IdType) => {
 
+    // TODO 
+    return Promise.resolve();
+
     const mailToken = getJWTToken(
         { id: userId },
         globalConfig.mail.tokenMailSecret,

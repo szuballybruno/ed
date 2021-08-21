@@ -2,6 +2,7 @@ import { User } from "../models/entities/User";
 import { ExpressRequest, TypedError } from "../utilities/helpers";
 import { getRequestAccessTokenMeta } from "./authentication";
 import { Connection } from "./connectMongo";
+import { log } from "./logger";
 import { toUserDTO } from "./mappings";
 
 export const getUserById = async (userId: string) => {
@@ -50,5 +51,7 @@ export const getCurrentUser = async (req: ExpressRequest) => {
     if (!tokenMeta)
         throw new TypedError("Token meta is missing!", "forbidden");
 
-    return await getUserDTOById(tokenMeta.userId);
+    const currentUser = await getUserDTOById(tokenMeta.userId);
+
+    return currentUser;
 }

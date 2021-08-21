@@ -88,6 +88,7 @@ export const handleAsyncAction = (req: ExpressRequest, res: ExpressResponse, act
         .then((returnValue: any) => respondOk(res, returnValue))
         .catch((error: any) => {
 
+            logError(error);
             respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
             // next(error);
         });

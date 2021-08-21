@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { getUsersAction } from "./controllers/GET/getUsers"
 // import { login } from "./controllers/GET/login"
-import { createUserAction } from "./controllers/PUT/signup"
+import { createUserAction } from "./controllers/PUT/createUserAction"
 import { deleteUser } from "./controllers/DELETE/deleteUser";
 import { updateUser } from "./controllers/PATCH/updateUser";
-import { resetUserPasswordAction } from "./controllers/GET/resetUser";
+import { resetUserPasswordAction } from "./controllers/GET/resetUserPasswordAction";
 import { getUser } from "./controllers/GET/getUser";
 import { updateCurrentItem } from "./controllers/PATCH/updateCurrentItem";
 import { updateCurrentCourse } from "./controllers/PATCH/updateCurrentCourse";
