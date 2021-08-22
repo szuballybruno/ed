@@ -15,6 +15,7 @@ export const useShowNotification = () => {
 }
 
 export const useAlert = () => {
+    
     const app = useState(applicationRunningState)
 
     return app.alert;

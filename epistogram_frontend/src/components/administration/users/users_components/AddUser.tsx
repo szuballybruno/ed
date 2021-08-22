@@ -150,10 +150,13 @@ const AddUser = () => {
             navigate("/admin/manage/users");
         } catch (error) {
 
+            // generic JS error
             if (!error.errorType) {
 
                 showNotification("Felhasználó hozzáadása sikertelen", "error");
             }
+
+            // typed error of http call 
             else {
 
                 const typedError = error as TypedError;

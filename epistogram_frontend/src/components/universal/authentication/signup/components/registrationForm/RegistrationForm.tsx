@@ -1,10 +1,9 @@
-import {SignupWrapper} from "../../HOC/signupWrapper/SignupWrapper";
-import {SignupForm} from "../../fragments/SignupForm";
-import {Title} from "../../fragments/Title";
+import { SignupWrapper } from "../../HOC/signupWrapper/SignupWrapper";
+import { SignupForm } from "../../fragments/SignupForm";
+import { Title } from "../../fragments/Title";
 import React from "react";
 import classes from './registrationForm.module.scss'
-import applicationRunningState from "../../../../../../store/application/applicationRunningState";
-import {useState} from "@hookstate/core";
+import { RegFormStateType as RegFormStateType } from "../../Signup";
 
 export const RegistrationForm = (props: {
     title: string,
@@ -18,14 +17,16 @@ export const RegistrationForm = (props: {
     upperTitle: string
     to?: string
     nextButtonTitle: string
-    onChange: (e: React.FormEvent<{name: string, value: string}>) => any
+    regFormState: RegFormStateType
     onSubmit: (e: any) => any
     errorText?: string
 }) => {
-    const app = useState(applicationRunningState)
+
+
+
     return <SignupWrapper {...props}>
         <div className={classes.questionAndAnswersWrapper}>
-            <Title text={props.title}/>
+            <Title text={props.title} />
             <div className={classes.answersWrapper}>
                 <SignupForm {...props} />
             </div>

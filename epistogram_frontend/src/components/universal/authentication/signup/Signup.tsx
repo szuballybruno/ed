@@ -1,24 +1,46 @@
-import React, {useEffect} from 'react';
-import {useState} from "@hookstate/core";
-import StartRegistration from "./components/startRegistration/StartRegistration";
-import {PersonalitySurvey} from "./components/personalitySurvey/PersonalitySurvey";
-import {images} from "./store/images";
-import {questions} from "./store/questions";
-import {Summary} from "./components/summary/Summary";
-import {RegistrationForm} from "./components/registrationForm/RegistrationForm";
-import applicationRunningState from "../../../../store/application/applicationRunningState";
-import instance from "../../../../services/axiosInstance";
+import { useState } from "@hookstate/core";
+import { Button, TextField, Typography } from "@material-ui/core";
 import queryString from "query-string";
-import {validatePassword} from "../../../../services/validator";
-import classes from "./signup.module.scss"
-import {globalConfig} from "../../../../configuration/config";
-import {updateActivity} from "../../../../services/updateActivity";
-import {Redirect} from "react-router-dom";
-import {Button, TextField, Typography} from "@material-ui/core";
+import React, { useEffect } from 'react';
+import { hasValue } from "../../../../frontendHelpers";
+import FinalizeUserRegistrationDTO from "../../../../models/shared_models/FinalizeUserRegistrationDTO";
+import instance from "../../../../services/axiosInstance";
+import { httpPostAsync } from "../../../../services/httpClient";
+import { useNavigation } from "../../../../services/navigatior";
+import { useShowNotification } from "../../../../services/notifications";
+import { updateActivity } from "../../../../services/updateActivity";
+import { finalizeUserRegistartionAsync } from "../../../../services/userManagementService";
+import applicationRunningState from "../../../../store/application/applicationRunningState";
+import { PersonalitySurvey } from "./components/personalitySurvey/PersonalitySurvey";
+import { RegistrationForm } from "./components/registrationForm/RegistrationForm";
+import StartRegistration from "./components/startRegistration/StartRegistration";
+import { Summary } from "./components/summary/Summary";
+import classes from "./signup.module.scss";
+import { images } from "./store/images";
+import { questions } from "./store/questions";
 
-export const Signup = (props: {history: any}) => {
+const useRegistrationFinalizationFormState = () => {
+
+    const [phoneNumber, setPhoneNumber] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [passwordControl, setPasswordControl] = React.useState("");
+
+    return {
+        phoneNumber,
+        setPhoneNumber,
+
+        password,
+        setPassword,
+
+        passwordControl,
+        setPasswordControl
+    };
+}
+
+export type RegFormStateType = ReturnType<typeof useRegistrationFinalizationFormState>
+
+export const Signup = (props: { history: any }) => {
     const app = useState(applicationRunningState)
-    const [file, setFile] = React.useState<string | Blob>("")
 
     const questionsState = useState([""])
 
@@ -38,52 +60,38 @@ export const Signup = (props: {history: any}) => {
         currentProgressBarValue: 0,
     })
     let params
+
     const getTokenFromUrl = () => {
-        console.log("GetTokenFromUrl")
+
         params = queryString.parse(window.location.search);
-        console.log(params)
-        try {
-            if (params.token) {
-                app.signup.token.set(params.token as keyof typeof app);
-                return true
-            } else {
-                return false
-            }
-        } catch (e) {
-            return false
-        }
+        return params.token;
     };
 
-    useEffect(() => {
-        getTokenFromUrl();
-    },[])
+    const showNotification = useShowNotification();
+    const invitaionToken = getTokenFromUrl();
+    const { navigate } = useNavigation();
+    const regFormState = useRegistrationFinalizationFormState();
 
-    const submitHandler = (e: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {
-        e.preventDefault();
-        console.log(JSON.stringify(app.signup.get()))
-        let formdata =  new FormData(e.currentTarget)
-        formdata.append('file', file)
-        formdata.set('phoneNumber', app.signup.phoneNumber.get())
-        formdata.set('newPassword', app.signup.passwordOne.get())
+    const submitFinalizationRequestAsync = async (formData: FormData) => {
 
-        if (app.signup.token.get() || app.signup.token.get() !== "") {
-            instance.patch("users", formdata, {
-                headers: {
-                    'Authorization': "Bearer " + app.signup.token.get(),
-                    'Content-Type': 'multipart/form-data'},
-            }).then((res) => {
-                if (res.status === 201) {
-                    app.snack.snackTitle.set("Felhasználó sikeresen frissítve")
-                    app.snack.showSnack.set(true)
-                    return props.history.push("/login")
-                }
-            }).catch((e) => {
-                app.snack.snackTitle.set("Felhasználó frissítése sikertelen " + e)
-                app.snack.showSnack.set(true)
-            })
-        } else {
-            app.snack.snackTitle.set("Nem található felhasználóe")
-            app.snack.showSnack.set(true)
+        const dto = new FinalizeUserRegistrationDTO(
+            regFormState.phoneNumber,
+            regFormState.password,
+            regFormState.passwordControl,
+            invitaionToken);
+
+        try {
+
+            await finalizeUserRegistartionAsync(dto);
+
+            showNotification("Felhasználó sikeresen frissítve")
+
+            // TODO unnecessary
+            navigate("/login");
+        }
+        catch (error) {
+
+            showNotification("Felhasználó frissítése sikertelen ")
         }
     }
 
@@ -100,22 +108,15 @@ export const Signup = (props: {history: any}) => {
         }
 
     }
-    const forwardHandler = (event: React.MouseEvent<any>) => {
-        localState.currentItemIndex.set(p => (p < questions.length - 1) ? p + 1 : p)
-    }
 
-    const handleFormChange = (e: React.FormEvent<{ name: string, value: string  }>) => {
-        app.signup[e.currentTarget.name].set(e.currentTarget.value);
-    };
-
-    const handleQuestionsChange = (e: React.FormEvent<{name: string, value: string}>) => {
+    const handleQuestionsChange = (e: React.FormEvent<{ name: string, value: string }>) => {
         questionsState[localState.currentItemIndex.get() - 1].set(e.currentTarget.value)
         if (localState.currentItemIndex.get() === questions.length - 1) {
             localState.currentType.set("info")
         }
         localState.currentItemIndex.set(p => p < questions.length ? p + 1 : p)
         updateActivity(
-            app.signup.token.get(),
+            invitaionToken,
             "answerSignupSurvey",
             "" + window.location.href,
             "Signup-PersonalitySurvey-SelectAnswer",
@@ -136,56 +137,60 @@ export const Signup = (props: {history: any}) => {
         console.log(questionsState.get())
     }
 
-    return (app.signup.token.get() || app.signup.token.get() !== "") ? <div>
+    return (hasValue(invitaionToken)) ? <div>
         {localState.currentType.get() === "start" &&
             <StartRegistration title={"Regisztráció"}
-                               backHandler={backHandler}
-                               currentImage={images[0]}
+                backHandler={backHandler}
+                currentImage={images[0]}
 
-                               description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
+                description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
 
-                               onClick={(e) => {
-                                   localState.currentType.set("registration")
-                               }}
-                               showUpperTitle
-                               upperTitle={"Üdv a fedélzeten!"}
-                               nextButtonTitle={"Kezdés"}/>}
+                onClick={(e) => {
+                    localState.currentType.set("registration")
+                }}
+                showUpperTitle
+                upperTitle={"Üdv a fedélzeten!"}
+                nextButtonTitle={"Kezdés"} />}
         {localState.currentType.get() === "registration" &&
-                <PersonalitySurvey title={questions[localState.currentItemIndex.get()].title}
-                                   currentValue={questionsState[localState.currentItemIndex.get()].get()}
-                                   onChange={handleQuestionsChange}
-                                   backHandler={backHandler}
-                                   currentImage={images[localState.currentItemIndex.get() + 1]}
-                                   progressBarValue={(localState.currentItemIndex.get() + 1) / questions.length * 100}
-                                   progressCounterValue={`${localState.currentItemIndex.get() + 1}/${questions.length}`}
-                                   questionAnswers={questions[localState.currentItemIndex.get()].questionAnswers} />}
+            <PersonalitySurvey title={questions[localState.currentItemIndex.get()].title}
+                currentValue={questionsState[localState.currentItemIndex.get()].get()}
+                onChange={handleQuestionsChange}
+                backHandler={backHandler}
+                currentImage={images[localState.currentItemIndex.get() + 1]}
+                progressBarValue={(localState.currentItemIndex.get() + 1) / questions.length * 100}
+                progressCounterValue={`${localState.currentItemIndex.get() + 1}/${questions.length}`}
+                questionAnswers={questions[localState.currentItemIndex.get()].questionAnswers} />}
         {localState.currentType.get() === "info" &&
-                <Summary title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
-                         currentValue={localState.currentItemValue.get()}
-                         description={"Már csak egy-két adatra van szükségünk, hogy elkezdhesd a rendszer használatát"}
-                         backHandler={backHandler}
-                         onClick={() => {
-                             localState.currentType.set("form")
-                         }}
-                         currentImage={images[6]}
-                         showBackHandler
-                         showUpperTitle
-                         upperTitle={"Összegzés"}
-                         nextButtonTitle={"Folytatás"}/>}
+            <Summary title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
+                currentValue={localState.currentItemValue.get()}
+                description={"Már csak egy-két adatra van szükségünk, hogy elkezdhesd a rendszer használatát"}
+                backHandler={backHandler}
+                onClick={() => {
+                    localState.currentType.set("form")
+                }}
+                currentImage={images[6]}
+                showBackHandler
+                showUpperTitle
+                upperTitle={"Összegzés"}
+                nextButtonTitle={"Folytatás"} />}
         {localState.currentType.get() === "form" &&
-                <RegistrationForm title={"Személyes adatok és jelszó megadása"}
-                                  currentValue={localState.currentItemValue.get()}
-                                  description={""}
-                                  backHandler={backHandler}
-                                  onClick={() => {}}
-                                  currentImage={images[7]}
-                                  showBackHandler
-                                  showUpperTitle
-                                  upperTitle={"Utolsó simítások"}
-                                  nextButtonTitle={"Regisztráció befejezése"}
-                                  onChange={handleFormChange}
-                                  onSubmit={submitHandler}
-                                  errorText={app.signup.errorText.get()}/>}
+            <RegistrationForm title={"Személyes adatok és jelszó megadása"}
+                currentValue={localState.currentItemValue.get()}
+                description={""}
+                backHandler={backHandler}
+                onClick={() => { }}
+                currentImage={images[7]}
+                showBackHandler
+                showUpperTitle
+                upperTitle={"Utolsó simítások"}
+                nextButtonTitle={"Regisztráció befejezése"}
+                regFormState={regFormState}
+                onSubmit={(e) => {
+
+                    e.preventDefault();
+                    submitFinalizationRequestAsync(new FormData(e.currentTarget));
+                }}
+                errorText={""} />}
     </div> : <div className={classes.noUserScreen}>
         <Typography>
             Nem található felhasználó. A regisztrációs email újraküldéséhez írd be az email címed és kattints a majd itt található gombra

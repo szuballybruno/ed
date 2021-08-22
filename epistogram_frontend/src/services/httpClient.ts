@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from "axios";
 import { getErrorTypeByHTTPCode, TypedError } from "../frontendHelpers";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import instance from "./axiosInstance";
@@ -12,14 +13,23 @@ export class HTTPResponse {
     }
 }
 
-export const httpPostAsync = async (urlEnding: string, data?: any) => {
+export const httpPostAsync = async (urlEnding: string, data?: any, bearerToken?: string) => {
 
     try {
 
-        const axiosResponse = await instance.post(urlEnding, data, {
+        const config = {
             withCredentials: true
-        });
+        } as AxiosRequestConfig;
 
+        // set bearer token 
+        if (bearerToken) {
+
+            config.headers = {
+                'Authorization': "Bearer " + bearerToken
+            };
+        }
+
+        const axiosResponse = await instance.post(urlEnding, data,);
         const response = new HTTPResponse(axiosResponse.status, axiosResponse.data);
 
         return response.data;

@@ -9,14 +9,14 @@ import { updateCurrentItem } from "./controllers/PATCH/updateCurrentItem";
 import { updateCurrentCourse } from "./controllers/PATCH/updateCurrentCourse";
 import { updateActivityAction } from "./controllers/PATCH/updateActivity";
 import { getAsyncActionHandler } from "../../utilities/helpers";
-import { createInvitedUserAction } from "./userManagementActions";
+import { createInvitedUserAction, finalizeUserRegistrationAction } from "./userManagementActions";
 
 // router.get('/login', login);
 export const router = Router()
 
 router.get("/", getAsyncActionHandler(getUsersAction))
 router.post("/create-invited-user", getAsyncActionHandler(createInvitedUserAction))
-router.post("/finalize-user-registration", updateUser)
+router.post("/finalize-user-registration", getAsyncActionHandler(finalizeUserRegistrationAction))
 
 router.patch("/activity", updateActivityAction)
 

@@ -3,7 +3,7 @@ import { CreateInvitedUserDTO } from "../../models/shared_models/CreateInvitedUs
 import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
 import { getUserIdFromRequest } from "../../services/authentication";
 import { createInvitedUserAsync, finalizeUserRegistrationAsync } from "../../services/userManagementService";
-import { withValueOrBadRequest } from "../../utilities/helpers";
+import { getBearerTokenFromRequest, withValueOrBadRequest } from "../../utilities/helpers";
 
 export const createInvitedUserAction = async (req: Request) => {
 
@@ -15,8 +15,7 @@ export const createInvitedUserAction = async (req: Request) => {
 
 export const finalizeUserRegistrationAction = async (req: Request) => {
 
-    const invitationToken = withValueOrBadRequest(req.query.token);
     const dto = withValueOrBadRequest(req.body) as FinalizeUserRegistrationDTO;
 
-    await finalizeUserRegistrationAsync(invitationToken, dto);
+    await finalizeUserRegistrationAsync(dto);
 };

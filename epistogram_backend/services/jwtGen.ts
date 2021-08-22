@@ -1,8 +1,8 @@
 import { sign, verify } from 'jsonwebtoken';
 
-export const getJWTToken = (tokenData: any, secret: string, expiresIn: string): string => {
+export const getJWTToken = <TTokenPayload>(tokenData: TTokenPayload, secret: string, expiresIn: string): string => {
 
-    return sign(tokenData, secret, { expiresIn: expiresIn });
+    return sign(tokenData as any, secret, { expiresIn: expiresIn });
 }
 
 export const verifyJWTToken = <TTokenPayload>(token: string, secret: string) => {

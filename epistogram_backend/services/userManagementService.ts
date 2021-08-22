@@ -56,16 +56,17 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
     const userId = insertResults.insertedId;
 
     // send invitaion mail
-    const invitationToken = getJWTToken(
-        { userId: userId } as InvitationTokenPayload,
+    const invitationToken = getJWTToken<InvitationTokenPayload>(
+        { userId: userId },
         globalConfig.mail.tokenMailSecret,
         "24h");
 
     await sendInvitaitionMailAsync(invitationToken, email, userFullName);
 }
 
-export const finalizeUserRegistrationAsync = async (invitationToken: string, dto: FinalizeUserRegistrationDTO) => {
+export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistrationDTO) => {
 
+    const invitationToken = withValueOrBadRequest(dto.invitationToken);
     const controlPassword = withValueOrBadRequest(dto.controlPassword);
     const password = withValueOrBadRequest(dto.password);
     const phoneNumber = withValueOrBadRequest(dto.phoneNumber);

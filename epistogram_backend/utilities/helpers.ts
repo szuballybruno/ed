@@ -96,6 +96,12 @@ export const withValueOrBadRequest = (obj: any) => withValue(obj, () => {
     throw new TypedError("Requied filed has no value!", "bad request");
 });
 
+export const getBearerTokenFromRequest = (req: ExpressRequest) => {
+
+    const authHeader = req.headers.authorization;
+    return authHeader?.split(' ')[1];
+}
+
 export const getAsyncActionHandler = (action: (req: ExpressRequest) => Promise<any>) => {
 
     return (req: ExpressRequest, res: ExpressResponse) => {
