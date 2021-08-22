@@ -10,6 +10,11 @@ export const disallowWindowNavigation = () => {
     };
 }
 
+export const hasValue = (obj: any) => {
+
+    return (!!obj || obj === false) && obj !== "";
+}
+
 export const getEventValueCallback = (callback: (value: any) => void) => {
 
     const inputChangeHandler = (e: React.ChangeEvent<{ value: unknown, name?: string }>) => {

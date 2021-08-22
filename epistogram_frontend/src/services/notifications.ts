@@ -13,3 +13,9 @@ export const useShowNotification = () => {
         app.snack.showSnack.set(true);
     }
 }
+
+export const useAlert = () => {
+    const app = useState(applicationRunningState)
+
+    return app.alert;
+}

@@ -1,8 +1,6 @@
-import { useState } from "@hookstate/core";
 import { Button } from "@material-ui/core";
-import React, { useContext, useEffect, useRef } from 'react';
-import { Redirect, useHistory } from "react-router-dom";
-import { disallowWindowNavigation, getEventValueCallback } from "../../../../frontendHelpers";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { disallowWindowNavigation, getEventValueCallback, hasValue } from "../../../../frontendHelpers";
 import { AddFrame } from "../../../../HOC/add_frame/AddFrame";
 import { CurrentUserContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
 import { DialogFrame } from "../../../../HOC/dialog_frame/DialogFrame";
@@ -10,9 +8,8 @@ import { organizationDTO } from "../../../../models/shared_models/OrganizationDT
 import { UserDTO } from "../../../../models/shared_models/UserDTO";
 import { httpPostAsync } from "../../../../services/httpClient";
 import { useNavigation } from "../../../../services/navigatior";
-import { useShowNotification } from "../../../../services/notifications";
+import { useAlert, useShowNotification } from "../../../../services/notifications";
 import { useOrganizations } from "../../../../services/organizationsService";
-import applicationRunningState from "../../../../store/application/applicationRunningState";
 import SelectFromArray, { OptionType } from "../../universal/selectFromArray/SelectFromArray";
 import SingleInput from "../../universal/singleInput/SingleInput";
 import DoubleInputs from "../../universal/twoInputs/DoubleInputs";
@@ -44,22 +41,26 @@ const roles = [{
 
 const AddUser = () => {
 
+    // editable fields
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [role, setRole] = useState("");
+    const [organizationId, setOrganizationId] = useState("");
+
     const user = useContext(CurrentUserContext) as UserDTO;
-    const app = useState(applicationRunningState)
+    const alert = useAlert();
     const canModifyOrganization = user.role === "admin";
-    const [firstName, setFirstName] = React.useState("");
-    const [lastName, setLastName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [role, setRole] = React.useState("");
-    const [organizationId, setOrganizationId] = React.useState("");
     const { organizations } = useOrganizations();
     const organizationOptions = mapOrganizations(organizations);
     const unblockHandle = useRef<any>();
     const showNotification = useShowNotification();
     const { navigate, history } = useNavigation();
-    const isChanged = useState(false);
-
-    useEffect()
+    const isChanged = hasValue(firstName)
+        || hasValue(lastName)
+        || hasValue(email)
+        || hasValue(role)
+        || hasValue(organizationId);
 
     const handleFirstLastNameChange = (changedPropertyName: string, value: string) => {
 
@@ -73,13 +74,25 @@ const AddUser = () => {
         }
     }
 
+    console.log("Changed: " + isChanged);
+
     // display unsaved changes alert when user navigates 
     useEffect(() => {
         unblockHandle.current = history.block((targetLocation: any) => {
+
+            if (!isChanged) {
+
+                console.log("Navigation not blocked because there is no changed fields!");
+                return true as any;
+            }
+
+
+            console.log("Blocking navigation because there's changed fields!");
+
             // take some custom action here
             // i chose to show my custom modal warning user froim going back
             // rather than relying on the browser's alert
-            app.alert.set({
+            alert.set({
                 showAlert: true,
                 targetLocation: targetLocation.pathname,
                 alertTitle: "Biztosan megszakítod a felhasználó hozzáadását?",
@@ -98,19 +111,19 @@ const AddUser = () => {
 
     const discardChangesAndNavigate = () => {
         if (unblockHandle) {
-            app.alert.showAlert.set(false)
+            alert.showAlert.set(false)
             unblockHandle.current()
         }
 
         // get altert target location, and navigate there
         // navigate to some other page or do some routing action now
         // history.push("/any/other/path")
-        navigate(app.alert.targetLocation.get())
+        navigate(alert.targetLocation.get())
     }
 
     const continueEditing = () => {
         if (unblockHandle) {
-            app.alert.showAlert.set(false)
+            alert.showAlert.set(false)
         }
     }
 
