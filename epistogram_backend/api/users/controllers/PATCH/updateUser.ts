@@ -1,69 +1,50 @@
-import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
-import jwt from 'jsonwebtoken';
-import { MongoError, ObjectID } from "mongodb";
+import { ObjectID } from "mongodb";
 import { globalConfig } from "../../../../server";
 import { comparePasswordAsync, hashPasswordAsync } from "../../../../services/crypt";
 import { createFile } from "../../../../services/fileServices";
 import { flattenObject } from "../../../../services/flattenObject";
+import { verifyJWTToken } from "../../../../services/jwtGen";
+import { useCollection } from "../../../../services/persistance";
+import { getSingleFileFromRequest, requestHasFiles } from "../../../../utilities/helpers";
 
 const { responseReducer } = require('../../../../services/responseReducer')
 const { Connection } = require('../../../../services/connectMongo')
 
-const updateUserInDatabase = (userId: string, updateableObject: object) => {
-    Connection.db.collection("users").findOneAndUpdate({
-        "_id": new ObjectID(userId)
-    }, {
-        $set: updateableObject
-    }, {
-        upsert: false,
-        new: true
-    } as any, (err: MongoError) => {
-        if (err) {
-            throw new Error("Az adatok frissítése sikertelen!" + err)
-        }
-    })
-}
-//const { ObjectID } = require('mongodb').ObjectID
+export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 
-export const updateUser = (req: Request, res: Response, next: NextFunction) => {
+    const { updateAsync } = await useCollection("users");
 
+    type UserDataType = { email: string, userId: string };
     const flatBody = flattenObject(req.body)
-    //Auth
-    //authenticate(req, res, next)
     const updateData = async () => {
         //FindOneAndUpdate
         if (!req.body.currentPassword && req.body.newPassword) {
             let uploadedFile: UploadedFile
 
             const authHeader = req.headers.authorization
-            let userData: {
-                email: string
-                userId: string
-            } | undefined
+            let userData: UserDataType | undefined
             if (authHeader) {
-                const token = authHeader.split(' ')[1];
 
-                jwt.verify(token, globalConfig.mail.tokenMailSecret, (err, user) => {
-                    if (err) {
-                        throw new Error("A token ellenőrzése sikertelen")
-                    }
-                    userData = user as { email: string, userId: string }
-                })
+                const token = authHeader.split(' ')[1];
+                userData = verifyJWTToken<UserDataType>(token, globalConfig.mail.tokenMailSecret);
             }
-            if (req.files) {
-                uploadedFile = req.files.file as UploadedFile
+            if (requestHasFiles(req)) {
+                uploadedFile = getSingleFileFromRequest(req);
                 createFile(uploadedFile, `/var/lib/assets/epistogram@development/users/${req.params.userId}/`, "avatar")
             }
             //checkFile(req, res, next)
             let hashedPassword;
             hashedPassword = await hashPasswordAsync(req.body.newPassword);
 
-            await updateUserInDatabase(userData != undefined ? userData.userId : "", {
+            if (!userData)
+                return;
+
+            await updateAsync(userData != undefined ? userData.userId : "", {
                 "userData.phoneNumber": req.body.phoneNumber,
                 "userData.password": hashedPassword
-            })
+            });
 
         } else if (req.body.currentPassword && req.body.newPassword) {
             let user;

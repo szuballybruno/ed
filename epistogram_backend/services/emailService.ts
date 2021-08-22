@@ -1,21 +1,21 @@
 import Email from 'email-templates';
-import { IdType } from '../models/shared_models/types/sharedTypes';
 import { globalConfig } from '../server';
-import { getJWTToken } from './jwtGen';
 import { createTransport } from 'nodemailer';
+import { log } from './logger';
 
-export const sendInvitaitionMailAsync = async (userEmail: string, userFullName: string, userId: IdType) => {
+export const sendInvitaitionMailAsync = async (
+    invitationToken: string, userEmail: string, userFullName: string) => {
 
-    // TODO 
+    const signupUrl = `${globalConfig.misc.frontendUrl}/signup`;
+    const invitationUrl = `${signupUrl}?token=${invitationToken}`;
+
+    log("Invitation link: ");
+    log(invitationUrl);
+
+    // TODO mailing 
     return Promise.resolve();
 
-    const mailToken = getJWTToken(
-        { id: userId },
-        globalConfig.mail.tokenMailSecret,
-        "24h");
-
     const mail = getEmail();
-    const signupUrl = `${globalConfig.misc.frontendUrl}/signup`;
 
     await mail.send({
         template: "setpassword",
@@ -26,7 +26,7 @@ export const sendInvitaitionMailAsync = async (userEmail: string, userFullName: 
         locals: {
             nev: userFullName,
             email: userEmail,
-            url: `${signupUrl}?token=${mailToken}`
+            url: invitationUrl
         }
     });
 }
@@ -73,12 +73,12 @@ export const getEmailConfig = () => ({
 });
 
 export const createNewTransporter = (mailHost: string, senderMail: string, pass: string) => createTransport({
-    host: mailHost,//globalConfig.mail.mailHost,
+    host: mailHost,
     port: 465,
     secure: true,
     auth: {
-        user: senderMail,//globalConfig.mail.senderEmail,
-        pass: pass//globalConfig.mail.senderPassword
+        user: senderMail,
+        pass: pass
     },
     tls: {
         rejectUnauthorized: false

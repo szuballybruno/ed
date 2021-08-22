@@ -6,11 +6,12 @@ import { TokenMeta } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { globalConfig } from "../server";
 import { ExpressRequest, ExpressResponse, getCookie, TypedError } from "../utilities/helpers";
-import { removeRefreshToken, setUserActiveRefreshToken } from "./authenticationPersistance";
+import { removeRefreshToken, setUserActiveRefreshToken } from "./refreshTokenService";
 import { comparePasswordAsync } from "./crypt";
 import { log, logError } from "./logger";
 import { toUserDTO } from "./mappings";
 import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById } from "./userService";
+import { verifyJWTToken } from "./jwtGen";
 
 // CONSTS
 export const accessTokenCookieName = "accessToken";
@@ -25,7 +26,7 @@ export const getRequestAccessTokenMeta = (req: Request) => {
     if (!accessToken)
         return null;
 
-    const tokenMeta = validateToken(accessToken, globalConfig.security.jwtSignSecret);
+    const tokenMeta = verifyJWTToken<TokenMeta>(accessToken, globalConfig.security.jwtSignSecret);
     if (!tokenMeta)
         return null;
 
@@ -39,7 +40,7 @@ export const authorizeRequest = (req: Request) => {
         if (!accessToken)
             throw new TypedError("Access token missing!", "forbidden");
 
-        const tokenMeta = validateToken(accessToken, globalConfig.security.jwtSignSecret);
+        const tokenMeta = verifyJWTToken<TokenMeta>(accessToken, globalConfig.security.jwtSignSecret);
         if (!tokenMeta)
             throw new TypedError("Invalid token!", "forbidden");
 
@@ -68,7 +69,7 @@ export const getUserIdFromRequest = (req: ExpressRequest) => {
         throw new TypedError("Refresh token not sent.", "bad request");
 
     // check sent refresh token if invalid by signature or expired
-    const tokenMeta = validateToken(refreshToken, globalConfig.security.jwtSignSecret);
+    const tokenMeta = verifyJWTToken<TokenMeta>(refreshToken, globalConfig.security.jwtSignSecret);
     if (!tokenMeta)
         throw new TypedError("Refresh token validation failed.", "forbidden");
 
@@ -85,7 +86,7 @@ export const renewUserSession = async (req: ExpressRequest, res: ExpressResponse
         throw new TypedError("Refresh token not sent.", "bad request");
 
     // check sent refresh token if invalid by signature or expired
-    const tokenMeta = validateToken(refreshToken, globalConfig.security.jwtSignSecret);
+    const tokenMeta = verifyJWTToken<TokenMeta>(refreshToken, globalConfig.security.jwtSignSecret);
     if (!tokenMeta)
         throw new TypedError("Refresh token validation failed.", "forbidden");
 
@@ -179,21 +180,6 @@ const getRefreshToken = (user: UserDTO) => {
 
     return jwt.sign(getPlainObjectUserInfoDTO(user), globalConfig.security.jwtSignSecret);
 }
-
-const validateToken = (token: string, secret: string) => {
-
-    try {
-        jwt.verify(token, secret);
-    }
-    catch (e) {
-
-        logError(e);
-        return null;
-    }
-
-    return jwt.decode(token) as TokenMeta;
-}
-
 
 const setAccessTokenCookie = (res: Response, accessToken: string) => {
     res.cookie(accessTokenCookieName, accessToken, {

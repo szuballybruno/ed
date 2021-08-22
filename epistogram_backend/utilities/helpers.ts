@@ -1,5 +1,6 @@
 import { extend } from "dayjs";
-import express, { NextFunction } from "express";
+import express, { NextFunction, Request } from "express";
+import { UploadedFile } from "express-fileupload";
 import { log, logError } from "../services/logger";
 
 export type ExpressRequest = express.Request;
@@ -73,6 +74,26 @@ export const withValue = (obj: any, errorFunc?: () => void) => {
 
     return obj;
 }
+
+export const requestHasFiles = (req: ExpressRequest) => {
+
+    return !!req.files;
+}
+
+export const getSingleFileFromRequest = (req: ExpressRequest) => {
+
+    if (!req.files)
+        throw new TypedError("Request contains no files.", "bad request");
+
+    // TODO multiple file error check
+
+    return req.files.file as UploadedFile;
+}
+
+export const withValueOrBadRequest = (obj: any) => withValue(obj, () => {
+
+    throw new TypedError("Requied filed has no value!", "bad request");
+});
 
 export const getAsyncActionHandler = (action: (req: ExpressRequest) => Promise<any>) => {
 

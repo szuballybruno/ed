@@ -4,12 +4,14 @@ import { disallowWindowNavigation, getEventValueCallback, hasValue } from "../..
 import { AddFrame } from "../../../../HOC/add_frame/AddFrame";
 import { CurrentUserContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
 import { DialogFrame } from "../../../../HOC/dialog_frame/DialogFrame";
+import { CreateInvitedUserDTO } from "../../../../models/shared_models/CreateInvitedUserDTO";
 import { organizationDTO } from "../../../../models/shared_models/OrganizationDTO";
 import { UserDTO } from "../../../../models/shared_models/UserDTO";
 import { httpPostAsync } from "../../../../services/httpClient";
 import { useNavigation } from "../../../../services/navigatior";
 import { useAlert, useShowNotification } from "../../../../services/notifications";
 import { useOrganizations } from "../../../../services/organizationsService";
+import { createInvitedUserAsync } from "../../../../services/userManagementService";
 import SelectFromArray, { OptionType } from "../../universal/selectFromArray/SelectFromArray";
 import SingleInput from "../../universal/singleInput/SingleInput";
 import DoubleInputs from "../../universal/twoInputs/DoubleInputs";
@@ -46,6 +48,7 @@ const AddUser = () => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("");
+    const [jobTitle, setJobTitle] = useState("");
     const [organizationId, setOrganizationId] = useState("");
 
     const user = useContext(CurrentUserContext) as UserDTO;
@@ -60,6 +63,7 @@ const AddUser = () => {
         || hasValue(lastName)
         || hasValue(email)
         || hasValue(role)
+        || hasValue(jobTitle)
         || hasValue(organizationId);
 
     const handleFirstLastNameChange = (changedPropertyName: string, value: string) => {
@@ -85,7 +89,6 @@ const AddUser = () => {
                 console.log("Navigation not blocked because there is no changed fields!");
                 return true as any;
             }
-
 
             console.log("Blocking navigation because there's changed fields!");
 
@@ -129,16 +132,19 @@ const AddUser = () => {
 
     disallowWindowNavigation();
 
-    const sumbmitAddUserRequestAsync = async (formData: FormData) => {
+    const sumbmitAddUserRequestAsync = async () => {
 
-        formData.set('firstName', firstName);
-        formData.set('lastName', lastName);
-        formData.set('email', email);
-        formData.set('organizationId', organizationId);
-        formData.set('role', role);
+        const createInvitedUserDTO = new CreateInvitedUserDTO(
+            firstName,
+            lastName,
+            email,
+            organizationId,
+            jobTitle,
+            role);
 
         try {
-            await httpPostAsync("users", formData)
+
+            createInvitedUserAsync(createInvitedUserDTO);
 
             showNotification("Felhasználó sikeresen hozzáadva");
             navigate("/admin/manage/users");
@@ -156,7 +162,7 @@ const AddUser = () => {
             submitHandler={e => {
 
                 e.preventDefault();
-                sumbmitAddUserRequestAsync(new FormData(e.currentTarget));
+                sumbmitAddUserRequestAsync();
             }}
             title={"Új felhasználó hozzáadása"}>
 
@@ -186,8 +192,8 @@ const AddUser = () => {
             {/* job title */}
             <SingleInput
                 labelText={"Beosztás"}
-                name={"innerRole"}
-                changeHandler={getEventValueCallback(setRole)} />
+                name={"jobTitle"}
+                changeHandler={getEventValueCallback(setJobTitle)} />
 
             {/* role */}
             <SelectFromArray labelText={"Jogosultsági kör"}

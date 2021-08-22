@@ -2,7 +2,9 @@ import { ObjectID } from "mongodb"
 import { IdType } from "../models/shared_models/types/sharedTypes"
 import { Connection } from "./connectMongo"
 
-export const useCollection = async <TItem>(collectionName: string) => {
+export type CollectionNameType = "users";
+
+export const useCollection = async <TItem>(collectionName: CollectionNameType) => {
 
     const collection = await Connection.db.collection(collectionName);
 
@@ -11,7 +13,7 @@ export const useCollection = async <TItem>(collectionName: string) => {
         return collection.insertOne(item);
     }
 
-    const getItemById = async (id: IdType) => {
+    const getItemById = (id: IdType) => {
 
         return collection.findOne({ _id: new ObjectID(id) })
     }
@@ -19,6 +21,20 @@ export const useCollection = async <TItem>(collectionName: string) => {
     const getItems = () => {
 
 
+    }
+
+    const updateAsync = (id: string, updateCommandObject: object) => {
+        return collection.findOneAndUpdate(
+            {
+                "_id": new ObjectID(id)
+            },
+            {
+                $set: updateCommandObject
+            },
+            {
+                upsert: false,
+                new: true
+            } as any);
     }
 
     const deleteItemById = (id: IdType) => {
@@ -30,6 +46,7 @@ export const useCollection = async <TItem>(collectionName: string) => {
         insertItem,
         getItemById,
         getItems,
-        deleteItemById
+        deleteItemById,
+        updateAsync
     }
 }
