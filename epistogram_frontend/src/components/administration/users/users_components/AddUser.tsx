@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { disallowWindowNavigation, getEventValueCallback, hasValue } from "../../../../frontendHelpers";
+import { disallowWindowNavigation, getEventValueCallback, hasValue, TypedError } from "../../../../frontendHelpers";
 import { AddFrame } from "../../../../HOC/add_frame/AddFrame";
 import { CurrentUserContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
 import { DialogFrame } from "../../../../HOC/dialog_frame/DialogFrame";
@@ -144,13 +144,28 @@ const AddUser = () => {
 
         try {
 
-            createInvitedUserAsync(createInvitedUserDTO);
+            await createInvitedUserAsync(createInvitedUserDTO);
 
             showNotification("Felhasználó sikeresen hozzáadva");
             navigate("/admin/manage/users");
         } catch (error) {
 
-            showNotification("Felhasználó hozzáadása sikertelen " + error, "error");
+            if (!error.errorType) {
+
+                showNotification("Felhasználó hozzáadása sikertelen", "error");
+            }
+            else {
+
+                const typedError = error as TypedError;
+
+                if (typedError.errorType == "bad request") {
+
+                    showNotification("Felhasználó hozzáadása sikertelen, hiányosak, vagy nem megfelelőek a megadott adatok", "error");
+                } else {
+
+                    showNotification("Felhasználó hozzáadása sikertelen, hiba a szerver-kliens kommunikációban", "error");
+                }
+            }
         }
     }
 

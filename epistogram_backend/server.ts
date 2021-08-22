@@ -114,7 +114,8 @@ connectToMongoDB().then(() => {
     expressServer.use('/votes', authMiddleware, generalDataRoutes);
 
     expressServer.use((req, res) => {
-        throw new Error(`Route did not match: ${req.url}`);
+
+        res.status(404).send(`Route did not match: ${req.url}`);
     });
 
     expressServer.use((error: express.Errback, req: express.Request, res: express.Response) => {

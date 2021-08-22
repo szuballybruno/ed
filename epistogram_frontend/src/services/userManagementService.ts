@@ -3,5 +3,5 @@ import { httpPostAsync } from "./httpClient";
 
 export const createInvitedUserAsync = (dto: CreateInvitedUserDTO) => {
 
-    return httpPostAsync("create-invited-user", dto);
+    return httpPostAsync("users/create-invited-user", dto);
 }
