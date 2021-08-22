@@ -66,20 +66,24 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
 
 export const finalizeUserRegistrationAsync = async (invitationToken: string, dto: FinalizeUserRegistrationDTO) => {
 
+    const controlPassword = withValueOrBadRequest(dto.controlPassword);
+    const password = withValueOrBadRequest(dto.password);
+    const phoneNumber = withValueOrBadRequest(dto.phoneNumber);
+
     const tokenPayload = verifyJWTToken<InvitationTokenPayload>(invitationToken, globalConfig.mail.tokenMailSecret);
     if (!tokenPayload)
         throw new TypedError("Invitation token is invalid or expired!", "forbidden");
 
-    if (dto.password != dto.controlPassword)
+    if (password != controlPassword)
         throw new TypedError("Passwords are not equal!", "bad request");
 
     const { updateAsync } = await useCollection("users");
 
     // hash password
-    const hashedPassword = await hashPasswordAsync(dto.password);
+    const hashedPassword = await hashPasswordAsync(password);
 
     await updateAsync(tokenPayload.userId, {
-        "userData.phoneNumber": dto.phoneNumber,
+        "userData.phoneNumber": phoneNumber,
         "userData.password": hashedPassword
     });
 }

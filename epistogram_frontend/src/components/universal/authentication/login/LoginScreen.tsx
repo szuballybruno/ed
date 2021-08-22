@@ -2,6 +2,7 @@ import { useState } from "@hookstate/core";
 import { Button } from "@material-ui/core";
 import React, { useContext } from 'react';
 import { Redirect } from "react-router";
+import { TypedError } from "../../../../frontendHelpers";
 import { AuthenticationStateContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
 import { useLogInUser } from '../../../../services/authenticationService';
 import applicationRunningState from "../../../../store/application/applicationRunningState";
@@ -13,6 +14,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
     console.warn("[LoginScreen] Started...")
     const app = useState(applicationRunningState)
     const errorMessage = useState("");
+    const setErrorMessage = (message: string) => errorMessage.set(message);
     const logInUser = useLogInUser();
 
     const authenticate = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,39 +25,33 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
         const password = app.currentPassword.get();
 
         try {
-            const response = await logInUser(email, password);
 
-            if (response) {
+            await logInUser(email, password);
 
-                if (response.code === 200) {
+            console.log("Login successful, naving to home page!");
+            return props.history.push('/kezdolap');
 
-                    console.log("Login successful, naving to home page!");
-                    return props.history.push('/kezdolap');
-                }
+        } catch (error: any | TypedError) {
 
-                else if (response.code !== 200) {
+            // non typed error
+            if (!error.errorType) {
 
-                    errorMessage.set("A megadott adatok hibásak");
-                }
-
-                else {
-
-                    errorMessage.set("Ismeretlen hiba történt");
-                }
+                setErrorMessage("Ismeretlen hiba történt");
             }
 
+            // typed error 
             else {
 
-                errorMessage.set("A megadott adatok hibásak");
-            }
-        } catch (error) {
+                const typedError = error as TypedError;
 
-            if (error.response !== undefined) {
-                if (error.response.status === 401 || error.response.status === 500) {
-                    errorMessage.set("A megadott adatok hibásak");
+                if (typedError.errorType == "bad request") {
+
+                    setErrorMessage("A megadott adatok hibásak");
                 }
-            } else {
-                errorMessage.set("A szerver nem elérhető" + error);
+                else {
+
+                    setErrorMessage("Ismeretlen hiba történt a szerverrel való kommunikáció során");
+                }
             }
         }
     };

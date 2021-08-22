@@ -73,9 +73,7 @@ export const useRenewUserSessionPooling = () => {
 
 export const logOutUserAsync = async () => {
 
-    const result = await httpPostAsync("log-out-user");
-    //rewrite with instance.post
-    validateHttpResponse(result);
+    await httpPostAsync("log-out-user");
 }
 
 export const useLogInUser = () => {
@@ -89,17 +87,8 @@ export const useLogInUser = () => {
             password: password
         });
 
-        // validateHttpResponse(result);
         refetchUser();
 
         return result;
     }
-}
-
-const validateHttpResponse = (response: HTTPResponse) => {
-
-    if (response.code === 200)
-        return;
-
-    throw new Error("Logout failed!" + response.data.msg);
 }

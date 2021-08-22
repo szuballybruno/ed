@@ -1,12 +1,12 @@
-import axios from "axios";
-import { globalConfig } from "../configuration/config";
+import { getErrorTypeByHTTPCode, TypedError } from "../frontendHelpers";
+import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import instance from "./axiosInstance";
 
 export class HTTPResponse {
     code: number;
     data: any;
 
-    constructor(code: number, data: any) {
+    constructor(code: number, data: any | HttpErrorResponseDTO) {
         this.code = code;
         this.data = data;
     }
@@ -18,7 +18,36 @@ export const httpPostAsync = async (urlEnding: string, data?: any) => {
         withCredentials: true
     });
 
-    return new HTTPResponse(axiosResponse.status, axiosResponse.data);
+    const response = new HTTPResponse(axiosResponse.status, axiosResponse.data);
+    const responseCode = response.code;
+
+    if (responseCode != 200) {
+
+        // get & check error response data
+        const error = response.data as HttpErrorResponseDTO;
+        if (!error)
+            throw new TypedError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+
+        // get & check error response data properties
+        if (!error.message && !error.errorType)
+            throw new TypedError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+
+        // message only 
+        // throw with a more informative message
+        if (error.message && !error.errorType)
+            throw new TypedError(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
+
+        // error type and maybe message as well
+        const message = error.message
+            ? `Http response code (${responseCode}) did not indicate success. Message: ${error.message}`
+            : `Http response code (${responseCode}) did not indicate success. Code: ${error.errorType}`
+
+        // throw with a more informative message 
+        // and error type
+        throw new TypedError(message, error.errorType);
+    }
+
+    return response.data;
 }
 
 export const httpGetAsync = async (urlEnding: string) => {

@@ -1,6 +1,7 @@
 import { extend } from "dayjs";
 import express, { NextFunction, Request } from "express";
 import { UploadedFile } from "express-fileupload";
+import { ErrorType } from "../models/shared_models/types/sharedTypes";
 import { log, logError } from "../services/logger";
 
 export type ExpressRequest = express.Request;
@@ -148,5 +149,3 @@ export class TypedError extends Error {
         return `${this.type}: ${this.message}`;
     }
 }
-
-type ErrorType = "forbidden" | "internal server error" | "bad request";
