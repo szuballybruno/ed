@@ -48,7 +48,7 @@ const EditUser = (props: {
             <div className={classes.editItemContainer}>
                 {dataSheetData.map((data) => {
                     return <EditItem value={`${props.user[data.placeholderName as keyof typeof props.user] || ""}`}
-                        editOnChange={(e: React.ChangeEvent<any>) => {
+                        onChange={(e: React.ChangeEvent<any>) => {
                             instance.patch(`users/${props.user._id}`, {
                                 "userData": {
                                     [data.placeholderName]: "" + e.currentTarget.value

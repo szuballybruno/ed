@@ -47,7 +47,7 @@ export const getAdminPageUsersList = async (userId: IdType, searchText: string) 
                     "phoneNumber": "$userData.phoneNumber",
                     "role": "$userData.role",
                     "innerRole": "$userData.innerRole",
-                    "organizationName": "$orgs.organizationName",
+                    "organizationName": "$orgs.name",
                     "name": { $concat: ["$userData.lastName", " ", "$userData.firstName"] },
                     "tasks": "$userData.tasks"
                 }

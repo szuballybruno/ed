@@ -15,15 +15,6 @@
   height: 30px;
 }
 
-.inputItem {
-  //background-color: white;
-  color: black;
-}
-
-.inputField {
-  width: calc(100% - 50px);
-}
-
 .editButtonIcon {
 }
 
@@ -50,16 +41,14 @@
   border: 0;
 }
 
-.editButtonsWrapper {
+
+.textOrInputWrapper {
   display: flex;
   flex-direction: row;
-}
-
-.formControl {
-  //background-color: seagreen;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
   width: 100%;
-}
-
-.select {
-  width: calc(100% - 35px);
+  box-sizing: border-box;
+  padding: 0 10px 0 10px;
 }
