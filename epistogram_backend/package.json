@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "nodemon": "npx nodemon server.ts"
+    "nodemon": "npx nodemon server.ts",
+    "syncDTOs": "xcopy /s %~dp0..\\epistogram_backend\\models\\shared_models %~dp0..\\epistogram_frontend\\src\\models\\shared_models /Y"
   },
   "dependencies": {
     "@babel/types": "^7.13.0",

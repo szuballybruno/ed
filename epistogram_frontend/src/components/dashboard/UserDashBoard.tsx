@@ -20,7 +20,7 @@ import userDetailsState from "../../store/user/userSideState";
 import { item } from "../../store/types/item";
 import ListItem from "../universal/atomic/listItem/ListItem";
 import { Divider, Grid } from "@material-ui/core";
-import { Assistant } from "./dashboard_components/Assistant/Assistant";
+import { OverviewDashboard } from "./dashboard_components/OverviewDashboard/OverviewDashboard";
 import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import applicationRunningState from '../../store/application/applicationRunningState';
 
@@ -59,7 +59,7 @@ const UserDashBoard = () => {
                 <RightPanel>
                     <AdminDashboardHeader titleText={"Személyes tanulási asszisztens"} />
                     <Divider className={classes.divider} />
-                    <Assistant />
+                    <OverviewDashboard />
                     <AdminDashboardHeader titleText={"Szavazás"} />
                     <Divider className={classes.divider} style={{ marginBottom: 40 }} />
                     <Votes />
