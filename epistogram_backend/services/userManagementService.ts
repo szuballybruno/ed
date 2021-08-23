@@ -4,11 +4,12 @@ import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserReg
 import { IdType, InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
 import { globalConfig } from "../server";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
+import { getUserLoginTokens } from "./authentication";
 import { hashPasswordAsync } from "./crypt";
 import { sendInvitaitionMailAsync } from "./emailService";
 import { getJWTToken, verifyJWTToken } from "./jwtGen";
 import { useCollection } from "./persistance";
-import { getUserByEmail, getUserById } from "./userService";
+import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
 
 export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: IdType) => {
 
@@ -75,6 +76,10 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
     if (!tokenPayload)
         throw new TypedError("Invitation token is invalid or expired!", "forbidden");
 
+    const userDTO = await getUserDTOById(tokenPayload.userId);
+    if (!userDTO)
+        throw new TypedError("Invited user not found by id: " + tokenPayload.userId, "bad request");
+
     if (password != controlPassword)
         throw new TypedError("Passwords are not equal!", "bad request");
 
@@ -87,4 +92,11 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
         "userData.phoneNumber": phoneNumber,
         "userData.password": hashedPassword
     });
+
+    const { accessToken, refreshToken } = await getUserLoginTokens(userDTO);
+
+    return {
+        accessToken,
+        refreshToken
+    }
 }

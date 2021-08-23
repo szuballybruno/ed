@@ -5,11 +5,12 @@ import { User } from '../models/entities/User';
 
 export const getAdminPageUsersList = async (userId: IdType, searchText: string) => {
 
-    const { getItemById, collection } = await useCollection("users");
+    const { getItemById, collection, aggregateAsync } = await useCollection("users");
     const user = await getItemById(userId) as User;
 
     const aggregateAllUsers = async () => {
-        const allUsers = await collection.aggregate([
+
+        const allUsers = await aggregateAsync<AdminPageUserView>([
             {
                 '$lookup': {
                     'from': 'organizations',
@@ -52,9 +53,9 @@ export const getAdminPageUsersList = async (userId: IdType, searchText: string) 
                 }
             }, {
                 $match: { "name": (new RegExp(searchText as string, 'i')) }
-            }]).toArray()
+            }]);
 
-        return allUsers as AdminPageUserView[];
+        return allUsers;
     }
 
     const aggregateUsersByOrganization = async () => {

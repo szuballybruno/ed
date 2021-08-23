@@ -14,17 +14,17 @@ import { createInvitedUserAction, finalizeUserRegistrationAction } from "./userM
 // router.get('/login', login);
 export const router = Router()
 
-router.get("/", getAsyncActionHandler(getUsersAction))
-router.post("/create-invited-user", getAsyncActionHandler(createInvitedUserAction))
-router.post("/finalize-user-registration", getAsyncActionHandler(finalizeUserRegistrationAction))
+router.get("/", getAsyncActionHandler(getUsersAction));
+router.post("/create-invited-user", getAsyncActionHandler(createInvitedUserAction));
+router.post("/finalize-user-registration", getAsyncActionHandler(finalizeUserRegistrationAction));
 
-router.patch("/activity", updateActivityAction)
+router.patch("/activity", updateActivityAction);
 
 router.get("/:userId", getUser);
 router.patch("/:userId", updateUser);
-router.delete("/:userId", deleteUser)
+router.delete("/:userId", deleteUser);
 
-router.patch("/:userId/course/:courseId", updateCurrentCourse)
-router.patch("/:userId/course/:courseId/item/:itemId", updateCurrentItem)
+router.patch("/:userId/course/:courseId", updateCurrentCourse);
+router.patch("/:userId/course/:courseId/item/:itemId", updateCurrentItem);
 
 router.get("/:userId/reset", getAsyncActionHandler(resetUserPasswordAction));

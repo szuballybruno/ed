@@ -1,11 +1,6 @@
-import classes from "./assistant.module.scss"
-import {Line} from "react-chartjs-2"
-
-import React from 'react';
+import { useState } from "@hookstate/core";
 import {
-    Button,
-    Container,
-    Grid,
+    Button, Grid,
     List,
     ListItem,
     ListItemIcon,
@@ -13,13 +8,17 @@ import {
     Paper,
     Typography
 } from "@material-ui/core";
-import {useState} from "@hookstate/core";
-import userDetailsState from "../../../../store/user/userSideState";
-import {Create, MenuBook, PlayCircleFilled} from "@material-ui/icons";
+import { Create, MenuBook, PlayCircleFilled } from "@material-ui/icons";
+import React from 'react';
+import { Line } from "react-chartjs-2";
 import { NavLink } from "react-router-dom";
+import userDetailsState from "../../../../store/user/userSideState";
+import classes from "./assistant.module.scss";
 
 export const Assistant = () => {
+
     const user = useState(userDetailsState)
+
     const data = {
         labels: ['30 nap', '45 nap', '60 nap', '75 nap', '90 nap'],
         datasets: [
@@ -30,9 +29,9 @@ export const Assistant = () => {
                 backgroundColor: 'rgb(63,178,181)',
                 borderColor: 'rgba(13,104,140,0.2)',
                 tension: 0.5
-            },{
+            }, {
                 label: 'Hagyományos tréningek',
-                data: [3, 5, 4, 5, 2 ],
+                data: [3, 5, 4, 5, 2],
                 fill: false,
                 backgroundColor: 'rgb(215,33,163)',
                 borderColor: 'rgba(139,0,155,0.2)',
@@ -40,6 +39,7 @@ export const Assistant = () => {
             }
         ],
     };
+
     const options = {
         maintainAspectRatio: false,
         scales: {
@@ -52,6 +52,7 @@ export const Assistant = () => {
             ],
         },
     };
+
     return <div className={classes.assistantWrapper}>
         <Grid container spacing={1}>
             <Grid item xs={8} className={classes.testItemWrapper}>
@@ -63,21 +64,21 @@ export const Assistant = () => {
                     <div className={classes.nmiAnswerWrapper}>
                         <div className={classes.nmiAnswerRow}>
                             <Button variant={"contained"} className={classes.nmiAnswerColumn}
-                                    onClick={() => {}}>
+                                onClick={() => { }}>
                                 {user.userData.currentItem.overlays[0].answers[0].answer.get()}
                             </Button>
                             <Button variant={"contained"} className={classes.nmiAnswerColumn}
-                                    onClick={() => {}}>
+                                onClick={() => { }}>
                                 {user.userData.currentItem.overlays[0].answers[1].answer.get()}
                             </Button>
                         </div>
                         <div className={classes.nmiAnswerRow}>
                             <Button variant={"contained"} className={classes.nmiAnswerColumn}
-                                    onClick={() => {}}>
+                                onClick={() => { }}>
                                 {user.userData.currentItem.overlays[0].answers[2].answer.get()}
                             </Button>
                             <Button variant={"contained"} className={classes.nmiAnswerColumn}
-                                    onClick={() => {}}>
+                                onClick={() => { }}>
                                 {user.userData.currentItem.overlays[0].answers[3].answer.get()}
                             </Button>
                         </div>
@@ -108,8 +109,8 @@ export const Assistant = () => {
                         </ListItem>
                         <NavLink className={classes.allTasksButtonLink} to={"/profilom/tanulas"}>
                             <Button variant={"outlined"}
-                                    className={classes.allTasksButton}
-                                    size={"small"}>Összes feladatom</Button>
+                                className={classes.allTasksButton}
+                                size={"small"}>Összes feladatom</Button>
                         </NavLink>
                     </List>
                 </Paper>
@@ -128,13 +129,11 @@ export const Assistant = () => {
                 <Typography variant={"overline"} className={classes.smallBlockTitle}>Fejlődési görbém az elmúlt 90 napban</Typography>
                 <Paper className={classes.progressLineChartPaper}>
                     <Line className={classes.progressLineChart}
-                          options={options}
-                          type={"line"}
-                          data={data}/>
+                        options={options}
+                        type={"line"}
+                        data={data} />
                 </Paper>
             </Grid>
         </Grid>
-
-
     </div>
 };

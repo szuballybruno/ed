@@ -1,6 +1,6 @@
 import { Divider, Fab } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { NavLink, Route, Switch } from "react-router-dom";
 import { globalConfig } from "../../../configuration/config";
 import { CurrentUserContext } from '../../../HOC/data_manager_frame/DataManagerFrame';

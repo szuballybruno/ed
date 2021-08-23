@@ -102,7 +102,7 @@ export const getBearerTokenFromRequest = (req: ExpressRequest) => {
     return authHeader?.split(' ')[1];
 }
 
-export const getAsyncActionHandler = (action: (req: ExpressRequest) => Promise<any>) => {
+export const getAsyncActionHandler = (action: (req: ExpressRequest, res: ExpressResponse) => Promise<any>) => {
 
     return (req: ExpressRequest, res: ExpressResponse) => {
 
@@ -110,9 +110,9 @@ export const getAsyncActionHandler = (action: (req: ExpressRequest) => Promise<a
     }
 }
 
-export const handleAsyncAction = (req: ExpressRequest, res: ExpressResponse, action: (req: ExpressRequest) => Promise<any>) => {
+export const handleAsyncAction = (req: ExpressRequest, res: ExpressResponse, action: (req: ExpressRequest, res: ExpressResponse) => Promise<any>) => {
 
-    action(req)
+    action(req, res)
         .then((returnValue: any) => respondOk(res, returnValue))
         .catch((error: any) => {
 

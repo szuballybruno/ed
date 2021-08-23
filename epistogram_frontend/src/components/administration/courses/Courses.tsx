@@ -33,7 +33,7 @@ const Courses = () => {
                 admin.courses.set(res.data)
                 app.loadingIndicator.set("success")
             } else {
-                app.loadingIndicator.set("failed")
+                app.loadingIndicator.set("error")
             }
 
         }).catch((e) => {
@@ -49,7 +49,7 @@ const Courses = () => {
                 admin.courses.set(res.data as course[])
                 app.loadingIndicator.set("success")
             } else {
-                app.loadingIndicator.set("failed")
+                app.loadingIndicator.set("error")
             }
 
         }).catch((e) => {

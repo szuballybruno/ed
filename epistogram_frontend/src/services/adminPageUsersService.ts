@@ -20,7 +20,9 @@ export const useUserListQuery = (user: UserDTO | null, searchText: string) => {
         async () => (await httpGetAsync(url)).data as AdminPageUserView[], {
         retry: false,
         refetchOnWindowFocus: false,
-        enabled: !!userId && !!organizationId
+        enabled: !!userId && !!organizationId,
+        refetchOnReconnect: true,
+        refetchOnMount: true
     });
 
     return {

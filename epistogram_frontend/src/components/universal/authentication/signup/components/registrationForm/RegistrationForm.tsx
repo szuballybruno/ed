@@ -22,8 +22,6 @@ export const RegistrationForm = (props: {
     errorText?: string
 }) => {
 
-
-
     return <SignupWrapper {...props}>
         <div className={classes.questionAndAnswersWrapper}>
             <Title text={props.title} />

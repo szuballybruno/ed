@@ -1,11 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { refreshTokenRefreshIntervalInS as refreshTokenRefreshIntervalInMs, userRefreshIntervalInS as userRefreshIntervalInMs } from '../Environemnt';
 import { RefetchUserFunctionContext } from '../HOC/data_manager_frame/DataManagerFrame';
 import { UserDTO } from '../models/shared_models/UserDTO';
 import { httpGetAsync, httpPostAsync, HTTPResponse } from './httpClient';
-
-const userFetchingIntervalInS = 15;
-const userSessionRenewIntervalInS = 10;
 
 export class AuthenticationState {
     isLoading: boolean;
@@ -35,7 +33,7 @@ export const useUserFetching = (nonAutomatic?: boolean) => {
         async () => (await httpGetAsync("get-current-user")).data, {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: bgFetchingEnabled ? userFetchingIntervalInS * 1000 : false,
+        refetchInterval: bgFetchingEnabled ? userRefreshIntervalInMs : false,
         enabled: true,
         notifyOnChangeProps: ['data', 'isSuccess', 'isError']
     });
@@ -58,10 +56,12 @@ export const useUserFetching = (nonAutomatic?: boolean) => {
 
 export const useRenewUserSessionPooling = () => {
 
-    const { isSuccess } = useQuery('renewUserSession', () => httpGetAsync("renew-user-session"), {
+    const { isSuccess } = useQuery(
+        ['renewUserSession'],
+        () => httpGetAsync("renew-user-session"), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: userSessionRenewIntervalInS * 1000,
+        refetchInterval: refreshTokenRefreshIntervalInMs,
         refetchIntervalInBackground: true,
         notifyOnChangeProps: []
     });

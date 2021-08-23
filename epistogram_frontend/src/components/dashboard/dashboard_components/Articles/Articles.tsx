@@ -25,7 +25,7 @@ const Articles = () => {
                 app.articles.set(res.data)
                 app.loadingIndicator.set("success")
             } else {
-                app.loadingIndicator.set("failed")
+                app.loadingIndicator.set("error")
             }
         })
         // eslint-disable-next-line

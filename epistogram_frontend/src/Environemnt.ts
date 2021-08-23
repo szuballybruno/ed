@@ -5,6 +5,8 @@ export const backendUrl = isLocalhost
     : window.location.origin + "/api/";
 
 export const currentOrigin = window.location.origin;
+export const refreshTokenRefreshIntervalInS = 10 * 60 * 1000; // 10 minutes
+export const userRefreshIntervalInS = 11 * 60 * 1000; // 11 minutes
 
 if (isLocalhost)
     console.warn("Application is running on LOCALHOST, in localhost mode!");

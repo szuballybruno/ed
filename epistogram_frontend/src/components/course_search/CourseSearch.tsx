@@ -80,7 +80,7 @@ const CourseSearch = () => {
         if (response) {
             app.loadingIndicator.set("success")
         } else {
-            app.loadingIndicator.set("failed")
+            app.loadingIndicator.set("error")
         }
         return response
     }
@@ -137,7 +137,7 @@ const CourseSearch = () => {
                 })
                 app.loadingIndicator.set("success")
             } else {
-                app.loadingIndicator.set("failed")
+                app.loadingIndicator.set("error")
             }
         }).catch((e) => {
             return e

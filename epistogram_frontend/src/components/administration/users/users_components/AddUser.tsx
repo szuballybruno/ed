@@ -7,7 +7,6 @@ import { DialogFrame } from "../../../../HOC/dialog_frame/DialogFrame";
 import { CreateInvitedUserDTO } from "../../../../models/shared_models/CreateInvitedUserDTO";
 import { organizationDTO } from "../../../../models/shared_models/OrganizationDTO";
 import { UserDTO } from "../../../../models/shared_models/UserDTO";
-import { httpPostAsync } from "../../../../services/httpClient";
 import { useNavigation } from "../../../../services/navigatior";
 import { useAlert, useShowNotification } from "../../../../services/notifications";
 import { useOrganizations } from "../../../../services/organizationsService";
@@ -134,13 +133,16 @@ const AddUser = () => {
 
     const sumbmitAddUserRequestAsync = async () => {
 
-        const createInvitedUserDTO = new CreateInvitedUserDTO(
+        const createInvitedUserDTO = {
             firstName,
             lastName,
             email,
-            organizationId,
             jobTitle,
-            role);
+            role: hasValue(role) ? role : "admin",
+            organizationId
+        } as CreateInvitedUserDTO;
+
+        console.log(createInvitedUserDTO);
 
         try {
 

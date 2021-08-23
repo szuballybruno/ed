@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import dayjs from "dayjs";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
@@ -6,18 +5,16 @@ import { TokenMeta } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { globalConfig } from "../server";
 import { ExpressRequest, ExpressResponse, getCookie, TypedError } from "../utilities/helpers";
-import { removeRefreshToken, setUserActiveRefreshToken } from "./refreshTokenService";
 import { comparePasswordAsync } from "./crypt";
-import { log, logError } from "./logger";
-import { toUserDTO } from "./mappings";
-import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById } from "./userService";
 import { verifyJWTToken } from "./jwtGen";
+import { log } from "./logger";
+import { toUserDTO } from "./mappings";
+import { removeRefreshToken, setUserActiveRefreshToken } from "./refreshTokenService";
+import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById } from "./userService";
 
 // CONSTS
 export const accessTokenCookieName = "accessToken";
 export const refreshTokenCookieName = "refreshToken";
-const accessTokenLifespanInS = 30;
-const refreshTokenLifespanInS = 604800; // one week
 
 // PUBLICS
 export const getRequestAccessTokenMeta = (req: Request) => {
@@ -107,7 +104,7 @@ export const renewUserSession = async (req: ExpressRequest, res: ExpressResponse
     // save refresh token to DB
     await setUserActiveRefreshToken(user.userId, refreshToken);
 
-    await setAuthCookies(res, user, newAccessToken, newRefreshToken);
+    await setAuthCookies(res, newAccessToken, newRefreshToken);
 }
 
 export const logInUser = async (req: ExpressRequest, res: ExpressResponse) => {
@@ -126,22 +123,16 @@ export const logInUser = async (req: ExpressRequest, res: ExpressResponse) => {
         throw new TypedError("Email or password is null.", "bad request");
 
     // authenticate
-    const user = await getUserDTOByCredentials(email, password)
-    if (!user)
+    const userDTO = await getUserDTOByCredentials(email, password)
+    if (!userDTO)
         throw new TypedError("Invalid credentials.", "forbidden");
 
     log("User logged in: ");
-    log(user);
+    log(userDTO);
 
-    // get tokens
-    const accessToken = getAccessToken(user);
-    const refreshToken = getRefreshToken(user);
+    const { accessToken, refreshToken } = await getUserLoginTokens(userDTO);
 
-    // save refresh token to DB
-    log(`Setting refresh token of user '${user.userId}' to '${refreshToken}'`);
-    await setUserActiveRefreshToken(user.userId, refreshToken);
-
-    await setAuthCookies(res, user, accessToken, refreshToken);
+    await setAuthCookies(res, accessToken, refreshToken);
 }
 
 export const logOutUser = async (req: ExpressRequest, res: ExpressResponse) => {
@@ -158,6 +149,28 @@ export const logOutUser = async (req: ExpressRequest, res: ExpressResponse) => {
     res.clearCookie(refreshTokenCookieName);
 }
 
+export const getUserLoginTokens = async (user: UserDTO) => {
+
+    // get tokens
+    const accessToken = getAccessToken(user);
+    const refreshToken = getRefreshToken(user);
+
+    // save refresh token to DB
+    log(`Setting refresh token of user '${user.userId}' to '${refreshToken}'`);
+    await setUserActiveRefreshToken(user.userId, refreshToken);
+
+    return {
+        accessToken,
+        refreshToken
+    }
+}
+
+export const setAuthCookies = (res: ExpressResponse, accessToken: string, refreshToken: string) => {
+
+    setAccessTokenCookie(res, accessToken);
+    setRefreshTokenCookie(res, refreshToken);
+}
+
 // PRIVATES
 const getPlainObjectUserInfoDTO = (user: UserDTO) => {
 
@@ -169,23 +182,30 @@ const getPlainObjectUserInfoDTO = (user: UserDTO) => {
 
 const getAccessToken = (user: UserDTO) => {
 
-    const secret = globalConfig.security.jwtSignSecret;
-    const token = jwt
-        .sign(getPlainObjectUserInfoDTO(user), secret, { expiresIn: `${accessTokenLifespanInS}s` });
+    const token = jwt.sign(
+        getPlainObjectUserInfoDTO(user),
+        globalConfig.security.jwtSignSecret, {
+        expiresIn: `${globalConfig.security.accessTokenLifespanInS}s`
+    });
 
     return token;
 }
 
 const getRefreshToken = (user: UserDTO) => {
 
-    return jwt.sign(getPlainObjectUserInfoDTO(user), globalConfig.security.jwtSignSecret);
+    return jwt.sign(
+        getPlainObjectUserInfoDTO(user),
+        globalConfig.security.jwtSignSecret,
+        {
+            expiresIn: globalConfig.security.refreshTokenLifespanInS
+        });
 }
 
 const setAccessTokenCookie = (res: Response, accessToken: string) => {
     res.cookie(accessTokenCookieName, accessToken, {
         secure: true,
         httpOnly: true,
-        expires: dayjs().add(accessTokenLifespanInS, "seconds").toDate()
+        expires: dayjs().add(globalConfig.security.accessTokenLifespanInS, "seconds").toDate()
     });
 }
 
@@ -193,12 +213,6 @@ const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
     res.cookie(refreshTokenCookieName, refreshToken, {
         secure: true,
         httpOnly: true,
-        expires: dayjs().add(refreshTokenLifespanInS, "seconds").toDate()
+        expires: dayjs().add(globalConfig.security.refreshTokenLifespanInS, "seconds").toDate()
     });
-}
-
-const setAuthCookies = (res: Response, user: UserDTO, accessToken: string, refreshToken: string) => {
-
-    setAccessTokenCookie(res, accessToken);
-    setRefreshTokenCookie(res, refreshToken);
 }

@@ -21,7 +21,7 @@ export const LoadingFrame = (props: LoadingFrameProps) => {
             case "loading":
                 return <LoadingComponent></LoadingComponent>
 
-            case "failed":
+            case "error":
                 return <FailedComponent></FailedComponent>
 
             case "success":

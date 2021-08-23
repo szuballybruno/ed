@@ -1,16 +1,13 @@
 import { useState } from "@hookstate/core";
 import { Button, TextField, Typography } from "@material-ui/core";
 import queryString from "query-string";
-import React, { useEffect } from 'react';
+import React from 'react';
 import { hasValue } from "../../../../frontendHelpers";
 import FinalizeUserRegistrationDTO from "../../../../models/shared_models/FinalizeUserRegistrationDTO";
-import instance from "../../../../services/axiosInstance";
-import { httpPostAsync } from "../../../../services/httpClient";
 import { useNavigation } from "../../../../services/navigatior";
 import { useShowNotification } from "../../../../services/notifications";
 import { updateActivity } from "../../../../services/updateActivity";
 import { finalizeUserRegistartionAsync } from "../../../../services/userManagementService";
-import applicationRunningState from "../../../../store/application/applicationRunningState";
 import { PersonalitySurvey } from "./components/personalitySurvey/PersonalitySurvey";
 import { RegistrationForm } from "./components/registrationForm/RegistrationForm";
 import StartRegistration from "./components/startRegistration/StartRegistration";
@@ -40,7 +37,6 @@ const useRegistrationFinalizationFormState = () => {
 export type RegFormStateType = ReturnType<typeof useRegistrationFinalizationFormState>
 
 export const Signup = (props: { history: any }) => {
-    const app = useState(applicationRunningState)
 
     const questionsState = useState([""])
 
@@ -96,17 +92,28 @@ export const Signup = (props: { history: any }) => {
     }
 
     const backHandler = (event: React.MouseEvent<any>) => {
-        if (localState.currentItemIndex.get() === 0) {
-            localState.currentType.set("start")
-        } else if (localState.currentItemIndex.get() < questions.length) {
-            localState.currentItemIndex.set(p => (p > 0) ? p - 1 : p)
-        } else if ((localState.currentItemIndex.get()) === questions.length) {
-            localState.currentItemIndex.set(p => (p > 0) ? p - 1 : p)
-            localState.currentType.set("registration")
-        } else {
-            localState.currentType.set("info")
-        }
 
+        const curretnItemIndex = localState.currentItemIndex.get();
+        const setCurretnItemIndex = localState.currentItemIndex.set;
+        const setCurrentType = localState.currentType.set;
+
+        if (curretnItemIndex === 0) {
+
+            setCurrentType("start")
+        }
+        else if (curretnItemIndex < questions.length) {
+
+            setCurretnItemIndex(p => (p > 0) ? p - 1 : p)
+        }
+        else if (curretnItemIndex === questions.length) {
+
+            setCurretnItemIndex(p => (p > 0) ? p - 1 : p)
+            setCurrentType("registration")
+        }
+        else {
+
+            setCurrentType("info")
+        }
     }
 
     const handleQuestionsChange = (e: React.FormEvent<{ name: string, value: string }>) => {

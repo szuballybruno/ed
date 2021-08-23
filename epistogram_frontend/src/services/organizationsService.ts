@@ -6,7 +6,7 @@ export const useOrganizations = () => {
 
     const url = "organizations/getorganizations";
     const { data, status, isLoading } = useQuery(
-        "getOrganizations",
+        ["getOrganizations"],
         async () => (await httpGetAsync(url)).data as OrganizationDTO[], {
         retry: false,
         refetchOnWindowFocus: false

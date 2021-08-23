@@ -1,6 +1,7 @@
 import { ObjectID } from "mongodb"
 import { IdType } from "../models/shared_models/types/sharedTypes"
 import { Connection } from "./connectMongo"
+import { logError } from "./logger";
 
 export type CollectionNameType = "users";
 
@@ -21,6 +22,19 @@ export const useCollection = async <TItem>(collectionName: CollectionNameType) =
     const getItems = () => {
 
 
+    }
+
+    const aggregateAsync = async <T>(pipeline: object[]) => {
+
+        try {
+
+            const array = await collection.aggregate(pipeline).toArray();
+            return array as T[];
+        } catch (e) {
+
+            logError(e);
+            throw new Error("Database aggregation error." + e.message);
+        }
     }
 
     const updateAsync = (id: string, updateCommandObject: object) => {
@@ -47,6 +61,7 @@ export const useCollection = async <TItem>(collectionName: CollectionNameType) =
         getItemById,
         getItems,
         deleteItemById,
-        updateAsync
+        updateAsync,
+        aggregateAsync
     }
 }

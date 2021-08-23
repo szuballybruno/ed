@@ -52,6 +52,8 @@ export const getCurrentUser = async (req: ExpressRequest) => {
         throw new TypedError("Token meta is missing!", "forbidden");
 
     const currentUser = await getUserDTOById(tokenMeta.userId);
+    if (!currentUser)
+        throw new TypedError("User not found by id: " + tokenMeta.userId, "bad request");
 
     return currentUser;
 }
