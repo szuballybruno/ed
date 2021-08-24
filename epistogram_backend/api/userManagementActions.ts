@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { CreateInvitedUserDTO } from "../../models/shared_models/CreateInvitedUserDTO";
-import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
-import { getUserIdFromRequest, setAuthCookies } from "../../services/authentication";
-import { createInvitedUserAsync, finalizeUserRegistrationAsync } from "../../services/userManagementService";
-import { withValueOrBadRequest } from "../../utilities/helpers";
+import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
+import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
+import { getUserIdFromRequest, setAuthCookies } from "../services/authentication";
+import { createInvitedUserAsync, finalizeUserRegistrationAsync } from "../services/userManagementService";
+import { withValueOrBadRequest } from "../utilities/helpers";
 
 export const createInvitedUserAction = async (req: Request) => {
 

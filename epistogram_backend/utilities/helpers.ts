@@ -1,62 +1,66 @@
 import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
+import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
 import { log, logError } from "../services/logger";
 
-export const respondOk = (res: Response, data?: any) => {
+export const getAsyncActionHandler = (action: (req: Request, res: Response) => Promise<any>) => {
 
-    data
-        ? respond(res, 200, data)
-        : respond(res, 200);
-};
+    return (req: Request, res: Response) => {
 
-export const respondForbidden = (res: Response) => {
-
-    respond(res, 403);
-};
-
-export const respondBadRequest = (res: Response) => {
-
-    respond(res, 400);
-};
-
-export const respondInternalServerError = (res: Response) => {
-
-    respond(res, 500);
-};
-
-const respond = (res: Response, code: number, data?: any) => {
-
-    if (data) {
-
-        log("Responding with data, code: " + code);
-        res.json(data);
-    } else {
-
-        log("Responding, code: " + code);
-        res.sendStatus(code);
+        handleAsyncAction(req, res, action);
     }
+}
+
+export const handleAsyncAction = (req: Request, res: Response, action: (req: Request, res: Response) => Promise<any>) => {
+
+    action(req, res)
+        .then((returnValue: any) => respond(res, 200, returnValue))
+        .catch((error: any) => {
+
+            logError(error);
+            respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
+            // next(error);
+        });
 }
 
 const respondError = (res: Response, msg: string, type: ErrorType) => {
 
     logError(`Responding error: ${type}: ${msg}`);
 
+    const errorDTO = {
+        errorType: type,
+        message: msg
+    } as HttpErrorResponseDTO;
+
     switch (type) {
         case "bad request":
-            respondBadRequest(res);
+            respond(res, 400, errorDTO);
             break;
 
         case "forbidden":
-            respondForbidden(res);
+            respond(res, 403, errorDTO);
             break;
 
         case "internal server error":
-            respondInternalServerError(res);
+            respond(res, 500, errorDTO);
             break;
 
         default:
             break;
+    }
+}
+
+export const respond = (res: Response, code: number, data?: any) => {
+
+    if (data) {
+
+        log("Responding with data, code: " + code);
+        res.status(code).send(data);
+    } else {
+
+        log("Responding, code: " + code);
+        res.sendStatus(code);
     }
 }
 
@@ -95,26 +99,6 @@ export const getBearerTokenFromRequest = (req: Request) => {
 
     const authHeader = req.headers.authorization;
     return authHeader?.split(' ')[1];
-}
-
-export const getAsyncActionHandler = (action: (req: Request, res: Response) => Promise<any>) => {
-
-    return (req: Request, res: Response) => {
-
-        handleAsyncAction(req, res, action);
-    }
-}
-
-export const handleAsyncAction = (req: Request, res: Response, action: (req: Request, res: Response) => Promise<any>) => {
-
-    action(req, res)
-        .then((returnValue: any) => respondOk(res, returnValue))
-        .catch((error: any) => {
-
-            logError(error);
-            respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
-            // next(error);
-        });
 }
 
 export const getCookies = (req: Request) => {

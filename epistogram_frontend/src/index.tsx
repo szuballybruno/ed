@@ -4,7 +4,7 @@ import { BrowserRouter, BrowserRouter as Router, Route, Switch, withRouter } fro
 import './index.css';
 import LoginScreen from "./components/universal/authentication/login/LoginScreen";
 import NotFound from "./components/universal/notFound/NotFound";
-import PlayerMain from "./components/player/PlayerMain";
+import PlayerPage from "./components/player/PlayerPage";
 import ProfileMain from "./components/profile/ProfileMain";
 import CourseSearch from "./components/course_search/CourseSearch";
 import OverviewPage from "./components/dashboard/OverviewPage";
@@ -32,7 +32,7 @@ const MainSwitch = () => {
         <Route path="/signup" component={withRouter(Signup)} />
 
         {/* protected paths */}
-        <ProtectedRoute path="/watch/:courseId/:id" render={() => <PlayerMain />} />
+        <ProtectedRoute path="/watch/:courseId/:id" render={() => <PlayerPage />} />
         <ProtectedRoute path="/admin" render={() => <Administration />} />
         <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
         <ProtectedRoute path="/kurzusok" render={() => <CourseSearch />} />

@@ -38,7 +38,7 @@ export const useOverviewPageDTO = () => {
 
     const queryRes = useReactQuery(
         ["overviewPageDTOQuery"],
-        () => httpGetAsync("get-overview-page-dto"));
+        () => httpGetAsync("data/get-overview-page-dto"));
 
     return {
         pageDTO: queryRes.data,

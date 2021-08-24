@@ -61,14 +61,14 @@ export const getUserDTOByCredentials = async (email: string, password: string) =
 export const getUserIdFromRequest = (req: Request) => {
 
     // check if there is a refresh token sent in the request 
-    const refreshToken = getCookie(req, "refreshToken")?.value;
-    if (!refreshToken)
-        throw new TypedError("Refresh token not sent.", "bad request");
+    const accessToken = getCookie(req, "accessToken")?.value;
+    if (!accessToken)
+        throw new TypedError("Access token not sent.", "bad request");
 
-    // check sent refresh token if invalid by signature or expired
-    const tokenMeta = verifyJWTToken<TokenMeta>(refreshToken, globalConfig.security.jwtSignSecret);
+    // check sent access token if invalid by signature or expired
+    const tokenMeta = verifyJWTToken<TokenMeta>(accessToken, globalConfig.security.jwtSignSecret);
     if (!tokenMeta)
-        throw new TypedError("Refresh token validation failed.", "forbidden");
+        throw new TypedError("Access token validation failed.", "forbidden");
 
     return tokenMeta.userId;
 }

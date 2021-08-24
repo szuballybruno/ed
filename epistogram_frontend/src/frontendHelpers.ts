@@ -32,6 +32,20 @@ export const hasValue = (obj: any) => {
     return (!!obj || obj === false) && obj !== "";
 }
 
+
+export const secondsToTime = (e: any) => {
+    let h = Math.floor(e / 3600).toString().padStart(2, '0'),
+        m = Math.floor(e % 3600 / 60).toString().padStart(2, '0'),
+        s = Math.floor(e % 60).toString().padStart(2, '0');
+
+    return h !== '00' ? h + ':' + m + ':' + s : m + ':' + s;
+}
+
+export const isArray = (obj: any) => {
+
+    return Array.isArray(obj);
+}
+
 export class TypedError extends Error {
 
     errorType: ErrorType;

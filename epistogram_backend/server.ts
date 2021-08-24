@@ -10,8 +10,11 @@ import { router as filesRoutes } from './api/files/routes';
 import { router as groupsRoutes } from './api/groups/routes';
 import { router as organizationRoutes } from './api/organizations/routes';
 import { router as overlaysRoutes } from './api/overlays/routes';
+import { getCurrentVideoAction, setCurrentVideoAction } from './api/playerActions';
 import { router as tagsRoutes } from './api/tags/routes';
 import { router as tasksRoutes } from './api/tasks/routes';
+import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
+import { getUsersAction } from './api/users/controllers/GET/getUsers';
 import { router as usersRoutes } from './api/users/routes';
 import { router as videosRoutes } from './api/videos/routes';
 import { router as generalDataRoutes } from './api/votes/routes';
@@ -20,7 +23,7 @@ import { connectToMongoDB } from "./services/connectMongo";
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/logger";
 import { getUserDataAsync } from './services/userDataService';
-import { getAsyncActionHandler, respondForbidden, respondOk } from './utilities/helpers';
+import { getAsyncActionHandler, respond } from './utilities/helpers';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -50,7 +53,7 @@ connectToMongoDB().then(() => {
             .catch(() => {
 
                 log("Authorizing request failed.");
-                respondForbidden(res);
+                respond(res, 403);
             });
     };
 
@@ -101,9 +104,25 @@ connectToMongoDB().then(() => {
 
     expressServer.get('/test', (req, res) => getUserDataAsync("6022c270f66f803c80243250").then(x => res.json(x)));
 
+    //
     // protected 
-    expressServer.get("/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));
+    // 
+
+    // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
+
+    // data
+    expressServer.get("/data/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));
+
+    // player
+    expressServer.post('/player/set-current-video', authMiddleware, getAsyncActionHandler(setCurrentVideoAction));
+    expressServer.get('/player/get-current-video', getAsyncActionHandler(getCurrentVideoAction));
+
+    // users
+    expressServer.get("/users", getAsyncActionHandler(getUsersAction));
+    expressServer.post("/users/create-invited-user", getAsyncActionHandler(createInvitedUserAction));
+    expressServer.post("/users/finalize-user-registration", getAsyncActionHandler(finalizeUserRegistrationAction));
+
     expressServer.use('/articles', authMiddleware, articleRoutes)
     expressServer.use('/courses', authMiddleware, courseRoutes)
     expressServer.use('/groups', authMiddleware, groupsRoutes)
