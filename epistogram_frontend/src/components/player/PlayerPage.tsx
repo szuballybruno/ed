@@ -31,23 +31,6 @@ const PlayerPage = (props: { history: any }) => {
 
     // set current video id 
     const { error: setCurrentVideoError, status: setCurrentVideoStatus } = useSetCurrentVideo(courseId, videoId);
-    if (setCurrentVideoError) {
-
-        alert.set({
-            alertTitle: "Figyelem! Hibás linket adtál meg!",
-            targetLocation: "",
-            alertDescription: "Az általad megadott linkhez nem tartozik egy videó sem. Kérlek ellenőrizd, hogy nem írtad-e el. A jelenlegi videó folytatásához kattints a folytatás gombra, új kurzus kiválasztásához pedig a kurzus kiválasztása gombra",
-            showFirstButton: true,
-            firstButtonTitle: "Jelenlegi videó folytatása",
-            showSecondButton: true,
-            secondButtonTitle: "Kurzus kiválasztása",
-            showAlert: true
-        })
-    }
-    else {
-
-        alert.showAlert.set(false)
-    }
 
     // get current video 
     const { video, error: getCurrentVideoError, status: getCurrentVideoStatus } = useCurrentVideoDTO(courseId, videoId);

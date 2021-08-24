@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useReactQuery } from "../frontendHelpers";
+import { TypedError, useReactQuery } from "../frontendHelpers";
 import { SetCurrentVideoDTO } from "../models/shared_models/SetCurrentVideoDTO";
 import { IdType } from "../models/shared_models/types/sharedTypes";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
@@ -8,7 +8,7 @@ import { httpGetAsync, httpPostAsync } from "./httpClient";
 
 export const useSetCurrentVideo = (courseId: IdType, videoId: IdType) => {
 
-    const [error, setError] = useState();
+    const [error, setError] = useState<any>();
     const [status, setStatus] = useState<LoadingStateType>("idle");
 
     const setCurrentVideoAsync = async () => {
@@ -28,8 +28,20 @@ export const useSetCurrentVideo = (courseId: IdType, videoId: IdType) => {
         }
         catch (e) {
 
+            const typedError = e as TypedError;
+            if (typedError.errorType) {
+
+                if (typedError.errorType == "videoNotFound")
+                    setError(new Error("Nem talalhato ilyen video!"));
+
+                setError(e);
+            }
+            else {
+
+                setError(e);
+            }
+
             setStatus("error");
-            setError(e);
         }
     }
 

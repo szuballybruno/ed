@@ -6,7 +6,7 @@ import LoginScreen from "./components/universal/authentication/login/LoginScreen
 import NotFound from "./components/universal/notFound/NotFound";
 import PlayerPage from "./components/player/PlayerPage";
 import ProfileMain from "./components/profile/ProfileMain";
-import CourseSearch from "./components/course_search/CourseSearch";
+import UserCourses from "./components/course_search/UserCourses";
 import OverviewPage from "./components/dashboard/OverviewPage";
 import Administration from "./components/administration/Administration";
 import CoursePage from "./components/course_search/CoursePage";
@@ -35,7 +35,7 @@ const MainSwitch = () => {
         <ProtectedRoute path="/watch/:courseId/:id" render={() => <PlayerPage />} />
         <ProtectedRoute path="/admin" render={() => <Administration />} />
         <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
-        <ProtectedRoute path="/kurzusok" render={() => <CourseSearch />} />
+        <ProtectedRoute path="/kurzusok" render={() => <UserCourses />} />
         <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />
         <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
         <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />

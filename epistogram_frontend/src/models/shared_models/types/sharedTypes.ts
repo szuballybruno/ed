@@ -7,7 +7,9 @@ export type HTTPErrorType = "forbidden" | "internal server error" | "bad request
 
 export type MiscErrorType = "passwordInvalid" | "unknown";
 
-export type ErrorType = HTTPErrorType | MiscErrorType;
+export type VideoErrorType = "videoNotFound";
+
+export type ErrorType = HTTPErrorType | MiscErrorType | VideoErrorType;
 
 export type TaskObjectiveType = "practise" | "continueVideo" | "exam";
 

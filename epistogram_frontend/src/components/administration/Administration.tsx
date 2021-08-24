@@ -4,7 +4,7 @@ import userDetailsState from "../../store/user/userSideState";
 import { useState } from "@hookstate/core";
 import { Users } from "./users/Users";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
-import Courses from "./courses/Courses";
+import CourseAdministartion from "./courses/CourseAdministartion";
 import { globalConfig } from "../../configuration/config";
 import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
 import Statistics from "./statistics/Statistics";
@@ -69,7 +69,7 @@ const Administration = (props: { match: { url: string; } }) => {
                         <Users />
                     </Route>
                     <Route path={'/admin/manage/courses'}>
-                        <Courses />
+                        <CourseAdministartion />
                     </Route>
                     <Route path={'/admin/manage/articles'}>
                         <ManageArticles />

@@ -13,6 +13,7 @@ import { router as overlaysRoutes } from './api/overlays/routes';
 import { getCurrentVideoAction, setCurrentVideoAction } from './api/playerActions';
 import { router as tagsRoutes } from './api/tags/routes';
 import { router as tasksRoutes } from './api/tasks/routes';
+import { getUserCoursesAction } from './api/userCourses';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
 import { getUsersAction } from './api/users/controllers/GET/getUsers';
 import { router as usersRoutes } from './api/users/routes';
@@ -116,12 +117,15 @@ connectToMongoDB().then(() => {
 
     // player
     expressServer.post('/player/set-current-video', authMiddleware, getAsyncActionHandler(setCurrentVideoAction));
-    expressServer.get('/player/get-current-video', getAsyncActionHandler(getCurrentVideoAction));
+    expressServer.get('/player/get-current-video', authMiddleware, getAsyncActionHandler(getCurrentVideoAction));
 
     // users
-    expressServer.get("/users", getAsyncActionHandler(getUsersAction));
-    expressServer.post("/users/create-invited-user", getAsyncActionHandler(createInvitedUserAction));
-    expressServer.post("/users/finalize-user-registration", getAsyncActionHandler(finalizeUserRegistrationAction));
+    expressServer.get("/users", authMiddleware, getAsyncActionHandler(getUsersAction));
+    expressServer.post("/users/create-invited-user", authMiddleware, getAsyncActionHandler(createInvitedUserAction));
+    expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
+
+    // courses 
+    expressServer.post("/get-user-courses", authMiddleware, getAsyncActionHandler(getUserCoursesAction));
 
     expressServer.use('/articles', authMiddleware, articleRoutes)
     expressServer.use('/courses', authMiddleware, courseRoutes)
