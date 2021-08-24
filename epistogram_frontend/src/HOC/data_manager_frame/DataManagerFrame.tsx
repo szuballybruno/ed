@@ -14,12 +14,13 @@ export const DataManagerFrame: FunctionComponent = (props) => {
     //SET THEME
     setTheme(globalConfig.currentTheme);
 
-    // fetch current user 
-    const { currentUser, refetchUser, authState } = useUserFetching();
-    console.log("Authentication state: " + authState.asString());
-
     // start auth pooling 
-    useRenewUserSessionPooling();
+    const { isSuccess } = useRenewUserSessionPooling();
+    console.log("Renewing token: " + isSuccess);
+
+    // fetch current user 
+    const { currentUser, refetchUser, authState } = useUserFetching(isSuccess);
+    console.log("Authentication state: " + authState.asString());
 
     return <AuthenticationStateContext.Provider value={authState}>
         <RefetchUserFunctionContext.Provider value={refetchUser}>

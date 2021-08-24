@@ -20,6 +20,8 @@ const CourseTile = (props: { course: CourseShortDTO, itemIndex: number, classNam
     const courseTeacherName = course.teacherName;
     const thumbnailImageUrl = course.thumbnailImageURL;
 
+    console.log(thumbnailImageUrl);
+
     return <Grid className={props.className} item xs={12} sm={12} md={6} lg={4} xl={3} >
         <Paper>
             <animated.div style={anim} className={classes.searchItem}>

@@ -45,7 +45,8 @@ export class GlobalConfiguration {
         uploadFolderPath: getEnvConfigEntry("UPLOAD_FOLDER_PATH"),
         hostPort: getEnvConfigEntry("HOST_PORT"),
         environmentName: getEnvConfigEntry("ENVIRONMENT_NAME"),
-        frontendUrl: getEnvConfigEntry("FRONTEND_URL")
+        frontendUrl: getEnvConfigEntry("FRONTEND_URL"),
+        assetStoreUrl: "https://dev.epistogram.com/assets/epistogram"
     }
 
     mail = {

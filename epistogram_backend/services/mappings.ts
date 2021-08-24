@@ -1,6 +1,9 @@
 import { User } from "../models/entities/User";
 import { CourseItemShortDTO } from "../models/shared_models/CourseItemShortDTO";
+import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
+import { globalConfig } from "../server";
+import { Course } from "./userCoursesService";
 import { CurrentItem, Item } from "./userDataService";
 
 export const toUserDTO = (user: User) => new UserDTO(
@@ -31,4 +34,16 @@ export const toCourseItemShortDTO2 = (item: CurrentItem) => {
         type: "video",
         thumbnailUrl: item.thumbnailUrl
     } as CourseItemShortDTO;
+}
+
+export const toCourseShortDTO = (course: Course) => {
+
+    return {
+        title: course.name,
+        category: course.category,
+        courseId: course._id,
+        firstVideoId: course.items[0]._id,
+        teacherName: "Mr. Teacher Name",
+        thumbnailImageURL: globalConfig.misc.assetStoreUrl + `/courses/${course._id}.png`
+    } as CourseShortDTO;
 }
