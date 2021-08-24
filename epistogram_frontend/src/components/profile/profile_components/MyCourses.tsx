@@ -1,34 +1,51 @@
+import { Typography } from "@material-ui/core";
 import React from 'react';
-import classes from './myCourses.module.scss'
-import {useState} from "@hookstate/core";
-import userDetailsState from "../../../store/user/userSideState";
-import CourseTile from "../../universal/atomic/courseTile/CourseTile";
+import { LoadingFrame } from "../../../HOC/loading_frame/LoadingFrame";
+import { CourseShortDTO } from "../../../models/shared_models/CourseShortDTO";
+import { useUserProfileData } from "../../../services/userProfileDataService";
 import AdminDashboardHeader from "../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
-import {Typography} from "@material-ui/core";
+import CourseTile from "../../universal/atomic/courseTile/CourseTile";
+import classes from './myCourses.module.scss';
 
 const MyCourses = () => {
-    const user = useState(userDetailsState)
 
-    //TODO: Külön kurzus state-ek
+    const { userProfileData, status, error } = useUserProfileData();
+    const completedCourses = userProfileData?.completedCourses ?? [] as CourseShortDTO[];
+    const favoriteCourses = userProfileData?.favoriteCourses ?? [] as CourseShortDTO[];
+    const hasCompletedCourses = completedCourses.length > 0;
+    const hasFavoriteCourses = completedCourses.length > 0;
 
     return <div className={classes.coursesInnerWrapper}>
-        <AdminDashboardHeader titleText={"Elvégzett kurzusaim"} />
-        <div className={classes.coursesInnerRow}>
-            {user.userData.doneCourses[0].get() ? user.userData.doneCourses.get().map((course, index) => {
-                return <CourseTile className={classes.courseItem} item={course} itemIndex={index} />
-            }) : <div className={classes.noCoursesWrapper}>
-                <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>
-            </div>}
-        </div>
-        <AdminDashboardHeader titleText={"Kedvenc kurzusaim"} />
-        <div className={classes.coursesInnerRow}>
-            {user.userData.favoriteCourses[0].get() ? user.userData.favoriteCourses.get().map((course, index) => {
-                return <CourseTile className={classes.courseItem} item={course} itemIndex={index} />
-            }) : <div className={classes.noCoursesWrapper}>
-                <Typography variant={"h6"}>Még nincs egy kedvenc kurzusod sem.</Typography>
-            </div>}
-        </div>
-        <AdminDashboardHeader titleText={""} />
+
+        <LoadingFrame loadingState={status} error={error}>
+            {/* completed courses */}
+            <AdminDashboardHeader titleText={"Elvégzett kurzusaim"} />
+            <div className={classes.coursesInnerRow}>
+                {hasCompletedCourses
+                    ? completedCourses
+                        .map((course, index) => {
+                            return <CourseTile className={classes.courseItem} course={course} itemIndex={index} />
+                        })
+                    : <div className={classes.noCoursesWrapper}>
+                        <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>
+                    </div>}
+            </div>
+
+            {/* favorite courses */}
+            <AdminDashboardHeader titleText={"Kedvenc kurzusaim"} />
+            <div className={classes.coursesInnerRow}>
+                {hasFavoriteCourses
+                    ? favoriteCourses
+                        .map((course, index) => {
+                            return <CourseTile className={classes.courseItem} course={course} itemIndex={index} />
+                        })
+                    : <div className={classes.noCoursesWrapper}>
+                        <Typography variant={"h6"}>Még nincs egy kedvenc kurzusod sem.</Typography>
+                    </div>}
+            </div>
+
+            <AdminDashboardHeader titleText={""} />
+        </LoadingFrame>
     </div>
 };
 

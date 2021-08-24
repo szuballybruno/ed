@@ -22,7 +22,7 @@ export const getOverviewPageDTOAsync = async (userId: IdType) => {
 
         currentCourseId: currentCourse?._id,
 
-        recommendedCourses: [] as CourseShortDTO,
+        recommendedCourses: [] as CourseShortDTO[],
 
         tipOfTheDay: tipOfTheDay,
 

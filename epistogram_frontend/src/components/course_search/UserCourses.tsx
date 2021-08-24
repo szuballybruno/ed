@@ -145,9 +145,8 @@ const UserCourses = () => {
                     <Grid container spacing={3} className={classes.courseItemsContainer}>
                         {courses
                             .map((course: any, index) => {
-                                return <CourseTile item={course} itemIndex={index} key={index} />
-                            })
-                        }
+                                return <CourseTile course={course} itemIndex={index} key={index} />
+                            })}
                     </Grid>
                 </LoadingFrame>
 
