@@ -39,7 +39,14 @@ const UserCourses = () => {
         .map((course, index) => course.category);
 
     return <MainWrapper>
-        <Navbar showHighlightedButton={true} menuItems={menuItems["user"]} showLastButton={true} showSwitchButton={false} showNavigation={true} />
+
+        <Navbar
+            showHighlightedButton={true}
+            menuItems={menuItems["user"]}
+            showLastButton={true}
+            showSwitchButton={false}
+            showNavigation={true} />
+
         <ContentWrapper>
 
             <LeftPanel>
@@ -66,7 +73,7 @@ const UserCourses = () => {
 
             <RightPanel>
 
-                <AdminDashboardHeader titleText={""} />
+                {/* <AdminDashboardHeader titleText={""} /> */}
                 <AdminDashboardSearch
                     searchChangeHandler={(x, value) => setSearchText(value)}
                     name={"searchData"}
@@ -141,7 +148,7 @@ const UserCourses = () => {
                 </div>
 
                 {/* courses */}
-                <LoadingFrame loadingState={[status]} error={[error]}>
+                <LoadingFrame p="20px" loadingState={[status]} error={[error]}>
                     <Grid container spacing={3} className={classes.courseItemsContainer}>
                         {courses
                             .map((course: any, index) => {

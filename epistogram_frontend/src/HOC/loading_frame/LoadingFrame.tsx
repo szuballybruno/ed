@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
+import { Box, Flex, FlexProps } from "@chakra-ui/react";
 import { isArray } from "../../frontendHelpers";
 import { LoadingStateType } from "../../store/application/ApplicationRunningStateInterface";
 import { FailedComponent, LoadingComponent } from "./loadingComponents/LoadingComponent";
@@ -47,23 +47,19 @@ export const LoadingFrame = (props: FlexProps & {
     const state = getLoadingState(loadingState);
 
     const getLoadingComponent = () => {
-        switch (state) {
 
-            case "idle":
-                return <LoadingComponent></LoadingComponent>
+        if (state == "idle" || state == "loading")
+            return <LoadingComponent></LoadingComponent>
 
-            case "loading":
-                return <LoadingComponent></LoadingComponent>
+        if (state == "error")
+            return <FailedComponent error={singleError}></FailedComponent>
 
-            case "error":
-                return <FailedComponent error={singleError}></FailedComponent>
+        if (state == "success")
+            return <Box flex="1" height="100%">
+                {props.children}
+            </Box>;
 
-            case "success":
-                return props.children;
-
-            default:
-                throw new Error(`Loading state is not reckognised: ${state}!`);
-        }
+        throw new Error(`Loading state is not reckognised: ${state}!`);
     }
 
     return <Flex height="100%" width="100%" justify="center" align="center" {...flexProps}>
