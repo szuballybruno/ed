@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { TokenMeta } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { globalConfig } from "../server";
-import { ExpressRequest, ExpressResponse, getCookie, TypedError } from "../utilities/helpers";
+import { getCookie, TypedError } from "../utilities/helpers";
 import { comparePasswordAsync } from "./crypt";
 import { verifyJWTToken } from "./jwtGen";
 import { log } from "./logger";
@@ -58,7 +58,7 @@ export const getUserDTOByCredentials = async (email: string, password: string) =
     return toUserDTO(user);
 }
 
-export const getUserIdFromRequest = (req: ExpressRequest) => {
+export const getUserIdFromRequest = (req: Request) => {
 
     // check if there is a refresh token sent in the request 
     const refreshToken = getCookie(req, "refreshToken")?.value;
@@ -73,7 +73,7 @@ export const getUserIdFromRequest = (req: ExpressRequest) => {
     return tokenMeta.userId;
 }
 
-export const renewUserSession = async (req: ExpressRequest, res: ExpressResponse) => {
+export const renewUserSession = async (req: Request, res: Response) => {
 
     log("Renewing user session...");
 
@@ -107,7 +107,7 @@ export const renewUserSession = async (req: ExpressRequest, res: ExpressResponse
     await setAuthCookies(res, newAccessToken, newRefreshToken);
 }
 
-export const logInUser = async (req: ExpressRequest, res: ExpressResponse) => {
+export const logInUser = async (req: Request, res: Response) => {
 
     log("Logging in user...");
 
@@ -135,7 +135,7 @@ export const logInUser = async (req: ExpressRequest, res: ExpressResponse) => {
     await setAuthCookies(res, accessToken, refreshToken);
 }
 
-export const logOutUser = async (req: ExpressRequest, res: ExpressResponse) => {
+export const logOutUser = async (req: Request, res: Response) => {
 
     const tokenMeta = getRequestAccessTokenMeta(req);
     if (!tokenMeta)
@@ -165,7 +165,7 @@ export const getUserLoginTokens = async (user: UserDTO) => {
     }
 }
 
-export const setAuthCookies = (res: ExpressResponse, accessToken: string, refreshToken: string) => {
+export const setAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
 
     setAccessTokenCookie(res, accessToken);
     setRefreshTokenCookie(res, refreshToken);

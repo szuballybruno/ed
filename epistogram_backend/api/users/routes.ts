@@ -4,7 +4,6 @@ import { getUsersAction } from "./controllers/GET/getUsers"
 import { deleteUser } from "./controllers/DELETE/deleteUser";
 import { updateUser } from "./controllers/PATCH/updateUser";
 import { resetUserPasswordAction } from "./controllers/GET/resetUserPasswordAction";
-import { getUser } from "./controllers/GET/getUser";
 import { updateCurrentItem } from "./controllers/PATCH/updateCurrentItem";
 import { updateCurrentCourse } from "./controllers/PATCH/updateCurrentCourse";
 import { updateActivityAction } from "./controllers/PATCH/updateActivity";
@@ -20,7 +19,7 @@ router.post("/finalize-user-registration", getAsyncActionHandler(finalizeUserReg
 
 router.patch("/activity", updateActivityAction);
 
-router.get("/:userId", getUser);
+// router.get("/:userId", getUser);
 router.patch("/:userId", updateUser);
 router.delete("/:userId", deleteUser);
 

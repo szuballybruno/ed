@@ -7,7 +7,7 @@ import NotFound from "./components/universal/notFound/NotFound";
 import PlayerMain from "./components/player/PlayerMain";
 import ProfileMain from "./components/profile/ProfileMain";
 import CourseSearch from "./components/course_search/CourseSearch";
-import UserDashBoard from "./components/dashboard/UserDashBoard";
+import OverviewPage from "./components/dashboard/OverviewPage";
 import Administration from "./components/administration/Administration";
 import CoursePage from "./components/course_search/CoursePage";
 
@@ -34,7 +34,7 @@ const MainSwitch = () => {
         {/* protected paths */}
         <ProtectedRoute path="/watch/:courseId/:id" render={() => <PlayerMain />} />
         <ProtectedRoute path="/admin" render={() => <Administration />} />
-        <ProtectedRoute path="/kezdolap" render={() => <UserDashBoard />} />
+        <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
         <ProtectedRoute path="/kurzusok" render={() => <CourseSearch />} />
         <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />
         <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
@@ -42,7 +42,7 @@ const MainSwitch = () => {
         <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
 
         {/* index path */}
-        <ProtectedRoute path="/" render={() => <UserDashBoard />} exact />
+        <ProtectedRoute path="/" render={() => <OverviewPage />} exact />
 
         {/* wrong path */}
         <Route path="*">

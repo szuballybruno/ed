@@ -5,6 +5,7 @@ import fileUpload from 'express-fileupload';
 import { router as articleRoutes } from './api/articles/routes';
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { router as courseRoutes } from './api/courses/routes';
+import { getOverviewPageDTOAction } from './api/dataActions';
 import { router as filesRoutes } from './api/files/routes';
 import { router as groupsRoutes } from './api/groups/routes';
 import { router as organizationRoutes } from './api/organizations/routes';
@@ -18,7 +19,8 @@ import { authorizeRequest } from './services/authentication';
 import { connectToMongoDB } from "./services/connectMongo";
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/logger";
-import { respondForbidden, respondOk } from './utilities/helpers';
+import { getUserDataAsync } from './services/userDataService';
+import { getAsyncActionHandler, respondForbidden, respondOk } from './utilities/helpers';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -97,9 +99,10 @@ connectToMongoDB().then(() => {
     expressServer.post('/log-out-user', logOutUserAction);
     expressServer.post('/login-user', logInUserAction);
 
-    expressServer.get('/test', (req, res) => res.json(process.env.TEST_VAR));
+    expressServer.get('/test', (req, res) => getUserDataAsync("6022c270f66f803c80243250").then(x => res.json(x)));
 
     // protected 
+    expressServer.get("/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
     expressServer.use('/articles', authMiddleware, articleRoutes)
     expressServer.use('/courses', authMiddleware, courseRoutes)

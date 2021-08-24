@@ -1,32 +1,23 @@
+import { useState } from "@hookstate/core";
 import React, { useEffect } from 'react';
-
-import classes from './playerMain.module.scss';
-
+import { Cookies } from "react-cookie";
+import { useParams, withRouter } from "react-router";
+import { useHistory } from "react-router-dom";
+import menuItems from "../../configuration/menuItems.json";
+import { DialogFrame } from "../../HOC/dialog_frame/DialogFrame";
+import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
+import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
+import instance from "../../services/axiosInstance";
+import applicationRunningState from "../../store/application/applicationRunningState";
+import userDetailsState from "../../store/user/userSideState";
+import { Copyright } from "../universal/footers/copyright/Copyright";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
-
+import classes from './playerMain.module.scss';
+import Descriptions from "./player_components/descriptions/Descriptions";
+import GeneratedInfo from "./player_components/GeneratedInfo";
+import NavigationalDivider from "./player_components/navigational_divider/NavigationalDivider";
 import Player from "./player_components/Player";
 import VideoList from "./player_components/video_list/VideoList";
-
-import NavigationalDivider from "./player_components/navigational_divider/NavigationalDivider";
-import GeneratedInfo from "./player_components/GeneratedInfo";
-
-import Descriptions from "./player_components/descriptions/Descriptions";
-
-import { Copyright } from "../universal/footers/copyright/Copyright";
-
-import menuItems from "../../configuration/menuItems.json"
-import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
-import { FailedComponent, LoadingComponent, NullComponent } from "../../HOC/loading_frame/loadingComponents/LoadingComponent";
-import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
-import { useState } from "@hookstate/core";
-import { useParams, withRouter } from "react-router";
-import userDetailsState from "../../store/user/userSideState";
-import applicationRunningState from "../../store/application/applicationRunningState";
-
-import instance from "../../services/axiosInstance";
-import { Cookies } from "react-cookie";
-import { DialogFrame } from "../../HOC/dialog_frame/DialogFrame";
-import { useHistory } from "react-router-dom";
 
 const PlayerMain = (props: { history: any }) => {
     console.log("[PlayerMain] Started...")

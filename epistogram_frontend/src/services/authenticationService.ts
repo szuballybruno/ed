@@ -30,7 +30,7 @@ export const useUserFetching = (nonAutomatic?: boolean) => {
 
     const queryResult = useQuery(
         'getCurrentUser',
-        async () => (await httpGetAsync("get-current-user")).data, {
+        () => httpGetAsync("get-current-user"), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: bgFetchingEnabled ? userRefreshIntervalInMs : false,

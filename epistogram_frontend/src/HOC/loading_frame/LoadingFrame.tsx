@@ -1,16 +1,13 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { LoadingStateType } from "../../store/application/ApplicationRunningStateInterface";
 import { FailedComponent, LoadingComponent, NullComponent } from "./loadingComponents/LoadingComponent";
 
-type LoadingFrameProps = {
-    // nullComponent: ReactNode,
-    // loadingComponent: ReactNode,
-    // failedComponent: ReactNode,
+export const LoadingFrame = (props: {
     children: ReactNode,
-    loadingState: LoadingStateType
-}
-
-export const LoadingFrame = (props: LoadingFrameProps) => {
+    loadingState: LoadingStateType,
+    error?: any
+}) => {
 
     const getLoadingComponent = () => {
         switch (props.loadingState) {
@@ -22,7 +19,7 @@ export const LoadingFrame = (props: LoadingFrameProps) => {
                 return <LoadingComponent></LoadingComponent>
 
             case "error":
-                return <FailedComponent></FailedComponent>
+                return <FailedComponent error={props.error}></FailedComponent>
 
             case "success":
                 return props.children;
@@ -32,7 +29,7 @@ export const LoadingFrame = (props: LoadingFrameProps) => {
         }
     }
 
-    return <div>
+    return <Flex height="100%" width="100%" justify="center" align="center">
         {getLoadingComponent()}
-    </div>;
+    </Flex>;
 }

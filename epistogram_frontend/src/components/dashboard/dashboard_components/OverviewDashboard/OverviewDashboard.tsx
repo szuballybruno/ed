@@ -12,9 +12,9 @@ import React, { ReactNode } from 'react';
 import { Line } from "react-chartjs-2";
 import { NavLink } from "react-router-dom";
 import { CurrentTasksDTO } from "../../../../models/shared_models/CurrentTasksDTO";
+import { OverviewPageDTO } from "../../../../models/shared_models/OverviewPageDTO";
 import { TestQuestionDTO } from "../../../../models/shared_models/TestQuestionDTO";
 import { TaskObjectiveType } from "../../../../models/shared_models/types/sharedTypes";
-import { overviewPageDTO } from "../../../../services/mockDataService";
 import classes from "./overviewDashboard.module.scss";
 
 const AssistantGridItem = (props: { children: ReactNode, title: string, xs: any }) => {
@@ -123,9 +123,9 @@ const TasksView = (props: { currentTasks: CurrentTasksDTO }) => {
     </List>
 }
 
-export const OverviewDashboard = () => {
+export const OverviewDashboard = (props: { dto: OverviewPageDTO }) => {
 
-    const { developmentChartData, testQuestionDTO, currentTasks } = overviewPageDTO;
+    const { developmentChartData, testQuestionDTO, currentTasks } = props.dto;
 
     return <div className={classes.assistantWrapper}>
         <Grid container spacing={1} style={{ flexDirection: "row" }}>

@@ -1,17 +1,15 @@
 import React from 'react';
+import { CourseShortDTO } from '../../../../models/shared_models/CourseShortDTO';
 import CourseTile from '../../../universal/atomic/courseTile/CourseTile';
 import classes from "./recommendedCourses.module.scss";
-import {useState} from "@hookstate/core"
-import userDetailsState from '../../../../store/user/userSideState';
 
-const RecommendedCourses = () => {
-    const user = useState(userDetailsState)
+const RecommendedCourses = (props: { courses: CourseShortDTO[] }) => {
 
     return (
         <div className={classes.recommendedCoursesWrapper}>
-            {user.userData.recommendedCourses.get().map((course, index) => {
+            {/* {props.courses.map((course, index) => {
                 return <CourseTile item={course} itemIndex={index} />
-            })}
+            })} */}
         </div>
     );
 };

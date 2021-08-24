@@ -1,36 +1,31 @@
-import { extend } from "dayjs";
-import express, { NextFunction, Request } from "express";
+import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
 import { log, logError } from "../services/logger";
 
-export type ExpressRequest = express.Request;
-export type ExpressResponse = express.Response;
-export type ExpressNext = () => void;
-
-export const respondOk = (res: ExpressResponse, data?: any) => {
+export const respondOk = (res: Response, data?: any) => {
 
     data
         ? respond(res, 200, data)
         : respond(res, 200);
 };
 
-export const respondForbidden = (res: ExpressResponse) => {
+export const respondForbidden = (res: Response) => {
 
     respond(res, 403);
 };
 
-export const respondBadRequest = (res: ExpressResponse) => {
+export const respondBadRequest = (res: Response) => {
 
     respond(res, 400);
 };
 
-export const respondInternalServerError = (res: ExpressResponse) => {
+export const respondInternalServerError = (res: Response) => {
 
     respond(res, 500);
 };
 
-const respond = (res: ExpressResponse, code: number, data?: any) => {
+const respond = (res: Response, code: number, data?: any) => {
 
     if (data) {
 
@@ -43,7 +38,7 @@ const respond = (res: ExpressResponse, code: number, data?: any) => {
     }
 }
 
-const respondError = (res: ExpressResponse, msg: string, type: ErrorType) => {
+const respondError = (res: Response, msg: string, type: ErrorType) => {
 
     logError(`Responding error: ${type}: ${msg}`);
 
@@ -76,12 +71,12 @@ export const withValue = (obj: any, errorFunc?: () => void) => {
     return obj;
 }
 
-export const requestHasFiles = (req: ExpressRequest) => {
+export const requestHasFiles = (req: Request) => {
 
     return !!req.files;
 }
 
-export const getSingleFileFromRequest = (req: ExpressRequest) => {
+export const getSingleFileFromRequest = (req: Request) => {
 
     if (!req.files)
         throw new TypedError("Request contains no files.", "bad request");
@@ -96,21 +91,21 @@ export const withValueOrBadRequest = (obj: any) => withValue(obj, () => {
     throw new TypedError("Requied filed has no value!", "bad request");
 });
 
-export const getBearerTokenFromRequest = (req: ExpressRequest) => {
+export const getBearerTokenFromRequest = (req: Request) => {
 
     const authHeader = req.headers.authorization;
     return authHeader?.split(' ')[1];
 }
 
-export const getAsyncActionHandler = (action: (req: ExpressRequest, res: ExpressResponse) => Promise<any>) => {
+export const getAsyncActionHandler = (action: (req: Request, res: Response) => Promise<any>) => {
 
-    return (req: ExpressRequest, res: ExpressResponse) => {
+    return (req: Request, res: Response) => {
 
         handleAsyncAction(req, res, action);
     }
 }
 
-export const handleAsyncAction = (req: ExpressRequest, res: ExpressResponse, action: (req: ExpressRequest, res: ExpressResponse) => Promise<any>) => {
+export const handleAsyncAction = (req: Request, res: Response, action: (req: Request, res: Response) => Promise<any>) => {
 
     action(req, res)
         .then((returnValue: any) => respondOk(res, returnValue))
@@ -122,7 +117,7 @@ export const handleAsyncAction = (req: ExpressRequest, res: ExpressResponse, act
         });
 }
 
-export const getCookies = (req: ExpressRequest) => {
+export const getCookies = (req: Request) => {
 
     const cookieString = (req.headers.cookie as string);
     if (!cookieString)
@@ -136,7 +131,7 @@ export const getCookies = (req: ExpressRequest) => {
         }));
 }
 
-export const getCookie = (req: ExpressRequest, key: string) => getCookies(req).filter(x => x.key == key)[0];
+export const getCookie = (req: Request, key: string) => getCookies(req).filter(x => x.key == key)[0];
 
 export class TypedError extends Error {
 

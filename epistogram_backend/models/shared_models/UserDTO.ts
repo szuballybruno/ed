@@ -6,18 +6,21 @@ export class UserDTO {
     lastName: string;
     organizationId: IdType;
     role: string;
+    jobTitle: string;
 
     constructor(
         userId: IdType,
         organizationId: IdType,
         firstName: string,
         lastName: string,
-        role: string) {
+        role: string,
+        jobTitle: string) {
 
         this.role = role;
         this.userId = userId;
         this.organizationId = organizationId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.jobTitle = jobTitle;
     }
 }

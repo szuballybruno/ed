@@ -10,3 +10,5 @@ export type MiscErrorType = "passwordInvalid" | "unknown";
 export type ErrorType = HTTPErrorType | MiscErrorType;
 
 export type TaskObjectiveType = "practise" | "continueVideo" | "exam";
+
+export type CourseItemType = "video" | "exam";

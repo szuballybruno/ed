@@ -1,24 +1,25 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classes from "./dashBoardSpacers.module.scss";
-import {Divider, Typography} from "@material-ui/core";
+import { Divider, Typography } from "@material-ui/core";
 
-export const DashBoardLeftSpacer = (props: {title: string}) => {
-    return (
+export const DashoardLeftItemGroup = (props: { children: ReactNode, title: string }) => {
+    return (<>
         <div className={classes.dashBoardLeftSpacerWrapper}>
             <Typography variant={"overline"}>{props.title}</Typography>
         </div>
-    );
+        {props.children}
+    </>);
 }
 
-export const DashBoardLeftBorder = () => {
+export const DashboardVerticalDivider = () => {
     return (
         <div className={classes.dashBoardLeftBorderWrapper} >
-            <Divider style={{zIndex: 999, marginTop: 20}} />
+            <Divider style={{ zIndex: 999, marginTop: 20 }} />
         </div>
     )
 }
 
-export const DashBoardRightSpacer = (props: {title: string}) => {
+export const DashBoardRightSpacer = (props: { title: string }) => {
     return (
         <div className={classes.dashBoardRightSpacerWrapper}>
             <Typography variant={"h4"}>{props.title}</Typography>

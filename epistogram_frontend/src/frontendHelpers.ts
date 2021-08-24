@@ -1,3 +1,4 @@
+import { useQuery } from "react-query";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 
 export const disallowWindowNavigation = () => {
@@ -10,6 +11,20 @@ export const disallowWindowNavigation = () => {
         }
         return ''; // Legacy method for cross browser support
     };
+}
+
+export const useReactQuery = <T>(
+    queryKey: any[],
+    queryFunc: () => Promise<T>,
+    enabled?: boolean) => {
+
+    return useQuery(
+        queryKey,
+        queryFunc, {
+        retry: false,
+        refetchOnWindowFocus: false,
+        enabled: enabled
+    });
 }
 
 export const hasValue = (obj: any) => {
