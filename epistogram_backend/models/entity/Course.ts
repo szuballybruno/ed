@@ -19,11 +19,11 @@ export class Course {
     @JoinColumn()
     users: User[];
 
-    @OneToMany(type => Video, video => video.courseId)
+    @OneToMany(type => Video, video => video.course)
     @JoinColumn()
     videos: Video[];
 
-    @OneToMany(type => Exam, exam => exam.courseId)
+    @OneToMany(type => Exam, exam => exam.course)
     @JoinColumn()
     exams: Exam[];
 }

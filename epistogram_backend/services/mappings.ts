@@ -38,12 +38,14 @@ export const toCourseItemShortDTO2 = (item: CurrentItem) => {
 
 export const toCourseShortDTO = (course: Course) => {
 
+    const thumbnailImageURL = globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
+
     return {
         courseId: course.id,
         title: course.title,
         category: course.category,
-        firstVideoId: course.items[0]._id,
+        firstVideoId: course.videos[0].id,
         teacherName: "Mr. Teacher Name",
-        thumbnailImageURL: globalConfig.misc.assetStoreUrl + `/courses/${course._id}.png`
+        thumbnailImageURL: thumbnailImageURL
     } as CourseShortDTO;
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
 import { Organization } from "./Organization";
 import { Video } from "./Video";
@@ -58,17 +58,17 @@ export class User {
 
     // Current course
     @Column({ nullable: true })
-    currentCourseId?: number;
+    currentCourseId: number;
 
     @ManyToOne(() => Course, course => course.users)
     @JoinColumn({ name: 'currentCourseId' })
-    currentCourse?: Course
+    currentCourse: Course
 
     // Current course
     @Column({ nullable: true })
-    currentVideoId?: number;
+    currentVideoId: number;
 
     @ManyToOne(() => Video, video => video.users)
     @JoinColumn({ name: 'currentVideoId' })
-    currentVideo?: Video
+    currentVideo: Video
 }

@@ -1,8 +1,6 @@
 import { Router } from "express";
-import { getAsyncActionHandler } from "../../utilities/helpers";
 // import { login } from "./controllers/GET/login"
 import { deleteUser } from "./controllers/DELETE/deleteUser";
-import { resetUserPasswordAction } from "./controllers/GET/resetUserPasswordAction";
 import { updateActivityAction } from "./controllers/PATCH/updateActivity";
 // import { updateCurrentItem } from "./controllers/PATCH/updateCurrentItem";
 import { updateCurrentCourse } from "./controllers/PATCH/updateCurrentCourse";
@@ -20,4 +18,4 @@ router.delete("/:userId", deleteUser);
 router.patch("/:userId/course/:courseId", updateCurrentCourse);
 // router.patch("/:userId/course/:courseId/item/:itemId", updateCurrentItem);
 
-router.get("/:userId/reset", getAsyncActionHandler(resetUserPasswordAction));
+// router.get("/:userId/reset", getAsyncActionHandler(resetUserPasswordAction));

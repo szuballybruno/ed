@@ -12,7 +12,7 @@ import { getJWTToken, verifyJWTToken } from "./jwtGen";
 import { useCollection } from "./persistance";
 import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
 
-export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: IdType) => {
+export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: number) => {
 
     const currentUser = await getUserById(currentUserId);
 
@@ -26,9 +26,9 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
 
     // if user is admin require organizationId to be provided
     // otherwise use the current user's organization
-    const organizationId = currentUser.userData.role === "admin"
+    const organizationId = currentUser.role === "admin"
         ? withValueOrBadRequest(dto.organizationId)
-        : currentUser.userData.organizationId;
+        : currentUser.organizationId;
 
     // does user already exist?
     const existingUser = await getUserByEmail(email);
@@ -37,20 +37,6 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
 
     // hash user password 
     const hashedDefaultPassword = await hashPasswordAsync("guest");
-
-    // insert new user 
-    // const newUser = {
-    //     userData: {
-    //         active: true,
-    //         email: email,
-    //         role: role,
-    //         firstName: firstName,
-    //         lastName: lastName,
-    //         organizationId: organizationId,
-    //         password: hashedDefaultPassword,
-    //         innerRole: jobTitle
-    //     }
-    // } as MongoUser;
 
     const user = {
         isActive: true,
@@ -96,15 +82,15 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
     if (password != controlPassword)
         throw new TypedError("Passwords are not equal!", "bad request");
 
-    const { updateAsync } = await useCollection("users");
-
     // hash password
     const hashedPassword = await hashPasswordAsync(password);
 
-    await updateAsync(tokenPayload.userId, {
-        "userData.phoneNumber": phoneNumber,
-        "userData.password": hashedPassword
-    });
+    await getTypeORMConnection()
+        .getRepository(User)
+        .save({
+            phoneNumber: phoneNumber,
+            password: hashedPassword
+        });
 
     const { accessToken, refreshToken } = await getUserLoginTokens(userDTO);
 

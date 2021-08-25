@@ -58,14 +58,14 @@ const updateActivity = async (activity: activity, userId: IdType) => {
 
 export const updateActivityAction = (req: Request, res: Response, next: NextFunction) => {
 
-    const userId = getUserIdFromRequest(req);
-    const activity = req.body as activity;
+    // const userId = getUserIdFromRequest(req);
+    // const activity = req.body as activity;
 
-    updateActivity(activity, userId)
-        .then((r) => {
-            res.status(r.responseStatus).send(r.responseText)
-        })
-        .catch((e) => {
-            res.status(400).send(e.toString())
-        });
+    // updateActivity(activity, userId)
+    //     .then((r) => {
+    //         res.status(r.responseStatus).send(r.responseText)
+    //     })
+    //     .catch((e) => {
+    //         res.status(400).send(e.toString())
+    //     });
 };

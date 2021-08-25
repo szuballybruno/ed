@@ -1,3 +1,5 @@
+import { Course } from "../models/entity/Course";
+import { Organization } from "../models/entity/Organization";
 import { User } from "../models/entity/User";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
@@ -18,9 +20,10 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
         .createQueryBuilder("user")
         .where("user.id = :userId", { userId: userId })
         .leftJoinAndSelect("user.currentCourse", "course")
-        .leftJoinAndSelect("course.videos", "videos")
         .leftJoinAndSelect("course.exams", "exams")
+        .leftJoinAndSelect("course.videos", "videos")   
         .leftJoinAndSelect("user.currentVideo", "video")
+        .leftJoinAndSelect("video.users", "users")
         .getOneOrFail();
 
     const currentCourse = user.currentCourse;

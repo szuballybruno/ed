@@ -45,13 +45,13 @@ export const seedDB = async () => {
     // seed organizations
     const organizations = [
         {
-            name: "New Organization"
+            name: "Farewell Kft."
         },
         {
-            name: "New Organization"
+            name: "Bruno Muvek"
         },
         {
-            name: "New Organization"
+            name: "Manfredisztan.org"
         }
     ] as Organization[];
 
@@ -70,8 +70,12 @@ export const seedDB = async () => {
             organizationId: insertedOrganizationIds[0]
         },
         {
-            email: "edina@email.com",
-            organizationId: insertedOrganizationIds[0]
+            email: "manifest@email.com",
+            organizationId: insertedOrganizationIds[1]
+        },
+        {
+            email: "elmegyek_brunyalni_xd@email.com",
+            organizationId: insertedOrganizationIds[1]
         }
     ] as User[];
 

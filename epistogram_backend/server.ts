@@ -6,7 +6,7 @@ import "reflect-metadata"; // need to be imported for TypeORM
 import { router as articleRoutes } from './api/articles/routes';
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { router as courseRoutes } from './api/courses/routes';
-import { getOverviewPageDTOAction } from './api/dataActions';
+import { getOverviewPageDTOAction, getUsersAction } from './api/dataActions';
 import { router as filesRoutes } from './api/files/routes';
 import { router as groupsRoutes } from './api/groups/routes';
 import { router as organizationRoutes } from './api/organizations/routes';
@@ -16,12 +16,12 @@ import { router as tagsRoutes } from './api/tags/routes';
 import { router as tasksRoutes } from './api/tasks/routes';
 import { getUserCoursesAction } from './api/userCourses';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
-import { getUsersAction } from './api/users/controllers/GET/getUsers';
 import { router as usersRoutes } from './api/users/routes';
 import { router as videosRoutes } from './api/videos/routes';
 import { router as generalDataRoutes } from './api/votes/routes';
 import { initializeDBAsync, seedDB, TypeORMConnection } from './database';
 import { authorizeRequest } from './services/authentication';
+import { getOverviewPageDTOAsync } from './services/dataService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/logger";
 import { getUserDataAsync } from './services/userDataService';
@@ -52,6 +52,8 @@ const initializeAsync = async () => {
     log("Seeding DB...");
     await seedDB()
     log("DB seeding completed.");
+
+    await getOverviewPageDTOAsync(1);
 
     // init express
     log("Initializing express...");

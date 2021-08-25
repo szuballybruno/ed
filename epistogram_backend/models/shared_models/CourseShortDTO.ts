@@ -1,8 +1,8 @@
 import { IdType } from "./types/sharedTypes";
 
 export type CourseShortDTO = {
-    courseId: IdType;
-    firstVideoId: IdType;
+    courseId: number;
+    firstVideoId: number;
     thumbnailImageURL: string; //globalConfig.assetStorageUrl + `/courses/${course.courseId}.${"png" || "jpg"}`
     colorOne: any;
     colorTwo: any;
