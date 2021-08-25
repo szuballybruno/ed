@@ -1,4 +1,4 @@
-import { User } from "../models/entities/User";
+import { User } from "../models/mongoEntities/User";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
 import { IdType, InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";

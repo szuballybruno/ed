@@ -1,4 +1,4 @@
-import { User } from "../models/entities/User";
+import { User } from "../models/mongoEntities/User";
 import { CourseItemShortDTO } from "../models/shared_models/CourseItemShortDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";

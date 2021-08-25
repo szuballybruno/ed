@@ -25,136 +25,146 @@ import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/logger";
 import { getUserDataAsync } from './services/userDataService';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
+// import "reflect-metadata"; // need to be imported for TypeORM
+// import { createConnection } from "typeorm";
+// import { Photo } from './models/entity/Test';
 
 // initialize env
 // require is mandatory here, for some unknown reason
 export const globalConfig = initailizeDotEnvEnvironmentConfig();
 
+const initializeAsync = async () => {
+
+    log("Connecting to sql database...");
+
+    // const sqlConnection = await createConnection({
+    //     type: "mssql",
+    //     host: "localhost",
+    //     port: 3306,
+    //     username: "root",
+    //     password: "admin",
+    //     database: "test",
+    //     entities: [
+    //         Photo
+    //     ],
+    //     synchronize: true,
+    // });
+
+    // log("Connected:");
+    // log(sqlConnection);
+
+    await connectToMongoDB();
+
+    // return { sqlConnection };
+}
+
 // connect mongo db
-connectToMongoDB().then(() => {
-    const expressServer = express();
+initializeAsync()
+    .then((initResult) => {
 
-    // const allowAllCorsMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    //     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-    //     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-    //     next();
-    // }
+        const expressServer = express();
 
-    const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+        const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
-        log("Authorizing request...");
+            log("Authorizing request...");
 
-        authorizeRequest(req)
-            .then(tokenMeta => {
+            authorizeRequest(req)
+                .then(tokenMeta => {
 
-                log("Authorization successful, userId: " + tokenMeta.userId);
-                next();
-            })
-            .catch(() => {
+                    log("Authorization successful, userId: " + tokenMeta.userId);
+                    next();
+                })
+                .catch(() => {
 
-                log("Authorizing request failed.");
-                respond(res, 403);
-            });
-    };
+                    log("Authorizing request failed.");
+                    respond(res, 403);
+                });
+        };
 
-    const corsMiddleware = cors({
-        origin: 'http://localhost:3000',
-        credentials: true,
-        allowedHeaders: [
-            "Origin",
-            "X-Requested-With",
-            "Content-Type",
-            "Accept",
-            "Authorization"
-        ],
-        preflightContinue: false,
-        methods: "DELETE, PATCH"
+        const corsMiddleware = cors({
+            origin: 'http://localhost:3000',
+            credentials: true,
+            allowedHeaders: [
+                "Origin",
+                "X-Requested-With",
+                "Content-Type",
+                "Accept",
+                "Authorization"
+            ],
+            preflightContinue: false,
+            methods: "DELETE, PATCH"
+        });
+
+        //
+        // add middlewares
+        //
+
+        expressServer.use(corsMiddleware);
+        expressServer.use(bodyParser.json());
+        expressServer.use(fileUpload());
+
+        // register user
+        expressServer.use((req, res, next) => {
+
+            log("Request arrived: " + req.path);
+            next();
+        })
+
+        expressServer.get('/renew-user-session', renewUserSessionAction);
+        expressServer.post('/log-out-user', logOutUserAction);
+        expressServer.post('/login-user', logInUserAction);
+
+        expressServer.get('/test', (req, res) => getUserDataAsync("6022c270f66f803c80243250").then(x => res.json(x)));
+
+        //
+        // protected 
+        // 
+
+        // misc
+        expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
+
+        // data
+        expressServer.get("/data/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));
+
+        // player
+        expressServer.post('/player/set-current-video', authMiddleware, getAsyncActionHandler(setCurrentVideoAction));
+        expressServer.get('/player/get-current-video', authMiddleware, getAsyncActionHandler(getCurrentVideoAction));
+
+        // users
+        expressServer.get("/users", authMiddleware, getAsyncActionHandler(getUsersAction));
+        expressServer.post("/users/create-invited-user", authMiddleware, getAsyncActionHandler(createInvitedUserAction));
+        expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
+
+        // courses 
+        expressServer.post("/get-user-courses", authMiddleware, getAsyncActionHandler(getUserCoursesAction));
+
+        expressServer.use('/articles', authMiddleware, articleRoutes)
+        expressServer.use('/courses', authMiddleware, courseRoutes)
+        expressServer.use('/groups', authMiddleware, groupsRoutes)
+        expressServer.use('/organizations', authMiddleware, organizationRoutes)
+        expressServer.use('/tags', authMiddleware, tagsRoutes)
+        expressServer.use('/tasks', authMiddleware, tasksRoutes)
+        expressServer.use('/upload', authMiddleware, filesRoutes)
+        expressServer.use('/overlays', authMiddleware, overlaysRoutes)
+        expressServer.use('/users', authMiddleware, usersRoutes);
+        expressServer.use('/videos', authMiddleware, videosRoutes);
+        expressServer.use('/votes', authMiddleware, generalDataRoutes);
+
+        expressServer.use((req, res) => {
+
+            res.status(404).send(`Route did not match: ${req.url}`);
+        });
+
+        expressServer.use((error: express.Errback, req: express.Request, res: express.Response) => {
+
+            logError("Express error middleware.");
+            logError(error);
+            return res.status(500).send(error.toString());
+        });
+
+        // listen
+        expressServer.listen(globalConfig.misc.hostPort, () =>
+            log(`Listening on port '${globalConfig.misc.hostPort}'!`));
+
     });
-
-    const setCredentialCORSHearders = (res: Response) => {
-        // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-        // res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-        // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS, DELETE');
-        // res.setHeader('Access-Control-Allow-Credentials', "true");
-    }
-
-    //
-    // add middlewares
-    //
-
-    expressServer.use(corsMiddleware);
-    expressServer.use(bodyParser.json());
-    expressServer.use(fileUpload());
-    expressServer.use((req, res, next) => {
-
-        setCredentialCORSHearders(res);
-        next();
-    })
-
-    // register user
-    expressServer.use((req, res, next) => {
-
-        log("Request arrived: " + req.path);
-        next();
-    })
-
-    expressServer.get('/renew-user-session', renewUserSessionAction);
-    expressServer.post('/log-out-user', logOutUserAction);
-    expressServer.post('/login-user', logInUserAction);
-
-    expressServer.get('/test', (req, res) => getUserDataAsync("6022c270f66f803c80243250").then(x => res.json(x)));
-
-    //
-    // protected 
-    // 
-
-    // misc
-    expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
-
-    // data
-    expressServer.get("/data/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));
-
-    // player
-    expressServer.post('/player/set-current-video', authMiddleware, getAsyncActionHandler(setCurrentVideoAction));
-    expressServer.get('/player/get-current-video', authMiddleware, getAsyncActionHandler(getCurrentVideoAction));
-
-    // users
-    expressServer.get("/users", authMiddleware, getAsyncActionHandler(getUsersAction));
-    expressServer.post("/users/create-invited-user", authMiddleware, getAsyncActionHandler(createInvitedUserAction));
-    expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
-
-    // courses 
-    expressServer.post("/get-user-courses", authMiddleware, getAsyncActionHandler(getUserCoursesAction));
-
-    expressServer.use('/articles', authMiddleware, articleRoutes)
-    expressServer.use('/courses', authMiddleware, courseRoutes)
-    expressServer.use('/groups', authMiddleware, groupsRoutes)
-    expressServer.use('/organizations', authMiddleware, organizationRoutes)
-    expressServer.use('/tags', authMiddleware, tagsRoutes)
-    expressServer.use('/tasks', authMiddleware, tasksRoutes)
-    expressServer.use('/upload', authMiddleware, filesRoutes)
-    expressServer.use('/overlays', authMiddleware, overlaysRoutes)
-    expressServer.use('/users', authMiddleware, usersRoutes);
-    expressServer.use('/videos', authMiddleware, videosRoutes);
-    expressServer.use('/votes', authMiddleware, generalDataRoutes);
-
-    expressServer.use((req, res) => {
-
-        res.status(404).send(`Route did not match: ${req.url}`);
-    });
-
-    expressServer.use((error: express.Errback, req: express.Request, res: express.Response) => {
-
-        logError("Express error middleware.");
-        logError(error);
-        return res.status(500).send(error.toString());
-    });
-
-    // listen
-    expressServer.listen(globalConfig.misc.hostPort, () =>
-        log(`Listening on port '${globalConfig.misc.hostPort}'!`));
-
-});
-
 

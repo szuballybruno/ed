@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { User } from "../models/entities/User";
+import { User } from "../models/mongoEntities/User";
 import { TypedError } from "../utilities/helpers";
 import { getRequestAccessTokenMeta } from "./authentication";
 import { Connection } from "./connectMongo";

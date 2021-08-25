@@ -1,0 +1,19 @@
+{
+    "type": "postgre",
+    "host": "localhost",
+    "port": 3306,
+    "username": "test",
+    "password": "test",
+    "database": "test",
+    "synchronize": true,
+    "logging": false,
+    "entities": [
+       "models/entity/**/*.ts"
+    ],
+    "migrations": [
+       "models/migration/**/*.ts"
+    ],
+    "subscribers": [
+       "models/subscriber/**/*.ts"
+    ]
+ }

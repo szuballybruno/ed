@@ -1,7 +1,7 @@
 import { IdType } from '../models/shared_models/types/sharedTypes';
 import { useCollection } from './persistance';
 import { AdminPageUserView } from '../models/shared_models/AdminPageUserDTO';
-import { User } from '../models/entities/User';
+import { User } from '../models/mongoEntities/User';
 
 export const getAdminPageUsersList = async (userId: IdType, searchText: string) => {
 
