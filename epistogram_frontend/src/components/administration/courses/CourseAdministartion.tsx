@@ -18,6 +18,7 @@ import { AddCourse } from './courses_components/addCourse/AddCourse';
 import { AddItem } from "./courses_components/addItem/AddItem";
 import { EditCourse } from "./courses_components/editCourse/EditCourse";
 import { EditItemPage } from "./courses_components/editItem/EditItemPage";
+import {SaveBar} from "../universal/saveBar/SaveBar";
 
 const CourseAdministartion = () => {
     

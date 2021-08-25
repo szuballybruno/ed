@@ -22,6 +22,7 @@ import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/ma
 import menuItems from "../../configuration/menuItems.json";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { AdminAddHeader } from "./universal/adminAddHeader/AdminAddHeader";
+import {SaveBar} from "./universal/saveBar/SaveBar";
 
 const Administration = (props: { match: { url: string; } }) => {
 
@@ -84,6 +85,8 @@ const Administration = (props: { match: { url: string; } }) => {
                         <Organizations />
                     </Route>
                 </Switch>
+
+                <SaveBar open={true} />
             </RightPanel>
         </ContentWrapper>
     </MainWrapper>

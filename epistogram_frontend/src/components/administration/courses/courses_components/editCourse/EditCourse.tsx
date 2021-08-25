@@ -10,7 +10,6 @@ import { HexColorPicker } from "react-colorful";
 import {none, State, useState} from "@hookstate/core";
 import instance from "../../../../../services/axiosInstance";
 import adminSideState from '../../../../../store/admin/adminSideState';
-import {SelectMultiple} from "../../../universal/selectMultiple/SelectMultiple";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
 import SelectImage from "../../../universal/selectImage/SelectImage";
 import {globalConfig} from "../../../../../configuration/config";
@@ -18,9 +17,9 @@ import {Cookies} from "react-cookie";
 import {fetchReducer} from "../../../universal/services/fetchReducer";
 import {useDebouncedCallback} from "use-debounce";
 import {Redirect} from "react-router-dom";
-import {permissionLevelOptions} from "../../store";
 import {AdminDashboardWrapper} from "../../../universal/adminDashboardWrapper/AdminDashboardWrapper";
 import {SelectRadio} from "../../SelectRadio";
+import {SaveBar} from "../../../universal/saveBar/SaveBar";
 
 
 export const EditCourse = () => {
@@ -219,8 +218,10 @@ export const EditCourse = () => {
             width: "100%"
         }} />
         <div className={classes.editDataOuterWrapper}>
+
             <div className={classes.editDataInnerWrapper}>
                 <div className={classes.editDataLeftWrapper}>
+
                     <div className={classes.editDataListWrapper}>
                         <SelectImage onChange={selectImage}
                                      uploadedImageUrls={[admin.currentlyEdited.course.uploadedFileUrl.get()]}
@@ -327,7 +328,9 @@ export const EditCourse = () => {
 
             <AdminDashboardSearch searchChangeHandler={() => {}} name={"searchData"} title={"Videók"}/>
             <CourseVideoList courseId={courseId} />
+
         </div>
         <AdminDashboardHeader titleText={""}/>
+
     </AdminDashboardWrapper>
 };
