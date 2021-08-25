@@ -6,7 +6,6 @@ import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/mainPanels/MainPanels";
 import { GetUserCoursesDTO } from "../../models/shared_models/GetUserCoursesDTO";
 import { useUserCourses } from "../../services/courseService";
-import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import AdminDashboardSearch from "../administration/universal/searchBar/AdminDashboardSearch";
 import CourseTile from "../universal/atomic/courseTile/CourseTile";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
