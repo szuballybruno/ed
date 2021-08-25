@@ -9,8 +9,8 @@ export const getUserCoursesAsync = async (userId: IdType, dto: GetUserCoursesDTO
     const user = (await getUserDTOById(userId))!;
     const organizationId = user.organizationId;
     const isRecommended = dto.isRecommended;
-    const isFeatured = null;//dto.isFeatured;
-    const searchText = null;//dto.searchText;
+    const isFeatured = dto.isFeatured;
+    const searchText = dto.searchText;
     const searchCategory = dto.searchCategory;
 
     const courses = (await Connection.db.collection("courses").aggregate([
@@ -198,14 +198,14 @@ export const getUserCoursesAsync = async (userId: IdType, dto: GetUserCoursesDTO
                     '$cond': [
                         {
                             '$eq': [
-                                isFeatured, true
+                                false, true // isFeatured
                             ]
                         },
                         {
                             '$eq': [
                                 '$featured', true
                             ]
-                        }, 
+                        },
                         {
                             'a': 'a'
                         }
