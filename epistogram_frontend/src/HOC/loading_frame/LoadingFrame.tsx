@@ -1,38 +1,68 @@
-import { ReactNode } from "react";
+import { Box, Flex, FlexProps } from "@chakra-ui/react";
+import { isArray } from "../../frontendHelpers";
 import { LoadingStateType } from "../../store/application/ApplicationRunningStateInterface";
-import { FailedComponent, LoadingComponent, NullComponent } from "./loadingComponents/LoadingComponent";
+import { FailedComponent, LoadingComponent } from "./loadingComponents/LoadingComponent";
 
-type LoadingFrameProps = {
-    // nullComponent: ReactNode,
-    // loadingComponent: ReactNode,
-    // failedComponent: ReactNode,
-    children: ReactNode,
-    loadingState: LoadingStateType
-}
+export const LoadingFrame = (props: FlexProps & {
+    loadingState: LoadingStateType | LoadingStateType[],
+    error?: any | any[]
+}) => {
 
-export const LoadingFrame = (props: LoadingFrameProps) => {
+    const { loadingState, error, ...flexProps } = props;
 
-    const getLoadingComponent = () => {
-        switch (props.loadingState) {
+    console.log(loadingState);
 
-            case "idle":
-                return <LoadingComponent></LoadingComponent>
+    const getLoadingState = (loadingState: LoadingStateType | LoadingStateType[]) => {
 
-            case "loading":
-                return <LoadingComponent></LoadingComponent>
+        if (isArray(loadingState)) {
 
-            case "error":
-                return <FailedComponent></FailedComponent>
+            const loadingStates = props.loadingState as LoadingStateType[];
 
-            case "success":
-                return props.children;
+            if (loadingStates.some(x => x == "error"))
+                return "error" as LoadingStateType;
 
-            default:
-                throw new Error(`Loading state is not reckognised: ${props.loadingState}!`);
+            if (loadingStates.some(x => x == "idle" || x == "loading"))
+                return "loading" as LoadingStateType;
+
+            return "success" as LoadingStateType;
+        }
+        else {
+
+            return loadingState as LoadingStateType;
         }
     }
 
-    return <div>
+    const getError = (error?: any | any[]) => {
+
+        if (!error)
+            return error;
+
+        if (isArray(error))
+            return (error as any[])[0];
+
+        return error;
+    }
+
+    const singleError = getError(error);
+    const state = getLoadingState(loadingState);
+
+    const getLoadingComponent = () => {
+
+        if (state == "idle" || state == "loading")
+            return <LoadingComponent></LoadingComponent>
+
+        if (state == "error")
+            return <FailedComponent error={singleError}></FailedComponent>
+
+        if (state == "success")
+            return <Box flex="1" height="100%">
+                {props.children}
+            </Box>;
+
+        throw new Error(`Loading state is not reckognised: ${state}!`);
+    }
+
+    return <Flex height="100%" width="100%" justify="center" align="center" {...flexProps}>
         {getLoadingComponent()}
-    </div>;
+    </Flex>;
 }

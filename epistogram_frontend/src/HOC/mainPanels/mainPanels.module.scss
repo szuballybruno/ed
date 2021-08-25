@@ -30,10 +30,6 @@
   align-items: flex-start;
 }
 
-.leftPanelWrapper {
-
-}
-
 .leftPanel {
   background-color: #f2f2f2;
   //background-color: var(--background-14);
@@ -41,8 +37,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 400px;
-  height: calc(100vh - 80px);
   border-left: 2px solid #e2e2e2;
 }
 

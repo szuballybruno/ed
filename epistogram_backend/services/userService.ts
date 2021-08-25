@@ -1,8 +1,8 @@
+import { Request } from "express";
 import { User } from "../models/entities/User";
-import { ExpressRequest, TypedError } from "../utilities/helpers";
+import { TypedError } from "../utilities/helpers";
 import { getRequestAccessTokenMeta } from "./authentication";
 import { Connection } from "./connectMongo";
-import { log } from "./logger";
 import { toUserDTO } from "./mappings";
 
 export const getUserById = async (userId: string) => {
@@ -45,7 +45,7 @@ export const getUserByEmail = async (email: string) => {
     return userFromDB as User;
 }
 
-export const getCurrentUser = async (req: ExpressRequest) => {
+export const getCurrentUser = async (req: Request) => {
 
     const tokenMeta = getRequestAccessTokenMeta(req);
     if (!tokenMeta)

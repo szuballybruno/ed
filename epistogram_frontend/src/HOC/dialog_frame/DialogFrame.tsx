@@ -1,6 +1,6 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 import React from "react";
-import {useState} from "@hookstate/core";
+import { useState } from "@hookstate/core";
 import applicationRunningState from "../../store/application/applicationRunningState";
 
 export const DialogFrame = (props: {
@@ -12,7 +12,7 @@ export const DialogFrame = (props: {
 }) => {
     const app = useState(applicationRunningState)
 
-    return <div className={props.className} style={{width: "100%"}}>
+    return <div className={props.className} style={{ width: "100%" }}>
         <Dialog
             open={app.alert.showAlert.get()}
             aria-labelledby="alert-dialog-title"
@@ -29,14 +29,14 @@ export const DialogFrame = (props: {
             </DialogContent>
             <DialogActions>
                 {app.alert.showFirstButton.get() ? <Button color="primary"
-                                                           onClick={props.firstButtonOnClick}>
+                    onClick={props.firstButtonOnClick}>
                     {app.alert.firstButtonTitle.get()}
                 </Button> : null}
 
                 {app.alert.showSecondButton.get() ?
                     <Button onClick={props.secondButtonOnClick}
-                            color="primary"
-                            autoFocus>
+                        color="primary"
+                        autoFocus>
                         {app.alert.secondButtonTitle.get()}
                     </Button> : null}
             </DialogActions>

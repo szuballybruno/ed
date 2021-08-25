@@ -1,32 +1,29 @@
-/** Kész
- *  TODO: - Reszponzivitás
- *        - Error handling
- */
-
-
 import React from 'react';
-import classes from './currentCourseStats.module.scss'
-import {useState} from "@hookstate/core";
-import userDetailsState from "../../../../store/user/userSideState";
+import { CourseItemShortDTO } from '../../../../models/shared_models/CourseItemShortDTO';
 import ListItem from "../../../universal/atomic/listItem/ListItem";
+import classes from './currentCourseStats.module.scss';
 
-const CurrentCourseStats = () => {
-    const user = useState(userDetailsState)
+const CourseItemList = (props: { courseItems: CourseItemShortDTO[] }) => {
 
     return (
         <div className={classes.coursesContainer}>
-            {user.userData.currentCourse.items.get().map((video, index) => {
-                return video.type === "video" ? <ListItem thumbnailUrl={video.thumbnailUrl}
-                                 mainTitle={video.title}
-                                 subTitle={video.subTitle} /> : <ListItem mainTitle={"Vizsga"}
-                                                                               subTitle={"Teszteld a tudásod"}
-                                                                               onClick={() => {
+            {props
+                .courseItems
+                .map((courseItem, index) => {
+                    return courseItem.type === "video"
 
-                                                                               }} />
-            })}
+                        ? <ListItem thumbnailUrl={courseItem.thumbnailUrl}
+                            mainTitle={courseItem.title}
+                            subTitle={courseItem.subTitle} />
 
+                        : <ListItem mainTitle={"Vizsga"}
+                            subTitle={"Teszteld a tudásod"}
+                            onClick={() => {
+
+                            }} />
+                })}
         </div>
     );
 };
 
-export default CurrentCourseStats;
+export default CourseItemList;

@@ -10,14 +10,14 @@ export const useUserListQuery = (user: UserDTO | null, searchText: string) => {
     const organizationId = user?.organizationId;
     const url = `users/?userId=${userId}&organizationId=${organizationId}&searchData=${searchText || ""}`;
 
-    const { data: users, refetch: fetchUsers, status } = useQuery(
+    const { data, refetch: fetchUsers, status } = useQuery(
         [
             'getCurrentUser',
             userId,
             organizationId,
             searchText
         ],
-        async () => (await httpGetAsync(url)).data as AdminPageUserView[], {
+        () => httpGetAsync(url), {
         retry: false,
         refetchOnWindowFocus: false,
         enabled: !!userId && !!organizationId,
@@ -26,7 +26,7 @@ export const useUserListQuery = (user: UserDTO | null, searchText: string) => {
     });
 
     return {
-        users: users ?? [],
+        users: (data ?? []) as AdminPageUserView[],
         fetchUsers,
         status: status as LoadingStateType
     };

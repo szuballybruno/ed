@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import Cookies from "universal-cookie";
-import { AdminPageUserView } from "../models/shared_models/AdminPageUserDTO";
+import { useReactQuery } from "../frontendHelpers";
 import { IdType } from "../models/shared_models/types/sharedTypes";
 import { LoadingStateType } from "../store/application/ApplicationRunningStateInterface";
 import { IUserDetails } from "../store/user/UserSideStateIF";
@@ -14,44 +14,7 @@ export const useUserId = () => {
     return userId ? userId as number : null;
 }
 
-//onLoadingStateChanged: (loadingState: LoadingState) => void
 export const useGetUserDetails = (userId: IdType | null) => {
-
-    //STATES
-    // var loadingState = "loading" as LoadingStateType;
-    // var userDetails = null as IUserDetails | null;
-
-    //LOADING INDICATOR METHODS
-    // const setLoadingOnRequest = (config: AxiosRequestConfig) => {
-    //     loadingState = "loading"
-    //     return config
-    // }
-
-    // useEffect(() => {
-
-    //     // do not query user data if user id is null
-    //     if (!userId)
-    //         return;
-
-    //     const requestInterceptor = instance.interceptors.request.use(setLoadingOnRequest)
-    //     //TODO: Normális error handling
-    //     instance.get(`users/${userId}`).then((res) => {
-    //         if (res.data) {
-    //             userDetails = (res.data)
-    //             loadingState = "success"
-    //         } else {
-    //             loadingState = "failed"
-    //         }
-    //     }).catch((e) => {
-    //         //app.loadingIndicator.set("failed")
-    //         loadingState = "failed"
-    //         return e
-    //     })
-
-    //     instance.interceptors.request.eject(requestInterceptor)
-
-    //     // eslint-disable-next-line
-    // }, [userId])
 
     const url = `users/${userId}`;
     const { data: userDetails, status } = useQuery(
@@ -69,4 +32,17 @@ export const useGetUserDetails = (userId: IdType | null) => {
         userDetails,
         status: status as LoadingStateType
     };
+}
+
+export const useOverviewPageDTO = () => {
+
+    const queryRes = useReactQuery(
+        ["overviewPageDTOQuery"],
+        () => httpGetAsync("data/get-overview-page-dto"));
+
+    return {
+        pageDTO: queryRes.data,
+        status: queryRes.status,
+        error: queryRes.error
+    }
 }

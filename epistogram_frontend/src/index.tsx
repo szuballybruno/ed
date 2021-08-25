@@ -4,10 +4,10 @@ import { BrowserRouter, BrowserRouter as Router, Route, Switch, withRouter } fro
 import './index.css';
 import LoginScreen from "./components/universal/authentication/login/LoginScreen";
 import NotFound from "./components/universal/notFound/NotFound";
-import PlayerMain from "./components/player/PlayerMain";
+import PlayerPage from "./components/player/PlayerPage";
 import ProfileMain from "./components/profile/ProfileMain";
-import CourseSearch from "./components/course_search/CourseSearch";
-import UserDashBoard from "./components/dashboard/UserDashBoard";
+import UserCourses from "./components/course_search/UserCourses";
+import OverviewPage from "./components/dashboard/OverviewPage";
 import Administration from "./components/administration/Administration";
 import CoursePage from "./components/course_search/CoursePage";
 
@@ -32,17 +32,17 @@ const MainSwitch = () => {
         <Route path="/signup" component={withRouter(Signup)} />
 
         {/* protected paths */}
-        <ProtectedRoute path="/watch/:courseId/:id" render={() => <PlayerMain />} />
+        <ProtectedRoute path="/watch/:courseId/:id" render={() => <PlayerPage />} />
         <ProtectedRoute path="/admin" render={() => <Administration />} />
-        <ProtectedRoute path="/kezdolap" render={() => <UserDashBoard />} />
-        <ProtectedRoute path="/kurzusok" render={() => <CourseSearch />} />
+        <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
+        <ProtectedRoute path="/kurzusok" render={() => <UserCourses />} />
         <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />
         <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
         <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
         <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
 
         {/* index path */}
-        <ProtectedRoute path="/" render={() => <UserDashBoard />} exact />
+        <ProtectedRoute path="/" render={() => <OverviewPage />} exact />
 
         {/* wrong path */}
         <Route path="*">

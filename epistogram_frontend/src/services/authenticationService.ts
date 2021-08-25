@@ -20,17 +20,17 @@ export class AuthenticationState {
     }
 }
 
-export const useUserFetching = (nonAutomatic?: boolean) => {
+export const useUserFetching = (enabled: boolean) => {
 
     const [isBgFetchingEnabled, setIsBgFetchingEnabled] = useState(false);
 
-    const bgFetchingEnabled = !nonAutomatic && isBgFetchingEnabled;
+    const bgFetchingEnabled = enabled && isBgFetchingEnabled;
 
     console.log("Background current user fetching set to: " + bgFetchingEnabled);
 
     const queryResult = useQuery(
         'getCurrentUser',
-        async () => (await httpGetAsync("get-current-user")).data, {
+        () => httpGetAsync("get-current-user"), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: bgFetchingEnabled ? userRefreshIntervalInMs : false,
@@ -63,12 +63,10 @@ export const useRenewUserSessionPooling = () => {
         refetchOnWindowFocus: false,
         refetchInterval: refreshTokenRefreshIntervalInMs,
         refetchIntervalInBackground: true,
-        notifyOnChangeProps: []
+        notifyOnChangeProps: ["isSuccess"]
     });
 
-    isSuccess
-        ? console.log("User session renewed.")
-        : console.warn("Failed to renew user session.");
+    return { isSuccess };
 }
 
 export const logOutUserAsync = async () => {

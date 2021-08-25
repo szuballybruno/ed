@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from "express";
 import { logInUser, logOutUser, renewUserSession } from "../services/authentication";
 import { getCurrentUser } from "../services/userService";
-import { handleAsyncAction, respondInternalServerError, respondOk } from "../utilities/helpers";
+import { handleAsyncAction } from "../utilities/helpers";
 
 export const renewUserSessionAction = (req: Request, res: Response) => {
 

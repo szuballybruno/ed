@@ -35,44 +35,22 @@ export const httpPostAsync = async (urlEnding: string, data?: any, bearerToken?:
         return response.data;
     } catch (error) {
 
-        const response = new HTTPResponse(error.response.status, error.response.data);
-        const responseCode = response.code;
-
-        if (responseCode != 200) {
-
-            // get & check error response data
-            const error = response.data as HttpErrorResponseDTO;
-            if (!error)
-                throw new TypedError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
-
-            // get & check error response data properties
-            if (!error.message && !error.errorType)
-                throw new TypedError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
-
-            // message only 
-            // throw with a more informative message
-            if (error.message && !error.errorType)
-                throw new TypedError(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
-
-            // error type and maybe message as well
-            const message = error.message
-                ? `Http response code (${responseCode}) did not indicate success. Message: ${error.message}`
-                : `Http response code (${responseCode}) did not indicate success. Code: ${error.errorType}`
-
-            // throw with a more informative message 
-            // and error type
-            throw new TypedError(message, error.errorType);
-        }
+        handleHttpError(error);
     }
 }
 
 export const httpGetAsync = async (urlEnding: string) => {
 
-    const axiosResponse = await instance.get(urlEnding, {
-        withCredentials: true
-    });
+    try {
+        const axiosResponse = await instance.get(urlEnding, {
+            withCredentials: true
+        });
 
-    return new HTTPResponse(axiosResponse.status, axiosResponse.data);
+        return new HTTPResponse(axiosResponse.status, axiosResponse.data).data;
+    } catch (e) {
+
+        handleHttpError(e);
+    }
 }
 
 export const httpDeleteAsync = async (urlEnding: string) => {
@@ -82,4 +60,36 @@ export const httpDeleteAsync = async (urlEnding: string) => {
     });
 
     return new HTTPResponse(axiosResponse.status, axiosResponse.data);
+}
+
+const handleHttpError = (error: any) => {
+
+    const response = new HTTPResponse(error.response.status, error.response.data);
+    const responseCode = response.code;
+
+    if (responseCode != 200) {
+
+        // get & check error response data
+        const error = response.data as HttpErrorResponseDTO;
+        if (!error)
+            throw new TypedError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+
+        // get & check error response data properties
+        if (!error.message && !error.errorType)
+            throw new TypedError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+
+        // message only 
+        // throw with a more informative message
+        if (error.message && !error.errorType)
+            throw new TypedError(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
+
+        // error type and maybe message as well
+        const message = error.message
+            ? `Http response code (${responseCode}) did not indicate success. Message: ${error.message}`
+            : `Http response code (${responseCode}) did not indicate success. Code: ${error.errorType}`
+
+        // throw with a more informative message 
+        // and error type
+        throw new TypedError(message, error.errorType);
+    }
 }

@@ -7,13 +7,13 @@ export const useOrganizations = () => {
     const url = "organizations/getorganizations";
     const { data, status, isLoading } = useQuery(
         ["getOrganizations"],
-        async () => (await httpGetAsync(url)).data as OrganizationDTO[], {
+        () => httpGetAsync(url), {
         retry: false,
         refetchOnWindowFocus: false
     });
 
     return {
-        organizations: data ?? [],
+        organizations: (data ?? []) as OrganizationDTO[],
         isOrganizationsLoaded: !isLoading
     }
 }

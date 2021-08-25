@@ -1,9 +1,9 @@
-import { ObjectID } from "mongodb"
+import { ObjectId, ObjectID } from "mongodb"
 import { IdType } from "../models/shared_models/types/sharedTypes"
 import { Connection } from "./connectMongo"
 import { logError } from "./logger";
 
-export type CollectionNameType = "users";
+export type CollectionNameType = "users" | "videos" | "courses";
 
 export const useCollection = async <TItem>(collectionName: CollectionNameType) => {
 
@@ -16,7 +16,17 @@ export const useCollection = async <TItem>(collectionName: CollectionNameType) =
 
     const getItemById = (id: IdType) => {
 
-        return collection.findOne({ _id: new ObjectID(id) })
+        let objectId;
+
+        try {
+            objectId = new ObjectID(id);
+        }
+        catch (e) {
+
+            return null;
+        }
+
+        return collection.findOne({ _id: objectId })
     }
 
     const getItems = () => {

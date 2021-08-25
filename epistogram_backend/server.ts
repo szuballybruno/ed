@@ -5,12 +5,17 @@ import fileUpload from 'express-fileupload';
 import { router as articleRoutes } from './api/articles/routes';
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { router as courseRoutes } from './api/courses/routes';
+import { getOverviewPageDTOAction } from './api/dataActions';
 import { router as filesRoutes } from './api/files/routes';
 import { router as groupsRoutes } from './api/groups/routes';
 import { router as organizationRoutes } from './api/organizations/routes';
 import { router as overlaysRoutes } from './api/overlays/routes';
+import { getCurrentVideoAction, setCurrentVideoAction } from './api/playerActions';
 import { router as tagsRoutes } from './api/tags/routes';
 import { router as tasksRoutes } from './api/tasks/routes';
+import { getUserCoursesAction } from './api/userCourses';
+import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
+import { getUsersAction } from './api/users/controllers/GET/getUsers';
 import { router as usersRoutes } from './api/users/routes';
 import { router as videosRoutes } from './api/videos/routes';
 import { router as generalDataRoutes } from './api/votes/routes';
@@ -18,7 +23,8 @@ import { authorizeRequest } from './services/authentication';
 import { connectToMongoDB } from "./services/connectMongo";
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/logger";
-import { respondForbidden, respondOk } from './utilities/helpers';
+import { getUserDataAsync } from './services/userDataService';
+import { getAsyncActionHandler, respond } from './utilities/helpers';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -48,7 +54,7 @@ connectToMongoDB().then(() => {
             .catch(() => {
 
                 log("Authorizing request failed.");
-                respondForbidden(res);
+                respond(res, 403);
             });
     };
 
@@ -97,10 +103,30 @@ connectToMongoDB().then(() => {
     expressServer.post('/log-out-user', logOutUserAction);
     expressServer.post('/login-user', logInUserAction);
 
-    expressServer.get('/test', (req, res) => res.json(process.env.TEST_VAR));
+    expressServer.get('/test', (req, res) => getUserDataAsync("6022c270f66f803c80243250").then(x => res.json(x)));
 
+    //
     // protected 
+    // 
+
+    // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
+
+    // data
+    expressServer.get("/data/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));
+
+    // player
+    expressServer.post('/player/set-current-video', authMiddleware, getAsyncActionHandler(setCurrentVideoAction));
+    expressServer.get('/player/get-current-video', authMiddleware, getAsyncActionHandler(getCurrentVideoAction));
+
+    // users
+    expressServer.get("/users", authMiddleware, getAsyncActionHandler(getUsersAction));
+    expressServer.post("/users/create-invited-user", authMiddleware, getAsyncActionHandler(createInvitedUserAction));
+    expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
+
+    // courses 
+    expressServer.post("/get-user-courses", authMiddleware, getAsyncActionHandler(getUserCoursesAction));
+
     expressServer.use('/articles', authMiddleware, articleRoutes)
     expressServer.use('/courses', authMiddleware, courseRoutes)
     expressServer.use('/groups', authMiddleware, groupsRoutes)
