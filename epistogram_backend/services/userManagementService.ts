@@ -1,8 +1,9 @@
-import { User } from "../models/mongoEntities/User";
+import { User } from "../models/entity/User";
+import { MongoUser } from "../models/mongoEntities/User";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
 import { IdType, InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
-import { globalConfig } from "../server";
+import { getTypeORMConnection, globalConfig } from "../server";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authentication";
 import { hashPasswordAsync } from "./crypt";
@@ -38,23 +39,35 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
     const hashedDefaultPassword = await hashPasswordAsync("guest");
 
     // insert new user 
-    const { insertItem } = await useCollection("users");
+    // const newUser = {
+    //     userData: {
+    //         active: true,
+    //         email: email,
+    //         role: role,
+    //         firstName: firstName,
+    //         lastName: lastName,
+    //         organizationId: organizationId,
+    //         password: hashedDefaultPassword,
+    //         innerRole: jobTitle
+    //     }
+    // } as MongoUser;
 
-    const newUser = {
-        userData: {
-            active: true,
-            email: email,
-            role: role,
-            firstName: firstName,
-            lastName: lastName,
-            organizationId: organizationId,
-            password: hashedDefaultPassword,
-            innerRole: jobTitle
-        }
+    const user = {
+        isActive: true,
+        email: email,
+        role: role,
+        firstName: firstName,
+        lastName: lastName,
+        organizationId: organizationId,
+        password: hashedDefaultPassword,
+        innerRole: jobTitle
     } as User;
 
-    const insertResults = await insertItem(newUser);
-    const userId = insertResults.insertedId;
+    const insertResults = await getTypeORMConnection()
+        .getRepository(User)
+        .insert(user);
+
+    const userId = user.id;
 
     // send invitaion mail
     const invitationToken = getJWTToken<InvitationTokenPayload>(

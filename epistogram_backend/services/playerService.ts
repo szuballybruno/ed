@@ -1,31 +1,37 @@
+import { User } from "../models/entity/User";
 import { IdType } from "../models/shared_models/types/sharedTypes";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
+import { getTypeORMConnection } from "../server";
 import { TypedError } from "../utilities/helpers";
-import { useCollection } from "./persistance"
-import { getUserDataAsync } from "./userDataService";
+import { getVideoByIdAsync } from "./videoService";
 
-export const setCurrentVideoAsync = async (userId: IdType, courseId: IdType, videoId: IdType) => {
+export const setCurrentVideoAsync = async (userId: number, courseId: number, videoId: number) => {
 
-    const { updateAsync } = await useCollection("users");
-    const { getItemById } = await useCollection("videos");
-
-    const video = await getItemById(videoId);
+    const video = await getVideoByIdAsync(videoId);
     if (!video)
         throw new TypedError("Video not found by id: " + videoId, "videoNotFound");
 
-    await updateAsync(userId, {
-        "userData.currentCourseId": courseId,
-        "userData.currentItemId": videoId
-    });
+    return await getTypeORMConnection()
+        .getRepository(User)
+        .save({
+            id: userId,
+            currentVideoId: videoId
+        });
 }
 
-export const getCurrentVideoAsync = async (userId: IdType, courseId: IdType, videoId: IdType) => {
+export const getCurrentVideoAsync = async (userId: number, courseId: IdType, videoId: IdType) => {
 
-    const userData = await getUserDataAsync(userId);
-    const currentItem = userData.userData.currentItem;
+    const user = await getTypeORMConnection()
+        .getRepository(User)
+        .createQueryBuilder("user")
+        .where("user.id = :userId", { userId: userId })
+        .leftJoinAndSelect("user.currentVideo", "video")
+        .getOneOrFail();
+
+    const currentVideo = user.currentVideo!;
 
     return {
-        length: currentItem.length,
-        url: currentItem.url
+        length: currentVideo.length,
+        url: currentVideo.url
     } as VideoDTO;
 }

@@ -1,18 +1,18 @@
-import { User } from "../models/mongoEntities/User";
+import { Course } from "../models/entity/Course";
+import { User } from "../models/entity/User";
 import { CourseItemShortDTO } from "../models/shared_models/CourseItemShortDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { globalConfig } from "../server";
-import { Course } from "./userCoursesService";
 import { CurrentItem, Item } from "./userDataService";
 
 export const toUserDTO = (user: User) => new UserDTO(
-    user._id,
-    user.userData.organizationId,
-    user.userData.firstName,
-    user.userData.lastName,
-    user.userData.role,
-    user.userData.innerRole);
+    user.id,
+    user.organizationId,
+    user.firstName,
+    user.lastName,
+    user.role,
+    user.innerRole);
 
 export const toCourseItemShortDTO = (item: Item) => {
 
@@ -39,9 +39,9 @@ export const toCourseItemShortDTO2 = (item: CurrentItem) => {
 export const toCourseShortDTO = (course: Course) => {
 
     return {
-        title: course.name,
+        courseId: course.id,
+        title: course.title,
         category: course.category,
-        courseId: course._id,
         firstVideoId: course.items[0]._id,
         teacherName: "Mr. Teacher Name",
         thumbnailImageURL: globalConfig.misc.assetStoreUrl + `/courses/${course._id}.png`

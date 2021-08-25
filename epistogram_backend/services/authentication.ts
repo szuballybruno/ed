@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { TokenMeta } from "../models/DTOs/TokenMeta";
+import { TokenMeta as TokenPayload } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { globalConfig } from "../server";
 import { getCookie, TypedError } from "../utilities/helpers";
@@ -9,35 +9,34 @@ import { comparePasswordAsync } from "./crypt";
 import { verifyJWTToken } from "./jwtGen";
 import { log } from "./logger";
 import { toUserDTO } from "./mappings";
-import { removeRefreshToken, setUserActiveRefreshToken } from "./refreshTokenService";
-import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById } from "./userService";
+import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
 
 // CONSTS
 export const accessTokenCookieName = "accessToken";
 export const refreshTokenCookieName = "refreshToken";
 
 // PUBLICS
-export const getRequestAccessTokenMeta = (req: Request) => {
+export const getRequestAccessTokenPayload = (req: Request) => {
 
     const accessToken = getCookie(req, accessTokenCookieName)?.value;
     if (!accessToken)
         return null;
 
-    const tokenMeta = verifyJWTToken<TokenMeta>(accessToken, globalConfig.security.jwtSignSecret);
-    if (!tokenMeta)
+    const tokenPayload = verifyJWTToken<TokenPayload>(accessToken, globalConfig.security.jwtSignSecret);
+    if (!tokenPayload)
         return null;
 
-    return tokenMeta;
+    return tokenPayload;
 }
 
 export const authorizeRequest = (req: Request) => {
-    return new Promise<TokenMeta>((resolve, reject) => {
+    return new Promise<TokenPayload>((resolve, reject) => {
 
         const accessToken = getCookie(req, accessTokenCookieName)?.value;
         if (!accessToken)
             throw new TypedError("Access token missing!", "forbidden");
 
-        const tokenMeta = verifyJWTToken<TokenMeta>(accessToken, globalConfig.security.jwtSignSecret);
+        const tokenMeta = verifyJWTToken<TokenPayload>(accessToken, globalConfig.security.jwtSignSecret);
         if (!tokenMeta)
             throw new TypedError("Invalid token!", "forbidden");
 
@@ -51,7 +50,7 @@ export const getUserDTOByCredentials = async (email: string, password: string) =
     if (!user)
         return null;
 
-    const isPasswordCorrect = await comparePasswordAsync(password as string, user.userData.password);
+    const isPasswordCorrect = await comparePasswordAsync(password as string, user.password);
     if (!isPasswordCorrect)
         return null;
 
@@ -66,7 +65,7 @@ export const getUserIdFromRequest = (req: Request) => {
         throw new TypedError("Access token not sent.", "bad request");
 
     // check sent access token if invalid by signature or expired
-    const tokenMeta = verifyJWTToken<TokenMeta>(accessToken, globalConfig.security.jwtSignSecret);
+    const tokenMeta = verifyJWTToken<TokenPayload>(accessToken, globalConfig.security.jwtSignSecret);
     if (!tokenMeta)
         throw new TypedError("Access token validation failed.", "forbidden");
 
@@ -83,7 +82,7 @@ export const renewUserSession = async (req: Request, res: Response) => {
         throw new TypedError("Refresh token not sent.", "bad request");
 
     // check sent refresh token if invalid by signature or expired
-    const tokenMeta = verifyJWTToken<TokenMeta>(refreshToken, globalConfig.security.jwtSignSecret);
+    const tokenMeta = verifyJWTToken<TokenPayload>(refreshToken, globalConfig.security.jwtSignSecret);
     if (!tokenMeta)
         throw new TypedError("Refresh token validation failed.", "forbidden");
 
@@ -137,7 +136,7 @@ export const logInUser = async (req: Request, res: Response) => {
 
 export const logOutUser = async (req: Request, res: Response) => {
 
-    const tokenMeta = getRequestAccessTokenMeta(req);
+    const tokenMeta = getRequestAccessTokenPayload(req);
     if (!tokenMeta)
         throw new TypedError("Token meta not found.", "internal server error");
 
