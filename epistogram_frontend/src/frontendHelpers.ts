@@ -67,6 +67,16 @@ export const getEventValueCallback = (callback: (value: any) => void) => {
     return inputChangeHandler;
 }
 
+export const getEventFileCallback = (callback: (value: any) => void) => {
+
+    const inputChangeHandler = (e: React.ChangeEvent<{ files: unknown, name?: string }>) => {
+
+        callback(e.currentTarget.files);
+    }
+
+    return inputChangeHandler;
+}
+
 export const getErrorTypeByHTTPCode = (code: number): ErrorType => {
 
     if (code == 400)

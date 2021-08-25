@@ -4,8 +4,8 @@ import {Fab, FormControl, TextField, Typography} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
 
 export const SelectMultiple = (props: {
-    listItem: React.ReactNode
-    items: any[]
+    children: React.ReactNode
+    items?: any
     onClick: () => void
     title: string
 }) => {
@@ -22,7 +22,7 @@ export const SelectMultiple = (props: {
         <TextField className={classes.filterInput} size={"small"} placeholder={"Szűrés"} variant={"outlined"} onChange={searchOnChange} />
 
         <FormControl  component="fieldset" className={classes.formControl}>
-            {props.items.map(item => props.listItem)}
+            {props.children}
         </FormControl>
 
         {showAdd && <Fab color="primary"

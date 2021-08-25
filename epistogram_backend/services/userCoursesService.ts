@@ -477,5 +477,6 @@ export interface Course {
     category: string;
     items: Item[];
     groups: string[];
+    videosCount?: 0,
     filteredGroups: FilteredGroup[];
 }

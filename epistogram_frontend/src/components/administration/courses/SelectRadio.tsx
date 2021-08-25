@@ -8,7 +8,7 @@ export const SelectRadio = (props:  {
     checked?: boolean,
     radioButtonOnChange: () => void,
     itemValueOnChange: () => void,
-    items: any[]
+    items?: any
     name: string,
     onClick: () => void,
     title: string
@@ -20,9 +20,10 @@ export const SelectRadio = (props:  {
                                                  radioButtonOnChange={props.radioButtonOnChange}/>
 
 
-    return <SelectMultiple listItem={listItemWithRadio}
-                           items={props.items}
+    return <SelectMultiple items={props.items}
                            onClick={props.onClick}
-                           title={props.title} />
+                           title={props.title}>
+
+    </SelectMultiple>
 
 };

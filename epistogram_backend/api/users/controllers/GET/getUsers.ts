@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request } from "express";
 import { getAdminPageUsersList } from '../../../../services/adminService';
 import { getUserIdFromRequest } from '../../../../services/authentication';
 

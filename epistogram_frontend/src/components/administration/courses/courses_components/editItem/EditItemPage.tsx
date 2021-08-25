@@ -1,63 +1,41 @@
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import classes from "./editItemPage.module.scss";
 import SelectImage from "../../../universal/selectImage/SelectImage";
-import {Button, Divider, List, Typography} from "@material-ui/core";
+import {Divider, List, Typography} from "@material-ui/core";
 import {useState} from "@hookstate/core";
 import adminSideState from '../../../../../store/admin/adminSideState';
 import {useParams} from "react-router";
 import EditItem from "../../../../universal/atomic/editItem/EditItem";
 import {Add} from "@material-ui/icons";
 import {SelectRadio} from "../../SelectRadio";
+import {AdminPageEditVideoView} from "../../../../../models/shared_models/AdminPageEditVideoDTO";
+import {getEventFileCallback, getEventValueCallback} from "../../../../../frontendHelpers";
 
-type TagType = {
-    tagId: string
-    tagName: string
-}
+
 
 export const EditItemPage = () => {
     const admin = useState(adminSideState)
 
-    const allTags = [] as TagType[]
-
-    const [file, setFile] = React.useState<string | Blob>("")
 
     const { courseId, itemId } = useParams<{ courseId: string, itemId: string }>();
 
-    const selectImage = (e) => {
-        if (e.currentTarget.files) {
-            setEditedVideoThumbnailURL(URL.createObjectURL(e.currentTarget.files[0]));
-            setFile(e.currentTarget.files[0])
-
-            new FormData()
-            e.preventDefault();
-            let formdata =  new FormData()
-
-            formdata.append('file', e.currentTarget.files[0])
-        }
-    }
-
-    const editedVideoTitle = admin.currentlyEdited.video.title.get()
-    const setEditedVideoTitle = admin.currentlyEdited.video.title.set
-
-    const editedVideoSubTitle = admin.currentlyEdited.video.subTitle.get()
-    const setEditedVideoSubTitle = admin.currentlyEdited.video.subTitle.set
-
-    const editedVideoURL = admin.currentlyEdited.video.url.get()
-    const setEditedVideoURL = admin.currentlyEdited.video.url.set
-
-    const editedVideoDescription = admin.currentlyEdited.video.description.get()
-    const setEditedVideoDescription = admin.currentlyEdited.video.description.set
-
-    const editedVideoThumbnailURL = admin.currentlyEdited.video.thumbnailUrl.get()
-    const setEditedVideoThumbnailURL = admin.currentlyEdited.video.thumbnailUrl.set
-
-    const editedVideoTags = admin.currentlyEdited.video.tags.get()
-    const setEditedVideoTags = admin.currentlyEdited.video.tags.set
-
-    const editedVideoOverlays = admin.currentlyEdited.video.overlays.get()
-    const setEditedVideoOverlays = admin.currentlyEdited.video.overlays.set
 
 
+    const [editedVideoTitle, setEditedVideoTitle] = React.useState("")
+    const [editedVideoSubTitle, setEditedVideoSubTitle] = React.useState("")
+    const [editedVideoURL, setEditedVideoURL] = React.useState("")
+    const [editedVideoDescription, setEditedVideoDescription] = React.useState("")
+    const [editedVideoThumbnailImage, setEditedVideoThumbnailImage] = React.useState("")
+    const [editedVideoThumbnailURL, setEditedVideoThumbnailURL] = React.useState("")
+    const [editedVideoTags, setEditedVideoTags] = React.useState([])
+    const [editedVideoOverlays, setEditedVideoOverlays] = React.useState([])
+
+    useEffect(() => {
+
+        //Creates an objectURL from the selected image
+        !!editedVideoThumbnailImage && setEditedVideoThumbnailURL(URL.createObjectURL(editedVideoThumbnailImage[0]));
+
+    }, [editedVideoThumbnailImage])
 
 
     return <div className={classes.editCourseWrapper}>
@@ -70,7 +48,7 @@ export const EditItemPage = () => {
                 <div className={classes.editDataLeftWrapper}>
                     <div className={classes.editDataListWrapper}>
 
-                        <SelectImage onChange={selectImage}
+                        <SelectImage onChange={getEventFileCallback(setEditedVideoThumbnailImage)}
                                      uploadedImageUrls={[editedVideoThumbnailURL]}
                                      title={"Thumbnail kép"}/>
 
@@ -82,25 +60,25 @@ export const EditItemPage = () => {
 
                             <EditItem value={editedVideoTitle}
                                       title={"Cím"}
-                                      onChange={() => {}}
+                                      onChange={getEventValueCallback(setEditedVideoTitle)}
                                       name={"editedVideoTitle"}/>
                             <EditItem value={editedVideoSubTitle}
                                       title={"Alcím"}
-                                      onChange={() => {}}
+                                      onChange={getEventValueCallback(setEditedVideoSubTitle)}
                                       name={"editedVideoSubTitle"}/>
                             <EditItem value={editedVideoURL}
                                       title={"URL"}
-                                      onChange={() => {}}
+                                      onChange={getEventValueCallback(setEditedVideoURL)}
                                       name={"editedVideoURL"}/>
                             <EditItem value={editedVideoDescription}
                                       title={"Leírás"}
-                                      onChange={() => {}}
+                                      onChange={getEventValueCallback(setEditedVideoDescription)}
                                       name={"editedVideoDescription"}/>
 
                         </List>
 
                         <div className={classes.editTagsWrapper}>
-                            <SelectRadio items={allTags} radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Tagek (ide majd selectcheckbox)"} />
+                            {/*There should be a tag selector*/}
                         </div>
 
                     </div>
@@ -110,7 +88,7 @@ export const EditItemPage = () => {
 
                 <div className={classes.editDataRightWrapper}>
                     <Typography variant={"overline"} style={{margin: "10px 0 0 0"}}>NMI Kérdések</Typography>
-                    {editedVideoOverlays.map((item, index) => {
+                    {/*{editedVideoOverlays.map((item, index) => {
                         return <div className={classes.editOverlayWrapper}>
                             <EditItem title={"Kérdés"}
                                       name={"editedVideoOverlayQuestion"}
@@ -136,7 +114,7 @@ export const EditItemPage = () => {
                         }])
                     }}>
                         <Add />
-                    </Button>
+                    </Button>*/}
                 </div>
 
             </div>

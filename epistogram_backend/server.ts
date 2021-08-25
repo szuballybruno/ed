@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
+import { getAdminCoursesAction } from './api/adminCourses';
 import { router as articleRoutes } from './api/articles/routes';
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { router as courseRoutes } from './api/courses/routes';
@@ -125,10 +126,11 @@ connectToMongoDB().then(() => {
     expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
 
     // courses 
-    expressServer.post("/get-user-courses", authMiddleware, getAsyncActionHandler(getUserCoursesAction));
+    expressServer.post("/get-user-courses", getAsyncActionHandler(getUserCoursesAction));
+    expressServer.post("/get-admin-courses", getAsyncActionHandler(getAdminCoursesAction));
 
     expressServer.use('/articles', authMiddleware, articleRoutes)
-    expressServer.use('/courses', authMiddleware, courseRoutes)
+    expressServer.use('/courses', courseRoutes)
     expressServer.use('/groups', authMiddleware, groupsRoutes)
     expressServer.use('/organizations', authMiddleware, organizationRoutes)
     expressServer.use('/tags', authMiddleware, tagsRoutes)

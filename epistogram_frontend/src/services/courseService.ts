@@ -2,12 +2,13 @@ import { hasValue, useReactQuery } from "../frontendHelpers"
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
 import { httpGetAsync, httpPostAsync } from "./httpClient";
+import {CourseAdminDTO} from "../models/shared_models/CourseAdminDTO";
 
 export const useAdministratedCourses = (searchText: string) => {
 
-    const { data, status, error } = useReactQuery(
+    const { data, status, error } = useReactQuery<CourseAdminDTO[]>(
         ["getCoursesQuery", searchText],
-        () => httpGetAsync(hasValue(searchText) ? "/courses?searchData=" + searchText : "/courses"));
+        () => httpPostAsync(hasValue(searchText) ? "/get-admin-courses?searchData=" + searchText : "/get-admin-courses"));
 
     return {
         courses: data,
