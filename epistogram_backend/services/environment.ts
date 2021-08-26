@@ -69,10 +69,11 @@ export class GlobalConfiguration {
     database = {
         name: getEnvConfigEntry("DB_NAME"),
         hostAddress: getEnvConfigEntry("DB_HOST_ADDRESS"),
-        port: getEnvConfigEntry("DB_PORT"),
+        port: parseInt(getEnvConfigEntry("DB_PORT")),
         serviceUserName: getEnvConfigEntry("DB_SERVICE_USER_NAME"),
         serviceUserPassword: getEnvConfigEntry("DB_SERVICE_USER_PASSWORD"),
-        isOrmSyncEnabled: getEnvConfigEntry("DB_IS_ORM_SYNC_ENABLED"),
-        isOrmLoggingEnabled: getEnvConfigEntry("DB_IS_ORM_LOGGING_ENABLED"),
+        isOrmSyncEnabled: getEnvConfigEntry("DB_IS_ORM_SYNC_ENABLED") == "true",
+        isOrmLoggingEnabled: getEnvConfigEntry("DB_IS_ORM_LOGGING_ENABLED") == "true",
+        recreateDatabaseAtStart: getEnvConfigEntry("DB_RECREATE_AT_START") == "true"
     }
 }

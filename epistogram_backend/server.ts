@@ -20,9 +20,11 @@ export const globalConfig = initailizeDotEnvEnvironmentConfig();
 
 const initializeAsync = async () => {
 
+    const recreateDatabaseAtStart = globalConfig.database.recreateDatabaseAtStart;
+
     // init DB
     log("Initializing DB...");
-    await initializeDBAsync(true);
+    await initializeDBAsync(recreateDatabaseAtStart);
     log("DB initialized.");
 
     // init express

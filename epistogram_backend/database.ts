@@ -25,12 +25,12 @@ export const getTypeORMConnection = () => {
 export const initializeDBAsync = async (recreate: boolean) => {
 
     const host = globalConfig.database.hostAddress;
-    const port = parseInt(globalConfig.database.port);
+    const port = globalConfig.database.port;
     const username = globalConfig.database.serviceUserName;
     const password = globalConfig.database.serviceUserPassword;
     const databaseName = globalConfig.database.name;
-    const isSyncEnabled = globalConfig.database.isOrmSyncEnabled == "true";
-    const isLoggingEnabled = globalConfig.database.isOrmLoggingEnabled == "true";
+    const isSyncEnabled = globalConfig.database.isOrmSyncEnabled;
+    const isLoggingEnabled = globalConfig.database.isOrmLoggingEnabled;
 
     const postgresOptions = {
         type: "postgres",
@@ -46,10 +46,7 @@ export const initializeDBAsync = async (recreate: boolean) => {
         ],
     } as ConnectionOptions;
 
-    log("Database connection options:");
-    log(postgresOptions);
-
-    // const postgresOptions2 = {
+    // const postgresOptions = {
     //     type: "postgres",
     //     port: 5432,
     //     host: "34.118.107.79",
@@ -62,6 +59,9 @@ export const initializeDBAsync = async (recreate: boolean) => {
     //         "models/entity/**/*.ts"
     //     ],
     // } as ConnectionOptions;
+
+    log("Database connection options:");
+    log(postgresOptions);
 
     if (recreate) {
 
