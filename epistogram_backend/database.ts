@@ -46,6 +46,9 @@ export const initializeDBAsync = async (recreate: boolean) => {
         ],
     } as ConnectionOptions;
 
+    log("Database connection options:");
+    log(postgresOptions);
+
     // const postgresOptions2 = {
     //     type: "postgres",
     //     port: 5432,
