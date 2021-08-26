@@ -3,6 +3,8 @@ import { createDatabase, dropDatabase } from "typeorm-extension";
 import { Course } from "./models/entity/Course";
 import { Exam } from "./models/entity/Exam";
 import { Organization } from "./models/entity/Organization";
+import { User } from "./models/entity/User";
+import { Video } from "./models/entity/Video";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
 import { globalConfig } from "./server";
 import { log } from "./services/misc/logger";
@@ -42,7 +44,12 @@ export const initializeDBAsync = async (recreate: boolean) => {
         synchronize: isSyncEnabled,
         logging: isLoggingEnabled,
         entities: [
-            "models/entity/**/*.ts"
+            // "models/entity/**/*.ts"
+            Course,
+            Exam,
+            Organization,
+            User,
+            Video
         ],
     } as ConnectionOptions;
 
