@@ -5,9 +5,9 @@ import { TokenMeta as TokenPayload } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { globalConfig } from "../server";
 import { getCookie, TypedError } from "../utilities/helpers";
-import { comparePasswordAsync } from "./crypt";
-import { verifyJWTToken } from "./jwtGen";
-import { log } from "./logger";
+import { comparePasswordAsync } from "./misc/crypt";
+import { verifyJWTToken } from "./misc/jwtGen";
+import { log } from "./misc/logger";
 import { toUserDTO } from "./mappings";
 import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
 

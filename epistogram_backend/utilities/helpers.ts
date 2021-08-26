@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
-import { log, logError } from "../services/logger";
+import { log, logError } from "../services/misc/logger";
 
 export const getAsyncActionHandler = (action: (req: Request, res: Response) => Promise<any>) => {
 

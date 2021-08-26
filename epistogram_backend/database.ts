@@ -4,7 +4,8 @@ import { Course } from "./models/entity/Course";
 import { Exam } from "./models/entity/Exam";
 import { Organization } from "./models/entity/Organization";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
-import { log } from "./services/logger";
+import { globalConfig } from "./server";
+import { log } from "./services/misc/logger";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/userManagementService";
 
 export type TypeORMConnection = Connection;
@@ -23,12 +24,33 @@ export const getTypeORMConnection = () => {
 
 export const initializeDBAsync = async (recreate: boolean) => {
 
+    const port = parseInt(globalConfig.database.port);
+    const username = globalConfig.database.serviceUserName;
+    const password = globalConfig.database.serviceUserPassword;
+    const databaseName = globalConfig.database.name;
+    const isSyncEnabled = globalConfig.database.isOrmSyncEnabled == "true";
+    const isLoggingEnabled = globalConfig.database.isOrmLoggingEnabled == "true";
+
     const postgresOptions = {
         type: "postgres",
-        port: 7000,
-        username: "postgres",
+        port: port,
+        username: username,
+        password: password,
+        database: databaseName,
+        synchronize: isSyncEnabled,
+        logging: isLoggingEnabled,
+        entities: [
+            "models/entity/**/*.ts"
+        ],
+    } as ConnectionOptions;
+
+    const postgresOptions2 = {
+        type: "postgres",
+        port: 5432,
+        host: "34.118.107.79",
+        username: "bence",
         password: "epistogram",
-        database: "epistogramDB",
+        database: "epistogram_DEV",
         synchronize: true,
         logging: false,
         entities: [

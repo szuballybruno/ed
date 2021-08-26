@@ -1,7 +1,7 @@
 import Email from 'email-templates';
 import { globalConfig } from '../server';
 import { createTransport } from 'nodemailer';
-import { log } from './logger';
+import { log } from './misc/logger';
 
 export const sendInvitaitionMailAsync = async (
     invitationToken: string, userEmail: string, userFullName: string) => {
