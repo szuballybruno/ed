@@ -51,6 +51,11 @@ const respondError = (res: Response, msg: string, type: ErrorType) => {
     }
 }
 
+export const throwNotImplemented = () => {
+ 
+    throw new Error("Not implemented!");
+}
+
 export const respond = (res: Response, code: number, data?: any) => {
 
     if (data) {

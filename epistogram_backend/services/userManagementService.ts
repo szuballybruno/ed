@@ -1,19 +1,30 @@
-import { User } from "../models/entities/User";
+import { getTypeORMConnection } from "../database";
+import { User } from "../models/entity/User";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
-import { IdType, InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
+import { InvitationTokenPayload, RoleType } from "../models/shared_models/types/sharedTypes";
 import { globalConfig } from "../server";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authentication";
 import { hashPasswordAsync } from "./crypt";
 import { sendInvitaitionMailAsync } from "./emailService";
 import { getJWTToken, verifyJWTToken } from "./jwtGen";
-import { useCollection } from "./persistance";
 import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
 
-export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: IdType) => {
+export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: number) => {
 
     const currentUser = await getUserById(currentUserId);
+
+    // if user is admin require organizationId to be provided
+    // otherwise use the current user's organization
+    const organizationId = currentUser.role === "admin"
+        ? withValueOrBadRequest(dto.organizationId)
+        : currentUser.organizationId;
+
+    return createInvitedUserWithOrgAsync(dto, organizationId);
+}
+
+export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, organizationId: number) => {
 
     // get and check sent data 
     const email = withValueOrBadRequest(dto.email);
@@ -23,12 +34,6 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
     const jobTitle = withValueOrBadRequest(dto.jobTitle);
     const userFullName = `${lastName} ${firstName}`;
 
-    // if user is admin require organizationId to be provided
-    // otherwise use the current user's organization
-    const organizationId = currentUser.userData.role === "admin"
-        ? withValueOrBadRequest(dto.organizationId)
-        : currentUser.userData.organizationId;
-
     // does user already exist?
     const existingUser = await getUserByEmail(email);
     if (existingUser)
@@ -37,24 +42,22 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
     // hash user password 
     const hashedDefaultPassword = await hashPasswordAsync("guest");
 
-    // insert new user 
-    const { insertItem } = await useCollection("users");
-
-    const newUser = {
-        userData: {
-            active: true,
-            email: email,
-            role: role,
-            firstName: firstName,
-            lastName: lastName,
-            organizationId: organizationId,
-            password: hashedDefaultPassword,
-            innerRole: jobTitle
-        }
+    const user = {
+        isActive: true,
+        email: email,
+        role: role,
+        firstName: firstName,
+        lastName: lastName,
+        organizationId: organizationId,
+        password: hashedDefaultPassword,
+        jobTitle: jobTitle
     } as User;
 
-    const insertResults = await insertItem(newUser);
-    const userId = insertResults.insertedId;
+    const insertResults = await getTypeORMConnection()
+        .getRepository(User)
+        .insert(user);
+
+    const userId = user.id;
 
     // send invitaion mail
     const invitationToken = getJWTToken<InvitationTokenPayload>(
@@ -63,6 +66,8 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
         "24h");
 
     await sendInvitaitionMailAsync(invitationToken, email, userFullName);
+
+    return { invitationToken, user };
 }
 
 export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistrationDTO) => {
@@ -83,15 +88,16 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
     if (password != controlPassword)
         throw new TypedError("Passwords are not equal!", "bad request");
 
-    const { updateAsync } = await useCollection("users");
-
     // hash password
     const hashedPassword = await hashPasswordAsync(password);
 
-    await updateAsync(tokenPayload.userId, {
-        "userData.phoneNumber": phoneNumber,
-        "userData.password": hashedPassword
-    });
+    await getTypeORMConnection()
+        .getRepository(User)
+        .save({
+            id: tokenPayload.userId,
+            phoneNumber: phoneNumber,
+            password: hashedPassword
+        });
 
     const { accessToken, refreshToken } = await getUserLoginTokens(userDTO);
 

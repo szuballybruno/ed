@@ -1,8 +1,9 @@
 import { CourseItemShortDTO } from "./CourseItemShortDTO";
 import { CourseShortDTO } from "./CourseShortDTO";
 import { CurrentTasksDTO } from "./CurrentTasksDTO";
+import { ExamDTO } from "./ExamDTO";
 import { TestQuestionDTO } from "./TestQuestionDTO";
-import { IdType } from "./types/sharedTypes";
+import { VideoDTO } from "./VideoDTO";
 
 export type OverviewPageDTO = {
     testQuestionDTO: TestQuestionDTO,
@@ -10,10 +11,13 @@ export type OverviewPageDTO = {
     currentTasks: CurrentTasksDTO
     tipOfTheDay: string;
 
-    currentCourseItem?: CourseItemShortDTO;
+    currentCourseId?: number;
+    
+    currentCourseExam?: ExamDTO;
+    currentCourseVideo?: VideoDTO;
 
-    currentCourseId?: IdType;
-    currentCourseItems: CourseItemShortDTO[];
+    currentCourseExams: ExamDTO[];
+    currentCourseVideos: VideoDTO[];
 
     recommendedCourses: CourseShortDTO[];
 }

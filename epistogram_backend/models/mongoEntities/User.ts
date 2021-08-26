@@ -1,7 +1,7 @@
 
 import { IdType } from "../shared_models/types/sharedTypes";
 
-export type User = {
+export type MongoUser = {
     _id: IdType;
     userData: UserData;
     userStatistics: UserStatistics;

@@ -1,22 +1,26 @@
 import { Request } from "express";
-import { User } from "../models/entities/User";
+import { getTypeORMConnection } from "../database";
+import { User } from "../models/entity/User";
 import { TypedError } from "../utilities/helpers";
-import { getRequestAccessTokenMeta } from "./authentication";
-import { Connection } from "./connectMongo";
+import { getRequestAccessTokenPayload } from "./authentication";
 import { toUserDTO } from "./mappings";
 
-export const getUserById = async (userId: string) => {
+export const getUserById = async (userId: number) => {
 
-    // const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId }) as User;
+    const user = getTypeORMConnection()
+        .getRepository(User)
+        .createQueryBuilder("user")
+        .where("user.id = :userId", { userId: userId })
+        .getOneOrFail();
 
-    const cursor = await Connection.db.collection("users").find();
-    const usersFromDB = (await cursor.toArray());
-    const foundUser = usersFromDB.filter((x: any) => x?._id == userId)[0] as User;
+    // const cursor = await Connection.db.collection("users").find();
+    // const usersFromDB = (await cursor.toArray());
+    // const foundUser = usersFromDB.filter((x: any) => x?._id == userId)[0] as MongoUser;
 
-    return foundUser;
+    return user;
 }
 
-export const getUserDTOById = async (userId: string) => {
+export const getUserDTOById = async (userId: number) => {
 
     const foundUser = await getUserById(userId);
     if (!foundUser)
@@ -25,7 +29,7 @@ export const getUserDTOById = async (userId: string) => {
     return toUserDTO(foundUser);
 }
 
-export const getUserActiveTokenById = async (userId: string) => {
+export const getUserActiveTokenById = async (userId: number) => {
 
     //const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId }) as User;
 
@@ -33,27 +37,52 @@ export const getUserActiveTokenById = async (userId: string) => {
     if (!foundUser)
         return null;
 
-    return foundUser.userData.refreshToken;
+    return foundUser.refreshToken;
 }
 
 export const getUserByEmail = async (email: string) => {
 
-    const userFromDB = await Connection.db.collection("users").findOne({ "userData.email": email })
-    if (!userFromDB)
+    const user = await getTypeORMConnection()
+        .getRepository(User)
+        .createQueryBuilder("user")
+        .where("user.email = :email", { email: email })
+        .getOne();
+
+    if (!user)
         return null;
 
-    return userFromDB as User;
+    return user;
 }
 
 export const getCurrentUser = async (req: Request) => {
 
-    const tokenMeta = getRequestAccessTokenMeta(req);
-    if (!tokenMeta)
+    const authTokenPayload = getRequestAccessTokenPayload(req);
+    if (!authTokenPayload)
         throw new TypedError("Token meta is missing!", "forbidden");
 
-    const currentUser = await getUserDTOById(tokenMeta.userId);
+    const currentUser = await getUserDTOById(authTokenPayload.userId);
     if (!currentUser)
-        throw new TypedError("User not found by id: " + tokenMeta.userId, "bad request");
+        throw new TypedError("User not found by id: " + authTokenPayload.userId, "bad request");
 
     return currentUser;
+}
+
+export const setUserActiveRefreshToken = (userId: number, refreshToken: string) => {
+
+    return getTypeORMConnection()
+        .getRepository(User)
+        .save({
+            id: userId,
+            refreshToken: refreshToken
+        });
+}
+
+export const removeRefreshToken = (userId: number) => {
+
+    return getTypeORMConnection()
+        .getRepository(User)
+        .save({
+            id: userId,
+            refreshToken: ""
+        });
 }
