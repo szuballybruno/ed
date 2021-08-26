@@ -1,10 +1,8 @@
 import { Request } from "express";
 import { User } from "../models/entity/User";
-import { MongoUser } from "../models/mongoEntities/User";
 import { getTypeORMConnection } from "../server";
 import { TypedError } from "../utilities/helpers";
 import { getRequestAccessTokenPayload } from "./authentication";
-import { Connection } from "./connectMongo";
 import { toUserDTO } from "./mappings";
 
 export const getUserById = async (userId: number) => {

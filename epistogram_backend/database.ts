@@ -1,4 +1,3 @@
-import { connect } from "mongodb";
 import { Connection, ConnectionOptions, createConnection } from "typeorm";
 import { createDatabase, dropDatabase } from "typeorm-extension";
 import { Course } from "./models/entity/Course";

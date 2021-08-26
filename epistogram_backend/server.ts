@@ -3,28 +3,16 @@ import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // need to be imported for TypeORM
-import { router as articleRoutes } from './api/articles/routes';
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { router as courseRoutes } from './api/courses/routes';
 import { getOverviewPageDTOAction, getUsersAction } from './api/dataActions';
-import { router as filesRoutes } from './api/files/routes';
-import { router as groupsRoutes } from './api/groups/routes';
-import { router as organizationRoutes } from './api/organizations/routes';
-import { router as overlaysRoutes } from './api/overlays/routes';
 import { getCurrentVideoAction, setCurrentVideoAction } from './api/playerActions';
-import { router as tagsRoutes } from './api/tags/routes';
-import { router as tasksRoutes } from './api/tasks/routes';
 import { getUserCoursesAction } from './api/userCourses';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
-import { router as usersRoutes } from './api/users/routes';
-import { router as videosRoutes } from './api/videos/routes';
-import { router as generalDataRoutes } from './api/votes/routes';
 import { initializeDBAsync, seedDB, TypeORMConnection } from './database';
 import { authorizeRequest } from './services/authentication';
 import { getOverviewPageDTOAsync } from './services/dataService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/logger";
-import { getUserDataAsync } from './services/userDataService';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
 
 // initialize env
@@ -98,22 +86,16 @@ const initializeAsync = async () => {
     expressServer.use(bodyParser.json());
     expressServer.use(fileUpload());
 
-    // register user
     expressServer.use((req, res, next) => {
-
+        
         log("Request arrived: " + req.path);
         next();
     })
-
+    
+    // unprotected routes
     expressServer.get('/renew-user-session', renewUserSessionAction);
     expressServer.post('/log-out-user', logOutUserAction);
     expressServer.post('/login-user', logInUserAction);
-
-    expressServer.get('/test', (req, res) => getUserDataAsync("6022c270f66f803c80243250").then(x => res.json(x)));
-
-    //
-    // protected 
-    // 
 
     // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
@@ -133,23 +115,13 @@ const initializeAsync = async () => {
     // courses 
     expressServer.post("/get-user-courses", authMiddleware, getAsyncActionHandler(getUserCoursesAction));
 
-    expressServer.use('/articles', authMiddleware, articleRoutes)
-    expressServer.use('/courses', authMiddleware, courseRoutes)
-    expressServer.use('/groups', authMiddleware, groupsRoutes)
-    expressServer.use('/organizations', authMiddleware, organizationRoutes)
-    expressServer.use('/tags', authMiddleware, tagsRoutes)
-    expressServer.use('/tasks', authMiddleware, tasksRoutes)
-    expressServer.use('/upload', authMiddleware, filesRoutes)
-    expressServer.use('/overlays', authMiddleware, overlaysRoutes)
-    expressServer.use('/users', authMiddleware, usersRoutes);
-    expressServer.use('/videos', authMiddleware, videosRoutes);
-    expressServer.use('/votes', authMiddleware, generalDataRoutes);
-
+    // 404 - no match
     expressServer.use((req, res) => {
 
         res.status(404).send(`Route did not match: ${req.url}`);
     });
 
+    // error handler
     expressServer.use((error: express.Errback, req: express.Request, res: express.Response) => {
 
         logError("Express error middleware.");

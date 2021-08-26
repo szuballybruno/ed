@@ -1,4 +1,3 @@
-import {ObjectID, ObjectId} from "mongodb";
 
 export const flattenObject = function(ob: object) {
     let toReturn = {};
