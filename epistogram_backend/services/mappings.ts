@@ -7,6 +7,7 @@ import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { globalConfig } from "../server";
+import {CourseAdminDTO} from "../models/shared_models/CourseAdminDTO";
 
 export const toUserDTO = (user: User) => new UserDTO(
     user.id,
@@ -50,4 +51,16 @@ export const toCourseShortDTO = (course: Course) => {
         teacherName: "Mr. Teacher Name",
         thumbnailImageURL: thumbnailImageURL
     } as CourseShortDTO;
+}
+
+export const toCourseAdminDTO = (course: Course) => {
+
+    return {
+        title: course.title,
+        category: course.category,
+        courseId: course.id,
+        teacherName: "Mr. Teacher Name",
+        videosCount: 0,
+        thumbnailImageURL: globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`
+    } as CourseAdminDTO;
 }

@@ -29,7 +29,10 @@ const Administration = (props: { match: { url: string; } }) => {
     const user = useState(userDetailsState)
 
     return <MainWrapper>
-        <Navbar showHighlightedButton={true} menuItems={menuItems["user"]} showLastButton={true} showNavigation={true} />
+        <Navbar showHighlightedButton={true}
+                menuItems={menuItems["user"]}
+                showLastButton={true}
+                showNavigation={true} />
         <ContentWrapper>
             <LeftPanel>
                 <div className={classes.adminDashboardLeftItemProfile}>

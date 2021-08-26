@@ -13,6 +13,7 @@ import { authorizeRequest } from './services/authentication';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/misc/logger";
 import { getAsyncActionHandler, respond } from './utilities/helpers';
+import {getAdminCoursesAction} from "./api/adminCourses";
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -98,6 +99,7 @@ const initializeAsync = async () => {
 
     // courses 
     expressServer.post("/get-user-courses", authMiddleware, getAsyncActionHandler(getUserCoursesAction));
+    expressServer.post("/get-admin-courses", authMiddleware, getAsyncActionHandler(getAdminCoursesAction));
 
     // 404 - no match
     expressServer.use((req, res) => {

@@ -1,6 +1,5 @@
 import {Request} from "express";
 import {AdminPageEditVideoView} from "../../models/shared_models/AdminPageEditVideoDTO";
-import {useCollection} from "../../services/persistance";
 import {TagView} from "../../models/shared_models/TagDTO";
 
 export const getVideoIdFromRequest = (req: Request) => {
@@ -12,11 +11,11 @@ export const getVideoIdFromRequest = (req: Request) => {
 
 export const getEditedVideoAsync = async (videoId: string, ) => {
 
-    const { aggregateAsync } = await useCollection("videos");
+    /*const { aggregateAsync } = await useCollection("videos");*/
 
     const aggregateEditedVideoByVideoId = async () => {
 
-        const AdminPageEditedVideo = await aggregateAsync([{
+        /*const AdminPageEditedVideo = await aggregateAsync([{
             '$match': {
                 '_id': {$toObjectId: videoId}
             }
@@ -33,7 +32,7 @@ export const getEditedVideoAsync = async (videoId: string, ) => {
             }
         }])
 
-        return AdminPageEditedVideo as AdminPageEditVideoView[];
+        return AdminPageEditedVideo as AdminPageEditVideoView[];*/
     }
 
     return aggregateEditedVideoByVideoId()

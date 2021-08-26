@@ -1,5 +1,5 @@
 export type CourseAdminDTO = {
-    courseId: string,
+    courseId: number,
     title: string,
     thumbnailImageURL: string,
     category: string,
