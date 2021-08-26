@@ -10,13 +10,13 @@ export const currentEnvironmentName = (process.env.NODE_ENV ?? "local") as Envir
 
 const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
 
-    log("Accessing config.env entry: " + entryName);
     const fullEntryName = entryName;
     const value = process.env[fullEntryName];
 
     if (!value && value != "false" && !allowEmptyStr)
         throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${currentEnvironmentName}'!`);
 
+    log(entryName + " -> " + value);
     return value ?? "";
 }
 

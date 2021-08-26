@@ -24,6 +24,7 @@ export const getTypeORMConnection = () => {
 
 export const initializeDBAsync = async (recreate: boolean) => {
 
+    const host = globalConfig.database.hostAddress;
     const port = parseInt(globalConfig.database.port);
     const username = globalConfig.database.serviceUserName;
     const password = globalConfig.database.serviceUserPassword;
@@ -34,6 +35,7 @@ export const initializeDBAsync = async (recreate: boolean) => {
     const postgresOptions = {
         type: "postgres",
         port: port,
+        host: host,
         username: username,
         password: password,
         database: databaseName,
@@ -44,19 +46,19 @@ export const initializeDBAsync = async (recreate: boolean) => {
         ],
     } as ConnectionOptions;
 
-    const postgresOptions2 = {
-        type: "postgres",
-        port: 5432,
-        host: "34.118.107.79",
-        username: "bence",
-        password: "epistogram",
-        database: "epistogram_DEV",
-        synchronize: true,
-        logging: false,
-        entities: [
-            "models/entity/**/*.ts"
-        ],
-    } as ConnectionOptions;
+    // const postgresOptions2 = {
+    //     type: "postgres",
+    //     port: 5432,
+    //     host: "34.118.107.79",
+    //     username: "bence",
+    //     password: "epistogram",
+    //     database: "epistogram_DEV",
+    //     synchronize: true,
+    //     logging: false,
+    //     entities: [
+    //         "models/entity/**/*.ts"
+    //     ],
+    // } as ConnectionOptions;
 
     if (recreate) {
 
