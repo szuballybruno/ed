@@ -13,13 +13,14 @@ export const sendInvitaitionMailAsync = async (
     log(invitationUrl);
 
     // TODO mailing 
-    return Promise.resolve();
+    //return Promise.resolve();
 
     const mail = getEmail();
 
     await mail.send({
         template: "setpassword",
         message: {
+            from: "noreply@epistogram.com",
             to: userEmail,
             subject: "Értesítés a regisztrációról"
         },
@@ -39,6 +40,7 @@ export const sendResetPasswordMailAsync = async (userEmail: string, userFullName
     await mail.send({
         template: "setpassword",
         message: {
+            from: "noreply@epistogram.com",
             to: userEmail,
             subject: "Értesítés a regisztrációról"
         },
@@ -54,7 +56,7 @@ const getEmail = () => new Email(getEmailConfig());
 
 export const getEmailConfig = () => ({
     message: {
-        from: globalConfig.mail.senderEmail
+        from: "noreply@epistogram.com"
     },
     send: true,
     transport: createNewTransporter(

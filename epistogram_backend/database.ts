@@ -152,7 +152,8 @@ export const seedDB = async () => {
             role: "admin" as RoleType,
             email: "edina.sandor@email.com",
         },
-        insertedOrganizationIds[0]);
+        insertedOrganizationIds[0],
+        false);
 
     await finalizeUserRegistrationAsync({
         invitationToken: invitationToken,

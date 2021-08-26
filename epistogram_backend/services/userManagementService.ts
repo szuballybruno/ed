@@ -21,10 +21,10 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
         ? withValueOrBadRequest(dto.organizationId)
         : currentUser.organizationId;
 
-    return createInvitedUserWithOrgAsync(dto, organizationId);
+    return createInvitedUserWithOrgAsync(dto, organizationId, true);
 }
 
-export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, organizationId: number) => {
+export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, organizationId: number, sendEmail: boolean) => {
 
     // get and check sent data 
     const email = withValueOrBadRequest(dto.email);
@@ -65,7 +65,7 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
         globalConfig.mail.tokenMailSecret,
         "24h");
 
-    await sendInvitaitionMailAsync(invitationToken, email, userFullName);
+    sendEmail && await sendInvitaitionMailAsync(invitationToken, email, userFullName);
 
     return { invitationToken, user };
 }
