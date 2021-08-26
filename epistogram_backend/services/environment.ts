@@ -6,7 +6,25 @@ import { log, logError } from "./misc/logger";
 
 type EnvironmentType = "development" | "production" | "demo" | "local";
 
-export const currentEnvironmentName = (process.env.NODE_ENV ?? "local") as EnvironmentType;
+export const getCurrentEnvironmentName = () => {
+
+    // const node_env = process.env.NODE_ENV;
+
+    // if (node_env == "production")
+    //     return "production" as EnvironmentType;
+
+    // if (node_env == "demo")
+    //     return "demo" as EnvironmentType;
+
+    // if (node_env == "development")
+    //     return "development" as EnvironmentType;
+
+    // return "local" as EnvironmentType;
+
+    return process.env.ENVIRONMENT_NAME as EnvironmentType;
+}
+
+log("Environemnt: " + getCurrentEnvironmentName());
 
 const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
 
@@ -14,7 +32,7 @@ const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
     const value = process.env[fullEntryName];
 
     if (!value && value != "false" && !allowEmptyStr)
-        throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${currentEnvironmentName}'!`);
+        throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${getCurrentEnvironmentName()}'!`);
 
     log(entryName + " -> " + value);
     return value ?? "";

@@ -162,7 +162,6 @@ export const seedDB = async () => {
     });
 }
 
-
 // const users = [
 //     {
 //         firstName: "Edina",
