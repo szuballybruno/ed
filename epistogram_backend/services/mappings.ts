@@ -1,8 +1,12 @@
 import { Course } from "../models/entity/Course";
+import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
+import { Video } from "../models/entity/Video";
 import { CourseItemShortDTO } from "../models/shared_models/CourseItemShortDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
+import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
+import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { globalConfig } from "../server";
 import { CurrentItem, Item } from "./userDataService";
 
@@ -12,7 +16,7 @@ export const toUserDTO = (user: User) => new UserDTO(
     user.firstName,
     user.lastName,
     user.role,
-    user.innerRole);
+    user.jobTitle);
 
 export const toCourseItemShortDTO = (item: Item) => {
 
@@ -34,6 +38,28 @@ export const toCourseItemShortDTO2 = (item: CurrentItem) => {
         type: "video",
         thumbnailUrl: item.thumbnailUrl
     } as CourseItemShortDTO;
+}
+
+export const toVideoDTO = (video: Video) => {
+
+    return {
+        id: video.id,
+        subTitle: video.subtitle,
+        title: video.title,
+        type: "video",
+        thumbnailUrl: video.thumbnailUrl
+    } as VideoDTO;
+}
+
+export const toExamDTO = (exam: Exam) => {
+
+    return {
+        id: exam.id,
+        subTitle: exam.subtitle,
+        title: exam.title,
+        type: "exam",
+        thumbnailUrl: exam.thumbnailUrl
+    } as ExamDTO;
 }
 
 export const toCourseShortDTO = (course: Course) => {

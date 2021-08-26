@@ -1,11 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
+import { Exam } from "./Exam";
 import { Organization } from "./Organization";
 import { Video } from "./Video";
 
 @Entity()
 export class User {
-
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -15,16 +15,16 @@ export class User {
     @Column({ nullable: true })
     isActive: boolean;
 
-    @Column({ nullable: true })
+    @Column()
     email: string;
 
     @Column({ nullable: true })
     username: string;
 
-    @Column({ nullable: true })
+    @Column()
     firstName: string;
 
-    @Column({ nullable: true })
+    @Column()
     lastName: string;
 
     @Column({ nullable: true })
@@ -36,11 +36,11 @@ export class User {
     @Column({ nullable: true })
     linkedInUrl: string;
 
-    @Column({ nullable: true })
+    @Column()
     role: string;
 
-    @Column({ nullable: true })
-    innerRole: string;
+    @Column()
+    jobTitle: string;
 
     @Column({ nullable: true })
     password: string;
@@ -49,7 +49,7 @@ export class User {
     refreshToken: string;
 
     // Organization 
-    @Column({ nullable: false })
+    @Column()
     organizationId: number;
 
     @ManyToOne(() => Organization, organization => organization.users)
@@ -64,11 +64,19 @@ export class User {
     @JoinColumn({ name: 'currentCourseId' })
     currentCourse: Course
 
-    // Current course
+    // Current video
     @Column({ nullable: true })
     currentVideoId: number;
 
     @ManyToOne(() => Video, video => video.users)
     @JoinColumn({ name: 'currentVideoId' })
     currentVideo: Video
+
+    // Current exam
+    @Column({ nullable: true })
+    currentExamId: number;
+
+    @ManyToOne(() => Exam, exam => exam.users)
+    @JoinColumn({ name: 'currentExamId' })
+    currentExam: Exam
 }

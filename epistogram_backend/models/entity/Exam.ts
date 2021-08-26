@@ -17,6 +17,9 @@ export class Exam {
     @Column({ nullable: true })
     description: string;
 
+    @Column()
+    thumbnailUrl: string;
+
     @OneToMany(type => User, user => user.currentCourse)
     @JoinColumn()
     users: User[];
@@ -24,7 +27,7 @@ export class Exam {
     // course
     @Column()
     courseId: number;
-    
+
     @ManyToOne(type => Course, course => course.exams)
     @JoinColumn({ name: "courseId" })
     course: Course

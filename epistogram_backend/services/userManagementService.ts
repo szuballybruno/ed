@@ -1,15 +1,13 @@
 import { User } from "../models/entity/User";
-import { MongoUser } from "../models/mongoEntities/User";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
-import { IdType, InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
+import { InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
 import { getTypeORMConnection, globalConfig } from "../server";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authentication";
 import { hashPasswordAsync } from "./crypt";
 import { sendInvitaitionMailAsync } from "./emailService";
 import { getJWTToken, verifyJWTToken } from "./jwtGen";
-import { useCollection } from "./persistance";
 import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
 
 export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: number) => {
@@ -46,7 +44,7 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
         lastName: lastName,
         organizationId: organizationId,
         password: hashedDefaultPassword,
-        innerRole: jobTitle
+        jobTitle: jobTitle
     } as User;
 
     const insertResults = await getTypeORMConnection()

@@ -1,9 +1,7 @@
-export type VideoDTO = {
+export type ExamDTO = {
     id: number;
     subTitle: string;
     title: string;
-    type: "video";
+    type: "exam";
     thumbnailUrl: string;
-    url: string;
-    length: any;
 }

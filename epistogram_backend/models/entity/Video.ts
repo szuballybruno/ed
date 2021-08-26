@@ -23,6 +23,9 @@ export class Video {
     @Column()
     length: number;
 
+    @Column()
+    thumbnailUrl: string;
+
     // -> users 
     @OneToMany(type => User, user => user.currentVideo)
     @JoinColumn()

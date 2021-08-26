@@ -1,6 +1,8 @@
 
 export type IdType = string;
 
+export type RoleType = "admin" | "notadmin";
+
 export type InvitationTokenPayload = { userId: number };
 
 export type HTTPErrorType = "forbidden" | "internal server error" | "bad request" | "http error";
