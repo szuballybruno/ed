@@ -8,7 +8,6 @@ import { backendUrl } from '../../../Environemnt';
 import instance from "../../../services/axiosInstance";
 import { useAdministratedCourses } from '../../../services/courseService';
 import adminSideState from "../../../store/admin/adminSideState";
-import applicationRunningState from "../../../store/application/applicationRunningState";
 import { AdminDashboardList } from "../universal/adminDashboardList/AdminDashboardList";
 import AdminDashboardSearchItem from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
 import { AdminDashboardWrapper } from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
@@ -19,6 +18,7 @@ import { AddCourse } from './courses_components/addCourse/AddCourse';
 import { AddItem } from "./courses_components/addItem/AddItem";
 import { EditCourse } from "./courses_components/editCourse/EditCourse";
 import { EditItemPage } from "./courses_components/editItem/EditItemPage";
+import {SaveBar} from "../universal/saveBar/SaveBar";
 
 const CourseAdministartion = () => {
     
@@ -26,6 +26,8 @@ const CourseAdministartion = () => {
 
     const [searchText, setSearchText] = React.useState("");
     const { courses } = useAdministratedCourses(searchText);
+
+    console.log(courses)
 
     return (
         <Switch>
@@ -44,19 +46,19 @@ const CourseAdministartion = () => {
 
                     {/* list */}
                     <AdminDashboardList>
-                        {courses
+                        {courses && courses
                             .map((course, index) => {
-                                return <AdminDashboardSearchItem title={course.name}
-                                    thumbnailUrl={course._id ? `${globalConfig.assetStorageUrl}/courses/${course._id}.png` : undefined}
-                                    key={course._id}
+                                return <AdminDashboardSearchItem title={course.title}
+                                    thumbnailUrl={course.courseId ? `${globalConfig.assetStorageUrl}/courses/${course.courseId}.png` : undefined}
+                                    key={course.courseId}
                                     chips={[
                                         { label: course.category, icon: "category" },
                                         { label: course.teacherName || "Ismeretlen oktató", icon: "person" },
-                                        { label: course.items ? course.items.length.toString() : "0", icon: "video" }]
+                                        { label: course.videosCount.toString(), icon: "video" }]
                                     }
                                     actions={[
                                         {
-                                            to: `courses/${course._id}`,
+                                            to: `courses/${course.courseId}`,
                                             selectedComponent: "editCourse",
                                             icon: "edit",
                                             onClick: () => {
@@ -73,14 +75,14 @@ const CourseAdministartion = () => {
                                         {
                                             icon: "delete",
                                             onClick: () => {
-                                                instance.delete(`${backendUrl}videos/deletevideo?videoId=${course._id}`).then(() => {
+                                                instance.delete(`${backendUrl}videos/deletevideo?videoId=${course.courseId}`).then(() => {
                                                     return admin.users[index].set(none)
                                                 }).catch(e => console.error(e.toString()))
                                             }
                                         },]
                                     }
                                     userActionComponents={{
-                                        editCourse: <Redirect to={`courses/${course._id}`} />,
+                                        editCourse: <Redirect to={`courses/${course.courseId}`} />,
                                         videoStatistics: <UserStatistics />
                                     }} />
                             })}

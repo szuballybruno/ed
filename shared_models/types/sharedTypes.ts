@@ -1,2 +1,2 @@
 
-export type IdType = string;
+export type IdType = number;

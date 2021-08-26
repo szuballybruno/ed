@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {AddFrame} from "../../../../../HOC/add_frame/AddFrame";
 import SingleInput from "../../../universal/singleInput/SingleInput";
-import SelectFromArray from "../../../universal/selectFromArray/SelectFromArray";
 import {none, State, useState} from "@hookstate/core";
 import adminSideState from '../../../../../store/admin/adminSideState';
 import instance from "../../../../../services/axiosInstance";
@@ -11,12 +10,11 @@ import applicationRunningState from "../../../../../store/application/applicatio
 import classes from "../../../users/users_components/addUser.module.scss";
 import {Button} from "@material-ui/core";
 import SelectImage from "../../../universal/selectImage/SelectImage";
-import {SelectMultiple} from "../../../universal/selectMultiple/SelectMultiple";
 import {ColorPicker} from "../../../universal/colorPicker/ColorPicker";
 import {fetchReducer} from "../../../universal/services/fetchReducer";
-import {globalConfig} from "../../../../../configuration/config";
 import {permissionLevelOptions} from "../../store";
 import EditItem from "../../../../universal/atomic/editItem/EditItem";
+import {SelectRadio} from "../../SelectRadio";
 
 export const AddCourse = () => {
     const admin = useState(adminSideState)
@@ -252,8 +250,7 @@ export const AddCourse = () => {
             <SingleInput labelText={"Kategória"} name={"category"} changeHandler={inputChangeHandler} />
             <EditItem value={admin.currentlyEdited.course.permissionLevel.get()}
                       title={"Elérés"}
-                      inputArray={permissionLevelOptions}
-                      editOnChange={(e) => {
+                      onChange={(e) => {
                           admin.currentlyEdited.course.permissionLevel.set(e.currentTarget.value)
                       }}
                       editButtonOnClick={(e: React.MouseEvent<any>) => {
@@ -265,124 +262,13 @@ export const AddCourse = () => {
             {(
                 admin.currentlyEdited.course.permissionLevel.get() === "groups" ||
                 admin.currentlyEdited.course.permissionLevel.get() === "publicInsideOrganization") &&
-            <SelectMultiple title={"Cég"}
+            <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Cég kiválasztása"} />}
 
-                            nameProperty={"name"}
-                            valueProperty={"_id"}
+            <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Tanár kiválasztása"} />
 
-                            inputArray={allOrganizations.get()}
-                            editingItems={editingItems.get()}
-                            checkedItems={[admin.currentlyEdited.course.organizationId.get()]}
-
-                            checkBoxOnChange={(e) => {
-                                instance.patch("courses/course/"+admin.currentlyEdited.course._id.get(), {
-                                    organizationId: e.currentTarget.value
-                                }).then((res) => {
-                                    app.snack.showSnack.set(true)
-                                    app.snack.snackTitle.set("Cég megváltoztatva")
-                                })
-                                return admin.currentlyEdited.course.organizationId.set(e.currentTarget.value)
-                            }}
-                            searchOnChange={() => {}}
-                            editOnChange={editOnChange}
-
-                            showCheckBox={true}
-                            selectOne={true}
-
-
-                            emptyArrayMessage={"Nem található egy cég sem."}
-            />}
-
-            <SelectMultiple title={"Tanár"}
-
-                            nameProperty={"name"}
-                            valueProperty={"_id"}
-
-                            inputArray={allTeachers.get().filter((teacher, index, arr) => {
-                                return teacher.name === "" ? null : teacher
-                            })}
-                            editingItems={editingItems.get()}
-                            checkedItems={[admin.currentlyEdited.course.teacherId.get()]}
-
-                            checkBoxOnChange={(e) => {
-                                instance.patch("courses/course/"+admin.currentlyEdited.course._id.get(), {
-                                    teacherId: e.currentTarget.value
-                                }).then((res) => {
-                                    app.snack.showSnack.set(true)
-                                    app.snack.snackTitle.set("Tanár megváltoztatva")
-                                })
-                                return admin.currentlyEdited.course.teacherId.set(e.currentTarget.value)
-
-                            }}
-                            searchOnChange={() => {}}
-                            selectOne={true}
-                            emptyArrayMessage={"Nem található egy tanár sem."}
-            />
-
-            <SelectMultiple title={"Tag-ek"}
-                            nameProperty={"name"}
-                            valueProperty={"_id"}
-                            showCheckBox
-                            showAdd
-                            showEditButton
-                            showDeleteButton
-                            editingItems={editingItems.get()}
-                            inputArray={allTags.get()}
-                            checkBoxOnChange={(e) => selectItem(e, selectedTags)}
-                            searchOnChange={() => {}}
-                            emptyArrayMessage={"Nem található egy tag sem. A plussz jelre kattintva adj hozzá egyet."}
-                            addButtonOnClick={(e) => {
-                                editingItems.merge([e.currentTarget.value])
-                                allTags.merge([{_id: "", name: "Nincs érték"}])
-                                admin.currentlyEdited.course.tags.merge([{_id: "", name: "Nincs érték"}])
-                                showAddTag.set(false)
-                            }}
-
-                            editButtonOnClick={(e) => {
-                                editingItems.merge([e.currentTarget.value])}
-                            }
-                            checkedItems={selectedTags.get()}
-                            editOnChange={editOnChange}
-
-                            deleteButtonOnClick={(e) => {
-                                admin.currentlyEdited.course.tags.get().filter((value, index, array) => {
-                                    return value._id === e.currentTarget.value ? admin.currentlyEdited.course.tags[index].set(none) : null
-                                })
-                                allTags.get().filter((value, index, array) => {
-                                    return value._id === e.currentTarget.value ? allTags[index].set(none) : null
-                                })
-                                instance.delete("tags/"+e.currentTarget.value).then((res) => {
-                                    app.snack.showSnack.set(true)
-                                    app.snack.snackTitle.set("A res.data: " + JSON.stringify(res.data))
-                                })
-                            }}
-                            doneButtonOnClick={(e) => {updateTag(e)}} />
+            <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Tagek kiválasztása"} />
             {(admin.currentlyEdited.course.permissionLevel.get() === "groups") &&
-            <SelectMultiple title={"Csoportok"}
-
-                            nameProperty={"name"}
-                            valueProperty={"_id"}
-
-                            inputArray={allGroups.get().filter((group, index, arr) => {
-                                return admin.currentlyEdited.course.groups.get().includes(group) || group.name === "" ? null : group
-                            })}
-                            editingItems={editingItems.get()}
-                            checkedItems={selectedGroups.get()}
-
-                            checkBoxOnChange={(e) => {
-                                admin.currentlyEdited.course.groups.get().find(group => group._id === e.currentTarget.value) ?
-                                    admin.currentlyEdited.course.groups.get().filter((value, index, array) =>
-                                        value._id === e.currentTarget.value && unCheckItem(e, index))
-                                    : checkItem(e)
-                            }}
-                            searchOnChange={() => {}}
-                            editOnChange={editOnChange}
-
-                            showCheckBox={true}
-                            selectOne={false}
-                            showDeleteButton
-
-                            emptyArrayMessage={"Nem található egy csoport sem. A plussz jelre kattintva adj hozzá egyet."}/>}
+            <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Csoportok kiválasztása"} />}
             <ColorPicker title={"Elsődleges szín"}
                          currentColor={admin.currentlyEdited.course.colorOne.get()}
                          onChange={(color) => admin.currentlyEdited.course.colorOne.set(color)} />

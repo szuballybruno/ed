@@ -193,7 +193,7 @@ const getRefreshToken = (user: UserDTO) => {
 
 const setAccessTokenCookie = (res: Response, accessToken: string) => {
     res.cookie(accessTokenCookieName, accessToken, {
-        secure: true,
+        secure: false, //set to false because of postman
         httpOnly: true,
         expires: dayjs().add(globalConfig.security.accessTokenLifespanInS, "seconds").toDate()
     });
@@ -201,7 +201,7 @@ const setAccessTokenCookie = (res: Response, accessToken: string) => {
 
 const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
     res.cookie(refreshTokenCookieName, refreshToken, {
-        secure: true,
+        secure: false, //set to false because of postman
         httpOnly: true,
         expires: dayjs().add(globalConfig.security.refreshTokenLifespanInS, "seconds").toDate()
     });

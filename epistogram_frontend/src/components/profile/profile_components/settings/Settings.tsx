@@ -66,7 +66,7 @@ const Settings = () => {
                 <div className={classes.dataSheetItemWrapper}>
                     {dataSheetData.map((data) => {
                         return <EditItem name={`${user.userData[data.placeholderName as keyof typeof user.userData].get() || ""}`}
-                                         editOnChange={(e: React.ChangeEvent<any>) => {
+                                         onChange={(e: React.ChangeEvent<any>) => {
                                              instance.patch(`users/${cookies.get("userId")}`, {
                                                  "userData": {
                                                      [data.placeholderName]: "" + e.currentTarget.value

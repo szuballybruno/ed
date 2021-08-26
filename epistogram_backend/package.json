@@ -1,5 +1,5 @@
 {
-  "name": "fitnessapp-backend",
+  "name": "epistogram_backend",
   "version": "0.3.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "build2": "react-scripts build",
     "start": "react-scripts start",
     "nodemon": "npx nodemon server.ts",
-    "syncDTOs": "xcopy /s %~dp0..\\epistogram_backend\\models\\shared_models %~dp0..\\epistogram_frontend\\src\\models\\shared_models /Y"
+    "syncDTOsToFrontend": "xcopy /s ..\\epistogram_backend\\models\\shared_models ..\\epistogram_frontend\\src\\models\\shared_models /Y /D",
+    "syncDTOsToBackend": "xcopy /s ..\\epistogram_frontend\\src\\models\\shared_models ..\\epistogram_backend\\models\\shared_models /Y /D"
   },
   "dependencies": {
     "@babel/types": "^7.13.0",

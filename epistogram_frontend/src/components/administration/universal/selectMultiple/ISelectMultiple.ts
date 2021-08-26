@@ -25,8 +25,6 @@ export interface ISelectMultiple {
 
     emptyArrayMessage: string,
 
-    editButtonOnClick?: (e: React.MouseEvent<any>) => any
-    addButtonOnClick?: (e: React.MouseEvent<any>) => any
-    doneButtonOnClick?: (e: React.MouseEvent<any>) => any
-    deleteButtonOnClick?: (e: React.MouseEvent<any>) => any
+    items: any[]
+    setItems: () => any
 }

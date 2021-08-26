@@ -1,14 +1,10 @@
 import React from 'react';
 import classes from './editItem.module.scss'
-import {CloseTwoTone, DoneTwoTone, EditTwoTone} from "@material-ui/icons";
-import {useState} from "@hookstate/core";
-import {FormControl, Select, TextField, Typography} from "@material-ui/core";
-import {TextOrInput} from "../../../administration/universal/selectMultiple/components/TextOrInput/TextOrInput";
+import {TextField, Typography} from "@material-ui/core";
 
 const EditItem = (props: {
     title: string
     className?: string
-    inputArray?: {[itemValue: string]: any}[],
 
     isEditing?: boolean
     name: string
@@ -17,7 +13,7 @@ const EditItem = (props: {
     nameProperty?: string
     valueProperty?: string
 
-    editOnChange?: (e: React.ChangeEvent<any>) => any,
+    onChange?: (e: React.ChangeEvent<any>) => any,
     showDeleteButton?: boolean,
     showEditButton?: boolean,
     deleteButtonOnClick?: (e: React.MouseEvent<any>) => any
@@ -29,22 +25,12 @@ const EditItem = (props: {
             <div className={classes.dataSheetItemTitleWrapper}>
                 <Typography>{props.title}</Typography>
             </div>
-            {props.inputArray ? <FormControl className={classes.formControl}>
-                <Select
-                    className={classes.select}
-                    native
-                    value={props.value}
-                    onChange={props.editOnChange}
-                    inputProps={{
-                        name: 'age',
-                        id: 'age-native-simple',
-                    }}
-                >
-                    {props.inputArray.map((listItem) => {
-                        return <option value={listItem.value}>{listItem.name}</option>
-                    })}
-                </Select>
-            </FormControl> : <TextOrInput {...props} />}
+            <div className={classes.textOrInputWrapper}>
+                <TextField size={"small"}
+                           name={props.name}
+                           value={props.value}
+                           onChange={props.onChange} />
+            </div>
         </div>
     );
 };

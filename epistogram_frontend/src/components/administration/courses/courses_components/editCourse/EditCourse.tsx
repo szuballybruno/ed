@@ -10,7 +10,6 @@ import { HexColorPicker } from "react-colorful";
 import {none, State, useState} from "@hookstate/core";
 import instance from "../../../../../services/axiosInstance";
 import adminSideState from '../../../../../store/admin/adminSideState';
-import {SelectMultiple} from "../../../universal/selectMultiple/SelectMultiple";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
 import SelectImage from "../../../universal/selectImage/SelectImage";
 import {globalConfig} from "../../../../../configuration/config";
@@ -18,8 +17,9 @@ import {Cookies} from "react-cookie";
 import {fetchReducer} from "../../../universal/services/fetchReducer";
 import {useDebouncedCallback} from "use-debounce";
 import {Redirect} from "react-router-dom";
-import {permissionLevelOptions} from "../../store";
 import {AdminDashboardWrapper} from "../../../universal/adminDashboardWrapper/AdminDashboardWrapper";
+import {SelectRadio} from "../../SelectRadio";
+import {SaveBar} from "../../../universal/saveBar/SaveBar";
 
 
 export const EditCourse = () => {
@@ -218,8 +218,10 @@ export const EditCourse = () => {
             width: "100%"
         }} />
         <div className={classes.editDataOuterWrapper}>
+
             <div className={classes.editDataInnerWrapper}>
                 <div className={classes.editDataLeftWrapper}>
+
                     <div className={classes.editDataListWrapper}>
                         <SelectImage onChange={selectImage}
                                      uploadedImageUrls={[admin.currentlyEdited.course.uploadedFileUrl.get()]}
@@ -232,7 +234,7 @@ export const EditCourse = () => {
                         >
                             <EditItem value={admin.currentlyEdited.course.name.get()}
                                       title={"Név"}
-                                      editOnChange={(e: React.ChangeEvent<any>) => {
+                                      onChange={(e: React.ChangeEvent<any>) => {
                                           return admin.currentlyEdited.course.name.set(e.currentTarget.value)
                                       }}
                                       editButtonOnClick={(e: React.MouseEvent<any>) => {
@@ -244,7 +246,7 @@ export const EditCourse = () => {
                                       showEditButton />
                             <EditItem value={admin.currentlyEdited.course.category.get()}
                                       title={"Kategória"}
-                                      editOnChange={(e: React.ChangeEvent<any>) => {
+                                      onChange={(e: React.ChangeEvent<any>) => {
                                           return admin.currentlyEdited.course.category.set(e.currentTarget.value)
                                       }}
                                       editButtonOnClick={(e: React.MouseEvent<any>) => {
@@ -256,7 +258,7 @@ export const EditCourse = () => {
                                       showEditButton />
                             <EditItem value={admin.currentlyEdited.course.courseGroup.get()}
                                       title={"Kategória csoport"}
-                                      editOnChange={(e: React.ChangeEvent<any>) => {
+                                      onChange={(e: React.ChangeEvent<any>) => {
                                           return admin.currentlyEdited.course.courseGroup.set(e.currentTarget.value)
                                       }}
                                       editButtonOnClick={(e: React.MouseEvent<any>) => {
@@ -268,8 +270,7 @@ export const EditCourse = () => {
                                       showEditButton />
                             <EditItem value={admin.currentlyEdited.course.permissionLevel.get()}
                                       title={"Elérés"}
-                                      inputArray={permissionLevelOptions}
-                                      editOnChange={(e) => updateItem("permissionLevel", e.currentTarget.value, "A kurzus elérése sikeresen módosítva")}
+                                      onChange={(e) => updateItem("permissionLevel", e.currentTarget.value, "A kurzus elérése sikeresen módosítva")}
                                       editButtonOnClick={(e: React.MouseEvent<any>) => {
                                           editingItems.merge(["permissionLevel"])
                                       }}
@@ -279,142 +280,16 @@ export const EditCourse = () => {
                         </List>
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectMultiple title={"Cég"}
-
-                                        nameProperty={"name"}
-                                        valueProperty={"_id"}
-
-                                        inputArray={allOrganizations.get()}
-                                        editingItems={editingItems.get()}
-                                        checkedItems={[admin.currentlyEdited.course.organizationId.get()]}
-
-                                        checkBoxOnChange={(e) => {
-                                            instance.patch("courses/course/"+admin.currentlyEdited.course._id.get(), {
-                                                organizationId: e.currentTarget.value
-                                            }).then((res) => {
-                                                app.snack.showSnack.set(true)
-                                                app.snack.snackTitle.set("Cég megváltoztatva")
-                                            })
-                                            return admin.currentlyEdited.course.organizationId.set(e.currentTarget.value)
-                                        }}
-                                        searchOnChange={() => {}}
-                                        editOnChange={editOnChange}
-
-                                        showCheckBox={true}
-                                        selectOne={true}
-
-
-                                        emptyArrayMessage={"Nem található egy cég sem."}
-                        />
+                        <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Cég kiválasztása"} />
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectMultiple title={"Tanár"}
-
-                                        nameProperty={"name"}
-                                        valueProperty={"_id"}
-
-                                        inputArray={allTeachers.get().filter((teacher, index, arr) => {
-                                            return teacher.name === "" ? null : teacher
-                                        })}
-                                        editingItems={editingItems.get()}
-                                        checkedItems={[admin.currentlyEdited.course.teacherId.get()]}
-
-                                        checkBoxOnChange={(e) => {
-                                            instance.patch("courses/course/"+admin.currentlyEdited.course._id.get(), {
-                                                teacherId: e.currentTarget.value
-                                            }).then((res) => {
-                                                app.snack.showSnack.set(true)
-                                                app.snack.snackTitle.set("Tanár megváltoztatva")
-                                            })
-                                            return admin.currentlyEdited.course.teacherId.set(e.currentTarget.value)
-
-                                        }}
-                                        searchOnChange={() => {}}
-                                        selectOne={true}
-                                        emptyArrayMessage={"Nem található egy tanár sem."}
-                        />
+                        <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Tanár kiválasztása"} />
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectMultiple title={"Tag-ek"}
-
-                                        nameProperty={"name"}
-                                        valueProperty={"_id"}
-
-                                        inputArray={allTags.get().filter((tag, index, arr) => {
-                                            return admin.currentlyEdited.course.tags.get().includes(tag) || tag.name === "" ? null : tag
-                                        })}
-                                        editingItems={editingItems.get()}
-                                        checkedItems={admin.currentlyEdited.course.tags.get().map(tag => tag._id)}
-
-                                        checkBoxOnChange={(e) => {
-                                            admin.currentlyEdited.course.tags.get().find(tag => tag._id === e.currentTarget.value) ?
-                                                admin.currentlyEdited.course.tags.get().filter((value, index, array) =>
-                                                    value._id === e.currentTarget.value && unCheckItem(e, index, "tags","Tag sikeresen eltávolítva"))
-                                                : checkItem(e, "tags", "Tag sikeresen hozzáadva")
-
-                                        }}
-                                        searchOnChange={() => {}}
-                                        editOnChange={editOnChange}
-
-                                        showAdd={showAddTag.get()}
-                                        showCheckBox={true}
-                                        selectOne={false}
-                                        showEditButton
-                                        showDeleteButton
-
-                                        emptyArrayMessage={"Nem található egy tag sem. A plussz jelre kattintva adj hozzá egyet."}
-
-                                        editButtonOnClick={(e) => {
-                                            editingItems.merge([e.currentTarget.value])}
-                                        }
-                                        doneButtonOnClick={updateTag}
-
-                                        addButtonOnClick={(e) => {
-                                            editingItems.merge([e.currentTarget.value])
-                                            allTags.merge([{_id: "", name: "Nincs érték"}])
-                                            admin.currentlyEdited.course.tags.merge([{_id: "", name: "Nincs érték"}])
-                                            showAddTag.set(false)
-                                        }}
-                                        deleteButtonOnClick={(e) => {
-                                            admin.currentlyEdited.course.tags.get().filter((value, index, array) => {
-                                                return value._id === e.currentTarget.value ? admin.currentlyEdited.course.tags[index].set(none) : null
-                                            })
-                                            allTags.get().filter((value, index, array) => {
-                                                return value._id === e.currentTarget.value ? allTags[index].set(none) : null
-                                            })
-                                            instance.delete("tags/"+e.currentTarget.value).then((res) => {
-                                                app.snack.showSnack.set(true)
-                                                app.snack.snackTitle.set("A res.data: " + JSON.stringify(res.data))
-                                            })
-                                        }}/>
+                        <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Tagek (ide majd selectcheckbox)"} />
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectMultiple title={"Csoportok"}
-
-                                        nameProperty={"name"}
-                                        valueProperty={"_id"}
-
-                                        inputArray={allGroups.get().filter((group, index, arr) => {
-                                            return admin.currentlyEdited.course.groups.get().includes(group) || group.name === "" ? null : group
-                                        })}
-                                        editingItems={editingItems.get()}
-                                        checkedItems={admin.currentlyEdited.course.groups.get().map(group => group._id)}
-
-                                        checkBoxOnChange={(e) => {
-                                            admin.currentlyEdited.course.groups.get().find(group => group._id === e.currentTarget.value) ?
-                                                admin.currentlyEdited.course.groups.get().filter((value, index, array) =>
-                                                    value._id === e.currentTarget.value && unCheckItem(e, index, "groups", "A csoport sikeresen eltávolítva"))
-                                                : checkItem(e, "groups", "A csoport sikeresen hozzáadva")
-
-                                        }}
-                                        searchOnChange={() => {}}
-                                        editOnChange={editOnChange}
-
-                                        showCheckBox={true}
-                                        selectOne={false}
-                                        showDeleteButton
-
-                                        emptyArrayMessage={"Nem található egy csoport sem. A plussz jelre kattintva adj hozzá egyet."}/>
+                        <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Csoportok kiválasztása"} />
                     </div>
 
 
@@ -453,7 +328,9 @@ export const EditCourse = () => {
 
             <AdminDashboardSearch searchChangeHandler={() => {}} name={"searchData"} title={"Videók"}/>
             <CourseVideoList courseId={courseId} />
+
         </div>
         <AdminDashboardHeader titleText={""}/>
+
     </AdminDashboardWrapper>
 };

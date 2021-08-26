@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "@chakra-ui/react": "^1.6.6",
+    "@emotion/react": "^11",
+    "@emotion/style": "^0.8.0",
+    "@emotion/styled": "^11",
+    "framer-motion": "^4",
     "react-query": "^3.19.4"
   }
 }

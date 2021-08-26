@@ -13,7 +13,7 @@ export const TextOrInput = (props: {
     deleteButtonOnClick?: (e: React.MouseEvent<any>) => any
     doneButtonOnClick?: (e: React.MouseEvent<any>) => any
     editButtonOnClick?: (e: React.MouseEvent<any>) => any
-}) => props.isEditing ? <div className={classes.textOrInputWrapper}>
+}) => <div className={classes.textOrInputWrapper}>
     <TextField size={"small"}
                name={props.value}
                value={props.name}
@@ -30,12 +30,4 @@ export const TextOrInput = (props: {
             <Done />
         </Button>}
     </div>
-</div> : <div className={classes.textOrInputWrapper}>
-    <Typography>
-        {props.name}
-    </Typography>
-    {props.showEditButton && <Button value={props.value} onClick={props.editButtonOnClick}>
-        <Edit />
-    </Button>}
-
 </div>
