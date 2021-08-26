@@ -4,7 +4,7 @@ import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserReg
 import { globalConfig } from "../server";
 import { getUserIdFromRequest, setAuthCookies } from "../services/authentication";
 import { sendResetPasswordMailAsync } from "../services/emailService";
-import { getJWTToken } from "../services/jwtGen";
+import { getJWTToken } from "../services/misc/jwtGen";
 import { createInvitedUserAsync, finalizeUserRegistrationAsync } from "../services/userManagementService";
 import { getUserById } from "../services/userService";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";

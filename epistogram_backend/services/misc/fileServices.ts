@@ -1,6 +1,6 @@
 import fs from "fs"
 import { UploadedFile } from "express-fileupload";
-import { globalConfig } from "../server";
+import { globalConfig } from "../../server";
 import { log } from "./logger";
 import { Config, NodeSSH } from "node-ssh";
 

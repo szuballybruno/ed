@@ -3,8 +3,11 @@ import { createDatabase, dropDatabase } from "typeorm-extension";
 import { Course } from "./models/entity/Course";
 import { Exam } from "./models/entity/Exam";
 import { Organization } from "./models/entity/Organization";
+import { User } from "./models/entity/User";
+import { Video } from "./models/entity/Video";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
-import { log } from "./services/logger";
+import { globalConfig } from "./server";
+import { log } from "./services/misc/logger";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/userManagementService";
 
 export type TypeORMConnection = Connection;
@@ -23,18 +26,49 @@ export const getTypeORMConnection = () => {
 
 export const initializeDBAsync = async (recreate: boolean) => {
 
+    const host = globalConfig.database.hostAddress;
+    const port = globalConfig.database.port;
+    const username = globalConfig.database.serviceUserName;
+    const password = globalConfig.database.serviceUserPassword;
+    const databaseName = globalConfig.database.name;
+    const isSyncEnabled = globalConfig.database.isOrmSyncEnabled;
+    const isLoggingEnabled = globalConfig.database.isOrmLoggingEnabled;
+
     const postgresOptions = {
         type: "postgres",
-        port: 7000,
-        username: "postgres",
-        password: "epistogram",
-        database: "epistogramDB",
-        synchronize: true,
-        logging: false,
+        port: port,
+        host: host,
+        username: username,
+        password: password,
+        database: databaseName,
+        synchronize: isSyncEnabled,
+        logging: isLoggingEnabled,
         entities: [
-            "models/entity/**/*.ts"
+            // "models/entity/**/*.ts"
+            Course,
+            Exam,
+            Organization,
+            User,
+            Video
         ],
     } as ConnectionOptions;
+
+    // const postgresOptions = {
+    //     type: "postgres",
+    //     port: 5432,
+    //     host: "34.118.107.79",
+    //     username: "bence",
+    //     password: "epistogram",
+    //     database: "epistogram_DEV",
+    //     synchronize: true,
+    //     logging: false,
+    //     entities: [
+    //         "models/entity/**/*.ts"
+    //     ],
+    // } as ConnectionOptions;
+
+    log("Database connection options:");
+    log(postgresOptions);
 
     if (recreate) {
 

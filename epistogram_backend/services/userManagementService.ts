@@ -6,9 +6,9 @@ import { InvitationTokenPayload, RoleType } from "../models/shared_models/types/
 import { globalConfig } from "../server";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authentication";
-import { hashPasswordAsync } from "./crypt";
+import { hashPasswordAsync } from "./misc/crypt";
 import { sendInvitaitionMailAsync } from "./emailService";
-import { getJWTToken, verifyJWTToken } from "./jwtGen";
+import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
 import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
 
 export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: number) => {

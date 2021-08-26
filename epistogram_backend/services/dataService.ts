@@ -6,7 +6,7 @@ import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { TestAnswerDTO } from "../models/shared_models/TestAnswerDTO";
 import { TestQuestionDTO } from "../models/shared_models/TestQuestionDTO";
 import { getTypeORMConnection } from "../database";
-import { log } from "./logger";
+import { log } from "./misc/logger";
 import { toExamDTO, toVideoDTO } from "./mappings";
 
 export const getOverviewPageDTOAsync = async (userId: number) => {

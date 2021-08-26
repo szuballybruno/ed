@@ -1,4 +1,4 @@
-import { log, logError } from "./logger";
+import { log, logError } from "./misc/logger";
 
 // 
 // Env Init 
@@ -10,13 +10,13 @@ export const currentEnvironmentName = (process.env.NODE_ENV ?? "local") as Envir
 
 const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
 
-    log("Accessing config.env entry: " + entryName);
     const fullEntryName = entryName;
     const value = process.env[fullEntryName];
 
     if (!value && value != "false" && !allowEmptyStr)
         throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${currentEnvironmentName}'!`);
 
+    log(entryName + " -> " + value);
     return value ?? "";
 }
 
@@ -66,10 +66,14 @@ export class GlobalConfiguration {
         privateKey: getEnvConfigEntry("VPS_RSA_PRIVATE_KEY")
     }
 
-    mongo = {
-        dbName: getEnvConfigEntry("MONGO_DB_DB_NAME"),
-        dbUsername: getEnvConfigEntry("MONGO_DB_DB_USER_NAME"),
-        dbPassword: getEnvConfigEntry("MONGO_DB_DB_PASSWORD"),
-        connectionUrl: getEnvConfigEntry("MONGO_DB_CONNECTION_URL"),
+    database = {
+        name: getEnvConfigEntry("DB_NAME"),
+        hostAddress: getEnvConfigEntry("DB_HOST_ADDRESS"),
+        port: parseInt(getEnvConfigEntry("DB_PORT")),
+        serviceUserName: getEnvConfigEntry("DB_SERVICE_USER_NAME"),
+        serviceUserPassword: getEnvConfigEntry("DB_SERVICE_USER_PASSWORD"),
+        isOrmSyncEnabled: getEnvConfigEntry("DB_IS_ORM_SYNC_ENABLED") == "true",
+        isOrmLoggingEnabled: getEnvConfigEntry("DB_IS_ORM_LOGGING_ENABLED") == "true",
+        recreateDatabaseAtStart: getEnvConfigEntry("DB_RECREATE_AT_START") == "true"
     }
 }

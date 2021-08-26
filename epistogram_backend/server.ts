@@ -8,11 +8,10 @@ import { getOverviewPageDTOAction, getUsersAction } from './api/dataActions';
 import { getCurrentVideoAction, setCurrentVideoAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCourses';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
-import { initializeDBAsync, seedDB, TypeORMConnection } from './database';
+import { initializeDBAsync } from './database';
 import { authorizeRequest } from './services/authentication';
-import { getOverviewPageDTOAsync } from './services/dataService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
-import { log, logError } from "./services/logger";
+import { log, logError } from "./services/misc/logger";
 import { getAsyncActionHandler, respond } from './utilities/helpers';
 
 // initialize env
@@ -21,9 +20,11 @@ export const globalConfig = initailizeDotEnvEnvironmentConfig();
 
 const initializeAsync = async () => {
 
+    const recreateDatabaseAtStart = globalConfig.database.recreateDatabaseAtStart;
+
     // init DB
     log("Initializing DB...");
-    await initializeDBAsync(true);
+    await initializeDBAsync(recreateDatabaseAtStart);
     log("DB initialized.");
 
     // init express
