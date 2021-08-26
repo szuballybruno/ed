@@ -1,6 +1,6 @@
 import { Request } from "express";
+import { getTypeORMConnection } from "../database";
 import { User } from "../models/entity/User";
-import { getTypeORMConnection } from "../server";
 import { TypedError } from "../utilities/helpers";
 import { getRequestAccessTokenPayload } from "./authentication";
 import { toUserDTO } from "./mappings";

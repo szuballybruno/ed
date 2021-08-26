@@ -1,6 +1,6 @@
 import { Course } from "../models/entity/Course";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
-import { getTypeORMConnection } from "../server";
+import { getTypeORMConnection } from "../database";
 import { toCourseShortDTO } from "./mappings";
 import { getUserDTOById } from "./userService";
 

@@ -5,7 +5,7 @@ import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { TestAnswerDTO } from "../models/shared_models/TestAnswerDTO";
 import { TestQuestionDTO } from "../models/shared_models/TestQuestionDTO";
-import { getTypeORMConnection } from "../server";
+import { getTypeORMConnection } from "../database";
 import { log } from "./logger";
 import { toExamDTO, toVideoDTO } from "./mappings";
 

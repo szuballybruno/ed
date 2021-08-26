@@ -19,29 +19,12 @@ import { getAsyncActionHandler, respond } from './utilities/helpers';
 // require is mandatory here, for some unknown reason
 export const globalConfig = initailizeDotEnvEnvironmentConfig();
 
-let typeORMConnection = null as TypeORMConnection | null;
-
-export const getTypeORMConnection = () => {
-
-    if (!typeORMConnection)
-        throw new Error("ORM Connection is not (yet) established!");
-
-    return typeORMConnection;
-};
-
 const initializeAsync = async () => {
 
     // init DB
     log("Initializing DB...");
-    typeORMConnection = await initializeDBAsync(true);
+    await initializeDBAsync(true);
     log("DB initialized.");
-
-    // Seed DB
-    log("Seeding DB...");
-    await seedDB()
-    log("DB seeding completed.");
-
-    await getOverviewPageDTOAsync(1);
 
     // init express
     log("Initializing express...");
@@ -87,15 +70,15 @@ const initializeAsync = async () => {
     expressServer.use(fileUpload());
 
     expressServer.use((req, res, next) => {
-        
+
         log("Request arrived: " + req.path);
         next();
     })
-    
+
     // unprotected routes
     expressServer.get('/renew-user-session', renewUserSessionAction);
     expressServer.post('/log-out-user', logOutUserAction);
-    expressServer.post('/login-user', logInUserAction);
+    expressServer.post('/login-user', getAsyncActionHandler(logInUserAction));
 
     // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);

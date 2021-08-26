@@ -3,14 +3,25 @@ import { createDatabase, dropDatabase } from "typeorm-extension";
 import { Course } from "./models/entity/Course";
 import { Exam } from "./models/entity/Exam";
 import { Organization } from "./models/entity/Organization";
-import { User } from "./models/entity/User";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
-import { getTypeORMConnection } from "./server";
 import { log } from "./services/logger";
+import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/userManagementService";
 
 export type TypeORMConnection = Connection;
 
-export const initializeDBAsync = async (freshStart: boolean) => {
+const typeORMConnectionContainer = {
+    connection: null as TypeORMConnection | null
+};
+
+export const getTypeORMConnection = () => {
+
+    if (!typeORMConnectionContainer.connection)
+        throw new Error("ORM Connection is not (yet) established!");
+
+    return typeORMConnectionContainer.connection;
+};
+
+export const initializeDBAsync = async (recreate: boolean) => {
 
     const postgresOptions = {
         type: "postgres",
@@ -25,20 +36,29 @@ export const initializeDBAsync = async (freshStart: boolean) => {
         ],
     } as ConnectionOptions;
 
-    // fresh start
-    if (freshStart) {
+    if (recreate) {
 
-        log("Dropping database...");
-        await dropDatabase({ ifExist: true }, postgresOptions);
-
-        log("Creating database...");
-        await createDatabase({ ifNotExist: true, characterSet: "UTF8" }, postgresOptions);
+        log("Recreating DB...");
+        await recreateDB(postgresOptions);
     }
 
     log("Connecting to database with TypeORM...");
-    const sqlConnection = await createConnection(postgresOptions);
+    typeORMConnectionContainer.connection = await createConnection(postgresOptions);
 
-    return sqlConnection as TypeORMConnection;
+    if (recreate) {
+
+        log("Seeding DB...");
+        await seedDB();
+    }
+}
+
+export const recreateDB = async (postgresOptions: ConnectionOptions) => {
+
+    log("Dropping database...");
+    await dropDatabase({ ifExist: true }, postgresOptions);
+
+    log("Creating database...");
+    await createDatabase({ ifNotExist: true, characterSet: "UTF8" }, postgresOptions);
 }
 
 export const seedDB = async () => {
@@ -90,36 +110,50 @@ export const seedDB = async () => {
         .map(x => x.id as number);
 
     // seed users
-    const userInsertedIds = (await connection
-        .getRepository(User)
-        .insert([
-            {
-                firstName: "Edina",
-                lastName: "Sandor",
-                jobTitle: "IT manager",
-                role: "admin" as RoleType,
-                email: "edina.sandor@email.com",
-                organizationId: insertedOrganizationIds[0],
-                currentCourseId: courseInsertedIds[0],
-                currentExamId: examInsertIds[0]
-            },
-            {
-                firstName: "Bela",
-                lastName: "Kovacs",
-                jobTitle: "Takarito",
-                role: "admin" as RoleType,
-                email: "bela.kovacs@email.com",
-                organizationId: insertedOrganizationIds[1]
-            },
-            {
-                firstName: "Rebeka",
-                lastName: "Kis",
-                jobTitle: "Instructor",
-                role: "admin" as RoleType,
-                email: "rebeka.kis@email.com",
-                organizationId: insertedOrganizationIds[1]
-            }
-        ]))
-        .identifiers
-        .map(x => x.id as number);
+    const { invitationToken, user } = await createInvitedUserWithOrgAsync(
+        {
+            firstName: "Edina",
+            lastName: "Sandor",
+            jobTitle: "IT manager",
+            role: "admin" as RoleType,
+            email: "edina.sandor@email.com",
+        },
+        insertedOrganizationIds[0]);
+
+    await finalizeUserRegistrationAsync({
+        invitationToken: invitationToken,
+        phoneNumber: "+36 202020202",
+        password: "admin",
+        controlPassword: "admin"
+    });
 }
+
+
+// const users = [
+//     {
+//         firstName: "Edina",
+//         lastName: "Sandor",
+//         jobTitle: "IT manager",
+//         role: "admin" as RoleType,
+//         email: "edina.sandor@email.com",
+//         organizationId: insertedOrganizationIds[0],
+//         currentCourseId: courseInsertedIds[0],
+//         currentExamId: examInsertIds[0]
+//     },
+//     {
+//         firstName: "Bela",
+//         lastName: "Kovacs",
+//         jobTitle: "Takarito",
+//         role: "admin" as RoleType,
+//         email: "bela.kovacs@email.com",
+//         organizationId: insertedOrganizationIds[1]
+//     },
+//     {
+//         firstName: "Rebeka",
+//         lastName: "Kis",
+//         jobTitle: "Instructor",
+//         role: "admin" as RoleType,
+//         email: "rebeka.kis@email.com",
+//         organizationId: insertedOrganizationIds[1]
+//     }
+// ];

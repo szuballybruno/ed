@@ -1,8 +1,9 @@
+import { getTypeORMConnection } from "../database";
 import { User } from "../models/entity/User";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
-import { InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
-import { getTypeORMConnection, globalConfig } from "../server";
+import { InvitationTokenPayload, RoleType } from "../models/shared_models/types/sharedTypes";
+import { globalConfig } from "../server";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authentication";
 import { hashPasswordAsync } from "./crypt";
@@ -14,6 +15,17 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
 
     const currentUser = await getUserById(currentUserId);
 
+    // if user is admin require organizationId to be provided
+    // otherwise use the current user's organization
+    const organizationId = currentUser.role === "admin"
+        ? withValueOrBadRequest(dto.organizationId)
+        : currentUser.organizationId;
+
+    return createInvitedUserWithOrgAsync(dto, organizationId);
+}
+
+export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, organizationId: number) => {
+
     // get and check sent data 
     const email = withValueOrBadRequest(dto.email);
     const role = withValueOrBadRequest(dto.role);
@@ -21,12 +33,6 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
     const lastName = withValueOrBadRequest(dto.lastName);
     const jobTitle = withValueOrBadRequest(dto.jobTitle);
     const userFullName = `${lastName} ${firstName}`;
-
-    // if user is admin require organizationId to be provided
-    // otherwise use the current user's organization
-    const organizationId = currentUser.role === "admin"
-        ? withValueOrBadRequest(dto.organizationId)
-        : currentUser.organizationId;
 
     // does user already exist?
     const existingUser = await getUserByEmail(email);
@@ -60,6 +66,8 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
         "24h");
 
     await sendInvitaitionMailAsync(invitationToken, email, userFullName);
+
+    return { invitationToken, user };
 }
 
 export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistrationDTO) => {
@@ -86,6 +94,7 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
     await getTypeORMConnection()
         .getRepository(User)
         .save({
+            id: tokenPayload.userId,
             phoneNumber: phoneNumber,
             password: hashedPassword
         });

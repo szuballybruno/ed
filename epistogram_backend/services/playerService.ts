@@ -1,7 +1,7 @@
 import { User } from "../models/entity/User";
 import { IdType } from "../models/shared_models/types/sharedTypes";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { getTypeORMConnection } from "../server";
+import { getTypeORMConnection } from "../database";
 import { TypedError } from "../utilities/helpers";
 import { getVideoByIdAsync } from "./videoService";
 

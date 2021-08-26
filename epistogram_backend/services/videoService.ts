@@ -1,5 +1,5 @@
 import { Video } from "../models/entity/Video";
-import { getTypeORMConnection } from "../server"
+import { getTypeORMConnection } from "../database"
 
 export const getVideoByIdAsync = (videoId: number) => {
 

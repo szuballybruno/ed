@@ -106,16 +106,9 @@ export const renewUserSession = async (req: Request, res: Response) => {
     await setAuthCookies(res, newAccessToken, newRefreshToken);
 }
 
-export const logInUser = async (req: Request, res: Response) => {
+export const logInUser = async (email: string, password: string) => {
 
-    log("Logging in user...");
-
-    // check request 
-    if (!req.body)
-        throw new TypedError("Body is null.", "bad request");
-
-    // get credentials from request
-    const { email, password } = req.body;
+    log(`Logging in user... ${email} - ${password}`);
 
     // further validate request 
     if (!email || !password)
@@ -129,9 +122,7 @@ export const logInUser = async (req: Request, res: Response) => {
     log("User logged in: ");
     log(userDTO);
 
-    const { accessToken, refreshToken } = await getUserLoginTokens(userDTO);
-
-    await setAuthCookies(res, accessToken, refreshToken);
+    return await getUserLoginTokens(userDTO);
 }
 
 export const logOutUser = async (req: Request, res: Response) => {

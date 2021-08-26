@@ -1,5 +1,5 @@
 import { User } from '../models/entity/User';
-import { getTypeORMConnection } from '../server';
+import { getTypeORMConnection } from '../database';
 
 export const getAdminPageUsersList = async (userId: number, searchText: string) => {
 
