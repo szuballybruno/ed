@@ -1,16 +1,16 @@
 import { IdType } from "./types/sharedTypes";
 
 export class UserDTO {
-    userId: IdType;
+    userId: number;
     firstName: string;
     lastName: string;
-    organizationId: IdType;
+    organizationId: number;
     role: string;
     jobTitle: string;
 
     constructor(
-        userId: IdType,
-        organizationId: IdType,
+        userId: number,
+        organizationId: number,
         firstName: string,
         lastName: string,
         role: string,

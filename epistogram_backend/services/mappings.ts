@@ -1,61 +1,53 @@
-import { User } from "../models/entities/User";
-import { CourseItemShortDTO } from "../models/shared_models/CourseItemShortDTO";
+import { Course } from "../models/entity/Course";
+import { Exam } from "../models/entity/Exam";
+import { User } from "../models/entity/User";
+import { Video } from "../models/entity/Video";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
+import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
+import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { globalConfig } from "../server";
-import { Course } from "./userCoursesService";
-import { CurrentItem, Item } from "./userDataService";
-import {CourseAdminDTO} from "../models/shared_models/CourseAdminDTO";
 
 export const toUserDTO = (user: User) => new UserDTO(
-    user._id,
-    user.userData.organizationId,
-    user.userData.firstName,
-    user.userData.lastName,
-    user.userData.role,
-    user.userData.innerRole);
+    user.id,
+    user.organizationId,
+    user.firstName,
+    user.lastName,
+    user.role,
+    user.jobTitle);
 
-export const toCourseItemShortDTO = (item: Item) => {
+export const toVideoDTO = (video: Video) => {
 
     return {
-        id: item._id,
-        subTitle: item.subTitle,
-        title: item.title,
-        type: item.type,
-        thumbnailUrl: item.thumbnailUrl
-    } as CourseItemShortDTO;
+        id: video.id,
+        subTitle: video.subtitle,
+        title: video.title,
+        type: "video",
+        thumbnailUrl: video.thumbnailUrl
+    } as VideoDTO;
 }
 
-export const toCourseItemShortDTO2 = (item: CurrentItem) => {
+export const toExamDTO = (exam: Exam) => {
 
     return {
-        id: item._id,
-        subTitle: item.subTitle,
-        title: item.title,
-        type: "video",
-        thumbnailUrl: item.thumbnailUrl
-    } as CourseItemShortDTO;
+        id: exam.id,
+        subTitle: exam.subtitle,
+        title: exam.title,
+        type: "exam",
+        thumbnailUrl: exam.thumbnailUrl
+    } as ExamDTO;
 }
 
 export const toCourseShortDTO = (course: Course) => {
 
-    return {
-        title: course.name,
-        category: course.category,
-        courseId: course._id,
-        firstVideoId: course.items[0]._id,
-        teacherName: "Mr. Teacher Name",
-        thumbnailImageURL: globalConfig.misc.assetStoreUrl + `/courses/${course._id}.png`
-    } as CourseShortDTO;
-}
-export const toCourseAdminDTO = (course: Course) => {
+    const thumbnailImageURL = globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
 
     return {
-        title: course.name,
+        courseId: course.id,
+        title: course.title,
         category: course.category,
-        courseId: course._id,
+        firstVideoId: course.videos ? course.videos[0].id : null,
         teacherName: "Mr. Teacher Name",
-        videosCount: 0,
-        thumbnailImageURL: globalConfig.misc.assetStoreUrl + `/courses/${course._id}.png`
-    } as CourseAdminDTO;
+        thumbnailImageURL: thumbnailImageURL
+    } as CourseShortDTO;
 }
