@@ -46,7 +46,7 @@ export const toCourseShortDTO = (course: Course) => {
         courseId: course.id,
         title: course.title,
         category: course.category,
-        firstVideoId: course.videos[0].id,
+        firstVideoId: course.videos ? course.videos[0].id : null,
         teacherName: "Mr. Teacher Name",
         thumbnailImageURL: thumbnailImageURL
     } as CourseShortDTO;
