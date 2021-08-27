@@ -82,7 +82,7 @@ export class User {
     currentExam: Exam
 
     // Tasks
-    @OneToMany(() => Task, task => task.users)
+    @OneToMany(() => Task, task => task.user)
     @JoinColumn()
     tasks: Task[]
 }

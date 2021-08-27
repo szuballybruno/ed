@@ -1,6 +1,6 @@
 import { IdType } from "./types/sharedTypes";
 
-export type TestAnswerDTO = {
+export type AnswerDTO = {
     answerId: IdType,
     answerText: string;
 }

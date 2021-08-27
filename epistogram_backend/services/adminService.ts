@@ -6,7 +6,10 @@ export const getAdminPageUsersList = async (userId: number, searchText: string) 
 
     const users = await getTypeORMConnection()
         .getRepository(User)
-        .find();
+        .createQueryBuilder("user")
+        .leftJoinAndSelect("user.organization", "org")
+        .leftJoinAndSelect("user.tasks", "tasks")
+        .getMany();
 
     return users
         .map(x => toAdminPageUserDTO(x));

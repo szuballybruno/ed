@@ -35,7 +35,6 @@ export const SignupForm = (
 
         <Typography style={{ color: "red", marginBottom: 20, maxWidth: 300 }}>{props.errorText}</Typography>
 
-
         <NextButton buttonTitle={"Regisztráció befejezése"}
             type={"submit"}
             to={props.to}

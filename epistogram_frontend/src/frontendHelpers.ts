@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 
@@ -12,6 +13,52 @@ export const disallowWindowNavigation = () => {
         return ''; // Legacy method for cross browser support
     };
 }
+
+export const usePaging = <T>(
+    items: T[],
+    onPreviousOverNavigation?: () => void,
+    onNextOverNavigation?: () => void) => {
+
+    const [currentItemIndex, setCurrentItemIndex] = useState(0);
+
+    const isLast = currentItemIndex == items.length - 1;
+    const isFirst = currentItemIndex == 0;
+
+    const next = () => {
+
+        if (isLast) {
+
+            if (onNextOverNavigation)
+                onNextOverNavigation();
+        } else {
+
+            setCurrentItemIndex(currentItemIndex + 1);
+        }
+    }
+
+    const previous = () => {
+
+        if (isFirst) {
+
+            if (onPreviousOverNavigation)
+                onPreviousOverNavigation();
+        } else {
+
+            setCurrentItemIndex(currentItemIndex - 1);
+        }
+    }
+
+
+    return {
+        next,
+        previous,
+        isLast,
+        isFirst,
+        currentIndex: currentItemIndex
+    }
+}
+
+export type PagingType = ReturnType<typeof usePaging>;
 
 export const useReactQuery = <T>(
     queryKey: any[],

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
 
 @Entity()
@@ -16,7 +16,11 @@ export class Task {
     @Column()
     objective: string;
 
-    @OneToMany(type => User, user => user.tasks)
-    @JoinColumn()
-    users: User[];
+    // users 
+    @Column()
+    userId: number;
+
+    @ManyToOne(type => User, user => user.tasks)
+    @JoinColumn({ name: "userId" })
+    user: User;
 }

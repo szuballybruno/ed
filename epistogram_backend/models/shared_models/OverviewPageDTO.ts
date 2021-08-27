@@ -1,12 +1,11 @@
-import { CourseItemShortDTO } from "./CourseItemShortDTO";
 import { CourseShortDTO } from "./CourseShortDTO";
 import { CurrentTasksDTO } from "./CurrentTasksDTO";
 import { ExamDTO } from "./ExamDTO";
-import { TestQuestionDTO } from "./TestQuestionDTO";
+import { QuestionDTO } from "./QuestionDTO";
 import { VideoDTO } from "./VideoDTO";
 
 export type OverviewPageDTO = {
-    testQuestionDTO: TestQuestionDTO,
+    testQuestionDTO: QuestionDTO,
     developmentChartData: any,
     currentTasks: CurrentTasksDTO
     tipOfTheDay: string;
