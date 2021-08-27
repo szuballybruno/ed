@@ -5,7 +5,6 @@ import { NavLink, Route, Switch } from "react-router-dom";
 import { globalConfig } from "../../../configuration/config";
 import { CurrentUserContext } from '../../../HOC/data_manager_frame/DataManagerFrame';
 import { LoadingFrame } from "../../../HOC/loading_frame/LoadingFrame";
-import { IdType } from '../../../models/shared_models/types/sharedTypes';
 import { useUserListQuery } from "../../../services/adminPageUsersService";
 import { httpDeleteAsync } from "../../../services/httpClient";
 import { AdminDashboardList } from "../universal/adminDashboardList/AdminDashboardList";
@@ -54,7 +53,7 @@ const actions = [
     },
 ] as DashboardSearchItemAction[];
 
-const getAvatarUrl = (userId: IdType | null) => {
+const getAvatarUrl = (userId: number | null) => {
 
     if (!userId)
         return "";
@@ -62,11 +61,11 @@ const getAvatarUrl = (userId: IdType | null) => {
     return `${globalConfig.assetStorageUrl}/users/${userId}/avatar.png`;
 }
 
-export const Users = () => {
+export const UserAdministartionPage = () => {
 
-    const user = useContext(CurrentUserContext);
+    const user = useContext(CurrentUserContext)!;
     const [searchText, setSearchText] = React.useState("");
-    const { users, status } = useUserListQuery(user, searchText);
+    const { users, status } = useUserListQuery(user.userId, searchText);
 
     return (
         <Switch>
@@ -87,11 +86,11 @@ export const Users = () => {
                                     return <AdminDashboardSearchItem
                                         additionalData={user}
                                         title={`${user.lastName} ${user.firstName}`}
-                                        profileImageUrl={getAvatarUrl(user._id)}
+                                        profileImageUrl={getAvatarUrl(user.userId)}
                                         chips={[
                                             { label: user.email, icon: "email" },
                                             { label: user.organizationName, icon: "organization" },
-                                            { label: user.innerRole, icon: "work" }]
+                                            { label: user.jobTitle, icon: "work" }]
                                         }
                                         key={index}
                                         actions={actions}

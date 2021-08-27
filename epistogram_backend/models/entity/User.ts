@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 import { Course } from "./Course";
 import { Exam } from "./Exam";
 import { Organization } from "./Organization";
+import { Task } from "./Task";
 import { Video } from "./Video";
 
 @Entity()
@@ -79,4 +80,9 @@ export class User {
     @ManyToOne(() => Exam, exam => exam.users)
     @JoinColumn({ name: 'currentExamId' })
     currentExam: Exam
+
+    // Tasks
+    @OneToMany(() => Task, task => task.users)
+    @JoinColumn()
+    tasks: Task[]
 }

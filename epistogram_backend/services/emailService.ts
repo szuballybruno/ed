@@ -11,10 +11,7 @@ export const sendInvitaitionMailAsync = async (
 
     log("Invitation link: ");
     log(invitationUrl);
-
-    // TODO mailing 
-    //return Promise.resolve();
-
+    
     const mail = getEmail();
 
     await mail.send({

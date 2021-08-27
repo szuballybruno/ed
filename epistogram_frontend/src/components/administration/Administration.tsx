@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './administration.module.scss'
 import userDetailsState from "../../store/user/userSideState";
 import { useState } from "@hookstate/core";
-import { Users } from "./users/Users";
+import { UserAdministartionPage } from "./users/UserAdministartionPage";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import CourseAdministartion from "./courses/CourseAdministartion";
 import { globalConfig } from "../../configuration/config";
@@ -70,7 +70,7 @@ const Administration = (props: { match: { url: string; } }) => {
                         <Statistics />
                     </Route>
                     <Route path={'/admin/manage/users'}>
-                        <Users />
+                        <UserAdministartionPage />
                     </Route>
                     <Route path={'/admin/manage/courses'}>
                         <CourseAdministartion />

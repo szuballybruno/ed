@@ -7,7 +7,18 @@ import { TestAnswerDTO } from "../models/shared_models/TestAnswerDTO";
 import { TestQuestionDTO } from "../models/shared_models/TestQuestionDTO";
 import { getTypeORMConnection } from "../database";
 import { log } from "./misc/logger";
-import { toExamDTO, toVideoDTO } from "./mappings";
+import { toExamDTO, toOrganizationDTO, toVideoDTO } from "./mappings";
+import { Organization } from "../models/entity/Organization";
+
+export const getOrganizationsAsync = async (userId: number) => {
+
+    const orgs = await getTypeORMConnection()
+        .getRepository(Organization)
+        .find();
+
+    return orgs
+        .map(org => toOrganizationDTO(org));
+}
 
 export const getOverviewPageDTOAsync = async (userId: number) => {
 

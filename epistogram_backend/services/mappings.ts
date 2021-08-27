@@ -7,7 +7,13 @@ import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { globalConfig } from "../server";
-import {CourseAdminDTO} from "../models/shared_models/CourseAdminDTO";
+import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
+import { Organization } from "../models/entity/Organization";
+import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
+import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
+import { Task } from "../models/entity/Task";
+import { TaskDTO } from "../models/shared_models/TaskDTO";
+import { navPropNotNull } from "../utilities/helpers";
 
 export const toUserDTO = (user: User) => new UserDTO(
     user.id,
@@ -15,7 +21,32 @@ export const toUserDTO = (user: User) => new UserDTO(
     user.firstName,
     user.lastName,
     user.role,
-    user.jobTitle);
+    user.jobTitle,
+    user.isActive,
+    user.email,
+    user.phoneNumber,
+    `${user.lastName} ${user.firstName}`);
+
+export const toAdminPageUserDTO = (user: User) => {
+
+    const userDTO = toUserDTO(user);
+    navPropNotNull(user.organization);
+
+    return {
+        ...userDTO,
+        organizationName: user.organization.name,
+        tasks: user.tasks.map(x => toTaskDTO(x))
+    } as AdminPageUserDTO;
+}
+
+export const toTaskDTO = (task: Task) => {
+
+    return {
+        text: task.name,
+        dueDate: task.dueData.toString(),
+        objective: task.objective
+    } as TaskDTO;
+}
 
 export const toVideoDTO = (video: Video) => {
 
@@ -51,6 +82,14 @@ export const toCourseShortDTO = (course: Course) => {
         teacherName: "Mr. Teacher Name",
         thumbnailImageURL: thumbnailImageURL
     } as CourseShortDTO;
+}
+
+export const toOrganizationDTO = (org: Organization) => {
+
+    return {
+        id: org.id,
+        name: org.name
+    } as OrganizationDTO;
 }
 
 export const toCourseAdminDTO = (course: Course) => {

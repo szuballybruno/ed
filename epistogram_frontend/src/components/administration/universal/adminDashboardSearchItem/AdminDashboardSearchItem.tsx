@@ -22,7 +22,6 @@ import {
     WorkTwoTone
 } from "@material-ui/icons";
 import { useState } from "@hookstate/core";
-import { AdminPageUserView } from '../../../../models/shared_models/AdminPageUserDTO';
 
 export type DashboardSearchItemAction = {
     to?: string,

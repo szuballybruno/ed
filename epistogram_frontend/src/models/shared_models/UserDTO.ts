@@ -1,20 +1,27 @@
-import { IdType } from "./types/sharedTypes";
 
 export class UserDTO {
-    userId: IdType;
+    userId: number;
     firstName: string;
     lastName: string;
-    organizationId: IdType;
+    organizationId: number;
     role: string;
     jobTitle: string;
+    isActive: boolean;
+    email: string;
+    phoneNumber: string;
+    name: string;
 
     constructor(
-        userId: IdType,
-        organizationId: IdType,
+        userId: number,
+        organizationId: number,
         firstName: string,
         lastName: string,
         role: string,
-        jobTitle: string) {
+        jobTitle: string,
+        isActive: boolean,
+        email: string,
+        phoneNumber: string,
+        name: string) {
 
         this.role = role;
         this.userId = userId;
@@ -22,5 +29,9 @@ export class UserDTO {
         this.firstName = firstName;
         this.lastName = lastName;
         this.jobTitle = jobTitle;
+        this.isActive = isActive;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.name = name;
     }
 }

@@ -1,7 +1,8 @@
 import { Request } from "express";
 import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
-import { getOverviewPageDTOAsync } from "../services/dataService";
+import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
+import { getAsyncActionHandler } from "../utilities/helpers";
 
 export const getOverviewPageDTOAction = async (req: Request) => {
 
@@ -10,13 +11,20 @@ export const getOverviewPageDTOAction = async (req: Request) => {
     return getOverviewPageDTOAsync(userId);
 }
 
-export const getUsersAction = async (req: Request) => {
+export const getUsersAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
     const adminPageUserDTOs = await getAdminPageUsersList(userId, (req.query.searchData as string) ?? "");
 
     return adminPageUserDTOs;
-};
+});
+
+export const getOrganizationsAction = (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+
+    return getOrganizationsAsync(userId);
+}
 
 // export const uploadCourseImage = (req: Request, res: Response, next: NextFunction) => {
 //     let uploadedFile: UploadedFile
@@ -108,7 +116,7 @@ export const getUsersAction = async (req: Request) => {
 // // };
 
 // export const setTask = (req: Request, res: Response, next: NextFunction) => {
-    
+
 //     const taskData = ["userId", "taskToUserId", "taskName", "dueDate", "state"]
 //     // checkRequest(req, res, next, taskData)
 //     const setTaskInDatabase = async () => {

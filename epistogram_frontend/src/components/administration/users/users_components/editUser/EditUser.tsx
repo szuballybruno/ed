@@ -8,10 +8,10 @@ import { useState } from "@hookstate/core";
 import adminSideState from '../../../../../store/admin/adminSideState';
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
 import { user } from '../../../../../store/types/user';
-import { AdminPageUserView } from '../../../../../models/shared_models/AdminPageUserDTO';
+import { AdminPageUserDTO } from '../../../../../models/shared_models/AdminPageUserDTO';
 
 const EditUser = (props: {
-    user: AdminPageUserView
+    user: AdminPageUserDTO
     index: number
 }) => {
     const admin = useState(adminSideState)
@@ -19,8 +19,8 @@ const EditUser = (props: {
     const active = useState(true)
 
     useEffect(() => {
-        active.set(props.user.active)
-        //eslint-disable-next-line react-hooks/exhaustive-deps
+
+        active.set(props.user.isActive)
     }, [])
 
     const dataSheetData = [{
@@ -49,7 +49,7 @@ const EditUser = (props: {
                 {dataSheetData.map((data) => {
                     return <EditItem value={`${props.user[data.placeholderName as keyof typeof props.user] || ""}`}
                         onChange={(e: React.ChangeEvent<any>) => {
-                            instance.patch(`users/${props.user._id}`, {
+                            instance.patch(`users/${props.user.userId}`, {
                                 "userData": {
                                     [data.placeholderName]: "" + e.currentTarget.value
                                 }
@@ -72,7 +72,7 @@ const EditUser = (props: {
                 <SettingsItem title={"Fiók aktív"}
                     switchState={active.get()}
                     switchOnChange={() => {
-                        instance.patch(`users/${props.user._id}`, {
+                        instance.patch(`users/${props.user.userId}`, {
                             "userData": {
                                 "active": !active.get()
                             }
@@ -90,7 +90,7 @@ const EditUser = (props: {
                 <SettingsItem title={"Jelszó visszaállítása"}
                     linkTitle={"Visszaállító email küldése"}
                     onClick={() => {
-                        instance.get(`users/${props.user._id}/reset`).then((r) => {
+                        instance.get(`users/${props.user.userId}/reset`).then((r) => {
                             app.snack.showSnack.set(true)
                             app.snack.snackTitle.set("Jelszó visszaállító e-mail kiküldve a felhasználónak")
                         }).catch((e) => {

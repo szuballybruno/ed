@@ -1,15 +1,7 @@
-import { UserTaskDTO } from "./UserTaskDTO";
+import { TaskDTO } from "./TaskDTO";
+import { UserDTO } from "./UserDTO";
 
-export type AdminPageUserView = {
-    _id: string;
-    active: boolean;
-    email: string;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    role: string;
+export type AdminPageUserDTO = UserDTO & {
     organizationName: string;
-    innerRole: string;
-    name: string;
-    tasks: UserTaskDTO[];
+    tasks: TaskDTO[];
 }

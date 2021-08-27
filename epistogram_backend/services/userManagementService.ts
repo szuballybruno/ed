@@ -10,6 +10,7 @@ import { hashPasswordAsync } from "./misc/crypt";
 import { sendInvitaitionMailAsync } from "./emailService";
 import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
 import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
+import { log } from "./misc/logger";
 
 export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: number) => {
 
@@ -65,7 +66,11 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
         globalConfig.mail.tokenMailSecret,
         "24h");
 
-    sendEmail && await sendInvitaitionMailAsync(invitationToken, email, userFullName);
+    if (sendEmail) {
+
+        log("Sending mail... to: " + email);
+        await sendInvitaitionMailAsync(invitationToken, email, userFullName);
+    }
 
     return { invitationToken, user };
 }

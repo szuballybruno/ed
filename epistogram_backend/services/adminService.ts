@@ -1,5 +1,6 @@
-import { User } from '../models/entity/User';
 import { getTypeORMConnection } from '../database';
+import { User } from '../models/entity/User';
+import { toAdminPageUserDTO } from './mappings';
 
 export const getAdminPageUsersList = async (userId: number, searchText: string) => {
 
@@ -7,20 +8,6 @@ export const getAdminPageUsersList = async (userId: number, searchText: string) 
         .getRepository(User)
         .find();
 
-    return users;
-
-    // switch (user.userData.role) {
-
-    //     case "admin":
-    //         return await aggregateAllUsers();
-
-    //     case "owner":
-    //         return await aggregateUsersByOrganization();
-
-    //     case "supervisor":
-    //         return await aggregateUsersByGroup();
-
-    //     default:
-    //         throw new Error("A felhasználó egyik rolenak sem felel meg")
-    // }
+    return users
+        .map(x => toAdminPageUserDTO(x));
 }

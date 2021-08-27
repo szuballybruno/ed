@@ -5,7 +5,7 @@ import { AddFrame } from "../../../../HOC/add_frame/AddFrame";
 import { CurrentUserContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
 import { DialogFrame } from "../../../../HOC/dialog_frame/DialogFrame";
 import { CreateInvitedUserDTO } from "../../../../models/shared_models/CreateInvitedUserDTO";
-import { organizationDTO } from "../../../../models/shared_models/OrganizationDTO";
+import { OrganizationDTO } from "../../../../models/shared_models/OrganizationDTO";
 import { UserDTO } from "../../../../models/shared_models/UserDTO";
 import { useNavigation } from "../../../../services/navigatior";
 import { useAlert, useShowNotification } from "../../../../services/notifications";
@@ -16,11 +16,11 @@ import SingleInput from "../../universal/singleInput/SingleInput";
 import DoubleInputs from "../../universal/twoInputs/DoubleInputs";
 import classes from "./addUser.module.scss";
 
-const mapOrganizations = (organizations: organizationDTO[]) => {
+const mapOrganizations = (organizations: OrganizationDTO[]) => {
     const organizationOptions = organizations
         .map(x => ({
-            optionText: x.name,
-            optionValue: x._id
+            optionValue: "" + x.id,
+            optionText: x.name
         } as OptionType));
 
     return organizationOptions;

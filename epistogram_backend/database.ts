@@ -3,6 +3,7 @@ import { createDatabase, dropDatabase } from "typeorm-extension";
 import { Course } from "./models/entity/Course";
 import { Exam } from "./models/entity/Exam";
 import { Organization } from "./models/entity/Organization";
+import { Task } from "./models/entity/Task";
 import { User } from "./models/entity/User";
 import { Video } from "./models/entity/Video";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
@@ -49,7 +50,8 @@ export const initializeDBAsync = async (recreate: boolean) => {
             Exam,
             Organization,
             User,
-            Video
+            Video,
+            Task
         ],
     } as ConnectionOptions;
 

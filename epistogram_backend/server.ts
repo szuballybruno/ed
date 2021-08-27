@@ -4,7 +4,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // need to be imported for TypeORM
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getOverviewPageDTOAction, getUsersAction } from './api/dataActions';
+import { getOrganizationsAction, getOverviewPageDTOAction, getUsersAction as getUserAdministrationUserListAction } from './api/dataActions';
 import { getCurrentVideoAction, setCurrentVideoAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCourses';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
@@ -93,13 +93,16 @@ const initializeAsync = async () => {
     expressServer.get('/player/get-current-video', authMiddleware, getAsyncActionHandler(getCurrentVideoAction));
 
     // users
-    expressServer.get("/users", authMiddleware, getAsyncActionHandler(getUsersAction));
+    expressServer.get("/users/get-user-administartion-user-list", authMiddleware, getUserAdministrationUserListAction);
     expressServer.post("/users/create-invited-user", authMiddleware, getAsyncActionHandler(createInvitedUserAction));
     expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
 
     // courses 
     expressServer.post("/get-user-courses", authMiddleware, getAsyncActionHandler(getUserCoursesAction));
     expressServer.post("/get-admin-courses", authMiddleware, getAsyncActionHandler(getAdminCoursesAction));
+
+    // organizations 
+    expressServer.get("/organizations/get-organizations", authMiddleware, getAsyncActionHandler(getOrganizationsAction));
 
     // 404 - no match
     expressServer.use((req, res) => {

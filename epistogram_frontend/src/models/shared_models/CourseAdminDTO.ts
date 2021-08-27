@@ -1,7 +1,5 @@
-import {IdType} from "./types/sharedTypes";
-
 export type CourseAdminDTO = {
-    courseId: IdType,
+    courseId: number,
     title: string,
     thumbnailImageURL: string,
     category: string,

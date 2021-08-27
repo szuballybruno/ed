@@ -52,8 +52,13 @@ const respondError = (res: Response, msg: string, type: ErrorType) => {
 }
 
 export const throwNotImplemented = () => {
- 
+
     throw new Error("Not implemented!");
+}
+
+export const navPropNotNull = (prop: any) => {
+
+    withValue(prop, () => { throw new Error("Navigation property was null, or undefined. This could be caused by an improper or missing join.") });
 }
 
 export const respond = (res: Response, code: number, data?: any) => {
