@@ -63,8 +63,6 @@ export const SignupPage = (props: { history: any }) => {
     const currentQuestionSelectedAnswerId = questionAnswers
         .filter(x => x.questionId == currentQuestion.questionId)[0]?.answerId as number | null;
 
-    console.log(currentQuestionSelectedAnswerId);
-
     const submitFinalizationRequestAsync = async () => {
 
         const dto = new FinalizeUserRegistrationDTO(
@@ -99,7 +97,6 @@ export const SignupPage = (props: { history: any }) => {
                 questionId: currentQuestion.questionId
             } as QuestionAnswerDTO
         ];
-        console.log(newAnswers);
         setQuestionAnswers(newAnswers);
 
         // go to next question
