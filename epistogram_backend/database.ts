@@ -79,7 +79,12 @@ export const initializeDBAsync = async (recreate: boolean) => {
     log("Connecting to database with TypeORM...");
     typeORMConnectionContainer.connection = await createConnection(postgresOptions);
 
-    if (recreate) {
+    // seed DB if no users are found
+    const users = await getTypeORMConnection()
+        .getRepository(User)
+        .find();
+
+    if (users.length < 1) {
 
         log("Seeding DB...");
         await seedDB();
