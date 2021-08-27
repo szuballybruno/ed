@@ -13,7 +13,7 @@ import { Line } from "react-chartjs-2";
 import { NavLink } from "react-router-dom";
 import { CurrentTasksDTO } from "../../../../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../../../../models/shared_models/OverviewPageDTO";
-import { TestQuestionDTO } from "../../../../models/shared_models/TestQuestionDTO";
+import { QuestionDTO } from "../../../../models/shared_models/QuestionDTO";
 import { TaskObjectiveType } from "../../../../models/shared_models/types/sharedTypes";
 import classes from "./overviewDashboard.module.scss";
 
@@ -27,7 +27,7 @@ const AssistantGridItem = (props: { children: ReactNode, title: string, xs: any 
     </Grid>
 }
 
-const TestYourKnowledge = (props: { dto: TestQuestionDTO }) => {
+const TestYourKnowledge = (props: { dto: QuestionDTO }) => {
 
     const dto = props.dto;
 

@@ -17,7 +17,7 @@ import { PopupsWrapper } from "./HOC/popups_wrapper/PopupsWrapper";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { theme } from "./configuration/defaultMUITheme";
 import { StylesProvider } from "@material-ui/core";
-import { Signup } from "./components/universal/authentication/signup/Signup";
+import { SignupPage } from "./components/universal/authentication/signup/SignupPage";
 import { MobileDemo } from "./components/universal/MobileDemo";
 import { QueryClient, QueryClientProvider } from 'react-query'
 
@@ -29,7 +29,7 @@ const MainSwitch = () => {
 
         {/* unprotected paths  */}
         <Route path="/login" component={withRouter(LoginScreen)} />
-        <Route path="/signup" component={withRouter(Signup)} />
+        <Route path="/signup" component={withRouter(SignupPage)} />
 
         {/* protected paths */}
         <ProtectedRoute path="/watch/:courseId/:id" render={() => <PlayerPage />} />

@@ -1,25 +1,25 @@
-import { useState } from "@hookstate/core";
 import { Typography } from "@material-ui/core";
 import queryString from "query-string";
 import React from 'react';
+import { useState } from "react";
 import { hasValue, usePaging } from "../../../../frontendHelpers";
 import FinalizeUserRegistrationDTO from "../../../../models/shared_models/FinalizeUserRegistrationDTO";
+import { QuestionAnswerDTO } from "../../../../models/shared_models/QuestionAnswerDTO";
 import { useNavigation } from "../../../../services/navigatior";
 import { useShowNotification } from "../../../../services/notifications";
 import { finalizeUserRegistartionAsync } from "../../../../services/userManagementService";
 import { SlidesDisplay } from "../../SlidesDisplay";
-import { RegistrationForm } from "./components/registrationForm/RegistrationForm";
-import { Summary } from "./components/summary/Summary";
+import { SignupForm } from "./fragments/SignupForm";
 import { SignupRadioGroup } from "./fragments/SignupRadioGroup";
-import { SignupWrapper } from "./HOC/signupWrapper/SignupWrapper";
 import { LinearProgressWithLabel } from "./ProgressIndicator";
+import { SignupWrapper } from "./SignupWrapper";
 import { images } from "./store/images";
 import { questions } from "./store/questions";
 
 const getTokenFromUrl = () => {
 
     const params = queryString.parse(window.location.search);
-    return params.token;
+    return params.token as string;
 };
 
 const useRegistrationFinalizationFormState = () => {
@@ -42,7 +42,7 @@ const useRegistrationFinalizationFormState = () => {
 
 export type RegFormStateType = ReturnType<typeof useRegistrationFinalizationFormState>
 
-export const Signup = (props: { history: any }) => {
+export const SignupPage = (props: { history: any }) => {
 
     const showNotification = useShowNotification();
     const invitaionToken = getTokenFromUrl();
@@ -50,16 +50,22 @@ export const Signup = (props: { history: any }) => {
     const regFormState = useRegistrationFinalizationFormState();
     const hasInvitationToken = hasValue(invitaionToken);
     const invitationTokenError = hasInvitationToken ? null : new Error("Nem megfelelo token!");
-    const [answerIds, setAnswerIds] = React.useState<number[]>([]);
     const slideIds = [1, 2, 3, 4];
     const slidesState = usePaging(slideIds);
     const questionnaireState = usePaging(questions, () => slidesState.previous(), () => slidesState.next());
-    const [currentQuestion, setCurrentQuestion] = React.useState<any>();
-    const currnetQuestionDisplayIndex = questionnaireState.currentIndex + 1;
-    const questionnaireProgressbarValue = (currnetQuestionDisplayIndex / questions.length) * 100;
-    const questionnaireProgressLabel = `${currnetQuestionDisplayIndex}/${questions.length}`;
+    const currentQuestion = questionnaireState.currentItem;
+    const questionnaireProgressbarValue = (questionnaireState.currentIndex / questions.length) * 100;
+    const questionnaireProgressLabel = `${questionnaireState.currentIndex + 1}/${questions.length}`;
+    const summaryImageUrl = images[6];
+    const gereetImageUrl = images[0];
+    const finalizeImageUrl = images[7];
+    const [questionAnswers, setQuestionAnswers] = useState<QuestionAnswerDTO[]>([]);
+    const currentQuestionSelectedAnswerId = questionAnswers
+        .filter(x => x.questionId == currentQuestion.questionId)[0]?.answerId as number | null;
 
-    const submitFinalizationRequestAsync = async (formData: FormData) => {
+    console.log(currentQuestionSelectedAnswerId);
+
+    const submitFinalizationRequestAsync = async () => {
 
         const dto = new FinalizeUserRegistrationDTO(
             regFormState.phoneNumber,
@@ -84,82 +90,74 @@ export const Signup = (props: { history: any }) => {
 
     const handleAnswerSelected = (answerId: number) => {
 
-        setAnswerIds([...answerIds, answerId]);
+        // save answer
+        const newAnswers = [
+            ...questionAnswers
+                .filter(x => x.questionId != currentQuestion.questionId),
+            {
+                answerId: answerId,
+                questionId: currentQuestion.questionId
+            } as QuestionAnswerDTO
+        ];
+        console.log(newAnswers);
+        setQuestionAnswers(newAnswers);
+
+        // go to next question
+        questionnaireState.next();
     }
 
-    const handleQuestionnaireCompleted = () => {
-
-
-    }
-
-    const greetSlide = <SignupWrapper
+    const GreetSlide = () => <SignupWrapper
         title="Regisztráció"
         upperTitle="Üdv a fedélzeten!"
-        currentImage={images[0]}
+        currentImage={gereetImageUrl}
         description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
         onNext={() => slidesState.next()}
         nextButtonTitle="Kezdés">
     </SignupWrapper>
 
-    const questionnaireSlide = <SignupWrapper
-        title={currentQuestion.title}
+    const QuestionnaireSlide = () => <SignupWrapper
+        title={currentQuestion.questionText}
         nextButtonTitle="Kovetkezo"
-        onNext={() => { }}
         onNavPrevious={() => questionnaireState.previous()}
-        currentImage={currentQuestion.imageUrl}
+        currentImage={currentQuestion.imageUrl!}
         bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
         upperComponent={<Typography>{questionnaireProgressLabel}</Typography>}>
-        <div>
-            <SignupRadioGroup
-                answers={currentQuestion.answers}
-                onAnswerSelected={handleAnswerSelected}
-                selectedAnswerId={currentQuestion.selectedAnswerId} />
-        </div>
+        <SignupRadioGroup
+            answers={currentQuestion.answers}
+            onAnswerSelected={handleAnswerSelected}
+            selectedAnswerId={currentQuestionSelectedAnswerId} />
     </SignupWrapper>
 
-    const summarySlide = <Summary
+    const SummarySlide = () => <SignupWrapper
         title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
         description={"Már csak egy-két adatra van szükségünk, hogy elkezdhesd a rendszer használatát"}
-        backHandler={() => }
-        onClick={() => {
-            localState.currentType.set("form")
-        }}
-        currentImage={images[6]}
-        showBackHandler
-        showUpperTitle
-        upperTitle={"Összegzés"}
-        nextButtonTitle={"Folytatás"} />;
+        upperTitle="Összegzés"
+        nextButtonTitle="Folytatás"
+        onNavPrevious={() => slidesState.previous()}
+        onNext={() => slidesState.next()}
+        currentImage={summaryImageUrl}>
+    </SignupWrapper>
 
-    const finalizeFormSlide = <RegistrationForm
+    const FinalizeFormSlide = () => <SignupWrapper
         title={"Személyes adatok és jelszó megadása"}
-        currentValue={localState.currentItemValue.get()}
-        description={""}
-        backHandler={backHandler}
-        onClick={() => { }}
-        currentImage={images[7]}
-        showBackHandler
-        showUpperTitle
-        upperTitle={"Utolsó simítások"}
-        nextButtonTitle={"Regisztráció befejezése"}
-        regFormState={regFormState}
-        onSubmit={(e) => {
-
-            e.preventDefault();
-            submitFinalizationRequestAsync(new FormData(e.currentTarget));
-        }}
-        errorText={""} />;
+        upperTitle="Utolsó simítások"
+        nextButtonTitle="Regisztráció befejezése"
+        onNavPrevious={() => slidesState.previous()}
+        onNext={() => submitFinalizationRequestAsync()}
+        currentImage={finalizeImageUrl}>
+        <SignupForm regFormState={regFormState} />
+    </SignupWrapper>
 
     const slides = [
-        greetSlide,
-        questionnaireSlide,
-        summarySlide,
-        finalizeFormSlide
+        GreetSlide,
+        QuestionnaireSlide,
+        SummarySlide,
+        FinalizeFormSlide
     ];
 
     return <SlidesDisplay
-        setIsLastSlide={setIsLastSlide}
         slides={slides}
-        index={slideIndex} />;
+        index={slidesState.currentIndex} />;
 };
 
 // updateActivity(

@@ -3,8 +3,8 @@ import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { TestAnswerDTO } from "../models/shared_models/AnswerDTO";
-import { TestQuestionDTO } from "../models/shared_models/QuestionDTO";
+import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { getTypeORMConnection } from "../database";
 import { log } from "./misc/logger";
 import { toExamDTO, toOrganizationDTO, toVideoDTO } from "./mappings";
@@ -107,21 +107,21 @@ const getReandomQuestion = () => {
             {
                 answerId: "asd",
                 answerText: "Answer 1"
-            } as TestAnswerDTO,
+            } as AnswerDTO,
             {
                 answerId: "asd",
                 answerText: "Answer 2"
-            } as TestAnswerDTO,
+            } as AnswerDTO,
             {
                 answerId: "asd",
                 answerText: "Answer 3"
-            } as TestAnswerDTO,
+            } as AnswerDTO,
             {
                 answerId: "asd",
                 answerText: "Answer 4"
-            } as TestAnswerDTO
+            } as AnswerDTO
         ]
-    } as TestQuestionDTO
+    } as QuestionDTO
 }
 
 const getDevelopmentChart = () => {

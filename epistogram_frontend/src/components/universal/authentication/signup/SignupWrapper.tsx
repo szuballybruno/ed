@@ -1,18 +1,18 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { Button, Divider, LinearProgress, LinearProgressProps, Typography } from "@material-ui/core";
-import Box from "@material-ui/core/Box";
 import React, { ReactNode } from 'react';
-import AllNavbar from "../../../../navigation/navbar/AllNavbar";
-import { Description } from "../../fragments/Description";
-import { NextButton } from "../../fragments/NextButton";
-import { Title } from "../../fragments/Title";
+import AllNavbar from "../../navigation/navbar/AllNavbar";
+import { Description } from "./fragments/Description";
+import { NextButton } from "./fragments/NextButton";
+import { Title } from "./fragments/Title";
 import classes from "./signupWrapper.module.scss";
 
 export const SignupWrapper = (props: {
     children: ReactNode,
     nextButtonTitle: string
     currentImage: string,
-    onNext: () => void,
 
+    onNext?: () => void,
     onNavPrevious?: () => void
     title?: string,
     upperTitle?: string,
@@ -57,17 +57,18 @@ export const SignupWrapper = (props: {
         <div className={classes.contentWrapper}>
 
             {/* upper title */}
-            {hasUpperTitle && <div className={classes.titleWrapper}>
-                <Typography
-                    variant={"overline"}>{upperTitle}
-                </Typography>
-            </div>}
+            <Flex height="40px" width="100%" align="left" justify="center">
+                {hasUpperTitle &&
+                    <Typography
+                        variant={"overline"}>{upperTitle}
+                    </Typography>}
+            </Flex>
 
             <Divider className={classes.divider} />
 
             {/* back button */}
             {canNavPrevious && <div className={classes.backAndProgress}>
-                <Button onClick={() => onNavPrevious}>
+                <Button onClick={() => onNavPrevious!()}>
                     Vissza
                 </Button>
                 {props.upperComponent}
@@ -89,12 +90,12 @@ export const SignupWrapper = (props: {
                 {children}
 
                 {/* next button */}
-                <div>
+                {onNext && <div>
                     <NextButton
                         buttonTitle={nextButtonTitle}
-                        onClick={() => onNext()}
+                        onClick={() => onNext!()}
                         type={"button"} />
-                </div>
+                </div>}
             </div>
         </div>
 

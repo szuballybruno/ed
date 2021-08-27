@@ -1,6 +1,5 @@
-import { IdType } from "./types/sharedTypes";
 
 export type AnswerDTO = {
-    answerId: IdType,
+    answerId: number,
     answerText: string;
 }

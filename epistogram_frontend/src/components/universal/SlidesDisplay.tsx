@@ -2,13 +2,13 @@ import { BoxProps, Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 export const SlidesDisplay = (props: {
-    slides: ReactNode[],
+    slides: (() => JSX.Element)[],
     index: number
 }) => {
 
     return (
         <Flex>
-            {props.slides[props.index]}
+            {props.slides[props.index]()}
         </Flex>
     );
 }

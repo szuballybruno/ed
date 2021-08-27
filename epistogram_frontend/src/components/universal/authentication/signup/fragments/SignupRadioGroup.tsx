@@ -4,7 +4,7 @@ import { AnswerDTO } from "../../../../../models/shared_models/AnswerDTO";
 
 export const SignupRadioGroup = (
     props: {
-        selectedAnswerId: number,
+        selectedAnswerId: number | null,
         onAnswerSelected: (answerId: number) => void,
         answers: AnswerDTO[]
     }) => {
@@ -13,14 +13,18 @@ export const SignupRadioGroup = (
 
     return <RadioGroup
         name="radioGroup1"
-        value={selectedAnswerId}
-        onChange={(e) => onAnswerSelected(parseInt(e.currentTarget.value))}>
+        onChange={(e) => {
+
+            const selectedAnswerId = parseInt(e.currentTarget.value);
+            onAnswerSelected(selectedAnswerId);
+        }}>
         {answers
             .map((answer) => {
 
                 return <FormControlLabel
+                    key={answer.answerId}
                     value={answer.answerId}
-                    control={<Radio />}
+                    control={<Radio checked={answer.answerId == selectedAnswerId} />}
                     label={answer.answerText} />
             })}
     </RadioGroup>

@@ -23,6 +23,7 @@ export const usePaging = <T>(
 
     const isLast = currentItemIndex == items.length - 1;
     const isFirst = currentItemIndex == 0;
+    const currentItem = items[currentItemIndex];
 
     const next = () => {
 
@@ -54,7 +55,8 @@ export const usePaging = <T>(
         previous,
         isLast,
         isFirst,
-        currentIndex: currentItemIndex
+        currentIndex: currentItemIndex,
+        currentItem
     }
 }
 
