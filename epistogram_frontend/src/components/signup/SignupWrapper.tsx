@@ -34,7 +34,7 @@ export const SignupWrapper = (props: {
     const children = props.children;
     const onNext = props.onNext;
 
-    return <div className={classes.signupWrapper} style={{ flex: 1 }}>
+    return <div className={classes.signupWrapper} >
 
         {/* header */}
         <div className={classes.contentWrapper}>

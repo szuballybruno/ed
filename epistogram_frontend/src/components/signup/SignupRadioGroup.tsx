@@ -12,6 +12,7 @@ export const SignupRadioGroup = (
     const { answers, selectedAnswerId, onAnswerSelected } = props;
 
     return <RadioGroup
+        style={{ marginBottom: "30px" }}
         name="radioGroup1"
         onChange={(e) => {
 

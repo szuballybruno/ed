@@ -11,7 +11,7 @@ import { staticProvider } from "../staticProvider";
 import { toExamDTO, toOrganizationDTO, toVideoDTO } from "./mappings";
 import { verifyJWTToken } from "./misc/jwtGen";
 import { log } from "./misc/logger";
-import { getQuestionAnswersAsync, getQuestionsAsync, getReandomQuestion } from "./questionService";
+import { getQuestionAnswersAsync, getStartupQuestionsAsync, getReandomQuestion } from "./questionService";
 
 export const getOrganizationsAsync = async (userId: number) => {
 
@@ -75,8 +75,6 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
 
     } as OverviewPageDTO;
 
-    log(overviewPageDTO);
-
     return overviewPageDTO;
 }
 
@@ -102,23 +100,6 @@ const getCurrentTasks = () => {
             } as TaskDTO
         ]
     } as CurrentTasksDTO;
-}
-
-export const getSignupDataAsync = async (invitationToken: string) => {
-
-    const invitationTokenPayload = verifyJWTToken<InvitationTokenPayload>(
-        invitationToken, staticProvider.globalConfig.mail.tokenMailSecret);
-
-    const userId = invitationTokenPayload.userId;
-    const questions = await getQuestionsAsync();
-    const questionAnswers = await getQuestionAnswersAsync(userId);
-
-    const dataDTO = {
-        questions: questions,
-        questionAnswers: questionAnswers
-    } as SignupDataDTO;
-
-    return dataDTO;
 }
 
 const getDevelopmentChart = () => {

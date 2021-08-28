@@ -7,6 +7,8 @@ import { Organization } from "./models/entity/Organization";
 import { Question } from "./models/entity/Question";
 import { QuestionAnswer } from "./models/entity/QuestionAnswer";
 import { Task } from "./models/entity/Task";
+import { TestChild } from "./models/entity/TestChild";
+import { TestParent } from "./models/entity/TestParent";
 import { User } from "./models/entity/User";
 import { Video } from "./models/entity/Video";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
@@ -45,7 +47,9 @@ export const initializeDBAsync = async (recreate: boolean) => {
             Task,
             QuestionAnswer,
             Question,
-            Answer
+            Answer,
+            TestChild,
+            TestParent
         ],
     } as ConnectionOptions;
 
@@ -163,6 +167,93 @@ export const seedDB = async () => {
         password: "admin",
         controlPassword: "admin"
     });
+
+    // seed signup questions
+    const questions = [
+        {
+            isSignupQuestion: true,
+            questionText: "Egy csapatban elvégzendő projekt esetén a következőt preferálom:",
+            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes1.png",
+            answers: [
+                {
+                    text: "Szoros együttműködés a többiekkel"
+                },
+                {
+                    text: "Szívesebben oldok meg egyedül részfeladatokat"
+                },
+            ]
+        },
+        {
+            isSignupQuestion: true,
+            questionText: "Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást: ",
+            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes2.png",
+            answers: [
+                {
+                    text: "Mutassa meg az épület alaprajzán/rajzolja le a helyes irányt",
+                },
+                {
+                    text: "Mondja el/írja le, hogy mikor merre kell fordulnom",
+                }
+            ]
+        },
+        {
+            isSignupQuestion: true,
+            questionText: "Jobban preferálom azt a munkában, mikor:",
+            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes3.png",
+            answers: [
+                {
+                    text: "Előre definiált instrukciók alapján végzek el feladatokat",
+                },
+                {
+                    text: "Kutatnom kell a megoldás után és analizálni különböző eseteket",
+                }
+            ]
+        },
+        {
+            isSignupQuestion: true,
+            questionText: "Egy előadás esetén hasznosabb számomra, ha:",
+            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes4.png",
+            answers: [
+                {
+                    text: "Az előadó magyaráz, és megválaszolja a felmerülő kérdéseket",
+                },
+                {
+                    text: "kisfilmekkel, videókkal illusztrálja és egészíti ki a mondanivalóját",
+                }
+            ]
+        },
+        {
+            isSignupQuestion: true,
+            questionText: "Az érzéseimet, gondolataimat a következő módokon fejezem ki szívesebben:",
+            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes5.png",
+            answers: [
+                {
+                    text: "Zenéken, írásokon, a művészet által",
+                },
+                {
+                    text: "Direkt, lényegre törő kommunikációval",
+                }
+            ]
+        }
+    ] as Question[]
+
+    await connection
+        .getRepository(Question)
+        .insert(questions);
+
+    const repo = connection
+        .getRepository(TestParent);
+
+    await repo.save([
+        {
+            name: "parent",
+            children: [
+                {
+                    name: "child"
+                }
+            ]
+        }
+    ]);
 }
 
 // const users = [

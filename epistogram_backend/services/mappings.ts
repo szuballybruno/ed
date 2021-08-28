@@ -16,6 +16,10 @@ import { navPropNotNull } from "../utilities/helpers";
 import { QuestionAnswer } from "../models/entity/QuestionAnswer";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { staticProvider } from "../staticProvider";
+import { Question } from "../models/entity/Question";
+import { QuestionDTO } from "../models/shared_models/QuestionDTO";
+import { Answer } from "../models/entity/Answer";
+import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 
 export const toUserDTO = (user: User) => new UserDTO(
     user.id,
@@ -101,6 +105,27 @@ export const toOrganizationDTO = (org: Organization) => {
         id: org.id,
         name: org.name
     } as OrganizationDTO;
+}
+
+export const toQuestionDTO = (q: Question) => {
+
+    navPropNotNull(q.answers);
+
+    return {
+        questionId: q.id,
+        questionText: q.questionText,
+        imageUrl: q.imageUrl,
+        answers: q.answers
+            .map(x => toAnswerDTO(x))
+
+    } as QuestionDTO;
+}
+
+export const toAnswerDTO = (a: Answer) => {
+
+    return {
+        answerText: a.text
+    } as AnswerDTO;
 }
 
 export const toCourseAdminDTO = (course: Course) => {

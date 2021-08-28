@@ -9,9 +9,6 @@ export class Question {
     id: number;
 
     @Column()
-    questionId: number;
-
-    @Column()
     questionText: string;
 
     @Column()
@@ -21,7 +18,7 @@ export class Question {
     isSignupQuestion: boolean;
 
     // answers
-    @OneToMany(type => Answer, answer => answer.question)
+    @OneToMany(type => Answer, answer => answer.question, { cascade: true })
     @JoinColumn()
     answers: Answer[];
 

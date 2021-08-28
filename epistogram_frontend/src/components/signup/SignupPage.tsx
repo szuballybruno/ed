@@ -125,6 +125,7 @@ export const SignupPage = () => {
         title={currentQuestion.questionText}
         nextButtonTitle="Kovetkezo"
         onNavPrevious={() => questionnaireState.previous()}
+        onNext={currentQuestionSelectedAnswerId ? questionnaireState.next : undefined}
         currentImage={currentQuestion.imageUrl!}
         bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
         upperComponent={<Typography>{questionnaireProgressLabel}</Typography>}>
@@ -161,7 +162,7 @@ export const SignupPage = () => {
         FinalizeFormSlide
     ];
 
-    return <Flex direction="column" justify="flex-start" align="center">
+    return <Flex direction="column" justify="flex-start" align="center" >
 
         {/* navbar */}
         <AllNavbar
@@ -176,7 +177,7 @@ export const SignupPage = () => {
             desktopClassName={classes.navbar}
             showLastButton={false} />
 
-        <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]}>
+        <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} flex="1">
             <SlidesDisplay
                 slides={slides}
                 index={slidesState.currentIndex} />
