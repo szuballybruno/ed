@@ -1,7 +1,7 @@
 import { User } from "../models/entity/User";
 import { IdType } from "../models/shared_models/types/sharedTypes";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { getTypeORMConnection } from "../database";
+import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getVideoByIdAsync } from "./videoService";
 
@@ -11,7 +11,8 @@ export const setCurrentVideoAsync = async (userId: number, courseId: number, vid
     if (!video)
         throw new TypedError("Video not found by id: " + videoId, "videoNotFound");
 
-    return await getTypeORMConnection()
+    return await staticProvider
+        .ormConnection
         .getRepository(User)
         .save({
             id: userId,
@@ -21,7 +22,8 @@ export const setCurrentVideoAsync = async (userId: number, courseId: number, vid
 
 export const getCurrentVideoAsync = async (userId: number, courseId: IdType, videoId: IdType) => {
 
-    const user = await getTypeORMConnection()
+    const user = await staticProvider
+        .ormConnection
         .getRepository(User)
         .createQueryBuilder("user")
         .where("user.id = :userId", { userId: userId })

@@ -1,16 +1,16 @@
-import { getTypeORMConnection } from "../database";
+
 import { User } from "../models/entity/User";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
-import { InvitationTokenPayload, RoleType } from "../models/shared_models/types/sharedTypes";
-import { globalConfig } from "../server";
+import { InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
+import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authentication";
-import { hashPasswordAsync } from "./misc/crypt";
 import { sendInvitaitionMailAsync } from "./emailService";
+import { hashPasswordAsync } from "./misc/crypt";
 import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
-import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
 import { log } from "./misc/logger";
+import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
 
 export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: number) => {
 
@@ -54,7 +54,8 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
         jobTitle: jobTitle
     } as User;
 
-    const insertResults = await getTypeORMConnection()
+    const insertResults = await staticProvider
+        .ormConnection
         .getRepository(User)
         .insert(user);
 
@@ -63,7 +64,7 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
     // send invitaion mail
     const invitationToken = getJWTToken<InvitationTokenPayload>(
         { userId: userId },
-        globalConfig.mail.tokenMailSecret,
+        staticProvider.globalConfig.mail.tokenMailSecret,
         "24h");
 
     if (sendEmail) {
@@ -82,7 +83,7 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
     const password = withValueOrBadRequest(dto.password);
     const phoneNumber = withValueOrBadRequest(dto.phoneNumber);
 
-    const tokenPayload = verifyJWTToken<InvitationTokenPayload>(invitationToken, globalConfig.mail.tokenMailSecret);
+    const tokenPayload = verifyJWTToken<InvitationTokenPayload>(invitationToken, staticProvider.globalConfig.mail.tokenMailSecret);
     if (!tokenPayload)
         throw new TypedError("Invitation token is invalid or expired!", "forbidden");
 
@@ -96,7 +97,8 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
     // hash password
     const hashedPassword = await hashPasswordAsync(password);
 
-    await getTypeORMConnection()
+    await staticProvider
+        .ormConnection
         .getRepository(User)
         .save({
             id: tokenPayload.userId,

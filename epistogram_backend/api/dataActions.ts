@@ -1,8 +1,10 @@
 import { Request } from "express";
+import { SaveQuestionnaireAnswersDTO } from "../models/shared_models/SaveQuestionnaireAnswersDTO";
 import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
-import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
-import { getAsyncActionHandler } from "../utilities/helpers";
+import { getOrganizationsAsync, getOverviewPageDTOAsync, getSignupDataAsync } from "../services/dataService";
+import { log } from "../services/misc/logger";
+import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
 export const getOverviewPageDTOAction = async (req: Request) => {
 
@@ -25,6 +27,25 @@ export const getOrganizationsAction = (req: Request) => {
 
     return getOrganizationsAsync(userId);
 }
+
+export const getSignupDataAction = getAsyncActionHandler((req: Request) => {
+
+    const token = withValueOrBadRequest(req.body.token);
+
+    return getSignupDataAsync(token);
+});
+
+export const saveSignupQuestionnaireAnswersAction = getAsyncActionHandler((req: Request) => {
+
+    const dto = withValueOrBadRequest(req.body) as SaveQuestionnaireAnswersDTO;
+    const token = withValueOrBadRequest(dto.invitationToken);
+    const answers = withValueOrBadRequest(dto.answers);
+
+    return new Promise<void>((res) => {
+
+        setTimeout(() => res(), 3000);
+    });
+});
 
 // export const uploadCourseImage = (req: Request, res: Response, next: NextFunction) => {
 //     let uploadedFile: UploadedFile

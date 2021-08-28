@@ -3,13 +3,13 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { TokenMeta as TokenPayload } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
-import { globalConfig } from "../server";
 import { getCookie, TypedError } from "../utilities/helpers";
 import { comparePasswordAsync } from "./misc/crypt";
 import { verifyJWTToken } from "./misc/jwtGen";
 import { log } from "./misc/logger";
 import { toUserDTO } from "./mappings";
 import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
+import { staticProvider } from "../staticProvider";
 
 // CONSTS
 export const accessTokenCookieName = "accessToken";
@@ -22,7 +22,7 @@ export const getRequestAccessTokenPayload = (req: Request) => {
     if (!accessToken)
         return null;
 
-    const tokenPayload = verifyJWTToken<TokenPayload>(accessToken, globalConfig.security.jwtSignSecret);
+    const tokenPayload = verifyJWTToken<TokenPayload>(accessToken, staticProvider.globalConfig.security.jwtSignSecret);
     if (!tokenPayload)
         return null;
 
@@ -36,7 +36,7 @@ export const authorizeRequest = (req: Request) => {
         if (!accessToken)
             throw new TypedError("Access token missing!", "forbidden");
 
-        const tokenMeta = verifyJWTToken<TokenPayload>(accessToken, globalConfig.security.jwtSignSecret);
+        const tokenMeta = verifyJWTToken<TokenPayload>(accessToken, staticProvider.globalConfig.security.jwtSignSecret);
         if (!tokenMeta)
             throw new TypedError("Invalid token!", "forbidden");
 
@@ -65,7 +65,7 @@ export const getUserIdFromRequest = (req: Request) => {
         throw new TypedError("Access token not sent.", "bad request");
 
     // check sent access token if invalid by signature or expired
-    const tokenMeta = verifyJWTToken<TokenPayload>(accessToken, globalConfig.security.jwtSignSecret);
+    const tokenMeta = verifyJWTToken<TokenPayload>(accessToken, staticProvider.globalConfig.security.jwtSignSecret);
     if (!tokenMeta)
         throw new TypedError("Access token validation failed.", "forbidden");
 
@@ -82,7 +82,7 @@ export const renewUserSession = async (req: Request, res: Response) => {
         throw new TypedError("Refresh token not sent.", "bad request");
 
     // check sent refresh token if invalid by signature or expired
-    const tokenMeta = verifyJWTToken<TokenPayload>(refreshToken, globalConfig.security.jwtSignSecret);
+    const tokenMeta = verifyJWTToken<TokenPayload>(refreshToken, staticProvider.globalConfig.security.jwtSignSecret);
     if (!tokenMeta)
         throw new TypedError("Refresh token validation failed.", "forbidden");
 
@@ -174,8 +174,8 @@ const getAccessToken = (user: UserDTO) => {
 
     const token = jwt.sign(
         getPlainObjectUserInfoDTO(user),
-        globalConfig.security.jwtSignSecret, {
-        expiresIn: `${globalConfig.security.accessTokenLifespanInS}s`
+        staticProvider.globalConfig.security.jwtSignSecret, {
+        expiresIn: `${staticProvider.globalConfig.security.accessTokenLifespanInS}s`
     });
 
     return token;
@@ -185,9 +185,9 @@ const getRefreshToken = (user: UserDTO) => {
 
     return jwt.sign(
         getPlainObjectUserInfoDTO(user),
-        globalConfig.security.jwtSignSecret,
+        staticProvider.globalConfig.security.jwtSignSecret,
         {
-            expiresIn: globalConfig.security.refreshTokenLifespanInS
+            expiresIn: staticProvider.globalConfig.security.refreshTokenLifespanInS
         });
 }
 
@@ -195,7 +195,7 @@ const setAccessTokenCookie = (res: Response, accessToken: string) => {
     res.cookie(accessTokenCookieName, accessToken, {
         secure: false, //set to false because of postman
         httpOnly: true,
-        expires: dayjs().add(globalConfig.security.accessTokenLifespanInS, "seconds").toDate()
+        expires: dayjs().add(staticProvider.globalConfig.security.accessTokenLifespanInS, "seconds").toDate()
     });
 }
 
@@ -203,6 +203,6 @@ const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
     res.cookie(refreshTokenCookieName, refreshToken, {
         secure: false, //set to false because of postman
         httpOnly: true,
-        expires: dayjs().add(globalConfig.security.refreshTokenLifespanInS, "seconds").toDate()
+        expires: dayjs().add(staticProvider.globalConfig.security.refreshTokenLifespanInS, "seconds").toDate()
     });
 }

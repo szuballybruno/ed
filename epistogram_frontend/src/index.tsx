@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import { BrowserRouter, BrowserRouter as Router, Route, Switch, withRouter } from "react-router-dom";
 import './index.css';
-import LoginScreen from "./components/universal/authentication/login/LoginScreen";
+import LoginScreen from "./components/login/LoginScreen";
 import NotFound from "./components/universal/notFound/NotFound";
 import PlayerPage from "./components/player/PlayerPage";
 import ProfileMain from "./components/profile/ProfileMain";
@@ -12,14 +12,14 @@ import Administration from "./components/administration/Administration";
 import CoursePage from "./components/course_search/CoursePage";
 
 import { DataManagerFrame } from "./HOC/data_manager_frame/DataManagerFrame";
-import { ProtectedRoute } from "./components/universal/authentication/protectedRoute/ProtectedRoute";
+import { ProtectedRoute } from "./components/universal/ProtectedRoute";
 import { PopupsWrapper } from "./HOC/popups_wrapper/PopupsWrapper";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { theme } from "./configuration/defaultMUITheme";
 import { StylesProvider } from "@material-ui/core";
-import { SignupPage } from "./components/universal/authentication/signup/SignupPage";
-import { MobileDemo } from "./components/universal/MobileDemo";
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { MobileDemo } from "./components/mobileDemo/MobileDemo";
+import { SignupPage } from "./components/signup/SignupPage";
 
 const queryClient = new QueryClient();
 

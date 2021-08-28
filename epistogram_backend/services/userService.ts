@@ -1,13 +1,14 @@
 import { Request } from "express";
-import { getTypeORMConnection } from "../database";
 import { User } from "../models/entity/User";
+import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getRequestAccessTokenPayload } from "./authentication";
 import { toUserDTO } from "./mappings";
 
 export const getUserById = async (userId: number) => {
 
-    const user = getTypeORMConnection()
+    const user = staticProvider
+        .ormConnection
         .getRepository(User)
         .createQueryBuilder("user")
         .where("user.id = :userId", { userId: userId })
@@ -42,7 +43,8 @@ export const getUserActiveTokenById = async (userId: number) => {
 
 export const getUserByEmail = async (email: string) => {
 
-    const user = await getTypeORMConnection()
+    const user = await staticProvider
+        .ormConnection
         .getRepository(User)
         .createQueryBuilder("user")
         .where("user.email = :email", { email: email })
@@ -69,7 +71,8 @@ export const getCurrentUser = async (req: Request) => {
 
 export const setUserActiveRefreshToken = (userId: number, refreshToken: string) => {
 
-    return getTypeORMConnection()
+    return staticProvider
+        .ormConnection
         .getRepository(User)
         .save({
             id: userId,
@@ -79,7 +82,8 @@ export const setUserActiveRefreshToken = (userId: number, refreshToken: string) 
 
 export const removeRefreshToken = (userId: number) => {
 
-    return getTypeORMConnection()
+    return staticProvider
+        .ormConnection
         .getRepository(User)
         .save({
             id: userId,

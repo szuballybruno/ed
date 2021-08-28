@@ -1,3 +1,4 @@
+import { staticProvider } from "../staticProvider";
 import { log, logError } from "./misc/logger";
 
 // 
@@ -45,9 +46,10 @@ export const initailizeDotEnvEnvironmentConfig = () => {
 
     const globalConfig = new GlobalConfiguration();
 
-    log(`Started in '${globalConfig.misc.environmentName}' environment!`);
+    // set static global config
+    staticProvider.globalConfig = globalConfig;
 
-    return globalConfig;
+    log(`Started in '${globalConfig.misc.environmentName}' environment!`);
 }
 
 export class GlobalConfiguration {

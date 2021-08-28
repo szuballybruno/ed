@@ -1,18 +1,22 @@
+
+import { Organization } from "../models/entity/Organization";
 import { User } from "../models/entity/User";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
+import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { AnswerDTO } from "../models/shared_models/AnswerDTO";
-import { QuestionDTO } from "../models/shared_models/QuestionDTO";
-import { getTypeORMConnection } from "../database";
-import { log } from "./misc/logger";
+import { InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
+import { staticProvider } from "../staticProvider";
 import { toExamDTO, toOrganizationDTO, toVideoDTO } from "./mappings";
-import { Organization } from "../models/entity/Organization";
+import { verifyJWTToken } from "./misc/jwtGen";
+import { log } from "./misc/logger";
+import { getQuestionAnswersAsync, getQuestionsAsync, getReandomQuestion } from "./questionService";
 
 export const getOrganizationsAsync = async (userId: number) => {
 
-    const orgs = await getTypeORMConnection()
+    const orgs = await staticProvider
+        .ormConnection
         .getRepository(Organization)
         .find();
 
@@ -24,7 +28,8 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
 
     // const userData = await getUserDataAsync(userId);
 
-    const user = await getTypeORMConnection()
+    const user = await staticProvider
+        .ormConnection
         .getRepository(User)
         .createQueryBuilder("user")
         .where("user.id = :userId", { userId: userId })
@@ -99,29 +104,21 @@ const getCurrentTasks = () => {
     } as CurrentTasksDTO;
 }
 
-const getReandomQuestion = () => {
-    return {
-        questionId: "asd",
-        questionText: "My fantastic question",
-        answers: [
-            {
-                answerId: "asd",
-                answerText: "Answer 1"
-            } as AnswerDTO,
-            {
-                answerId: "asd",
-                answerText: "Answer 2"
-            } as AnswerDTO,
-            {
-                answerId: "asd",
-                answerText: "Answer 3"
-            } as AnswerDTO,
-            {
-                answerId: "asd",
-                answerText: "Answer 4"
-            } as AnswerDTO
-        ]
-    } as QuestionDTO
+export const getSignupDataAsync = async (invitationToken: string) => {
+
+    const invitationTokenPayload = verifyJWTToken<InvitationTokenPayload>(
+        invitationToken, staticProvider.globalConfig.mail.tokenMailSecret);
+
+    const userId = invitationTokenPayload.userId;
+    const questions = await getQuestionsAsync();
+    const questionAnswers = await getQuestionAnswersAsync(userId);
+
+    const dataDTO = {
+        questions: questions,
+        questionAnswers: questionAnswers
+    } as SignupDataDTO;
+
+    return dataDTO;
 }
 
 const getDevelopmentChart = () => {

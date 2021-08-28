@@ -1,10 +1,6 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { Button, Divider, LinearProgress, LinearProgressProps, Typography } from "@material-ui/core";
+import { Flex } from "@chakra-ui/react";
+import { Button, Divider, Typography } from "@material-ui/core";
 import React, { ReactNode } from 'react';
-import AllNavbar from "../../navigation/navbar/AllNavbar";
-import { Description } from "./fragments/Description";
-import { NextButton } from "./fragments/NextButton";
-import { Title } from "./fragments/Title";
 import classes from "./signupWrapper.module.scss";
 
 export const SignupWrapper = (props: {
@@ -38,20 +34,7 @@ export const SignupWrapper = (props: {
     const children = props.children;
     const onNext = props.onNext;
 
-    return <div className={classes.signupWrapper}>
-
-        {/* navbar */}
-        <AllNavbar
-            showHighlightedButton={false}
-            menuItems={{
-                "middleMenu": [],
-                "lastItem": {
-                    "menuName": "",
-                    "menuPath": ""
-                }
-            }}
-            desktopClassName={classes.navbar}
-            showLastButton={false} />
+    return <div className={classes.signupWrapper} style={{ flex: 1 }}>
 
         {/* header */}
         <div className={classes.contentWrapper}>
@@ -81,20 +64,30 @@ export const SignupWrapper = (props: {
             <div className={classes.questionAndAnswersWrapper}>
 
                 {/* title */}
-                {hasTitle && <Title text={title!} />}
+                {hasTitle && <div className={classes.questionWrapper}>
+                    <Typography variant={"h5"}>
+                        {title!}
+                    </Typography>
+                </div>}
 
                 {/* description */}
-                {hasDescription && <Description text={description!} />}
+                {hasDescription && <div className={classes.descriptionWrapper}>
+                    <Typography>
+                        {description!}
+                    </Typography>
+                </div>}
 
                 {/* content */}
                 {children}
 
                 {/* next button */}
                 {onNext && <div>
-                    <NextButton
-                        buttonTitle={nextButtonTitle}
+                    <Button
+                        variant={"outlined"}
                         onClick={() => onNext!()}
-                        type={"button"} />
+                        type="button">
+                        {nextButtonTitle}
+                    </Button>
                 </div>}
             </div>
         </div>

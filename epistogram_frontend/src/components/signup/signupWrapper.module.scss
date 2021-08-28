@@ -1,10 +1,31 @@
 // Main frame
 
+.questionWrapper {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  min-height: 70px;
+  margin-bottom: 12px;
+}
+
+.questionWrapper h5 {
+  max-width: 500px;
+}
+
 .signupWrapper {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+}
+.descriptionWrapper {
+  box-sizing: border-box;
+  min-height: 60px;
+  width: 100%;
+  margin-bottom: 40px;
+}
+.descriptionWrapper p {
+  max-width: 500px;
 }
 .questionAndAnswersWrapper {
   display: flex;
@@ -15,13 +36,6 @@
   width: calc(50% - 50px)
 }
 // Navigation
-
-.navbar {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
 
 .contentWrapper {
   display: flex;
@@ -82,8 +96,6 @@
 
 .progressPercentage {
 }
-
-
 
 .questionAndAnswersOuterWrapper {
   width: calc(100% - 400px);

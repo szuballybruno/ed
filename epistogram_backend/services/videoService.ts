@@ -1,9 +1,10 @@
 import { Video } from "../models/entity/Video";
-import { getTypeORMConnection } from "../database"
+import { staticProvider } from "../staticProvider";
 
 export const getVideoByIdAsync = (videoId: number) => {
 
-    return getTypeORMConnection()
+    return staticProvider
+        .ormConnection
         .getRepository(Video)
         .findOne(videoId);
 }

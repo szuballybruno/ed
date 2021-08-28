@@ -1,10 +1,8 @@
+import { useState } from "@hookstate/core";
+import { Button, Typography } from "@material-ui/core";
 import React from 'react';
-import {Button, Typography} from "@material-ui/core";
-import classes from './mobileDemo.module.scss'
-import Navbar from "./navigation/navbar/AllNavbar";
-import AllNavbar from "./navigation/navbar/AllNavbar";
-import {useState} from "@hookstate/core";
-import {globalConfig} from "../../configuration/config";
+import { globalConfig } from "../../configuration/config";
+import classes from './mobileDemo.module.scss';
 
 export const MobileDemo = () => {
     const showNextPage = useState(true)

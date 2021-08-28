@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { useContext } from 'react';
 import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
-import { AuthenticationStateContext as AuthenticationStateContext } from '../../../../HOC/data_manager_frame/DataManagerFrame';
-import {LoadingComponent} from "../../../../HOC/loading_frame/loadingComponents/LoadingComponent";
+import { AuthenticationStateContext as AuthenticationStateContext } from '../../HOC/data_manager_frame/DataManagerFrame';
+import {LoadingComponent} from "../../HOC/loading_frame/loadingComponents/LoadingComponent";
 
 export const ProtectedRoute = (props: {
     path: string,

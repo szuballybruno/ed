@@ -13,5 +13,9 @@
 			"path": "misc"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"search.exclude": {
+			"**/build": true
+		}
+	}
 }

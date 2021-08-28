@@ -1,8 +1,8 @@
 import { Course } from "../models/entity/Course";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
-import { getTypeORMConnection } from "../database";
 import { toCourseShortDTO } from "./mappings";
 import { getUserDTOById } from "./userService";
+import { staticProvider } from "../staticProvider";
 
 export const getUserCoursesAsync = async (userId: number, dto: GetUserCoursesDTO) => {
 
@@ -13,7 +13,8 @@ export const getUserCoursesAsync = async (userId: number, dto: GetUserCoursesDTO
     const searchText = dto.searchText;
     const searchCategory = dto.searchCategory;
 
-    const courses = await getTypeORMConnection()
+    const courses = await staticProvider
+        .ormConnection
         .getRepository(Course)
         .find();
 

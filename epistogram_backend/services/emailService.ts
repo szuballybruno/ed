@@ -1,12 +1,12 @@
 import Email from 'email-templates';
-import { globalConfig } from '../server';
 import { createTransport } from 'nodemailer';
+import { staticProvider } from '../staticProvider';
 import { log } from './misc/logger';
 
 export const sendInvitaitionMailAsync = async (
     invitationToken: string, userEmail: string, userFullName: string) => {
 
-    const signupUrl = `${globalConfig.misc.frontendUrl}/signup`;
+    const signupUrl = `${staticProvider.globalConfig.misc.frontendUrl}/signup`;
     const invitationUrl = `${signupUrl}?token=${invitationToken}`;
 
     log("Invitation link: ");
@@ -32,7 +32,7 @@ export const sendInvitaitionMailAsync = async (
 export const sendResetPasswordMailAsync = async (userEmail: string, userFullName: string, pwResetToken: string) => {
 
     const mail = getEmail();
-    const url = `${globalConfig.misc.frontendUrl}/regisztracio`;
+    const url = `${staticProvider.globalConfig.misc.frontendUrl}/regisztracio`;
 
     await mail.send({
         template: "setpassword",
@@ -57,9 +57,9 @@ export const getEmailConfig = () => ({
     },
     send: true,
     transport: createNewTransporter(
-        globalConfig.mail.mailHost,
-        globalConfig.mail.senderEmail,
-        globalConfig.mail.senderPassword),
+        staticProvider.globalConfig.mail.mailHost,
+        staticProvider.globalConfig.mail.senderEmail,
+        staticProvider.globalConfig.mail.senderPassword),
     views: {
         options: {
             extension: "hbs",

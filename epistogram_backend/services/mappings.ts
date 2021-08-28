@@ -6,7 +6,6 @@ import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { globalConfig } from "../server";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
 import { Organization } from "../models/entity/Organization";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
@@ -14,6 +13,9 @@ import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { Task } from "../models/entity/Task";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { navPropNotNull } from "../utilities/helpers";
+import { QuestionAnswer } from "../models/entity/QuestionAnswer";
+import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
+import { staticProvider } from "../staticProvider";
 
 export const toUserDTO = (user: User) => new UserDTO(
     user.id,
@@ -37,6 +39,15 @@ export const toAdminPageUserDTO = (user: User) => {
         organizationName: user.organization.name,
         tasks: user.tasks.map(x => toTaskDTO(x))
     } as AdminPageUserDTO;
+}
+
+export const toQuestionAnswerDTO = (questionAnswer: QuestionAnswer) => {
+
+    return {
+        answerId: questionAnswer.answerId,
+        questionId: questionAnswer.questionId,
+        userId: questionAnswer.userId
+    } as QuestionAnswerDTO;
 }
 
 export const toTaskDTO = (task: Task) => {
@@ -72,7 +83,7 @@ export const toExamDTO = (exam: Exam) => {
 
 export const toCourseShortDTO = (course: Course) => {
 
-    const thumbnailImageURL = globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
+    const thumbnailImageURL = staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
 
     return {
         courseId: course.id,
@@ -100,6 +111,6 @@ export const toCourseAdminDTO = (course: Course) => {
         courseId: course.id,
         teacherName: "Mr. Teacher Name",
         videosCount: 0,
-        thumbnailImageURL: globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`
+        thumbnailImageURL: staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`
     } as CourseAdminDTO;
 }

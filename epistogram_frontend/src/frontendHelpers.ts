@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
+import { LoadingStateType } from "./store/application/ApplicationRunningStateInterface";
+import queryString from "query-string";
 
 export const disallowWindowNavigation = () => {
     window.onbeforeunload = (event) => {
@@ -60,6 +62,12 @@ export const usePaging = <T>(
     }
 }
 
+export const getQueryParam = (name: string) => {
+
+    const params = queryString.parse(window.location.search);
+    return params[name] as string;
+};
+
 export type PagingType = ReturnType<typeof usePaging>;
 
 export const useReactQuery = <T>(
@@ -67,13 +75,20 @@ export const useReactQuery = <T>(
     queryFunc: () => Promise<T>,
     enabled?: boolean) => {
 
-    return useQuery(
+    const queryResult = useQuery(
         queryKey,
         queryFunc, {
         retry: false,
         refetchOnWindowFocus: false,
         enabled: enabled
     });
+
+    const { status, ...queryResult2 } = queryResult;
+
+    return {
+        status: status as LoadingStateType,
+        ...queryResult2
+    }
 }
 
 export const hasValue = (obj: any) => {

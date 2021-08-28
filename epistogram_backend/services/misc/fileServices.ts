@@ -1,8 +1,8 @@
 import fs from "fs"
 import { UploadedFile } from "express-fileupload";
-import { globalConfig } from "../../server";
 import { log } from "./logger";
 import { Config, NodeSSH } from "node-ssh";
+import { staticProvider } from "../../staticProvider";
 
 export const getFileExtension = (fileName: string) => {
 
@@ -52,11 +52,11 @@ export const createFile = async (file: UploadedFile, localpath: string, fileName
     const sshClient = new NodeSSH();
 
     await sshClient.connect({
-        host: globalConfig.vps.host,
-        port: parseInt(globalConfig.vps.scpPort),
-        username: globalConfig.vps.username,
-        passphrase: globalConfig.vps.passphrase,
-        privateKey: globalConfig.vps.privateKey
+        host: staticProvider.globalConfig.vps.host,
+        port: parseInt(staticProvider.globalConfig.vps.scpPort),
+        username: staticProvider.globalConfig.vps.username,
+        passphrase: staticProvider.globalConfig.vps.passphrase,
+        privateKey: staticProvider.globalConfig.vps.privateKey
     });
 
     // PUT FILE 

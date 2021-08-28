@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
-import { globalConfig } from "../server";
 import { getUserIdFromRequest, setAuthCookies } from "../services/authentication";
 import { sendResetPasswordMailAsync } from "../services/emailService";
 import { getJWTToken } from "../services/misc/jwtGen";
 import { createInvitedUserAsync, finalizeUserRegistrationAsync } from "../services/userManagementService";
 import { getUserById } from "../services/userService";
+import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 
 export const createInvitedUserAction = async (req: Request) => {
@@ -36,7 +36,7 @@ export const resetUserPasswordAction = async (req: Request) => {
         throw new TypedError("User not found.", "bad request");
 
     // get reset token
-    const resetPawsswordToken = await getJWTToken({ userId: user.id }, globalConfig.mail.tokenMailSecret, "24h");
+    const resetPawsswordToken = await getJWTToken({ userId: user.id }, staticProvider.globalConfig.mail.tokenMailSecret, "24h");
 
     // send mail
     const userFullName = `${user.lastName} ${user.firstName}`;

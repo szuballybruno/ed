@@ -1,39 +1,30 @@
 import { Connection, ConnectionOptions, createConnection } from "typeorm";
 import { createDatabase, dropDatabase } from "typeorm-extension";
+import { Answer } from "./models/entity/Answer";
 import { Course } from "./models/entity/Course";
 import { Exam } from "./models/entity/Exam";
 import { Organization } from "./models/entity/Organization";
+import { Question } from "./models/entity/Question";
+import { QuestionAnswer } from "./models/entity/QuestionAnswer";
 import { Task } from "./models/entity/Task";
 import { User } from "./models/entity/User";
 import { Video } from "./models/entity/Video";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
-import { globalConfig } from "./server";
 import { log } from "./services/misc/logger";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/userManagementService";
+import { staticProvider } from "./staticProvider";
 
 export type TypeORMConnection = Connection;
 
-const typeORMConnectionContainer = {
-    connection: null as TypeORMConnection | null
-};
-
-export const getTypeORMConnection = () => {
-
-    if (!typeORMConnectionContainer.connection)
-        throw new Error("ORM Connection is not (yet) established!");
-
-    return typeORMConnectionContainer.connection;
-};
-
 export const initializeDBAsync = async (recreate: boolean) => {
 
-    const host = globalConfig.database.hostAddress;
-    const port = globalConfig.database.port;
-    const username = globalConfig.database.serviceUserName;
-    const password = globalConfig.database.serviceUserPassword;
-    const databaseName = globalConfig.database.name;
-    const isSyncEnabled = globalConfig.database.isOrmSyncEnabled;
-    const isLoggingEnabled = globalConfig.database.isOrmLoggingEnabled;
+    const host = staticProvider.globalConfig.database.hostAddress;
+    const port = staticProvider.globalConfig.database.port;
+    const username = staticProvider.globalConfig.database.serviceUserName;
+    const password = staticProvider.globalConfig.database.serviceUserPassword;
+    const databaseName = staticProvider.globalConfig.database.name;
+    const isSyncEnabled = staticProvider.globalConfig.database.isOrmSyncEnabled;
+    const isLoggingEnabled = staticProvider.globalConfig.database.isOrmLoggingEnabled;
 
     const postgresOptions = {
         type: "postgres",
@@ -51,7 +42,10 @@ export const initializeDBAsync = async (recreate: boolean) => {
             Organization,
             User,
             Video,
-            Task
+            Task,
+            QuestionAnswer,
+            Question,
+            Answer
         ],
     } as ConnectionOptions;
 
@@ -79,10 +73,11 @@ export const initializeDBAsync = async (recreate: boolean) => {
     }
 
     log("Connecting to database with TypeORM...");
-    typeORMConnectionContainer.connection = await createConnection(postgresOptions);
+    staticProvider.ormConnection = await createConnection(postgresOptions);
 
     // seed DB if no users are found
-    const users = await getTypeORMConnection()
+    const users = await staticProvider
+        .ormConnection
         .getRepository(User)
         .find();
 
@@ -104,7 +99,7 @@ export const recreateDB = async (postgresOptions: ConnectionOptions) => {
 
 export const seedDB = async () => {
 
-    const connection = getTypeORMConnection();
+    const connection = staticProvider.ormConnection;
 
     // seed organizations
     const insertedOrganizationIds = (await connection

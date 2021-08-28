@@ -2,11 +2,11 @@ import { useState } from "@hookstate/core";
 import { Button } from "@material-ui/core";
 import React, { useContext } from 'react';
 import { Redirect } from "react-router";
-import { TypedError } from "../../../../frontendHelpers";
-import { AuthenticationStateContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
-import { useLogInUser } from '../../../../services/authenticationService';
-import applicationRunningState from "../../../../store/application/applicationRunningState";
-import SingleInput from "../../../administration/universal/singleInput/SingleInput";
+import { TypedError } from "../../frontendHelpers";
+import { AuthenticationStateContext } from "../../HOC/data_manager_frame/DataManagerFrame";
+import { useLogInUser } from '../../services/authenticationService';
+import applicationRunningState from "../../store/application/applicationRunningState";
+import SingleInput from "../administration/universal/singleInput/SingleInput";
 import classes from './loginScreen.module.scss';
 
 const LoginScreen = (props: { history: any; }): JSX.Element => {

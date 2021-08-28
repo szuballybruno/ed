@@ -4,7 +4,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // need to be imported for TypeORM
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getOrganizationsAction, getOverviewPageDTOAction, getUsersAction as getUserAdministrationUserListAction } from './api/dataActions';
+import { getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, saveSignupQuestionnaireAnswersAction } from './api/dataActions';
 import { getCurrentVideoAction, setCurrentVideoAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCourses';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
@@ -13,15 +13,16 @@ import { authorizeRequest } from './services/authentication';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/misc/logger";
 import { getAsyncActionHandler, respond } from './utilities/helpers';
-import {getAdminCoursesAction} from "./api/adminCourses";
+import { getAdminCoursesAction } from "./api/adminCourses";
+import { staticProvider } from './staticProvider';
 
 // initialize env
 // require is mandatory here, for some unknown reason
-export const globalConfig = initailizeDotEnvEnvironmentConfig();
+initailizeDotEnvEnvironmentConfig();
 
 const initializeAsync = async () => {
 
-    const recreateDatabaseAtStart = globalConfig.database.recreateDatabaseAtStart;
+    const recreateDatabaseAtStart = staticProvider.globalConfig.database.recreateDatabaseAtStart;
 
     // init DB
     log("Initializing DB...");
@@ -81,6 +82,8 @@ const initializeAsync = async () => {
     expressServer.get('/renew-user-session', renewUserSessionAction);
     expressServer.post('/log-out-user', logOutUserAction);
     expressServer.post('/login-user', getAsyncActionHandler(logInUserAction));
+    expressServer.post('/get-signup-data', getSignupDataAction);
+    expressServer.post('/save-signup-questionnaire-answers', saveSignupQuestionnaireAnswersAction);
 
     // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
@@ -119,8 +122,8 @@ const initializeAsync = async () => {
     });
 
     // listen
-    expressServer.listen(globalConfig.misc.hostPort, () =>
-        log(`Listening on port '${globalConfig.misc.hostPort}'!`));
+    expressServer.listen(staticProvider.globalConfig.misc.hostPort, () =>
+        log(`Listening on port '${staticProvider.globalConfig.misc.hostPort}'!`));
 };
 
 initializeAsync();

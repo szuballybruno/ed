@@ -1,67 +1,73 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { Typography } from "@material-ui/core";
-import queryString from "query-string";
-import React from 'react';
-import { useState } from "react";
-import { hasValue, usePaging } from "../../../../frontendHelpers";
-import FinalizeUserRegistrationDTO from "../../../../models/shared_models/FinalizeUserRegistrationDTO";
-import { QuestionAnswerDTO } from "../../../../models/shared_models/QuestionAnswerDTO";
-import { useNavigation } from "../../../../services/navigatior";
-import { useShowNotification } from "../../../../services/notifications";
-import { finalizeUserRegistartionAsync } from "../../../../services/userManagementService";
-import { SlidesDisplay } from "../../SlidesDisplay";
-import { SignupForm } from "./fragments/SignupForm";
-import { SignupRadioGroup } from "./fragments/SignupRadioGroup";
+import React, { useState } from 'react';
+import { useEffect } from "react";
+import { globalConfig } from "../../configuration/config";
+import { getQueryParam, hasValue, usePaging } from "../../frontendHelpers";
+import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
+import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
+import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
+import { useNavigation } from "../../services/navigatior";
+import { useShowNotification } from "../../services/notifications";
+import { useSaveSignupQuestionnaireAnswers, useSignupData } from "../../services/signupService";
+import { finalizeUserRegistartionAsync } from "../../services/userManagementService";
+import AllNavbar from "../universal/navigation/navbar/AllNavbar";
+import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { LinearProgressWithLabel } from "./ProgressIndicator";
+import { SignupForm } from "./SignupForm";
+import { useRegistrationFinalizationFormState } from "./SignupFormLogic";
+import { SignupRadioGroup } from "./SignupRadioGroup";
 import { SignupWrapper } from "./SignupWrapper";
-import { images } from "./store/images";
-import { questions } from "./store/questions";
+import classes from "./signupPage.module.scss";
 
-const getTokenFromUrl = () => {
+const images = [
+    globalConfig.assetStorageUrl + "/application/indulo.svg",
+    globalConfig.assetStorageUrl + "/application/kerdes1.png",
+    globalConfig.assetStorageUrl + "/application/kerdes2.png",
+    globalConfig.assetStorageUrl + "/application/kerdes3.png",
+    globalConfig.assetStorageUrl + "/application/kerdes4.png",
+    globalConfig.assetStorageUrl + "/application/kerdes5.png",
+    globalConfig.assetStorageUrl + "/application/tanulasi_stilus.png",
+    globalConfig.assetStorageUrl + "/application/szemelyes_adatok.png",
+]
 
-    const params = queryString.parse(window.location.search);
-    return params.token as string;
-};
+export const SignupPage = () => {
 
-const useRegistrationFinalizationFormState = () => {
+    // input
+    const invitaionToken = getQueryParam("token");
+    const { signupData, signupDataError, signupDataStatus } = useSignupData(invitaionToken);
+    const questions = signupData?.questions ?? [];
 
-    const [phoneNumber, setPhoneNumber] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [passwordControl, setPasswordControl] = React.useState("");
-
-    return {
-        phoneNumber,
-        setPhoneNumber,
-
-        password,
-        setPassword,
-
-        passwordControl,
-        setPasswordControl
-    };
-}
-
-export type RegFormStateType = ReturnType<typeof useRegistrationFinalizationFormState>
-
-export const SignupPage = (props: { history: any }) => {
-
+    // util
     const showNotification = useShowNotification();
-    const invitaionToken = getTokenFromUrl();
     const { navigate } = useNavigation();
     const regFormState = useRegistrationFinalizationFormState();
-    const hasInvitationToken = hasValue(invitaionToken);
-    const invitationTokenError = hasInvitationToken ? null : new Error("Nem megfelelo token!");
-    const slideIds = [1, 2, 3, 4];
-    const slidesState = usePaging(slideIds);
+
+    // slides
+    const summaryImageUrl = images[6];
+    const gereetImageUrl = images[0];
+    const finalizeImageUrl = images[7];
+    const slidesState = usePaging([1, 2, 3, 4]);
+
+    // questionnaire 
     const questionnaireState = usePaging(questions, () => slidesState.previous(), () => slidesState.next());
     const currentQuestion = questionnaireState.currentItem;
     const questionnaireProgressbarValue = (questionnaireState.currentIndex / questions.length) * 100;
     const questionnaireProgressLabel = `${questionnaireState.currentIndex + 1}/${questions.length}`;
-    const summaryImageUrl = images[6];
-    const gereetImageUrl = images[0];
-    const finalizeImageUrl = images[7];
+
+    // question answers
     const [questionAnswers, setQuestionAnswers] = useState<QuestionAnswerDTO[]>([]);
     const currentQuestionSelectedAnswerId = questionAnswers
         .filter(x => x.questionId == currentQuestion.questionId)[0]?.answerId as number | null;
+
+    // save questionnaire answers
+    const { saveAnswers, saveAnswersError, saveAnswersStatus } = useSaveSignupQuestionnaireAnswers();
+
+    useEffect(() => {
+
+        if (signupData)
+            setQuestionAnswers(signupData.questionAnswers ?? []);
+    }, [signupDataStatus]);
 
     const submitFinalizationRequestAsync = async () => {
 
@@ -86,7 +92,7 @@ export const SignupPage = (props: { history: any }) => {
         }
     }
 
-    const handleAnswerSelected = (answerId: number) => {
+    const handleAnswerSelectedAsync = async (answerId: number) => {
 
         // save answer
         const newAnswers = [
@@ -98,6 +104,9 @@ export const SignupPage = (props: { history: any }) => {
             } as QuestionAnswerDTO
         ];
         setQuestionAnswers(newAnswers);
+
+        // save answers 
+        await saveAnswers(newAnswers, invitaionToken);
 
         // go to next question
         questionnaireState.next();
@@ -121,7 +130,7 @@ export const SignupPage = (props: { history: any }) => {
         upperComponent={<Typography>{questionnaireProgressLabel}</Typography>}>
         <SignupRadioGroup
             answers={currentQuestion.answers}
-            onAnswerSelected={handleAnswerSelected}
+            onAnswerSelected={x => handleAnswerSelectedAsync(x)}
             selectedAnswerId={currentQuestionSelectedAnswerId} />
     </SignupWrapper>
 
@@ -152,9 +161,27 @@ export const SignupPage = (props: { history: any }) => {
         FinalizeFormSlide
     ];
 
-    return <SlidesDisplay
-        slides={slides}
-        index={slidesState.currentIndex} />;
+    return <Flex direction="column" justify="flex-start" align="center">
+
+        {/* navbar */}
+        <AllNavbar
+            showHighlightedButton={false}
+            menuItems={{
+                "middleMenu": [],
+                "lastItem": {
+                    "menuName": "",
+                    "menuPath": ""
+                }
+            }}
+            desktopClassName={classes.navbar}
+            showLastButton={false} />
+
+        <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]}>
+            <SlidesDisplay
+                slides={slides}
+                index={slidesState.currentIndex} />
+        </LoadingFrame>
+    </Flex>
 };
 
 // updateActivity(
