@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
 import { User } from "./User";
 
@@ -25,6 +25,9 @@ export class Video {
 
     @Column()
     thumbnailUrl: string;
+
+    @Column()
+    orderIndex: number;
 
     // -> users 
     @OneToMany(type => User, user => user.currentVideo)

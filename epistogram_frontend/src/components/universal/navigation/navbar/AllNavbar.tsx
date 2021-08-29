@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
-import classes from "./navbar.module.scss";
-import { NavLink } from "react-router-dom";
+import { Box } from "@chakra-ui/react";
 import { useState } from "@hookstate/core";
-
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { globalConfig } from "../../../../configuration/config";
+import { useIsDesktopView } from "../../../../frontendHelpers";
 // @ts-ignore
 import applicationRunningState from "../../../../store/application/applicationRunningState";
-
-import { globalConfig } from "../../../../configuration/config";
+import classes from "./navbar.module.scss";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
 import MobileDropdown from "./navbar_components/MobileDropdown";
-import { Box } from "@chakra-ui/react";
+
+
 
 interface NavbarIF {
     desktopClassName?: string;
@@ -36,24 +37,6 @@ const Navbar = (props: NavbarIF) => {
 
     const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
     const app = useState(applicationRunningState)
-    const isMobile = useState(0)
-
-    useEffect(() => {
-        isMobile.set(window.innerWidth)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-
-    // Figyeli a jelenlegi ablak szélességet
-    useEffect(() => {
-        window.addEventListener("resize", updateWidth)
-        return () => window.removeEventListener("resize", updateWidth)
-    })
-
-    // Frissíti a jelenlegi ablak szélességet
-    const updateWidth = () => {
-        isMobile.set(window.innerWidth)
-    }
 
     const MobileNavbar = () => <div className={classes.mobileNavbarOuterWrapperIn}>
         <NavLink to={'/kezdolap'}>
@@ -65,7 +48,7 @@ const Navbar = (props: NavbarIF) => {
 
     //console.log(JSON.stringify(user.get()))
 
-    const isDesktop = isMobile.get() > 992;
+    const isDesktop = useIsDesktopView();
 
     const renderDesktopNavbar = () => <DesktopNavbar {...props} />;
 

@@ -4,14 +4,10 @@ import { User } from "../models/entity/User";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
-import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { toExamDTO, toOrganizationDTO, toVideoDTO } from "./mappings";
-import { verifyJWTToken } from "./misc/jwtGen";
-import { log } from "./misc/logger";
-import { getQuestionAnswersAsync, getStartupQuestionsAsync, getReandomQuestion } from "./questionService";
+import { getReandomQuestion } from "./questionService";
 
 export const getOrganizationsAsync = async (userId: number) => {
 

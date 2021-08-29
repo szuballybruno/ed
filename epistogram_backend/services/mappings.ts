@@ -1,25 +1,25 @@
+import { Answer } from "../models/entity/Answer";
 import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
+import { Organization } from "../models/entity/Organization";
+import { Question } from "../models/entity/Question";
+import { QuestionAnswer } from "../models/entity/QuestionAnswer";
+import { Task } from "../models/entity/Task";
 import { User } from "../models/entity/User";
 import { Video } from "../models/entity/Video";
+import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
+import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
+import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
+import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
+import { QuestionDTO } from "../models/shared_models/QuestionDTO";
+import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
-import { Organization } from "../models/entity/Organization";
-import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
-import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
-import { Task } from "../models/entity/Task";
-import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { navPropNotNull } from "../utilities/helpers";
-import { QuestionAnswer } from "../models/entity/QuestionAnswer";
-import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { staticProvider } from "../staticProvider";
-import { Question } from "../models/entity/Question";
-import { QuestionDTO } from "../models/shared_models/QuestionDTO";
-import { Answer } from "../models/entity/Answer";
-import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { navPropNotNull } from "../utilities/helpers";
 
 export const toUserDTO = (user: User) => new UserDTO(
     user.id,
@@ -87,13 +87,16 @@ export const toExamDTO = (exam: Exam) => {
 
 export const toCourseShortDTO = (course: Course) => {
 
+    navPropNotNull(course.videos);
+    navPropNotNull(course.exams);
+
     const thumbnailImageURL = staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
 
     return {
         courseId: course.id,
         title: course.title,
         category: course.category,
-        firstVideoId: course.videos ? course.videos[0].id : null,
+        firstVideoId: course.videos.length != 0 ? course.videos[0].id : null,
         teacherName: "Mr. Teacher Name",
         thumbnailImageURL: thumbnailImageURL
     } as CourseShortDTO;

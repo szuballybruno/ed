@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
 import { User } from "./User";
 
@@ -19,6 +19,9 @@ export class Exam {
 
     @Column()
     thumbnailUrl: string;
+
+    @Column()
+    orderIndex: number;
 
     @OneToMany(type => User, user => user.currentCourse)
     @JoinColumn()

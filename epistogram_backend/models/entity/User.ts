@@ -18,6 +18,12 @@ export class User {
     isActive: boolean;
 
     @Column()
+    isInvitedOnly: boolean;
+
+    @Column({ nullable: true })
+    invitationToken: string;
+
+    @Column()
     email: string;
 
     @Column({ nullable: true })
@@ -86,7 +92,7 @@ export class User {
     @OneToMany(() => Task, task => task.user)
     @JoinColumn()
     tasks: Task[]
-    
+
     // question answers
     @OneToMany(() => QuestionAnswer, qa => qa.answer)
     @JoinColumn()

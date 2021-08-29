@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Exam } from "./Exam";
 import { User } from "./User";
 import { Video } from "./Video";
@@ -19,11 +19,11 @@ export class Course {
     @JoinColumn()
     users: User[];
 
-    @OneToMany(type => Video, video => video.course)
+    @OneToMany(type => Video, video => video.course, { cascade: true })
     @JoinColumn()
     videos: Video[];
 
-    @OneToMany(type => Exam, exam => exam.course)
+    @OneToMany(type => Exam, exam => exam.course, { cascade: true })
     @JoinColumn()
     exams: Exam[];
 }

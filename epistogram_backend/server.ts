@@ -101,7 +101,7 @@ const initializeAsync = async () => {
     expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
 
     // courses 
-    expressServer.post("/get-user-courses", authMiddleware, getAsyncActionHandler(getUserCoursesAction));
+    expressServer.post("/get-user-courses", authMiddleware, getUserCoursesAction);
     expressServer.post("/get-admin-courses", authMiddleware, getAsyncActionHandler(getAdminCoursesAction));
 
     // organizations 

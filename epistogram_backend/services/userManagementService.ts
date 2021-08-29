@@ -51,7 +51,8 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
         lastName: lastName,
         organizationId: organizationId,
         password: hashedDefaultPassword,
-        jobTitle: jobTitle
+        jobTitle: jobTitle,
+        isInvitedOnly: true
     } as User;
 
     const insertResults = await staticProvider
@@ -66,6 +67,14 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
         { userId: userId },
         staticProvider.globalConfig.mail.tokenMailSecret,
         "24h");
+
+    await await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .save({
+            id: userId,
+            invitationToken: invitationToken
+        });
 
     if (sendEmail) {
 
@@ -103,7 +112,9 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
         .save({
             id: tokenPayload.userId,
             phoneNumber: phoneNumber,
-            password: hashedPassword
+            password: hashedPassword,
+            invitationToken: "",
+            isInvitedOnly: false
         });
 
     const { accessToken, refreshToken } = await getUserLoginTokens(userDTO);

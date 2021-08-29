@@ -123,31 +123,57 @@ export const seedDB = async () => {
         .map(x => x.id as number);
 
     // seed courses
-    const courseInsertedIds = (await connection
+    await connection
         .getRepository(Course)
-        .insert([
+        .save([
             {
                 title: "Java Course",
-                category: "Programming"
+                category: "Programming",
+                exams: [
+                    {
+                        title: "New Exam 1",
+                        subtitle: "Fantastic exam 1",
+                        thumbnailUrl: "",
+                        description: "",
+                        orderIndex: 1
+                    },
+                    {
+                        title: "New Exam 2",
+                        subtitle: "Fantastic exam 2",
+                        thumbnailUrl: "",
+                        description: "",
+                        orderIndex: 3
+                    },
+                    {
+                        title: "New Exam 3",
+                        subtitle: "Fantastic exam 3",
+                        thumbnailUrl: "",
+                        description: "",
+                        orderIndex: 4
+                    }
+                ],
+                videos: [
+                    {
+                        title: "Video 1",
+                        subtitle: "Fantastic Video 1",
+                        description: "Very very fantastic video 1 description",
+                        length: 141,
+                        url: "https://player.vimeo.com/video/541638710",
+                        thumbnailUrl: "https://dev.epistogram.com/assets/epistogram/videos/thumbnail1.png",
+                        orderIndex: 0
+                    },
+                    {
+                        title: "Video 2",
+                        subtitle: "Fantastic Video 2",
+                        description: "Very very fantastic video 2 description",
+                        length: 465,
+                        url: "https://player.vimeo.com/video/515672960",
+                        thumbnailUrl: "https://yieldbird.com/wp-content/uploads/2019/03/fota.png",
+                        orderIndex: 2
+                    }
+                ]
             }
-        ]))
-        .identifiers
-        .map(x => x.id as number);
-
-    // exams 
-    const examInsertIds = (await connection
-        .getRepository(Exam)
-        .insert([
-            {
-                title: "New Exam 1",
-                subtitle: "Fantastic exam 1",
-                courseId: courseInsertedIds[0],
-                thumbnailUrl: "",
-                description: ""
-            }
-        ]))
-        .identifiers
-        .map(x => x.id as number);
+        ]);
 
     // seed users
     const { invitationToken, user } = await createInvitedUserWithOrgAsync(

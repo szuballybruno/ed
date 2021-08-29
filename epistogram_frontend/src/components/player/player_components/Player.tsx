@@ -120,8 +120,6 @@ const Player = (props: { videoItem: VideoDTO }) => {
                         videoLength={videoLength}
                         videoUrl={videoUrl} />
 
-                    {/* <Box width="100%" height="100%" bg="red"></Box> */}
-
                     {/* video controls */}
                     <div className={classes.playerControllerWrapper}>
 

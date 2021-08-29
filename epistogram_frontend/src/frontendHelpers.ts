@@ -1,8 +1,9 @@
+import { useMediaQuery } from "@chakra-ui/react";
+import queryString from "query-string";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 import { LoadingStateType } from "./store/application/ApplicationRunningStateInterface";
-import queryString from "query-string";
 
 export const disallowWindowNavigation = () => {
     window.onbeforeunload = (event) => {
@@ -69,6 +70,12 @@ export const getQueryParam = (name: string) => {
 };
 
 export type PagingType = ReturnType<typeof usePaging>;
+
+export const useIsDesktopView = () => {
+
+    const [isDesktopView] = useMediaQuery("(min-width: 980px)")
+    return isDesktopView;
+}
 
 export const useReactQuery = <T>(
     queryKey: any[],

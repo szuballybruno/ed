@@ -3,6 +3,7 @@ import { useState } from "@hookstate/core";
 import React, { useEffect } from 'react';
 import { useParams, withRouter } from "react-router";
 import menuItems from "../../configuration/menuItems.json";
+import { useIsDesktopView } from "../../frontendHelpers";
 import { DialogFrame } from "../../HOC/dialog_frame/DialogFrame";
 import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
 import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
@@ -64,6 +65,8 @@ const PlayerPage = (props: { history: any }) => {
         navigate(`/watch/${user.userData.currentCourse._id.get()}/${videoId}`);
     }
 
+    const isDesktopView = useIsDesktopView();
+
     return (
         <Flex width="100%" minHeight="100vh" align="stretch" justify="stretch">
             <DialogFrame firstButtonOnClick={setCurrentVideo} secondButtonOnClick={redirectToCourseSearch}>
@@ -85,13 +88,13 @@ const PlayerPage = (props: { history: any }) => {
 
                                 <Box>
                                     <GeneratedInfo />
-                                    {currentWidth <= 993 ? <VideoList /> : null}
+                                    {isDesktopView ? <VideoList /> : null}
                                     <NavigationalDivider />
                                     <Descriptions />
                                     <Copyright />
                                 </Box>
                             </div>
-                            {currentWidth >= 993 ? <VideoList /> : null}
+                            {isDesktopView ? <VideoList /> : null}
                         </div>
                     </LoadingFrame>
                 </MainWrapper>

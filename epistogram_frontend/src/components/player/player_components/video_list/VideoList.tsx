@@ -1,26 +1,23 @@
-import React from 'react';
-import classes from './videoList.module.scss';
 import { useState } from "@hookstate/core";
-import userDetailsState from "../../../../store/user/userSideState";
-import instance from "../../../../services/axiosInstance";
-import { Cookies } from "react-cookie";
-import ListItem from "../../../universal/atomic/listItem/ListItem";
-import applicationRunningState from "../../../../store/application/applicationRunningState";
 import { Slider } from "@material-ui/core";
-import { item } from "../../../../store/types/item";
-import { useParams } from "react-router";
-import { updateActivity } from "../../../../services/updateActivity";
-import { DialogFrame } from "../../../../HOC/dialog_frame/DialogFrame";
+import React from 'react';
 import { useHistory } from "react-router-dom";
-import { globalConfig } from "../../../../configuration/config";
-import { currentOrigin } from '../../../../Environemnt';
+import { VideoDTO } from "../../../../models/shared_models/VideoDTO";
+import applicationRunningState from "../../../../store/application/applicationRunningState";
+import { item } from "../../../../store/types/item";
+import userDetailsState from "../../../../store/user/userSideState";
+import ListItem from "../../../universal/atomic/listItem/ListItem";
+import classes from './videoList.module.scss';
 
 const VideoList = () => {
+
+    const videoList = [] as VideoDTO[];
+    const currentCourseItemId = 0;
+    const courseId = 0;
+
     const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
     const history = useHistory()
-
-    const { courseId, id } = useParams<{ courseId: string, id: string }>();
 
     const currentLoadedItem = useState({
         _id: "",
@@ -45,8 +42,6 @@ const VideoList = () => {
             validAnswer: ""
         }],
     })
-
-    const cookies = new Cookies();
 
     const marks = [
         {
@@ -76,7 +71,6 @@ const VideoList = () => {
         app.alert.showAlert.set(false)
     }
 
-
     const setCurrentItem = (item: item) => {
         if (app.showPlayerOrExam.get()) {
             app.alert.set({
@@ -95,82 +89,94 @@ const VideoList = () => {
             app.shouldViewOverlay.set(false)
             app.showPlayerOrExam.set(item.type === "exam")
             app.activeVideoListItem.set(item._id)
-            instance.patch(`/users/${cookies.get("userId")}/course/${courseId}/item/${id}`).then((res) => {
-                if (res.status === 201) {
-                    user.userData.currentItem.set(res.data.currentItem)
-                    user.userData.currentCourse.set(res.data.currentCourse)
-                }
-            }).catch((e) => {
 
-            })
+            // instance.patch(`/users/${cookies.get("userId")}/course/${courseId}/item/${id}`).then((res) => {
+            //     if (res.status === 201) {
+            //         user.userData.currentItem.set(res.data.currentItem)
+            //         user.userData.currentCourse.set(res.data.currentCourse)
+            //     }
+            // }).catch((e) => {
+
+            // })
         }
     }
 
+    return (
+        <div className={classes.videoListWrapper}>
+            <div className={classes.videoListInnerWrapper}>
+                <div className={classes.learningTypeSelector}>
+                    <Slider className={classes.slider}
+                        defaultValue={30}
+                        aria-labelledby="discrete-slider"
+                        step={30}
+                        marks={marks}
+                        min={30}
+                        max={90} />
+                </div>
+                <div className={classes.videoWrapper}>
+                    {videoList
+                        .map((item, index) => {
 
-    return user.userData.currentCourse.name.get() ? <div className={classes.videoListWrapper}>
-        <div className={classes.videoListInnerWrapper}>
-            <div className={classes.learningTypeSelector}>
-                <Slider className={classes.slider}
-                    defaultValue={30}
-                    aria-labelledby="discrete-slider"
-                    step={30}
-                    marks={marks}
-                    min={30}
-                    max={90} />
-            </div>
-            <div className={classes.videoWrapper}>
-                {user.userData.currentCourse.items.get().map((item, index) => {
-                    return item.type === "video" ?
-                        <ListItem active={app.activeVideoListItem.get() === item._id}
-                            key={index}
-                            mainTitle={item.title}
-                            subTitle={item.subTitle}
-                            to={"/watch/" + user.userData.currentCourse._id.get() + "/" + item._id}
-                            thumbnailUrl={item.thumbnailUrl}
-                            onClick={() => {
-                                updateActivity("",
-                                    "selectVideo",
-                                    window.location.href,
-                                    "VideoList-ListItems-SelectsNewVideo",
-                                    item.title,
-                                    "collBasedPassive",
-                                    "A felhasználó kiválaszt egy videót",
-                                    true,
-                                    undefined,
-                                    undefined,
-                                    "videos",
-                                    "_id",
-                                    item._id,
-                                    index.toString(),
-                                    currentOrigin + "watch/" + user.userData.currentCourse._id.get() + "/" + item._id)
-                                //updateActivity("collBasedActive", "selectVideo", "A felhasználó kiválaszt egy másik videót", window.location.href, "VideoList-ListItems-SelectsNewVideo", item.videoMainTitle, "" + index)
-                                setCurrentItem(item)
-                            }} /> :
-                        <ListItem active={app.activeVideoListItem.get() === item._id}
-                            className={app.showPlayerOrExam.get() ? [classes.quiz, classes.selectedQuiz].join(' ') : [classes.quiz].join('')}
-                            mainTitle={"Vizsga"}
-                            subTitle={"Teszteld a tudásod"}
-                            onClick={() => {
-                                updateActivity("", "selectExam",
-                                    window.location.href,
-                                    "VideoList-ListItems-SelectsNewExam",
-                                    item.name as string,
-                                    "collBasedPassive",
-                                    "A felhasználó kiválaszt egy vizsgát",
-                                    true,
-                                    undefined,
-                                    undefined,
-                                    "exams",
-                                    "_id",
-                                    item._id,
-                                    index.toString(),
-                                    currentOrigin + "/watch/" + user.userData.currentCourse._id.get() + "/" + item._id)
-                                setCurrentItem(item)
-                            }} />
-                })}
+                            const isActiveItem = item.id == currentCourseItemId;
+
+                            return item.type === "video"
+                                ? <ListItem
+                                    active={isActiveItem}
+                                    key={index}
+                                    mainTitle={item.title}
+                                    subTitle={item.subTitle}
+                                    to={"/watch/" + courseId + "/" + item.id}
+                                    thumbnailUrl={item.thumbnailUrl}
+                                    onClick={() => {
+
+                                        //updateActivity("collBasedActive", "selectVideo", "A felhasználó kiválaszt egy másik videót", window.location.href, "VideoList-ListItems-SelectsNewVideo", item.videoMainTitle, "" + index)
+                                        // setCurrentItem(item)
+                                    }} />
+                                : <ListItem
+                                    active={isActiveItem}
+                                    className={app.showPlayerOrExam.get() ? [classes.quiz, classes.selectedQuiz].join(' ') : [classes.quiz].join('')}
+                                    mainTitle={"Vizsga"}
+                                    subTitle={"Teszteld a tudásod"}
+                                    onClick={() => {
+
+                                        // setCurrentItem(item)
+                                    }} />
+                        })}
+                </div>
             </div>
         </div>
-    </div> : <div style={{ backgroundColor: "white" }} />
+    )
 }
 
 export default VideoList
+
+// updateActivity("",
+//                                             "selectVideo",
+//                                             window.location.href,
+//                                             "VideoList-ListItems-SelectsNewVideo",
+//                                             item.title,
+//                                             "collBasedPassive",
+//                                             "A felhasználó kiválaszt egy videót",
+//                                             true,
+//                                             undefined,
+//                                             undefined,
+//                                             "videos",
+//                                             "_id",
+//                                             item.id,
+//                                             index.toString(),
+//                                             currentOrigin + "watch/" + user.userData.currentCourse._id.get() + "/" + item._id)
+
+// updateActivity("", "selectExam",
+//                                     window.location.href,
+//                                     "VideoList-ListItems-SelectsNewExam",
+//                                     item.name as string,
+//                                     "collBasedPassive",
+//                                     "A felhasználó kiválaszt egy vizsgát",
+//                                     true,
+//                                     undefined,
+//                                     undefined,
+//                                     "exams",
+//                                     "_id",
+//                                     item._id,
+//                                     index.toString(),
+//                                     currentOrigin + "/watch/" + user.userData.currentCourse._id.get() + "/" + item._id)
