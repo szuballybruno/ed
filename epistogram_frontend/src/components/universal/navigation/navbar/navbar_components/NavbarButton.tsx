@@ -1,27 +1,24 @@
-import classes from "./navbarButton.module.scss";
-import {useState} from "@hookstate/core";
-import {NavLink} from "react-router-dom";
+import { useState } from "@hookstate/core";
+import { Button } from "@material-ui/core";
 import React from "react";
-import applicationRunningState from "../../../../../store/application/applicationRunningState";
-import {globalConfig} from "../../../../../configuration/config";
-import {updateActivity} from "../../../../../services/updateActivity";
-import {Button, Typography} from "@material-ui/core";
+import { NavLink } from "react-router-dom";
 import { currentOrigin } from "../../../../../Environemnt";
+import { updateActivity } from "../../../../../services/updateActivity";
+import applicationRunningState from "../../../../../store/application/applicationRunningState";
+import classes from "./navbarButton.module.scss";
 
 
 const NavbarButton = (props: {
-        className?: string,
-        activeClassName?: string,
-        key: number,
-        index: number,
-        menuName?: string,
-        menuPath: string | null
-        showImage?: boolean
-    }) => {
+    className?: string,
+    activeClassName?: string,
+    key: number,
+    index: number,
+    menuName?: string,
+    menuPath: string | null
+    showImage?: boolean
+}) => {
 
     const app = useState(applicationRunningState)
-
-
 
     return props.menuPath ?
         <NavLink activeClassName={props.activeClassName} to={props.menuPath} onClick={() => {

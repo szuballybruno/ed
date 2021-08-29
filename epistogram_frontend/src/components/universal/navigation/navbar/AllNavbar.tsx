@@ -78,7 +78,7 @@ const Navbar = (props: NavbarIF) => {
             : <MobileNavbar />
     }
 
-    return <Box height={isDesktop ? "80px" : "60px"} transition="0.6s">
+    return <Box height={isDesktop ? "80px" : "60px"} >
         {isDesktop
             ? renderDesktopNavbar()
             : renderMobileNavbar()}

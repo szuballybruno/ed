@@ -1,8 +1,6 @@
 import React from 'react';
-import classes from './menuItemList.module.scss'
+import classes from './menuItemList.module.scss';
 import NavbarButton from "./NavbarButton";
-import {updateActivity} from "../../../../../services/updateActivity";
-import {Button} from "@material-ui/core";
 
 const MenuItemList = (props: {
     menuItems: {
@@ -12,12 +10,13 @@ const MenuItemList = (props: {
 }) => {
     return <div className={classes.navbarNavLinksWrapper}>
         {props.menuItems.map((item, index) => {
-            return <NavbarButton activeClassName={classes.fos}
-                                 key={index}
-                                 index={index}
+            return <NavbarButton
+                activeClassName={classes.fos}
+                key={index}
+                index={index}
 
-                                 menuName={item.menuName}
-                                 menuPath={item.menuPath} />
+                menuName={item.menuName}
+                menuPath={item.menuPath} />
         })}
     </div>
 }

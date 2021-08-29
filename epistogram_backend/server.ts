@@ -3,6 +3,7 @@ import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // need to be imported for TypeORM
+import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, saveSignupQuestionnaireAnswersAction } from './api/dataActions';
 import { getCurrentVideoAction, setCurrentVideoAction } from './api/playerActions';
@@ -12,9 +13,8 @@ import { initializeDBAsync } from './database';
 import { authorizeRequest } from './services/authentication';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/misc/logger";
-import { getAsyncActionHandler, respond } from './utilities/helpers';
-import { getAdminCoursesAction } from "./api/adminCourses";
 import { staticProvider } from './staticProvider';
+import { getAsyncActionHandler, respond } from './utilities/helpers';
 
 // initialize env
 // require is mandatory here, for some unknown reason

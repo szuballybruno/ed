@@ -98,16 +98,14 @@ const TasksView = (props: { currentTasks: CurrentTasksDTO }) => {
         throw new Error("Unknown task objective type!");
     }
 
-    console.log(props.currentTasks.tasks);
-
     return <List className={classes.tasksList}>
 
         {props
             .currentTasks
             .tasks
-            .map(currentTask => {
+            .map((currentTask, index) => {
 
-                return <ListItem button>
+                return <ListItem key={index} button >
                     <ListItemIcon>
                         {getListIcon(currentTask.objective)}
                     </ListItemIcon>
