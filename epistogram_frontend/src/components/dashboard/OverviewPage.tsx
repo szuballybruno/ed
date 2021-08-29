@@ -1,4 +1,5 @@
 //BASIC
+import { Flex } from "@chakra-ui/react";
 import { Divider, Grid } from "@material-ui/core";
 import React, { ReactNode } from 'react';
 import { useContext } from "react";

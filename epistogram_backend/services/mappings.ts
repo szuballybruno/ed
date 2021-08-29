@@ -124,6 +124,7 @@ export const toQuestionDTO = (q: Question) => {
 export const toAnswerDTO = (a: Answer) => {
 
     return {
+        answerId: a.id,
         answerText: a.text
     } as AnswerDTO;
 }

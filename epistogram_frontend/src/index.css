@@ -7,11 +7,18 @@
   url("configuration/fonts/Poppins-Light.ttf") format("ttf");
 }
 
+html {
+  width: 100vh;
+}
+
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
+  overflow-x: hidden;
+  width: 100vh;
+  min-height: 100vh;
 }
 
 code {

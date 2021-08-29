@@ -1,20 +1,21 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import classes from "./navbar.module.scss";
-import {NavLink} from "react-router-dom";
-import {useState} from "@hookstate/core";
+import { NavLink } from "react-router-dom";
+import { useState } from "@hookstate/core";
 
 // @ts-ignore
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 
-import {globalConfig} from "../../../../configuration/config";
+import { globalConfig } from "../../../../configuration/config";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
 import MobileDropdown from "./navbar_components/MobileDropdown";
+import { Box } from "@chakra-ui/react";
 
-interface NavbarIF  {
+interface NavbarIF {
     desktopClassName?: string;
     homeUrl?: string;
     menuItems: {
-        middleMenu:  {
+        middleMenu: {
             menuName: string;
             menuPath: string
         }[];
@@ -32,8 +33,8 @@ interface NavbarIF  {
 }
 
 const Navbar = (props: NavbarIF) => {
-    const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
 
+    const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
     const app = useState(applicationRunningState)
     const isMobile = useState(0)
 
@@ -54,26 +55,34 @@ const Navbar = (props: NavbarIF) => {
         isMobile.set(window.innerWidth)
     }
 
-
-
     const MobileNavbar = () => <div className={classes.mobileNavbarOuterWrapperIn}>
         <NavLink to={'/kezdolap'}>
             <div className={classes.mobileNavbarLogoWrapper}>
-                <img alt="EpistoGram Logo" src={logoUrl}/>
+                <img alt="EpistoGram Logo" src={logoUrl} />
             </div>
         </NavLink>
     </div>
 
     //console.log(JSON.stringify(user.get()))
 
-    return isMobile.get() > 992 ?
-        <DesktopNavbar {...props} /> :
-        (app.hamburgerButtonState.get() ?
-            <div className={classes.mobileNavbarOuterWrapperOut}>
+    const isDesktop = isMobile.get() > 992;
+
+    const renderDesktopNavbar = () => <DesktopNavbar {...props} />;
+
+    const renderMobileNavbar = () => {
+        return app.hamburgerButtonState.get()
+            ? <div className={classes.mobileNavbarOuterWrapperOut}>
                 <MobileNavbar />
                 <MobileDropdown menuItems={props.menuItems} showHighlightedButton={props.showHighlightedButton} />
-            </div> :
-            <MobileNavbar />)
+            </div>
+            : <MobileNavbar />
+    }
+
+    return <Box height={isDesktop ? "80px" : "60px"} transition="0.6s">
+        {isDesktop
+            ? renderDesktopNavbar()
+            : renderMobileNavbar()}
+    </Box>
 }
 
 export default Navbar

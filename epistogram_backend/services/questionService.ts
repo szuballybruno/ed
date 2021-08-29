@@ -12,7 +12,7 @@ export const getStartupQuestionsAsync = async () => {
         .ormConnection
         .getRepository(Question)
         .createQueryBuilder("q")
-        .where("q.isStartupQuestion = true")
+        .where("q.isSignupQuestion = true")
         .leftJoinAndSelect("q.answers", "a")
         .getMany();
 

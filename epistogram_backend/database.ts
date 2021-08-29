@@ -239,21 +239,7 @@ export const seedDB = async () => {
 
     await connection
         .getRepository(Question)
-        .insert(questions);
-
-    const repo = connection
-        .getRepository(TestParent);
-
-    await repo.save([
-        {
-            name: "parent",
-            children: [
-                {
-                    name: "child"
-                }
-            ]
-        }
-    ]);
+        .save(questions);
 }
 
 // const users = [

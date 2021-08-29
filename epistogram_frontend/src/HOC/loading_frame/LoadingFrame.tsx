@@ -10,8 +10,6 @@ export const LoadingFrame = (props: FlexProps & {
 
     const { loadingState, error, ...flexProps } = props;
 
-    console.log(loadingState);
-
     const getLoadingState = (loadingState: LoadingStateType | LoadingStateType[]) => {
 
         if (isArray(loadingState)) {
@@ -55,14 +53,14 @@ export const LoadingFrame = (props: FlexProps & {
             return <FailedComponent error={singleError}></FailedComponent>
 
         if (state == "success")
-            return <Box flex="1" height="100%">
+            return <Box id="loadingFrameContentBox" width="100%" height="100%">
                 {props.children}
             </Box>;
 
         throw new Error(`Loading state is not reckognised: ${state}!`);
     }
 
-    return <Flex height="100%" width="100%" justify="center" align="center" {...flexProps}>
+    return <Flex id="loadingFrame" height="100%" width="100%" justify="center" align="center" {...flexProps}>
         {getLoadingComponent()}
     </Flex>;
 }

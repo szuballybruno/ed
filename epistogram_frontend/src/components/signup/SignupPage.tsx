@@ -65,8 +65,10 @@ export const SignupPage = () => {
 
     useEffect(() => {
 
-        if (signupData)
+        if (signupData) {
+
             setQuestionAnswers(signupData.questionAnswers ?? []);
+        }
     }, [signupDataStatus]);
 
     const submitFinalizationRequestAsync = async () => {
