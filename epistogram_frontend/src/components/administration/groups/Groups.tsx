@@ -1,17 +1,16 @@
 import React, {useEffect} from 'react';
 import AdminDashboardHeader from "../universal/adminDashboardHeader/AdminDashboardHeader";
-import AdminDashboardSearch from "../universal/searchBar/AdminDashboardSearch";
+import {AdminDashboardSearch} from "../universal/searchBar/AdminDashboardSearch";
 import adminSideState from "../../../store/admin/adminSideState";
 import instance from "../../../services/axiosInstance";
 import {none, useState} from "@hookstate/core";
-import AdminDashboardSearchItem from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
+import {AdministrationListItem} from "../universal/adminDashboardSearchItem/AdministrationListItem";
 import {Route, Switch} from "react-router-dom";
 import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
 import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
 import {group} from "../../../store/types/group";
 import {AxiosResponse} from "axios";
-import {globalConfig} from "../../../configuration/config";
-import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
+import {UserStatistics} from "../users/userStatistics/UserStatistics";
 import {AddGroup} from "./groups_components/AddGroup";
 import {Add} from "@material-ui/icons";
 import {Fab} from "@material-ui/core";
@@ -45,12 +44,12 @@ export const Groups: React.FunctionComponent = () => {
                     <AdminDashboardSearch searchChangeHandler={searchChangeHandler} name={"searchData"} title={"Csoportok"}/>
                     <AdminDashboardList>
                         {admin.groups.get().map((group, index) => {
-                            return <AdminDashboardSearchItem title={group.groupName}
-                                                             chips={[
+                            return <AdministrationListItem title={group.groupName}
+                                                           chips={[
                                                                  {label: "1", icon: "person"}]}
 
-                                                             key={group._id}
-                                                             actions={[
+                                                           key={group._id}
+                                                           searchItemButtons={[
                                                                  {
                                                                      selectedComponent: "editCourse",
                                                                      icon: "edit",
@@ -71,11 +70,7 @@ export const Groups: React.FunctionComponent = () => {
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }
                                                                  },]
-                                                             }
-                                                             userActionComponents={{
-                                                                 editCourse: <div>asd</div>,
-                                                                 videoStatistics: <UserStatistics />
-                                                             }}/>})}
+                                                             }/>})}
 
                     </AdminDashboardList>
                     <Fab color="primary"

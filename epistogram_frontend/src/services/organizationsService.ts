@@ -3,7 +3,6 @@ import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { httpGetAsync } from "./httpClient";
 
 export const useOrganizations = () => {
-
     const url = "organizations/get-organizations";
     const { data, status, isLoading } = useQuery(
         ["getOrganizations"],

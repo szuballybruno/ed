@@ -1,18 +1,11 @@
 import React from 'react';
-import classes from './administration.module.scss'
+import classes from './users/userList/administration.module.scss'
 import userDetailsState from "../../store/user/userSideState";
 import { useState } from "@hookstate/core";
-import { UserAdministartionPage } from "./users/UserAdministartionPage";
-import { Redirect, Route, Switch, withRouter } from "react-router-dom";
-import CourseAdministartion from "./courses/CourseAdministartion";
+import { withRouter } from "react-router-dom";
 import { globalConfig } from "../../configuration/config";
 import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
-import Statistics from "./statistics/Statistics";
 import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
-import { ManageArticles } from "./articles/ManageArticles";
-import { Votes } from "./votes/Votes";
-import { Groups } from "./groups/Groups";
-import { Organizations } from "./organizations/Organizations";
 import {
     Chip,
     Divider,
@@ -23,6 +16,7 @@ import menuItems from "../../configuration/menuItems.json";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { AdminAddHeader } from "./universal/adminAddHeader/AdminAddHeader";
 import {SaveBar} from "./universal/saveBar/SaveBar";
+import {AdministrationRouting} from "./routing/AdministrationRouting";
 
 const Administration = (props: { match: { url: string; } }) => {
 
@@ -62,33 +56,7 @@ const Administration = (props: { match: { url: string; } }) => {
             </LeftPanel>
             <RightPanel>
                 <AdminAddHeader />
-                <Switch>
-                    <Route exact path={'/admin'}>
-                        <Redirect to={'/admin/statistics'} />
-                    </Route>
-                    <Route path={'/admin/statistics'}>
-                        <Statistics />
-                    </Route>
-                    <Route path={'/admin/manage/users'}>
-                        <UserAdministartionPage />
-                    </Route>
-                    <Route path={'/admin/manage/courses'}>
-                        <CourseAdministartion />
-                    </Route>
-                    <Route path={'/admin/manage/articles'}>
-                        <ManageArticles />
-                    </Route>
-                    <Route path={'/admin/manage/votes'}>
-                        <Votes />
-                    </Route>
-                    <Route path={'/admin/manage/groups'}>
-                        <Groups />
-                    </Route>
-                    <Route path={'/admin/manage/organizations'}>
-                        <Organizations />
-                    </Route>
-                </Switch>
-
+                <AdministrationRouting />
                 <SaveBar open={true} />
             </RightPanel>
         </ContentWrapper>
