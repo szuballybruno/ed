@@ -30,6 +30,8 @@ export const AdminAddHeader = () => {
         } : {}}>{props.iconComponent}{props.title}</Typography>
     </NavLink>
 
+    //TODO: Navigate back to previously edited course or video on click e.g.: not to :courseId but the real courseId
+
     return <div className={classes.breadCrumbsWrapper}>
         <Breadcrumbs>
             {statisticsMatches && <BreadcrumbLink to={"/admin/statistics"} title={"Statisztika"} iconComponent={<BarChart color={"secondary"} />} />}

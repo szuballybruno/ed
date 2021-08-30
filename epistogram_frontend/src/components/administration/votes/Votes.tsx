@@ -1,16 +1,15 @@
 import React, {useEffect} from 'react';
 import AdminDashboardHeader from "../universal/adminDashboardHeader/AdminDashboardHeader";
-import AdminDashboardSearch from "../universal/searchBar/AdminDashboardSearch";
+import {AdminDashboardSearch} from "../universal/searchBar/AdminDashboardSearch";
 import adminSideState from "../../../store/admin/adminSideState";
 import instance from "../../../services/axiosInstance";
 import {none, useState} from "@hookstate/core";
-import AdminDashboardSearchItem from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
+import {AdministrationListItem} from "../universal/adminDashboardSearchItem/AdministrationListItem";
 import {Route, Switch} from "react-router-dom";
 import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
 import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
 import {AxiosResponse} from "axios";
-import {globalConfig} from "../../../configuration/config";
-import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
+import {UserStatistics} from "../users/userStatistics/UserStatistics";
 import {AddVote} from "./votes_components/AddVote";
 import {vote} from "../../../store/types/vote";
 import {Add} from "@material-ui/icons";
@@ -45,13 +44,13 @@ export const Votes: React.FunctionComponent = () => {
                     <AdminDashboardSearch searchChangeHandler={searchChangeHandler} name={"searchData"} title={"Szavazások"}/>
                     <AdminDashboardList>
                         {admin.votes.get().map((vote, index) => {
-                            return <AdminDashboardSearchItem title={vote.voteQuestion}
-                                                             chips={[
+                            return <AdministrationListItem title={vote.voteQuestion}
+                                                           chips={[
                                                                  {label: (vote.voteFirstAnswerCount + vote.voteSecondAnswerCount).toString(), icon: "vote"},
                                                                  {label: `${vote.voteFirstAnswerCount} szavazat az első opcióra`, icon: ""},
                                                                  {label: `${vote.voteSecondAnswerCount} szavazat a második opcióra`, icon: ""}]}
-                                                             key={vote._id}
-                                                             actions={[
+                                                           key={vote._id}
+                                                           searchItemButtons={[
                                                                  {
                                                                      selectedComponent: "editCourse",
                                                                      icon: "edit",
@@ -72,11 +71,7 @@ export const Votes: React.FunctionComponent = () => {
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }
                                                                  },]
-                                                             }
-                                                             userActionComponents={{
-                                                                 editCourse: <div>asd</div>,
-                                                                 videoStatistics: <UserStatistics />
-                                                             }}/>})}
+                                                             }/>})}
 
                     </AdminDashboardList>
                     <Fab color="primary"

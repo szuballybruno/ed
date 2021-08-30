@@ -1,16 +1,15 @@
 import React, {useEffect} from 'react';
 import AdminDashboardHeader from "../universal/adminDashboardHeader/AdminDashboardHeader";
-import AdminDashboardSearch from "../universal/searchBar/AdminDashboardSearch";
+import {AdminDashboardSearch} from "../universal/searchBar/AdminDashboardSearch";
 import adminSideState from "../../../store/admin/adminSideState";
 import instance from "../../../services/axiosInstance";
 import {none, useState} from "@hookstate/core";
-import AdminDashboardSearchItem from "../universal/adminDashboardSearchItem/AdminDashboardSearchItem";
+import {AdministrationListItem} from "../universal/adminDashboardSearchItem/AdministrationListItem";
 import {Route, Switch} from "react-router-dom";
 import {AdminDashboardWrapper} from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
 import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboardList";
 import {AxiosResponse} from "axios";
-import {globalConfig} from "../../../configuration/config";
-import UserStatistics from "../users/users_components/userStatistics/UserStatistics";
+import {UserStatistics} from "../users/userStatistics/UserStatistics";
 import {AddOrganization} from "./organizations_components/AddOrganization";
 import {organization} from "../../../store/types/organization";
 import {Add} from "@material-ui/icons";
@@ -45,12 +44,12 @@ export const Organizations: React.FunctionComponent = () => {
                     <AdminDashboardSearch searchChangeHandler={searchChangeHandler} name={"searchData"} title={"Cégek"}/>
                     <AdminDashboardList>
                         {admin.organizations.get().map((organization, index) => {
-                            return <AdminDashboardSearchItem title={organization.organizationName}
-                                                             chips={[
+                            return <AdministrationListItem title={organization.organizationName}
+                                                           chips={[
                                                                  {label: "1", icon: "person"},
                                                                  {label: "1", icon: "person"}]}
-                                                             key={organization._id}
-                                                             actions={[
+                                                           key={organization._id}
+                                                           searchItemButtons={[
                                                                  {
                                                                      selectedComponent: "editCourse",
                                                                      icon: "edit",
@@ -71,11 +70,7 @@ export const Organizations: React.FunctionComponent = () => {
                                                                          }).catch(e => console.error(e.toString()))
                                                                      }
                                                                  },]
-                                                             }
-                                                             userActionComponents={{
-                                                                 editCourse: <div>asd</div>,
-                                                                 videoStatistics: <UserStatistics />
-                                                             }}/>})}
+                                                             }/>})}
 
                     </AdminDashboardList>
                     <Fab color="primary"
