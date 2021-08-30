@@ -72,7 +72,8 @@ export const toVideoDTO = (video: Video) => {
         subTitle: video.subtitle,
         title: video.title,
         type: "video",
-        thumbnailUrl: video.thumbnailUrl
+        thumbnailUrl: video.thumbnailUrl,
+        url: video.url
     } as VideoDTO;
 }
 

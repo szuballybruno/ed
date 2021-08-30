@@ -1,3 +1,4 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { Slider } from "@material-ui/core";
 import React from 'react';
 import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
@@ -16,7 +17,7 @@ export const CourseItemList = (params: {
     const navigateToCourseItem = params.navigateToCourseItem;
 
     return (
-        <div className={classes.videoListWrapper}>
+        <Box className={classes.videoListWrapper} bg="#f6f6f6">
             <div className={classes.videoListInnerWrapper}>
 
                 {/* learning type selector */}
@@ -56,11 +57,11 @@ export const CourseItemList = (params: {
                                 mainTitle={courseItem.title}
                                 subTitle={courseItem.subTitle}
                                 thumbnailUrl={courseItem.thumbnailUrl}
-                                onClick={() => navigateToCourseItem(courseItem.id, courseItem.type)} />;
+                                onClick={() => navigateToCourseItem(courseItem.id, courseItem.type)} />
                         })}
                 </div>
             </div>
-        </div>
+        </Box>
     )
 }
 

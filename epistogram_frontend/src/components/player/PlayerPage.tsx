@@ -1,20 +1,23 @@
 import { Box, Flex } from "@chakra-ui/react";
+import { Divider, Typography } from "@material-ui/core";
 import React from 'react';
 import { useParams, withRouter } from "react-router";
 import menuItems from "../../configuration/menuItems.json";
-import { getQueryParam, useIsDesktopView } from "../../frontendHelpers";
+import { getQueryParam, useIsDesktopView, usePaging } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
 import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
 import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
+import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { useNavigation } from "../../services/navigatior";
 import { useAlert } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
 import { Copyright } from "../universal/footers/copyright/Copyright";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
+import { SegmentedButton } from "../universal/SegmentedButton";
+import { SlidesDisplay } from "../universal/SlidesDisplay";
 import classes from './playerMain.module.scss';
 import Descriptions from "./player_components/descriptions/Descriptions";
 import GeneratedInfo from "./player_components/GeneratedInfo";
-import NavigationalDivider from "./player_components/navigational_divider/NavigationalDivider";
 import VideoPlayer from "./player_components/VideoPlayer";
 import { CourseItemList } from "./player_components/video_list/CourseItemList";
 
@@ -48,12 +51,37 @@ const PlayerPage = () => {
     }
 
     const isDesktopView = useIsDesktopView();
-    console.log("asd" + isDesktopView);
+    const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
+    const VideoDescription = () => <Descriptions />;
+    const VideoComments = () => <Box bg="red" />;
 
-    const renderCourseItems = () => <CourseItemList
-        courseItems={courseItems}
-        currentCourseItemId={courseItemId}
-        navigateToCourseItem={navigateToCourseItem} />
+    const renderVideoPlayer = () => <>
+
+        {/* video player with controls */}
+        {video && <VideoPlayer videoItem={video} />}
+
+        {/* under video info */}
+        <Box>
+            <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} />
+            {!isDesktopView && <CourseItemList
+                courseItems={courseItems}
+                currentCourseItemId={courseItemId}
+                navigateToCourseItem={navigateToCourseItem} />}
+
+            <Flex justify="space-between" padding="20px">
+                <Typography variant={"h4"}>{video!.title}</Typography>
+                <SegmentedButton paging={descCommentPaging}></SegmentedButton>
+            </Flex>
+            <Divider style={{ width: "100%" }} />
+            <SlidesDisplay
+                index={descCommentPaging.currentIndex}
+                slides={[
+                    VideoDescription,
+                    VideoComments
+                ]}></SlidesDisplay>
+            <Copyright />
+        </Box>
+    </>
 
     return (
         <MainWrapper>
@@ -72,22 +100,16 @@ const PlayerPage = () => {
                     {/* main column */}
                     <Box id="mainColumn" className={classes.playerContentWrapper} >
 
-                        {/* video player with controls */}
-                        {video && <VideoPlayer videoItem={video!} />}
+                        {video && renderVideoPlayer()}
 
-                        {/* under video info */}
-                        <Box>
-                            <GeneratedInfo />
-                            {!isDesktopView && renderCourseItems()}
-                            <NavigationalDivider />
-                            <Descriptions />
-                            <Copyright />
-                        </Box>
                     </Box>
 
                     {/* right sidebar */}
                     <Box>
-                        {isDesktopView && renderCourseItems()}
+                        {isDesktopView && <CourseItemList
+                            courseItems={courseItems}
+                            currentCourseItemId={courseItemId}
+                            navigateToCourseItem={navigateToCourseItem} />}
                     </Box>
                 </div>
             </LoadingFrame>

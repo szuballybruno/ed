@@ -52,16 +52,42 @@ export const usePaging = <T>(
         }
     }
 
+    const setItemIndex = (itemIndex: number) => {
+
+        if (itemIndex < 0)
+            throw new Error("Item index is less than 0!");
+
+        if (itemIndex > items.length - 1)
+            throw new Error("Item index is more than the length of the items collection!");
+
+        setCurrentItemIndex(itemIndex);
+    }
 
     return {
+        items,
         next,
         previous,
         isLast,
         isFirst,
         currentIndex: currentItemIndex,
-        currentItem
-    }
+        currentItem,
+        setItem: setItemIndex
+    } as PagingType<T>;
 }
+
+export type PagingType<T> = {
+
+    next: () => void;
+    previous: () => void;
+    setItem: (itemIndex: number) => void;
+
+    items: T[];
+    currentItem: T;
+
+    isLast: boolean;
+    isFirst: boolean;
+    currentIndex: number;
+};
 
 export const getQueryParam = (name: string) => {
 
@@ -69,7 +95,6 @@ export const getQueryParam = (name: string) => {
     return params[name] as string;
 };
 
-export type PagingType = ReturnType<typeof usePaging>;
 
 export const useIsDesktopView = () => {
 

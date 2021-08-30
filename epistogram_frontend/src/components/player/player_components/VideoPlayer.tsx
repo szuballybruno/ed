@@ -115,7 +115,8 @@ const VideoPlayer = (props: {
                     </Typography>
 
                     {/* slider */}
-                    <Slider className={classes.slider}
+                    <Slider
+                        className={classes.slider}
                         defaultValue={0}
                         aria-labelledby="discrete-slider"
                         value={seekSliderValue}

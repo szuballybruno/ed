@@ -14,7 +14,6 @@
 }
 
 .learningTypeSelector {
-    background-color: #EEE;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -39,8 +38,8 @@
 .videoWrapper {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: stretch;
+    justify-content: stretch;
     width: 100%;
     height: 100%;
     overflow-y: scroll;
