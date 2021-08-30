@@ -5,7 +5,6 @@ import React from 'react';
 import { NavLink } from "react-router-dom";
 import { globalConfig } from "../../../../../configuration/config";
 import { currentOrigin } from '../../../../../Environemnt';
-import { updateActivity } from "../../../../../services/updateActivity";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";
 import userDetailsState from "../../../../../store/user/userSideState";
 import classes from "./desktopNavbar.module.scss";
@@ -57,22 +56,7 @@ const DesktopNavbar = (props: {
                         <Button variant={"outlined"}
                             size={"large"}
                             onClick={() => {
-                                updateActivity("",
-                                    "openPage",
-                                    window.location.href,
-                                    "DesktopNavbar-Button-PlayVideo",
-                                    "play",
-                                    "generalPassive",
-                                    "A felhasználó megnyit egy új oldalt",
-                                    true,
-                                    undefined,
-                                    undefined,
-                                    undefined,
-                                    undefined,
-                                    undefined,
-                                    undefined,
-                                    currentOrigin + "/watch/" + user.userData.currentCourse._id.get() + "/" + user.userData.currentItem._id.get()
-                                )
+
                             }}
                             className={classes.playButton}>
                             <PlayArrow />
@@ -88,3 +72,20 @@ const DesktopNavbar = (props: {
 };
 
 export default DesktopNavbar;
+
+// updateActivity("",
+//     "openPage",
+//     window.location.href,
+//     "DesktopNavbar-Button-PlayVideo",
+//     "play",
+//     "generalPassive",
+//     "A felhasználó megnyit egy új oldalt",
+//     true,
+//     undefined,
+//     undefined,
+//     undefined,
+//     undefined,
+//     undefined,
+//     undefined,
+//     currentOrigin + "/watch/" + user.userData.currentCourse._id.get() + "/" + user.userData.currentItem._id.get()
+// )

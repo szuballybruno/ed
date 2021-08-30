@@ -1,42 +1,28 @@
-import React, {useEffect} from 'react';
-import {useState} from "@hookstate/core";
+import React, { useEffect } from 'react';
+import { useState } from "@hookstate/core";
 import applicationRunningState from "../../../../store/application/applicationRunningState";
 import NmiOne from "./NmiOne";
 import NmiTwo from './NmiTwo';
 import userDetailsState from "../../../../store/user/userSideState";
 import classes from "./overlay.module.scss"
-import {updateActivity} from "../../../../services/updateActivity";
 
 const Overlay = (props: { children: React.ReactNode; currentSeekSliderValue: number }) => {
     const user = useState(userDetailsState)
     const app = useState(applicationRunningState)
 
 
-   useEffect(() => {
+    useEffect(() => {
         if (props.currentSeekSliderValue === user.userData.currentItem.overlays[0].timecode.get() && props.currentSeekSliderValue !== 0 && user.userData.currentItem.overlays[0].timecode.get() !== 0) {
             app.shouldPlayVideo.set(false)
-            updateActivity(
-                "",
-                "openNMI",
-                window.location.href as string,
-                "Overlay-useEffect",
-                "useEffect",
-                "collBasedActive",
-                "NMI megnyitva",
-                false,
-                undefined,
-                undefined,
-                "videos",
-                "_id",
-                user.userData.currentItem._id.get(), undefined, undefined)
+
             return app.shouldViewOverlay.set(true)
         }
         // eslint-disable-next-line
-    },[props.currentSeekSliderValue])
+    }, [props.currentSeekSliderValue])
 
 
 
-    const overlays: {[key: number]: JSX.Element} = {
+    const overlays: { [key: number]: JSX.Element } = {
         0: <NmiOne />,
         1: <NmiTwo />
     }
@@ -49,3 +35,18 @@ const Overlay = (props: { children: React.ReactNode; currentSeekSliderValue: num
 };
 
 export default Overlay
+
+// updateActivity(
+//     "",
+//     "openNMI",
+//     window.location.href as string,
+//     "Overlay-useEffect",
+//     "useEffect",
+//     "collBasedActive",
+//     "NMI megnyitva",
+//     false,
+//     undefined,
+//     undefined,
+//     "videos",
+//     "_id",
+//     user.userData.currentItem._id.get(), undefined, undefined)
