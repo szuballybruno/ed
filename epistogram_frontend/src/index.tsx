@@ -3,7 +3,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import React from "react";
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter, BrowserRouter as Router, Route, Switch, withRouter } from "react-router-dom";
+import { BrowserRouter, Route, Switch, withRouter } from "react-router-dom";
 import Administration from "./components/administration/Administration";
 import CoursePage from "./components/course_search/CoursePage";
 import UserCoursesPage from "./components/course_search/UserCoursesPage";
@@ -52,20 +52,18 @@ const MainSwitch = () => {
 }
 
 ReactDOM.render(
-    <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+    <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
             <StylesProvider injectFirst>
                 <ThemeProvider theme={theme}>
                     <DataManagerFrame>
-                        <Router>
-                            <PopupsWrapper>
-                                <MainSwitch />
-                            </PopupsWrapper>
-                        </Router>
+                        <PopupsWrapper>
+                            <MainSwitch />
+                        </PopupsWrapper>
                     </DataManagerFrame>
                 </ThemeProvider>
             </StylesProvider>
-        </BrowserRouter>
-    </QueryClientProvider>,
+        </QueryClientProvider>
+    </BrowserRouter>,
     document.getElementById('root')
 );
