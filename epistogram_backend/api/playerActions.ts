@@ -1,22 +1,15 @@
 import { Request } from "express";
+import { GetPlayerDataDTO } from "../models/shared_models/GetPlayerDataDTO";
 import { getUserIdFromRequest } from "../services/authentication";
-import { getCurrentVideoAsync, setCurrentVideoAsync } from "../services/playerService";
-import { withValueOrBadRequest } from "../utilities/helpers";
+import { getPlayerDataAsync } from "../services/playerService";
+import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
-export const setCurrentVideoAction = (req: Request) => {
-
-    const userId = getUserIdFromRequest(req);
-    const courseId = withValueOrBadRequest(req.body.courseId);
-    const videoId = withValueOrBadRequest(req.body.videoId);
-
-    return setCurrentVideoAsync(userId, courseId, videoId);
-}
-
-export const getCurrentVideoAction = (req: Request) => {
+export const getPlayerDataAction = getAsyncActionHandler((req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const courseId = withValueOrBadRequest(req.query.courseId);
-    const videoId = withValueOrBadRequest(req.query.videoId);
+    const dto = withValueOrBadRequest(req.body) as GetPlayerDataDTO;
+    const courseItemId = withValueOrBadRequest(dto.courseItemId);
+    const courseItemType = withValueOrBadRequest(dto.courseItemType);
 
-    return getCurrentVideoAsync(userId, courseId, videoId);
-}
+    return getPlayerDataAsync(userId, courseItemId, courseItemType);
+});

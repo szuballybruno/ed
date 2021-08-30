@@ -74,6 +74,9 @@ export type PagingType = ReturnType<typeof usePaging>;
 export const useIsDesktopView = () => {
 
     const [isDesktopView] = useMediaQuery("(min-width: 980px)")
+
+    console.log(isDesktopView);
+
     return isDesktopView;
 }
 

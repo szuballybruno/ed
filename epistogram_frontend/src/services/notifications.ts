@@ -9,13 +9,16 @@ export const useShowNotification = () => {
 
     return (text: string, type?: NotificationType) => {
 
+        if (type == "error")
+            text = "Error: " + text;
+
         app.snack.snackTitle.set(text);
         app.snack.showSnack.set(true);
     }
 }
 
 export const useAlert = () => {
-    
+
     const app = useState(applicationRunningState)
 
     return app.alert;

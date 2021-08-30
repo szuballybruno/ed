@@ -1,4 +1,5 @@
-export { }
+export const extensions = true;
+
 declare global {
 
     interface Array<T> {

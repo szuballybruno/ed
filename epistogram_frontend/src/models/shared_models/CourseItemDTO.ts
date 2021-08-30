@@ -6,4 +6,5 @@ export type CourseItemDTO = {
     subTitle: string;
     type: CourseItemType;
     thumbnailUrl: string;
+    orederIndex: number;
 }

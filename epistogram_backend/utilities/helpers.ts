@@ -102,7 +102,7 @@ export const getSingleFileFromRequest = (req: Request) => {
 
 export const withValueOrBadRequest = (obj: any) => withValue(obj, () => {
 
-    throw new TypedError("Requied filed has no value!", "bad request");
+    throw new TypedError("Requied field has no value!", "bad request");
 });
 
 export const getBearerTokenFromRequest = (req: Request) => {

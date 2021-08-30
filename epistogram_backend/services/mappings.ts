@@ -10,9 +10,11 @@ import { Video } from "../models/entity/Video";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
+import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
+import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
@@ -83,6 +85,59 @@ export const toExamDTO = (exam: Exam) => {
         type: "exam",
         thumbnailUrl: exam.thumbnailUrl
     } as ExamDTO;
+}
+
+export const toPlayerDataDTO = (course: Course, video: Video | null, exam: Exam | null) => {
+
+    const examItems = course
+        .exams
+        .map(x => toCourseItemDTO(x, false));
+
+    const videoItems = course
+        .videos
+        .map(x => toCourseItemDTO(x, true));
+
+    const itemsCombined = examItems
+        .concat(videoItems);
+
+    const itemsOrdered = itemsCombined
+        .orderBy(x => x.orederIndex);
+
+    return {
+        courseItems: itemsOrdered,
+        video: video ? toVideoDTO(video) : null,
+        exam: exam ? toExamDTO(exam) : null
+    } as PlayerDataDTO;
+}
+
+export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {
+
+    if (isVideo) {
+
+        const video = item as Video;
+
+        return {
+            id: video.id,
+            subTitle: video.subtitle,
+            thumbnailUrl: video.thumbnailUrl,
+            title: video.title,
+            type: "video",
+            orederIndex: video.orderIndex
+        } as CourseItemDTO;
+    }
+    else {
+
+        const exam = item as Exam;
+
+        return {
+            id: exam.id,
+            subTitle: exam.subtitle,
+            thumbnailUrl: exam.thumbnailUrl,
+            title: exam.title,
+            type: "exam",
+            orederIndex: exam.orderIndex
+        } as CourseItemDTO;
+    }
 }
 
 export const toCourseShortDTO = (course: Course) => {

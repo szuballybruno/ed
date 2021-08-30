@@ -11,7 +11,7 @@ import CourseTile from "../universal/atomic/courseTile/CourseTile";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import classes from "./courseSearchMain.module.scss";
 
-const UserCourses = () => {
+const UserCoursesPage = () => {
 
     const [searchText, setSearchText] = React.useState("");
     const [searchCategory, setSearchCategory] = React.useState("");
@@ -161,4 +161,4 @@ const UserCourses = () => {
     </MainWrapper>
 }
 
-export default UserCourses
+export default UserCoursesPage

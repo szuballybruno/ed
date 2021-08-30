@@ -6,21 +6,27 @@ import { Gradient } from 'react-gradient';
 import { NavLink } from "react-router-dom";
 import { animated, useSpring } from "react-spring";
 import { CourseShortDTO } from "../../../../models/shared_models/CourseShortDTO";
+import { useNavigation } from "../../../../services/navigatior";
+import { useShowNotification } from "../../../../services/notifications";
 import classes from "./courseTile.module.scss";
 
 const CourseTile = (props: { course: CourseShortDTO, itemIndex: number, className?: string }) => {
 
     const anim = useSpring({ opacity: 1, from: { opacity: 0 } })
     const course = props.course;
-    const firstVideoUrl = `/watch/${course.courseId}/${course.firstVideoId}`;
     const errorImage = "https://picsum.photos/500/350";
     const colorOne = course.colorOne;
     const colorTwo = course.colorTwo;
     const courseTitle = course.title;
     const courseTeacherName = course.teacherName;
     const thumbnailImageUrl = course.thumbnailImageURL;
+    const { navigateToPlayer } = useNavigation();
 
-    console.log(thumbnailImageUrl);
+    const startCourseAsync = async () => {
+
+        // navigate to player
+        navigateToPlayer(course.firstVideoId, "video");
+    }
 
     return <Grid className={props.className} item xs={12} sm={12} md={6} lg={4} xl={3} >
         <Paper>
@@ -56,10 +62,10 @@ const CourseTile = (props: { course: CourseShortDTO, itemIndex: number, classNam
                                 </Button>
 
                                 {/* start course */}
-                                <Button className={classes.videoInfoStartButton}>
-                                    <NavLink to={firstVideoUrl}>
-                                        Indítás
-                                    </NavLink>
+                                <Button
+                                    className={classes.videoInfoStartButton}
+                                    onClick={() => startCourseAsync()}>
+                                    Indítás
                                 </Button>
                             </div>
                         </div>

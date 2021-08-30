@@ -6,7 +6,7 @@ import "reflect-metadata"; // need to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, saveSignupQuestionnaireAnswersAction } from './api/dataActions';
-import { getCurrentVideoAction, setCurrentVideoAction } from './api/playerActions';
+import { getPlayerDataAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCourses';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
 import { initializeDBAsync } from './database';
@@ -15,6 +15,7 @@ import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
+import './utilities/jsExtensions';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -92,8 +93,7 @@ const initializeAsync = async () => {
     expressServer.get("/data/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));
 
     // player
-    expressServer.post('/player/set-current-video', authMiddleware, getAsyncActionHandler(setCurrentVideoAction));
-    expressServer.get('/player/get-current-video', authMiddleware, getAsyncActionHandler(getCurrentVideoAction));
+    expressServer.post('/player/get-player-data', authMiddleware, getPlayerDataAction);
 
     // users
     expressServer.get("/users/get-user-administartion-user-list", authMiddleware, getUserAdministrationUserListAction);

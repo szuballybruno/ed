@@ -1,4 +1,3 @@
-import { IdType } from "./types/sharedTypes";
 
 export type CourseShortDTO = {
     courseId: number;

@@ -1,105 +1,97 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { useState } from "@hookstate/core";
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, withRouter } from "react-router";
 import menuItems from "../../configuration/menuItems.json";
-import { useIsDesktopView } from "../../frontendHelpers";
-import { DialogFrame } from "../../HOC/dialog_frame/DialogFrame";
+import { getQueryParam, useIsDesktopView } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
 import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
+import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
 import { useNavigation } from "../../services/navigatior";
 import { useAlert } from "../../services/notifications";
-import { useCurrentVideoDTO, useSetCurrentVideo } from "../../services/playerService";
-import applicationRunningState from "../../store/application/applicationRunningState";
-import userDetailsState from "../../store/user/userSideState";
+import { usePlayerData } from "../../services/playerService";
 import { Copyright } from "../universal/footers/copyright/Copyright";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import classes from './playerMain.module.scss';
 import Descriptions from "./player_components/descriptions/Descriptions";
 import GeneratedInfo from "./player_components/GeneratedInfo";
 import NavigationalDivider from "./player_components/navigational_divider/NavigationalDivider";
-import Player from "./player_components/Player";
-import VideoList from "./player_components/video_list/VideoList";
+import VideoPlayer from "./player_components/VideoPlayer";
+import { CourseItemList } from "./player_components/video_list/CourseItemList";
 
-const PlayerPage = (props: { history: any }) => {
+const PlayerPage = () => {
 
-    const user = useState(userDetailsState)
-    const app = useState(applicationRunningState)
     const alert = useAlert();
-    const { navigate } = useNavigation();
-    const { courseId, id: videoId } = useParams<{ courseId: string, id: string }>();
-    const [currentWidth, setCurrentWidth] = React.useState(0);
+    const { navigate, navigateToPlayer } = useNavigation();
+    const { id: courseItemString } = useParams<{ id: string }>();
+    const courseItemType = getQueryParam("type") as CourseItemType;
+    const courseItemId = parseInt(courseItemString);
 
-    // set current video id 
-    const { error: setCurrentVideoError, status: setCurrentVideoStatus } = useSetCurrentVideo(courseId, videoId);
+    // get player page data
+    const { playerData, playerDataStatus, playerDataError } = usePlayerData(courseItemId, courseItemType);
+    const courseItems = playerData?.courseItems ?? [];
+    const video = playerData?.video;
 
-    // get current video 
-    const { video, error: getCurrentVideoError, status: getCurrentVideoStatus } = useCurrentVideoDTO(courseId, videoId);
+    const navigateToCourseItem = (courseItemId: number, courseItemType: CourseItemType) => {
 
-    // set initial window width
-    useEffect(() => {
+        alert.set({
+            alertTitle: "Biztosan megszakítod a vizsgát?",
+            targetLocation: "",
+            alertDescription: "Figyelem! Ha most kilépsz, a jelenlegi vizsgád elveszik és nem kezdhető újra.",
+            showFirstButton: true,
+            firstButtonTitle: "Mégse",
+            showSecondButton: true,
+            secondButtonTitle: "Igen",
+            showAlert: true
+        });
 
-        updateWidth();
-    }, [])
-
-    // react to window resize
-    useEffect(() => {
-
-        window.addEventListener("resize", updateWidth)
-        return () => window.removeEventListener("resize", updateWidth)
-    })
-
-    const updateWidth = () => {
-        setCurrentWidth(window.innerWidth)
-    }
-
-    const redirectToCourseSearch = () => {
-        navigate('/kurzusok');
-    }
-
-    const setCurrentVideo = () => {
-
-        alert.showAlert.set(false)
-        app.activeVideoListItem.set(videoId)
-
-        navigate(`/watch/${user.userData.currentCourse._id.get()}/${videoId}`);
+        navigateToPlayer(courseItemId, courseItemType);
     }
 
     const isDesktopView = useIsDesktopView();
+    console.log("asd" + isDesktopView);
+
+    const renderCourseItems = () => <CourseItemList
+        courseItems={courseItems}
+        currentCourseItemId={courseItemId}
+        navigateToCourseItem={navigateToCourseItem} />
 
     return (
-        <Flex width="100%" minHeight="100vh" align="stretch" justify="stretch">
-            <DialogFrame firstButtonOnClick={setCurrentVideo} secondButtonOnClick={redirectToCourseSearch}>
-                <MainWrapper>
+        <MainWrapper>
 
-                    <Navbar showHighlightedButton={true}
-                        menuItems={menuItems["user"]}
-                        showLastButton={false}
-                        showNavigation={true} />
+            <Navbar showHighlightedButton={true}
+                menuItems={menuItems["user"]}
+                showLastButton={false}
+                showNavigation={true} />
 
-                    <LoadingFrame
-                        minHeight="100%"
-                        loadingState={[getCurrentVideoStatus, setCurrentVideoStatus]}
-                        error={[getCurrentVideoError, setCurrentVideoError]}>
-                        <div className={classes.playerAndVideoListWrapper}>
-                            <div className={classes.playerContentWrapper} >
+            <LoadingFrame
+                minHeight="100%"
+                loadingState={[playerDataStatus]}
+                error={[playerDataError]}>
+                <div className={classes.playerAndVideoListWrapper}>
 
-                                <Player videoItem={video!} />
+                    {/* main column */}
+                    <Box id="mainColumn" className={classes.playerContentWrapper} >
 
-                                <Box>
-                                    <GeneratedInfo />
-                                    {isDesktopView ? <VideoList /> : null}
-                                    <NavigationalDivider />
-                                    <Descriptions />
-                                    <Copyright />
-                                </Box>
-                            </div>
-                            {isDesktopView ? <VideoList /> : null}
-                        </div>
-                    </LoadingFrame>
-                </MainWrapper>
-            </DialogFrame>
-        </Flex>
+                        {/* video player with controls */}
+                        {video && <VideoPlayer videoItem={video!} />}
+
+                        {/* under video info */}
+                        <Box>
+                            <GeneratedInfo />
+                            {!isDesktopView && renderCourseItems()}
+                            <NavigationalDivider />
+                            <Descriptions />
+                            <Copyright />
+                        </Box>
+                    </Box>
+
+                    {/* right sidebar */}
+                    <Box>
+                        {isDesktopView && renderCourseItems()}
+                    </Box>
+                </div>
+            </LoadingFrame>
+        </MainWrapper>
     )
 };
 
