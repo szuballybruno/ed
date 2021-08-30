@@ -3,7 +3,7 @@ import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { httpGetAsync } from "./httpClient";
 
 export const useOrganizations = () => {
-
+    //TODO: Fetch all organizations for user upload
     const url = "organizations/get-organizations";
     const { data, status, isLoading } = useQuery(
         ["getOrganizations"],
