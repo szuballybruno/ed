@@ -135,8 +135,7 @@ const UserCoursesPage = () => {
                                 classes={{
                                     root: classes.sortFormControlRoot,
                                     select: classes.sortFormControlSelect,
-                                }}
-                            >
+                                }}>
                                 <option value={10}>A-Z</option>
                                 <option value={20}>Z-A</option>
                                 <option value={30}>Új-Régi</option>

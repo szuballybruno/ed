@@ -35,7 +35,7 @@ const VideoPlayer = (props: {
     const playerContainerRef = useRef(null);
     const playerRef = useRef<ReactPlayer>(null);
     const [seeking, setSeeking] = React.useState(false)
-    const [isPlaying, setIsPlaying] = React.useState(true);
+    const [isPlaying, setIsPlaying] = React.useState(false);
     const [seekSliderValue, setSeekSliderValue] = React.useState(0);
     const playerDuration = playerRef.current?.getDuration();
 

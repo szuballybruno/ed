@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from "./adminDashboardSearch.module.scss";
-import {Grid, TextField, Typography} from "@material-ui/core";
+import { Grid, TextField, Typography } from "@material-ui/core";
 
 export const AdminDashboardSearch = (props: {
     searchChangeHandler: (name: string, value: string) => void,
@@ -13,9 +13,9 @@ export const AdminDashboardSearch = (props: {
             <Typography variant={"overline"}>{props.title}</Typography>
         </Grid>}
         <TextField variant={"outlined"}
-                   fullWidth
-                   placeholder="A kereséshez kezdjen el gépelni..."
-                   name={props.name}
-                   onChange={(e) => props.searchChangeHandler(e.currentTarget.name, e.currentTarget.value)} />
+            fullWidth
+            placeholder="A kereséshez kezdjen el gépelni..."
+            name={props.name}
+            onChange={(e) => props.searchChangeHandler(e.currentTarget.name, e.currentTarget.value)} />
     </Grid>
 };
