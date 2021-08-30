@@ -80,10 +80,10 @@ export const CourseList = () => {
                             getChipWithLabel(index, course.videosCount.toString(), "video"),
                         ]}
                         searchItemButtons={[
-                            <SearchItemButton to={`courses/${"course.courseId"}`}>
+                            <SearchItemButton to={`courses/${course.courseId}`}>
                                 <EditTwoTone />
                             </SearchItemButton>,
-                            <SearchItemButton to={`courses/${"course.courseId"}/stats`}>
+                            <SearchItemButton to={`courses/${course.courseId}/stats`}>
                                 <EqualizerTwoTone />
                             </SearchItemButton>
                         ]} />
