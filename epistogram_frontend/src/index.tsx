@@ -3,7 +3,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import React from "react";
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter, HashRouter, Route, Switch, withRouter } from "react-router-dom";
+import { BrowserRouter, Route, Switch, withRouter } from "react-router-dom";
 import Administration from "./components/administration/Administration";
 import CoursePage from "./components/course_search/CoursePage";
 import UserCoursesPage from "./components/course_search/UserCoursesPage";
@@ -52,7 +52,7 @@ const MainSwitch = () => {
 }
 
 ReactDOM.render(
-    <HashRouter>
+    <BrowserRouter>
         <QueryClientProvider client={queryClient}>
             <StylesProvider injectFirst>
                 <ThemeProvider theme={theme}>
@@ -64,6 +64,6 @@ ReactDOM.render(
                 </ThemeProvider>
             </StylesProvider>
         </QueryClientProvider>
-    </HashRouter>,
+    </BrowserRouter>,
     document.getElementById('root')
 );
