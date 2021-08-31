@@ -6,6 +6,7 @@ import { Exam } from "./models/entity/Exam";
 import { Organization } from "./models/entity/Organization";
 import { Question } from "./models/entity/Question";
 import { QuestionAnswer } from "./models/entity/QuestionAnswer";
+import { StorageFile } from "./models/entity/StorageFile";
 import { Task } from "./models/entity/Task";
 import { TestChild } from "./models/entity/TestChild";
 import { TestParent } from "./models/entity/TestParent";
@@ -49,7 +50,8 @@ export const initializeDBAsync = async (recreate: boolean) => {
             Question,
             Answer,
             TestChild,
-            TestParent
+            TestParent,
+            StorageFile
         ],
     } as ConnectionOptions;
 
@@ -157,18 +159,12 @@ export const seedDB = async () => {
                         title: "Video 1",
                         subtitle: "Fantastic Video 1",
                         description: "Very very fantastic video 1 description",
-                        length: 141,
-                        url: "https://storage.googleapis.com/epistogram_bucket_dev/videos/How%20to%20Upload%20a%20File%20to%20Google%20Cloud%20Storage%20in%20Nodejs.mp4",
-                        thumbnailUrl: "https://dev.epistogram.com/assets/epistogram/videos/thumbnail1.png",
                         orderIndex: 0
                     },
                     {
                         title: "Video 2",
                         subtitle: "Fantastic Video 2",
                         description: "Very very fantastic video 2 description",
-                        length: 465,
-                        url: "https://player.vimeo.com/video/515672960",
-                        thumbnailUrl: "https://yieldbird.com/wp-content/uploads/2019/03/fota.png",
                         orderIndex: 2
                     }
                 ]

@@ -71,9 +71,9 @@ export const toVideoDTO = (video: Video) => {
         id: video.id,
         subTitle: video.subtitle,
         title: video.title,
-        thumbnailUrl: video.thumbnailUrl,
-        url: video.url,
-        description: video.description
+        description: video.description,
+        thumbnailUrl: "",
+        url: video.videoFile?.url ?? null,
     } as VideoDTO;
 }
 
@@ -119,7 +119,7 @@ export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {
         return {
             id: video.id,
             subTitle: video.subtitle,
-            thumbnailUrl: video.thumbnailUrl,
+            thumbnailUrl: "",//video.thumbnailFile?.url ?? null,
             title: video.title,
             type: "video",
             orederIndex: video.orderIndex

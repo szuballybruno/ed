@@ -5,12 +5,14 @@ import { getUserIdFromRequest } from "../services/authentication";
 import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
 import { getSignupDataAsync, saveSignupQuestionnaireAnswersAsync } from "../services/signupService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+import { UploadedFile } from "express-fileupload";
+import { uploadVideoFileAsync } from "../services/videoService";
 
 export const fileUploadAction = getAsyncActionHandler((req: Request) => {
 
-    console.log(req.files?.file);
+    const file = req.files?.file as UploadedFile;
 
-    return Promise.resolve();
+    return uploadVideoFileAsync(1, file);
 });
 
 export const getOverviewPageDTOAction = async (req: Request) => {

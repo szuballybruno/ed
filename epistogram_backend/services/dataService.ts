@@ -42,11 +42,11 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
 
     const videoDTOs = currentCourse
         ?.videos
-        ?.map(course => toVideoDTO(course));
+        ?.map(video => toVideoDTO(video));
 
     const examDTOs = currentCourse
-        ?.videos
-        ?.map(course => toExamDTO(course));
+        ?.exams
+        ?.map(exam => toExamDTO(exam));
 
     const recommendedCourseDTOs = [] as CourseShortDTO[];
     const randomQuestion = getReandomQuestion();

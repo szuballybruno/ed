@@ -6,6 +6,7 @@ import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { toPlayerDataDTO, toVideoDTO } from "./mappings";
+import { getVideoByIdAsync } from "./videoService";
 
 export const getCurrentVideoAsync = async (userId: number, videoId: number) => {
 
@@ -48,14 +49,21 @@ export const getPlayerDataAsync = async (
 const setAndGetCurrentCourseItem = async (userId: number, courseItemId: number, courseItemType: CourseItemType) => {
     if (courseItemType == "video") {
 
-        // set current video 
-        await setCurrentVideoAsync(userId, courseItemId);
+        const videoId = courseItemId;
 
-        // get player data
-        const video = await staticProvider
+        // set current video 
+        const video = await getVideoByIdAsync(videoId);
+        if (!video)
+            throw new TypedError("Video not found by id: " + videoId, "courseItemNotFound");
+
+        // set current video id
+        await staticProvider
             .ormConnection
-            .getRepository(Video)
-            .findOneOrFail(courseItemId);
+            .getRepository(User)
+            .save({
+                id: userId,
+                currentVideoId: videoId
+            });
 
         return video;
     }
@@ -74,21 +82,6 @@ const setAndGetCurrentCourseItem = async (userId: number, courseItemId: number, 
     }
 }
 
-const setCurrentVideoAsync = async (userId: number, videoId: number) => {
-
-    const video = await getVideoByIdAsync(videoId);
-    if (!video)
-        throw new TypedError("Video not found by id: " + videoId, "courseItemNotFound");
-
-    return await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .save({
-            id: userId,
-            currentVideoId: videoId
-        });
-}
-
 const setCurrentExamAsync = async (userId: number, examId: number) => {
 
     const exam = await getExamByIdAsync(examId);
@@ -102,14 +95,6 @@ const setCurrentExamAsync = async (userId: number, examId: number) => {
             id: userId,
             currentExamId: examId
         });
-}
-
-const getVideoByIdAsync = (videoId: number) => {
-
-    return staticProvider
-        .ormConnection
-        .getRepository(Video)
-        .findOne(videoId);
 }
 
 const getExamByIdAsync = (examId: number) => {

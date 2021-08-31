@@ -1,7 +1,7 @@
 import { backendUrl } from "../Environemnt";
 import { httpPostAsync } from "./httpClient";
 
-const maxChunkSizeBytes = 100;
+const maxChunkSizeBytes = 1000000; // 1 mb
 
 export const uploadeFileAsync = async (urlEnding: string, file: File) => {
 
@@ -63,7 +63,7 @@ const getFileChunkAsync = (uploadedBytesCount: number, file: File): Promise<Arra
 const uploadChunkAsync = async (url: string, fileChunk: ArrayBuffer) => {
 
     var formData = new FormData();
-    formData.append('filedata', new File([fileChunk], 'filechunk'));
+    formData.append('file', new File([fileChunk], 'filechunk'));
 
     await httpPostAsync(
         url,

@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
+import { StorageFile } from "./StorageFile";
 import { User } from "./User";
 
 @Entity()
@@ -18,13 +19,23 @@ export class Video {
     description: string;
 
     @Column()
-    url: string;
-
-    @Column()
-    thumbnailUrl: string;
-
-    @Column()
     orderIndex: number;
+
+    // video file
+    @Column({ nullable: true })
+    videoFileId: number;
+
+    @ManyToOne(type => StorageFile, s => s.videos)
+    @JoinColumn({ name: "videoFileId" })
+    videoFile: StorageFile
+
+    // thumbnail file
+    // @Column({ nullable: true })
+    // thumbnailFileId: number;
+
+    // @OneToMany(type => StorageFile, f => f.videos)
+    // @JoinColumn({ name: "thumbnailFileId" })
+    // thumbnailFile: StorageFile
 
     // -> users 
     @OneToMany(type => User, user => user.currentVideo)
