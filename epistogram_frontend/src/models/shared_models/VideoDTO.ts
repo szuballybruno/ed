@@ -6,4 +6,5 @@ export type VideoDTO = {
     thumbnailUrl: string;
     url: string;
     length: any;
+    description: string;
 }

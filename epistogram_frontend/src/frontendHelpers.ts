@@ -99,9 +99,6 @@ export const getQueryParam = (name: string) => {
 export const useIsDesktopView = () => {
 
     const [isDesktopView] = useMediaQuery("(min-width: 980px)")
-
-    console.log(isDesktopView);
-
     return isDesktopView;
 }
 

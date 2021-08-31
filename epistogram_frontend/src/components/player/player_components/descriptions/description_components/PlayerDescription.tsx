@@ -1,15 +1,8 @@
+import { Typography } from "@material-ui/core";
 import React from 'react';
-import classes from './playerDescription.module.scss'
-import {useState} from "@hookstate/core";
-import userDetailsState from "../../../../../store/user/userSideState";
-import {Divider, Typography} from "@material-ui/core";
-import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
-import applicationRunningState from "../../../../../store/application/applicationRunningState";
+import classes from './playerDescription.module.scss';
 
-const PlayerDescription = () => {
-    const user = useState(userDetailsState)
-
-
+const PlayerDescription = (props: { description: string }) => {
 
     const breakText = (inputText: string) => {
         try {
@@ -22,11 +15,11 @@ const PlayerDescription = () => {
         }
     };
 
-    return(
+    return (
         <div className={classes.descriptionWrapper}>
             <div className={classes.innerDescriptionWrapper}>
                 <div className={classes.descriptionTextWrapper}>
-                    <Typography>{breakText(user.userData.currentItem.description.get() as string)}</Typography>
+                    <Typography>{breakText(props.description)}</Typography>
                 </div>
             </div>
         </div>

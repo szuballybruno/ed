@@ -7,7 +7,6 @@ import { getQueryParam, useIsDesktopView, usePaging } from "../../frontendHelper
 import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
 import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
 import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
-import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { useNavigation } from "../../services/navigatior";
 import { useAlert } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
@@ -16,7 +15,7 @@ import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import classes from './playerMain.module.scss';
-import Descriptions from "./player_components/descriptions/Descriptions";
+import PlayerDescription from "./player_components/descriptions/description_components/PlayerDescription";
 import GeneratedInfo from "./player_components/GeneratedInfo";
 import VideoPlayer from "./player_components/VideoPlayer";
 import { CourseItemList } from "./player_components/video_list/CourseItemList";
@@ -52,36 +51,8 @@ const PlayerPage = () => {
 
     const isDesktopView = useIsDesktopView();
     const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
-    const VideoDescription = () => <Descriptions />;
+    const VideoDescription = () => <PlayerDescription description={video!.description} />;
     const VideoComments = () => <Box bg="red" />;
-
-    const renderVideoPlayer = () => <>
-
-        {/* video player with controls */}
-        {video && <VideoPlayer videoItem={video} />}
-
-        {/* under video info */}
-        <Box>
-            <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} />
-            {!isDesktopView && <CourseItemList
-                courseItems={courseItems}
-                currentCourseItemId={courseItemId}
-                navigateToCourseItem={navigateToCourseItem} />}
-
-            <Flex justify="space-between" padding="20px">
-                <Typography variant={"h4"}>{video!.title}</Typography>
-                <SegmentedButton paging={descCommentPaging}></SegmentedButton>
-            </Flex>
-            <Divider style={{ width: "100%" }} />
-            <SlidesDisplay
-                index={descCommentPaging.currentIndex}
-                slides={[
-                    VideoDescription,
-                    VideoComments
-                ]}></SlidesDisplay>
-            <Copyright />
-        </Box>
-    </>
 
     return (
         <MainWrapper>
@@ -100,8 +71,33 @@ const PlayerPage = () => {
                     {/* main column */}
                     <Box id="mainColumn" className={classes.playerContentWrapper} >
 
-                        {video && renderVideoPlayer()}
+                        {video &&
+                            <>
+                                {/* video player with controls */}
+                                {video && <VideoPlayer videoItem={video} />}
 
+                                {/* under video info */}
+                                <Box>
+                                    <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} />
+                                    {!isDesktopView && <CourseItemList
+                                        courseItems={courseItems}
+                                        currentCourseItemId={courseItemId}
+                                        navigateToCourseItem={navigateToCourseItem} />}
+
+                                    <Flex justify="space-between" padding="20px">
+                                        <Typography variant={"h4"}>{video!.title}</Typography>
+                                        <SegmentedButton paging={descCommentPaging}></SegmentedButton>
+                                    </Flex>
+                                    <Divider style={{ width: "100%" }} />
+                                    <SlidesDisplay
+                                        index={descCommentPaging.currentIndex}
+                                        slides={[
+                                            VideoDescription,
+                                            VideoComments
+                                        ]}></SlidesDisplay>
+                                    <Copyright />
+                                </Box>
+                            </>}
                     </Box>
 
                     {/* right sidebar */}
@@ -113,7 +109,7 @@ const PlayerPage = () => {
                     </Box>
                 </div>
             </LoadingFrame>
-        </MainWrapper>
+        </MainWrapper >
     )
 };
 

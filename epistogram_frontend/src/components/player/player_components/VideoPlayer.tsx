@@ -55,14 +55,12 @@ const VideoPlayer = (props: {
     const handleSeekMouseUp = e => {
 
         setSeeking(false)
-        console.log(e.currentTarget.value)
-        // @ts-ignore
-        //
     }
 
     const handleSeek = (event: any, newValue: number | number[]) => {
 
         setSeekSliderValue(newValue as number);
+
         // @ts-ignore
         playerRef.current.seekTo(newValue)
     };
@@ -92,7 +90,6 @@ const VideoPlayer = (props: {
                     }
                     onReady={(e) => {
                         const player = e.getInternalPlayer()
-                        console.log(player)
                     }}
                     config={{
                         file: {
