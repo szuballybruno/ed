@@ -78,7 +78,7 @@ const PlayerPage = () => {
 
                                 {/* under video info */}
                                 <Box>
-                                    <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} />
+                                    {/* <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} /> */}
                                     {!isDesktopView && <CourseItemList
                                         courseItems={courseItems}
                                         currentCourseItemId={courseItemId}

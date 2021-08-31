@@ -21,9 +21,6 @@ export class Video {
     url: string;
 
     @Column()
-    length: number;
-
-    @Column()
     thumbnailUrl: string;
 
     @Column()

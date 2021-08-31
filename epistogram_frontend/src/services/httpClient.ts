@@ -13,7 +13,10 @@ export class HTTPResponse {
     }
 }
 
-export const httpPostAsync = async (urlEnding: string, data?: any, bearerToken?: string) => {
+export const httpPostAsync = async (
+    urlEnding: string,
+    data?: any,
+    configure?: (config: AxiosRequestConfig) => void) => {
 
     try {
 
@@ -22,11 +25,9 @@ export const httpPostAsync = async (urlEnding: string, data?: any, bearerToken?:
         } as AxiosRequestConfig;
 
         // set bearer token 
-        if (bearerToken) {
+        if (configure) {
 
-            config.headers = {
-                'Authorization': "Bearer " + bearerToken
-            };
+            configure(config);
         }
 
         const axiosResponse = await instance.post(urlEnding, data,);
@@ -62,7 +63,17 @@ export const httpDeleteAsync = async (urlEnding: string) => {
     return new HTTPResponse(axiosResponse.status, axiosResponse.data);
 }
 
+export const addBearerToken = (config: AxiosRequestConfig, bearerToken: string) => {
+    config.headers = {
+        'Authorization': "Bearer " + bearerToken
+    };
+}
+
 const handleHttpError = (error: any) => {
+
+    // no response at all
+    if (!error.response)
+        throw error;
 
     const response = new HTTPResponse(error.response.status, error.response.data);
     const responseCode = response.code;

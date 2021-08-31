@@ -8,6 +8,7 @@ import Administration from "./components/administration/Administration";
 import CoursePage from "./components/course_search/CoursePage";
 import UserCoursesPage from "./components/course_search/UserCoursesPage";
 import OverviewPage from "./components/dashboard/OverviewPage";
+import { FileUploadPage } from "./components/FileUploadPage";
 import LoginScreen from "./components/login/LoginScreen";
 import { MobileDemo } from "./components/mobileDemo/MobileDemo";
 import PlayerPage from "./components/player/PlayerPage";
@@ -40,6 +41,8 @@ const MainSwitch = () => {
         <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
         <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
         <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
+
+        <ProtectedRoute path="/fileupload" render={() => <FileUploadPage />} />
 
         {/* index path */}
         <ProtectedRoute path="/" render={() => <OverviewPage />} exact />

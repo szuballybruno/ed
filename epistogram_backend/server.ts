@@ -5,7 +5,7 @@ import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // need to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, saveSignupQuestionnaireAnswersAction } from './api/dataActions';
+import { fileUploadAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, saveSignupQuestionnaireAnswersAction } from './api/dataActions';
 import { getPlayerDataAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCourses';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
@@ -88,6 +88,7 @@ const initializeAsync = async () => {
 
     // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
+    expressServer.post('/fileupload', authMiddleware, fileUploadAction);
 
     // data
     expressServer.get("/data/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));

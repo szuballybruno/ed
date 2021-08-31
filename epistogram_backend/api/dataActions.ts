@@ -6,6 +6,13 @@ import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/data
 import { getSignupDataAsync, saveSignupQuestionnaireAnswersAsync } from "../services/signupService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
+export const fileUploadAction = getAsyncActionHandler((req: Request) => {
+
+    console.log(req.files?.file);
+
+    return Promise.resolve();
+});
+
 export const getOverviewPageDTOAction = async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);

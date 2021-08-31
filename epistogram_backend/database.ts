@@ -158,7 +158,7 @@ export const seedDB = async () => {
                         subtitle: "Fantastic Video 1",
                         description: "Very very fantastic video 1 description",
                         length: 141,
-                        url: "https://player.vimeo.com/video/541638710",
+                        url: "https://storage.googleapis.com/epistogram_bucket_dev/videos/How%20to%20Upload%20a%20File%20to%20Google%20Cloud%20Storage%20in%20Nodejs.mp4",
                         thumbnailUrl: "https://dev.epistogram.com/assets/epistogram/videos/thumbnail1.png",
                         orderIndex: 0
                     },

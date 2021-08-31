@@ -71,7 +71,6 @@ export const toVideoDTO = (video: Video) => {
         id: video.id,
         subTitle: video.subtitle,
         title: video.title,
-        type: "video",
         thumbnailUrl: video.thumbnailUrl,
         url: video.url,
         description: video.description
@@ -84,7 +83,6 @@ export const toExamDTO = (exam: Exam) => {
         id: exam.id,
         subTitle: exam.subtitle,
         title: exam.title,
-        type: "exam",
         thumbnailUrl: exam.thumbnailUrl
     } as ExamDTO;
 }

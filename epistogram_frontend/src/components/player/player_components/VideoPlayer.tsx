@@ -30,14 +30,13 @@ const VideoPlayer = (props: {
 }) => {
 
     const videoUrl = props.videoItem.url;
-    const videoLength = props.videoItem.length;
+    // const videoLength = props.videoItem.length;
 
     const playerContainerRef = useRef(null);
     const playerRef = useRef<ReactPlayer>(null);
-    const [seeking, setSeeking] = React.useState(false)
     const [isPlaying, setIsPlaying] = React.useState(false);
-    const [seekSliderValue, setSeekSliderValue] = React.useState(0);
-    const playerDuration = playerRef.current?.getDuration();
+    const [playedSeconds, setPlayedSeconds] = React.useState(0);
+    const [videoLength, setVideoLength] = React.useState(0);
 
     const handlePlayPause = () => setIsPlaying(isPlaying => !isPlaying);
 
@@ -47,28 +46,12 @@ const VideoPlayer = (props: {
         screenfull.toggle(playerContainerRef.current);
     };
 
-    const handleSeekMouseDown = e => {
-
-        setSeeking(true)
-    }
-
-    const handleSeekMouseUp = e => {
-
-        setSeeking(false)
-    }
-
-    const handleSeek = (event: any, newValue: number | number[]) => {
-
-        setSeekSliderValue(newValue as number);
-
-        // @ts-ignore
-        playerRef.current.seekTo(newValue)
-    };
+    console.log("Played secs: " + playedSeconds + " Length: " + videoLength);
 
     return (
         <div className={classes.playerInnerWrapper} ref={playerContainerRef}>
 
-            <Overlay currentSeekSliderValue={seekSliderValue}>
+            <Overlay currentSeekSliderValue={playedSeconds}>
 
                 {/* the player */}
                 <ReactPlayer
@@ -81,15 +64,13 @@ const VideoPlayer = (props: {
                     controls={false}
                     playing={isPlaying}
                     onPlay={() => setIsPlaying(true)}
-                    onProgress={
+                    onProgress={(playedInfo) => {
 
-                        // TODO wtf
-                        ({ played }) => {
-                            setSeekSliderValue(~~(videoLength * played))
-                        }
-                    }
+                        setPlayedSeconds(playedInfo.playedSeconds);
+                    }}
                     onReady={(e) => {
-                        const player = e.getInternalPlayer()
+
+                        setVideoLength(e.getDuration());
                     }}
                     config={{
                         file: {
@@ -108,7 +89,7 @@ const VideoPlayer = (props: {
 
                     {/* timestamp */}
                     <Typography className={classes.playerTimestamp}>
-                        {`${secondsToTime(seekSliderValue)}/${secondsToTime(playerDuration)}`}
+                        {`${secondsToTime(playedSeconds)}/${secondsToTime(videoLength)}`}
                     </Typography>
 
                     {/* slider */}
@@ -116,12 +97,16 @@ const VideoPlayer = (props: {
                         className={classes.slider}
                         defaultValue={0}
                         aria-labelledby="discrete-slider"
-                        value={seekSliderValue}
+                        value={playedSeconds}
                         min={0}
-                        max={playerRef.current?.getDuration()}
-                        onMouseUp={handleSeekMouseUp}
-                        onMouseDown={handleSeekMouseDown}
-                        onChange={handleSeek} />
+                        max={videoLength}
+                        onChange={(event, targetSeconds) => {
+
+                            setPlayedSeconds(targetSeconds as number);
+
+                            // @ts-ignore
+                            playerRef.current.seekTo(targetSeconds as number)
+                        }} />
 
                     {/* wtf */}
                     <button onClick={(e) => {
