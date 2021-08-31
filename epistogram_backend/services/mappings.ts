@@ -22,6 +22,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { staticProvider } from "../staticProvider";
 import { navPropNotNull } from "../utilities/helpers";
+import { getStorageFileUrl } from "./storageService";
 
 export const toUserDTO = (user: User) => new UserDTO(
     user.id,
@@ -73,7 +74,7 @@ export const toVideoDTO = (video: Video) => {
         title: video.title,
         description: video.description,
         thumbnailUrl: "",
-        url: video.videoFile?.url ?? null,
+        url: video.videoFile ? getStorageFileUrl(video.videoFile.filePath) : null,
     } as VideoDTO;
 }
 

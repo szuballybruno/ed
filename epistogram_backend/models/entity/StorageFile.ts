@@ -11,7 +11,7 @@ export class StorageFile {
     pending: boolean;
 
     @Column()
-    url: string;
+    filePath: string;
 
     // video 
     @OneToMany(type => Video, v => v.videoFile)

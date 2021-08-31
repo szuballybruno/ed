@@ -1,5 +1,5 @@
 import { backendUrl } from "../Environemnt";
-import { httpPostAsync } from "./httpClient";
+import { postFileAsync } from "./httpClient";
 
 const maxChunkSizeBytes = 1000000; // 1 mb
 
@@ -18,7 +18,7 @@ export const uploadeFileAsync = async (urlEnding: string, file: File) => {
 
         console.log("Uploading chunk: ");
         console.log(currentChunkArrayBuffer);
-        await uploadChunkAsync(url, currentChunkArrayBuffer);
+        await postFileAsync(url, new File([currentChunkArrayBuffer], "chunk"));
 
         uploadedBytesCount += currentChunkArrayBuffer.byteLength;
     }
@@ -58,15 +58,4 @@ const getFileChunkAsync = (uploadedBytesCount: number, file: File): Promise<Arra
             reject(e);
         }
     })
-}
-
-const uploadChunkAsync = async (url: string, fileChunk: ArrayBuffer) => {
-
-    var formData = new FormData();
-    formData.append('file', new File([fileChunk], 'filechunk'));
-
-    await httpPostAsync(
-        url,
-        formData,
-        x => x.headers = { ...x.headers, "Content-Type": 'multipart/form-data' });
 }

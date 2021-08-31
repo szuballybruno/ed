@@ -63,6 +63,28 @@ export const httpDeleteAsync = async (urlEnding: string) => {
     return new HTTPResponse(axiosResponse.status, axiosResponse.data);
 }
 
+export const postFileAsync = async (url: string, file: File, data?: any) => {
+
+    var formData = new FormData();
+    formData.append('file', file);
+
+    if (data) {
+
+        for (const key in data) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+
+                const value = data[key];
+                formData.append(key, value);
+            }
+        }
+    }
+
+    await httpPostAsync(
+        url,
+        formData,
+        x => x.headers = { ...x.headers, "Content-Type": 'multipart/form-data' });
+}
+
 export const addBearerToken = (config: AxiosRequestConfig, bearerToken: string) => {
     config.headers = {
         'Authorization': "Bearer " + bearerToken

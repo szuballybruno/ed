@@ -2,7 +2,7 @@ import { UploadedFile } from "express-fileupload";
 import { StorageFile } from "../models/entity/StorageFile";
 import { Video } from "../models/entity/Video";
 import { staticProvider } from "../staticProvider"
-import { appendToFileAsync } from "./storageService";
+import { uploadToStorageAsync } from "./storageService";
 
 export const createVideoAsync = async (courseId: number, orderIndex: number) => {
 
@@ -17,37 +17,28 @@ export const createVideoAsync = async (courseId: number, orderIndex: number) => 
 
 export const uploadVideoFileAsync = async (videoId: number, file: UploadedFile) => {
 
-    let videoFile = (await staticProvider
+    // crate pending storage file
+    const videoFile = {
+        pending: true,
+        filePath: `videos/video_${videoId}.mp4`
+    } as StorageFile;
+
+    await staticProvider
+        .ormConnection
+        .getRepository(StorageFile)
+        .insert(videoFile);
+
+    // assing to video
+    await staticProvider
         .ormConnection
         .getRepository(Video)
-        .createQueryBuilder("v")
-        .leftJoinAndSelect("v.videoFile", "vf")
-        .getOneOrFail()).videoFile;
+        .save({
+            id: videoId,
+            videoFileId: videoFile.id
+        });
 
-    // crate pending storage file
-    if (!videoFile) {
-
-        videoFile = {
-            pending: true,
-            url: "file.mp4"
-        } as StorageFile;
-
-        await staticProvider
-            .ormConnection
-            .getRepository(StorageFile)
-            .insert(videoFile);
-
-        await staticProvider
-            .ormConnection
-            .getRepository(Video)
-            .save({
-                id: videoId,
-                videoFileId: videoFile.id
-            });
-    }
-
-    // append to file
-    await appendToFileAsync(videoFile.url, file.data);
+    // upload to storage
+    await uploadToStorageAsync(file, videoFile.filePath);
 }
 
 export const getVideoByIdAsync = (videoId: number) => {

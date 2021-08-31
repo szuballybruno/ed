@@ -10,9 +10,10 @@ import { uploadVideoFileAsync } from "../services/videoService";
 
 export const fileUploadAction = getAsyncActionHandler((req: Request) => {
 
-    const file = req.files?.file as UploadedFile;
+    const file = withValueOrBadRequest(req.files?.file) as UploadedFile;
+    const videoId = parseInt(withValueOrBadRequest(req.body.videoId));
 
-    return uploadVideoFileAsync(1, file);
+    return uploadVideoFileAsync(videoId, file);
 });
 
 export const getOverviewPageDTOAction = async (req: Request) => {

@@ -1,6 +1,42 @@
-import { appendFile } from "async-fs-wrapper";
+import { Storage } from "@google-cloud/storage";
+import { UploadedFile } from "express-fileupload";
+import path from "path";
 
-export const appendToFileAsync = (url: string, buffer: Buffer) => {
+const bucketName = "epistogram_bucket_dev";
 
-    return appendFile(url, buffer);
+export const uploadToStorageAsync = (file: UploadedFile, path: string) => new Promise<void>((resolve, reject) => {
+
+    const bucket = getBucket();
+    const { data: buffer } = file;
+    const blob = bucket.file(path.replace(/ /g, "_"));
+
+    const blobStream = blob
+        .createWriteStream({
+            resumable: false
+        });
+
+    blobStream
+        .on('finish', () => {
+
+            resolve();
+        })
+        .on('error', (e) => {
+
+            reject(e);
+        })
+        .end(buffer);
+})
+
+export const getStorageFileUrl = (filePath: string) => {
+
+    return `https://storage.googleapis.com/${bucketName}/${filePath}`;
+}
+
+const getBucket = () => {
+
+    const storage = new Storage({
+        keyFilename: path.join(__dirname, "../epistogram_service_user_key.json")
+    });
+
+    return storage.bucket(bucketName);
 }
