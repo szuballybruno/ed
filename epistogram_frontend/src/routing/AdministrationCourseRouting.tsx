@@ -2,11 +2,11 @@ import React from 'react';
 
 import { Route, Switch } from "react-router-dom";
 
-import { AddCourse } from '../courses/addCourse/AddCourse';
-import { AddVideo } from "../courses/addVideo/AddVideo";
-import { EditCourse } from "../courses/editCourse/EditCourse";
-import { EditVideo } from "../courses/editVideo/EditVideo";
-import { CourseList } from "../courses/courseList/CourseList";
+import { AddCourse } from '../components/administration/courses/addCourse/AddCourse';
+import { AddVideo } from "../components/administration/courses/addVideo/AddVideo";
+import { EditCourse } from "../components/administration/courses/editCourse/EditCourse";
+import { EditVideo } from "../components/administration/courses/editVideo/EditVideo";
+import { CourseList } from "../components/administration/courses/courseList/CourseList";
 
 const AdministrationCourseRouting = () => {
     return <Switch>

@@ -17,6 +17,7 @@ import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
 import './utilities/jsExtensions';
+import {getEditedCourseAction} from "./api/courses/courseManagementActions";
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -110,6 +111,7 @@ const initializeAsync = async () => {
     // courses 
     expressServer.post("/get-user-courses", authMiddleware, getUserCoursesAction);
     expressServer.post("/get-admin-courses", authMiddleware, getAsyncActionHandler(getAdminCoursesAction));
+    expressServer.post("/get-admin-edit-course", authMiddleware, getAsyncActionHandler(getEditedCourseAction))
 
     // organizations 
     expressServer.get("/organizations/get-organizations", authMiddleware, getAsyncActionHandler(getOrganizationsAction));

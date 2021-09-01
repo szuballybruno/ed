@@ -107,7 +107,7 @@ export const toPlayerDataDTO = (course: Course, video: Video | null, exam: Exam 
         .concat(videoItems);
 
     const itemsOrdered = itemsCombined
-        .orderBy(x => x.orederIndex);
+        .orderBy(x => x.orderIndex);
 
     return {
         courseItems: itemsOrdered,
@@ -128,7 +128,7 @@ export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {
             thumbnailUrl: "",//video.thumbnailFile?.url ?? null,
             title: video.title,
             type: "video",
-            orederIndex: video.orderIndex
+            orderIndex: video.orderIndex
         } as CourseItemDTO;
     }
     else {
@@ -141,7 +141,7 @@ export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {
             thumbnailUrl: exam.thumbnailUrl,
             title: exam.title,
             type: "exam",
-            orederIndex: exam.orderIndex
+            orderIndex: exam.orderIndex
         } as CourseItemDTO;
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from "react-router-dom";
-import AddUser from "../users/addUser/AddUser";
-import {UserList} from "../users/userList/UserList";
+import AddUser from "../components/administration/users/addUser/AddUser";
+import {UserList} from "../components/administration/users/userList/UserList";
 
 export const AdministrationUserRouting = () => {
     return (

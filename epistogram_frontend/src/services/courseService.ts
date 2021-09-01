@@ -1,8 +1,9 @@
 import { hasValue, useReactQuery } from "../frontendHelpers"
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
-import { httpGetAsync, httpPostAsync } from "./httpClient";
+import { httpPostAsync } from "./httpClient";
 import {CourseAdminDTO} from "../models/shared_models/CourseAdminDTO";
+import {AdminPageEditCourseView} from "../models/shared_models/AdminPageEditCourseDTO";
 
 export const useAdministratedCourses = (searchText: string) => {
 
@@ -12,6 +13,21 @@ export const useAdministratedCourses = (searchText: string) => {
 
     return {
         courses: data,
+        error,
+        status
+    }
+}
+
+export const useAdminEditedCourse = (courseId: number) => {
+
+    const { data, status, error } = useReactQuery<AdminPageEditCourseView>(
+        ["getCourseEditQuery", courseId],
+        () => httpPostAsync("/get-admin-edit-course", {
+            courseId: courseId
+        }))
+
+    return {
+        course: data,
         error,
         status
     }

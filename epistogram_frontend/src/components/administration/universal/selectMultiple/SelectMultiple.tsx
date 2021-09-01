@@ -6,7 +6,7 @@ import {Add} from "@material-ui/icons";
 export const SelectMultiple = (props: {
     children: React.ReactNode
     items?: any
-    onClick: () => void
+    onClick?: () => void
     title: string
 }) => {
 

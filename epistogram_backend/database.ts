@@ -131,6 +131,11 @@ export const seedDB = async () => {
             {
                 title: "Java Course",
                 category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                organizationId: 1,
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
                 exams: [
                     {
                         title: "New Exam 1",

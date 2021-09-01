@@ -16,7 +16,7 @@ import menuItems from "../../configuration/menuItems.json";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { AdminAddHeader } from "./universal/adminAddHeader/AdminAddHeader";
 import { SaveBar } from "./universal/saveBar/SaveBar";
-import { AdministrationRouting } from "./routing/AdministrationRouting";
+import { AdministrationRouting } from "../../routing/AdministrationRouting";
 
 const Administration = (props: { match: { url: string; } }) => {
 

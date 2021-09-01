@@ -1,8 +1,9 @@
 import {TagView} from "./TagDTO";
+import {CourseItemDTO} from "./CourseItemDTO";
 
-export type AdminPageEditVideoView = {
-    id: number,
-    name: string,
+export type AdminPageEditCourseView = {
+    courseId: number,
+    title: string,
     category: string,
     courseGroup: string,
     permissionLevel: string,
@@ -10,11 +11,7 @@ export type AdminPageEditVideoView = {
     colorTwo: string,
     thumbnailURL: string,
 
-    /* TODO:
-    *   - Do or do not separate the videos from exams here
-    * */
-    courseVideos: [],
-    courseExams: []
+    courseItems: CourseItemDTO[]
 
     // User groups where the course is visible
     courseGroups: {

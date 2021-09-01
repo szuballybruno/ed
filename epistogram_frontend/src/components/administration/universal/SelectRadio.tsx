@@ -10,20 +10,14 @@ export const SelectRadio = (props:  {
     itemValueOnChange: () => void,
     items?: any
     name: string,
-    onClick: () => void,
+    onClick?: () => void,
     title: string
 }) => {
-
-    const listItemWithRadio = <ListItemWithRadio name={props.name}
-                                                 value={props.value}
-                                                 itemValueOnChange={props.itemValueOnChange}
-                                                 radioButtonOnChange={props.radioButtonOnChange}/>
-
 
     return <SelectMultiple items={props.items}
                            onClick={props.onClick}
                            title={props.title}>
+        {!!props.items && props.items.map(item => <ListItemWithRadio radioButtonOnChange={props.radioButtonOnChange} itemValueOnChange={props.itemValueOnChange} name={item.name} value={item.title} />)}
 
     </SelectMultiple>
-
 };
