@@ -1,7 +1,7 @@
-import {Route, Switch, withRouter} from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import LoginScreen from "../components/login/LoginScreen";
-import {SignupPage} from "../components/signup/SignupPage";
-import {ProtectedRoute} from "../components/universal/ProtectedRoute";
+import { SignupPage } from "../components/signup/SignupPage";
+import { ProtectedRoute } from "../components/universal/ProtectedRoute";
 import PlayerPage from "../components/player/PlayerPage";
 import Administration from "../components/administration/Administration";
 import OverviewPage from "../components/dashboard/OverviewPage";
@@ -10,8 +10,7 @@ import ProfileMain from "../components/profile/ProfileMain";
 import NotFound from "../components/universal/notFound/NotFound";
 import React from "react";
 import CoursePage from "../components/course_search/CoursePage";
-import {MobileDemo} from "../components/mobileDemo/MobileDemo";
-import {FileUploadPage} from "../components/FileUploadPage";
+import { FileUploadPage } from "../components/FileUploadPage";
 
 export const MainRouting = () => {
     return <Switch>
