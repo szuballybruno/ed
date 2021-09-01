@@ -24,17 +24,22 @@ import { staticProvider } from "../staticProvider";
 import { navPropNotNull } from "../utilities/helpers";
 import { getStorageFileUrl } from "./storageService";
 
-export const toUserDTO = (user: User) => new UserDTO(
-    user.id,
-    user.organizationId,
-    user.firstName,
-    user.lastName,
-    user.role,
-    user.jobTitle,
-    user.isActive,
-    user.email,
-    user.phoneNumber,
-    `${user.lastName} ${user.firstName}`);
+export const toUserDTO = (user: User) => {
+
+    return {
+        userId: user.id,
+        organizationId: user.organizationId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        jobTitle: user.jobTitle,
+        isActive: user.isActive,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        name: `${user.lastName} ${user.firstName}`,
+        avatarUrl: getStorageFileUrl(user.avatarFile?.filePath)
+    } as UserDTO;
+}
 
 export const toAdminPageUserDTO = (user: User) => {
 

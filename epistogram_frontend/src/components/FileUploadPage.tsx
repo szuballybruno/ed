@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react"
 import { Button, ButtonProps } from "@material-ui/core"
 import { ReactNode } from "react";
-import { uploadVideoFileAsync } from "../services/fileService";
+import { uploadAvatarFileAsync, uploadVideoFileAsync } from "../services/fileService";
 import { httpPostAsync, postFileAsync } from "../services/httpClient";
 
 const FileUploadButton = (props: {
@@ -38,6 +38,12 @@ export const FileUploadPage = () => {
             uploadVideoFileAsync(1, file);
         }}>
             Upload video...
+        </FileUploadButton>
+        <FileUploadButton onSelected={(file) => {
+
+            uploadAvatarFileAsync(file);
+        }}>
+            Upload avatar...
         </FileUploadButton>
     </Box>
 }

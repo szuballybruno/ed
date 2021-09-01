@@ -15,8 +15,8 @@ import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/ma
 import menuItems from "../../configuration/menuItems.json";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { AdminAddHeader } from "./universal/adminAddHeader/AdminAddHeader";
-import {SaveBar} from "./universal/saveBar/SaveBar";
-import {AdministrationRouting} from "./routing/AdministrationRouting";
+import { SaveBar } from "./universal/saveBar/SaveBar";
+import { AdministrationRouting } from "./routing/AdministrationRouting";
 
 const Administration = (props: { match: { url: string; } }) => {
 
@@ -24,16 +24,16 @@ const Administration = (props: { match: { url: string; } }) => {
 
     return <MainWrapper>
         <Navbar showHighlightedButton={true}
-                menuItems={menuItems["user"]}
-                showLastButton={true}
-                showNavigation={true} />
+            menuItems={menuItems["user"]}
+            showLastButton={true}
+            showNavigation={true} />
         <ContentWrapper>
             <LeftPanel>
                 <div className={classes.adminDashboardLeftItemProfile}>
                     <div className={classes.leftItemProfileTopWrapper} />
                     <div className={classes.leftItemProfileBottomWrapper}>
                         <div className={classes.profileImageWrapper}>
-                            <ProfileImage />
+                            <ProfileImage imageUrl="" />
                         </div>
                         <div className={classes.profileNameWrapper}>
                             <Typography variant={"h5"}>{user.userData.lastName.get() + " " + user.userData.firstName.get()}</Typography>

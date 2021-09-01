@@ -10,6 +10,7 @@ export class UserDTO {
     email: string;
     phoneNumber: string;
     name: string;
+    avatarUrl: string | null;
 
     constructor(
         userId: number,
@@ -21,7 +22,8 @@ export class UserDTO {
         isActive: boolean,
         email: string,
         phoneNumber: string,
-        name: string) {
+        name: string,
+        avatarUrl: string | null) {
 
         this.role = role;
         this.userId = userId;
@@ -33,5 +35,6 @@ export class UserDTO {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.name = name;
+        this.avatarUrl = avatarUrl;
     }
 }

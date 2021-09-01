@@ -11,24 +11,26 @@ export const globalConfig = {
     //backendUrlMinimal: "http://itsfourothree.tplinkdns.com:5000/",
     //backendUrl: "http://itsfourothree.tplinkdns.com:5000/",
 
+    gcpUrl: "https://storage.googleapis.com/epistogram_bucket_dev",
+
     assetStorageUrl: "https://dev.epistogram.com/assets/epistogram",
     currentTheme: "nextGenTheme",
     adminMenuItems: [{
         title: "Statisztika",
         path: "/statistics"
-    },{
+    }, {
         title: "Felhasználók kezelése",
         path: "/manage/users"
-    },{
+    }, {
         title: "Kurzusok kezelése",
         path: "/manage/courses"
-    },{
+    }, {
         title: "Szavazások kezelése",
         path: "/manage/votes"
-    },{
+    }, {
         title: "Csoportok kezelése",
         path: "/manage/groups"
-    },{
+    }, {
         title: "Cégek kezelése",
         path: "/manage/organizations"
     }]

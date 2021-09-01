@@ -1,31 +1,32 @@
-import React, {useRef} from 'react';
-import classes from "./profileImage.module.scss"
-import {globalConfig} from "../../../../configuration/config";
-import {Cookies} from "react-cookie";
+import React from 'react';
+import { globalConfig } from "../../../../configuration/config";
+import classes from "./profileImage.module.scss";
 
-const ProfileImage = (props: {
-    showSelectButton?: boolean,
-    onChange?: ((event: React.ChangeEvent<HTMLInputElement>) => void) | undefined
-    imageUrl?: string
-}) => {
-    const cookies = new Cookies()
-    //const [file, setFile] = React.useState()
-    const hiddenFileInput: React.MutableRefObject<any> = useRef();
-    const handleUpload = () => {
-        hiddenFileInput.current.click();
-    }
+const ProfileImage = (props: { imageUrl: string | null }) => {
+
+    // const cookies = new Cookies()
+    // //const [file, setFile] = React.useState()
+    // const hiddenFileInput: React.MutableRefObject<any> = useRef();
+    // const handleUpload = () => {
+    //     hiddenFileInput.current.click();
+    // }
+
+    const defaultImage = `${globalConfig.gcpUrl}/images/defaultAvatar.png`;
+
     return (
         <div className={classes.profileImageWrapper}>
-            {props.showSelectButton ? <div className={classes.addProfileImage} onClick={handleUpload}>
+            {/* {props.showSelectButton ? <div className={classes.addProfileImage} onClick={handleUpload}>
                 Kiválasztás
             </div> : null}
             <input type="file"
                    ref={hiddenFileInput}
                    style={{display: "none"}}
-                   onChange={props.onChange}/>
-            <img alt=""
-                 onError={(e) => {e.currentTarget.src = `${globalConfig.assetStorageUrl}/application/avatar.png`}}
-                 src={props.imageUrl ? props.imageUrl : `${globalConfig.assetStorageUrl}/users/${cookies.get("userId")}/avatar.png`}/>
+                   onChange={props.onChange}/> */}
+
+            <img
+                alt=""
+                onError={(e) => e.currentTarget.src = defaultImage}
+                src={props.imageUrl ?? defaultImage} />
         </div>
     );
 };

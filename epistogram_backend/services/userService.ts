@@ -12,6 +12,7 @@ export const getUserById = async (userId: number) => {
         .getRepository(User)
         .createQueryBuilder("user")
         .where("user.id = :userId", { userId: userId })
+        .leftJoinAndSelect("user.avatarFile", "a")
         .getOneOrFail();
 
     // const cursor = await Connection.db.collection("users").find();

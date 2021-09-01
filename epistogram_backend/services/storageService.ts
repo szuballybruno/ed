@@ -33,7 +33,10 @@ export const deleteStorageFileAsync = async (filePath: string) => {
     await bucket.file(filePath).delete();
 }
 
-export const getStorageFileUrl = (filePath: string) => {
+export const getStorageFileUrl = (filePath: string | null | undefined) => {
+
+    if (!filePath)
+        return null;
 
     return `https://storage.googleapis.com/${bucketName}/${filePath}`;
 }

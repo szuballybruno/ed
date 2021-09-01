@@ -1,12 +1,12 @@
 import React from 'react';
 import classes from './settings.module.scss'
-import {useState} from "@hookstate/core";
+import { useState } from "@hookstate/core";
 import userDetailsState from "../../../../store/user/userSideState";
 import AdminDashboardHeader from "../../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import SettingsItem from "./settings_components/SettingsItem";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
-import {Cookies} from "react-cookie";
+import { Cookies } from "react-cookie";
 import instance from "../../../../services/axiosInstance";
 
 
@@ -17,7 +17,7 @@ const Settings = () => {
     const dataSheetData = [{
         name: "Vezetéknév",
         placeholderName: "lastName"
-    },{
+    }, {
         name: "Keresztnév",
         placeholderName: "firstName"
     }, {
@@ -32,7 +32,7 @@ const Settings = () => {
     }, {
         name: "Bemutatkozás",
         placeholderName: "userDescription"
-    },{
+    }, {
         name: "LinkedIn",
         placeholderName: "linkedInUrl"
     }]
@@ -61,25 +61,25 @@ const Settings = () => {
             <AdminDashboardHeader titleText={"Adatlap"} />
             <div className={classes.dataSheetWrapper}>
                 <div className={classes.profileImageWrapper}>
-                    <ProfileImage />
+                    <ProfileImage imageUrl="" />
                 </div>
                 <div className={classes.dataSheetItemWrapper}>
                     {dataSheetData.map((data) => {
                         return <EditItem name={`${user.userData[data.placeholderName as keyof typeof user.userData].get() || ""}`}
-                                         onChange={(e: React.ChangeEvent<any>) => {
-                                             instance.patch(`users/${cookies.get("userId")}`, {
-                                                 "userData": {
-                                                     [data.placeholderName]: "" + e.currentTarget.value
-                                                 }
-                                             }).then((r) => {
-                                                 //@ts-ignore
-                                                 user.userData[data.placeholderName].set(e.currentTarget.value)
-                                             }).catch((e) => {
-                                                 console.log("asd" + e)
-                                             })
-                                         }}
-                                         value={data.placeholderName}
-                                         title={data.name} />
+                            onChange={(e: React.ChangeEvent<any>) => {
+                                instance.patch(`users/${cookies.get("userId")}`, {
+                                    "userData": {
+                                        [data.placeholderName]: "" + e.currentTarget.value
+                                    }
+                                }).then((r) => {
+                                    //@ts-ignore
+                                    user.userData[data.placeholderName].set(e.currentTarget.value)
+                                }).catch((e) => {
+                                    console.log("asd" + e)
+                                })
+                            }}
+                            value={data.placeholderName}
+                            title={data.name} />
                     })}
                 </div>
             </div>
@@ -96,7 +96,7 @@ const Settings = () => {
             <AdminDashboardHeader titleText={"Biztonság"} />
             <div className={classes.securityWrapper}>
                 <SettingsItem title={"Kétfaktoros autentikáció"} switchState={false} switchOnChange={setSemmi} switchProperty={"twoFactorAuth"} />
-                <SettingsItem title={"Engedélyezett otthoni eszközök"} linkTitle={"Eszközök mutatása"} onClick={setSemmi}  />
+                <SettingsItem title={"Engedélyezett otthoni eszközök"} linkTitle={"Eszközök mutatása"} onClick={setSemmi} />
                 <SettingsItem linkTitle={"Jelszó módosítása"} link={"/profilom/beallitasok/jelszo"} />
             </div>
 

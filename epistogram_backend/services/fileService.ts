@@ -20,7 +20,7 @@ export const uploadVideoFileAsync = (videoId: number, file: UploadedFile) => {
 export const uploadVideoThumbnailFileAsync = (videoId: number, file: UploadedFile) => {
 
     return uploadAssigendFileAsync<Video>(
-        getFilePath("videos", "video_thumbnail", videoId, "png"),
+        getFilePath("videoThumbnails", "video_thumbnail", videoId, "png"),
         () => getVideoByIdAsync(videoId),
         (fileId) => setVideoThumbnailFileId(videoId, fileId),
         (entity) => entity.thumbnailFileId,
@@ -30,7 +30,7 @@ export const uploadVideoThumbnailFileAsync = (videoId: number, file: UploadedFil
 export const uploadAvatarFileAsync = (userId: number, file: UploadedFile) => {
 
     return uploadAssigendFileAsync<User>(
-        getFilePath("videos", "user_avatar", userId, "png"),
+        getFilePath("userAvatars", "user_avatar", userId, "png"),
         () => getUserById(userId),
         (fileId) => setUserAvatarFileId(userId, fileId),
         (entity) => entity.avatarFileId,
