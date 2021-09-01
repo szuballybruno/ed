@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import AdminDashboardHeader from "../universal/adminDashboardHeader/AdminDashboardHeader";
 import {AdminDashboardSearch} from "../universal/searchBar/AdminDashboardSearch";
-import adminSideState from "../../../store/admin/adminSideState";
 import instance from "../../../services/axiosInstance";
 import {none, useState} from "@hookstate/core";
 import {AdministrationListItem} from "../universal/adminDashboardSearchItem/AdministrationListItem";
@@ -11,7 +10,6 @@ import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboard
 import {AxiosResponse} from "axios";
 import {UserStatistics} from "../users/userStatistics/UserStatistics";
 import {AddVote} from "./votes_components/AddVote";
-import {vote} from "../../../store/types/vote";
 import {Add} from "@material-ui/icons";
 import {Fab} from "@material-ui/core";
 import { backendUrl } from '../../../Environemnt';

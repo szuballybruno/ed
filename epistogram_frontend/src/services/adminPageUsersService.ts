@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
-import { LoadingStateType } from "../store/application/ApplicationRunningStateInterface";
+import { LoadingStateType } from "../models/types";
 import { httpGetAsync } from "./httpClient";
 
 export const useUserListQuery = (userId: number | null, searchText: string) => {

@@ -8,7 +8,7 @@ import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
 import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { useNavigation } from "../../services/navigatior";
-import { useShowNotification } from "../../services/notifications";
+import { showNotification } from "../../services/notifications";
 import { useSaveSignupQuestionnaireAnswers, useSignupData } from "../../services/signupService";
 import { finalizeUserRegistartionAsync } from "../../services/userManagementService";
 import AllNavbar from "../universal/navigation/navbar/AllNavbar";
@@ -39,7 +39,6 @@ export const SignupPage = () => {
     const questions = signupData?.questions ?? [];
 
     // util
-    const showNotification = useShowNotification();
     const { navigate } = useNavigation();
     const regFormState = useRegistrationFinalizationFormState();
 

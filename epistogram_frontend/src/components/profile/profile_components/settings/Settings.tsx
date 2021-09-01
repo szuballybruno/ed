@@ -1,7 +1,5 @@
 import React from 'react';
 import classes from './settings.module.scss'
-import { useState } from "@hookstate/core";
-import userDetailsState from "../../../../store/user/userSideState";
 import AdminDashboardHeader from "../../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import SettingsItem from "./settings_components/SettingsItem";
@@ -11,8 +9,6 @@ import instance from "../../../../services/axiosInstance";
 
 
 const Settings = () => {
-    const user = useState(userDetailsState)
-    const cookies = new Cookies()
 
     const dataSheetData = [{
         name: "Vezetéknév",
@@ -65,21 +61,21 @@ const Settings = () => {
                 </div>
                 <div className={classes.dataSheetItemWrapper}>
                     {dataSheetData.map((data) => {
-                        return <EditItem name={`${user.userData[data.placeholderName as keyof typeof user.userData].get() || ""}`}
-                            onChange={(e: React.ChangeEvent<any>) => {
-                                instance.patch(`users/${cookies.get("userId")}`, {
-                                    "userData": {
-                                        [data.placeholderName]: "" + e.currentTarget.value
-                                    }
-                                }).then((r) => {
-                                    //@ts-ignore
-                                    user.userData[data.placeholderName].set(e.currentTarget.value)
-                                }).catch((e) => {
-                                    console.log("asd" + e)
-                                })
-                            }}
-                            value={data.placeholderName}
-                            title={data.name} />
+                        // return <EditItem name={`${user.userData[data.placeholderName as keyof typeof user.userData].get() || ""}`}
+                        //     onChange={(e: React.ChangeEvent<any>) => {
+                        //         instance.patch(`users/${cookies.get("userId")}`, {
+                        //             "userData": {
+                        //                 [data.placeholderName]: "" + e.currentTarget.value
+                        //             }
+                        //         }).then((r) => {
+                        //             //@ts-ignore
+                        //             user.userData[data.placeholderName].set(e.currentTarget.value)
+                        //         }).catch((e) => {
+                        //             console.log("asd" + e)
+                        //         })
+                        //     }}
+                        //     value={data.placeholderName}
+                        //     title={data.name} />
                     })}
                 </div>
             </div>

@@ -11,7 +11,6 @@ import classes from "./articles.module.scss";
 import './components/carouselStyles.scss'
 import { State, useState } from "@hookstate/core";
 import ArticlesListItem from "./components/ArticlesListItem";
-import applicationRunningState from "../../../../store/application/applicationRunningState";
 import instance from "../../../../services/axiosInstance";
 import { globalConfig } from "../../../../configuration/config";
 import { backendUrl } from '../../../../Environemnt';

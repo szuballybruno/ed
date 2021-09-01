@@ -1,6 +1,6 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/react";
 import { isArray } from "../../frontendHelpers";
-import { LoadingStateType } from "../../store/application/ApplicationRunningStateInterface";
+import { LoadingStateType } from "../../models/types";
 import { FailedComponent, LoadingComponent } from "./loadingComponents/LoadingComponent";
 
 export const LoadingFrame = (props: FlexProps & {
@@ -60,7 +60,13 @@ export const LoadingFrame = (props: FlexProps & {
         throw new Error(`Loading state is not reckognised: ${state}!`);
     }
 
-    return <Flex id="loadingFrame" height="100%" width="100%" justify="center" align="center" {...flexProps}>
+    return <Flex
+        id="loadingFrame"
+        flex="1"
+        justify="center"
+        align="center"
+        overflow="hidden"
+        {...flexProps}>
         {getLoadingComponent()}
     </Flex>;
 }

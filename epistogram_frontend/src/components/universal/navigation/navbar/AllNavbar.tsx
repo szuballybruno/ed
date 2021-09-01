@@ -1,16 +1,11 @@
 import { Box } from "@chakra-ui/react";
-import { useState } from "@hookstate/core";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { globalConfig } from "../../../../configuration/config";
 import { useIsDesktopView } from "../../../../frontendHelpers";
-// @ts-ignore
-import applicationRunningState from "../../../../store/application/applicationRunningState";
 import classes from "./navbar.module.scss";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
 import MobileDropdown from "./navbar_components/MobileDropdown";
-
-
 
 interface NavbarIF {
     desktopClassName?: string;
@@ -36,7 +31,6 @@ interface NavbarIF {
 const Navbar = (props: NavbarIF) => {
 
     const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
-    const app = useState(applicationRunningState)
 
     const MobileNavbar = () => <div className={classes.mobileNavbarOuterWrapperIn}>
         <NavLink to={'/kezdolap'}>
@@ -53,12 +47,10 @@ const Navbar = (props: NavbarIF) => {
     const renderDesktopNavbar = () => <DesktopNavbar {...props} />;
 
     const renderMobileNavbar = () => {
-        return app.hamburgerButtonState.get()
-            ? <div className={classes.mobileNavbarOuterWrapperOut}>
-                <MobileNavbar />
-                <MobileDropdown menuItems={props.menuItems} showHighlightedButton={props.showHighlightedButton} />
-            </div>
-            : <MobileNavbar />
+        return <div className={classes.mobileNavbarOuterWrapperOut}>
+            <MobileNavbar />
+            <MobileDropdown menuItems={props.menuItems} showHighlightedButton={props.showHighlightedButton} />
+        </div>
     }
 
     return <Box height={isDesktop ? "80px" : "60px"} >

@@ -1,4 +1,3 @@
-//BASIC
 import { Flex } from "@chakra-ui/react";
 import { Divider, Grid } from "@material-ui/core";
 import React, { ReactNode } from 'react';
@@ -16,7 +15,6 @@ import { DashBoardRightSpacer, DashboardVerticalDivider, DashoardLeftItemGroup }
 import { OverviewDashboard } from "./dashboard_components/OverviewDashboard/OverviewDashboard";
 import ProfileStats from "./dashboard_components/ProfileStats/ProfileStats";
 import RecommendedCourses from "./dashboard_components/RecommendedCourses/RecommendedCourses";
-import Votes from "./dashboard_components/Votes/Votes";
 import classes from './userDashBoard.module.scss';
 
 const OverviewSection = (props: { children: ReactNode, title: string }) => {
@@ -32,8 +30,6 @@ const OverviewPage = () => {
 
     const user = useContext(CurrentUserContext);
     const { pageDTO, status, error } = useOverviewPageDTO();
-
-    console.log(pageDTO);
 
     // current item
     const currentItem = pageDTO?.currentCourseItem;
@@ -99,7 +95,7 @@ const OverviewPage = () => {
                     </OverviewSection>
 
                     <OverviewSection title="Szavazás">
-                        <Votes />
+                        {/* <Votes /> */}
                         {recommendedCourses === [] ? <DashBoardRightSpacer title={"Kurzusajánló"} /> : null}
                         {recommendedCourses === [] ? <RecommendedCourses courses={recommendedCourses} /> : null}
                         <DashBoardRightSpacer title={""} />

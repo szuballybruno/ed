@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react';
 import AdminDashboardHeader from "../universal/adminDashboardHeader/AdminDashboardHeader";
 import {AdminDashboardSearch} from "../universal/searchBar/AdminDashboardSearch";
-import adminSideState from "../../../store/admin/adminSideState";
 import instance from "../../../services/axiosInstance";
-import { none, useState } from "@hookstate/core";
 import {AdministrationListItem} from "../universal/adminDashboardSearchItem/AdministrationListItem";
 import { Route, Switch } from "react-router-dom";
 import { AdminDashboardWrapper } from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
 import { AdminDashboardList } from "../universal/adminDashboardList/AdminDashboardList";
-import { article } from "../../../store/types/article";
 import { AxiosResponse } from "axios";
 import { backendUrl } from '../../../Environemnt';
 import {Fab} from "@material-ui/core";

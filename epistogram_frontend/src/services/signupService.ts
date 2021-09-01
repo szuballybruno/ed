@@ -3,7 +3,7 @@ import { useReactQuery } from "../frontendHelpers";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionnaireAnswersDTO } from "../models/shared_models/SaveQuestionnaireAnswersDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
-import { LoadingStateType } from "../store/application/ApplicationRunningStateInterface";
+import { LoadingStateType } from "../models/types";
 import { httpPostAsync } from "./httpClient";
 
 export const useSignupData = (invitationToken: string) => {

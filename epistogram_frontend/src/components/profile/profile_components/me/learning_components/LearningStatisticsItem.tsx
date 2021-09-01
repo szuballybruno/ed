@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from "./learningStatisticsItem.module.scss";
-import {Button, Card, Typography} from "@material-ui/core";
-import {Fullscreen, FullscreenExit} from "@material-ui/icons";
-import {useState} from "@hookstate/core";
+import { Button, Card, Typography } from "@material-ui/core";
+import { Fullscreen, FullscreenExit } from "@material-ui/icons";
 
 /*
  * Expandable statistics item for CSS Grid container
@@ -26,10 +25,10 @@ const LearningStatisticsItem = (props: {
     children?: React.ReactNode
     chartSize?: string
 }) => {
-    const open = useState(false)
+    const [open, setOpen] = useState(false)
 
     const data = {
-        labels: ['0:00-3:00','3:00-6:00', '6:00-9:00', '9:00-12:00', '12:00-15:00', '15:00-18:00', '18:00-21:00', '21:00-0:00'],
+        labels: ['0:00-3:00', '3:00-6:00', '6:00-9:00', '9:00-12:00', '12:00-15:00', '15:00-18:00', '18:00-21:00', '21:00-0:00'],
         datasets: [
             {
                 label: 'Napok száma amikor ebben az idősávban volt aktivitásom',
@@ -65,18 +64,18 @@ const LearningStatisticsItem = (props: {
 
 
     return <Card className={classes.itemWrapper} style={{
-        gridColumn: `auto / span ${open.get() ? (props.chartSize === "large" ? 4 : 2) : 1}`,
-        gridRow: `auto / span ${open.get() ? 2 : 1}`,
+        gridColumn: `auto / span ${open ? (props.chartSize === "large" ? 4 : 2) : 1}`,
+        gridRow: `auto / span ${open ? 2 : 1}`,
         transition: "all 2s"
     }}>
-        {open.get() ? <div className={classes.chartOuterWrapper}>
+        {open ? <div className={classes.chartOuterWrapper}>
             <div className={classes.headerTitle}>
                 <Typography>{props.title}</Typography>
             </div>
             <div className={classes.chartContainer}>
                 {props.children}
             </div>
-            <Button className={classes.expandButton} onClick={() => {open.set(p => !p)}}>
+            <Button className={classes.expandButton} onClick={() => { setOpen(p => !p) }}>
                 <FullscreenExit />
             </Button>
         </div> : <div className={classes.dataTileWrapper}>
@@ -96,7 +95,7 @@ const LearningStatisticsItem = (props: {
                     </div>
                 </div>
             </div>
-            {props.children && <Button className={classes.expandButton} onClick={() => {open.set(p => !p)}}>
+            {props.children && <Button className={classes.expandButton} onClick={() => { setOpen(p => !p) }}>
                 <Fullscreen />
             </Button>}
         </div>}

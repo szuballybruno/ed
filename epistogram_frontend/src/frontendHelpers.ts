@@ -3,7 +3,7 @@ import queryString from "query-string";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
-import { LoadingStateType } from "./store/application/ApplicationRunningStateInterface";
+import { LoadingStateType } from "./models/types";
 
 export const disallowWindowNavigation = () => {
     window.onbeforeunload = (event) => {

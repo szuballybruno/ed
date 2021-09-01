@@ -1,28 +1,23 @@
-import { useState } from "@hookstate/core";
 import { Button } from "@material-ui/core";
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Redirect } from "react-router";
 import { TypedError } from "../../frontendHelpers";
 import { AuthenticationStateContext } from "../../HOC/data_manager_frame/DataManagerFrame";
 import { useLogInUser } from '../../services/authenticationService';
-import applicationRunningState from "../../store/application/applicationRunningState";
 import SingleInput from "../administration/universal/singleInput/SingleInput";
 import classes from './loginScreen.module.scss';
 
 const LoginScreen = (props: { history: any; }): JSX.Element => {
 
     console.warn("[LoginScreen] Started...")
-    const app = useState(applicationRunningState)
-    const errorMessage = useState("");
-    const setErrorMessage = (message: string) => errorMessage.set(message);
     const logInUser = useLogInUser();
+    const [errorMessage, setErrorMessage] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const authenticate = async (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
-
-        const email = app.currentEmail.get();
-        const password = app.currentPassword.get();
 
         try {
 
@@ -57,7 +52,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
     };
 
     const changeHandler = (e: React.ChangeEvent<{ value: string, name: string }>) => {
-        app[e.currentTarget.name as keyof typeof app].set(e.currentTarget.value)
+        // app[e.currentTarget.name as keyof typeof app].set(e.currentTarget.value)
     };
 
     const authState = useContext(AuthenticationStateContext);
@@ -81,7 +76,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
                     <p className={classes.forgotPassword}>Elfelejtettem a jelszavam</p>
 
                     <Button type="submit" variant={"outlined"}>Bejelentkezés</Button>
-                    <p className={classes.errorLabel}>{errorMessage.get()}</p>
+                    <p className={classes.errorLabel}>{errorMessage}</p>
                 </form>
             </div>
             <div className={classes.regisztracio}>

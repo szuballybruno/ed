@@ -1,12 +1,8 @@
-import { useState } from "@hookstate/core";
 import { Button } from "@material-ui/core";
 import { PlayArrow } from "@material-ui/icons";
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import { globalConfig } from "../../../../../configuration/config";
-import { currentOrigin } from '../../../../../Environemnt';
-import applicationRunningState from "../../../../../store/application/applicationRunningState";
-import userDetailsState from "../../../../../store/user/userSideState";
 import classes from "./desktopNavbar.module.scss";
 import MenuItemList from "./MenuItemList";
 
@@ -28,10 +24,9 @@ const DesktopNavbar = (props: {
     style?: React.CSSProperties | undefined,
 
 }) => {
-    const app = useState(applicationRunningState)
-    const user = useState(userDetailsState)
 
     const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
+    const currentVideoWatchUrl = ""; // "/watch/" + user.userData.currentCourse._id.get() + "/" + user.userData.currentItem._id.get()
 
     return (
         <div style={props.style} className={classes.navbarOuterWrapper}>
@@ -47,12 +42,12 @@ const DesktopNavbar = (props: {
                             size={"large"}
                             className={classes.showSomethingButton}
                             onClick={() => {
-                                app.modalState.set(true)
+                                // app.modalState.set(true)
                             }}>
                             Mutass valamit!
                         </Button>
                         : null}
-                    <NavLink to={"/watch/" + user.userData.currentCourse._id.get() + "/" + user.userData.currentItem._id.get()}>
+                    <NavLink to={currentVideoWatchUrl}>
                         <Button variant={"outlined"}
                             size={"large"}
                             onClick={() => {

@@ -1,6 +1,5 @@
 import React from 'react';
 import classes from './articlesListItem.module.scss'
-import {State} from "@hookstate/core";
 
 const ArticlesListItem = (props: {
     articleItem: {
@@ -13,7 +12,8 @@ const ArticlesListItem = (props: {
     currentArticle: State<{
         index: number,
         articleCoverImage: string
-    }>}) => {
+    }>
+}) => {
 
     function shorten(str: string, maxLen: number, separator: string = ' ') {
         if (str.length <= maxLen) return str;
@@ -33,7 +33,7 @@ const ArticlesListItem = (props: {
                     {props.articleItem.articleTitle}
                 </h1>
                 <p className={classes.articleDescription}>
-                    {shorten(props.articleItem.articleDescription, 60 )}
+                    {shorten(props.articleItem.articleDescription, 60)}
                 </p>
             </div>
         </div>

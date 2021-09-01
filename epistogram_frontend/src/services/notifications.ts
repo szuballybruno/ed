@@ -1,25 +1,38 @@
-import { useState } from "@hookstate/core";
-import applicationRunningState from "../store/application/applicationRunningState";
+import { useContext } from "react";
+import { toast } from 'react-toastify';
+import { DialogContext } from "../HOC/DialogFrame";
 
 export type NotificationType = "error" | "info" | "warning";
 
-export const useShowNotification = () => {
+export const showNotification = (text: string, type?: NotificationType) => {
 
-    const app = useState(applicationRunningState);
+    toast.info(
+        text,
+        {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
 
-    return (text: string, type?: NotificationType) => {
+    // const app = useState(applicationRunningState);
 
-        if (type == "error")
-            text = "Error: " + text;
+    // return (text: string, type?: NotificationType) => {
 
-        app.snack.snackTitle.set(text);
-        app.snack.showSnack.set(true);
-    }
+    //     if (type == "error")
+    //         text = "Error: " + text;
+
+    //     app.snack.snackTitle.set(text);
+    //     app.snack.showSnack.set(true);
+    // }
 }
 
-export const useAlert = () => {
+export const useDialog = () => {
 
-    const app = useState(applicationRunningState)
+    const dialogContext = useContext(DialogContext);
 
-    return app.alert;
+    return dialogContext!;
 }

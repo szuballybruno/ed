@@ -3,12 +3,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { disallowWindowNavigation, getEventValueCallback, hasValue, TypedError } from "../../../../frontendHelpers";
 import { AddFrame } from "../../../../HOC/add_frame/AddFrame";
 import { CurrentUserContext } from "../../../../HOC/data_manager_frame/DataManagerFrame";
-import { DialogFrame } from "../../../../HOC/dialog_frame/DialogFrame";
 import { CreateInvitedUserDTO } from "../../../../models/shared_models/CreateInvitedUserDTO";
 import { OrganizationDTO } from "../../../../models/shared_models/OrganizationDTO";
 import { UserDTO } from "../../../../models/shared_models/UserDTO";
 import { useNavigation } from "../../../../services/navigatior";
-import { useAlert, useShowNotification } from "../../../../services/notifications";
+import { showNotification, useDialog } from "../../../../services/notifications";
 import { useOrganizations } from "../../../../services/organizationsService";
 import { createInvitedUserAsync } from "../../../../services/userManagementService";
 import SelectFromArray, { OptionType } from "../../universal/selectFromArray/SelectFromArray";
@@ -50,13 +49,12 @@ const AddUser = () => {
     const [jobTitle, setJobTitle] = useState("");
     const [organizationId, setOrganizationId] = useState("");
 
+    const { showDialog } = useDialog();
     const user = useContext(CurrentUserContext) as UserDTO;
-    const alert = useAlert();
     const canModifyOrganization = user.role === "admin";
     const { organizations } = useOrganizations();
     const organizationOptions = mapOrganizations(organizations);
     const unblockHandle = useRef<any>();
-    const showNotification = useShowNotification();
     const { navigate, history } = useNavigation();
     const isChanged = hasValue(firstName)
         || hasValue(lastName)
@@ -94,16 +92,13 @@ const AddUser = () => {
             // take some custom action here
             // i chose to show my custom modal warning user froim going back
             // rather than relying on the browser's alert
-            alert.set({
-                showAlert: true,
-                targetLocation: targetLocation.pathname,
-                alertTitle: "Biztosan megszakítod a felhasználó hozzáadását?",
-                alertDescription: "Megszakítás esetén a beírt adatok elvesznek.",
-                showFirstButton: true,
+            showDialog({
+                title: "Biztosan megszakítod a felhasználó hozzáadását?",
+                description: "Megszakítás esetén a beírt adatok elvesznek.",
                 firstButtonTitle: "Folytatom",
-                showSecondButton: true,
                 secondButtonTitle: "Megszakítom"
-            })
+            });
+
             return false;
         });
         return function () {
@@ -111,23 +106,23 @@ const AddUser = () => {
         }
     })
 
-    const discardChangesAndNavigate = () => {
-        if (unblockHandle) {
-            alert.showAlert.set(false)
-            unblockHandle.current()
-        }
+    // const discardChangesAndNavigate = () => {
+    //     if (unblockHandle) {
 
-        // get altert target location, and navigate there
-        // navigate to some other page or do some routing action now
-        // history.push("/any/other/path")
-        navigate(alert.targetLocation.get())
-    }
+    //         unblockHandle.current()
+    //     }
 
-    const continueEditing = () => {
-        if (unblockHandle) {
-            alert.showAlert.set(false)
-        }
-    }
+    //     // get altert target location, and navigate there
+    //     // navigate to some other page or do some routing action now
+    //     // history.push("/any/other/path")
+    //     navigate(alert.targetLocation.get())
+    // }
+
+    // const continueEditing = () => {
+    //     if (unblockHandle) {
+    //         alert.showAlert.set(false)
+    //     }
+    // }
 
     disallowWindowNavigation();
 
@@ -174,64 +169,59 @@ const AddUser = () => {
         }
     }
 
-    return <DialogFrame
-        firstButtonOnClick={continueEditing}
-        secondButtonOnClick={discardChangesAndNavigate}
-        className={classes.dialogFrameWrapper}>
-        <AddFrame
-            submitHandler={e => {
+    return <AddFrame
+        submitHandler={e => {
 
-                e.preventDefault();
-                submitAddUserRequestAsync();
-            }}
-            title={"Új felhasználó hozzáadása"}>
+            e.preventDefault();
+            submitAddUserRequestAsync();
+        }}
+        title={"Új felhasználó hozzáadása"}>
 
-            {/* first & last name */}
-            <DoubleInputs
-                firstLabelText={"Vezetéknév"}
-                secondLabelText={"Keresztnév"}
-                firstLabelName={"lastName"}
-                secondLabelName={"firstName"}
-                changeHandler={x => handleFirstLastNameChange(x.currentTarget.name, x.currentTarget.value)} />
+        {/* first & last name */}
+        <DoubleInputs
+            firstLabelText={"Vezetéknév"}
+            secondLabelText={"Keresztnév"}
+            firstLabelName={"lastName"}
+            secondLabelName={"firstName"}
+            changeHandler={x => handleFirstLastNameChange(x.currentTarget.name, x.currentTarget.value)} />
 
-            {/* email */}
-            <SingleInput
-                labelText={"E-mail"}
-                name={"email"}
-                changeHandler={getEventValueCallback(setEmail)} />
+        {/* email */}
+        <SingleInput
+            labelText={"E-mail"}
+            name={"email"}
+            changeHandler={getEventValueCallback(setEmail)} />
 
-            {/* organization */}
-            {canModifyOrganization && <SelectFromArray
-                labelText={"Cég"}
-                showNull
-                name={"organizationId"}
-                value={organizationId}
-                optionValues={organizationOptions}
-                changeHandler={getEventValueCallback(setOrganizationId)} />}
+        {/* organization */}
+        {canModifyOrganization && <SelectFromArray
+            labelText={"Cég"}
+            showNull
+            name={"organizationId"}
+            value={organizationId}
+            optionValues={organizationOptions}
+            changeHandler={getEventValueCallback(setOrganizationId)} />}
 
-            {/* job title */}
-            <SingleInput
-                labelText={"Beosztás"}
-                name={"jobTitle"}
-                changeHandler={getEventValueCallback(setJobTitle)} />
+        {/* job title */}
+        <SingleInput
+            labelText={"Beosztás"}
+            name={"jobTitle"}
+            changeHandler={getEventValueCallback(setJobTitle)} />
 
-            {/* role */}
-            <SelectFromArray labelText={"Jogosultsági kör"}
-                name={"role"}
-                value={role}
-                optionValues={roles}
-                changeHandler={getEventValueCallback(setRole)} />
+        {/* role */}
+        <SelectFromArray labelText={"Jogosultsági kör"}
+            name={"role"}
+            value={role}
+            optionValues={roles}
+            changeHandler={getEventValueCallback(setRole)} />
 
-            {/* submit button */}
-            <Button
-                className={classes.submitButton}
-                type={"submit"}
-                variant={"outlined"}
-                color={"secondary"}>
-                Feltöltés
-            </Button>
-        </AddFrame>
-    </DialogFrame>
+        {/* submit button */}
+        <Button
+            className={classes.submitButton}
+            type={"submit"}
+            variant={"outlined"}
+            color={"secondary"}>
+            Feltöltés
+        </Button>
+    </AddFrame>
 };
 
 export default AddUser;

@@ -4,7 +4,7 @@ import classes from './mainPanels.module.scss'
 
 export const MainWrapper = (props: { children: ReactNode }) => {
 
-    return <Flex id="mainWrapper" direction="column" height="100vh">
+    return <Flex id="mainWrapper" direction="column" height="100%" width="100%">
         {props.children}
     </Flex>
 };

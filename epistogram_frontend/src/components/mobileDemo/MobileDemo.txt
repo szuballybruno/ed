@@ -1,4 +1,3 @@
-import { useState } from "@hookstate/core";
 import { Button, Typography } from "@material-ui/core";
 import React from 'react';
 import { globalConfig } from "../../configuration/config";
@@ -24,7 +23,7 @@ export const MobileDemo = () => {
 
     return <div className={classes.mobileDemoWrapper}>
         <div className={classes.navbar}>
-            <img className={classes.logo} alt="EpistoGram Logo" src={logoUrl}/>
+            <img className={classes.logo} alt="EpistoGram Logo" src={logoUrl} />
         </div>
         <div className={classes.mobileDemoTitleWrapper}>
             <Typography style={{
@@ -33,34 +32,34 @@ export const MobileDemo = () => {
         </div>
         {showNextPage.get() ? <div className={classes.mobileDemoButtonsWrapper}>
             <Button variant={"outlined"}
-                    style={{backgroundColor: wrongAnswer[0].get() ? "red" : ""}}
-                    onClick={(e) => {
-                        wrongAnswer[0].set(true)
-                        setTimeout(() => {
-                            wrongAnswer[0].set(false)
-                        }, 500)
-                    }}>
+                style={{ backgroundColor: wrongAnswer[0].get() ? "red" : "" }}
+                onClick={(e) => {
+                    wrongAnswer[0].set(true)
+                    setTimeout(() => {
+                        wrongAnswer[0].set(false)
+                    }, 500)
+                }}>
                 CTR
             </Button>
             <Button variant={"outlined"}
-                    style={{backgroundColor: wrongAnswer[1].get() ? "red" : ""}}
-                    onClick={(e) => {
-                        wrongAnswer[1].set(true)
-                        setTimeout(() => {
-                            wrongAnswer[1].set(false)
-                        }, 500)
-                    }}>ROI</Button>
+                style={{ backgroundColor: wrongAnswer[1].get() ? "red" : "" }}
+                onClick={(e) => {
+                    wrongAnswer[1].set(true)
+                    setTimeout(() => {
+                        wrongAnswer[1].set(false)
+                    }, 500)
+                }}>ROI</Button>
             <Button variant={"outlined"} onClick={() => {
                 showNextPage.set(false)
             }}>CPC</Button>
             <Button variant={"outlined"}
-                    style={{backgroundColor: wrongAnswer[3].get() ? "red" : ""}}
-                    onClick={(e) => {
-                        wrongAnswer[3].set(true)
-                        setTimeout(() => {
-                            wrongAnswer[3].set(false)
-                        }, 500)
-                    }}>ROAS</Button>
+                style={{ backgroundColor: wrongAnswer[3].get() ? "red" : "" }}
+                onClick={(e) => {
+                    wrongAnswer[3].set(true)
+                    setTimeout(() => {
+                        wrongAnswer[3].set(false)
+                    }, 500)
+                }}>ROAS</Button>
         </div> : <div className={classes.nextPageWrapper}>
             <img className={classes.congrat} src={`${globalConfig.assetStorageUrl}/application/welldone.png`} />
             <div>

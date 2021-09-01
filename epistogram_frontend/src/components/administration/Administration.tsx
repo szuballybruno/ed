@@ -1,26 +1,23 @@
+import { Chip, Divider, Typography } from "@material-ui/core";
 import React from 'react';
-import classes from './users/userList/administration.module.scss'
-import userDetailsState from "../../store/user/userSideState";
-import { useState } from "@hookstate/core";
 import { withRouter } from "react-router-dom";
 import { globalConfig } from "../../configuration/config";
-import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
-import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
-import {
-    Chip,
-    Divider,
-    Typography
-} from "@material-ui/core";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/mainPanels/MainPanels";
 import menuItems from "../../configuration/menuItems.json";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/mainPanels/MainPanels";
+import { AdministrationRouting } from "../../routing/AdministrationRouting";
+import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { AdminAddHeader } from "./universal/adminAddHeader/AdminAddHeader";
+import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
 import { SaveBar } from "./universal/saveBar/SaveBar";
-import { AdministrationRouting } from "../../routing/AdministrationRouting";
+import classes from './users/userList/administration.module.scss';
 
 const Administration = (props: { match: { url: string; } }) => {
 
-    const user = useState(userDetailsState)
+    // const user = useState(userDetailsState)
+
+    const userFullName = "WIP";
+    const userRole = "WIP";
 
     return <MainWrapper>
         <Navbar showHighlightedButton={true}
@@ -36,10 +33,10 @@ const Administration = (props: { match: { url: string; } }) => {
                             <ProfileImage imageUrl="" />
                         </div>
                         <div className={classes.profileNameWrapper}>
-                            <Typography variant={"h5"}>{user.userData.lastName.get() + " " + user.userData.firstName.get()}</Typography>
+                            <Typography variant={"h5"}>{userFullName}</Typography>
                         </div>
                         <div className={classes.profileRoleWrapper}>
-                            <Chip label={user.userData.role.get()} />
+                            <Chip label={userRole} />
                         </div>
                         <Divider style={{ zIndex: 999, marginTop: 20 }} />
                     </div>

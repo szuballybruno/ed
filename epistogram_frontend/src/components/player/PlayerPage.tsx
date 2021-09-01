@@ -8,7 +8,7 @@ import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
 import { MainWrapper } from "../../HOC/mainPanels/MainPanels";
 import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
 import { useNavigation } from "../../services/navigatior";
-import { useAlert } from "../../services/notifications";
+import { useDialog } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
 import { Copyright } from "../universal/footers/copyright/Copyright";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
@@ -16,13 +16,12 @@ import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import classes from './playerMain.module.scss';
 import PlayerDescription from "./player_components/descriptions/description_components/PlayerDescription";
-import GeneratedInfo from "./player_components/GeneratedInfo";
 import VideoPlayer from "./player_components/VideoPlayer";
 import { CourseItemList } from "./player_components/video_list/CourseItemList";
 
 const PlayerPage = () => {
 
-    const alert = useAlert();
+    const { showDialog } = useDialog();
     const { navigate, navigateToPlayer } = useNavigation();
     const { id: courseItemString } = useParams<{ id: string }>();
     const courseItemType = getQueryParam("type") as CourseItemType;
@@ -35,15 +34,11 @@ const PlayerPage = () => {
 
     const navigateToCourseItem = (courseItemId: number, courseItemType: CourseItemType) => {
 
-        alert.set({
-            alertTitle: "Biztosan megszakítod a vizsgát?",
-            targetLocation: "",
-            alertDescription: "Figyelem! Ha most kilépsz, a jelenlegi vizsgád elveszik és nem kezdhető újra.",
-            showFirstButton: true,
+        showDialog({
+            title: "Biztosan megszakítod a vizsgát?",
+            description: "Figyelem! Ha most kilépsz, a jelenlegi vizsgád elveszik és nem kezdhető újra.",
             firstButtonTitle: "Mégse",
-            showSecondButton: true,
             secondButtonTitle: "Igen",
-            showAlert: true
         });
 
         navigateToPlayer(courseItemId, courseItemType);

@@ -7,7 +7,7 @@ import ReactPlayer from "react-player";
 import screenfull from "screenfull";
 import { secondsToTime } from "../../../frontendHelpers";
 import { VideoDTO } from "../../../models/shared_models/VideoDTO";
-import Overlay from "./overlay/Overlay";
+import { OverlayQuestionnaire } from "./overlay/OverlayQuestionnaire";
 import classes from "./player.module.scss";
 
 const downloadedTracks = [
@@ -54,7 +54,7 @@ const VideoPlayer = (props: {
     return (
         <div className={classes.playerInnerWrapper} ref={playerContainerRef}>
 
-            <Overlay currentSeekSliderValue={playedSeconds}>
+            <OverlayQuestionnaire currentSeekSliderValue={playedSeconds}>
 
                 <Box
                     id="videoWrapper"
@@ -134,7 +134,7 @@ const VideoPlayer = (props: {
                         <Fullscreen />
                     </button>
                 </Box>
-            </Overlay>
+            </OverlayQuestionnaire>
         </div>
     )
 };

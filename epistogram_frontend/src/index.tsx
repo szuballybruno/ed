@@ -6,10 +6,10 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from "react-router-dom";
 import { theme } from "./configuration/defaultMUITheme";
 import { DataManagerFrame } from "./HOC/data_manager_frame/DataManagerFrame";
-import { PopupsWrapper } from "./HOC/popups_wrapper/PopupsWrapper";
+import { DialogFrame } from "./HOC/DialogFrame";
+import { NotificationsFrame } from "./HOC/popups_wrapper/NotificationsFrame";
 import './index.css';
-import {MainRouting} from "./routing/MainRouting";
-
+import { MainRouting } from "./routing/MainRouting";
 
 const queryClient = new QueryClient();
 
@@ -19,9 +19,11 @@ ReactDOM.render(
             <StylesProvider injectFirst>
                 <ThemeProvider theme={theme}>
                     <DataManagerFrame>
-                        <PopupsWrapper>
-                            <MainRouting />
-                        </PopupsWrapper>
+                        <DialogFrame>
+                            <NotificationsFrame>
+                                <MainRouting />
+                            </NotificationsFrame>
+                        </DialogFrame>
                     </DataManagerFrame>
                 </ThemeProvider>
             </StylesProvider>

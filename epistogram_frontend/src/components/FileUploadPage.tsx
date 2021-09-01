@@ -3,6 +3,7 @@ import { Button, ButtonProps } from "@material-ui/core"
 import { ReactNode } from "react";
 import { uploadAvatarFileAsync, uploadVideoFileAsync } from "../services/fileService";
 import { httpPostAsync, postFileAsync } from "../services/httpClient";
+import { showNotification, useDialog } from "../services/notifications";
 
 const FileUploadButton = (props: {
     children: ReactNode,
@@ -32,6 +33,8 @@ const FileUploadButton = (props: {
 
 export const FileUploadPage = () => {
 
+    const { showDialog } = useDialog();
+
     return <Box>
         <FileUploadButton onSelected={(file) => {
 
@@ -45,5 +48,20 @@ export const FileUploadPage = () => {
         }}>
             Upload avatar...
         </FileUploadButton>
+
+        <Button onClick={() => {
+
+            showNotification("asd");
+        }}>Notif</Button>
+
+        <Button onClick={() => {
+
+            showDialog({
+                title: "asd",
+                description: "desc",
+                firstButtonTitle: "first b",
+                secondButtonTitle: "sec b"
+            })
+        }}>Dialog</Button>
     </Box>
 }

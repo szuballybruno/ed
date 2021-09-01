@@ -1,13 +1,10 @@
 import React from 'react';
+import { globalConfig } from "../../../../configuration/config";
 import classes from "./profileCourseStats.module.scss";
-import {useState} from "@hookstate/core";
-import userDetailsState from "../../../../store/user/userSideState";
-import {globalConfig} from "../../../../configuration/config";
 
 const ProfileCourseStats = (props: { style?: React.CSSProperties }) => {
-    const user = useState(userDetailsState)
 
-    const ProfileCourseStatsItem = (props: {dataCount: number, dataString: string, imageSrc: string}) => {
+    const ProfileCourseStatsItem = (props: { dataCount: number, dataString: string, imageSrc: string }) => {
         return <div className={classes.firstRowStatsItem}>
             <div className={classes.firstRowStatsItemHeader}>
                 <h2>{props.dataCount + props.dataString}</h2>
@@ -22,7 +19,7 @@ const ProfileCourseStats = (props: { style?: React.CSSProperties }) => {
     //TODO: Opcióknak külön komponensek
 
     return (
-        user.get() ? <div style={props.style} className={classes.firstRowStatsContainer}>
+        <div style={props.style} className={classes.firstRowStatsContainer}>
             <div className={classes.firstRowStatsInnerContainer}>
                 <div className={classes.firstRowStatsHeaderWrapper}>
                     <h1>Statisztikám</h1>
@@ -35,7 +32,7 @@ const ProfileCourseStats = (props: { style?: React.CSSProperties }) => {
                     <ProfileCourseStatsItem dataCount={3} dataString={" vizsga"} imageSrc={`${globalConfig.assetStorageUrl}/application/online-learning.svg`} />
                 </div>
             </div>
-        </div> : <div>barack</div>
+        </div>
     );
 };
 

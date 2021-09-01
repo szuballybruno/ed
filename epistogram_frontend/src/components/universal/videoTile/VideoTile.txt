@@ -1,9 +1,8 @@
 import React from 'react';
 import classes from "./videoTile.module.scss";
-import {globalConfig} from "../../../configuration/config";
-import {  item } from '../../../store/types/item';
+import { globalConfig } from "../../../configuration/config";
 
-const VideoTile = (props: {item: item, itemIndex: number}) => {
+const VideoTile = (props: { item: item, itemIndex: number }) => {
     return (
         <div className={classes.searchItemWrapper}>
             <div className={classes.searchItem}>
@@ -15,7 +14,7 @@ const VideoTile = (props: {item: item, itemIndex: number}) => {
                         <div className={classes.videoMainTitleItem}>
                             <span>{props.item.title}</span>
                         </div>
-                        <div className={classes.videoTitleDivider}/>
+                        <div className={classes.videoTitleDivider} />
                         <div className={classes.videoSubTitleItem}>
                             <span>{props.item.subTitle}</span>
                         </div>
