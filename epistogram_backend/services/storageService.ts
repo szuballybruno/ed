@@ -27,6 +27,12 @@ export const uploadToStorageAsync = (file: UploadedFile, path: string) => new Pr
         .end(buffer);
 })
 
+export const deleteStorageFileAsync = async (filePath: string) => {
+
+    const bucket = getBucket();
+    await bucket.file(filePath).delete();
+}
+
 export const getStorageFileUrl = (filePath: string) => {
 
     return `https://storage.googleapis.com/${bucketName}/${filePath}`;

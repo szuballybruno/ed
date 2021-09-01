@@ -30,12 +30,12 @@ export class Video {
     videoFile: StorageFile
 
     // thumbnail file
-    // @Column({ nullable: true })
-    // thumbnailFileId: number;
+    @Column({ nullable: true })
+    thumbnailFileId: number;
 
-    // @OneToMany(type => StorageFile, f => f.videos)
-    // @JoinColumn({ name: "thumbnailFileId" })
-    // thumbnailFile: StorageFile
+    @OneToOne(type => StorageFile)
+    @JoinColumn({ name: "thumbnailFileId" })
+    thumbnailFile: StorageFile
 
     // -> users 
     @OneToMany(type => User, user => user.currentVideo)

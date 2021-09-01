@@ -69,6 +69,17 @@ export const getCurrentUser = async (req: Request) => {
     return currentUser;
 }
 
+export const setUserAvatarFileId = async (userId: number, avatarFileId: number) => {
+
+    await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .save({
+            id: userId,
+            avatarFileId: avatarFileId
+        });
+}
+
 export const setUserActiveRefreshToken = (userId: number, refreshToken: string) => {
 
     return staticProvider

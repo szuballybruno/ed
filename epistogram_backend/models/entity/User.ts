@@ -3,6 +3,7 @@ import { Course } from "./Course";
 import { Exam } from "./Exam";
 import { Organization } from "./Organization";
 import { QuestionAnswer } from "./QuestionAnswer";
+import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
 import { Video } from "./Video";
 
@@ -55,6 +56,14 @@ export class User {
 
     @Column({ nullable: true })
     refreshToken: string;
+
+    // Avatar file
+    @Column({ nullable: true })
+    avatarFileId: number;
+
+    @ManyToOne(() => StorageFile, sf => sf.users)
+    @JoinColumn({ name: 'avatarFileId' })
+    avatarFile: StorageFile
 
     // Organization 
     @Column()
