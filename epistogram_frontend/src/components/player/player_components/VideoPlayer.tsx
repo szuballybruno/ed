@@ -2,6 +2,7 @@ import { Box } from "@chakra-ui/react";
 import { Slider, Typography } from "@material-ui/core";
 import { ClosedCaption, Fullscreen, Pause, PlayArrow } from "@material-ui/icons";
 import React, { useRef } from "react";
+import { useState } from "react";
 import ReactPlayer from "react-player";
 import screenfull from "screenfull";
 import { secondsToTime } from "../../../frontendHelpers";
@@ -37,6 +38,8 @@ const VideoPlayer = (props: {
     const [isPlaying, setIsPlaying] = React.useState(false);
     const [playedSeconds, setPlayedSeconds] = React.useState(0);
     const [videoLength, setVideoLength] = React.useState(0);
+    const [showControls, setShowControls] = useState(true);
+    const controlsOpacity = showControls || !isPlaying ? 1 : 0;
 
     const handlePlayPause = () => setIsPlaying(isPlaying => !isPlaying);
 
@@ -53,34 +56,45 @@ const VideoPlayer = (props: {
 
             <Overlay currentSeekSliderValue={playedSeconds}>
 
-                {/* the player */}
-                <ReactPlayer
-                    playbackRate={1}
-                    ref={playerRef}
-                    className={classes.player}
-                    url={videoUrl}
-                    width={"100%"}
-                    height={"100%"}
-                    controls={false}
-                    playing={isPlaying}
-                    onPlay={() => setIsPlaying(true)}
-                    onProgress={(playedInfo) => {
+                <Box
+                    id="videoWrapper"
+                    width="100%"
+                    height="100%"
+                    onClick={() => handlePlayPause()}>
+                    {/* the player */}
+                    <ReactPlayer
+                        playbackRate={1}
+                        ref={playerRef}
+                        className={classes.player}
+                        url={videoUrl}
+                        width={"100%"}
+                        height={"100%"}
+                        controls={false}
+                        playing={isPlaying}
+                        onPlay={() => setIsPlaying(true)}
+                        onProgress={(playedInfo) => {
 
-                        setPlayedSeconds(playedInfo.playedSeconds);
-                    }}
-                    onReady={(e) => {
+                            setPlayedSeconds(playedInfo.playedSeconds);
+                        }}
+                        onReady={(e) => {
 
-                        setVideoLength(e.getDuration());
-                    }}
-                    config={{
-                        file: {
-                            attributes: { crossOrigin: "true" },
-                            tracks: downloadedTracks,
-                        }
-                    }} />
+                            setVideoLength(e.getDuration());
+                        }}
+                        config={{
+                            file: {
+                                attributes: { crossOrigin: "true" },
+                                tracks: downloadedTracks,
+                            }
+                        }} />
+                </Box>
 
                 {/* video controls */}
-                <div className={classes.playerControllerWrapper}>
+                <Box
+                    className={classes.playerControllerWrapper}
+                    onMouseEnter={() => setShowControls(true)}
+                    onMouseLeave={() => setShowControls(false)}
+                    opacity={controlsOpacity}
+                    transition="0.15s">
 
                     {/* play/pause */}
                     <button onClick={(e) => handlePlayPause()}>
@@ -119,7 +133,7 @@ const VideoPlayer = (props: {
                     <button onClick={(e) => toggleFullScreen()}>
                         <Fullscreen />
                     </button>
-                </div>
+                </Box>
             </Overlay>
         </div>
     )
