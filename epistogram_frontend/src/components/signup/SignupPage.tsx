@@ -1,10 +1,9 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Typography } from "@material-ui/core";
-import React, { useState } from 'react';
-import { useEffect } from "react";
+import React, { useEffect, useState } from 'react';
 import { globalConfig } from "../../configuration/config";
-import { getQueryParam, hasValue, usePaging } from "../../frontendHelpers";
-import { LoadingFrame } from "../../HOC/loading_frame/LoadingFrame";
+import { getQueryParam, usePaging } from "../../frontendHelpers";
+import { LoadingFrame } from "../../HOC/LoadingFrame";
 import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { useNavigation } from "../../services/navigatior";
@@ -16,9 +15,9 @@ import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { LinearProgressWithLabel } from "./ProgressIndicator";
 import { SignupForm } from "./SignupForm";
 import { useRegistrationFinalizationFormState } from "./SignupFormLogic";
+import classes from "./signupPage.module.scss";
 import { SignupRadioGroup } from "./SignupRadioGroup";
 import { SignupWrapper } from "./SignupWrapper";
-import classes from "./signupPage.module.scss";
 
 const images = [
     globalConfig.assetStorageUrl + "/application/indulo.svg",

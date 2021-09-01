@@ -3,7 +3,7 @@ import React from 'react';
 import { withRouter } from "react-router-dom";
 import { globalConfig } from "../../configuration/config";
 import menuItems from "../../configuration/menuItems.json";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/mainPanels/MainPanels";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
 import { AdministrationRouting } from "../../routing/AdministrationRouting";
 import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
 import Navbar from "../universal/navigation/navbar/AllNavbar";

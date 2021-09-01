@@ -1,19 +1,14 @@
 import React from 'react';
 import classes from "./editItemPage.module.scss";
 import SelectImage from "../../universal/selectImage/SelectImage";
-import {Divider, List, Typography} from "@material-ui/core";
-import {useParams} from "react-router";
+import { Divider, List, Typography } from "@material-ui/core";
+import { useParams } from "react-router";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
-import {getEventFileCallback, getEventValueCallback} from "../../../../frontendHelpers";
-import {useCreateObjectURL} from "../../../../hooks/useCreateObjectURL";
-
-
+import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
 
 export const EditVideo = () => {
 
-
     const { courseId, itemId } = useParams<{ courseId: string, itemId: string }>();
-
     const [editedVideoTitle, setEditedVideoTitle] = React.useState("")
     const [editedVideoSubTitle, setEditedVideoSubTitle] = React.useState("")
     const [editedVideoURL, setEditedVideoURL] = React.useState("")
@@ -36,31 +31,31 @@ export const EditVideo = () => {
                     <div className={classes.editDataListWrapper}>
 
                         <SelectImage onChange={getEventFileCallback(setEditedVideoThumbnailImage)}
-                                     uploadedImageUrls={[editedVideoThumbnailURL]}
-                                     title={"Thumbnail kép"}/>
+                            uploadedImageUrls={[editedVideoThumbnailURL]}
+                            title={"Thumbnail kép"} />
 
                         <Typography variant={"overline"}>Alapadatok</Typography>
 
                         <List component="nav"
-                              aria-labelledby="nested-list-subheader"
-                              className={classes.tagList}>
+                            aria-labelledby="nested-list-subheader"
+                            className={classes.tagList}>
 
                             <EditItem value={editedVideoTitle}
-                                      title={"Cím"}
-                                      onChange={getEventValueCallback(setEditedVideoTitle)}
-                                      name={"editedVideoTitle"}/>
+                                title={"Cím"}
+                                onChange={getEventValueCallback(setEditedVideoTitle)}
+                                name={"editedVideoTitle"} />
                             <EditItem value={editedVideoSubTitle}
-                                      title={"Alcím"}
-                                      onChange={getEventValueCallback(setEditedVideoSubTitle)}
-                                      name={"editedVideoSubTitle"}/>
+                                title={"Alcím"}
+                                onChange={getEventValueCallback(setEditedVideoSubTitle)}
+                                name={"editedVideoSubTitle"} />
                             <EditItem value={editedVideoURL}
-                                      title={"URL"}
-                                      onChange={getEventValueCallback(setEditedVideoURL)}
-                                      name={"editedVideoURL"}/>
+                                title={"URL"}
+                                onChange={getEventValueCallback(setEditedVideoURL)}
+                                name={"editedVideoURL"} />
                             <EditItem value={editedVideoDescription}
-                                      title={"Leírás"}
-                                      onChange={getEventValueCallback(setEditedVideoDescription)}
-                                      name={"editedVideoDescription"}/>
+                                title={"Leírás"}
+                                onChange={getEventValueCallback(setEditedVideoDescription)}
+                                name={"editedVideoDescription"} />
 
                         </List>
 
@@ -74,7 +69,7 @@ export const EditVideo = () => {
                 <Divider orientation={"vertical"} />
 
                 <div className={classes.editDataRightWrapper}>
-                    <Typography variant={"overline"} style={{margin: "10px 0 0 0"}}>NMI Kérdések</Typography>
+                    <Typography variant={"overline"} style={{ margin: "10px 0 0 0" }}>NMI Kérdések</Typography>
                     {/*{editedVideoOverlays.map((item, index) => {
                         return <div className={classes.editOverlayWrapper}>
                             <EditItem title={"Kérdés"}

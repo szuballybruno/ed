@@ -1,20 +1,24 @@
 import React from 'react';
 import { CircularProgress, Typography } from "@material-ui/core";
-import classes from "./loadingComponents.module.scss"
 import { Box, Flex, Heading, Text } from "@chakra-ui/react"
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 
 export const LoadingComponent = () => {
 
-    return <div className={classes.dashBoardStateContainer} >
-        <CircularProgress className={classes.loadingCircle} style={{ 'color': 'black' }} size={50} />
+    return <Flex
+        direction="column"
+        justify="center"
+        align="center"
+        width="100%"
+        height="100vh">
+
+        <CircularProgress style={{ 'color': 'black' }} size={50} />
+
         <Box padding="20px">
             <Typography>Loading...</Typography>
         </Box>
-    </div>
+    </Flex>
 }
-
-export const NullComponent = () => <div className={classes.dashBoardStateContainer} />
 
 export const FailedComponent = (props: { error?: any }) => {
 

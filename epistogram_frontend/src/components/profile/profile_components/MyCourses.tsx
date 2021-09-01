@@ -1,6 +1,6 @@
 import { Typography } from "@material-ui/core";
 import React from 'react';
-import { LoadingFrame } from "../../../HOC/loading_frame/LoadingFrame";
+import { LoadingFrame } from "../../../HOC/LoadingFrame";
 import { CourseShortDTO } from "../../../models/shared_models/CourseShortDTO";
 import { useUserProfileData } from "../../../services/userProfileDataService";
 import AdminDashboardHeader from "../../administration/universal/adminDashboardHeader/AdminDashboardHeader";

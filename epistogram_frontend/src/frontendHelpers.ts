@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 import { LoadingStateType } from "./models/types";
@@ -101,6 +101,13 @@ export const useIsDesktopView = () => {
     const [isDesktopView] = useMediaQuery("(min-width: 980px)")
     return isDesktopView;
 }
+
+export const useCreateObjectURL = (imageUrl: any, setImageUrl: (imageUrl: string) => void) => useEffect(() => {
+
+    console.log("useCreateObjectURL hook called")
+    !!imageUrl && setImageUrl(URL.createObjectURL(imageUrl[0]))
+
+}, [imageUrl, setImageUrl])
 
 export const useReactQuery = <T>(
     queryKey: any[],

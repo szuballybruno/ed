@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import ProfileWrapper from "./profile_components/ProfileWrapper";
 import menuItems from "../../configuration/menuItems.json";
-import {MainWrapper} from "../../HOC/mainPanels/MainPanels";
+import { MainWrapper } from "../../HOC/MainPanels";
 
 const ProfileMain = () => {
     return <MainWrapper>

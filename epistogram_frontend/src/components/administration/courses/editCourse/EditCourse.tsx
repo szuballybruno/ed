@@ -1,21 +1,20 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import classes from "./editCourse.module.scss"
-import {Divider, List, Switch, Typography} from "@material-ui/core";
+import { Divider, List, Switch, Typography } from "@material-ui/core";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
-import {CourseVideoList} from "./CourseVideoList";
-import {useParams} from "react-router";
+import { CourseVideoList } from "./CourseVideoList";
+import { useParams } from "react-router";
 import AdminDashboardHeader from "../../universal/adminDashboardHeader/AdminDashboardHeader";
 import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSearch";
 import { HexColorPicker } from "react-colorful";
 import SelectImage from "../../universal/selectImage/SelectImage";
-import {AdminDashboardWrapper} from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import {SelectRadio} from "../../universal/SelectRadio";
-import {SaveBar} from "../../universal/saveBar/SaveBar";
-import {getEventFileCallback, getEventValueCallback} from "../../../../frontendHelpers";
-import {useCreateObjectURL} from "../../../../hooks/useCreateObjectURL";
-import {useAdminEditedCourse, useUserCourses} from "../../../../services/courseService";
-import {AdministrationListItem} from "../../universal/adminDashboardSearchItem/AdministrationListItem";
-import {getChipWithLabel} from "../courseList/CourseList";
+import { AdminDashboardWrapper } from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
+import { SelectRadio } from "../../universal/SelectRadio";
+import { SaveBar } from "../../universal/saveBar/SaveBar";
+import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
+import { useAdminEditedCourse, useUserCourses } from "../../../../services/courseService";
+import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
+import { getChipWithLabel } from "../courseList/CourseList";
 
 /* TODO:
 *   - onClick for save changes button
@@ -57,8 +56,8 @@ export const EditCourse = () => {
 
                     <div className={classes.editDataListWrapper}>
                         <SelectImage onChange={getEventFileCallback(setThumbnailImage)}
-                                     uploadedImageUrls={[thumbnailURL]}
-                                     title={"Borítókép"}/>
+                            uploadedImageUrls={[thumbnailURL]}
+                            title={"Borítókép"} />
                         <Typography variant={"overline"}>Alapadatok</Typography>
                         <List
                             component="nav"
@@ -66,39 +65,39 @@ export const EditCourse = () => {
                             className={classes.tagList}
                         >
                             <EditItem value={course?.title}
-                                      title={"Név"}
-                                      onChange={getEventValueCallback(setName)}
-                                      name={"name"} />
+                                title={"Név"}
+                                onChange={getEventValueCallback(setName)}
+                                name={"name"} />
 
                             <EditItem value={course?.category}
-                                      title={"Kategória"}
-                                      onChange={getEventValueCallback(setCategory)}
-                                      name={"category"} />
+                                title={"Kategória"}
+                                onChange={getEventValueCallback(setCategory)}
+                                name={"category"} />
 
                             <EditItem value={course?.courseGroup}
-                                      title={"Kategória csoport"}
-                                      onChange={getEventValueCallback(setCourseGroup)}
-                                      name={"courseGroup"} />
+                                title={"Kategória csoport"}
+                                onChange={getEventValueCallback(setCourseGroup)}
+                                name={"courseGroup"} />
 
                             <EditItem value={course?.permissionLevel}
-                                      title={"Elérés"}
-                                      onChange={getEventValueCallback(setPermissionLevel)}
-                                      name={"permissionLevel"} />
+                                title={"Elérés"}
+                                onChange={getEventValueCallback(setPermissionLevel)}
+                                name={"permissionLevel"} />
                         </List>
                     </div>
                     <div className={classes.editTagsWrapper}>
                         <SelectRadio items={course?.courseOrganizations} checked={course?.allOrganizations && course?.allOrganizations.some((org, index) => {
-                                return org === course?.courseOrganizations
-                            })} radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} title={"Cég kiválasztása"} />
+                            return org === course?.courseOrganizations
+                        })} radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} title={"Cég kiválasztása"} />
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Tanár kiválasztása"} />
+                        <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Tanár kiválasztása"} />
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Tagek (ide majd selectcheckbox)"} />
+                        <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Tagek (ide majd selectcheckbox)"} />
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectRadio radioButtonOnChange={() => {}} itemValueOnChange={() => {}} name={""} onClick={() => {}} title={"Csoportok kiválasztása"} />
+                        <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Csoportok kiválasztása"} />
                     </div>
 
 
@@ -108,18 +107,18 @@ export const EditCourse = () => {
                     <div className={classes.tagWrapper}>
                         <Typography variant={"overline"} className={classes.colorPickerTitle}>Elsődleges szín</Typography>
                         <div className={classes.colorPickerWrapper}>
-                            <HexColorPicker style={{width: "100%"}} color={course?.colorOne} onChange={(color) => {
+                            <HexColorPicker style={{ width: "100%" }} color={course?.colorOne} onChange={(color) => {
                                 !showSecondColorPicker && setColorTwo(color)
                                 setColorOne(color)
                             }} />
                         </div>
                     </div>
                     <div className={classes.colorPickerSwitchWrapper}>
-                        <Typography>Második szín kiválasztása a színátmenethez</Typography><Switch onChange={() => {setShowSecondColorPicker(p => !p)}} />
+                        <Typography>Második szín kiválasztása a színátmenethez</Typography><Switch onChange={() => { setShowSecondColorPicker(p => !p) }} />
                     </div>
                     {showSecondColorPicker && <div className={classes.tagWrapper}>
                         <Typography variant={"overline"}>Másodlagos szín</Typography>
-                        <HexColorPicker style={{width: "100%"}} color={course?.colorTwo} onChange={(color) => {
+                        <HexColorPicker style={{ width: "100%" }} color={course?.colorTwo} onChange={(color) => {
                             setColorTwo(color)
                         }} />
                     </div>}
@@ -133,15 +132,15 @@ export const EditCourse = () => {
         }} />
 
         <div className={classes.editVideosWrapper}>
-            <AdminDashboardSearch searchChangeHandler={() => {}} name={"searchData"} title={"A kurzus tartalma"}/>
-            {course?.courseItems.map((item,index) => <AdministrationListItem title={item.title} thumbnailUrl={item.thumbnailUrl} chips={[
+            <AdminDashboardSearch searchChangeHandler={() => { }} name={"searchData"} title={"A kurzus tartalma"} />
+            {course?.courseItems.map((item, index) => <AdministrationListItem title={item.title} thumbnailUrl={item.thumbnailUrl} chips={[
                 getChipWithLabel(index, item.type, "category"),
                 getChipWithLabel(index, "item.length", "person"),
                 getChipWithLabel(index, "item.isEssential", "video")
             ]} searchItemButtons={[]} />)}
         </div>
 
-        <AdminDashboardHeader titleText={""}/>
+        <AdminDashboardHeader titleText={""} />
 
         <SaveBar open={true} />
 

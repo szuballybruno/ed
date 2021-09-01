@@ -6,7 +6,7 @@ import MyExams from "./MyExams";
 import MyCourses from "./MyCourses";
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
 import ChangePassword from "./ChangePassword";
-import { ContentWrapper, LeftPanel, RightPanel } from "../../../HOC/mainPanels/MainPanels";
+import { ContentWrapper, LeftPanel, RightPanel } from "../../../HOC/MainPanels";
 import {
     Assignment,
     School,

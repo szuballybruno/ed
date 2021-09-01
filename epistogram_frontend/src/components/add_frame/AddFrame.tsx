@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from "./addFrame.module.scss"
-import {AdminAddHeader} from "../../components/administration/universal/adminAddHeader/AdminAddHeader";
+import { AdminAddHeader } from "../administration/universal/adminAddHeader/AdminAddHeader";
 
 export const AddFrame = (props: {
     children: any,
@@ -10,7 +10,7 @@ export const AddFrame = (props: {
 
     return <div className={classes.addUserOuterWrapper}>
         <form className={classes.addUserInnerWrapper}
-              onSubmit={props.submitHandler}>
+            onSubmit={props.submitHandler}>
             {props.children}
         </form>
     </div>

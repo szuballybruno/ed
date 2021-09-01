@@ -1,7 +1,7 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/react";
-import { isArray } from "../../frontendHelpers";
-import { LoadingStateType } from "../../models/types";
-import { FailedComponent, LoadingComponent } from "./loadingComponents/LoadingComponent";
+import { isArray } from "../frontendHelpers";
+import { LoadingStateType } from "../models/types";
+import { FailedComponent, LoadingComponent } from "./LoadingComponent";
 
 export const LoadingFrame = (props: FlexProps & {
     loadingState: LoadingStateType | LoadingStateType[],

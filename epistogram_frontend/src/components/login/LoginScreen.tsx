@@ -2,7 +2,7 @@ import { Button } from "@material-ui/core";
 import React, { useContext, useState } from 'react';
 import { Redirect } from "react-router";
 import { TypedError } from "../../frontendHelpers";
-import { AuthenticationStateContext } from "../../HOC/data_manager_frame/DataManagerFrame";
+import { AuthenticationStateContext } from "../../HOC/AuthenticationFrame";
 import { useLogInUser } from '../../services/authenticationService';
 import SingleInput from "../administration/universal/singleInput/SingleInput";
 import classes from './loginScreen.module.scss';

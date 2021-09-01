@@ -1,17 +1,17 @@
-import {AdminDashboardSearch} from "../../universal/searchBar/AdminDashboardSearch";
+import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSearch";
 import classes from "../users.module.scss";
-import {LoadingFrame} from "../../../../HOC/loading_frame/LoadingFrame";
-import {AdminDashboardList} from "../../universal/adminDashboardList/AdminDashboardList";
-import {AdministrationListItem} from "../../universal/adminDashboardSearchItem/AdministrationListItem";
-import {NavLink} from "react-router-dom";
-import {Fab} from "@material-ui/core";
-import {Add} from "@material-ui/icons";
-import {AdminDashboardWrapper} from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import React, {useContext} from "react";
-import {CurrentUserContext} from "../../../../HOC/data_manager_frame/DataManagerFrame";
-import {useUserListQuery} from "../../../../services/adminPageUsersService";
-import {globalConfig} from "../../../../configuration/config";
-import {getChipWithLabel} from "../../courses/courseList/CourseList";
+import { AdminDashboardList } from "../../universal/adminDashboardList/AdminDashboardList";
+import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
+import { NavLink } from "react-router-dom";
+import { Fab } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
+import { AdminDashboardWrapper } from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
+import React, { useContext } from "react";
+import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
+import { useUserListQuery } from "../../../../services/adminPageUsersService";
+import { globalConfig } from "../../../../configuration/config";
+import { getChipWithLabel } from "../../courses/courseList/CourseList";
+import { LoadingFrame } from "../../../../HOC/LoadingFrame";
 
 
 //TODO: Implement the actions into the UserList component the same way as in CourseList
@@ -90,8 +90,8 @@ export const UserList = () => {
 
             <NavLink to={"/admin/manage/users/add"}>
                 <Fab color="primary"
-                     aria-label="add"
-                     style={{ position: "absolute", bottom: 45, right: 45 }}>
+                    aria-label="add"
+                    style={{ position: "absolute", bottom: 45, right: 45 }}>
                     <Add />
                 </Fab>
             </NavLink>

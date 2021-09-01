@@ -31,9 +31,13 @@ export const LeftPanel = ({ children }: { children?: ReactNode }) => {
             flexDirection="column"
             flexBasis="400px" >
             <Box flex="1">
-                <div className={classes.leftPanel}>
+                <Flex
+                    direction="column"
+                    align="center"
+                    justify="flex-start"
+                    borderLeft="2px solid #e2e2e2">
                     {children}
-                </div>
+                </Flex>
             </Box>
         </Flex >
     );
