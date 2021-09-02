@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Slider, Typography } from "@material-ui/core";
+import { Button, Slider, Typography } from "@material-ui/core";
 import { ClosedCaption, Fullscreen, Pause, PlayArrow } from "@material-ui/icons";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
@@ -15,6 +15,9 @@ import useEventListener from 'react-use-event-listener'
 import FastForwardIcon from '@material-ui/icons/FastForward';
 import FastRewindIcon from '@material-ui/icons/FastRewind';
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import { Questionnaire } from "../../universal/Questionnaire";
+import { QuestionDTO } from "../../../models/shared_models/QuestionDTO";
+import { useAnswerQuestion } from "../../../services/questionnaireService";
 
 const downloadedTracks = [
     {
@@ -33,6 +36,23 @@ const downloadedTracks = [
 ]
 
 type visualOverlayType = "counter" | "pause" | "start" | "seekRight" | "seekLeft";
+const question = {
+    questionText: "Mennyire szereted az almas pitet?",
+    answers: [
+        {
+            answerId: 1,
+            answerText: "Nagyon"
+        },
+        {
+            answerId: 2,
+            answerText: "Kozepesen"
+        },
+        {
+            answerId: 3,
+            answerText: "Kicsit"
+        }
+    ]
+} as QuestionDTO;
 
 const VideoPlayer = (props: {
     videoItem: VideoDTO
@@ -50,6 +70,9 @@ const VideoPlayer = (props: {
     const controlsOpacity = showControls || !isPlaying ? 1 : 0;
     const [visualOverlayType, setVisualOverlayType] = useState<visualOverlayType>("start");
     const [isVisualOverlayVisible, setIsVisualOverlayVisible] = useState(false);
+    const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
+    const isQuestionVisible = !!currentQuestion;
+    const [currentQuestionAnswered, setCurrentQuestionAnswered] = useState(false);
 
     const toggleFullScreen = () => {
 
@@ -146,6 +169,9 @@ const VideoPlayer = (props: {
 
         e.preventDefault();
 
+        if (isQuestionVisible)
+            return;
+
         if (e.key == " ")
             toggleIsPlaying();
 
@@ -156,121 +182,172 @@ const VideoPlayer = (props: {
             jump(true);
     });
 
+    const showQuestion = (question: QuestionDTO) => {
+
+        setCurrentQuestionAnswered(false);
+        setCurrentQuestion(question);
+    }
+
     return (
-        <Box
-            id="videoRoot"
-            position="relative"
-            height="100%"
-            width="100%"
-            ref={playerContainerRef}>
-
-            {/* video wrapper */}
+        <>
             <Box
-                id="videoWrapper"
-                width="100%"
+                id="fullScreenRoot"
+                position="relative"
                 height="100%"
-                pt="56.25%" // to keep 16:9 ratio
-                onClick={() => toggleIsPlaying()}
-                onMouseMove={() => {
+                width="100%"
+                ref={playerContainerRef}>
 
-                    if (!controlOverlayTimer)
-                        showControlOverlay();
-                }}
-                position="relative">
+                <Box
+                    id="playbackWrapper"
+                    filter={isQuestionVisible ? "blur(5px)" : "blur(0px)"}
+                    transition="0.3s"
+                    position="relative"
+                    height="100%"
+                    width="100%">
 
-                {/* the player */}
-                <ReactPlayer
-                    playbackRate={1}
-                    ref={playerRef}
-                    className={classes.player}
-                    url={videoUrl}
-                    width={"100%"}
-                    height={"100%"}
-                    controls={false}
-                    playing={isPlaying}
-                    onPlay={() => setIsPlaying(true)}
-                    onProgress={(playedInfo) => {
+                    {/* video wrapper */}
+                    <Box
+                        id="videoWrapper"
+                        width="100%"
+                        height="100%"
+                        pt="56.25%" // to keep 16:9 ratio
+                        onClick={() => toggleIsPlaying()}
+                        onMouseMove={() => {
 
-                        setPlayedSeconds(playedInfo.playedSeconds);
-                    }}
-                    onReady={(e) => {
+                            if (!controlOverlayTimer)
+                                showControlOverlay();
+                        }}
+                        position="relative">
 
-                        setVideoLength(e.getDuration());
-                    }}
-                    config={{
-                        file: {
-                            attributes: { crossOrigin: "true" },
-                            tracks: downloadedTracks,
-                        }
-                    }} />
+                        {/* the player */}
+                        <ReactPlayer
+                            playbackRate={1}
+                            ref={playerRef}
+                            className={classes.player}
+                            url={videoUrl}
+                            width={"100%"}
+                            height={"100%"}
+                            controls={false}
+                            playing={isPlaying && !isQuestionVisible}
+                            onPlay={() => setIsPlaying(true)}
+                            onProgress={(playedInfo) => {
+
+                                setPlayedSeconds(playedInfo.playedSeconds);
+                            }}
+                            onReady={(e) => {
+
+                                setVideoLength(e.getDuration());
+                            }}
+                            config={{
+                                file: {
+                                    attributes: { crossOrigin: "true" },
+                                    tracks: downloadedTracks,
+                                }
+                            }} />
+                    </Box>
+
+                    {/* visual overlay */}
+                    <Flex
+                        id="visualOverlay"
+                        position="absolute"
+                        width="100%"
+                        height="100%"
+                        top="0"
+                        pointerEvents="none"
+                        align="center"
+                        transition="0.2s"
+                        opacity={isVisualOverlayVisible ? 1 : 0}
+                        justify="center">
+                        {getVisualOverlay()}
+                    </Flex>
+
+                    {/* video controls */}
+                    <Box
+                        className={classes.playerControllerWrapper}
+                        onMouseEnter={() => showControlOverlay(true)}
+                        onMouseLeave={() => showControlOverlay()}
+                        opacity={controlsOpacity}
+                        transition="0.15s">
+
+                        {/* play/pause */}
+                        <button onClick={(e) => toggleIsPlaying()}>
+                            {isPlaying ? <Pause /> : <PlayArrow />}
+                        </button>
+
+                        {/* timestamp */}
+                        <Typography className={classes.playerTimestamp}>
+                            {`${secondsToTime(playedSeconds)}/${secondsToTime(videoLength)}`}
+                        </Typography>
+
+                        {/* slider */}
+                        <Slider
+                            className={classes.slider}
+                            defaultValue={0}
+                            aria-labelledby="discrete-slider"
+                            value={playedSeconds}
+                            min={0}
+                            max={videoLength}
+                            onChange={(event, targetSeconds) => {
+
+                                setPlayedSeconds(targetSeconds as number);
+                                seekToSeconds(targetSeconds as number);
+                            }} />
+
+                        {/* wtf */}
+                        <button onClick={(e) => {
+
+                        }}>
+                            <ClosedCaption />
+                        </button>
+
+                        {/* Fullscreen */}
+                        <button onClick={(e) => toggleFullScreen()}>
+                            <Fullscreen />
+                        </button>
+                    </Box>
+
+                </Box>
+
+                {/* questionnaire */}
+                <Flex
+                    id="questionnaireOverlay"
+                    position="absolute"
+                    width="100%"
+                    height="100%"
+                    top="0"
+                    align="center"
+                    justify="center"
+                    transition="0.3s"
+                    opacity={isQuestionVisible ? 1 : 0}
+                    pointerEvents={isQuestionVisible ? "all" : "none"}>
+
+                    <Box
+                        id="questionnaireDialog"
+                        bg="white"
+                        p="20px"
+                        borderRadius="20px"
+                        boxShadow="0 0 20px #0000004a">
+
+                        {/* questionnaire */}
+                        {isQuestionVisible && <Questionnaire
+                            question={currentQuestion!}
+                            onAnswered={() => setCurrentQuestionAnswered(true)} />}
+
+                        {/* close button */}
+                        <Flex mt="20px" justify="flex-end" display={currentQuestionAnswered ? "flex" : "none"}>
+                            <Button variant="outlined" onClick={() => setCurrentQuestion(null)}>
+                                Bezárás
+                            </Button>
+                        </Flex>
+                    </Box>
+                </Flex>
             </Box>
 
-            {/* visual overlay */}
-            <Flex
-                id="visualOverlay"
-                position="absolute"
-                width="100%"
-                height="100%"
-                top="0"
-                pointerEvents="none"
-                align="center"
-                transition="0.2s"
-                opacity={isVisualOverlayVisible ? 1 : 0}
-                justify="center">
-                {getVisualOverlay()}
-            </Flex>
+            <Button onClick={() => {
 
-            {/* video controls */}
-            <Box
-                className={classes.playerControllerWrapper}
-                onMouseEnter={() => showControlOverlay(true)}
-                onMouseLeave={() => showControlOverlay()}
-                opacity={controlsOpacity}
-                transition="0.15s">
-
-                {/* play/pause */}
-                <button onClick={(e) => toggleIsPlaying()}>
-                    {isPlaying ? <Pause /> : <PlayArrow />}
-                </button>
-
-                {/* timestamp */}
-                <Typography className={classes.playerTimestamp}>
-                    {`${secondsToTime(playedSeconds)}/${secondsToTime(videoLength)}`}
-                </Typography>
-
-                {/* slider */}
-                <Slider
-                    className={classes.slider}
-                    defaultValue={0}
-                    aria-labelledby="discrete-slider"
-                    value={playedSeconds}
-                    min={0}
-                    max={videoLength}
-                    onChange={(event, targetSeconds) => {
-
-                        setPlayedSeconds(targetSeconds as number);
-                        seekToSeconds(targetSeconds as number);
-                    }} />
-
-                {/* wtf */}
-                <button onClick={(e) => {
-
-                }}>
-                    <ClosedCaption />
-                </button>
-
-                {/* Fullscreen */}
-                <button onClick={(e) => toggleFullScreen()}>
-                    <Fullscreen />
-                </button>
-            </Box>
-
-            {/* questionnaier */}
-            <OverlayQuestionnaire
-                videoProgressSeconds={playedSeconds}
-                videoLengthSeconds={videoLength}
-                questions={questions} />
-        </Box>
+                showQuestion(question);
+            }}>CLIIICK</Button>
+        </>
     )
 };
 

@@ -119,7 +119,7 @@ export const useReactQuery = <T>(
         queryFunc, {
         retry: false,
         refetchOnWindowFocus: false,
-        enabled: enabled
+        enabled: enabled === true || enabled === undefined
     });
 
     const { status, ...queryResult2 } = queryResult;

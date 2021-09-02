@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { QuestionDTO } from '../../../../models/shared_models/QuestionDTO';
+import { Questionnaire } from '../../../universal/Questionnaire';
 
 export const OverlayQuestionnaire = (props: {
     videoProgressSeconds: number,
@@ -8,9 +9,10 @@ export const OverlayQuestionnaire = (props: {
     questions: QuestionDTO[]
 }) => {
 
+
+
     return <Box>
-        <NmiOne />,
-        <NmiTwo />
+
     </Box>
 };
 
