@@ -5,14 +5,14 @@ import { Video } from "../models/entity/Video";
 import { staticProvider } from "../staticProvider";
 import { deleteStorageFileAsync, uploadToStorageAsync } from "./storageService";
 import { getUserById, setUserAvatarFileId } from "./userService";
-import { getVideoByIdAsync, setVideoFileId, setVideoThumbnailFileId } from "./videoService";
+import { getVideoByIdAsync, setVideoFileIdAsync, setVideoThumbnailFileId } from "./videoService";
 
 export const uploadVideoFileAsync = (videoId: number, file: UploadedFile) => {
 
     return uploadAssigendFileAsync<Video>(
         getFilePath("videos", "video", videoId, "mp4"),
         () => getVideoByIdAsync(videoId),
-        (fileId) => setVideoFileId(videoId, fileId),
+        (fileId) => setVideoFileIdAsync(videoId, fileId),
         (entity) => entity.videoFileId,
         file);
 }

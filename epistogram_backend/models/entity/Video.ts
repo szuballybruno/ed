@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
+import { Question } from "./Question";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
 
@@ -36,6 +37,11 @@ export class Video {
     @OneToOne(type => StorageFile)
     @JoinColumn({ name: "thumbnailFileId" })
     thumbnailFile: StorageFile
+
+    // questions
+    @OneToMany(type => Question, q => q.video, { cascade: true })
+    @JoinColumn()
+    questions: Question[];
 
     // -> users 
     @OneToMany(type => User, user => user.currentVideo)

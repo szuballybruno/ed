@@ -1,4 +1,4 @@
-import { CourseItemType } from "./types/sharedTypes";
+import { CourseItemState, CourseItemType } from "./types/sharedTypes";
 
 export type CourseItemDTO = {
     id: number;
@@ -7,4 +7,5 @@ export type CourseItemDTO = {
     type: CourseItemType;
     thumbnailUrl: string;
     orderIndex: number;
+    state: CourseItemState;
 }

@@ -12,7 +12,7 @@ export const createVideoAsync = async (courseId: number, orderIndex: number) => 
         });
 }
 
-export const setVideoFileId = async (videoId: number, videoFileId: number) => {
+export const setVideoFileIdAsync = async (videoId: number, videoFileId: number) => {
 
     await staticProvider
         .ormConnection
@@ -42,5 +42,7 @@ export const getVideoByIdAsync = (videoId: number) => {
         .createQueryBuilder("v")
         .where("v.id = :videoId", { videoId })
         .leftJoinAndSelect("v.videoFile", "vf")
+        .leftJoinAndSelect("v.questions", "q")
+        .leftJoinAndSelect("q.answers", "a")
         .getOneOrFail();
 }

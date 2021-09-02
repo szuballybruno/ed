@@ -10,11 +10,13 @@ import { StorageFile } from "./models/entity/StorageFile";
 import { Task } from "./models/entity/Task";
 import { TestChild } from "./models/entity/TestChild";
 import { TestParent } from "./models/entity/TestParent";
+import { TestSubChild } from "./models/entity/TestSubChild";
 import { User } from "./models/entity/User";
 import { Video } from "./models/entity/Video";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
 import { log } from "./services/misc/logger";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/userManagementService";
+import { setVideoFileIdAsync } from "./services/videoService";
 import { staticProvider } from "./staticProvider";
 
 export type TypeORMConnection = Connection;
@@ -51,23 +53,10 @@ export const initializeDBAsync = async (recreate: boolean) => {
             Answer,
             TestChild,
             TestParent,
+            TestSubChild,
             StorageFile
         ],
     } as ConnectionOptions;
-
-    // const postgresOptions = {
-    //     type: "postgres",
-    //     port: 5432,
-    //     host: "34.118.107.79",
-    //     username: "bence",
-    //     password: "epistogram",
-    //     database: "epistogram_DEV",
-    //     synchronize: true,
-    //     logging: false,
-    //     entities: [
-    //         "models/entity/**/*.ts"
-    //     ],
-    // } as ConnectionOptions;
 
     log("Database connection options:");
     log(postgresOptions);
@@ -107,8 +96,17 @@ export const seedDB = async () => {
 
     const connection = staticProvider.ormConnection;
 
-    // seed organizations
-    const insertedOrganizationIds = (await connection
+    const orgIds = await seedOrganizations(connection);
+    await seedCourses(connection);
+    await seedUsers(connection, orgIds);
+    await seedSignupQuestions(connection);
+    await seedFiles(connection);
+    await seedVideoQuestions(connection);
+}
+
+const seedOrganizations = async (connection: TypeORMConnection) => {
+
+    return (await connection
         .getRepository(Organization)
         .insert([
             {
@@ -123,8 +121,10 @@ export const seedDB = async () => {
         ]))
         .identifiers
         .map(x => x.id as number);
+}
 
-    // seed courses
+const seedCourses = async (connection: TypeORMConnection) => {
+
     await connection
         .getRepository(Course)
         .save([
@@ -175,8 +175,10 @@ export const seedDB = async () => {
                 ]
             }
         ]);
+}
 
-    // seed users
+const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
+
     const { invitationToken, user } = await createInvitedUserWithOrgAsync(
         {
             firstName: "Edina",
@@ -185,7 +187,7 @@ export const seedDB = async () => {
             role: "admin" as RoleType,
             email: "edina.sandor@email.com",
         },
-        insertedOrganizationIds[0],
+        orgIds[0],
         false);
 
     await finalizeUserRegistrationAsync({
@@ -194,8 +196,10 @@ export const seedDB = async () => {
         password: "admin",
         controlPassword: "admin"
     });
+}
 
-    // seed signup questions
+const seedSignupQuestions = async (connection: TypeORMConnection) => {
+
     const questions = [
         {
             isSignupQuestion: true,
@@ -269,31 +273,37 @@ export const seedDB = async () => {
         .save(questions);
 }
 
-// const users = [
-//     {
-//         firstName: "Edina",
-//         lastName: "Sandor",
-//         jobTitle: "IT manager",
-//         role: "admin" as RoleType,
-//         email: "edina.sandor@email.com",
-//         organizationId: insertedOrganizationIds[0],
-//         currentCourseId: courseInsertedIds[0],
-//         currentExamId: examInsertIds[0]
-//     },
-//     {
-//         firstName: "Bela",
-//         lastName: "Kovacs",
-//         jobTitle: "Takarito",
-//         role: "admin" as RoleType,
-//         email: "bela.kovacs@email.com",
-//         organizationId: insertedOrganizationIds[1]
-//     },
-//     {
-//         firstName: "Rebeka",
-//         lastName: "Kis",
-//         jobTitle: "Instructor",
-//         role: "admin" as RoleType,
-//         email: "rebeka.kis@email.com",
-//         organizationId: insertedOrganizationIds[1]
-//     }
-// ];
+const seedFiles = async (connection: TypeORMConnection) => {
+
+    const file = {
+        pending: false,
+        filePath: "videos/video_1.mp4",
+    } as StorageFile;
+
+    await connection
+        .getRepository(StorageFile)
+        .insert(file);
+
+    await setVideoFileIdAsync(1, file.id);
+}
+
+const seedVideoQuestions = async (connection: TypeORMConnection) => {
+
+    await connection
+        .getRepository(Question)
+        .save([
+            {
+                questionText: "Video question 1",
+                isSignupQuestion: false,
+                videoId: 1,
+                answers: [
+                    {
+                        text: "Video answer 1"
+                    },
+                    {
+                        text: "Video answer 2"
+                    }
+                ]
+            }
+        ]);
+}

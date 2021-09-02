@@ -71,18 +71,6 @@ export const toTaskDTO = (task: Task) => {
     } as TaskDTO;
 }
 
-export const toVideoDTO = (video: Video) => {
-
-    return {
-        id: video.id,
-        subTitle: video.subtitle,
-        title: video.title,
-        description: video.description,
-        thumbnailUrl: "",
-        url: video.videoFile ? getStorageFileUrl(video.videoFile.filePath) : null,
-    } as VideoDTO;
-}
-
 export const toExamDTO = (exam: Exam) => {
 
     return {
@@ -93,12 +81,16 @@ export const toExamDTO = (exam: Exam) => {
     } as ExamDTO;
 }
 
-export const toPlayerDataDTO = (course: Course, video: Video | null, exam: Exam | null) => {
+export const toPlayerDataDTO = (
+    course: Course,
+    video: Video | null,
+    exam: Exam | null) => {
 
     const examItems = course
         .exams
         .map(x => toCourseItemDTO(x, false));
 
+    // aggregate items to a single ordered collection
     const videoItems = course
         .videos
         .map(x => toCourseItemDTO(x, true));
@@ -109,11 +101,31 @@ export const toPlayerDataDTO = (course: Course, video: Video | null, exam: Exam 
     const itemsOrdered = itemsCombined
         .orderBy(x => x.orderIndex);
 
+    // TODO: set state 
+    // itemsOrdered
+    //     .forEach((courseItem, index) => {
+    //     })
+
     return {
         courseItems: itemsOrdered,
         video: video ? toVideoDTO(video) : null,
         exam: exam ? toExamDTO(exam) : null
     } as PlayerDataDTO;
+}
+
+export const toVideoDTO = (video: Video) => {
+
+    navPropNotNull(video.questions);
+
+    return {
+        id: video.id,
+        subTitle: video.subtitle,
+        title: video.title,
+        description: video.description,
+        thumbnailUrl: "",
+        url: video.videoFile ? getStorageFileUrl(video.videoFile.filePath) : null,
+        questions: video.questions.map(q => toQuestionDTO(q))
+    } as VideoDTO;
 }
 
 export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {

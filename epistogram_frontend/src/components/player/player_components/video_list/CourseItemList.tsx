@@ -51,13 +51,16 @@ export const CourseItemList = (params: {
 
                             const isActiveItem = courseItem.id == currentCourseItemId;
 
-                            return <ListItem
-                                active={isActiveItem}
-                                key={index}
-                                mainTitle={courseItem.title}
-                                subTitle={courseItem.subTitle}
-                                thumbnailUrl={courseItem.thumbnailUrl}
-                                onClick={() => navigateToCourseItem(courseItem.id, courseItem.type)} />
+                            return <Box
+                                cursor="pointer"
+                                key={index}>
+                                <ListItem
+                                    active={isActiveItem}
+                                    mainTitle={courseItem.title}
+                                    subTitle={courseItem.subTitle}
+                                    thumbnailUrl={courseItem.thumbnailUrl}
+                                    onClick={() => navigateToCourseItem(courseItem.id, courseItem.type)} />
+                            </Box>
                         })}
                 </div>
             </div>

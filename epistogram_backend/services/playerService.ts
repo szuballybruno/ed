@@ -40,6 +40,12 @@ export const getPlayerDataAsync = async (
         .leftJoinAndSelect("c.exams", "e")
         .getOneOrFail();
 
+    if (courseItemType == "video" && !courseItem)
+        throw new TypedError("Video not found by id: " + courseItemId, "bad request");
+
+    if (courseItemType == "exam" && !courseItem)
+        throw new TypedError("Exam not found by id: " + courseItemId, "bad request");
+
     return toPlayerDataDTO(
         course,
         courseItemType == "video" ? courseItem as Video : null,

@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Answer } from "./Answer";
 import { QuestionAnswer } from "./QuestionAnswer";
+import { Video } from "./Video";
 
 @Entity()
 export class Question {
@@ -11,8 +12,8 @@ export class Question {
     @Column()
     questionText: string;
 
-    @Column()
-    imageUrl?: string;
+    @Column({ nullable: true })
+    imageUrl: string;
 
     @Column()
     isSignupQuestion: boolean;
@@ -26,4 +27,12 @@ export class Question {
     @OneToMany(() => QuestionAnswer, qa => qa.answer)
     @JoinColumn()
     questionAnswers: QuestionAnswer[]
+
+    // video 
+    @Column({ nullable: true })
+    videoId: number;
+
+    @ManyToOne(() => Video, v => v.questions)
+    @JoinColumn({ name: "videoId" })
+    video: Video;
 }

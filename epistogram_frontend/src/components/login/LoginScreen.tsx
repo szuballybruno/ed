@@ -1,4 +1,5 @@
 import { Button } from "@material-ui/core";
+import { SettingsApplicationsSharp } from "@material-ui/icons";
 import React, { useContext, useState } from 'react';
 import { Redirect } from "react-router";
 import { TypedError } from "../../frontendHelpers";
@@ -71,8 +72,22 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
                     <h1 className={classes.loginalcim}>Jelentkezz be, és már kezdhetsz is.</h1>
                 </div>
                 <form className={classes.formitem} onSubmit={(e: React.FormEvent<HTMLFormElement>) => authenticate(e)}>
-                    <SingleInput id="email" labelText={"E-mail"} name={"currentEmail"} changeHandler={changeHandler} style={{ justifySelf: "center" }} />
-                    <SingleInput id="password" labelText={"Jelszó"} name={"currentPassword"} type={"password"} changeHandler={changeHandler} style={{ justifySelf: "center" }} />
+
+                    <SingleInput
+                        id="email"
+                        labelText={"E-mail"}
+                        name={"currentEmail"}
+                        changeHandler={(e) => setEmail(e.target.value)}
+                        style={{ justifySelf: "center" }} />
+
+                    <SingleInput
+                        id="password"
+                        labelText={"Jelszó"}
+                        name={"currentPassword"}
+                        type={"password"}
+                        changeHandler={(x) => setPassword(x.target.value)}
+                        style={{ justifySelf: "center" }} />
+
                     <p className={classes.forgotPassword}>Elfelejtettem a jelszavam</p>
 
                     <Button type="submit" variant={"outlined"}>Bejelentkezés</Button>

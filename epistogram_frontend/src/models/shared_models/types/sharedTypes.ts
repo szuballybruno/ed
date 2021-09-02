@@ -14,3 +14,5 @@ export type ErrorType = HTTPErrorType | MiscErrorType | CoursePlaybackErrorType;
 export type TaskObjectiveType = "practise" | "continueVideo" | "exam";
 
 export type CourseItemType = "video" | "exam";
+
+export type CourseItemState = "watched" | "locked" | "current";

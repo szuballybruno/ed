@@ -61,6 +61,7 @@ const PlayerPage = () => {
                 minHeight="100%"
                 loadingState={[playerDataStatus]}
                 error={[playerDataError]}>
+
                 <div className={classes.playerAndVideoListWrapper}>
 
                     {/* main column */}
