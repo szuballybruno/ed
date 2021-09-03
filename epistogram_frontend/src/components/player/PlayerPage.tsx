@@ -1,40 +1,18 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { Divider, Typography } from "@material-ui/core";
+import { Box } from "@chakra-ui/react";
 import React from 'react';
 import { useParams, withRouter } from "react-router";
 import menuItems from "../../configuration/menuItems.json";
-import { getQueryParam, useIsDesktopView, usePaging } from "../../frontendHelpers";
+import { getQueryParam, useIsDesktopView } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { MainWrapper } from "../../HOC/MainPanels";
 import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
 import { useNavigation } from "../../services/navigatior";
 import { useDialog } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
-import { Copyright } from "../universal/footers/copyright/Copyright";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
-import { SegmentedButton } from "../universal/SegmentedButton";
-import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { CourseItemList } from "./courseItemList/CourseItemList";
-import PlayerDescription from "./description/PlayerDescription";
 import classes from './playerMain.module.scss';
-import { VideoPlayer } from "./VideoPlayer";
 import { WatchView } from "./WatchView";
-
-const subtitles = [
-    {
-        kind: 'subtitles',
-        src: 'http://abydosai.com/hajacska.vtt',
-        srcLang: 'hu',
-        label: "Magyar",
-        mode: "showing"
-    }, {
-        kind: 'subtitles',
-        src: 'http://abydosai.com/hajacska.vtt',
-        srcLang: 'en',
-        label: "Angol",
-        mode: "hidden"
-    }
-]
 
 const PlayerPage = () => {
 
@@ -43,6 +21,7 @@ const PlayerPage = () => {
     const { id: courseItemString } = useParams<{ id: string }>();
     const courseItemType = getQueryParam("type") as CourseItemType;
     const courseItemId = parseInt(courseItemString);
+    const exam = courseItemType == "exam" ? {} : null;
 
     // get player page data
     const { playerData, playerDataStatus, playerDataError } = usePlayerData(courseItemId, courseItemType);
@@ -62,9 +41,6 @@ const PlayerPage = () => {
     }
 
     const isDesktopView = useIsDesktopView();
-    const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
-    const VideoDescription = () => <PlayerDescription description={video!.description} />;
-    const VideoComments = () => <Box bg="red" />;
 
     return (
         <MainWrapper>
@@ -84,18 +60,18 @@ const PlayerPage = () => {
                     {/* main column */}
                     <Box id="mainColumn" className={classes.playerContentWrapper} >
 
-                        {video &&
-                            <>
-                                {/* video player with controls */}
-                                {<WatchView />}
-                            </>}
+                        {video && <WatchView
+                            video={video}
+                            courseItems={courseItems}
+                            navigateToCourseItem={navigateToCourseItem} />}
+
+                        {exam && <Box>Exam</Box>}
                     </Box>
 
                     {/* right sidebar */}
                     <Box>
                         {isDesktopView && <CourseItemList
                             courseItems={courseItems}
-                            currentCourseItemId={courseItemId}
                             navigateToCourseItem={navigateToCourseItem} />}
                     </Box>
                 </div>

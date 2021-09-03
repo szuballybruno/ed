@@ -6,14 +6,14 @@ import { CourseItemType } from "../../../models/shared_models/types/sharedTypes"
 import ListItem from "../../universal/atomic/listItem/ListItem";
 import classes from './videoList.module.scss';
 
+export type NavigateToCourseItemActionType = (courseItemId: number, courseItemType: CourseItemType) => void;
+
 export const CourseItemList = (params: {
     courseItems: CourseItemDTO[],
-    currentCourseItemId: number,
-    navigateToCourseItem: (courseItemId: number, courseItemType: CourseItemType) => void
+    navigateToCourseItem: NavigateToCourseItemActionType
 }) => {
 
     const courseItems = params.courseItems;
-    const currentCourseItemId = params.currentCourseItemId;
     const navigateToCourseItem = params.navigateToCourseItem;
 
     return (
@@ -49,13 +49,11 @@ export const CourseItemList = (params: {
                     {courseItems
                         .map((courseItem, index) => {
 
-                            const isActiveItem = courseItem.id == currentCourseItemId;
-
                             return <Box
                                 cursor="pointer"
                                 key={index}>
                                 <ListItem
-                                    active={isActiveItem}
+                                    active={false}
                                     mainTitle={courseItem.title}
                                     subTitle={courseItem.subTitle}
                                     thumbnailUrl={courseItem.thumbnailUrl}
