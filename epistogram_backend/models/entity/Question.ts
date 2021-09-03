@@ -18,6 +18,9 @@ export class Question {
     @Column()
     isSignupQuestion: boolean;
 
+    @Column({ nullable: true })
+    showUpTimeSeconds: number;
+
     // answers
     @OneToMany(type => Answer, answer => answer.question, { cascade: true })
     @JoinColumn()

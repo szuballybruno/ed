@@ -34,9 +34,9 @@ export const setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: 
         });
 }
 
-export const getVideoByIdAsync = (videoId: number) => {
+export const getVideoByIdAsync = async (videoId: number) => {
 
-    return staticProvider
+    const video = await staticProvider
         .ormConnection
         .getRepository(Video)
         .createQueryBuilder("v")
@@ -45,4 +45,6 @@ export const getVideoByIdAsync = (videoId: number) => {
         .leftJoinAndSelect("v.questions", "q")
         .leftJoinAndSelect("q.answers", "a")
         .getOneOrFail();
+
+    return video;
 }

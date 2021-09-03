@@ -1,7 +1,10 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/react";
+import { Box, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import React from 'react';
 import { isArray } from "../frontendHelpers";
 import { LoadingStateType } from "../models/types";
-import { FailedComponent, LoadingComponent } from "./LoadingComponent";
 
 export const LoadingFrame = (props: FlexProps & {
     loadingState: LoadingStateType | LoadingStateType[],
@@ -43,30 +46,41 @@ export const LoadingFrame = (props: FlexProps & {
 
     const singleError = getError(error);
     const state = getLoadingState(loadingState);
+    const showContent = state == "idle" || state == "success";
 
-    const getLoadingComponent = () => {
+    return <>
+        {!showContent && <Flex
+            id="loadingFrameCenterFlex"
+            flex="1"
+            justify="center"
+            align="center"
+            overflow="hidden"
+            p="30px"
+            {...flexProps}>
 
-        if (state == "idle" || state == "loading")
-            return <LoadingComponent></LoadingComponent>
+            {/* error */}
+            {state == "error" && <Flex align="center" direction="column">
+                <ErrorOutlineIcon style={{ width: "100px", height: "100px" }}></ErrorOutlineIcon>
+                <Heading as="h1">Az alkalmazás betöltése sikertelen</Heading>
+                <Text maxWidth="300px">{singleError?.message}</Text>
+            </Flex>}
 
-        if (state == "error")
-            return <FailedComponent error={singleError}></FailedComponent>
+            {/* loading */}
+            {state == "loading" && <Flex
+                id="loadingDisplayContainer"
+                direction="column"
+                justify="center"
+                align="center">
 
-        if (state == "success")
-            return <Box id="loadingFrameContentBox" width="100%" height="100%">
-                {props.children}
-            </Box>;
+                <CircularProgress style={{ 'color': 'black' }} size={50} />
 
-        throw new Error(`Loading state is not reckognised: ${state}!`);
-    }
+                <Box pt="20px">
+                    <Typography>Loading...</Typography>
+                </Box>
+            </Flex>}
+        </Flex>}
 
-    return <Flex
-        id="loadingFrame"
-        flex="1"
-        justify="center"
-        align="center"
-        overflow="hidden"
-        {...flexProps}>
-        {getLoadingComponent()}
-    </Flex>;
+        {/* content */}
+        {showContent && props.children}
+    </>
 }

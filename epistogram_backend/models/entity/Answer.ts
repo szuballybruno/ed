@@ -11,6 +11,9 @@ export class Answer {
     @Column()
     text: string;
 
+    @Column({ nullable: true })
+    isCorrect: boolean;
+
     // question 
     @Column()
     questionId: number;

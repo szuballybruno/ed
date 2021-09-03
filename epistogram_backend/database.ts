@@ -293,15 +293,56 @@ const seedVideoQuestions = async (connection: TypeORMConnection) => {
         .getRepository(Question)
         .save([
             {
-                questionText: "Video question 1",
+                questionText: "What Makes You Unique?",
                 isSignupQuestion: false,
                 videoId: 1,
+                showUpTimeSeconds: 150,
+                answers: [
+                    {
+                        text: "Video answer 1",
+                        isCorrect: true
+                    },
+                    {
+                        text: "Video answer 2"
+                    },
+                    {
+                        text: "Video answer 3"
+                    }
+                ]
+            },
+            {
+                questionText: "What are some random fun facts about you?",
+                isSignupQuestion: false,
+                videoId: 1,
+                showUpTimeSeconds: 250,
+                answers: [
+                    {
+                        text: "Video answer 1"
+                    },
+                    {
+                        text: "Video answer 2",
+                        isCorrect: true
+                    },
+                    {
+                        text: "Video answer 3"
+                    }
+                ]
+            },
+            {
+                questionText: "What's Something You Want to Learn or Wish You Were Better At?",
+                isSignupQuestion: false,
+                videoId: 1,
+                showUpTimeSeconds: 400,
                 answers: [
                     {
                         text: "Video answer 1"
                     },
                     {
                         text: "Video answer 2"
+                    },
+                    {
+                        text: "Video answer 3",
+                        isCorrect: true
                     }
                 ]
             }

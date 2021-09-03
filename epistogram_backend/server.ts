@@ -18,6 +18,7 @@ import { staticProvider } from './staticProvider';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
 import './utilities/jsExtensions';
 import { getEditedCourseAction } from "./api/courses/courseManagementActions";
+import { answerQuestionAction } from './api/questionActions';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -115,6 +116,9 @@ const initializeAsync = async () => {
 
     // organizations 
     expressServer.get("/organizations/get-organizations", authMiddleware, getAsyncActionHandler(getOrganizationsAction));
+
+    // questionnaire
+    expressServer.post("/questions/answer-question", authMiddleware, answerQuestionAction);
 
     // 404 - no match
     expressServer.use((req, res) => {

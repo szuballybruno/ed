@@ -4,7 +4,7 @@ import { QuestionAnswer } from "../models/entity/QuestionAnswer";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { staticProvider } from "../staticProvider";
-import { toQuestionAnswerDTO, toQuestionDTO } from "./mappings";
+import { toAnswerDTO, toQuestionAnswerDTO, toQuestionDTO } from "./mappings";
 
 export const getStartupQuestionsAsync = async () => {
 
@@ -33,6 +33,43 @@ export const getQuestionAnswersAsync = async (userId: number) => {
 
     return questionAnswers
         .map(qa => toQuestionAnswerDTO(qa));
+}
+
+export const answerQuestionAsync = async (userId: number, questionId: number, answerId: number) => {
+
+    // save question answer
+    const existingAnswer = await staticProvider
+        .ormConnection
+        .getRepository(QuestionAnswer)
+        .findOne({
+            where: {
+                questionId: questionId,
+                answerId: answerId,
+                userId: userId
+            }
+        });
+
+    await staticProvider
+        .ormConnection
+        .getRepository(QuestionAnswer)
+        .save({
+            id: existingAnswer?.id,
+            answerId: answerId,
+            questionId: questionId,
+            userId: userId
+        });
+
+    // get correct answer
+    const correctAnswer = await staticProvider
+        .ormConnection
+        .getRepository(Question)
+        .createQueryBuilder("q")
+        .leftJoinAndSelect("q.answers", "a")
+        .where("q.id = :questionId", { questionId })
+        .andWhere("a.isCorrect = true")
+        .getOneOrFail();
+
+    return toAnswerDTO(correctAnswer.answers[0]);
 }
 
 export const getReandomQuestion = () => {

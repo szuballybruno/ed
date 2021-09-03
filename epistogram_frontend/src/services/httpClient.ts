@@ -1,6 +1,9 @@
 import { AxiosRequestConfig } from "axios";
+import { url } from "inspector";
+import { useState } from "react";
 import { getErrorTypeByHTTPCode, TypedError } from "../frontendHelpers";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
+import { LoadingStateType } from "../models/types";
 import instance from "./axiosInstance";
 
 export class HTTPResponse {
@@ -61,6 +64,38 @@ export const httpDeleteAsync = async (urlEnding: string) => {
     });
 
     return new HTTPResponse(axiosResponse.status, axiosResponse.data);
+}
+
+export const usePostData = <TData, TResult>(url: string) => {
+
+    const [state, setState] = useState<LoadingStateType>("success");
+    const [error, setError] = useState<any>(null);
+    const [result, setResult] = useState<TResult | null>(null);
+
+    const postDataAsync = async (data: TData) => {
+
+        try {
+
+            setState("loading");
+
+            const postResult = await httpPostAsync(url, data);
+
+            setState("success");
+            setResult(postResult as TResult);
+        }
+        catch (e) {
+
+            setState("error");
+            setError(e);
+        }
+    }
+
+    return {
+        postDataAsync,
+        state,
+        error,
+        result
+    };
 }
 
 export const postFileAsync = async (url: string, file: File, data?: any) => {

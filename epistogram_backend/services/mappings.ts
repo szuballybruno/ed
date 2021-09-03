@@ -116,6 +116,7 @@ export const toPlayerDataDTO = (
 export const toVideoDTO = (video: Video) => {
 
     navPropNotNull(video.questions);
+    navPropNotNull(video.videoFile);
 
     return {
         id: video.id,
@@ -123,7 +124,7 @@ export const toVideoDTO = (video: Video) => {
         title: video.title,
         description: video.description,
         thumbnailUrl: "",
-        url: video.videoFile ? getStorageFileUrl(video.videoFile.filePath) : null,
+        url: getStorageFileUrl(video.videoFile.filePath),
         questions: video.questions.map(q => toQuestionDTO(q))
     } as VideoDTO;
 }
@@ -191,6 +192,7 @@ export const toQuestionDTO = (q: Question) => {
         questionId: q.id,
         questionText: q.questionText,
         imageUrl: q.imageUrl,
+        showUpTimeSeconds: q.showUpTimeSeconds,
         answers: q.answers
             .map(x => toAnswerDTO(x))
 

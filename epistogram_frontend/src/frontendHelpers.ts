@@ -114,18 +114,20 @@ export const useReactQuery = <T>(
     queryFunc: () => Promise<T>,
     enabled?: boolean) => {
 
+    const isEnabled = enabled === true || enabled === undefined;
+
     const queryResult = useQuery(
         queryKey,
         queryFunc, {
         retry: false,
         refetchOnWindowFocus: false,
-        enabled: enabled === true || enabled === undefined
+        enabled: isEnabled
     });
 
     const { status, ...queryResult2 } = queryResult;
 
     return {
-        status: status as LoadingStateType,
+        status: (!isEnabled && status == "idle" ? "success" : status) as LoadingStateType,
         ...queryResult2
     }
 }

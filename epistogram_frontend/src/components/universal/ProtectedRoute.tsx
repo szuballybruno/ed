@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 import { useContext } from 'react';
 import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
 import { AuthenticationStateContext as AuthenticationStateContext } from '../../HOC/AuthenticationFrame';
-import { LoadingComponent } from "../../HOC/LoadingComponent";
 
 export const ProtectedRoute = (props: {
     path: string,
@@ -27,7 +26,7 @@ export const ProtectedRoute = (props: {
 
                 // if still loading
                 if (authState.isLoading)
-                    return <LoadingComponent />;
+                    return <div></div>
 
                 // if not, leave
                 return <Redirect to={{ pathname: "/login" }} />

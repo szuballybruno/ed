@@ -79,7 +79,13 @@ export const withValue = (obj: any, errorFunc?: () => void) => {
     if (!errorFunc)
         errorFunc = () => { throw new Error("Object has no value!"); };
 
-    if (obj == "" || (!obj && obj != false))
+    if (obj === "")
+        errorFunc();
+
+    if (obj === undefined)
+        errorFunc();
+
+    if (obj === null)
         errorFunc();
 
     return obj;

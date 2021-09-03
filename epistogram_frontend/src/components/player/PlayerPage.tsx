@@ -14,10 +14,27 @@ import { Copyright } from "../universal/footers/copyright/Copyright";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
+import { CourseItemList } from "./courseItemList/CourseItemList";
+import PlayerDescription from "./description/PlayerDescription";
 import classes from './playerMain.module.scss';
-import PlayerDescription from "./player_components/descriptions/description_components/PlayerDescription";
-import VideoPlayer from "./player_components/VideoPlayer";
-import { CourseItemList } from "./player_components/video_list/CourseItemList";
+import { VideoPlayer } from "./VideoPlayer";
+import { WatchView } from "./WatchView";
+
+const subtitles = [
+    {
+        kind: 'subtitles',
+        src: 'http://abydosai.com/hajacska.vtt',
+        srcLang: 'hu',
+        label: "Magyar",
+        mode: "showing"
+    }, {
+        kind: 'subtitles',
+        src: 'http://abydosai.com/hajacska.vtt',
+        srcLang: 'en',
+        label: "Angol",
+        mode: "hidden"
+    }
+]
 
 const PlayerPage = () => {
 
@@ -70,29 +87,7 @@ const PlayerPage = () => {
                         {video &&
                             <>
                                 {/* video player with controls */}
-                                {video && <VideoPlayer videoItem={video} />}
-
-                                {/* under video info */}
-                                <Box>
-                                    {/* <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} /> */}
-                                    {!isDesktopView && <CourseItemList
-                                        courseItems={courseItems}
-                                        currentCourseItemId={courseItemId}
-                                        navigateToCourseItem={navigateToCourseItem} />}
-
-                                    <Flex justify="space-between" padding="20px">
-                                        <Typography variant={"h4"}>{video!.title}</Typography>
-                                        <SegmentedButton paging={descCommentPaging}></SegmentedButton>
-                                    </Flex>
-                                    <Divider style={{ width: "100%" }} />
-                                    <SlidesDisplay
-                                        index={descCommentPaging.currentIndex}
-                                        slides={[
-                                            VideoDescription,
-                                            VideoComments
-                                        ]}></SlidesDisplay>
-                                    <Copyright />
-                                </Box>
+                                {<WatchView />}
                             </>}
                     </Box>
 

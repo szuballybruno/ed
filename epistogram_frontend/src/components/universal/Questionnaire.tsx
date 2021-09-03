@@ -4,6 +4,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import { AnswerDTO } from '../../models/shared_models/AnswerDTO';
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
+import { LoadingFrame } from '../../HOC/LoadingFrame';
 
 const QuestionnaierAnswer = (props: {
     answer: AnswerDTO,
@@ -42,7 +43,8 @@ export const Questionnaire = (props: {
 
     const { question, onAnswered } = props;
     const [selectedAnswerId, setSelectedAnswerId] = useState(-1);
-    const { answerQuestion, correctAnswerId } = useAnswerQuestion();
+    const { answerQuestionAsync, correctAnswer, answerQuestionError, answerQuestionState } = useAnswerQuestion();
+    const correctAnswerId = correctAnswer?.answerId;
 
     return (
         <Flex id="questionnaireRoot" direction="column">
@@ -53,26 +55,34 @@ export const Questionnaire = (props: {
             </Typography>
 
             {/* answers */}
-            <Flex
-                id="answersList"
-                direction="column"
-                alignItems="center"
-                mt="20px"
-                pointerEvents={correctAnswerId ? "none" : "all"}>
-                {question
-                    .answers
-                    .map((answer, index) => <QuestionnaierAnswer
-                        key={index}
-                        answer={answer}
-                        isCorrect={correctAnswerId === answer.answerId}
-                        isIncorrect={selectedAnswerId === answer.answerId && correctAnswerId !== answer.answerId}
-                        onClick={() => {
+            <LoadingFrame loadingState={answerQuestionState} error={answerQuestionError}>
+                <Flex
+                    id="answersList"
+                    direction="column"
+                    alignItems="center"
+                    mt="20px"
+                    pointerEvents={correctAnswerId ? "none" : "all"}>
+                    {question
+                        .answers
+                        .map((answer, index) => {
 
-                            setSelectedAnswerId(answer.answerId);
-                            answerQuestion(question.questionId, answer.answerId);
-                            onAnswered();
-                        }} />)}
-            </Flex>
+                            const answerId = answer.answerId;
+
+                            return <QuestionnaierAnswer
+                                key={index}
+                                answer={answer}
+                                isCorrect={correctAnswerId === answerId}
+                                isIncorrect={selectedAnswerId === answerId && correctAnswerId !== answerId}
+                                onClick={async () => {
+
+                                    setSelectedAnswerId(answerId);
+                                    onAnswered();
+
+                                    await answerQuestionAsync(answerId, question.questionId);
+                                }} />;
+                        })}
+                </Flex>
+            </LoadingFrame>
         </Flex>
     );
 }

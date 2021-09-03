@@ -5,4 +5,5 @@ export type QuestionDTO = {
     questionText: string;
     answers: AnswerDTO[];
     imageUrl?: string;
+    showUpTimeSeconds?: number;
 }

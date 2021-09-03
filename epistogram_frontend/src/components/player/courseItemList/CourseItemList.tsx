@@ -1,9 +1,9 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { Slider } from "@material-ui/core";
 import React from 'react';
-import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
-import { CourseItemType } from "../../../../models/shared_models/types/sharedTypes";
-import ListItem from "../../../universal/atomic/listItem/ListItem";
+import { CourseItemDTO } from "../../../models/shared_models/CourseItemDTO";
+import { CourseItemType } from "../../../models/shared_models/types/sharedTypes";
+import ListItem from "../../universal/atomic/listItem/ListItem";
 import classes from './videoList.module.scss';
 
 export const CourseItemList = (params: {

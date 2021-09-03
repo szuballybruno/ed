@@ -1,31 +1,25 @@
-import { useState } from "react";
-import { useReactQuery } from "../frontendHelpers";
+import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
-import { httpPostAsync } from "./httpClient";
+import { usePostData } from "./httpClient";
 
 export const useAnswerQuestion = () => {
 
-    const [answerId, setAnswerId] = useState(-1);
-    const [questionId, setQuestionId] = useState(-1);
+    const queryRes = usePostData<AnswerQuestionDTO, AnswerDTO>("questions/answer-question");
 
-    const queryRes = useReactQuery(
-        ["answerQuestion"],
-        () => httpPostAsync("questions/answer-question", {
+    const answerQuestionAsync = (answerId: number, questionId: number) => {
+
+        const dto = {
             answerId,
             questionId
-        } as AnswerQuestionDTO), false);
+        } as AnswerQuestionDTO;
 
-    const answerQuestion = (questionId: number, answerId: number) => {
-
-        setAnswerId(answerId);
-        setQuestionId(questionId);
-        queryRes.refetch();
+        return queryRes.postDataAsync(dto);
     }
 
     return {
-        correctAnswerId: queryRes.data as number,
+        correctAnswer: queryRes.result,
         answerQuestionError: queryRes.error,
-        answerQuestionState: queryRes.status,
-        answerQuestion
+        answerQuestionState: queryRes.state,
+        answerQuestionAsync
     }
 }
