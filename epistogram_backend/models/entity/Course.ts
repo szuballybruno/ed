@@ -1,8 +1,8 @@
-import {Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Exam } from "./Exam";
 import { User } from "./User";
 import { Video } from "./Video";
-import {Organization} from "./Organization";
+import { Organization } from "./Organization";
 
 @Entity()
 export class Course {
@@ -31,18 +31,17 @@ export class Course {
     @Column()
     organizationId: number;
 
+    // organization
     @ManyToOne(() => Organization, organization => organization.courses)
     @JoinColumn({ name: 'organizationId' })
-    organization: Organization
+    organization: Organization;
 
-    @OneToMany(type => User, user => user.currentCourse)
-    @JoinColumn()
-    users: User[];
-
+    // videos 
     @OneToMany(type => Video, video => video.course, { cascade: true })
     @JoinColumn()
     videos: Video[];
 
+    // exams
     @OneToMany(type => Exam, exam => exam.course, { cascade: true })
     @JoinColumn()
     exams: Exam[];

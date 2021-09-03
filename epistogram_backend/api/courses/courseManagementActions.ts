@@ -1,20 +1,12 @@
-import {Request} from "express";
-import {AdminPageEditVideoView} from "../../models/shared_models/AdminPageEditVideoDTO";
-import {TagView} from "../../models/shared_models/TagDTO";
-import {staticProvider} from "../../staticProvider";
-import {User} from "../../models/entity/User";
-import {Video} from "../../models/entity/Video";
-import {toCourseItemDTO, toExamDTO, toPlayerDataDTO, toVideoDTO} from "../../services/mappings";
-import {Exam} from "../../models/entity/Exam";
-import {CourseShortDTO} from "../../models/shared_models/CourseShortDTO";
-import {getReandomQuestion} from "../../services/questionService";
-import {OverviewPageDTO} from "../../models/shared_models/OverviewPageDTO";
-import {Course} from "../../models/entity/Course";
-import {AdminPageEditCourseView} from "../../models/shared_models/AdminPageEditCourseDTO";
-import {CourseItemDTO} from "../../models/shared_models/CourseItemDTO";
-import {CourseItemType} from "../../models/shared_models/types/sharedTypes";
-import {getPlayerDataAsync} from "../../services/playerService";
-import {PlayerDataDTO} from "../../models/shared_models/PlayerDataDTO";
+import { Request } from "express";
+import { Course } from "../../models/entity/Course";
+import { Exam } from "../../models/entity/Exam";
+import { Video } from "../../models/entity/Video";
+import { AdminPageEditCourseView } from "../../models/shared_models/AdminPageEditCourseDTO";
+import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
+import { toCourseItemDTO } from "../../services/mappings";
+import { staticProvider } from "../../staticProvider";
 
 export const getVideoIdFromRequest = (req: Request) => {
 
@@ -30,7 +22,7 @@ export const getCourseIdFromRequest = (req: Request) => {
     return !!courseId ? courseId : new Error("Cannot get courseId")
 }
 
-export const getEditedVideoAsync = async (videoId: string, ) => {
+export const getEditedVideoAsync = async (videoId: string,) => {
 
     /*const { aggregateAsync } = await useCollection("videos");*/
 
@@ -110,7 +102,7 @@ export const getEditedCourseAsync = async (courseId: number) => {
         .ormConnection
         .getRepository(Course)
         .createQueryBuilder("course")
-        .where("course.id = :courseId", {courseId: courseId})
+        .where("course.id = :courseId", { courseId: courseId })
         //.leftJoinAndSelect("course.tags", "tags")
         //.leftJoinAndSelect("user.currentVideo", "video")
         //.leftJoinAndSelect("user.currentExam", "exam")

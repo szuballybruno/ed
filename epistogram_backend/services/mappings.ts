@@ -10,6 +10,7 @@ import { Video } from "../models/entity/Video";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
+import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
@@ -18,6 +19,7 @@ import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
+import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { staticProvider } from "../staticProvider";
@@ -81,10 +83,14 @@ export const toExamDTO = (exam: Exam) => {
     } as ExamDTO;
 }
 
-export const toPlayerDataDTO = (
+export const toCourseItemDTOs = (
     course: Course,
-    video: Video | null,
-    exam: Exam | null) => {
+    currentCourseItemDescriptor: CourseItemDescriptorDTO) => {
+
+    navPropNotNull(course.exams);
+    navPropNotNull(course.videos);
+
+    const { itemId, itemType } = currentCourseItemDescriptor;
 
     const examItems = course
         .exams
@@ -101,16 +107,19 @@ export const toPlayerDataDTO = (
     const itemsOrdered = itemsCombined
         .orderBy(x => x.orderIndex);
 
+    itemsOrdered
+        .forEach(x => {
+
+            if (x.id === itemId && x.type === itemType)
+                x.state = "current";
+        })
+
     // TODO: set state 
     // itemsOrdered
     //     .forEach((courseItem, index) => {
     //     })
 
-    return {
-        courseItems: itemsOrdered,
-        video: video ? toVideoDTO(video) : null,
-        exam: exam ? toExamDTO(exam) : null
-    } as PlayerDataDTO;
+    return itemsOrdered;
 }
 
 export const toVideoDTO = (video: Video) => {

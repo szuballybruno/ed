@@ -1,16 +1,15 @@
-import { Route, Switch, withRouter } from "react-router-dom";
-import LoginScreen from "../components/login/LoginScreen";
-import { SignupPage } from "../components/signup/SignupPage";
-import { ProtectedRoute } from "../components/universal/ProtectedRoute";
-import PlayerPage from "../components/player/PlayerPage";
-import Administration from "../components/administration/Administration";
-import OverviewPage from "../components/dashboard/OverviewPage";
-import UserCoursesPage from "../components/course_search/UserCoursesPage";
-import ProfileMain from "../components/profile/ProfileMain";
-import NotFound from "../components/universal/notFound/NotFound";
 import React from "react";
-import CoursePage from "../components/course_search/CoursePage";
+import { Route, Switch, withRouter } from "react-router-dom";
+import Administration from "../components/administration/Administration";
+import UserCoursesPage from "../components/course_search/UserCoursesPage";
+import OverviewPage from "../components/dashboard/OverviewPage";
 import { FileUploadPage } from "../components/FileUploadPage";
+import LoginScreen from "../components/login/LoginScreen";
+import { PlayerPage } from "../components/player/PlayerPage";
+import ProfileMain from "../components/profile/ProfileMain";
+import { SignupPage } from "../components/signup/SignupPage";
+import NotFound from "../components/universal/notFound/NotFound";
+import { ProtectedRoute } from "../components/universal/ProtectedRoute";
 
 export const MainRouting = () => {
     return <Switch>
@@ -26,11 +25,7 @@ export const MainRouting = () => {
         <ProtectedRoute path="/kurzusok" render={() => <UserCoursesPage />} />
         <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />
         <ProtectedRoute path="/fileupload" render={() => <FileUploadPage />} />
-
-        {/* index path */}
         <ProtectedRoute path="/" render={() => <OverviewPage />} exact />
-
-
 
         {/* wrong path */}
         <Route path="*">
@@ -38,13 +33,11 @@ export const MainRouting = () => {
         </Route>
 
         {/*
-
             Not used pages, maybe useful on demo
 
             <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
             <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
             <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
-
         */}
 
     </Switch>

@@ -31,23 +31,18 @@ const OverviewPage = () => {
     const user = useContext(CurrentUserContext);
     const { pageDTO, status, error } = useOverviewPageDTO();
 
-    // current item
-    const currentItem = pageDTO?.currentCourseItem;
+    const currentItem = pageDTO?.currentCourseItems
+        .filter(x => x.state == "current")[0];
+
     const currentItemId = currentItem?.id;
     const currentItemTitle = currentItem?.title;
     const currentItemSubtitle = currentItem?.subTitle;
     const currentItemThumbnailUrl = currentItem?.thumbnailUrl;
     const hasCurrentItem = !!currentItemId;
-
-    // recommended courses
-    const recommendedCourses = pageDTO?.recommendedCourses;
-
-    // current course items
-    const currentCourseId = pageDTO?.currentCourseId;
+    const hasCurrentCourse = hasCurrentItem;
     const courseItems = pageDTO?.currentCourseItems;
-    const hasCurrentCourse = !!currentCourseId;
-
-    const watchCurrentCurrentUrl = "/watch/" + currentCourseId + "/" + currentItemId;
+    const recommendedCourses = pageDTO?.recommendedCourses;
+    const watchCurrentCurrentUrl = "/watch/" + currentItemId + "?type=";
 
     return <MainWrapper>
 
@@ -83,7 +78,7 @@ const OverviewPage = () => {
                         {/* current course */}
                         {hasCurrentCourse &&
                             <DashoardLeftItemGroup title={"Jelenlegi kurzus"} >
-                                <CourseItemList courseItems={courseItems} />
+                                <CourseItemList courseItems={courseItems!} />
                             </DashoardLeftItemGroup>}
                     </Grid>
 
@@ -91,7 +86,7 @@ const OverviewPage = () => {
                 <RightPanel>
 
                     <OverviewSection title="Személyes tanulási asszisztens">
-                        <OverviewDashboard dto={pageDTO} />
+                        <OverviewDashboard dto={pageDTO!} />
                     </OverviewSection>
 
                     <OverviewSection title="Szavazás">

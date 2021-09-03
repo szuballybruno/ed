@@ -1,12 +1,12 @@
 
 import { Organization } from "../models/entity/Organization";
-import { User } from "../models/entity/User";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { staticProvider } from "../staticProvider";
-import { toExamDTO, toOrganizationDTO, toVideoDTO } from "./mappings";
+import { getCourseItemDTOsAsync } from "./courseService";
+import { toOrganizationDTO } from "./mappings";
 import { getReandomQuestion } from "./questionService";
 
 export const getOrganizationsAsync = async (userId: number) => {
@@ -22,53 +22,19 @@ export const getOrganizationsAsync = async (userId: number) => {
 
 export const getOverviewPageDTOAsync = async (userId: number) => {
 
-    // const userData = await getUserDataAsync(userId);
-
-    const user = await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .createQueryBuilder("user")
-        .where("user.id = :userId", { userId: userId })
-        .leftJoinAndSelect("user.currentCourse", "course")
-        .leftJoinAndSelect("user.currentVideo", "video")
-        .leftJoinAndSelect("user.currentExam", "exam")
-        .leftJoinAndSelect("course.exams", "exams")
-        .leftJoinAndSelect("course.videos", "videos")
-        .getOneOrFail();
-
-    const currentCourse = user.currentCourse;
-    const currentVideo = user.currentVideo;
-    const currentExam = user.currentExam;
-
-    const videoDTOs = currentCourse
-        ?.videos
-        ?.map(video => toVideoDTO(video));
-
-    const examDTOs = currentCourse
-        ?.exams
-        ?.map(exam => toExamDTO(exam));
-
+    const courseItems = await getCourseItemDTOsAsync(userId);
     const recommendedCourseDTOs = [] as CourseShortDTO[];
     const randomQuestion = getReandomQuestion();
     const currntTasks = getCurrentTasks();
     const developmentChartData = getDevelopmentChart();
 
     const overviewPageDTO = {
-
         tipOfTheDay: tipOfTheDay,
-        currentCourseId: currentCourse?.id ?? null,
-
-        currentCourseVideos: videoDTOs ?? null,
-        currentCourseExams: examDTOs ?? null,
-
-        currentCourseVideo: currentVideo ? toVideoDTO(currentVideo) : null,
-        currentCourseExam: currentExam ? toExamDTO(currentExam) : null,
-
         recommendedCourses: recommendedCourseDTOs,
         testQuestionDTO: randomQuestion,
         currentTasks: currntTasks,
-        developmentChartData: developmentChartData
-
+        developmentChartData: developmentChartData,
+        currentCourseItems: courseItems
     } as OverviewPageDTO;
 
     return overviewPageDTO;

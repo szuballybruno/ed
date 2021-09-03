@@ -1,5 +1,6 @@
 import Cookies from "universal-cookie";
 import { useReactQuery } from "../frontendHelpers";
+import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { httpGetAsync } from "./httpClient";
 
 export const useUserId = () => {
@@ -12,7 +13,7 @@ export const useUserId = () => {
 
 export const useOverviewPageDTO = () => {
 
-    const queryRes = useReactQuery(
+    const queryRes = useReactQuery<OverviewPageDTO>(
         ["overviewPageDTOQuery"],
         () => httpGetAsync("data/get-overview-page-dto"));
 

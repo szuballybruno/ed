@@ -23,7 +23,7 @@ export class Exam {
     @Column()
     orderIndex: number;
 
-    @OneToMany(type => User, user => user.currentCourse)
+    @OneToMany(type => User, user => user.currentExam)
     @JoinColumn()
     users: User[];
 

@@ -14,7 +14,7 @@ import { CourseItemList } from "./courseItemList/CourseItemList";
 import classes from './playerMain.module.scss';
 import { WatchView } from "./WatchView";
 
-const PlayerPage = () => {
+export const PlayerPage = () => {
 
     const { showDialog } = useDialog();
     const { navigate, navigateToPlayer } = useNavigation();
@@ -79,5 +79,3 @@ const PlayerPage = () => {
         </MainWrapper >
     )
 };
-
-export default withRouter(PlayerPage);
