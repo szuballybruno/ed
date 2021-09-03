@@ -1,5 +1,10 @@
-import {TagView} from "./TagDTO";
 import {CourseItemDTO} from "./CourseItemDTO";
+
+export type EditListItemDTO = {
+    id: number,
+    name: string,
+    checked: boolean
+}
 
 export type AdminPageEditCourseView = {
     courseId: number,
@@ -13,31 +18,8 @@ export type AdminPageEditCourseView = {
 
     courseItems: CourseItemDTO[]
 
-    // User groups where the course is visible
-    groups: {
-        id: number,
-        name: string,
-        checked: boolean
-    }[],
-
-    // Teacher of the course who recorded the videos
-    courseTeacher: {
-        id: number
-        name: string
-    },
-    allTeachers: {
-        id: number,
-        name: string
-    }[]
-
-    // Organization where the course is visible
-
-    organizations: {
-        id: number,
-        name: string,
-        checked: boolean
-    }[]
-
-    courseTags: TagView[]
-    allTags: TagView[]
+    groups: EditListItemDTO[],
+    teachers: EditListItemDTO[],
+    organizations: EditListItemDTO[],
+    tags: EditListItemDTO[],
 }

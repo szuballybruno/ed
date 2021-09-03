@@ -1,5 +1,7 @@
 export type CourseOrganizationDTO = {
     courseId: number,
     organizationId: number,
-    groupId: number
+    groupId: number,
+    teacherId: number,
+    tagId: number
 }

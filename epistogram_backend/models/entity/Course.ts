@@ -56,4 +56,11 @@ export class Course {
     @OneToMany(type => Exam, exam => exam.course, { cascade: true })
     @JoinColumn()
     exams: Exam[];
+
+    @Column()
+    teacherId: number
+
+    @ManyToOne(() => User, teacher => teacher.teachedCourses)
+    @JoinColumn({ name: "teacherId"} )
+    teacher: User
 }

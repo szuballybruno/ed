@@ -17,7 +17,7 @@ import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
 import './utilities/jsExtensions';
-import { getEditedCourseAction } from "./api/courses/courseManagementActions";
+import { getEditedCourseAction } from "./services/courseManagementService";
 
 // initialize env
 // require is mandatory here, for some unknown reason

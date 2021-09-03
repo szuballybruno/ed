@@ -21,14 +21,11 @@ export type AdminPageEditCourseView = {
     }[],
 
     // Teacher of the course who recorded the videos
-    courseTeacher: {
+    teachers: {
         id: number
         name: string
-    },
-    allTeachers: {
-        id: number,
-        name: string
-    }[]
+        checked: boolean
+    }[],
 
     // Organization where the course is visible
 
@@ -38,6 +35,9 @@ export type AdminPageEditCourseView = {
         checked: boolean
     }[]
 
-    courseTags: TagView[]
-    allTags: TagView[]
+    tags: {
+        id: number,
+        name: string,
+        checked: boolean
+    }[]
 }

@@ -99,11 +99,40 @@ export const EditCourse = () => {
 
                         </SelectMultiple>
                     </div>
+
                     <div className={classes.editTagsWrapper}>
-                        <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Tanár kiválasztása"} />
+                        <SelectMultiple
+                            items={course?.teachers}
+                            title={"Tanár kiválasztása"}
+                        >
+                            {course?.teachers?.map(item =>
+                                <div>
+                                    <ListItem className={classes.listItem}>
+                                        <Radio checked={item.checked} />
+                                        <Typography>{item.name}</Typography>
+                                    </ListItem>
+                                    <Divider style={{width: "100%"}} />
+                                </div>
+                            )}
+
+                        </SelectMultiple>
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Tagek (ide majd selectcheckbox)"} />
+                        <SelectMultiple
+                            items={course?.tags}
+                            title={"Tagek kiválasztása"}
+                        >
+                            {course?.tags?.map(item =>
+                                <div>
+                                    <ListItem className={classes.listItem}>
+                                        <Checkbox checked={item.checked} />
+                                        <Typography>{item.name}</Typography>
+                                    </ListItem>
+                                    <Divider style={{width: "100%"}} />
+                                </div>
+                            )}
+
+                        </SelectMultiple>
                     </div>
                     <div className={classes.editTagsWrapper}>
                         <SelectMultiple

@@ -106,4 +106,11 @@ export class User {
     @OneToMany(() => QuestionAnswer, qa => qa.answer)
     @JoinColumn()
     questionAnswers: QuestionAnswer[]
+
+    // question answers
+    @OneToMany(() => Course, course => course.teacher)
+    @JoinColumn()
+    teachedCourses: Course[]
+
+
 }

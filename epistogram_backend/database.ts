@@ -17,8 +17,9 @@ import { log } from "./services/misc/logger";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/userManagementService";
 import { staticProvider } from "./staticProvider";
 import {CourseOrganization} from "./models/entity/CourseOrganization";
-import {saveCourseOrganizationsAsync} from "./api/courses/courseManagementActions";
+import {saveCourseOrganizationsAsync} from "./services/courseManagementService";
 import {Group} from "./models/entity/Group";
+import {Tag} from "./models/entity/Tag";
 
 export type TypeORMConnection = Connection;
 
@@ -54,6 +55,7 @@ export const initializeDBAsync = async (recreate: boolean) => {
             QuestionAnswer,
             Question,
             Answer,
+            Tag,
             TestChild,
             TestParent,
             StorageFile
@@ -135,19 +137,45 @@ export const seedDB = async () => {
         .save([
             {
                 name: "Hegesztők",
-                organizationId: 1
+                organizationId: insertedOrganizationIds[0]
             },
             {
                 name: "Takarítók",
-                organizationId: 1
+                organizationId: insertedOrganizationIds[0]
             },
             {
                 name: "Műszerészek",
-                organizationId: 2
+                organizationId: insertedOrganizationIds[1]
+            }
+        ])
+
+    // seed tags
+    await connection
+        .getRepository(Tag)
+        .save([
+            {
+                name: "design",
+            },
+            {
+                name: "marketing",
+            },
+            {
+                name: "development",
             }
         ])
 
 
+    // seed users
+    const { invitationToken, user } = await createInvitedUserWithOrgAsync(
+        {
+            firstName: "Edina",
+            lastName: "Sandor",
+            jobTitle: "IT manager",
+            role: "admin" as RoleType,
+            email: "edina.sandor@email.com",
+        },
+        insertedOrganizationIds[0],
+        false);
 
     // seed courses
     await connection
@@ -160,6 +188,7 @@ export const seedDB = async () => {
                 permissionLevel: "public",
                 colorOne: "#123456",
                 colorTwo: "#ABCDEF",
+                teacherId: 1,
                 exams: [
                     {
                         title: "New Exam 1",
@@ -200,19 +229,8 @@ export const seedDB = async () => {
             }
         ]);
 
+    // seed connection between courses, organizations, groups, tags
     await saveCourseOrganizationsAsync()
-
-    // seed users
-    const { invitationToken, user } = await createInvitedUserWithOrgAsync(
-        {
-            firstName: "Edina",
-            lastName: "Sandor",
-            jobTitle: "IT manager",
-            role: "admin" as RoleType,
-            email: "edina.sandor@email.com",
-        },
-        insertedOrganizationIds[0],
-        false);
 
     await finalizeUserRegistrationAsync({
         invitationToken: invitationToken,

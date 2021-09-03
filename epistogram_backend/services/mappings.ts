@@ -23,6 +23,9 @@ import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { staticProvider } from "../staticProvider";
 import { navPropNotNull } from "../utilities/helpers";
 import { getStorageFileUrl } from "./storageService";
+import {EditListItemDTO} from "../models/shared_models/AdminPageEditCourseDTO";
+import {CourseOrganization} from "../models/entity/CourseOrganization";
+import {CourseOrganizationDTO} from "../models/shared_models/CourseOrganizationDTO";
 
 export const toUserDTO = (user: User) => {
 
@@ -60,6 +63,16 @@ export const toQuestionAnswerDTO = (questionAnswer: QuestionAnswer) => {
         questionId: questionAnswer.questionId,
         userId: questionAnswer.userId
     } as QuestionAnswerDTO;
+}
+
+export const toCourseOrganizationDTO = (courseOrganization: CourseOrganization) => {
+
+    return {
+        courseId: courseOrganization.courseId,
+        organizationId: courseOrganization.organizationId,
+        groupId: courseOrganization.groupId,
+        tagId: courseOrganization.tagId
+    } as CourseOrganizationDTO;
 }
 
 export const toTaskDTO = (task: Task) => {
@@ -203,4 +216,12 @@ export const toCourseAdminDTO = (course: Course) => {
         videosCount: 0,
         thumbnailImageURL: staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`
     } as CourseAdminDTO;
+}
+
+export const toEditListItemDTO = (id: number, name: string, checked: boolean) => {
+    return {
+        id: id,
+        name: name,
+        checked: checked
+    } as EditListItemDTO
 }
