@@ -138,10 +138,10 @@ const Statistics = () => {
             <div className={classes.statisticsInfoOuterContainer}>
                 <LearningStatisticsSeciton title={"Grafikonok"}>
                     <LearningStatisticsItem suffix={""} title={""} value={""}>
-                        <Line options={config}  data={data} type={"line"}/>
+                        <Line options={config}  data={data} /*type={"line"}*//>
                     </LearningStatisticsItem>
                     <LearningStatisticsItem suffix={""} title={""} value={""}>
-                        <Bar type={"bar"} data={data2} />
+                        <Bar /*type={"bar"}*/ data={data2} />
                     </LearningStatisticsItem>
                     <LearningStatisticsItem suffix={""} title={""} value={""}>
                         <Line options={{
@@ -156,10 +156,10 @@ const Statistics = () => {
                                     type: 'linear'
                                 }
                             }
-                        }}  data={data5} type={"line"}/>
+                        }}  data={data5} /*type={"line"}*//>
                     </LearningStatisticsItem>
                     <LearningStatisticsItem suffix={""} title={""} value={""}>
-                        <Pie options={{responsive: true, maintainAspectRatio: false}} type={"pie"} data={{
+                        <Pie options={{responsive: true, maintainAspectRatio: false}} /*type={"pie"}*/ data={{
                             labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
                             datasets: [
                                 {
@@ -182,7 +182,7 @@ const Statistics = () => {
                                     text: 'Chart.js Scatter Chart'
                                 }
                             }
-                        }} type={"scatter"} data={{
+                        }} /*type={"scatter"}*/ data={{
                             labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
                             datasets: [
                                 {
@@ -231,7 +231,7 @@ const Statistics = () => {
                                     text: 'Chart.js Horizontal Bar Chart'
                                 }
                             }
-                        }} type={"bar"} data={{
+                        }} /*type={"bar"}*/ data={{
                             labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
                             datasets: [
                                 {

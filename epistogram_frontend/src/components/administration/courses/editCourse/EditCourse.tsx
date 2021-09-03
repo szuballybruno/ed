@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import classes from "./editCourse.module.scss"
-import { Divider, List, Switch, Typography } from "@material-ui/core";
+import {Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography} from "@material-ui/core";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
 import { CourseVideoList } from "./CourseVideoList";
 import { useParams } from "react-router";
@@ -15,12 +15,40 @@ import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from 
 import { useAdminEditedCourse, useUserCourses } from "../../../../services/courseService";
 import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
 import { getChipWithLabel } from "../courseList/CourseList";
+import {ListItemWithRadio} from "../../universal/selectMultiple/components/ListItemWithRadioButton/ListItemWithRadioButton";
+import {SelectMultiple} from "../../universal/selectMultiple/SelectMultiple";
 
 /* TODO:
 *   - onClick for save changes button
 *   - editCourseDTO
 *   - fetch all the necessary data
 */
+
+export const useCombinedCheckedItems = (propToBeChecked: string, allItems?: any[], checkedItems?: any[]) => {
+    const createCheckedById = function (propToBeChecked: string, allItems: any[], checkedItems: any[]) {
+        let aa = allItems
+        aa.map((item, index) => {
+            if (checkedItems.some(value => value[propToBeChecked] === item[propToBeChecked])) {
+                console.log("true")
+                return [...aa, aa[index].checked = true]
+            } else {
+                console.log("false")
+                return [...aa, aa[index].checked = false]
+            }
+        })
+        return aa
+    };
+    if (allItems && checkedItems) {
+        return createCheckedById(propToBeChecked, allItems, checkedItems)
+    } else {
+        //TODO: Error handling
+    }
+
+
+
+
+
+}
 
 export const EditCourse = () => {
     const [showSecondColorPicker, setShowSecondColorPicker] = React.useState(false)
@@ -38,10 +66,9 @@ export const EditCourse = () => {
 
     const { course, status, error } = useAdminEditedCourse(Number(courseId));
 
+    const combinedOrganizations = useCombinedCheckedItems("id", course?.allOrganizations, course?.courseOrganizations)
 
-    useEffect(() => {
-
-    }, [])
+    console.log("EZ: " + combinedOrganizations)
 
     useCreateObjectURL(thumbnailImage, setThumbnailURL)
 
@@ -86,9 +113,21 @@ export const EditCourse = () => {
                         </List>
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectRadio items={course?.courseOrganizations} checked={course?.allOrganizations && course?.allOrganizations.some((org, index) => {
-                            return org === course?.courseOrganizations
-                        })} radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} title={"Cég kiválasztása"} />
+                        <SelectMultiple
+                            items={course?.allOrganizations}
+                            title={"Cég kiválasztása"}
+                        >
+                            {combinedOrganizations?.map(item =>
+                                <div>
+                                    <ListItem className={classes.listItem}>
+                                        <Checkbox checked={item.checked} />
+                                        <Typography>{item.name}</Typography>
+                                    </ListItem>
+                                    <Divider style={{width: "100%"}} />
+                                </div>
+                            )}
+
+                        </SelectMultiple>
                     </div>
                     <div className={classes.editTagsWrapper}>
                         <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Tanár kiválasztása"} />

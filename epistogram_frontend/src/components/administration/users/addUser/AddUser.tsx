@@ -148,7 +148,8 @@ const AddUser = () => {
         } catch (error) {
 
             // generic JS error
-            if (!error.errorType) {
+            // There was !error.errorType inside the condition, but that throws ts error
+            if (!error) {
 
                 showNotification("Felhasználó hozzáadása sikertelen", "error");
             }

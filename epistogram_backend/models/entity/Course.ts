@@ -1,8 +1,20 @@
-import {Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {
+    Column,
+    Entity,
+    JoinColumn,
+    JoinTable,
+    ManyToMany,
+    ManyToOne,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn
+} from "typeorm";
 import { Exam } from "./Exam";
 import { User } from "./User";
 import { Video } from "./Video";
 import {Organization} from "./Organization";
+import {QuestionAnswer} from "./QuestionAnswer";
+import {CourseOrganization} from "./CourseOrganization";
 
 @Entity()
 export class Course {
@@ -28,12 +40,10 @@ export class Course {
     @Column()
     colorTwo: string;
 
-    @Column()
-    organizationId: number;
-
-    @ManyToOne(() => Organization, organization => organization.courses)
-    @JoinColumn({ name: 'organizationId' })
-    organization: Organization
+    // Course's organizations
+    @OneToMany(() => CourseOrganization, co => co.course)
+    @JoinColumn()
+    courseOrganizations: CourseOrganization[]
 
     @OneToMany(type => User, user => user.currentCourse)
     @JoinColumn()

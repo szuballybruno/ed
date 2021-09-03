@@ -15,6 +15,11 @@ import {CourseItemDTO} from "../../models/shared_models/CourseItemDTO";
 import {CourseItemType} from "../../models/shared_models/types/sharedTypes";
 import {getPlayerDataAsync} from "../../services/playerService";
 import {PlayerDataDTO} from "../../models/shared_models/PlayerDataDTO";
+import {Organization} from "../../models/entity/Organization";
+import {CourseOrganization} from "../../models/entity/CourseOrganization";
+import {QuestionAnswer} from "../../models/entity/QuestionAnswer";
+import {CourseOrganizationDTO} from "../../models/shared_models/CourseOrganizationDTO";
+import {Group} from "../../models/entity/Group";
 
 export const getVideoIdFromRequest = (req: Request) => {
 
@@ -101,42 +106,92 @@ const getCurrentCourseItem = async (courseItemId: number, courseItemType: Course
         return exam;
     }
 }
+export const saveCourseOrganizationsAsync = async () => {
+    // insert new answers
+    const repo = staticProvider
+        .ormConnection
+        .getRepository(CourseOrganization);
+
+    const courseOrganizationsSeed = [
+        {
+            courseId: 1,
+            organizationId: 1,
+            groupId: 1
+        },{
+            courseId: 1,
+            organizationId: 2,
+            groupId: 3
+        }
+    ] as CourseOrganizationDTO[]
+
+    const courseOrganizations = courseOrganizationsSeed
+        .map(x => ({
+            courseId: x.courseId,
+            organizationId: x.organizationId,
+            groupId: x.groupId
+        } as CourseOrganization))
+
+    await repo.save(courseOrganizations);
+}
 
 export const getEditedCourseAsync = async (courseId: number) => {
 
+    const organizations = await staticProvider
+        .ormConnection
+        .getRepository(Organization)
+        .find()
 
+    const groups = await staticProvider
+        .ormConnection
+        .getRepository(Group)
+        .find()
+
+    const courseOrganizations = await staticProvider
+        .ormConnection
+        .getRepository(CourseOrganization)
+        .createQueryBuilder("co")
+        .where("co.courseId = :courseId", { courseId })
+        .leftJoinAndSelect("co.organization", "o")
+        //.where("o.isSignupQuestion = true")
+        .getMany()
+    const courseGroups = await staticProvider
+        .ormConnection
+        .getRepository(CourseOrganization)
+        .createQueryBuilder("co")
+        .where("co.courseId = :courseId", { courseId })
+        .leftJoinAndSelect("co.group", "g")
+        //.where("o.isSignupQuestion = true")
+        .getMany()
+
+    const toOrganizationDTO = (courseOrganization: CourseOrganization[]) => {
+        return courseOrganization.map((co) => {
+            return {
+                id: co.organization.id,
+                name: co.organization.name
+            }
+        }) as Organization[]
+    }
+
+    const toGroupDTO = (courseOrganization: CourseOrganization[]) => {
+        return courseOrganization.map((co) => {
+            return {
+                id: co.group.id,
+                name: co.group.name
+            }
+        }) as Group[]
+    }
 
     const course = await staticProvider
         .ormConnection
         .getRepository(Course)
         .createQueryBuilder("course")
         .where("course.id = :courseId", {courseId: courseId})
-        //.leftJoinAndSelect("course.tags", "tags")
-        //.leftJoinAndSelect("user.currentVideo", "video")
-        //.leftJoinAndSelect("user.currentExam", "exam")
-        .leftJoinAndSelect("course.organization", "organization")
         .leftJoinAndSelect("course.exams", "exams")
         .leftJoinAndSelect("course.videos", "videos")
         .getOneOrFail();
 
     const courseItems = toEditCourseItemsDTO(course)
 
-    // const currentCourse = user.currentCourse;
-    // const currentVideo = user.currentVideo;
-    // const currentExam = user.currentExam;
-    //
-    // const videoDTOs = currentCourse
-    //     ?.videos
-    //     ?.map((course: Video) => toVideoDTO(course));
-    //
-    // const examDTOs = currentCourse
-    //     ?.videos
-    //     ?.map((course: Exam) => toExamDTO(course));
-    //
-    // const recommendedCourseDTOs = [] as CourseShortDTO[];
-    // const randomQuestion = getReandomQuestion();
-    // const currntTasks = getCurrentTasks();
-    // const developmentChartData = getDevelopmentChart();
 
     const AdminPageEditCourseDTO = {
         courseId: course.id,
@@ -146,27 +201,11 @@ export const getEditedCourseAsync = async (courseId: number) => {
         permissionLevel: course.permissionLevel,
         colorOne: course.colorOne,
         colorTwo: course.colorTwo,
-        courseOrganizations: [course.organization],
-        allOrganizations: [{
-            id: ""
-        }],
-        /*courseTags: [{
-            id: course.tags.id
-        }]*/
+        courseOrganizations: toOrganizationDTO(courseOrganizations),
+        allOrganizations: organizations,
+        courseGroups: toGroupDTO(courseGroups),
+        allGroups: groups,
         courseItems: courseItems
-        // tipOfTheDay: tipOfTheDay,
-        // currentCourseId: currentCourse?.id ?? null,
-        //
-        // currentCourseVideos: videoDTOs ?? null,
-        // currentCourseExams: examDTOs ?? null,
-        //
-        //currentCourseVideo: currentVideo ? toVideoDTO(currentVideo) : null,
-        // currentCourseExam: currentExam ? toExamDTO(currentExam) : null,
-        //
-        // recommendedCourses: recommendedCourseDTOs,
-        // testQuestionDTO: randomQuestion,
-        // currentTasks: currntTasks,
-        // developmentChartData: developmentChartData
     } as unknown as AdminPageEditCourseView;
 
     return AdminPageEditCourseDTO;

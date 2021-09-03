@@ -78,7 +78,7 @@ const DevelopmentLineChart = (props: { data: any }) => {
 
     return <Line className={classes.progressLineChart}
         options={options}
-        type={"line"}
+        /*type={"line"}*/
         data={props.data} />
 }
 

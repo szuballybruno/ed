@@ -38,7 +38,7 @@ export type AdminPageEditCourseView = {
     courseOrganizations: {
         id: number,
         name: string
-    }
+    }[]
 
     // ONLY IF THE PERMISSION IS ADMIN
     allOrganizations: {

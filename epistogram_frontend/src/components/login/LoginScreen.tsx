@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import React, { useContext, useState } from 'react';
 import { Redirect } from "react-router";
-import { TypedError } from "../../frontendHelpers";
+import {getEventValueCallback, TypedError} from "../../frontendHelpers";
 import { AuthenticationStateContext } from "../../HOC/AuthenticationFrame";
 import { useLogInUser } from '../../services/authenticationService';
 import SingleInput from "../administration/universal/singleInput/SingleInput";
@@ -51,10 +51,6 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
         }
     };
 
-    const changeHandler = (e: React.ChangeEvent<{ value: string, name: string }>) => {
-        // app[e.currentTarget.name as keyof typeof app].set(e.currentTarget.value)
-    };
-
     const authState = useContext(AuthenticationStateContext);
 
     if (authState.isLoading)
@@ -71,8 +67,8 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
                     <h1 className={classes.loginalcim}>Jelentkezz be, és már kezdhetsz is.</h1>
                 </div>
                 <form className={classes.formitem} onSubmit={(e: React.FormEvent<HTMLFormElement>) => authenticate(e)}>
-                    <SingleInput id="email" labelText={"E-mail"} name={"currentEmail"} changeHandler={changeHandler} style={{ justifySelf: "center" }} />
-                    <SingleInput id="password" labelText={"Jelszó"} name={"currentPassword"} type={"password"} changeHandler={changeHandler} style={{ justifySelf: "center" }} />
+                    <SingleInput id="email" labelText={"E-mail"} name={"currentEmail"} changeHandler={getEventValueCallback(setEmail)} style={{ justifySelf: "center" }} />
+                    <SingleInput id="password" labelText={"Jelszó"} name={"currentPassword"} type={"password"} changeHandler={getEventValueCallback(setPassword)} style={{ justifySelf: "center" }} />
                     <p className={classes.forgotPassword}>Elfelejtettem a jelszavam</p>
 
                     <Button type="submit" variant={"outlined"}>Bejelentkezés</Button>

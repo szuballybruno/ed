@@ -16,6 +16,9 @@ import { RoleType } from "./models/shared_models/types/sharedTypes";
 import { log } from "./services/misc/logger";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/userManagementService";
 import { staticProvider } from "./staticProvider";
+import {CourseOrganization} from "./models/entity/CourseOrganization";
+import {saveCourseOrganizationsAsync} from "./api/courses/courseManagementActions";
+import {Group} from "./models/entity/Group";
 
 export type TypeORMConnection = Connection;
 
@@ -41,7 +44,9 @@ export const initializeDBAsync = async (recreate: boolean) => {
         entities: [
             // "models/entity/**/*.ts"
             Course,
+            CourseOrganization,
             Exam,
+            Group,
             Organization,
             User,
             Video,
@@ -124,6 +129,26 @@ export const seedDB = async () => {
         .identifiers
         .map(x => x.id as number);
 
+    // seed groups
+    await connection
+        .getRepository(Group)
+        .save([
+            {
+                name: "Hegesztők",
+                organizationId: 1
+            },
+            {
+                name: "Takarítók",
+                organizationId: 1
+            },
+            {
+                name: "Műszerészek",
+                organizationId: 2
+            }
+        ])
+
+
+
     // seed courses
     await connection
         .getRepository(Course)
@@ -133,7 +158,6 @@ export const seedDB = async () => {
                 category: "Programming",
                 courseGroup: "IT",
                 permissionLevel: "public",
-                organizationId: 1,
                 colorOne: "#123456",
                 colorTwo: "#ABCDEF",
                 exams: [
@@ -175,6 +199,8 @@ export const seedDB = async () => {
                 ]
             }
         ]);
+
+    await saveCourseOrganizationsAsync()
 
     // seed users
     const { invitationToken, user } = await createInvitedUserWithOrgAsync(

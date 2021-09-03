@@ -1,6 +1,5 @@
 import React from 'react';
 import classes from "./addFrame.module.scss"
-import { AdminAddHeader } from "../administration/universal/adminAddHeader/AdminAddHeader";
 
 export const AddFrame = (props: {
     children: any,
