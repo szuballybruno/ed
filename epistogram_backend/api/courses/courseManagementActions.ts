@@ -136,14 +136,23 @@ export const saveCourseOrganizationsAsync = async () => {
 
 export const getEditedCourseAsync = async (courseId: number) => {
 
+    const createCheckedById = function (propToBeComparedBy: string, allItems: any[], checkedItems: any[]) {
+        let aa = allItems
+        aa.map((item, index) => {
+            if (checkedItems.some(value => value[propToBeComparedBy] === item[propToBeComparedBy])) {
+                console.log("true")
+                return [...aa, aa[index].checked = true]
+            } else {
+                console.log("false")
+                return [...aa, aa[index].checked = false]
+            }
+        })
+        return aa
+    };
+
     const organizations = await staticProvider
         .ormConnection
         .getRepository(Organization)
-        .find()
-
-    const groups = await staticProvider
-        .ormConnection
-        .getRepository(Group)
         .find()
 
     const courseOrganizations = await staticProvider
@@ -154,6 +163,17 @@ export const getEditedCourseAsync = async (courseId: number) => {
         .leftJoinAndSelect("co.organization", "o")
         //.where("o.isSignupQuestion = true")
         .getMany()
+
+    const courseOrganizationsChecked = createCheckedById("id", organizations, courseOrganizations)
+
+
+
+    const groups = await staticProvider
+        .ormConnection
+        .getRepository(Group)
+        .find()
+
+
     const courseGroups = await staticProvider
         .ormConnection
         .getRepository(CourseOrganization)
@@ -162,6 +182,8 @@ export const getEditedCourseAsync = async (courseId: number) => {
         .leftJoinAndSelect("co.group", "g")
         //.where("o.isSignupQuestion = true")
         .getMany()
+
+    const courseGroupsChecked = createCheckedById("id", groups, courseGroups)
 
     const toOrganizationDTO = (courseOrganization: CourseOrganization[]) => {
         return courseOrganization.map((co) => {
@@ -201,10 +223,9 @@ export const getEditedCourseAsync = async (courseId: number) => {
         permissionLevel: course.permissionLevel,
         colorOne: course.colorOne,
         colorTwo: course.colorTwo,
-        courseOrganizations: toOrganizationDTO(courseOrganizations),
-        allOrganizations: organizations,
-        courseGroups: toGroupDTO(courseGroups),
-        allGroups: groups,
+        organizations: courseOrganizationsChecked, //toOrganizationDTO(courseOrganizations),
+        groups: courseGroupsChecked,
+        //courseGroups: toGroupDTO(courseGroups),
         courseItems: courseItems
     } as unknown as AdminPageEditCourseView;
 

@@ -24,32 +24,6 @@ import {SelectMultiple} from "../../universal/selectMultiple/SelectMultiple";
 *   - fetch all the necessary data
 */
 
-export const useCombinedCheckedItems = (propToBeChecked: string, allItems?: any[], checkedItems?: any[]) => {
-    const createCheckedById = function (propToBeChecked: string, allItems: any[], checkedItems: any[]) {
-        let aa = allItems
-        aa.map((item, index) => {
-            if (checkedItems.some(value => value[propToBeChecked] === item[propToBeChecked])) {
-                console.log("true")
-                return [...aa, aa[index].checked = true]
-            } else {
-                console.log("false")
-                return [...aa, aa[index].checked = false]
-            }
-        })
-        return aa
-    };
-    if (allItems && checkedItems) {
-        return createCheckedById(propToBeChecked, allItems, checkedItems)
-    } else {
-        //TODO: Error handling
-    }
-
-
-
-
-
-}
-
 export const EditCourse = () => {
     const [showSecondColorPicker, setShowSecondColorPicker] = React.useState(false)
 
@@ -65,10 +39,6 @@ export const EditCourse = () => {
     const [colorTwo, setColorTwo] = React.useState("")
 
     const { course, status, error } = useAdminEditedCourse(Number(courseId));
-
-    const combinedOrganizations = useCombinedCheckedItems("id", course?.allOrganizations, course?.courseOrganizations)
-
-    console.log("EZ: " + combinedOrganizations)
 
     useCreateObjectURL(thumbnailImage, setThumbnailURL)
 
@@ -114,10 +84,10 @@ export const EditCourse = () => {
                     </div>
                     <div className={classes.editTagsWrapper}>
                         <SelectMultiple
-                            items={course?.allOrganizations}
+                            items={course?.organizations}
                             title={"Cég kiválasztása"}
                         >
-                            {combinedOrganizations?.map(item =>
+                            {course?.organizations?.map(item =>
                                 <div>
                                     <ListItem className={classes.listItem}>
                                         <Checkbox checked={item.checked} />
@@ -136,10 +106,22 @@ export const EditCourse = () => {
                         <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Tagek (ide majd selectcheckbox)"} />
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Csoportok kiválasztása"} />
+                        <SelectMultiple
+                            items={course?.groups}
+                            title={"Csoport kiválasztása"}
+                        >
+                            {course?.groups?.map(item =>
+                                <div>
+                                    <ListItem className={classes.listItem}>
+                                        <Checkbox checked={item.checked} />
+                                        <Typography>{item.name}</Typography>
+                                    </ListItem>
+                                    <Divider style={{width: "100%"}} />
+                                </div>
+                            )}
+
+                        </SelectMultiple>
                     </div>
-
-
                 </div>
                 <Divider orientation={"vertical"} />
                 <div className={classes.editDataRightWrapper}>
