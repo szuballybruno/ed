@@ -1,8 +1,6 @@
 .videoListWrapper {
     display: flex;
     flex-direction: column;
-    min-width: 450px;
-    height: calc(100vh - 80px);
 }
 
 .videoListInnerWrapper {
@@ -35,7 +33,7 @@
     color: var(--background-18);
 }
 
-.videoWrapper {
+.courseItemListContainer {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -47,7 +45,7 @@
     scrollbar-width: none;  /* Firefox */
 }
 
-.videoWrapper::-webkit-scrollbar {
+.courseItemListContainer::-webkit-scrollbar {
     display: none;
 }
 .video {
@@ -164,39 +162,39 @@
     color: #EEE;
 }
 
-@media only screen and (max-width: 600px) {
-    .videoListWrapper {
-        width: 100%;
-        border-radius: 0;
-        padding: 0;
-    }
-    .videoWrapper {
+// @media only screen and (max-width: 600px) {
+//     .videoListWrapper {
+//         width: 100%;
+//         border-radius: 0;
+//         padding: 0;
+//     }
+//     .courseItemListContainer {
 
-    }
-}
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 600px) and (max-width: 768px) {
-    .videoListWrapper {
-        width: 100%;
-        border-radius: 0;
-        padding: 0;
-    }
-    .videoWrapper {
+//     }
+// }
+// /* Medium devices (landscape tablets, 768px and up) */
+// @media only screen and (min-width: 600px) and (max-width: 768px) {
+//     .videoListWrapper {
+//         width: 100%;
+//         border-radius: 0;
+//         padding: 0;
+//     }
+//     .courseItemListContainer {
 
-    }
-}
+//     }
+// }
 
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 768px) and (max-width: 992px) {
-    .videoListWrapper {
-        width: 100%;
-        border-radius: 0;
-        padding: 0;
-    }
-    .videoWrapper {
+// /* Large devices (laptops/desktops, 992px and up) */
+// @media only screen and (min-width: 768px) and (max-width: 992px) {
+//     .videoListWrapper {
+//         width: 100%;
+//         border-radius: 0;
+//         padding: 0;
+//     }
+//     .courseItemListContainer {
 
-    }
-}
+//     }
+// }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 992px) and (max-width: 1200px) {

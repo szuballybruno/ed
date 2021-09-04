@@ -13,6 +13,7 @@ import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
 import { CourseItemList, NavigateToCourseItemActionType } from "./courseItemList/CourseItemList";
 import PlayerDescription from "./description/PlayerDescription";
 import { OverlayDialog } from "./OverlayDialog";
+import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
 
 export const WatchView = (props: {
@@ -25,7 +26,7 @@ export const WatchView = (props: {
     const { questions } = video;
     const hasQuestions = questions.length > 0;
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
-    const [isShowingStillWatching, setShowingStillWatching] = useState(false);
+    const [isShowingStillWatching, setShowingStillWatching] = useState(true);
     const isQuestionVisible = !!currentQuestion;
     const [answeredQuestionIds, setAnsweredQuestionIds] = useState<number[]>([]);
     const isDesktopView = useIsDesktopView();
@@ -69,24 +70,19 @@ export const WatchView = (props: {
                 <OverlayDialog
                     showCloseButton={currentQuestionAnswered}
                     closeButtonAction={() => setCurrentQuestion(null)}>
-                    {isQuestionVisible && <Questionnaire
+                    <Questionnaire
                         question={currentQuestion!}
                         onAnswered={() => setAnsweredQuestionIds([
                             ...answeredQuestionIds,
                             currentQuestion?.questionId!
-                        ])} />}
+                        ])} />
                 </OverlayDialog>
             </AbsoluteFlexOverlay>
 
             {/* questionnaire */}
-            <AbsoluteFlexOverlay isVisible={false} hasPointerEvents={true}>
+            <AbsoluteFlexOverlay isVisible={isShowingStillWatching} hasPointerEvents={true}>
                 <OverlayDialog showCloseButton={false}>
-                    {isQuestionVisible && <Questionnaire
-                        question={currentQuestion!}
-                        onAnswered={() => setAnsweredQuestionIds([
-                            ...answeredQuestionIds,
-                            currentQuestion?.questionId!
-                        ])} />}
+                    <StillWatching onClose={() => setShowingStillWatching(false)} />
                 </OverlayDialog>
             </AbsoluteFlexOverlay>
         </VideoPlayer>

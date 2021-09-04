@@ -204,6 +204,7 @@ export const VideoPlayer = (props: {
             position="relative"
             height="100%"
             width="100%"
+            p="6px"
             ref={playerContainerRef}>
 
             {/* playback */}

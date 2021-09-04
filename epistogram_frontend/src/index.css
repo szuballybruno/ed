@@ -40,3 +40,25 @@ a {
 button {
   cursor: pointer;
 }
+
+.hoverOnHover {
+  transition: 0.2s;
+}
+
+.hoverOnHover:hover {
+  transform: scale(1.02);
+  box-shadow: 1 1 black;
+}
+
+.leftBorderOnHover{
+  transition: 0.2s;
+}
+.leftBorderOnHover:hover{
+  border-left: 5px solid var(--background-18);
+}
+
+:root {
+  --intenseGreen: #61ca61;
+  --intenseRed: #e73f3f;
+  --intenseYellow: #efd116;
+}

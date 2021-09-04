@@ -1,23 +1,25 @@
-import { Box } from "@chakra-ui/react";
-import { Slider } from "@material-ui/core";
+import { Box, Flex } from "@chakra-ui/react";
+import { Divider, Slider } from "@material-ui/core";
 import React from 'react';
 import { CourseItemDTO } from "../../../models/shared_models/CourseItemDTO";
 import { CourseItemType } from "../../../models/shared_models/types/sharedTypes";
 import ListItem from "../../universal/atomic/listItem/ListItem";
 import classes from './videoList.module.scss';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import LockIcon from '@material-ui/icons/Lock';
 
 export type NavigateToCourseItemActionType = (courseItemId: number, courseItemType: CourseItemType) => void;
 
-export const CourseItemList = (params: {
+export const CourseItemList = (props: {
     courseItems: CourseItemDTO[],
     navigateToCourseItem: NavigateToCourseItemActionType
 }) => {
 
-    const courseItems = params.courseItems;
-    const navigateToCourseItem = params.navigateToCourseItem;
+    const courseItems = props.courseItems;
+    const navigateToCourseItem = props.navigateToCourseItem;
 
     return (
-        <Box className={classes.videoListWrapper} bg="#f6f6f6">
+        <Box className={classes.videoListWrapper} bg="white" minWidth="390px">
             <div className={classes.videoListInnerWrapper}>
 
                 {/* learning type selector */}
@@ -45,20 +47,29 @@ export const CourseItemList = (params: {
                 </div>
 
                 {/* course items */}
-                <div className={classes.videoWrapper}>
+                <div id="courseItemListContainer" className={classes.courseItemListContainer}>
                     {courseItems
                         .map((courseItem, index) => {
 
-                            return <Box
+                            return <Flex
+                                id="courseItemRoot"
+                                className="leftBorderOnHover"
                                 cursor="pointer"
-                                key={index}>
+                                key={index}
+                                align="center"
+                                pr="20px"
+                                borderBottom={courseItems.length - 1 != index ? "1px solid #eaeaea" : "none"}>
+
                                 <ListItem
-                                    active={false}
                                     mainTitle={courseItem.title}
                                     subTitle={courseItem.subTitle}
                                     thumbnailUrl={courseItem.thumbnailUrl}
                                     onClick={() => navigateToCourseItem(courseItem.id, courseItem.type)} />
-                            </Box>
+
+                                {courseItem.state === "current" && <VisibilityIcon style={{ color: "var(--background-18)" }} />}
+                                {courseItem.state !== "current" && <LockIcon style={{ color: "grey" }} />}
+
+                            </Flex>
                         })}
                 </div>
             </div>

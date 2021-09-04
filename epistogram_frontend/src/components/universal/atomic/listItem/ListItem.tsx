@@ -1,8 +1,8 @@
 import React from 'react';
 import classes from './listItem.module.scss'
-import {NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import DynamicFont from 'react-dynamic-font';
-import {Typography} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 const ListItem = (props: {
     active?: boolean
@@ -28,7 +28,7 @@ const ListItem = (props: {
         </div>
     }
 
-    const ThumbnailSelector = (props: {thumbnailUrl?: string}) => {
+    const ThumbnailSelector = (props: { thumbnailUrl?: string }) => {
         return props.thumbnailUrl ? <div className={classes.playbackThumbnailWrapper}>
             <img className={classes.playbackThumbnail} alt="" src={props.thumbnailUrl} />
             <label className={classes.courseCounterLabel}>

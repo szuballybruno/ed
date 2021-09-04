@@ -134,7 +134,16 @@ export const useReactQuery = <T>(
 
 export const hasValue = (obj: any) => {
 
-    return (!!obj || obj === false) && obj !== "";
+    if (obj === undefined)
+        return false;
+
+    if (obj === null)
+        return false;
+
+    if (obj === "")
+        return false;
+
+    return true;
 }
 
 
