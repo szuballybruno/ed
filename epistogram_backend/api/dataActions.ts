@@ -2,9 +2,24 @@ import { Request } from "express";
 import { SaveQuestionnaireAnswersDTO } from "../models/shared_models/SaveQuestionnaireAnswersDTO";
 import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
+import { getEditedCourseAsync, getEditedVideoAsync } from "../services/courseManagementService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
 import { getSignupDataAsync, saveSignupQuestionnaireAnswersAsync } from "../services/signupService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+
+export const getEditedVideoAction = async (req: Request) => {
+
+    const videoId = req.body.videoId
+
+    return await getEditedVideoAsync(videoId);
+};
+
+export const getEditedCourseAction = async (req: Request) => {
+
+    const courseId = req.body.courseId
+
+    return await getEditedCourseAsync(courseId);
+};
 
 export const getOverviewPageDTOAction = async (req: Request) => {
 

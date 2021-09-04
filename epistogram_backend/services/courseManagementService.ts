@@ -1,21 +1,21 @@
-import {Request} from "express";
-import {staticProvider} from "../staticProvider";
-import {User} from "../models/entity/User";
-import {Video} from "../models/entity/Video";
+import { Request } from "express";
+import { staticProvider } from "../staticProvider";
+import { User } from "../models/entity/User";
+import { Video } from "../models/entity/Video";
 import {
     toCourseItemDTO,
     toEditListItemDTO,
 } from "./mappings";
-import {Exam} from "../models/entity/Exam";
-import {Course} from "../models/entity/Course";
-import {AdminPageEditCourseView} from "../models/shared_models/AdminPageEditCourseDTO";
-import {CourseItemDTO} from "../models/shared_models/CourseItemDTO";
-import {CourseItemType} from "../models/shared_models/types/sharedTypes";
-import {Organization} from "../models/entity/Organization";
-import {CourseOrganization} from "../models/entity/CourseOrganization";
-import {CourseOrganizationDTO} from "../models/shared_models/CourseOrganizationDTO";
-import {Group} from "../models/entity/Group";
-import {Tag} from "../models/entity/Tag";
+import { Exam } from "../models/entity/Exam";
+import { Course } from "../models/entity/Course";
+import { AdminPageEditCourseView } from "../models/shared_models/AdminPageEditCourseDTO";
+import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
+import { CourseItemType } from "../models/shared_models/types/sharedTypes";
+import { Organization } from "../models/entity/Organization";
+import { CourseOrganization } from "../models/entity/CourseOrganization";
+import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizationDTO";
+import { Group } from "../models/entity/Group";
+import { Tag } from "../models/entity/Tag";
 
 export const getVideoIdFromRequest = (req: Request) => {
 
@@ -77,43 +77,6 @@ const getCurrentCourseItem = async (courseItemId: number, courseItemType: Course
     }
 }
 
-
-export const saveCourseOrganizationsAsync = async () => {
-    // insert new answers
-    const repo = staticProvider
-        .ormConnection
-        .getRepository(CourseOrganization);
-
-    const courseOrganizationsSeed = [
-        {
-            courseId: 1,
-            organizationId: 1,
-            groupId: 1,
-            tagId: 1
-        },{
-            courseId: 1,
-            organizationId: 2,
-            groupId: 3,
-            tagId: 1
-        },{
-            courseId: 1,
-            organizationId: 2,
-            groupId: 3,
-            tagId: 2
-        }
-    ] as CourseOrganizationDTO[]
-
-    const courseOrganizations = courseOrganizationsSeed
-        .map(x => ({
-            courseId: x.courseId,
-            organizationId: x.organizationId,
-            groupId: x.groupId,
-            tagId: x.tagId
-        } as CourseOrganizationDTO))
-
-    await repo.save(courseOrganizations);
-}
-
 export const getEditedCourseAsync = async (courseId: number) => {
 
     const createCheckedById = function (propToBeComparedBy: string, allItems: any[], checkedItems: any[]) {
@@ -132,7 +95,7 @@ export const getEditedCourseAsync = async (courseId: number) => {
         .ormConnection
         .getRepository(CourseOrganization)
         .createQueryBuilder("co")
-        .where("co.courseId = :courseId", {courseId})
+        .where("co.courseId = :courseId", { courseId })
         .leftJoinAndSelect("co.tag", "t")
         .leftJoinAndSelect("co.group", "g")
         .leftJoinAndSelect("co.organization", "o")
@@ -166,7 +129,7 @@ export const getEditedCourseAsync = async (courseId: number) => {
         .ormConnection
         .getRepository(Course)
         .createQueryBuilder("course")
-        .where("course.id = :courseId", {courseId: courseId})
+        .where("course.id = :courseId", { courseId: courseId })
         .leftJoinAndSelect("course.teacher", "teacher")
         .leftJoinAndSelect("course.exams", "exams")
         .leftJoinAndSelect("course.videos", "videos")
@@ -219,17 +182,3 @@ export const getEditedCourseAsync = async (courseId: number) => {
                 tag.checked)),
     } as AdminPageEditCourseView;
 }
-
-export const getEditedVideoAction = async (req: Request) => {
-
-    const videoId = getVideoIdFromRequest(req);
-
-    return await getEditedVideoAsync(videoId);
-};
-
-export const getEditedCourseAction = async (req: Request) => {
-    //needs a getCourseIdFromRequest
-    const videoId = getCourseIdFromRequest(req);
-    //needs a getEditedVideoAsync
-    return await getEditedCourseAsync(videoId);
-};
