@@ -53,7 +53,7 @@ import { LoadingFrame } from "../../../../HOC/LoadingFrame";
 export const UserList = () => {
     const user = useContext(CurrentUserContext)!;
     const [searchText, setSearchText] = React.useState("");
-    const { users, status } = useUserListQuery(user.userId, searchText);
+    const { users, status } = useUserListQuery(user.id, searchText);
 
     const getAvatarUrl = (userId: number | null) => {
 
@@ -76,7 +76,7 @@ export const UserList = () => {
                     .map((user, index) => {
                         return <AdministrationListItem
                             title={`${user.lastName} ${user.firstName}`}
-                            profileImageUrl={getAvatarUrl(user.userId)}
+                            profileImageUrl={getAvatarUrl(user.organizationId)}
                             chips={[
                                 getChipWithLabel(index, user.email, "email"),
                                 getChipWithLabel(index, user.organizationName, "organization"),

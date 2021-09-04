@@ -102,7 +102,6 @@ export const recreateDB = async (postgresOptions: ConnectionOptions) => {
 export const seedDB = async () => {
 
     const connection = staticProvider.ormConnection;
-
     const orgIds = await seedOrganizations(connection);
 
     log("seedUsers")

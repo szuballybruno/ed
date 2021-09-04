@@ -7,6 +7,7 @@ import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
 import { useOverviewPageDTO } from "../../services/dataService";
+import { getCourseItemUrl } from "../../services/navigatior";
 import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import ListItem from "../universal/atomic/listItem/ListItem";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
@@ -42,7 +43,7 @@ const OverviewPage = () => {
     const hasCurrentCourse = hasCurrentItem;
     const courseItems = pageDTO?.currentCourseItems;
     const recommendedCourses = pageDTO?.recommendedCourses;
-    const watchCurrentCurrentUrl = "/watch/" + currentItemId + "?type=";
+    const continueCourseUrl = hasCurrentItem ? getCourseItemUrl(currentItemId!, currentItem?.type!) : "";
 
     return <MainWrapper>
 
@@ -66,8 +67,8 @@ const OverviewPage = () => {
                             {hasCurrentItem
                                 ? <ListItem mainTitle={currentItemTitle!}
                                     subTitle={currentItemSubtitle!}
-                                    thumbnailUrl={currentItemThumbnailUrl!}
-                                    to={watchCurrentCurrentUrl} />
+                                    thumbnailUrl={currentItemThumbnailUrl}
+                                    to={continueCourseUrl} />
 
                                 : <ListItem mainTitle={"Tanfolyamkereső"}
                                     subTitle={"Válaszd ki a legszimpatikusabb tanfolyamot"}

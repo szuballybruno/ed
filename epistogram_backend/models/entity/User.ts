@@ -51,6 +51,9 @@ export class User {
     @Column()
     jobTitle: string;
 
+    @Column({ default: false })
+    isTeacher: boolean;
+
     @Column({ nullable: true })
     password: string;
 
@@ -103,6 +106,4 @@ export class User {
     @OneToMany(() => Course, course => course.teacher)
     @JoinColumn()
     teachedCourses: Course[]
-
-
 }

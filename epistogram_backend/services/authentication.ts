@@ -101,7 +101,7 @@ export const renewUserSession = async (req: Request, res: Response) => {
     const newRefreshToken = getRefreshToken(user);
 
     // save refresh token to DB
-    await setUserActiveRefreshToken(user.userId, refreshToken);
+    await setUserActiveRefreshToken(user.id, refreshToken);
 
     await setAuthCookies(res, newAccessToken, newRefreshToken);
 }
@@ -146,8 +146,8 @@ export const getUserLoginTokens = async (user: UserDTO) => {
     const refreshToken = getRefreshToken(user);
 
     // save refresh token to DB
-    log(`Setting refresh token of user '${user.userId}' to '${refreshToken}'`);
-    await setUserActiveRefreshToken(user.userId, refreshToken);
+    log(`Setting refresh token of user '${user.id}' to '${refreshToken}'`);
+    await setUserActiveRefreshToken(user.id, refreshToken);
 
     return {
         accessToken,
@@ -165,7 +165,7 @@ export const setAuthCookies = (res: Response, accessToken: string, refreshToken:
 const getPlainObjectUserInfoDTO = (user: UserDTO) => {
 
     return {
-        userId: user.userId,
+        userId: user.id,
         organizationId: user.organizationId
     }
 }

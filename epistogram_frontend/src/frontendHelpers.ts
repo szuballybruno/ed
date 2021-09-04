@@ -146,6 +146,15 @@ export const hasValue = (obj: any) => {
     return true;
 }
 
+export const isBetweenThreshold = (valueA: number, valueB: number, threshold: number) => {
+
+    return (valueA - threshold) < valueB && valueB < (valueA + threshold);
+}
+
+export const getRandomInteger = (min: number, max: number) => {
+
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
 export const secondsToTime = (e: any) => {
     let h = Math.floor(e / 3600).toString().padStart(2, '0'),

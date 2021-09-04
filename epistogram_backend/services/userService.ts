@@ -102,3 +102,14 @@ export const removeRefreshToken = (userId: number) => {
             refreshToken: ""
         });
 }
+
+export const getTeacherDTOAsync = async () => {
+
+    const teachers = await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .find();
+
+    return teachers
+        .map(x => toUserDTO(x));
+}

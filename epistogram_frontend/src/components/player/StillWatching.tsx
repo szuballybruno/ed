@@ -1,9 +1,9 @@
-import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from "@material-ui/icons"
+import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from "@material-ui/icons";
 import { useState } from "react";
 import { hasValue } from "../../frontendHelpers";
-import { QuestionnaierAnswer, QuestionnaireLayout } from "../universal/QuestionnaireLayout"
+import { QuestionnaierAnswer, QuestionnaireLayout } from "../universal/QuestionnaireLayout";
 
-export const StillWatching = (props: { onClose: () => void }) => {
+export const StillWatching = (props: { onClose: () => void, optionIndex: number }) => {
 
     const options = [
         {
@@ -20,7 +20,7 @@ export const StillWatching = (props: { onClose: () => void }) => {
         }
     ]
 
-    const correctOptionIndex = 0;
+    const correctOptionIndex = props.optionIndex;
     const correctOption = options[correctOptionIndex];
 
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -30,7 +30,7 @@ export const StillWatching = (props: { onClose: () => void }) => {
             .map((option, index) => <QuestionnaierAnswer
                 key={index}
                 isCorrect={hasValue(selectedIndex) && index === correctOptionIndex}
-                isIncorrect={hasValue(selectedIndex) && index !== correctOptionIndex}
+                isIncorrect={selectedIndex === index && index !== correctOptionIndex}
                 onClick={() => {
 
                     setSelectedIndex(index);

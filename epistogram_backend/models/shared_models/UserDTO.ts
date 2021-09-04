@@ -1,6 +1,6 @@
 
 export class UserDTO {
-    userId: number;
+    id: number;
     firstName: string;
     lastName: string;
     organizationId: number;
@@ -26,7 +26,7 @@ export class UserDTO {
         avatarUrl: string | null) {
 
         this.role = role;
-        this.userId = userId;
+        this.id = userId;
         this.organizationId = organizationId;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -1,6 +1,9 @@
 import { useHistory } from "react-router";
 import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 
+export const getCourseItemUrl = (courseItemId: number, courseItemType: CourseItemType) =>
+    "/watch/" + courseItemId + "?type=" + courseItemType;
+
 export const useNavigation = () => {
 
     const history = useHistory();
@@ -9,7 +12,7 @@ export const useNavigation = () => {
     return {
         navigate,
         navigateToPlayer: (courseItemId: number, courseItemType: CourseItemType) =>
-            navigate("/watch/" + courseItemId + "?type=" + courseItemType),
+            navigate(getCourseItemUrl(courseItemId, courseItemType)),
         history
     };
 }

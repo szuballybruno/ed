@@ -1,6 +1,6 @@
-import {Redirect, Route, Switch} from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Statistics from "../components/administration/statistics/Statistics";
-import {AdministrationUserRouting} from "./AdministrationUserRouting";
+import { AdministrationUserRouting } from "./AdministrationUserRouting";
 import AdministrationCourseRouting from "./AdministrationCourseRouting";
 //import {ManageArticles} from "../articles/ManageArticles";
 //import {Votes} from "../votes/Votes";

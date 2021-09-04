@@ -30,9 +30,10 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
     const [videoLength, setVideoLength] = React.useState(0);
     const [showControls, setShowControls] = useState(true);
     const [controlOverlayTimer, setControlOverlayTimer] = useState<NodeJS.Timeout | null>(null);
-    const controlsOpacity = showControls || !isPlaying ? 1 : 0;
     const [visualOverlayType, setVisualOverlayType] = useState<VisualOverlayType>("start");
     const [isVisualOverlayVisible, setIsVisualOverlayVisible] = useState(false);
+    const [isSeeking, setIsSeeking] = useState(false);
+    const controlsOpacity = showControls || !isPlaying || isSeeking ? 1 : 0;
 
     const subtileTracks = subtitles
         .map(x => ({
@@ -141,12 +142,14 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
         playedSeconds,
         videoLength,
         isShowingOverlay,
+        isSeeking,
         toggleIsPlaying,
         showControlOverlay,
         setPlayedSeconds,
         setVideoLength,
         toggleFullScreen,
-        seekToSeconds
+        seekToSeconds,
+        setIsSeeking
     }
 }
 
@@ -193,7 +196,8 @@ export const VideoPlayer = (props: {
         setPlayedSeconds,
         setVideoLength,
         toggleFullScreen,
-        seekToSeconds
+        seekToSeconds,
+        setIsSeeking
     } = videoPlayerState;
 
     const iconStyle = { width: "70px", height: "70px", color: "white" } as CSSProperties;
@@ -240,7 +244,6 @@ export const VideoPlayer = (props: {
                         height={"100%"}
                         controls={false}
                         playing={isPlaying && !isShowingOverlay}
-                        // onPlay={() => setIsPlaying(true)}
                         onProgress={(playedInfo) => {
 
                             setPlayedSeconds(playedInfo.playedSeconds);
@@ -283,6 +286,8 @@ export const VideoPlayer = (props: {
                         value={playedSeconds}
                         min={0}
                         max={videoLength}
+                        onMouseDown={() => setIsSeeking(true)}
+                        onChangeCommitted={() => setIsSeeking(false)}
                         onChange={(event, targetSeconds) => {
 
                             setPlayedSeconds(targetSeconds as number);

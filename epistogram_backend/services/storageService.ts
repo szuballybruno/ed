@@ -1,6 +1,7 @@
 import { Storage } from "@google-cloud/storage";
 import { UploadedFile } from "express-fileupload";
 import path from "path";
+import { staticProvider } from "../staticProvider";
 
 const bucketName = "epistogram_bucket_dev";
 
@@ -31,14 +32,6 @@ export const deleteStorageFileAsync = async (filePath: string) => {
 
     const bucket = getBucket();
     await bucket.file(filePath).delete();
-}
-
-export const getStorageFileUrl = (filePath: string | null | undefined) => {
-
-    if (!filePath)
-        return null;
-
-    return `https://storage.googleapis.com/${bucketName}/${filePath}`;
 }
 
 const getBucket = () => {

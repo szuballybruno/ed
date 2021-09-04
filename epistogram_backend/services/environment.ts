@@ -66,7 +66,7 @@ export class GlobalConfiguration {
         hostPort: getEnvConfigEntry("HOST_PORT"),
         environmentName: getEnvConfigEntry("ENVIRONMENT_NAME"),
         frontendUrl: getEnvConfigEntry("FRONTEND_URL"),
-        assetStoreUrl: "https://dev.epistogram.com/assets/epistogram"
+        assetStoreUrl: "https://storage.googleapis.com/epistogram_bucket_dev"
     }
 
     mail = {

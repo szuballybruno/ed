@@ -1,10 +1,11 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Divider, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { useIsDesktopView, usePaging } from "../../frontendHelpers";
+import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../frontendHelpers";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
+import { StillWatchingDialogMarker } from "../../models/types";
 import { Copyright } from "../universal/footers/copyright/Copyright";
 import { Questionnaire } from "../universal/Questionnaire";
 import { SegmentedButton } from "../universal/SegmentedButton";
@@ -24,16 +25,25 @@ export const WatchView = (props: {
 
     const { video, courseItems, navigateToCourseItem } = props;
     const { questions } = video;
-    const hasQuestions = questions.length > 0;
-    const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
-    const [isShowingStillWatching, setShowingStillWatching] = useState(true);
-    const isQuestionVisible = !!currentQuestion;
-    const [answeredQuestionIds, setAnsweredQuestionIds] = useState<number[]>([]);
     const isDesktopView = useIsDesktopView();
     const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
-    const isShowingOverlay = isQuestionVisible || isShowingStillWatching;
+    const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
+    const dialogThresholdSecs = 1;
+
+    // questions
+    const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
+    const isQuestionVisible = !!currentQuestion;
+    const [answeredQuestionIds, setAnsweredQuestionIds] = useState<number[]>([]);
+    const hasQuestions = questions.length > 0;
+
+    // still watching
+    const [currentStillWatchingMarker, setCurrentStillWatchingMarker] = useState<StillWatchingDialogMarker | null>(null);
+    const [stillWatchingDilalogMarkers, setStillWatchingDilalogMarkers] = useState<StillWatchingDialogMarker[]>([]);
+    const stillWatchingDialogDelaySecs = 60 * 2; // 2 mins
+
+    const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
     const videoPlayerState = useVideoPlayerState(video, isShowingOverlay);
-    const { playedSeconds } = videoPlayerState;
+    const { playedSeconds, videoLength, isSeeking } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription description={video!.description} />;
     const VideoComments = () => <Box bg="red" />;
@@ -41,7 +51,21 @@ export const WatchView = (props: {
     const currentQuestionAnswered = answeredQuestionIds
         .some(qid => currentQuestion?.questionId === qid);
 
+    const enableNewDialogPopups = () => {
+
+        setTimeout(() => setShowNewDialogsEnabled(true), 2000);
+    }
+
+    // show dialogs 
     useEffect(() => {
+
+        // if not allowed to show new dialogs
+        if (!isShowNewDialogsEnabled)
+            return;
+
+        // don't show dialogs while seeking
+        if (isSeeking)
+            return;
 
         // questions that are past the current video progress
         // and have not been answered during this video session
@@ -49,13 +73,54 @@ export const WatchView = (props: {
             .filter(x => x.showUpTimeSeconds! < playedSeconds
                 && !answeredQuestionIds.some(qid => x.questionId === qid))[0];
 
-        if (unansweredQuestion)
+        if (unansweredQuestion) {
+
+            setShowNewDialogsEnabled(false);
             setCurrentQuestion(unansweredQuestion);
+        }
+
+        // only show when there are no questions
+        if (hasQuestions)
+            return;
 
         // show "still watching" dialog
-        // const stillWatchingDialog = stillWatchingDila
+        const showStillPlayingDialog = stillWatchingDilalogMarkers
+            .filter(x => isBetweenThreshold(playedSeconds, x.showUpTimeSeconds, dialogThresholdSecs))[0];
 
+        if (showStillPlayingDialog) {
+
+            setShowNewDialogsEnabled(false);
+            setCurrentStillWatchingMarker(showStillPlayingDialog);
+        }
     }, [playedSeconds]);
+
+    // when video length is set, 
+    // calculate are you still watching dialog seconds
+    useEffect(() => {
+
+        // only show when there are no questions
+        if (hasQuestions)
+            return;
+
+        // only calculate when video is longer than delay
+        // and when video length is loaded by the player
+        if (videoLength < stillWatchingDialogDelaySecs)
+            return;
+
+        const remainingLength = videoLength - stillWatchingDialogDelaySecs;
+        const dialogCount = Math.floor(remainingLength / stillWatchingDialogDelaySecs);
+
+        let dialogShowUpSeconds = [] as StillWatchingDialogMarker[];
+        for (let index = 1; index < dialogCount + 1; index++) {
+
+            dialogShowUpSeconds.push({
+                showUpTimeSeconds: index * stillWatchingDialogDelaySecs,
+                answerOptionIndex: getRandomInteger(0, 2)
+            });
+        }
+
+        setStillWatchingDilalogMarkers(dialogShowUpSeconds);
+    }, [videoLength]);
 
     return <>
 
@@ -66,7 +131,11 @@ export const WatchView = (props: {
             <AbsoluteFlexOverlay isVisible={isQuestionVisible} hasPointerEvents={true}>
                 <OverlayDialog
                     showCloseButton={currentQuestionAnswered}
-                    closeButtonAction={() => setCurrentQuestion(null)}>
+                    closeButtonAction={() => {
+
+                        setCurrentQuestion(null);
+                        enableNewDialogPopups();
+                    }}>
                     <Questionnaire
                         question={currentQuestion!}
                         onAnswered={() => setAnsweredQuestionIds([
@@ -77,9 +146,19 @@ export const WatchView = (props: {
             </AbsoluteFlexOverlay>
 
             {/* questionnaire */}
-            <AbsoluteFlexOverlay isVisible={isShowingStillWatching} hasPointerEvents={true}>
+            <AbsoluteFlexOverlay isVisible={!!currentStillWatchingMarker} hasPointerEvents={true}>
                 <OverlayDialog showCloseButton={false}>
-                    <StillWatching onClose={() => setShowingStillWatching(false)} />
+                    <StillWatching
+                        optionIndex={currentStillWatchingMarker?.answerOptionIndex!}
+                        onClose={() => {
+
+                            const removed = [...stillWatchingDilalogMarkers]
+                                .filter(x => !isBetweenThreshold(playedSeconds, x.showUpTimeSeconds, dialogThresholdSecs));
+
+                            setStillWatchingDilalogMarkers(removed);
+                            setCurrentStillWatchingMarker(null);
+                            enableNewDialogPopups();
+                        }} />
                 </OverlayDialog>
             </AbsoluteFlexOverlay>
         </VideoPlayer>

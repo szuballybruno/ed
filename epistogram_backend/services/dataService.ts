@@ -7,6 +7,7 @@ import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { staticProvider } from "../staticProvider";
 import { getCourseItemDTOsAsync } from "./courseService";
 import { toOrganizationDTO } from "./mappings";
+import { log } from "./misc/logger";
 import { getReandomQuestion } from "./questionService";
 
 export const getOrganizationsAsync = async (userId: number) => {
@@ -37,6 +38,7 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
         currentCourseItems: courseItems
     } as OverviewPageDTO;
 
+    log(overviewPageDTO);
     return overviewPageDTO;
 }
 

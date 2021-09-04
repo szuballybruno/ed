@@ -1,5 +1,6 @@
 import { Answer } from "../models/entity/Answer";
 import { Course } from "../models/entity/Course";
+import { CourseOrganization } from "../models/entity/CourseOrganization";
 import { Exam } from "../models/entity/Exam";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
@@ -7,32 +8,29 @@ import { QuestionAnswer } from "../models/entity/QuestionAnswer";
 import { Task } from "../models/entity/Task";
 import { User } from "../models/entity/User";
 import { Video } from "../models/entity/Video";
+import { EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
+import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizationDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
-import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { staticProvider } from "../staticProvider";
 import { navPropNotNull } from "../utilities/helpers";
-import { getStorageFileUrl } from "./storageService";
-import {EditListItemDTO} from "../models/shared_models/AdminPageEditCourseDTO";
-import {CourseOrganization} from "../models/entity/CourseOrganization";
-import {CourseOrganizationDTO} from "../models/shared_models/CourseOrganizationDTO";
+import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
 export const toUserDTO = (user: User) => {
 
     return {
-        userId: user.id,
+        id: user.id,
         organizationId: user.organizationId,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -42,7 +40,7 @@ export const toUserDTO = (user: User) => {
         email: user.email,
         phoneNumber: user.phoneNumber,
         name: `${user.lastName} ${user.firstName}`,
-        avatarUrl: getStorageFileUrl(user.avatarFile?.filePath)
+        avatarUrl: getAssetUrl(user.avatarFile?.filePath)
     } as UserDTO;
 }
 
@@ -146,7 +144,7 @@ export const toVideoDTO = (video: Video) => {
         title: video.title,
         description: video.description,
         thumbnailUrl: "",
-        url: getStorageFileUrl(video.videoFile.filePath),
+        url: getAssetUrl(video.videoFile.filePath),
         questions: video.questions.map(q => toQuestionDTO(q))
     } as VideoDTO;
 }
@@ -173,7 +171,7 @@ export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {
         return {
             id: exam.id,
             subTitle: exam.subtitle,
-            thumbnailUrl: exam.thumbnailUrl,
+            thumbnailUrl: getExamCoverImageUrl(),
             title: exam.title,
             type: "exam",
             orderIndex: exam.orderIndex
@@ -247,4 +245,23 @@ export const toEditListItemDTO = (id: number, name: string, checked: boolean) =>
         name: name,
         checked: checked
     } as EditListItemDTO
+}
+
+export const toEditCourseItemsDTO = (course: Course) => {
+
+    const examItems = course
+        .exams
+        .map(x => toCourseItemDTO(x, false));
+
+    const videoItems = course
+        .videos
+        .map(x => toCourseItemDTO(x, true));
+
+    const itemsCombined = examItems
+        .concat(videoItems);
+
+    const itemsOrdered = itemsCombined
+        .orderBy(x => x.orderIndex);
+
+    return itemsOrdered as CourseItemDTO[];
 }
