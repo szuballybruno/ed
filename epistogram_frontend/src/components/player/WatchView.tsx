@@ -43,21 +43,18 @@ export const WatchView = (props: {
 
     useEffect(() => {
 
-        if (hasQuestions) {
+        // questions that are past the current video progress
+        // and have not been answered during this video session
+        const unansweredQuestion = questions
+            .filter(x => x.showUpTimeSeconds! < playedSeconds
+                && !answeredQuestionIds.some(qid => x.questionId === qid))[0];
 
-            // questions that are past the current video progress
-            // and have not been answered during this video session
-            const unansweredQuestion = questions
-                .filter(x => x.showUpTimeSeconds! < playedSeconds
-                    && !answeredQuestionIds.some(qid => x.questionId === qid))[0];
+        if (unansweredQuestion)
+            setCurrentQuestion(unansweredQuestion);
 
-            if (unansweredQuestion)
-                setCurrentQuestion(unansweredQuestion);
-        }
-        else {
+        // show "still watching" dialog
+        // const stillWatchingDialog = stillWatchingDila
 
-
-        }
     }, [playedSeconds]);
 
     return <>
