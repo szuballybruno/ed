@@ -14,38 +14,30 @@ export type AdminPageEditCourseView = {
     courseItems: CourseItemDTO[]
 
     // User groups where the course is visible
-    courseGroups: {
-        id: number
-        name: string
-    },
-    allGroups: {
+    groups: {
         id: number,
-        name: string
-    }[]
+        name: string,
+        checked: boolean
+    }[],
 
     // Teacher of the course who recorded the videos
-    courseTeacher: {
+    teachers: {
         id: number
         name: string
-    },
-    allTeachers: {
-        id: number,
-        name: string
-    }[]
+        checked: boolean
+    }[],
 
     // Organization where the course is visible
 
-    courseOrganizations: {
+    organizations: {
         id: number,
-        name: string
-    }
-
-    // ONLY IF THE PERMISSION IS ADMIN
-    allOrganizations: {
-        id: number,
-        name: string
+        name: string,
+        checked: boolean
     }[]
 
-    courseTags: TagView[]
-    allTags: TagView[]
+    tags: {
+        id: number,
+        name: string,
+        checked: boolean
+    }[]
 }

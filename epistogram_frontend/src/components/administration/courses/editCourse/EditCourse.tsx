@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import classes from "./editCourse.module.scss"
-import { Divider, List, Switch, Typography } from "@material-ui/core";
+import {Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography} from "@material-ui/core";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
 import { CourseVideoList } from "./CourseVideoList";
 import { useParams } from "react-router";
@@ -15,6 +15,8 @@ import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from 
 import { useAdminEditedCourse, useUserCourses } from "../../../../services/courseService";
 import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
 import { getChipWithLabel } from "../courseList/CourseList";
+import {ListItemWithRadio} from "../../universal/selectMultiple/components/ListItemWithRadioButton/ListItemWithRadioButton";
+import {SelectMultiple} from "../../universal/selectMultiple/SelectMultiple";
 
 /* TODO:
 *   - onClick for save changes button
@@ -37,11 +39,6 @@ export const EditCourse = () => {
     const [colorTwo, setColorTwo] = React.useState("")
 
     const { course, status, error } = useAdminEditedCourse(Number(courseId));
-
-
-    useEffect(() => {
-
-    }, [])
 
     useCreateObjectURL(thumbnailImage, setThumbnailURL)
 
@@ -86,21 +83,74 @@ export const EditCourse = () => {
                         </List>
                     </div>
                     <div className={classes.editTagsWrapper}>
-                        <SelectRadio items={course?.courseOrganizations} checked={course?.allOrganizations && course?.allOrganizations.some((org, index) => {
-                            return org === course?.courseOrganizations
-                        })} radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} title={"Cég kiválasztása"} />
-                    </div>
-                    <div className={classes.editTagsWrapper}>
-                        <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Tanár kiválasztása"} />
-                    </div>
-                    <div className={classes.editTagsWrapper}>
-                        <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Tagek (ide majd selectcheckbox)"} />
-                    </div>
-                    <div className={classes.editTagsWrapper}>
-                        <SelectRadio radioButtonOnChange={() => { }} itemValueOnChange={() => { }} name={""} onClick={() => { }} title={"Csoportok kiválasztása"} />
+                        <SelectMultiple
+                            items={course?.organizations}
+                            title={"Cég kiválasztása"}
+                        >
+                            {course?.organizations?.map(item =>
+                                <div>
+                                    <ListItem className={classes.listItem}>
+                                        <Checkbox checked={item.checked} />
+                                        <Typography>{item.name}</Typography>
+                                    </ListItem>
+                                    <Divider style={{width: "100%"}} />
+                                </div>
+                            )}
+
+                        </SelectMultiple>
                     </div>
 
+                    <div className={classes.editTagsWrapper}>
+                        <SelectMultiple
+                            items={course?.teachers}
+                            title={"Tanár kiválasztása"}
+                        >
+                            {course?.teachers?.map(item =>
+                                <div>
+                                    <ListItem className={classes.listItem}>
+                                        <Radio checked={item.checked} />
+                                        <Typography>{item.name}</Typography>
+                                    </ListItem>
+                                    <Divider style={{width: "100%"}} />
+                                </div>
+                            )}
 
+                        </SelectMultiple>
+                    </div>
+                    <div className={classes.editTagsWrapper}>
+                        <SelectMultiple
+                            items={course?.tags}
+                            title={"Tagek kiválasztása"}
+                        >
+                            {course?.tags?.map(item =>
+                                <div>
+                                    <ListItem className={classes.listItem}>
+                                        <Checkbox checked={item.checked} />
+                                        <Typography>{item.name}</Typography>
+                                    </ListItem>
+                                    <Divider style={{width: "100%"}} />
+                                </div>
+                            )}
+
+                        </SelectMultiple>
+                    </div>
+                    <div className={classes.editTagsWrapper}>
+                        <SelectMultiple
+                            items={course?.groups}
+                            title={"Csoport kiválasztása"}
+                        >
+                            {course?.groups?.map(item =>
+                                <div>
+                                    <ListItem className={classes.listItem}>
+                                        <Checkbox checked={item.checked} />
+                                        <Typography>{item.name}</Typography>
+                                    </ListItem>
+                                    <Divider style={{width: "100%"}} />
+                                </div>
+                            )}
+
+                        </SelectMultiple>
+                    </div>
                 </div>
                 <Divider orientation={"vertical"} />
                 <div className={classes.editDataRightWrapper}>

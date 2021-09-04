@@ -46,7 +46,7 @@ export const LearningRadarChart = () => {
 
                     }
                 ]
-            }} type={"radar"}/>
+            }} /*type={"radar"}*//>
         </div>
 
     </div>

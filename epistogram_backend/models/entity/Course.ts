@@ -1,8 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CourseOrganization } from "./CourseOrganization";
 import { Exam } from "./Exam";
 import { User } from "./User";
 import { Video } from "./Video";
-import { Organization } from "./Organization";
 
 @Entity()
 export class Course {
@@ -28,13 +28,10 @@ export class Course {
     @Column()
     colorTwo: string;
 
-    @Column()
-    organizationId: number;
-
-    // organization
-    @ManyToOne(() => Organization, organization => organization.courses)
-    @JoinColumn({ name: 'organizationId' })
-    organization: Organization;
+    // Course's organizations
+    @OneToMany(() => CourseOrganization, co => co.course)
+    @JoinColumn()
+    courseOrganizations: CourseOrganization[];
 
     // videos 
     @OneToMany(type => Video, video => video.course, { cascade: true })
@@ -45,4 +42,11 @@ export class Course {
     @OneToMany(type => Exam, exam => exam.course, { cascade: true })
     @JoinColumn()
     exams: Exam[];
+
+    @Column()
+    teacherId: number
+
+    @ManyToOne(() => User, teacher => teacher.teachedCourses)
+    @JoinColumn({ name: "teacherId" })
+    teacher: User
 }

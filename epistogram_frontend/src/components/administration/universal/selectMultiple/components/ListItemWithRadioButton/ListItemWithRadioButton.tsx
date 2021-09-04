@@ -4,7 +4,7 @@ import classes from "./listItemWithRadioButton.module.scss";
 import {TextOrInput} from "../TextOrInput/TextOrInput";
 
 export const ListItemWithRadio = (props: {
-    value?: string,
+    value?: string | number,
     checked?: boolean,
     radioButtonOnChange: () => void,
     itemValueOnChange: () => void,
@@ -14,7 +14,7 @@ export const ListItemWithRadio = (props: {
            value={props.value}
            checked={props.checked} />
     <TextField size={"small"}
-               name={props.value}
-               value={props.name}
+               name={props.name}
+               value={props.value}
                onChange={props.itemValueOnChange} />
 </ListItem>

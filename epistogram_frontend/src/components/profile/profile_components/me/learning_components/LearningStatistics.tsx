@@ -98,14 +98,14 @@ const LearningStatistics = (props: {className?: string}) => {
                     <LearningStatisticsItem iconPath={globalConfig.assetStorageUrl + "/application/stats/2.preferaltidosav.png"} value={"12-15"} suffix={"óra"} title={"Mely az általam leginkább preferált idősáv?"}>
                         <Bar className={classes.progressLineChart}
                              options={chartDefaultOptions}
-                             type={"bar"}
+                             /*type={"bar"}*/
                              data={daysWithActivityInTime}/>
                     </LearningStatisticsItem>
                     <LearningStatisticsItem iconPath={globalConfig.assetStorageUrl + "/application/stats/3.leghatekonyabbidosav.png"} value={"9-12"} suffix={"óra"} title={"Mely a leghatékonyabb idősáv?"} />
                     <LearningStatisticsItem iconPath={globalConfig.assetStorageUrl + "/application/stats/4.melynapok.png"} value={"Szerda"} suffix={""} title={"Mely nap(ok)on vagyok a legaktívabb?"}>
                         <Bar className={classes.progressLineChart}
                              options={chartDefaultOptions}
-                             type={"bar"}
+                             /*type={"bar"}*/
                              data={howActiveIAm}/>
                     </LearningStatisticsItem>
                 </LearningStatisticsSeciton>
@@ -115,7 +115,7 @@ const LearningStatistics = (props: {className?: string}) => {
                     <LearningStatisticsItem value={"13"} suffix={"db"} title={"Megtekintett videók a hónapban"}>
                         <Bar className={classes.progressLineChart}
                              options={chartDefaultOptions}
-                             type={"bar"}
+                             /*type={"bar"}*/
                              data={howActiveIAm}/>
                     </LearningStatisticsItem>
                     <LearningStatisticsItem value={"18.5"} suffix={"óra"} title={"Videónézéssel eltöltött idő a hónapban"} />
@@ -141,7 +141,7 @@ const LearningStatistics = (props: {className?: string}) => {
                     <LearningStatisticsItem value={"45"} suffix={"%"} title={"Fókuszálás a videómegtekintések során"}>
                         <Bar className={classes.progressLineChart}
                              options={chartDefaultOptions}
-                             type={"bar"}
+                             /*type={"bar"}*/
                              data={howActiveIAm}/>
                     </LearningStatisticsItem>
                     <LearningStatisticsItem value={"3.2"} suffix={"mp"} title={"Reakcióidő fókuszálást vizsgáló kérdésekre"}  />
@@ -156,7 +156,7 @@ const LearningStatistics = (props: {className?: string}) => {
                     <LearningStatisticsItem value={"13.82"} suffix={"db"} title={"Mennyi EpistoCoint szereztem az elmúlt hónapban"}>
                         <Bar className={classes.progressLineChart}
                              options={chartDefaultOptions}
-                             type={"bar"}
+                             /*type={"bar"}*/
                              data={howActiveIAm}/>
                     </LearningStatisticsItem>
                 </LearningStatisticsSeciton>
@@ -164,7 +164,7 @@ const LearningStatistics = (props: {className?: string}) => {
                     <LearningStatisticsItem value={"0"} suffix={"%"} title={"Határidők betartása"} chartSize={"large"}>
                         <Bar className={classes.progressLineChart}
                              options={chartDefaultOptions}
-                             type={"bar"}
+                             /*type={"bar"}*/
                              data={howActiveIAm}/>
                     </LearningStatisticsItem>
                 </LearningStatisticsSeciton>

@@ -2,10 +2,10 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
-import "reflect-metadata"; // need to be imported for TypeORM
+import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, saveSignupQuestionnaireAnswersAction } from './api/dataActions';
+import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, saveSignupQuestionnaireAnswersAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCourses';
@@ -17,7 +17,6 @@ import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
 import './utilities/jsExtensions';
-import { getEditedCourseAction } from "./api/courses/courseManagementActions";
 import { answerQuestionAction } from './api/questionActions';
 
 // initialize env

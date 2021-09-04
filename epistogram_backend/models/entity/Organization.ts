@@ -1,6 +1,18 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import {
+    Entity,
+    Column,
+    PrimaryColumn,
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    JoinColumn,
+    OneToMany,
+    ManyToMany, JoinTable
+} from "typeorm";
 import { User } from "./User";
 import {Course} from "./Course";
+import {QuestionAnswer} from "./QuestionAnswer";
+import {CourseOrganization} from "./CourseOrganization";
+import {Group} from "./Group";
 
 @Entity()
 export class Organization {
@@ -15,7 +27,12 @@ export class Organization {
     @JoinColumn()
     users: User[];
 
-    @OneToMany(type => Course, course => course.organization)
+    @OneToMany(type => Group, group => group.organization)
     @JoinColumn()
-    courses: Course[];
+    groups: Group[];
+
+    // Organization's courses
+    @OneToMany(() => CourseOrganization, co => co.organization)
+    @JoinColumn()
+    courseOrganizations: CourseOrganization[]
 }

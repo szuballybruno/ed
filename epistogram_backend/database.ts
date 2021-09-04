@@ -18,6 +18,10 @@ import { log } from "./services/misc/logger";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/userManagementService";
 import { setVideoFileIdAsync } from "./services/videoService";
 import { staticProvider } from "./staticProvider";
+import { CourseOrganization } from "./models/entity/CourseOrganization";
+import { Group } from "./models/entity/Group";
+import { Tag } from "./models/entity/Tag";
+import { CourseOrganizationDTO } from "./models/shared_models/CourseOrganizationDTO";
 
 export type TypeORMConnection = Connection;
 
@@ -43,7 +47,9 @@ export const initializeDBAsync = async (recreate: boolean) => {
         entities: [
             // "models/entity/**/*.ts"
             Course,
+            CourseOrganization,
             Exam,
+            Group,
             Organization,
             User,
             Video,
@@ -51,6 +57,7 @@ export const initializeDBAsync = async (recreate: boolean) => {
             QuestionAnswer,
             Question,
             Answer,
+            Tag,
             TestChild,
             TestParent,
             TestSubChild,
@@ -97,11 +104,30 @@ export const seedDB = async () => {
     const connection = staticProvider.ormConnection;
 
     const orgIds = await seedOrganizations(connection);
-    await seedCourses(connection);
+
+    log("seedUsers")
     await seedUsers(connection, orgIds);
+
+    log("seedSignupQuestions")
     await seedSignupQuestions(connection);
-    await seedFiles(connection);
+
+    log("seedTags")
+    await seedTags(connection);
+
+    log("seedGroups")
+    await seedGroups(connection, orgIds);
+
+    log("seedCourses")
+    await seedCourses(connection);
+
+    log("seedVideoQuestions")
     await seedVideoQuestions(connection);
+
+    log("seedFiles")
+    await seedFiles(connection);
+
+    log("seedCourseOrganizationsAsync")
+    await seedCourseOrganizationsAsync();
 }
 
 const seedOrganizations = async (connection: TypeORMConnection) => {
@@ -133,9 +159,9 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 category: "Programming",
                 courseGroup: "IT",
                 permissionLevel: "public",
-                organizationId: 1,
                 colorOne: "#123456",
                 colorTwo: "#ABCDEF",
+                teacherId: 1,
                 exams: [
                     {
                         title: "New Exam 1",
@@ -347,4 +373,78 @@ const seedVideoQuestions = async (connection: TypeORMConnection) => {
                 ]
             }
         ]);
+}
+
+const seedCourseOrganizationsAsync = async () => {
+
+    // insert new answers
+    const repo = staticProvider
+        .ormConnection
+        .getRepository(CourseOrganization);
+
+    const courseOrganizationsSeed = [
+        {
+            courseId: 1,
+            organizationId: 1,
+            groupId: 1,
+            tagId: 1
+        }, {
+            courseId: 1,
+            organizationId: 2,
+            groupId: 3,
+            tagId: 1
+        }, {
+            courseId: 1,
+            organizationId: 2,
+            groupId: 3,
+            tagId: 2
+        }
+    ] as CourseOrganizationDTO[]
+
+    const courseOrganizations = courseOrganizationsSeed
+        .map(x => ({
+            courseId: x.courseId,
+            organizationId: x.organizationId,
+            groupId: x.groupId,
+            tagId: x.tagId
+        } as CourseOrganizationDTO))
+
+    await repo.save(courseOrganizations);
+}
+
+const seedTags = (connection: TypeORMConnection) => {
+
+    return connection
+        .getRepository(Tag)
+        .save([
+            {
+                name: "design",
+            },
+            {
+                name: "marketing",
+            },
+            {
+                name: "development",
+            }
+        ])
+}
+
+const seedGroups = (connection: TypeORMConnection, orgIds: number[]) => {
+
+    return connection
+        .getRepository(Group)
+        .save([
+            {
+                name: "Hegesztők",
+                organizationId: orgIds[0]
+            },
+            {
+                name: "Takarítók",
+                organizationId: orgIds[0]
+            },
+            {
+                name: "Műszerészek",
+                organizationId: orgIds[1]
+            }
+        ])
 }

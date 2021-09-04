@@ -1,4 +1,4 @@
 export type TagView = {
-    tagId: string
-    tagName: string
+    id: string
+    name: string
 }
