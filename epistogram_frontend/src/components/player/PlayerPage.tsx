@@ -11,6 +11,7 @@ import { useDialog } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { CourseItemSelector } from "./CourseItemSelector";
+import { Exam } from "./Exam";
 import classes from './playerMain.module.scss';
 import { WatchView } from "./WatchView";
 
@@ -65,7 +66,7 @@ export const PlayerPage = () => {
                             courseItems={courseItems}
                             navigateToCourseItem={navigateToCourseItem} />}
 
-                        {exam && <Box>Exam</Box>}
+                        {exam && <Exam />}
                     </Box>
 
                     {/* right sidebar */}

@@ -153,22 +153,6 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
     }
 }
 
-const subtitles = [
-    {
-        kind: 'subtitles',
-        src: 'http://abydosai.com/hajacska.vtt',
-        srcLang: 'hu',
-        label: "Magyar",
-        mode: "showing"
-    }, {
-        kind: 'subtitles',
-        src: 'http://abydosai.com/hajacska.vtt',
-        srcLang: 'en',
-        label: "Angol",
-        mode: "hidden"
-    }
-]
-
 export type VideoPlayerStateType = ReturnType<typeof useVideoPlayerState>;
 
 export const VideoPlayer = (props: {
