@@ -15,7 +15,7 @@ import { MainRouting } from "./routing/MainRouting";
 const queryClient = new QueryClient();
 
 ReactDOM.render(
-    <BrowserRouter>
+    <BrowserRouter getUserConfirmation={(msg, callback) => { console.log("What??") }}>
         <QueryClientProvider client={queryClient}>
             <ChakraProvider>
                 <StylesProvider injectFirst>

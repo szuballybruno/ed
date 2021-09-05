@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useContext } from 'react';
 import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
+import { globalConfig } from '../../configuration/config';
 import { AuthenticationStateContext as AuthenticationStateContext } from '../../HOC/AuthenticationFrame';
 
 export const ProtectedRoute = (props: {
@@ -12,7 +13,8 @@ export const ProtectedRoute = (props: {
     const authState = useContext(AuthenticationStateContext);
     const { render, ...routeProps } = props;
 
-    console.log(`Navigated to protected route '${props.path}'. Authenticated: ${authState.asString()}`);
+    if (globalConfig.verboseLogging)
+        console.log(`Navigated to protected route '${props.path}'. Authenticated: ${authState.asString()}`);
 
     return (
         <Route

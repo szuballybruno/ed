@@ -3,6 +3,8 @@ export const globalConfig = {
     backendUrl: "http://localhost:5000/",
     backendUrlMinimal: "http://localhost:5000/",
 
+    verboseLogging: false,
+
     // siteUrl: "https://dev.epistogram.com", // Per jel nélkül
     // backendUrlMinimal: "https://dev.epistogram.com/",
     // backendUrl: "https://dev.epistogram.com/api/",

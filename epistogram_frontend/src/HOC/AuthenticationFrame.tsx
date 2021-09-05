@@ -15,11 +15,15 @@ export const AuthenticationFrame = (props) => {
 
     // start auth pooling 
     const { isSuccess } = useRenewUserSessionPooling();
-    console.log("Renewing token: " + isSuccess);
+
+    if (globalConfig.verboseLogging)
+        console.log("Renewing token: " + isSuccess);
 
     // fetch current user 
     const { currentUser, refetchUser, authState } = useUserFetching(isSuccess);
-    console.log("Authentication state: " + authState.asString());
+
+    if (globalConfig.verboseLogging)
+        console.log("Authentication state: " + authState.asString());
 
     return <AuthenticationStateContext.Provider value={authState}>
         <RefetchUserFunctionContext.Provider value={refetchUser}>

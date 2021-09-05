@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { globalConfig } from '../configuration/config';
 import { refreshTokenRefreshIntervalInS as refreshTokenRefreshIntervalInMs, userRefreshIntervalInS as userRefreshIntervalInMs } from '../Environemnt';
 import { RefetchUserFunctionContext } from '../HOC/AuthenticationFrame';
 import { UserDTO } from '../models/shared_models/UserDTO';
@@ -26,7 +27,8 @@ export const useUserFetching = (enabled: boolean) => {
 
     const bgFetchingEnabled = enabled && isBgFetchingEnabled;
 
-    console.log("Background current user fetching set to: " + bgFetchingEnabled);
+    if (globalConfig.verboseLogging)
+        console.log("Background current user fetching set to: " + bgFetchingEnabled);
 
     const queryResult = useQuery(
         'getCurrentUser',

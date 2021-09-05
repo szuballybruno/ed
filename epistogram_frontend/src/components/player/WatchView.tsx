@@ -11,11 +11,12 @@ import { Questionnaire } from "../universal/Questionnaire";
 import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
-import { CourseItemList, NavigateToCourseItemActionType } from "./courseItemList/CourseItemList";
+import { CourseItemList, NavigateToCourseItemActionType } from "../universal/CourseItemList";
 import PlayerDescription from "./description/PlayerDescription";
 import { OverlayDialog } from "./OverlayDialog";
 import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
+import { CourseItemSelector } from "./CourseItemSelector";
 
 export const WatchView = (props: {
     video: VideoDTO,
@@ -166,9 +167,8 @@ export const WatchView = (props: {
         {/* under video info */}
         <Box>
             {/* <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} /> */}
-            {!isDesktopView && <CourseItemList
-                courseItems={courseItems}
-                navigateToCourseItem={navigateToCourseItem} />}
+            {!isDesktopView && <CourseItemSelector
+                courseItems={courseItems} />}
 
             <Flex justify="space-between" padding="20px">
                 <Typography variant={"h4"}>{video!.title}</Typography>

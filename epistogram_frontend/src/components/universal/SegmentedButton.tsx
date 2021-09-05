@@ -18,6 +18,7 @@ export const SegmentedButton = (props: { paging: PagingType<string> }) => {
                         <ToggleButton
                             selected={isActive}
                             key={index}
+                            value={index}
                             onClick={() => paging.setItem(index)}>
                             <Typography>{buttonText}</Typography>
                         </ToggleButton>

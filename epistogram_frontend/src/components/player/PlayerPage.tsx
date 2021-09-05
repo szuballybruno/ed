@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import React from 'react';
-import { useParams, withRouter } from "react-router";
+import { useParams } from "react-router";
 import menuItems from "../../configuration/menuItems.json";
 import { getQueryParam, useIsDesktopView } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
@@ -10,7 +10,7 @@ import { useNavigation } from "../../services/navigatior";
 import { useDialog } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
-import { CourseItemList } from "./courseItemList/CourseItemList";
+import { CourseItemSelector } from "./CourseItemSelector";
 import classes from './playerMain.module.scss';
 import { WatchView } from "./WatchView";
 
@@ -70,9 +70,8 @@ export const PlayerPage = () => {
 
                     {/* right sidebar */}
                     <Box>
-                        {isDesktopView && <CourseItemList
-                            courseItems={courseItems}
-                            navigateToCourseItem={navigateToCourseItem} />}
+                        {isDesktopView && <CourseItemSelector
+                            courseItems={courseItems} />}
                     </Box>
                 </div>
             </LoadingFrame>

@@ -144,7 +144,7 @@ export const toVideoDTO = (video: Video) => {
         title: video.title,
         description: video.description,
         thumbnailUrl: "",
-        url: getAssetUrl(video.videoFile.filePath),
+        url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl("images/videoImage.jpg"),
         questions: video.questions.map(q => toQuestionDTO(q))
     } as VideoDTO;
 }
@@ -158,7 +158,7 @@ export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {
         return {
             id: video.id,
             subTitle: video.subtitle,
-            thumbnailUrl: "",//video.thumbnailFile?.url ?? null,
+            thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
             title: video.title,
             type: "video",
             orderIndex: video.orderIndex

@@ -9,9 +9,9 @@ import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/Ma
 import { useOverviewPageDTO } from "../../services/dataService";
 import { getCourseItemUrl } from "../../services/navigatior";
 import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
+import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
 import ListItem from "../universal/atomic/listItem/ListItem";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
-import CourseItemList from "./dashboard_components/CurrentCourseStats/CurrentCourse";
 import { DashBoardRightSpacer, DashboardVerticalDivider, DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
 import { OverviewDashboard } from "./dashboard_components/OverviewDashboard/OverviewDashboard";
 import ProfileStats from "./dashboard_components/ProfileStats/ProfileStats";
@@ -65,10 +65,7 @@ const OverviewPage = () => {
                         {/* active item */}
                         <DashoardLeftItemGroup title={hasCurrentItem ? "Folytatom" : "Új tanfolyam kiválasztása"}>
                             {hasCurrentItem
-                                ? <ListItem mainTitle={currentItemTitle!}
-                                    subTitle={currentItemSubtitle!}
-                                    thumbnailUrl={currentItemThumbnailUrl}
-                                    to={continueCourseUrl} />
+                                ? <CourseItemView courseItem={currentItem!} />
 
                                 : <ListItem mainTitle={"Tanfolyamkereső"}
                                     subTitle={"Válaszd ki a legszimpatikusabb tanfolyamot"}

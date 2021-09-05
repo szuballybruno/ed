@@ -32,13 +32,13 @@ export const MainRouting = () => {
             <NotFound />
         </Route>
 
-        {/*
-            Not used pages, maybe useful on demo
-
-            <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
-            <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
-            <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
-        */}
-
     </Switch>
 }
+
+{/*
+    Not used pages, maybe useful on demo
+
+    <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
+    <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
+    <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
+*/}
