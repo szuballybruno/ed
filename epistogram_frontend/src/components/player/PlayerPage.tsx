@@ -58,12 +58,12 @@ export const PlayerPage = () => {
                 showLastButton={false}
                 showNavigation={true} />
 
-            <LoadingFrame
-                minHeight="100%"
-                loadingState={[playerDataStatus]}
-                error={[playerDataError]}>
+            <ContentWrapper>
 
-                <ContentWrapper>
+                <LoadingFrame
+                    minHeight="100%"
+                    loadingState={[playerDataStatus]}
+                    error={[playerDataError]}>
 
                     {/* main column */}
                     <Box id="mainColumn" className={classes.playerContentWrapper} >
@@ -93,8 +93,8 @@ export const PlayerPage = () => {
                         {isDesktopView && <CourseItemSelector
                             courseItems={courseItems} />}
                     </FlexFloat>
-                </ContentWrapper>
-            </LoadingFrame>
+                </LoadingFrame>
+            </ContentWrapper>
         </MainWrapper >
     )
 };

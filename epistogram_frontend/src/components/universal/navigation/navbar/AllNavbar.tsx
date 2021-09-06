@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { globalConfig } from "../../../../configuration/config";
-import { useIsDesktopView } from "../../../../frontendHelpers";
+import { getStaticAssetUrl, useIsDesktopView } from "../../../../frontendHelpers";
 import { FlexFloat } from "../../FlexFloat";
 import classes from "./navbar.module.scss";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
@@ -31,25 +31,25 @@ interface NavbarIF {
 
 const Navbar = (props: NavbarIF) => {
 
-    const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
-
-    const MobileNavbar = () => <div className={classes.mobileNavbarOuterWrapperIn}>
-        <NavLink to={'/kezdolap'}>
-            <div className={classes.mobileNavbarLogoWrapper}>
-                <img alt="EpistoGram Logo" src={logoUrl} />
-            </div>
-        </NavLink>
-    </div>
-
-    //console.log(JSON.stringify(user.get()))
-
     const isDesktop = useIsDesktopView();
 
+    // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar {...props} />;
 
+    // render mobile
     const renderMobileNavbar = () => {
         return <div className={classes.mobileNavbarOuterWrapperOut}>
-            <MobileNavbar />
+
+            {/* navbar */}
+            <div className={classes.mobileNavbarOuterWrapperIn}>
+                <NavLink to={'/kezdolap'}>
+                    <div className={classes.mobileNavbarLogoWrapper}>
+                        <img alt="EpistoGram Logo" src={getStaticAssetUrl("/images/logo.png")} />
+                    </div>
+                </NavLink>
+            </div>
+
+            {/* dropdonw */}
             <MobileDropdown menuItems={props.menuItems} showHighlightedButton={props.showHighlightedButton} />
         </div>
     }

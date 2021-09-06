@@ -22,6 +22,7 @@ import { CourseOrganization } from "./models/entity/CourseOrganization";
 import { Group } from "./models/entity/Group";
 import { Tag } from "./models/entity/Tag";
 import { CourseOrganizationDTO } from "./models/shared_models/CourseOrganizationDTO";
+import { setUserAvatarFileId } from "./services/userService";
 
 export type TypeORMConnection = Connection;
 
@@ -300,16 +301,28 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
 
 const seedFiles = async (connection: TypeORMConnection) => {
 
+    const fileRepo = await connection
+        .getRepository(StorageFile);
+
+    // video 1 file
     const file = {
         pending: false,
         filePath: "videos/video_1.mp4",
     } as StorageFile;
 
-    await connection
-        .getRepository(StorageFile)
-        .insert(file);
+    await fileRepo.insert(file);
 
     await setVideoFileIdAsync(1, file.id);
+
+    // user avatar 1 file 
+    const avatarFile = {
+        pending: false,
+        filePath: "userAvatars/user_avatar_1.png"
+    } as StorageFile;
+
+    await fileRepo.insert(avatarFile);
+
+    await setUserAvatarFileId(1, avatarFile.id);
 }
 
 const seedVideoQuestions = async (connection: TypeORMConnection) => {

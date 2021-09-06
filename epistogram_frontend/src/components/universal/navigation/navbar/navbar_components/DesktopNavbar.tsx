@@ -3,6 +3,7 @@ import { PlayArrow } from "@material-ui/icons";
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import { globalConfig } from "../../../../../configuration/config";
+import { getStaticAssetUrl } from "../../../../../frontendHelpers";
 import classes from "./desktopNavbar.module.scss";
 import MenuItemList from "./MenuItemList";
 
@@ -25,16 +26,20 @@ const DesktopNavbar = (props: {
 
 }) => {
 
-    const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
     const currentVideoWatchUrl = ""; // "/watch/" + user.userData.currentCourse._id.get() + "/" + user.userData.currentItem._id.get()
 
     return (
         <div style={props.style} className={classes.navbarOuterWrapper}>
             <div className={`${classes.navbarButtonWrapper} ${props.desktopClassName}`}>
 
+                {/* logo link */}
                 <NavLink to={props.homeUrl || ""} className={classes.logoWrapper}>
-                    <img className={classes.logo} alt="EpistoGram Logo" src={logoUrl} />
+                    <img
+                        className={classes.logo}
+                        alt="EpistoGram Logo"
+                        src={getStaticAssetUrl("/images/logo.png")} />
                 </NavLink>
+
                 {props.showNavigation ? <div className={classes.navbarRightWrapper}>
                     <MenuItemList menuItems={props.menuItems.middleMenu} />
                     {props.showHighlightedButton
