@@ -2,7 +2,6 @@ import { Chip, Divider, Typography } from "@material-ui/core";
 import React from 'react';
 import { withRouter } from "react-router-dom";
 import { globalConfig } from "../../configuration/config";
-import menuItems from "../../configuration/menuItems.json";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
 import { AdministrationRouting } from "../../routing/AdministrationRouting";
 import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
@@ -20,10 +19,7 @@ const Administration = (props: { match: { url: string; } }) => {
     const userRole = "WIP";
 
     return <MainWrapper>
-        <Navbar showHighlightedButton={true}
-            menuItems={menuItems["user"]}
-            showLastButton={true}
-            showNavigation={true} />
+        <Navbar />
         <ContentWrapper>
             <LeftPanel>
                 <div className={classes.adminDashboardLeftItemProfile}>

@@ -1,8 +1,8 @@
-import { Flex } from "@chakra-ui/react";
 import React from 'react';
 import { globalConfig } from "../../configuration/config";
 import { getQueryParam, usePaging } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { MainWrapper } from "../../HOC/MainPanels";
 import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";
@@ -11,11 +11,10 @@ import { showNotification } from "../../services/notifications";
 import { useAnswerSignupQuestion, useSignupData } from "../../services/signupService";
 import { finalizeUserRegistartionAsync } from "../../services/userManagementService";
 import { QuestionSlides } from "../exam/QuestionSlides";
-import AllNavbar from "../universal/navigation/navbar/AllNavbar";
+import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupForm } from "./SignupForm";
 import { useRegistrationFinalizationFormState } from "./SignupFormLogic";
-import classes from "./signupPage.module.scss";
 import { SignupWrapper } from "./SignupWrapper";
 
 const images = [
@@ -82,6 +81,7 @@ export const SignupPage = () => {
 
         // save answers 
         await saveAnswersAsync(dto);
+        await refetchSignupData();
     }
 
     const getSelectedAnswerId = (questionId: number) => {
@@ -103,8 +103,8 @@ export const SignupPage = () => {
 
     const QuestionnaireSlide = () => <QuestionSlides
         onAnswerSelected={handleSaveSelectedAnswerAsync}
-        onNextOverNavigation={slidesState.previous}
-        onPrevoiusOverNavigation={slidesState.next}
+        onNextOverNavigation={slidesState.next}
+        onPrevoiusOverNavigation={slidesState.previous}
         getSelectedAnswerId={getSelectedAnswerId}
         questions={questions} />
 
@@ -135,27 +135,21 @@ export const SignupPage = () => {
         FinalizeFormSlide
     ];
 
-    return <Flex direction="column" justify="flex-start" align="center" >
+    return (
 
-        {/* navbar */}
-        <AllNavbar
-            showHighlightedButton={false}
-            menuItems={{
-                "middleMenu": [],
-                "lastItem": {
-                    "menuName": "",
-                    "menuPath": ""
-                }
-            }}
-            desktopClassName={classes.navbar}
-            showLastButton={false} />
+        <MainWrapper>
 
-        <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} flex="1">
-            <SlidesDisplay
-                slides={slides}
-                index={slidesState.currentIndex} />
-        </LoadingFrame>
-    </Flex>
+            {/* navbar */}
+            <Navbar hideLinks={true} />
+
+            <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} flex="1">
+                <SlidesDisplay
+                    flex="1"
+                    slides={slides}
+                    index={slidesState.currentIndex} />
+            </LoadingFrame>
+        </MainWrapper >
+    );
 };
 
 // updateActivity(

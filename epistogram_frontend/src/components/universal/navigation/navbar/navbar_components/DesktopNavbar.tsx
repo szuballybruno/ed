@@ -2,56 +2,49 @@ import { Button } from "@material-ui/core";
 import { PlayArrow } from "@material-ui/icons";
 import React from 'react';
 import { NavLink } from "react-router-dom";
-import { globalConfig } from "../../../../../configuration/config";
 import { getStaticAssetUrl } from "../../../../../frontendHelpers";
+import { MenuItemsType } from "../AllNavbar";
 import classes from "./desktopNavbar.module.scss";
 import MenuItemList from "./MenuItemList";
 
-const DesktopNavbar = (props: {
-    desktopClassName?: string
-    homeUrl?: string
-    menuItems: {
-        middleMenu: {
-            menuName: string;
-            menuPath: string
-        }[];
-        lastItem: {
-            menuName: string;
-            menuPath: string
-        };
-    },
-    showHighlightedButton?: boolean
-    showNavigation?: boolean
-    style?: React.CSSProperties | undefined,
-
-}) => {
+const DesktopNavbar = (props: { menuItems: MenuItemsType, hideLinks: boolean }) => {
 
     const currentVideoWatchUrl = ""; // "/watch/" + user.userData.currentCourse._id.get() + "/" + user.userData.currentItem._id.get()
+    const homeUrl = "";
 
     return (
-        <div style={props.style} className={classes.navbarOuterWrapper}>
-            <div className={`${classes.navbarButtonWrapper} ${props.desktopClassName}`}>
+        <div className={classes.navbarOuterWrapper}>
+            <div className={`${classes.navbarButtonWrapper}`}>
 
                 {/* logo link */}
-                <NavLink to={props.homeUrl || ""} className={classes.logoWrapper}>
+                <NavLink to={homeUrl} className={classes.logoWrapper}>
                     <img
                         className={classes.logo}
                         alt="EpistoGram Logo"
                         src={getStaticAssetUrl("/images/logo.png")} />
                 </NavLink>
 
-                {props.showNavigation ? <div className={classes.navbarRightWrapper}>
+                {/* content */}
+                <div
+                    className={classes.navbarRightWrapper}
+                    style={{
+                        display: props.hideLinks ? "none" : "flex"
+                    }}>
+
+                    {/* menu items */}
                     <MenuItemList menuItems={props.menuItems.middleMenu} />
-                    {props.showHighlightedButton
-                        ? <Button variant={"outlined"}
-                            size={"large"}
-                            className={classes.showSomethingButton}
-                            onClick={() => {
-                                // app.modalState.set(true)
-                            }}>
-                            Mutass valamit!
-                        </Button>
-                        : null}
+
+                    {/* show something new  */}
+                    <Button variant={"outlined"}
+                        size={"large"}
+                        className={classes.showSomethingButton}
+                        onClick={() => {
+                            // app.modalState.set(true)
+                        }}>
+                        Mutass valamit!
+                    </Button>
+
+                    {/* continue watching  */}
                     <NavLink to={currentVideoWatchUrl}>
                         <Button variant={"outlined"}
                             size={"large"}
@@ -62,10 +55,11 @@ const DesktopNavbar = (props: {
                             <PlayArrow />
                         </Button>
                     </NavLink>
+
                     <div style={{
                         width: '50px'
                     }} />
-                </div> : null}
+                </div>
             </div>
         </div>
     );

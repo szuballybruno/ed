@@ -8,33 +8,24 @@ import classes from "./navbar.module.scss";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
 import MobileDropdown from "./navbar_components/MobileDropdown";
 
-interface NavbarIF {
-    desktopClassName?: string;
-    homeUrl?: string;
-    menuItems: {
-        middleMenu: {
-            menuName: string;
-            menuPath: string
-        }[];
-        lastItem: {
-            menuName: string;
-            menuPath: string
-        };
-    };
-    selectedPage?: number;
-    showHighlightedButton?: boolean;
-    showLastButton?: boolean;
-    showNavigation?: boolean;
-    showSwitchButton?: boolean;
-    style?: React.CSSProperties | undefined
-}
+export type MenuItemType = {
+    menuName: string;
+    menuPath: string;
+};
 
-const Navbar = (props: NavbarIF) => {
+export type MenuItemsType = {
+    middleMenu: MenuItemType[],
+    lastItem: MenuItemType
+};
+
+const Navbar = (props: { hideLinks?: boolean }) => {
 
     const isDesktop = useIsDesktopView();
 
     // render desktop
-    const renderDesktopNavbar = () => <DesktopNavbar {...props} />;
+    const renderDesktopNavbar = () => <DesktopNavbar
+        menuItems={menuItems}
+        hideLinks={!!props.hideLinks} />;
 
     // render mobile
     const renderMobileNavbar = () => {
@@ -50,7 +41,7 @@ const Navbar = (props: NavbarIF) => {
             </div>
 
             {/* dropdonw */}
-            <MobileDropdown menuItems={props.menuItems} showHighlightedButton={props.showHighlightedButton} />
+            {/* <MobileDropdown menuItems={menuItems} showHighlightedButton={props.showHighlightedButton} /> */}
         </div>
     }
 
@@ -61,4 +52,29 @@ const Navbar = (props: NavbarIF) => {
     </FlexFloat>
 }
 
-export default Navbar
+export default Navbar;
+
+const menuItems = {
+    middleMenu: [
+        {
+            menuName: "Kezdőlap",
+            menuPath: "/kezdolap"
+        },
+        {
+            menuName: "Tanfolyamkereső",
+            menuPath: "/kurzusok"
+        },
+        {
+            menuName: "Profilom",
+            menuPath: "/profilom"
+        },
+        {
+            menuName: "Adminisztráció",
+            menuPath: "/admin"
+        }
+    ],
+    lastItem: {
+        menuName: "Nincs kiválasztott kurzus",
+        menuPath: "/cybersecurity-kurzus"
+    }
+} as MenuItemsType;

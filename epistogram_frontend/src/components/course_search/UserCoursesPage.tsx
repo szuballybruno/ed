@@ -1,7 +1,6 @@
 import { FormControl, Grid, Select, Typography } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import React from "react";
-import menuItems from "../../configuration/menuItems.json";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
 import { GetUserCoursesDTO } from "../../models/shared_models/GetUserCoursesDTO";
@@ -39,12 +38,7 @@ const UserCoursesPage = () => {
 
     return <MainWrapper>
 
-        <Navbar
-            showHighlightedButton={true}
-            menuItems={menuItems["user"]}
-            showLastButton={true}
-            showSwitchButton={false}
-            showNavigation={true} />
+        <Navbar />
 
         <ContentWrapper>
 

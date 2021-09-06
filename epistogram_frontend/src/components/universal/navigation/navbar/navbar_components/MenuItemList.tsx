@@ -1,12 +1,10 @@
 import React from 'react';
+import { MenuItemsType, MenuItemType } from '../AllNavbar';
 import classes from './menuItemList.module.scss';
 import NavbarButton from "./NavbarButton";
 
 const MenuItemList = (props: {
-    menuItems: {
-        menuName: string,
-        menuPath: string
-    }[]
+    menuItems: MenuItemType[]
 }) => {
     return <div className={classes.navbarNavLinksWrapper}>
         {props.menuItems.map((item, index) => {
@@ -14,7 +12,6 @@ const MenuItemList = (props: {
                 activeClassName={classes.fos}
                 key={index}
                 index={index}
-
                 menuName={item.menuName}
                 menuPath={item.menuPath} />
         })}

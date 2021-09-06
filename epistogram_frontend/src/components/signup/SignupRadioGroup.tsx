@@ -1,7 +1,6 @@
-import React from "react";
 import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import React from "react";
 import { AnswerDTO } from "../../models/shared_models/AnswerDTO";
-import { border } from "@chakra-ui/react";
 
 export const SignupRadioGroup = (
     props: {
@@ -11,7 +10,14 @@ export const SignupRadioGroup = (
         answers: AnswerDTO[]
     }) => {
 
-    const { answers, selectedAnswerId, onAnswerSelected, correctAnswerId } = props;
+    const {
+        answers,
+        selectedAnswerId,
+        onAnswerSelected,
+        correctAnswerId
+    } = props;
+
+    const hasAnswer = !!correctAnswerId;
 
     return <RadioGroup
         id="answers"
@@ -41,8 +47,12 @@ export const SignupRadioGroup = (
                     value={answer.answerId}
                     style={{
                         margin: "1px 0px 0px 0px",
-                        color: borderColor,
-                        borderBottom: (isIncorrect || isCorrect) ? "dotted 4px " + borderColor : "none"
+                        color: hasAnswer ? borderColor : undefined,
+                        borderBottom: hasAnswer
+                            ? (isIncorrect || isCorrect)
+                                ? "dotted 4px " + borderColor
+                                : "none"
+                            : undefined
                     }}
                     control={<Radio checked={answer.answerId == selectedAnswerId} />}
                     label={answer.answerText} />

@@ -132,7 +132,7 @@ export const answerSignupQuestionAsync = async (invitationToken: string, questio
 
     const userId = await verifyInvitationTokenAsync(invitationToken);
 
-    await answerQuestionAsync(userId, questionAnswer.questionId, questionAnswer.answerId);
+    await answerQuestionAsync(userId, questionAnswer.questionId, questionAnswer.answerId, true);
 }
 
 export const getSignupDataAsync = async (invitationToken: string) => {

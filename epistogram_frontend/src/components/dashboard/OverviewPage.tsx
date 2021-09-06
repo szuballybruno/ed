@@ -1,6 +1,5 @@
 import { Divider, Grid } from "@material-ui/core";
 import React, { ReactNode, useContext } from 'react';
-import menuItems from "../../configuration/menuItems.json";
 import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
@@ -41,10 +40,7 @@ const OverviewPage = () => {
 
     return <MainWrapper>
 
-        <Navbar showHighlightedButton={true}
-            menuItems={menuItems["user"]}
-            showLastButton={true}
-            showNavigation={true} />
+        <Navbar />
 
         <LoadingFrame loadingState={status} error={error}>
             <ContentWrapper>

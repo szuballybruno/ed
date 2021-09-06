@@ -72,6 +72,7 @@ export const QuestionSlides = (props: {
             answers={currentQuestion.answers}
             onAnswerSelected={x => handleAnswerSelectedAsync(x)}
             selectedAnswerId={selectedAnswerId}
-            correctAnswerId={correctAnswerId} />
+            correctAnswerId={correctAnswerId}
+        />
     </SignupWrapper>
 }

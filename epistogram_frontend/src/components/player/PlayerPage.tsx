@@ -53,10 +53,7 @@ export const PlayerPage = () => {
     return (
         <MainWrapper>
 
-            <Navbar showHighlightedButton={true}
-                menuItems={menuItems["user"]}
-                showLastButton={false}
-                showNavigation={true} />
+            <Navbar />
 
             <ContentWrapper>
 

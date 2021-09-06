@@ -16,7 +16,6 @@ export const answerQuestionAsync = async (userId: number, questionId: number, an
         .where("qa.userId = :userId ", { userId })
         .andWhere("qa.questionId = :questionId", { questionId })
         .andWhere("qa.answerId = :answerId", { answerId })
-        .select("qa.id")
         .getOne();
 
     await repo.save({
