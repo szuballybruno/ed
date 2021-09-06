@@ -1,16 +1,13 @@
-import { Flex } from "@chakra-ui/react";
 import { Divider, Grid } from "@material-ui/core";
-import React, { ReactNode } from 'react';
-import { useContext } from "react";
+import React, { ReactNode, useContext } from 'react';
 import menuItems from "../../configuration/menuItems.json";
 import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
 import { useOverviewPageDTO } from "../../services/dataService";
-import { getCourseItemUrl } from "../../services/navigatior";
 import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
-import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
 import ListItem from "../universal/atomic/listItem/ListItem";
+import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { DashBoardRightSpacer, DashboardVerticalDivider, DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
 import { OverviewDashboard } from "./dashboard_components/OverviewDashboard/OverviewDashboard";
@@ -36,14 +33,11 @@ const OverviewPage = () => {
         .filter(x => x.state == "current")[0];
 
     const currentItemId = currentItem?.id;
-    const currentItemTitle = currentItem?.title;
-    const currentItemSubtitle = currentItem?.subTitle;
     const currentItemThumbnailUrl = currentItem?.thumbnailUrl;
     const hasCurrentItem = !!currentItemId;
     const hasCurrentCourse = hasCurrentItem;
     const courseItems = pageDTO?.currentCourseItems;
     const recommendedCourses = pageDTO?.recommendedCourses;
-    const continueCourseUrl = hasCurrentItem ? getCourseItemUrl(currentItemId!, currentItem?.type!) : "";
 
     return <MainWrapper>
 
