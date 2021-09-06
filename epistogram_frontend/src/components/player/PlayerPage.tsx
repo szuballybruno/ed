@@ -66,7 +66,7 @@ export const PlayerPage = () => {
                     error={[playerDataError]}>
 
                     {/* main column */}
-                    <Box id="mainColumn" className={classes.playerContentWrapper} >
+                    <Box id="mainColumn" height="100%" width="100%">
 
                         {video && <WatchView
                             video={video}
@@ -85,10 +85,9 @@ export const PlayerPage = () => {
                         justify="flex-start"
                         height="100%"
                         bg="white"
-                        pl="15px"
-                        width={isSidebarHidden ? "0px" : "500px"}
-                        transition="0.5s"
-                        overflow="hidden">
+                        maxWidth={isSidebarHidden ? "0px" : "350px"}
+                        opacity={isSidebarHidden ? 0 : 1}
+                        transition="0.5s">
 
                         {isDesktopView && <CourseItemSelector
                             courseItems={courseItems} />}

@@ -67,6 +67,8 @@ export const ExamPlayer = (props: {
             flex="1">
 
             <SlidesDisplay
+                flex="1"
+                height="100%"
                 slides={slides}
                 index={slidesState.currentIndex} />
         </LoadingFrame>

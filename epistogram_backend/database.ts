@@ -123,6 +123,9 @@ export const seedDB = async () => {
     log("seedVideoQuestions")
     await seedVideoQuestions(connection);
 
+    log("seedExamQuestions")
+    await seedExamQuestions(connection);
+
     log("seedFiles")
     await seedFiles(connection);
 
@@ -380,6 +383,67 @@ const seedVideoQuestions = async (connection: TypeORMConnection) => {
                     },
                     {
                         text: "Video answer 3",
+                        isCorrect: true
+                    }
+                ]
+            }
+        ]);
+}
+
+const seedExamQuestions = async (connection: TypeORMConnection) => {
+
+    await connection
+        .getRepository(Question)
+        .save([
+            {
+                questionText: "Exam question 1",
+                isSignupQuestion: false,
+                examId: 1,
+                answers: [
+                    {
+                        text: "Exam answer 1",
+                        isCorrect: true
+                    },
+                    {
+                        text: "Exam answer 2"
+                    },
+                    {
+                        text: "Exam answer 3"
+                    }
+                ]
+            },
+            {
+                questionText: "Exam question 2",
+                isSignupQuestion: false,
+                examId: 1,
+                showUpTimeSeconds: 250,
+                answers: [
+                    {
+                        text: "Exam answer 1"
+                    },
+                    {
+                        text: "Exam answer 2",
+                        isCorrect: true
+                    },
+                    {
+                        text: "Exam answer 3"
+                    }
+                ]
+            },
+            {
+                questionText: "Exam question 3",
+                isSignupQuestion: false,
+                examId: 1,
+                showUpTimeSeconds: 400,
+                answers: [
+                    {
+                        text: "Exam answer 1"
+                    },
+                    {
+                        text: "Exam answer 2"
+                    },
+                    {
+                        text: "Exam answer 3",
                         isCorrect: true
                     }
                 ]

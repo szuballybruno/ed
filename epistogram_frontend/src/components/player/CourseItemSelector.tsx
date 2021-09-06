@@ -8,7 +8,11 @@ import classes from './videoList.module.scss';
 
 export const CourseItemSelector = (props: { courseItems: CourseItemDTO[] }) => {
 
-    return <Box flex="1">
+    return <Box
+        if="courseItemSelectorRoot"
+        width="350px"
+        minWidth="350px"
+        pl="15px">
 
         {/* learning type selector */}
         <div className={classes.learningTypeSelector}>

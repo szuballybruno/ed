@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { Button, Divider, Typography } from "@material-ui/core";
 import React, { ReactNode } from 'react';
 import { FlexImage } from "../universal/FlexImage";
@@ -60,13 +60,13 @@ export const SignupWrapper = (props: {
         </Flex>
 
         {/* content */}
-        <Flex id="content" align="center" justify="center">
+        <Flex id="content" align="center" justify="center" flex="1">
 
             {/* image */}
             <FlexImage width="250px" height="250px" url={currentImage} mr="20px"></FlexImage>
 
-            {/* text */}
-            <div className={classes.questionAndAnswersWrapper}>
+            {/* question content */}
+            <div>
 
                 {/* title */}
                 {hasTitle && <div className={classes.questionWrapper}>
@@ -98,6 +98,8 @@ export const SignupWrapper = (props: {
         </Flex>
 
         {/* progress bar */}
-        {props.bottomComponent}
+        <Box id="footerBox" >
+            {props.bottomComponent}
+        </Box>
     </Flex>
 };
