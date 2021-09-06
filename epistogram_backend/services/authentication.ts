@@ -5,11 +5,12 @@ import { TokenMeta as TokenPayload } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { getCookie, TypedError } from "../utilities/helpers";
 import { comparePasswordAsync } from "./misc/crypt";
-import { verifyJWTToken } from "./misc/jwtGen";
+import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
 import { log } from "./misc/logger";
 import { toUserDTO } from "./mappings";
-import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
+import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserById, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
 import { staticProvider } from "../staticProvider";
+import { sendResetPasswordMailAsync } from "./emailService";
 
 // CONSTS
 export const accessTokenCookieName = "accessToken";
@@ -160,6 +161,23 @@ export const setAuthCookies = (res: Response, accessToken: string, refreshToken:
     setAccessTokenCookie(res, accessToken);
     setRefreshTokenCookie(res, refreshToken);
 }
+
+export const resetUserPasswordAction = async (req: Request) => {
+
+    const userId = parseInt(req.params.userId);
+
+    // get user 
+    const user = await getUserById(userId);
+    if (!user)
+        throw new TypedError("User not found.", "bad request");
+
+    // get reset token
+    const resetPawsswordToken = await getJWTToken({ userId: user.id }, staticProvider.globalConfig.mail.tokenMailSecret, "24h");
+
+    // send mail
+    const userFullName = `${user.lastName} ${user.firstName}`;
+    await sendResetPasswordMailAsync(user.email, userFullName, resetPawsswordToken);
+};
 
 // PRIVATES
 const getPlainObjectUserInfoDTO = (user: UserDTO) => {

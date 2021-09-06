@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { globalConfig } from "./configuration/config";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";

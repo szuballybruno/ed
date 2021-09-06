@@ -6,7 +6,7 @@ export const FlexImage = (props: BoxProps & { url: string }) => {
 
     return <Box position="relative" {...boxProps}>
         <Box position="absolute" top="0" height="100%" width="100%">
-            <img style={{ width: "100%", height: "100%", objectFit: "cover" }} src={url} alt="" />
+            <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src={url} alt="" />
         </Box>
     </Box>
 }

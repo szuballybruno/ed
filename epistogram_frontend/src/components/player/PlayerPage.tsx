@@ -61,7 +61,6 @@ export const PlayerPage = () => {
             <ContentWrapper>
 
                 <LoadingFrame
-                    minHeight="100%"
                     loadingState={[playerDataStatus]}
                     error={[playerDataError]}>
 
@@ -74,9 +73,8 @@ export const PlayerPage = () => {
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
-                            setIsExamStarted={isExamStarted => setIsSidebarHidden(isExamStarted)}
-                            exam={exam}
-                            refetchData={refetchPlayerData} />}
+                            setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
+                            exam={exam} />}
                     </Box>
 
                     {/* right sidebar */}

@@ -1,26 +1,47 @@
+import { useState } from "react";
 import { getStaticAssetUrl, usePaging } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { useSaveExamAnswer } from "../../services/examService";
-import { ExamQuestionSlides } from "../exam/ExamQuestionSlides";
+import { ExamResultsTable } from "../exam/ExamResultsTable";
+import { QuestionSlides } from "../exam/QuestionSlides";
 import { SignupWrapper } from "../signup/SignupWrapper";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 
 export const ExamPlayer = (props: {
     exam: ExamDTO,
-    setIsExamStarted: (isExamStarted: boolean) => void,
-    refetchData: () => Promise<void>
+    setIsExamInProgress: (isExamStarted: boolean) => void
 }) => {
 
-    const { exam, refetchData, setIsExamStarted } = props;
-    const { questions, questionAnswers } = exam;
+    const { exam, setIsExamInProgress } = props;
+    const { questions } = exam;
     const slidesState = usePaging([1, 2, 3, 4]);
-    const { saveExamAnswer, saveExamAnswerError, saveExamAnswerState } = useSaveExamAnswer();
+    const {
+        saveExamAnswer,
+        saveExamAnswerError,
+        saveExamAnswerState,
+        correctExamAnswerId,
+        clearExamAnswerCache
+    } = useSaveExamAnswer();
+    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
 
     const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
 
+        setSelectedAnswerId(questionAnswer.answerId);
         await saveExamAnswer(questionAnswer);
+    }
+
+    const clearAnswerCache = () => {
+
+        clearExamAnswerCache();
+        setSelectedAnswerId(null);
+    }
+
+    const finishExam = () => {
+
+        setIsExamInProgress(false);
+        slidesState.next();
     }
 
     const GreetSlide = () => <SignupWrapper
@@ -30,28 +51,26 @@ export const ExamPlayer = (props: {
         description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
         onNext={() => {
 
-            setIsExamStarted(true);
+            setIsExamInProgress(true);
             slidesState.next();
         }}
         nextButtonTitle="Kezdés">
     </SignupWrapper>
 
-    const QuestionnaireSlide = () => <ExamQuestionSlides
-        saveAnswer={handleSaveSelectedAnswerAsync}
-        refetchData={refetchData}
-        onNextOverNavigation={slidesState.previous}
-        onPrevoiusOverNavigation={slidesState.next}
-        questionAnswers={questionAnswers}
+    const QuestionnaireSlide = () => <QuestionSlides
+        clearAnswerCache={clearAnswerCache}
+        upperTitle={exam.title}
+        onAnswerSelected={handleSaveSelectedAnswerAsync}
+        onNextOverNavigation={finishExam}
+        getSelectedAnswerId={() => selectedAnswerId}
+        getCorrectAnswerId={() => correctExamAnswerId}
         questions={questions} />
 
     const ResultsSlide = () => <SignupWrapper
-        title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
-        description={"Már csak egy-két adatra van szükségünk, hogy elkezdhesd a rendszer használatát"}
-        upperTitle="Összegzés"
-        nextButtonTitle="Folytatás"
-        onNavPrevious={() => slidesState.previous()}
-        onNext={() => slidesState.next()}
-        currentImage={getStaticAssetUrl("/images/asd")}>
+        title={exam.title}
+        description={"Sikeresen elvegezve!"}
+        upperTitle="Összegzés">
+        <ExamResultsTable></ExamResultsTable>
     </SignupWrapper>
 
     const slides = [

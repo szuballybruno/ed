@@ -4,7 +4,7 @@ import { usePostData } from "./httpClient";
 
 export const useAnswerQuestion = () => {
 
-    const queryRes = usePostData<AnswerQuestionDTO, AnswerDTO>("questions/answer-question");
+    const queryRes = usePostData<AnswerQuestionDTO, AnswerDTO>("questions/answer-video-question");
 
     const answerQuestionAsync = (answerId: number, questionId: number) => {
 

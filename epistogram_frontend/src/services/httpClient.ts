@@ -90,11 +90,17 @@ export const usePostData = <TData, TResult>(url: string) => {
         }
     }
 
+    const clearCache = () => {
+
+        setResult(null);
+    }
+
     return {
         postDataAsync,
         state,
         error,
-        result
+        result,
+        clearCache
     };
 }
 

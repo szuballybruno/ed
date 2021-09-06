@@ -15,7 +15,6 @@ import { User } from "./models/entity/User";
 import { Video } from "./models/entity/Video";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
 import { log } from "./services/misc/logger";
-import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/userManagementService";
 import { setVideoFileIdAsync } from "./services/videoService";
 import { staticProvider } from "./staticProvider";
 import { CourseOrganization } from "./models/entity/CourseOrganization";
@@ -23,6 +22,7 @@ import { Group } from "./models/entity/Group";
 import { Tag } from "./models/entity/Tag";
 import { CourseOrganizationDTO } from "./models/shared_models/CourseOrganizationDTO";
 import { setUserAvatarFileId } from "./services/userService";
+import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/signupService";
 
 export type TypeORMConnection = Connection;
 

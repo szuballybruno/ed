@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useReactQuery } from "../frontendHelpers";
+import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
@@ -21,13 +22,14 @@ export const useSignupData = (invitationToken: string) => {
     };
 }
 
-export const useSaveSignupQuestionnaireAnswers = () => {
+export const useAnswerSignupQuestion = () => {
 
-    const qr = usePostData<SaveQuestionAnswerDTO, void>(`save-signup-question-answer`);
+    const qr = usePostData<SaveQuestionAnswerDTO, AnswerDTO>(`questions/answer-signup-question`);
 
     return {
         saveAnswersStatus: qr.state,
         saveAnswersError: qr.error,
-        saveAnswersAsync: qr.postDataAsync
+        saveAnswersAsync: qr.postDataAsync,
+        correctAnswerId: qr.result?.answerId ?? null
     };
 }

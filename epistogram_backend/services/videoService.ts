@@ -1,5 +1,13 @@
 import { Video } from "../models/entity/Video";
 import { staticProvider } from "../staticProvider";
+import { answerQuestionAsync } from "./questionAnswerService";
+
+export const answerVideoQuestionAsync = async (userId: number, questionId: number, answerId: number) => {
+
+    // validation comes here
+
+    return answerQuestionAsync(userId, questionId, answerId);
+}
 
 export const createVideoAsync = async (courseId: number, orderIndex: number) => {
 

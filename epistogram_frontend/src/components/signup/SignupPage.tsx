@@ -8,9 +8,9 @@ import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO"
 import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";
 import { useNavigation } from "../../services/navigatior";
 import { showNotification } from "../../services/notifications";
-import { useSaveSignupQuestionnaireAnswers, useSignupData } from "../../services/signupService";
+import { useAnswerSignupQuestion, useSignupData } from "../../services/signupService";
 import { finalizeUserRegistartionAsync } from "../../services/userManagementService";
-import { ExamQuestionSlides } from "../exam/ExamQuestionSlides";
+import { QuestionSlides } from "../exam/QuestionSlides";
 import AllNavbar from "../universal/navigation/navbar/AllNavbar";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupForm } from "./SignupForm";
@@ -48,7 +48,7 @@ export const SignupPage = () => {
     const slidesState = usePaging([1, 2, 3, 4]);
 
     // save questionnaire answers
-    const { saveAnswersAsync, saveAnswersError, saveAnswersStatus } = useSaveSignupQuestionnaireAnswers();
+    const { saveAnswersAsync, saveAnswersError, saveAnswersStatus } = useAnswerSignupQuestion();
 
     const submitFinalizationRequestAsync = async () => {
 
@@ -84,6 +84,14 @@ export const SignupPage = () => {
         await saveAnswersAsync(dto);
     }
 
+    const getSelectedAnswerId = (questionId: number) => {
+
+        const currentQuestionSelectedAnswer = questionAnswers
+            .filter(x => x.questionId == questionId)[0];
+
+        return currentQuestionSelectedAnswer?.answerId as number | null;
+    }
+
     const GreetSlide = () => <SignupWrapper
         title="Regisztráció"
         upperTitle="Üdv a fedélzeten!"
@@ -93,12 +101,11 @@ export const SignupPage = () => {
         nextButtonTitle="Kezdés">
     </SignupWrapper>
 
-    const QuestionnaireSlide = () => <ExamQuestionSlides
-        saveAnswer={handleSaveSelectedAnswerAsync}
-        refetchData={refetchSignupData}
+    const QuestionnaireSlide = () => <QuestionSlides
+        onAnswerSelected={handleSaveSelectedAnswerAsync}
         onNextOverNavigation={slidesState.previous}
         onPrevoiusOverNavigation={slidesState.next}
-        questionAnswers={questionAnswers}
+        getSelectedAnswerId={getSelectedAnswerId}
         questions={questions} />
 
     const SummarySlide = () => <SignupWrapper

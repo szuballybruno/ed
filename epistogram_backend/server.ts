@@ -5,11 +5,11 @@ import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, saveSignupQuestionAnswerAction } from './api/dataActions';
+import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCourses';
-import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/userManagementActions';
+import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/signupActions';
 import { initializeDBAsync } from './database';
 import { authorizeRequest } from './services/authentication';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
@@ -17,7 +17,8 @@ import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
 import './utilities/jsExtensions';
-import { answerQuestionAction } from './api/questionActions';
+import { answerVideoQuestionAction } from './api/questionActions';
+import { answerExamQuestionAction } from './api/examActions';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -86,7 +87,6 @@ const initializeAsync = async () => {
     expressServer.post('/log-out-user', logOutUserAction);
     expressServer.post('/login-user', getAsyncActionHandler(logInUserAction));
     expressServer.post('/get-signup-data', getSignupDataAction);
-    expressServer.post('/save-signup-question-answer', saveSignupQuestionAnswerAction);
 
     // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
@@ -116,8 +116,10 @@ const initializeAsync = async () => {
     // organizations 
     expressServer.get("/organizations/get-organizations", authMiddleware, getAsyncActionHandler(getOrganizationsAction));
 
-    // questionnaire
-    expressServer.post("/questions/answer-question", authMiddleware, answerQuestionAction);
+    // question answer
+    expressServer.post('/questions/answer-signup-question', answerSignupQuestionAction);
+    expressServer.post("/questions/answer-video-question", authMiddleware, answerVideoQuestionAction);
+    expressServer.post("/questions/answer-exam-question", authMiddleware, answerExamQuestionAction);
 
     // 404 - no match
     expressServer.use((req, res) => {

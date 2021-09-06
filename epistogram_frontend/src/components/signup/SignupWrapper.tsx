@@ -1,13 +1,14 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Button, Divider, Typography } from "@material-ui/core";
 import React, { ReactNode } from 'react';
+import { hasValue } from "../../frontendHelpers";
 import { FlexImage } from "../universal/FlexImage";
 import classes from "./signupWrapper.module.scss";
 
 export const SignupWrapper = (props: {
     children: ReactNode,
-    nextButtonTitle: string
-    currentImage: string,
+    nextButtonTitle?: string
+    currentImage?: string,
 
     onNext?: () => void,
     onNavPrevious?: () => void
@@ -32,6 +33,7 @@ export const SignupWrapper = (props: {
 
     const nextButtonTitle = props.nextButtonTitle;
     const currentImage = props.currentImage;
+    const hasImage = hasValue(currentImage);
     const children = props.children;
     const onNext = props.onNext;
 
@@ -63,7 +65,7 @@ export const SignupWrapper = (props: {
         <Flex id="content" align="center" justify="center" flex="1">
 
             {/* image */}
-            <FlexImage width="250px" height="250px" url={currentImage} mr="20px"></FlexImage>
+            {hasImage && <FlexImage width="250px" height="250px" url={currentImage!} mr="20px"></FlexImage>}
 
             {/* question content */}
             <div>
