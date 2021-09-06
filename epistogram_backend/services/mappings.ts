@@ -84,13 +84,17 @@ export const toTaskDTO = (task: Task) => {
     } as TaskDTO;
 }
 
-export const toExamDTO = (exam: Exam) => {
+export const toExamDTO = (exam: Exam, questionAnswers: QuestionAnswer[]) => {
+
+    navPropNotNull(exam.questions);
 
     return {
         id: exam.id,
         subTitle: exam.subtitle,
         title: exam.title,
-        thumbnailUrl: exam.thumbnailUrl
+        thumbnailUrl: exam.thumbnailUrl,
+        questions: exam.questions.map(x => toQuestionDTO(x)),
+        questionAnswers: questionAnswers.map(x => toQuestionAnswerDTO(x))
     } as ExamDTO;
 }
 

@@ -13,9 +13,7 @@ export const globalConfig = {
     //backendUrlMinimal: "http://itsfourothree.tplinkdns.com:5000/",
     //backendUrl: "http://itsfourothree.tplinkdns.com:5000/",
 
-    gcpUrl: "https://storage.googleapis.com/epistogram_bucket_dev",
-
-    assetStorageUrl: "https://dev.epistogram.com/assets/epistogram",
+    assetStorageUrl: "https://storage.googleapis.com/epistogram_bucket_dev",
     currentTheme: "nextGenTheme",
     adminMenuItems: [{
         title: "Statisztika",

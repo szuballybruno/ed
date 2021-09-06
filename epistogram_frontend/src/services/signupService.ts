@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useReactQuery } from "../frontendHelpers";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
-import { SaveQuestionnaireAnswersDTO } from "../models/shared_models/SaveQuestionnaireAnswersDTO";
+import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { LoadingStateType } from "../models/types";
-import { httpPostAsync } from "./httpClient";
+import { httpPostAsync, usePostData } from "./httpClient";
 
 export const useSignupData = (invitationToken: string) => {
 
@@ -16,41 +16,18 @@ export const useSignupData = (invitationToken: string) => {
     return {
         signupData: qr.data,
         signupDataStatus: qr.status,
-        signupDataError: qr.error
+        signupDataError: qr.error,
+        refetchSignupData: qr.refetch
     };
 }
 
 export const useSaveSignupQuestionnaireAnswers = () => {
 
-    const url = `save-signup-questionnaire-answers`;
-
-    const [state, setState] = useState<LoadingStateType>("success");
-    const [error, setError] = useState<any>(null);
-
-    const postData = async (questionAnswers: QuestionAnswerDTO[], invitationToken: string) => {
-
-        const dto = {
-            invitationToken: invitationToken,
-            answers: questionAnswers
-        } as SaveQuestionnaireAnswersDTO;
-
-        try {
-
-            setState("loading");
-
-            const postResult = await httpPostAsync(url, dto);
-
-            setState("success");
-        }
-        catch (e) {
-
-            setState("error");
-        }
-    }
+    const qr = usePostData<SaveQuestionAnswerDTO, void>(`save-signup-question-answer`);
 
     return {
-        saveAnswersStatus: state,
-        saveAnswersError: error,
-        saveAnswers: postData
+        saveAnswersStatus: qr.state,
+        saveAnswersError: qr.error,
+        saveAnswersAsync: qr.postDataAsync
     };
 }

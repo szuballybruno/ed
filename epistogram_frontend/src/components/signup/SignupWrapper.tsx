@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import { Button, Divider, Typography } from "@material-ui/core";
 import React, { ReactNode } from 'react';
+import { FlexImage } from "../universal/FlexImage";
 import classes from "./signupWrapper.module.scss";
 
 export const SignupWrapper = (props: {
@@ -34,13 +35,13 @@ export const SignupWrapper = (props: {
     const children = props.children;
     const onNext = props.onNext;
 
-    return <div className={classes.signupWrapper} >
+    return <Flex id="signupWrapperRoot" p="20px" direction="column" width="100%" height="100%">
 
         {/* header */}
-        <div className={classes.contentWrapper}>
+        <Flex id="header" direction="column">
 
             {/* upper title */}
-            <Flex height="40px" width="100%" align="left" justify="center">
+            <Flex id="titleAligner" height="40px" justify="start">
                 {hasUpperTitle &&
                     <Typography
                         variant={"overline"}>{upperTitle}
@@ -56,11 +57,15 @@ export const SignupWrapper = (props: {
                 </Button>
                 {props.upperComponent}
             </div>}
-        </div>
+        </Flex>
 
         {/* content */}
-        <div className={classes.questionAndAnswersOuterWrapper}>
-            <img className={classes.questionImage} src={currentImage} alt={""} />
+        <Flex id="content" align="center" justify="center">
+
+            {/* image */}
+            <FlexImage width="250px" height="250px" url={currentImage} mr="20px"></FlexImage>
+
+            {/* text */}
             <div className={classes.questionAndAnswersWrapper}>
 
                 {/* title */}
@@ -90,9 +95,9 @@ export const SignupWrapper = (props: {
                     </Button>
                 </div>}
             </div>
-        </div>
+        </Flex>
 
         {/* progress bar */}
         {props.bottomComponent}
-    </div>
+    </Flex>
 };

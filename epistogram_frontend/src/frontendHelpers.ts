@@ -2,6 +2,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { globalConfig } from "./configuration/config";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 import { LoadingStateType } from "./models/types";
 
@@ -21,6 +22,9 @@ export const usePaging = <T>(
     items: T[],
     onPreviousOverNavigation?: () => void,
     onNextOverNavigation?: () => void) => {
+
+    if (!hasValue(items))
+        throw new Error("Cannot page a null or undefined items collection!");
 
     const [currentItemIndex, setCurrentItemIndex] = useState(0);
 
@@ -124,13 +128,19 @@ export const useReactQuery = <T>(
         enabled: isEnabled
     });
 
-    const { status, ...queryResult2 } = queryResult;
+    const { status, refetch, ...queryResult2 } = queryResult;
 
     return {
         status: (!isEnabled && status == "idle" ? "success" : status) as LoadingStateType,
+        refetch: async () => {
+
+            await refetch();
+        },
         ...queryResult2
     }
 }
+
+export const getStaticAssetUrl = (path: string) => globalConfig.assetStorageUrl + path;
 
 export const hasValue = (obj: any) => {
 

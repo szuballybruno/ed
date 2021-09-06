@@ -5,6 +5,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import React from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
+import { FlexImage } from "./FlexImage";
 
 export type NavigateToCourseItemActionType = (courseItemId: number, courseItemType: CourseItemType) => void;
 
@@ -21,11 +22,7 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
         p="10px"
         borderBottom="1px solid #eaeaea">
 
-        <Box position="relative" flexBasis="50px">
-            <Box position="absolute" top="0" height="100%" width="100%">
-                <img style={{ width: "100%", height: "100%", objectFit: "cover" }} src={thumbnailUrl} alt="" />
-            </Box>
-        </Box>
+        <FlexImage url={thumbnailUrl} flexBasis="50px"></FlexImage>
 
         <Flex direction="column" flex="1" pl="20px">
             <Flex>

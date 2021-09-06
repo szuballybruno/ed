@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
+import { Question } from "./Question";
 import { User } from "./User";
 
 @Entity()
@@ -23,6 +24,7 @@ export class Exam {
     @Column()
     orderIndex: number;
 
+    // users
     @OneToMany(type => User, user => user.currentExam)
     @JoinColumn()
     users: User[];
@@ -34,4 +36,9 @@ export class Exam {
     @ManyToOne(type => Course, course => course.exams)
     @JoinColumn({ name: "courseId" })
     course: Course
+
+    // questions 
+    @OneToMany(_ => Question, q => q.exam)
+    @JoinColumn()
+    questions: Question[];
 }

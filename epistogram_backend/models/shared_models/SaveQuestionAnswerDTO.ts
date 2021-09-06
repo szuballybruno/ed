@@ -1,6 +1,6 @@
 import { QuestionAnswerDTO } from "./QuestionAnswerDTO";
 
-export type SaveQuestionnaireAnswersDTO = {
+export type SaveQuestionAnswerDTO = {
     invitationToken: string,
-    answers: QuestionAnswerDTO[]
+    questionAnswer: QuestionAnswerDTO;
 }

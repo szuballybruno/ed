@@ -2,8 +2,7 @@ import { useReactQuery } from "../frontendHelpers";
 import { GetPlayerDataDTO } from "../models/shared_models/GetPlayerDataDTO";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { CourseItemType } from "../models/shared_models/types/sharedTypes";
-import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { httpGetAsync, httpPostAsync } from "./httpClient";
+import { httpPostAsync } from "./httpClient";
 
 export const usePlayerData = (courseItemId: number, courseItemType: CourseItemType) => {
 
@@ -19,6 +18,7 @@ export const usePlayerData = (courseItemId: number, courseItemType: CourseItemTy
     return {
         playerData: qr.data,
         playerDataStatus: qr.status,
-        playerDataError: qr.error
+        playerDataError: qr.error,
+        refetchPlayerData: qr.refetch
     }
 }

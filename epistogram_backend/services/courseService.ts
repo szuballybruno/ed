@@ -1,11 +1,12 @@
 import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
+import { QuestionAnswer } from "../models/entity/QuestionAnswer";
 import { User } from "../models/entity/User";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
-import { toCourseItemDTOs } from "./mappings";
+import { toCourseItemDTOs, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
 import { getVideoByIdAsync } from "./videoService";
 
@@ -56,6 +57,30 @@ export const getCurrentCourseItemDescriptor = (user: User) => {
         itemType: currentCourseItemType,
         itemId: currentCourseItemId
     } as CourseItemDescriptorDTO
+}
+
+export const getExamDTOAsync = async (userId: number, examId: number) => {
+
+    const exam = await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .createQueryBuilder("e")
+        .where("e.id = :examId", { examId })
+        .leftJoinAndSelect("e.questions", "q")
+        .leftJoinAndSelect("q.answers", "a")
+        .getOneOrFail();
+
+    const questionIds = exam.questions.map(x => x.id);
+
+    const questionAnswers = await staticProvider
+        .ormConnection
+        .getRepository(QuestionAnswer)
+        .createQueryBuilder("qa")
+        .where("qa.userId = :userId", { userId })
+        .andWhere("qa.quesitonId IN (:...questionIds)", { questionIds })
+        .getMany();
+
+    return toExamDTO(exam, questionAnswers);
 }
 
 const getExamByIdAsync = (examId: number) => {

@@ -3,6 +3,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { globalConfig } from "../../../../configuration/config";
 import { useIsDesktopView } from "../../../../frontendHelpers";
+import { FlexFloat } from "../../FlexFloat";
 import classes from "./navbar.module.scss";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
 import MobileDropdown from "./navbar_components/MobileDropdown";
@@ -53,11 +54,11 @@ const Navbar = (props: NavbarIF) => {
         </div>
     }
 
-    return <Box height={isDesktop ? "80px" : "60px"} >
+    return <FlexFloat id="navbarRoot" height={isDesktop ? "80px" : "60px"} zIndex="1" >
         {isDesktop
             ? renderDesktopNavbar()
             : renderMobileNavbar()}
-    </Box>
+    </FlexFloat>
 }
 
 export default Navbar

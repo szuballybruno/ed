@@ -1,22 +1,21 @@
 import { Flex } from "@chakra-ui/react";
-import { Typography } from "@material-ui/core";
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { globalConfig } from "../../configuration/config";
 import { getQueryParam, usePaging } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
+import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";
 import { useNavigation } from "../../services/navigatior";
 import { showNotification } from "../../services/notifications";
 import { useSaveSignupQuestionnaireAnswers, useSignupData } from "../../services/signupService";
 import { finalizeUserRegistartionAsync } from "../../services/userManagementService";
+import { ExamQuestionSlides } from "../exam/ExamQuestionSlides";
 import AllNavbar from "../universal/navigation/navbar/AllNavbar";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
-import { LinearProgressWithLabel } from "./ProgressIndicator";
 import { SignupForm } from "./SignupForm";
 import { useRegistrationFinalizationFormState } from "./SignupFormLogic";
 import classes from "./signupPage.module.scss";
-import { SignupRadioGroup } from "./SignupRadioGroup";
 import { SignupWrapper } from "./SignupWrapper";
 
 const images = [
@@ -34,8 +33,9 @@ export const SignupPage = () => {
 
     // input
     const invitaionToken = getQueryParam("token");
-    const { signupData, signupDataError, signupDataStatus } = useSignupData(invitaionToken);
+    const { signupData, signupDataError, signupDataStatus, refetchSignupData } = useSignupData(invitaionToken);
     const questions = signupData?.questions ?? [];
+    const questionAnswers = signupData?.questionAnswers ?? [];
 
     // util
     const { navigate } = useNavigation();
@@ -47,27 +47,8 @@ export const SignupPage = () => {
     const finalizeImageUrl = images[7];
     const slidesState = usePaging([1, 2, 3, 4]);
 
-    // questionnaire 
-    const questionnaireState = usePaging(questions, () => slidesState.previous(), () => slidesState.next());
-    const currentQuestion = questionnaireState.currentItem;
-    const questionnaireProgressbarValue = (questionnaireState.currentIndex / questions.length) * 100;
-    const questionnaireProgressLabel = `${questionnaireState.currentIndex + 1}/${questions.length}`;
-
-    // question answers
-    const [questionAnswers, setQuestionAnswers] = useState<QuestionAnswerDTO[]>([]);
-    const currentQuestionSelectedAnswerId = questionAnswers
-        .filter(x => x.questionId == currentQuestion.questionId)[0]?.answerId as number | null;
-
     // save questionnaire answers
-    const { saveAnswers, saveAnswersError, saveAnswersStatus } = useSaveSignupQuestionnaireAnswers();
-
-    useEffect(() => {
-
-        if (signupData) {
-
-            setQuestionAnswers(signupData.questionAnswers ?? []);
-        }
-    }, [signupDataStatus]);
+    const { saveAnswersAsync, saveAnswersError, saveAnswersStatus } = useSaveSignupQuestionnaireAnswers();
 
     const submitFinalizationRequestAsync = async () => {
 
@@ -92,24 +73,15 @@ export const SignupPage = () => {
         }
     }
 
-    const handleAnswerSelectedAsync = async (answerId: number) => {
+    const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
 
-        // save answer
-        const newAnswers = [
-            ...questionAnswers
-                .filter(x => x.questionId != currentQuestion.questionId),
-            {
-                answerId: answerId,
-                questionId: currentQuestion.questionId
-            } as QuestionAnswerDTO
-        ];
-        setQuestionAnswers(newAnswers);
+        const dto = {
+            invitationToken: invitaionToken,
+            questionAnswer: questionAnswer
+        } as SaveQuestionAnswerDTO;
 
         // save answers 
-        await saveAnswers(newAnswers, invitaionToken);
-
-        // go to next question
-        questionnaireState.next();
+        await saveAnswersAsync(dto);
     }
 
     const GreetSlide = () => <SignupWrapper
@@ -121,19 +93,13 @@ export const SignupPage = () => {
         nextButtonTitle="Kezdés">
     </SignupWrapper>
 
-    const QuestionnaireSlide = () => <SignupWrapper
-        title={currentQuestion.questionText}
-        nextButtonTitle="Kovetkezo"
-        onNavPrevious={() => questionnaireState.previous()}
-        onNext={currentQuestionSelectedAnswerId ? questionnaireState.next : undefined}
-        currentImage={currentQuestion.imageUrl!}
-        bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
-        upperComponent={<Typography>{questionnaireProgressLabel}</Typography>}>
-        <SignupRadioGroup
-            answers={currentQuestion.answers}
-            onAnswerSelected={x => handleAnswerSelectedAsync(x)}
-            selectedAnswerId={currentQuestionSelectedAnswerId} />
-    </SignupWrapper>
+    const QuestionnaireSlide = () => <ExamQuestionSlides
+        saveAnswer={handleSaveSelectedAnswerAsync}
+        refetchData={refetchSignupData}
+        onNextOverNavigation={slidesState.previous}
+        onPrevoiusOverNavigation={slidesState.next}
+        questionAnswers={questionAnswers}
+        questions={questions} />
 
     const SummarySlide = () => <SignupWrapper
         title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}

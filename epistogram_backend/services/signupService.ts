@@ -8,7 +8,7 @@ import { TypedError } from "../utilities/helpers";
 import { verifyJWTToken } from "./misc/jwtGen";
 import { getQuestionAnswersAsync, getStartupQuestionsAsync } from "./questionService";
 
-export const saveSignupQuestionnaireAnswersAsync = async (invitationToken: string, answers: QuestionAnswerDTO[]) => {
+export const saveSignupQuestionAnswerAsync = async (invitationToken: string, questionAnswer: QuestionAnswerDTO) => {
 
     const userId = await verifyInvitationTokenAsync(invitationToken);
 
@@ -16,33 +16,20 @@ export const saveSignupQuestionnaireAnswersAsync = async (invitationToken: strin
         .ormConnection
         .getRepository(QuestionAnswer);
 
-    // delete previous answers
-    const questionIds = answers.map(x => x.questionId);
-
-    const qas = await repo
+    const qa = await repo
         .createQueryBuilder("qa")
         .where("qa.userId = :userId ", { userId })
-        .andWhere("qa.questionId IN (:...questionIds)", { questionIds })
+        .andWhere("qa.questionId = :questionId", { questionId: questionAnswer.questionId })
+        .andWhere("qa.answerId = :answerId", { answerId: questionAnswer.answerId })
         .select("qa.id")
-        .getMany();
+        .getOne();
 
-    if (qas.length > 0)
-        await repo
-            .createQueryBuilder()
-            .delete()
-            .from(QuestionAnswer)
-            .where("id IN (:...ids)", { ids: qas.map(x => x.id) })
-            .execute();
-
-    // insert new answers
-    const questionAnswers = answers
-        .map(x => ({
-            answerId: x.answerId,
-            questionId: x.questionId,
-            userId: userId
-        } as QuestionAnswer))
-
-    await repo.save(questionAnswers);
+    await repo.save({
+        id: qa?.id,
+        answerId: questionAnswer.answerId,
+        questionId: questionAnswer.questionId,
+        userId: userId
+    });
 }
 
 export const getSignupDataAsync = async (invitationToken: string) => {

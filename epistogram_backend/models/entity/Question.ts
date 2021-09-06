@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Answer } from "./Answer";
+import { Exam } from "./Exam";
 import { QuestionAnswer } from "./QuestionAnswer";
 import { Video } from "./Video";
 
@@ -38,4 +39,12 @@ export class Question {
     @ManyToOne(() => Video, v => v.questions)
     @JoinColumn({ name: "videoId" })
     video: Video;
+
+    // exam 
+    @Column({ nullable: true })
+    examId: number | null;
+
+    @ManyToOne(_ => Exam, e => e.questions)
+    @JoinColumn({ name: "examId" })
+    exam: Exam | null;
 }

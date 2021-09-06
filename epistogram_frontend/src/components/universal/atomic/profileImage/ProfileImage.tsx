@@ -1,5 +1,5 @@
 import React from 'react';
-import { globalConfig } from "../../../../configuration/config";
+import { getStaticAssetUrl } from '../../../../frontendHelpers';
 import classes from "./profileImage.module.scss";
 
 const ProfileImage = (props: { imageUrl: string | null }) => {
@@ -11,7 +11,7 @@ const ProfileImage = (props: { imageUrl: string | null }) => {
     //     hiddenFileInput.current.click();
     // }
 
-    const defaultImage = `${globalConfig.gcpUrl}/images/defaultAvatar.png`;
+    const defaultImage = getStaticAssetUrl("/images/defaultAvatar.png");
 
     return (
         <div className={classes.profileImageWrapper}>

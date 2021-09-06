@@ -1,10 +1,10 @@
 import { Request } from "express";
-import { SaveQuestionnaireAnswersDTO } from "../models/shared_models/SaveQuestionnaireAnswersDTO";
+import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
 import { getEditedCourseAsync, getEditedVideoAsync } from "../services/courseManagementService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
-import { getSignupDataAsync, saveSignupQuestionnaireAnswersAsync } from "../services/signupService";
+import { getSignupDataAsync, saveSignupQuestionAnswerAsync } from "../services/signupService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
 export const getEditedVideoAction = async (req: Request) => {
@@ -50,13 +50,13 @@ export const getSignupDataAction = getAsyncActionHandler((req: Request) => {
     return getSignupDataAsync(token);
 });
 
-export const saveSignupQuestionnaireAnswersAction = getAsyncActionHandler((req: Request) => {
+export const saveSignupQuestionAnswerAction = getAsyncActionHandler((req: Request) => {
 
-    const dto = withValueOrBadRequest(req.body) as SaveQuestionnaireAnswersDTO;
+    const dto = withValueOrBadRequest(req.body) as SaveQuestionAnswerDTO;
     const token = withValueOrBadRequest(dto.invitationToken);
-    const answers = withValueOrBadRequest(dto.answers);
+    const questionAnswer = withValueOrBadRequest(dto.questionAnswer);
 
-    return saveSignupQuestionnaireAnswersAsync(token, answers);
+    return saveSignupQuestionAnswerAsync(token, questionAnswer);
 });
 
 // export const uploadCourseImage = (req: Request, res: Response, next: NextFunction) => {

@@ -1,16 +1,10 @@
-import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
 import { Video } from "../models/entity/Video";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
-import { TypedError } from "../utilities/helpers";
-import { getCourseItemAsync, getCourseItemDTOsAsync, getCurrentCourseItemDescriptor } from "./courseService";
-import { toExamDTO, toVideoDTO } from "./mappings";
-import { getUserById } from "./userService";
-import { getVideoByIdAsync } from "./videoService";
-
-
+import { getCourseItemAsync, getCourseItemDTOsAsync, getExamDTOAsync } from "./courseService";
+import { toVideoDTO } from "./mappings";
 
 export const getCurrentVideoAsync = async (userId: number, videoId: number) => {
 
@@ -36,7 +30,7 @@ export const getPlayerDataAsync = async (
     // get course item
     const currentCourseItem = await getCourseItemAsync({ itemId: courseItemId, itemType: courseItemType });
     const videoDTO = courseItemType == "video" ? toVideoDTO(currentCourseItem as Video) : null;
-    const examDTO = courseItemType == "exam" ? toExamDTO(currentCourseItem as Exam) : null;
+    const examDTO = courseItemType == "exam" ? await getExamDTOAsync(userId, courseItemId) : null;
 
     // set current course item
     await staticProvider

@@ -1,17 +1,18 @@
-import { Box } from "@chakra-ui/react";
-import React from 'react';
+import { Box, Flex } from "@chakra-ui/react";
+import React, { useState } from 'react';
 import { useParams } from "react-router";
 import menuItems from "../../configuration/menuItems.json";
 import { getQueryParam, useIsDesktopView } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
-import { MainWrapper } from "../../HOC/MainPanels";
+import { ContentWrapper, MainWrapper } from "../../HOC/MainPanels";
 import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
 import { useNavigation } from "../../services/navigatior";
 import { useDialog } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
+import { FlexFloat } from "../universal/FlexFloat";
 import Navbar from "../universal/navigation/navbar/AllNavbar";
 import { CourseItemSelector } from "./CourseItemSelector";
-import { Exam } from "./Exam";
+import { ExamPlayer } from "./ExamPlayer";
 import classes from './playerMain.module.scss';
 import { WatchView } from "./WatchView";
 
@@ -22,12 +23,18 @@ export const PlayerPage = () => {
     const { id: courseItemString } = useParams<{ id: string }>();
     const courseItemType = getQueryParam("type") as CourseItemType;
     const courseItemId = parseInt(courseItemString);
-    const exam = courseItemType == "exam" ? {} : null;
+    const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
     // get player page data
-    const { playerData, playerDataStatus, playerDataError } = usePlayerData(courseItemId, courseItemType);
+    const {
+        playerData,
+        playerDataStatus,
+        playerDataError,
+        refetchPlayerData
+    } = usePlayerData(courseItemId, courseItemType);
     const courseItems = playerData?.courseItems ?? [];
     const video = playerData?.video;
+    const exam = playerData?.exam;
 
     const navigateToCourseItem = (courseItemId: number, courseItemType: CourseItemType) => {
 
@@ -56,7 +63,7 @@ export const PlayerPage = () => {
                 loadingState={[playerDataStatus]}
                 error={[playerDataError]}>
 
-                <div className={classes.playerAndVideoListWrapper}>
+                <ContentWrapper>
 
                     {/* main column */}
                     <Box id="mainColumn" className={classes.playerContentWrapper} >
@@ -66,15 +73,27 @@ export const PlayerPage = () => {
                             courseItems={courseItems}
                             navigateToCourseItem={navigateToCourseItem} />}
 
-                        {exam && <Exam />}
+                        {exam && <ExamPlayer
+                            setIsExamStarted={isExamStarted => setIsSidebarHidden(isExamStarted)}
+                            exam={exam}
+                            refetchData={refetchPlayerData} />}
                     </Box>
 
                     {/* right sidebar */}
-                    <Box>
+                    <FlexFloat
+                        id="courseItemListSidebar"
+                        justify="flex-start"
+                        height="100%"
+                        bg="white"
+                        pl="15px"
+                        width={isSidebarHidden ? "0px" : "500px"}
+                        transition="0.5s"
+                        overflow="hidden">
+
                         {isDesktopView && <CourseItemSelector
                             courseItems={courseItems} />}
-                    </Box>
-                </div>
+                    </FlexFloat>
+                </ContentWrapper>
             </LoadingFrame>
         </MainWrapper >
     )
