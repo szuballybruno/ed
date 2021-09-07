@@ -1,5 +1,5 @@
 import React from 'react';
-import { MenuItemsType, MenuItemType } from '../AllNavbar';
+import { MenuItemsType, MenuItemType } from '../Navbar';
 import classes from './menuItemList.module.scss';
 import NavbarButton from "./NavbarButton";
 

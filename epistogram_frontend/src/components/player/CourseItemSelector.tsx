@@ -1,18 +1,12 @@
-import { Box } from "@chakra-ui/react";
 import { Slider } from "@material-ui/core";
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { CourseItemList } from "../universal/CourseItemList";
-import { FlexFloat } from "../universal/FlexFloat";
 import classes from './videoList.module.scss';
 
 export const CourseItemSelector = (props: { courseItems: CourseItemDTO[] }) => {
 
-    return <Box
-        if="courseItemSelectorRoot"
-        width="350px"
-        minWidth="350px"
-        pl="15px">
+    return <>
 
         {/* learning type selector */}
         <div className={classes.learningTypeSelector}>
@@ -39,5 +33,5 @@ export const CourseItemSelector = (props: { courseItems: CourseItemDTO[] }) => {
         </div>
 
         <CourseItemList courseItems={props.courseItems}></CourseItemList>
-    </Box>
+    </>
 }

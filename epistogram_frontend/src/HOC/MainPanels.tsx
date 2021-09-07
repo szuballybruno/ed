@@ -1,45 +1,40 @@
 import { Box, Flex } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
+import { FlexFloat } from '../components/universal/FlexFloat';
 import classes from './mainPanels.module.scss'
 
 export const MainWrapper = (props: { children: ReactNode }) => {
 
-    return <Flex id="mainWrapper" direction="column" height="100%" width="100%">
+    return <Flex id="mainWrapper" direction="column" height="100%" width="100%" overflow="hidden">
         {props.children}
     </Flex>
 };
-
-// export const ContentWrapper = ({ children }: { children?: ReactNode }) => {
-//     return (
-//         <div className={classes.contentWrapper} style={{ background: "red" }}>
-//             {children}
-//         </div>
-//     ) as unknown as JSX.Element;
-// };
 
 export const ContentWrapper = (props: { children: ReactNode }) => {
-    return <Flex id="contentWrapper" height="100%" overflow="hidden">
+    return <Flex id="contentWrapper" height="100%" >
         {props.children}
     </Flex>
 };
 
-export const LeftPanel = ({ children }: { children?: ReactNode }) => {
+export const LeftPanel = (props: { children: ReactNode }) => {
     return (
-        <Flex
+        <FlexFloat
             id="leftPanel"
-            bg="#f2f2f2"
+            bg="white"
             flexDirection="column"
+            zIndex={1}
             flexBasis="400px" >
+
             <Box flex="1">
                 <Flex
                     direction="column"
                     align="center"
                     justify="flex-start"
                     borderLeft="2px solid #e2e2e2">
-                    {children}
+                    {props.children}
                 </Flex>
             </Box>
-        </Flex >
+        </FlexFloat >
     );
 };
 

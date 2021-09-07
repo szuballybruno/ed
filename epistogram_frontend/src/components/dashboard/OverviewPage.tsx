@@ -7,7 +7,7 @@ import { useOverviewPageDTO } from "../../services/dataService";
 import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import ListItem from "../universal/atomic/listItem/ListItem";
 import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
-import Navbar from "../universal/navigation/navbar/AllNavbar";
+import Navbar from "../universal/navigation/navbar/Navbar";
 import { DashBoardRightSpacer, DashboardVerticalDivider, DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
 import { OverviewDashboard } from "./dashboard_components/OverviewDashboard/OverviewDashboard";
 import ProfileStats from "./dashboard_components/ProfileStats/ProfileStats";
@@ -42,7 +42,7 @@ const OverviewPage = () => {
 
         <Navbar />
 
-        <LoadingFrame loadingState={status} error={error}>
+        <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
             <ContentWrapper>
                 <LeftPanel>
                     <Grid>

@@ -190,8 +190,6 @@ export const VideoPlayer = (props: {
         <Box
             id="fullScreenRoot"
             position="relative"
-            height="100%"
-            width="100%"
             p="6px"
             ref={playerContainerRef}>
 

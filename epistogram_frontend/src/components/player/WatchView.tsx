@@ -170,7 +170,7 @@ export const WatchView = (props: {
             {!isDesktopView && <CourseItemSelector
                 courseItems={courseItems} />}
 
-            <Flex justify="space-between" padding="20px">
+            <Flex id="titleAndSegmentedButtonFlex" justify="space-between" padding="20px" flexWrap="wrap">
                 <Typography variant={"h4"}>{video!.title}</Typography>
                 <SegmentedButton paging={descCommentPaging}></SegmentedButton>
             </Flex>

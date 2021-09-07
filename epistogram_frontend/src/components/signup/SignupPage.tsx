@@ -11,7 +11,7 @@ import { showNotification } from "../../services/notifications";
 import { useAnswerSignupQuestion, useSignupData } from "../../services/signupService";
 import { finalizeUserRegistartionAsync } from "../../services/userManagementService";
 import { QuestionSlides } from "../exam/QuestionSlides";
-import Navbar from "../universal/navigation/navbar/AllNavbar";
+import Navbar from "../universal/navigation/navbar/Navbar";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupForm } from "./SignupForm";
 import { useRegistrationFinalizationFormState } from "./SignupFormLogic";

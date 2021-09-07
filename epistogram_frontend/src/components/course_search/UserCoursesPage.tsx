@@ -7,7 +7,7 @@ import { GetUserCoursesDTO } from "../../models/shared_models/GetUserCoursesDTO"
 import { useUserCourses } from "../../services/courseService";
 import { AdminDashboardSearch } from "../administration/universal/searchBar/AdminDashboardSearch";
 import CourseTile from "../universal/atomic/courseTile/CourseTile";
-import Navbar from "../universal/navigation/navbar/AllNavbar";
+import Navbar from "../universal/navigation/navbar/Navbar";
 import classes from "./courseSearchMain.module.scss";
 
 const UserCoursesPage = () => {

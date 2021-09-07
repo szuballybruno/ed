@@ -3,7 +3,7 @@ import { PlayArrow } from "@material-ui/icons";
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import { getStaticAssetUrl } from "../../../../../frontendHelpers";
-import { MenuItemsType } from "../AllNavbar";
+import { MenuItemsType } from "../Navbar";
 import classes from "./desktopNavbar.module.scss";
 import MenuItemList from "./MenuItemList";
 
@@ -46,12 +46,14 @@ const DesktopNavbar = (props: { menuItems: MenuItemsType, hideLinks: boolean }) 
 
                     {/* continue watching  */}
                     <NavLink to={currentVideoWatchUrl}>
-                        <Button variant={"outlined"}
+                        <Button
+                            variant={"outlined"}
                             size={"large"}
                             onClick={() => {
 
                             }}
-                            className={classes.playButton}>
+                            className={classes.playButton}
+                            style={{ color: "white" }}>
                             <PlayArrow />
                         </Button>
                     </NavLink>

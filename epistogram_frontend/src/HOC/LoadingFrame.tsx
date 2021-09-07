@@ -9,18 +9,20 @@ import { LoadingStateType } from "../models/types";
 
 export const LoadingFrame = (props: BoxProps & {
     loadingState: LoadingStateType | LoadingStateType[],
-    error?: any | any[]
+    error?: any | any[],
+    onlyRenderIfLoaded?: boolean
 }) => {
 
-    const { loadingState, error, ...rootProps } = props;
+    const { loadingState, error, onlyRenderIfLoaded, ...rootProps } = props;
     const singleError = getError(error);
     const state = getLoadingState(loadingState);
     const showOverlay = state == "error" || state == "loading";
+    const renderContent = onlyRenderIfLoaded ? !showOverlay : true;
 
     return <Flex id="loadigFrameRoot" position="relative" width="100%" height="100%" flex="1" {...rootProps}>
 
         {/* content */}
-        {props.children}
+        {renderContent && props.children}
 
         {/* overlay */}
         {showOverlay && <Flex

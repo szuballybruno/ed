@@ -10,7 +10,7 @@ import { useNavigation } from "../../services/navigatior";
 import { useDialog } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
 import { FlexFloat } from "../universal/FlexFloat";
-import Navbar from "../universal/navigation/navbar/AllNavbar";
+import Navbar from "../universal/navigation/navbar/Navbar";
 import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
 import classes from './playerMain.module.scss';
@@ -62,7 +62,7 @@ export const PlayerPage = () => {
                     error={[playerDataError]}>
 
                     {/* main column */}
-                    <Box id="mainColumn" height="100%" width="100%">
+                    <Box id="mainColumn" overflowY="scroll" height="100%" width="100%">
 
                         {video && <WatchView
                             video={video}
@@ -84,8 +84,13 @@ export const PlayerPage = () => {
                         opacity={isSidebarHidden ? 0 : 1}
                         transition="0.5s">
 
-                        {isDesktopView && <CourseItemSelector
-                            courseItems={courseItems} />}
+                        {isDesktopView && <Box
+                            id="courseItemSelectorRoot"
+                            width="350px"
+                            minWidth="350px"
+                            pl="15px">
+                            <CourseItemSelector courseItems={courseItems} />
+                        </Box>}
                     </FlexFloat>
                 </LoadingFrame>
             </ContentWrapper>

@@ -5,7 +5,7 @@ import { globalConfig } from "../../configuration/config";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
 import { AdministrationRouting } from "../../routing/AdministrationRouting";
 import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
-import Navbar from "../universal/navigation/navbar/AllNavbar";
+import Navbar from "../universal/navigation/navbar/Navbar";
 import { AdminAddHeader } from "./universal/adminAddHeader/AdminAddHeader";
 import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
 import { SaveBar } from "./universal/saveBar/SaveBar";
