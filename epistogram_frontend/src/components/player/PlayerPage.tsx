@@ -66,6 +66,7 @@ export const PlayerPage = () => {
                     <Box id="mainColumn" overflowY="scroll" height="100%" width="100%">
 
                         {video && <WatchView
+                            answerSessionId={answerSessionId!}
                             video={video}
                             courseItems={courseItems}
                             navigateToCourseItem={navigateToCourseItem} />}

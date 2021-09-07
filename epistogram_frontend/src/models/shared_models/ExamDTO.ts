@@ -7,8 +7,5 @@ export type ExamDTO = {
     title: string;
     type: "exam";
     thumbnailUrl: string;
-
     questions: QuestionDTO[];
-
-    questionAnswers: QuestionAnswerDTO[];
 }

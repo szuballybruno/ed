@@ -21,12 +21,20 @@ export const getCourseItemDTOsAsync = async (userId: number) => {
         .getRepository(Course)
         .createQueryBuilder("c")
         .where("c.id = :courseId", { courseId: currentCourseItem.courseId })
+
+        // videos
         .leftJoinAndSelect("c.videos", "v")
         .leftJoinAndSelect("v.questions", "vq")
-        .leftJoinAndSelect("v.answerSessions", "as")
-        .leftJoinAndSelect("as.questionAnswers", "asqa")
-        .leftJoinAndSelect("asqa.answer", "asqaa")
+        .leftJoinAndSelect("v.answerSessions", "vas")
+        .leftJoinAndSelect("vas.questionAnswers", "vasqa")
+        .leftJoinAndSelect("vasqa.answer", "vasqaa")
+
+        // exams 
         .leftJoinAndSelect("c.exams", "e")
+        .leftJoinAndSelect("e.questions", "eq")
+        .leftJoinAndSelect("e.answerSessions", "eas")
+        .leftJoinAndSelect("eas.questionAnswers", "easqa")
+        .leftJoinAndSelect("easqa.answer", "easqaa")
         .getOneOrFail();
 
     return toCourseItemDTOs(course, currentCourseItemDesc);

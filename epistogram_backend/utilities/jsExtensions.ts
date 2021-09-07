@@ -33,7 +33,7 @@ Array.prototype.findLastIndex = function <T>(func: (item: T) => boolean) {
     if (filtered.length == 0)
         return null;
 
-    return filtered[filtered.length - 1];
+    return filtered.length - 1;
 }
 
 Array.prototype.all = function <T>(func: (item: T) => boolean) {

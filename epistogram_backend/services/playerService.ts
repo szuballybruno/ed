@@ -51,7 +51,7 @@ export const getPlayerDataAsync = async (
     const courseItemDTOs = await getCourseItemDTOsAsync(currentCourseItem.courseId);
 
     // get new answer session
-    const answerSessionId = await createAnswerSessionAsync(userId, videoId, examId);
+    const answerSessionId = await createAnswerSessionAsync(userId, examId, videoId);
 
     return {
         courseItems: courseItemDTOs,

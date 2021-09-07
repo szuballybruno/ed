@@ -6,6 +6,8 @@ import React from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
 import { FlexImage } from "./FlexImage";
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import DoneIcon from '@material-ui/icons/Done';
 
 export type NavigateToCourseItemActionType = (courseItemId: number, courseItemType: CourseItemType) => void;
 
@@ -39,7 +41,9 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
 
         <Flex align="center" justify="center" flexBasis="50px">
             {state === "current" && <VisibilityIcon style={{ color: "var(--background-18)" }} />}
-            {state !== "current" && <LockIcon style={{ color: "grey" }} />}
+            {state === "locked" && <LockIcon style={{ color: "grey" }} />}
+            {state === "available" && <LockOpenIcon style={{ color: "var(--mildGreen)" }} />}
+            {state === "completed" && <DoneIcon style={{ color: "var(--mildGreen)" }} />}
         </Flex>
     </Flex>
 }

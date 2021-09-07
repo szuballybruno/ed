@@ -74,18 +74,26 @@ export const respond = (res: Response, code: number, data?: any) => {
     }
 }
 
+export const hasValue = (obj: any) => {
+
+    if (obj === "")
+        return false;
+
+    if (obj === undefined)
+        return false;
+
+    if (obj === null)
+        return false;
+
+    return true;
+}
+
 export const withValue = (obj: any, errorFunc?: () => void) => {
 
     if (!errorFunc)
         errorFunc = () => { throw new Error("Object has no value!"); };
 
-    if (obj === "")
-        errorFunc();
-
-    if (obj === undefined)
-        errorFunc();
-
-    if (obj === null)
+    if (!hasValue(obj))
         errorFunc();
 
     return obj;

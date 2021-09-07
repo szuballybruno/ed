@@ -26,7 +26,7 @@ import { CourseItemState, CourseItemType } from "../models/shared_models/types/s
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { staticProvider } from "../staticProvider";
-import { navPropNotNull } from "../utilities/helpers";
+import { hasValue, navPropNotNull, throwNotImplemented, withValue } from "../utilities/helpers";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
 export const toUserDTO = (user: User) => {
@@ -108,16 +108,24 @@ export const toCourseItemDTOs = (
     // map exam items
     const examItems = course
         .exams
-        .map(x => {
+        .map(exam => {
 
-            const state = getExamState(x.questions, x.answerSessions);
-            return toCourseItemDTO(x, state, false);
+            navPropNotNull(exam.questions);
+            navPropNotNull(exam.answerSessions);
+
+            return toCourseItemDTO(exam, getCourseItemState(exam.questions, exam.answerSessions), false);
         });
 
     // map video items
     const videoItems = course
         .videos
-        .map(x => toCourseItemDTO(x, getExamState(x.questions, x.quesitonAnswers), true));
+        .map(video => {
+
+            navPropNotNull(video.questions);
+            navPropNotNull(video.answerSessions);
+
+            return toCourseItemDTO(video, getCourseItemState(video.questions, video.answerSessions), true);
+        });
 
     // concat to one ordered list
     const itemsOrdered = examItems
@@ -132,8 +140,8 @@ export const toCourseItemDTOs = (
     // if there is a last non-locked, 
     // and it's not the last in the list
     // set it to available 
-    if (lastNonLockedItemIndex && lastNonLockedItemIndex + 1 != itemsOrdered.length)
-        itemsOrdered[lastNonLockedItemIndex].state = "available";
+    if (hasValue(lastNonLockedItemIndex) && lastNonLockedItemIndex! + 1 != itemsOrdered.length)
+        itemsOrdered[lastNonLockedItemIndex! + 1].state = "available";
 
     // set current item's state to 'current'
     const currentItem = itemsOrdered
@@ -145,7 +153,7 @@ export const toCourseItemDTOs = (
     return itemsOrdered;
 }
 
-const getExamState = (
+const getCourseItemState = (
     questions: Question[],
     answerSessions: AnswerSession[]): CourseItemState => {
 
@@ -168,7 +176,7 @@ const getExamState = (
         });
 
     if (isAnyCompletedAnswerSession)
-        return "available";
+        return "completed";
 
     return "locked";
 }
@@ -300,19 +308,21 @@ export const toEditListItemDTO = (id: number, name: string, checked: boolean) =>
 
 export const toEditCourseItemsDTO = (course: Course) => {
 
-    const examItems = course
-        .exams
-        .map(x => toCourseItemDTO(x, false));
+    // const examItems = course
+    //     .exams
+    //     .map(x => toCourseItemDTO(x, false));
 
-    const videoItems = course
-        .videos
-        .map(x => toCourseItemDTO(x, true));
+    // const videoItems = course
+    //     .videos
+    //     .map(x => toCourseItemDTO(x, true));
 
-    const itemsCombined = examItems
-        .concat(videoItems);
+    // const itemsCombined = examItems
+    //     .concat(videoItems);
 
-    const itemsOrdered = itemsCombined
-        .orderBy(x => x.orderIndex);
+    // const itemsOrdered = itemsCombined
+    //     .orderBy(x => x.orderIndex);
 
-    return itemsOrdered as CourseItemDTO[];
+    // return itemsOrdered as CourseItemDTO[];
+    throwNotImplemented();
+    return [] as CourseItemDTO[];
 }
