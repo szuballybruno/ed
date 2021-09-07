@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import classes from "./editCourse.module.scss"
-import {Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography} from "@material-ui/core";
+import { Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography } from "@material-ui/core";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
 import { CourseVideoList } from "./CourseVideoList";
 import { useParams } from "react-router";
@@ -15,8 +15,8 @@ import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from 
 import { useAdminEditedCourse, useUserCourses } from "../../../../services/courseService";
 import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
 import { getChipWithLabel } from "../courseList/CourseList";
-import {ListItemWithRadio} from "../../universal/selectMultiple/components/ListItemWithRadioButton/ListItemWithRadioButton";
-import {SelectMultiple} from "../../universal/selectMultiple/SelectMultiple";
+import { ListItemWithRadio } from "../../universal/selectMultiple/components/ListItemWithRadioButton/ListItemWithRadioButton";
+import { SelectMultiple } from "../../universal/selectMultiple/SelectMultiple";
 
 /* TODO:
 *   - onClick for save changes button
@@ -93,7 +93,7 @@ export const EditCourse = () => {
                                         <Checkbox checked={item.checked} />
                                         <Typography>{item.name}</Typography>
                                     </ListItem>
-                                    <Divider style={{width: "100%"}} />
+                                    <Divider style={{ width: "100%" }} />
                                 </div>
                             )}
 
@@ -111,7 +111,7 @@ export const EditCourse = () => {
                                         <Radio checked={item.checked} />
                                         <Typography>{item.name}</Typography>
                                     </ListItem>
-                                    <Divider style={{width: "100%"}} />
+                                    <Divider style={{ width: "100%" }} />
                                 </div>
                             )}
 
@@ -128,7 +128,7 @@ export const EditCourse = () => {
                                         <Checkbox checked={item.checked} />
                                         <Typography>{item.name}</Typography>
                                     </ListItem>
-                                    <Divider style={{width: "100%"}} />
+                                    <Divider style={{ width: "100%" }} />
                                 </div>
                             )}
 
@@ -145,7 +145,7 @@ export const EditCourse = () => {
                                         <Checkbox checked={item.checked} />
                                         <Typography>{item.name}</Typography>
                                     </ListItem>
-                                    <Divider style={{width: "100%"}} />
+                                    <Divider style={{ width: "100%" }} />
                                 </div>
                             )}
 
@@ -181,14 +181,14 @@ export const EditCourse = () => {
             width: "100%"
         }} />
 
-        <div className={classes.editVideosWrapper}>
+        {/* <div className={classes.editVideosWrapper}>
             <AdminDashboardSearch searchChangeHandler={() => { }} name={"searchData"} title={"A kurzus tartalma"} />
             {course?.courseItems.map((item, index) => <AdministrationListItem title={item.title} thumbnailUrl={item.thumbnailUrl} chips={[
                 getChipWithLabel(index, item.type, "category"),
                 getChipWithLabel(index, "item.length", "person"),
                 getChipWithLabel(index, "item.isEssential", "video")
             ]} searchItemButtons={[]} />)}
-        </div>
+        </div> */}
 
         <AdminDashboardHeader titleText={""} />
 

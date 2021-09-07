@@ -5,7 +5,7 @@ import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction } from './api/dataActions';
+import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCourses';
@@ -90,6 +90,7 @@ const initializeAsync = async () => {
 
     // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
+    expressServer.get('/get-current-course-item-code', authMiddleware, getCurrentCourseItemCode);
 
     // file
     expressServer.post('/file/upload-video', authMiddleware, uploadVideoFileAction);

@@ -8,13 +8,17 @@ import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
 import { FlexImage } from "./FlexImage";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import DoneIcon from '@material-ui/icons/Done';
+import { useNavigation } from "../../services/navigatior";
 
-export type NavigateToCourseItemActionType = (courseItemId: number, courseItemType: CourseItemType) => void;
+export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
 
-    const { title, subTitle, thumbnailUrl, state } = props.courseItem;
-    const to = "";
+    const { title, subTitle, thumbnailUrl, state, descriptorCode } = props.courseItem;
+    const isLocked = state == "locked";
+    const { navigateToPlayer } = useNavigation();
+
+    const navigate = () => navigateToPlayer(descriptorCode);
 
     return <Flex
         id="courseItemRoot"
@@ -22,6 +26,8 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
         cursor="pointer"
         align="stretch"
         p="10px"
+        pointerEvents={isLocked ? "none" : "all"}
+        onClick={navigate}
         borderBottom="1px solid #eaeaea">
 
         <FlexImage url={thumbnailUrl} flexBasis="50px"></FlexImage>

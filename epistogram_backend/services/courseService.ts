@@ -1,20 +1,30 @@
 import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
-import { QuestionAnswer } from "../models/entity/QuestionAnswer";
 import { User } from "../models/entity/User";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
+import { getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { toCourseItemDTOs, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
 import { getVideoByIdAsync } from "./videoService";
+
+export const getCurrentCourseItemDescriptorCode = async (userId: number) => {
+
+    const user = await getUserById(userId);
+    const dsc = getCurrentCourseItemDescriptor(user);
+    if (!dsc)
+        return null;
+
+    return getCourseItemDescriptorCodeFromDTO(dsc);
+}
 
 export const getCourseItemDTOsAsync = async (userId: number) => {
 
     const user = await getUserById(userId);
     const currentCourseItemDesc = getCurrentCourseItemDescriptor(user);
-    const currentCourseItem = await getCourseItemAsync(currentCourseItemDesc);
+    const currentCourseItem = await getCourseItemAsync(currentCourseItemDesc!);
 
     const course = await staticProvider
         .ormConnection
@@ -37,7 +47,7 @@ export const getCourseItemDTOsAsync = async (userId: number) => {
         .leftJoinAndSelect("easqa.answer", "easqaa")
         .getOneOrFail();
 
-    return toCourseItemDTOs(course, currentCourseItemDesc);
+    return toCourseItemDTOs(course, currentCourseItemDesc!);
 }
 
 export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {
@@ -63,6 +73,9 @@ export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) =>
 export const getCurrentCourseItemDescriptor = (user: User) => {
 
     const currentCourseItemId = user.currentVideoId || user.currentExamId;
+    if (!currentCourseItemId)
+        return null;
+
     const currentCourseItemType = user.currentVideoId ? "video" as CourseItemType : "exam" as CourseItemType;
 
     return {

@@ -1,7 +1,16 @@
 import Cookies from "universal-cookie";
-import { useReactQuery } from "../frontendHelpers";
+import { hasValue, useReactQuery } from "../frontendHelpers";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { httpGetAsync } from "./httpClient";
+
+export const useCurrentCourseItemCode = () => {
+
+    const qr = useReactQuery(
+        ["getCurrentCourseItemCode"],
+        () => httpGetAsync("/get-current-course-item-code"));
+
+    return hasValue(qr.data) ? qr.data as string : null;
+}
 
 export const useUserId = () => {
 

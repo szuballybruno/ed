@@ -20,9 +20,7 @@ export const PlayerPage = () => {
 
     const { showDialog } = useDialog();
     const { navigate, navigateToPlayer } = useNavigation();
-    const { id: courseItemString } = useParams<{ id: string }>();
-    const courseItemType = getQueryParam("type") as CourseItemType;
-    const courseItemId = parseInt(courseItemString);
+    const { descriptorCode } = useParams<{ descriptorCode: string }>();
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
     // get player page data
@@ -31,13 +29,13 @@ export const PlayerPage = () => {
         playerDataStatus,
         playerDataError,
         refetchPlayerData
-    } = usePlayerData(courseItemId, courseItemType);
+    } = usePlayerData(descriptorCode);
     const courseItems = playerData?.courseItems ?? [];
     const video = playerData?.video;
     const exam = playerData?.exam;
     const answerSessionId = playerData?.answerSessionId;
 
-    const navigateToCourseItem = (courseItemId: number, courseItemType: CourseItemType) => {
+    const navigateToCourseItem = (descriptorCode: string) => {
 
         showDialog({
             title: "Biztosan megszakítod a vizsgát?",
@@ -46,7 +44,7 @@ export const PlayerPage = () => {
             secondButtonTitle: "Igen",
         });
 
-        navigateToPlayer(courseItemId, courseItemType);
+        navigateToPlayer(descriptorCode);
     }
 
     const isDesktopView = useIsDesktopView();

@@ -3,14 +3,25 @@ import { PlayArrow } from "@material-ui/icons";
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import { getStaticAssetUrl } from "../../../../../frontendHelpers";
+import { useNavigation } from "../../../../../services/navigatior";
 import { MenuItemsType } from "../Navbar";
 import classes from "./desktopNavbar.module.scss";
 import MenuItemList from "./MenuItemList";
 
-const DesktopNavbar = (props: { menuItems: MenuItemsType, hideLinks: boolean }) => {
+const DesktopNavbar = (props: {
+    currentCourseItemCode: string | null,
+    menuItems: MenuItemsType,
+    hideLinks: boolean
+}) => {
 
-    const currentVideoWatchUrl = ""; // "/watch/" + user.userData.currentCourse._id.get() + "/" + user.userData.currentItem._id.get()
-    const homeUrl = "";
+    const { navigateToPlayer } = useNavigation();
+    const currentCourseItemCode = props.currentCourseItemCode;
+    const continueWatching = () => {
+
+        if (currentCourseItemCode)
+            navigateToPlayer(currentCourseItemCode);
+    }
+    const homeUrl = "/";
 
     return (
         <div className={classes.navbarOuterWrapper}>
@@ -40,23 +51,20 @@ const DesktopNavbar = (props: { menuItems: MenuItemsType, hideLinks: boolean }) 
                         className={classes.showSomethingButton}
                         onClick={() => {
                             // app.modalState.set(true)
-                        }}>
+                        }}
+                        style={{ color: "white" }}>
                         Mutass valamit!
                     </Button>
 
                     {/* continue watching  */}
-                    <NavLink to={currentVideoWatchUrl}>
+                    {currentCourseItemCode &&
                         <Button
                             variant={"outlined"}
                             size={"large"}
-                            onClick={() => {
-
-                            }}
-                            className={classes.playButton}
-                            style={{ color: "white" }}>
+                            onClick={continueWatching}
+                            className={classes.playButton}>
                             <PlayArrow />
-                        </Button>
-                    </NavLink>
+                        </Button>}
 
                     <div style={{
                         width: '50px'

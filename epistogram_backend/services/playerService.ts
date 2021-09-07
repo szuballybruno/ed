@@ -4,6 +4,7 @@ import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { getCourseItemAsync, getCourseItemDTOsAsync, getExamDTOAsync } from "./courseService";
+import { readCourseItemDescriptorCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
 import { createAnswerSessionAsync } from "./questionAnswerService";
 
@@ -25,8 +26,9 @@ export const getCurrentVideoAsync = async (userId: number, videoId: number) => {
 
 export const getPlayerDataAsync = async (
     userId: number,
-    courseItemId: number,
-    courseItemType: CourseItemType) => {
+    descriptorCode: string) => {
+
+    const { itemId: courseItemId, itemType: courseItemType } = readCourseItemDescriptorCode(descriptorCode);
 
     // get course item
     const currentCourseItem = await getCourseItemAsync({ itemId: courseItemId, itemType: courseItemType });

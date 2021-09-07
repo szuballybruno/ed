@@ -19,7 +19,7 @@ export const MainRouting = () => {
         <Route path="/signup" component={withRouter(SignupPage)} />
 
         {/* protected paths */}
-        <ProtectedRoute path="/watch/:id" render={() => <PlayerPage />} />
+        <ProtectedRoute path="/watch/:descriptorCode" render={() => <PlayerPage />} />
         <ProtectedRoute path="/admin" render={() => <Administration />} />
         <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
         <ProtectedRoute path="/kurzusok" render={() => <UserCoursesPage />} />

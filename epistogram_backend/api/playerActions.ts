@@ -7,9 +7,7 @@ import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpe
 export const getPlayerDataAction = getAsyncActionHandler((req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest(req.body) as GetPlayerDataDTO;
-    const courseItemId = withValueOrBadRequest(dto.courseItemId);
-    const courseItemType = withValueOrBadRequest(dto.courseItemType);
+    const descriptorCode = withValueOrBadRequest(req.query.descriptorCode);
 
-    return getPlayerDataAsync(userId, courseItemId, courseItemType);
+    return getPlayerDataAsync(userId, descriptorCode);
 });

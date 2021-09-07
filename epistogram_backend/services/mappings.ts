@@ -27,6 +27,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { staticProvider } from "../staticProvider";
 import { hasValue, navPropNotNull, throwNotImplemented, withValue } from "../utilities/helpers";
+import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
 export const toUserDTO = (user: User) => {
@@ -144,9 +145,9 @@ export const toCourseItemDTOs = (
         itemsOrdered[lastNonLockedItemIndex! + 1].state = "available";
 
     // set current item's state to 'current'
+    const currentItemDescriptorCode = getCourseItemDescriptorCodeFromDTO(currentCourseItemDescriptor);
     const currentItem = itemsOrdered
-        .single(x => x.id === currentCourseItemDescriptor.itemId
-            && x.type === currentCourseItemDescriptor.itemType)
+        .single(item => item.descriptorCode === currentItemDescriptorCode);
 
     currentItem.state = "current";
 
@@ -213,13 +214,12 @@ export const toCourseItemDTO = (item: Video | Exam, state: CourseItemState, isVi
         const video = item as Video;
 
         return {
-            id: video.id,
             subTitle: video.subtitle,
             thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
             title: video.title,
-            type: "video",
             orderIndex: video.orderIndex,
-            state: state
+            state: state,
+            descriptorCode: getCourseItemDescriptorCode(video.id, "video")
         } as CourseItemDTO;
     }
     else {
@@ -227,13 +227,12 @@ export const toCourseItemDTO = (item: Video | Exam, state: CourseItemState, isVi
         const exam = item as Exam;
 
         return {
-            id: exam.id,
             subTitle: exam.subtitle,
             thumbnailUrl: getExamCoverImageUrl(),
             title: exam.title,
-            type: "exam",
             orderIndex: exam.orderIndex,
-            state: state
+            state: state,
+            descriptorCode: getCourseItemDescriptorCode(exam.id, "exam")
         } as CourseItemDTO;
     }
 }

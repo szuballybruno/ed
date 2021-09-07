@@ -31,9 +31,8 @@ const OverviewPage = () => {
     const currentItem = pageDTO?.currentCourseItems
         .filter(x => x.state == "current")[0];
 
-    const currentItemId = currentItem?.id;
     const currentItemThumbnailUrl = currentItem?.thumbnailUrl;
-    const hasCurrentItem = !!currentItemId;
+    const hasCurrentItem = !!currentItem;
     const hasCurrentCourse = hasCurrentItem;
     const courseItems = pageDTO?.currentCourseItems;
     const recommendedCourses = pageDTO?.recommendedCourses;
