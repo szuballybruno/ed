@@ -5,5 +5,9 @@ export const answerExamQuestionAsync = (userId: number, questionAnswerDTO: Quest
 
     // validation comes here 
 
-    return answerQuestionAsync(userId, questionAnswerDTO.questionId, questionAnswerDTO.answerId);
+    return answerQuestionAsync(
+        userId,
+        questionAnswerDTO.answerSessionId,
+        questionAnswerDTO.questionId,
+        questionAnswerDTO.answerId);
 }

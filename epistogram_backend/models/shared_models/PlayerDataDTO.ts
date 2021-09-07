@@ -7,4 +7,5 @@ export type PlayerDataDTO = {
     courseItems: CourseItemDTO[];
     video: VideoDTO | null;
     exam: ExamDTO | null;
+    answerSessionId: number | null
 }

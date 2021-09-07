@@ -7,7 +7,7 @@ import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { StillWatchingDialogMarker } from "../../models/types";
 import { Copyright } from "../universal/footers/copyright/Copyright";
-import { Questionnaire } from "../universal/Questionnaire";
+import { VideoQuestionnaire } from "../universal/VideoQuestionnaire";
 import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
@@ -20,11 +20,12 @@ import { CourseItemSelector } from "./CourseItemSelector";
 
 export const WatchView = (props: {
     video: VideoDTO,
+    answerSessionId: number,
     courseItems: CourseItemDTO[],
     navigateToCourseItem: NavigateToCourseItemActionType
 }) => {
 
-    const { video, courseItems, navigateToCourseItem } = props;
+    const { video, courseItems, navigateToCourseItem, answerSessionId } = props;
     const { questions } = video;
     const isDesktopView = useIsDesktopView();
     const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
@@ -137,7 +138,8 @@ export const WatchView = (props: {
                         setCurrentQuestion(null);
                         enableNewDialogPopups();
                     }}>
-                    <Questionnaire
+                    <VideoQuestionnaire
+                        answerSessionId={answerSessionId}
                         question={currentQuestion!}
                         onAnswered={() => setAnsweredQuestionIds([
                             ...answeredQuestionIds,
@@ -146,7 +148,7 @@ export const WatchView = (props: {
                 </OverlayDialog>
             </AbsoluteFlexOverlay>
 
-            {/* questionnaire */}
+            {/* still watching */}
             <AbsoluteFlexOverlay isVisible={!!currentStillWatchingMarker} hasPointerEvents={true}>
                 <OverlayDialog showCloseButton={false}>
                     <StillWatching

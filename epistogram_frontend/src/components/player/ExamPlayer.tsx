@@ -11,10 +11,11 @@ import { SlidesDisplay } from "../universal/SlidesDisplay";
 
 export const ExamPlayer = (props: {
     exam: ExamDTO,
+    answerSessionId: number,
     setIsExamInProgress: (isExamStarted: boolean) => void
 }) => {
 
-    const { exam, setIsExamInProgress } = props;
+    const { exam, setIsExamInProgress, answerSessionId } = props;
     const { questions } = exam;
     const slidesState = usePaging([1, 2, 3, 4]);
     const {
@@ -29,7 +30,11 @@ export const ExamPlayer = (props: {
     const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
 
         setSelectedAnswerId(questionAnswer.answerId);
-        await saveExamAnswer(questionAnswer);
+        await saveExamAnswer({
+            answerSessionId: answerSessionId,
+            answerId: questionAnswer.answerId,
+            questionId: questionAnswer.questionId
+        });
     }
 
     const clearAnswerCache = () => {

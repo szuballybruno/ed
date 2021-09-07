@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { Exam } from "./Exam";
 import { Organization } from "./Organization";
-import { QuestionAnswer } from "./QuestionAnswer";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
 import { Video } from "./Video";
@@ -97,13 +97,13 @@ export class User {
     @JoinColumn()
     tasks: Task[]
 
-    // question answers
-    @OneToMany(() => QuestionAnswer, qa => qa.answer)
-    @JoinColumn()
-    questionAnswers: QuestionAnswer[]
-
-    // question answers
+    // teacher
     @OneToMany(() => Course, course => course.teacher)
     @JoinColumn()
     teachedCourses: Course[]
+
+    // answer sessions
+    @OneToMany(_ => AnswerSession, as => as.user)
+    @JoinColumn()
+    answerSessions: AnswerSession[];
 }

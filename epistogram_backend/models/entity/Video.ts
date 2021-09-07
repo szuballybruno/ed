@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { Question } from "./Question";
 import { StorageFile } from "./StorageFile";
@@ -43,16 +44,21 @@ export class Video {
     @JoinColumn()
     questions: Question[];
 
-    // -> users 
+    // users 
     @OneToMany(type => User, user => user.currentVideo)
     @JoinColumn()
     users: User[];
 
-    // -> course
+    // course
     @Column()
     courseId: number;
 
     @ManyToOne(type => Course, course => course.videos)
     @JoinColumn({ name: "courseId" })
     course: Course
+
+    // answer sessions
+    @OneToMany(_ => AnswerSession, as => as.video)
+    @JoinColumn()
+    answerSessions: AnswerSession[];
 }

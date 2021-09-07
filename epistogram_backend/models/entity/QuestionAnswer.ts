@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Answer } from "./Answer";
+import { AnswerSession } from "./AnswerSession";
 import { Exam } from "./Exam";
 import { Question } from "./Question";
 import { User } from "./User";
@@ -10,14 +11,6 @@ export class QuestionAnswer {
 
     @PrimaryGeneratedColumn()
     id: number;
-
-    // user 
-    @Column()
-    userId: number;
-
-    @ManyToOne(type => User, user => user.questionAnswers)
-    @JoinColumn({ name: "userId" })
-    user: User;
 
     // question
     @Column()
@@ -34,4 +27,12 @@ export class QuestionAnswer {
     @ManyToOne(type => Answer, answer => answer.questionAnswers)
     @JoinColumn({ name: "answerId" })
     answer: Answer;
+
+    // answer session
+    @Column()
+    answerSessionId: number;
+
+    @ManyToOne(_ => AnswerSession, as => as.questionAnswers)
+    @JoinColumn({ name: "answerSessionId" })
+    answerSession: AnswerSession;
 }

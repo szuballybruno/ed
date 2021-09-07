@@ -3,12 +3,13 @@ import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
 import { QuestionnaierAnswer, QuestionnaireLayout } from './QuestionnaireLayout';
 
-export const Questionnaire = (props: {
+export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
+    answerSessionId: number,
     onAnswered: () => void
 }) => {
 
-    const { question, onAnswered } = props;
+    const { question, onAnswered, answerSessionId } = props;
     const [selectedAnswerId, setSelectedAnswerId] = useState(-1);
     const { answerQuestionAsync, correctAnswer, answerQuestionError, answerQuestionState } = useAnswerQuestion();
     const correctAnswerId = correctAnswer?.answerId;
@@ -34,7 +35,7 @@ export const Questionnaire = (props: {
                             setSelectedAnswerId(answerId);
                             onAnswered();
 
-                            await answerQuestionAsync(answerId, question.questionId);
+                            await answerQuestionAsync(answerSessionId, answerId, question.questionId);
                         }}>
                         {answer.answerText}
                     </QuestionnaierAnswer>;
