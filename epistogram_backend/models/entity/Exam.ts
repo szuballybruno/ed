@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { Question } from "./Question";
 import { User } from "./User";
@@ -41,4 +42,9 @@ export class Exam {
     @OneToMany(_ => Question, q => q.exam)
     @JoinColumn()
     questions: Question[];
+
+    // answer sessions
+    @OneToMany(_ => AnswerSession, as => as.exam)
+    @JoinColumn()
+    answerSessions: AnswerSession[];
 }

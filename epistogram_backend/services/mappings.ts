@@ -1,4 +1,5 @@
 import { Answer } from "../models/entity/Answer";
+import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
 import { CourseOrganization } from "../models/entity/CourseOrganization";
 import { Exam } from "../models/entity/Exam";
@@ -21,6 +22,7 @@ import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
+import { CourseItemState, CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { staticProvider } from "../staticProvider";
@@ -61,7 +63,6 @@ export const toQuestionAnswerDTO = (questionAnswer: QuestionAnswer) => {
     return {
         answerId: questionAnswer.answerId,
         questionId: questionAnswer.questionId,
-        userId: questionAnswer.userId
     } as QuestionAnswerDTO;
 }
 
@@ -84,7 +85,7 @@ export const toTaskDTO = (task: Task) => {
     } as TaskDTO;
 }
 
-export const toExamDTO = (exam: Exam, questionAnswers: QuestionAnswer[]) => {
+export const toExamDTO = (exam: Exam) => {
 
     navPropNotNull(exam.questions);
 
@@ -93,8 +94,7 @@ export const toExamDTO = (exam: Exam, questionAnswers: QuestionAnswer[]) => {
         subTitle: exam.subtitle,
         title: exam.title,
         thumbnailUrl: exam.thumbnailUrl,
-        questions: exam.questions.map(x => toQuestionDTO(x)),
-        questionAnswers: questionAnswers.map(x => toQuestionAnswerDTO(x))
+        questions: exam.questions.map(x => toQuestionDTO(x))
     } as ExamDTO;
 }
 
@@ -105,36 +105,81 @@ export const toCourseItemDTOs = (
     navPropNotNull(course.exams);
     navPropNotNull(course.videos);
 
-    const { itemId, itemType } = currentCourseItemDescriptor;
-
+    // map exam items
     const examItems = course
         .exams
-        .map(x => toCourseItemDTO(x, false));
+        .map(x => {
 
-    // aggregate items to a single ordered collection
+            const state = getExamState(x.questions, x.answerSessions);
+            return toCourseItemDTO(x, state, false);
+        });
+
+    // map video items
     const videoItems = course
         .videos
-        .map(x => toCourseItemDTO(x, true));
+        .map(x => toCourseItemDTO(x, getExamState(x.questions, x.quesitonAnswers), true));
 
-    const itemsCombined = examItems
-        .concat(videoItems);
-
-    const itemsOrdered = itemsCombined
+    // concat to one ordered list
+    const itemsOrdered = examItems
+        .concat(videoItems)
         .orderBy(x => x.orderIndex);
 
-    itemsOrdered
-        .forEach(x => {
+    // get the index of the last non-locked item
+    // note that there has not been a current calculation so far
+    const lastNonLockedItemIndex = itemsOrdered
+        .findLastIndex(x => x.state != "locked");
 
-            if (x.id === itemId && x.type === itemType)
-                x.state = "current";
-        })
+    // if there is a last non-locked, 
+    // and it's not the last in the list
+    // set it to available 
+    if (lastNonLockedItemIndex && lastNonLockedItemIndex + 1 != itemsOrdered.length)
+        itemsOrdered[lastNonLockedItemIndex].state = "available";
 
-    // TODO: set state 
-    // itemsOrdered
-    //     .forEach((courseItem, index) => {
-    //     })
+    // set current item's state to 'current'
+    const currentItem = itemsOrdered
+        .single(x => x.id === currentCourseItemDescriptor.itemId
+            && x.type === currentCourseItemDescriptor.itemType)
+
+    currentItem.state = "current";
 
     return itemsOrdered;
+}
+
+const getExamState = (
+    questions: Question[],
+    answerSessions: AnswerSession[]): CourseItemState => {
+
+    const isAnyCompletedAnswerSession = answerSessions
+        .any(answerSession => {
+
+            const isAllQuestionsAnswered = questions
+                .all(quesiton => answerSession
+                    .questionAnswers
+                    .any(qa => qa.questionId == quesiton.id));
+
+            const isAllAnswersCorrect = answerSession
+                .questionAnswers
+                .all(qa => !!qa.answer.isCorrect);
+
+            if (isAllQuestionsAnswered && isAllAnswersCorrect)
+                return true;
+
+            return false;
+        });
+
+    if (isAnyCompletedAnswerSession)
+        return "available";
+
+    return "locked";
+}
+
+const getVideoState = (video: Video) => {
+
+    return video
+        .questions
+        .map(question => question
+            .questionAnswers
+            .map(questionAnswer => questionAnswer.answer.isCorrect))
 }
 
 export const toVideoDTO = (video: Video) => {
@@ -153,7 +198,7 @@ export const toVideoDTO = (video: Video) => {
     } as VideoDTO;
 }
 
-export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {
+export const toCourseItemDTO = (item: Video | Exam, state: CourseItemState, isVideo: boolean) => {
 
     if (isVideo) {
 
@@ -165,7 +210,8 @@ export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {
             thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
             title: video.title,
             type: "video",
-            orderIndex: video.orderIndex
+            orderIndex: video.orderIndex,
+            state: state
         } as CourseItemDTO;
     }
     else {
@@ -178,7 +224,8 @@ export const toCourseItemDTO = (item: Video | Exam, isVideo: boolean) => {
             thumbnailUrl: getExamCoverImageUrl(),
             title: exam.title,
             type: "exam",
-            orderIndex: exam.orderIndex
+            orderIndex: exam.orderIndex,
+            state: state
         } as CourseItemDTO;
     }
 }

@@ -5,6 +5,7 @@ import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { getCourseItemAsync, getCourseItemDTOsAsync, getExamDTOAsync } from "./courseService";
 import { toVideoDTO } from "./mappings";
+import { createAnswerSessionAsync } from "./questionAnswerService";
 
 export const getCurrentVideoAsync = async (userId: number, videoId: number) => {
 
@@ -29,8 +30,12 @@ export const getPlayerDataAsync = async (
 
     // get course item
     const currentCourseItem = await getCourseItemAsync({ itemId: courseItemId, itemType: courseItemType });
+
     const videoDTO = courseItemType == "video" ? toVideoDTO(currentCourseItem as Video) : null;
+    const videoId = courseItemType == "video" ? courseItemId : null;
+
     const examDTO = courseItemType == "exam" ? await getExamDTOAsync(userId, courseItemId) : null;
+    const examId = courseItemType == "exam" ? courseItemId : null;
 
     // set current course item
     await staticProvider
@@ -38,16 +43,20 @@ export const getPlayerDataAsync = async (
         .getRepository(User)
         .save({
             id: userId,
-            currentVideoId: courseItemType == "video" ? courseItemId : null,
-            currentExamId: courseItemType == "exam" ? courseItemId : null
+            currentVideoId: videoId,
+            currentExamId: examId
         });
 
     // get current course items
     const courseItemDTOs = await getCourseItemDTOsAsync(currentCourseItem.courseId);
 
+    // get new answer session
+    const answerSessionId = await createAnswerSessionAsync(userId, videoId, examId);
+
     return {
         courseItems: courseItemDTOs,
         video: videoDTO,
-        exam: examDTO
+        exam: examDTO,
+        answerSessionId: answerSessionId
     } as PlayerDataDTO;
 }

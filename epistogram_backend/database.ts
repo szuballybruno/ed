@@ -23,6 +23,7 @@ import { Tag } from "./models/entity/Tag";
 import { CourseOrganizationDTO } from "./models/shared_models/CourseOrganizationDTO";
 import { setUserAvatarFileId } from "./services/userService";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/signupService";
+import { AnswerSession } from "./models/entity/AnswerSession";
 
 export type TypeORMConnection = Connection;
 
@@ -62,7 +63,8 @@ export const initializeDBAsync = async (recreate: boolean) => {
             TestChild,
             TestParent,
             TestSubChild,
-            StorageFile
+            StorageFile,
+            AnswerSession
         ],
     } as ConnectionOptions;
 

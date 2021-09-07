@@ -22,6 +22,10 @@ export const getCourseItemDTOsAsync = async (userId: number) => {
         .createQueryBuilder("c")
         .where("c.id = :courseId", { courseId: currentCourseItem.courseId })
         .leftJoinAndSelect("c.videos", "v")
+        .leftJoinAndSelect("v.questions", "vq")
+        .leftJoinAndSelect("v.answerSessions", "as")
+        .leftJoinAndSelect("as.questionAnswers", "asqa")
+        .leftJoinAndSelect("asqa.answer", "asqaa")
         .leftJoinAndSelect("c.exams", "e")
         .getOneOrFail();
 
@@ -75,15 +79,7 @@ export const getExamDTOAsync = async (userId: number, examId: number) => {
     if (questionIds.length == 0)
         throw new Error("Exam has no questions assigend.");
 
-    const questionAnswers = await staticProvider
-        .ormConnection
-        .getRepository(QuestionAnswer)
-        .createQueryBuilder("qa")
-        .where("qa.userId = :userId", { userId })
-        .andWhere("qa.questionId IN (:...questionIds)", { questionIds })
-        .getMany();
-
-    return toExamDTO(exam, questionAnswers);
+    return toExamDTO(exam);
 }
 
 const getExamByIdAsync = (examId: number) => {

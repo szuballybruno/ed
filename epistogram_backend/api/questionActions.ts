@@ -9,7 +9,8 @@ export const answerVideoQuestionAction = getAsyncActionHandler(async (req: Reque
     const dto = withValueOrBadRequest(req.body) as AnswerQuestionDTO;
     const answerId = withValueOrBadRequest(dto.answerId);
     const questionId = withValueOrBadRequest(dto.questionId);
+    const answerSessionId = withValueOrBadRequest(dto.answerSessionId);
     const userId = getUserIdFromRequest(req);
 
-    return answerVideoQuestionAsync(userId, questionId, answerId);
+    return answerVideoQuestionAsync(userId, answerSessionId, questionId, answerId);
 });

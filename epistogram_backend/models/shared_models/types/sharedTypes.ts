@@ -15,4 +15,4 @@ export type TaskObjectiveType = "practise" | "continueVideo" | "exam";
 
 export type CourseItemType = "video" | "exam";
 
-export type CourseItemState = "watched" | "locked" | "current";
+export type CourseItemState = "watched" | "locked" | "current" | "available";

@@ -35,6 +35,7 @@ export const PlayerPage = () => {
     const courseItems = playerData?.courseItems ?? [];
     const video = playerData?.video;
     const exam = playerData?.exam;
+    const answerSessionId = playerData?.answerSessionId;
 
     const navigateToCourseItem = (courseItemId: number, courseItemType: CourseItemType) => {
 
@@ -70,6 +71,7 @@ export const PlayerPage = () => {
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
+                            answerSessionId={answerSessionId!}
                             setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
                             exam={exam} />}
                     </Box>

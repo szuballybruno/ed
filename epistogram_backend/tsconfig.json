@@ -11,7 +11,10 @@
     // for TypeORM
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "lib": [
+      "ES2019"
+    ]
   },
   "exclude": [
     "node_modules"
