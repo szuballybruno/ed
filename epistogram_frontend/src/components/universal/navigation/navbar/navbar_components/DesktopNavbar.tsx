@@ -38,6 +38,7 @@ const DesktopNavbar = (props: { menuItems: MenuItemsType, hideLinks: boolean }) 
                     <Button variant={"outlined"}
                         size={"large"}
                         className={classes.showSomethingButton}
+                        style={{ color: "white" }}
                         onClick={() => {
                             // app.modalState.set(true)
                         }}>
@@ -52,8 +53,7 @@ const DesktopNavbar = (props: { menuItems: MenuItemsType, hideLinks: boolean }) 
                             onClick={() => {
 
                             }}
-                            className={classes.playButton}
-                            style={{ color: "white" }}>
+                            className={classes.playButton}>
                             <PlayArrow />
                         </Button>
                     </NavLink>
