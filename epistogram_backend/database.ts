@@ -217,6 +217,10 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorOne: "#123456",
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
+                coverFile: {
+                    pending: false,
+                    filePath: "/courseCoverImages/2.png"
+                },
             },
             {
                 title: "Angular - Minden amire szükséged lehet",

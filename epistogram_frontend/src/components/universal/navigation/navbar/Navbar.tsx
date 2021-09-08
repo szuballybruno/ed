@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { getStaticAssetUrl, useIsDesktopView } from "../../../../frontendHelpers";
+import { getAssetUrl, useIsDesktopView } from "../../../../frontendHelpers";
 import { useCurrentCourseItemCode } from "../../../../services/dataService";
 import { FlexFloat } from "../../FlexFloat";
 import classes from "./navbar.module.scss";
@@ -37,7 +37,7 @@ const Navbar = (props: { hideLinks?: boolean }) => {
             <div className={classes.mobileNavbarOuterWrapperIn}>
                 <NavLink to={'/kezdolap'}>
                     <div className={classes.mobileNavbarLogoWrapper}>
-                        <img alt="EpistoGram Logo" src={getStaticAssetUrl("/images/logo.png")} />
+                        <img alt="EpistoGram Logo" src={getAssetUrl("/images/logo.png")} />
                     </div>
                 </NavLink>
             </div>

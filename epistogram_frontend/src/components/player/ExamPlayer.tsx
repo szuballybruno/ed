@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getStaticAssetUrl, usePaging } from "../../frontendHelpers";
+import { getAssetUrl, usePaging } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
@@ -52,7 +52,7 @@ export const ExamPlayer = (props: {
     const GreetSlide = () => <SignupWrapper
         title={exam.title}
         upperTitle="Üdv!"
-        currentImage={getStaticAssetUrl("/images/examCover.jpg")}
+        currentImage={getAssetUrl("/images/examCover.jpg")}
         description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
         onNext={() => {
 

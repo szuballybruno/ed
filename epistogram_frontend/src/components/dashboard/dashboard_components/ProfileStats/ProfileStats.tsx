@@ -2,6 +2,7 @@ import { Button, Typography } from "@material-ui/core";
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { globalConfig } from "../../../../configuration/config";
+import { getAssetUrl } from "../../../../frontendHelpers";
 import { UserDTO } from '../../../../models/shared_models/UserDTO';
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import classes from './profileStats.module.scss';
@@ -21,9 +22,15 @@ const ProfileStats = (props: { user: UserDTO }) => {
             </div>
             <NavLink to={"/profilom"} className={classes.selectProfileWrapper}>
                 <Button variant={"outlined"}>Profilom</Button>
+
+                {/* episto coin */}
                 <div className={classes.epistoCoinWrapper}>
+
+                    {/* coin value  */}
                     <Typography variant={"button"}>23.459</Typography>
-                    <img alt={""} src={`${globalConfig.assetStorageUrl}/application/episto.png`} />
+
+                    {/* coin image */}
+                    <img alt={""} src={getAssetUrl("/images/epistoCoin.png")} />
                 </div>
             </NavLink>
 

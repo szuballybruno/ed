@@ -2,7 +2,7 @@ import { Button } from "@material-ui/core";
 import { PlayArrow } from "@material-ui/icons";
 import React from 'react';
 import { NavLink } from "react-router-dom";
-import { getStaticAssetUrl } from "../../../../../frontendHelpers";
+import { getAssetUrl } from "../../../../../frontendHelpers";
 import { useNavigation } from "../../../../../services/navigatior";
 import { MenuItemsType } from "../Navbar";
 import classes from "./desktopNavbar.module.scss";
@@ -32,7 +32,7 @@ const DesktopNavbar = (props: {
                     <img
                         className={classes.logo}
                         alt="EpistoGram Logo"
-                        src={getStaticAssetUrl("/images/logo.png")} />
+                        src={getAssetUrl("/images/logo.png")} />
                 </NavLink>
 
                 {/* content */}

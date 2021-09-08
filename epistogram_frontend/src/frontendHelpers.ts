@@ -151,7 +151,7 @@ export const useReactQuery = <T>(
     }
 }
 
-export const getStaticAssetUrl = (path: string) => globalConfig.assetStorageUrl + path;
+export const getAssetUrl = (path: string) => globalConfig.assetStorageUrl + path;
 
 export const hasValue = (obj: any) => {
 
