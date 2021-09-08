@@ -10,7 +10,7 @@ const ProfileStats = (props: { user: UserDTO }) => {
 
     return <div className={classes.welcomeWrapper}>
         <div className={classes.avatarWrapper}>
-            <ProfileImage imageUrl={props.user.avatarUrl} />
+            <ProfileImage imageUrl={props.user.avatarUrl ? props.user.avatarUrl : ""} />
         </div>
         <div className={classes.userDataWrapper}>
             <div className={classes.userNameWrapper}>

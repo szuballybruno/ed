@@ -21,7 +21,7 @@ export const AdministrationListItem = (props: {
 
     const showRoundedImageOrNull = (imageUrl?: string) => {
         return imageUrl ? <Grid lg={1} md={1} xs={1} item className={classes.searchItemAvatar}>
-            <ProfileImage imageUrl={imageUrl} />
+            <ProfileImage imageUrl={imageUrl ? imageUrl : ""} />
         </Grid> : null
     }
 
@@ -44,7 +44,7 @@ export const AdministrationListItem = (props: {
 
             {/* Display image or nothing */}
             {showRectangleImageOrNull(props.thumbnailUrl)}
-            {showRoundedImageOrNull(props.profileImageUrl)}
+            {showRoundedImageOrNull(props.profileImageUrl ? props.profileImageUrl : "")}
 
             {/* Display title and info in chips */}
             <Grid lg={9} md={10} xs={10} item>
