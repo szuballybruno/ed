@@ -1,7 +1,9 @@
+import { Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
 import { QuestionnaierAnswer, QuestionnaireLayout } from './QuestionnaireLayout';
+import { Text } from "@chakra-ui/react"
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -37,7 +39,7 @@ export const VideoQuestionnaire = (props: {
 
                             await answerQuestionAsync(answerSessionId, answerId, question.questionId);
                         }}>
-                        {answer.answerText}
+                        <Text fontSize="13px">{answer.answerText}</Text>
                     </QuestionnaierAnswer>;
                 })}
         </QuestionnaireLayout>
