@@ -289,13 +289,17 @@ export const toAnswerDTO = (a: Answer) => {
 
 export const toCourseAdminDTO = (course: Course) => {
 
+    const thumbnailImageURL = course.coverFile
+        ? getAssetUrl(course.coverFile.filePath)
+        : getAssetUrl("/images/defaultCourseCover.jpg");
+
     return {
         title: course.title,
         category: course.category,
         courseId: course.id,
         teacherName: "Mr. Teacher Name",
         videosCount: 0,
-        thumbnailImageURL: staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`
+        thumbnailImageURL: thumbnailImageURL
     } as CourseAdminDTO;
 }
 

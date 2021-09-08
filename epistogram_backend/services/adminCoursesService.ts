@@ -7,6 +7,8 @@ export const getAdminCoursesAsync = async (userId: number, dto: GetUserCoursesDT
     const aggregatedCourses = await staticProvider
         .ormConnection
         .getRepository(Course)
-        .find()
+        .createQueryBuilder("c")
+        .leftJoinAndSelect("c.coverFile", "cf")
+        .getMany()
     return aggregatedCourses.map(course => toCourseAdminDTO(course));
 }

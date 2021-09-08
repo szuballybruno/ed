@@ -11,6 +11,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
 import { toEditCourseItemsDTO, toUserDTO } from "./mappings";
 import { getTeacherDTOAsync } from "./userService";
+import {getAssetUrl} from "./misc/urlProvider";
 
 export const getEditedVideoAsync = async (videoId: string) => {
     // TODO: Create a method to get the currently edited video by videoId
@@ -70,12 +71,17 @@ export const getEditedCourseAsync = async (courseId: number) => {
         .getRepository(Course)
         .createQueryBuilder("course")
         .where("course.id = :courseId", { courseId: courseId })
+        .leftJoinAndSelect("course.coverFile", "cf")
         .leftJoinAndSelect("course.teacher", "teacher")
         .leftJoinAndSelect("course.exams", "exams")
         .leftJoinAndSelect("course.videos", "videos")
         .getOneOrFail();
 
-    const thumbnailImageURL = staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
+    //const thumbnailImageURL = staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
+
+    const thumbnailImageURL = course.coverFile
+        ? getAssetUrl(course.coverFile.filePath)
+        : getAssetUrl("/images/defaultCourseCover.jpg");
 
     const courseItems = toEditCourseItemsDTO(course)
     const courseTeacher = toUserDTO(course.teacher);
