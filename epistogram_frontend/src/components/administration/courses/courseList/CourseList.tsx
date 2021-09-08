@@ -57,6 +57,8 @@ export const CourseList = () => {
     const [searchText, setSearchText] = React.useState("");
     const { courses } = useAdministratedCourses(searchText);
 
+    console.log(JSON.stringify(courses))
+
     return <AdminDashboardWrapper>
 
         {/* Filter the listed courses */}
