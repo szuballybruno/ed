@@ -54,10 +54,8 @@ const CourseTile = (props: {
                             <div className={classes.videoInfoInnerWrapper}>
 
                                 {/* details */}
-                                <Button>
-                                    <NavLink to={"/excel-kurzus"}>
-                                        Adatlap
-                                    </NavLink>
+                                <Button onClick={() => window.location.href = "https://epistogram.com/excel/"}>
+                                    Adatlap
                                 </Button>
 
                                 {/* start course */}
