@@ -137,13 +137,13 @@ const Statistics = () => {
             </div>
             <div className={classes.statisticsInfoOuterContainer}>
                 <LearningStatisticsSeciton title={"Grafikonok"}>
-                    <LearningStatisticsItem suffix={""} title={""} value={""}>
+                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
                         <Line options={config}  data={data} /*type={"line"}*//>
                     </LearningStatisticsItem>
-                    <LearningStatisticsItem suffix={""} title={""} value={""}>
+                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
                         <Bar /*type={"bar"}*/ data={data2} />
                     </LearningStatisticsItem>
-                    <LearningStatisticsItem suffix={""} title={""} value={""}>
+                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
                         <Line options={{
                             interaction: {
                                 intersect: false
@@ -158,7 +158,7 @@ const Statistics = () => {
                             }
                         }}  data={data5} /*type={"line"}*//>
                     </LearningStatisticsItem>
-                    <LearningStatisticsItem suffix={""} title={""} value={""}>
+                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
                         <Pie options={{responsive: true, maintainAspectRatio: false}} /*type={"pie"}*/ data={{
                             labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
                             datasets: [
@@ -170,7 +170,7 @@ const Statistics = () => {
                             ]
                         }} />
                     </LearningStatisticsItem>
-                    <LearningStatisticsItem suffix={""} title={""} value={""}>
+                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
                         <Scatter options={{
                             responsive: true,
                             plugins: {
@@ -211,7 +211,7 @@ const Statistics = () => {
                             ]
                         }} />
                     </LearningStatisticsItem>
-                    <LearningStatisticsItem suffix={""} title={""} value={""}>
+                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
                         <Bar options={{
                             indexAxis: 'y',
                             // Elements options apply to all of the options unless overridden in a dataset

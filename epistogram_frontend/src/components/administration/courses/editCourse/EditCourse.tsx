@@ -1,22 +1,21 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from "./editCourse.module.scss"
 import {Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography} from "@material-ui/core";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
-import { CourseVideoList } from "./CourseVideoList";
 import { useParams } from "react-router";
 import AdminDashboardHeader from "../../universal/adminDashboardHeader/AdminDashboardHeader";
 import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSearch";
 import { HexColorPicker } from "react-colorful";
 import SelectImage from "../../universal/selectImage/SelectImage";
 import { AdminDashboardWrapper } from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import { SelectRadio } from "../../universal/SelectRadio";
 import { SaveBar } from "../../universal/saveBar/SaveBar";
 import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
 import { useAdminEditedCourse, useUserCourses } from "../../../../services/courseService";
 import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
 import { getChipWithLabel } from "../courseList/CourseList";
-import {ListItemWithRadio} from "../../universal/selectMultiple/components/ListItemWithRadioButton/ListItemWithRadioButton";
 import {SelectMultiple} from "../../universal/selectMultiple/SelectMultiple";
+import {AdminPageEditCourseDTO, EditListItemDTO} from "../../../../models/shared_models/AdminPageEditCourseDTO";
+import {httpPostAsync} from "../../../../services/httpClient";
 
 /* TODO:
 *   - onClick for save changes button
@@ -24,23 +23,96 @@ import {SelectMultiple} from "../../universal/selectMultiple/SelectMultiple";
 *   - fetch all the necessary data
 */
 
+export const TextOrInput = (props: {isEditable: boolean, value: string}) => {
+    return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
+}
+
+const updateEditPage = (data?: AdminPageEditCourseDTO) => {
+    console.log("Data is updated on the server")
+
+    console.log("This is the data: " + JSON.stringify(data))
+    //Send data in post request here
+}
+
 export const EditCourse = () => {
-    const [showSecondColorPicker, setShowSecondColorPicker] = React.useState(false)
+    console.log("EditCourse loaded")
+    const [showSecondColorPicker, setShowSecondColorPicker] = useState(false)
 
     const { courseId } = useParams<{ courseId: string }>();
 
-    const [name, setName] = React.useState("")
-    const [category, setCategory] = React.useState("")
-    const [courseGroup, setCourseGroup] = React.useState("")
-    const [permissionLevel, setPermissionLevel] = React.useState("")
-    const [thumbnailImage, setThumbnailImage] = React.useState("")
-    const [thumbnailURL, setThumbnailURL] = React.useState("")
-    const [colorOne, setColorOne] = React.useState("")
-    const [colorTwo, setColorTwo] = React.useState("")
+    const [isAllowEditOnPage, setIsAllowEditOnPage] = useState(false)
+
+    const [title, setTitle] = useState("")
+    const [category, setCategory] = useState("")
+    const [courseGroup, setCourseGroup] = useState("")
+    const [permissionLevel, setPermissionLevel] = useState("")
+    const [thumbnailImage, setThumbnailImage] = useState("")
+    const [thumbnailURL, setThumbnailURL] = useState("")
+    const [colorOne, setColorOne] = useState("")
+    const [colorTwo, setColorTwo] = useState("")
+    const [organizations, setOrganizations] = useState<EditListItemDTO[]>([])
+    const [groups, setGroups] = useState<EditListItemDTO[]>([])
+    const [tags, setTags] = useState<EditListItemDTO[]>([])
+    const [teachers, setTeachers] = useState<EditListItemDTO[]>([])
+
+
 
     const { course, status, error } = useAdminEditedCourse(Number(courseId));
 
     useCreateObjectURL(thumbnailImage, setThumbnailURL)
+
+    const setEditCourseState = (course: AdminPageEditCourseDTO) => {
+        const {
+            title,
+            category,
+            courseGroup,
+            permissionLevel,
+            thumbnailURL,
+            colorOne,
+            colorTwo,
+            organizations,
+            tags,
+            teachers,
+            groups
+        } = course
+
+        setTitle(title)
+        setCategory(category)
+        setCourseGroup(courseGroup)
+        setPermissionLevel(permissionLevel)
+        setThumbnailURL(thumbnailURL)
+        setColorOne(colorOne)
+        setColorTwo(colorTwo)
+        setOrganizations(organizations)
+        setTags(tags)
+        setTeachers(teachers)
+        setGroups(groups)
+    }
+
+    const getAdminPageEditCourseDTO = () => {
+        return {
+            courseId: course?.courseId,
+            title: title,
+            category: category,
+            courseGroup: courseGroup,
+            permissionLevel: permissionLevel,
+            thumbnailURL: thumbnailURL,
+            colorOne: colorOne,
+            colorTwo: colorTwo,
+            courseItems: course?.courseItems,
+            organizations: organizations,
+            tags: tags,
+            teachers: teachers,
+            groups: groups
+        } as AdminPageEditCourseDTO
+    }
+    const updateAdminPageEditCourse = (course: AdminPageEditCourseDTO) => {
+        return httpPostAsync("set-admin-edit-course", course)
+    }
+
+    useEffect(() => {
+        !!course && setEditCourseState(course)
+    }, [course])
 
     return <AdminDashboardWrapper>
         <Divider style={{
@@ -61,22 +133,30 @@ export const EditCourse = () => {
                             aria-labelledby="nested-list-subheader"
                             className={classes.tagList}
                         >
-                            <EditItem value={course?.title}
+                            <EditItem
+                                isEditing={isAllowEditOnPage}
+                                value={title}
                                 title={"Név"}
-                                onChange={getEventValueCallback(setName)}
+                                onChange={getEventValueCallback(setTitle)}
                                 name={"name"} />
 
-                            <EditItem value={course?.category}
+                            <EditItem
+                                isEditing={isAllowEditOnPage}
+                                value={category}
                                 title={"Kategória"}
                                 onChange={getEventValueCallback(setCategory)}
                                 name={"category"} />
 
-                            <EditItem value={course?.courseGroup}
+                            <EditItem
+                                isEditing={isAllowEditOnPage}
+                                value={courseGroup}
                                 title={"Kategória csoport"}
                                 onChange={getEventValueCallback(setCourseGroup)}
                                 name={"courseGroup"} />
 
-                            <EditItem value={course?.permissionLevel}
+                            <EditItem
+                                isEditing={isAllowEditOnPage}
+                                value={permissionLevel}
                                 title={"Elérés"}
                                 onChange={getEventValueCallback(setPermissionLevel)}
                                 name={"permissionLevel"} />
@@ -87,11 +167,11 @@ export const EditCourse = () => {
                             items={course?.organizations}
                             title={"Cég kiválasztása"}
                         >
-                            {course?.organizations?.map(item =>
-                                <div>
+                            {course?.organizations?.map((item, index) =>
+                                <div key={"org" + index}>
                                     <ListItem className={classes.listItem}>
                                         <Checkbox checked={item.checked} />
-                                        <Typography>{item.name}</Typography>
+                                        <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
                                     </ListItem>
                                     <Divider style={{width: "100%"}} />
                                 </div>
@@ -102,14 +182,14 @@ export const EditCourse = () => {
 
                     <div className={classes.editTagsWrapper}>
                         <SelectMultiple
-                            items={course?.teachers}
+                            items={teachers}
                             title={"Tanár kiválasztása"}
                         >
-                            {course?.teachers?.map(item =>
-                                <div>
+                            {teachers?.map((item, index) =>
+                                <div key={"teacher" + index}>
                                     <ListItem className={classes.listItem}>
                                         <Radio checked={item.checked} />
-                                        <Typography>{item.name}</Typography>
+                                        <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
                                     </ListItem>
                                     <Divider style={{width: "100%"}} />
                                 </div>
@@ -119,14 +199,14 @@ export const EditCourse = () => {
                     </div>
                     <div className={classes.editTagsWrapper}>
                         <SelectMultiple
-                            items={course?.tags}
+                            items={tags}
                             title={"Tagek kiválasztása"}
                         >
-                            {course?.tags?.map(item =>
-                                <div>
+                            {tags?.map((item, index) =>
+                                <div key={"tag" + index}>
                                     <ListItem className={classes.listItem}>
                                         <Checkbox checked={item.checked} />
-                                        <Typography>{item.name}</Typography>
+                                        <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
                                     </ListItem>
                                     <Divider style={{width: "100%"}} />
                                 </div>
@@ -136,14 +216,14 @@ export const EditCourse = () => {
                     </div>
                     <div className={classes.editTagsWrapper}>
                         <SelectMultiple
-                            items={course?.groups}
+                            items={groups}
                             title={"Csoport kiválasztása"}
                         >
-                            {course?.groups?.map(item =>
-                                <div>
+                            {groups?.map((item, index) =>
+                                <div key={"group" + index}>
                                     <ListItem className={classes.listItem}>
                                         <Checkbox checked={item.checked} />
-                                        <Typography>{item.name}</Typography>
+                                        <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
                                     </ListItem>
                                     <Divider style={{width: "100%"}} />
                                 </div>
@@ -157,7 +237,7 @@ export const EditCourse = () => {
                     <div className={classes.tagWrapper}>
                         <Typography variant={"overline"} className={classes.colorPickerTitle}>Elsődleges szín</Typography>
                         <div className={classes.colorPickerWrapper}>
-                            <HexColorPicker style={{ width: "100%" }} color={course?.colorOne} onChange={(color) => {
+                            <HexColorPicker style={{ width: "100%" }} color={colorOne} onChange={(color) => {
                                 !showSecondColorPicker && setColorTwo(color)
                                 setColorOne(color)
                             }} />
@@ -168,7 +248,7 @@ export const EditCourse = () => {
                     </div>
                     {showSecondColorPicker && <div className={classes.tagWrapper}>
                         <Typography variant={"overline"}>Másodlagos szín</Typography>
-                        <HexColorPicker style={{ width: "100%" }} color={course?.colorTwo} onChange={(color) => {
+                        <HexColorPicker style={{ width: "100%" }} color={colorTwo} onChange={(color) => {
                             setColorTwo(color)
                         }} />
                     </div>}
@@ -183,16 +263,18 @@ export const EditCourse = () => {
 
         <div className={classes.editVideosWrapper}>
             <AdminDashboardSearch searchChangeHandler={() => { }} name={"searchData"} title={"A kurzus tartalma"} />
-            {course?.courseItems.map((item, index) => <AdministrationListItem title={item.title} thumbnailUrl={item.thumbnailUrl} chips={[
-                getChipWithLabel(index, item.type, "category"),
-                getChipWithLabel(index, "item.length", "person"),
-                getChipWithLabel(index, "item.isEssential", "video")
+            {course?.courseItems.map((item, index) => <AdministrationListItem key={"adlistitem" + index} title={item.title} thumbnailUrl={item.thumbnailUrl} chips={[
+                getChipWithLabel("fis" + index, item.type, "category"),
+                getChipWithLabel("fos" + index, "item.length", "person"),
+                getChipWithLabel("fasz" + index, "item.isEssential", "video")
             ]} searchItemButtons={[]} />)}
         </div>
 
         <AdminDashboardHeader titleText={""} />
 
-        <SaveBar open={true} />
+        <SaveBar open={isAllowEditOnPage} onClick={() => setIsAllowEditOnPage(p => !p) } onDoneClick={() => {
+            return updateAdminPageEditCourse(getAdminPageEditCourseDTO())
+        }} />
 
     </AdminDashboardWrapper>
 };

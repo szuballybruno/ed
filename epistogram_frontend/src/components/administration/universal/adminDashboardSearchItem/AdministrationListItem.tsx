@@ -11,6 +11,7 @@ export type DashboardSearchItemAction = {
 }
 
 export const AdministrationListItem = (props: {
+    key: any,
     title: string,
     profileImageUrl?: string,
     thumbnailUrl?: string,
@@ -33,6 +34,7 @@ export const AdministrationListItem = (props: {
     return <Grid
         container
         style={{ width: "100%" }}
+        key={props.key}
         spacing={0}
         direction={"row"}
         justify={"center"}

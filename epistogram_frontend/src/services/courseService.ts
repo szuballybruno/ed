@@ -3,7 +3,7 @@ import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
 import { httpPostAsync } from "./httpClient";
 import {CourseAdminDTO} from "../models/shared_models/CourseAdminDTO";
-import {AdminPageEditCourseView} from "../models/shared_models/AdminPageEditCourseDTO";
+import {AdminPageEditCourseDTO} from "../models/shared_models/AdminPageEditCourseDTO";
 
 export const useAdministratedCourses = (searchText: string) => {
 
@@ -20,7 +20,7 @@ export const useAdministratedCourses = (searchText: string) => {
 
 export const useAdminEditedCourse = (courseId: number) => {
 
-    const { data, status, error } = useReactQuery<AdminPageEditCourseView>(
+    const { data, status, error } = useReactQuery<AdminPageEditCourseDTO>(
         ["getCourseEditQuery", courseId],
         () => httpPostAsync("/get-admin-edit-course", {
             courseId: courseId

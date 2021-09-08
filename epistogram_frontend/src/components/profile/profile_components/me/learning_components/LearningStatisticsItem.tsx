@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from "./learningStatisticsItem.module.scss";
 import { Button, Card, Typography } from "@material-ui/core";
 import { Fullscreen, FullscreenExit } from "@material-ui/icons";
@@ -21,11 +21,16 @@ const LearningStatisticsItem = (props: {
     suffix: string
     title: string
     value: string
+    isOpenByDefault?: boolean
     hasChart?: boolean
     children?: React.ReactNode
     chartSize?: string
 }) => {
     const [open, setOpen] = useState(false)
+    
+    useEffect(() => {
+        props.isOpenByDefault && setOpen(true)
+    }, [props.isOpenByDefault])
 
     const data = {
         labels: ['0:00-3:00', '3:00-6:00', '6:00-9:00', '9:00-12:00', '12:00-15:00', '15:00-18:00', '18:00-21:00', '21:00-0:00'],

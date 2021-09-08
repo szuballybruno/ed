@@ -6,7 +6,7 @@ export type EditListItemDTO = {
     checked: boolean
 }
 
-export type AdminPageEditCourseView = {
+export type AdminPageEditCourseDTO = {
     courseId: number,
     title: string,
     category: string,
