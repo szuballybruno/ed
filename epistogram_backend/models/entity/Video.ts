@@ -27,15 +27,15 @@ export class Video {
     @Column({ nullable: true })
     videoFileId: number;
 
-    @ManyToOne(type => StorageFile, s => s.videos)
+    @ManyToOne(type => StorageFile, s => s.videos, { cascade: true })
     @JoinColumn({ name: "videoFileId" })
-    videoFile: StorageFile
+    videoFile: StorageFile;
 
     // thumbnail file
     @Column({ nullable: true })
     thumbnailFileId: number;
 
-    @OneToOne(type => StorageFile)
+    @OneToOne(type => StorageFile, { cascade: true })
     @JoinColumn({ name: "thumbnailFileId" })
     thumbnailFile: StorageFile
 

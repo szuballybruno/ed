@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { FormControl, Grid, Select, Typography } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import React from "react";
@@ -65,89 +66,96 @@ const UserCoursesPage = () => {
                 </div>
             </LeftPanel>
 
-            <RightPanel>
+            <RightPanel noPadding={true}>
 
-                {/* <AdminDashboardHeader titleText={""} /> */}
-                <AdminDashboardSearch
-                    searchChangeHandler={(x, value) => setSearchText(value)}
-                    name={"searchData"}
-                    title={"Kurzusok"}
-                    className={classes.searchBar} />
+                <Box display="none">
 
-                <div className={classes.courseOptionsContainer}>
-                    <div className={classes.courseLeftOptionsContainer}>
-                        <ToggleButtonGroup
-                            classes={{
-                                root: classes.filterSelectorButtonGroupRoot
-                            }}
-                            size={"small"}>
+                    {/* <AdminDashboardHeader titleText={""} /> */}
+                    <AdminDashboardSearch
+                        searchChangeHandler={(x, value) => setSearchText(value)}
+                        name={"searchData"}
+                        title={"Kurzusok"}
+                        className={classes.searchBar} />
 
-                            {/* recommended */}
-                            <ToggleButton
-                                onClick={() => setIsRecommended(!isRecommended)}
-                                selected={isRecommended}
+                    <div className={classes.courseOptionsContainer}>
+                        <div className={classes.courseLeftOptionsContainer}>
+                            <ToggleButtonGroup
                                 classes={{
-                                    root: classes.filterSelectorButtonRoot,
-                                    selected: classes.filterSelectorButtonSelected
-                                }}>
-                                Neked ajánljuk
-                            </ToggleButton>
-
-                            {/* featured */}
-                            <ToggleButton
-                                onClick={() => setIsFeatured(!isFeatured)}
-                                selected={isFeatured}
-                                classes={{
-                                    root: classes.filterSelectorButtonRoot,
-                                    selected: classes.filterSelectorButtonSelected
-                                }}>
-                                Kiemelt
-                            </ToggleButton>
-
-                            {/* show all */}
-                            <ToggleButton
-                                onClick={() => clearFilters()}
-                                selected={isRecommended && isFeatured}
-                                classes={{
-                                    root: classes.filterSelectorButtonRoot,
-                                    selected: classes.filterSelectorButtonSelected
-                                }}>
-                                Mind
-                            </ToggleButton>
-                        </ToggleButtonGroup>
-                    </div>
-                    <div className={classes.courseRightOptionsContainer}>
-                        <FormControl variant={"outlined"} className={classes.sortFormControl} size={"small"}>
-                            <Select
-                                native
-                                onChange={() => { }}
-                                className={classes.sortFormControl}
-                                inputProps={{
-                                    name: 'A-Z',
-                                    id: 'outlined-age-native-simple',
+                                    root: classes.filterSelectorButtonGroupRoot
                                 }}
+                                size={"small"}>
 
-                                classes={{
-                                    root: classes.sortFormControlRoot,
-                                    select: classes.sortFormControlSelect,
-                                }}>
-                                <option value={10}>A-Z</option>
-                                <option value={20}>Z-A</option>
-                                <option value={30}>Új-Régi</option>
-                                <option value={30}>Régi-Új</option>
-                            </Select>
-                        </FormControl>
+                                {/* recommended */}
+                                <ToggleButton
+                                    onClick={() => setIsRecommended(!isRecommended)}
+                                    selected={isRecommended}
+                                    classes={{
+                                        root: classes.filterSelectorButtonRoot,
+                                        selected: classes.filterSelectorButtonSelected
+                                    }}>
+                                    Neked ajánljuk
+                                </ToggleButton>
+
+                                {/* featured */}
+                                <ToggleButton
+                                    onClick={() => setIsFeatured(!isFeatured)}
+                                    selected={isFeatured}
+                                    classes={{
+                                        root: classes.filterSelectorButtonRoot,
+                                        selected: classes.filterSelectorButtonSelected
+                                    }}>
+                                    Kiemelt
+                                </ToggleButton>
+
+                                {/* show all */}
+                                <ToggleButton
+                                    onClick={() => clearFilters()}
+                                    selected={isRecommended && isFeatured}
+                                    classes={{
+                                        root: classes.filterSelectorButtonRoot,
+                                        selected: classes.filterSelectorButtonSelected
+                                    }}>
+                                    Mind
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                        </div>
+                        <div className={classes.courseRightOptionsContainer}>
+                            <FormControl variant={"outlined"} className={classes.sortFormControl} size={"small"}>
+                                <Select
+                                    native
+                                    onChange={() => { }}
+                                    className={classes.sortFormControl}
+                                    inputProps={{
+                                        name: 'A-Z',
+                                        id: 'outlined-age-native-simple',
+                                    }}
+
+                                    classes={{
+                                        root: classes.sortFormControlRoot,
+                                        select: classes.sortFormControlSelect,
+                                    }}>
+                                    <option value={10}>A-Z</option>
+                                    <option value={20}>Z-A</option>
+                                    <option value={30}>Új-Régi</option>
+                                    <option value={30}>Régi-Új</option>
+                                </Select>
+                            </FormControl>
+                        </div>
                     </div>
-                </div>
+                </Box>
 
                 {/* courses */}
-                <LoadingFrame p="20px" loadingState={[status]} error={[error]}>
-                    <Grid container spacing={3} className={classes.courseItemsContainer}>
-                        {courses
-                            .map((course: any, index) => {
-                                return <CourseTile course={course} itemIndex={index} key={index} />
-                            })}
-                    </Grid>
+                <LoadingFrame loadingState={[status]} error={[error]}>
+                    <Box id="scrollContainer" overflowY="scroll">
+                        <Box id="scrollContent" p="20px 20px 140px 20px">
+                            <Grid container spacing={3}>
+                                {courses
+                                    .map((course: any, index) => {
+                                        return <CourseTile course={course} itemIndex={index} key={index} />
+                                    })}
+                            </Grid>
+                        </Box>
+                    </Box>
                 </LoadingFrame>
 
             </RightPanel>

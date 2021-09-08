@@ -37,17 +37,17 @@ export const LeftPanel = (props: { children: ReactNode }) => {
     );
 };
 
-export const RightPanel = (params: { children: ReactNode }) => {
+export const RightPanel = (props: { children: ReactNode, noPadding?: boolean }) => {
     return (
         <Box
             id="rightPanel"
             bg="#fafafa"
-            pl="20px"
+            pl={props.noPadding ? undefined : "20px"}
             flex="1"
             overflowX="hidden"
             overflowY="scroll"
             direction="column">
-            {params.children}
+            {props.children}
         </Box>
     );
 };

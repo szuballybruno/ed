@@ -247,6 +247,36 @@ const seedCourses = async (connection: TypeORMConnection) => {
                     pending: false,
                     filePath: "/courseCoverImages/4.png"
                 },
+                videos: [
+                    {
+                        title: "Egyszerűbb számítások",
+                        subtitle: "Alapvető műveletek Excelben",
+                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+                        orderIndex: 0,
+                        videoFile: {
+                            pending: false,
+                            filePath: "/videos/video_2.mp4"
+                        }
+                    },
+                    {
+                        title: "Cellák és területek azonosítása",
+                        subtitle: "Alapvető műveletek Excelben",
+                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+                        orderIndex: 0
+                    },
+                    {
+                        title: "Adatbevitel, javítás I.",
+                        subtitle: "Alapvető műveletek Excelben",
+                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+                        orderIndex: 0
+                    },
+                    {
+                        title: "Adatbevitel, javítás II.",
+                        subtitle: "Alapvető műveletek Excelben",
+                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+                        orderIndex: 0
+                    },
+                ]
             },
             {
                 title: "DevOps kezdőknek - Kubernetes",
