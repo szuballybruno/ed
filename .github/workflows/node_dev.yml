@@ -37,7 +37,7 @@ jobs:
     
       # BUILD BACKEND
       - name: Installing dependencies for backend
-        run: npm install
+        run: yarn
         working-directory: ./dev_build/epistogram_backend
         
       - name: Building backend
@@ -48,7 +48,7 @@ jobs:
       - run: echo $REACT_APP_IS_DEPLOYED
 
       - name: Installing dependencies for frontend
-        run: npm install
+        run: yarn
         working-directory: ./dev_build/epistogram_frontend
         
       - name: Building frontend
@@ -56,17 +56,27 @@ jobs:
         working-directory: ./dev_build/epistogram_frontend
 
       # DEPLOY BACKEND
+      - name: Clearing target folder
+        run: |
+          rm -r epistogram_backend@development
+          mkdir epistogram_backend@development
+        working-directory: /var/lib/apps/
+
+      - name: Copying package.json to ./build folder
+        run: cp ./package.json ./build
+        working-directory: ./dev_build/epistogram_backend
+
+      - name: Deploying 'config.dev.env' file
+        run: cp ./config.dev.env ./build
+        working-directory: ./dev_build/epistogram_backend
+
       - name: Deploying backend to hosted location
         run: cp -r ./build/. /var/lib/apps/epistogram_backend@development
         working-directory: ./dev_build/epistogram_backend
 
       - name: Downloading node_modules to hosting location
-        run: npm install
+        run: yarn
         working-directory: /var/lib/apps/epistogram_backend@development
-
-      - name: Deploying 'config.dev.env' file
-        run: cp ./config.dev.env /var/lib/apps/epistogram_backend@development/config.env
-        working-directory: ./dev_build/epistogram_backend
 
       # DEPLOY FRONTEND
       - name: Deploying frontend to hosted location
