@@ -75,6 +75,8 @@ export const getEditedCourseAsync = async (courseId: number) => {
         .leftJoinAndSelect("course.videos", "videos")
         .getOneOrFail();
 
+    const thumbnailImageURL = staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
+
     const courseItems = toEditCourseItemsDTO(course)
     const courseTeacher = toUserDTO(course.teacher);
     const courseOrganizationsChecked = createCheckedById(organizations, assignedOrganizations)
@@ -88,6 +90,7 @@ export const getEditedCourseAsync = async (courseId: number) => {
         category: course.category,
         courseGroup: course.courseGroup,
         permissionLevel: course.permissionLevel,
+        thumbnailURL: thumbnailImageURL,
         colorOne: course.colorOne,
         colorTwo: course.colorTwo,
         courseItems: courseItems,
