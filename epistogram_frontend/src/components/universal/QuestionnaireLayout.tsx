@@ -45,19 +45,20 @@ export const QuestionnaireLayout = (props: {
     const { title, buttonsEnabled, children, loadingError, loadingState } = props;
 
     return (
-        <Flex id="questionnaireRoot" direction="column">
+        <Flex id="questionnaireRoot" direction="column" p="20px">
 
             {/* title */}
-            <Typography variant={"button"} style={{ fontSize: "18px" }}>
+            <Typography variant={"button"} style={{ fontSize: "18px", textAlign: "center" }}>
                 {title}
             </Typography>
 
             {/* answers */}
             <LoadingFrame loadingState={loadingState ?? "idle"} error={loadingError}>
                 <Flex
-                    id="answersList"
+                    id="answersListContainer"
                     direction="column"
                     alignItems="center"
+                    width="100%"
                     mt="20px"
                     pointerEvents={buttonsEnabled ? "all" : "none"}>
                     {children}

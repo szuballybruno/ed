@@ -15,6 +15,7 @@ import { CurrentTasksDTO } from "../../../../models/shared_models/CurrentTasksDT
 import { OverviewPageDTO } from "../../../../models/shared_models/OverviewPageDTO";
 import { QuestionDTO } from "../../../../models/shared_models/QuestionDTO";
 import { TaskObjectiveType } from "../../../../models/shared_models/types/sharedTypes";
+import { VideoQuestionnaire } from "../../../universal/VideoQuestionnaire";
 import classes from "./overviewDashboard.module.scss";
 
 const AssistantGridItem = (props: { children: ReactNode, title: string, xs: any }) => {
@@ -130,7 +131,11 @@ export const OverviewDashboard = (props: { dto: OverviewPageDTO }) => {
 
             {/* test your knowledge */}
             <AssistantGridItem title="Teszteld a tudásod" xs={8}>
-                <TestYourKnowledge dto={testQuestionDTO}></TestYourKnowledge>
+                <VideoQuestionnaire
+                    answerSessionId={-1}
+                    onAnswered={() => { }}
+                    question={testQuestionDTO} />
+                {/* <TestYourKnowledge dto={testQuestionDTO}></TestYourKnowledge> */}
             </AssistantGridItem>
 
             {/* current tasks */}
