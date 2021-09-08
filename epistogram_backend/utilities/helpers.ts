@@ -63,14 +63,14 @@ export const navPropNotNull = (prop: any) => {
 
 export const respond = (res: Response, code: number, data?: any) => {
 
-    if (data) {
-
-        log("Responding with data, code: " + code);
-        res.status(code).send(data);
-    } else {
+    if (data === undefined) {
 
         log("Responding, code: " + code);
         res.sendStatus(code);
+    } else {
+
+        log("Responding with data, code: " + code);
+        res.status(code).send(data);
     }
 }
 

@@ -1,13 +1,10 @@
-import { Box } from "@chakra-ui/react";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { globalConfig } from "../../../../configuration/config";
 import { getStaticAssetUrl, useIsDesktopView } from "../../../../frontendHelpers";
 import { useCurrentCourseItemCode } from "../../../../services/dataService";
 import { FlexFloat } from "../../FlexFloat";
 import classes from "./navbar.module.scss";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
-import MobileDropdown from "./navbar_components/MobileDropdown";
 
 export type MenuItemType = {
     menuName: string;
@@ -23,6 +20,8 @@ const Navbar = (props: { hideLinks?: boolean }) => {
 
     const isDesktop = useIsDesktopView();
     const currentCourseItemCode = useCurrentCourseItemCode();
+
+    console.log("Code: " + currentCourseItemCode);
 
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar

@@ -8,10 +8,12 @@ import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/data
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
-export const getCurrentCourseItemCode = getAsyncActionHandler((req: Request) => {
+export const getCurrentCourseItemCode = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    return getCurrentCourseItemDescriptorCodeAsync(userId);
+    const code = await getCurrentCourseItemDescriptorCodeAsync(userId);
+
+    return code;
 });
 
 export const getEditedVideoAction = async (req: Request) => {
