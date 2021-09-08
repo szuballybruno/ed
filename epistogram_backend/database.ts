@@ -262,19 +262,31 @@ const seedCourses = async (connection: TypeORMConnection) => {
                         title: "Cellák és területek azonosítása",
                         subtitle: "Alapvető műveletek Excelben",
                         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 0
+                        orderIndex: 0,
+                        videoFile: {
+                            pending: false,
+                            filePath: "/videos/video_3.mp4"
+                        }
                     },
                     {
                         title: "Adatbevitel, javítás I.",
                         subtitle: "Alapvető műveletek Excelben",
                         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 0
+                        orderIndex: 0,
+                        videoFile: {
+                            pending: false,
+                            filePath: "/videos/video_4.mp4"
+                        }
                     },
                     {
                         title: "Adatbevitel, javítás II.",
                         subtitle: "Alapvető műveletek Excelben",
                         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 0
+                        orderIndex: 0,
+                        videoFile: {
+                            pending: false,
+                            filePath: "/videos/video_5.mp4"
+                        }
                     },
                 ]
             },

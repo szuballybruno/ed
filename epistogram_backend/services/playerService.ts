@@ -50,7 +50,7 @@ export const getPlayerDataAsync = async (
         });
 
     // get current course items
-    const courseItemDTOs = await getCourseItemDTOsAsync(currentCourseItem.courseId);
+    const courseItemDTOs = await getCourseItemDTOsAsync(userId);
 
     // get new answer session
     const answerSessionId = await createAnswerSessionAsync(userId, examId, videoId);
