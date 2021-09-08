@@ -5,12 +5,33 @@ import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescr
 import { CourseItemType } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
-import { getCourseItemDescriptorCodeFromDTO } from "./encodeService";
+import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { toCourseItemDTOs, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
 import { getVideoByIdAsync } from "./videoService";
 
-export const getCurrentCourseItemDescriptorCode = async (userId: number) => {
+export const getCourseItemsDescriptorCodesAsync = async (userId: number, courseId: number) => {
+
+    const course = await staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .createQueryBuilder("c")
+        .where("c.id = :courseId", { courseId })
+        .leftJoinAndSelect("c.videos", "v")
+        .leftJoinAndSelect("c.exams", "e")
+        .getOneOrFail();
+
+    const codes = course
+        .videos
+        .map(x => ({ code: getCourseItemDescriptorCode(x.id, "video"), order: x.orderIndex }))
+        .concat(course
+            .exams
+            .map(e => ({ code: getCourseItemDescriptorCode(e.id, "exam"), order: e.orderIndex })));
+
+    return codes.orderBy(x => x.order).map(x => x.code);
+}
+
+export const getCurrentCourseItemDescriptorCodeAsync = async (userId: number) => {
 
     const user = await getUserById(userId);
     const dsc = getCurrentCourseItemDescriptor(user);

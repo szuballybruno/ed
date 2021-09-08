@@ -3,7 +3,7 @@ import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswe
 import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
 import { getEditedCourseAsync, getEditedVideoAsync, setEditedCourseAsync } from "../services/courseManagementService";
-import { getCurrentCourseItemDescriptorCode } from "../services/courseService";
+import { getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
@@ -11,7 +11,7 @@ import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpe
 export const getCurrentCourseItemCode = getAsyncActionHandler((req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    return getCurrentCourseItemDescriptorCode(userId);
+    return getCurrentCourseItemDescriptorCodeAsync(userId);
 });
 
 export const getEditedVideoAction = async (req: Request) => {

@@ -1,8 +1,8 @@
 
 export type CourseShortDTO = {
     courseId: number;
-    firstVideoId: number;
-    thumbnailImageURL: string; //globalConfig.assetStorageUrl + `/courses/${course.courseId}.${"png" || "jpg"}`
+    firstItemCode: string;
+    thumbnailImageURL: string;
     colorOne: any;
     colorTwo: any;
     title: string;

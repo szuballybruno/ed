@@ -8,7 +8,7 @@ import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessi
 import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction } from './api/playerActions';
-import { getUserCoursesAction } from './api/userCourses';
+import { getUserCoursesAction } from './api/userCoursesActions';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/signupActions';
 import { initializeDBAsync } from './database';
 import { authorizeRequest } from './services/authentication';

@@ -237,18 +237,18 @@ export const toCourseItemDTO = (item: Video | Exam, state: CourseItemState, isVi
     }
 }
 
-export const toCourseShortDTO = (course: Course) => {
+export const toCourseShortDTO = (course: Course, itemCode: string) => {
 
     navPropNotNull(course.videos);
     navPropNotNull(course.exams);
 
-    const thumbnailImageURL = staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
+    const thumbnailImageURL = getAssetUrl(`/courses/${course.id}.png`);
 
     return {
         courseId: course.id,
         title: course.title,
         category: course.category,
-        firstVideoId: course.videos.length != 0 ? course.videos[0].id : null,
+        firstItemCode: itemCode,
         teacherName: "Mr. Teacher Name",
         thumbnailImageURL: thumbnailImageURL
     } as CourseShortDTO;

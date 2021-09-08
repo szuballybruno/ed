@@ -6,6 +6,7 @@ import { Gradient } from 'react-gradient';
 import { NavLink } from "react-router-dom";
 import { animated, useSpring } from "react-spring";
 import { CourseShortDTO } from "../../../../models/shared_models/CourseShortDTO";
+import { useNavigation } from "../../../../services/navigatior";
 import classes from "./courseTile.module.scss";
 
 const CourseTile = (props: {
@@ -22,7 +23,9 @@ const CourseTile = (props: {
     const courseTitle = course.title;
     const courseTeacherName = course.teacherName;
     const thumbnailImageUrl = course.thumbnailImageURL;
-    const startUrl = `watch/${course.firstVideoId}?type=video`;
+    const { navigateToPlayer } = useNavigation();
+
+    const playCourse = () => navigateToPlayer(course.firstItemCode);
 
     return <Grid className={props.className} item xs={12} sm={12} md={6} lg={4} xl={3} >
         <Paper>
@@ -59,10 +62,9 @@ const CourseTile = (props: {
 
                                 {/* start course */}
                                 <Button
+                                    onClick={playCourse}
                                     className={classes.videoInfoStartButton}>
-                                    <NavLink to={startUrl}>
-                                        Indítás
-                                    </NavLink>
+                                    Indítás
                                 </Button>
                             </div>
                         </div>
