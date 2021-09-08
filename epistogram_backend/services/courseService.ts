@@ -24,6 +24,9 @@ export const getCourseItemDTOsAsync = async (userId: number) => {
 
     const user = await getUserById(userId);
     const currentCourseItemDesc = getCurrentCourseItemDescriptor(user);
+    if (!currentCourseItemDesc)
+        return [];
+
     const currentCourseItem = await getCourseItemAsync(currentCourseItemDesc!);
 
     const course = await staticProvider

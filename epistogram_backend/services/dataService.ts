@@ -38,7 +38,6 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
         currentCourseItems: courseItems
     } as OverviewPageDTO;
 
-    log(overviewPageDTO);
     return overviewPageDTO;
 }
 
