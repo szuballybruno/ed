@@ -4,7 +4,7 @@ import { FlexFloat } from '../components/universal/FlexFloat';
 
 export const MainWrapper = (props: { children: ReactNode }) => {
 
-    return <Flex id="mainWrapper" direction="column" height="100%" width="100%" overflow="hidden">
+    return <Flex id="mainWrapper" direction="column" height="100%" width="100%" maxWidth={"1920px"} overflow="hidden">
         {props.children}
     </Flex>
 };

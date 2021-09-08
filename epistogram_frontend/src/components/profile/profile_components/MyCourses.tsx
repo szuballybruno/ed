@@ -9,7 +9,7 @@ import classes from './myCourses.module.scss';
 
 const MyCourses = () => {
 
-    const { userProfileData, status, error } = useUserProfileData();
+    const { userProfileData } = useUserProfileData();
     const completedCourses = userProfileData?.completedCourses ?? [] as CourseShortDTO[];
     const favoriteCourses = userProfileData?.favoriteCourses ?? [] as CourseShortDTO[];
     const hasCompletedCourses = completedCourses.length > 0;
@@ -17,7 +17,7 @@ const MyCourses = () => {
 
     return <div className={classes.coursesInnerWrapper}>
 
-        <LoadingFrame loadingState={status} error={error}>
+        {/*<LoadingFrame loadingState={status} error={error}>*/}
             {/* completed courses */}
             <AdminDashboardHeader titleText={"Elvégzett kurzusaim"} />
             <div className={classes.coursesInnerRow}>
@@ -45,7 +45,7 @@ const MyCourses = () => {
             </div>
 
             <AdminDashboardHeader titleText={""} />
-        </LoadingFrame>
+        {/*</LoadingFrame>*/}
     </div>
 };
 

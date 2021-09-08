@@ -2,7 +2,7 @@ import React from 'react';
 import { getStaticAssetUrl } from '../../../../frontendHelpers';
 import classes from "./profileImage.module.scss";
 
-const ProfileImage = (props: { imageUrl: string | null }) => {
+const ProfileImage = (props: { imageUrl?: string }) => {
 
     // const cookies = new Cookies()
     // //const [file, setFile] = React.useState()

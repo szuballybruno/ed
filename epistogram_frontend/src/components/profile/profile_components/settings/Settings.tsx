@@ -1,37 +1,24 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import classes from './settings.module.scss'
 import AdminDashboardHeader from "../../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import SettingsItem from "./settings_components/SettingsItem";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
-import { Cookies } from "react-cookie";
-import instance from "../../../../services/axiosInstance";
+import {CurrentUserContext} from "../../../../HOC/AuthenticationFrame";
 
 
 const Settings = () => {
 
-    const dataSheetData = [{
-        name: "Vezetéknév",
-        placeholderName: "lastName"
-    }, {
-        name: "Keresztnév",
-        placeholderName: "firstName"
-    }, {
-        name: "E-mail",
-        placeholderName: "email"
-    }, {
-        name: "Beosztás",
-        placeholderName: "innerRole"
-    }, {
-        name: "Telefonszám",
-        placeholderName: "phoneNumber"
-    }, {
-        name: "Bemutatkozás",
-        placeholderName: "userDescription"
-    }, {
-        name: "LinkedIn",
-        placeholderName: "linkedInUrl"
-    }]
+    const user = useContext(CurrentUserContext);
+
+    const dataSheetData = {
+        name: "Név",
+        email: "E-mail",
+        jobTitle: "Beosztás",
+        phoneNumber: "Telefonszám",
+        userDescription: "Bemutatkozás",
+        linkedInUrl: "LinkedIn"
+    }
 
     const viewSettingsData = [
         "Téma",
@@ -57,26 +44,25 @@ const Settings = () => {
             <AdminDashboardHeader titleText={"Adatlap"} />
             <div className={classes.dataSheetWrapper}>
                 <div className={classes.profileImageWrapper}>
-                    <ProfileImage imageUrl="" />
+                    <ProfileImage imageUrl={user?.avatarUrl ? user?.avatarUrl : ""} />
                 </div>
                 <div className={classes.dataSheetItemWrapper}>
-                    {dataSheetData.map((data) => {
-                        // return <EditItem name={`${user.userData[data.placeholderName as keyof typeof user.userData].get() || ""}`}
-                        //     onChange={(e: React.ChangeEvent<any>) => {
-                        //         instance.patch(`users/${cookies.get("userId")}`, {
-                        //             "userData": {
-                        //                 [data.placeholderName]: "" + e.currentTarget.value
-                        //             }
-                        //         }).then((r) => {
-                        //             //@ts-ignore
-                        //             user.userData[data.placeholderName].set(e.currentTarget.value)
-                        //         }).catch((e) => {
-                        //             console.log("asd" + e)
-                        //         })
-                        //     }}
-                        //     value={data.placeholderName}
-                        //     title={data.name} />
-                    })}
+                    <EditItem
+                        name={`asd`}
+                        value={user?.name}
+                        title={dataSheetData.name} />
+                    <EditItem
+                        name={`asd`}
+                        value={user?.email}
+                        title={dataSheetData.email} />
+                    <EditItem
+                        name={`asd`}
+                        value={user?.phoneNumber}
+                        title={dataSheetData.phoneNumber} />
+                    <EditItem
+                        name={`asd`}
+                        value={user?.jobTitle}
+                        title={dataSheetData.jobTitle} />
                 </div>
             </div>
 

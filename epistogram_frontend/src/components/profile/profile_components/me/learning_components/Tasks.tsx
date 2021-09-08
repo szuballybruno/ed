@@ -82,7 +82,7 @@ const Tasks = (props: {
                                 {statuses.map(status => {
                                     return status.name === task.status ? <StyledTableCell>{status.displayedText}</StyledTableCell> : null
                                 })}
-                                <StyledTableCell>{String(new Date(task.due).toDateString())}</StyledTableCell>
+                                <StyledTableCell>{String(new Date(Date.now()).toDateString())}</StyledTableCell>
                             </StyledTableRow>
                         )) : <TableRow key={"No task"}>
                             <StyledTableCell component="th">

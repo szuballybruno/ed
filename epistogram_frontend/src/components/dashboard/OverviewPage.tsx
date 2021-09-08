@@ -76,12 +76,12 @@ const OverviewPage = () => {
                         <OverviewDashboard dto={pageDTO!} />
                     </OverviewSection>
 
-                    <OverviewSection title="Szavazás">
-                        {/* <Votes /> */}
+                    {/*<OverviewSection title="Szavazás">
+                         <Votes />
                         {recommendedCourses === [] ? <DashBoardRightSpacer title={"Kurzusajánló"} /> : null}
                         {recommendedCourses === [] ? <RecommendedCourses courses={recommendedCourses} /> : null}
                         <DashBoardRightSpacer title={""} />
-                    </OverviewSection>
+                    </OverviewSection>*/}
 
                 </RightPanel>
             </ContentWrapper>

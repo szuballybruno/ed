@@ -60,7 +60,7 @@ export const UserList = () => {
         if (!userId)
             return "";
 
-        return `${globalConfig.assetStorageUrl}/users/${userId}/avatar.png`;
+        return `${globalConfig.assetStorageUrl}/userAvatars/user_avatar_${userId}.png`;
     }
 
     return <AdminDashboardWrapper>
@@ -76,7 +76,7 @@ export const UserList = () => {
                     .map((user, index) => {
                         return <AdministrationListItem
                             title={`${user.lastName} ${user.firstName}`}
-                            profileImageUrl={getAvatarUrl(user.organizationId)}
+                            profileImageUrl={getAvatarUrl(user.id)}
                             chips={[
                                 getChipWithLabel(index, user.email, "email"),
                                 getChipWithLabel(index, user.organizationName, "organization"),
