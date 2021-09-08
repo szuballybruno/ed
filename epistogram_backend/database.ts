@@ -230,24 +230,10 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorOne: "#123456",
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
-            },
-            {
-                title: "DevOps kezdőknek - Kubernetes",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-            },
-            {
-                title: "Google classroom használata",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
+                coverFile: {
+                    pending: false,
+                    filePath: "/courseCoverImages/3.png"
+                },
             },
             {
                 title: "Microsoft Excel Mesterkurzus",
@@ -257,6 +243,36 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorOne: "#123456",
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
+                coverFile: {
+                    pending: false,
+                    filePath: "/courseCoverImages/4.png"
+                },
+            },
+            {
+                title: "DevOps kezdőknek - Kubernetes",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
+                coverFile: {
+                    pending: false,
+                    filePath: "/courseCoverImages/5.png"
+                },
+            },
+            {
+                title: "Google classroom használata",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
+                coverFile: {
+                    pending: false,
+                    filePath: "/courseCoverImages/7.png"
+                },
             },
             {
                 title: "Válj szuper tanulóvá - Gyorsolvasás és tanulás fejlesztés",
@@ -275,6 +291,10 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorOne: "#123456",
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
+                coverFile: {
+                    pending: false,
+                    filePath: "/courseCoverImages/6.png"
+                },
             },
             {
                 title: "Google Ads Mesterkurzus",
@@ -284,6 +304,10 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorOne: "#123456",
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
+                coverFile: {
+                    pending: false,
+                    filePath: "/courseCoverImages/8.png"
+                },
             }
         ] as Course[]);
 }
@@ -292,11 +316,11 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
 
     const { invitationToken, user } = await createInvitedUserWithOrgAsync(
         {
-            firstName: "Edina",
-            lastName: "Sandor",
-            jobTitle: "IT manager",
+            firstName: "Endre",
+            lastName: "Marosi",
+            jobTitle: "IT Manager",
             role: "admin" as RoleType,
-            email: "edina.sandor@email.com",
+            email: "marosi.endre@email.com",
         },
         orgIds[0],
         false);
