@@ -307,21 +307,21 @@ export const toEditListItemDTO = (id: number, name: string, checked: boolean) =>
 
 export const toEditCourseItemsDTO = (course: Course) => {
 
-    // const examItems = course
-    //     .exams
-    //     .map(x => toCourseItemDTO(x, false));
+    const examItems = course
+        .exams
+        .map(x => toCourseItemDTO(x, "completed", false));
 
-    // const videoItems = course
-    //     .videos
-    //     .map(x => toCourseItemDTO(x, true));
+    const videoItems = course
+        .videos
+        .map(x => toCourseItemDTO(x, "completed",true));
 
-    // const itemsCombined = examItems
-    //     .concat(videoItems);
+    const itemsCombined = examItems
+        .concat(videoItems);
 
-    // const itemsOrdered = itemsCombined
-    //     .orderBy(x => x.orderIndex);
+    const itemsOrdered = itemsCombined
+        .orderBy(x => x.orderIndex);
 
-    // return itemsOrdered as CourseItemDTO[];
-    throwNotImplemented();
+    return itemsOrdered as CourseItemDTO[];
+    //throwNotImplemented();
     return [] as CourseItemDTO[];
 }
