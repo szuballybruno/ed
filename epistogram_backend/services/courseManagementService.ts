@@ -3,7 +3,10 @@ import { CourseOrganization } from "../models/entity/CourseOrganization";
 import { Group } from "../models/entity/Group";
 import { Organization } from "../models/entity/Organization";
 import { Tag } from "../models/entity/Tag";
-import { AdminPageEditCourseView, EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO";
+import {
+    AdminPageEditCourseDTO,
+    EditListItemDTO
+} from "../models/shared_models/AdminPageEditCourseDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
 import { toEditCourseItemsDTO, toUserDTO } from "./mappings";
@@ -11,6 +14,34 @@ import { getTeacherDTOAsync } from "./userService";
 
 export const getEditedVideoAsync = async (videoId: string) => {
     // TODO: Create a method to get the currently edited video by videoId
+}
+
+export const setEditedCourseAsync = async (courseId: number, courseData: AdminPageEditCourseDTO) => {
+    const getCourseFromDTOAsync = async (courseData: AdminPageEditCourseDTO) => {
+        return {
+            id: courseData.courseId,
+            title: courseData.title,
+            category: courseData.category,
+            courseGroup: courseData.courseGroup,
+            permissionLevel: courseData.permissionLevel,
+            colorOne: courseData.colorOne,
+            colorTwo: courseData.colorTwo
+            // courseOrganizations: organizatcourseData.courseOrganizations,
+            // videos: courseData.videos,
+            // exams: courseData.exams,
+            // teacherId: courseData.teacherId,
+            // teacher: courseData.teacher,
+        } as Course
+    }
+    const course = await getCourseFromDTOAsync(courseData)
+    const setCourse = await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .update(Course)
+        .set(course)
+        .where("course.id = :courseId", { courseId: courseId })
+        .execute();
+    return setCourse
 }
 
 export const getEditedCourseAsync = async (courseId: number) => {
@@ -64,7 +95,7 @@ export const getEditedCourseAsync = async (courseId: number) => {
         groups: courseGroupsChecked,
         teachers: courseTeachersChecked,
         tags: courseTagsChecked,
-    } as AdminPageEditCourseView;
+    } as AdminPageEditCourseDTO;
 }
 
 const getOrganizationAsync = async () => {

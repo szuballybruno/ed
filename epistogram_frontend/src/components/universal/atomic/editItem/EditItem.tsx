@@ -26,10 +26,17 @@ const EditItem = (props: {
                 <Typography>{props.title}</Typography>
             </div>
             <div className={classes.textOrInputWrapper}>
-                <TextField size={"small"}
-                           name={props.name}
-                           value={props.value}
-                           onChange={props.onChange} />
+                {props.isEditing ?
+                    <TextField
+                        size={"small"}
+                        name={props.name}
+                        value={props.value}
+                        onChange={props.onChange}
+                    /> :
+                    <Typography>
+                        {props.value}
+                    </Typography>
+                }
             </div>
         </div>
     );

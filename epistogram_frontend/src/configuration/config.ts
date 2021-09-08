@@ -25,9 +25,6 @@ export const globalConfig = {
         title: "Kurzusok kezelése",
         path: "/manage/courses"
     }, {
-        title: "Szavazások kezelése",
-        path: "/manage/votes"
-    }, {
         title: "Csoportok kezelése",
         path: "/manage/groups"
     }, {

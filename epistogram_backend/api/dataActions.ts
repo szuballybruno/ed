@@ -3,7 +3,6 @@ import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswe
 import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
 import { getEditedCourseAsync, getEditedVideoAsync } from "../services/courseManagementService";
-import { getCurrentCourseItemDescriptorCode } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
@@ -26,6 +25,13 @@ export const getEditedCourseAction = async (req: Request) => {
     const courseId = req.body.courseId
 
     return await getEditedCourseAsync(courseId);
+};
+export const setEditedCourseAction = async (req: Request) => {
+
+    const courseId = req.body.courseId
+    const courseData = req.body
+
+    return await setEditedCourseAsync(courseId, courseData);
 };
 
 export const getOverviewPageDTOAction = async (req: Request) => {

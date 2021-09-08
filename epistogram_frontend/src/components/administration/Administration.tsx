@@ -50,7 +50,6 @@ const Administration = (props: { match: { url: string; } }) => {
             <RightPanel>
                 <AdminAddHeader />
                 <AdministrationRouting />
-                <SaveBar open={true} />
             </RightPanel>
         </ContentWrapper>
     </MainWrapper>
