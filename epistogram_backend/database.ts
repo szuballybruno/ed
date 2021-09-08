@@ -95,7 +95,7 @@ export const initializeDBAsync = async (recreate: boolean) => {
 
 export const recreateDB = async (postgresOptions: ConnectionOptions) => {
 
-    log("Dropping database...");
+    log("Dropping databasea...");
     await dropDatabase({ ifExist: true }, postgresOptions);
 
     log("Creating database...");
