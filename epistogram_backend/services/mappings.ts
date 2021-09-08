@@ -242,7 +242,9 @@ export const toCourseShortDTO = (course: Course, itemCode: string) => {
     navPropNotNull(course.videos);
     navPropNotNull(course.exams);
 
-    const thumbnailImageURL = getAssetUrl(`/courses/${course.id}.png`);
+    const thumbnailImageURL = course.coverFile
+        ? getAssetUrl(course.coverFile.filePath)
+        : getAssetUrl("/images/defaultCourseCover.jpg");
 
     return {
         courseId: course.id,
@@ -313,7 +315,7 @@ export const toEditCourseItemsDTO = (course: Course) => {
 
     const videoItems = course
         .videos
-        .map(x => toCourseItemDTO(x, "completed",true));
+        .map(x => toCourseItemDTO(x, "completed", true));
 
     const itemsCombined = examItems
         .concat(videoItems);

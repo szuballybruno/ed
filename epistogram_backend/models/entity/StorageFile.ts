@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Course } from "./Course";
 import { User } from "./User";
 import { Video } from "./Video";
 
@@ -23,4 +24,9 @@ export class StorageFile {
     @OneToMany(type => User, u => u.avatarFile)
     @JoinColumn()
     users: User[];
+
+    // course
+    @OneToMany(_ => Course, c => c.coverFile)
+    @JoinColumn()
+    courses: Course[];
 }

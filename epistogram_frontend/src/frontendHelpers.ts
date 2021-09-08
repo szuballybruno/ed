@@ -18,6 +18,17 @@ export const disallowWindowNavigation = () => {
     };
 }
 
+export function distinct<T>(array: T[]) {
+
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
+    var unique = array.filter(onlyUnique);
+
+    return unique;
+}
+
 export const usePaging = <T>(
     items: T[],
     onPreviousOverNavigation?: () => void,

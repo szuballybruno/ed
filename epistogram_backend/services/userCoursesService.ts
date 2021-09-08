@@ -19,6 +19,7 @@ export const getUserCoursesAsync = async (userId: number, dto: GetUserCoursesDTO
         .ormConnection
         .getRepository(Course)
         .createQueryBuilder("c")
+        .leftJoinAndSelect("c.coverFile", "cf")
         .leftJoinAndSelect("c.videos", "v")
         .leftJoinAndSelect("c.exams", "e")
         .getMany();

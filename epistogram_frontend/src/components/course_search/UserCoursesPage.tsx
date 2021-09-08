@@ -1,6 +1,7 @@
 import { FormControl, Grid, Select, Typography } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import React from "react";
+import { distinct } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
 import { GetUserCoursesDTO } from "../../models/shared_models/GetUserCoursesDTO";
@@ -33,8 +34,8 @@ const UserCoursesPage = () => {
         setIsRecommended(false);
     }
 
-    const categoryOptions = courses
-        .map((course, index) => course.category);
+    const categoryOptions = distinct(courses
+        .map((course, index) => course.category));
 
     return <MainWrapper>
 

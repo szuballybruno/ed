@@ -17,7 +17,6 @@ const CourseTile = (props: {
 
     const anim = useSpring({ opacity: 1, from: { opacity: 0 } })
     const course = props.course;
-    const errorImage = "https://picsum.photos/500/350";
     const colorOne = course.colorOne;
     const colorTwo = course.colorTwo;
     const courseTitle = course.title;
@@ -32,9 +31,10 @@ const CourseTile = (props: {
             <animated.div style={anim} className={classes.searchItem}>
                 <div className={classes.videoItemTopWrapper}>
 
-                    <animated.img className={classes.videoItemThumbnailImage} style={anim}
-                        src={thumbnailImageUrl}
-                        onError={(e) => { e.currentTarget.src = errorImage }} />
+                    <animated.img
+                        className={classes.videoItemThumbnailImage}
+                        style={anim}
+                        src={thumbnailImageUrl} />
 
                     <div className={classes.videoTitleOuterWrapper}>
 

@@ -160,13 +160,17 @@ const seedCourses = async (connection: TypeORMConnection) => {
         .getRepository(Course)
         .save([
             {
-                title: "Java Course",
+                title: "Webfejlesztés kezdőknek (HTML, CSS, BOOTSTRAP)",
                 category: "Programming",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
+                coverFile: {
+                    pending: false,
+                    filePath: "/courseCoverImages/1.png"
+                },
                 exams: [
                     {
                         title: "New Exam 1",
@@ -204,8 +208,80 @@ const seedCourses = async (connection: TypeORMConnection) => {
                         orderIndex: 2
                     }
                 ]
+            },
+            {
+                title: "Java programozás mesterkurzus",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
+            },
+            {
+                title: "Angular - Minden amire szükséged lehet",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
+            },
+            {
+                title: "DevOps kezdőknek - Kubernetes",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
+            },
+            {
+                title: "Google classroom használata",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
+            },
+            {
+                title: "Microsoft Excel Mesterkurzus",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
+            },
+            {
+                title: "Válj szuper tanulóvá - Gyorsolvasás és tanulás fejlesztés",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
+            },
+            {
+                title: "Tanulj meg elkészíteni bármilyen karaktert - Adobe Illustrator",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
+            },
+            {
+                title: "Google Ads Mesterkurzus",
+                category: "Programming",
+                courseGroup: "IT",
+                permissionLevel: "public",
+                colorOne: "#123456",
+                colorTwo: "#ABCDEF",
+                teacherId: 1,
             }
-        ]);
+        ] as Course[]);
 }
 
 const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {

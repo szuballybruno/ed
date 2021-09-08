@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CourseOrganization } from "./CourseOrganization";
 import { Exam } from "./Exam";
+import { StorageFile } from "./StorageFile";
 import { User } from "./User";
 import { Video } from "./Video";
 
@@ -43,10 +44,19 @@ export class Course {
     @JoinColumn()
     exams: Exam[];
 
+    // teacher
     @Column()
     teacherId: number
 
     @ManyToOne(() => User, teacher => teacher.teachedCourses)
     @JoinColumn({ name: "teacherId" })
-    teacher: User
+    teacher: User;
+
+    // coverFile
+    @Column({ nullable: true })
+    coverFileId: number | null;
+
+    @ManyToOne(_ => StorageFile, x => x.courses, { cascade: true })
+    @JoinColumn({ name: "coverFileId" })
+    coverFile: StorageFile;
 }

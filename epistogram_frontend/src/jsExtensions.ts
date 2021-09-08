@@ -4,8 +4,8 @@ declare global {
     interface Array<T> {
 
         remove(func: (item: T) => boolean): Array<T>;
-
         orderBy(func: (item: T) => number | string): Array<T>;
+        distinct(): Array<T>;
     }
 }
 
