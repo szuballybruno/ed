@@ -67,7 +67,7 @@ jobs:
         working-directory: ./dev_build/epistogram_backend
 
       - name: Deploying 'config.dev.env' file
-        run: cp ./config.dev.env ./build
+        run: cp ./config.dev.env ./build/config.env
         working-directory: ./dev_build/epistogram_backend
 
       - name: Deploying backend to hosted location

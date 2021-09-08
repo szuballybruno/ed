@@ -9,19 +9,6 @@ type EnvironmentType = "development" | "production" | "demo" | "local";
 
 export const getCurrentEnvironmentName = () => {
 
-    // const node_env = process.env.NODE_ENV;
-
-    // if (node_env == "production")
-    //     return "production" as EnvironmentType;
-
-    // if (node_env == "demo")
-    //     return "demo" as EnvironmentType;
-
-    // if (node_env == "development")
-    //     return "development" as EnvironmentType;
-
-    // return "local" as EnvironmentType;
-
     return process.env.ENVIRONMENT_NAME as EnvironmentType;
 }
 
@@ -74,16 +61,6 @@ export class GlobalConfiguration {
         mailHost: getEnvConfigEntry("MAIL_HOST"),
         senderEmail: getEnvConfigEntry("MAIL_SENDER_MAIL"),
         senderPassword: getEnvConfigEntry("MAIL_SENDER_PASSWORD")
-    }
-
-    vps = {
-        host: getEnvConfigEntry("VPS_HOST"),
-        scpPort: getEnvConfigEntry("VPS_SCP_PORT"),
-
-        username: getEnvConfigEntry("VPS_USERNAME"),
-        passphrase: getEnvConfigEntry("VPS_PASSPHRASE"),
-
-        privateKey: getEnvConfigEntry("VPS_RSA_PRIVATE_KEY")
     }
 
     database = {

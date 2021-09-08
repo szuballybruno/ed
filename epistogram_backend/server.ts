@@ -90,6 +90,7 @@ const initializeAsync = async () => {
 
     // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
+    expressServer.get('/get-current-course-item-code', authMiddleware, getCurrentCourseItemCode);
 
     // file
     expressServer.post('/file/upload-video', authMiddleware, uploadVideoFileAction);
