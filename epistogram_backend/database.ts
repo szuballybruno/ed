@@ -265,7 +265,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
                         orderIndex: 1,
                         videoFile: {
                             pending: false,
-                            filePath: "/videos/video_3.mp4"
+                            filePath: "/videos/video_3.m4v"
                         }
                     },
                     {
@@ -275,7 +275,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
                         orderIndex: 2,
                         videoFile: {
                             pending: false,
-                            filePath: "/videos/video_4.mp4"
+                            filePath: "/videos/video_4.m4v"
                         }
                     },
                     {
@@ -285,7 +285,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
                         orderIndex: 3,
                         videoFile: {
                             pending: false,
-                            filePath: "/videos/video_5.mp4"
+                            filePath: "/videos/video_5.m4v"
                         }
                     },
                 ]
