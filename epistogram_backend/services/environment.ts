@@ -49,11 +49,14 @@ export class GlobalConfiguration {
     }
 
     misc = {
-        uploadFolderPath: getEnvConfigEntry("UPLOAD_FOLDER_PATH"),
         hostPort: getEnvConfigEntry("HOST_PORT"),
         environmentName: getEnvConfigEntry("ENVIRONMENT_NAME"),
-        frontendUrl: getEnvConfigEntry("FRONTEND_URL"),
-        assetStoreUrl: "https://storage.googleapis.com/epistogram_bucket_dev"
+        frontendUrl: getEnvConfigEntry("FRONTEND_URL")
+    }
+
+    fileStorage = {
+        assetStoreUrl: getEnvConfigEntry("FILE_STORAGE_URL"),
+        bucketName: getEnvConfigEntry("FILE_STORAGE_BUCKET_NAME"),
     }
 
     mail = {

@@ -7,7 +7,7 @@ export const getAssetUrl = (assetPath: string | null | undefined) => {
 
     assetPath = ("/" + assetPath).replace("//", "/");
 
-    return staticProvider.globalConfig.misc.assetStoreUrl + assetPath;
+    return staticProvider.globalConfig.fileStorage.assetStoreUrl + assetPath;
 }
 
 export const getExamCoverImageUrl = () => getAssetUrl("/images/examCover.jpg");

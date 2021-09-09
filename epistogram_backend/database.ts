@@ -24,6 +24,7 @@ import { CourseOrganizationDTO } from "./models/shared_models/CourseOrganization
 import { setUserAvatarFileId } from "./services/userService";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/signupService";
 import { AnswerSession } from "./models/entity/AnswerSession";
+import { getAssetUrl } from "./services/misc/urlProvider";
 
 export type TypeORMConnection = Connection;
 
@@ -381,7 +382,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
         {
             isSignupQuestion: true,
             questionText: "Egy csapatban elvégzendő projekt esetén a következőt preferálom:",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes1.png",
+            imageUrl: getAssetUrl("/application/kerdes1.png"),
             answers: [
                 {
                     text: "Szoros együttműködés a többiekkel"
@@ -394,7 +395,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
         {
             isSignupQuestion: true,
             questionText: "Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást: ",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes2.png",
+            imageUrl: getAssetUrl("/application/kerdes2.png"),
             answers: [
                 {
                     text: "Mutassa meg az épület alaprajzán/rajzolja le a helyes irányt",
@@ -407,7 +408,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
         {
             isSignupQuestion: true,
             questionText: "Jobban preferálom azt a munkában, mikor:",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes3.png",
+            imageUrl: getAssetUrl("/application/kerdes3.png"),
             answers: [
                 {
                     text: "Előre definiált instrukciók alapján végzek el feladatokat",
@@ -420,7 +421,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
         {
             isSignupQuestion: true,
             questionText: "Egy előadás esetén hasznosabb számomra, ha:",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes4.png",
+            imageUrl: getAssetUrl("/application/kerdes4.png"),
             answers: [
                 {
                     text: "Az előadó magyaráz, és megválaszolja a felmerülő kérdéseket",
@@ -433,7 +434,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
         {
             isSignupQuestion: true,
             questionText: "Az érzéseimet, gondolataimat a következő módokon fejezem ki szívesebben:",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes5.png",
+            imageUrl: getAssetUrl("/application/kerdes5.png"),
             answers: [
                 {
                     text: "Zenéken, írásokon, a művészet által",
