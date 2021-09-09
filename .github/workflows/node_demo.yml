@@ -29,7 +29,7 @@ jobs:
         run: echo ${{ env.PIPELINE_ENVIRONMENT }}
 
       # INITIALIZE
-      - name: Checkout '${{ env.PIPELINE_ENVIRONMENT }}' branch
+      - name: Checkout branch
         uses: actions/checkout@v2
         with:
           ref: ${{ env.PIPELINE_ENVIRONMENT }} # references the target branch
@@ -42,56 +42,79 @@ jobs:
     
       # BUILD BACKEND
       - name: Installing dependencies for backend
-        run: yarn
+        run: |
+          echo In: $PWD
+          yarn
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
         
       - name: Building backend
-        run: tsc
+        run: |
+          echo In: $PWD
+          tsc
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
         
       # BUILD FRONTEND
-      - run: echo $REACT_APP_IS_DEPLOYED
-
       - name: Installing dependencies for frontend
-        run: yarn
+        run: |
+          echo In: $PWD
+          yarn
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_frontend
         
       - name: Building frontend
-        run: CI=false npm run build --if-present
+        run: |
+          echo In: $PWD
+          CI=false npm run build
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_frontend
 
       # DEPLOY BACKEND
       - name: Clearing target folder
         run: |
+          echo In: $PWD
           rm -r epistogram_backend@${{ env.PIPELINE_ENVIRONMENT_LONG }}
           mkdir epistogram_backend@${{ env.PIPELINE_ENVIRONMENT_LONG }}
         working-directory: /var/lib/apps/
 
       - name: Copying package.json to ./build folder
-        run: cp ./package.json ./build
+        run: |
+          echo In: $PWD
+          cp ./package.json ./build
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
 
-      - name: Deploying 'config.${{ env.PIPELINE_ENVIRONMENT }}.env' file
-        run: cp ./config.${{ env.PIPELINE_ENVIRONMENT }}.env ./build/config.env
+      - name: Copying config file to ./build folder
+        run: |
+          echo In: $PWD
+          cp ./config.${{ env.PIPELINE_ENVIRONMENT }}.env ./build/config.env
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
 
       - name: Deploying backend to hosted location
-        run: cp -r ./build/. /var/lib/apps/epistogram_backend@${{ env.PIPELINE_ENVIRONMENT_LONG }}
+        run: |
+          echo In: $PWD
+          cp -r ./build/. /var/lib/apps/epistogram_backend@${{ env.PIPELINE_ENVIRONMENT_LONG }}
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
 
       - name: Downloading node_modules to hosting location
-        run: yarn
+        run: |
+          echo In: $PWD
+          yarn
         working-directory: /var/lib/apps/epistogram_backend@${{ env.PIPELINE_ENVIRONMENT_LONG }}
 
       # DEPLOY FRONTEND
       - name: Deploying frontend to hosted location
-        run: cp -r ./build/. /var/lib/apps/epistogram@${{ env.PIPELINE_ENVIRONMENT_LONG }}
+        run: |
+          echo In: $PWD
+          cp -r ./build/. /var/lib/apps/epistogram@${{ env.PIPELINE_ENVIRONMENT_LONG }}
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_frontend
 
       # RUN BACKEND APPLICATION  
-      - run: pm2 delete epistogram_backend_${{ env.PIPELINE_ENVIRONMENT }}
+      - name: Deleting previous PM2 process
+        run: |
+          echo In: $PWD
+          pm2 delete epistogram_backend_${{ env.PIPELINE_ENVIRONMENT }}
         continue-on-error: true
         working-directory: /var/lib/apps/epistogram_backend@${{ env.PIPELINE_ENVIRONMENT_LONG }}
       
-      - run: pm2 start /var/lib/apps/epistogram_backend@${{ env.PIPELINE_ENVIRONMENT_LONG }}/server.js --name=epistogram_backend_${{ env.PIPELINE_ENVIRONMENT }}
+      - name: Start new PM2 process
+        run: |
+          echo In: $PWD
+          pm2 start /var/lib/apps/epistogram_backend@${{ env.PIPELINE_ENVIRONMENT_LONG }}/server.js --name=epistogram_backend_${{ env.PIPELINE_ENVIRONMENT }}
         working-directory: /var/lib/apps/epistogram_backend@${{ env.PIPELINE_ENVIRONMENT_LONG }}
