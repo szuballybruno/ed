@@ -6,28 +6,6 @@ import { getCurrentCourseItemDescriptor } from "./courseService";
 import { answerQuestionAsync } from "./questionAnswerService";
 import { getUserById } from "./userService";
 
-export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlaybackSampleDTO) => {
-
-    const user = await getUserById(userId);
-    const currentItemDesc = getCurrentCourseItemDescriptor(user);
-
-    if (!currentItemDesc)
-        throw new Error("Cannot add video playback sample while current course item is not set!");
-
-    if (currentItemDesc.itemType !== "video")
-        throw new Error("Cannot add video playback sample while current course item is not a video!");
-
-    await staticProvider
-        .ormConnection
-        .getRepository(VideoPlaybackSample)
-        .insert({
-            videoId: currentItemDesc.itemId,
-            userId: userId,
-            fromSeconds: dto.fromSeconds,
-            toSeconds: dto.toSeconds
-        });
-}
-
 export const answerVideoQuestionAsync = async (
     userId: number, answerSessionId: number, questionId: number, answerId: number) => {
 

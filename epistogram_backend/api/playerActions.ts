@@ -1,8 +1,7 @@
 import { Request } from "express";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { getUserIdFromRequest } from "../services/authentication";
-import { getPlayerDataAsync } from "../services/playerService";
-import { saveVideoPlaybackSample } from "../services/videoService";
+import { getPlayerDataAsync, saveVideoPlaybackSample } from "../services/playerService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
 export const saveVideoPlaybackSampleAction = getAsyncActionHandler((req: Request) => {
