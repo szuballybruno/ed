@@ -15,6 +15,7 @@ export class VideoPlaybackSample {
     toSeconds: number;
 
     // video 
+    @Column()
     videoId: number;
 
     @ManyToOne(_ => Video, x => x.videoPlaybackSamples)
