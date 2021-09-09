@@ -21,8 +21,6 @@ const Navbar = (props: { hideLinks?: boolean }) => {
     const isDesktop = useIsDesktopView();
     const currentCourseItemCode = useCurrentCourseItemCode();
 
-    console.log("Code: " + currentCourseItemCode);
-
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar
         currentCourseItemCode={currentCourseItemCode}

@@ -1,9 +1,9 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Organization} from "./Organization";
-import {Course} from "./Course";
-import {Group} from "./Group";
-import {User} from "./User";
-import {Tag} from "./Tag";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Organization } from "./Organization";
+import { Course } from "./Course";
+import { Group } from "./Group";
+import { User } from "./User";
+import { Tag } from "./Tag";
 
 @Entity()
 export class CourseOrganization {
@@ -42,6 +42,4 @@ export class CourseOrganization {
     @ManyToOne(type => Tag, tag => tag.courseOrganizations)
     @JoinColumn({ name: "tagId" })
     tag: Tag;
-
-
 }

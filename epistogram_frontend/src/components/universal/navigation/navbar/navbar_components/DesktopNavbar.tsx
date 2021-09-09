@@ -1,12 +1,15 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { Button } from "@material-ui/core";
 import { PlayArrow } from "@material-ui/icons";
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import { getAssetUrl } from "../../../../../frontendHelpers";
 import { useNavigation } from "../../../../../services/navigatior";
+import { FlexImage } from "../../../FlexImage";
 import { MenuItemsType } from "../Navbar";
 import classes from "./desktopNavbar.module.scss";
 import MenuItemList from "./MenuItemList";
+import NavbarButton from "./NavbarButton";
 
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,
@@ -24,51 +27,51 @@ const DesktopNavbar = (props: {
     const homeUrl = "/";
 
     return (
-        <div className={classes.navbarOuterWrapper}>
-            <div className={`${classes.navbarButtonWrapper}`}>
+        <Flex align="center" height="80px" width="100%" justify="space-evenly">
 
-                {/* logo link */}
-                <NavLink to={homeUrl} className={classes.logoWrapper}>
-                    <img
-                        className={classes.logo}
-                        alt="EpistoGram Logo"
-                        src={getAssetUrl("/images/logo.png")} />
-                </NavLink>
+            {/* logo link */}
+            <NavLink to={homeUrl} className={classes.logoWrapper}>
+                <FlexImage url={getAssetUrl("/images/logo.png")} height="90%" width="100%" />
+            </NavLink>
 
-                {/* content */}
-                <div
-                    className={classes.navbarRightWrapper}
-                    style={{
-                        display: props.hideLinks ? "none" : "flex"
-                    }}>
+            {/* menu items */}
+            <Flex display={props.hideLinks ? "none" : "flex"}>
+                {props
+                    .menuItems
+                    .middleMenu
+                    .map((item, index) => {
+                        return <Box p="10px">
+                            <NavbarButton
+                                key={index}
+                                index={index}
+                                menuName={item.menuName}
+                                menuPath={item.menuPath} />
+                        </Box>
+                    })}
+            </Flex>
 
-                    {/* menu items */}
-                    <MenuItemList menuItems={props.menuItems.middleMenu} />
+            {/* content */}
+            <Flex pr="10px">
 
-                    {/* show something new  */}
-                    <Button variant={"outlined"}
+                {/* show something new  */}
+                <Button variant={"outlined"}
+                    size={"large"}
+                    className={classes.showSomethingButton}
+                    style={{ color: "white" }}>
+                    Mutass valamit!
+                </Button>
+
+                {/* continue watching  */}
+                {currentCourseItemCode &&
+                    <Button
+                        variant={"outlined"}
                         size={"large"}
-                        className={classes.showSomethingButton}
-                        style={{ color: "white" }}>
-                        Mutass valamit!
-                    </Button>
-
-                    {/* continue watching  */}
-                    {currentCourseItemCode &&
-                        <Button
-                            variant={"outlined"}
-                            size={"large"}
-                            onClick={continueWatching}
-                            className={classes.playButton}>
-                            <PlayArrow />
-                        </Button>}
-
-                    <div style={{
-                        width: '50px'
-                    }} />
-                </div>
-            </div>
-        </div>
+                        onClick={continueWatching}
+                        className={classes.playButton}>
+                        <PlayArrow />
+                    </Button>}
+            </Flex>
+        </Flex>
     );
 };
 
