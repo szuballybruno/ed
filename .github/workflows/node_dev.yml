@@ -25,7 +25,7 @@ jobs:
     steps:
 
       - name: Echo pipeline environment
-        run: echo ${{ PIPELINE_ENVIRONMENT }}
+        run: echo ${{ env.PIPELINE_ENVIRONMENT }}
 
       # INITIALIZE
       - name: Checkout 'dev' branch
