@@ -17,6 +17,7 @@ import { OverlayDialog } from "./OverlayDialog";
 import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
 import { CourseItemSelector } from "./CourseItemSelector";
+import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
 
 export const WatchView = (props: {
     video: VideoDTO,
@@ -45,7 +46,7 @@ export const WatchView = (props: {
 
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
     const videoPlayerState = useVideoPlayerState(video, isShowingOverlay);
-    const { playedSeconds, videoLength, isSeeking } = videoPlayerState;
+    const { playedSeconds, videoLength, isSeeking, isPlaying } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription description={video!.description} />;
     const VideoComments = () => <Box bg="red" />;
@@ -123,6 +124,9 @@ export const WatchView = (props: {
 
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
     }, [videoLength]);
+
+    // playback watcher
+    usePlaybackWatcher(playedSeconds, isPlaying);
 
     return <>
 

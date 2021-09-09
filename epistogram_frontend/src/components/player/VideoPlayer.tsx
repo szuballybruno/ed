@@ -25,7 +25,7 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
     const { subtitles } = { subtitles: [] as SubtitleDTO[] };
     const playerContainerRef = useRef(null);
     const playerRef = useRef<ReactPlayer>(null);
-    const [isPlaying, setIsPlaying] = React.useState(false);
+    const [shouldBePlaying, setShouldBePlaying] = React.useState(false);
     const [playedSeconds, setPlayedSeconds] = React.useState(0);
     const [videoLength, setVideoLength] = React.useState(0);
     const [showControls, setShowControls] = useState(true);
@@ -33,7 +33,8 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
     const [visualOverlayType, setVisualOverlayType] = useState<VisualOverlayType>("start");
     const [isVisualOverlayVisible, setIsVisualOverlayVisible] = useState(false);
     const [isSeeking, setIsSeeking] = useState(false);
-    const controlsOpacity = showControls || !isPlaying || isSeeking ? 1 : 0;
+    const controlsOpacity = showControls || !shouldBePlaying || isSeeking ? 1 : 0;
+    const isPlaying = shouldBePlaying && !isShowingOverlay && !isSeeking;
 
     const subtileTracks = subtitles
         .map(x => ({
@@ -81,12 +82,12 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
         }
     }
 
-    const toggleIsPlaying = () => {
+    const toggleShouldBePlaying = () => {
 
-        const targetIsPlaying = !isPlaying;
-        setIsPlaying(targetIsPlaying);
+        const targetShouldBePlaying = !shouldBePlaying;
+        setShouldBePlaying(targetShouldBePlaying);
         showControlOverlay();
-        flashVisualOverlay(targetIsPlaying ? "start" : "pause");
+        flashVisualOverlay(targetShouldBePlaying ? "start" : "pause");
     }
 
     const jump = (right?: boolean) => {
@@ -120,7 +121,7 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
             return;
 
         if (e.key == " ")
-            toggleIsPlaying();
+            toggleShouldBePlaying();
 
         if (e.key == "ArrowLeft")
             jump();
@@ -136,14 +137,15 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
         visualOverlayType,
         controlOverlayTimer,
         videoUrl,
-        isPlaying,
+        shouldBePlaying,
         subtileTracks,
         controlsOpacity,
         playedSeconds,
         videoLength,
         isShowingOverlay,
         isSeeking,
-        toggleIsPlaying,
+        isPlaying,
+        toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
         setVideoLength,
@@ -169,13 +171,14 @@ export const VideoPlayer = (props: {
         visualOverlayType,
         controlOverlayTimer,
         videoUrl,
-        isPlaying,
+        shouldBePlaying,
         subtileTracks,
         controlsOpacity,
         playedSeconds,
         videoLength,
         isShowingOverlay,
-        toggleIsPlaying,
+        isPlaying,
+        toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
         setVideoLength,
@@ -208,7 +211,7 @@ export const VideoPlayer = (props: {
                     width="100%"
                     height="100%"
                     pt="56.25%" // to keep 16:9 ratio
-                    onClick={() => toggleIsPlaying()}
+                    onClick={toggleShouldBePlaying}
                     onMouseMove={() => {
 
                         if (!controlOverlayTimer)
@@ -225,7 +228,7 @@ export const VideoPlayer = (props: {
                         width={"100%"}
                         height={"100%"}
                         controls={false}
-                        playing={isPlaying && !isShowingOverlay}
+                        playing={isPlaying}
                         onProgress={(playedInfo) => {
 
                             setPlayedSeconds(playedInfo.playedSeconds);
@@ -251,8 +254,8 @@ export const VideoPlayer = (props: {
                     transition="0.15s">
 
                     {/* play/pause */}
-                    <button onClick={(e) => toggleIsPlaying()}>
-                        {isPlaying ? <Pause /> : <PlayArrow />}
+                    <button onClick={toggleShouldBePlaying}>
+                        {shouldBePlaying ? <Pause /> : <PlayArrow />}
                     </button>
 
                     {/* timestamp */}
