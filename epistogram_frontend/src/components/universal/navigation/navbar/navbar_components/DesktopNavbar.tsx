@@ -8,7 +8,6 @@ import { useNavigation } from "../../../../../services/navigatior";
 import { FlexImage } from "../../../FlexImage";
 import { MenuItemsType } from "../Navbar";
 import classes from "./desktopNavbar.module.scss";
-import MenuItemList from "./MenuItemList";
 import NavbarButton from "./NavbarButton";
 
 const DesktopNavbar = (props: {
@@ -27,7 +26,7 @@ const DesktopNavbar = (props: {
     const homeUrl = "/";
 
     return (
-        <Flex align="center" height="80px" width="100%" justify="space-evenly">
+        <Flex align="center" width="100%" justify="space-between">
 
             {/* logo link */}
             <NavLink to={homeUrl} className={classes.logoWrapper}>

@@ -41,8 +41,8 @@ const OverviewPage = () => {
 
         <Navbar />
 
-        <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
-            <ContentWrapper>
+        <ContentWrapper>
+            <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
                 <LeftPanel>
                     <Grid>
 
@@ -84,8 +84,8 @@ const OverviewPage = () => {
                     </OverviewSection>*/}
 
                 </RightPanel>
-            </ContentWrapper>
-        </LoadingFrame>
+            </LoadingFrame>
+        </ContentWrapper>
     </MainWrapper>
 };
 

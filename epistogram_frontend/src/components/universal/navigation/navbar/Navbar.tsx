@@ -45,7 +45,7 @@ const Navbar = (props: { hideLinks?: boolean }) => {
         </div>
     }
 
-    return <FlexFloat id="navbarRoot" height={isDesktop ? "80px" : "60px"} zIndex={2} >
+    return <FlexFloat id="flexFloat-navbarRoot" height={isDesktop ? "80px" : "60px"} zIndex={3} >
         {isDesktop
             ? renderDesktopNavbar()
             : renderMobileNavbar()}

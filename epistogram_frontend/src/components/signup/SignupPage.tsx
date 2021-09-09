@@ -2,7 +2,7 @@ import React from 'react';
 import { globalConfig } from "../../configuration/config";
 import { getQueryParam, usePaging } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
-import { MainWrapper } from "../../HOC/MainPanels";
+import { ContentWrapper, MainWrapper } from "../../HOC/MainPanels";
 import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";
@@ -142,12 +142,14 @@ export const SignupPage = () => {
             {/* navbar */}
             <Navbar hideLinks={true} />
 
-            <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} flex="1">
-                <SlidesDisplay
-                    flex="1"
-                    slides={slides}
-                    index={slidesState.currentIndex} />
-            </LoadingFrame>
+            <ContentWrapper>
+                <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} flex="1">
+                    <SlidesDisplay
+                        flex="1"
+                        slides={slides}
+                        index={slidesState.currentIndex} />
+                </LoadingFrame>
+            </ContentWrapper>
         </MainWrapper >
     );
 };

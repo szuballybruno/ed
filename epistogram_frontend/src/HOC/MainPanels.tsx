@@ -10,7 +10,7 @@ export const MainWrapper = (props: { children: ReactNode }) => {
 };
 
 export const ContentWrapper = (props: { children: ReactNode }) => {
-    return <Flex id="contentWrapper" height="100%" >
+    return <Flex id="contentWrapper" flex="1" overflow="hidden">
         {props.children}
     </Flex>
 };
