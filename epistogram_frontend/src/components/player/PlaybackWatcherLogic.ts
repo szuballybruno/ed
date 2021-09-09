@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { isBetweenThreshold } from "../../frontendHelpers";
+import { usePostVideoPlaybackSample } from "../../services/playerService";
 
 export const usePlaybackWatcher = (playedSeconds: number, isPlaying: boolean) => {
 
@@ -14,19 +15,24 @@ export const usePlaybackWatcher = (playedSeconds: number, isPlaying: boolean) =>
     const minSampleSeconds = 1;
 
     // the collection of taken samples
-    const [samples, setSamples] = useState<number[]>([]);
-    const lastSample = samples[samples.length - 1];
+    const [lastSampleSeconds, setLastSampleSeconds] = useState(0);
+
+    // post funciton
+    const { postVideoPlaybackSampleAsync } = usePostVideoPlaybackSample();
 
     const samplePlayedSeconds = () => {
 
-        setSamples([...samples, playedSeconds]);
+        setLastSampleSeconds(playedSeconds);
 
-        const elapsedSeconds = Math.round((playedSeconds - lastSample) * 10) / 10;
+        const elapsedSeconds = Math.round((playedSeconds - lastSampleSeconds) * 10) / 10;
 
         if (elapsedSeconds < maxSampleSeconds
             && elapsedSeconds > 0
-            && elapsedSeconds > minSampleSeconds)
-            console.log(`Watched ${elapsedSeconds}s`)
+            && elapsedSeconds > minSampleSeconds) {
+
+            console.log(`Watched ${elapsedSeconds}s`);
+            postVideoPlaybackSampleAsync(lastSampleSeconds, playedSeconds);
+        }
     }
 
     // force sample at playback changes
@@ -39,7 +45,7 @@ export const usePlaybackWatcher = (playedSeconds: number, isPlaying: boolean) =>
     useEffect(() => {
 
         // ordinary sample 
-        if (isBetweenThreshold(playedSeconds, lastSample, sampleRateSeconds))
+        if (isBetweenThreshold(playedSeconds, lastSampleSeconds, sampleRateSeconds))
             return;
 
         samplePlayedSeconds();

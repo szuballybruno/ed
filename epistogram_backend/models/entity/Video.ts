@@ -4,6 +4,7 @@ import { Course } from "./Course";
 import { Question } from "./Question";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
+import { VideoPlaybackSample } from "./VideoPlaybackSample";
 
 @Entity()
 export class Video {
@@ -61,4 +62,9 @@ export class Video {
     @OneToMany(_ => AnswerSession, as => as.video)
     @JoinColumn()
     answerSessions: AnswerSession[];
+
+    // video playback samples 
+    @OneToMany(_ => VideoPlaybackSample, x => x.video)
+    @JoinColumn()
+    videoPlaybackSamples: VideoPlaybackSample[];
 }

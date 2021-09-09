@@ -7,7 +7,7 @@ import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
-import { getPlayerDataAction } from './api/playerActions';
+import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/signupActions';
 import { initializeDBAsync } from './database';
@@ -101,8 +101,9 @@ const initializeAsync = async () => {
     // data
     expressServer.get("/data/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));
 
-    // player
+    // player 
     expressServer.post('/player/get-player-data', authMiddleware, getPlayerDataAction);
+    expressServer.post('/player/save-video-playback-sample', authMiddleware, saveVideoPlaybackSampleAction);
 
     // users
     expressServer.get("/users/get-user-administartion-user-list", authMiddleware, getUserAdministrationUserListAction);

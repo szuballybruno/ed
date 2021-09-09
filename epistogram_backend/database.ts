@@ -25,6 +25,7 @@ import { setUserAvatarFileId } from "./services/userService";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/signupService";
 import { AnswerSession } from "./models/entity/AnswerSession";
 import { getAssetUrl } from "./services/misc/urlProvider";
+import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
 
 export type TypeORMConnection = Connection;
 
@@ -65,7 +66,8 @@ export const initializeDBAsync = async (recreate: boolean) => {
             TestParent,
             TestSubChild,
             StorageFile,
-            AnswerSession
+            AnswerSession,
+            VideoPlaybackSample
         ],
     } as ConnectionOptions;
 

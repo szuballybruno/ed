@@ -1,6 +1,7 @@
 import { useReactQuery } from "../frontendHelpers";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
-import { httpPostAsync } from "./httpClient";
+import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
+import { httpPostAsync, usePostData } from "./httpClient";
 
 export const usePlayerData = (descriptorCode: string) => {
 
@@ -13,5 +14,22 @@ export const usePlayerData = (descriptorCode: string) => {
         playerDataStatus: qr.status,
         playerDataError: qr.error,
         refetchPlayerData: qr.refetch
+    }
+}
+
+export const usePostVideoPlaybackSample = () => {
+
+    const qr = usePostData<VideoPlaybackSampleDTO, void>("player/save-video-playback-sample");
+
+    const postVideoPlaybackSampleAsync = (fromPlayedSeconds: number, toPlayedSeconds: number) => {
+
+        return qr.postDataAsync({
+            fromSeconds: fromPlayedSeconds,
+            toSeconds: toPlayedSeconds
+        });
+    }
+
+    return {
+        postVideoPlaybackSampleAsync
     }
 }
