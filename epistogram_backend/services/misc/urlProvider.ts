@@ -3,7 +3,7 @@ import { staticProvider } from "../../staticProvider";
 export const getAssetUrl = (assetPath: string | null | undefined) => {
 
     if (!assetPath)
-        return;
+        return null;
 
     assetPath = ("/" + assetPath).replace("//", "/");
 

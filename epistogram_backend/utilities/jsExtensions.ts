@@ -12,15 +12,22 @@ declare global {
         single(func: (item: T) => boolean): T;
         first(func: (item: T) => boolean): T;
         last(func: (item: T) => boolean): T;
-        firstOrNull(func: (item: T) => boolean): T;
+        firstOrNull(func: (item: T) => boolean): T | null;
     }
 }
 
 Array.prototype.firstOrNull = function <T>(func: (item: T) => T) {
 
     const filtered = this.filter(func);
+    const first = filtered[0];
 
-    return filtered[0];
+    if (first === undefined)
+        return null;
+
+    if (first === null)
+        return null;
+
+    return first;
 }
 
 Array.prototype.last = function <T>(func: (item: T) => T) {

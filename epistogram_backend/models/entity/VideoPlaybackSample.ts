@@ -8,10 +8,10 @@ export class VideoPlaybackSample {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: "numeric" })
+    @Column({ type: "double precision" })
     fromSeconds: number;
 
-    @Column({ type: "numeric" })
+    @Column({ type: "double precision" })
     toSeconds: number;
 
     // video 

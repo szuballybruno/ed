@@ -1,13 +1,16 @@
 import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
+import { Video } from "../models/entity/Video";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemType } from "../models/shared_models/types/sharedTypes";
+import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { toCourseItemDTOs, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
+import { getVideoWatchedPercentAsync } from "./videoPlaybackSampleService";
 import { getVideoByIdAsync } from "./videoService";
 
 export const getCourseItemsDescriptorCodesAsync = async (userId: number, courseId: number) => {
@@ -71,7 +74,20 @@ export const getCourseItemDTOsAsync = async (userId: number) => {
         .leftJoinAndSelect("easqa.answer", "easqaa")
         .getOneOrFail();
 
-    return toCourseItemDTOs(course, currentCourseItemDesc!);
+    // get video watched percents
+    let videoWatchedPercents = [] as VideoWatchedPercent[];
+
+    for (let index = 0; index < course.videos.length; index++) {
+
+        const video = course.videos[index];
+        videoWatchedPercents
+            .push({
+                video: video,
+                watchedPercent: await getVideoWatchedPercentAsync(userId, video.id)
+            })
+    }
+
+    return toCourseItemDTOs(course, currentCourseItemDesc!, videoWatchedPercents);
 }
 
 export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {

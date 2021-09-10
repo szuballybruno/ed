@@ -22,11 +22,11 @@ import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { CourseItemState, CourseItemType } from "../models/shared_models/types/sharedTypes";
+import { CourseItemState } from "../models/shared_models/types/sharedTypes";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { staticProvider } from "../staticProvider";
-import { hasValue, navPropNotNull, throwNotImplemented, withValue } from "../utilities/helpers";
+import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
+import { hasValue, navPropNotNull } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
@@ -101,7 +101,8 @@ export const toExamDTO = (exam: Exam) => {
 
 export const toCourseItemDTOs = (
     course: Course,
-    currentCourseItemDescriptor: CourseItemDescriptorDTO) => {
+    currentCourseItemDescriptor: CourseItemDescriptorDTO,
+    videoWatchedPercents: VideoWatchedPercent[]) => {
 
     navPropNotNull(course.exams);
     navPropNotNull(course.videos);
@@ -114,7 +115,9 @@ export const toCourseItemDTOs = (
             navPropNotNull(exam.questions);
             navPropNotNull(exam.answerSessions);
 
-            return toCourseItemDTO(exam, getCourseItemState(exam.questions, exam.answerSessions), false);
+            const hasCompletedAnswerSession = getCompletedAnswerSession(exam.questions, exam.answerSessions);
+
+            return toCourseItemDTO(exam, hasCompletedAnswerSession ? "completed" : "locked", false);
         });
 
     // map video items
@@ -125,7 +128,19 @@ export const toCourseItemDTOs = (
             navPropNotNull(video.questions);
             navPropNotNull(video.answerSessions);
 
-            return toCourseItemDTO(video, getCourseItemState(video.questions, video.answerSessions), true);
+            const answerSessionCompleted = video.answerSessions.length != 0
+                ? getCompletedAnswerSession(video.questions, video.answerSessions)
+                : true;
+
+            const watchedPercent = videoWatchedPercents
+                .single(x => x.video.id === video.id)
+                .watchedPercent;
+
+            // 20% is a very low number only for development
+            const percentReached = watchedPercent > 20;
+            const isCompleted = answerSessionCompleted && percentReached;
+
+            return toCourseItemDTO(video, isCompleted ? "completed" : "locked", true);
         });
 
     // concat to one ordered list
@@ -154,9 +169,9 @@ export const toCourseItemDTOs = (
     return itemsOrdered;
 }
 
-const getCourseItemState = (
+const getCompletedAnswerSession = (
     questions: Question[],
-    answerSessions: AnswerSession[]): CourseItemState => {
+    answerSessions: AnswerSession[]) => {
 
     const isAnyCompletedAnswerSession = answerSessions
         .any(answerSession => {
@@ -176,19 +191,7 @@ const getCourseItemState = (
             return false;
         });
 
-    if (isAnyCompletedAnswerSession)
-        return "completed";
-
-    return "locked";
-}
-
-const getVideoState = (video: Video) => {
-
-    return video
-        .questions
-        .map(question => question
-            .questionAnswers
-            .map(questionAnswer => questionAnswer.answer.isCorrect))
+    return isAnyCompletedAnswerSession;
 }
 
 export const toVideoDTO = (video: Video) => {
