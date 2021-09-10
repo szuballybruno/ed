@@ -1,10 +1,9 @@
+import { StorageFile } from "../models/entity/StorageFile";
 import { Video } from "../models/entity/Video";
-import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { staticProvider } from "../staticProvider";
-import { getCurrentCourseItemDescriptor } from "./courseService";
+import { getAssetUrl } from "./misc/urlProvider";
+import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
 import { answerQuestionAsync } from "./questionAnswerService";
-import { getUserById } from "./userService";
 
 export const answerVideoQuestionAsync = async (
     userId: number, answerSessionId: number, questionId: number, answerId: number) => {
@@ -14,15 +13,30 @@ export const answerVideoQuestionAsync = async (
     return answerQuestionAsync(userId, answerSessionId, questionId, answerId);
 }
 
-export const createVideoAsync = async (courseId: number, orderIndex: number) => {
+export const insertVideoAsync = async (video: Video, filePath: string | null) => {
+
+    if (video.id)
+        throw new Error("Cannot insert with id!");
+
+    if (filePath) {
+        const videoFileUrl = getAssetUrl(filePath)!;
+
+        video.videoFile = {
+            pending: false,
+            filePath: filePath
+        } as StorageFile;
+
+        video.lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
+    }
+    else {
+
+        video.lengthSeconds = 0;
+    }
 
     await staticProvider
         .ormConnection
         .getRepository(Video)
-        .insert({
-            courseId: courseId,
-            orderIndex: orderIndex,
-        });
+        .save(video);
 }
 
 export const setVideoFileIdAsync = async (videoId: number, videoFileId: number) => {

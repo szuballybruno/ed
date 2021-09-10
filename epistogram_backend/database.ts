@@ -15,7 +15,7 @@ import { User } from "./models/entity/User";
 import { Video } from "./models/entity/Video";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
 import { log } from "./services/misc/logger";
-import { setVideoFileIdAsync } from "./services/videoService";
+import { insertVideoAsync, setVideoFileIdAsync } from "./services/videoService";
 import { staticProvider } from "./staticProvider";
 import { CourseOrganization } from "./models/entity/CourseOrganization";
 import { Group } from "./models/entity/Group";
@@ -26,6 +26,7 @@ import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./
 import { AnswerSession } from "./models/entity/AnswerSession";
 import { getAssetUrl } from "./services/misc/urlProvider";
 import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
+import { VideoPlaybackData } from "./models/entity/VideoPlaybackData";
 
 export type TypeORMConnection = Connection;
 
@@ -67,7 +68,8 @@ export const initializeDBAsync = async (recreate: boolean) => {
             TestSubChild,
             StorageFile,
             AnswerSession,
-            VideoPlaybackSample
+            VideoPlaybackSample,
+            VideoPlaybackData
         ],
     } as ConnectionOptions;
 
@@ -125,6 +127,9 @@ export const seedDB = async () => {
     log("seedCourses")
     await seedCourses(connection);
 
+    log("seedVideos")
+    await seedVideos(connection);
+
     log("seedVideoQuestions")
     await seedVideoQuestions(connection);
 
@@ -162,6 +167,8 @@ const seedCourses = async (connection: TypeORMConnection) => {
     await connection
         .getRepository(Course)
         .save([
+
+            // course: 1
             {
                 title: "Webfejlesztés kezdőknek (HTML, CSS, BOOTSTRAP)",
                 category: "Programming",
@@ -196,22 +203,10 @@ const seedCourses = async (connection: TypeORMConnection) => {
                         description: "",
                         orderIndex: 4
                     }
-                ],
-                videos: [
-                    {
-                        title: "Video 1",
-                        subtitle: "Fantastic Video 1",
-                        description: "Very very fantastic video 1 description",
-                        orderIndex: 0
-                    },
-                    {
-                        title: "Video 2",
-                        subtitle: "Fantastic Video 2",
-                        description: "Very very fantastic video 2 description",
-                        orderIndex: 2
-                    }
                 ]
-            },
+            } as Course,
+
+            // course: 2
             {
                 title: "Java programozás mesterkurzus",
                 category: "Programming",
@@ -225,6 +220,8 @@ const seedCourses = async (connection: TypeORMConnection) => {
                     filePath: "/courseCoverImages/2.png"
                 },
             },
+
+            // course: 3
             {
                 title: "Angular - Minden amire szükséged lehet",
                 category: "Programming",
@@ -238,6 +235,8 @@ const seedCourses = async (connection: TypeORMConnection) => {
                     filePath: "/courseCoverImages/3.png"
                 },
             },
+
+            // course: 4
             {
                 title: "Microsoft Excel Mesterkurzus",
                 category: "Programming",
@@ -249,50 +248,10 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 coverFile: {
                     pending: false,
                     filePath: "/courseCoverImages/4.png"
-                },
-                videos: [
-                    {
-                        title: "Egyszerűbb számítások",
-                        subtitle: "Alapvető műveletek Excelben",
-                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 0,
-                        videoFile: {
-                            pending: false,
-                            filePath: "/videos/video_2.mp4"
-                        }
-                    },
-                    {
-                        title: "Cellák és területek azonosítása",
-                        subtitle: "Alapvető műveletek Excelben",
-                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 1,
-                        videoFile: {
-                            pending: false,
-                            filePath: "/videos/video_3.m4v"
-                        }
-                    },
-                    {
-                        title: "Adatbevitel, javítás I.",
-                        subtitle: "Alapvető műveletek Excelben",
-                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 2,
-                        videoFile: {
-                            pending: false,
-                            filePath: "/videos/video_4.m4v"
-                        }
-                    },
-                    {
-                        title: "Adatbevitel, javítás II.",
-                        subtitle: "Alapvető műveletek Excelben",
-                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 3,
-                        videoFile: {
-                            pending: false,
-                            filePath: "/videos/video_5.m4v"
-                        }
-                    },
-                ]
+                }
             },
+
+            // etc
             {
                 title: "DevOps kezdőknek - Kubernetes",
                 category: "Programming",
@@ -355,6 +314,59 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 },
             }
         ] as Course[]);
+}
+
+const seedVideos = async (connection: TypeORMConnection) => {
+
+    // course 1 videos
+    await insertVideoAsync({
+        courseId: 1,
+        title: "Ben Awad Rant 1/1",
+        subtitle: "Fantastic Video 1",
+        description: "Very very fantastic video 1 description",
+        orderIndex: 0
+    } as Video, "videos/video_1.mp4");
+
+    await insertVideoAsync({
+        courseId: 1,
+        title: "Video 1/2",
+        subtitle: "Fantastic Video 2",
+        description: "Very very fantastic video 2 description",
+        orderIndex: 2
+    } as Video, null);
+
+    // course 4 videos
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Egyszerűbb számítások",
+        subtitle: "Alapvető műveletek Excelben",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 0,
+    } as Video, "videos/video_2.mp4");
+
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Cellák és területek azonosítása",
+        subtitle: "Alapvető műveletek Excelben",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 1,
+    } as Video, "videos/video_3.m4v");
+
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Adatbevitel, javítás I.",
+        subtitle: "Alapvető műveletek Excelben",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 2,
+    } as Video, "videos/video_4.m4v");
+
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Adatbevitel, javítás II.",
+        subtitle: "Alapvető műveletek Excelben",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 3,
+    } as Video, "videos/video_5.m4v");
 }
 
 const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
@@ -459,14 +471,14 @@ const seedFiles = async (connection: TypeORMConnection) => {
         .getRepository(StorageFile);
 
     // video 1 file
-    const file = {
-        pending: false,
-        filePath: "videos/video_1.mp4",
-    } as StorageFile;
+    // const file = {
+    //     pending: false,
+    //     filePath: "videos/video_1.mp4",
+    // } as StorageFile;
 
-    await fileRepo.insert(file);
+    // await fileRepo.insert(file);
 
-    await setVideoFileIdAsync(1, file.id);
+    // await setVideoFileIdAsync(1, file.id);
 
     // user avatar 1 file 
     const avatarFile = {

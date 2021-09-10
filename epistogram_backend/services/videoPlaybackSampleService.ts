@@ -1,9 +1,7 @@
-import { getVideoDurationInSeconds } from 'get-video-duration';
 import { Video } from "../models/entity/Video";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { staticProvider } from "../staticProvider";
-import { hasValue, navPropNotNull } from "../utilities/helpers";
-import { getAssetUrl } from "./misc/urlProvider";
+import { hasValue } from "../utilities/helpers";
 
 export type VideoPlaybackSampleChunk = {
     startSeconds: number;
@@ -17,14 +15,10 @@ export const getVideoWatchedPercentAsync = async (userId: number, videoId: numbe
         .getRepository(Video)
         .createQueryBuilder("v")
         .where("v.id = :videoId", { videoId })
-        .leftJoinAndSelect("v.videoFile", "vf")
         .getOneOrFail();
 
-    if (!video.videoFile)
+    if (video.lengthSeconds == 0)
         return 0;
-
-    const videoFileUrl = getAssetUrl(video.videoFile.filePath)!;
-    const videoFileDurationSeconds = await getVideoDurationInSeconds(videoFileUrl);
 
     const chunks = await getSampleChunksAsync(userId, videoId);
     if (chunks.length == 0)
@@ -34,9 +28,7 @@ export const getVideoWatchedPercentAsync = async (userId: number, videoId: numbe
         .map(x => x.endSeconds - x.startSeconds)
         .reduce((prev, curr) => curr + prev);
 
-    // console.log(`Watched ${videoFileDurationSeconds}s/${netWatchedSeconds}s`);
-
-    return Math.round((netWatchedSeconds / videoFileDurationSeconds) * 100);
+    return Math.round((netWatchedSeconds / video.lengthSeconds) * 100);
 }
 
 const getSampleChunksAsync = async (userId: number, videoId: number) => {

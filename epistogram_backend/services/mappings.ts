@@ -136,8 +136,8 @@ export const toCourseItemDTOs = (
                 .single(x => x.video.id === video.id)
                 .watchedPercent;
 
-            // 20% is a very low number only for development
-            const percentReached = watchedPercent > 20;
+            // 10% is a very low number only for development
+            const percentReached = watchedPercent > 10;
             const isCompleted = answerSessionCompleted && percentReached;
 
             return toCourseItemDTO(video, isCompleted ? "completed" : "locked", true);

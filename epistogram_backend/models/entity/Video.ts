@@ -24,6 +24,9 @@ export class Video {
     @Column()
     orderIndex: number;
 
+    @Column({ type: "double precision" })
+    lengthSeconds: number;
+
     // video file
     @Column({ nullable: true })
     videoFileId: number;
