@@ -20,12 +20,16 @@ export const getVideoWatchedPercentAsync = async (userId: number, videoId: numbe
         .leftJoinAndSelect("v.videoFile", "vf")
         .getOneOrFail();
 
-    navPropNotNull(video.videoFile);
+    if (!video.videoFile)
+        return 0;
 
     const videoFileUrl = getAssetUrl(video.videoFile.filePath)!;
     const videoFileDurationSeconds = await getVideoDurationInSeconds(videoFileUrl);
 
     const chunks = await getSampleChunksAsync(userId, videoId);
+    if (chunks.length == 0)
+        return 0;
+
     const netWatchedSeconds = chunks
         .map(x => x.endSeconds - x.startSeconds)
         .reduce((prev, curr) => curr + prev);

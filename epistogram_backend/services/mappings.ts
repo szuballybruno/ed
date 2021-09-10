@@ -128,7 +128,7 @@ export const toCourseItemDTOs = (
             navPropNotNull(video.questions);
             navPropNotNull(video.answerSessions);
 
-            const answerSessionCompleted = video.answerSessions.length != 0
+            const answerSessionCompleted = video.questions.length != 0
                 ? getCompletedAnswerSession(video.questions, video.answerSessions)
                 : true;
 
