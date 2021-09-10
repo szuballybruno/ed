@@ -46,7 +46,7 @@ const Administration = (props: { match: { url: string; } }) => {
                     })}
                 </div>
             </LeftPanel>
-            <RightPanel>
+            <RightPanel noPadding>
                 <AdminAddHeader />
                 <AdministrationRouting />
             </RightPanel>

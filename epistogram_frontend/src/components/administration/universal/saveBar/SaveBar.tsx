@@ -10,15 +10,15 @@ export const SaveBar = (props: {
 }) => {
 
     return props.open ? <div className={classes.saveBarOuterWrapper}>
-        <Fab>
-            <Done onClick={props.onDoneClick} />
+        <Fab className={classes.firstButton} onClick={props.onDoneClick}>
+            <Done />
         </Fab>
     </div> : <div className={classes.saveBarOuterWrapper}>
-        <Fab>
-            <Edit onClick={props.onClick} />
+        <Fab className={classes.secondButton} onClick={props.onClick}>
+            <Edit />
         </Fab>
 
-        <Fab>
+        <Fab className={classes.firstButton}>
             <Add />
         </Fab>
     </div>

@@ -29,6 +29,10 @@ import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
 import { hasValue, navPropNotNull } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
+import {CourseGroup} from "../models/entity/CourseGroup";
+import {CourseGroupDTO} from "../models/shared_models/CourseGroupDTO";
+import {CourseTag} from "../models/entity/CourseTag";
+import {CourseTagDTO} from "../models/shared_models/CourseTagDTO";
 
 export const toUserDTO = (user: User) => {
 
@@ -71,10 +75,24 @@ export const toCourseOrganizationDTO = (courseOrganization: CourseOrganization) 
 
     return {
         courseId: courseOrganization.courseId,
-        organizationId: courseOrganization.organizationId,
-        groupId: courseOrganization.groupId,
-        tagId: courseOrganization.tagId
+        organizationId: courseOrganization.organizationId
     } as CourseOrganizationDTO;
+}
+
+export const toCourseGroupDTO = (courseGroup: CourseGroup) => {
+
+    return {
+        courseId: courseGroup.courseId,
+        groupId: courseGroup.groupId
+    } as CourseGroupDTO;
+}
+
+export const toCourseTagDTO = (courseTag: CourseTag) => {
+
+    return {
+        courseId: courseTag.courseId,
+        tagId: courseTag.tagId
+    } as CourseTagDTO;
 }
 
 export const toTaskDTO = (task: Task) => {
