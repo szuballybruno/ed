@@ -25,6 +25,10 @@ import { setUserAvatarFileId } from "./services/userService";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/signupService";
 import { AnswerSession } from "./models/entity/AnswerSession";
 import { getAssetUrl } from "./services/misc/urlProvider";
+import {CourseGroup} from "./models/entity/CourseGroup";
+import {CourseGroupDTO} from "./models/shared_models/CourseGroupDTO";
+import {CourseTagDTO} from "./models/shared_models/CourseTagDTO";
+import {CourseTag} from "./models/entity/CourseTag";
 
 export type TypeORMConnection = Connection;
 
@@ -51,6 +55,8 @@ export const initializeDBAsync = async (recreate: boolean) => {
             // "models/entity/**/*.ts"
             Course,
             CourseOrganization,
+            CourseGroup,
+            CourseTag,
             Exam,
             Group,
             Organization,
@@ -134,6 +140,12 @@ export const seedDB = async () => {
 
     log("seedCourseOrganizationsAsync")
     await seedCourseOrganizationsAsync();
+
+    log("seedCourseGroupsAsync")
+    await seedCourseGroupsAsync();
+
+    log("seedCourseTagsAsync")
+    await seedCourseTagsAsync();
 }
 
 const seedOrganizations = async (connection: TypeORMConnection) => {
@@ -629,18 +641,9 @@ const seedCourseOrganizationsAsync = async () => {
         {
             courseId: 1,
             organizationId: 1,
-            groupId: 1,
-            tagId: 1
         }, {
             courseId: 1,
             organizationId: 2,
-            groupId: 3,
-            tagId: 1
-        }, {
-            courseId: 1,
-            organizationId: 2,
-            groupId: 3,
-            tagId: 2
         }
     ] as CourseOrganizationDTO[]
 
@@ -648,11 +651,61 @@ const seedCourseOrganizationsAsync = async () => {
         .map(x => ({
             courseId: x.courseId,
             organizationId: x.organizationId,
-            groupId: x.groupId,
-            tagId: x.tagId
         } as CourseOrganizationDTO))
 
     await repo.save(courseOrganizations);
+}
+
+const seedCourseGroupsAsync = async () => {
+
+    // insert new answers
+    const repo = staticProvider
+        .ormConnection
+        .getRepository(CourseGroup);
+
+    const courseGroupsSeed = [
+        {
+            courseId: 1,
+            groupId: 1,
+        }, {
+            courseId: 1,
+            groupId: 3,
+        }
+    ] as CourseGroupDTO[]
+
+    const courseGroups = courseGroupsSeed
+        .map(x => ({
+            courseId: x.courseId,
+            groupId: x.groupId,
+        } as CourseGroupDTO))
+
+    await repo.save(courseGroups);
+}
+
+const seedCourseTagsAsync = async () => {
+
+    // insert new answers
+    const repo = staticProvider
+        .ormConnection
+        .getRepository(CourseTag);
+
+    const courseTagsSeed = [
+        {
+            courseId: 1,
+            tagId: 1,
+        }, {
+            courseId: 1,
+            tagId: 2,
+        }
+    ] as CourseTagDTO[]
+
+    const courseTags = courseTagsSeed
+        .map(x => ({
+            courseId: x.courseId,
+            tagId: x.tagId,
+        } as CourseTagDTO))
+
+    await repo.save(courseTags);
 }
 
 const seedTags = (connection: TypeORMConnection) => {

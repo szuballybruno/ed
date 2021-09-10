@@ -4,6 +4,8 @@ import { Exam } from "./Exam";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
 import { Video } from "./Video";
+import {CourseGroup} from "./CourseGroup";
+import {CourseTag} from "./CourseTag";
 
 @Entity()
 export class Course {
@@ -33,6 +35,17 @@ export class Course {
     @OneToMany(() => CourseOrganization, co => co.course)
     @JoinColumn()
     courseOrganizations: CourseOrganization[];
+
+    // Course's groups
+    @OneToMany(() => CourseGroup, cg => cg.course)
+    @JoinColumn()
+    courseGroups: CourseGroup[];
+
+    // Course's organizations
+
+    @OneToMany(() => CourseTag, ct => ct.course)
+    @JoinColumn()
+    courseTags: CourseTag[];
 
     // videos 
     @OneToMany(type => Video, video => video.course, { cascade: true })

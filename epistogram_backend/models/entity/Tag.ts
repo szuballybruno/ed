@@ -1,5 +1,5 @@
 import {Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {CourseOrganization} from "./CourseOrganization";
+import {CourseTag} from "./CourseTag";
 
 @Entity()
 export class Tag {
@@ -11,8 +11,8 @@ export class Tag {
     name: string;
 
     // Tag's courses
-    @OneToMany(() => CourseOrganization, co => co.tag)
+    @OneToMany(() => CourseTag, co => co.tag)
     @JoinColumn()
-    courseOrganizations: CourseOrganization[]
+    courseTags: CourseTag[]
 
 }

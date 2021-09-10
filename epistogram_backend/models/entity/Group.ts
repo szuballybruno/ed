@@ -1,6 +1,7 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {CourseOrganization} from "./CourseOrganization";
 import {Organization} from "./Organization";
+import {CourseGroup} from "./CourseGroup";
 
 @Entity()
 export class Group {
@@ -19,8 +20,8 @@ export class Group {
     organization: Organization
 
     // Groups's courses
-    @OneToMany(() => CourseOrganization, co => co.group)
+    @OneToMany(() => CourseGroup, cg => cg.course)
     @JoinColumn()
-    courseOrganizations: CourseOrganization[]
+    courseGroups: CourseGroup[]
 
 }
