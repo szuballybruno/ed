@@ -8,7 +8,10 @@ export type VideoPlaybackSampleChunk = {
     endSeconds: number;
 }
 
-export const getVideoWatchedPercentAsync = async (userId: number, videoId: number) => {
+export const getVideoWatchedPercentAsync = async (userId: number, videoId: number, chunks: VideoPlaybackSampleChunk[]) => {
+
+    if (chunks.length == 0)
+        return 0;
 
     const video = await staticProvider
         .ormConnection
@@ -20,10 +23,6 @@ export const getVideoWatchedPercentAsync = async (userId: number, videoId: numbe
     if (video.lengthSeconds == 0)
         return 0;
 
-    const chunks = await getSampleChunksAsync(userId, videoId);
-    if (chunks.length == 0)
-        return 0;
-
     const netWatchedSeconds = chunks
         .map(x => x.endSeconds - x.startSeconds)
         .reduce((prev, curr) => curr + prev);
@@ -31,7 +30,13 @@ export const getVideoWatchedPercentAsync = async (userId: number, videoId: numbe
     return Math.round((netWatchedSeconds / video.lengthSeconds) * 100);
 }
 
-const getSampleChunksAsync = async (userId: number, videoId: number) => {
+export const squishSamplesAsync = async (userId: number, videoId: number, chunks: VideoPlaybackSampleChunk[]) => {
+
+    // TODO squish samples
+    return Promise.resolve();
+}
+
+export const getSampleChunksAsync = async (userId: number, videoId: number) => {
 
     const samples = await staticProvider
         .ormConnection

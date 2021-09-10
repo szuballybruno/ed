@@ -4,11 +4,14 @@ import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { staticProvider } from "../staticProvider";
+import { hasValue } from "../utilities/helpers";
 import { getCourseItemAsync, getCourseItemDTOsAsync, getCurrentCourseItemDescriptor, getExamDTOAsync } from "./courseService";
 import { readCourseItemDescriptorCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
 import { createAnswerSessionAsync } from "./questionAnswerService";
 import { getUserById } from "./userService";
+import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
+import { getVideoPlaybackData, saveVideoPlaybackDataAsync } from "./videoService";
 
 export const getPlayerDataAsync = async (
     userId: number,
@@ -35,14 +38,10 @@ export const getPlayerDataAsync = async (
             currentExamId: examId
         });
 
-    // get current course items
-    const courseItemDTOs = await getCourseItemDTOsAsync(userId);
-
     // get new answer session
     const answerSessionId = await createAnswerSessionAsync(userId, examId, videoId);
 
     return {
-        courseItems: courseItemDTOs,
         video: videoDTO,
         exam: examDTO,
         answerSessionId: answerSessionId
@@ -71,4 +70,45 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
             fromSeconds: dto.fromSeconds,
             toSeconds: dto.toSeconds
         });
+
+    // get sample chunks
+    const chunks = await getSampleChunksAsync(userId, videoId);
+
+    // calucate and save watched percent
+    const watchedPercent = await getVideoWatchedPercentAsync(userId, videoId, chunks);
+    const newIsWatchedState = isVideoConsideredWatched(watchedPercent);
+
+    // get old watched state, can be null on first sampling.
+    const oldIsWatchedState = await getOldIsWatchedState(userId, videoId);
+
+    // squish chunks to store less data 
+    await squishSamplesAsync(userId, videoId, chunks);
+    await saveVideoPlaybackDataAsync(userId, videoId, watchedPercent, newIsWatchedState);
+
+    // calculate is watched state changed
+    // 
+    const isWatchedStateChanged = hasValue(oldIsWatchedState)
+        ? oldIsWatchedState != newIsWatchedState
+        : newIsWatchedState;
+
+    return isWatchedStateChanged;
+}
+
+const isVideoConsideredWatched = (watchedPercent: number) => {
+
+    // 10% is a very low number only for development
+    const percentReached = watchedPercent > 10;
+
+    return percentReached;
+}
+
+const getOldIsWatchedState = async (userId: number, videoId: number) => {
+
+    const videoPlaybackData = await getVideoPlaybackData(userId, videoId);
+    if (!videoPlaybackData)
+        return null;
+
+    const oldIsWatchedState = isVideoConsideredWatched(videoPlaybackData!.watchedPercent);
+
+    return oldIsWatchedState;
 }

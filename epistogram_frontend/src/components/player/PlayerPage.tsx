@@ -8,7 +8,7 @@ import { ContentWrapper, MainWrapper } from "../../HOC/MainPanels";
 import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
 import { useNavigation } from "../../services/navigatior";
 import { useDialog } from "../../services/notifications";
-import { usePlayerData } from "../../services/playerService";
+import { useCourseItemList, usePlayerData } from "../../services/playerService";
 import { FlexFloat } from "../universal/FlexFloat";
 import Navbar from "../universal/navigation/navbar/Navbar";
 import { CourseItemSelector } from "./CourseItemSelector";
@@ -30,10 +30,14 @@ export const PlayerPage = () => {
         playerDataError,
         refetchPlayerData
     } = usePlayerData(descriptorCode);
-    const courseItems = playerData?.courseItems ?? [];
     const video = playerData?.video;
     const exam = playerData?.exam;
     const answerSessionId = playerData?.answerSessionId;
+
+    const {
+        courseItemList,
+        refetchCourseItemList
+    } = useCourseItemList(descriptorCode);
 
     const navigateToCourseItem = (descriptorCode: string) => {
 
@@ -66,7 +70,8 @@ export const PlayerPage = () => {
                         {video && <WatchView
                             answerSessionId={answerSessionId!}
                             video={video}
-                            courseItems={courseItems}
+                            courseItems={courseItemList}
+                            refetchCourseItemList={refetchCourseItemList}
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
@@ -90,7 +95,7 @@ export const PlayerPage = () => {
                             width="350px"
                             minWidth="350px"
                             pl="15px">
-                            <CourseItemSelector courseItems={courseItems} />
+                            <CourseItemSelector courseItems={courseItemList} />
                         </Box>}
                     </FlexFloat>
                 </LoadingFrame>

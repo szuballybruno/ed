@@ -1,4 +1,5 @@
 import { useReactQuery } from "../frontendHelpers";
+import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { httpPostAsync, usePostData } from "./httpClient";
@@ -17,9 +18,25 @@ export const usePlayerData = (descriptorCode: string) => {
     }
 }
 
+export const useCourseItemList = (descriptorCode: string) => {
+
+    // descriptor code is not sent but is to trigger updates
+
+    const qr = useReactQuery<CourseItemDTO[]>(
+        ["getCorseItemsList", descriptorCode],
+        () => httpPostAsync(`player/get-course-items`));
+
+    return {
+        courseItemList: qr.data as CourseItemDTO[] ?? [],
+        courseItemListStatus: qr.status,
+        courseItemListError: qr.error,
+        refetchCourseItemList: qr.refetch
+    }
+}
+
 export const usePostVideoPlaybackSample = () => {
 
-    const qr = usePostData<VideoPlaybackSampleDTO, void>("player/save-video-playback-sample");
+    const qr = usePostData<VideoPlaybackSampleDTO, boolean>("player/save-video-playback-sample");
 
     const postVideoPlaybackSampleAsync = (fromPlayedSeconds: number, toPlayedSeconds: number) => {
 
@@ -30,6 +47,7 @@ export const usePostVideoPlaybackSample = () => {
     }
 
     return {
-        postVideoPlaybackSampleAsync
+        postVideoPlaybackSampleAsync,
+        isWatchedStateChanged: qr.result ?? false
     }
 }

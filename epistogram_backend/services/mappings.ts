@@ -29,10 +29,10 @@ import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
 import { hasValue, navPropNotNull } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
-import {CourseGroup} from "../models/entity/CourseGroup";
-import {CourseGroupDTO} from "../models/shared_models/CourseGroupDTO";
-import {CourseTag} from "../models/entity/CourseTag";
-import {CourseTagDTO} from "../models/shared_models/CourseTagDTO";
+import { CourseGroup } from "../models/entity/CourseGroup";
+import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
+import { CourseTag } from "../models/entity/CourseTag";
+import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 
 export const toUserDTO = (user: User) => {
 
@@ -119,8 +119,7 @@ export const toExamDTO = (exam: Exam) => {
 
 export const toCourseItemDTOs = (
     course: Course,
-    currentCourseItemDescriptor: CourseItemDescriptorDTO,
-    videoWatchedPercents: VideoWatchedPercent[]) => {
+    currentCourseItemDescriptor: CourseItemDescriptorDTO) => {
 
     navPropNotNull(course.exams);
     navPropNotNull(course.videos);
@@ -150,13 +149,12 @@ export const toCourseItemDTOs = (
                 ? getCompletedAnswerSession(video.questions, video.answerSessions)
                 : true;
 
-            const watchedPercent = videoWatchedPercents
-                .single(x => x.video.id === video.id)
-                .watchedPercent;
+            const isVideoWatched = video
+                .videoPlaybackDatas
+                ?.firstOrNull(x => true)
+                ?.isWatched ?? false;
 
-            // 10% is a very low number only for development
-            const percentReached = watchedPercent > 10;
-            const isCompleted = answerSessionCompleted && percentReached;
+            const isCompleted = answerSessionCompleted && isVideoWatched;
 
             return toCourseItemDTO(video, isCompleted ? "completed" : "locked", true);
         });

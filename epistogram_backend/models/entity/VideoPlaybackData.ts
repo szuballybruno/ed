@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "./User";
+import { Video } from "./Video";
 
 @Entity()
 export class VideoPlaybackData {
@@ -9,19 +11,22 @@ export class VideoPlaybackData {
     @Column()
     watchedPercent: number;
 
-    // // video 
-    // @Column()
-    // videoId: number;
+    @Column()
+    isWatched: boolean;
 
-    // @ManyToOne(_ => Video, x => x.videoPlaybackData)
-    // @JoinColumn({ name: "videoId" })
-    // video: Video;
+    // video 
+    @Column()
+    videoId: number;
 
-    // // user
-    // @Column()
-    // userId: number;
+    @ManyToOne(_ => Video, x => x.videoPlaybackDatas)
+    @JoinColumn({ name: "videoId" })
+    video: Video;
 
-    // @ManyToOne(_ => User, x => x.videoPlaybackDatas)
-    // @JoinColumn({ name: "userId" })
-    // user: User;
+    // user
+    @Column()
+    userId: number;
+
+    @ManyToOne(_ => User, x => x.videoPlaybackDatas)
+    @JoinColumn({ name: "userId" })
+    user: User;
 }

@@ -61,6 +61,7 @@ export const getCourseItemDTOsAsync = async (userId: number) => {
 
         // videos
         .leftJoinAndSelect("c.videos", "v")
+        .leftJoinAndSelect("v.videoPlaybackDatas", "vpd")
         .leftJoinAndSelect("v.questions", "vq")
         .leftJoinAndSelect("v.answerSessions", "vas")
         .leftJoinAndSelect("vas.questionAnswers", "vasqa")
@@ -74,20 +75,7 @@ export const getCourseItemDTOsAsync = async (userId: number) => {
         .leftJoinAndSelect("easqa.answer", "easqaa")
         .getOneOrFail();
 
-    // get video watched percents
-    let videoWatchedPercents = [] as VideoWatchedPercent[];
-
-    for (let index = 0; index < course.videos.length; index++) {
-
-        const video = course.videos[index];
-        videoWatchedPercents
-            .push({
-                video: video,
-                watchedPercent: await getVideoWatchedPercentAsync(userId, video.id)
-            })
-    }
-
-    return toCourseItemDTOs(course, currentCourseItemDesc!, videoWatchedPercents);
+    return toCourseItemDTOs(course, currentCourseItemDesc!);
 }
 
 export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {

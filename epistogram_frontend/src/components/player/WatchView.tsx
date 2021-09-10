@@ -23,10 +23,11 @@ export const WatchView = (props: {
     video: VideoDTO,
     answerSessionId: number,
     courseItems: CourseItemDTO[],
+    refetchCourseItemList: () => void,
     navigateToCourseItem: NavigateToCourseItemActionType
 }) => {
 
-    const { video, courseItems, navigateToCourseItem, answerSessionId } = props;
+    const { video, courseItems, navigateToCourseItem, answerSessionId, refetchCourseItemList } = props;
     const { questions } = video;
     const isDesktopView = useIsDesktopView();
     const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
@@ -126,7 +127,7 @@ export const WatchView = (props: {
     }, [videoLength]);
 
     // playback watcher
-    usePlaybackWatcher(playedSeconds, isPlaying);
+    usePlaybackWatcher(playedSeconds, isPlaying, refetchCourseItemList);
 
     return <>
 

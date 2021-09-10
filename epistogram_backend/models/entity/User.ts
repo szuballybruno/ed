@@ -6,6 +6,7 @@ import { Organization } from "./Organization";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
 import { Video } from "./Video";
+import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
 
 @Entity()
@@ -112,4 +113,9 @@ export class User {
     @OneToMany(_ => VideoPlaybackSample, x => x.user)
     @JoinColumn()
     videoPlaybackSamples: VideoPlaybackSample[];
+
+    // video playback datas 
+    @OneToMany(_ => VideoPlaybackData, x => x.user)
+    @JoinColumn()
+    videoPlaybackDatas: VideoPlaybackData[];
 }
