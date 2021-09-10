@@ -1,8 +1,9 @@
 import { Request } from "express";
+import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
-import { getEditedCourseAsync, getEditedVideoAsync, setEditedCourseAsync } from "../services/courseManagementService";
+import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "../services/courseManagementService";
 import { getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
@@ -29,12 +30,12 @@ export const getEditedCourseAction = async (req: Request) => {
 
     return await getEditedCourseAsync(courseId);
 };
-export const setEditedCourseAction = async (req: Request) => {
 
-    const courseId = req.body.courseId
-    const courseData = req.body
+export const setEditedCourseAction = (req: Request) => {
 
-    return await setEditedCourseAsync(courseId, courseData);
+    const adminPageEditCourseDTO = withValueOrBadRequest(req.body) as AdminPageEditCourseDTO;
+
+    return updateCourseAsync(adminPageEditCourseDTO);
 };
 
 export const getOverviewPageDTOAction = async (req: Request) => {
