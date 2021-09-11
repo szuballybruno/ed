@@ -17,17 +17,6 @@ export const showNotification = (text: string, type?: NotificationType) => {
             draggable: true,
             progress: undefined,
         });
-
-    // const app = useState(applicationRunningState);
-
-    // return (text: string, type?: NotificationType) => {
-
-    //     if (type == "error")
-    //         text = "Error: " + text;
-
-    //     app.snack.snackTitle.set(text);
-    //     app.snack.showSnack.set(true);
-    // }
 }
 
 export const useDialog = () => {

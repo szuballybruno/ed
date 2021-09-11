@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAssetUrl, usePaging } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
-import { useSaveExamAnswer } from "../../services/examService";
+import { useExamResults, useSaveExamAnswer } from "../../services/examService";
+import { showNotification } from "../../services/notifications";
 import { ExamResultsTable } from "../exam/ExamResultsTable";
 import { QuestionSlides } from "../exam/QuestionSlides";
 import { SignupWrapper } from "../signup/SignupWrapper";
@@ -18,6 +19,9 @@ export const ExamPlayer = (props: {
     const { exam, setIsExamInProgress, answerSessionId } = props;
     const { questions } = exam;
     const slidesState = usePaging([1, 2, 3, 4]);
+    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
+
+    // save exam answer
     const {
         saveExamAnswer,
         saveExamAnswerError,
@@ -25,8 +29,11 @@ export const ExamPlayer = (props: {
         correctExamAnswerId,
         clearExamAnswerCache
     } = useSaveExamAnswer();
-    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
 
+    // exam result fetching
+    const { examResults, examResultsError, examResultsState, refetchExamResults } = useExamResults();
+
+    // handle save selected answer
     const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
 
         setSelectedAnswerId(questionAnswer.answerId);
@@ -48,6 +55,17 @@ export const ExamPlayer = (props: {
         setIsExamInProgress(false);
         slidesState.next();
     }
+
+    useEffect(() => {
+
+        if (!examResults)
+            return;
+
+        if (!examResults.unlockedNextCourseItem)
+            return;
+
+        showNotification("Unlocked new course item!");
+    }, [examResultsState]);
 
     const GreetSlide = () => <SignupWrapper
         title={exam.title}

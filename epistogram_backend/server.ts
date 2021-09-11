@@ -121,6 +121,9 @@ const initializeAsync = async () => {
     // organizations 
     expressServer.get("/organizations/get-organizations", authMiddleware, getAsyncActionHandler(getOrganizationsAction));
 
+    // exam
+    expressServer.get("", authMiddleware,)
+
     // question answer
     expressServer.post('/questions/answer-signup-question', answerSignupQuestionAction);
     expressServer.post("/questions/answer-video-question", authMiddleware, answerVideoQuestionAction);

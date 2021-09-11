@@ -1,6 +1,8 @@
+import { useReactQuery } from "../frontendHelpers";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
-import { usePostData } from "./httpClient";
+import { httpGetAsync, usePostData } from "./httpClient";
 
 export const useSaveExamAnswer = () => {
 
@@ -12,5 +14,20 @@ export const useSaveExamAnswer = () => {
         saveExamAnswerState: qr.state,
         correctExamAnswerId: qr.result?.answerId ?? null,
         clearExamAnswerCache: qr.clearCache
+    }
+}
+
+export const useExamResults = () => {
+
+    const qr = useReactQuery<ExamResultsDTO>(
+        ["getExamResults"],
+        () => httpGetAsync("/exam/get-exam-results"),
+        false);
+
+    return {
+        examResults: qr.data,
+        examResultsError: qr.error,
+        examResultsState: qr.status,
+        refetchExamResults: qr.refetch
     }
 }
