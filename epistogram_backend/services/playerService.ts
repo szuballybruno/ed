@@ -5,14 +5,14 @@ import { UserVideoCompletedView } from "../models/entity/views/UserVideoComplete
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { staticProvider } from "../staticProvider";
-import { hasValue } from "../utilities/helpers";
-import { getCourseItemAsync, getCourseItemDTOsAsync, getCurrentCourseItemDescriptor, getExamDTOAsync } from "./courseService";
+import { getCourseItemAsync, getCurrentCourseItemDescriptor, getExamDTOAsync } from "./courseService";
 import { readCourseItemDescriptorCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
+import { log } from "./misc/logger";
 import { createAnswerSessionAsync } from "./questionAnswerService";
 import { getUserById } from "./userService";
 import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
-import { getVideoPlaybackData, saveVideoPlaybackDataAsync } from "./videoService";
+import { saveVideoPlaybackDataAsync } from "./videoService";
 
 export const getPlayerDataAsync = async (
     userId: number,
@@ -95,8 +95,8 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
 
 const isVideoConsideredWatched = (watchedPercent: number) => {
 
-    // 10% is a very low number only for development
-    const percentReached = watchedPercent > 10;
+    // 5% is a very low number only for development
+    const percentReached = watchedPercent > 5;
 
     return percentReached;
 }

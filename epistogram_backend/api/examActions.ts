@@ -1,5 +1,4 @@
 import { Request } from "express";
-import { UserAnswerSessionView } from "../models/entity/views/UserAnswerSessionView";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { getUserIdFromRequest } from "../services/authentication";
 import { answerExamQuestionAsync, getExamResultsAsync } from "../services/examService";

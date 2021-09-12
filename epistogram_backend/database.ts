@@ -1,37 +1,36 @@
 import { Connection, ConnectionOptions, createConnection } from "typeorm";
 import { createDatabase, dropDatabase } from "typeorm-extension";
 import { Answer } from "./models/entity/Answer";
+import { AnswerSession } from "./models/entity/AnswerSession";
 import { Course } from "./models/entity/Course";
+import { CourseGroup } from "./models/entity/CourseGroup";
+import { CourseOrganization } from "./models/entity/CourseOrganization";
+import { CourseTag } from "./models/entity/CourseTag";
 import { Exam } from "./models/entity/Exam";
+import { Group } from "./models/entity/Group";
 import { Organization } from "./models/entity/Organization";
 import { Question } from "./models/entity/Question";
 import { QuestionAnswer } from "./models/entity/QuestionAnswer";
 import { StorageFile } from "./models/entity/StorageFile";
+import { Tag } from "./models/entity/Tag";
 import { Task } from "./models/entity/Task";
 import { TestChild } from "./models/entity/TestChild";
 import { TestParent } from "./models/entity/TestParent";
 import { TestSubChild } from "./models/entity/TestSubChild";
 import { User } from "./models/entity/User";
 import { Video } from "./models/entity/Video";
+import { VideoPlaybackData } from "./models/entity/VideoPlaybackData";
+import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
+import { CourseGroupDTO } from "./models/shared_models/CourseGroupDTO";
+import { CourseOrganizationDTO } from "./models/shared_models/CourseOrganizationDTO";
+import { CourseTagDTO } from "./models/shared_models/CourseTagDTO";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
 import { log } from "./services/misc/logger";
-import { insertVideoAsync, setVideoFileIdAsync } from "./services/videoService";
-import { staticProvider } from "./staticProvider";
-import { CourseOrganization } from "./models/entity/CourseOrganization";
-import { Group } from "./models/entity/Group";
-import { Tag } from "./models/entity/Tag";
-import { CourseOrganizationDTO } from "./models/shared_models/CourseOrganizationDTO";
-import { setUserAvatarFileId } from "./services/userService";
-import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/signupService";
-import { AnswerSession } from "./models/entity/AnswerSession";
 import { getAssetUrl } from "./services/misc/urlProvider";
-import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
-import { VideoPlaybackData } from "./models/entity/VideoPlaybackData";
-import { CourseGroup } from "./models/entity/CourseGroup";
-import { CourseGroupDTO } from "./models/shared_models/CourseGroupDTO";
-import { CourseTagDTO } from "./models/shared_models/CourseTagDTO";
-import { CourseTag } from "./models/entity/CourseTag";
-import { UserAnswerSessionView } from "./models/entity/views/UserAnswerSessionView";
+import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/signupService";
+import { setUserAvatarFileId } from "./services/userService";
+import { insertVideoAsync } from "./services/videoService";
+import { staticProvider } from "./staticProvider";
 import { UserVideoCompletedView } from "./models/entity/views/UserVideoCompletedView";
 
 export type TypeORMConnection = Connection;
@@ -80,8 +79,7 @@ export const initializeDBAsync = async (recreate: boolean) => {
             VideoPlaybackData,
 
             // views
-            UserAnswerSessionView,
-            UserVideoCompletedView
+            UserVideoCompletedView,
         ],
     } as ConnectionOptions;
 
@@ -95,7 +93,7 @@ export const initializeDBAsync = async (recreate: boolean) => {
     }
 
     log("Connecting to database with TypeORM...");
-    staticProvider.ormConnection = await createConnection(postgresOptions);
+    staticProvider.ormConnection = await createTypeORMConnection(postgresOptions);
 
     // seed DB if no users are found
     const users = await staticProvider
@@ -108,13 +106,18 @@ export const initializeDBAsync = async (recreate: boolean) => {
         log("Seeding DB...");
         await seedDB();
     }
+}
 
-    const asd = await staticProvider
-        .ormConnection
-        .getRepository(UserVideoCompletedView)
-        .find();
+const createTypeORMConnection = (opt: ConnectionOptions) => {
 
-    log(asd);
+    try {
+
+        return createConnection(opt);
+    }
+    catch (e) {
+
+        throw new Error("Type ORM connection error!" + e);
+    }
 }
 
 export const recreateDB = async (postgresOptions: ConnectionOptions) => {
