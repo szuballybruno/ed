@@ -18,6 +18,7 @@ import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
 import { CourseItemSelector } from "./CourseItemSelector";
 import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
+import { showNotification } from "../../services/notifications";
 
 export const WatchView = (props: {
     video: VideoDTO,
@@ -58,6 +59,12 @@ export const WatchView = (props: {
     const enableNewDialogPopups = () => {
 
         setTimeout(() => setShowNewDialogsEnabled(true), 2000);
+    }
+
+    const handleVideoCompletedStateChanged = () => {
+
+        refetchCourseItemList();
+        showNotification("Video unlocked!");
     }
 
     // show dialogs 
@@ -127,7 +134,7 @@ export const WatchView = (props: {
     }, [videoLength]);
 
     // playback watcher
-    usePlaybackWatcher(playedSeconds, isPlaying, refetchCourseItemList);
+    usePlaybackWatcher(playedSeconds, isPlaying, handleVideoCompletedStateChanged);
 
     return <>
 

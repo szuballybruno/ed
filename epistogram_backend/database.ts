@@ -27,10 +27,12 @@ import { AnswerSession } from "./models/entity/AnswerSession";
 import { getAssetUrl } from "./services/misc/urlProvider";
 import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
 import { VideoPlaybackData } from "./models/entity/VideoPlaybackData";
-import {CourseGroup} from "./models/entity/CourseGroup";
-import {CourseGroupDTO} from "./models/shared_models/CourseGroupDTO";
-import {CourseTagDTO} from "./models/shared_models/CourseTagDTO";
-import {CourseTag} from "./models/entity/CourseTag";
+import { CourseGroup } from "./models/entity/CourseGroup";
+import { CourseGroupDTO } from "./models/shared_models/CourseGroupDTO";
+import { CourseTagDTO } from "./models/shared_models/CourseTagDTO";
+import { CourseTag } from "./models/entity/CourseTag";
+import { UserAnswerSessionView } from "./models/entity/views/UserAnswerSessionView";
+import { UserVideoCompletedView } from "./models/entity/views/UserVideoCompletedView";
 
 export type TypeORMConnection = Connection;
 
@@ -75,7 +77,11 @@ export const initializeDBAsync = async (recreate: boolean) => {
             StorageFile,
             AnswerSession,
             VideoPlaybackSample,
-            VideoPlaybackData
+            VideoPlaybackData,
+
+            // views
+            UserAnswerSessionView,
+            UserVideoCompletedView
         ],
     } as ConnectionOptions;
 
@@ -102,6 +108,13 @@ export const initializeDBAsync = async (recreate: boolean) => {
         log("Seeding DB...");
         await seedDB();
     }
+
+    const asd = await staticProvider
+        .ormConnection
+        .getRepository(UserVideoCompletedView)
+        .find();
+
+    log(asd);
 }
 
 export const recreateDB = async (postgresOptions: ConnectionOptions) => {

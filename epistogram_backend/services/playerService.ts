@@ -1,6 +1,7 @@
 import { User } from "../models/entity/User";
 import { Video } from "../models/entity/Video";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
+import { UserVideoCompletedView } from "../models/entity/views/UserVideoCompletedView";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { staticProvider } from "../staticProvider";
@@ -79,17 +80,15 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
     const newIsWatchedState = isVideoConsideredWatched(watchedPercent);
 
     // get old watched state, can be null on first sampling.
-    const oldIsWatchedState = await getOldIsWatchedState(userId, videoId);
+    const isCompletedBefore = await getVideoIsCompletedState(userId, videoId);
 
     // squish chunks to store less data 
     await squishSamplesAsync(userId, videoId, chunks);
     await saveVideoPlaybackDataAsync(userId, videoId, watchedPercent, newIsWatchedState);
 
     // calculate is watched state changed
-    // 
-    const isWatchedStateChanged = hasValue(oldIsWatchedState)
-        ? oldIsWatchedState != newIsWatchedState
-        : newIsWatchedState;
+    const isCompletedAfter = await getVideoIsCompletedState(userId, videoId);
+    const isWatchedStateChanged = isCompletedBefore?.isComplete !== isCompletedAfter?.isComplete;
 
     return isWatchedStateChanged;
 }
@@ -102,13 +101,15 @@ const isVideoConsideredWatched = (watchedPercent: number) => {
     return percentReached;
 }
 
-const getOldIsWatchedState = async (userId: number, videoId: number) => {
+export const getVideoIsCompletedState = async (userId: number, videoId: number) => {
 
-    const videoPlaybackData = await getVideoPlaybackData(userId, videoId);
-    if (!videoPlaybackData)
-        return null;
-
-    const oldIsWatchedState = isVideoConsideredWatched(videoPlaybackData!.watchedPercent);
-
-    return oldIsWatchedState;
+    return await staticProvider
+        .ormConnection
+        .getRepository(UserVideoCompletedView)
+        .findOne({
+            where: {
+                userId: userId,
+                videoId: videoId
+            }
+        });
 }
