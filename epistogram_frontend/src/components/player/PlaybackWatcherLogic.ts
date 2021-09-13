@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react"
 import { isBetweenThreshold } from "../../frontendHelpers";
 import { usePostVideoPlaybackSample } from "../../services/playerService";
 
-export const usePlaybackWatcher = (playedSeconds: number, isPlaying: boolean, onVideoWatchedStateChanged: () => void) => {
+export const usePlaybackWatcher = (
+    playedSeconds: number,
+    isPlaying: boolean,
+    onVideoWatchedStateChanged: () => void,
+    setMaxWatchedSeconds: (maxWatchedSeconds: number) => void) => {
 
     // the rate in which new samples are taken
     const sampleRateSeconds = 5;
@@ -18,7 +22,7 @@ export const usePlaybackWatcher = (playedSeconds: number, isPlaying: boolean, on
     const [lastSampleSeconds, setLastSampleSeconds] = useState(0);
 
     // post funciton
-    const { postVideoPlaybackSampleAsync, isWatchedStateChanged } = usePostVideoPlaybackSample();
+    const { postVideoPlaybackSampleAsync, videoSamplingResult } = usePostVideoPlaybackSample();
 
     const samplePlayedSeconds = () => {
 
@@ -53,9 +57,17 @@ export const usePlaybackWatcher = (playedSeconds: number, isPlaying: boolean, on
     }, [playedSeconds]);
 
     // watched state changed 
-    useEffect(() => {
+    useEffect(
+        () => {
 
-        if (isWatchedStateChanged)
-            onVideoWatchedStateChanged();
-    }, [isWatchedStateChanged])
+            if (videoSamplingResult?.isWatchedStateChanged)
+                onVideoWatchedStateChanged();
+
+            if (videoSamplingResult?.maxWathcedSeconds)
+                setMaxWatchedSeconds(videoSamplingResult.maxWathcedSeconds);
+        },
+        [
+            videoSamplingResult?.isWatchedStateChanged,
+            videoSamplingResult?.maxWathcedSeconds
+        ])
 }

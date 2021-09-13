@@ -1,6 +1,7 @@
 import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
+import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemType } from "../models/shared_models/types/sharedTypes";
@@ -129,6 +130,17 @@ export const getExamDTOAsync = async (userId: number, examId: number) => {
         throw new Error("Exam has no questions assigend.");
 
     return toExamDTO(exam);
+}
+
+export const startCourseAsync = async (userId: number, courseId: number) => {
+
+    await staticProvider
+        .ormConnection
+        .getRepository(UserCourseBridge)
+        .insert({
+            courseId: courseId,
+            userId: userId,
+        } as UserCourseBridge);
 }
 
 const getExamByIdAsync = (examId: number) => {

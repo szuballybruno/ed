@@ -8,4 +8,5 @@ export type VideoDTO = {
     url: string;
     description: string;
     questions: QuestionDTO[];
+    maxWatchedSeconds: number;
 }

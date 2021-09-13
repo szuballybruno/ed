@@ -34,6 +34,7 @@ export const WatchView = (props: {
     const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
+    const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
@@ -47,7 +48,7 @@ export const WatchView = (props: {
     const stillWatchingDialogDelaySecs = 60 * 2; // 2 mins
 
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
-    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay);
+    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds);
     const { playedSeconds, videoLength, isSeeking, isPlaying } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription description={video!.description} />;
@@ -134,7 +135,7 @@ export const WatchView = (props: {
     }, [videoLength]);
 
     // playback watcher
-    usePlaybackWatcher(playedSeconds, isPlaying, handleVideoCompletedStateChanged);
+    usePlaybackWatcher(playedSeconds, isPlaying, handleVideoCompletedStateChanged, setMaxWatchedSeconds);
 
     return <>
 

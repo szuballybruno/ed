@@ -5,6 +5,7 @@ import { Exam } from "./Exam";
 import { Organization } from "./Organization";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
+import { UserCourseBridge } from "./UserCourseBridge";
 import { Video } from "./Video";
 import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
@@ -118,4 +119,9 @@ export class User {
     @OneToMany(_ => VideoPlaybackData, x => x.user)
     @JoinColumn()
     videoPlaybackDatas: VideoPlaybackData[];
+
+    // user course bridges 
+    @OneToMany(_ => UserCourseBridge, x => x.user)
+    @JoinColumn()
+    userCourseBridges: UserCourseBridge[];
 }

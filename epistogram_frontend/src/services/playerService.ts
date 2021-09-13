@@ -2,6 +2,7 @@ import { useReactQuery } from "../frontendHelpers";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
+import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
 import { httpPostAsync, usePostData } from "./httpClient";
 
 export const usePlayerData = (descriptorCode: string) => {
@@ -36,7 +37,7 @@ export const useCourseItemList = (descriptorCode: string) => {
 
 export const usePostVideoPlaybackSample = () => {
 
-    const qr = usePostData<VideoPlaybackSampleDTO, boolean>("player/save-video-playback-sample");
+    const qr = usePostData<VideoPlaybackSampleDTO, VideoSamplingResultDTO>("player/save-video-playback-sample");
 
     const postVideoPlaybackSampleAsync = (fromPlayedSeconds: number, toPlayedSeconds: number) => {
 
@@ -48,6 +49,6 @@ export const usePostVideoPlaybackSample = () => {
 
     return {
         postVideoPlaybackSampleAsync,
-        isWatchedStateChanged: qr.result ?? false
+        videoSamplingResult: qr.result
     }
 }

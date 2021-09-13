@@ -4,8 +4,9 @@ import { Exam } from "./Exam";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
 import { Video } from "./Video";
-import {CourseGroup} from "./CourseGroup";
-import {CourseTag} from "./CourseTag";
+import { CourseGroup } from "./CourseGroup";
+import { CourseTag } from "./CourseTag";
+import { UserCourseBridge } from "./UserCourseBridge";
 
 @Entity()
 export class Course {
@@ -72,4 +73,9 @@ export class Course {
     @ManyToOne(_ => StorageFile, x => x.courses, { cascade: true })
     @JoinColumn({ name: "coverFileId" })
     coverFile: StorageFile;
+
+    // user course bridges 
+    @OneToMany(_ => UserCourseBridge, x => x.course)
+    @JoinColumn()
+    userCourseBridges: UserCourseBridge[];
 }

@@ -36,6 +36,7 @@ import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { UserExamAnswerSessionView } from "../models/entity/views/UserExamAnswerSessionView";
+import { getMaxWatchedSeconds } from "./playerService";
 
 export const toUserDTO = (user: User) => {
 
@@ -252,7 +253,7 @@ const getCompletedAnswerSession = (
     return isAnyCompletedAnswerSession;
 }
 
-export const toVideoDTO = (video: Video) => {
+export const toVideoDTO = (video: Video, maxWatchedSeconds: number) => {
 
     navPropNotNull(video.questions);
     navPropNotNull(video.videoFile);
@@ -264,7 +265,8 @@ export const toVideoDTO = (video: Video) => {
         description: video.description,
         thumbnailUrl: "",
         url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl("images/videoImage.jpg"),
-        questions: video.questions.map(q => toQuestionDTO(q))
+        questions: video.questions.map(q => toQuestionDTO(q)),
+        maxWatchedSeconds: maxWatchedSeconds
     } as VideoDTO;
 }
 

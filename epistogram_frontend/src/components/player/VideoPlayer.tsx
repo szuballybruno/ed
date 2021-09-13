@@ -6,7 +6,7 @@ import FastForwardIcon from '@material-ui/icons/FastForward';
 import FastRewindIcon from '@material-ui/icons/FastRewind';
 import PauseIcon from '@material-ui/icons/Pause';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import React, { ReactNode, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { TrackProps } from "react-player/file";
 import useEventListener from 'react-use-event-listener';
@@ -19,7 +19,10 @@ import classes from "./player.module.scss";
 
 type VisualOverlayType = "counter" | "pause" | "start" | "seekRight" | "seekLeft";
 
-export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boolean) => {
+export const useVideoPlayerState = (
+    videoItem: VideoDTO,
+    isShowingOverlay: boolean,
+    maxWatchedSeconds: number) => {
 
     const { url: videoUrl } = videoItem;
     const { subtitles } = { subtitles: [] as SubtitleDTO[] };
@@ -49,8 +52,17 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
 
     const seekToSeconds = (seconds: number) => {
 
+        console.log(seconds);
+        console.log(maxWatchedSeconds);
+
+        // limit from seeking too far forward
+        if (seconds > maxWatchedSeconds)
+            return;
+
+        setPlayedSeconds(seconds);
+
         // @ts-ignore
-        playerRef.current.seekTo(seconds as number)
+        playerRef.current.seekTo(seconds);
     }
 
     const flashVisualOverlay = (visualOverlayType: VisualOverlayType) => {
@@ -108,8 +120,11 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
             flashVisualOverlay("seekLeft");
         }
 
+        // limit from seeking too far forward
+        if (seekSeconds > maxWatchedSeconds)
+            return;
+
         showControlOverlay();
-        setPlayedSeconds(seekSeconds);
         seekToSeconds(seekSeconds);
     }
 
@@ -130,6 +145,9 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
             jump(true);
     });
 
+    // TODO start at specific time
+    // useEffect(() => seekToSeconds(maxWatchedSeconds), [])
+
     return {
         playerContainerRef,
         playerRef,
@@ -145,6 +163,7 @@ export const useVideoPlayerState = (videoItem: VideoDTO, isShowingOverlay: boole
         isShowingOverlay,
         isSeeking,
         isPlaying,
+        maxWatchedSeconds,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -178,6 +197,7 @@ export const VideoPlayer = (props: {
         videoLength,
         isShowingOverlay,
         isPlaying,
+        maxWatchedSeconds,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -188,6 +208,12 @@ export const VideoPlayer = (props: {
     } = videoPlayerState;
 
     const iconStyle = { width: "70px", height: "70px", color: "white" } as CSSProperties;
+
+    const marks = [
+        {
+            value: maxWatchedSeconds,
+        },
+    ];
 
     return (
         <Box
@@ -275,9 +301,9 @@ export const VideoPlayer = (props: {
                         onChangeCommitted={() => setIsSeeking(false)}
                         onChange={(event, targetSeconds) => {
 
-                            setPlayedSeconds(targetSeconds as number);
                             seekToSeconds(targetSeconds as number);
-                        }} />
+                        }}
+                        marks={marks} />
 
                     {/* wtf */}
                     <button onClick={(e) => {

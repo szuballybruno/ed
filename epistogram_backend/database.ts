@@ -34,6 +34,8 @@ import { staticProvider } from "./staticProvider";
 import { UserVideoCompletedView } from "./models/entity/views/UserVideoCompletedView";
 import { UserExamCompletedView } from "./models/entity/views/UserExamCompletedView";
 import { UserExamAnswerSessionView } from "./models/entity/views/UserExamAnswerSessionView";
+import { UserVideoMaxWatchedSecondsView } from "./models/entity/views/UserVideoMaxWatchedSecondsView";
+import { UserCourseBridge } from "./models/entity/UserCourseBridge";
 
 export type TypeORMConnection = Connection;
 
@@ -79,11 +81,13 @@ export const initializeDBAsync = async (recreate: boolean) => {
             AnswerSession,
             VideoPlaybackSample,
             VideoPlaybackData,
+            UserCourseBridge,
 
             // views
             UserVideoCompletedView,
             UserExamCompletedView,
-            UserExamAnswerSessionView
+            UserExamAnswerSessionView,
+            UserVideoMaxWatchedSecondsView
         ],
     } as ConnectionOptions;
 

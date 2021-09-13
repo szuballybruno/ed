@@ -10,26 +10,23 @@ export const CourseItemSelector = (props: { courseItems: CourseItemDTO[] }) => {
 
         {/* learning type selector */}
         <div className={classes.learningTypeSelector}>
-            <Slider className={classes.slider}
+            <Slider
+                className={classes.slider}
                 defaultValue={0}
                 aria-labelledby="discrete-slider"
                 step={1}
                 marks={[
                     {
                         value: 0,
-                        label: 'Alapértelmezett',
+                        label: 'Újonc',
                     },
                     {
                         value: 1,
-                        label: 'Áttekintés',
-                    },
-                    {
-                        value: 2,
-                        label: 'Ismétlés',
+                        label: 'Haladó',
                     }
                 ]}
                 min={0}
-                max={2} />
+                max={1} />
         </div>
 
         <CourseItemList courseItems={props.courseItems}></CourseItemList>
