@@ -16,6 +16,9 @@ import {getChipWithLabel} from "../courseList/CourseList";
 import {SelectMultiple} from "../../universal/selectMultiple/SelectMultiple";
 import {AdminPageEditCourseDTO, EditListItemDTO} from "../../../../models/shared_models/AdminPageEditCourseDTO";
 import {httpPostAsync} from "../../../../services/httpClient";
+import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd"
+import {CourseItemDTO} from "../../../../models/shared_models/CourseItemDTO";
+
 
 /* TODO:
 *   - onClick for save changes button
@@ -50,6 +53,7 @@ export const EditCourse = () => {
     const [thumbnailURL, setThumbnailURL] = useState("")
     const [colorOne, setColorOne] = useState("")
     const [colorTwo, setColorTwo] = useState("")
+    const [courseItems, setCourseItems] = useState<CourseItemDTO[]>([])
     const [organizations, setOrganizations] = useState<EditListItemDTO[]>([])
     const [groups, setGroups] = useState<EditListItemDTO[]>([])
     const [tags, setTags] = useState<EditListItemDTO[]>([])
@@ -70,6 +74,7 @@ export const EditCourse = () => {
             thumbnailURL,
             colorOne,
             colorTwo,
+            courseItems,
             organizations,
             tags,
             teachers,
@@ -83,6 +88,7 @@ export const EditCourse = () => {
         setThumbnailURL(thumbnailURL)
         setColorOne(colorOne)
         setColorTwo(colorTwo)
+        setCourseItems(courseItems)
         setOrganizations(organizations)
         setTags(tags)
         setTeachers(teachers)
@@ -278,7 +284,6 @@ export const EditCourse = () => {
                                 <Divider style={{width: "100%"}} />
                             </div>
                         )}
-
                     </SelectMultiple>
 
                 </div>
@@ -292,11 +297,44 @@ export const EditCourse = () => {
 
         <div className={classes.editVideosWrapper}>
             <AdminDashboardSearch searchChangeHandler={() => { }} name={"searchData"} title={"A kurzus tartalma"} />
-            {course?.courseItems.map((item, index) => <AdministrationListItem key={"adlistitem" + index} title={item.title} thumbnailUrl={item.thumbnailUrl} chips={[
-                getChipWithLabel("fis" + index, "item.type", "category"),
-                getChipWithLabel("fos" + index, "item.length", "person"),
-                getChipWithLabel("fasz" + index, "item.isEssential", "video")
-            ]} searchItemButtons={[]} />)}
+            <DragDropContext onDragEnd={(result) => {
+                const items = Array.from(courseItems)
+                const [reorderedItem] = items.splice(result.source.index, 1)
+                items.splice(result.destination.index, 0, reorderedItem)
+
+                setCourseItems(items)
+            }}>
+                <Droppable droppableId={"courseItems"}>
+                    {(provided) => (
+                        <div {...provided.droppableProps} ref={provided.innerRef}>
+                            {courseItems.map((item, index) => <Draggable key={item.title} draggableId={item.title} index={index}>
+                                {(provided) => (
+                                    <li {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        ref={provided.innerRef}>
+                                        <AdministrationListItem
+
+                                            key={"adlistitem" + index}
+                                            title={item.title}
+                                            thumbnailUrl={item.thumbnailUrl}
+                                            chips={[
+                                                getChipWithLabel("fis" + index, "item.type", "category"),
+                                                getChipWithLabel("fos" + index, "item.length", "person"),
+                                                getChipWithLabel("fasz" + index, "item.isEssential", "video")
+                                            ]}
+                                            searchItemButtons={[]}
+                                        />
+                                    </li>
+                                    )}
+
+                                </Draggable> )
+                            }{provided.placeholder}
+                        </div>
+
+                    )}
+                </Droppable>
+
+            </DragDropContext>
         </div>
 
         <AdminDashboardHeader titleText={""} />
