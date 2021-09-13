@@ -32,8 +32,28 @@ export const getVideoWatchedPercentAsync = async (userId: number, videoId: numbe
 
 export const squishSamplesAsync = async (userId: number, videoId: number, chunks: VideoPlaybackSampleChunk[]) => {
 
-    // TODO squish samples
-    return Promise.resolve();
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(VideoPlaybackSample)
+        .where("userId = :userId", { userId })
+        .andWhere("videoId = :videoId", { videoId })
+        .execute();
+
+    await staticProvider
+        .ormConnection
+        .getRepository(VideoPlaybackSample)
+        .save(chunks
+            .map(chunk => {
+
+                return {
+                    fromSeconds: chunk.startSeconds,
+                    toSeconds: chunk.endSeconds,
+                    userId: userId,
+                    videoId: videoId
+                } as VideoPlaybackSample;
+            }));
 }
 
 export const getSampleChunksAsync = async (userId: number, videoId: number) => {

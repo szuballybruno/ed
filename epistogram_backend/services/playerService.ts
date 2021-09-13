@@ -77,7 +77,8 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
 
     // calucate and save watched percent
     const watchedPercent = await getVideoWatchedPercentAsync(userId, videoId, chunks);
-    const newIsWatchedState = isVideoConsideredWatched(watchedPercent);
+    // 5% is a very low number only for development
+    const newIsWatchedState = watchedPercent > 5;
 
     // get old watched state, can be null on first sampling.
     const isCompletedBefore = await getVideoIsCompletedState(userId, videoId);
@@ -91,14 +92,6 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
     const isWatchedStateChanged = isCompletedBefore?.isComplete !== isCompletedAfter?.isComplete;
 
     return isWatchedStateChanged;
-}
-
-const isVideoConsideredWatched = (watchedPercent: number) => {
-
-    // 5% is a very low number only for development
-    const percentReached = watchedPercent > 5;
-
-    return percentReached;
 }
 
 export const getVideoIsCompletedState = async (userId: number, videoId: number) => {
