@@ -1,9 +1,9 @@
-import { getegid } from "process";
-import { AnswerSession } from "../models/entity/AnswerSession";
-import { Exam } from "../models/entity/Exam";
+import { User } from "../models/entity/User";
+import { UserExamAnswerSessionView } from "../models/entity/views/UserExamAnswerSessionView";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { staticProvider } from "../staticProvider";
 import { getCurrentCourseItemDescriptor } from "./courseService";
+import { toExamResultDTO } from "./mappings";
 import { answerQuestionAsync } from "./questionAnswerService";
 import { getUserById } from "./userService";
 
@@ -26,14 +26,28 @@ export const getExamResultsAsync = async (userId: number, answerSessionId: numbe
     if (descriptor?.itemType != "exam")
         throw new Error("Current course item type is not 'exam'!");
 
-    return Promise.resolve();
-    // const ad = await staticProvider
-    //     .ormConnection
-    //     .getRepository(AnswerSession)
-    //     .find({
-    //         where: {
-    //             examId: descriptor.itemId,
-    //             userId: userId
-    //         }
-    //     })
+    const answerSession = await staticProvider
+        .ormConnection
+        .getRepository(UserExamAnswerSessionView)
+        .findOneOrFail({
+            where: {
+                examId: descriptor.itemId,
+                userId: userId,
+                answerSessionId: answerSessionId
+            }
+        });
+
+    const data = await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .createQueryBuilder("u")
+        .leftJoinAndSelect("u.currentExam", "ce")
+        .leftJoinAndSelect("ce.questions", "q")
+        .leftJoinAndSelect("q.answers", "allA")
+        .leftJoinAndSelect("q.questionAnswers", "qa", "qa.answerSessionId = :answerSessionId", { answerSessionId })
+        .leftJoinAndSelect("qa.answer", "ans")
+        .where("u.id = :userId", { userId })
+        .getOneOrFail();
+
+    return toExamResultDTO(answerSession, data);
 }

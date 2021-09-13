@@ -17,17 +17,15 @@ export const useSaveExamAnswer = () => {
     }
 }
 
-export const useExamResults = () => {
+export const useExamResults = (answerSessionId: number) => {
 
     const qr = useReactQuery<ExamResultsDTO>(
         ["getExamResults"],
-        () => httpGetAsync("/exam/get-exam-results"),
-        false);
+        () => httpGetAsync("/exam/get-exam-results?answerSessionId=" + answerSessionId));
 
     return {
         examResults: qr.data,
         examResultsError: qr.error,
-        examResultsState: qr.status,
-        refetchExamResults: qr.refetch
+        examResultsState: qr.status
     }
 }

@@ -18,6 +18,8 @@ export const disallowWindowNavigation = () => {
     };
 }
 
+export const isString = (obj: any) => typeof obj === 'string' || obj instanceof String;
+
 export function distinct<T>(array: T[]) {
 
     function onlyUnique(value, index, self) {

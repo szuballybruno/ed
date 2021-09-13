@@ -32,6 +32,8 @@ import { setUserAvatarFileId } from "./services/userService";
 import { insertVideoAsync } from "./services/videoService";
 import { staticProvider } from "./staticProvider";
 import { UserVideoCompletedView } from "./models/entity/views/UserVideoCompletedView";
+import { UserExamCompletedView } from "./models/entity/views/UserExamCompletedView";
+import { UserExamAnswerSessionView } from "./models/entity/views/UserExamAnswerSessionView";
 
 export type TypeORMConnection = Connection;
 
@@ -80,6 +82,8 @@ export const initializeDBAsync = async (recreate: boolean) => {
 
             // views
             UserVideoCompletedView,
+            UserExamCompletedView,
+            UserExamAnswerSessionView
         ],
     } as ConnectionOptions;
 

@@ -1,3 +1,8 @@
+import { ExamResultQuestionDTO } from "./ExamResultQuestionDTO";
+
 export type ExamResultsDTO = {
-    unlockedNextCourseItem: boolean;
+    isSuccessful: boolean;
+    correctAnswerCount: number;
+    questionCount: number;
+    questions: ExamResultQuestionDTO[];
 }

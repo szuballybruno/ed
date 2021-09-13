@@ -64,7 +64,7 @@ export const WatchView = (props: {
     const handleVideoCompletedStateChanged = () => {
 
         refetchCourseItemList();
-        showNotification("Video unlocked!");
+        // showNotification("Video unlocked!");
     }
 
     // show dialogs 

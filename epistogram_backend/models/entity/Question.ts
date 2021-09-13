@@ -28,7 +28,7 @@ export class Question {
     answers: Answer[];
 
     // question answers
-    @OneToMany(() => QuestionAnswer, qa => qa.answer)
+    @OneToMany(() => QuestionAnswer, qa => qa.question)
     @JoinColumn()
     questionAnswers: QuestionAnswer[]
 

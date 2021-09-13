@@ -18,7 +18,7 @@ import { staticProvider } from './staticProvider';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
 import './utilities/jsExtensions';
 import { answerVideoQuestionAction } from './api/questionActions';
-import { answerExamQuestionAction } from './api/examActions';
+import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -122,7 +122,7 @@ const initializeAsync = async () => {
     expressServer.get("/organizations/get-organizations", authMiddleware, getAsyncActionHandler(getOrganizationsAction));
 
     // exam
-    expressServer.get("", authMiddleware,)
+    expressServer.get("/exam/get-exam-results", authMiddleware, getExamResultsAction);
 
     // question answer
     expressServer.post('/questions/answer-signup-question', answerSignupQuestionAction);

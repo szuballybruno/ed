@@ -30,9 +30,6 @@ export const ExamPlayer = (props: {
         clearExamAnswerCache
     } = useSaveExamAnswer();
 
-    // exam result fetching
-    const { examResults, examResultsError, examResultsState, refetchExamResults } = useExamResults();
-
     // handle save selected answer
     const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
 
@@ -56,17 +53,6 @@ export const ExamPlayer = (props: {
         slidesState.next();
     }
 
-    useEffect(() => {
-
-        if (!examResults)
-            return;
-
-        if (!examResults.unlockedNextCourseItem)
-            return;
-
-        showNotification("Unlocked new course item!");
-    }, [examResultsState]);
-
     const GreetSlide = () => <SignupWrapper
         title={exam.title}
         upperTitle="Üdv!"
@@ -89,12 +75,8 @@ export const ExamPlayer = (props: {
         getCorrectAnswerId={() => correctExamAnswerId}
         questions={questions} />
 
-    const ResultsSlide = () => <SignupWrapper
-        title={exam.title}
-        description={"Sikeresen elvegezve!"}
-        upperTitle="Összegzés">
-        <ExamResultsTable></ExamResultsTable>
-    </SignupWrapper>
+    const ResultsSlide = () =>
+        <ExamResultsTable examTitle={exam.title} answerSessionId={answerSessionId}></ExamResultsTable>
 
     const slides = [
         GreetSlide,

@@ -33,6 +33,9 @@ import { CourseGroup } from "../models/entity/CourseGroup";
 import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
 import { CourseTag } from "../models/entity/CourseTag";
 import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
+import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
+import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
+import { UserExamAnswerSessionView } from "../models/entity/views/UserExamAnswerSessionView";
 
 export const toUserDTO = (user: User) => {
 
@@ -115,6 +118,45 @@ export const toExamDTO = (exam: Exam) => {
         thumbnailUrl: exam.thumbnailUrl,
         questions: exam.questions.map(x => toQuestionDTO(x))
     } as ExamDTO;
+}
+
+export const toExamResultDTO = (answerSessionView: UserExamAnswerSessionView, data: User) => {
+
+    navPropNotNull(data.currentExam);
+    navPropNotNull(data.currentExam!.questions);
+
+    const questions = data.currentExam!.questions;
+
+    const questionDTOs = questions
+        .map(question => {
+
+            navPropNotNull(question.questionAnswers);
+            navPropNotNull(question.answers);
+
+            const questionAnswer = question
+                .questionAnswers
+                .single(x => true);
+
+            navPropNotNull(questionAnswer.answer);
+
+            const correctAnswer = question
+                .answers
+                .single(x => x.isCorrect);
+
+            return {
+                text: question.questionText,
+                answerText: questionAnswer.answer.text,
+                correctAnswerText: correctAnswer.text,
+                isCorrect: questionAnswer.answer.isCorrect ?? false
+            } as ExamResultQuestionDTO;
+        })
+
+    return {
+        isSuccessful: answerSessionView.isCompleteSession,
+        correctAnswerCount: answerSessionView.correctAnswerCount,
+        questionCount: answerSessionView.questionCount,
+        questions: questionDTOs
+    } as ExamResultsDTO;
 }
 
 export const toCourseItemDTOs = (

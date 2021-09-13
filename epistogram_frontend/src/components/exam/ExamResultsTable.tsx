@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -6,43 +7,54 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import React from 'react';
+import { useExamResults } from '../../services/examService';
+import { SignupWrapper } from '../signup/SignupWrapper';
 
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-    return { name, calories, fat, carbs, protein };
-}
+export const ExamResultsTable = (props: {
+    answerSessionId: number,
+    examTitle: string
+}) => {
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+    const { answerSessionId, examTitle } = props;
 
-export const ExamResultsTable = () => {
+    // exam result fetching
+    const { examResults, examResultsError, examResultsState } = useExamResults(answerSessionId);
+    const questions = examResults?.questions ?? [];
 
-    return <Table>
-        <TableHead>
-            <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align="right">Calories</TableCell>
-                <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            {rows.map((row) => (
-                <TableRow key={row.name}>
-                    <TableCell component="th" scope="row">
-                        {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+    return <SignupWrapper
+        title={examTitle}
+        description={<Typography
+            style={{ color: examResults?.isSuccessful ? "var(--mildGreen)" : "var(--mildRed)" }}>
+            {examResults?.isSuccessful ? "Sikeresen elvegezve!" : "Ez most nem jott ossze!"}
+        </Typography >}
+        upperTitle="Összegzés" >
+
+        <Table>
+            <TableHead>
+                <TableRow>
+                    <TableCell>Kérdés</TableCell>
+                    <TableCell align="right">Adott válasz</TableCell>
+                    <TableCell align="right">Helyes válasz</TableCell>
+                    <TableCell align="right"></TableCell>
                 </TableRow>
-            ))}
-        </TableBody>
-    </Table>
+            </TableHead>
+            <TableBody>
+                {questions
+                    .map((question) => (
+                        <TableRow key={question.text}>
+                            <TableCell component="th" scope="row">
+                                {question.text}
+                            </TableCell>
+                            <TableCell align="right">{question.answerText}</TableCell>
+                            <TableCell align="right">{question.correctAnswerText}</TableCell>
+                            <TableCell
+                                align="right"
+                                style={{ color: question.isCorrect ? "var(--mildGreen)" : "var(--mildRed)" }}>
+                                {question.isCorrect ? "Jo valasz" : "Helytelen valasz"}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+            </TableBody>
+        </Table>
+    </SignupWrapper >
 }
