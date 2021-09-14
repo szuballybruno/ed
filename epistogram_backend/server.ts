@@ -5,7 +5,7 @@ import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemDTOsAction } from './api/dataActions';
+import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemsAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
@@ -106,7 +106,7 @@ const initializeAsync = async () => {
     // player 
     expressServer.post('/player/get-player-data', authMiddleware, getPlayerDataAction);
     expressServer.post('/player/save-video-playback-sample', authMiddleware, saveVideoPlaybackSampleAction);
-    expressServer.post('/player/get-course-items', authMiddleware, getCourseItemDTOsAction);
+    expressServer.post('/player/get-course-items', authMiddleware, getCourseItemsAction);
 
     // users
     expressServer.get("/users/get-user-administartion-user-list", authMiddleware, getUserAdministrationUserListAction);

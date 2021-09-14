@@ -10,6 +10,7 @@ import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { toCourseItemDTOs, toExamDTO } from "./mappings";
+import { log } from "./misc/logger";
 import { getUserById } from "./userService";
 import { getVideoWatchedPercentAsync } from "./videoPlaybackSampleService";
 import { getVideoByIdAsync } from "./videoService";
@@ -45,7 +46,7 @@ export const getCurrentCourseItemDescriptorCodeAsync = async (userId: number) =>
     return getCourseItemDescriptorCodeFromDTO(dsc);
 }
 
-export const getCourseItemDTOsAsync = async (userId: number) => {
+export const getCourseItemsAsync = async (userId: number) => {
 
     const user = await getUserById(userId);
     const currentCourseItemDesc = getCurrentCourseItemDescriptor(user);
@@ -76,7 +77,9 @@ export const getCourseItemDTOsAsync = async (userId: number) => {
         .leftJoinAndSelect("easqa.answer", "easqaa")
         .getOneOrFail();
 
-    return toCourseItemDTOs(course, currentCourseItemDesc!);
+    const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, course.id);
+
+    return toCourseItemDTOs(course, userCourseBridge.courseMode, currentCourseItemDesc!);
 }
 
 export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {
@@ -132,7 +135,7 @@ export const getExamDTOAsync = async (userId: number, examId: number) => {
     return toExamDTO(exam);
 }
 
-export const getUserCourseBridge = async (userId: number, courseId: number) => {
+export const getUserCourseBridgeAsync = async (userId: number, courseId: number) => {
 
     const userCourseBridge = await staticProvider
         .ormConnection
@@ -147,9 +150,18 @@ export const getUserCourseBridge = async (userId: number, courseId: number) => {
     return userCourseBridge;
 }
 
+export const getUserCourseBridgeOrFailAsync = async (userId: number, courseId: number) => {
+
+    const userCourseBridge = await getUserCourseBridgeAsync(userId, courseId);
+    if (!userCourseBridge)
+        throw new Error("User course bridge not found, maybe the course is not yet started!");
+
+    return userCourseBridge;
+}
+
 export const startCourseAsync = async (userId: number, courseId: number) => {
 
-    const userCourseBridge = await getUserCourseBridge(userId, courseId);
+    const userCourseBridge = await getUserCourseBridgeAsync(userId, courseId);
     if (!userCourseBridge)
         await staticProvider
             .ormConnection
@@ -162,7 +174,7 @@ export const startCourseAsync = async (userId: number, courseId: number) => {
 
 export const setCourseTypeAsync = async (userId: number, courseId: number, mode: CourseModeType) => {
 
-    const userCourseBridge = await getUserCourseBridge(userId, courseId);
+    const userCourseBridge = await getUserCourseBridgeAsync(userId, courseId);
     if (!userCourseBridge)
         throw new Error("User course bridge not found!");
 

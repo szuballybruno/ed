@@ -35,11 +35,14 @@ export const PlayerPage = () => {
     const answerSessionId = playerData?.answerSessionId;
     const courseMode = playerData?.mode ?? "beginner";
     const courseId = playerData?.courseId;
+    const courseItems = playerData?.courseItems ?? [];
 
-    const {
-        courseItemList,
-        refetchCourseItemList
-    } = useCourseItemList(descriptorCode);
+    // const isPlayerDataUpToDate = playerData?.courseItemCode === descriptorCode;
+
+    // const {
+    //     courseItemList,
+    //     refetchCourseItemList
+    // } = useCourseItemList(descriptorCode, isPlayerDataUpToDate);
 
     const navigateToCourseItem = (descriptorCode: string) => {
 
@@ -75,8 +78,8 @@ export const PlayerPage = () => {
                             refetchPlayerData={refetchPlayerData}
                             answerSessionId={answerSessionId!}
                             video={video}
-                            courseItems={courseItemList}
-                            refetchCourseItemList={refetchCourseItemList}
+                            courseItems={courseItems}
+                            refetchCourseItemList={refetchPlayerData}
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
@@ -103,7 +106,7 @@ export const PlayerPage = () => {
                             <CourseItemSelector
                                 courseId={courseId!}
                                 mode={courseMode}
-                                courseItems={courseItemList}
+                                courseItems={courseItems}
                                 refetchPlayerData={refetchPlayerData} />
                         </Box>}
                     </FlexFloat>

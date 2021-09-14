@@ -6,9 +6,10 @@ import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
 import { staticProvider } from "../staticProvider";
-import { getCurrentCourseItemDescriptor, getExamDTOAsync, getUserCourseBridge } from "./courseService";
+import { getCourseItemsAsync, getCurrentCourseItemDescriptor, getCurrentCourseItemDescriptorCodeAsync, getExamDTOAsync, getUserCourseBridgeAsync, getUserCourseBridgeOrFailAsync } from "./courseService";
 import { readCourseItemDescriptorCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
+import { log } from "./misc/logger";
 import { createAnswerSessionAsync } from "./questionAnswerService";
 import { getUserById } from "./userService";
 import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
@@ -25,29 +26,37 @@ export const getPlayerDataAsync = async (
     const courseId = videoDTO?.courseId || examDTO?.courseId;
 
     // set current course item
+    const setCurrentItemData = {
+        id: userId,
+        currentVideoId: videoDTO?.id ?? null,
+        currentExamId: examDTO?.id ?? null
+    } as User;
+
     await staticProvider
         .ormConnection
         .getRepository(User)
-        .save({
-            id: userId,
-            currentVideoId: videoDTO?.id,
-            currentExamId: examDTO?.id
-        });
+        .save(setCurrentItemData);
 
     // get user course bridge
-    const userCourseBridge = await getUserCourseBridge(userId, courseId!);
-    if (!userCourseBridge)
-        throw new Error("User course bridge not found, maybe the course is not yet started!");
+    const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, courseId!);
 
     // get new answer session
     const answerSessionId = await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
+
+    // current item code 
+    const code = await getCurrentCourseItemDescriptorCodeAsync(userId);
+
+    // course items 
+    const courseItems = await getCourseItemsAsync(userId);
 
     return {
         video: videoDTO,
         exam: examDTO,
         answerSessionId: answerSessionId,
         mode: userCourseBridge.courseMode,
-        courseId: courseId!
+        courseId: courseId!,
+        courseItemCode: code,
+        courseItems: courseItems
     } as PlayerDataDTO;
 }
 

@@ -59,7 +59,8 @@ export const WatchView = (props: {
     const stillWatchingDialogDelaySecs = 60 * 2; // 2 mins
 
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
-    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds);
+    const limitSeek = courseMode === "beginner";
+    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek);
     const { playedSeconds, videoLength, isSeeking, isPlaying } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription description={video!.description} />;

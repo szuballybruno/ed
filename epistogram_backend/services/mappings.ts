@@ -22,7 +22,7 @@ import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { CourseItemState } from "../models/shared_models/types/sharedTypes";
+import { CourseItemStateType, CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
@@ -37,6 +37,7 @@ import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestio
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { UserExamAnswerSessionView } from "../models/entity/views/UserExamAnswerSessionView";
 import { getMaxWatchedSeconds } from "./playerService";
+import { log } from "./misc/logger";
 
 export const toUserDTO = (user: User) => {
 
@@ -163,10 +164,13 @@ export const toExamResultDTO = (answerSessionView: UserExamAnswerSessionView, da
 
 export const toCourseItemDTOs = (
     course: Course,
+    courseMode: CourseModeType,
     currentCourseItemDescriptor: CourseItemDescriptorDTO) => {
 
     navPropNotNull(course.exams);
     navPropNotNull(course.videos);
+
+    const isBeginnerMode = courseMode === "beginner";
 
     // map exam items
     const examItems = course
@@ -177,8 +181,11 @@ export const toCourseItemDTOs = (
             navPropNotNull(exam.answerSessions);
 
             const hasCompletedAnswerSession = getCompletedAnswerSession(exam.questions, exam.answerSessions);
+            const state = hasCompletedAnswerSession
+                ? "completed"
+                : isBeginnerMode ? "locked" : "available" as CourseItemStateType;
 
-            return toCourseItemDTO(exam, hasCompletedAnswerSession ? "completed" : "locked", false);
+            return toCourseItemDTO(exam, state, false);
         });
 
     // map video items
@@ -200,7 +207,11 @@ export const toCourseItemDTOs = (
 
             const isCompleted = answerSessionCompleted && isVideoWatched;
 
-            return toCourseItemDTO(video, isCompleted ? "completed" : "locked", true);
+            const state = isCompleted
+                ? "completed"
+                : isBeginnerMode ? "locked" : "available" as CourseItemStateType;
+
+            return toCourseItemDTO(video, state, true);
         });
 
     // concat to one ordered list
@@ -272,7 +283,7 @@ export const toVideoDTO = (video: Video, maxWatchedSeconds: number) => {
     } as VideoDTO;
 }
 
-export const toCourseItemDTO = (item: Video | Exam, state: CourseItemState, isVideo: boolean) => {
+export const toCourseItemDTO = (item: Video | Exam, state: CourseItemStateType, isVideo: boolean) => {
 
     if (isVideo) {
 

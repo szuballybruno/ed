@@ -19,13 +19,16 @@ export const usePlayerData = (descriptorCode: string) => {
     }
 }
 
-export const useCourseItemList = (descriptorCode: string) => {
+export const useCourseItemList = (descriptorCode: string, isEnabled: boolean) => {
 
     // descriptor code is not sent but is to trigger updates
+    if (isEnabled)
+        console.log("getting " + descriptorCode);
 
     const qr = useReactQuery<CourseItemDTO[]>(
-        ["getCorseItemsList", descriptorCode],
-        () => httpPostAsync(`player/get-course-items`));
+        ["getCorseItemsList", descriptorCode, isEnabled],
+        () => httpPostAsync(`player/get-course-items`),
+        isEnabled);
 
     return {
         courseItemList: qr.data as CourseItemDTO[] ?? [],

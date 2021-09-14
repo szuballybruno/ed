@@ -22,7 +22,8 @@ type VisualOverlayType = "counter" | "pause" | "start" | "seekRight" | "seekLeft
 export const useVideoPlayerState = (
     videoItem: VideoDTO,
     isShowingOverlay: boolean,
-    maxWatchedSeconds: number) => {
+    maxWatchedSeconds: number,
+    limitSeek: boolean) => {
 
     const { url: videoUrl } = videoItem;
     const { subtitles } = { subtitles: [] as SubtitleDTO[] };
@@ -52,11 +53,8 @@ export const useVideoPlayerState = (
 
     const seekToSeconds = (seconds: number) => {
 
-        console.log(seconds);
-        console.log(maxWatchedSeconds);
-
         // limit from seeking too far forward
-        if (seconds > maxWatchedSeconds)
+        if ((seconds > maxWatchedSeconds) && limitSeek)
             return;
 
         setPlayedSeconds(seconds);
@@ -121,7 +119,7 @@ export const useVideoPlayerState = (
         }
 
         // limit from seeking too far forward
-        if (seekSeconds > maxWatchedSeconds)
+        if ((seekSeconds > maxWatchedSeconds) && limitSeek)
             return;
 
         showControlOverlay();
@@ -164,6 +162,7 @@ export const useVideoPlayerState = (
         isSeeking,
         isPlaying,
         maxWatchedSeconds,
+        limitSeek,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -198,6 +197,7 @@ export const VideoPlayer = (props: {
         isShowingOverlay,
         isPlaying,
         maxWatchedSeconds,
+        limitSeek,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
