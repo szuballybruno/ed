@@ -33,6 +33,8 @@ export const PlayerPage = () => {
     const video = playerData?.video;
     const exam = playerData?.exam;
     const answerSessionId = playerData?.answerSessionId;
+    const courseMode = playerData?.mode ?? "beginner";
+    const courseId = playerData?.courseId;
 
     const {
         courseItemList,
@@ -68,6 +70,9 @@ export const PlayerPage = () => {
                     <Box id="mainColumn" overflowY="scroll" height="100%" width="100%">
 
                         {video && <WatchView
+                            courseId={courseId!}
+                            courseMode={courseMode}
+                            refetchPlayerData={refetchPlayerData}
                             answerSessionId={answerSessionId!}
                             video={video}
                             courseItems={courseItemList}
@@ -95,7 +100,11 @@ export const PlayerPage = () => {
                             width="350px"
                             minWidth="350px"
                             pl="15px">
-                            <CourseItemSelector courseItems={courseItemList} />
+                            <CourseItemSelector
+                                courseId={courseId!}
+                                mode={courseMode}
+                                courseItems={courseItemList}
+                                refetchPlayerData={refetchPlayerData} />
                         </Box>}
                     </FlexFloat>
                 </LoadingFrame>

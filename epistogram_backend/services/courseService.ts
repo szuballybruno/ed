@@ -4,7 +4,7 @@ import { User } from "../models/entity/User";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
-import { CourseItemType } from "../models/shared_models/types/sharedTypes";
+import { CourseItemType, CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
@@ -132,14 +132,48 @@ export const getExamDTOAsync = async (userId: number, examId: number) => {
     return toExamDTO(exam);
 }
 
+export const getUserCourseBridge = async (userId: number, courseId: number) => {
+
+    const userCourseBridge = await staticProvider
+        .ormConnection
+        .getRepository(UserCourseBridge)
+        .findOne({
+            where: {
+                userId: userId,
+                courseId: courseId
+            }
+        });
+
+    return userCourseBridge;
+}
+
 export const startCourseAsync = async (userId: number, courseId: number) => {
+
+    const userCourseBridge = await getUserCourseBridge(userId, courseId);
+    if (!userCourseBridge)
+        await staticProvider
+            .ormConnection
+            .getRepository(UserCourseBridge)
+            .save({
+                courseId: courseId,
+                userId: userId,
+            } as UserCourseBridge);
+}
+
+export const setCourseTypeAsync = async (userId: number, courseId: number, mode: CourseModeType) => {
+
+    const userCourseBridge = await getUserCourseBridge(userId, courseId);
+    if (!userCourseBridge)
+        throw new Error("User course bridge not found!");
 
     await staticProvider
         .ormConnection
         .getRepository(UserCourseBridge)
-        .insert({
+        .save({
             courseId: courseId,
             userId: userId,
+            id: userCourseBridge.id,
+            courseMode: mode
         } as UserCourseBridge);
 }
 

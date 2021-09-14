@@ -4,31 +4,42 @@ import { useEffect, useState } from "react";
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../frontendHelpers";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
+import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { StillWatchingDialogMarker } from "../../models/types";
+import { NavigateToCourseItemActionType } from "../universal/CourseItemList";
 import { Copyright } from "../universal/footers/copyright/Copyright";
-import { VideoQuestionnaire } from "../universal/VideoQuestionnaire";
 import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
+import { VideoQuestionnaire } from "../universal/VideoQuestionnaire";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
-import { CourseItemList, NavigateToCourseItemActionType } from "../universal/CourseItemList";
+import { CourseItemSelector } from "./CourseItemSelector";
 import PlayerDescription from "./description/PlayerDescription";
 import { OverlayDialog } from "./OverlayDialog";
+import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
 import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
-import { CourseItemSelector } from "./CourseItemSelector";
-import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
-import { showNotification } from "../../services/notifications";
 
 export const WatchView = (props: {
     video: VideoDTO,
     answerSessionId: number,
     courseItems: CourseItemDTO[],
+    courseMode: CourseModeType,
+    courseId: number,
     refetchCourseItemList: () => void,
-    navigateToCourseItem: NavigateToCourseItemActionType
+    navigateToCourseItem: NavigateToCourseItemActionType,
+    refetchPlayerData: () => Promise<void>,
 }) => {
 
-    const { video, courseItems, navigateToCourseItem, answerSessionId, refetchCourseItemList } = props;
+    const {
+        video,
+        courseItems,
+        answerSessionId,
+        courseMode,
+        courseId,
+        refetchCourseItemList,
+        refetchPlayerData
+    } = props;
     const { questions } = video;
     const isDesktopView = useIsDesktopView();
     const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
@@ -183,6 +194,9 @@ export const WatchView = (props: {
         <Box>
             {/* <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} /> */}
             {!isDesktopView && <CourseItemSelector
+                courseId={courseId}
+                mode={courseMode}
+                refetchPlayerData={refetchPlayerData}
                 courseItems={courseItems} />}
 
             <Flex id="titleAndSegmentedButtonFlex" justify="space-between" padding="20px" flexWrap="wrap">

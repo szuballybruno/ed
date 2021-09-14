@@ -114,6 +114,7 @@ export const toExamDTO = (exam: Exam) => {
 
     return {
         id: exam.id,
+        courseId: exam.courseId,
         subTitle: exam.subtitle,
         title: exam.title,
         thumbnailUrl: exam.thumbnailUrl,
@@ -260,6 +261,7 @@ export const toVideoDTO = (video: Video, maxWatchedSeconds: number) => {
 
     return {
         id: video.id,
+        courseId: video.courseId,
         subTitle: video.subtitle,
         title: video.title,
         description: video.description,
