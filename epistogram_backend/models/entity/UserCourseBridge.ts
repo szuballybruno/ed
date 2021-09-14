@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CourseModeType } from "../shared_models/types/sharedTypes";
 import { Course } from "./Course";
 import { User } from "./User";
 
@@ -9,7 +10,7 @@ export class UserCourseBridge {
     id: number;
 
     @Column({ type: "text", default: "beginner" })
-    courseMode: "beginner" | "advanced";
+    courseMode: CourseModeType;
 
     @Column()
     userId: number;

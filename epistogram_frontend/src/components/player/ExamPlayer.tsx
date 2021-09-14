@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getAssetUrl, usePaging } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
-import { useExamResults, useSaveExamAnswer } from "../../services/examService";
-import { showNotification } from "../../services/notifications";
+import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
+import { useSaveExamAnswer } from "../../services/examService";
 import { ExamResultsTable } from "../exam/ExamResultsTable";
 import { QuestionSlides } from "../exam/QuestionSlides";
 import { SignupWrapper } from "../signup/SignupWrapper";
@@ -16,7 +16,11 @@ export const ExamPlayer = (props: {
     setIsExamInProgress: (isExamStarted: boolean) => void
 }) => {
 
-    const { exam, setIsExamInProgress, answerSessionId } = props;
+    const {
+        exam,
+        setIsExamInProgress,
+        answerSessionId,
+    } = props;
     const { questions } = exam;
     const slidesState = usePaging([1, 2, 3, 4]);
     const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);

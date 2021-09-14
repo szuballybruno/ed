@@ -1,5 +1,4 @@
 import { User } from "../models/entity/User";
-import { Video } from "../models/entity/Video";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { UserVideoCompletedView } from "../models/entity/views/UserVideoCompletedView";
 import { UserVideoMaxWatchedSecondsView } from "../models/entity/views/UserVideoMaxWatchedSecondsView";
@@ -7,10 +6,9 @@ import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
 import { staticProvider } from "../staticProvider";
-import { getCourseItemAsync, getCurrentCourseItemDescriptor, getExamDTOAsync } from "./courseService";
+import { getCurrentCourseItemDescriptor, getExamDTOAsync, getUserCourseBridge } from "./courseService";
 import { readCourseItemDescriptorCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
-import { log } from "./misc/logger";
 import { createAnswerSessionAsync } from "./questionAnswerService";
 import { getUserById } from "./userService";
 import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
@@ -24,6 +22,7 @@ export const getPlayerDataAsync = async (
 
     const videoDTO = courseItemType == "video" ? await getVideoDTOAsync(userId, courseItemId) : null;
     const examDTO = courseItemType == "exam" ? await getExamDTOAsync(userId, courseItemId) : null;
+    const courseId = videoDTO?.courseId || examDTO?.courseId;
 
     // set current course item
     await staticProvider
@@ -35,13 +34,20 @@ export const getPlayerDataAsync = async (
             currentExamId: examDTO?.id
         });
 
+    // get user course bridge
+    const userCourseBridge = await getUserCourseBridge(userId, courseId!);
+    if (!userCourseBridge)
+        throw new Error("User course bridge not found, maybe the course is not yet started!");
+
     // get new answer session
     const answerSessionId = await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
 
     return {
         video: videoDTO,
         exam: examDTO,
-        answerSessionId: answerSessionId
+        answerSessionId: answerSessionId,
+        mode: userCourseBridge.courseMode,
+        courseId: courseId!
     } as PlayerDataDTO;
 }
 
