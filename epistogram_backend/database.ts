@@ -25,19 +25,19 @@ import { CourseGroupDTO } from "./models/shared_models/CourseGroupDTO";
 import { CourseOrganizationDTO } from "./models/shared_models/CourseOrganizationDTO";
 import { CourseTagDTO } from "./models/shared_models/CourseTagDTO";
 import { RoleType } from "./models/shared_models/types/sharedTypes";
-import { log } from "./services/misc/logger";
+import { log, logObject } from "./services/misc/logger";
 import { getAssetUrl } from "./services/misc/urlProvider";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/signupService";
 import { setUserAvatarFileId } from "./services/userService";
 import { insertVideoAsync } from "./services/videoService";
 import { staticProvider } from "./staticProvider";
-import { UserVideoCompletedView } from "./models/entity/views/UserVideoCompletedView";
+import { VideoCompletedView } from "./models/entity/views/VideoCompletedView";
 import { UserExamCompletedView } from "./models/entity/views/UserExamCompletedView";
 import { UserExamAnswerSessionView } from "./models/entity/views/UserExamAnswerSessionView";
 import { UserVideoMaxWatchedSecondsView } from "./models/entity/views/UserVideoMaxWatchedSecondsView";
 import { UserCourseBridge } from "./models/entity/UserCourseBridge";
-import { Test2View } from "./models/entity/views/Test2View";
-import { Test3View } from "./models/entity/views/Test3View";
+import { CourseItemView } from "./models/entity/views/CourseItemView";
+import { CourseItemStateView } from "./models/entity/views/CourseItemStateView";
 
 export type TypeORMConnection = Connection;
 
@@ -85,13 +85,13 @@ export const initializeDBAsync = async (recreate: boolean) => {
             VideoPlaybackData,
             UserCourseBridge,
 
-            // views
-            UserVideoCompletedView,
+            // views,
+            VideoCompletedView,
             UserExamCompletedView,
             UserExamAnswerSessionView,
             UserVideoMaxWatchedSecondsView,
-            Test3View,
-            Test2View
+            CourseItemView,
+            // CourseItemStateView,
         ],
     } as ConnectionOptions;
 
@@ -111,12 +111,14 @@ export const initializeDBAsync = async (recreate: boolean) => {
     // TEST
     //
 
-    const views = await staticProvider
-        .ormConnection
-        .getRepository(Test2View)
-        .find();
+    // const views = await staticProvider
+    //     .ormConnection
+    //     .getRepository(CourseItemStateView)
+    //     .createQueryBuilder("cisv")
+    //     .leftJoinAndSelect("cisv.exam", "e")
+    //     .getMany();
 
-    log(views);
+    // views.forEach(x => logObject(x))
 
     // seed DB if no users are found
     const users = await staticProvider

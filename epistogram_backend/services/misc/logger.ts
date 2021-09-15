@@ -23,3 +23,8 @@ export const log = (content: any, entryType?: LogEntryType) => {
     if (entryType == "info")
         console.log(`[${dateTimeString}.${miliseconds}] ${content}`);
 }
+
+export const logObject = (obj: any) => {
+
+    console.log(obj);
+}

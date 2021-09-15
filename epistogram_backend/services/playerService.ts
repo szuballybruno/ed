@@ -1,6 +1,6 @@
 import { User } from "../models/entity/User";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { UserVideoCompletedView } from "../models/entity/views/UserVideoCompletedView";
+import { VideoCompletedView } from "../models/entity/views/VideoCompletedView";
 import { UserVideoMaxWatchedSecondsView } from "../models/entity/views/UserVideoMaxWatchedSecondsView";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
@@ -50,7 +50,7 @@ export const getPlayerDataAsync = async (
         exam: examDTO,
         answerSessionId: answerSessionId,
         mode: userCourseBridge.courseMode,
-        courseId: courseId,
+        courseId: courseId!,
         courseItemCode: currentCourseItem.descriptorCode,
         courseItems: courseItems
     } as PlayerDataDTO;
@@ -153,7 +153,7 @@ export const getVideoIsCompletedState = async (userId: number, videoId: number) 
 
     return await staticProvider
         .ormConnection
-        .getRepository(UserVideoCompletedView)
+        .getRepository(VideoCompletedView)
         .findOne({
             where: {
                 userId: userId,

@@ -26,7 +26,7 @@ import { CourseItemStateType, CourseModeType } from "../models/shared_models/typ
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
-import { hasValue, navPropNotNull } from "../utilities/helpers";
+import { hasValue, navPropNotNull, throwNotImplemented } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 import { CourseGroup } from "../models/entity/CourseGroup";
@@ -38,6 +38,7 @@ import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { UserExamAnswerSessionView } from "../models/entity/views/UserExamAnswerSessionView";
 import { getMaxWatchedSeconds } from "./playerService";
 import { log } from "./misc/logger";
+import { CourseItemStateView } from "../models/entity/views/CourseItemStateView";
 
 export const toUserDTO = (user: User) => {
 
@@ -163,65 +164,18 @@ export const toExamResultDTO = (answerSessionView: UserExamAnswerSessionView, da
 }
 
 export const toCourseItemDTOs = (
-    course: Course,
+    courseItems: CourseItemStateView[],
     courseMode: CourseModeType,
     currentItemDescriptorCode: string) => {
 
-    navPropNotNull(course.exams);
-    navPropNotNull(course.videos);
-
     const isBeginnerMode = courseMode === "beginner";
 
-    // map exam items
-    const examItems = course
-        .exams
-        .map(exam => {
-
-            navPropNotNull(exam.questions);
-            navPropNotNull(exam.answerSessions);
-
-            const hasCompletedAnswerSession = getCompletedAnswerSession(exam.questions, exam.answerSessions);
-            const state = hasCompletedAnswerSession
-                ? "completed"
-                : isBeginnerMode ? "locked" : "available" as CourseItemStateType;
-
-            return toCourseItemDTO(exam, state, false);
-        });
-
-    // map video items
-    const videoItems = course
-        .videos
-        .map(video => {
-
-            navPropNotNull(video.questions);
-            navPropNotNull(video.answerSessions);
-
-            const answerSessionCompleted = video.questions.length != 0
-                ? getCompletedAnswerSession(video.questions, video.answerSessions)
-                : true;
-
-            const isVideoWatched = video
-                .videoPlaybackDatas
-                ?.firstOrNull(x => true)
-                ?.isWatched ?? false;
-
-            const isCompleted = answerSessionCompleted && isVideoWatched;
-
-            const state = isCompleted
-                ? "completed"
-                : isBeginnerMode ? "locked" : "available" as CourseItemStateType;
-
-            return toCourseItemDTO(video, state, true);
-        });
-
-    // concat to one ordered list
-    const itemsOrdered = examItems
-        .concat(videoItems)
-        .orderBy(x => x.orderIndex);
+    const courseItemDTOs = courseItems
+        .map(x => toCourseItemDTO(x));
 
     // get the index of the last non-locked item
     // note that there has not been a current calculation so far
-    const lastNonLockedItemIndex = itemsOrdered
+    const lastNonLockedItemIndex = courseItemDTOs
         .findLastIndex(x => x.state != "locked");
 
     // if there is a last non-locked, 
@@ -230,24 +184,24 @@ export const toCourseItemDTOs = (
     if (hasValue(lastNonLockedItemIndex)) {
 
         const availableItemIndex = lastNonLockedItemIndex! + 1;
-        const availableItemIndexMax = availableItemIndex != itemsOrdered.length
+        const availableItemIndexMax = availableItemIndex != courseItemDTOs.length
             ? availableItemIndex
-            : itemsOrdered.length - 1;
+            : courseItemDTOs.length - 1;
 
         for (let index = 0; index < availableItemIndexMax; index++) {
 
-            const element = itemsOrdered[index];
+            const element = courseItemDTOs[index];
             if (element.state === "locked")
                 element.state = "available";
         }
     }
     else {
 
-        itemsOrdered[0].state = "available";
+        courseItemDTOs[0].state = "available";
     }
 
     // set current item's state to 'current'
-    const currentItem = itemsOrdered
+    const currentItem = courseItemDTOs
         .firstOrNull(item => item.descriptorCode === currentItemDescriptorCode
             && item.state !== "locked");
 
@@ -257,38 +211,13 @@ export const toCourseItemDTOs = (
     }
     else {
 
-        const lastAvailable = itemsOrdered
+        const lastAvailable = courseItemDTOs
             .last(x => x.state === "available");
 
         lastAvailable.state = "current";
     }
 
-    return itemsOrdered;
-}
-
-const getCompletedAnswerSession = (
-    questions: Question[],
-    answerSessions: AnswerSession[]) => {
-
-    const isAnyCompletedAnswerSession = answerSessions
-        .any(answerSession => {
-
-            const isAllQuestionsAnswered = questions
-                .all(quesiton => answerSession
-                    .questionAnswers
-                    .any(qa => qa.questionId == quesiton.id));
-
-            const isAllAnswersCorrect = answerSession
-                .questionAnswers
-                .all(qa => !!qa.answer.isCorrect);
-
-            if (isAllQuestionsAnswered && isAllAnswersCorrect)
-                return true;
-
-            return false;
-        });
-
-    return isAnyCompletedAnswerSession;
+    return courseItemDTOs;
 }
 
 export const toVideoDTO = (video: Video, maxWatchedSeconds: number) => {
@@ -309,31 +238,40 @@ export const toVideoDTO = (video: Video, maxWatchedSeconds: number) => {
     } as VideoDTO;
 }
 
-export const toCourseItemDTO = (item: Video | Exam, state: CourseItemStateType, isVideo: boolean) => {
+export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
 
+    const isVideo = !!courseItemView.videoId;
+
+    // VIDEO
     if (isVideo) {
 
-        const video = item as Video;
+        navPropNotNull(courseItemView.video);
+
+        const video = courseItemView.video as Video;
 
         return {
             subTitle: video.subtitle,
             thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
             title: video.title,
             orderIndex: video.orderIndex,
-            state: state,
+            state: courseItemView.isVideoCompleted ? "completed" : "locked",
             descriptorCode: getCourseItemDescriptorCode(video.id, "video")
         } as CourseItemDTO;
     }
+
+    // EXAM
     else {
 
-        const exam = item as Exam;
+        navPropNotNull(courseItemView.exam);
+
+        const exam = courseItemView.exam as Exam;
 
         return {
             subTitle: exam.subtitle,
             thumbnailUrl: getExamCoverImageUrl(),
             title: exam.title,
             orderIndex: exam.orderIndex,
-            state: state,
+            state: courseItemView.isExamCompleted ? "completed" : "locked",
             descriptorCode: getCourseItemDescriptorCode(exam.id, "exam")
         } as CourseItemDTO;
     }
@@ -415,21 +353,21 @@ export const toEditListItemDTO = (id: number, name: string, checked: boolean) =>
 
 export const toEditCourseItemsDTO = (course: Course) => {
 
-    const examItems = course
-        .exams
-        .map(x => toCourseItemDTO(x, "completed", false));
+    // const examItems = course
+    //     .exams
+    //     .map(x => toCourseItemDTO(x, "completed", false));
 
-    const videoItems = course
-        .videos
-        .map(x => toCourseItemDTO(x, "completed", true));
+    // const videoItems = course
+    //     .videos
+    //     .map(x => toCourseItemDTO(x, "completed", true));
 
-    const itemsCombined = examItems
-        .concat(videoItems);
+    // const itemsCombined = examItems
+    //     .concat(videoItems);
 
-    const itemsOrdered = itemsCombined
-        .orderBy(x => x.orderIndex);
+    // const itemsOrdered = itemsCombined
+    //     .orderBy(x => x.orderIndex);
 
-    return itemsOrdered as CourseItemDTO[];
-    //throwNotImplemented();
+    // return itemsOrdered as CourseItemDTO[];
+    throwNotImplemented();
     return [] as CourseItemDTO[];
 }

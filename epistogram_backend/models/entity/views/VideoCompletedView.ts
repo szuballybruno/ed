@@ -1,11 +1,12 @@
 import { ViewColumn, ViewEntity } from "typeorm";
 
 @ViewEntity({
-	name: "user_video_completed_view",
+	name: "video_completed_view",
 	expression: `
 	SELECT 
 	"video"."id" AS "videoId",
 	"video"."courseId" AS "courseId",
+	"video"."orderIndex" AS "orderIndex",
 	"user"."id" AS "userId",
 	"view"."isAnswered",
 	"vpd"."watchedPercent",
@@ -103,7 +104,7 @@ ON "vpd"."userId" = "user"."id"
 	AND "vpd"."videoId" = "video"."id" 
 `
 })
-export class UserVideoCompletedView {
+export class VideoCompletedView {
 
 	@ViewColumn()
 	videoId: number;
@@ -113,6 +114,9 @@ export class UserVideoCompletedView {
 
 	@ViewColumn()
 	courseId: number;
+
+	@ViewColumn()
+	orderIndex: number;
 
 	@ViewColumn()
 	isAnswered: boolean;
