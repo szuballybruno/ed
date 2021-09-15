@@ -5,6 +5,7 @@ import { ViewColumn, ViewEntity } from "typeorm";
 	expression: `
 	SELECT 
 	"video"."id" AS "videoId",
+	"video"."courseId" AS "courseId",
 	"user"."id" AS "userId",
 	"view"."isAnswered",
 	"vpd"."watchedPercent",
@@ -109,6 +110,9 @@ export class UserVideoCompletedView {
 
 	@ViewColumn()
 	userId: number;
+
+	@ViewColumn()
+	courseId: number;
 
 	@ViewColumn()
 	isAnswered: boolean;

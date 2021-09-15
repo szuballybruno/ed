@@ -7,6 +7,7 @@ import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "..
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
+import { getUserById } from "../services/userService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
 export const getCurrentCourseItemCode = getAsyncActionHandler(async (req: Request) => {
@@ -21,8 +22,9 @@ export const getCourseItemsAction = getAsyncActionHandler(async (req: Request) =
 
     const userId = getUserIdFromRequest(req);
     const code = await getCurrentCourseItemDescriptorCodeAsync(userId);
+    const currentCourseId = (await getUserById(userId)).currentCourseId!;
 
-    return getCourseItemsAsync(userId, code!);
+    return getCourseItemsAsync(userId, currentCourseId, code!);
 });
 
 export const getEditedVideoAction = async (req: Request) => {

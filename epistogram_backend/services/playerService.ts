@@ -6,7 +6,7 @@ import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
 import { staticProvider } from "../staticProvider";
-import { getCourseItemsAsync, getCurrentCourseItemDescriptor, getCurrentCourseItemDescriptorCodeAsync, getExamDTOAsync, getUserCourseBridgeAsync, getUserCourseBridgeOrFailAsync } from "./courseService";
+import { getCourseItemAsync, getCourseItemByCodeAsync, getCourseItemsAsync, getCurrentCourseItemDescriptor, getCurrentCourseItemDescriptorCodeAsync, getExamDTOAsync, getUserCourseBridgeAsync, getUserCourseBridgeOrFailAsync } from "./courseService";
 import { getCourseItemDescriptorCode, readCourseItemDescriptorCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
 import { log } from "./misc/logger";
@@ -19,8 +19,11 @@ export const getPlayerDataAsync = async (
     userId: number,
     descriptorCode: string) => {
 
+    // get course id
+    const courseId = (await getCourseItemByCodeAsync(descriptorCode)).courseId;
+
     // course items 
-    const courseItems = await getCourseItemsAsync(userId, descriptorCode);
+    const courseItems = await getCourseItemsAsync(userId, courseId, descriptorCode);
 
     const currentCourseItem = courseItems
         .single(x => x.state === "current");
@@ -28,17 +31,16 @@ export const getPlayerDataAsync = async (
     const { itemId, itemType } = readCourseItemDescriptorCode(currentCourseItem.descriptorCode);
     const videoDTO = itemType == "video" ? await getVideoDTOAsync(userId, itemId) : null;
     const examDTO = itemType == "exam" ? await getExamDTOAsync(userId, itemId) : null;
-    const courseId = videoDTO?.courseId || examDTO?.courseId;
 
     // set current items 
     setUserCurrentCourseDataAsync(
         userId,
         itemType === "video" ? itemId : null,
         itemType === "exam" ? itemId : null,
-        courseId!);
+        courseId);
 
     // get user course bridge
-    const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, courseId!);
+    const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, courseId);
 
     // get new answer session
     const answerSessionId = await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
@@ -48,7 +50,7 @@ export const getPlayerDataAsync = async (
         exam: examDTO,
         answerSessionId: answerSessionId,
         mode: userCourseBridge.courseMode,
-        courseId: courseId!,
+        courseId: courseId,
         courseItemCode: currentCourseItem.descriptorCode,
         courseItems: courseItems
     } as PlayerDataDTO;

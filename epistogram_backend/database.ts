@@ -36,6 +36,8 @@ import { UserExamCompletedView } from "./models/entity/views/UserExamCompletedVi
 import { UserExamAnswerSessionView } from "./models/entity/views/UserExamAnswerSessionView";
 import { UserVideoMaxWatchedSecondsView } from "./models/entity/views/UserVideoMaxWatchedSecondsView";
 import { UserCourseBridge } from "./models/entity/UserCourseBridge";
+import { Test2View } from "./models/entity/views/Test2View";
+import { Test3View } from "./models/entity/views/Test3View";
 
 export type TypeORMConnection = Connection;
 
@@ -87,7 +89,9 @@ export const initializeDBAsync = async (recreate: boolean) => {
             UserVideoCompletedView,
             UserExamCompletedView,
             UserExamAnswerSessionView,
-            UserVideoMaxWatchedSecondsView
+            UserVideoMaxWatchedSecondsView,
+            Test3View,
+            Test2View
         ],
     } as ConnectionOptions;
 
@@ -102,6 +106,17 @@ export const initializeDBAsync = async (recreate: boolean) => {
 
     log("Connecting to database with TypeORM...");
     staticProvider.ormConnection = await createTypeORMConnection(postgresOptions);
+
+    //
+    // TEST
+    //
+
+    const views = await staticProvider
+        .ormConnection
+        .getRepository(Test2View)
+        .find();
+
+    log(views);
 
     // seed DB if no users are found
     const users = await staticProvider

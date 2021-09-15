@@ -2,17 +2,13 @@ import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { Video } from "../models/entity/Video";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemType, CourseModeType } from "../models/shared_models/types/sharedTypes";
-import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
-import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
+import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO, readCourseItemDescriptorCode } from "./encodeService";
 import { toCourseItemDTOs, toExamDTO } from "./mappings";
-import { log } from "./misc/logger";
 import { getUserById } from "./userService";
-import { getVideoWatchedPercentAsync } from "./videoPlaybackSampleService";
 import { getVideoByIdAsync } from "./videoService";
 
 export const getCourseItemsDescriptorCodesAsync = async (userId: number, courseId: number) => {
@@ -46,14 +42,12 @@ export const getCurrentCourseItemDescriptorCodeAsync = async (userId: number) =>
     return getCourseItemDescriptorCodeFromDTO(dsc);
 }
 
-export const getCourseItemsAsync = async (userId: number, currentItemDescriptorCode: string) => {
+export const getCourseItemsAsync = async (userId: number, courseId: number, currentItemDescriptorCode: string) => {
 
     const course = await staticProvider
         .ormConnection
         .getRepository(Course)
         .createQueryBuilder("c")
-        .leftJoinAndSelect("c.users", "u", "u.id = :userId", { userId })
-        .where("c.id = u.currentCourseId")
 
         // videos
         .leftJoinAndSelect("c.videos", "v")
@@ -69,6 +63,8 @@ export const getCourseItemsAsync = async (userId: number, currentItemDescriptorC
         .leftJoinAndSelect("e.answerSessions", "eas")
         .leftJoinAndSelect("eas.questionAnswers", "easqa")
         .leftJoinAndSelect("easqa.answer", "easqaa")
+
+        .where("c.id = :courseId", { courseId })
         .getOneOrFail();
 
     const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, course.id);
@@ -94,6 +90,13 @@ export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) =>
 
         return exam;
     }
+}
+
+export const getCourseItemByCodeAsync = async (descriptorCode: string) => {
+
+    const dto = readCourseItemDescriptorCode(descriptorCode);
+
+    return getCourseItemAsync(dto);
 }
 
 export const getCurrentCourseItemDescriptor = (user: User) => {

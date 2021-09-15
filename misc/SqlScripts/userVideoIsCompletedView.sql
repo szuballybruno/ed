@@ -1,5 +1,6 @@
 SELECT 
 	"video"."id" AS "videoId",
+	"video"."courseId" AS "courseId",
 	"user"."id" AS "userId",
 	"view"."isAnswered",
 	"vpd"."watchedPercent",

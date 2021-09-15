@@ -8,6 +8,7 @@ import { staticProvider } from "../staticProvider";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "./courseService";
 import { toOrganizationDTO } from "./mappings";
 import { getReandomQuestion } from "./questionService";
+import { getUserById } from "./userService";
 
 export const getOrganizationsAsync = async (userId: number) => {
 
@@ -22,8 +23,9 @@ export const getOrganizationsAsync = async (userId: number) => {
 
 export const getOverviewPageDTOAsync = async (userId: number) => {
 
+    const courseId = (await getUserById(userId)).currentCourseId!;
     const itemCode = await getCurrentCourseItemDescriptorCodeAsync(userId);
-    const courseItems = itemCode ? await getCourseItemsAsync(userId, itemCode) : [];
+    const courseItems = itemCode ? await getCourseItemsAsync(userId, courseId, itemCode) : [];
     const recommendedCourseDTOs = [] as CourseShortDTO[];
     const randomQuestion = getReandomQuestion();
     const currntTasks = getCurrentTasks();

@@ -230,8 +230,16 @@ export const toCourseItemDTOs = (
     if (hasValue(lastNonLockedItemIndex)) {
 
         const availableItemIndex = lastNonLockedItemIndex! + 1;
-        if (availableItemIndex != itemsOrdered.length)
-            itemsOrdered[availableItemIndex].state = "available";
+        const availableItemIndexMax = availableItemIndex != itemsOrdered.length
+            ? availableItemIndex
+            : itemsOrdered.length - 1;
+
+        for (let index = 0; index < availableItemIndexMax; index++) {
+
+            const element = itemsOrdered[index];
+            if (element.state === "locked")
+                element.state = "available";
+        }
     }
     else {
 
