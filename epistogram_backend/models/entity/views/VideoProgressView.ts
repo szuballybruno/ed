@@ -4,20 +4,14 @@ import { ViewColumn, ViewEntity } from "typeorm";
     synchronize: false,
     expression: ``
 })
-export class CourseItemView {
-
-    @ViewColumn()
-    userId: number;
-
-    @ViewColumn()
-    courseId: number;
+export class VideoProgressView {
 
     @ViewColumn()
     videoId: number;
 
     @ViewColumn()
-    examId: number;
+    userId: number;
 
     @ViewColumn()
-    isComplete: number;
+    toSeconds: number;
 }

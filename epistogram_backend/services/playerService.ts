@@ -1,7 +1,7 @@
 import { User } from "../models/entity/User";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { VideoCompletedView } from "../models/entity/views/VideoCompletedView";
-import { UserVideoMaxWatchedSecondsView } from "../models/entity/views/UserVideoMaxWatchedSecondsView";
+import { VideoProgressView } from "../models/entity/views/VideoProgressView";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
@@ -138,7 +138,7 @@ export const getMaxWatchedSeconds = async (userId: number, videoId: number) => {
 
     const ads = await staticProvider
         .ormConnection
-        .getRepository(UserVideoMaxWatchedSecondsView)
+        .getRepository(VideoProgressView)
         .findOneOrFail({
             where: {
                 userId: userId,

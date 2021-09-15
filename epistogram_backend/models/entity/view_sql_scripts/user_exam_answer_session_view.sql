@@ -1,3 +1,5 @@
+CREATE VIEW user_exam_answer_session_view
+AS
 SELECT 
 	"exam"."id" AS "examId",
 	"answer_session"."id" AS "answerSessionId",

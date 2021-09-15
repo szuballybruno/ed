@@ -1,3 +1,5 @@
+CREATE VIEW video_completed_view 
+AS
 SELECT 
 	"video"."id" AS "videoId",
 	"video"."courseId" AS "courseId",

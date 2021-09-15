@@ -1,8 +1,6 @@
-import { ViewColumn, ViewEntity } from "typeorm";
-
-@ViewEntity({
-	expression: `
-	SELECT 
+CREATE VIEW exam_completed_view
+AS
+SELECT 
 	"subquery"."userId",
 	"subquery"."examId",
 	"subquery"."courseId",
@@ -54,16 +52,3 @@ GROUP BY
 	"subquery"."examId", 	
 	"subquery"."userId",
 	"subquery"."courseId" 
-`
-})
-export class UserExamCompletedView {
-
-	@ViewColumn()
-	examId: number;
-
-	@ViewColumn()
-	userId: number;
-
-	@ViewColumn()
-	isCompleted: boolean;
-}

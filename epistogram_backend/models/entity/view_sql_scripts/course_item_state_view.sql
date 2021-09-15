@@ -1,3 +1,5 @@
+CREATE VIEW course_item_state_view
+AS
 SELECT 
 	"course"."id" AS "courseId",
 	"user"."id" AS "userId",
