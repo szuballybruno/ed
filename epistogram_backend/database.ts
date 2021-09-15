@@ -34,7 +34,7 @@ import { VideoProgressView } from "./models/entity/views/VideoProgressView";
 
 export type TypeORMConnection = Connection;
 
-export const initializeDBAsync = async (recreate: boolean) => {
+export const initializeDBAsync = async (isRecreateDB: boolean) => {
 
     const host = staticProvider.globalConfig.database.hostAddress;
     const port = staticProvider.globalConfig.database.port;
@@ -88,7 +88,7 @@ export const initializeDBAsync = async (recreate: boolean) => {
         ],
     } as ConnectionOptions;
 
-    if (recreate) {
+    if (isRecreateDB) {
 
         log("Recreating DB...");
         await recreateDB(postgresOptions);
@@ -97,22 +97,20 @@ export const initializeDBAsync = async (recreate: boolean) => {
     log("Connecting to database with TypeORM...");
     staticProvider.ormConnection = await createTypeORMConnection(postgresOptions);
 
-    log("Creating SQL views...")
-    await createSQLViewAsync("video_completed_view");
-    await createSQLViewAsync("exam_completed_view");
-    await createSQLViewAsync("user_exam_answer_session_view");
-    await createSQLViewAsync("video_progress_view");
-    await createSQLViewAsync("course_item_view");
-    await createSQLViewAsync("course_item_state_view");
+    if (isRecreateDB) {
+
+        log("Creating SQL views...")
+        await createSQLViewAsync("video_completed_view");
+        await createSQLViewAsync("exam_completed_view");
+        await createSQLViewAsync("user_exam_answer_session_view");
+        await createSQLViewAsync("video_progress_view");
+        await createSQLViewAsync("course_item_view");
+        await createSQLViewAsync("course_item_state_view");
+    }
 
     //
     // TEST
     //
-
-    console.log("--------- TEST  --------------");
-
-
-    console.log("--------- END TEST  --------------");
 
     // seed DB if no users are found
     const users = await staticProvider

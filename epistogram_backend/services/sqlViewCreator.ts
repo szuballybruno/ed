@@ -4,7 +4,6 @@ import { log } from "./misc/logger";
 
 export const createSQLViewAsync = async (viewName: string) => {
 
-    log("");
     log(`Creating SQL View (${viewName})...`);
 
     // Read view script 
