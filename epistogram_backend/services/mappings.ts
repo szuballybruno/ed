@@ -165,7 +165,7 @@ export const toExamResultDTO = (answerSessionView: UserExamAnswerSessionView, da
 export const toCourseItemDTOs = (
     course: Course,
     courseMode: CourseModeType,
-    currentCourseItemDescriptor: CourseItemDescriptorDTO) => {
+    currentItemDescriptorCode: string) => {
 
     navPropNotNull(course.exams);
     navPropNotNull(course.videos);
@@ -227,15 +227,33 @@ export const toCourseItemDTOs = (
     // if there is a last non-locked, 
     // and it's not the last in the list
     // set it to available 
-    if (hasValue(lastNonLockedItemIndex) && lastNonLockedItemIndex! + 1 != itemsOrdered.length)
-        itemsOrdered[lastNonLockedItemIndex! + 1].state = "available";
+    if (hasValue(lastNonLockedItemIndex)) {
+
+        const availableItemIndex = lastNonLockedItemIndex! + 1;
+        if (availableItemIndex != itemsOrdered.length)
+            itemsOrdered[availableItemIndex].state = "available";
+    }
+    else {
+
+        itemsOrdered[0].state = "available";
+    }
 
     // set current item's state to 'current'
-    const currentItemDescriptorCode = getCourseItemDescriptorCodeFromDTO(currentCourseItemDescriptor);
     const currentItem = itemsOrdered
-        .single(item => item.descriptorCode === currentItemDescriptorCode);
+        .firstOrNull(item => item.descriptorCode === currentItemDescriptorCode
+            && item.state !== "locked");
 
-    currentItem.state = "current";
+    if (currentItem) {
+
+        currentItem.state = "current";
+    }
+    else {
+
+        const lastAvailable = itemsOrdered
+            .last(x => x.state === "available");
+
+        lastAvailable.state = "current";
+    }
 
     return itemsOrdered;
 }

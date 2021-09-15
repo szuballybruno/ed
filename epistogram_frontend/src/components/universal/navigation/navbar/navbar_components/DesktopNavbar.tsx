@@ -39,9 +39,10 @@ const DesktopNavbar = (props: {
                     .menuItems
                     .middleMenu
                     .map((item, index) => {
-                        return <Box p="10px">
+                        return <Box
+                            p="10px"
+                            key={index}>
                             <NavbarButton
-                                key={index}
                                 index={index}
                                 menuName={item.menuName}
                                 menuPath={item.menuPath} />

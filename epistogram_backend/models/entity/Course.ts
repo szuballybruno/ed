@@ -78,4 +78,9 @@ export class Course {
     @OneToMany(_ => UserCourseBridge, x => x.course)
     @JoinColumn()
     userCourseBridges: UserCourseBridge[];
+
+    // user 
+    @OneToMany(_ => User, x => x.currentCourse)
+    @JoinColumn()
+    users: User[];
 }

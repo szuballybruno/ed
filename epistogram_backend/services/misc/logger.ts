@@ -6,6 +6,13 @@ export const logError = (content: any) => log(content, "error");
 
 export const log = (content: any, entryType?: LogEntryType) => {
 
+    const dateTime = new Date();
+    const miliseconds = dateTime.getMilliseconds();
+    const options = { hour12: false };
+    const dateTimeString = dateTime.toLocaleString('en-US', options);
+
+    content = `[${dateTimeString}.${miliseconds}] ${content}`;
+
     if (!entryType)
         entryType = "info";
 

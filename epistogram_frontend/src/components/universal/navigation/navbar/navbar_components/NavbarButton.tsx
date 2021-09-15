@@ -5,7 +5,6 @@ import { NavLink } from "react-router-dom";
 const NavbarButton = (props: {
     className?: string,
     activeClassName?: string,
-    key: number,
     index: number,
     menuName?: string,
     menuPath: string | null

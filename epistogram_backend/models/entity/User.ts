@@ -93,7 +93,15 @@ export class User {
 
     @ManyToOne(() => Exam, exam => exam.users)
     @JoinColumn({ name: 'currentExamId' })
-    currentExam: Exam | null
+    currentExam: Exam | null;
+
+    // course 
+    @Column({ nullable: true })
+    currentCourseId: number | null;
+
+    @ManyToOne(_ => Course, x => x.users)
+    @JoinColumn({ name: "currentCourseId" })
+    currentCourse: Course;
 
     // Tasks
     @OneToMany(() => Task, task => task.user)

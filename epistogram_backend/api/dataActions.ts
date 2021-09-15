@@ -20,8 +20,9 @@ export const getCurrentCourseItemCode = getAsyncActionHandler(async (req: Reques
 export const getCourseItemsAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
+    const code = await getCurrentCourseItemDescriptorCodeAsync(userId);
 
-    return getCourseItemsAsync(userId);
+    return getCourseItemsAsync(userId, code!);
 });
 
 export const getEditedVideoAction = async (req: Request) => {

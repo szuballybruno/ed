@@ -46,20 +46,14 @@ export const getCurrentCourseItemDescriptorCodeAsync = async (userId: number) =>
     return getCourseItemDescriptorCodeFromDTO(dsc);
 }
 
-export const getCourseItemsAsync = async (userId: number) => {
-
-    const user = await getUserById(userId);
-    const currentCourseItemDesc = getCurrentCourseItemDescriptor(user);
-    if (!currentCourseItemDesc)
-        return [];
-
-    const currentCourseItem = await getCourseItemAsync(currentCourseItemDesc!);
+export const getCourseItemsAsync = async (userId: number, currentItemDescriptorCode: string) => {
 
     const course = await staticProvider
         .ormConnection
         .getRepository(Course)
         .createQueryBuilder("c")
-        .where("c.id = :courseId", { courseId: currentCourseItem.courseId })
+        .leftJoinAndSelect("c.users", "u", "u.id = :userId", { userId })
+        .where("c.id = u.currentCourseId")
 
         // videos
         .leftJoinAndSelect("c.videos", "v")
@@ -79,7 +73,7 @@ export const getCourseItemsAsync = async (userId: number) => {
 
     const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, course.id);
 
-    return toCourseItemDTOs(course, userCourseBridge.courseMode, currentCourseItemDesc!);
+    return toCourseItemDTOs(course, userCourseBridge.courseMode, currentItemDescriptorCode);
 }
 
 export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {

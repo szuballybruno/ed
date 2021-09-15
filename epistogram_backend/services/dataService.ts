@@ -5,9 +5,8 @@ import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { staticProvider } from "../staticProvider";
-import { getCourseItemsAsync } from "./courseService";
+import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "./courseService";
 import { toOrganizationDTO } from "./mappings";
-import { log } from "./misc/logger";
 import { getReandomQuestion } from "./questionService";
 
 export const getOrganizationsAsync = async (userId: number) => {
@@ -23,7 +22,8 @@ export const getOrganizationsAsync = async (userId: number) => {
 
 export const getOverviewPageDTOAsync = async (userId: number) => {
 
-    const courseItems = await getCourseItemsAsync(userId);
+    const itemCode = await getCurrentCourseItemDescriptorCodeAsync(userId);
+    const courseItems = itemCode ? await getCourseItemsAsync(userId, itemCode) : [];
     const recommendedCourseDTOs = [] as CourseShortDTO[];
     const randomQuestion = getReandomQuestion();
     const currntTasks = getCurrentTasks();

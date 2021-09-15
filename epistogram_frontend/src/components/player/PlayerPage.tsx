@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router";
 import menuItems from "../../configuration/menuItems.json";
 import { getQueryParam, useIsDesktopView } from "../../frontendHelpers";
@@ -37,12 +37,18 @@ export const PlayerPage = () => {
     const courseId = playerData?.courseId;
     const courseItems = playerData?.courseItems ?? [];
 
-    // const isPlayerDataUpToDate = playerData?.courseItemCode === descriptorCode;
+    // redirect if current item should be locked 
+    useEffect(() => {
 
-    // const {
-    //     courseItemList,
-    //     refetchCourseItemList
-    // } = useCourseItemList(descriptorCode, isPlayerDataUpToDate);
+        if (!playerData?.courseItemCode)
+            return;
+
+        if (playerData.courseItemCode === descriptorCode)
+            return;
+
+        navigateToPlayer(playerData.courseItemCode);
+
+    }, [playerData?.courseItemCode]);
 
     const navigateToCourseItem = (descriptorCode: string) => {
 
