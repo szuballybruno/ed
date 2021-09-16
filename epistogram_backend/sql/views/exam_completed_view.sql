@@ -3,6 +3,7 @@ SELECT
 	"subquery"."examId",
 	"subquery"."courseId",
 	"subquery"."orderIndex",
+	"subquery"."isFinalExam",
 	CAST(CASE WHEN 
 		SUM("subquery"."isCompleteSession") > 0
 		THEN 1 
@@ -13,6 +14,7 @@ FROM (
 		"exam"."id" AS "examId",
 		"exam"."courseId" AS "courseId",
 		"exam"."orderIndex" AS "orderIndex",
+		"exam"."isFinalExam" AS "isFinalExam",
 		"answer_session"."id" AS "answerSessionId",
 		"user"."id" AS "userId",
 		COUNT ("answer"."isCorrect") AS "correctAnswerCount",
@@ -46,6 +48,7 @@ FROM (
 		"exam"."courseId",
 		"exam"."orderIndex",
 		"answer_session"."id",
+		"exam"."isFinalExam",
 		"user"."id"
 ) AS "subquery"
 
@@ -53,4 +56,5 @@ GROUP BY
 	"subquery"."examId", 	
 	"subquery"."userId",
 	"subquery"."courseId",
+	"subquery"."isFinalExam",
 	"subquery"."orderIndex" 

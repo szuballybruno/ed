@@ -21,9 +21,11 @@ import { UserCourseBridge } from "./models/entity/UserCourseBridge";
 import { Video } from "./models/entity/Video";
 import { VideoPlaybackData } from "./models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
+import { CourseItemAllView } from "./models/views/CourseItemAllView";
 import { CourseItemStateView } from "./models/views/CourseItemStateView";
 import { CourseItemView } from "./models/views/CourseItemView";
 import { CourseStateView } from "./models/views/CourseStateView";
+import { CourseView } from "./models/views/CourseView";
 import { ExamCompletedView } from "./models/views/ExamCompletedView";
 import { UserExamAnswerSessionView } from "./models/views/UserExamAnswerSessionView";
 import { VideoCompletedView } from "./models/views/VideoCompletedView";
@@ -87,7 +89,9 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
             VideoProgressView,
             CourseItemView,
             CourseItemStateView,
-            CourseStateView
+            CourseStateView,
+            CourseItemAllView,
+            CourseView
         ],
     } as ConnectionOptions;
 
@@ -108,7 +112,9 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
         "video_progress_view",
         "course_item_view",
         "course_item_state_view",
-        "course_state_view"
+        "course_state_view",
+        "course_item_all_view",
+        "course_view"
     ]);
 
     const isFreshDB = await getIsFreshDB();

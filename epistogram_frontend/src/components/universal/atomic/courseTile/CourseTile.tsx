@@ -27,7 +27,7 @@ const CourseTile = (props: {
     const courseTeacherName = course.teacherName;
     const thumbnailImageUrl = course.thumbnailImageURL;
     const { navigateToPlayer } = useNavigation();
-    const isComplete = false;
+    const isComplete = course.isComplete;
 
     const playCourse = async () => {
 

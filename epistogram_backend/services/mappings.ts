@@ -39,6 +39,7 @@ import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSession
 import { getMaxWatchedSeconds } from "./playerService";
 import { log } from "./misc/logger";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
+import { CourseView } from "../models/views/CourseView";
 
 export const toUserDTO = (user: User) => {
 
@@ -244,22 +245,24 @@ export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
     }
 }
 
-export const toCourseShortDTO = (course: Course, itemCode: string) => {
+export const toCourseShortDTO = (course: CourseView) => {
 
-    navPropNotNull(course.videos);
-    navPropNotNull(course.exams);
-
-    const thumbnailImageURL = course.coverFile
-        ? getAssetUrl(course.coverFile.filePath)
+    const thumbnailImageURL = course.filePath
+        ? getAssetUrl(course.filePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
+
+    const firstItemCode = course.currentExamId || course.currentVideoId
+        ? getCourseItemDescriptorCode(course.currentExamId, course.currentExamId ? "exam" : "video")
+        : null;
 
     return {
         courseId: course.id,
         title: course.title,
         category: course.category,
-        firstItemCode: itemCode,
+        firstItemCode: firstItemCode,
         teacherName: "Mr. Teacher Name",
-        thumbnailImageURL: thumbnailImageURL
+        thumbnailImageURL: thumbnailImageURL,
+        isComplete: course.isComplete
     } as CourseShortDTO;
 }
 

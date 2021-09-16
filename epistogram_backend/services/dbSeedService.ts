@@ -439,7 +439,7 @@ const seedVideoQuestions = async (connection: TypeORMConnection) => {
         .save([
             {
                 questionText: "What Makes You Unique?",
-                isSignupQuestion: false,
+
                 videoId: 3,
                 showUpTimeSeconds: 150,
                 answers: [
@@ -457,7 +457,7 @@ const seedVideoQuestions = async (connection: TypeORMConnection) => {
             },
             {
                 questionText: "What Makes You Unique?",
-                isSignupQuestion: false,
+
                 videoId: 1,
                 showUpTimeSeconds: 150,
                 answers: [
@@ -475,7 +475,7 @@ const seedVideoQuestions = async (connection: TypeORMConnection) => {
             },
             {
                 questionText: "What are some random fun facts about you?",
-                isSignupQuestion: false,
+
                 videoId: 1,
                 showUpTimeSeconds: 250,
                 answers: [
@@ -493,7 +493,7 @@ const seedVideoQuestions = async (connection: TypeORMConnection) => {
             },
             {
                 questionText: "What's Something You Want to Learn or Wish You Were Better At?",
-                isSignupQuestion: false,
+
                 videoId: 1,
                 showUpTimeSeconds: 400,
                 answers: [
@@ -517,9 +517,11 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
     await connection
         .getRepository(Question)
         .save([
+
+            // NEW EXAM 1
             {
                 questionText: "Exam question 1",
-                isSignupQuestion: false,
+
                 examId: 1,
                 answers: [
                     {
@@ -536,7 +538,7 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
             },
             {
                 questionText: "Exam question 2",
-                isSignupQuestion: false,
+
                 examId: 1,
                 showUpTimeSeconds: 250,
                 answers: [
@@ -554,7 +556,7 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
             },
             {
                 questionText: "Exam question 3",
-                isSignupQuestion: false,
+
                 examId: 1,
                 showUpTimeSeconds: 400,
                 answers: [
@@ -567,6 +569,24 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
                     {
                         text: "Exam answer 3",
                         isCorrect: true
+                    }
+                ]
+            },
+
+            // EXCEL FINAL EXAM
+            {
+                questionText: "Excel filal exam / question 1?",
+                examId: 4,
+                answers: [
+                    {
+                        text: "Correct answer",
+                        isCorrect: true
+                    },
+                    {
+                        text: "Exam answer 2"
+                    },
+                    {
+                        text: "Exam answer 3"
                     }
                 ]
             }

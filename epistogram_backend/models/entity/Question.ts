@@ -16,7 +16,7 @@ export class Question {
     @Column({ nullable: true })
     imageUrl: string;
 
-    @Column()
+    @Column({ default: false })
     isSignupQuestion: boolean;
 
     @Column({ nullable: true })
