@@ -153,7 +153,7 @@ const UserCoursesPage = () => {
                             gap="5">
                             {courses
                                 .map((course: any, index) => {
-                                    return <GridItem height="300px" >
+                                    return <GridItem height="350px" >
 
                                         <CourseTile course={course} itemIndex={index} key={index} />
                                     </GridItem>
