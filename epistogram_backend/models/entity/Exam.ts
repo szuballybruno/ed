@@ -25,6 +25,9 @@ export class Exam {
     @Column()
     orderIndex: number;
 
+    @Column({ default: false })
+    isFinalExam: boolean;
+
     // users
     @OneToMany(type => User, user => user.currentExam)
     @JoinColumn()

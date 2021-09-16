@@ -1,3 +1,4 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { Button } from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -9,6 +10,7 @@ import { CourseShortDTO } from "../../../../models/shared_models/CourseShortDTO"
 import { httpPostAsync, usePostData } from "../../../../services/httpClient";
 import { useNavigation } from "../../../../services/navigatior";
 import classes from "./courseTile.module.scss";
+import DoneIcon from '@material-ui/icons/Done';
 
 const CourseTile = (props: {
     course: CourseShortDTO,
@@ -36,11 +38,33 @@ const CourseTile = (props: {
             <animated.div style={anim} className={classes.searchItem}>
                 <div className={classes.videoItemTopWrapper}>
 
-                    <animated.img
-                        className={classes.videoItemThumbnailImage}
-                        style={anim}
-                        src={thumbnailImageUrl} />
+                    <Box position="relative">
 
+                        <animated.img
+                            className={classes.videoItemThumbnailImage}
+                            style={anim}
+                            src={thumbnailImageUrl} />
+
+                        {/* done overlay */}
+                        <Flex
+                            position="absolute"
+                            top={0}
+                            left={0}
+                            width="100%"
+                            justify="flex-end">
+
+                            <DoneIcon style={{
+                                color: "var(--mildGreen)",
+                                height: "50px",
+                                width: "50px",
+                                margin: "4px",
+                                borderRadius: "50%",
+                                border: "4px solid var(--mildGreen)",
+                                background: "white"
+                            }} />
+                        </Flex>
+
+                    </Box>
                     <div className={classes.videoTitleOuterWrapper}>
 
                         <Gradient className={classes.courseTitleBorder}
@@ -75,7 +99,7 @@ const CourseTile = (props: {
                 </div>
             </animated.div>
         </Paper>
-    </Grid>
+    </Grid >
 };
 
 export default CourseTile;

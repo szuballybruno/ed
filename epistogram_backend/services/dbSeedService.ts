@@ -131,7 +131,8 @@ const seedCourses = async (connection: TypeORMConnection) => {
                         subtitle: "Fantastic exam 3",
                         thumbnailUrl: "",
                         description: "",
-                        orderIndex: 4
+                        orderIndex: 4,
+                        isFinalExam: true
                     }
                 ]
             } as Course,
@@ -178,7 +179,17 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 coverFile: {
                     pending: false,
                     filePath: "/courseCoverImages/4.png"
-                }
+                },
+                exams: [
+                    {
+                        title: "Excel Final Exam",
+                        subtitle: "Excel Final Exam",
+                        thumbnailUrl: "",
+                        description: "",
+                        orderIndex: 4,
+                        isFinalExam: true
+                    }
+                ]
             },
 
             // etc

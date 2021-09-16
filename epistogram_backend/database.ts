@@ -37,13 +37,14 @@ export type TypeORMConnection = Connection;
 
 export const initializeDBAsync = async (isRecreateDB: boolean) => {
 
-    const host = staticProvider.globalConfig.database.hostAddress;
-    const port = staticProvider.globalConfig.database.port;
-    const username = staticProvider.globalConfig.database.serviceUserName;
-    const password = staticProvider.globalConfig.database.serviceUserPassword;
-    const databaseName = staticProvider.globalConfig.database.name;
-    const isSyncEnabled = staticProvider.globalConfig.database.isOrmSyncEnabled;
-    const isLoggingEnabled = staticProvider.globalConfig.database.isOrmLoggingEnabled;
+    const dbConfig = staticProvider.globalConfig.database;
+    const host = dbConfig.hostAddress;
+    const port = dbConfig.port;
+    const username = dbConfig.serviceUserName;
+    const password = dbConfig.serviceUserPassword;
+    const databaseName = dbConfig.name;
+    const isSyncEnabled = dbConfig.isOrmSyncEnabled;
+    const isLoggingEnabled = dbConfig.isOrmLoggingEnabled;
 
     const postgresOptions = {
         type: "postgres",
@@ -110,21 +111,22 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
         "course_state_view"
     ]);
 
-    //
-    // TEST
-    //
+    const isFreshDB = await getIsFreshDB();
+    if (isFreshDB) {
 
-    // seed DB if no users are found
+        log("Seeding DB...");
+        await seedDB();
+    }
+}
+
+const getIsFreshDB = async () => {
+
     const users = await staticProvider
         .ormConnection
         .getRepository(User)
         .find();
 
-    if (users.length < 1) {
-
-        log("Seeding DB...");
-        await seedDB();
-    }
+    return users.length == 0;
 }
 
 const createTypeORMConnection = (opt: ConnectionOptions) => {
