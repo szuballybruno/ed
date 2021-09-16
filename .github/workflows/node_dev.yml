@@ -83,6 +83,12 @@ jobs:
           cp ./config.${{ env.PIPELINE_ENVIRONMENT }}.env ./build/config.env
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
 
+      - name: Copying 'sql' folder to ./build folder
+        run: |
+          echo In: $PWD
+          cp ./sql ./build/sql
+        working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
+
       - name: Deploying backend to hosted location
         run: |
           echo In: $PWD
