@@ -1,5 +1,5 @@
-import { Box } from "@chakra-ui/react";
-import { FormControl, Grid, Select, Typography } from "@material-ui/core";
+import { Box, Flex } from "@chakra-ui/react";
+import { FormControl, Select, Typography } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import React from "react";
 import { distinct } from "../../frontendHelpers";
@@ -11,6 +11,7 @@ import { AdminDashboardSearch } from "../administration/universal/searchBar/Admi
 import CourseTile from "../universal/atomic/courseTile/CourseTile";
 import Navbar from "../universal/navigation/navbar/Navbar";
 import classes from "./courseSearchMain.module.scss";
+import { Grid, GridItem } from "@chakra-ui/react";
 
 const UserCoursesPage = () => {
 
@@ -146,21 +147,35 @@ const UserCoursesPage = () => {
 
                 {/* courses */}
                 <LoadingFrame loadingState={[status]} error={[error]}>
-                    <Box id="scrollContainer" overflowY="scroll">
-                        <Box id="scrollContent" p="20px 20px 140px 20px">
-                            <Grid container spacing={3}>
-                                {courses
-                                    .map((course: any, index) => {
-                                        return <CourseTile course={course} itemIndex={index} key={index} />
-                                    })}
-                            </Grid>
-                        </Box>
+                    <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
+                        <Grid
+                            templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+                            gap="5">
+                            {courses
+                                .map((course: any, index) => {
+                                    return <GridItem height="300px" >
+
+                                        <CourseTile course={course} itemIndex={index} key={index} />
+                                    </GridItem>
+                                })}
+                        </Grid>
                     </Box>
                 </LoadingFrame>
 
             </RightPanel>
         </ContentWrapper>
-    </MainWrapper>
+    </MainWrapper >
 }
 
 export default UserCoursesPage
+
+// // <Grid id="gridFlex" wrap="wrap" className="whall">
+//                             {courses
+//                                 .map((course: any, index) => {
+//                                     return <Box bg="red" flexBasis="33%" padding="10px">
+
+//                                         <Box bg="grey" className="whall"></Box>
+//                                         {/* <CourseTile course={course} itemIndex={index} key={index} /> */}
+//                                     </Box>
+//                                 })}
+//                         </Flex>
