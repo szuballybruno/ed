@@ -2,7 +2,7 @@ import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { CourseItemStateView } from "../models/entity/views/CourseItemStateView";
+import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemType, CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";

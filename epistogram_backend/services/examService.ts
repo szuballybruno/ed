@@ -1,5 +1,5 @@
 import { User } from "../models/entity/User";
-import { UserExamAnswerSessionView } from "../models/entity/views/UserExamAnswerSessionView";
+import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { staticProvider } from "../staticProvider";
 import { getCurrentCourseItemDescriptor } from "./courseService";

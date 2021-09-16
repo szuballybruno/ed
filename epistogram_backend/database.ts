@@ -21,12 +21,13 @@ import { UserCourseBridge } from "./models/entity/UserCourseBridge";
 import { Video } from "./models/entity/Video";
 import { VideoPlaybackData } from "./models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
-import { CourseItemStateView } from "./models/entity/views/CourseItemStateView";
-import { CourseItemView } from "./models/entity/views/CourseItemView";
-import { ExamCompletedView } from "./models/entity/views/ExamCompletedView";
-import { UserExamAnswerSessionView } from "./models/entity/views/UserExamAnswerSessionView";
-import { VideoCompletedView } from "./models/entity/views/VideoCompletedView";
-import { VideoProgressView } from "./models/entity/views/VideoProgressView";
+import { CourseItemStateView } from "./models/views/CourseItemStateView";
+import { CourseItemView } from "./models/views/CourseItemView";
+import { CourseStateView } from "./models/views/CourseStateView";
+import { ExamCompletedView } from "./models/views/ExamCompletedView";
+import { UserExamAnswerSessionView } from "./models/views/UserExamAnswerSessionView";
+import { VideoCompletedView } from "./models/views/VideoCompletedView";
+import { VideoProgressView } from "./models/views/VideoProgressView";
 import { recreateDB, seedDB } from "./services/dbSeedService";
 import { log } from "./services/misc/logger";
 import { recreateViewsAsync } from "./services/sqlViewCreator";
@@ -85,6 +86,7 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
             VideoProgressView,
             CourseItemView,
             CourseItemStateView,
+            CourseStateView
         ],
     } as ConnectionOptions;
 
@@ -104,7 +106,8 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
         "user_exam_answer_session_view",
         "video_progress_view",
         "course_item_view",
-        "course_item_state_view"
+        "course_item_state_view",
+        "course_state_view"
     ]);
 
     //

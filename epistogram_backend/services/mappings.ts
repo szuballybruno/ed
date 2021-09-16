@@ -35,10 +35,10 @@ import { CourseTag } from "../models/entity/CourseTag";
 import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
-import { UserExamAnswerSessionView } from "../models/entity/views/UserExamAnswerSessionView";
+import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
 import { getMaxWatchedSeconds } from "./playerService";
 import { log } from "./misc/logger";
-import { CourseItemStateView } from "../models/entity/views/CourseItemStateView";
+import { CourseItemStateView } from "../models/views/CourseItemStateView";
 
 export const toUserDTO = (user: User) => {
 

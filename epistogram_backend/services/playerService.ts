@@ -1,7 +1,7 @@
 import { User } from "../models/entity/User";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { VideoCompletedView } from "../models/entity/views/VideoCompletedView";
-import { VideoProgressView } from "../models/entity/views/VideoProgressView";
+import { VideoCompletedView } from "../models/views/VideoCompletedView";
+import { VideoProgressView } from "../models/views/VideoProgressView";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
