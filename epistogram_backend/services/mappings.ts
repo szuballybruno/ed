@@ -251,8 +251,10 @@ export const toCourseShortDTO = (course: CourseView) => {
         ? getAssetUrl(course.filePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
 
-    const firstItemCode = course.currentExamId || course.currentVideoId
-        ? getCourseItemDescriptorCode(course.currentExamId, course.currentExamId ? "exam" : "video")
+    const firstItemCode = (course.currentExamId || course.currentVideoId)
+        ? course.currentExamId
+            ? getCourseItemDescriptorCode(course.currentExamId, "exam")
+            : getCourseItemDescriptorCode(course.currentVideoId, "video")
         : null;
 
     return {

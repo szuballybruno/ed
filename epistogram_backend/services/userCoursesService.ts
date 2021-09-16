@@ -16,7 +16,14 @@ export const getUserCoursesAsync = async (userId: number, dto: GetUserCoursesDTO
     const courses = await staticProvider
         .ormConnection
         .getRepository(CourseView)
-        .find();
+        .find({
+            where: {
+                userId: userId
+            },
+            order: {
+                title: "DESC"
+            }
+        });
 
     const courseShortDTOs = courses
         .map(course => toCourseShortDTO(course));

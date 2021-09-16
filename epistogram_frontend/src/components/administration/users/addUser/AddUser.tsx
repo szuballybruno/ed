@@ -78,33 +78,33 @@ const AddUser = () => {
     console.log("Changed: " + isChanged);
 
     // display unsaved changes alert when user navigates 
-    useEffect(() => {
-        unblockHandle.current = history.block((targetLocation: any) => {
+    // useEffect(() => {
+    //     unblockHandle.current = history.block((targetLocation: any) => {
 
-            if (!isChanged) {
+    //         if (!isChanged) {
 
-                console.log("Navigation not blocked because there is no changed fields!");
-                return true as any;
-            }
+    //             console.log("Navigation not blocked because there is no changed fields!");
+    //             return true as any;
+    //         }
 
-            console.log("Blocking navigation because there's changed fields!");
+    //         console.log("Blocking navigation because there's changed fields!");
 
-            // take some custom action here
-            // i chose to show my custom modal warning user froim going back
-            // rather than relying on the browser's alert
-            showDialog({
-                title: "Biztosan megszakítod a felhasználó hozzáadását?",
-                description: "Megszakítás esetén a beírt adatok elvesznek.",
-                firstButtonTitle: "Folytatom",
-                secondButtonTitle: "Megszakítom"
-            });
+    //         // take some custom action here
+    //         // i chose to show my custom modal warning user froim going back
+    //         // rather than relying on the browser's alert
+    //         showDialog({
+    //             title: "Biztosan megszakítod a felhasználó hozzáadását?",
+    //             description: "Megszakítás esetén a beírt adatok elvesznek.",
+    //             firstButtonTitle: "Folytatom",
+    //             secondButtonTitle: "Megszakítom"
+    //         });
 
-            return false;
-        });
-        return function () {
-            unblockHandle.current.current && unblockHandle.current.current()
-        }
-    })
+    //         return false;
+    //     });
+    //     return function () {
+    //         unblockHandle.current.current && unblockHandle.current.current()
+    //     }
+    // })
 
     // const discardChangesAndNavigate = () => {
     //     if (unblockHandle) {
@@ -124,7 +124,7 @@ const AddUser = () => {
     //     }
     // }
 
-    disallowWindowNavigation();
+    // disallowWindowNavigation();
 
     const submitAddUserRequestAsync = async () => {
 

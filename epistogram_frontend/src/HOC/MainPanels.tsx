@@ -33,7 +33,7 @@ export const LeftPanel = (props: { children: ReactNode }) => {
                     {props.children}
                 </Flex>
             </Box>
-        </FlexFloat >
+        </FlexFloat>
     );
 };
 
