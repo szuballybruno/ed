@@ -38,6 +38,6 @@ const dropViews = async (viewNames: string[]) => {
 
 const getViewCreationScript = (viewName: string) => {
 
-    const sql = readFileSync(`./models/entity/view_sql_scripts/${viewName}.sql`, 'utf8');
+    const sql = readFileSync(`./sql/views/${viewName}.sql`, 'utf8');
     return `CREATE VIEW ${viewName}\nAS\n${sql}`;
 }
