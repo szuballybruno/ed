@@ -1,5 +1,3 @@
-CREATE VIEW video_progress_view 
-AS
 SELECT
     "video"."id" AS "videoId",
     "user"."id" AS "userId",

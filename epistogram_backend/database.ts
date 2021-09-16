@@ -23,14 +23,14 @@ import { VideoPlaybackData } from "./models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
 import { CourseItemStateView } from "./models/entity/views/CourseItemStateView";
 import { CourseItemView } from "./models/entity/views/CourseItemView";
-import { UserExamAnswerSessionView } from "./models/entity/views/UserExamAnswerSessionView";
 import { ExamCompletedView } from "./models/entity/views/ExamCompletedView";
+import { UserExamAnswerSessionView } from "./models/entity/views/UserExamAnswerSessionView";
 import { VideoCompletedView } from "./models/entity/views/VideoCompletedView";
+import { VideoProgressView } from "./models/entity/views/VideoProgressView";
 import { recreateDB, seedDB } from "./services/dbSeedService";
 import { log } from "./services/misc/logger";
-import { createSQLViewAsync } from "./services/sqlViewCreator";
+import { recreateViewsAsync } from "./services/sqlViewCreator";
 import { staticProvider } from "./staticProvider";
-import { VideoProgressView } from "./models/entity/views/VideoProgressView";
 
 export type TypeORMConnection = Connection;
 
@@ -97,16 +97,15 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
     log("Connecting to database with TypeORM...");
     staticProvider.ormConnection = await createTypeORMConnection(postgresOptions);
 
-    if (isRecreateDB) {
-
-        log("Creating SQL views...")
-        await createSQLViewAsync("video_completed_view");
-        await createSQLViewAsync("exam_completed_view");
-        await createSQLViewAsync("user_exam_answer_session_view");
-        await createSQLViewAsync("video_progress_view");
-        await createSQLViewAsync("course_item_view");
-        await createSQLViewAsync("course_item_state_view");
-    }
+    log("Creating SQL views...")
+    await recreateViewsAsync([
+        "video_completed_view",
+        "exam_completed_view",
+        "user_exam_answer_session_view",
+        "video_progress_view",
+        "course_item_view",
+        "course_item_state_view"
+    ]);
 
     //
     // TEST

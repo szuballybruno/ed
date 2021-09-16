@@ -1,9 +1,8 @@
-CREATE VIEW exam_completed_view
-AS
 SELECT 
 	"subquery"."userId",
 	"subquery"."examId",
 	"subquery"."courseId",
+	"subquery"."orderIndex",
 	CAST(CASE WHEN 
 		SUM("subquery"."isCompleteSession") > 0
 		THEN 1 
@@ -13,6 +12,7 @@ FROM (
 	SELECT 
 		"exam"."id" AS "examId",
 		"exam"."courseId" AS "courseId",
+		"exam"."orderIndex" AS "orderIndex",
 		"answer_session"."id" AS "answerSessionId",
 		"user"."id" AS "userId",
 		COUNT ("answer"."isCorrect") AS "correctAnswerCount",
@@ -44,6 +44,7 @@ FROM (
 	GROUP BY
 		"exam"."id",
 		"exam"."courseId",
+		"exam"."orderIndex",
 		"answer_session"."id",
 		"user"."id"
 ) AS "subquery"
@@ -51,4 +52,5 @@ FROM (
 GROUP BY 
 	"subquery"."examId", 	
 	"subquery"."userId",
-	"subquery"."courseId" 
+	"subquery"."courseId",
+	"subquery"."orderIndex" 

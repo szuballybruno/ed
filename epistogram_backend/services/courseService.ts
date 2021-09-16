@@ -53,11 +53,10 @@ export const getCourseItemsAsync = async (userId: number, courseId: number, curr
         .leftJoinAndSelect("cisv.video", "v")
         .where("cisv.courseId = :courseId", { courseId })
         .andWhere("cisv.userId = :userId", { userId })
+        .orderBy("cisv.orderIndex")
         .getMany();
 
-    const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, courseId);
-
-    return toCourseItemDTOs(courseItems, userCourseBridge.courseMode, currentItemDescriptorCode);
+    return toCourseItemDTOs(courseItems, currentItemDescriptorCode);
 }
 
 export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {

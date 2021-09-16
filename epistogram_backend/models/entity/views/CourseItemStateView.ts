@@ -1,4 +1,5 @@
 import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from "typeorm";
+import { CourseItemStateType } from "../../shared_models/types/sharedTypes";
 import { Exam } from "../Exam";
 import { Video } from "../Video";
 
@@ -18,6 +19,9 @@ export class CourseItemStateView {
     videoId: number;
 
     @ViewColumn()
+    orderIndex: number;
+
+    @ViewColumn()
     isVideoCompleted: boolean;
 
     @ViewColumn()
@@ -25,6 +29,9 @@ export class CourseItemStateView {
 
     @ViewColumn()
     isExamCompleted: boolean;
+
+    @ViewColumn()
+    state: CourseItemStateType;
 
     // exam 
     @ManyToOne(_ => Exam)

@@ -1,17 +1,43 @@
-import { readFileSync } from "fs";
+import { readFileSync, stat } from "fs";
 import { staticProvider } from "../staticProvider";
 import { log } from "./misc/logger";
 
-export const createSQLViewAsync = async (viewName: string) => {
+export const recreateViewsAsync = async (viewNames: string[]) => {
 
-    log(`Creating SQL View (${viewName})...`);
+    log("Recreating views...");
 
-    // Read view script 
-    const sql = readFileSync(`./models/entity/view_sql_scripts/${viewName}.sql`, 'utf8');
+    await dropViews(viewNames);
+    await createViews(viewNames);
+}
 
-    // execute view script 
+const createViews = async (viewNames: string[]) => {
+
+    for (let index = 0; index < viewNames.length; index++) {
+
+        const viewName = viewNames[index];
+        const script = getViewCreationScript(viewName);
+
+        log(`Creating view: [${viewName}]...`);
+        await staticProvider
+            .ormConnection
+            .manager
+            .query(script);
+    }
+}
+
+const dropViews = async (viewNames: string[]) => {
+
+    const drops = viewNames
+        .map(viewName => `DROP VIEW IF EXISTS ${viewName} CASCADE;`);
+
     await staticProvider
         .ormConnection
         .manager
-        .query(sql);
+        .query(drops.join("\n"));
+}
+
+const getViewCreationScript = (viewName: string) => {
+
+    const sql = readFileSync(`./models/entity/view_sql_scripts/${viewName}.sql`, 'utf8');
+    return `CREATE VIEW ${viewName}\nAS\n${sql}`;
 }

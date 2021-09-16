@@ -26,7 +26,7 @@ import { CourseItemStateType, CourseModeType } from "../models/shared_models/typ
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
-import { hasValue, navPropNotNull, throwNotImplemented } from "../utilities/helpers";
+import { hasValue, navPropNotNull, throwNotImplemented, TypedError } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 import { CourseGroup } from "../models/entity/CourseGroup";
@@ -165,57 +165,24 @@ export const toExamResultDTO = (answerSessionView: UserExamAnswerSessionView, da
 
 export const toCourseItemDTOs = (
     courseItems: CourseItemStateView[],
-    courseMode: CourseModeType,
     currentItemDescriptorCode: string) => {
-
-    const isBeginnerMode = courseMode === "beginner";
 
     const courseItemDTOs = courseItems
         .map(x => toCourseItemDTO(x));
 
-    // get the index of the last non-locked item
-    // note that there has not been a current calculation so far
-    const lastNonLockedItemIndex = courseItemDTOs
-        .findLastIndex(x => x.state != "locked");
-
-    // if there is a last non-locked, 
-    // and it's not the last in the list
-    // set it to available 
-    if (hasValue(lastNonLockedItemIndex)) {
-
-        const availableItemIndex = lastNonLockedItemIndex! + 1;
-        const availableItemIndexMax = availableItemIndex != courseItemDTOs.length
-            ? availableItemIndex
-            : courseItemDTOs.length - 1;
-
-        for (let index = 0; index < availableItemIndexMax; index++) {
-
-            const element = courseItemDTOs[index];
-            if (element.state === "locked")
-                element.state = "available";
-        }
-    }
-    else {
-
-        courseItemDTOs[0].state = "available";
-    }
-
     // set current item's state to 'current'
-    const currentItem = courseItemDTOs
-        .firstOrNull(item => item.descriptorCode === currentItemDescriptorCode
-            && item.state !== "locked");
+    let currentItem = courseItemDTOs
+        .single(item => item.descriptorCode === currentItemDescriptorCode);
 
-    if (currentItem) {
+    if (currentItem.state === "locked") {
 
-        currentItem.state = "current";
+        const firstLockedIndex = courseItemDTOs
+            .findIndex(x => x.state === "locked");
+
+        currentItem = courseItemDTOs[firstLockedIndex - 1];
     }
-    else {
 
-        const lastAvailable = courseItemDTOs
-            .last(x => x.state === "available");
-
-        lastAvailable.state = "current";
-    }
+    currentItem.state = "current";
 
     return courseItemDTOs;
 }
@@ -254,7 +221,7 @@ export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
             thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
             title: video.title,
             orderIndex: video.orderIndex,
-            state: courseItemView.isVideoCompleted ? "completed" : "locked",
+            state: courseItemView.state,
             descriptorCode: getCourseItemDescriptorCode(video.id, "video")
         } as CourseItemDTO;
     }
@@ -271,7 +238,7 @@ export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
             thumbnailUrl: getExamCoverImageUrl(),
             title: exam.title,
             orderIndex: exam.orderIndex,
-            state: courseItemView.isExamCompleted ? "completed" : "locked",
+            state: courseItemView.state,
             descriptorCode: getCourseItemDescriptorCode(exam.id, "exam")
         } as CourseItemDTO;
     }
