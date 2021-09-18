@@ -19,8 +19,9 @@ import { httpPostAsync } from "../../../../services/httpClient";
 export const UserAdministrationPage = () => {
 
     const user = useContext(CurrentUserContext)!;
+    const userId = user.id;
     const [searchText, setSearchText] = React.useState("");
-    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(user.id, searchText);
+    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(userId, searchText);
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate("/admin/manage/users/add");
 
@@ -76,12 +77,12 @@ export const UserAdministrationPage = () => {
                                 </Flex>}
                             />}
                             endContent={<Flex align="center">
-                                <EpistoButton
+                                {(userId != user.id) && <EpistoButton
                                     variant="colored"
                                     padding="5px"
                                     onClick={() => deleteUserAsync(user.id)}>
                                     <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>
-                                </EpistoButton>
+                                </EpistoButton>}
                             </Flex>}
                         />
                     })}

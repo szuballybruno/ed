@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { Exam } from "./Exam";
@@ -15,8 +15,8 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: true })
-    timeOfAdd: Date;
+    @DeleteDateColumn()
+    deletionDate: Date;
 
     @Column({ nullable: true })
     isActive: boolean;

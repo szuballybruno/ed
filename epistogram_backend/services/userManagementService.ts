@@ -8,5 +8,5 @@ export const deleteUserAsync = async (userId: number, deletedUserId: number) => 
     return await staticProvider
         .ormConnection
         .getRepository(User)
-        .delete(deletedUserId);
+        .softDelete(deletedUserId);
 }
