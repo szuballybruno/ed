@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Switch } from "react-router-dom";
 import AddUser from "../components/administration/users/addUser/AddUser";
-import {UserList} from "../components/administration/users/userList/UserList";
+import { UserAdministrationPage } from "../components/administration/users/userList/UserAdministrationPage";
 
 export const AdministrationUserRouting = () => {
     return (
         <Switch>
             <Route exact path={'/admin/manage/users'}>
-                <UserList />
+                <UserAdministrationPage />
             </Route>
             <Route path={'/admin/manage/users/add'}>
                 <AddUser />

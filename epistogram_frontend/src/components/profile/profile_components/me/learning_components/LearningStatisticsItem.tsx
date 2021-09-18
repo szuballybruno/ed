@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from "./learningStatisticsItem.module.scss";
-import { Button, Card, Typography } from "@material-ui/core";
-import { Fullscreen, FullscreenExit } from "@material-ui/icons";
+import { Button, Card, Typography } from "@mui/material";
+import { Fullscreen, FullscreenExit } from "@mui/icons-material";
 
 /*
  * Expandable statistics item for CSS Grid container
@@ -27,7 +27,7 @@ const LearningStatisticsItem = (props: {
     chartSize?: string
 }) => {
     const [open, setOpen] = useState(false)
-    
+
     useEffect(() => {
         props.isOpenByDefault && setOpen(true)
     }, [props.isOpenByDefault])

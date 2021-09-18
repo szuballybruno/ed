@@ -1,5 +1,5 @@
-import { Button, Divider, LinearProgress, LinearProgressProps, Typography } from "@material-ui/core";
-import Box from "@material-ui/core/Box";
+import { Button, Divider, LinearProgress, LinearProgressProps, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
 import React, { ReactNode } from 'react';
 import classes from "./signupWrapper.module.scss";
 

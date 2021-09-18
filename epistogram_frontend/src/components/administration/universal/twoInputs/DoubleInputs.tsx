@@ -1,13 +1,14 @@
 import React from 'react';
 import classes from "./doubleInputs.module.scss";
-import {TextField, Typography} from "@material-ui/core";
+import { TextField, Typography } from "@mui/material";
 
 const DoubleInputs = (props: {
     firstLabelText: string,
     secondLabelText: string,
     firstLabelName: string,
     secondLabelName: string,
-    changeHandler: (e: React.ChangeEvent<{ value: string, name: string }>) => void}) => {
+    changeHandler: (e: React.ChangeEvent<{ value: string, name: string }>) => void
+}) => {
     return (
         <div className={classes.namesRow}>
             <div className={classes.halfDataRow}>

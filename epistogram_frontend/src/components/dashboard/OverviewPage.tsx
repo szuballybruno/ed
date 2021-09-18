@@ -1,4 +1,5 @@
-import { Divider, Grid } from "@material-ui/core";
+import { Flex } from "@chakra-ui/layout";
+import { Divider, Grid } from "@mui/material";
 import React, { ReactNode, useContext } from 'react';
 import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
@@ -43,31 +44,33 @@ const OverviewPage = () => {
 
         <ContentWrapper>
             <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
-                <LeftPanel>
-                    <Grid>
+                <LeftPanel align="stretch" justify="stretch">
 
-                        {/* profile data */}
-                        <ProfileStats user={user!} />
+                    {/* profile data */}
+                    <ProfileStats user={user!} />
 
-                        <DashboardVerticalDivider />
+                    <DashboardVerticalDivider />
 
-                        {/* active item */}
-                        <DashoardLeftItemGroup title={hasCurrentItem ? "Folytatom" : "Új tanfolyam kiválasztása"}>
-                            {hasCurrentItem
-                                ? <CourseItemView courseItem={currentItem!} />
+                    {/* active item */}
+                    <DashoardLeftItemGroup title={hasCurrentItem ? "Folytatom" : "Új tanfolyam kiválasztása"}>
+                        {hasCurrentItem
+                            ? <CourseItemView courseItem={currentItem!} />
 
-                                : <ListItem mainTitle={"Tanfolyamkereső"}
-                                    subTitle={"Válaszd ki a legszimpatikusabb tanfolyamot"}
-                                    thumbnailUrl={currentItemThumbnailUrl}
-                                    to={"/kurzusok"} />}
-                        </DashoardLeftItemGroup>
+                            : <ListItem mainTitle={"Tanfolyamkereső"}
+                                subTitle={"Válaszd ki a legszimpatikusabb tanfolyamot"}
+                                thumbnailUrl={currentItemThumbnailUrl}
+                                to={"/kurzusok"} />}
+                    </DashoardLeftItemGroup>
 
-                        {/* current course */}
-                        {hasCurrentCourse &&
-                            <DashoardLeftItemGroup title={"Jelenlegi kurzus"} >
-                                <CourseItemList courseItems={courseItems!} />
-                            </DashoardLeftItemGroup>}
-                    </Grid>
+                    {/* current course */}
+                    {hasCurrentCourse &&
+                        <DashoardLeftItemGroup
+                            title={"Jelenlegi kurzus"}
+                            flex="1"
+                            overflow="hidden">
+
+                            <CourseItemList courseItems={courseItems!} />
+                        </DashoardLeftItemGroup>}
 
                 </LeftPanel>
                 <RightPanel>

@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { FlexFloat } from '../components/universal/FlexFloat';
 
@@ -15,24 +15,22 @@ export const ContentWrapper = (props: { children: ReactNode }) => {
     </Flex>
 };
 
-export const LeftPanel = (props: { children: ReactNode }) => {
+export const LeftPanel = (props: FlexProps) => {
+
     return (
         <FlexFloat
             id="leftPanel"
             bg="white"
-            flexDirection="column"
             zIndex={1}
-            flexBasis="400px" >
+            flexBasis="400px"
+            direction="column"
+            align="center"
+            padding="0 15px 0 15px"
+            justify="flex-start"
+            borderLeft="2px solid #e2e2e2"
+            {...props}>
 
-            <Box flex="1">
-                <Flex
-                    direction="column"
-                    align="center"
-                    justify="flex-start"
-                    borderLeft="2px solid #e2e2e2">
-                    {props.children}
-                </Flex>
-            </Box>
+            {props.children}
         </FlexFloat>
     );
 };

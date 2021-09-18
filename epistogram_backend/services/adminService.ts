@@ -11,6 +11,7 @@ export const getAdminPageUsersList = async (userId: number, searchText: string) 
         .createQueryBuilder("user")
         .leftJoinAndSelect("user.organization", "org")
         .leftJoinAndSelect("user.tasks", "tasks")
+        .leftJoinAndSelect("user.avatarFile", "sf")
         .getMany();
 
     return users

@@ -1,5 +1,4 @@
 import { AxiosRequestConfig } from "axios";
-import { url } from "inspector";
 import { useState } from "react";
 import { getErrorTypeByHTTPCode, TypedError } from "../frontendHelpers";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";

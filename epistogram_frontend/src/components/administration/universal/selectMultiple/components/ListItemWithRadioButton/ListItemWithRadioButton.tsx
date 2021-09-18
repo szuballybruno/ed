@@ -1,7 +1,7 @@
 import React from "react";
-import {ListItem, Radio, RadioGroup, TextField} from "@material-ui/core";
+import { ListItem, Radio, RadioGroup, TextField } from "@mui/material";
 import classes from "./listItemWithRadioButton.module.scss";
-import {TextOrInput} from "../TextOrInput/TextOrInput";
+import { TextOrInput } from "../TextOrInput/TextOrInput";
 
 export const ListItemWithRadio = (props: {
     value?: string | number,
@@ -10,11 +10,11 @@ export const ListItemWithRadio = (props: {
     itemValueOnChange: () => void,
     name: string
 }) => <ListItem className={classes.listItem}>
-    <Radio name={props.name}
-           value={props.value}
-           checked={props.checked} />
-    <TextField size={"small"}
-               name={props.name}
-               value={props.value}
-               onChange={props.itemValueOnChange} />
-</ListItem>
+        <Radio name={props.name}
+            value={props.value}
+            checked={props.checked} />
+        <TextField size={"small"}
+            name={props.name}
+            value={props.value}
+            onChange={props.itemValueOnChange} />
+    </ListItem>

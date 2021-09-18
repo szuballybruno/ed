@@ -1,4 +1,4 @@
-import { Slider } from "@material-ui/core";
+import { Slider } from "@mui/material";
 import React, { useState } from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";

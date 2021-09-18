@@ -20,6 +20,7 @@ import './utilities/jsExtensions';
 import { answerVideoQuestionAction } from './api/questionActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
 import { setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { deleteUserAction } from './api/userAdministartionActions';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -112,6 +113,7 @@ const initializeAsync = async () => {
     expressServer.get("/users/get-user-administartion-user-list", authMiddleware, getUserAdministrationUserListAction);
     expressServer.post("/users/create-invited-user", authMiddleware, getAsyncActionHandler(createInvitedUserAction));
     expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
+    expressServer.post("/users/delete-user", authMiddleware, deleteUserAction);
 
     // course 
     expressServer.post("/course/start-course", authMiddleware, startCourseAction);

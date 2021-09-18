@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import React from 'react';
 import { Cookies } from "react-cookie";
 import { getEventFileCallback } from "../../../../frontendHelpers";

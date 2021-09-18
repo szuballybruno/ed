@@ -1,21 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import classes from "./editCourse.module.scss"
-import {Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography} from "@material-ui/core";
+import { Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { HexColorPicker } from "react-colorful";
+import { useParams } from "react-router";
+import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
+import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../../models/shared_models/AdminPageEditCourseDTO";
+import { useAdminEditedCourse } from "../../../../services/courseService";
+import { httpPostAsync } from "../../../../services/httpClient";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
-import {useParams} from "react-router";
 import AdminDashboardHeader from "../../universal/adminDashboardHeader/AdminDashboardHeader";
-import {AdminDashboardSearch} from "../../universal/searchBar/AdminDashboardSearch";
-import {HexColorPicker} from "react-colorful";
+import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
+import { AdminDashboardWrapper } from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
+import { SaveBar } from "../../universal/saveBar/SaveBar";
+import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSearch";
 import SelectImage from "../../universal/selectImage/SelectImage";
-import {AdminDashboardWrapper} from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import {SaveBar} from "../../universal/saveBar/SaveBar";
-import {getEventFileCallback, getEventValueCallback, useCreateObjectURL} from "../../../../frontendHelpers";
-import {useAdminEditedCourse} from "../../../../services/courseService";
-import {AdministrationListItem} from "../../universal/adminDashboardSearchItem/AdministrationListItem";
-import {getChipWithLabel} from "../courseList/CourseList";
-import {SelectMultiple} from "../../universal/selectMultiple/SelectMultiple";
-import {AdminPageEditCourseDTO, EditListItemDTO} from "../../../../models/shared_models/AdminPageEditCourseDTO";
-import {httpPostAsync} from "../../../../services/httpClient";
+import { SelectMultiple } from "../../universal/selectMultiple/SelectMultiple";
+import classes from "./editCourse.module.scss";
 
 /* TODO:
 *   - onClick for save changes button
@@ -23,7 +22,7 @@ import {httpPostAsync} from "../../../../services/httpClient";
 *   - fetch all the necessary data
 */
 
-export const TextOrInput = (props: {isEditable?: boolean, value: string}) => {
+export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
 }
 
@@ -209,7 +208,7 @@ export const EditCourse = () => {
                                     })} />
                                     <TextOrInput value={item.name} />
                                 </ListItem>
-                                <Divider style={{width: "100%"}} />
+                                <Divider style={{ width: "100%" }} />
                             </div>
                         )}
 
@@ -231,7 +230,7 @@ export const EditCourse = () => {
                                     })} />
                                     <TextOrInput value={item.name} />
                                 </ListItem>
-                                <Divider style={{width: "100%"}} />
+                                <Divider style={{ width: "100%" }} />
                             </div>
                         )}
 
@@ -253,7 +252,7 @@ export const EditCourse = () => {
                                     })} />
                                     <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
                                 </ListItem>
-                                <Divider style={{width: "100%"}} />
+                                <Divider style={{ width: "100%" }} />
                             </div>
                         )}
 
@@ -275,7 +274,7 @@ export const EditCourse = () => {
                                     })} />
                                     <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
                                 </ListItem>
-                                <Divider style={{width: "100%"}} />
+                                <Divider style={{ width: "100%" }} />
                             </div>
                         )}
 
@@ -293,15 +292,15 @@ export const EditCourse = () => {
         <div className={classes.editVideosWrapper}>
             <AdminDashboardSearch searchChangeHandler={() => { }} name={"searchData"} title={"A kurzus tartalma"} />
             {course?.courseItems.map((item, index) => <AdministrationListItem key={"adlistitem" + index} title={item.title} thumbnailUrl={item.thumbnailUrl} chips={[
-                getChipWithLabel("fis" + index, "item.type", "category"),
-                getChipWithLabel("fos" + index, "item.length", "person"),
-                getChipWithLabel("fasz" + index, "item.isEssential", "video")
+                // getChipWithLabel("fis" + index, "item.type", "category"),
+                // getChipWithLabel("fos" + index, "item.length", "person"),
+                // getChipWithLabel("fasz" + index, "item.isEssential", "video")
             ]} searchItemButtons={[]} />)}
         </div>
 
         <AdminDashboardHeader titleText={""} />
 
-        <SaveBar open={isAllowEditOnPage} onClick={() => setIsAllowEditOnPage(p => !p) } onDoneClick={() => {
+        <SaveBar open={isAllowEditOnPage} onClick={() => setIsAllowEditOnPage(p => !p)} onDoneClick={() => {
             setIsAllowEditOnPage(p => !p)
             return updateAdminPageEditCourse(getAdminPageEditCourseDTO())
         }} />

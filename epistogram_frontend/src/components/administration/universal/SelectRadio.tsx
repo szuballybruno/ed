@@ -1,10 +1,10 @@
 import React from 'react';
-import {ListItemWithRadio} from "./selectMultiple/components/ListItemWithRadioButton/ListItemWithRadioButton";
-import {SelectMultiple} from "./selectMultiple/SelectMultiple";
+import { ListItemWithRadio } from "./selectMultiple/components/ListItemWithRadioButton/ListItemWithRadioButton";
+import { SelectMultiple } from "./selectMultiple/SelectMultiple";
 import classes from "./selectMultiple/components/ListItemWithRadioButton/listItemWithRadioButton.module.scss";
-import {ListItem, Radio, TextField} from "@material-ui/core";
+import { ListItem, Radio, TextField } from "@mui/material";
 
-export const SelectRadio = (props:  {
+export const SelectRadio = (props: {
     isEditing?: boolean,
     value?: string,
     checkedValues?: any[],

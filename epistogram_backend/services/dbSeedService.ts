@@ -5,6 +5,7 @@ import { Course } from "../models/entity/Course";
 import { CourseGroup } from "../models/entity/CourseGroup";
 import { CourseOrganization } from "../models/entity/CourseOrganization";
 import { CourseTag } from "../models/entity/CourseTag";
+import { Exam } from "../models/entity/Exam";
 import { Group } from "../models/entity/Group";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
@@ -34,7 +35,12 @@ export const recreateDB = async (postgresOptions: ConnectionOptions) => {
 export const seedDB = async () => {
 
     const connection = staticProvider.ormConnection;
+
+    log("seedOrganizations");
     const orgIds = await seedOrganizations(connection);
+
+    log("seedSignupExam");
+    await seedSignupExam(connection);
 
     log("seedUsers")
     await seedUsers(connection, orgIds);
@@ -90,6 +96,16 @@ const seedOrganizations = async (connection: TypeORMConnection) => {
         ]))
         .identifiers
         .map(x => x.id as number);
+}
+
+const seedSignupExam = async (connection: TypeORMConnection) => {
+
+    await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .insert({
+            title: "Signup exam",
+        });
 }
 
 const seedCourses = async (connection: TypeORMConnection) => {
@@ -312,6 +328,7 @@ const seedVideos = async (connection: TypeORMConnection) => {
 
 const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
 
+    log("seeding User 1...")
     const { invitationToken, user } = await createInvitedUserWithOrgAsync(
         {
             firstName: "Endre",
@@ -329,13 +346,27 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
         password: "admin",
         controlPassword: "admin"
     });
+
+    log("seeding User 2...")
+    const { invitationToken: it2, user: u2 } = await createInvitedUserWithOrgAsync(
+        {
+            firstName: "Elon",
+            lastName: "Musk",
+            jobTitle: "Tech God",
+            role: "admin" as RoleType,
+            email: "elon.musk@email.com",
+        },
+        orgIds[0],
+        false);
+
+    log("User 2 token: " + it2);
 }
 
 const seedSignupQuestions = async (connection: TypeORMConnection) => {
 
     const questions = [
         {
-            isSignupQuestion: true,
+            examId: 1,
             questionText: "Egy csapatban elvégzendő projekt esetén a következőt preferálom:",
             imageUrl: getAssetUrl("/application/kerdes1.png"),
             answers: [
@@ -348,7 +379,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
             ]
         },
         {
-            isSignupQuestion: true,
+            examId: 1,
             questionText: "Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást: ",
             imageUrl: getAssetUrl("/application/kerdes2.png"),
             answers: [
@@ -361,7 +392,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
             ]
         },
         {
-            isSignupQuestion: true,
+            examId: 1,
             questionText: "Jobban preferálom azt a munkában, mikor:",
             imageUrl: getAssetUrl("/application/kerdes3.png"),
             answers: [
@@ -374,7 +405,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
             ]
         },
         {
-            isSignupQuestion: true,
+            examId: 1,
             questionText: "Egy előadás esetén hasznosabb számomra, ha:",
             imageUrl: getAssetUrl("/application/kerdes4.png"),
             answers: [
@@ -387,7 +418,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
             ]
         },
         {
-            isSignupQuestion: true,
+            examId: 1,
             questionText: "Az érzéseimet, gondolataimat a következő módokon fejezem ki szívesebben:",
             imageUrl: getAssetUrl("/application/kerdes5.png"),
             answers: [
@@ -522,7 +553,7 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
             {
                 questionText: "Exam question 1",
 
-                examId: 1,
+                examId: 2,
                 answers: [
                     {
                         text: "Exam answer 1",
@@ -539,7 +570,7 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
             {
                 questionText: "Exam question 2",
 
-                examId: 1,
+                examId: 2,
                 showUpTimeSeconds: 250,
                 answers: [
                     {
@@ -557,7 +588,7 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
             {
                 questionText: "Exam question 3",
 
-                examId: 1,
+                examId: 2,
                 showUpTimeSeconds: 400,
                 answers: [
                     {
@@ -576,7 +607,7 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
             // EXCEL FINAL EXAM
             {
                 questionText: "Excel filal exam / question 1?",
-                examId: 4,
+                examId: 5,
                 answers: [
                     {
                         text: "Correct answer",

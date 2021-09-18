@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { disallowWindowNavigation, getEventValueCallback, hasValue, TypedError } from "../../../../frontendHelpers";
 import { AddFrame } from "../../../add_frame/AddFrame";
@@ -199,7 +199,7 @@ const AddUser = () => {
             name={"organizationId"}
             value={organizationId}
             optionValues={organizationOptions}
-            changeHandler={getEventValueCallback(setOrganizationId)} />}
+            onSelected={setOrganizationId} />}
 
         {/* job title */}
         <SingleInput
@@ -212,7 +212,7 @@ const AddUser = () => {
             name={"role"}
             value={role}
             optionValues={roles}
-            changeHandler={getEventValueCallback(setRole)} />
+            onSelected={setRole} />
 
         {/* submit button */}
         <Button

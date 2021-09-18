@@ -1,7 +1,7 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { Button } from "@material-ui/core";
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+import { Button } from "@mui/material";
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import React from 'react';
 import { Gradient } from 'react-gradient';
 import { NavLink } from "react-router-dom";
@@ -10,9 +10,10 @@ import { CourseShortDTO } from "../../../../models/shared_models/CourseShortDTO"
 import { httpPostAsync, usePostData } from "../../../../services/httpClient";
 import { useNavigation } from "../../../../services/navigatior";
 import classes from "./courseTile.module.scss";
-import DoneIcon from '@material-ui/icons/Done';
+import DoneIcon from '@mui/icons-material/Done';
 import { FlexImage } from "../../FlexImage";
 import { FlexFloat } from "../../FlexFloat";
+import { EpistoButton } from "../../EpistoButton";
 
 const CourseTile = (props: {
     course: CourseShortDTO,
@@ -68,15 +69,6 @@ const CourseTile = (props: {
                             background: "var(--mildGreen)"
                         }} />
                 </Flex>
-                {/* <DoneIcon style={{
-                    color: "var(--mildGreen)",
-                    height: "50px",
-                    width: "50px",
-                    margin: "4px",
-                    borderRadius: "50%",
-                    border: "4px solid var(--mildGreen)",
-                    background: "white"
-                }} /> */}
             </Flex>}
         </Box>
 
@@ -93,20 +85,19 @@ const CourseTile = (props: {
                 <Flex mt="10px">
 
                     {/* details */}
-                    <Button
+                    <EpistoButton
                         onClick={() => window.location.href = "https://epistogram.com/excel/"}
-                        style={{ flex: "1", margin: "3px" }}>
+                        style={{ flex: "1" }}>
                         Adatlap
-                    </Button>
+                    </EpistoButton>
 
                     {/* start course */}
-                    <Button
+                    <EpistoButton
                         onClick={playCourse}
-                        variant="contained"
-                        color="primary"
-                        style={{ flex: "1", color: "white", margin: "3px" }}>
+                        variant="colored"
+                        style={{ flex: "1" }}>
                         Indítás
-                    </Button>
+                    </EpistoButton>
                 </Flex>
             </Flex>
         </Box>

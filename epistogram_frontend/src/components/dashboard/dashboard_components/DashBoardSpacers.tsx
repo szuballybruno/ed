@@ -1,14 +1,16 @@
 import React, { ReactNode } from 'react';
 import classes from "./dashBoardSpacers.module.scss";
-import { Divider, Typography } from "@material-ui/core";
+import { Divider, Typography } from "@mui/material";
+import { Box, BoxProps, Flex, FlexProps } from '@chakra-ui/layout';
 
-export const DashoardLeftItemGroup = (props: { children: ReactNode, title: string }) => {
-    return (<>
-        <div className={classes.dashBoardLeftSpacerWrapper}>
-            <Typography variant={"overline"}>{props.title}</Typography>
-        </div>
+export const DashoardLeftItemGroup = (props: FlexProps & { title: string }) => {
+
+    const { title, ...boxProps } = props;
+
+    return (<Flex id="listItemGroup" direction="column" {...boxProps}>
+        <Typography variant={"overline"}>{props.title}</Typography>
         {props.children}
-    </>);
+    </Flex>);
 }
 
 export const DashboardVerticalDivider = () => {

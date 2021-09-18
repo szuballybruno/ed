@@ -28,7 +28,7 @@ export const answerQuestionAsync = async (
     answerSessionId: number,
     questionId: number,
     answerId: number,
-    noAnswer?: boolean) => {
+    noCorrectAnswer?: boolean) => {
 
     const repo = staticProvider
         .ormConnection
@@ -42,7 +42,7 @@ export const answerQuestionAsync = async (
     });
 
     // get correct answer
-    if (noAnswer)
+    if (noCorrectAnswer)
         return null;
 
     const correctAnswer = await staticProvider

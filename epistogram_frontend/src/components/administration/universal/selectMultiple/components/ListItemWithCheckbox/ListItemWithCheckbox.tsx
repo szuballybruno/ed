@@ -1,7 +1,7 @@
 import React from "react";
 import classes from "./listItemWithCheckBox.module.scss"
-import {Checkbox, ListItem} from "@material-ui/core";
-import {TextOrInput} from "../TextOrInput/TextOrInput";
+import { Checkbox, ListItem } from "@mui/material";
+import { TextOrInput } from "../TextOrInput/TextOrInput";
 
 export const ListItemWithCheckbox = (props: {
     key: any,
@@ -16,12 +16,12 @@ export const ListItemWithCheckbox = (props: {
     name: string
     value?: string
 }) => <ListItem className={classes.listItem}
-                key={props.key}
-                dense>
-    {props.showCheckBox && <Checkbox className={classes.checkbox}
-                                     checked={props.checked}
-                                     onChange={props.checkBoxOnChange}
-                                     name={props.name}
-                                     value={props.value}/>}
-    <TextOrInput {...props} />
-</ListItem>
+    key={props.key}
+    dense>
+        {props.showCheckBox && <Checkbox className={classes.checkbox}
+            checked={props.checked}
+            onChange={props.checkBoxOnChange}
+            name={props.name}
+            value={props.value} />}
+        <TextOrInput {...props} />
+    </ListItem>

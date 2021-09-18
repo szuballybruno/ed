@@ -1,7 +1,8 @@
 import { Answer } from "../models/entity/Answer";
-import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
+import { CourseGroup } from "../models/entity/CourseGroup";
 import { CourseOrganization } from "../models/entity/CourseOrganization";
+import { CourseTag } from "../models/entity/CourseTag";
 import { Exam } from "../models/entity/Exam";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
@@ -13,33 +14,26 @@ import { EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO"
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
-import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
+import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizationDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
+import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
+import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
+import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { CourseItemStateType, CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
-import { hasValue, navPropNotNull, throwNotImplemented, TypedError } from "../utilities/helpers";
-import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
-import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
-import { CourseGroup } from "../models/entity/CourseGroup";
-import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
-import { CourseTag } from "../models/entity/CourseTag";
-import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
-import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
-import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
-import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
-import { getMaxWatchedSeconds } from "./playerService";
-import { log } from "./misc/logger";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
+import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
+import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
+import { getCourseItemDescriptorCode } from "./encodeService";
+import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
 export const toUserDTO = (user: User) => {
 
