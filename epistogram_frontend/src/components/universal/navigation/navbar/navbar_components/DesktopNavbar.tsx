@@ -49,10 +49,11 @@ const DesktopNavbar = (props: {
             navigateToPlayer(currentCourseItemCode);
     }
     const homeUrl = "/";
-    const user = useContext(CurrentUserContext)!;
+    const user = useContext(CurrentUserContext);
 
     const ref = useRef<HTMLButtonElement>(null);
     const [popperOpen, setPopperOpen] = useState(false);
+    const { hideLinks } = props;
 
     return (
         <Flex align="center" width="100%" justify="space-between">
@@ -63,7 +64,7 @@ const DesktopNavbar = (props: {
             </NavLink>
 
             {/* menu items */}
-            <Flex display={props.hideLinks ? "none" : "flex"}>
+            <Flex display={hideLinks ? "none" : "flex"}>
                 {props
                     .menuItems
                     .middleMenu
@@ -80,7 +81,7 @@ const DesktopNavbar = (props: {
             </Flex>
 
             {/* content */}
-            <Flex pr="10px" align="center">
+            <Flex display={hideLinks ? "none" : undefined} pr="10px" align="center">
 
                 <Flex height="45px" pr="10px">
                     {/* show something new  */}
@@ -97,7 +98,7 @@ const DesktopNavbar = (props: {
                         </EpistoButton>}
                 </Flex>
 
-                <EpistoButton
+                {!!user && <EpistoButton
                     ref={ref}
                     variant="plain"
                     onClick={() => setPopperOpen(true)}
@@ -109,10 +110,10 @@ const DesktopNavbar = (props: {
                         margin: "0px",
                     }}>
                     <FlexImage
-                        className="whall"
+                        className="whall hoverShine"
                         overflow="hidden"
                         url={user.avatarUrl!}></FlexImage>
-                </EpistoButton>
+                </EpistoButton>}
             </Flex>
 
             {/* user menu */}

@@ -73,6 +73,14 @@ button {
   box-shadow: "0 0 8px #0000001f"
 }
 
+.hoverShine {
+  transition: 0.3s;
+}
+
+.hoverShine:hover {
+  filter: brightness(110%) saturate(90%);
+}
+
 :root {
   --intenseGreen: #61ca61;
   --intenseRed: #e73f3f;
