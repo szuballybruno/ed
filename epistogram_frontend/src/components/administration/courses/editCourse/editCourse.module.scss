@@ -28,6 +28,10 @@
   box-sizing: border-box;
 }
 
+.draggableListItem {
+  list-style: none;
+}
+
 .editDataRightWrapper {
   display: flex;
   flex-direction: column;

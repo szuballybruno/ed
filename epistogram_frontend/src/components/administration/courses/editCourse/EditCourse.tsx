@@ -1,4 +1,5 @@
 import { Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography } from "@mui/material";
+import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd"
 import React, { useEffect, useState } from 'react';
 import { HexColorPicker } from "react-colorful";
 import { useParams } from "react-router";
@@ -15,11 +16,12 @@ import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSe
 import SelectImage from "../../universal/selectImage/SelectImage";
 import { SelectMultiple } from "../../universal/selectMultiple/SelectMultiple";
 import classes from "./editCourse.module.scss";
+import {CourseItemDTO} from "../../../../models/shared_models/CourseItemDTO";
 
 /* TODO:
-*   - onClick for save changes button
-*   - editCourseDTO
-*   - fetch all the necessary data
+*   - Create a new CourseItemDTO for this page
+*   - Make the order state editable -> If the orderIndex is not equal with the sent array index
+*
 */
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
@@ -115,6 +117,28 @@ export const EditCourse = () => {
     useEffect(() => {
         !!course && setEditCourseState(course)
     }, [course])
+
+    const handleOnDragEnd = (dragParams) => {
+        const items = Array.from(courseItems)
+        const [reorderedItem] = items.splice(dragParams.source.index, 1)
+        items.splice(dragParams.destination.index, 0, reorderedItem)
+
+        setCourseItems(items)
+    }
+
+    const DraggableListItemWrapper = ({...props}) => <Draggable
+        key={props.key}
+        draggableId={props.draggableId}
+        index={props.index}>
+        {(provided) => (
+            <li className={classes.draggableListItem}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                ref={provided.innerRef}>
+                {props.children}
+            </li>
+            )}
+        </Draggable>
 
     return <AdminDashboardWrapper>
         <Divider style={{
@@ -294,38 +318,24 @@ export const EditCourse = () => {
 
         <div className={classes.editVideosWrapper}>
             <AdminDashboardSearch searchChangeHandler={() => { }} name={"searchData"} title={"A kurzus tartalma"} />
-            <DragDropContext onDragEnd={(result) => {
-                const items = Array.from(courseItems)
-                const [reorderedItem] = items.splice(result.source.index, 1)
-                items.splice(result.destination.index, 0, reorderedItem)
-
-                setCourseItems(items)
-            }}>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId={"courseItems"}>
                     {(provided) => (
                         <div {...provided.droppableProps} ref={provided.innerRef}>
-                            {courseItems.map((item, index) => <Draggable key={item.title} draggableId={item.title} index={index}>
-                                {(provided) => (
-                                    <li {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        ref={provided.innerRef}>
-                                        <AdministrationListItem
-
-                                            key={"adlistitem" + index}
-                                            title={item.title}
-                                            thumbnailUrl={item.thumbnailUrl}
-                                            chips={[
-                                                getChipWithLabel("fis" + index, "item.type", "category"),
-                                                getChipWithLabel("fos" + index, "item.length", "person"),
-                                                getChipWithLabel("fasz" + index, "item.isEssential", "video")
-                                            ]}
-                                            searchItemButtons={[]}
-                                        />
-                                    </li>
-                                    )}
-
-                                </Draggable> )
-                            }{provided.placeholder}
+                            {courseItems.map((item, index) => <DraggableListItemWrapper key={item.title} draggableId={item.title} index={index}>
+                                    <AdministrationListItem
+                                        key={"adlistitem" + index}
+                                        title={item.title}
+                                        thumbnailUrl={item.thumbnailUrl}
+                                        chips={[]/*[
+                                            getChipWithLabel("a" + index, "item.type", "category"),
+                                            getChipWithLabel("b" + index, "item.length", "person"),
+                                            getChipWithLabel("c" + index, "item.isEssential", "video")
+                                        ]*/}
+                                        searchItemButtons={[]}
+                                    />
+                                </DraggableListItemWrapper>
+                            )}{provided.placeholder}
                         </div>
 
                     )}
