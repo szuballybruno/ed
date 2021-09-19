@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./selectFromArray.module.scss";
-import {FormControl, Select, Typography} from "@material-ui/core";
+import { FormControl, Select, Typography } from "@mui/material";
 
 export type OptionType = {
     optionValue: string,
@@ -13,7 +13,7 @@ const SelectFromArray = (props: {
     value: string,
     showNull?: boolean,
     optionValues: OptionType[]
-    changeHandler?: (e: React.ChangeEvent<{ value: unknown, name?: string }>) => void
+    onSelected?: (value: string) => void
 }) => {
     return <div className={classes.dataRow}>
         <div>
@@ -21,9 +21,9 @@ const SelectFromArray = (props: {
         </div>
         <FormControl variant={"outlined"} className={classes.formControl} size={"small"}>
             <Select native
-                    name={props.name}
-                    onChange={props.changeHandler}
-                    value={props.value}>
+                name={props.name}
+                onChange={(x) => props.onSelected && props.onSelected(x.target.value)}
+                value={props.value}>
                 {props.showNull ? <option value={""}>Kérem válasszon...</option> : null}
                 {
                     props.optionValues.map((option) => {

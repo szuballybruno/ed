@@ -1,5 +1,5 @@
-import { Button } from "@material-ui/core";
-import { SettingsApplicationsSharp } from "@material-ui/icons";
+import { Button } from "@mui/material";
+import { SettingsApplicationsSharp } from "@mui/icons-material";
 import React, { useContext, useState } from 'react';
 import { Redirect } from "react-router";
 import { getEventValueCallback, TypedError } from "../../frontendHelpers";

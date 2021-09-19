@@ -1,12 +1,12 @@
 import { User } from "../models/entity/User";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { UserVideoCompletedView } from "../models/entity/views/UserVideoCompletedView";
-import { UserVideoMaxWatchedSecondsView } from "../models/entity/views/UserVideoMaxWatchedSecondsView";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
+import { VideoCompletedView } from "../models/views/VideoCompletedView";
+import { VideoProgressView } from "../models/views/VideoProgressView";
 import { staticProvider } from "../staticProvider";
-import { getCurrentCourseItemDescriptor, getExamDTOAsync, getUserCourseBridge } from "./courseService";
+import { getCourseItemByCodeAsync, getCourseItemsAsync, getCurrentCourseItemDescriptor, getExamDTOAsync, getUserCourseBridgeOrFailAsync } from "./courseService";
 import { readCourseItemDescriptorCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
 import { createAnswerSessionAsync } from "./questionAnswerService";
@@ -18,26 +18,28 @@ export const getPlayerDataAsync = async (
     userId: number,
     descriptorCode: string) => {
 
-    const { itemId: courseItemId, itemType: courseItemType } = readCourseItemDescriptorCode(descriptorCode);
+    // get course id
+    const courseId = (await getCourseItemByCodeAsync(descriptorCode)).courseId;
 
-    const videoDTO = courseItemType == "video" ? await getVideoDTOAsync(userId, courseItemId) : null;
-    const examDTO = courseItemType == "exam" ? await getExamDTOAsync(userId, courseItemId) : null;
-    const courseId = videoDTO?.courseId || examDTO?.courseId;
+    // course items 
+    const courseItems = await getCourseItemsAsync(userId, courseId, descriptorCode);
 
-    // set current course item
-    await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .save({
-            id: userId,
-            currentVideoId: videoDTO?.id,
-            currentExamId: examDTO?.id
-        });
+    const currentCourseItem = courseItems
+        .single(x => x.state === "current");
+
+    const { itemId, itemType } = readCourseItemDescriptorCode(currentCourseItem.descriptorCode);
+    const videoDTO = itemType == "video" ? await getVideoDTOAsync(userId, itemId) : null;
+    const examDTO = itemType == "exam" ? await getExamDTOAsync(userId, itemId) : null;
+
+    // set current items 
+    setUserCurrentCourseDataAsync(
+        userId,
+        itemType === "video" ? itemId : null,
+        itemType === "exam" ? itemId : null,
+        courseId);
 
     // get user course bridge
-    const userCourseBridge = await getUserCourseBridge(userId, courseId!);
-    if (!userCourseBridge)
-        throw new Error("User course bridge not found, maybe the course is not yet started!");
+    const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, courseId);
 
     // get new answer session
     const answerSessionId = await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
@@ -47,8 +49,30 @@ export const getPlayerDataAsync = async (
         exam: examDTO,
         answerSessionId: answerSessionId,
         mode: userCourseBridge.courseMode,
-        courseId: courseId!
+        courseId: courseId!,
+        courseItemCode: currentCourseItem.descriptorCode,
+        courseItems: courseItems
     } as PlayerDataDTO;
+}
+
+const setUserCurrentCourseDataAsync = async (
+    userId: number,
+    videoId: number | null,
+    examId: number | null,
+    courseId: number | null) => {
+
+    // set current course item
+    const setCurrentItemData = {
+        id: userId,
+        currentVideoId: videoId,
+        currentExamId: examId,
+        currentCourseId: courseId
+    } as User;
+
+    await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .save(setCurrentItemData);
 }
 
 export const getVideoDTOAsync = async (userId: number, videoId: number) => {
@@ -113,7 +137,7 @@ export const getMaxWatchedSeconds = async (userId: number, videoId: number) => {
 
     const ads = await staticProvider
         .ormConnection
-        .getRepository(UserVideoMaxWatchedSecondsView)
+        .getRepository(VideoProgressView)
         .findOneOrFail({
             where: {
                 userId: userId,
@@ -128,7 +152,7 @@ export const getVideoIsCompletedState = async (userId: number, videoId: number) 
 
     return await staticProvider
         .ormConnection
-        .getRepository(UserVideoCompletedView)
+        .getRepository(VideoCompletedView)
         .findOne({
             where: {
                 userId: userId,

@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Divider, Typography } from "@material-ui/core";
+import { Divider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../frontendHelpers";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
@@ -59,7 +59,8 @@ export const WatchView = (props: {
     const stillWatchingDialogDelaySecs = 60 * 2; // 2 mins
 
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
-    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds);
+    const limitSeek = courseMode === "beginner";
+    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek);
     const { playedSeconds, videoLength, isSeeking, isPlaying } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription description={video!.description} />;

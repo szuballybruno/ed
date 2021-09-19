@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
-import { Fab } from "@material-ui/core";
-import { Add } from "@material-ui/icons";
+import { Fab } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { AxiosResponse } from "axios";
 import React, { useEffect } from 'react';
 import { Route, Switch } from "react-router-dom";

@@ -1,14 +1,20 @@
-import { ViewColumn, ViewEntity } from "typeorm";
-
-@ViewEntity({
-    expression: `
 SELECT 
 	"subquery"."userId",
 	"subquery"."examId",
-	SUM("subquery"."isCompleteSession") AS "isCompletedSession"
+	"subquery"."courseId",
+	"subquery"."orderIndex",
+	"subquery"."isFinalExam",
+	CAST(CASE WHEN 
+		SUM("subquery"."isCompleteSession") > 0
+		THEN 1 
+		ELSE 0 
+	END AS boolean) AS "isCompleted"
 FROM (
 	SELECT 
 		"exam"."id" AS "examId",
+		"exam"."courseId" AS "courseId",
+		"exam"."orderIndex" AS "orderIndex",
+		"exam"."isFinalExam" AS "isFinalExam",
 		"answer_session"."id" AS "answerSessionId",
 		"user"."id" AS "userId",
 		COUNT ("answer"."isCorrect") AS "correctAnswerCount",
@@ -39,23 +45,16 @@ FROM (
 
 	GROUP BY
 		"exam"."id",
+		"exam"."courseId",
+		"exam"."orderIndex",
 		"answer_session"."id",
+		"exam"."isFinalExam",
 		"user"."id"
 ) AS "subquery"
 
 GROUP BY 
 	"subquery"."examId", 	
-	"subquery"."userId" 
-`
-})
-export class UserExamCompletedView {
-
-    @ViewColumn()
-    examId: number;
-
-    @ViewColumn()
-    userId: number;
-
-    @ViewColumn()
-    isCompletedSession: boolean;
-}
+	"subquery"."userId",
+	"subquery"."courseId",
+	"subquery"."isFinalExam",
+	"subquery"."orderIndex" 

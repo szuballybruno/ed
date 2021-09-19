@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from "./adminDashboardMenuItem.module.scss";
-import {Typography} from "@material-ui/core";
+import { Typography } from "@mui/material";
 import {
     BarChart, Business,
     ChromeReaderMode,
@@ -8,10 +8,10 @@ import {
     Person,
     Subscriptions,
     ThumbsUpDown
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 import { NavLink } from 'react-router-dom';
 
-const AdminDashboardMenuItem = (props: {title: string, index: number, url: string}) => {
+const AdminDashboardMenuItem = (props: { title: string, index: number, url: string }) => {
     const icons = {
         0: <BarChart color={"secondary"} />,
         1: <Person color={"secondary"} />,
@@ -23,9 +23,9 @@ const AdminDashboardMenuItem = (props: {title: string, index: number, url: strin
     }
 
     return <NavLink className={classes.adminDashboardMenuItem}
-                    to={props.url}
-                    activeClassName={classes.adminDashboardMenuItemSelected}
-                    key={props.index}>
+        to={props.url}
+        activeClassName={classes.adminDashboardMenuItemSelected}
+        key={props.index}>
         {icons[props.index]}
         <Typography color={"secondary"} className={classes.adminDashboardMenuItemText} variant={"button"}>{props.title}</Typography>
     </NavLink>

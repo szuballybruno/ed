@@ -5,7 +5,7 @@ import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemDTOsAction } from './api/dataActions';
+import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemsAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
@@ -20,6 +20,7 @@ import './utilities/jsExtensions';
 import { answerVideoQuestionAction } from './api/questionActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
 import { setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { deleteUserAction } from './api/userAdministartionActions';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -106,12 +107,13 @@ const initializeAsync = async () => {
     // player 
     expressServer.post('/player/get-player-data', authMiddleware, getPlayerDataAction);
     expressServer.post('/player/save-video-playback-sample', authMiddleware, saveVideoPlaybackSampleAction);
-    expressServer.post('/player/get-course-items', authMiddleware, getCourseItemDTOsAction);
+    expressServer.post('/player/get-course-items', authMiddleware, getCourseItemsAction);
 
     // users
     expressServer.get("/users/get-user-administartion-user-list", authMiddleware, getUserAdministrationUserListAction);
     expressServer.post("/users/create-invited-user", authMiddleware, getAsyncActionHandler(createInvitedUserAction));
     expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
+    expressServer.post("/users/delete-user", authMiddleware, deleteUserAction);
 
     // course 
     expressServer.post("/course/start-course", authMiddleware, startCourseAction);

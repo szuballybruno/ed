@@ -1,6 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { StylesProvider } from "@material-ui/core";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -18,17 +17,15 @@ ReactDOM.render(
     <BrowserRouter getUserConfirmation={(msg, callback) => { console.log("What??") }}>
         <QueryClientProvider client={queryClient}>
             <ChakraProvider>
-                <StylesProvider injectFirst>
-                    <ThemeProvider theme={theme}>
-                        <AuthenticationFrame>
-                            <DialogFrame>
-                                <NotificationsFrame>
-                                    <MainRouting />
-                                </NotificationsFrame>
-                            </DialogFrame>
-                        </AuthenticationFrame>
-                    </ThemeProvider>
-                </StylesProvider>
+                <ThemeProvider theme={theme}>
+                    <AuthenticationFrame>
+                        <DialogFrame>
+                            <NotificationsFrame>
+                                <MainRouting />
+                            </NotificationsFrame>
+                        </DialogFrame>
+                    </AuthenticationFrame>
+                </ThemeProvider>
             </ChakraProvider>
         </QueryClientProvider>
     </BrowserRouter>,

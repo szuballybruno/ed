@@ -2,16 +2,14 @@ import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { Video } from "../models/entity/Video";
+import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemType, CourseModeType } from "../models/shared_models/types/sharedTypes";
-import { VideoWatchedPercent } from "../models/VideoWatchedPercent";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
-import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
-import { toCourseItemDTOs, toExamDTO } from "./mappings";
+import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO, readCourseItemDescriptorCode } from "./encodeService";
+import { toCourseItemDTO, toCourseItemDTOs, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
-import { getVideoWatchedPercentAsync } from "./videoPlaybackSampleService";
 import { getVideoByIdAsync } from "./videoService";
 
 export const getCourseItemsDescriptorCodesAsync = async (userId: number, courseId: number) => {
@@ -45,38 +43,20 @@ export const getCurrentCourseItemDescriptorCodeAsync = async (userId: number) =>
     return getCourseItemDescriptorCodeFromDTO(dsc);
 }
 
-export const getCourseItemDTOsAsync = async (userId: number) => {
+export const getCourseItemsAsync = async (userId: number, courseId: number, currentItemDescriptorCode: string) => {
 
-    const user = await getUserById(userId);
-    const currentCourseItemDesc = getCurrentCourseItemDescriptor(user);
-    if (!currentCourseItemDesc)
-        return [];
-
-    const currentCourseItem = await getCourseItemAsync(currentCourseItemDesc!);
-
-    const course = await staticProvider
+    const courseItems = await staticProvider
         .ormConnection
-        .getRepository(Course)
-        .createQueryBuilder("c")
-        .where("c.id = :courseId", { courseId: currentCourseItem.courseId })
+        .getRepository(CourseItemStateView)
+        .createQueryBuilder("cisv")
+        .leftJoinAndSelect("cisv.exam", "e")
+        .leftJoinAndSelect("cisv.video", "v")
+        .where("cisv.courseId = :courseId", { courseId })
+        .andWhere("cisv.userId = :userId", { userId })
+        .orderBy("cisv.orderIndex")
+        .getMany();
 
-        // videos
-        .leftJoinAndSelect("c.videos", "v")
-        .leftJoinAndSelect("v.videoPlaybackDatas", "vpd")
-        .leftJoinAndSelect("v.questions", "vq")
-        .leftJoinAndSelect("v.answerSessions", "vas")
-        .leftJoinAndSelect("vas.questionAnswers", "vasqa")
-        .leftJoinAndSelect("vasqa.answer", "vasqaa")
-
-        // exams 
-        .leftJoinAndSelect("c.exams", "e")
-        .leftJoinAndSelect("e.questions", "eq")
-        .leftJoinAndSelect("e.answerSessions", "eas")
-        .leftJoinAndSelect("eas.questionAnswers", "easqa")
-        .leftJoinAndSelect("easqa.answer", "easqaa")
-        .getOneOrFail();
-
-    return toCourseItemDTOs(course, currentCourseItemDesc!);
+    return toCourseItemDTOs(courseItems, currentItemDescriptorCode);
 }
 
 export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {
@@ -97,6 +77,13 @@ export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) =>
 
         return exam;
     }
+}
+
+export const getCourseItemByCodeAsync = async (descriptorCode: string) => {
+
+    const dto = readCourseItemDescriptorCode(descriptorCode);
+
+    return getCourseItemAsync(dto);
 }
 
 export const getCurrentCourseItemDescriptor = (user: User) => {
@@ -132,7 +119,7 @@ export const getExamDTOAsync = async (userId: number, examId: number) => {
     return toExamDTO(exam);
 }
 
-export const getUserCourseBridge = async (userId: number, courseId: number) => {
+export const getUserCourseBridgeAsync = async (userId: number, courseId: number) => {
 
     const userCourseBridge = await staticProvider
         .ormConnection
@@ -147,9 +134,18 @@ export const getUserCourseBridge = async (userId: number, courseId: number) => {
     return userCourseBridge;
 }
 
+export const getUserCourseBridgeOrFailAsync = async (userId: number, courseId: number) => {
+
+    const userCourseBridge = await getUserCourseBridgeAsync(userId, courseId);
+    if (!userCourseBridge)
+        throw new Error("User course bridge not found, maybe the course is not yet started!");
+
+    return userCourseBridge;
+}
+
 export const startCourseAsync = async (userId: number, courseId: number) => {
 
-    const userCourseBridge = await getUserCourseBridge(userId, courseId);
+    const userCourseBridge = await getUserCourseBridgeAsync(userId, courseId);
     if (!userCourseBridge)
         await staticProvider
             .ormConnection
@@ -162,7 +158,7 @@ export const startCourseAsync = async (userId: number, courseId: number) => {
 
 export const setCourseTypeAsync = async (userId: number, courseId: number, mode: CourseModeType) => {
 
-    const userCourseBridge = await getUserCourseBridge(userId, courseId);
+    const userCourseBridge = await getUserCourseBridgeAsync(userId, courseId);
     if (!userCourseBridge)
         throw new Error("User course bridge not found!");
 

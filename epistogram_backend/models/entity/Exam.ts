@@ -19,11 +19,14 @@ export class Exam {
     @Column({ nullable: true })
     description: string;
 
-    @Column()
+    @Column({ nullable: true })
     thumbnailUrl: string;
 
-    @Column()
+    @Column({ nullable: true })
     orderIndex: number;
+
+    @Column({ default: false })
+    isFinalExam: boolean;
 
     // users
     @OneToMany(type => User, user => user.currentExam)
@@ -31,12 +34,12 @@ export class Exam {
     users: User[];
 
     // course
-    @Column()
+    @Column({ nullable: true })
     courseId: number;
 
     @ManyToOne(type => Course, course => course.exams)
     @JoinColumn({ name: "courseId" })
-    course: Course
+    course: Course | null
 
     // questions 
     @OneToMany(_ => Question, q => q.exam)

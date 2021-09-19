@@ -1,4 +1,4 @@
-import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from "@material-ui/icons";
+import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from "@mui/icons-material";
 import { useState } from "react";
 import { hasValue } from "../../frontendHelpers";
 import { QuestionnaierAnswer, QuestionnaireLayout } from "../universal/QuestionnaireLayout";

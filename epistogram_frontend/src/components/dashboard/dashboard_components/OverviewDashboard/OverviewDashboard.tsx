@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/layout";
 import {
     Button, Grid,
     List,
@@ -6,60 +7,26 @@ import {
     ListItemText,
     Paper,
     Typography
-} from "@material-ui/core";
-import { Create, MenuBook, PlayCircleFilled } from "@material-ui/icons";
+} from "@mui/material";
+import { Create, MenuBook, PlayCircleFilled } from "@mui/icons-material";
 import React, { ReactNode } from 'react';
 import { Line } from "react-chartjs-2";
 import { NavLink } from "react-router-dom";
 import { CurrentTasksDTO } from "../../../../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../../../../models/shared_models/OverviewPageDTO";
-import { QuestionDTO } from "../../../../models/shared_models/QuestionDTO";
 import { TaskObjectiveType } from "../../../../models/shared_models/types/sharedTypes";
 import { VideoQuestionnaire } from "../../../universal/VideoQuestionnaire";
 import classes from "./overviewDashboard.module.scss";
+import { EpistoButton } from "../../../universal/EpistoButton";
 
 const AssistantGridItem = (props: { children: ReactNode, title: string, xs: any }) => {
 
-    return <Grid item xs={props.xs} className={classes.testItemWrapper}>
+    return <Box flexGrow={1} p="10px">
         <Typography variant={"overline"} className={classes.smallBlockTitle}>{props.title}</Typography>
         <Paper className={classes.testKnowledgePaper}>
             {props.children}
         </Paper>
-    </Grid>
-}
-
-const TestYourKnowledge = (props: { dto: QuestionDTO }) => {
-
-    const dto = props.dto;
-
-    return (
-        <div style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column" }}>
-            <div className={classes.nmiModalText}>
-                <Typography variant={"button"}>{dto.questionText}</Typography>
-            </div>
-            <div className={classes.nmiAnswerWrapper}>
-                <div className={classes.nmiAnswerRow}>
-                    <Button variant={"contained"} className={classes.nmiAnswerColumn}
-                        onClick={() => { }}>
-                        {dto.answers[0].answerText}
-                    </Button>
-                    <Button variant={"contained"} className={classes.nmiAnswerColumn}
-                        onClick={() => { }}>
-                        {dto.answers[1].answerText}
-                    </Button>
-                </div>
-                <div className={classes.nmiAnswerRow}>
-                    <Button variant={"contained"} className={classes.nmiAnswerColumn}
-                        onClick={() => { }}>
-                        {dto.answers[2].answerText}
-                    </Button>
-                    <Button variant={"contained"} className={classes.nmiAnswerColumn}
-                        onClick={() => { }}>
-                        {dto.answers[3].answerText}
-                    </Button>
-                </div>
-            </div>
-        </div>);
+    </Box>
 }
 
 const DevelopmentLineChart = (props: { data: any }) => {
@@ -115,9 +82,10 @@ const TasksView = (props: { currentTasks: CurrentTasksDTO }) => {
             })}
 
         <NavLink className={classes.allTasksButtonLink} to={"/profilom/tanulas"}>
-            <Button variant={"outlined"}
-                className={classes.allTasksButton}
-                size={"small"}>Összes feladatom</Button>
+            <EpistoButton
+                variant="outlined">
+                Összes feladatom
+            </EpistoButton>
         </NavLink>
     </List>
 }

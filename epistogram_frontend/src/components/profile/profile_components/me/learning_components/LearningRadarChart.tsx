@@ -1,7 +1,7 @@
-import {Radar} from "react-chartjs-2";
+import { Radar } from "react-chartjs-2";
 import React from "react";
 import classes from "./learningRadarChart.module.scss"
-import {Typography} from "@material-ui/core";
+import { Typography } from "@mui/material";
 
 export const LearningRadarChart = () => {
     return <div className={classes.chartWrapper}>
@@ -32,7 +32,7 @@ export const LearningRadarChart = () => {
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
                         pointHoverBorderColor: 'rgb(54, 162, 235)',
-                        data: [57,26,31,12,34, 83],
+                        data: [57, 26, 31, 12, 34, 83],
                     }, {
                         label: 'Dashed',
                         fill: true,
@@ -46,7 +46,7 @@ export const LearningRadarChart = () => {
 
                     }
                 ]
-            }} /*type={"radar"}*//>
+            }} /*type={"radar"}*/ />
         </div>
 
     </div>

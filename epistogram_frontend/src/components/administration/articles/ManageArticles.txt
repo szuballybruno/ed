@@ -8,8 +8,8 @@ import { AdminDashboardWrapper } from "../universal/adminDashboardWrapper/AdminD
 import { AdminDashboardList } from "../universal/adminDashboardList/AdminDashboardList";
 import { AxiosResponse } from "axios";
 import { backendUrl } from '../../../Environemnt';
-import {Fab} from "@material-ui/core";
-import {Add} from "@material-ui/icons";
+import {Fab} from "@mui/material";
+import {Add} from "@mui/icons-material";
 import {AddArticle} from "./articles_components/AddArticle";
 
 export const ManageArticles: React.FunctionComponent = () => {

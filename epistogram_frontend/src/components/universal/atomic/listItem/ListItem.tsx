@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './listItem.module.scss'
 import { NavLink } from "react-router-dom";
 import DynamicFont from 'react-dynamic-font';
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 
 const LinkSelector = (props: {
     to?: string,

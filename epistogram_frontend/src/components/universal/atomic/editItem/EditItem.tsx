@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './editItem.module.scss'
-import {TextField, Typography} from "@material-ui/core";
+import { TextField, Typography } from "@mui/material";
 
 const EditItem = (props: {
     title: string

@@ -1,10 +1,7 @@
-import { ViewColumn, ViewEntity } from "typeorm";
-
-@ViewEntity({
-	name: "user_video_completed_view",
-	expression: `
-	SELECT 
+SELECT 
 	"video"."id" AS "videoId",
+	"video"."courseId" AS "courseId",
+	"video"."orderIndex" AS "orderIndex",
 	"user"."id" AS "userId",
 	"view"."isAnswered",
 	"vpd"."watchedPercent",
@@ -100,25 +97,3 @@ ON "view"."userId" = "user"."id"
 LEFT JOIN public."video_playback_data" AS "vpd"
 ON "vpd"."userId" = "user"."id" 
 	AND "vpd"."videoId" = "video"."id" 
-`
-})
-export class UserVideoCompletedView {
-
-	@ViewColumn()
-	videoId: number;
-
-	@ViewColumn()
-	userId: number;
-
-	@ViewColumn()
-	isAnswered: boolean;
-
-	@ViewColumn()
-	watchedPercent: number;
-
-	@ViewColumn()
-	isWatched: boolean;
-
-	@ViewColumn()
-	isComplete: boolean;
-}

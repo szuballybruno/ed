@@ -8,4 +8,5 @@ export type CourseShortDTO = {
     title: string;
     teacherName: string;
     category: string;
+    isComplete: boolean;
 }

@@ -1,11 +1,11 @@
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { EpistoButton } from "../../../EpistoButton";
 
 const NavbarButton = (props: {
     className?: string,
     activeClassName?: string,
-    key: number,
     index: number,
     menuName?: string,
     menuPath: string | null
@@ -20,28 +20,10 @@ const NavbarButton = (props: {
             activeClassName={props.activeClassName}
             to={props.menuPath}
             onClick={() => {
-                // updateActivity(
-                //     "",
-                //     "openPage",
-                //     window.location.href,
-                //     "NavbarButton-Navlink-OpenPage",
-                //     props.menuName as string,
-                //     "generalPassive",
-                //     "A felhasználó megnyit egy új oldalt",
-                //     true,
-                //     undefined,
-                //     undefined,
-                //     undefined,
-                //     undefined,
-                //     undefined,
-                //     undefined,
-                //     currentOrigin + props.menuPath
-                // )
-                // app.hamburgerButtonState.set(false)
             }}>
-            <Button className={props.className} >
+            <EpistoButton variant="plain">
                 {props.menuName}
-            </Button>
+            </EpistoButton>
         </NavLink> :
 
         <Button

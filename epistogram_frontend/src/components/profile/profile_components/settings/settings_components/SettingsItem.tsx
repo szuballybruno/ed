@@ -1,9 +1,9 @@
 import React from 'react';
 import classes from "./settingsItem.module.scss";
-import {NavLink} from "react-router-dom";
-import {Switch} from "@material-ui/core";
+import { NavLink } from "react-router-dom";
+import { Switch } from "@mui/material";
 
-const SettingsItem = ({className, link, linkTitle, onClick, switchOnChange, switchProperty, switchState, title, value}: {
+const SettingsItem = ({ className, link, linkTitle, onClick, switchOnChange, switchProperty, switchState, title, value }: {
     className?: string,
     link?: string,
     linkTitle?: string,
@@ -19,7 +19,7 @@ const SettingsItem = ({className, link, linkTitle, onClick, switchOnChange, swit
         <div className={`${classes.viewSettingsItem} ${className}`}>
             {title ? <div className={classes.viewSettingsItemTitleWrapper}>
                 <label>{title}</label>
-            </div> : <div className={classes.viewSettingsItemWrapper}/>}
+            </div> : <div className={classes.viewSettingsItemWrapper} />}
             {link ? <NavLink className={classes.settingsItemButton} to={link}>{linkTitle}</NavLink> : null}
             {onClick ? <button className={classes.settingsItemButton} onClick={onClick}>{linkTitle}</button> : null}
             {switchProperty && switchOnChange ? <Switch
@@ -28,7 +28,7 @@ const SettingsItem = ({className, link, linkTitle, onClick, switchOnChange, swit
                     switchOnChange(e.currentTarget.name, e.currentTarget.checked)
                 }}
                 name="checkedA"
-                inputProps={{'aria-label': 'secondary checkbox'}}
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
             /> : null}
             {value ? <div className={classes.valueWrapper}>
                 <span>{value}</span>

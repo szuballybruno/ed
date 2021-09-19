@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from "./selectMultiple.module.scss";
-import {Fab, FormControl, TextField, Typography} from "@material-ui/core";
-import {Add} from "@material-ui/icons";
+import { Fab, FormControl, TextField, Typography } from "@mui/material";
+import { Add } from "@mui/icons-material";
 
 export const SelectMultiple = (props: {
     children: React.ReactNode
@@ -12,7 +12,7 @@ export const SelectMultiple = (props: {
 
     const showAdd = !!props.onClick
 
-    const searchOnChange = () => {}
+    const searchOnChange = () => { }
 
     return <div className={classes.formWrapper}>
         <div>
@@ -21,14 +21,14 @@ export const SelectMultiple = (props: {
 
         <TextField className={classes.filterInput} size={"small"} placeholder={"Szűrés"} variant={"outlined"} onChange={searchOnChange} />
 
-        <FormControl  component="fieldset" className={classes.formControl}>
+        <FormControl component="fieldset" className={classes.formControl}>
             {props.children}
         </FormControl>
 
         {showAdd && <Fab color="primary"
-                               aria-label="add"
-                               onClick={props.onClick}
-                               style={{position: "absolute", bottom: 10, right: 25}}>
+            aria-label="add"
+            onClick={props.onClick}
+            style={{ position: "absolute", bottom: 10, right: 25 }}>
             <Add />
         </Fab>}
     </div>

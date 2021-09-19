@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Button, Divider, Typography } from "@material-ui/core";
+import { Button, Divider, Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { hasValue, isString } from "../../frontendHelpers";
 import { FlexImage } from "../universal/FlexImage";

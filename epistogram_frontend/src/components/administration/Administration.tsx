@@ -1,5 +1,5 @@
-import { Chip, Divider, Typography } from "@material-ui/core";
-import React, {useContext} from 'react';
+import { Chip, Divider, Typography } from "@mui/material";
+import React, { useContext } from 'react';
 import { withRouter } from "react-router-dom";
 import { globalConfig } from "../../configuration/config";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
@@ -9,7 +9,7 @@ import Navbar from "../universal/navigation/navbar/Navbar";
 import { AdminAddHeader } from "./universal/adminAddHeader/AdminAddHeader";
 import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
 import classes from './users/userList/administration.module.scss';
-import {CurrentUserContext} from "../../HOC/AuthenticationFrame";
+import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
 
 const Administration = (props: { match: { url: string; } }) => {
 

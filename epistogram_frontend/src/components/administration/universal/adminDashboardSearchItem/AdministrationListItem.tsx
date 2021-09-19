@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './adminDashboardSearchItem.module.scss';
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@mui/material";
 
 export type DashboardSearchItemAction = {
     to?: string,
@@ -37,38 +37,38 @@ export const AdministrationListItem = (props: {
         key={props.key}
         spacing={0}
         direction={"row"}
-        justify={"center"}
+        justifyContent={"center"}
         alignContent={"center"}
         xs={12}
         wrap={"nowrap"}>
 
-            {/* Display image or nothing */}
-            {showRectangleImageOrNull(props.thumbnailUrl)}
-            {showRoundedImageOrNull(props.profileImageUrl ? props.profileImageUrl : "")}
+        {/* Display image or nothing */}
+        {showRectangleImageOrNull(props.thumbnailUrl)}
+        {showRoundedImageOrNull(props.profileImageUrl ? props.profileImageUrl : "")}
 
-            {/* Display title and info in chips */}
-            <Grid lg={9} md={10} xs={10} item>
-                <div className={classes.searchItemInfoTopWrapper}>
-                    <Typography variant={"h5"} className={classes.itemMainTitle}>
-                        {props.title}
-                    </Typography>
-                </div>
-                <div className={classes.searchItemInfoBottomWrapper}>
-                    {
-                        props.chips.map((chip, index) => {
-                            return chip
-                        })
-                    }
-                </div>
-            </Grid>
-
-            {/* Show buttons to make further actions */}
-            <Grid xs={1} item className={classes.searchItemButtons}>
+        {/* Display title and info in chips */}
+        <Grid lg={9} md={10} xs={10} item>
+            <div className={classes.searchItemInfoTopWrapper}>
+                <Typography variant={"h5"} className={classes.itemMainTitle}>
+                    {props.title}
+                </Typography>
+            </div>
+            <div className={classes.searchItemInfoBottomWrapper}>
                 {
-                    props.searchItemButtons.map((action, index) => {
-                        return action
+                    props.chips.map((chip, index) => {
+                        return chip
                     })
                 }
-            </Grid>
+            </div>
         </Grid>
+
+        {/* Show buttons to make further actions */}
+        <Grid xs={1} item className={classes.searchItemButtons}>
+            {
+                props.searchItemButtons.map((action, index) => {
+                    return action
+                })
+            }
+        </Grid>
+    </Grid>
 };

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { DialogFrame } from "../../../../HOC/DialogFrame";
 import { AddFrame } from "../../../add_frame/AddFrame";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import classes from "../../users/addUser/addUser.module.scss";
 import instance from "../../../../services/axiosInstance";
 import { Redirect, useHistory } from "react-router-dom";

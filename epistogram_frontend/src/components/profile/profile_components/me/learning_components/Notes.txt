@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import classes from './notes.module.scss'
 import ListItem from "../../../../universal/atomic/listItem/ListItem";
-import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
-import {Button, Fab, Typography} from "@material-ui/core";
-import {Add} from "@material-ui/icons";
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import {Button, Fab, Typography} from "@mui/material";
+import {Add} from "@mui/icons-material";
 import {useState} from "@hookstate/core";
 import userDetailsState from "../../../../../store/user/userSideState";
 import applicationRunningState from "../../../../../store/application/applicationRunningState";

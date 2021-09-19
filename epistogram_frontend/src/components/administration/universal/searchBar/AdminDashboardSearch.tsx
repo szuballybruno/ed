@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from "./adminDashboardSearch.module.scss";
-import { Grid, TextField, Typography } from "@material-ui/core";
+import { Grid, TextField, Typography } from "@mui/material";
 
 export const AdminDashboardSearch = (props: {
     searchChangeHandler: (name: string, value: string) => void,
@@ -9,7 +9,7 @@ export const AdminDashboardSearch = (props: {
     className?: string
 }) => {
     return <Grid container className={`${classes.manageUsersSearchWrapper} ${props.className}`}>
-        {props.title && <Grid container direction={"row"} justify={"flex-start"}>
+        {props.title && <Grid container direction={"row"} justifyContent={"flex-start"}>
             <Typography variant={"overline"}>{props.title}</Typography>
         </Grid>}
         <TextField variant={"outlined"}

@@ -1,12 +1,12 @@
 import React from 'react';
 import classes from './achievements.module.scss'
 import Cookies from "universal-cookie";
-import {globalConfig} from "../../../../../configuration/config";
-import {Typography} from "@material-ui/core";
+import { globalConfig } from "../../../../../configuration/config";
+import { Typography } from "@mui/material";
 
 const Achievements = () => {
     const cookies = new Cookies();
-    const AchievementItem = (props: {itemUrl: string, itemTitle: string}) => {
+    const AchievementItem = (props: { itemUrl: string, itemTitle: string }) => {
         return <div className={classes.achievementItem}>
             <div className={classes.achievementItemInnerContainer}>
                 <img alt={""} src={props.itemUrl} />
@@ -17,8 +17,8 @@ const Achievements = () => {
     return (
         <div className={classes.achievementsContainer}>
             <div className={classes.achievementsInnerContainer}>
-                <AchievementItem itemUrl={globalConfig.assetStorageUrl + "/users/" + cookies.get("userId") + "/badges/achievement-52-124188.svg"} itemTitle={"Született marketinges"}/>
-                <AchievementItem itemUrl={globalConfig.assetStorageUrl + "/users/" + cookies.get("userId") + "/badges/achievement-53-124196.svg"} itemTitle={"A csoport bajnoka"}/>
+                <AchievementItem itemUrl={globalConfig.assetStorageUrl + "/users/" + cookies.get("userId") + "/badges/achievement-52-124188.svg"} itemTitle={"Született marketinges"} />
+                <AchievementItem itemUrl={globalConfig.assetStorageUrl + "/users/" + cookies.get("userId") + "/badges/achievement-53-124196.svg"} itemTitle={"A csoport bajnoka"} />
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router";
 import menuItems from "../../configuration/menuItems.json";
 import { getQueryParam, useIsDesktopView } from "../../frontendHelpers";
@@ -35,11 +35,20 @@ export const PlayerPage = () => {
     const answerSessionId = playerData?.answerSessionId;
     const courseMode = playerData?.mode ?? "beginner";
     const courseId = playerData?.courseId;
+    const courseItems = playerData?.courseItems ?? [];
 
-    const {
-        courseItemList,
-        refetchCourseItemList
-    } = useCourseItemList(descriptorCode);
+    // redirect if current item should be locked 
+    useEffect(() => {
+
+        if (!playerData?.courseItemCode)
+            return;
+
+        if (playerData.courseItemCode === descriptorCode)
+            return;
+
+        navigateToPlayer(playerData.courseItemCode);
+
+    }, [playerData?.courseItemCode]);
 
     const navigateToCourseItem = (descriptorCode: string) => {
 
@@ -75,8 +84,8 @@ export const PlayerPage = () => {
                             refetchPlayerData={refetchPlayerData}
                             answerSessionId={answerSessionId!}
                             video={video}
-                            courseItems={courseItemList}
-                            refetchCourseItemList={refetchCourseItemList}
+                            courseItems={courseItems}
+                            refetchCourseItemList={refetchPlayerData}
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
@@ -103,7 +112,7 @@ export const PlayerPage = () => {
                             <CourseItemSelector
                                 courseId={courseId!}
                                 mode={courseMode}
-                                courseItems={courseItemList}
+                                courseItems={courseItems}
                                 refetchPlayerData={refetchPlayerData} />
                         </Box>}
                     </FlexFloat>

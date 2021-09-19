@@ -1,3 +1,5 @@
+import { AnswerSession } from "../models/entity/AnswerSession";
+import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
@@ -8,12 +10,14 @@ import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authentication";
 import { sendInvitaitionMailAsync } from "./emailService";
+import { toQuestionAnswerDTO, toQuestionDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
 import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
 import { log } from "./misc/logger";
 import { answerQuestionAsync } from "./questionAnswerService";
-import { getQuestionAnswersAsync, getStartupQuestionsAsync } from "./questionService";
 import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
+
+const SIGNUP_EXAM_ID = 1;
 
 export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: number) => {
 
@@ -46,6 +50,7 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
     // hash user password 
     const hashedDefaultPassword = await hashPasswordAsync("guest");
 
+    // insert user 
     const user = {
         isActive: true,
         email: email,
@@ -58,12 +63,21 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
         isInvitedOnly: true
     } as User;
 
-    const insertResults = await staticProvider
+    await staticProvider
         .ormConnection
         .getRepository(User)
         .insert(user);
 
     const userId = user.id;
+
+    // insert signup answer session
+    await staticProvider
+        .ormConnection
+        .getRepository(AnswerSession)
+        .insert({
+            examId: SIGNUP_EXAM_ID,
+            userId: userId
+        });
 
     // send invitaion mail
     const invitationToken = getJWTToken<InvitationTokenPayload>(
@@ -71,7 +85,7 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
         staticProvider.globalConfig.mail.tokenMailSecret,
         "9924h");
 
-    await await staticProvider
+    await staticProvider
         .ormConnection
         .getRepository(User)
         .save({
@@ -132,9 +146,19 @@ export const answerSignupQuestionAsync = async (invitationToken: string, questio
 
     const userId = await verifyInvitationTokenAsync(invitationToken);
 
+    const signupAnswerSession = await staticProvider
+        .ormConnection
+        .getRepository(AnswerSession)
+        .findOneOrFail({
+            where: {
+                examId: SIGNUP_EXAM_ID,
+                userId: userId
+            }
+        });
+
     await answerQuestionAsync(
         userId,
-        questionAnswer.answerSessionId,
+        signupAnswerSession.id,
         questionAnswer.questionId,
         questionAnswer.answerId,
         true);
@@ -143,8 +167,8 @@ export const answerSignupQuestionAsync = async (invitationToken: string, questio
 export const getSignupDataAsync = async (invitationToken: string) => {
 
     const userId = await verifyInvitationTokenAsync(invitationToken);
-    const questions = await getStartupQuestionsAsync();
-    const questionAnswers = await getQuestionAnswersAsync(userId);
+    const questions = await getSignupQuestionsAsync();
+    const questionAnswers = await getSignupQuestionAnswersAsync(userId);
 
     const dataDTO = {
         questions: questions,
@@ -176,4 +200,39 @@ const verifyInvitationTokenAsync = async (invitationToken: string) => {
         throw new TypedError("Bad token.", "bad request");
 
     return userId;
+}
+
+const getSignupQuestionsAsync = async () => {
+
+    const exam = await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .createQueryBuilder("e")
+        .where("e.courseId IS NULL AND e.id = 1")
+        .leftJoinAndSelect("e.questions", "q")
+        .leftJoinAndSelect("q.answers", "a")
+        .getOneOrFail();
+
+    return exam
+        .questions
+        .map(x => toQuestionDTO(x));
+}
+
+const getSignupQuestionAnswersAsync = async (userId: number) => {
+
+    const exam = await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .createQueryBuilder("e")
+        .where("e.courseId IS NULL AND e.id = 1")
+        .leftJoinAndSelect("e.questions", "q")
+        .leftJoinAndSelect("q.questionAnswers", "qa")
+        .leftJoinAndSelect("qa.answerSession", "as")
+        .where("as.userId = :userId", { userId })
+        .getOne();
+
+    return exam
+        ?.questions
+        ?.flatMap(x => x.questionAnswers)
+        ?.map(qa => toQuestionAnswerDTO(qa)) ?? [];
 }

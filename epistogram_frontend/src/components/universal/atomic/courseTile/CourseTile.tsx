@@ -1,6 +1,7 @@
-import { Button } from "@material-ui/core";
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+import { Box, Flex, Text } from "@chakra-ui/react";
+import { Button } from "@mui/material";
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import React from 'react';
 import { Gradient } from 'react-gradient';
 import { NavLink } from "react-router-dom";
@@ -9,6 +10,10 @@ import { CourseShortDTO } from "../../../../models/shared_models/CourseShortDTO"
 import { httpPostAsync, usePostData } from "../../../../services/httpClient";
 import { useNavigation } from "../../../../services/navigatior";
 import classes from "./courseTile.module.scss";
+import DoneIcon from '@mui/icons-material/Done';
+import { FlexImage } from "../../FlexImage";
+import { FlexFloat } from "../../FlexFloat";
+import { EpistoButton } from "../../EpistoButton";
 
 const CourseTile = (props: {
     course: CourseShortDTO,
@@ -16,7 +21,6 @@ const CourseTile = (props: {
     className?: string
 }) => {
 
-    const anim = useSpring({ opacity: 1, from: { opacity: 0 } })
     const course = props.course;
     const colorOne = course.colorOne;
     const colorTwo = course.colorTwo;
@@ -24,6 +28,7 @@ const CourseTile = (props: {
     const courseTeacherName = course.teacherName;
     const thumbnailImageUrl = course.thumbnailImageURL;
     const { navigateToPlayer } = useNavigation();
+    const isComplete = course.isComplete;
 
     const playCourse = async () => {
 
@@ -31,51 +36,78 @@ const CourseTile = (props: {
         navigateToPlayer(course.firstItemCode);
     }
 
-    return <Grid className={props.className} item xs={12} sm={12} md={6} lg={4} xl={3} >
-        <Paper>
-            <animated.div style={anim} className={classes.searchItem}>
-                <div className={classes.videoItemTopWrapper}>
+    return <FlexFloat
+        className="whall"
+        direction="column"
+        borderRadius="10px"
+        position="relative"
+        overflow="hidden"
+        bg="white"
+        border="5px solid white">
 
-                    <animated.img
-                        className={classes.videoItemThumbnailImage}
-                        style={anim}
-                        src={thumbnailImageUrl} />
+        {/* image  */}
+        <Box flex="1" position="relative">
 
-                    <div className={classes.videoTitleOuterWrapper}>
+            <FlexImage url={thumbnailImageUrl} className="whall" fit="cover" />
 
-                        <Gradient className={classes.courseTitleBorder}
-                            gradients={[[colorOne || "grey", colorTwo || "grey"]]}
-                            property="background"
-                            duration={3000}
-                            angle="45deg" />
+            {/* done overlay */}
+            {isComplete && <Flex
+                position="absolute"
+                top={0}
+                left={0}
+                width="100%"
+                justify="flex-end">
 
-                        <div className={classes.videoInteractionsWrapper}>
+                <Flex padding="4px 10px 8px 14px" bg="white" borderRadius="0 0 0 10px">
+                    <Text pr="10px">Teljesítve!</Text>
+                    <DoneIcon
+                        width="25px"
+                        height="25px"
+                        style={{
+                            color: "white",
+                            borderRadius: "50%",
+                            background: "var(--mildGreen)"
+                        }} />
+                </Flex>
+            </Flex>}
+        </Box>
 
-                            <div className={classes.videoTitleItem}>
-                                <h3>{courseTitle}</h3>
-                                <span>{courseTeacherName}</span>
-                            </div>
+        {/* title */}
+        <Box flexBasis="80px" borderTop="1px solid var(--mildGrey)" zIndex={1}>
 
-                            <div className={classes.videoInfoInnerWrapper}>
+            <Flex direction="column" p="10px" >
 
-                                {/* details */}
-                                <Button onClick={() => window.location.href = "https://epistogram.com/excel/"}>
-                                    Adatlap
-                                </Button>
+                <Flex direction="column" >
+                    <Text as="h6" fontSize="large">{courseTitle}</Text>
+                    <Text as="text" color="grey">{courseTeacherName}</Text>
+                </Flex>
 
-                                {/* start course */}
-                                <Button
-                                    onClick={playCourse}
-                                    className={classes.videoInfoStartButton}>
-                                    Indítás
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </animated.div>
-        </Paper>
-    </Grid>
+                <Flex mt="10px">
+
+                    {/* details */}
+                    <EpistoButton
+                        onClick={() => window.location.href = "https://epistogram.com/excel/"}
+                        style={{ flex: "1" }}>
+                        Adatlap
+                    </EpistoButton>
+
+                    {/* start course */}
+                    <EpistoButton
+                        onClick={playCourse}
+                        variant="colored"
+                        style={{ flex: "1" }}>
+                        Indítás
+                    </EpistoButton>
+                </Flex>
+            </Flex>
+        </Box>
+    </FlexFloat>
 };
 
 export default CourseTile;
+
+{/* <Gradient className={classes.courseTitleBorder}
+    gradients={[[colorOne || "grey", colorTwo || "grey"]]}
+    property="background"
+    duration={3000}
+    angle="45deg" /> */}

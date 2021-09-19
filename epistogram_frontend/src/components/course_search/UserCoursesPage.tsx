@@ -1,6 +1,5 @@
-import { Box } from "@chakra-ui/react";
-import { FormControl, Grid, Select, Typography } from "@material-ui/core";
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { Box, Flex, Grid, GridItem } from "@chakra-ui/react";
+import { FormControl, Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React from "react";
 import { distinct } from "../../frontendHelpers";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
@@ -44,26 +43,27 @@ const UserCoursesPage = () => {
 
         <ContentWrapper>
 
-            <LeftPanel>
-                <div className={classes.categoriesContainer}>
-                    <div className={classes.categoriesTitle}>
-                        <Typography variant={"h4"}>Kategóriák</Typography>
-                    </div>
+            <LeftPanel direction="column" align="stretch" >
 
-                    <ToggleButtonGroup className={classes.categoriesList}>
-                        {categoryOptions
-                            .map((categoryOption, index) => {
-                                return <ToggleButton
-                                    name={"category"}
-                                    className={searchCategory === categoryOption ? `${classes.categoriesListItem} ${classes.categoriesListItemSelected}` : `${classes.categoriesListItem}`}
-                                    value={categoryOption}
-                                    onClick={x => setSearchCategory(x.currentTarget.value)}
-                                    key={index}>
-                                    {categoryOption}
-                                </ToggleButton>
-                            })}
-                    </ToggleButtonGroup>
-                </div>
+                <Typography
+                    style={{ margin: "20px", textAlign: "center" }}
+                    variant={"h4"}>
+                    Kategóriák
+                </Typography>
+
+                <ToggleButtonGroup className={classes.categoriesList}>
+                    {categoryOptions
+                        .map((categoryOption, index) => {
+                            return <ToggleButton
+                                name={"category"}
+                                className={searchCategory === categoryOption ? `${classes.categoriesListItem} ${classes.categoriesListItemSelected}` : `${classes.categoriesListItem}`}
+                                value={categoryOption}
+                                onClick={x => setSearchCategory(x.currentTarget.value)}
+                                key={index}>
+                                {categoryOption}
+                            </ToggleButton>
+                        })}
+                </ToggleButtonGroup>
             </LeftPanel>
 
             <RightPanel noPadding={true}>
@@ -89,6 +89,7 @@ const UserCoursesPage = () => {
                                 <ToggleButton
                                     onClick={() => setIsRecommended(!isRecommended)}
                                     selected={isRecommended}
+                                    value="recommended"
                                     classes={{
                                         root: classes.filterSelectorButtonRoot,
                                         selected: classes.filterSelectorButtonSelected
@@ -100,6 +101,7 @@ const UserCoursesPage = () => {
                                 <ToggleButton
                                     onClick={() => setIsFeatured(!isFeatured)}
                                     selected={isFeatured}
+                                    value="featured"
                                     classes={{
                                         root: classes.filterSelectorButtonRoot,
                                         selected: classes.filterSelectorButtonSelected
@@ -111,6 +113,7 @@ const UserCoursesPage = () => {
                                 <ToggleButton
                                     onClick={() => clearFilters()}
                                     selected={isRecommended && isFeatured}
+                                    value="showAll"
                                     classes={{
                                         root: classes.filterSelectorButtonRoot,
                                         selected: classes.filterSelectorButtonSelected
@@ -146,21 +149,35 @@ const UserCoursesPage = () => {
 
                 {/* courses */}
                 <LoadingFrame loadingState={[status]} error={[error]}>
-                    <Box id="scrollContainer" overflowY="scroll">
-                        <Box id="scrollContent" p="20px 20px 140px 20px">
-                            <Grid container spacing={3}>
-                                {courses
-                                    .map((course: any, index) => {
-                                        return <CourseTile course={course} itemIndex={index} key={index} />
-                                    })}
-                            </Grid>
-                        </Box>
+                    <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
+                        <Grid
+                            templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+                            gap="15">
+                            {courses
+                                .map((course: any, index) => {
+                                    return <GridItem height="350px" >
+
+                                        <CourseTile course={course} itemIndex={index} key={index} />
+                                    </GridItem>
+                                })}
+                        </Grid>
                     </Box>
                 </LoadingFrame>
 
             </RightPanel>
         </ContentWrapper>
-    </MainWrapper>
+    </MainWrapper >
 }
 
 export default UserCoursesPage
+
+// // <Grid id="gridFlex" wrap="wrap" className="whall">
+//                             {courses
+//                                 .map((course: any, index) => {
+//                                     return <Box bg="red" flexBasis="33%" padding="10px">
+
+//                                         <Box bg="grey" className="whall"></Box>
+//                                         {/* <CourseTile course={course} itemIndex={index} key={index} /> */}
+//                                     </Box>
+//                                 })}
+//                         </Flex>

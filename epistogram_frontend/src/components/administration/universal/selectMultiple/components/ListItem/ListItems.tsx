@@ -1,6 +1,6 @@
 import React from "react";
-import {ListItem as MUIListItem} from "@material-ui/core";
-import {TextOrInput} from "../TextOrInput/TextOrInput";
+import { ListItem as MUIListItem } from "@mui/material";
+import { TextOrInput } from "../TextOrInput/TextOrInput";
 
 export const ListItems = () => (props: {
     key: any,
@@ -13,7 +13,7 @@ export const ListItems = () => (props: {
     name: string
     value?: string
 }) => <MUIListItem key={props.key}
-                   dense
-                   button>
-    <TextOrInput {...props} />
-</MUIListItem>
+    dense
+    button>
+        <TextOrInput {...props} />
+    </MUIListItem>

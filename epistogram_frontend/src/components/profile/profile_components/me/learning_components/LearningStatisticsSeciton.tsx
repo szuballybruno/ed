@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from "./learningStatisticsSection.module.scss";
-import {Divider, Typography} from "@material-ui/core";
+import { Divider, Typography } from "@mui/material";
 
 // HOC for a user statistics group like e.g.: focus, videos, time management
 
@@ -12,7 +12,7 @@ export const LearningStatisticsSeciton = (props: {
         <div className={classes.learningListHeaderWrapper}>
             <Typography variant={"overline"}>{props.title}</Typography>
         </div>
-        <Divider style={{width: "99%"}} />
+        <Divider style={{ width: "99%" }} />
         <div className={classes.gridContainer}>
             {props.children}
         </div>

@@ -11,9 +11,9 @@ import {
     Assignment,
     School,
     Subscriptions, ExitToApp,
-} from "@material-ui/icons";
-import SettingsIcon from "@material-ui/icons/Settings"
-import { Typography } from "@material-ui/core";
+} from "@mui/icons-material";
+import SettingsIcon from "@mui/icons-material/Settings"
+import { Typography } from "@mui/material";
 import Settings from "./settings/Settings";
 import { logOutUserAsync } from "../../../services/authenticationService";
 

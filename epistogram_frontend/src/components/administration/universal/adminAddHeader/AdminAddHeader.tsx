@@ -1,13 +1,13 @@
 import React from 'react';
 import classes from "./addUserHeader.module.scss";
-import Typography from '@material-ui/core/Typography';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import {useParams, useRouteMatch, matchPath} from 'react-router';
-import {NavLink } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import { useParams, useRouteMatch, matchPath } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import {
     BarChart,
     PersonOutlineTwoTone, SubscriptionsOutlined, SubscriptionsTwoTone,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 
 export const AdminAddHeader = () => {
     const { courseId } = useParams<{ courseId: string }>();
@@ -20,7 +20,7 @@ export const AdminAddHeader = () => {
     const editCoursesMatches = useRouteMatch("/admin/manage/courses/:courseId");
     const editVideoMatches = useRouteMatch("/admin/manage/courses/:courseId/item/:itemId");
 
-    const BreadcrumbLink = (props: {to: string, title: string, iconComponent?: JSX.Element}) => <NavLink to={props.to}>
+    const BreadcrumbLink = (props: { to: string, title: string, iconComponent?: JSX.Element }) => <NavLink to={props.to}>
         <Typography className={classes.breadcrumbTitle} style={matchPath(window.location.pathname, {
             path: props.to,
             exact: true,

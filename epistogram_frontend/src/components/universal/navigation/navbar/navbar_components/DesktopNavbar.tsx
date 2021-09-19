@@ -1,10 +1,11 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Button } from "@material-ui/core";
-import { PlayArrow } from "@material-ui/icons";
+import { Button } from "@mui/material";
+import { PlayArrow } from "@mui/icons-material";
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import { getAssetUrl } from "../../../../../frontendHelpers";
 import { useNavigation } from "../../../../../services/navigatior";
+import { EpistoButton } from "../../../EpistoButton";
 import { FlexImage } from "../../../FlexImage";
 import { MenuItemsType } from "../Navbar";
 import classes from "./desktopNavbar.module.scss";
@@ -39,9 +40,10 @@ const DesktopNavbar = (props: {
                     .menuItems
                     .middleMenu
                     .map((item, index) => {
-                        return <Box p="10px">
+                        return <Box
+                            p="10px"
+                            key={index}>
                             <NavbarButton
-                                key={index}
                                 index={index}
                                 menuName={item.menuName}
                                 menuPath={item.menuPath} />
@@ -53,22 +55,17 @@ const DesktopNavbar = (props: {
             <Flex pr="10px">
 
                 {/* show something new  */}
-                <Button variant={"outlined"}
-                    size={"large"}
-                    className={classes.showSomethingButton}
-                    style={{ color: "white" }}>
+                <EpistoButton variant="colored">
                     Mutass valamit!
-                </Button>
+                </EpistoButton>
 
                 {/* continue watching  */}
                 {currentCourseItemCode &&
-                    <Button
-                        variant={"outlined"}
-                        size={"large"}
-                        onClick={continueWatching}
-                        className={classes.playButton}>
+                    <EpistoButton
+                        variant="outlined"
+                        onClick={continueWatching}>
                         <PlayArrow />
-                    </Button>}
+                    </EpistoButton>}
             </Flex>
         </Flex>
     );

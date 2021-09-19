@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { Exam } from "./Exam";
@@ -15,8 +15,8 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: true })
-    timeOfAdd: Date;
+    @DeleteDateColumn()
+    deletionDate: Date;
 
     @Column({ nullable: true })
     isActive: boolean;
@@ -93,7 +93,15 @@ export class User {
 
     @ManyToOne(() => Exam, exam => exam.users)
     @JoinColumn({ name: 'currentExamId' })
-    currentExam: Exam | null
+    currentExam: Exam | null;
+
+    // course 
+    @Column({ nullable: true })
+    currentCourseId: number | null;
+
+    @ManyToOne(_ => Course, x => x.users)
+    @JoinColumn({ name: "currentCourseId" })
+    currentCourse: Course;
 
     // Tasks
     @OneToMany(() => Task, task => task.user)

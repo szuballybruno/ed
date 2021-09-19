@@ -1,12 +1,11 @@
 import { Box } from "@chakra-ui/react";
-import { Slider, Typography } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
-import { ClosedCaption, Fullscreen, Pause, PlayArrow } from "@material-ui/icons";
-import FastForwardIcon from '@material-ui/icons/FastForward';
-import FastRewindIcon from '@material-ui/icons/FastRewind';
-import PauseIcon from '@material-ui/icons/Pause';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import { Slider, Typography } from "@mui/material";
+import { ClosedCaption, Fullscreen, Pause, PlayArrow } from "@mui/icons-material";
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import React, { CSSProperties, ReactNode, useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { TrackProps } from "react-player/file";
 import useEventListener from 'react-use-event-listener';
@@ -22,7 +21,8 @@ type VisualOverlayType = "counter" | "pause" | "start" | "seekRight" | "seekLeft
 export const useVideoPlayerState = (
     videoItem: VideoDTO,
     isShowingOverlay: boolean,
-    maxWatchedSeconds: number) => {
+    maxWatchedSeconds: number,
+    limitSeek: boolean) => {
 
     const { url: videoUrl } = videoItem;
     const { subtitles } = { subtitles: [] as SubtitleDTO[] };
@@ -52,11 +52,8 @@ export const useVideoPlayerState = (
 
     const seekToSeconds = (seconds: number) => {
 
-        console.log(seconds);
-        console.log(maxWatchedSeconds);
-
         // limit from seeking too far forward
-        if (seconds > maxWatchedSeconds)
+        if ((seconds > maxWatchedSeconds) && limitSeek)
             return;
 
         setPlayedSeconds(seconds);
@@ -121,7 +118,7 @@ export const useVideoPlayerState = (
         }
 
         // limit from seeking too far forward
-        if (seekSeconds > maxWatchedSeconds)
+        if ((seekSeconds > maxWatchedSeconds) && limitSeek)
             return;
 
         showControlOverlay();
@@ -164,6 +161,7 @@ export const useVideoPlayerState = (
         isSeeking,
         isPlaying,
         maxWatchedSeconds,
+        limitSeek,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -198,6 +196,7 @@ export const VideoPlayer = (props: {
         isShowingOverlay,
         isPlaying,
         maxWatchedSeconds,
+        limitSeek,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,

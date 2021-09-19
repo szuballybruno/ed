@@ -6,6 +6,11 @@ export const logError = (content: any) => log(content, "error");
 
 export const log = (content: any, entryType?: LogEntryType) => {
 
+    const dateTime = new Date();
+    const miliseconds = dateTime.getMilliseconds();
+    const options = { hour12: false };
+    const dateTimeString = dateTime.toLocaleString('en-US', options);
+
     if (!entryType)
         entryType = "info";
 
@@ -16,5 +21,10 @@ export const log = (content: any, entryType?: LogEntryType) => {
         console.error(content);
 
     if (entryType == "info")
-        console.log(content);
+        console.log(`[${dateTimeString}.${miliseconds}] ${content}`);
+}
+
+export const logObject = (obj: any) => {
+
+    console.log(obj);
 }

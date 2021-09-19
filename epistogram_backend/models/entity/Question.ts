@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 import { Answer } from "./Answer";
 import { Exam } from "./Exam";
 import { QuestionAnswer } from "./QuestionAnswer";
+import { QuestionCategory } from "./QuestionCategory";
 import { Video } from "./Video";
 
 @Entity()
@@ -16,11 +17,16 @@ export class Question {
     @Column({ nullable: true })
     imageUrl: string;
 
-    @Column()
-    isSignupQuestion: boolean;
-
     @Column({ nullable: true })
     showUpTimeSeconds: number;
+
+    // category
+    @Column({ nullable: true })
+    categoryId: number;
+
+    @ManyToOne(_ => QuestionCategory, x => x.questions)
+    @JoinColumn({ name: "categoryId" })
+    category: QuestionCategory | null;
 
     // answers
     @OneToMany(type => Answer, answer => answer.question, { cascade: true })

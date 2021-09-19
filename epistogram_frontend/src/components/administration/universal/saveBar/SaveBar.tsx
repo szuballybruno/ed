@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './saveBar.module.scss'
-import {Fab} from "@material-ui/core";
-import {Add, Done, Edit} from "@material-ui/icons";
+import { Fab } from "@mui/material";
+import { Add, Done, Edit } from "@mui/icons-material";
 
 export const SaveBar = (props: {
     open: boolean
