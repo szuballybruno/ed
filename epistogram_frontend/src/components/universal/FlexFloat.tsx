@@ -5,7 +5,7 @@ export const FlexFloat = (props: FlexProps & { elevation?: number }) => {
 
     const { elevation, ...flexProps } = props;
 
-    return <Flex id="flexFloat" {...flexProps} boxShadow={`0 0 ${elevation ?? 8}px #0000001f`}>
+    return <Flex id="flexFloat" boxShadow={`0 0 ${elevation ?? 8}px #0000001f`} bg="white" {...flexProps} >
         {props.children}
     </Flex>
 }

@@ -62,6 +62,13 @@ button {
   height: 100%;
 }
 
+.normalizeChild>.MuiPaper-root {
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
 :root {
   --intenseGreen: #61ca61;
   --intenseRed: #e73f3f;

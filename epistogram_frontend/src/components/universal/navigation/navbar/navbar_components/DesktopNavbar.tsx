@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Button } from "@mui/material";
 import { PlayArrow } from "@mui/icons-material";
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { getAssetUrl } from "../../../../../frontendHelpers";
 import { useNavigation } from "../../../../../services/navigatior";
@@ -10,6 +10,7 @@ import { FlexImage } from "../../../FlexImage";
 import { MenuItemsType } from "../Navbar";
 import classes from "./desktopNavbar.module.scss";
 import NavbarButton from "./NavbarButton";
+import { EpistoPopper } from "../../../EpistoPopper";
 
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,
@@ -26,8 +27,17 @@ const DesktopNavbar = (props: {
     }
     const homeUrl = "/";
 
+    const ref = useRef<HTMLDivElement>(null);
+    const [popperOpen, setPopperOpen] = useState(false);
+
     return (
         <Flex align="center" width="100%" justify="space-between">
+
+            <EpistoPopper
+                isOpen={popperOpen}
+                target={ref?.current}
+                placementX="left"
+                handleClose={() => setPopperOpen(false)} />
 
             {/* logo link */}
             <NavLink to={homeUrl} className={classes.logoWrapper}>
@@ -66,6 +76,8 @@ const DesktopNavbar = (props: {
                         onClick={continueWatching}>
                         <PlayArrow />
                     </EpistoButton>}
+
+                <Box bg="blue" width="40px" height="40px" ref={ref} onClick={() => setPopperOpen(true)}></Box>
             </Flex>
         </Flex>
     );
