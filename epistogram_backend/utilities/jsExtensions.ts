@@ -31,7 +31,7 @@ Array.prototype.groupBy = function <T>(func: (item: T) => any) {
 
             const key = func(item);
             const currentGroup = groups
-                .filter(x => x === key)[0];
+                .filter(x => x.key === key)[0];
             const existingKey = !!currentGroup;
 
             if (existingKey) {

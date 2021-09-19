@@ -4,6 +4,7 @@ import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { PersonalityDataDTO } from "../models/shared_models/PersonalityDataDTO";
+import { PersonalityTraitDataDTO } from "../models/shared_models/PersonalityTraitDataDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { SignupAnswersView } from "../models/views/SignupAnswersView";
 import { staticProvider } from "../staticProvider";
@@ -34,36 +35,52 @@ export const getUserPersonalityDataAsync = async (userId: number) => {
             }
         });
 
-    const groups = signupQuestions
-        .groupBy(x => x.categoryName);
+    const categoryGroups = signupQuestions
+        .groupBy(x => x.categoryId);
+
+    const traits = [] as PersonalityTraitDataDTO[];
+    const traitCount = categoryGroups.length * 2; // gc is 5 by default, * 2 cause' min-max 
+    const offset = categoryGroups.length;
+
+    categoryGroups
+        .forEach((group, index) => {
+
+            const firstItem = group.items.first(x => true);
+            const minLabel = firstItem.minLabel;
+            const maxLabel = firstItem.maxLabel;
+
+            // min trait 
+            const incorrectAnswersCount = group
+                .items
+                .filter(y => y.isCorrect === false)
+                .length;
+
+            traits
+                .push({
+                    traitName: minLabel,
+                    orderIndex: index,
+                    traitScore: incorrectAnswersCount
+                });
+
+            // max trait
+            const correctAnswersCount = group
+                .items
+                .filter(y => y.isCorrect === true)
+                .length;
+
+            traits
+                .push({
+                    traitName: maxLabel,
+                    orderIndex: index + offset,
+                    traitScore: correctAnswersCount
+                });
+        })
+
+    const traitsOrdered = traits
+        .orderBy(x => x.orderIndex);
 
     return {
-        traits: [
-            {
-                traitName: "Wine person",
-                traitScore: 2,
-            },
-            {
-                traitName: "Fun person",
-                traitScore: 1,
-            },
-            {
-                traitName: "Movie person",
-                traitScore: 2,
-            },
-            {
-                traitName: "Anti-wine person",
-                traitScore: 4,
-            },
-            {
-                traitName: "Anti-fun person",
-                traitScore: 2,
-            },
-            {
-                traitName: "Anit-movie person",
-                traitScore: 5,
-            }
-        ]
+        traits: traitsOrdered
     } as PersonalityDataDTO;
 }
 

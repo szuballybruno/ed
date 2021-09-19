@@ -3,7 +3,8 @@ SELECT
 	 "answer"."id" AS "answerId",
 	 "answer"."isCorrect" AS "isCorrect",
 	 "qc"."id" AS "categoryId",
-	 "qc"."name" AS "categoryName"
+	 "qc"."minLabel" AS "minLabel",
+	 "qc"."maxLabel" AS "maxLabel"
 FROM public."exam_session_answers_view" AS "esav"
 
 LEFT JOIN public."question_answer" AS "qa"

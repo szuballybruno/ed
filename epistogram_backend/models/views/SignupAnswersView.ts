@@ -19,5 +19,8 @@ export class SignupAnswersView {
 	categoryId: number;
 
 	@ViewColumn()
-	categoryName: string;
+	minLabel: string;
+
+	@ViewColumn()
+	maxLabel: string;
 }

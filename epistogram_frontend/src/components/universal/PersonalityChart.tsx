@@ -48,7 +48,7 @@ export const PersonalityChart = () => {
                             display: false
                         },
                         suggestedMin: 0,
-                        suggestedMax: 5
+                        suggestedMax: 7
                     }
                 }
             }}
