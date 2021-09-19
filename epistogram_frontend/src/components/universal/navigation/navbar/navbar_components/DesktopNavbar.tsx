@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { PlayArrow } from "@mui/icons-material";
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { getAssetUrl } from "../../../../../frontendHelpers";
 import { useNavigation } from "../../../../../services/navigatior";
@@ -11,6 +11,29 @@ import { MenuItemsType } from "../Navbar";
 import classes from "./desktopNavbar.module.scss";
 import NavbarButton from "./NavbarButton";
 import { EpistoPopper } from "../../../EpistoPopper";
+import SettingsIcon from '@mui/icons-material/Settings';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { CurrentUserContext } from "../../../../../HOC/AuthenticationFrame";
+
+const userMenuItems = [
+    {
+        name: "Settings",
+        path: "user/settings",
+        icon: <SettingsIcon></SettingsIcon>
+    },
+    {
+        name: "Profile Dashboard",
+        path: "",
+        icon: <DashboardIcon></DashboardIcon>
+    },
+    {
+        name: "Log Out",
+        path: "",
+        icon: <LogoutIcon></LogoutIcon>,
+        color: "var(--mildRed)"
+    }
+]
 
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,
@@ -26,18 +49,13 @@ const DesktopNavbar = (props: {
             navigateToPlayer(currentCourseItemCode);
     }
     const homeUrl = "/";
+    const user = useContext(CurrentUserContext)!;
 
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLButtonElement>(null);
     const [popperOpen, setPopperOpen] = useState(false);
 
     return (
         <Flex align="center" width="100%" justify="space-between">
-
-            <EpistoPopper
-                isOpen={popperOpen}
-                target={ref?.current}
-                placementX="left"
-                handleClose={() => setPopperOpen(false)} />
 
             {/* logo link */}
             <NavLink to={homeUrl} className={classes.logoWrapper}>
@@ -62,24 +80,68 @@ const DesktopNavbar = (props: {
             </Flex>
 
             {/* content */}
-            <Flex pr="10px">
+            <Flex pr="10px" align="center">
 
-                {/* show something new  */}
-                <EpistoButton variant="colored">
-                    Mutass valamit!
+                <Flex height="45px" pr="10px">
+                    {/* show something new  */}
+                    <EpistoButton variant="colored">
+                        Mutass valamit!
+                    </EpistoButton>
+
+                    {/* continue watching  */}
+                    {currentCourseItemCode &&
+                        <EpistoButton
+                            variant="outlined"
+                            onClick={continueWatching}>
+                            <PlayArrow />
+                        </EpistoButton>}
+                </Flex>
+
+                <EpistoButton
+                    ref={ref}
+                    variant="plain"
+                    onClick={() => setPopperOpen(true)}
+                    padding="0px"
+                    isRound
+                    size="55px"
+                    style={{
+                        // border: "5px solid white", //var(--epistoTeal)
+                        margin: "0px",
+                    }}>
+                    <FlexImage
+                        className="whall"
+                        overflow="hidden"
+                        url={user.avatarUrl!}></FlexImage>
                 </EpistoButton>
-
-                {/* continue watching  */}
-                {currentCourseItemCode &&
-                    <EpistoButton
-                        variant="outlined"
-                        onClick={continueWatching}>
-                        <PlayArrow />
-                    </EpistoButton>}
-
-                <Box bg="blue" width="40px" height="40px" ref={ref} onClick={() => setPopperOpen(true)}></Box>
             </Flex>
-        </Flex>
+
+            {/* user menu */}
+            <EpistoPopper
+                isOpen={popperOpen}
+                target={ref?.current}
+                placementX="left"
+                handleClose={() => setPopperOpen(false)}>
+                {userMenuItems
+                    .map(x => {
+
+                        return <EpistoButton
+                            variant={x.color ? "colored" : undefined}
+                            style={{ background: x.color }}>
+                            <Flex className="whall" m="5px" align="center">
+                                {x.icon}
+                                <Typography
+                                    style={{
+                                        marginLeft: "14px",
+                                        textAlign: "left",
+                                        fontSize: "14px"
+                                    }}>
+                                    {x.name}
+                                </Typography>
+                            </Flex>
+                        </EpistoButton>
+                    })}
+            </EpistoPopper>
+        </Flex >
     );
 };
 

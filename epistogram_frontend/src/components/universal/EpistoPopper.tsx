@@ -24,7 +24,7 @@ export const EpistoPopper = (props: {
         elevation={0}
         className="normalizeChild">
 
-        <FlexFloat width="400px" height="300px" borderRadius="10px" p="20px">
+        <FlexFloat borderRadius="10px" direction="column" p="20px">
             {children}
         </FlexFloat>
     </Popover>

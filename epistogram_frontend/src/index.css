@@ -69,6 +69,10 @@ button {
   overflow: visible;
 }
 
+.mildShadow {
+  box-shadow: "0 0 8px #0000001f"
+}
+
 :root {
   --intenseGreen: #61ca61;
   --intenseRed: #e73f3f;
