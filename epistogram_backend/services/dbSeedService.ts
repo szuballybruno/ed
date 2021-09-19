@@ -9,6 +9,7 @@ import { Exam } from "../models/entity/Exam";
 import { Group } from "../models/entity/Group";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
+import { QuestionCategory } from "../models/entity/QuestionCategory";
 import { StorageFile } from "../models/entity/StorageFile";
 import { Tag } from "../models/entity/Tag";
 import { Video } from "../models/entity/Video";
@@ -19,6 +20,7 @@ import { RoleType } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { log } from "./misc/logger";
 import { getAssetUrl } from "./misc/urlProvider";
+import { executeSeedScriptAsync } from "./rawSqlService";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./signupService";
 import { setUserAvatarFileId } from "./userService";
 import { insertVideoAsync } from "./videoService";
@@ -45,8 +47,12 @@ export const seedDB = async () => {
     log("seedUsers")
     await seedUsers(connection, orgIds);
 
-    log("seedSignupQuestions")
-    await seedSignupQuestions(connection);
+    // log("seedQuestionCategories")
+    // await seedQuestionCategories(connection);
+
+    // log("seedSignupQuestions")
+    // await seedSignupQuestions(connection);
+    await executeSeedScriptAsync("seedSignupQuestions");
 
     log("seedTags")
     await seedTags(connection);
@@ -362,6 +368,21 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
     log("User 2 token: " + it2);
 }
 
+const seedQuestionCategories = async (connection: TypeORMConnection) => {
+
+    await staticProvider
+        .ormConnection
+        .getRepository(QuestionCategory)
+        .insert([
+            {
+                name: "category1"
+            },
+            {
+                name: "category2"
+            }
+        ])
+}
+
 const seedSignupQuestions = async (connection: TypeORMConnection) => {
 
     const questions = [
@@ -369,6 +390,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
             examId: 1,
             questionText: "Egy csapatban elvégzendő projekt esetén a következőt preferálom:",
             imageUrl: getAssetUrl("/application/kerdes1.png"),
+            categoryId: 1,
             answers: [
                 {
                     text: "Szoros együttműködés a többiekkel"
@@ -382,6 +404,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
             examId: 1,
             questionText: "Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást: ",
             imageUrl: getAssetUrl("/application/kerdes2.png"),
+            categoryId: 1,
             answers: [
                 {
                     text: "Mutassa meg az épület alaprajzán/rajzolja le a helyes irányt",
@@ -395,6 +418,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
             examId: 1,
             questionText: "Jobban preferálom azt a munkában, mikor:",
             imageUrl: getAssetUrl("/application/kerdes3.png"),
+            categoryId: 2,
             answers: [
                 {
                     text: "Előre definiált instrukciók alapján végzek el feladatokat",
@@ -408,6 +432,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
             examId: 1,
             questionText: "Egy előadás esetén hasznosabb számomra, ha:",
             imageUrl: getAssetUrl("/application/kerdes4.png"),
+            categoryId: 2,
             answers: [
                 {
                     text: "Az előadó magyaráz, és megválaszolja a felmerülő kérdéseket",
@@ -421,6 +446,7 @@ const seedSignupQuestions = async (connection: TypeORMConnection) => {
             examId: 1,
             questionText: "Az érzéseimet, gondolataimat a következő módokon fejezem ki szívesebben:",
             imageUrl: getAssetUrl("/application/kerdes5.png"),
+            categoryId: 2,
             answers: [
                 {
                     text: "Zenéken, írásokon, a művészet által",

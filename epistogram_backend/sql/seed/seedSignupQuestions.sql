@@ -1,42 +1,83 @@
-INSERT INTO public."question"(
+START TRANSACTION;
+
+-- Question categories
+INSERT INTO "question_category" ("name") 
+VALUES 
+    ('category1'), 
+    ('category2') 
+RETURNING "id";
+
+-- Questions
+INSERT INTO "question"
+(
     "questionText", 
     "imageUrl", 
-    "isSignupQuestion", 
-    "showUpTimeSeconds",
-    "videoId",
-    "examId") 
+    "showUpTimeSeconds", 
+    "categoryId", 
+    "videoId", 
+    "examId"
+) 
 VALUES 
-    (
-        "Egy csapatban elvégzendő projekt esetén a következőt preferálom:", 
-        "https://storage.googleapis.com/epistogram_bucket_dev/application/kerdes1.png", 
-        1,
-        DEFAULT, 
-        DEFAULT, 
-        DEFAULT
-    ), 
-    ($4, $5, $6, DEFAULT, DEFAULT, DEFAULT),
-    ($7, $8, $9, DEFAULT, DEFAULT, DEFAULT), 
-    ($10, $11, $12, DEFAULT, DEFAULT, DEFAULT),
-    ($13, $14, $15, DEFAULT, DEFAULT, DEFAULT) 
-RETURNING "id" 
-      
--- PARAMETERS: ["Egy csapatban elvégzendő projekt esetén a következőt preferálom:","https://storage.googleapis.com/epistogram_bucket_dev/application/kerdes1.png",1,"Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást: ","https://storage.googleapis.com/epistogram_bucket_dev/application/kerdes2.png",1,"Jobban preferálom azt a munkában, mikor:","https://storage.googleapis.com/epistogram_bucket_dev/application/kerdes3.png",1,"Egy előadás esetén hasznosabb számomra, ha:","https://storage.googleapis.com/epistogram_bucket_dev/application/kerdes4.png",1,"Az érzéseimet, gondolataimat a következő módokon fejezem ki szívesebben:","https://storage.googleapis.com/epistogram_bucket_dev/application/kerdes5.png",1]
+(
+    'Egy csapatban elvégzendő projekt esetén a következőt preferálom:', 
+    '{CDN_BUCKET_URL}/signupQuestionImages/kerdes1.png', 
+    DEFAULT, 
+    1, 
+    DEFAULT, 
+    1
+), 
+(
+    'Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást: ', 
+    '{CDN_BUCKET_URL}/signupQuestionImages/kerdes2.png', 
+    DEFAULT, 
+    1, 
+    DEFAULT, 
+    1
+), 
+(
+    'Jobban preferálom azt a munkában, mikor:', 
+    '{CDN_BUCKET_URL}/signupQuestionImages/kerdes3.png',
+    DEFAULT,
+    2,
+    DEFAULT,
+    1
+), 
+(
+    'Egy előadás esetén hasznosabb számomra, ha:', 
+    '{CDN_BUCKET_URL}/signupQuestionImages/kerdes4.png',
+    DEFAULT, 
+    2, 
+    DEFAULT, 
+    1
+), 
+(
+    'Az érzéseimet, gondolataimat a következő módokon fejezem ki szívesebben:', 
+    '{CDN_BUCKET_URL}/signupQuestionImages/kerdes5.png',
+    DEFAULT, 
+    2, 
+    DEFAULT, 
+    1
+) 
+RETURNING "id";
 
-INSERT INTO 
-    "answer"("text", "isCorrect", "questionId") 
+-- Answers (isCorrect is used here as a flag to determine which end of a category does a question fall into)
+INSERT INTO "answer"
+(
+    "text", 
+    "isCorrect", 
+    "questionId"
+) 
 VALUES 
-    ($1, DEFAULT, $2), 
-    ($3, DEFAULT, $4), 
-    ($5, DEFAULT, $6), 
-    ($7, DEFAULT, $8), 
-    ($9, DEFAULT, $10), 
-    ($11, DEFAULT, $12), 
-    ($13, DEFAULT, $14), 
-    ($15, DEFAULT, $16), 
-    ($17, DEFAULT, $18), 
-    ($19, DEFAULT, $20) 
-RETURNING "id"
+    ('Szoros együttműködés a többiekkel', true, 1), 
+    ('Szívesebben oldok meg egyedül részfeladatokat', false, 1), 
+    ('Mutassa meg az épület alaprajzán/rajzolja le a helyes irányt', true, 2), 
+    ('Mondja el/írja le, hogy mikor merre kell fordulnom', false, 2), 
+    ('Előre definiált instrukciók alapján végzek el feladatokat', true, 3), 
+    ('Kutatnom kell a megoldás után és analizálni különböző eseteket', false, 3), 
+    ('Az előadó magyaráz, és megválaszolja a felmerülő kérdéseket', true, 4), 
+    ('kisfilmekkel, videókkal illusztrálja és egészíti ki a mondanivalóját', false, 4), 
+    ('Zenéken, írásokon, a művészet által', true, 5),
+    ('Direkt, lényegre törő kommunikációval', false, 5) 
+RETURNING "id";
 
- -- PARAMETERS: ["Szoros együttműködés a többiekkel",1,"Szívesebben oldok meg egyedül részfeladatokat",1,"Mutassa meg az épület alaprajzán/rajzolja le a helyes irányt",2,"Mondja 
--- el/írja le, hogy mikor merre kell fordulnom",2,"Előre definiált instrukciók alapján végzek el feladatokat",3,"Kutatnom kell a megoldás után és analizálni 
--- különböző eseteket",3,"Az előadó magyaráz, és megválaszolja a felmerülő kérdéseket",4,"kisfilmekkel, videókkal illusztrálja és egészíti ki a mondanivalóját",4,"Zenéken, írásokon, a művészet által",5,"Direkt, lényegre törő kommunikációval",5]
+COMMIT

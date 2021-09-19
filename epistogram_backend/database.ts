@@ -10,6 +10,7 @@ import { Group } from "./models/entity/Group";
 import { Organization } from "./models/entity/Organization";
 import { Question } from "./models/entity/Question";
 import { QuestionAnswer } from "./models/entity/QuestionAnswer";
+import { QuestionCategory } from "./models/entity/QuestionCategory";
 import { StorageFile } from "./models/entity/StorageFile";
 import { Tag } from "./models/entity/Tag";
 import { Task } from "./models/entity/Task";
@@ -32,7 +33,7 @@ import { VideoCompletedView } from "./models/views/VideoCompletedView";
 import { VideoProgressView } from "./models/views/VideoProgressView";
 import { recreateDB, seedDB } from "./services/dbSeedService";
 import { log } from "./services/misc/logger";
-import { recreateViewsAsync } from "./services/sqlViewCreator";
+import { recreateViewsAsync } from "./services/rawSqlService";
 import { staticProvider } from "./staticProvider";
 
 export type TypeORMConnection = Connection;
@@ -81,6 +82,7 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
             VideoPlaybackSample,
             VideoPlaybackData,
             UserCourseBridge,
+            QuestionCategory,
 
             // views,
             VideoCompletedView,

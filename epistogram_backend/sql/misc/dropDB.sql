@@ -16,3 +16,5 @@ DROP TABLE IF EXISTS public.test_sub_child CASCADE;
 DROP TABLE IF EXISTS public.user CASCADE;
 DROP TABLE IF EXISTS public.video CASCADE;
 DROP TABLE IF EXISTS public.video_playback_sample CASCADE;
+DROP TABLE IF EXISTS public.video_playback_data CASCADE;
+DROP TABLE IF EXISTS public.user_course_bridge CASCADE;

@@ -1,11 +1,11 @@
 SELECT 
 	pg_terminate_backend(pid) 
 FROM pg_stat_activity 
-WHERE datname = tableName;
+WHERE datname = 'epistogram_DEV';
 
-DROP DATABASE tableName;
+DROP DATABASE epistogram_DEV;
 
-CREATE DATABASE tableName
+CREATE DATABASE epistogram_DEV
 	WITH 
 	OWNER = cloudsqlsuperuser
 	ENCODING = 'UTF8'

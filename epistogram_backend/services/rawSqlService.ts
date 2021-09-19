@@ -10,6 +10,25 @@ export const recreateViewsAsync = async (viewNames: string[]) => {
     await createViews(viewNames);
 }
 
+export const executeSeedScriptAsync = async (seedScriptName: string) => {
+
+    const sql = readFileSync(`./sql/seed/${seedScriptName}.sql`, 'utf8');
+
+    const replacedSQl = replaceSymbols(sql);
+
+    await staticProvider
+        .ormConnection
+        .manager
+        .query(replacedSQl);
+}
+
+const replaceSymbols = (sql: string) => {
+
+    sql = sql.replace("{CDN_BUCKET_URL}", staticProvider.globalConfig.fileStorage.assetStoreUrl);
+
+    return sql;
+}
+
 const createViews = async (viewNames: string[]) => {
 
     for (let index = 0; index < viewNames.length; index++) {
