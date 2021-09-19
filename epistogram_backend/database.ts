@@ -28,6 +28,7 @@ import { CourseItemView } from "./models/views/CourseItemView";
 import { CourseStateView } from "./models/views/CourseStateView";
 import { CourseView } from "./models/views/CourseView";
 import { ExamCompletedView } from "./models/views/ExamCompletedView";
+import { SignupAnswersView } from "./models/views/SignupAnswersView";
 import { UserExamAnswerSessionView } from "./models/views/UserExamAnswerSessionView";
 import { VideoCompletedView } from "./models/views/VideoCompletedView";
 import { VideoProgressView } from "./models/views/VideoProgressView";
@@ -93,7 +94,8 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
             CourseItemStateView,
             CourseStateView,
             CourseItemAllView,
-            CourseView
+            CourseView,
+            SignupAnswersView
         ],
     } as ConnectionOptions;
 
@@ -116,7 +118,9 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
         "course_item_state_view",
         "course_state_view",
         "course_item_all_view",
-        "course_view"
+        "course_view",
+        "exam_session_answers_view",
+        "signup_answers_view"
     ]);
 
     const isFreshDB = await getIsFreshDB();

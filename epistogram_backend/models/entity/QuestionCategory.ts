@@ -8,7 +8,10 @@ export class QuestionCategory {
     id: number;
 
     @Column()
-    name: string;
+    minLabel: string;
+
+    @Column()
+    maxLabel: string;
 
     @OneToMany(_ => Question, x => x.category)
     @JoinColumn()

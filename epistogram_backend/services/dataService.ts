@@ -3,7 +3,9 @@ import { Organization } from "../models/entity/Organization";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
+import { PersonalityDataDTO } from "../models/shared_models/PersonalityDataDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
+import { SignupAnswersView } from "../models/views/SignupAnswersView";
 import { staticProvider } from "../staticProvider";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "./courseService";
 import { toOrganizationDTO } from "./mappings";
@@ -19,6 +21,50 @@ export const getOrganizationsAsync = async (userId: number) => {
 
     return orgs
         .map(org => toOrganizationDTO(org));
+}
+
+export const getUserPersonalityDataAsync = async (userId: number) => {
+
+    const signupQuestions = await staticProvider
+        .ormConnection
+        .getRepository(SignupAnswersView)
+        .find({
+            where: {
+                userId: userId,
+            }
+        });
+
+    const groups = signupQuestions
+        .groupBy(x => x.categoryName);
+
+    return {
+        traits: [
+            {
+                traitName: "Wine person",
+                traitScore: 2,
+            },
+            {
+                traitName: "Fun person",
+                traitScore: 1,
+            },
+            {
+                traitName: "Movie person",
+                traitScore: 2,
+            },
+            {
+                traitName: "Anti-wine person",
+                traitScore: 4,
+            },
+            {
+                traitName: "Anti-fun person",
+                traitScore: 2,
+            },
+            {
+                traitName: "Anit-movie person",
+                traitScore: 5,
+            }
+        ]
+    } as PersonalityDataDTO;
 }
 
 export const getOverviewPageDTOAsync = async (userId: number) => {

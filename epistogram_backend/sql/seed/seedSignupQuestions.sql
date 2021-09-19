@@ -1,13 +1,13 @@
 START TRANSACTION;
 
 -- Question categories
-INSERT INTO "question_category" ("name") 
+INSERT INTO "question_category" ("minLabel", "maxLabel") 
 VALUES 
-    ('Category1'), 
-    ('Category2'), 
-    ('Category3'), 
-    ('Category4'), 
-    ('Category5') 
+    ('Category1 - Min', 'Category1 - Max'), 
+    ('Category2 - Min', 'Category2 - Max'), 
+    ('Category3 - Min', 'Category3 - Max'), 
+    ('Category4 - Min', 'Category4 - Max'), 
+    ('Category5 - Min', 'Category5 - Max')
 RETURNING "id";
 
 -- Questions

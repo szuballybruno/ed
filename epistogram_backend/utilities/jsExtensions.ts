@@ -6,6 +6,7 @@ declare global {
 
         remove(func: (item: T) => boolean): Array<T>;
         orderBy(func: (item: T) => number | string | Date): Array<T>;
+        groupBy(func: (item: T) => any): Grouping<T>[];
         any(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
         findLastIndex(func: (item: T) => boolean): number | null;
@@ -14,6 +15,40 @@ declare global {
         last(func: (item: T) => boolean): T;
         firstOrNull(func: (item: T) => boolean): T | null;
     }
+}
+
+export type Grouping<T> = {
+    key: any,
+    items: T[]
+}
+
+Array.prototype.groupBy = function <T>(func: (item: T) => any) {
+
+    const groups = [] as Grouping<T>[];
+
+    this
+        .forEach(item => {
+
+            const key = func(item);
+            const currentGroup = groups
+                .filter(x => x === key)[0];
+            const existingKey = !!currentGroup;
+
+            if (existingKey) {
+
+                currentGroup.items.push(item);
+            }
+            else {
+
+                groups
+                    .push({
+                        key: key,
+                        items: [item]
+                    })
+            }
+        });
+
+    return groups;
 }
 
 Array.prototype.firstOrNull = function <T>(func: (item: T) => T) {
