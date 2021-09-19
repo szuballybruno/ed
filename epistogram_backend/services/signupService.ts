@@ -233,6 +233,9 @@ const getSignupQuestionAnswersAsync = async (userId: number) => {
 
     return exam
         ?.questions
-        ?.flatMap(x => x.questionAnswers)
+        ?.flatMap(question => question
+            .questionAnswers
+            .orderBy(x => x.creationDate)
+            .last(x => true))
         ?.map(qa => toQuestionAnswerDTO(qa)) ?? [];
 }

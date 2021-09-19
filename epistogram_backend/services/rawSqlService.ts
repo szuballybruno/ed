@@ -1,5 +1,6 @@
 import { readFileSync, stat } from "fs";
 import { staticProvider } from "../staticProvider";
+import { replaceAll } from "../utilities/helpers";
 import { log } from "./misc/logger";
 
 export const recreateViewsAsync = async (viewNames: string[]) => {
@@ -24,9 +25,8 @@ export const executeSeedScriptAsync = async (seedScriptName: string) => {
 
 const replaceSymbols = (sql: string) => {
 
-    sql = sql.replace("{CDN_BUCKET_URL}", staticProvider.globalConfig.fileStorage.assetStoreUrl);
-
-    return sql;
+    const url = staticProvider.globalConfig.fileStorage.assetStoreUrl;
+    return replaceAll(sql, "{CDN_BUCKET_URL}", url);
 }
 
 const createViews = async (viewNames: string[]) => {

@@ -5,7 +5,7 @@ declare global {
     interface Array<T> {
 
         remove(func: (item: T) => boolean): Array<T>;
-        orderBy(func: (item: T) => number | string): Array<T>;
+        orderBy(func: (item: T) => number | string | Date): Array<T>;
         any(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
         findLastIndex(func: (item: T) => boolean): number | null;
@@ -91,7 +91,7 @@ Array.prototype.remove = function <T>(func: (item: T) => boolean) {
     return this.filter(item => !func(item)) as Array<T>
 }
 
-Array.prototype.orderBy = function <T>(func: (item: T) => number | string) {
+Array.prototype.orderBy = function <T>(func: (item: T) => number | string | Date) {
 
     const sorted = this
         .sort((a, b) => {

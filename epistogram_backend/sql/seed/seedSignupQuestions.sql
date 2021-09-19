@@ -3,8 +3,11 @@ START TRANSACTION;
 -- Question categories
 INSERT INTO "question_category" ("name") 
 VALUES 
-    ('category1'), 
-    ('category2') 
+    ('Category1'), 
+    ('Category2'), 
+    ('Category3'), 
+    ('Category4'), 
+    ('Category5') 
 RETURNING "id";
 
 -- Questions
@@ -89,7 +92,7 @@ VALUES
     'Ha egy matematikai problémát kellene megoldanom',
     '{CDN_BUCKET_URL}/signupQuestionImages/2.1.svg',
     DEFAULT,
-    1,
+    2,
     DEFAULT,
     1
 ),
@@ -98,7 +101,7 @@ VALUES
     'Hogy megjegyezzek valamit, számomra hatékonyabb, ha',
     '{CDN_BUCKET_URL}/signupQuestionImages/2.2.svg',
     DEFAULT,
-    1,
+    2,
     DEFAULT,
     1
 ),
@@ -107,7 +110,7 @@ VALUES
     'Összeszerelni egy darabokból álló bútort használati útmutató alapján',
     '{CDN_BUCKET_URL}/signupQuestionImages/2.3.svg',
     DEFAULT,
-    1,
+    2,
     DEFAULT,
     1
 ),
@@ -116,7 +119,7 @@ VALUES
     'Az olyan képzéseket szeretem, ahol',
     '{CDN_BUCKET_URL}/signupQuestionImages/2.4.svg',
     DEFAULT,
-    1,
+    2,
     DEFAULT,
     1
 ),
@@ -125,7 +128,7 @@ VALUES
     'Hogy megértsem és emlékezzek arra, hogyan működik egy gép',
     '{CDN_BUCKET_URL}/signupQuestionImages/2.5.svg',
     DEFAULT,
-    1,
+    2,
     DEFAULT,
     1
 ),
@@ -134,7 +137,7 @@ VALUES
     'Jobban élvezem, mikor',
     '{CDN_BUCKET_URL}/signupQuestionImages/2.6.svg',
     DEFAULT,
-    1,
+    2,
     DEFAULT,
     1
 ),
@@ -143,7 +146,7 @@ VALUES
     'Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást',
     '{CDN_BUCKET_URL}/signupQuestionImages/2.7.svg',
     DEFAULT,
-    1,
+    2,
     DEFAULT,
     1
 ),
@@ -154,7 +157,7 @@ VALUES
     'Jobban szeretek',
     '{CDN_BUCKET_URL}/signupQuestionImages/3.1.svg',
     DEFAULT,
-    1,
+    3,
     DEFAULT,
     1
 ),
@@ -163,7 +166,7 @@ VALUES
     'Olyan munkát preferálok jobban, ahol',
     '{CDN_BUCKET_URL}/signupQuestionImages/3.2.svg',
     DEFAULT,
-    1,
+    3,
     DEFAULT,
     1
 ),
@@ -172,7 +175,7 @@ VALUES
     'Jobban szeretek',
     '{CDN_BUCKET_URL}/signupQuestionImages/3.3.svg',
     DEFAULT,
-    1,
+    3,
     DEFAULT,
     1
 ),
@@ -181,7 +184,7 @@ VALUES
     'Ha esszét kéne írnom',
     '{CDN_BUCKET_URL}/signupQuestionImages/3.4.svg',
     DEFAULT,
-    1,
+    3,
     DEFAULT,
     1
 ),
@@ -190,7 +193,7 @@ VALUES
     'Az olyan feladatokat kedvelem inkább, ahol',
     '{CDN_BUCKET_URL}/signupQuestionImages/3.5.svg',
     DEFAULT,
-    1,
+    3,
     DEFAULT,
     1
 ),
@@ -199,7 +202,7 @@ VALUES
     'For a criminal justice course I would prefer to',
     '{CDN_BUCKET_URL}/signupQuestionImages/3.6.svg',
     DEFAULT,
-    1,
+    3,
     DEFAULT,
     1
 ),
@@ -208,7 +211,7 @@ VALUES
     'Ha szeretnék többet megtudni nagysebességű nyomtatókról',
     '{CDN_BUCKET_URL}/signupQuestionImages/3.7.svg',
     DEFAULT,
-    1,
+    3,
     DEFAULT,
     1
 ),
@@ -219,7 +222,7 @@ VALUES
     'Jobban szeretem, ha az instrukciókat',
     '{CDN_BUCKET_URL}/signupQuestionImages/4.1.svg',
     DEFAULT,
-    1,
+    4,
     DEFAULT,
     1
 ),
@@ -228,7 +231,7 @@ VALUES
     'Szívesebben,',
     '{CDN_BUCKET_URL}/signupQuestionImages/4.2.svg',
     DEFAULT,
-    1,
+    4,
     DEFAULT,
     1
 ),
@@ -237,7 +240,7 @@ VALUES
     'Jobban megjegyzem',
     '{CDN_BUCKET_URL}/signupQuestionImages/4.3.svg',
     DEFAULT,
-    1,
+    4,
     DEFAULT,
     1
 ),
@@ -246,7 +249,7 @@ VALUES
     'Jobban szeretem az olyan előadásokat, ahol',
     '{CDN_BUCKET_URL}/signupQuestionImages/4.4.svg',
     DEFAULT,
-    1,
+    4,
     DEFAULT,
     1
 ),
@@ -255,7 +258,7 @@ VALUES
     'Könnyebben jegyzek meg új információkat',
     '{CDN_BUCKET_URL}/signupQuestionImages/4.5.svg',
     DEFAULT,
-    1,
+    4,
     DEFAULT,
     1
 ),
@@ -264,7 +267,7 @@ VALUES
     'Ha informálódni szeretnék a hétköznapi élettel kapcsolatban',
     '{CDN_BUCKET_URL}/signupQuestionImages/4.6.svg',
     DEFAULT,
-    1,
+    4,
     DEFAULT,
     1
 ),
@@ -273,7 +276,7 @@ VALUES
     'Ha meg akarom tudni, hogyan használjam a faxgépet',
     '{CDN_BUCKET_URL}/signupQuestionImages/4.7.svg',
     DEFAULT,
-    1,
+    4,
     DEFAULT,
     1
 ),
@@ -284,7 +287,7 @@ VALUES
     'Döntéshozatalnál fajsúlyosabbak számomra',
     '{CDN_BUCKET_URL}/signupQuestionImages/5.1.svg',
     DEFAULT,
-    1,
+    5,
     DEFAULT,
     1
 ),
@@ -293,7 +296,7 @@ VALUES
     'Egy feladat hatékony elvégzéséhez',
     '{CDN_BUCKET_URL}/signupQuestionImages/5.2.svg',
     DEFAULT,
-    1,
+    5,
     DEFAULT,
     1
 ),
@@ -302,7 +305,7 @@ VALUES
     'Ha ki szeretném fejezni a gondolataimat, érzéseimet',
     '{CDN_BUCKET_URL}/signupQuestionImages/5.3.svg',
     DEFAULT,
-    1,
+    5,
     DEFAULT,
     1
 ),
@@ -311,7 +314,7 @@ VALUES
     'Az olyan előadókat, oktatókat kedvelem, akik',
     '{CDN_BUCKET_URL}/signupQuestionImages/5.4.svg',
     DEFAULT,
-    1,
+    5,
     DEFAULT,
     1
 ),
@@ -320,7 +323,7 @@ VALUES
     'Általában',
     '{CDN_BUCKET_URL}/signupQuestionImages/5.5.svg',
     DEFAULT,
-    1,
+    5,
     DEFAULT,
     1
 ),
@@ -329,7 +332,7 @@ VALUES
     'Ha vizsgáznom kellene, a következőt preferálnám',
     '{CDN_BUCKET_URL}/signupQuestionImages/5.6.svg',
     DEFAULT,
-    1,
+    5,
     DEFAULT,
     1
 ),
@@ -338,7 +341,7 @@ VALUES
     'HHa kapok egy megbízást, feladatot, jobban szeretem',
     '{CDN_BUCKET_URL}/signupQuestionImages/5.7.svg',
     DEFAULT,
-    1,
+    5,
     DEFAULT,
     1
 )
