@@ -1,45 +1,30 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { getAssetUrl, useIsDesktopView } from "../../../../frontendHelpers";
+import { NavigationListItemType } from "../../../../models/types";
 import { useCurrentCourseItemCode } from "../../../../services/dataService";
 import { FlexFloat } from "../../FlexFloat";
 import classes from "./navbar.module.scss";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
 
-const menuItems = {
-    middleMenu: [
-        {
-            menuName: "Kezdőlap",
-            menuPath: "/kezdolap"
-        },
-        {
-            menuName: "Tanfolyamkereső",
-            menuPath: "/kurzusok"
-        },
-        {
-            menuName: "Tanulás",
-            menuPath: "/learning"
-        },
-        {
-            menuName: "Adminisztráció",
-            menuPath: "/admin"
-        }
-    ],
-    lastItem: {
-        menuName: "Nincs kiválasztott kurzus",
-        menuPath: "/cybersecurity-kurzus"
+const menuItems = [
+    {
+        title: "Kezdőlap",
+        route: "/kezdolap"
+    },
+    {
+        title: "Tanfolyamkereső",
+        route: "/kurzusok"
+    },
+    {
+        title: "Tanulás",
+        route: "/learning"
+    },
+    {
+        title: "Adminisztráció",
+        route: "/administration/statistics"
     }
-} as MenuItemsType;
-
-export type MenuItemType = {
-    menuName: string;
-    menuPath: string;
-};
-
-export type MenuItemsType = {
-    middleMenu: MenuItemType[],
-    lastItem: MenuItemType
-};
+] as NavigationListItemType[];
 
 const Navbar = (props: { hideLinks?: boolean }) => {
 

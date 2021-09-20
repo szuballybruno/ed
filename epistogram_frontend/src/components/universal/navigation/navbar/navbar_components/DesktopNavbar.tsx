@@ -1,24 +1,23 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Button, Typography } from "@mui/material";
 import { PlayArrow } from "@mui/icons-material";
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { getAssetUrl } from "../../../../../frontendHelpers";
+import { NavigationListItemType } from "../../../../../models/types";
 import { useNavigation } from "../../../../../services/navigatior";
+import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
 import { EpistoButton } from "../../../EpistoButton";
+import { EpistoPopper } from "../../../EpistoPopper";
 import { FlexImage } from "../../../FlexImage";
-import { MenuItemsType } from "../Navbar";
 import classes from "./desktopNavbar.module.scss";
 import NavbarButton from "./NavbarButton";
-import { EpistoPopper } from "../../../EpistoPopper";
-import SettingsIcon from '@mui/icons-material/Settings';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
 
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,
-    menuItems: MenuItemsType,
+    menuItems: NavigationListItemType[],
     hideLinks: boolean
 }) => {
 
@@ -62,15 +61,14 @@ const DesktopNavbar = (props: {
             <Flex display={hideLinks ? "none" : "flex"}>
                 {props
                     .menuItems
-                    .middleMenu
                     .map((item, index) => {
                         return <Box
                             p="10px"
                             key={index}>
                             <NavbarButton
                                 index={index}
-                                menuName={item.menuName}
-                                menuPath={item.menuPath} />
+                                menuName={item.title}
+                                menuPath={item.route} />
                         </Box>
                     })}
             </Flex>

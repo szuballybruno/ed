@@ -4,9 +4,9 @@ import AdministrationPage from "../components/administration/AdministrationPage"
 import UserCoursesPage from "../components/course_search/UserCoursesPage";
 import OverviewPage from "../components/dashboard/OverviewPage";
 import { FileUploadPage } from "../components/FileUploadPage";
+import LearningInsightsPage from "../components/LearningInsightsPage";
 import LoginScreen from "../components/login/LoginScreen";
 import { PlayerPage } from "../components/player/PlayerPage";
-import LearningInsightsPage from "../components/LearningInsightsPage";
 import { SignupPage } from "../components/signup/SignupPage";
 import NotFound from "../components/universal/notFound/NotFound";
 import { ProtectedRoute } from "../components/universal/ProtectedRoute";
@@ -21,7 +21,7 @@ export const MainRouting = () => {
 
         {/* protected paths */}
         <ProtectedRoute path="/watch/:descriptorCode" render={() => <PlayerPage />} />
-        <ProtectedRoute path="/admin" render={() => <AdministrationPage />} />
+        <ProtectedRoute path="/administration" render={() => <AdministrationPage />} />
         <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
         <ProtectedRoute path="/kurzusok" render={() => <UserCoursesPage />} />
         <ProtectedRoute path="/settings" render={() => <UserSettingsPage />} />

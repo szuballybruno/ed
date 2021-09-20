@@ -10,23 +10,32 @@ import Navbar from '../universal/navigation/navbar/Navbar';
 import { NavigationListItemType } from '../../models/types';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { Route, Switch } from 'react-router';
+import SettingsIcon from '@mui/icons-material/Settings';
+import PersonIcon from '@mui/icons-material/Person';
+import MonitorIcon from '@mui/icons-material/Monitor';
+import SecurityIcon from '@mui/icons-material/Security';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const menuItems = [
     {
         title: "Adatlap",
         route: "/settings/preferences",
+        icon: <PersonIcon color="secondary"></PersonIcon>
     },
     {
         title: "Megjelenítés",
         route: "/settings/display",
+        icon: <MonitorIcon color="secondary"></MonitorIcon>
     },
     {
         title: "Biztonság",
         route: "/settings/security",
+        icon: <SecurityIcon color="secondary"></SecurityIcon>
     },
     {
         title: "Értesítések",
         route: "/settings/notifications",
+        icon: <NotificationsIcon color="secondary"></NotificationsIcon>
     }
 ] as NavigationListItemType[];
 
