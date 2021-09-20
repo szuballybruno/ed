@@ -14,7 +14,7 @@ export const LearningStatisticsSeciton = (props: {
 
         <EpistoHeader variant="sub" text={props.title} showDivider />
 
-        <EpistoGrid minColumnWidth="200px" columnGap="10">
+        <EpistoGrid minColumnWidth="250px" columnGap="10">
             {props.children}
         </EpistoGrid>
     </Flex>
