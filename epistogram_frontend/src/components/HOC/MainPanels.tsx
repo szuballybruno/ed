@@ -24,7 +24,7 @@ export const LeftPanel = (props: FlexProps) => {
             zIndex={2}
             flexBasis="400px"
             direction="column"
-            align="center"
+            align="stretch"
             padding="0 15px 0 15px"
             justify="flex-start"
             borderLeft="2px solid #e2e2e2"

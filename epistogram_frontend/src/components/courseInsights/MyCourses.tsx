@@ -1,10 +1,10 @@
 import { Typography } from "@mui/material";
 import React from 'react';
-import { LoadingFrame } from "../../HOC/LoadingFrame";
-import { CourseShortDTO } from "../../../models/shared_models/CourseShortDTO";
-import { useUserProfileData } from "../../../services/userProfileDataService";
-import AdminDashboardHeader from "../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
-import CourseTile from "../../universal/atomic/courseTile/CourseTile";
+import { LoadingFrame } from "../HOC/LoadingFrame";
+import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
+import { useUserProfileData } from "../../services/userProfileDataService";
+import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
+import CourseTile from "../universal/atomic/courseTile/CourseTile";
 import classes from './myCourses.module.scss';
 
 const MyCourses = () => {

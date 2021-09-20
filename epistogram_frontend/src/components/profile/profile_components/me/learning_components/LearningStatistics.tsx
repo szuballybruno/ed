@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './learningStatistics.module.scss'
-import StatisticsCard from "./StatisticsCard";
+import StatisticsCard from "../../../../statisticsCard/StatisticsCard";
 import { List } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";

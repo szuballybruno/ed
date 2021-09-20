@@ -6,6 +6,31 @@ import { FlexFloat } from "../../FlexFloat";
 import classes from "./navbar.module.scss";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
 
+const menuItems = {
+    middleMenu: [
+        {
+            menuName: "Kezdőlap",
+            menuPath: "/kezdolap"
+        },
+        {
+            menuName: "Tanfolyamkereső",
+            menuPath: "/kurzusok"
+        },
+        {
+            menuName: "Tanulás",
+            menuPath: "/learning"
+        },
+        {
+            menuName: "Adminisztráció",
+            menuPath: "/admin"
+        }
+    ],
+    lastItem: {
+        menuName: "Nincs kiválasztott kurzus",
+        menuPath: "/cybersecurity-kurzus"
+    }
+} as MenuItemsType;
+
 export type MenuItemType = {
     menuName: string;
     menuPath: string;
@@ -53,28 +78,3 @@ const Navbar = (props: { hideLinks?: boolean }) => {
 }
 
 export default Navbar;
-
-const menuItems = {
-    middleMenu: [
-        {
-            menuName: "Kezdőlap",
-            menuPath: "/kezdolap"
-        },
-        {
-            menuName: "Tanfolyamkereső",
-            menuPath: "/kurzusok"
-        },
-        {
-            menuName: "Profilom",
-            menuPath: "/profilom"
-        },
-        {
-            menuName: "Adminisztráció",
-            menuPath: "/admin"
-        }
-    ],
-    lastItem: {
-        menuName: "Nincs kiválasztott kurzus",
-        menuPath: "/cybersecurity-kurzus"
-    }
-} as MenuItemsType;

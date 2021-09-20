@@ -1,8 +1,7 @@
-import React from 'react';
-import classes from './myExams.module.scss';
-import { globalConfig } from "../../../configuration/config";
-import AdminDashboardHeader from "../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import { Button, Typography } from "@mui/material";
+import React from 'react';
+import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
+import classes from './myExams.module.scss';
 
 const MyExams = () => {
     return (

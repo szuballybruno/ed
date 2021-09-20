@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import classes from "./learningStatisticsItem.module.scss";
 import { Button, Card, Typography } from "@mui/material";
 import { Fullscreen, FullscreenExit } from "@mui/icons-material";
-import { FlexFloat } from '../../../../universal/FlexFloat';
+import { FlexFloat } from '../universal/FlexFloat';
 
 const StatisticsCard = (props: {
     iconPath?: string

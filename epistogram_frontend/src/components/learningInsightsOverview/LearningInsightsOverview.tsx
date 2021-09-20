@@ -16,7 +16,7 @@ const tasks = [
     }
 ];
 
-export const LearningInsights = () => {
+export const LearningInsightsOverview = () => {
 
     return <Flex direction="column">
 

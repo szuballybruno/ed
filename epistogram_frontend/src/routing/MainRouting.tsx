@@ -6,7 +6,7 @@ import OverviewPage from "../components/dashboard/OverviewPage";
 import { FileUploadPage } from "../components/FileUploadPage";
 import LoginScreen from "../components/login/LoginScreen";
 import { PlayerPage } from "../components/player/PlayerPage";
-import ProfileMain from "../components/profile/ProfileMain";
+import LearningInsightsPage from "../components/LearningInsightsPage";
 import { SignupPage } from "../components/signup/SignupPage";
 import NotFound from "../components/universal/notFound/NotFound";
 import { ProtectedRoute } from "../components/universal/ProtectedRoute";
@@ -23,7 +23,8 @@ export const MainRouting = () => {
         <ProtectedRoute path="/admin" render={() => <AdministrationPage />} />
         <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
         <ProtectedRoute path="/kurzusok" render={() => <UserCoursesPage />} />
-        <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />
+        <ProtectedRoute path="/profilom" render={() => <LearningInsightsPage />} />
+        <ProtectedRoute path="/learning" render={() => <LearningInsightsPage />} />
         <ProtectedRoute path="/fileupload" render={() => <FileUploadPage />} />
         <ProtectedRoute path="/" render={() => <OverviewPage />} exact />
 
