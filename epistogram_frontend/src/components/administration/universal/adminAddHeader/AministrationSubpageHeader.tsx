@@ -5,8 +5,6 @@ import Typography from '@mui/material/Typography';
 import React from 'react';
 import { matchPath, useParams, useRouteMatch } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { FlexFloat } from "../../../universal/FlexFloat";
-import classes from "./addUserHeader.module.scss";
 
 export const AministrationSubpageHeader = () => {
 
@@ -20,7 +18,7 @@ export const AministrationSubpageHeader = () => {
     const editVideoMatches = useRouteMatch("/admin/manage/courses/:courseId/item/:itemId");
 
     const BreadcrumbLink = (props: { to: string, title: string, iconComponent?: JSX.Element }) => <NavLink to={props.to}>
-        <Typography className={classes.breadcrumbTitle} style={matchPath(window.location.pathname, {
+        <Typography style={matchPath(window.location.pathname, {
             path: props.to,
             exact: true,
             strict: false
