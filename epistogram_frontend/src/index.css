@@ -73,6 +73,10 @@ button {
   box-shadow: 0 0 8px #0000001f
 }
 
+.tinyShadow {
+  box-shadow: 0 0 4px #0000001f
+}
+
 .hoverShine {
   transition: 0.3s;
 }

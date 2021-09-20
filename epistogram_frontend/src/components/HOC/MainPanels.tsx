@@ -19,6 +19,7 @@ export const LeftPanel = (props: FlexProps) => {
 
     return (
         <FlexFloat
+            borderRadius="none"
             id="leftPanel"
             bg="white"
             zIndex={2}

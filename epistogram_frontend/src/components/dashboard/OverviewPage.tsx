@@ -1,16 +1,20 @@
-import { Divider } from '@mui/material';
+import { Box } from '@chakra-ui/layout';
+import { Typography } from '@mui/material';
 import React, { useContext } from 'react';
+import { tipOfTheDay, useOverviewPageDTO } from "../../services/dataService";
+import { EpistoHeader } from "../administration/universal/EpistoHeader";
+import { DevelopmentLineChart } from '../DevelopmentLineChart';
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
-import { useOverviewPageDTO } from "../../services/dataService";
-import { EpistoHeader } from "../administration/universal/EpistoHeader";
+import { Tasks } from '../Tasks';
 import ListItem from "../universal/atomic/listItem/ListItem";
 import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
+import { EpistoText } from '../universal/EpistoText';
+import { FlexFloat } from '../universal/FlexFloat';
 import Navbar from "../universal/navigation/navbar/Navbar";
-import { DashboardVerticalDivider, DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
-import { OverviewDashboard } from "./dashboard_components/OverviewDashboard/OverviewDashboard";
-import ProfileStats from "./dashboard_components/ProfileStats/ProfileStats";
+import { VideoQuestionnaire } from '../universal/VideoQuestionnaire';
+import { DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
 
 const OverviewPage = () => {
 
@@ -33,11 +37,6 @@ const OverviewPage = () => {
         <ContentWrapper>
             <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
                 <LeftPanel align="stretch" justify="stretch">
-
-                    {/* profile data */}
-                    <ProfileStats user={user!} />
-
-                    <DashboardVerticalDivider />
 
                     {/* active item */}
                     <DashoardLeftItemGroup title={hasCurrentItem ? "Folytatom" : "Új tanfolyam kiválasztása"}>
@@ -63,16 +62,32 @@ const OverviewPage = () => {
                 </LeftPanel>
                 <RightPanel>
 
-                    <EpistoHeader showDivider text="Személyes tanulási asszisztens" />
-                    <OverviewDashboard dto={pageDTO!} />
+                    {/* test your knowledge */}
+                    <EpistoHeader text="A nap kerdese" />
+                    <FlexFloat margin="0 20px 20px 20px" width="550px" alignSelf="center">
+                        <VideoQuestionnaire
+                            answerSessionId={-1}
+                            onAnswered={() => { }}
+                            question={pageDTO?.testQuestionDTO!} />
+                    </FlexFloat>
 
-                    {/*<OverviewSection title="Szavazás">
-                         <Votes />
-                        {recommendedCourses === [] ? <DashBoardRightSpacer title={"Kurzusajánló"} /> : null}
-                        {recommendedCourses === [] ? <RecommendedCourses courses={recommendedCourses} /> : null}
-                        <DashBoardRightSpacer title={""} />
-                    </OverviewSection>*/}
+                    {/* current tasks */}
+                    <EpistoHeader text="Feladatok" />
+                    <FlexFloat margin="0 20px 20px 20px">
+                        <Tasks currentTasks={pageDTO?.currentTasks!} />
+                    </FlexFloat>
 
+                    {/* tip of the day */}
+                    <EpistoHeader text="Napi tipped" />
+                    <FlexFloat margin="0 20px 20px 20px">
+                        <Typography variant={"h6"}>{tipOfTheDay}</Typography>
+                    </FlexFloat>
+
+                    {/* development chart */}
+                    <EpistoHeader text="Fejlődési görbém az elmúlt 90 napban" />
+                    <FlexFloat margin="0 20px 20px 20px" height="600px">
+                        <DevelopmentLineChart data={pageDTO?.developmentChartData!} />
+                    </FlexFloat>
                 </RightPanel>
             </LoadingFrame>
         </ContentWrapper>

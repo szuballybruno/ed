@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom";
 import { getAssetUrl } from "../../../../../frontendHelpers";
 import { NavigationListItemType } from "../../../../../models/types";
 import { useNavigation } from "../../../../../services/navigatior";
+import { EpistoConinInfo } from "../../../../EpistoCoinInfo";
 import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
 import { EpistoButton } from "../../../EpistoButton";
 import { EpistoPopper } from "../../../EpistoPopper";
@@ -76,20 +77,19 @@ const DesktopNavbar = (props: {
             {/* content */}
             <Flex display={hideLinks ? "none" : undefined} pr="10px" align="center">
 
-                <Flex height="45px" pr="10px">
-                    {/* show something new  */}
-                    <EpistoButton variant="colored">
-                        Mutass valamit!
-                    </EpistoButton>
+                {/* continue watching  */}
+                {currentCourseItemCode &&
+                    <EpistoButton
+                        style={{ marginRight: "10px" }}
+                        variant="colored"
+                        isRound
+                        padding="0"
+                        size="45px"
+                        onClick={continueWatching}>
+                        <PlayArrow />
+                    </EpistoButton>}
 
-                    {/* continue watching  */}
-                    {currentCourseItemCode &&
-                        <EpistoButton
-                            variant="outlined"
-                            onClick={continueWatching}>
-                            <PlayArrow />
-                        </EpistoButton>}
-                </Flex>
+                <EpistoConinInfo height="45px" mr="10px" />
 
                 {!!user && <EpistoButton
                     ref={ref}

@@ -1,17 +1,18 @@
-import { Typography } from '@mui/material';
+import { FlexProps, Text } from "@chakra-ui/react";
 import React, { useState } from 'react';
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
-import { QuestionnaierAnswer, QuestionnaireLayout } from './QuestionnaireLayout';
-import { Text } from "@chakra-ui/react"
+import { EpistoText } from "./EpistoText";
+import { QuestionnaierAnswer } from "./QuestionnaireAnswer";
+import { QuestionnaireLayout } from './QuestionnaireLayout';
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
     answerSessionId: number,
     onAnswered: () => void
-}) => {
+} & FlexProps) => {
 
-    const { question, onAnswered, answerSessionId } = props;
+    const { question, onAnswered, answerSessionId, ...css } = props;
     const [selectedAnswerId, setSelectedAnswerId] = useState(-1);
     const { answerQuestionAsync, correctAnswer, answerQuestionError, answerQuestionState } = useAnswerQuestion();
     const correctAnswerId = correctAnswer?.answerId;
@@ -20,8 +21,9 @@ export const VideoQuestionnaire = (props: {
         <QuestionnaireLayout
             buttonsEnabled={!correctAnswerId}
             loadingError={answerQuestionError}
+            loadingState={answerQuestionState}
             title={question.questionText}
-            loadingState={answerQuestionState}>
+            {...css}>
             {question
                 .answers
                 .map((answer, index) => {
@@ -32,6 +34,7 @@ export const VideoQuestionnaire = (props: {
                         key={index}
                         isCorrect={correctAnswerId === answerId}
                         isIncorrect={selectedAnswerId === answerId && correctAnswerId !== answerId}
+                        mb="8px"
                         onClick={async () => {
 
                             setSelectedAnswerId(answerId);
@@ -39,7 +42,13 @@ export const VideoQuestionnaire = (props: {
 
                             await answerQuestionAsync(answerSessionId, answerId, question.questionId);
                         }}>
-                        <Text fontSize="13px">{answer.answerText}</Text>
+                        <EpistoText
+                            isAutoFontSize
+                            text={answer.answerText}
+                            style={{
+                                width: "100%"
+                            }} />
+                        {/* <Text fontSize="15px" textTransform="none">{answer.answerText}</Text> */}
                     </QuestionnaierAnswer>;
                 })}
         </QuestionnaireLayout>

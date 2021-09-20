@@ -1,7 +1,8 @@
 import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from "@mui/icons-material";
 import { useState } from "react";
 import { hasValue } from "../../frontendHelpers";
-import { QuestionnaierAnswer, QuestionnaireLayout } from "../universal/QuestionnaireLayout";
+import { QuestionnaierAnswer } from "../universal/QuestionnaireAnswer";
+import { QuestionnaireLayout } from "../universal/QuestionnaireLayout";
 
 export const StillWatching = (props: { onClose: () => void, optionIndex: number }) => {
 

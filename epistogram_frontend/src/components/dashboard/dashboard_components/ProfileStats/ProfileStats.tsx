@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material";
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { getAssetUrl } from "../../../../frontendHelpers";
 import { UserDTO } from '../../../../models/shared_models/UserDTO';
+import { EpistoConinInfo } from "../../../EpistoCoinInfo";
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import { EpistoButton } from "../../../universal/EpistoButton";
 import classes from './profileStats.module.scss';
@@ -24,14 +24,7 @@ const ProfileStats = (props: { user: UserDTO }) => {
                 <EpistoButton variant="outlined">Profilom</EpistoButton>
 
                 {/* episto coin */}
-                <div className={classes.epistoCoinWrapper}>
-
-                    {/* coin value  */}
-                    <Typography variant={"button"}>23.459</Typography>
-
-                    {/* coin image */}
-                    <img alt={""} src={getAssetUrl("/images/epistoCoin.png")} />
-                </div>
+                <EpistoConinInfo></EpistoConinInfo>
             </NavLink>
 
         </div>

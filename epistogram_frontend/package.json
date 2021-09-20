@@ -9,6 +9,7 @@
     "@emotion/styled": "11",
     "@mui/icons-material": "^5.0.0",
     "@mui/material": "^5.0.0",
+    "auto-fontsize": "^1.0.25",
     "axios": "^0.21.1",
     "babel-plugin-react-css-modules": "^5.2.6",
     "chart.js": "^3.3.2",
