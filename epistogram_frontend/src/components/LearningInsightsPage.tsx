@@ -1,36 +1,33 @@
-import { Flex } from "@chakra-ui/layout";
 import { Assignment, School, Subscriptions } from "@mui/icons-material";
-import { Typography } from "@mui/material";
 import React from "react";
-import { NavLink, Route, Switch } from 'react-router-dom';
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
-import { LearningInsightsOverview as LearningInsightsOverview } from "./learningInsightsOverview/LearningInsightsOverview";
-import Navbar from "./universal/navigation/navbar/Navbar";
+import { Route, Switch } from 'react-router-dom';
+import { NavigationListItemType } from "../models/types";
 import MyCourses from "./courseInsights/MyCourses";
 import MyExams from "./examInsights/MyExams";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
+import { LearningInsightsOverview as LearningInsightsOverview } from "./learningInsightsOverview/LearningInsightsOverview";
+import { NavigationLinkList } from "./NavigationLinkList";
+import Navbar from "./universal/navigation/navbar/Navbar";
 
 const menuItems = [
     {
-        "menuName": "Tanulás",
-        "route": "/learning"
+        title: "Áttekintés",
+        route: "/learning",
+        icon: <School color={"secondary"} />,
     },
     {
-        "menuName": "Kurzusaim",
-        "route": "/learning/courses"
+        title: "Kurzusaim",
+        route: "/learning/courses",
+        icon: <Subscriptions color={"secondary"} />,
     },
     {
-        "menuName": "Vizsgáim",
-        "route": "/learning/exams"
+        title: "Vizsgáim",
+        route: "/learning/exams",
+        icon: <Assignment color={"secondary"} />
     }
-];
+] as NavigationListItemType[];
 
 const LearningInsightsPage = () => {
-
-    const icons = {
-        0: <School color={"secondary"} />,
-        1: <Subscriptions color={"secondary"} />,
-        2: <Assignment color={"secondary"} />
-    }
 
     return <MainWrapper>
 
@@ -39,28 +36,7 @@ const LearningInsightsPage = () => {
         <ContentWrapper>
 
             <LeftPanel padding="20px">
-                {menuItems
-                    .map((menuItem, index) => {
-
-                        return <NavLink
-                            exact
-                            to={menuItem.route}
-                            key={index}>
-                            <Flex p="20px" className="leftBorderOnHover" align="center">
-
-                                {/* icon */}
-                                {icons[index]}
-
-                                {/* text */}
-                                <Typography
-                                    color={"secondary"}
-                                    variant={"button"}
-                                    style={{ marginLeft: "10px" }}>
-                                    {menuItems[index].menuName}
-                                </Typography>
-                            </Flex>
-                        </NavLink>
-                    })}
+                <NavigationLinkList items={menuItems} />
             </LeftPanel>
 
             <RightPanel>

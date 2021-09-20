@@ -16,32 +16,13 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
 
-const userMenuItems = [
-    {
-        name: "Settings",
-        path: "user/settings",
-        icon: <SettingsIcon></SettingsIcon>
-    },
-    {
-        name: "Profile Dashboard",
-        path: "",
-        icon: <DashboardIcon></DashboardIcon>
-    },
-    {
-        name: "Log Out",
-        path: "",
-        icon: <LogoutIcon></LogoutIcon>,
-        color: "var(--mildRed)"
-    }
-]
-
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,
     menuItems: MenuItemsType,
     hideLinks: boolean
 }) => {
 
-    const { navigateToPlayer } = useNavigation();
+    const { navigateToPlayer, navigate } = useNavigation();
     const currentCourseItemCode = props.currentCourseItemCode;
     const continueWatching = () => {
 
@@ -54,6 +35,20 @@ const DesktopNavbar = (props: {
     const ref = useRef<HTMLButtonElement>(null);
     const [popperOpen, setPopperOpen] = useState(false);
     const { hideLinks } = props;
+
+    const userMenuItems = [
+        {
+            name: "Settings",
+            icon: <SettingsIcon></SettingsIcon>,
+            onClick: () => navigate("/settings/preferences")
+        },
+        {
+            name: "Log Out",
+            icon: <LogoutIcon></LogoutIcon>,
+            color: "var(--mildRed)",
+            onClick: () => navigate("/settings")
+        }
+    ]
 
     return (
         <Flex align="center" width="100%" justify="space-between">
@@ -127,7 +122,8 @@ const DesktopNavbar = (props: {
 
                         return <EpistoButton
                             variant={x.color ? "colored" : undefined}
-                            style={{ background: x.color }}>
+                            style={{ background: x.color }}
+                            onClick={x.onClick}>
                             <Flex className="whall" m="5px" align="center">
                                 {x.icon}
                                 <Typography

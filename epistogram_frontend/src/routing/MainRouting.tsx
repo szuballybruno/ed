@@ -10,6 +10,7 @@ import LearningInsightsPage from "../components/LearningInsightsPage";
 import { SignupPage } from "../components/signup/SignupPage";
 import NotFound from "../components/universal/notFound/NotFound";
 import { ProtectedRoute } from "../components/universal/ProtectedRoute";
+import { UserSettingsPage } from "../components/userSettings/UserSettingsPage";
 
 export const MainRouting = () => {
     return <Switch>
@@ -23,7 +24,7 @@ export const MainRouting = () => {
         <ProtectedRoute path="/admin" render={() => <AdministrationPage />} />
         <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
         <ProtectedRoute path="/kurzusok" render={() => <UserCoursesPage />} />
-        <ProtectedRoute path="/profilom" render={() => <LearningInsightsPage />} />
+        <ProtectedRoute path="/settings" render={() => <UserSettingsPage />} />
         <ProtectedRoute path="/learning" render={() => <LearningInsightsPage />} />
         <ProtectedRoute path="/fileupload" render={() => <FileUploadPage />} />
         <ProtectedRoute path="/" render={() => <OverviewPage />} exact />

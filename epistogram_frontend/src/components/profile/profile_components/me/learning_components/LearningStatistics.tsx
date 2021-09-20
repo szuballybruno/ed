@@ -1,11 +1,9 @@
-import React from 'react';
-import classes from './learningStatistics.module.scss'
-import StatisticsCard from "../../../../statisticsCard/StatisticsCard";
-import { List } from "@mui/material";
-import { Bar } from "react-chartjs-2";
-import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
-import { globalConfig } from "../../../../../configuration/config";
 import { Flex } from '@chakra-ui/layout';
+import React from 'react';
+import { Bar } from "react-chartjs-2";
+import StatisticsCard from "../../../../statisticsCard/StatisticsCard";
+import classes from './learningStatistics.module.scss';
+import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
 
 // The default options that should be included with chartjs data object
 
