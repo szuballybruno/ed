@@ -10,6 +10,7 @@ import { AdminDashboardSearch } from "../administration/universal/searchBar/Admi
 import CourseTile from "../universal/atomic/courseTile/CourseTile";
 import Navbar from "../universal/navigation/navbar/Navbar";
 import classes from "./courseSearchMain.module.scss";
+import { EpistoGrid } from "../universal/EpistoGrid";
 
 const UserCoursesPage = () => {
 
@@ -150,9 +151,7 @@ const UserCoursesPage = () => {
                 {/* courses */}
                 <LoadingFrame loadingState={[status]} error={[error]}>
                     <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
-                        <Grid
-                            templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
-                            gap="15">
+                        <EpistoGrid columnGap="15" minColumnWidth="300px">
                             {courses
                                 .map((course: any, index) => {
                                     return <GridItem height="350px" >
@@ -160,7 +159,7 @@ const UserCoursesPage = () => {
                                         <CourseTile course={course} itemIndex={index} key={index} />
                                     </GridItem>
                                 })}
-                        </Grid>
+                        </EpistoGrid>
                     </Box>
                 </LoadingFrame>
 

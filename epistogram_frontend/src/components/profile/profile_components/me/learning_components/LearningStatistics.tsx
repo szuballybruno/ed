@@ -1,10 +1,11 @@
 import React from 'react';
 import classes from './learningStatistics.module.scss'
-import LearningStatisticsItem from "./LearningStatisticsItem";
+import StatisticsCard from "./StatisticsCard";
 import { List } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
 import { globalConfig } from "../../../../../configuration/config";
+import { Flex } from '@chakra-ui/layout';
 
 // The default options that should be included with chartjs data object
 
@@ -89,88 +90,94 @@ export const chartDefaultOptions = {
 
 // TODO: Create a map function by local history to awoid code duplication
 
-const LearningStatistics = (props: { className?: string }) => {
-    return <div className={`${classes.learningContainer} ${props.className}`}>
-        <div className={classes.learningInnerContainer}>
-            <List className={classes.learningList}>
-                <LearningStatisticsSeciton title={"Időbeosztás"}>
-                    <LearningStatisticsItem iconPath={globalConfig.assetStorageUrl + "/application/stats/1.session.png"} value={"32"} suffix={"perc"} title={"Session átlagos hossza"} />
-                    <LearningStatisticsItem iconPath={globalConfig.assetStorageUrl + "/application/stats/2.preferaltidosav.png"} value={"12-15"} suffix={"óra"} title={"Mely az általam leginkább preferált idősáv?"}>
-                        <Bar className={classes.progressLineChart}
-                            options={chartDefaultOptions}
-                            /*type={"bar"}*/
-                            data={daysWithActivityInTime} />
-                    </LearningStatisticsItem>
-                    <LearningStatisticsItem iconPath={globalConfig.assetStorageUrl + "/application/stats/3.leghatekonyabbidosav.png"} value={"9-12"} suffix={"óra"} title={"Mely a leghatékonyabb idősáv?"} />
-                    <LearningStatisticsItem iconPath={globalConfig.assetStorageUrl + "/application/stats/4.melynapok.png"} value={"Szerda"} suffix={""} title={"Mely nap(ok)on vagyok a legaktívabb?"}>
-                        <Bar className={classes.progressLineChart}
-                            options={chartDefaultOptions}
-                            /*type={"bar"}*/
-                            data={howActiveIAm} />
-                    </LearningStatisticsItem>
-                </LearningStatisticsSeciton>
+const LearningStatistics = () => {
 
+    return <Flex direction="column" flex="1">
 
-                <LearningStatisticsSeciton title={"Videók"}>
-                    <LearningStatisticsItem value={"13"} suffix={"db"} title={"Megtekintett videók a hónapban"}>
-                        <Bar className={classes.progressLineChart}
-                            options={chartDefaultOptions}
-                            /*type={"bar"}*/
-                            data={howActiveIAm} />
-                    </LearningStatisticsItem>
-                    <LearningStatisticsItem value={"18.5"} suffix={"óra"} title={"Videónézéssel eltöltött idő a hónapban"} />
-                </LearningStatisticsSeciton>
+        {/* time */}
+        <LearningStatisticsSeciton title={"Időbeosztás"}>
+            <StatisticsCard value={"32"} suffix={"perc"} title={"Session átlagos hossza"} />
+            <StatisticsCard value={"12-15"} suffix={"óra"} title={"Mely az általam leginkább preferált idősáv?"}>
+                <Bar className={classes.progressLineChart}
+                    options={chartDefaultOptions}
+                    data={daysWithActivityInTime} />
+            </StatisticsCard>
+            <StatisticsCard value={"9-12"} suffix={"óra"} title={"Mely a leghatékonyabb idősáv?"} />
+            <StatisticsCard value={"Szerda"} suffix={""} title={"Mely nap(ok)on vagyok a legaktívabb?"}>
+                <Bar className={classes.progressLineChart}
+                    options={chartDefaultOptions}
+                    data={howActiveIAm} />
+            </StatisticsCard>
+        </LearningStatisticsSeciton>
 
-                <LearningStatisticsSeciton title={"Kurzusok"}>
-                    <LearningStatisticsItem value={"8"} suffix={"db"} title={"Elkezdett kurzusok száma"} />
-                    <LearningStatisticsItem value={"1"} suffix={"db"} title={"Több mint két hete inaktív kurzusok száma"} />
-                    <LearningStatisticsItem value={"4"} suffix={"db"} title={"Kurzusok száma, amelyek legalább 50%-ban készen vannak"} />
-                    <LearningStatisticsItem value={"3"} suffix={"db"} title={"Befejezett kurzusok száma"} />
-                </LearningStatisticsSeciton>
+        {/* videos */}
+        <LearningStatisticsSeciton title={"Videók"}>
+            <StatisticsCard value={"13"} suffix={"db"} title={"Megtekintett videók a hónapban"}>
+                <Bar className={classes.progressLineChart}
+                    options={chartDefaultOptions}
+                    data={howActiveIAm} />
+            </StatisticsCard>
+            <StatisticsCard value={"18.5"} suffix={"óra"} title={"Videónézéssel eltöltött idő a hónapban"} />
+        </LearningStatisticsSeciton>
 
-                <LearningStatisticsSeciton title={"Vizsgák"}>
-                    <LearningStatisticsItem value={"2"} suffix={"db"} title={"Elvégzett vizsgák száma"} />
-                    <LearningStatisticsItem value={"75"} suffix={"%"} title={"Átlagos teljesítmény a vizsgákon"} />
-                </LearningStatisticsSeciton>
-                <LearningStatisticsSeciton title={"Hatékonyság"}>
-                    <LearningStatisticsItem value={"17"} suffix={"db"} title={"Megválaszolt tudást vizsgáló kérdések száma"} />
-                    <LearningStatisticsItem value={"62"} suffix={"%"} title={"Helyes válaszok aránya"} />
-                </LearningStatisticsSeciton>
+        {/* courses */}
+        <LearningStatisticsSeciton title={"Kurzusok"}>
+            <StatisticsCard value={"8"} suffix={"db"} title={"Elkezdett kurzusok száma"} />
+            <StatisticsCard value={"1"} suffix={"db"} title={"Több mint két hete inaktív kurzusok száma"} />
+            <StatisticsCard value={"4"} suffix={"db"} title={"Kurzusok száma, amelyek legalább 50%-ban készen vannak"} />
+            <StatisticsCard value={"3"} suffix={"db"} title={"Befejezett kurzusok száma"} />
+        </LearningStatisticsSeciton>
 
-                <LearningStatisticsSeciton title={"Fókusz"}>
-                    <LearningStatisticsItem value={"45"} suffix={"%"} title={"Fókuszálás a videómegtekintések során"}>
-                        <Bar className={classes.progressLineChart}
-                            options={chartDefaultOptions}
-                            /*type={"bar"}*/
-                            data={howActiveIAm} />
-                    </LearningStatisticsItem>
-                    <LearningStatisticsItem value={"3.2"} suffix={"mp"} title={"Reakcióidő fókuszálást vizsgáló kérdésekre"} />
-                    <LearningStatisticsItem value={"9.5"} suffix={"mp"} title={"Reakcióidő tudást vizsgáló kérdésekre"} />
-                </LearningStatisticsSeciton>
-                <LearningStatisticsSeciton title={"Feladatok"}>
-                    <LearningStatisticsItem value={"8"} suffix={"db"} title={"Elvégzett feladatok"} />
-                    <LearningStatisticsItem value={"12"} suffix={"db"} title={"Fogadott feladatok"} />
-                    <LearningStatisticsItem value={"0"} suffix={"db"} title={"Megszakított feladatok"} />
-                </LearningStatisticsSeciton>
-                <LearningStatisticsSeciton title={"EpistoGram"}>
-                    <LearningStatisticsItem value={"13.82"} suffix={"db"} title={"Mennyi EpistoCoint szereztem az elmúlt hónapban"}>
-                        <Bar className={classes.progressLineChart}
-                            options={chartDefaultOptions}
-                            /*type={"bar"}*/
-                            data={howActiveIAm} />
-                    </LearningStatisticsItem>
-                </LearningStatisticsSeciton>
-                <LearningStatisticsSeciton title={"Szorgalom"}>
-                    <LearningStatisticsItem value={"0"} suffix={"%"} title={"Határidők betartása"} chartSize={"large"}>
-                        <Bar className={classes.progressLineChart}
-                            options={chartDefaultOptions}
-                            /*type={"bar"}*/
-                            data={howActiveIAm} />
-                    </LearningStatisticsItem>
-                </LearningStatisticsSeciton>
-            </List>
-        </div>
-    </div>
+        {/* exams */}
+        <LearningStatisticsSeciton title={"Vizsgák"}>
+            <StatisticsCard value={"2"} suffix={"db"} title={"Elvégzett vizsgák száma"} />
+            <StatisticsCard value={"75"} suffix={"%"} title={"Átlagos teljesítmény a vizsgákon"} />
+        </LearningStatisticsSeciton>
+
+        {/* efficiency */}
+        <LearningStatisticsSeciton title={"Hatékonyság"}>
+            <StatisticsCard value={"17"} suffix={"db"} title={"Megválaszolt tudást vizsgáló kérdések száma"} />
+            <StatisticsCard value={"62"} suffix={"%"} title={"Helyes válaszok aránya"} />
+        </LearningStatisticsSeciton>
+
+        {/* focus */}
+        <LearningStatisticsSeciton title={"Fókusz"}>
+            <StatisticsCard value={"45"} suffix={"%"} title={"Fókuszálás a videómegtekintések során"}>
+                <Bar className={classes.progressLineChart}
+                    options={chartDefaultOptions}
+                    /*type={"bar"}*/
+                    data={howActiveIAm} />
+            </StatisticsCard>
+            <StatisticsCard value={"3.2"} suffix={"mp"} title={"Reakcióidő fókuszálást vizsgáló kérdésekre"} />
+            <StatisticsCard value={"9.5"} suffix={"mp"} title={"Reakcióidő tudást vizsgáló kérdésekre"} />
+        </LearningStatisticsSeciton>
+
+        {/* tasks */}
+        <LearningStatisticsSeciton title={"Feladatok"}>
+            <StatisticsCard value={"8"} suffix={"db"} title={"Elvégzett feladatok"} />
+            <StatisticsCard value={"12"} suffix={"db"} title={"Fogadott feladatok"} />
+            <StatisticsCard value={"0"} suffix={"db"} title={"Megszakított feladatok"} />
+        </LearningStatisticsSeciton>
+
+        {/* epistogram */}
+        <LearningStatisticsSeciton title={"EpistoGram"}>
+            <StatisticsCard value={"13.82"} suffix={"db"} title={"Mennyi EpistoCoint szereztem az elmúlt hónapban"}>
+                <Bar className={classes.progressLineChart}
+                    options={chartDefaultOptions}
+                    /*type={"bar"}*/
+                    data={howActiveIAm} />
+            </StatisticsCard>
+        </LearningStatisticsSeciton>
+
+        {/* courage */}
+        <LearningStatisticsSeciton title={"Szorgalom"}>
+            <StatisticsCard value={"0"} suffix={"%"} title={"Határidők betartása"} chartSize={"large"}>
+                <Bar className={classes.progressLineChart}
+                    options={chartDefaultOptions}
+                    data={howActiveIAm} />
+            </StatisticsCard>
+        </LearningStatisticsSeciton>
+    </Flex>
 };
 
 export default LearningStatistics;

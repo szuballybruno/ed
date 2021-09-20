@@ -7,7 +7,7 @@ export const FlexFloat = (props: FlexProps & { elevation?: number }) => {
 
     return <Flex
         id="flexFloat"
-        borderRadius="10px"
+        borderRadius="7px"
         boxShadow={`0 0 ${elevation ?? 8}px #0000001f`}
         bg="white"
         {...flexProps} >

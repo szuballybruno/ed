@@ -9,7 +9,7 @@ import { AministrationSubpageHeader } from "./universal/adminAddHeader/Aministra
 import AdminDashboardMenuItem from "./universal/adminDashboardMenuItem/AdminDashboardMenuItem";
 import classes from './users/userList/administration.module.scss';
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
-import Statistics from "./statistics/Statistics";
+import AminStatistics from "./statistics/AminStatistics";
 import AddUser from "./users/addUser/AddUser";
 import { UserAdministrationPage } from "./users/userList/UserAdministrationPage";
 import { CourseList } from "./courses/courseList/CourseList";
@@ -68,7 +68,7 @@ const AdministrationPage = (props: { match: { url: string; } }) => {
 
                     {/* statistics */}
                     <Route path={'/admin/statistics'}>
-                        <Statistics />
+                        <AminStatistics />
                     </Route>
 
                     {/* user administration */}

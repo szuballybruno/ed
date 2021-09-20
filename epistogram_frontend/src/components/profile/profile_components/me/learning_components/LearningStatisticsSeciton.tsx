@@ -1,20 +1,21 @@
-import React from 'react';
+import { Flex } from "@chakra-ui/layout";
+import React, { ReactNode } from 'react';
+import { EpistoHeader } from "../../../../administration/universal/EpistoHeader";
+import { EpistoGrid } from "../../../../universal/EpistoGrid";
 import classes from "./learningStatisticsSection.module.scss";
-import { Divider, Typography } from "@mui/material";
 
 // HOC for a user statistics group like e.g.: focus, videos, time management
 
 export const LearningStatisticsSeciton = (props: {
     title: string,
-    children: React.ReactNode | React.ReactNode[]
+    children: ReactNode
 }) => {
-    return <div className={classes.sectionWrapper}>
-        <div className={classes.learningListHeaderWrapper}>
-            <Typography variant={"overline"}>{props.title}</Typography>
-        </div>
-        <Divider style={{ width: "99%" }} />
-        <div className={classes.gridContainer}>
+    return <Flex direction="column">
+
+        <EpistoHeader variant="sub" text={props.title} showDivider />
+
+        <EpistoGrid minColumnWidth="200px" columnGap="10">
             {props.children}
-        </div>
-    </div>
+        </EpistoGrid>
+    </Flex>
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import classes from "./statistics.module.scss"
-import {LearningStatisticsSeciton} from "../../profile/profile_components/me/learning_components/LearningStatisticsSeciton";
-import LearningStatisticsItem from "../../profile/profile_components/me/learning_components/LearningStatisticsItem";
-import {Bar, Line, Pie, Scatter} from "react-chartjs-2";
+import { LearningStatisticsSeciton } from "../../profile/profile_components/me/learning_components/LearningStatisticsSeciton";
+import StatisticsCard from "../../profile/profile_components/me/learning_components/StatisticsCard";
+import { Bar, Line, Pie, Scatter } from "react-chartjs-2";
 
 
-const Statistics = () => {
+const AminStatistics = () => {
 
     const data = {
         labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
@@ -15,19 +15,19 @@ const Statistics = () => {
                 fill: false,
                 backgroundColor: "#067daf",
                 borderColor: "#067daf",
-                data: [57,26,31,-42,34],
+                data: [57, 26, 31, -42, 34],
             }, {
                 label: 'Dashed',
                 fill: false,
                 backgroundColor: "#d9617d",
                 borderColor: "#D9617DFF",
-                borderDash: [5,5],
+                borderDash: [5, 5],
                 data: [5, -59, 72, 32, -19, 23],
             }, {
                 label: 'Filled',
                 backgroundColor: "#7DE8B2FF",
                 borderColor: "#7DE8B2FF",
-                data: [12,93,-58,42,-89,24],
+                data: [12, 93, -58, 42, -89, 24],
                 fill: true,
             }
         ]
@@ -41,13 +41,13 @@ const Statistics = () => {
                 fill: false,
                 backgroundColor: "#067daf",
                 borderColor: "#067daf",
-                data: [57,26,31,-42,34],
+                data: [57, 26, 31, -42, 34],
             }, {
                 label: 'Dashed',
                 fill: false,
                 backgroundColor: "#d9617d",
                 borderColor: "#D9617DFF",
-                borderDash: [5,5],
+                borderDash: [5, 5],
                 data: [5, -59, 72, 32, -19, 23],
                 type: 'line'
             }
@@ -62,10 +62,10 @@ const Statistics = () => {
     for (let i = 0; i < 1000; i++) {
         prev += 5 - Math.random() * 10;
         // @ts-ignore
-        data3.push({x: i, y: prev});
+        data3.push({ x: i, y: prev });
         prev2 += 5 - Math.random() * 10;
         // @ts-ignore
-        data4.push({x: i, y: prev2});
+        data4.push({ x: i, y: prev2 });
     }
 
     const data5 = {
@@ -81,7 +81,7 @@ const Statistics = () => {
                 label: 'Dashed',
                 backgroundColor: "#d9617d",
                 borderColor: "#D9617DFF",
-                borderDash: [5,5],
+                borderDash: [5, 5],
                 radius: 0,
                 data: data4,
             }
@@ -125,25 +125,25 @@ const Statistics = () => {
         <div className={classes.statisticsOuterWrapper}>
             <div className={classes.statisticsInfoOuterContainer}>
                 <LearningStatisticsSeciton title={"Leggyakoribb adatok"}>
-                    <LearningStatisticsItem suffix={"%"} value={"95"} title={"Kurzus teljesítési ráta"} />
-                    <LearningStatisticsItem suffix={"perc"} value={"38"} title={"Átlagosan eltöltött idő/belépés"} />
-                    <LearningStatisticsItem suffix={"óra"} value={"3,15"} title={"Átlagos tanulással töltött idő/hét"} />
-                    <LearningStatisticsItem suffix={"%"} value={"70"} title={"Belépési arány a héten"} />
-                    <LearningStatisticsItem suffix={"%"} value={"54"} title={"Teljesítés a vizsgákon"} />
-                    <LearningStatisticsItem suffix={"%"} value={"80"} title={"Átlagos fókusztartás"} />
-                    <LearningStatisticsItem suffix={"%"} value={"3"} title={"Felejtési görbe javulása"} />
-                    <LearningStatisticsItem suffix={"pont"} value={"8.5"} title={"Munkavállalói feedback"} />
+                    <StatisticsCard suffix={"%"} value={"95"} title={"Kurzus teljesítési ráta"} />
+                    <StatisticsCard suffix={"perc"} value={"38"} title={"Átlagosan eltöltött idő/belépés"} />
+                    <StatisticsCard suffix={"óra"} value={"3,15"} title={"Átlagos tanulással töltött idő/hét"} />
+                    <StatisticsCard suffix={"%"} value={"70"} title={"Belépési arány a héten"} />
+                    <StatisticsCard suffix={"%"} value={"54"} title={"Teljesítés a vizsgákon"} />
+                    <StatisticsCard suffix={"%"} value={"80"} title={"Átlagos fókusztartás"} />
+                    <StatisticsCard suffix={"%"} value={"3"} title={"Felejtési görbe javulása"} />
+                    <StatisticsCard suffix={"pont"} value={"8.5"} title={"Munkavállalói feedback"} />
                 </LearningStatisticsSeciton>
             </div>
             <div className={classes.statisticsInfoOuterContainer}>
                 <LearningStatisticsSeciton title={"Grafikonok"}>
-                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
-                        <Line options={config}  data={data} /*type={"line"}*//>
-                    </LearningStatisticsItem>
-                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
+                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                        <Line options={config} data={data} /*type={"line"}*/ />
+                    </StatisticsCard>
+                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
                         <Bar /*type={"bar"}*/ data={data2} />
-                    </LearningStatisticsItem>
-                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
+                    </StatisticsCard>
+                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
                         <Line options={{
                             interaction: {
                                 intersect: false
@@ -156,21 +156,21 @@ const Statistics = () => {
                                     type: 'linear'
                                 }
                             }
-                        }}  data={data5} /*type={"line"}*//>
-                    </LearningStatisticsItem>
-                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
-                        <Pie options={{responsive: true, maintainAspectRatio: false}} /*type={"pie"}*/ data={{
+                        }} data={data5} /*type={"line"}*/ />
+                    </StatisticsCard>
+                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                        <Pie options={{ responsive: true, maintainAspectRatio: false }} /*type={"pie"}*/ data={{
                             labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
                             datasets: [
                                 {
                                     label: 'Dataset 1',
-                                    data: [5,9,13,2,6,8],
+                                    data: [5, 9, 13, 2, 6, 8],
                                     backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
                                 }
                             ]
                         }} />
-                    </LearningStatisticsItem>
-                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
+                    </StatisticsCard>
+                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
                         <Scatter options={{
                             responsive: true,
                             plugins: {
@@ -210,8 +210,8 @@ const Statistics = () => {
                                 }
                             ]
                         }} />
-                    </LearningStatisticsItem>
-                    <LearningStatisticsItem isOpenByDefault suffix={""} title={""} value={""}>
+                    </StatisticsCard>
+                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
                         <Bar options={{
                             indexAxis: 'y',
                             // Elements options apply to all of the options unless overridden in a dataset
@@ -239,22 +239,22 @@ const Statistics = () => {
                                     fill: false,
                                     backgroundColor: "#067daf",
                                     borderColor: "#067daf",
-                                    data: [57,26,31,-42,34],
+                                    data: [57, 26, 31, -42, 34],
                                 }, {
                                     label: 'Dashed',
                                     fill: false,
                                     backgroundColor: "#d9617d",
                                     borderColor: "#D9617DFF",
-                                    borderDash: [5,5],
+                                    borderDash: [5, 5],
                                     data: [5, -59, 72, 32, -19, 23],
                                 }
                             ]
                         }} />
-                    </LearningStatisticsItem>
+                    </StatisticsCard>
                 </LearningStatisticsSeciton>
             </div>
         </div>
     );
 };
 
-export default Statistics;
+export default AminStatistics;

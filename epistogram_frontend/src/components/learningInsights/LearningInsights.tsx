@@ -22,17 +22,21 @@ export const LearningInsights = () => {
 
         {/* tasks */}
         <EpistoHeader text="Feladataim" />
-        <Tasks tasksArray={tasks} />
+        <FlexFloat height="50px" p="30px" borderRadius="none" boxShadow="none" borderLeft="3px solid var(--epistoTeal)">
+            <Tasks tasksArray={tasks} />
+        </FlexFloat>
 
         {/* personality */}
         <EpistoHeader text="Személyes tanulási analízis" />
-        <FlexFloat height="400px" p="30px">
+        <FlexFloat height="400px" p="30px" borderRadius="none" boxShadow="none" borderLeft="3px solid var(--epistoTeal)">
             <PersonalityChart />
         </FlexFloat>
 
         {/* stats */}
         <EpistoHeader text="Statisztikám" />
-        <LearningStatistics />
+        <FlexFloat p="30px" borderRadius="none" boxShadow="none" borderLeft="3px solid var(--epistoTeal)">
+            <LearningStatistics />
+        </FlexFloat>
 
         {/* badges */}
         <EpistoHeader text="Megszerzett jelvényeim" />
