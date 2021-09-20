@@ -1,17 +1,16 @@
-import React from 'react';
-import classes from "./addUserHeader.module.scss";
-import Typography from '@mui/material/Typography';
+import { Box } from "@chakra-ui/layout";
+import { BarChart, PersonOutlineTwoTone, SubscriptionsTwoTone } from "@mui/icons-material";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { useParams, useRouteMatch, matchPath } from 'react-router';
+import Typography from '@mui/material/Typography';
+import React from 'react';
+import { matchPath, useParams, useRouteMatch } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import {
-    BarChart,
-    PersonOutlineTwoTone, SubscriptionsOutlined, SubscriptionsTwoTone,
-} from "@mui/icons-material";
+import { FlexFloat } from "../../../universal/FlexFloat";
+import classes from "./addUserHeader.module.scss";
 
-export const AdminAddHeader = () => {
+export const AministrationSubpageHeader = () => {
+
     const { courseId } = useParams<{ courseId: string }>();
-
     const statisticsMatches = useRouteMatch("/admin/statistics");
     const usersMatches = useRouteMatch("/admin/manage/users");
     const addUserMatches = useRouteMatch("/admin/manage/users/add");
@@ -32,7 +31,7 @@ export const AdminAddHeader = () => {
 
     //TODO: Navigate back to previously edited course or video on click e.g.: not to :courseId but the real courseId
 
-    return <div className={classes.breadCrumbsWrapper}>
+    return <Box padding="25px" borderBottom="5px solid var(--epistoTeal)">
         <Breadcrumbs>
             {statisticsMatches && <BreadcrumbLink to={"/admin/statistics"} title={"Statisztika"} iconComponent={<BarChart color={"secondary"} />} />}
             {usersMatches && <BreadcrumbLink to={"/admin/manage/users"} title={"Felhasználók kezelése"} iconComponent={<PersonOutlineTwoTone color={"secondary"} />} />}
@@ -42,5 +41,5 @@ export const AdminAddHeader = () => {
             {editCoursesMatches && <BreadcrumbLink to={`/admin/manage/courses/:courseId`} title={"Kurzus szerkesztése"} />}
             {editVideoMatches && <BreadcrumbLink to={`/admin/manage/courses/:courseId/item/:itemId`} title={"Videó szerkesztése"} />}
         </Breadcrumbs>
-    </div>
+    </Box>
 }

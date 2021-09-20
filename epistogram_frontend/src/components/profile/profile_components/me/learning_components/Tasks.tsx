@@ -1,16 +1,8 @@
 import { Box } from "@chakra-ui/react";
-import {
-    Paper,
-    Table,
-    TableBody, TableContainer,
-    TableHead,
-    TableRow
-} from "@mui/material";
+import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
 import React from 'react';
 import { UserTaskDTO } from '../../../../../models/shared_models/UserTaskDTO';
 import classes from './tasks.module.scss';
-
-// TODO: Migrate to language file
 
 const statuses = [{
     name: "new",
@@ -29,7 +21,7 @@ const statuses = [{
 const Tasks = (props: {
     tasksArray?: UserTaskDTO[]
 }) => {
-    return (<Box></Box>
+    return (<></>
         // <div className={classes.tasksWrapper}>
         //     <TableContainer component={Paper} className={classes.tasksTableWrapper}>
         //         <Table className={classes.table} aria-label="customized table">

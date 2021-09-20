@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
-import Administration from "../components/administration/Administration";
+import AdministrationPage from "../components/administration/AdministrationPage";
 import UserCoursesPage from "../components/course_search/UserCoursesPage";
 import OverviewPage from "../components/dashboard/OverviewPage";
 import { FileUploadPage } from "../components/FileUploadPage";
@@ -20,7 +20,7 @@ export const MainRouting = () => {
 
         {/* protected paths */}
         <ProtectedRoute path="/watch/:descriptorCode" render={() => <PlayerPage />} />
-        <ProtectedRoute path="/admin" render={() => <Administration />} />
+        <ProtectedRoute path="/admin" render={() => <AdministrationPage />} />
         <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
         <ProtectedRoute path="/kurzusok" render={() => <UserCoursesPage />} />
         <ProtectedRoute path="/profilom" render={() => <ProfileMain />} />

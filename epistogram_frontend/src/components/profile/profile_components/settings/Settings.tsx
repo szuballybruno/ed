@@ -1,10 +1,10 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import classes from './settings.module.scss'
 import AdminDashboardHeader from "../../../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import SettingsItem from "./settings_components/SettingsItem";
 import EditItem from "../../../universal/atomic/editItem/EditItem";
-import {CurrentUserContext} from "../../../../HOC/AuthenticationFrame";
+import { CurrentUserContext } from "../../../HOC/AuthenticationFrame";
 
 
 const Settings = () => {

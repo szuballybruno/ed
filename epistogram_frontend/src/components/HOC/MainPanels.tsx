@@ -1,6 +1,6 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
-import { FlexFloat } from '../components/universal/FlexFloat';
+import { FlexFloat } from '../universal/FlexFloat';
 
 export const MainWrapper = (props: { children: ReactNode }) => {
 
@@ -21,7 +21,7 @@ export const LeftPanel = (props: FlexProps) => {
         <FlexFloat
             id="leftPanel"
             bg="white"
-            zIndex={1}
+            zIndex={2}
             flexBasis="400px"
             direction="column"
             align="center"
@@ -35,17 +35,22 @@ export const LeftPanel = (props: FlexProps) => {
     );
 };
 
-export const RightPanel = (props: { children: ReactNode, noPadding?: boolean }) => {
+export const RightPanel = (props: FlexProps & { noPadding?: boolean }) => {
+
+    const { noPadding, ...css } = props;
+
     return (
-        <Box
+        <Flex
             id="rightPanel"
-            bg="#fafafa"
-            pl={props.noPadding ? undefined : "20px"}
+            //bg="#fafafa"
+            bg="white"
+            p={props.noPadding ? undefined : "20px"}
             flex="1"
             overflowX="hidden"
             overflowY="scroll"
-            direction="column">
+            direction="column"
+            {...css}>
             {props.children}
-        </Box>
+        </Flex>
     );
 };

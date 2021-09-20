@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { globalConfig } from '../configuration/config';
 import { refreshTokenRefreshIntervalInS as refreshTokenRefreshIntervalInMs, userRefreshIntervalInS as userRefreshIntervalInMs } from '../Environemnt';
-import { RefetchUserFunctionContext } from '../HOC/AuthenticationFrame';
+import { RefetchUserFunctionContext } from '../components/HOC/AuthenticationFrame';
 import { UserDTO } from '../models/shared_models/UserDTO';
 import { httpGetAsync, httpPostAsync, HTTPResponse } from './httpClient';
 

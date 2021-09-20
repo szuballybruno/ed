@@ -3,7 +3,7 @@ import { SettingsApplicationsSharp } from "@mui/icons-material";
 import React, { useContext, useState } from 'react';
 import { Redirect } from "react-router";
 import { getEventValueCallback, TypedError } from "../../frontendHelpers";
-import { AuthenticationStateContext } from "../../HOC/AuthenticationFrame";
+import { AuthenticationStateContext } from "../HOC/AuthenticationFrame";
 import { useLogInUser } from '../../services/authenticationService';
 import SingleInput from "../administration/universal/singleInput/SingleInput";
 import classes from './loginScreen.module.scss';

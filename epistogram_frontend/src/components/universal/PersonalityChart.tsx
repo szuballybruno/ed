@@ -1,6 +1,6 @@
 import React from "react";
 import { Radar } from "react-chartjs-2";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { LoadingFrame } from "../HOC/LoadingFrame";
 import { usePersonalityData } from "../../services/dataService";
 
 export const PersonalityChart = () => {

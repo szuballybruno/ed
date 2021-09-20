@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { disallowWindowNavigation, getEventValueCallback, hasValue, TypedError } from "../../../../frontendHelpers";
 import { AddFrame } from "../../../add_frame/AddFrame";
-import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
+import { CurrentUserContext } from "../../../HOC/AuthenticationFrame";
 import { CreateInvitedUserDTO } from "../../../../models/shared_models/CreateInvitedUserDTO";
 import { OrganizationDTO } from "../../../../models/shared_models/OrganizationDTO";
 import { UserDTO } from "../../../../models/shared_models/UserDTO";

@@ -14,7 +14,7 @@ import { EpistoPopper } from "../../../EpistoPopper";
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { CurrentUserContext } from "../../../../../HOC/AuthenticationFrame";
+import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
 
 const userMenuItems = [
     {

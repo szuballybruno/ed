@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { globalConfig } from "../configuration/config";
-import { UserDTO } from "../models/shared_models/UserDTO";
-import { AuthenticationState, useRenewUserSessionPooling, useUserFetching } from "../services/authenticationService";
-import setTheme from "../services/setTheme";
+import { globalConfig } from "../../configuration/config";
+import { UserDTO } from "../../models/shared_models/UserDTO";
+import { AuthenticationState, useRenewUserSessionPooling, useUserFetching } from "../../services/authenticationService";
+import setTheme from "../../services/setTheme";
 
 export const CurrentUserContext = createContext<UserDTO | null>(null);
 export const RefetchUserFunctionContext = createContext<() => void>(() => { });

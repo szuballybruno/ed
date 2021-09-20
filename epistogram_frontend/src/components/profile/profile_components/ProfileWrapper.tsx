@@ -1,17 +1,39 @@
 import React from "react";
 import classes from "./profileWrapper.module.scss";
-import profileItems from "../profile_configuration/profileItems.json"
-import Learning from "./me/Learning";
 import MyExams from "./MyExams";
 import MyCourses from "./MyCourses";
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
 import ChangePassword from "./ChangePassword";
-import { ContentWrapper, LeftPanel, RightPanel } from "../../../HOC/MainPanels";
+import { ContentWrapper, LeftPanel, RightPanel } from "../../HOC/MainPanels";
 import { Assignment, School, Subscriptions, ExitToApp, } from "@mui/icons-material";
 import SettingsIcon from "@mui/icons-material/Settings"
 import { Typography } from "@mui/material";
 import Settings from "./settings/Settings";
 import { logOutUserAsync } from "../../../services/authenticationService";
+import { LearningInsights } from "../../learningInsights/LearningInsights";
+
+const menuItems = [
+    {
+        "menuName": "Tanulás",
+        "route": "/profilom/tanulas"
+    },
+    {
+        "menuName": "Kurzusaim",
+        "route": "/profilom/kurzusaim"
+    },
+    {
+        "menuName": "Vizsgáim",
+        "route": "/profilom/vizsgaim"
+    },
+    {
+        "menuName": "Beállítások",
+        "route": "/profilom/beallitasok"
+    },
+    {
+        "menuName": "Kijelentkezés",
+        "route": "/"
+    }
+];
 
 const ProfileWrapper = () => {
     const icons = {
@@ -32,7 +54,7 @@ const ProfileWrapper = () => {
             color={"secondary"}
             className={classes.profileDataOptionItemText}
             variant={"button"}>
-            {profileItems.sideMenu[index].menuName}
+            {menuItems[index].menuName}
         </Typography>
     </NavLink>
 
@@ -47,7 +69,7 @@ const ProfileWrapper = () => {
             color={"secondary"}
             className={classes.profileDataOptionItemText}
             variant={"button"}>
-            {profileItems.sideMenu[index].menuName}
+            {menuItems[index].menuName}
         </Typography>
     </NavLink>
 
@@ -55,8 +77,7 @@ const ProfileWrapper = () => {
         <LeftPanel>
             <div className={classes.profileDataInnerBottomWrapper}>
                 <div className={classes.profileDataOptionsWrapper}>
-                    {profileItems
-                        .sideMenu
+                    {menuItems
                         .map((menuItem, index) => {
 
                             return menuLink(index, menuItem.route);
@@ -75,7 +96,7 @@ const ProfileWrapper = () => {
                     <Redirect to={'/profilom/tanulas'} />
                 </Route>
                 <Route path={'/profilom/tanulas'}>
-                    <Learning />
+                    <LearningInsights />
                 </Route>
                 <Route path={'/profilom/kurzusaim'}>
                     <MyCourses />

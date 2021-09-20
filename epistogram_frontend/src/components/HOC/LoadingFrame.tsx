@@ -3,8 +3,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from 'react';
-import { isArray } from "../frontendHelpers";
-import { LoadingStateType } from "../models/types";
+import { isArray } from "../../frontendHelpers";
+import { LoadingStateType } from "../../models/types";
 import { DialogStateType } from "./DialogFrame";
 
 export const LoadingFrame = (props: FlexProps & {

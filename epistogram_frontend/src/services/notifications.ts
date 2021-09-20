@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { toast } from 'react-toastify';
-import { DialogContext } from "../HOC/DialogFrame";
+import { DialogContext } from "../components/HOC/DialogFrame";
 
 export type NotificationType = "error" | "info" | "warning";
 

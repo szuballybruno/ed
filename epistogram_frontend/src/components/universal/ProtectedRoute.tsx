@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { useContext } from 'react';
 import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
 import { globalConfig } from '../../configuration/config';
-import { AuthenticationStateContext as AuthenticationStateContext } from '../../HOC/AuthenticationFrame';
+import { AuthenticationStateContext as AuthenticationStateContext } from '../HOC/AuthenticationFrame';
 
 export const ProtectedRoute = (props: {
     path: string,

@@ -1,7 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { Button, Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
-import { LoadingFrame } from '../../HOC/LoadingFrame';
+import { LoadingFrame } from '../HOC/LoadingFrame';
 import { LoadingStateType } from '../../models/types';
 
 export const QuestionnaierAnswer = (props: {

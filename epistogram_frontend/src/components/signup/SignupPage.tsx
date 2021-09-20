@@ -1,8 +1,8 @@
 import React from 'react';
 import { globalConfig } from "../../configuration/config";
 import { getQueryParam, usePaging } from "../../frontendHelpers";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
-import { ContentWrapper, MainWrapper } from "../../HOC/MainPanels";
+import { LoadingFrame } from "../HOC/LoadingFrame";
+import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";

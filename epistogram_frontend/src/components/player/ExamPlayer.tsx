@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getAssetUrl, usePaging } from "../../frontendHelpers";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";

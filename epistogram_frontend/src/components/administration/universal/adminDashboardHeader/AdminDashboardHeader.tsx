@@ -6,7 +6,7 @@ const AdminDashboardHeader = (props: {
     titleText: string;
 }) => {
     return (
-        <Grid container alignItems={"flex-end"} className={classes.manageUsersHeaderWrapper}>
+        <Grid id="adminDashboardHeaderRoot" container alignItems={"flex-end"} className={classes.manageUsersHeaderWrapper}>
             <Typography variant={"h5"} classes={{ root: classes.manageUsersHeaderText }}>{props.titleText}</Typography>
         </Grid>
     );

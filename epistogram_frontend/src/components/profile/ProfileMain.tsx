@@ -1,5 +1,5 @@
 import React from "react";
-import { MainWrapper } from "../../HOC/MainPanels";
+import { MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../universal/navigation/navbar/Navbar";
 import ProfileWrapper from "./profile_components/ProfileWrapper";
 

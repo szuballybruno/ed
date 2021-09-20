@@ -5,9 +5,9 @@ import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from "react-router-dom";
 import { theme } from "./configuration/defaultMUITheme";
-import { AuthenticationFrame } from "./HOC/AuthenticationFrame";
-import { DialogFrame } from "./HOC/DialogFrame";
-import { NotificationsFrame } from "./HOC/NotificationsFrame";
+import { AuthenticationFrame } from "./components/HOC/AuthenticationFrame";
+import { DialogFrame } from "./components/HOC/DialogFrame";
+import { NotificationsFrame } from "./components/HOC/NotificationsFrame";
 import './index.css';
 import { MainRouting } from "./routing/MainRouting";
 

@@ -1,8 +1,8 @@
 import { Box, Flex } from "@chakra-ui/layout";
 import { Add, ApartmentTwoTone, Email, WorkTwoTone } from "@mui/icons-material";
 import React, { useContext } from "react";
-import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
-import { LoadingFrame } from "../../../../HOC/LoadingFrame";
+import { CurrentUserContext } from "../../../HOC/AuthenticationFrame";
+import { LoadingFrame } from "../../../HOC/LoadingFrame";
 import { useUserListQuery } from "../../../../services/adminPageUsersService";
 import { useNavigation } from "../../../../services/navigatior";
 import { EpistoButton } from "../../../universal/EpistoButton";
@@ -15,6 +15,7 @@ import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSe
 import classes from "../users.module.scss";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { httpPostAsync } from "../../../../services/httpClient";
+import { FloatSearch } from "../../../universal/FloatSearch";
 
 export const UserAdministrationPage = () => {
 
@@ -31,16 +32,15 @@ export const UserAdministrationPage = () => {
         await refetchUsers();
     }
 
-    return <AdminDashboardWrapper>
+    return <Flex flex="1" direction="column" bg="white">
 
-        <AdminDashboardSearch
-            searchChangeHandler={(name, searchText) => setSearchText(searchText)}
-            name="searchData"
-            title="Felhasználók"
-            className={classes.searchBar} />
+        <Flex justify="flex-end" marginTop="20px">
+            <FloatSearch margin="10px" width="300px"></FloatSearch>
+        </Flex>
 
         <LoadingFrame loadingState={usersStatus} error={usersError}>
 
+            {/* user list */}
             <FlexList className="whall">
                 {users
                     .map((user, index) => {
@@ -100,5 +100,5 @@ export const UserAdministrationPage = () => {
             </Box>
 
         </LoadingFrame>
-    </AdminDashboardWrapper >
+    </Flex>
 }

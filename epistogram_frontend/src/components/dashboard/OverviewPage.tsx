@@ -1,28 +1,16 @@
-import { Flex } from "@chakra-ui/layout";
-import { Divider, Grid } from "@mui/material";
-import React, { ReactNode, useContext } from 'react';
-import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../../HOC/MainPanels";
+import { Divider } from '@mui/material';
+import React, { useContext } from 'react';
+import { CurrentUserContext } from "../HOC/AuthenticationFrame";
+import { LoadingFrame } from "../HOC/LoadingFrame";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import { useOverviewPageDTO } from "../../services/dataService";
-import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
+import { EpistoHeader } from "../administration/universal/EpistoHeader";
 import ListItem from "../universal/atomic/listItem/ListItem";
 import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
 import Navbar from "../universal/navigation/navbar/Navbar";
-import { DashBoardRightSpacer, DashboardVerticalDivider, DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
+import { DashboardVerticalDivider, DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
 import { OverviewDashboard } from "./dashboard_components/OverviewDashboard/OverviewDashboard";
 import ProfileStats from "./dashboard_components/ProfileStats/ProfileStats";
-import RecommendedCourses from "./dashboard_components/RecommendedCourses/RecommendedCourses";
-import classes from './userDashBoard.module.scss';
-
-const OverviewSection = (props: { children: ReactNode, title: string }) => {
-
-    return <>
-        <AdminDashboardHeader titleText={props.title} />
-        <Divider className={classes.divider} />
-        {props.children}
-    </>
-}
 
 const OverviewPage = () => {
 
@@ -75,9 +63,8 @@ const OverviewPage = () => {
                 </LeftPanel>
                 <RightPanel>
 
-                    <OverviewSection title="Személyes tanulási asszisztens">
-                        <OverviewDashboard dto={pageDTO!} />
-                    </OverviewSection>
+                    <EpistoHeader showDivider text="Személyes tanulási asszisztens" />
+                    <OverviewDashboard dto={pageDTO!} />
 
                     {/*<OverviewSection title="Szavazás">
                          <Votes />
