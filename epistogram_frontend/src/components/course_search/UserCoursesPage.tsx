@@ -11,6 +11,7 @@ import CourseTile from "../universal/atomic/courseTile/CourseTile";
 import Navbar from "../universal/navigation/navbar/Navbar";
 import classes from "./courseSearchMain.module.scss";
 import { EpistoGrid } from "../universal/EpistoGrid";
+import { FloatSearch } from "../universal/FloatSearch";
 
 const UserCoursesPage = () => {
 
@@ -46,107 +47,91 @@ const UserCoursesPage = () => {
 
             <LeftPanel direction="column" align="stretch" >
 
-                <Typography
-                    style={{ margin: "20px", textAlign: "center" }}
-                    variant={"h4"}>
-                    Kategóriák
-                </Typography>
+                <Box id="courseSearchRoute" p="20px">
 
-                <ToggleButtonGroup className={classes.categoriesList}>
-                    {categoryOptions
-                        .map((categoryOption, index) => {
-                            return <ToggleButton
-                                name={"category"}
-                                className={searchCategory === categoryOption ? `${classes.categoriesListItem} ${classes.categoriesListItemSelected}` : `${classes.categoriesListItem}`}
-                                value={categoryOption}
-                                onClick={x => setSearchCategory(x.currentTarget.value)}
-                                key={index}>
-                                {categoryOption}
-                            </ToggleButton>
-                        })}
-                </ToggleButtonGroup>
+                    {/* <AdminDashboardHeader titleText={""} /> */}
+                    <Flex justify="space-between">
+                        <FloatSearch />
+                        <Select
+                            native
+                            onChange={() => { }}
+                            className={classes.sortFormControl}
+                            inputProps={{
+                                name: 'A-Z',
+                                id: 'outlined-age-native-simple',
+                            }}
+                            style={{
+                                height: "40px"
+                            }}>
+                            <option value={10}>A-Z</option>
+                            <option value={20}>Z-A</option>
+                            <option value={30}>Új-Régi</option>
+                            <option value={30}>Régi-Új</option>
+                        </Select>
+                    </Flex>
+
+                    {/* toggle buttons */}
+                    <ToggleButtonGroup
+                        style={{ marginTop: "20px", margin: "0px", width: "100%" }}
+                        size={"small"}>
+
+                        {/* recommended */}
+                        <ToggleButton
+                            onClick={() => setIsRecommended(!isRecommended)}
+                            selected={isRecommended}
+                            value="recommended"
+                            style={{ width: "100%" }}>
+                            Neked ajánljuk
+                        </ToggleButton>
+
+                        {/* featured */}
+                        <ToggleButton
+                            onClick={() => setIsFeatured(!isFeatured)}
+                            selected={isFeatured}
+                            value="featured"
+                            style={{ width: "100%" }}>
+                            Kiemelt
+                        </ToggleButton>
+
+                        {/* show all */}
+                        <ToggleButton
+                            onClick={() => clearFilters()}
+                            selected={isRecommended && isFeatured}
+                            value="showAll"
+                            style={{ width: "100%" }}>
+                            Mind
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                </Box>
+
+                {/* categories  */}
+                <Flex direction="column">
+
+                    {/* categories title */}
+                    <Typography
+                        style={{ margin: "20px", textAlign: "center" }}
+                        variant={"h4"}>
+                        Kategóriák
+                    </Typography>
+
+                    {/* categories list */}
+                    <ToggleButtonGroup className={classes.categoriesList}>
+                        {categoryOptions
+                            .map((categoryOption, index) => {
+                                return <ToggleButton
+                                    name={"category"}
+                                    className={searchCategory === categoryOption ? `${classes.categoriesListItem} ${classes.categoriesListItemSelected}` : `${classes.categoriesListItem}`}
+                                    value={categoryOption}
+                                    onClick={x => setSearchCategory(x.currentTarget.value)}
+                                    key={index}>
+                                    {categoryOption}
+                                </ToggleButton>
+                            })}
+                    </ToggleButtonGroup>
+                </Flex>
             </LeftPanel>
 
             <RightPanel noPadding={true}>
-
-                <Box display="none">
-
-                    {/* <AdminDashboardHeader titleText={""} /> */}
-                    <AdminDashboardSearch
-                        searchChangeHandler={(x, value) => setSearchText(value)}
-                        name={"searchData"}
-                        title={"Kurzusok"}
-                        className={classes.searchBar} />
-
-                    <div className={classes.courseOptionsContainer}>
-                        <div className={classes.courseLeftOptionsContainer}>
-                            <ToggleButtonGroup
-                                classes={{
-                                    root: classes.filterSelectorButtonGroupRoot
-                                }}
-                                size={"small"}>
-
-                                {/* recommended */}
-                                <ToggleButton
-                                    onClick={() => setIsRecommended(!isRecommended)}
-                                    selected={isRecommended}
-                                    value="recommended"
-                                    classes={{
-                                        root: classes.filterSelectorButtonRoot,
-                                        selected: classes.filterSelectorButtonSelected
-                                    }}>
-                                    Neked ajánljuk
-                                </ToggleButton>
-
-                                {/* featured */}
-                                <ToggleButton
-                                    onClick={() => setIsFeatured(!isFeatured)}
-                                    selected={isFeatured}
-                                    value="featured"
-                                    classes={{
-                                        root: classes.filterSelectorButtonRoot,
-                                        selected: classes.filterSelectorButtonSelected
-                                    }}>
-                                    Kiemelt
-                                </ToggleButton>
-
-                                {/* show all */}
-                                <ToggleButton
-                                    onClick={() => clearFilters()}
-                                    selected={isRecommended && isFeatured}
-                                    value="showAll"
-                                    classes={{
-                                        root: classes.filterSelectorButtonRoot,
-                                        selected: classes.filterSelectorButtonSelected
-                                    }}>
-                                    Mind
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                        </div>
-                        <div className={classes.courseRightOptionsContainer}>
-                            <FormControl variant={"outlined"} className={classes.sortFormControl} size={"small"}>
-                                <Select
-                                    native
-                                    onChange={() => { }}
-                                    className={classes.sortFormControl}
-                                    inputProps={{
-                                        name: 'A-Z',
-                                        id: 'outlined-age-native-simple',
-                                    }}
-
-                                    classes={{
-                                        root: classes.sortFormControlRoot,
-                                        select: classes.sortFormControlSelect,
-                                    }}>
-                                    <option value={10}>A-Z</option>
-                                    <option value={20}>Z-A</option>
-                                    <option value={30}>Új-Régi</option>
-                                    <option value={30}>Régi-Új</option>
-                                </Select>
-                            </FormControl>
-                        </div>
-                    </div>
-                </Box>
 
                 {/* courses */}
                 <LoadingFrame loadingState={[status]} error={[error]}>
