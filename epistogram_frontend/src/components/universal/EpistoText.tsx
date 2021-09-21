@@ -4,12 +4,14 @@ import { CSSProperties, RefObject, useCallback, useEffect, useRef, useState } fr
 export const EpistoText = (props: {
     isAutoFontSize?: boolean,
     style?: CSSProperties,
-    text: string
+    text: string,
+    maxFontSize?: number,
+    allowedLines?: number
 }) => {
 
-    const { style, text, isAutoFontSize } = props;
+    const { style, text, maxFontSize, isAutoFontSize, allowedLines } = props;
     const ref = useRef<HTMLSpanElement>(null);
-    const fontSize = useAutoFontSize(ref, text, 2, 20);
+    const fontSize = useAutoFontSize(ref, text, allowedLines ?? 2, maxFontSize ?? 20);
     const css = {
         fontSize: fontSize,
         textTransform: "none",

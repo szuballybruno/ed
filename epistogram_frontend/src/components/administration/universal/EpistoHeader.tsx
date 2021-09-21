@@ -3,21 +3,23 @@ import { Divider, Typography } from "@mui/material"
 
 export const EpistoHeader = (props: {
     text: string,
-    variant?: "main" | "sub"
+    variant?: "main" | "sub" | "strongSub"
     showDivider?: boolean
 } & FlexProps) => {
 
     const { text, showDivider, variant, ...css } = props;
 
     return <Flex id="epistoHeaderRoot" direction="column" p="20px" {...css}>
-        {variant === "sub"
-            ? <Typography variant={"h6"} style={{ fontWeight: "normal", color: "var(--intenseGray)" }}>
-                {text}
-            </Typography>
-            : <Typography variant={"h5"}>
-                {text}
-            </Typography>}
 
-        {!!showDivider && <Divider />}
+        <Typography
+            variant={variant === "main" ? "h5" : "h6"}
+            style={{
+                fontWeight: "normal",
+                color: variant === "sub" ? "var(--intenseGray)" : "black"
+            }}>
+            {text}
+        </Typography>
+
+        {!!showDivider && <Divider style={{ marginTop: "10px" }} />}
     </Flex>
 }

@@ -45,6 +45,7 @@ export const VideoQuestionnaire = (props: {
                         <EpistoText
                             isAutoFontSize
                             text={answer.answerText}
+                            maxFontSize={20}
                             style={{
                                 width: "100%"
                             }} />

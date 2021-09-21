@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/layout';
+import { Box, BoxProps, Flex, FlexProps } from '@chakra-ui/layout';
 import { Typography } from '@mui/material';
 import React, { useContext } from 'react';
 import { tipOfTheDay, useOverviewPageDTO } from "../../services/dataService";
@@ -10,11 +10,29 @@ import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainP
 import { Tasks } from '../Tasks';
 import ListItem from "../universal/atomic/listItem/ListItem";
 import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
+import { EpistoGrid } from '../universal/EpistoGrid';
 import { EpistoText } from '../universal/EpistoText';
 import { FlexFloat } from '../universal/FlexFloat';
+import { FlexImage } from '../universal/FlexImage';
 import Navbar from "../universal/navigation/navbar/Navbar";
 import { VideoQuestionnaire } from '../universal/VideoQuestionnaire';
 import { DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
+
+const DashboardCard = (props: FlexProps & { title: string }) => {
+
+    const { title, children, ...css } = props;
+
+    return <FlexFloat
+        direction="column"
+        borderRadius="none"
+        p="10px"
+        {...css}>
+        <EpistoHeader text={title} showDivider variant="strongSub" />
+        <Box className="whall">
+            {children}
+        </Box>
+    </FlexFloat>
+}
 
 const OverviewPage = () => {
 
@@ -61,33 +79,44 @@ const OverviewPage = () => {
 
                 </LeftPanel>
                 <RightPanel>
+                    <EpistoGrid minColumnWidth="400px" columnGap="10">
+                        {/* <Flex direction="column" align="flex-start" justify="flex-start" wrap="wrap"> */}
 
-                    {/* test your knowledge */}
-                    <EpistoHeader text="A nap kerdese" />
-                    <FlexFloat margin="0 20px 20px 20px" width="550px" alignSelf="center">
-                        <VideoQuestionnaire
-                            answerSessionId={-1}
-                            onAnswered={() => { }}
-                            question={pageDTO?.testQuestionDTO!} />
-                    </FlexFloat>
+                        {/* test your knowledge */}
+                        <DashboardCard title="A nap kerdese" >
 
-                    {/* current tasks */}
-                    <EpistoHeader text="Feladatok" />
-                    <FlexFloat margin="0 20px 20px 20px">
-                        <Tasks currentTasks={pageDTO?.currentTasks!} />
-                    </FlexFloat>
+                            <VideoQuestionnaire
+                                answerSessionId={-1}
+                                onAnswered={() => { }}
+                                question={pageDTO?.testQuestionDTO!} />
+                        </DashboardCard>
 
-                    {/* tip of the day */}
-                    <EpistoHeader text="Napi tipped" />
-                    <FlexFloat margin="0 20px 20px 20px">
-                        <Typography variant={"h6"}>{tipOfTheDay}</Typography>
-                    </FlexFloat>
+                        {/* greeting */}
+                        <DashboardCard title="Haladj előre!">
+                            <Box p="20px">
+                                <EpistoText
+                                    allowedLines={4}
+                                    text="Current video that you were watching but left watch this video, please, videos are good, watch this!!!" />
+                                <FlexImage height="300px" width="100%" url="https://i.stack.imgur.com/z3pLU.png"></FlexImage>
+                            </Box>
+                        </DashboardCard>
 
-                    {/* development chart */}
-                    <EpistoHeader text="Fejlődési görbém az elmúlt 90 napban" />
-                    <FlexFloat margin="0 20px 20px 20px" height="600px">
-                        <DevelopmentLineChart data={pageDTO?.developmentChartData!} />
-                    </FlexFloat>
+                        {/* current tasks */}
+                        <DashboardCard title="Feladatok">
+                            <Tasks currentTasks={pageDTO?.currentTasks!} className="whall" />
+                        </DashboardCard>
+
+                        {/* development chart */}
+                        <DashboardCard title="Fejlődési görbém az elmúlt 90 napban" >
+                            <DevelopmentLineChart data={pageDTO?.developmentChartData!} />
+                        </DashboardCard>
+
+                        {/* tip of the day */}
+                        <DashboardCard title="Napi tipped" >
+                            <Typography variant={"h6"} fontSize="16px">{tipOfTheDay}</Typography>
+                        </DashboardCard>
+                        {/* </Flex> */}
+                    </EpistoGrid>
                 </RightPanel>
             </LoadingFrame>
         </ContentWrapper>

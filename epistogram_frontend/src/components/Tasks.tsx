@@ -1,3 +1,4 @@
+import { Box, BoxProps, Flex, FlexProps } from "@chakra-ui/layout"
 import { Create, MenuBook, PlayCircleFilled } from "@mui/icons-material"
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material"
 import { NavLink } from "react-router-dom"
@@ -5,7 +6,7 @@ import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO"
 import { TaskObjectiveType } from "../models/shared_models/types/sharedTypes"
 import { EpistoButton } from "./universal/EpistoButton"
 
-export const Tasks = (props: { currentTasks: CurrentTasksDTO }) => {
+export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
 
     const getListIcon = (objective: TaskObjectiveType) => {
 
@@ -21,26 +22,28 @@ export const Tasks = (props: { currentTasks: CurrentTasksDTO }) => {
         throw new Error("Unknown task objective type!");
     }
 
-    return <List>
+    const { currentTasks, children, ...css } = props;
 
-        {props
-            .currentTasks
-            .tasks
-            .map((currentTask, index) => {
+    return <Flex direction="column" justify="space-between" {...css}>
+        <List>
 
-                return <ListItem key={index} button >
-                    <ListItemIcon>
-                        {getListIcon(currentTask.objective)}
-                    </ListItemIcon>
-                    <ListItemText primary={currentTask.text} secondary={currentTask.dueDate} />
-                </ListItem>
-            })}
+            {currentTasks
+                .tasks
+                .map((currentTask, index) => {
 
-        <NavLink to={"/profilom/tanulas"}>
-            <EpistoButton
-                variant="outlined">
-                Összes feladatom
-            </EpistoButton>
-        </NavLink>
-    </List>
+                    return <ListItem key={index} button >
+                        <ListItemIcon>
+                            {getListIcon(currentTask.objective)}
+                        </ListItemIcon>
+                        <ListItemText primary={currentTask.text} secondary={currentTask.dueDate} />
+                    </ListItem>
+                })}
+        </List>
+
+        <EpistoButton
+            style={{ marginTop: "20px" }}
+            variant="outlined">
+            Összes feladatom
+        </EpistoButton>
+    </Flex>
 }

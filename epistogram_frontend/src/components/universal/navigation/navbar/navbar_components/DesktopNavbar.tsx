@@ -83,10 +83,15 @@ const DesktopNavbar = (props: {
                         style={{ marginRight: "10px" }}
                         variant="colored"
                         isRound
-                        padding="0"
+                        padding="10px 10px 10px 13px"
                         size="45px"
                         onClick={continueWatching}>
-                        <PlayArrow />
+                        <img
+                            className="whall"
+                            src={getAssetUrl("/icons/play.svg")}
+                            style={{
+                                filter: "invert(1)"
+                            }} />
                     </EpistoButton>}
 
                 <EpistoConinInfo height="45px" mr="10px" />
