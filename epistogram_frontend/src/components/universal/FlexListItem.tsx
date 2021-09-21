@@ -25,7 +25,7 @@ export const FlexListItem = (props: FlexProps & {
         borderBottom="1px solid #eaeaea"
         {...css}>
 
-        {thumbnailUrl && <FlexImage mr="10px" url={thumbnailUrl} flexBasis={thumbnailBasis ?? "50px"} />}
+        {thumbnailUrl && <FlexImage height="100%" mr="10px" url={thumbnailUrl} flexBasis={thumbnailBasis ?? "50px"} />}
 
         <Box flex="1">
             {midContent}

@@ -45,64 +45,7 @@ const UserCoursesPage = () => {
 
         <ContentWrapper>
 
-            <LeftPanel direction="column" align="stretch" >
-
-                <Box id="courseSearchRoute" p="20px">
-
-                    {/* <AdminDashboardHeader titleText={""} /> */}
-                    <Flex justify="space-between">
-                        <FloatSearch />
-                        <Select
-                            native
-                            onChange={() => { }}
-                            className={classes.sortFormControl}
-                            inputProps={{
-                                name: 'A-Z',
-                                id: 'outlined-age-native-simple',
-                            }}
-                            style={{
-                                height: "40px"
-                            }}>
-                            <option value={10}>A-Z</option>
-                            <option value={20}>Z-A</option>
-                            <option value={30}>Új-Régi</option>
-                            <option value={30}>Régi-Új</option>
-                        </Select>
-                    </Flex>
-
-                    {/* toggle buttons */}
-                    <ToggleButtonGroup
-                        style={{ marginTop: "20px", margin: "0px", width: "100%" }}
-                        size={"small"}>
-
-                        {/* recommended */}
-                        <ToggleButton
-                            onClick={() => setIsRecommended(!isRecommended)}
-                            selected={isRecommended}
-                            value="recommended"
-                            style={{ width: "100%" }}>
-                            Neked ajánljuk
-                        </ToggleButton>
-
-                        {/* featured */}
-                        <ToggleButton
-                            onClick={() => setIsFeatured(!isFeatured)}
-                            selected={isFeatured}
-                            value="featured"
-                            style={{ width: "100%" }}>
-                            Kiemelt
-                        </ToggleButton>
-
-                        {/* show all */}
-                        <ToggleButton
-                            onClick={() => clearFilters()}
-                            selected={isRecommended && isFeatured}
-                            value="showAll"
-                            style={{ width: "100%" }}>
-                            Mind
-                        </ToggleButton>
-                    </ToggleButtonGroup>
-                </Box>
+            <LeftPanel direction="column" align="stretch">
 
                 {/* categories  */}
                 <Flex direction="column">
@@ -132,22 +75,81 @@ const UserCoursesPage = () => {
             </LeftPanel>
 
             <RightPanel noPadding={true}>
+                <Flex id="coursesPanelRoot" direction="column" overflow="hidden" className="whall">
 
-                {/* courses */}
-                <LoadingFrame loadingState={[status]} error={[error]}>
-                    <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
-                        <EpistoGrid columnGap="15" minColumnWidth="300px">
-                            {courses
-                                .map((course: any, index) => {
-                                    return <GridItem height="350px" >
+                    {/* search */}
+                    <Box id="courseSearchRoot" p="20px">
 
-                                        <CourseTile course={course} itemIndex={index} key={index} />
-                                    </GridItem>
-                                })}
-                        </EpistoGrid>
+                        {/* search */}
+                        <Flex justify="space-between">
+                            <FloatSearch />
+                            <Select
+                                native
+                                onChange={() => { }}
+                                className={classes.sortFormControl}
+                                inputProps={{
+                                    name: 'A-Z',
+                                    id: 'outlined-age-native-simple',
+                                }}
+                                style={{
+                                    height: "40px"
+                                }}>
+                                <option value={10}>A-Z</option>
+                                <option value={20}>Z-A</option>
+                                <option value={30}>Új-Régi</option>
+                                <option value={30}>Régi-Új</option>
+                            </Select>
+                        </Flex>
+
+                        {/* toggle buttons */}
+                        <ToggleButtonGroup
+                            style={{ marginTop: "20px", width: "100%" }}
+                            size={"small"}>
+
+                            {/* recommended */}
+                            <ToggleButton
+                                onClick={() => setIsRecommended(!isRecommended)}
+                                selected={isRecommended}
+                                value="recommended"
+                                style={{ width: "100%" }}>
+                                Neked ajánljuk
+                            </ToggleButton>
+
+                            {/* featured */}
+                            <ToggleButton
+                                onClick={() => setIsFeatured(!isFeatured)}
+                                selected={isFeatured}
+                                value="featured"
+                                style={{ width: "100%" }}>
+                                Kiemelt
+                            </ToggleButton>
+
+                            {/* show all */}
+                            <ToggleButton
+                                onClick={() => clearFilters()}
+                                selected={isRecommended && isFeatured}
+                                value="showAll"
+                                style={{ width: "100%" }}>
+                                Mind
+                            </ToggleButton>
+                        </ToggleButtonGroup>
                     </Box>
-                </LoadingFrame>
 
+                    {/* courses */}
+                    <LoadingFrame overflow="hidden" loadingState={[status]} error={[error]}>
+                        <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
+                            <EpistoGrid columnGap="15" minColumnWidth="300px">
+                                {courses
+                                    .map((course: any, index) => {
+                                        return <GridItem height="350px" >
+
+                                            <CourseTile course={course} itemIndex={index} key={index} />
+                                        </GridItem>
+                                    })}
+                            </EpistoGrid>
+                        </Box>
+                    </LoadingFrame>
+                </Flex>
             </RightPanel>
         </ContentWrapper>
     </MainWrapper >

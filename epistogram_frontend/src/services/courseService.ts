@@ -2,8 +2,8 @@ import { hasValue, useReactQuery } from "../frontendHelpers"
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
 import { httpPostAsync } from "./httpClient";
-import {CourseAdminDTO} from "../models/shared_models/CourseAdminDTO";
-import {AdminPageEditCourseDTO} from "../models/shared_models/AdminPageEditCourseDTO";
+import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
+import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 
 export const useAdministratedCourses = (searchText: string) => {
 
@@ -12,7 +12,7 @@ export const useAdministratedCourses = (searchText: string) => {
         () => httpPostAsync(hasValue(searchText) ? "/get-admin-courses?searchData=" + searchText : "/get-admin-courses"));
 
     return {
-        courses: data,
+        courses: data ?? [],
         error,
         status
     }

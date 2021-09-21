@@ -39,8 +39,6 @@ export const LoadingFrame = (props: FlexProps & {
     return <Flex
         id="loadigFrameRoot"
         position="relative"
-        width="100%"
-        height="100%"
         flex="1"
         {...rootProps}>
 

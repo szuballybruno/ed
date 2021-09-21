@@ -17,8 +17,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { httpPostAsync } from "../../../../services/httpClient";
 import { FloatSearch } from "../../../universal/FloatSearch";
 import { administrationRoutes } from "../../AdministrationPage";
+import { FloatAddButton } from "../../../FloatAddButton";
 
-export const UserAdministrationPage = () => {
+export const UserAdministration = () => {
 
     const user = useContext(CurrentUserContext)!;
     const userId = user.id;
@@ -89,16 +90,7 @@ export const UserAdministrationPage = () => {
                     })}
             </FlexList>
 
-            <Box position="absolute" bottom="45" right="45">
-                <EpistoButton
-                    variant="colored"
-                    size="60px"
-                    padding="0px"
-                    isRound
-                    onClick={navigateToAddUser}>
-                    <Add />
-                </EpistoButton>
-            </Box>
+            <FloatAddButton onClick={navigateToAddUser} />
 
         </LoadingFrame>
     </Flex>

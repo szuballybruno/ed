@@ -48,7 +48,9 @@ export const toUserDTO = (user: User) => {
         email: user.email,
         phoneNumber: user.phoneNumber,
         name: `${user.lastName} ${user.firstName}`,
-        avatarUrl: getAssetUrl(user.avatarFile?.filePath)
+        avatarUrl: user.avatarFile
+            ? getAssetUrl(user.avatarFile.filePath)
+            : getAssetUrl("images/defaultAvatar.png")
     } as UserDTO;
 }
 

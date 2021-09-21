@@ -8,13 +8,13 @@ import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../universal/navigation/navbar/Navbar";
 import { AddCourse } from "./courses/addCourse/AddCourse";
 import { AddVideo } from "./courses/addVideo/AddVideo";
-import { CourseList } from "./courses/courseList/CourseList";
+import { CourseAdministration } from "./courses/courseList/CourseAdministration";
 import { EditCourse } from "./courses/editCourse/EditCourse";
 import { EditVideo } from "./courses/editVideo/EditVideo";
 import AminStatistics from "./statistics/AminStatistics";
 import { AministrationSubpageHeader } from "./universal/adminAddHeader/AministrationSubpageHeader";
 import AddUser from "./users/addUser/AddUser";
-import { UserAdministrationPage } from "./users/userList/UserAdministrationPage";
+import { UserAdministration } from "./users/userList/UserAdministration";
 
 export const administrationRoutes = {
     statisticsRoute: {
@@ -90,7 +90,7 @@ const AdministrationPage = () => {
                     <Route path={administrationRoutes.usersRoute.route}>
                         <Switch>
                             <Route exact path={administrationRoutes.usersRoute.route}>
-                                <UserAdministrationPage />
+                                <UserAdministration />
                             </Route>
                             <Route path={administrationRoutes.usersRoute.addRoute.route}>
                                 <AddUser />
@@ -102,7 +102,7 @@ const AdministrationPage = () => {
                     <Route path={administrationRoutes.coursesRoute.route}>
                         <Switch>
                             <Route exact path={administrationRoutes.coursesRoute.route}>
-                                <CourseList />
+                                <CourseAdministration />
                             </Route>
                             <Route path={administrationRoutes.coursesRoute.addRoute.route}>
                                 <AddCourse />
