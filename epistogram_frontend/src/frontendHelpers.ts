@@ -6,6 +6,17 @@ import { globalConfig } from "./configuration/config";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 import { LoadingStateType } from "./models/types";
 
+export const dateToString = (date: Date) => {
+
+    if (!date)
+        return "";
+
+    if (isString(date))
+        return new Date(date).toLocaleString();
+
+    return date.toLocaleString();
+}
+
 export const disallowWindowNavigation = () => {
     window.onbeforeunload = (event) => {
         const e = event || window.event;
@@ -191,6 +202,23 @@ export const isArray = (obj: any) => {
 
     return Array.isArray(obj);
 }
+
+export const objToArray = (obj: any) => {
+
+    const properties = [] as any[];
+
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+
+            const element = obj[key];
+            properties.push(element);
+        }
+    }
+
+    return properties;
+}
+
+export const isCurrentRoute = (route: string) => window.location.pathname == route;
 
 export class TypedError extends Error {
 

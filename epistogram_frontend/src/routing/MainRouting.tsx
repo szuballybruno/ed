@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import AdministrationPage from "../components/administration/AdministrationPage";
 import UserCoursesPage from "../components/course_search/UserCoursesPage";
-import OverviewPage from "../components/dashboard/OverviewPage";
+import HomePage from "../components/dashboard/HomePage";
 import { FileUploadPage } from "../components/FileUploadPage";
 import LearningInsightsPage from "../components/LearningInsightsPage";
 import LoginScreen from "../components/login/LoginScreen";
@@ -22,12 +22,12 @@ export const MainRouting = () => {
         {/* protected paths */}
         <ProtectedRoute path="/watch/:descriptorCode" render={() => <PlayerPage />} />
         <ProtectedRoute path="/administration" render={() => <AdministrationPage />} />
-        <ProtectedRoute path="/kezdolap" render={() => <OverviewPage />} />
+        <ProtectedRoute path="/kezdolap" render={() => <HomePage />} />
         <ProtectedRoute path="/kurzusok" render={() => <UserCoursesPage />} />
         <ProtectedRoute path="/settings" render={() => <UserSettingsPage />} />
         <ProtectedRoute path="/learning" render={() => <LearningInsightsPage />} />
         <ProtectedRoute path="/fileupload" render={() => <FileUploadPage />} />
-        <ProtectedRoute path="/" render={() => <OverviewPage />} exact />
+        <ProtectedRoute path="/" render={() => <HomePage />} exact />
 
         {/* wrong path */}
         <Route path="*">

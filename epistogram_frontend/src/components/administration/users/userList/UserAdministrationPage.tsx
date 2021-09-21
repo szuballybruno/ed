@@ -16,6 +16,7 @@ import classes from "../users.module.scss";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { httpPostAsync } from "../../../../services/httpClient";
 import { FloatSearch } from "../../../universal/FloatSearch";
+import { administrationRoutes } from "../../AdministrationPage";
 
 export const UserAdministrationPage = () => {
 
@@ -24,7 +25,7 @@ export const UserAdministrationPage = () => {
     const [searchText, setSearchText] = React.useState("");
     const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(userId, searchText);
     const { navigate } = useNavigation();
-    const navigateToAddUser = () => navigate("/admin/manage/users/add");
+    const navigateToAddUser = () => navigate(administrationRoutes.usersRoute.addRoute.route);
 
     const deleteUserAsync = async (userId: number) => {
 

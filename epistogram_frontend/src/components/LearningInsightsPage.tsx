@@ -1,7 +1,7 @@
 import { Assignment, School, Subscriptions } from "@mui/icons-material";
 import React from "react";
 import { Route, Switch } from 'react-router-dom';
-import { NavigationListItemType } from "../models/types";
+import { RouteItemType } from "../models/types";
 import MyCourses from "./courseInsights/MyCourses";
 import MyExams from "./examInsights/MyExams";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
@@ -25,7 +25,7 @@ const menuItems = [
         route: "/learning/exams",
         icon: <Assignment color={"secondary"} />
     }
-] as NavigationListItemType[];
+] as RouteItemType[];
 
 const LearningInsightsPage = () => {
 

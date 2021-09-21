@@ -1,13 +1,12 @@
 import { Flex } from "@chakra-ui/layout"
 import { Typography } from "@mui/material";
 import { NavLink, useRouteMatch } from "react-router-dom";
-import { NavigationListItemType } from "../models/types"
+import { isCurrentRoute } from "../frontendHelpers";
+import { RouteItemType } from "../models/types"
 
-export const NavigationLinkList = (props: { items: NavigationListItemType[] }) => {
+export const NavigationLinkList = (props: { items: RouteItemType[] }) => {
 
     const { items } = props;
-
-    const isCurrentRoute = (route: string) => window.location.pathname == route;
 
     return <Flex direction="column">
         {items

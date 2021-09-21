@@ -1,59 +1,26 @@
-import { Button } from "@mui/material";
+import { Flex, FlexProps } from "@chakra-ui/react";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigation } from "../../../../../services/navigatior";
 import { EpistoButton } from "../../../EpistoButton";
 
 const NavbarButton = (props: {
-    className?: string,
-    activeClassName?: string,
-    index: number,
     menuName?: string,
-    menuPath: string | null
-    showImage?: boolean
-}) => {
+    menuPath: string
+} & FlexProps) => {
 
-    const className = props.className;//app.hamburgerButtonState.get() !== false ? '' : 'classes.displayNone' && (app.selectedPage.get() === props.index ? props.activeClassName : undefined)
-    // ? props.className : classes.navbarButton && (app.hamburgerButtonState.get() !== false ? '' : 'classes.displayNone')
+    const { menuPath, menuName, children, ...css } = props;
+    const { navigate } = useNavigation();
 
-    return props.menuPath ?
-        <NavLink
-            activeClassName={props.activeClassName}
-            to={props.menuPath}
-            onClick={() => {
-            }}>
-            <EpistoButton variant="plain">
-                {props.menuName}
-            </EpistoButton>
-        </NavLink> :
-
-        <Button
-            variant={"text"}
-            className={className}
-            onClick={() => {
-
-                // app.selectedPage.set(props.index);
-                // app.hamburgerButtonState.set(false)
-
-                // updateActivity(
-                //     "",
-                //     "openPage",
-                //     window.location.href,
-                //     "NavbarButton-Navlink-OpenPage",
-                //     props.menuName as string,
-                //     "generalPassive",
-                //     "A felhasználó megnyit egy új oldalt",
-                //     true,
-                //     undefined,
-                //     undefined,
-                //     undefined,
-                //     undefined,
-                //     undefined,
-                //     undefined,
-                //     currentOrigin + props.menuPath
-                // )
-            }}>
-            {props.menuName}
-        </Button>
+    return <Flex margin="0 5px 0 5px" {...css}>
+        {children
+            ? children
+            : <EpistoButton
+                onClick={() => navigate(menuPath)}
+                style={{ flex: "1" }}
+                variant="plain" >
+                {menuName}
+            </EpistoButton>}
+    </Flex>
 }
 
 export default NavbarButton

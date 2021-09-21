@@ -7,4 +7,5 @@ export type CourseItemDTO = {
     orderIndex: number;
     state: CourseItemStateType;
     descriptorCode: string;
+    type: CourseItemType;
 }

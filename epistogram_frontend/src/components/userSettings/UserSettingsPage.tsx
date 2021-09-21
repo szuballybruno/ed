@@ -7,7 +7,7 @@ import EditItem from "../universal/atomic/editItem/EditItem";
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from '../HOC/MainPanels';
 import Navbar from '../universal/navigation/navbar/Navbar';
-import { NavigationListItemType } from '../../models/types';
+import { RouteItemType } from '../../models/types';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { Route, Switch } from 'react-router';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -37,7 +37,7 @@ const menuItems = [
         route: "/settings/notifications",
         icon: <NotificationsIcon color="secondary"></NotificationsIcon>
     }
-] as NavigationListItemType[];
+] as RouteItemType[];
 
 export const UserSettingsPage = () => {
 

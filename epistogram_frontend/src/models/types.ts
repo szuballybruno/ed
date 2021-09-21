@@ -5,8 +5,9 @@ export type StillWatchingDialogMarker = {
     answerOptionIndex: number;
 }
 
-export type NavigationListItemType = {
+export type RouteItemType = {
     title: string;
     route: string;
     icon?: any;
+    isExact?: boolean;
 }

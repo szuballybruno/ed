@@ -10,7 +10,8 @@ export type EpistoButtonPropsType = {
     fontSize?: string,
     variant?: "outlined" | "plain" | "colored",
     style?: CSSProperties,
-    className?: string
+    className?: string,
+    icon?: ReactNode
 };
 
 export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>((props: EpistoButtonPropsType, ref) => {
@@ -24,7 +25,8 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         fontSize,
         variant,
         style,
-        className
+        className,
+        icon
     } = props;
 
     return <Button
@@ -50,6 +52,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             fontSize: fontSize ? fontSize : undefined,
             ...style
         }}>
+        {icon}
         {children}
     </Button>
 });

@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import React from 'react';
 import { CurrentTasksDTO } from '../../models/shared_models/CurrentTasksDTO';
 import { EpistoHeader } from '../administration/universal/EpistoHeader';
@@ -10,12 +10,12 @@ import { PersonalityChart } from "../universal/PersonalityChart";
 const tasks = {
     tasks: [
         {
-            addedDate: Date.now(),
-            addedBy: "Spengler Manfréd",
-            due: "Vasárnap",
             objective: "practise",
-            text: "Összefoglaló írása az office kurzusból",
-            status: "Kesz"
+            name: "Összefoglaló írása az office kurzusból",
+            createdBy: "Spengler Manfréd",
+            status: "Kesz",
+            creationDate: new Date(Date.now()),
+            dueDate: new Date(Date.now()),
         }
     ]
 } as CurrentTasksDTO;

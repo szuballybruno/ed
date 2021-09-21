@@ -26,7 +26,7 @@ export const QuestionnaireLayout = (props: {
                         padding: "8px",
                         width: "50px",
                         height: "50px",
-                        marginRight: "20px"
+                        marginRight: "30px"
                     }}
                     src="https://static.thenounproject.com/png/92068-200.png"
                     className="tinyShadow" />

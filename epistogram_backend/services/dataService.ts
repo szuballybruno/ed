@@ -112,18 +112,18 @@ const getCurrentTasks = () => {
     return {
         tasks: [
             {
-                text: "Office kurzus gyakorlása",
-                dueDate: "",
+                name: "Office kurzus gyakorlása",
+                dueDate: new Date(Date.now()),
                 objective: "practise"
             } as TaskDTO,
             {
-                text: "PHP videók megtekintése",
-                dueDate: "",
+                name: "PHP videók megtekintése",
+                dueDate: new Date(Date.now()),
                 objective: "continueVideo"
             } as TaskDTO,
             {
-                text: "Word kurzus végi vizsga",
-                dueDate: "",
+                name: "Word kurzus végi vizsga",
+                dueDate: new Date(Date.now()),
                 objective: "exam"
             } as TaskDTO
         ]

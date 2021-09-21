@@ -99,8 +99,8 @@ export const toCourseTagDTO = (courseTag: CourseTag) => {
 export const toTaskDTO = (task: Task) => {
 
     return {
-        text: task.name,
-        dueDate: task.dueData.toString(),
+        name: task.name,
+        dueDate: task.dueData,
         objective: task.objective
     } as TaskDTO;
 }
@@ -217,7 +217,8 @@ export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
             title: video.title,
             orderIndex: video.orderIndex,
             state: courseItemView.state,
-            descriptorCode: getCourseItemDescriptorCode(video.id, "video")
+            descriptorCode: getCourseItemDescriptorCode(video.id, "video"),
+            type: "video"
         } as CourseItemDTO;
     }
 
@@ -234,7 +235,8 @@ export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
             title: exam.title,
             orderIndex: exam.orderIndex,
             state: courseItemView.state,
-            descriptorCode: getCourseItemDescriptorCode(exam.id, "exam")
+            descriptorCode: getCourseItemDescriptorCode(exam.id, "exam"),
+            type: "exam"
         } as CourseItemDTO;
     }
 }

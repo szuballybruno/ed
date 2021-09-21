@@ -107,8 +107,7 @@ export const PlayerPage = () => {
                         {isDesktopView && <Box
                             id="courseItemSelectorRoot"
                             width="350px"
-                            minWidth="350px"
-                            pl="15px">
+                            minWidth="350px">
                             <CourseItemSelector
                                 courseId={courseId!}
                                 mode={courseMode}

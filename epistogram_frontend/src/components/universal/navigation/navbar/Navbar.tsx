@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { getAssetUrl, useIsDesktopView } from "../../../../frontendHelpers";
-import { NavigationListItemType } from "../../../../models/types";
+import { RouteItemType } from "../../../../models/types";
 import { useCurrentCourseItemCode } from "../../../../services/dataService";
 import { FlexFloat } from "../../FlexFloat";
 import classes from "./navbar.module.scss";
@@ -24,7 +24,7 @@ const menuItems = [
         title: "Adminisztráció",
         route: "/administration/statistics"
     }
-] as NavigationListItemType[];
+] as RouteItemType[];
 
 const Navbar = (props: { hideLinks?: boolean }) => {
 

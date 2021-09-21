@@ -8,6 +8,7 @@ import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import { Tasks } from '../Tasks';
+import { TipOfTheDay } from '../TipOfTheDay';
 import ListItem from "../universal/atomic/listItem/ListItem";
 import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
 import { EpistoGrid } from '../universal/EpistoGrid';
@@ -34,7 +35,7 @@ const DashboardCard = (props: FlexProps & { title: string }) => {
     </FlexFloat>
 }
 
-const OverviewPage = () => {
+const HomePage = () => {
 
     const user = useContext(CurrentUserContext);
     const { pageDTO, status, error } = useOverviewPageDTO();
@@ -59,7 +60,9 @@ const OverviewPage = () => {
                     {/* active item */}
                     <DashoardLeftItemGroup title={hasCurrentItem ? "Folytatom" : "Új tanfolyam kiválasztása"}>
                         {hasCurrentItem
-                            ? <CourseItemView courseItem={currentItem!} />
+                            ? <Box padding="10px">
+                                <CourseItemView courseItem={currentItem!} />
+                            </Box>
 
                             : <ListItem mainTitle={"Tanfolyamkereső"}
                                 subTitle={"Válaszd ki a legszimpatikusabb tanfolyamot"}
@@ -79,11 +82,11 @@ const OverviewPage = () => {
 
                 </LeftPanel>
                 <RightPanel>
-                    <EpistoGrid minColumnWidth="400px" columnGap="10">
+                    <EpistoGrid minColumnWidth="300px" columnGap="10">
                         {/* <Flex direction="column" align="flex-start" justify="flex-start" wrap="wrap"> */}
 
                         {/* test your knowledge */}
-                        <DashboardCard title="A nap kerdese" >
+                        <DashboardCard title="A nap kerdese" gridColumnEnd="span 2" >
 
                             <VideoQuestionnaire
                                 answerSessionId={-1}
@@ -91,18 +94,13 @@ const OverviewPage = () => {
                                 question={pageDTO?.testQuestionDTO!} />
                         </DashboardCard>
 
-                        {/* greeting */}
-                        <DashboardCard title="Haladj előre!">
-                            <Box p="20px">
-                                <EpistoText
-                                    allowedLines={4}
-                                    text="Current video that you were watching but left watch this video, please, videos are good, watch this!!!" />
-                                <FlexImage height="300px" width="100%" url="https://i.stack.imgur.com/z3pLU.png"></FlexImage>
-                            </Box>
+                        {/* tip of the day */}
+                        <DashboardCard title="Napi tipped">
+                            <TipOfTheDay />
                         </DashboardCard>
 
                         {/* current tasks */}
-                        <DashboardCard title="Feladatok">
+                        <DashboardCard title="Feladatok" gridColumnEnd="span 2">
                             <Tasks currentTasks={pageDTO?.currentTasks!} className="whall" />
                         </DashboardCard>
 
@@ -111,11 +109,6 @@ const OverviewPage = () => {
                             <DevelopmentLineChart data={pageDTO?.developmentChartData!} />
                         </DashboardCard>
 
-                        {/* tip of the day */}
-                        <DashboardCard title="Napi tipped" >
-                            <Typography variant={"h6"} fontSize="16px">{tipOfTheDay}</Typography>
-                        </DashboardCard>
-                        {/* </Flex> */}
                     </EpistoGrid>
                 </RightPanel>
             </LoadingFrame>
@@ -123,4 +116,4 @@ const OverviewPage = () => {
     </MainWrapper>
 };
 
-export default OverviewPage;
+export default HomePage;

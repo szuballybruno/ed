@@ -1,8 +1,10 @@
+import { BarChart, Person, Subscriptions } from "@mui/icons-material";
 import React, { useContext } from 'react';
-import { Redirect, Route, Switch, withRouter } from "react-router-dom";
-import { NavigationListItemType } from "../../models/types";
+import { Route, Switch, useLocation, withRouter } from "react-router-dom";
+import { RouteItemType } from "../../models/types";
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
+import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../universal/navigation/navbar/Navbar";
 import { AddCourse } from "./courses/addCourse/AddCourse";
 import { AddVideo } from "./courses/addVideo/AddVideo";
@@ -13,38 +15,48 @@ import AminStatistics from "./statistics/AminStatistics";
 import { AministrationSubpageHeader } from "./universal/adminAddHeader/AministrationSubpageHeader";
 import AddUser from "./users/addUser/AddUser";
 import { UserAdministrationPage } from "./users/userList/UserAdministrationPage";
-import { BarChart, Business, ChromeReaderMode, Group, Person, Subscriptions, ThumbsUpDown } from "@mui/icons-material";
-import { NavigationLinkList } from '../NavigationLinkList';
 
-const menuItems = [
-    {
+export const administrationRoutes = {
+    statisticsRoute: {
         title: "Statisztika",
         route: "/administration/statistics",
         icon: <BarChart color={"secondary"} />
     },
-    {
+    usersRoute: {
         title: "Felhasználók kezelése",
         route: "/administration/users",
-        icon: <Person color={"secondary"} />
+        icon: <Person color={"secondary"} />,
+
+        addRoute: {
+            title: "Felhasznalo hozzaadasa",
+            route: "/administration/users/add"
+        }
     },
-    {
+    coursesRoute: {
         title: "Kurzusok kezelése",
         route: "/administration/courses",
-        icon: <Subscriptions color={"secondary"} />
-    },
-    {
-        title: "Csoportok kezelése",
-        route: "/administration/groups",
-        icon: <ChromeReaderMode color={"secondary"} />
-    },
-    {
-        title: "Cégek kezelése",
-        route: "/administration/organizations",
-        icon: <Group color={"secondary"} />//Business
-    }
-] as NavigationListItemType[];
+        icon: <Subscriptions color={"secondary"} />,
 
-const AdministrationPage = (props: { match: { url: string; } }) => {
+        addRoute: {
+            title: "Kurzus hozzaadasa",
+            route: "/administration/courses/add"
+        },
+        editCourseRoute: {
+            title: "Kurzus szerkesztese",
+            route: "/administration/courses/:courseId"
+        },
+        addVideoRoute: {
+            title: "Kurzus szerkesztese",
+            route: "/administration/courses/:courseId/item/add"
+        },
+        editVideoRoute: {
+            title: "Kurzus szerkesztese",
+            route: "/administration/courses/:courseId/item/:itemId"
+        }
+    }
+};
+
+const AdministrationPage = () => {
 
     // const user = useState(userDetailsState)
 
@@ -54,7 +66,12 @@ const AdministrationPage = (props: { match: { url: string; } }) => {
         <Navbar />
         <ContentWrapper>
             <LeftPanel p="20px">
-                <NavigationLinkList items={menuItems} />
+                <NavigationLinkList
+                    items={[
+                        administrationRoutes.statisticsRoute,
+                        administrationRoutes.usersRoute,
+                        administrationRoutes.coursesRoute
+                    ] as RouteItemType[]} />
             </LeftPanel>
             <RightPanel noPadding bg="white">
 
@@ -65,38 +82,38 @@ const AdministrationPage = (props: { match: { url: string; } }) => {
                 <Switch>
 
                     {/* statistics */}
-                    <Route path={'/administration/statistics'}>
+                    <Route path={administrationRoutes.statisticsRoute.route}>
                         <AminStatistics />
                     </Route>
 
                     {/* user administration */}
-                    <Route path={'/administration/users'}>
+                    <Route path={administrationRoutes.usersRoute.route}>
                         <Switch>
-                            <Route exact path={'/administration/users'}>
+                            <Route exact path={administrationRoutes.usersRoute.route}>
                                 <UserAdministrationPage />
                             </Route>
-                            <Route path={'/administration/users/add'}>
+                            <Route path={administrationRoutes.usersRoute.addRoute.route}>
                                 <AddUser />
                             </Route>
                         </Switch>
                     </Route>
 
                     {/* course administartion */}
-                    <Route path={'/administration/courses'}>
+                    <Route path={administrationRoutes.coursesRoute.route}>
                         <Switch>
-                            <Route exact path={"/administration/courses"}>
+                            <Route exact path={administrationRoutes.coursesRoute.route}>
                                 <CourseList />
                             </Route>
-                            <Route path={"/administration/courses/add"}>
+                            <Route path={administrationRoutes.coursesRoute.addRoute.route}>
                                 <AddCourse />
                             </Route>
-                            <Route path={"/administration/courses/:courseId"} exact>
+                            <Route path={administrationRoutes.coursesRoute.editCourseRoute.route} exact>
                                 <EditCourse />
                             </Route>
-                            <Route path={"/administration/courses/:courseId/item/add"} exact>
+                            <Route path={administrationRoutes.coursesRoute.addVideoRoute.route} exact>
                                 <AddVideo />
                             </Route>
-                            <Route path={`/administration/courses/:courseId/item/:itemId`}>
+                            <Route path={administrationRoutes.coursesRoute.editVideoRoute.route}>
                                 <EditVideo />
                             </Route>
                         </Switch>

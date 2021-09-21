@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { FlexImage } from "./FlexImage";
 
 export const FlexListItem = (props: FlexProps & {
-    thumbnailUrl: string,
+    thumbnailUrl?: string,
     onClick?: () => void,
     isLocked?: boolean,
     endContent?: ReactNode,
@@ -16,7 +16,7 @@ export const FlexListItem = (props: FlexProps & {
 
     return <Flex
         id="flexListItem"
-        className="leftBorderOnHover"
+        className="shadowOnHover"
         cursor="pointer"
         align="stretch"
         p="10px"
@@ -25,9 +25,9 @@ export const FlexListItem = (props: FlexProps & {
         borderBottom="1px solid #eaeaea"
         {...css}>
 
-        <FlexImage url={thumbnailUrl} flexBasis={thumbnailBasis ?? "50px"}></FlexImage>
+        {thumbnailUrl && <FlexImage mr="10px" url={thumbnailUrl} flexBasis={thumbnailBasis ?? "50px"} />}
 
-        <Box flex="1" pl="20px">
+        <Box flex="1">
             {midContent}
         </Box>
 

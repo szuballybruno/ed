@@ -18,19 +18,29 @@ export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
 
-    const { title, subTitle, thumbnailUrl, state, descriptorCode } = props.courseItem;
+    const { title, subTitle, thumbnailUrl, state, descriptorCode, type } = props.courseItem;
     const isLocked = state == "locked";
     const { navigateToPlayer } = useNavigation();
 
     const navigate = () => navigateToPlayer(descriptorCode);
 
+    const borderWidth = state === "current"
+        ? 5
+        : type === "video"
+            ? 0
+            : 3
+
+    const borderColor = type === "exam"
+        ? "var(--intenseOrange)"
+        : "var(--epistoTeal)"
+
     return <FlexListItem
         isLocked={isLocked}
         onClick={navigate}
-        thumbnailUrl={thumbnailUrl}
+        borderLeft={`${borderWidth}px solid ${borderColor}`}
         midContent={<FlexListTitleSubtitle title={title} subTitle={subTitle} />}
         endContent={<Flex align="center" justify="center" flexBasis="50px">
-            {state === "current" && <VisibilityIcon style={{ color: "var(--background-18)" }} />}
+            {state === "current" && <VisibilityIcon style={{ color: "var(--epistoTeal)" }} />}
             {state === "locked" && <LockIcon style={{ color: "grey" }} />}
             {state === "available" && <LockOpenIcon style={{ color: "var(--mildGreen)" }} />}
             {state === "completed" && <DoneIcon style={{ color: "var(--mildGreen)" }} />}
@@ -46,7 +56,7 @@ export const CourseItemList = (props: {
     // const navigateToCourseItem = props.navigateToCourseItem;
 
     return (
-        <FlexList id="courseItemListContainer">
+        <FlexList id="courseItemListContainer" p="10px">
             {courseItems
                 .map((courseItem, index) => <CourseItemView
                     key={index}
@@ -54,36 +64,3 @@ export const CourseItemList = (props: {
         </FlexList>
     );
 }
-
-// () => navigateToCourseItem(courseItem.id, courseItem.type)
-
-// updateActivity("",
-//                                             "selectVideo",
-//                                             window.location.href,
-//                                             "VideoList-ListItems-SelectsNewVideo",
-//                                             item.title,
-//                                             "collBasedPassive",
-//                                             "A felhasználó kiválaszt egy videót",
-//                                             true,
-//                                             undefined,
-//                                             undefined,
-//                                             "videos",
-//                                             "_id",
-//                                             item.id,
-//                                             index.toString(),
-//                                             currentOrigin + "watch/" + user.userData.currentCourse._id.get() + "/" + item._id)
-
-// updateActivity("", "selectExam",
-//                                     window.location.href,
-//                                     "VideoList-ListItems-SelectsNewExam",
-//                                     item.name as string,
-//                                     "collBasedPassive",
-//                                     "A felhasználó kiválaszt egy vizsgát",
-//                                     true,
-//                                     undefined,
-//                                     undefined,
-//                                     "exams",
-//                                     "_id",
-//                                     item._id,
-//                                     index.toString(),
-//                                     currentOrigin + "/watch/" + user.userData.currentCourse._id.get() + "/" + item._id)

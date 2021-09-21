@@ -85,11 +85,20 @@ button {
   filter: brightness(110%) saturate(90%);
 }
 
+.shadowOnHover{
+  transition: 0.2s;
+}
+
+.shadowOnHover:hover{
+  box-shadow: 0 0 4px #0000001f
+}
+
 :root {
   --intenseGreen: #61ca61;
   --intenseRed: #e73f3f;
   --intenseYellow: #efd116;
   --intenseGray: #8e8e8e;
+  --intenseOrange: #ffc400;
 
   --mildRed: #fa6767;
   --mildGreen: #7cf25e;

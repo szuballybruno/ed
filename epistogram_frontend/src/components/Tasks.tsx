@@ -1,7 +1,13 @@
-import { Box, BoxProps, Flex, FlexProps } from "@chakra-ui/layout"
+import { Flex, FlexProps } from "@chakra-ui/layout"
+import { Box } from "@chakra-ui/react"
 import { Create, MenuBook, PlayCircleFilled } from "@mui/icons-material"
-import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material"
-import { NavLink } from "react-router-dom"
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import * as React from 'react'
+import { dateToString } from "../frontendHelpers"
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO"
 import { TaskObjectiveType } from "../models/shared_models/types/sharedTypes"
 import { EpistoButton } from "./universal/EpistoButton"
@@ -19,13 +25,60 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
         if (objective == "exam")
             return <Create />
 
-        throw new Error("Unknown task objective type!");
+        // throw new Error("Unknown task objective type!");
     }
 
     const { currentTasks, children, ...css } = props;
+    const tasks = currentTasks.tasks;
 
     return <Flex direction="column" justify="space-between" {...css}>
-        <List>
+        <Table>
+            <TableHead>
+                <TableRow>
+                    <TableCell align="left"></TableCell>
+                    <TableCell align="left">Feladat</TableCell>
+                    <TableCell align="right">Felado</TableCell>
+                    <TableCell align="right">Feladas datuma</TableCell>
+                    <TableCell align="right">Esedekes</TableCell>
+                    <TableCell align="right">Status</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {tasks
+                    .map((task, index) => {
+
+                        return <TableRow
+                            key={index}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+
+                            {/* icon */}
+                            <TableCell component="th" scope="row">
+                                {getListIcon(task.objective)}
+                            </TableCell>
+
+                            {/* name */}
+                            <TableCell component="th" scope="row">
+                                {task.name}
+                            </TableCell>
+
+                            {/* created by  */}
+                            <TableCell align="right">
+                                {task.createdBy}
+                            </TableCell>
+
+                            {/* creation date */}
+                            <TableCell align="right">{dateToString(task.creationDate)}</TableCell>
+
+                            {/* due date */}
+                            <TableCell align="right">{dateToString(task.dueDate)}</TableCell>
+
+                            {/* status */}
+                            <TableCell align="right">{task.status}</TableCell>
+                        </TableRow>
+                    })}
+            </TableBody>
+        </Table>
+        {/* <List>
 
             {currentTasks
                 .tasks
@@ -38,7 +91,7 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
                         <ListItemText primary={currentTask.text} secondary={currentTask.dueDate} />
                     </ListItem>
                 })}
-        </List>
+        </List> */}
 
         <EpistoButton
             style={{ marginTop: "20px" }}
