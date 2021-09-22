@@ -1,10 +1,10 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { PlayArrow } from "@mui/icons-material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
 import { NavLink } from "react-router-dom";
+import { applicationRoutes } from "../../../../../configuration/applicationRoutes";
 import { getAssetUrl } from "../../../../../frontendHelpers";
 import { RouteItemType } from "../../../../../models/types";
 import { getCourseItemUrl, useNavigation } from "../../../../../services/navigatior";
@@ -25,7 +25,7 @@ const DesktopNavbar = (props: {
     const { navigateToPlayer, navigate } = useNavigation();
     const currentCourseItemCode = props.currentCourseItemCode;
 
-    const homeUrl = "/";
+    const homeUrl = applicationRoutes.rootHomeRoute.route;
     const user = useContext(CurrentUserContext);
 
     const ref = useRef<HTMLButtonElement>(null);
@@ -34,15 +34,15 @@ const DesktopNavbar = (props: {
 
     const userMenuItems = [
         {
-            name: "Settings",
-            icon: <SettingsIcon></SettingsIcon>,
-            onClick: () => navigate("/settings/preferences")
+            name: applicationRoutes.settingsRoute.title,
+            icon: applicationRoutes.settingsRoute.icon,
+            onClick: () => navigate(applicationRoutes.settingsRoute.preferencesRoute.route)
         },
         {
-            name: "Log Out",
+            name: "Kijelentkezes",
             icon: <LogoutIcon></LogoutIcon>,
             color: "var(--mildRed)",
-            onClick: () => navigate("/settings")
+            onClick: () => { }
         }
     ]
 
@@ -113,7 +113,7 @@ const DesktopNavbar = (props: {
             </Flex >
 
             {/* user menu */}
-            < EpistoPopper
+            <EpistoPopper
                 isOpen={popperOpen}
                 target={ref?.current}
                 placementX="left"
@@ -146,20 +146,3 @@ const DesktopNavbar = (props: {
 };
 
 export default DesktopNavbar;
-
-// updateActivity("",
-//     "openPage",
-//     window.location.href,
-//     "DesktopNavbar-Button-PlayVideo",
-//     "play",
-//     "generalPassive",
-//     "A felhasználó megnyit egy új oldalt",
-//     true,
-//     undefined,
-//     undefined,
-//     undefined,
-//     undefined,
-//     undefined,
-//     undefined,
-//     currentOrigin + "/watch/" + user.userData.currentCourse._id.get() + "/" + user.userData.currentItem._id.get()
-// )

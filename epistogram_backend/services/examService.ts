@@ -37,6 +37,22 @@ export const getExamResultsAsync = async (userId: number, answerSessionId: numbe
             }
         });
 
+    const prevoiuslyCompletedSessions = await staticProvider
+        .ormConnection
+        .getRepository(UserExamAnswerSessionView)
+        .find({
+            where: {
+                examId: descriptor.itemId,
+                userId: userId,
+                isCompleteSession: true
+            }
+        });
+
+    // if only one previous session is completed, 
+    // and the current session is completed
+    // than the current session is the first one completed.  
+    const isFirstTimeComplted = prevoiuslyCompletedSessions.length === 1 && answerSession.isCompleteSession;
+
     const data = await staticProvider
         .ormConnection
         .getRepository(User)
@@ -49,5 +65,5 @@ export const getExamResultsAsync = async (userId: number, answerSessionId: numbe
         .where("u.id = :userId", { userId })
         .getOneOrFail();
 
-    return toExamResultDTO(answerSession, data);
+    return toExamResultDTO(answerSession, data, isFirstTimeComplted);
 }

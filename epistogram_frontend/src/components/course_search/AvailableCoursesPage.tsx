@@ -1,19 +1,18 @@
-import { Box, Flex, Grid, GridItem } from "@chakra-ui/react";
-import { FormControl, Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { Box, Flex, GridItem } from "@chakra-ui/react";
+import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React from "react";
 import { distinct } from "../../frontendHelpers";
-import { LoadingFrame } from "../HOC/LoadingFrame";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import { GetUserCoursesDTO } from "../../models/shared_models/GetUserCoursesDTO";
 import { useUserCourses } from "../../services/courseService";
-import { AdminDashboardSearch } from "../administration/universal/searchBar/AdminDashboardSearch";
+import { LoadingFrame } from "../HOC/LoadingFrame";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import CourseTile from "../universal/atomic/courseTile/CourseTile";
-import Navbar from "../universal/navigation/navbar/Navbar";
-import classes from "./courseSearchMain.module.scss";
 import { EpistoGrid } from "../universal/EpistoGrid";
 import { FloatSearch } from "../universal/FloatSearch";
+import Navbar from "../universal/navigation/navbar/Navbar";
+import classes from "./courseSearchMain.module.scss";
 
-const UserCoursesPage = () => {
+const AvailableCoursesPage = () => {
 
     const [searchText, setSearchText] = React.useState("");
     const [searchCategory, setSearchCategory] = React.useState("");
@@ -155,7 +154,7 @@ const UserCoursesPage = () => {
     </MainWrapper >
 }
 
-export default UserCoursesPage
+export default AvailableCoursesPage
 
 // // <Grid id="gridFlex" wrap="wrap" className="whall">
 //                             {courses

@@ -1,12 +1,11 @@
 import { Box } from "@chakra-ui/layout";
-import { BarChart, MilitaryTechOutlined, PersonOutlineTwoTone, SubscriptionsTwoTone } from "@mui/icons-material";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
 import React, { ReactNode } from 'react';
-import { matchPath, useLocation, useParams, useRouteMatch } from 'react-router';
+import { matchPath, useLocation } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { applicationRoutes } from "../../../../configuration/applicationRoutes";
 import { objToArray } from "../../../../frontendHelpers";
-import { administrationRoutes } from "../../AdministrationPage";
 
 export const AministrationSubpageHeader = () => {
 
@@ -24,8 +23,8 @@ export const AministrationSubpageHeader = () => {
         return !!match;
     };
 
-    const currentRoute = objToArray(administrationRoutes)
-        .filter(x => isMatchingCurrentRoute(x.route, false))[0];
+    const currentRoute = objToArray(applicationRoutes.administrationRoute)
+        .filter(x => isMatchingCurrentRoute(x.route, x.exact))[0];
 
     const subRoute = objToArray(currentRoute)
         .filter(x => isMatchingCurrentRoute(x.route, true))[0];

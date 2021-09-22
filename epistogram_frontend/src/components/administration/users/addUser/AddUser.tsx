@@ -14,6 +14,7 @@ import SelectFromArray, { OptionType } from "../../universal/selectFromArray/Sel
 import SingleInput from "../../universal/singleInput/SingleInput";
 import DoubleInputs from "../../universal/twoInputs/DoubleInputs";
 import classes from "./addUser.module.scss";
+import { applicationRoutes } from "../../../../configuration/applicationRoutes";
 
 const mapOrganizations = (organizations: OrganizationDTO[]) => {
     const organizationOptions = organizations
@@ -144,7 +145,7 @@ const AddUser = () => {
             await createInvitedUserAsync(createInvitedUserDTO);
 
             showNotification("Felhasználó sikeresen hozzáadva");
-            navigate("/admin/manage/users");
+            navigate(applicationRoutes.administrationRoute.usersRoute.route);
         } catch (error) {
 
             // generic JS error

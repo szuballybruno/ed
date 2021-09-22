@@ -5,7 +5,7 @@ import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { useSaveExamAnswer } from "../../services/examService";
-import { ExamResultsTable } from "../exam/ExamResultsTable";
+import { ExamResults } from "../exam/ExamResults";
 import { QuestionSlides } from "../exam/QuestionSlides";
 import { SignupWrapper } from "../signup/SignupWrapper";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
@@ -80,7 +80,9 @@ export const ExamPlayer = (props: {
         questions={questions} />
 
     const ResultsSlide = () =>
-        <ExamResultsTable examTitle={exam.title} answerSessionId={answerSessionId}></ExamResultsTable>
+        <ExamResults
+            examTitle={exam.title}
+            answerSessionId={answerSessionId}></ExamResults>
 
     const slides = [
         GreetSlide,
@@ -90,6 +92,7 @@ export const ExamPlayer = (props: {
 
     return (
         <LoadingFrame
+            className="whall"
             loadingState={saveExamAnswerState}
             error={saveExamAnswerError}
             flex="1">

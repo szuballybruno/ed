@@ -1,9 +1,8 @@
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import AdministrationPage from "../components/administration/AdministrationPage";
-import UserCoursesPage from "../components/course_search/UserCoursesPage";
+import AvailableCoursesPage from "../components/course_search/AvailableCoursesPage";
 import HomePage from "../components/dashboard/HomePage";
-import { FileUploadPage } from "../components/FileUploadPage";
 import LearningInsightsPage from "../components/LearningInsightsPage";
 import LoginScreen from "../components/login/LoginScreen";
 import { PlayerPage } from "../components/player/PlayerPage";
@@ -11,23 +10,23 @@ import { SignupPage } from "../components/signup/SignupPage";
 import NotFound from "../components/universal/notFound/NotFound";
 import { ProtectedRoute } from "../components/universal/ProtectedRoute";
 import { UserSettingsPage } from "../components/userSettings/UserSettingsPage";
+import { applicationRoutes } from "../configuration/applicationRoutes";
 
 export const MainRouting = () => {
     return <Switch>
 
         {/* unprotected paths  */}
-        <Route path="/login" component={withRouter(LoginScreen)} />
-        <Route path="/signup" component={withRouter(SignupPage)} />
+        <Route path={applicationRoutes.loginRoute.route} component={withRouter(LoginScreen)} />
+        <Route path={applicationRoutes.signupRoute.route} component={withRouter(SignupPage)} />
 
         {/* protected paths */}
         <ProtectedRoute path="/watch/:descriptorCode" render={() => <PlayerPage />} />
-        <ProtectedRoute path="/administration" render={() => <AdministrationPage />} />
-        <ProtectedRoute path="/kezdolap" render={() => <HomePage />} />
-        <ProtectedRoute path="/kurzusok" render={() => <UserCoursesPage />} />
-        <ProtectedRoute path="/settings" render={() => <UserSettingsPage />} />
-        <ProtectedRoute path="/learning" render={() => <LearningInsightsPage />} />
-        <ProtectedRoute path="/fileupload" render={() => <FileUploadPage />} />
-        <ProtectedRoute path="/" render={() => <HomePage />} exact />
+        <ProtectedRoute path={applicationRoutes.administrationRoute.route} render={() => <AdministrationPage />} />
+        <ProtectedRoute path={applicationRoutes.homeRoute.route} render={() => <HomePage />} />
+        <ProtectedRoute path={applicationRoutes.availableCoursesRoute.route} render={() => <AvailableCoursesPage />} />
+        <ProtectedRoute path={applicationRoutes.settingsRoute.route} render={() => <UserSettingsPage />} />
+        <ProtectedRoute path={applicationRoutes.learningRoute.route} render={() => <LearningInsightsPage />} />
+        <ProtectedRoute path={applicationRoutes.rootHomeRoute.route} render={() => <HomePage />} exact />
 
         {/* wrong path */}
         <Route path="*">
@@ -36,11 +35,3 @@ export const MainRouting = () => {
 
     </Switch>
 }
-
-{/*
-    Not used pages, maybe useful on demo
-
-    <ProtectedRoute path="/regisztracio" render={() => <CoursePage pageUrl={"https://brunosteppenwolf.wixsite.com/mysite"} />} />
-    <ProtectedRoute path="/excel-kurzus" render={() => <CoursePage pageUrl={"https://epistogram.com/?page_id=7147"} />} />
-    <ProtectedRoute path="/mobiledemo" render={() => <MobileDemo />} />
-*/}

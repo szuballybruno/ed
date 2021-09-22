@@ -62,9 +62,6 @@ export const SignupPage = () => {
             await finalizeUserRegistartionAsync(dto);
 
             showNotification("Felhasználó sikeresen frissítve")
-
-            // TODO unnecessary
-            navigate("/login");
         }
         catch (error) {
 

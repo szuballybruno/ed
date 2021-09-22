@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/layout";
 import { EditTwoTone, EqualizerTwoTone } from "@mui/icons-material";
 import React from "react";
+import { applicationRoutes } from "../../../../configuration/applicationRoutes";
 import { useAdministratedCourses } from "../../../../services/courseService";
 import { useNavigation } from "../../../../services/navigatior";
 import { FloatAddButton } from "../../../FloatAddButton";
@@ -8,7 +9,6 @@ import { EpistoButton } from "../../../universal/EpistoButton";
 import { FlexList } from "../../../universal/FlexList";
 import { FlexListItem } from "../../../universal/FlexListItem";
 import { FloatSearch } from "../../../universal/FloatSearch";
-import { administrationRoutes } from "../../AdministrationPage";
 import { EpistoHeader } from "../../universal/EpistoHeader";
 
 export const CourseAdministration = () => {
@@ -18,7 +18,7 @@ export const CourseAdministration = () => {
 
     const { navigate } = useNavigation();
 
-    const navigateToAddUser = () => navigate(administrationRoutes.coursesRoute.addRoute.route);
+    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.coursesRoute.addRoute.route);
 
     return <Flex direction="column">
 

@@ -1,11 +1,12 @@
 import { Button } from "@mui/material";
-import { SettingsApplicationsSharp } from "@mui/icons-material";
 import React, { useContext, useState } from 'react';
 import { Redirect } from "react-router";
-import { getEventValueCallback, TypedError } from "../../frontendHelpers";
-import { AuthenticationStateContext } from "../HOC/AuthenticationFrame";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { TypedError } from "../../frontendHelpers";
 import { useLogInUser } from '../../services/authenticationService';
+import { useNavigation } from "../../services/navigatior";
 import SingleInput from "../administration/universal/singleInput/SingleInput";
+import { AuthenticationStateContext } from "../HOC/AuthenticationFrame";
 import classes from './loginScreen.module.scss';
 
 const LoginScreen = (props: { history: any; }): JSX.Element => {
@@ -15,6 +16,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { navigate } = useNavigation();
 
     const authenticate = async (e: React.FormEvent<HTMLFormElement>) => {
 
@@ -25,7 +27,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
             await logInUser(email, password);
 
             console.log("Login successful, naving to home page!");
-            return props.history.push('/kezdolap');
+            navigate(applicationRoutes.homeRoute.route);
 
         } catch (error: any | TypedError) {
 
@@ -58,7 +60,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
         return <div>loading...</div>
 
     if (authState.isAuthenticated)
-        return <Redirect to="/kezdolap"></Redirect>
+        return <Redirect to={applicationRoutes.homeRoute.route}></Redirect>
 
     return (
         <div className={classes.loginhatter}>

@@ -1,19 +1,16 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router";
-import menuItems from "../../configuration/menuItems.json";
-import { getQueryParam, useIsDesktopView } from "../../frontendHelpers";
-import { LoadingFrame } from "../HOC/LoadingFrame";
-import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
-import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
+import { useIsDesktopView } from "../../frontendHelpers";
 import { useNavigation } from "../../services/navigatior";
 import { useDialog } from "../../services/notifications";
-import { useCourseItemList, usePlayerData } from "../../services/playerService";
+import { usePlayerData } from "../../services/playerService";
+import { LoadingFrame } from "../HOC/LoadingFrame";
+import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import { FlexFloat } from "../universal/FlexFloat";
 import Navbar from "../universal/navigation/navbar/Navbar";
 import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
-import classes from './playerMain.module.scss';
 import { WatchView } from "./WatchView";
 
 export const PlayerPage = () => {

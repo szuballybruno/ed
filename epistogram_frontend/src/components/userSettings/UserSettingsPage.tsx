@@ -1,43 +1,14 @@
 import React, { useContext } from 'react';
-import classes from './settings.module.scss'
-import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
-import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
-import SettingsItem from "./settings_components/SettingsItem";
-import EditItem from "../universal/atomic/editItem/EditItem";
+import { Route, Switch } from 'react-router';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from '../HOC/MainPanels';
-import Navbar from '../universal/navigation/navbar/Navbar';
-import { RouteItemType } from '../../models/types';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { Route, Switch } from 'react-router';
-import SettingsIcon from '@mui/icons-material/Settings';
-import PersonIcon from '@mui/icons-material/Person';
-import MonitorIcon from '@mui/icons-material/Monitor';
-import SecurityIcon from '@mui/icons-material/Security';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-
-const menuItems = [
-    {
-        title: "Adatlap",
-        route: "/settings/preferences",
-        icon: <PersonIcon color="secondary"></PersonIcon>
-    },
-    {
-        title: "Megjelenítés",
-        route: "/settings/display",
-        icon: <MonitorIcon color="secondary"></MonitorIcon>
-    },
-    {
-        title: "Biztonság",
-        route: "/settings/security",
-        icon: <SecurityIcon color="secondary"></SecurityIcon>
-    },
-    {
-        title: "Értesítések",
-        route: "/settings/notifications",
-        icon: <NotificationsIcon color="secondary"></NotificationsIcon>
-    }
-] as RouteItemType[];
+import EditItem from "../universal/atomic/editItem/EditItem";
+import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
+import Navbar from '../universal/navigation/navbar/Navbar';
+import classes from './settings.module.scss';
+import SettingsItem from "./settings_components/SettingsItem";
 
 export const UserSettingsPage = () => {
 
@@ -109,7 +80,6 @@ export const UserSettingsPage = () => {
         <div className={classes.securityWrapper}>
             <SettingsItem title={"Kétfaktoros autentikáció"} switchState={false} switchOnChange={setSemmi} switchProperty={"twoFactorAuth"} />
             <SettingsItem title={"Engedélyezett otthoni eszközök"} linkTitle={"Eszközök mutatása"} onClick={setSemmi} />
-            <SettingsItem linkTitle={"Jelszó módosítása"} link={"/profilom/beallitasok/jelszo"} />
         </div>
     </>
 
@@ -128,25 +98,30 @@ export const UserSettingsPage = () => {
         <ContentWrapper>
 
             <LeftPanel p="20px">
-                <NavigationLinkList items={menuItems}></NavigationLinkList>
+                <NavigationLinkList items={[
+                    applicationRoutes.settingsRoute.preferencesRoute,
+                    applicationRoutes.settingsRoute.displayRoute,
+                    applicationRoutes.settingsRoute.securityRoute,
+                    applicationRoutes.settingsRoute.notificationsRoute
+                ]}></NavigationLinkList>
             </LeftPanel>
 
             <RightPanel>
 
                 <Switch>
-                    <Route path={'/settings/preferences'}>
+                    <Route path={applicationRoutes.settingsRoute.preferencesRoute.route}>
                         <Preferences></Preferences>
                     </Route>
 
-                    <Route path={'/settings/display'}>
+                    <Route path={applicationRoutes.settingsRoute.displayRoute.route}>
                         <DisplaySettings />
                     </Route>
 
-                    <Route path={'/settings/security'}>
+                    <Route path={applicationRoutes.settingsRoute.securityRoute.route}>
                         <SecuritySettings />
                     </Route>
 
-                    <Route path={'/settings/notifications'}>
+                    <Route path={applicationRoutes.settingsRoute.notificationsRoute.route}>
                         <NotificationSettings />
                     </Route>
                 </Switch>

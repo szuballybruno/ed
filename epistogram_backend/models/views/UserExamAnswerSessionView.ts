@@ -10,6 +10,9 @@ export class UserExamAnswerSessionView {
 	examId: number;
 
 	@ViewColumn()
+	isFinalExam: boolean;
+
+	@ViewColumn()
 	answerSessionId: number;
 
 	@ViewColumn()

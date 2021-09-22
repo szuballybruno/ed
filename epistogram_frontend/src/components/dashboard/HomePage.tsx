@@ -1,6 +1,7 @@
 import { Box, BoxProps, Flex, FlexProps } from '@chakra-ui/layout';
 import { Typography } from '@mui/material';
 import React, { useContext } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { tipOfTheDay, useOverviewPageDTO } from "../../services/dataService";
 import { EpistoHeader } from "../administration/universal/EpistoHeader";
 import { DevelopmentLineChart } from '../DevelopmentLineChart';
@@ -67,7 +68,7 @@ const HomePage = () => {
                             : <ListItem mainTitle={"Tanfolyamkereső"}
                                 subTitle={"Válaszd ki a legszimpatikusabb tanfolyamot"}
                                 thumbnailUrl={currentItemThumbnailUrl}
-                                to={"/kurzusok"} />}
+                                to={applicationRoutes.availableCoursesRoute.route} />}
                     </DashoardLeftItemGroup>
 
                     {/* current course */}

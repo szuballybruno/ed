@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { applicationRoutes } from "../../../../configuration/applicationRoutes";
 import { getAssetUrl, useIsDesktopView } from "../../../../frontendHelpers";
 import { RouteItemType } from "../../../../models/types";
 import { useCurrentCourseItemCode } from "../../../../services/dataService";
@@ -8,22 +9,10 @@ import classes from "./navbar.module.scss";
 import DesktopNavbar from "./navbar_components/DesktopNavbar";
 
 const menuItems = [
-    {
-        title: "Kezdőlap",
-        route: "/kezdolap"
-    },
-    {
-        title: "Tanfolyamkereső",
-        route: "/kurzusok"
-    },
-    {
-        title: "Tanulás",
-        route: "/learning"
-    },
-    {
-        title: "Adminisztráció",
-        route: "/administration/statistics"
-    }
+    applicationRoutes.homeRoute,
+    applicationRoutes.availableCoursesRoute,
+    applicationRoutes.learningRoute,
+    applicationRoutes.administrationRoute
 ] as RouteItemType[];
 
 const Navbar = (props: { hideLinks?: boolean }) => {
@@ -43,7 +32,7 @@ const Navbar = (props: { hideLinks?: boolean }) => {
 
             {/* navbar */}
             <div className={classes.mobileNavbarOuterWrapperIn}>
-                <NavLink to={'/kezdolap'}>
+                <NavLink to={applicationRoutes.homeRoute.route}>
                     <div className={classes.mobileNavbarLogoWrapper}>
                         <img alt="EpistoGram Logo" src={getAssetUrl("/images/logo.png")} />
                     </div>

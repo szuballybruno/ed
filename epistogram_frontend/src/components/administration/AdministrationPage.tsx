@@ -1,6 +1,6 @@
-import { BarChart, Person, Subscriptions } from "@mui/icons-material";
 import React, { useContext } from 'react';
-import { Route, Switch, useLocation, withRouter } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
+import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { RouteItemType } from "../../models/types";
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
@@ -16,51 +16,12 @@ import { AministrationSubpageHeader } from "./universal/adminAddHeader/Aministra
 import AddUser from "./users/addUser/AddUser";
 import { UserAdministration } from "./users/userList/UserAdministration";
 
-export const administrationRoutes = {
-    statisticsRoute: {
-        title: "Statisztika",
-        route: "/administration/statistics",
-        icon: <BarChart color={"secondary"} />
-    },
-    usersRoute: {
-        title: "Felhasználók kezelése",
-        route: "/administration/users",
-        icon: <Person color={"secondary"} />,
-
-        addRoute: {
-            title: "Felhasznalo hozzaadasa",
-            route: "/administration/users/add"
-        }
-    },
-    coursesRoute: {
-        title: "Kurzusok kezelése",
-        route: "/administration/courses",
-        icon: <Subscriptions color={"secondary"} />,
-
-        addRoute: {
-            title: "Kurzus hozzaadasa",
-            route: "/administration/courses/add"
-        },
-        editCourseRoute: {
-            title: "Kurzus szerkesztese",
-            route: "/administration/courses/:courseId"
-        },
-        addVideoRoute: {
-            title: "Kurzus szerkesztese",
-            route: "/administration/courses/:courseId/item/add"
-        },
-        editVideoRoute: {
-            title: "Kurzus szerkesztese",
-            route: "/administration/courses/:courseId/item/:itemId"
-        }
-    }
-};
-
 const AdministrationPage = () => {
 
     // const user = useState(userDetailsState)
 
     const user = useContext(CurrentUserContext);
+    const administrationRoutes = applicationRoutes.administrationRoute;
 
     return <MainWrapper>
         <Navbar />
@@ -82,7 +43,7 @@ const AdministrationPage = () => {
                 <Switch>
 
                     {/* statistics */}
-                    <Route path={administrationRoutes.statisticsRoute.route}>
+                    <Route exact path={administrationRoutes.statisticsRoute.route}>
                         <AminStatistics />
                     </Route>
 

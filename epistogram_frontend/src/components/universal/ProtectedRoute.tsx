@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useContext } from 'react';
 import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { globalConfig } from '../../configuration/config';
 import { AuthenticationStateContext as AuthenticationStateContext } from '../HOC/AuthenticationFrame';
 
@@ -31,7 +32,7 @@ export const ProtectedRoute = (props: {
                     return <div></div>
 
                 // if not, leave
-                return <Redirect to={{ pathname: "/login" }} />
+                return <Redirect to={applicationRoutes.loginRoute.route} />
             }} />
     );
 };

@@ -1,15 +1,16 @@
 SELECT 
 	"exam"."id" AS "examId",
+	"exam"."isFinalExam" AS "isFinalExam",
 	"answer_session"."id" AS "answerSessionId",
 	"user"."id" AS "userId",
 	COUNT ("answer"."isCorrect") AS "correctAnswerCount",
 	COUNT ("question"."id") AS "questionCount",
-	CASE WHEN 
+	CAST (CASE WHEN 
 		COUNT ("answer"."isCorrect") = COUNT ("question"."id") 
 			AND COUNT ("answer"."isCorrect") > 0
 		THEN 1
 		ELSE 0
-	END AS "isCompleteSession"
+	END AS boolean) AS "isCompleteSession"
 FROM public."exam"
 
 LEFT JOIN public."user"
@@ -31,4 +32,5 @@ ON "answer"."id" = "question_answer"."answerId"
 GROUP BY
 	"exam"."id",
 	"answer_session"."id",
-	"user"."id"
+	"user"."id",
+	"exam"."isFinalExam"

@@ -121,7 +121,10 @@ export const toExamDTO = (exam: Exam) => {
     } as ExamDTO;
 }
 
-export const toExamResultDTO = (answerSessionView: UserExamAnswerSessionView, data: User) => {
+export const toExamResultDTO = (
+    answerSessionView: UserExamAnswerSessionView,
+    data: User,
+    isFirstTimeComplted: boolean) => {
 
     navPropNotNull(data.currentExam);
     navPropNotNull(data.currentExam!.questions);
@@ -156,7 +159,10 @@ export const toExamResultDTO = (answerSessionView: UserExamAnswerSessionView, da
         isSuccessful: answerSessionView.isCompleteSession,
         correctAnswerCount: answerSessionView.correctAnswerCount,
         questionCount: answerSessionView.questionCount,
-        questions: questionDTOs
+        questions: questionDTOs,
+        isCompletedPrevoiusly: !isFirstTimeComplted,
+        isFinalExam: answerSessionView.isFinalExam,
+        shouldShowCourseCompleted: isFirstTimeComplted && answerSessionView.isFinalExam
     } as ExamResultsDTO;
 }
 

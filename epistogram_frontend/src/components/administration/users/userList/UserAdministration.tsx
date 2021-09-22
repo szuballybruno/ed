@@ -1,23 +1,20 @@
-import { Box, Flex } from "@chakra-ui/layout";
-import { Add, ApartmentTwoTone, Email, WorkTwoTone } from "@mui/icons-material";
+import { Flex } from "@chakra-ui/layout";
+import { ApartmentTwoTone, Email, WorkTwoTone } from "@mui/icons-material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useContext } from "react";
+import { applicationRoutes } from "../../../../configuration/applicationRoutes";
+import { useUserListQuery } from "../../../../services/adminPageUsersService";
+import { httpPostAsync } from "../../../../services/httpClient";
+import { useNavigation } from "../../../../services/navigatior";
+import { FloatAddButton } from "../../../FloatAddButton";
 import { CurrentUserContext } from "../../../HOC/AuthenticationFrame";
 import { LoadingFrame } from "../../../HOC/LoadingFrame";
-import { useUserListQuery } from "../../../../services/adminPageUsersService";
-import { useNavigation } from "../../../../services/navigatior";
 import { EpistoButton } from "../../../universal/EpistoButton";
 import { FlexList } from "../../../universal/FlexList";
 import { FlexListItem } from "../../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../../universal/FlexListTitleSubtitle";
 import { FloatChip } from "../../../universal/FloatChip";
-import { AdminDashboardWrapper } from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSearch";
-import classes from "../users.module.scss";
-import DeleteIcon from '@mui/icons-material/Delete';
-import { httpPostAsync } from "../../../../services/httpClient";
 import { FloatSearch } from "../../../universal/FloatSearch";
-import { administrationRoutes } from "../../AdministrationPage";
-import { FloatAddButton } from "../../../FloatAddButton";
 
 export const UserAdministration = () => {
 
@@ -26,7 +23,7 @@ export const UserAdministration = () => {
     const [searchText, setSearchText] = React.useState("");
     const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(userId, searchText);
     const { navigate } = useNavigation();
-    const navigateToAddUser = () => navigate(administrationRoutes.usersRoute.addRoute.route);
+    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
 
     const deleteUserAsync = async (userId: number) => {
 

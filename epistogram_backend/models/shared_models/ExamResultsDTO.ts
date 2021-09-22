@@ -5,4 +5,7 @@ export type ExamResultsDTO = {
     correctAnswerCount: number;
     questionCount: number;
     questions: ExamResultQuestionDTO[];
+    isFinalExam: boolean;
+    isCompletedPrevoiusly: boolean;
+    shouldShowCourseCompleted: boolean;
 }
