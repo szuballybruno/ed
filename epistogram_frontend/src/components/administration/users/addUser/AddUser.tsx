@@ -15,30 +15,31 @@ import SingleInput from "../../universal/singleInput/SingleInput";
 import DoubleInputs from "../../universal/twoInputs/DoubleInputs";
 import classes from "./addUser.module.scss";
 import { applicationRoutes } from "../../../../configuration/applicationRoutes";
+import { RoleDTO } from "../../../../models/shared_models/RoleDTO";
 
-const mapOrganizations = (organizations: OrganizationDTO[]) => {
-    const organizationOptions = organizations
-        .map(x => ({
-            optionValue: "" + x.id,
-            optionText: x.name
-        } as OptionType));
-
-    return organizationOptions;
-}
-
-const roles = [{
-    optionText: "Adminisztrátor",
-    optionValue: "admin"
-}, {
-    optionText: "Vezető",
-    optionValue: "owner"
-}, {
-    optionText: "Csoportvezető",
-    optionValue: "supervisor"
-}, {
-    optionText: "Felhasználó",
-    optionValue: "user"
-}]
+const roles = [
+    {
+        optionText: "Adminisztrátor",
+        optionValue: {
+            name: "admin",
+            id: 1
+        },
+    },
+    {
+        optionText: "Vezető",
+        optionValue: {
+            name: "supervisor",
+            id: 2
+        }
+    },
+    {
+        optionText: "Felhasználó",
+        optionValue: {
+            name: "user",
+            id: 3
+        }
+    }
+] as OptionType<RoleDTO>[];
 
 const AddUser = () => {
 
@@ -46,15 +47,21 @@ const AddUser = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState<RoleDTO>();
     const [jobTitle, setJobTitle] = useState("");
-    const [organizationId, setOrganizationId] = useState("");
+    const [organizationId, setOrganizationId] = useState<number>(-1);
 
     const { showDialog } = useDialog();
     const user = useContext(CurrentUserContext) as UserDTO;
-    const canModifyOrganization = user.role === "admin";
+    const canSetInvitedUserOrganization = user.userRights.canSetInvitedUserOrganization;
     const { organizations } = useOrganizations();
-    const organizationOptions = mapOrganizations(organizations);
+
+    const organizationOptions = organizations
+        .map(org => ({
+            optionValue: org.id,
+            optionText: org.name
+        } as OptionType<number>));
+
     const unblockHandle = useRef<any>();
     const { navigate, history } = useNavigation();
     const isChanged = hasValue(firstName)
@@ -134,7 +141,7 @@ const AddUser = () => {
             lastName,
             email,
             jobTitle,
-            role: hasValue(role) ? role : "admin",
+            roleId: hasValue(role) ? role!.id : 1,
             organizationId
         } as CreateInvitedUserDTO;
 
@@ -194,26 +201,28 @@ const AddUser = () => {
             changeHandler={getEventValueCallback(setEmail)} />
 
         {/* organization */}
-        {canModifyOrganization && <SelectFromArray
-            labelText={"Cég"}
-            showNull
-            name={"organizationId"}
-            value={organizationId}
-            optionValues={organizationOptions}
-            onSelected={setOrganizationId} />}
+        {canSetInvitedUserOrganization && <SelectFromArray
+            labelText="Cég"
+            name="organizationId"
+            items={organizationOptions}
+            selectedValue={organizationId}
+            onSelected={setOrganizationId}
+            getCompareKey={orgId => orgId.toString()} />}
 
         {/* job title */}
         <SingleInput
-            labelText={"Beosztás"}
+            labelText="Beosztás"
             name={"jobTitle"}
             changeHandler={getEventValueCallback(setJobTitle)} />
 
         {/* role */}
-        <SelectFromArray labelText={"Jogosultsági kör"}
-            name={"role"}
-            value={role}
-            optionValues={roles}
-            onSelected={setRole} />
+        <SelectFromArray
+            labelText="Jogosultsági kör"
+            name="role"
+            selectedValue={role}
+            items={roles}
+            onSelected={setRole}
+            getCompareKey={x => "" + x?.id} />
 
         {/* submit button */}
         <Button

@@ -5,7 +5,7 @@ import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserD
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
-import { InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
+import { InvitationTokenPayload, UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authentication";
@@ -25,7 +25,7 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
 
     // if user is admin require organizationId to be provided
     // otherwise use the current user's organization
-    const organizationId = currentUser.role === "admin"
+    const organizationId = currentUser.roleId === UserRoleEnum.administratorId
         ? withValueOrBadRequest(dto.organizationId)
         : currentUser.organizationId;
 
@@ -36,7 +36,7 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
 
     // get and check sent data 
     const email = withValueOrBadRequest(dto.email);
-    const role = withValueOrBadRequest(dto.role);
+    const roleId = withValueOrBadRequest(dto.roleId);
     const firstName = withValueOrBadRequest(dto.firstName);
     const lastName = withValueOrBadRequest(dto.lastName);
     const jobTitle = withValueOrBadRequest(dto.jobTitle);
@@ -54,7 +54,7 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
     const user = {
         isActive: true,
         email: email,
-        role: role,
+        roleId: roleId,
         firstName: firstName,
         lastName: lastName,
         organizationId: organizationId,

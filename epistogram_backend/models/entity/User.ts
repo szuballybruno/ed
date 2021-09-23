@@ -1,8 +1,10 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { UserActivityFlatView } from "../views/UserActivityFlatView";
 import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { Exam } from "./Exam";
 import { Organization } from "./Organization";
+import { Role } from "./Role";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
 import { UserCourseBridge } from "./UserCourseBridge";
@@ -49,9 +51,6 @@ export class User {
     linkedInUrl: string;
 
     @Column()
-    role: string;
-
-    @Column()
     jobTitle: string;
 
     @Column({ default: false })
@@ -62,6 +61,19 @@ export class User {
 
     @Column({ nullable: true })
     refreshToken: string;
+
+    // user activity 
+    @OneToOne(_ => UserActivityFlatView, x => x.user)
+    @JoinColumn({ name: "id" })
+    userActivity: UserActivityFlatView;
+
+    // user role
+    @Column()
+    roleId: number;
+
+    @ManyToOne(_ => Role, x => x.users)
+    @JoinColumn({ name: "roleId" })
+    role: Role;
 
     // Avatar file
     @Column({ nullable: true })

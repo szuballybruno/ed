@@ -9,21 +9,21 @@ import { Exam } from "../models/entity/Exam";
 import { Group } from "../models/entity/Group";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
-import { QuestionCategory } from "../models/entity/QuestionCategory";
 import { StorageFile } from "../models/entity/StorageFile";
 import { Tag } from "../models/entity/Tag";
+import { Role } from "../models/entity/Role";
 import { Video } from "../models/entity/Video";
 import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
 import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizationDTO";
 import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
-import { RoleType } from "../models/shared_models/types/sharedTypes";
+import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { log } from "./misc/logger";
-import { getAssetUrl } from "./misc/urlProvider";
 import { executeSeedScriptAsync } from "./rawSqlService";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./signupService";
 import { setUserAvatarFileId } from "./userService";
 import { insertVideoAsync } from "./videoService";
+import { Activity } from "../models/entity/Activity";
 
 export const recreateDB = async (postgresOptions: ConnectionOptions) => {
 
@@ -41,17 +41,18 @@ export const seedDB = async () => {
     log("seedOrganizations");
     const orgIds = await seedOrganizations(connection);
 
+    log("seedActivities");
+    await seedActivities(connection);
+
+    log("seedUserRoles");
+    await seedRoles(connection);
+
     log("seedSignupExam");
     await seedSignupExam(connection);
 
     log("seedUsers")
     await seedUsers(connection, orgIds);
 
-    // log("seedQuestionCategories")
-    // await seedQuestionCategories(connection);
-
-    // log("seedSignupQuestions")
-    // await seedSignupQuestions(connection);
     await executeSeedScriptAsync("seedSignupQuestions");
 
     log("seedTags")
@@ -102,6 +103,56 @@ const seedOrganizations = async (connection: TypeORMConnection) => {
         ]))
         .identifiers
         .map(x => x.id as number);
+}
+
+const seedActivities = async (connection: TypeORMConnection) => {
+
+    await connection
+        .getRepository(Activity)
+        .save([
+            {
+                name: "canSetInvitedUserOrganization"
+            },
+            {
+                name: "canAccessCourseAdministration"
+            },
+            {
+                name: "canAccessAdministration"
+            }
+        ]);
+}
+
+const seedRoles = async (connection: TypeORMConnection) => {
+
+    await connection
+        .getRepository(Role)
+        .save([
+            {
+                name: "Administrator",
+                roleActivityBridges: [
+                    {
+                        activityId: 1,
+                    },
+                    {
+                        activityId: 2
+                    },
+                    {
+                        activityId: 3
+                    }
+                ]
+            },
+            {
+                name: "Supervisor",
+                roleActivityBridges: [
+                    {
+                        activityId: 3
+                    }
+                ]
+            },
+            {
+                name: "User"
+            }
+        ] as Role[]);
 }
 
 const seedSignupExam = async (connection: TypeORMConnection) => {
@@ -340,7 +391,7 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
             firstName: "Endre",
             lastName: "Marosi",
             jobTitle: "IT Manager",
-            role: "admin" as RoleType,
+            roleId: UserRoleEnum.administratorId,
             email: "marosi.endre@email.com",
         },
         orgIds[0],
@@ -359,7 +410,7 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
             firstName: "Elon",
             lastName: "Musk",
             jobTitle: "Tech God",
-            role: "admin" as RoleType,
+            roleId: UserRoleEnum.supervisorId,
             email: "elon.musk@email.com",
         },
         orgIds[0],

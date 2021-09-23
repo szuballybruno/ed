@@ -26,10 +26,12 @@ import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
+import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
+import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
 import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
 import { getCourseItemDescriptorCode } from "./encodeService";
@@ -42,7 +44,6 @@ export const toUserDTO = (user: User) => {
         organizationId: user.organizationId,
         firstName: user.firstName,
         lastName: user.lastName,
-        role: user.role,
         jobTitle: user.jobTitle,
         isActive: user.isActive,
         email: user.email,
@@ -50,8 +51,18 @@ export const toUserDTO = (user: User) => {
         name: `${user.lastName} ${user.firstName}`,
         avatarUrl: user.avatarFile
             ? getAssetUrl(user.avatarFile.filePath)
-            : getAssetUrl("images/defaultAvatar.png")
+            : getAssetUrl("images/defaultAvatar.png"),
+        userRights: user.userActivity ? toUserActivityDTO(user.userActivity) : null
     } as UserDTO;
+}
+
+export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
+
+    return {
+        canSetInvitedUserOrganization: userRightsView.canSetInvitedUserOrganization,
+        canAccessAdministration: userRightsView.canAccessAdministration,
+        canAccessCourseAdministration: userRightsView.canAccessCourseAdministration,
+    } as UserActivityDTO;
 }
 
 export const toAdminPageUserDTO = (user: User) => {

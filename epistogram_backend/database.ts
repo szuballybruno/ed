@@ -19,6 +19,7 @@ import { TestParent } from "./models/entity/TestParent";
 import { TestSubChild } from "./models/entity/TestSubChild";
 import { User } from "./models/entity/User";
 import { UserCourseBridge } from "./models/entity/UserCourseBridge";
+import { Role } from "./models/entity/Role";
 import { Video } from "./models/entity/Video";
 import { VideoPlaybackData } from "./models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
@@ -36,6 +37,9 @@ import { recreateDB, seedDB } from "./services/dbSeedService";
 import { log } from "./services/misc/logger";
 import { recreateViewsAsync } from "./services/rawSqlService";
 import { staticProvider } from "./staticProvider";
+import { Activity } from "./models/entity/Activity";
+import { RoleActivityBridge } from "./models/entity/RoleActivityBridge";
+import { UserActivityFlatView } from "./models/views/UserActivityFlatView";
 
 export type TypeORMConnection = Connection;
 
@@ -84,6 +88,9 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
             VideoPlaybackData,
             UserCourseBridge,
             QuestionCategory,
+            Role,
+            Activity,
+            RoleActivityBridge,
 
             // views,
             VideoCompletedView,
@@ -95,7 +102,8 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
             CourseStateView,
             CourseItemAllView,
             CourseView,
-            SignupAnswersView
+            SignupAnswersView,
+            UserActivityFlatView
         ],
     } as ConnectionOptions;
 
@@ -120,7 +128,9 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
         "course_item_all_view",
         "course_view",
         "exam_session_answers_view",
-        "signup_answers_view"
+        "signup_answers_view",
+        "user_activity_view",
+        "user_activity_flat_view"
     ]);
 
     const isFreshDB = await getIsFreshDB();
