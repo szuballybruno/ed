@@ -1,4 +1,4 @@
-import { UserRightsDTO } from "./UserRightsDTO";
+import { UserActivityDTO } from "./UserActivityDTO";
 
 export type UserDTO = {
     id: number;
@@ -11,5 +11,5 @@ export type UserDTO = {
     phoneNumber: string;
     name: string;
     avatarUrl: string | null;
-    userRights: UserRightsDTO;
+    userActivity: UserActivityDTO;
 }

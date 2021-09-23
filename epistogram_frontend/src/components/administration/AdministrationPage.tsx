@@ -6,6 +6,7 @@ import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../universal/navigation/navbar/Navbar";
+import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AddCourse } from "./courses/addCourse/AddCourse";
 import { AddVideo } from "./courses/addVideo/AddVideo";
 import { CourseAdministration } from "./courses/courseList/CourseAdministration";
@@ -20,19 +21,23 @@ const AdministrationPage = () => {
 
     // const user = useState(userDetailsState)
 
-    const user = useContext(CurrentUserContext);
+    const user = useContext(CurrentUserContext)!;
     const administrationRoutes = applicationRoutes.administrationRoute;
+
+    const menuItems = [
+        administrationRoutes.statisticsRoute,
+        administrationRoutes.usersRoute
+    ] as RouteItemType[];
+
+    if (user.userActivity.canAccessCourseAdministration)
+        menuItems.push(administrationRoutes.coursesRoute);
 
     return <MainWrapper>
         <Navbar />
         <ContentWrapper>
             <LeftPanel p="20px">
                 <NavigationLinkList
-                    items={[
-                        administrationRoutes.statisticsRoute,
-                        administrationRoutes.usersRoute,
-                        administrationRoutes.coursesRoute
-                    ] as RouteItemType[]} />
+                    items={menuItems} />
             </LeftPanel>
             <RightPanel noPadding bg="white">
 
@@ -60,8 +65,10 @@ const AdministrationPage = () => {
                     </Route>
 
                     {/* course administartion */}
-                    <Route path={administrationRoutes.coursesRoute.route}>
-                        <Switch>
+                    <ProtectedRoute
+                        path={administrationRoutes.coursesRoute.route}
+                        isAuthorizedToView={x => x.canAccessCourseAdministration}
+                        render={() => <Switch>
                             <Route exact path={administrationRoutes.coursesRoute.route}>
                                 <CourseAdministration />
                             </Route>
@@ -77,8 +84,7 @@ const AdministrationPage = () => {
                             <Route path={administrationRoutes.coursesRoute.editVideoRoute.route}>
                                 <EditVideo />
                             </Route>
-                        </Switch>
-                    </Route>
+                        </Switch>} />
                 </Switch>
             </RightPanel>
         </ContentWrapper>

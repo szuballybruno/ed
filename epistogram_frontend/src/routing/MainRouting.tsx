@@ -20,13 +20,34 @@ export const MainRouting = () => {
         <Route path={applicationRoutes.signupRoute.route} component={withRouter(SignupPage)} />
 
         {/* protected paths */}
-        <ProtectedRoute path="/watch/:descriptorCode" render={() => <PlayerPage />} />
-        <ProtectedRoute path={applicationRoutes.administrationRoute.route} render={() => <AdministrationPage />} />
-        <ProtectedRoute path={applicationRoutes.homeRoute.route} render={() => <HomePage />} />
-        <ProtectedRoute path={applicationRoutes.availableCoursesRoute.route} render={() => <AvailableCoursesPage />} />
-        <ProtectedRoute path={applicationRoutes.settingsRoute.route} render={() => <UserSettingsPage />} />
-        <ProtectedRoute path={applicationRoutes.learningRoute.route} render={() => <LearningInsightsPage />} />
-        <ProtectedRoute path={applicationRoutes.rootHomeRoute.route} render={() => <HomePage />} exact />
+        <ProtectedRoute
+            path="/watch/:descriptorCode"
+            render={() => <PlayerPage />} />
+
+        <ProtectedRoute
+            path={applicationRoutes.administrationRoute.route}
+            isAuthorizedToView={x => x.canAccessAdministration}
+            render={() => <AdministrationPage />} />
+
+        <ProtectedRoute
+            path={applicationRoutes.homeRoute.route}
+            render={() => <HomePage />} />
+
+        <ProtectedRoute
+            path={applicationRoutes.availableCoursesRoute.route}
+            render={() => <AvailableCoursesPage />} />
+
+        <ProtectedRoute
+            path={applicationRoutes.settingsRoute.route}
+            render={() => <UserSettingsPage />} />
+
+        <ProtectedRoute
+            path={applicationRoutes.learningRoute.route}
+            render={() => <LearningInsightsPage />} />
+
+        <ProtectedRoute
+            path={applicationRoutes.rootHomeRoute.route}
+            render={() => <HomePage />} exact />
 
         {/* wrong path */}
         <Route path="*">

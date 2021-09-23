@@ -128,18 +128,7 @@ const seedRoles = async (connection: TypeORMConnection) => {
         .getRepository(Role)
         .save([
             {
-                name: "Administrator",
-                roleActivityBridges: [
-                    {
-                        activityId: 1,
-                    },
-                    {
-                        activityId: 2
-                    },
-                    {
-                        activityId: 3
-                    }
-                ]
+                name: "Administrator"
             },
             {
                 name: "Supervisor",
@@ -391,7 +380,7 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
             firstName: "Endre",
             lastName: "Marosi",
             jobTitle: "IT Manager",
-            roleId: UserRoleEnum.administratorId,
+            roleId: UserRoleEnum.supervisorId,
             email: "marosi.endre@email.com",
         },
         orgIds[0],

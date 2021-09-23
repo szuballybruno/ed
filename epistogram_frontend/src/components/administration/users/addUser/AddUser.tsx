@@ -53,7 +53,7 @@ const AddUser = () => {
 
     const { showDialog } = useDialog();
     const user = useContext(CurrentUserContext) as UserDTO;
-    const canSetInvitedUserOrganization = user.userRights.canSetInvitedUserOrganization;
+    const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;
     const { organizations } = useOrganizations();
 
     const organizationOptions = organizations

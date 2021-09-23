@@ -52,7 +52,7 @@ export const toUserDTO = (user: User) => {
         avatarUrl: user.avatarFile
             ? getAssetUrl(user.avatarFile.filePath)
             : getAssetUrl("images/defaultAvatar.png"),
-        userRights: user.userActivity ? toUserActivityDTO(user.userActivity) : null
+        userActivity: user.userActivity ? toUserActivityDTO(user.userActivity) : null
     } as UserDTO;
 }
 

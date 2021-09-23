@@ -23,7 +23,6 @@ const Navbar = (props: { hideLinks?: boolean }) => {
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar
         currentCourseItemCode={currentCourseItemCode}
-        menuItems={menuItems}
         hideLinks={!!props.hideLinks} />;
 
     // render mobile

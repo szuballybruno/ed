@@ -1,6 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
 import LogoutIcon from '@mui/icons-material/Logout';
-import SettingsIcon from '@mui/icons-material/Settings';
 import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
 import { NavLink } from "react-router-dom";
@@ -16,9 +15,14 @@ import { FlexImage } from "../../../FlexImage";
 import classes from "./desktopNavbar.module.scss";
 import NavbarButton from "./NavbarButton";
 
+const menuItems = [
+    applicationRoutes.homeRoute,
+    applicationRoutes.availableCoursesRoute,
+    applicationRoutes.learningRoute
+] as RouteItemType[];
+
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,
-    menuItems: RouteItemType[],
     hideLinks: boolean
 }) => {
 
@@ -26,11 +30,13 @@ const DesktopNavbar = (props: {
     const currentCourseItemCode = props.currentCourseItemCode;
 
     const homeUrl = applicationRoutes.rootHomeRoute.route;
-    const user = useContext(CurrentUserContext);
+    const user = useContext(CurrentUserContext)!;
 
     const ref = useRef<HTMLButtonElement>(null);
     const [popperOpen, setPopperOpen] = useState(false);
     const { hideLinks } = props;
+
+    console.log(user);
 
     const userMenuItems = [
         {
@@ -56,14 +62,17 @@ const DesktopNavbar = (props: {
 
             {/* menu items */}
             <Flex display={hideLinks ? "none" : "flex"} height="50px">
-                {props
-                    .menuItems
+                {menuItems
                     .map((item, index) => {
                         return <NavbarButton
                             key={index}
                             menuName={item.title}
                             menuPath={item.route} />
                     })}
+
+                {user.userActivity.canAccessAdministration && <NavbarButton
+                    menuName={applicationRoutes.administrationRoute.title}
+                    menuPath={applicationRoutes.administrationRoute.route} />}
 
                 {/* continue watching  */}
                 {currentCourseItemCode &&

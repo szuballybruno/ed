@@ -11,5 +11,5 @@ export type UserDTO = {
     phoneNumber: string;
     name: string;
     avatarUrl: string | null;
-    userRights: UserActivityDTO;
+    userActivity: UserActivityDTO;
 }
