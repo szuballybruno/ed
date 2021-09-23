@@ -1,10 +1,10 @@
+import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React from 'react';
-import { LoadingFrame } from "../HOC/LoadingFrame";
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { useUserProfileData } from "../../services/userProfileDataService";
-import AdminDashboardHeader from "../administration/universal/adminDashboardHeader/AdminDashboardHeader";
 import CourseTile from "../universal/atomic/courseTile/CourseTile";
+import { DashboardSection } from "../universal/DashboardSection";
 import classes from './myCourses.module.scss';
 
 const MyCourses = () => {
@@ -15,38 +15,31 @@ const MyCourses = () => {
     const hasCompletedCourses = completedCourses.length > 0;
     const hasFavoriteCourses = completedCourses.length > 0;
 
-    return <div className={classes.coursesInnerWrapper}>
+    return <Flex direction="column">
 
-        {/*<LoadingFrame loadingState={status} error={error}>*/}
         {/* completed courses */}
-        <AdminDashboardHeader titleText={"Elvégzett kurzusaim"} />
-        <div className={classes.coursesInnerRow}>
+        <DashboardSection title="Elvégzett kurzusaim">
             {hasCompletedCourses
                 ? completedCourses
                     .map((course, index) => {
                         return <CourseTile className={classes.courseItem} course={course} itemIndex={index} />
                     })
-                : <div className={classes.noCoursesWrapper}>
+                : <Flex p="100px">
                     <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>
-                </div>}
-        </div>
+                </Flex>}
+        </DashboardSection>
 
-        {/* favorite courses */}
-        <AdminDashboardHeader titleText={"Kedvenc kurzusaim"} />
-        <div className={classes.coursesInnerRow}>
+        <DashboardSection title="Folyamatban lévő kurzusaim">
             {hasFavoriteCourses
                 ? favoriteCourses
                     .map((course, index) => {
                         return <CourseTile className={classes.courseItem} course={course} itemIndex={index} />
                     })
-                : <div className={classes.noCoursesWrapper}>
-                    <Typography variant={"h6"}>Még nincs egy kedvenc kurzusod sem.</Typography>
-                </div>}
-        </div>
-
-        <AdminDashboardHeader titleText={""} />
-        {/*</LoadingFrame>*/}
-    </div>
+                : <Flex p="100px">
+                    <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>
+                </Flex>}
+        </DashboardSection>
+    </Flex>
 };
 
 export default MyCourses;

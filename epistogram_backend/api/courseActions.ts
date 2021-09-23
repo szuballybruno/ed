@@ -20,3 +20,10 @@ export const setCourseTypeAction = getAsyncActionHandler(async (req: Request) =>
 
     return setCourseTypeAsync(userId, courseId, modeType);
 });
+
+export const getUserCoursesDataAction = getAsyncActionHandler(async (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+
+    return getUserCoursesDataAsync(userId);
+});

@@ -45,3 +45,16 @@ export const useUserCourses = (dto: GetUserCoursesDTO) => {
         status
     }
 }
+
+export const useUserCourseData = () => {
+
+    const { data, status, error } = useReactQuery<CourseShortDTO[]>(
+        ["getCoursesQuery", dto.isFeatured, dto.isRecommended, dto.searchCategory, dto.searchText],
+        () => httpPostAsync("/get-user-courses", dto));
+
+    return {
+        courses: (data ?? []),
+        error,
+        status
+    }
+}

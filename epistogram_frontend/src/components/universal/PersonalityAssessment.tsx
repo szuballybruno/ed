@@ -16,23 +16,22 @@ export const PersonalityAssessment = (props: FlexProps) => {
 
     const descriptions = personalityData?.personalityDescriptions;
 
-    return <Flex {...css}>
-        <LoadingFrame
-            loadingState={personalityDataState}
-            onlyRenderIfLoaded
-            error={personalityDataError}>
+    return <LoadingFrame
+        loadingState={personalityDataState}
+        onlyRenderIfLoaded
+        error={personalityDataError}
+        {...css}>
 
-            <Flex direction="column" flexBasis="50%">
-                <Typography >{descriptions?.category1}</Typography>
-                <Typography >{descriptions?.category2}</Typography>
-                <Typography >{descriptions?.category3}</Typography>
-                <Typography >{descriptions?.category4}</Typography>
-                <Typography >{descriptions?.category5}</Typography>
-            </Flex>
+        <Flex direction="column" flexBasis="50%">
+            <Typography >{descriptions?.category1}</Typography>
+            <Typography >{descriptions?.category2}</Typography>
+            <Typography >{descriptions?.category3}</Typography>
+            <Typography >{descriptions?.category4}</Typography>
+            <Typography >{descriptions?.category5}</Typography>
+        </Flex>
 
-            <Flex flexBasis="50%">
-                <PersonalityChart data={personalityData?.chartData ?? null}></PersonalityChart>
-            </Flex>
-        </LoadingFrame>
-    </Flex>
+        <Flex flexBasis="50%">
+            <PersonalityChart data={personalityData?.chartData ?? null}></PersonalityChart>
+        </Flex>
+    </LoadingFrame>
 }

@@ -11,6 +11,15 @@ import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO, readCo
 import { toCourseItemDTO, toCourseItemDTOs, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
 import { getVideoByIdAsync } from "./videoService";
+import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
+
+export const getUserCoursesDataAsync = async (userId: number) => {
+
+    return {
+
+
+    } as UserCoursesDataDTO;
+}
 
 export const getCourseItemsDescriptorCodesAsync = async (userId: number, courseId: number) => {
 

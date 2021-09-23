@@ -1,12 +1,12 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { CurrentTasksDTO } from '../../models/shared_models/CurrentTasksDTO';
 import { EpistoHeader } from '../administration/universal/EpistoHeader';
 import LearningStatistics from "../profile/profile_components/me/learning_components/LearningStatistics";
 import { Tasks } from '../Tasks';
+import { DashboardSection } from '../universal/DashboardSection';
 import { FlexFloat } from '../universal/FlexFloat';
 import { PersonalityAssessment } from '../universal/PersonalityAssessment';
-import { PersonalityChart } from "../universal/PersonalityChart";
 
 const tasks = {
     tasks: [
@@ -26,22 +26,19 @@ export const LearningInsightsOverview = () => {
     return <Flex direction="column">
 
         {/* tasks */}
-        <EpistoHeader text="Feladataim" />
-        <FlexFloat p="30px" borderRadius="none" boxShadow="none" borderLeft="3px solid var(--epistoTeal)">
+        <DashboardSection title="Feladataim">
             <Tasks currentTasks={tasks} />
-        </FlexFloat>
+        </DashboardSection>
 
         {/* personality */}
-        <EpistoHeader text="Személyes tanulási analízis" />
-        <FlexFloat height="400px" p="30px" borderRadius="none" boxShadow="none" borderLeft="3px solid var(--epistoTeal)">
-            <PersonalityAssessment flex="1" />
-        </FlexFloat>
+        <DashboardSection title="Személyes tanulási analízis" minHeight="500px">
+            <PersonalityAssessment className="whall" />
+        </DashboardSection>
 
         {/* stats */}
-        <EpistoHeader text="Statisztikám" />
-        <FlexFloat p="30px" borderRadius="none" boxShadow="none" borderLeft="3px solid var(--epistoTeal)">
+        <DashboardSection title="Statisztikám" minHeight="500px">
             <LearningStatistics />
-        </FlexFloat>
+        </DashboardSection>
 
         {/* badges */}
         <EpistoHeader text="Megszerzett jelvényeim" />

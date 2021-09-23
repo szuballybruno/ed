@@ -1,8 +1,6 @@
-import { Assignment, School, Subscriptions } from "@mui/icons-material";
 import React from "react";
 import { Route, Switch } from 'react-router-dom';
 import { applicationRoutes } from "../configuration/applicationRoutes";
-import { RouteItemType } from "../models/types";
 import MyCourses from "./courseInsights/MyCourses";
 import MyExams from "./examInsights/MyExams";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";

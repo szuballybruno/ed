@@ -86,8 +86,6 @@ export const chartDefaultOptions = {
     },
 };
 
-// TODO: Create a map function by local history to awoid code duplication
-
 const LearningStatistics = () => {
 
     return <Flex direction="column" flex="1">

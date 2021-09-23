@@ -1,10 +1,8 @@
-import { Box, BoxProps, Flex, FlexProps } from '@chakra-ui/layout';
-import { Typography } from '@mui/material';
+import { Box, Flex, FlexProps } from '@chakra-ui/layout';
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { tipOfTheDay, useOverviewPageDTO } from "../../services/dataService";
+import { useOverviewPageDTO } from "../../services/dataService";
 import { EpistoHeader } from "../administration/universal/EpistoHeader";
-import { DevelopmentLineChart } from '../DevelopmentLineChart';
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
@@ -12,29 +10,11 @@ import { Tasks } from '../Tasks';
 import { TipOfTheDay } from '../TipOfTheDay';
 import ListItem from "../universal/atomic/listItem/ListItem";
 import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
-import { EpistoGrid } from '../universal/EpistoGrid';
-import { EpistoText } from '../universal/EpistoText';
+import { DashboardSection } from '../universal/DashboardSection';
 import { FlexFloat } from '../universal/FlexFloat';
-import { FlexImage } from '../universal/FlexImage';
 import Navbar from "../universal/navigation/navbar/Navbar";
 import { VideoQuestionnaire } from '../universal/VideoQuestionnaire';
 import { DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
-
-const DashboardCard = (props: FlexProps & { title: string }) => {
-
-    const { title, children, ...css } = props;
-
-    return <FlexFloat
-        direction="column"
-        borderRadius="none"
-        p="10px"
-        {...css}>
-        <EpistoHeader text={title} showDivider variant="strongSub" />
-        <Box className="whall">
-            {children}
-        </Box>
-    </FlexFloat>
-}
 
 const HomePage = () => {
 
@@ -85,34 +65,28 @@ const HomePage = () => {
 
                 </LeftPanel>
                 <RightPanel>
-                    <EpistoGrid minColumnWidth="300px" columnGap="10">
-                        {/* <Flex direction="column" align="flex-start" justify="flex-start" wrap="wrap"> */}
+                    <Flex direction="column">
 
                         {/* test your knowledge */}
-                        <DashboardCard title="A nap kerdese" gridColumnEnd="span 2" >
+                        <DashboardSection title="A nap kerdese" gridColumnEnd="span 2" >
 
                             <VideoQuestionnaire
                                 answerSessionId={-1}
                                 onAnswered={() => { }}
                                 question={pageDTO?.testQuestionDTO!} />
-                        </DashboardCard>
+                        </DashboardSection>
 
                         {/* tip of the day */}
-                        <DashboardCard title="Napi tipped">
+                        <DashboardSection title="Napi tipped">
                             <TipOfTheDay />
-                        </DashboardCard>
+                        </DashboardSection>
 
                         {/* current tasks */}
-                        <DashboardCard title="Feladatok" gridColumnEnd="span 2">
+                        <DashboardSection title="Feladatok" gridColumnEnd="span 2">
                             <Tasks currentTasks={pageDTO?.currentTasks!} className="whall" />
-                        </DashboardCard>
+                        </DashboardSection>
 
-                        {/* development chart */}
-                        <DashboardCard title="Fejlődési görbém az elmúlt 90 napban" >
-                            <DevelopmentLineChart data={pageDTO?.developmentChartData!} />
-                        </DashboardCard>
-
-                    </EpistoGrid>
+                    </Flex>
                 </RightPanel>
             </LoadingFrame>
         </ContentWrapper>

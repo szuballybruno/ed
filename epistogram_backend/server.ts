@@ -19,7 +19,7 @@ import { getAsyncActionHandler, respond } from './utilities/helpers';
 import './utilities/jsExtensions';
 import { answerVideoQuestionAction } from './api/questionActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
-import { setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import { deleteUserAction } from './api/userAdministartionActions';
 
 // initialize env
@@ -115,6 +115,7 @@ const initializeAsync = async () => {
     expressServer.post("/users/create-invited-user", authMiddleware, getAsyncActionHandler(createInvitedUserAction));
     expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
     expressServer.post("/users/delete-user", authMiddleware, deleteUserAction);
+    expressServer.get("/users/get-courses-data", authMiddleware, getUserCoursesDataAction);
 
     // course 
     expressServer.post("/course/start-course", authMiddleware, startCourseAction);
