@@ -152,7 +152,7 @@ export const useReactQuery = <T>(
         enabled: isEnabled
     });
 
-    const { status, refetch, isFetching, ...queryResult2 } = queryResult;
+    const { status, refetch, isFetching, data, ...queryResult2 } = queryResult;
 
     return {
         status: isFetching ? "loading" : status as LoadingStateType,
@@ -160,6 +160,7 @@ export const useReactQuery = <T>(
 
             await refetch();
         },
+        data: data ?? null,
         ...queryResult2
     }
 }

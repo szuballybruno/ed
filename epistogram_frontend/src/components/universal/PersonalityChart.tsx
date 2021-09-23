@@ -1,17 +1,14 @@
+import { Box } from "@chakra-ui/layout";
 import React from "react";
 import { Radar } from "react-chartjs-2";
-import { LoadingFrame } from "../HOC/LoadingFrame";
-import { usePersonalityData } from "../../services/dataService";
+import { PersonalityDataDTO } from "../../models/shared_models/PersonalityDataDTO";
 
-export const PersonalityChart = () => {
+export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => {
 
-    const {
-        personalityData,
-        personalityDataError,
-        personalityDataState
-    } = usePersonalityData();
+    const personalityData = props.data;
 
-    console.log(personalityData);
+    if (!personalityData)
+        return <Box></Box>
 
     const keys = personalityData
         ?.traits
@@ -35,26 +32,22 @@ export const PersonalityChart = () => {
         }
     ];
 
-    return <LoadingFrame
-        loadingState={personalityDataState}
-        error={personalityDataError}>
-        <Radar
-            options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        angleLines: {
-                            display: false
-                        },
-                        suggestedMin: 0,
-                        suggestedMax: 7
-                    }
+    return <Radar
+        options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: {
+                        display: false
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 7
                 }
-            }}
-            data={{
-                labels: keys,
-                datasets: sets
-            }} />
-    </LoadingFrame>
+            }
+        }}
+        data={{
+            labels: keys,
+            datasets: sets
+        }} />
 }

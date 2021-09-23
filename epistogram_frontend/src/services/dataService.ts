@@ -1,6 +1,7 @@
 import Cookies from "universal-cookie";
 import { hasValue, useReactQuery } from "../frontendHelpers";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
+import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
 import { PersonalityDataDTO } from "../models/shared_models/PersonalityDataDTO";
 import { httpGetAsync } from "./httpClient";
 
@@ -15,7 +16,7 @@ export const useCurrentCourseItemCode = () => {
 
 export const usePersonalityData = () => {
 
-    const qr = useReactQuery<PersonalityDataDTO>(
+    const qr = useReactQuery<PersonalityAssessmentDTO>(
         ["usePersonalityData"],
         () => httpGetAsync("/get-user-personality-data"));
 

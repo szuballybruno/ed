@@ -2,7 +2,7 @@ import { PersonalityCategoryDescription } from "../models/entity/PersonalityCate
 import { PersonalityDataDTO } from "../models/shared_models/PersonalityDataDTO";
 import { PersonalityDescriptionsDTO } from "../models/shared_models/PersonalityDescriptionsDTO";
 import { PersonalityTraitDataDTO } from "../models/shared_models/PersonalityTraitDataDTO";
-import { UserPersonalityAssessmentDTO } from "../models/shared_models/UserPersonalityAssessmentDTO";
+import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
 import { SignupAnswersView } from "../models/views/SignupAnswersView";
 import { staticProvider } from "../staticProvider";
 
@@ -14,7 +14,7 @@ export const getUserPersonalityAssessmentDTOAsync = async (userId: number) => {
     return {
         chartData: chartData,
         personalityDescriptions: personalityDescriptions
-    } as UserPersonalityAssessmentDTO;
+    } as PersonalityAssessmentDTO;
 }
 
 const getPersonalityDescriptionsDTOAsync = async (userId: number) => {
