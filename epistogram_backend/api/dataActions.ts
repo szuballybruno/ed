@@ -5,7 +5,8 @@ import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
 import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "../services/courseManagementService";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
-import { getOrganizationsAsync, getOverviewPageDTOAsync, getUserPersonalityDataAsync } from "../services/dataService";
+import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
+import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
 import { getUserById } from "../services/userService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
@@ -67,7 +68,7 @@ export const getUserPersonalityDataAction = getAsyncActionHandler(async (req: Re
 
     const userId = getUserIdFromRequest(req);
 
-    return getUserPersonalityDataAsync(userId);
+    return getUserPersonalityAssessmentDTOAsync(userId);
 });
 
 export const getOrganizationsAction = (req: Request) => {

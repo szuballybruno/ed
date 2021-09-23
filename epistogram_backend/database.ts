@@ -40,6 +40,7 @@ import { staticProvider } from "./staticProvider";
 import { Activity } from "./models/entity/Activity";
 import { RoleActivityBridge } from "./models/entity/RoleActivityBridge";
 import { UserActivityFlatView } from "./models/views/UserActivityFlatView";
+import { PersonalityCategoryDescription } from "./models/entity/PersonalityCategoryDescription";
 
 export type TypeORMConnection = Connection;
 
@@ -91,6 +92,7 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
             Role,
             Activity,
             RoleActivityBridge,
+            PersonalityCategoryDescription,
 
             // views,
             VideoCompletedView,

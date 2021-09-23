@@ -55,6 +55,8 @@ export const seedDB = async () => {
 
     await executeSeedScriptAsync("seedSignupQuestions");
 
+    await executeSeedScriptAsync("seedPersonalityCategoryDescriptions");
+
     log("seedTags")
     await seedTags(connection);
 
@@ -380,7 +382,7 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
             firstName: "Endre",
             lastName: "Marosi",
             jobTitle: "IT Manager",
-            roleId: UserRoleEnum.supervisorId,
+            roleId: UserRoleEnum.administratorId,
             email: "marosi.endre@email.com",
         },
         orgIds[0],

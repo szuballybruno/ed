@@ -1,18 +1,7 @@
-import {
-    Entity,
-    Column,
-    PrimaryColumn,
-    PrimaryGeneratedColumn,
-    ManyToOne,
-    JoinColumn,
-    OneToMany,
-    ManyToMany, JoinTable
-} from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CourseOrganization } from "./CourseOrganization";
+import { Group } from "./Group";
 import { User } from "./User";
-import {Course} from "./Course";
-import {QuestionAnswer} from "./QuestionAnswer";
-import {CourseOrganization} from "./CourseOrganization";
-import {Group} from "./Group";
 
 @Entity()
 export class Organization {

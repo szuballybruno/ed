@@ -24,66 +24,6 @@ export const getOrganizationsAsync = async (userId: number) => {
         .map(org => toOrganizationDTO(org));
 }
 
-export const getUserPersonalityDataAsync = async (userId: number) => {
-
-    const signupQuestions = await staticProvider
-        .ormConnection
-        .getRepository(SignupAnswersView)
-        .find({
-            where: {
-                userId: userId,
-            }
-        });
-
-    const categoryGroups = signupQuestions
-        .groupBy(x => x.categoryId);
-
-    const traits = [] as PersonalityTraitDataDTO[];
-    const traitCount = categoryGroups.length * 2; // gc is 5 by default, * 2 cause' min-max 
-    const offset = categoryGroups.length;
-
-    categoryGroups
-        .forEach((group, index) => {
-
-            const firstItem = group.items.first(x => true);
-            const minLabel = firstItem.minLabel;
-            const maxLabel = firstItem.maxLabel;
-
-            // min trait 
-            const incorrectAnswersCount = group
-                .items
-                .filter(y => y.isCorrect === false)
-                .length;
-
-            traits
-                .push({
-                    traitName: minLabel,
-                    orderIndex: index,
-                    traitScore: incorrectAnswersCount
-                });
-
-            // max trait
-            const correctAnswersCount = group
-                .items
-                .filter(y => y.isCorrect === true)
-                .length;
-
-            traits
-                .push({
-                    traitName: maxLabel,
-                    orderIndex: index + offset,
-                    traitScore: correctAnswersCount
-                });
-        })
-
-    const traitsOrdered = traits
-        .orderBy(x => x.orderIndex);
-
-    return {
-        traits: traitsOrdered
-    } as PersonalityDataDTO;
-}
-
 export const getOverviewPageDTOAsync = async (userId: number) => {
 
     const courseId = (await getUserById(userId)).currentCourseId!;
