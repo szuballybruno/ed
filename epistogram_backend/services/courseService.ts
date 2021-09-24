@@ -2,18 +2,17 @@ import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
 import { CourseItemType, CourseModeType } from "../models/shared_models/types/sharedTypes";
+import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
+import { CourseItemStateView } from "../models/views/CourseItemStateView";
+import { CourseView } from "../models/views/CourseView";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO, readCourseItemDescriptorCode } from "./encodeService";
-import { toCourseItemDTO, toCourseItemDTOs, toCourseStatDTO, toExamDTO } from "./mappings";
+import { toCourseItemDTOs, toCourseStatDTO, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
 import { getVideoByIdAsync } from "./videoService";
-import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
-import { CourseStateView } from "../models/views/CourseStateView";
-import { CourseView } from "../models/views/CourseView";
 
 export const getUserCoursesDataAsync = async (userId: number) => {
 
