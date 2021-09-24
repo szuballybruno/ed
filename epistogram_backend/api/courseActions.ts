@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { getUserIdFromRequest } from "../services/authentication";
-import { setCourseTypeAsync, startCourseAsync } from "../services/courseService"
+import { getUserCoursesDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService"
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
 export const startCourseAction = getAsyncActionHandler(async (req: Request) => {

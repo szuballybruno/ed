@@ -1,8 +1,8 @@
 import React from 'react';
 import classes from "./statistics.module.scss"
-import { LearningStatisticsSeciton } from "../../profile/profile_components/me/learning_components/LearningStatisticsSeciton";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { Bar, Line, Pie, Scatter } from "react-chartjs-2";
+import { LearningStatisticsSeciton } from '../../learningStatistics/LearningStatisticsSeciton';
 
 
 const AminStatistics = () => {

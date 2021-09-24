@@ -1,9 +1,6 @@
 import { Flex } from "@chakra-ui/layout";
 import React, { ReactNode } from 'react';
-import { EpistoHeader } from "../../../../administration/universal/EpistoHeader";
-import { EpistoGrid } from "../../../../universal/EpistoGrid";
-
-// HOC for a user statistics group like e.g.: focus, videos, time management
+import { EpistoHeader } from "../administration/universal/EpistoHeader";
 
 export const LearningStatisticsSeciton = (props: {
     title: string,

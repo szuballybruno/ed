@@ -3,17 +3,17 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
 import { NavLink } from "react-router-dom";
-import { applicationRoutes } from "../../../../../configuration/applicationRoutes";
-import { getAssetUrl } from "../../../../../frontendHelpers";
-import { RouteItemType } from "../../../../../models/types";
-import { getCourseItemUrl, useNavigation } from "../../../../../services/navigatior";
-import { EpistoConinInfo } from "../../../../EpistoCoinInfo";
-import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
-import { EpistoButton } from "../../../EpistoButton";
-import { EpistoPopper } from "../../../EpistoPopper";
-import { FlexImage } from "../../../FlexImage";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { getAssetUrl } from "../../frontendHelpers";
+import { RouteItemType } from "../../models/types";
+import { getCourseItemUrl, useNavigation } from "../../services/navigatior";
+import { EpistoConinInfo } from "../EpistoCoinInfo";
+import { CurrentUserContext } from "../HOC/AuthenticationFrame";
+import { EpistoButton } from "../universal/EpistoButton";
+import { EpistoPopper } from "../universal/EpistoPopper";
+import { FlexImage } from "../universal/FlexImage";
 import classes from "./desktopNavbar.module.scss";
-import NavbarButton from "./NavbarButton";
+import NavbarButton from "../universal/NavbarButton";
 
 const menuItems = [
     applicationRoutes.homeRoute,
@@ -56,7 +56,7 @@ const DesktopNavbar = (props: {
         <Flex align="center" width="100%" justify="space-between">
 
             {/* logo link */}
-            <NavLink to={homeUrl} className={classes.logoWrapper}>
+            <NavLink to={homeUrl}>
                 <FlexImage url={getAssetUrl("/images/logo.png")} height="90%" width="100%" />
             </NavLink>
 

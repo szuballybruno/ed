@@ -1,9 +1,10 @@
 import { hasValue, useReactQuery } from "../frontendHelpers"
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
-import { httpPostAsync } from "./httpClient";
+import { httpGetAsync, httpPostAsync } from "./httpClient";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
 import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
+import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 
 export const useAdministratedCourses = (searchText: string) => {
 
@@ -48,13 +49,13 @@ export const useUserCourses = (dto: GetUserCoursesDTO) => {
 
 export const useUserCourseData = () => {
 
-    const { data, status, error } = useReactQuery<CourseShortDTO[]>(
-        ["getCoursesQuery", dto.isFeatured, dto.isRecommended, dto.searchCategory, dto.searchText],
-        () => httpPostAsync("/get-user-courses", dto));
+    const { data, status, error } = useReactQuery<UserCoursesDataDTO>(
+        ["getUserCoursesDataDTO"],
+        () => httpGetAsync("/users/get-courses-data"));
 
     return {
-        courses: (data ?? []),
-        error,
-        status
+        coursesData: data,
+        coursesDataError: error,
+        coursesDataStatus: status
     }
 }

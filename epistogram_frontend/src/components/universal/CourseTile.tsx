@@ -1,19 +1,12 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { Button } from "@mui/material";
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import React from 'react';
-import { Gradient } from 'react-gradient';
-import { NavLink } from "react-router-dom";
-import { animated, useSpring } from "react-spring";
-import { CourseShortDTO } from "../../../../models/shared_models/CourseShortDTO";
-import { httpPostAsync, usePostData } from "../../../../services/httpClient";
-import { useNavigation } from "../../../../services/navigatior";
-import classes from "./courseTile.module.scss";
 import DoneIcon from '@mui/icons-material/Done';
-import { FlexImage } from "../../FlexImage";
-import { FlexFloat } from "../../FlexFloat";
-import { EpistoButton } from "../../EpistoButton";
+import React from 'react';
+import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
+import { httpPostAsync } from "../../services/httpClient";
+import { useNavigation } from "../../services/navigatior";
+import { EpistoButton } from "./EpistoButton";
+import { FlexFloat } from "./FlexFloat";
+import { FlexImage } from "./FlexImage";
 
 const CourseTile = (props: {
     course: CourseShortDTO,

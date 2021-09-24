@@ -1,6 +1,6 @@
 import React from 'react';
 import { CourseShortDTO } from '../../../../models/shared_models/CourseShortDTO';
-import CourseTile from '../../../universal/atomic/courseTile/CourseTile';
+import CourseTile from '../../../universal/CourseTile';
 import classes from "./recommendedCourses.module.scss";
 
 const RecommendedCourses = (props: { courses: CourseShortDTO[] }) => {

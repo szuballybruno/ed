@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from "../universal/navigation/navbar/Navbar";
+import Navbar from "../navbar/Navbar";
 import classes from "./coursePage.module.scss";
 
 const CoursePage = (props: { pageUrl: string }) => {

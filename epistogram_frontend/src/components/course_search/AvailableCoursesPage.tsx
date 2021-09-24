@@ -6,10 +6,10 @@ import { GetUserCoursesDTO } from "../../models/shared_models/GetUserCoursesDTO"
 import { useUserCourses } from "../../services/courseService";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
-import CourseTile from "../universal/atomic/courseTile/CourseTile";
+import CourseTile from "../universal/CourseTile";
 import { EpistoGrid } from "../universal/EpistoGrid";
 import { FloatSearch } from "../universal/FloatSearch";
-import Navbar from "../universal/navigation/navbar/Navbar";
+import Navbar from "../navbar/Navbar";
 import classes from "./courseSearchMain.module.scss";
 
 const AvailableCoursesPage = () => {

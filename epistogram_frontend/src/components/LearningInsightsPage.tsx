@@ -2,11 +2,10 @@ import React from "react";
 import { Route, Switch } from 'react-router-dom';
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import MyCourses from "./courseInsights/MyCourses";
-import MyExams from "./examInsights/MyExams";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
-import { LearningInsightsOverview as LearningInsightsOverview } from "./learningInsightsOverview/LearningInsightsOverview";
+import { LearningInsightsOverview as LearningInsightsOverview } from "./LearningInsightsOverview";
 import { NavigationLinkList } from "./NavigationLinkList";
-import Navbar from "./universal/navigation/navbar/Navbar";
+import Navbar from "./navbar/Navbar";
 
 const LearningInsightsPage = () => {
 
@@ -33,7 +32,7 @@ const LearningInsightsPage = () => {
                         <MyCourses />
                     </Route>
                     <Route path={applicationRoutes.learningRoute.myExamsRoute.route}>
-                        <MyExams />
+                        {/* <MyExams /> */}
                     </Route>
                 </Switch>
             </RightPanel>

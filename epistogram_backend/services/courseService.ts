@@ -12,12 +12,29 @@ import { toCourseItemDTO, toCourseItemDTOs, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
 import { getVideoByIdAsync } from "./videoService";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
+import { CourseStateView } from "../models/views/CourseStateView";
 
 export const getUserCoursesDataAsync = async (userId: number) => {
 
+    const completedCOurses = await staticProvider
+        .ormConnection
+        .getRepository(CourseStateView)
+        .find({
+            where: {
+                isComplete: true,
+                userId: userId,
+            },
+            join: {
+                alias: "csv",
+                leftJoinAndSelect: {
+                    course: "csv.course"
+                }
+            }
+        });
+
     return {
-
-
+        isAnyCoursesComplete: false,
+        isAnyCoursesInProgress: false
     } as UserCoursesDataDTO;
 }
 

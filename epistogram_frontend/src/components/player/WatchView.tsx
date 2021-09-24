@@ -8,7 +8,7 @@ import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { StillWatchingDialogMarker } from "../../models/types";
 import { NavigateToCourseItemActionType } from "../universal/CourseItemList";
-import { Copyright } from "../universal/footers/copyright/Copyright";
+import { Copyright } from "../universal/Copyright";
 import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { VideoQuestionnaire } from "../universal/VideoQuestionnaire";

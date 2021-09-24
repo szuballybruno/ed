@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CourseOrganization } from "./CourseOrganization";
 import { Exam } from "./Exam";
 import { StorageFile } from "./StorageFile";
@@ -7,6 +7,7 @@ import { Video } from "./Video";
 import { CourseGroup } from "./CourseGroup";
 import { CourseTag } from "./CourseTag";
 import { UserCourseBridge } from "./UserCourseBridge";
+import { CourseStateView } from "../views/CourseStateView";
 
 @Entity()
 export class Course {
@@ -31,6 +32,11 @@ export class Course {
 
     @Column()
     colorTwo: string;
+
+    // course state 
+    @OneToOne(_ => CourseStateView, x => x.course)
+    @JoinColumn()
+    courseState: CourseStateView;
 
     // Course's organizations
     @OneToMany(() => CourseOrganization, co => co.course)

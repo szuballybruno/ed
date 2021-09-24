@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import classes from './editUser.module.scss'
-import EditItem from "../../../universal/atomic/editItem/EditItem";
+import EditItem from "../../../universal/editItem/EditItem";
 import SettingsItem from "../../../userSettings/settings_components/SettingsItem";
 import instance from "../../../../services/axiosInstance";
 import { AdminPageUserDTO } from '../../../../models/shared_models/AdminPageUserDTO';

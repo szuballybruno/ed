@@ -1,12 +1,12 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
-import { CurrentTasksDTO } from '../../models/shared_models/CurrentTasksDTO';
-import { EpistoHeader } from '../administration/universal/EpistoHeader';
-import LearningStatistics from "../profile/profile_components/me/learning_components/LearningStatistics";
-import { Tasks } from '../Tasks';
-import { DashboardSection } from '../universal/DashboardSection';
-import { FlexFloat } from '../universal/FlexFloat';
-import { PersonalityAssessment } from '../universal/PersonalityAssessment';
+import { CurrentTasksDTO } from '../models/shared_models/CurrentTasksDTO';
+import { EpistoHeader } from './administration/universal/EpistoHeader';
+import LearningStatistics from "./learningStatistics/LearningStatistics";
+import { Tasks } from './Tasks';
+import { DashboardSection } from './universal/DashboardSection';
+import { FlexFloat } from './universal/FlexFloat';
+import { PersonalityAssessment } from './universal/PersonalityAssessment';
 
 const tasks = {
     tasks: [

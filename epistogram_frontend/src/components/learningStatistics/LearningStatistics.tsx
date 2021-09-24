@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/layout';
 import React from 'react';
 import { Bar } from "react-chartjs-2";
-import StatisticsCard from "../../../../statisticsCard/StatisticsCard";
+import StatisticsCard from "../statisticsCard/StatisticsCard";
 import classes from './learningStatistics.module.scss';
 import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
 

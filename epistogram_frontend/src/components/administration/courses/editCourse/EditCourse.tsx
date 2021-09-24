@@ -1,5 +1,5 @@
 import { Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography } from "@mui/material";
-import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd"
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import React, { useEffect, useState } from 'react';
 import { HexColorPicker } from "react-colorful";
 import { useParams } from "react-router";
@@ -7,7 +7,7 @@ import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from 
 import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../../models/shared_models/AdminPageEditCourseDTO";
 import { useAdminEditedCourse } from "../../../../services/courseService";
 import { httpPostAsync } from "../../../../services/httpClient";
-import EditItem from "../../../universal/atomic/editItem/EditItem";
+import EditItem from "../../../universal/editItem/EditItem";
 import AdminDashboardHeader from "../../universal/adminDashboardHeader/AdminDashboardHeader";
 import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
 import { AdminDashboardWrapper } from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
@@ -16,7 +16,7 @@ import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSe
 import SelectImage from "../../universal/selectImage/SelectImage";
 import { SelectMultiple } from "../../universal/selectMultiple/SelectMultiple";
 import classes from "./editCourse.module.scss";
-import {CourseItemDTO} from "../../../../models/shared_models/CourseItemDTO";
+import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
 
 /* TODO:
 *   - Create a new CourseItemDTO for this page
@@ -126,7 +126,7 @@ export const EditCourse = () => {
         setCourseItems(items)
     }
 
-    const DraggableListItemWrapper = ({...props}) => <Draggable
+    const DraggableListItemWrapper = ({ ...props }) => <Draggable
         key={props.key}
         draggableId={props.draggableId}
         index={props.index}>
@@ -137,8 +137,8 @@ export const EditCourse = () => {
                 ref={provided.innerRef}>
                 {props.children}
             </li>
-            )}
-        </Draggable>
+        )}
+    </Draggable>
 
     return <AdminDashboardWrapper>
         <Divider style={{
@@ -235,7 +235,7 @@ export const EditCourse = () => {
                                     })} />
                                     <TextOrInput value={item.name} />
                                 </ListItem>
-                                <Divider style={{width: "100%"}} />
+                                <Divider style={{ width: "100%" }} />
                             </div>
                         )}
 
@@ -257,7 +257,7 @@ export const EditCourse = () => {
                                     })} />
                                     <TextOrInput value={item.name} />
                                 </ListItem>
-                                <Divider style={{width: "100%"}} />
+                                <Divider style={{ width: "100%" }} />
                             </div>
                         )}
 
@@ -279,7 +279,7 @@ export const EditCourse = () => {
                                     })} />
                                     <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
                                 </ListItem>
-                                <Divider style={{width: "100%"}} />
+                                <Divider style={{ width: "100%" }} />
                             </div>
                         )}
 
@@ -301,7 +301,7 @@ export const EditCourse = () => {
                                     })} />
                                     <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
                                 </ListItem>
-                                <Divider style={{width: "100%"}} />
+                                <Divider style={{ width: "100%" }} />
                             </div>
                         )}
 
@@ -323,18 +323,18 @@ export const EditCourse = () => {
                     {(provided) => (
                         <div {...provided.droppableProps} ref={provided.innerRef}>
                             {courseItems.map((item, index) => <DraggableListItemWrapper key={item.title} draggableId={item.title} index={index}>
-                                    <AdministrationListItem
-                                        key={"adlistitem" + index}
-                                        title={item.title}
-                                        thumbnailUrl={item.thumbnailUrl}
-                                        chips={[]/*[
+                                <AdministrationListItem
+                                    key={"adlistitem" + index}
+                                    title={item.title}
+                                    thumbnailUrl={item.thumbnailUrl}
+                                    chips={[]/*[
                                             getChipWithLabel("a" + index, "item.type", "category"),
                                             getChipWithLabel("b" + index, "item.length", "person"),
                                             getChipWithLabel("c" + index, "item.isEssential", "video")
                                         ]*/}
-                                        searchItemButtons={[]}
-                                    />
-                                </DraggableListItemWrapper>
+                                    searchItemButtons={[]}
+                                />
+                            </DraggableListItemWrapper>
                             )}{provided.placeholder}
                         </div>
 
@@ -346,7 +346,7 @@ export const EditCourse = () => {
 
         <AdminDashboardHeader titleText={""} />
 
-        <SaveBar open={isAllowEditOnPage} onClick={() => setIsAllowEditOnPage(p => !p) } onDoneClick={() => {
+        <SaveBar open={isAllowEditOnPage} onClick={() => setIsAllowEditOnPage(p => !p)} onDoneClick={() => {
             setIsAllowEditOnPage(p => !p)
             return updateAdminPageEditCourse(getAdminPageEditCourseDTO())
         }} />

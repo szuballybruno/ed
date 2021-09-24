@@ -4,11 +4,11 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from '../HOC/MainPanels';
 import { NavigationLinkList } from '../NavigationLinkList';
-import EditItem from "../universal/atomic/editItem/EditItem";
-import ProfileImage from "../universal/atomic/profileImage/ProfileImage";
-import Navbar from '../universal/navigation/navbar/Navbar';
+import EditItem from "../universal/editItem/EditItem";
+import Navbar from '../navbar/Navbar';
 import classes from './settings.module.scss';
 import SettingsItem from "./settings_components/SettingsItem";
+import { Image } from '@chakra-ui/image';
 
 export const UserSettingsPage = () => {
 
@@ -45,7 +45,7 @@ export const UserSettingsPage = () => {
     const Preferences = () => <>
         <div className={classes.dataSheetWrapper}>
             <div className={classes.profileImageWrapper}>
-                <ProfileImage imageUrl={user?.avatarUrl ? user?.avatarUrl : ""} />
+                <Image src={user?.avatarUrl!} />
             </div>
             <div className={classes.dataSheetItemWrapper}>
                 <EditItem

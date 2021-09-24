@@ -7,7 +7,7 @@ import LearningInsightsPage from "../components/LearningInsightsPage";
 import LoginScreen from "../components/login/LoginScreen";
 import { PlayerPage } from "../components/player/PlayerPage";
 import { SignupPage } from "../components/signup/SignupPage";
-import NotFound from "../components/universal/notFound/NotFound";
+import NotFound from "../components/notFound/NotFound";
 import { ProtectedRoute } from "../components/universal/ProtectedRoute";
 import { UserSettingsPage } from "../components/userSettings/UserSettingsPage";
 import { applicationRoutes } from "../configuration/applicationRoutes";

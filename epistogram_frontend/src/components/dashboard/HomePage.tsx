@@ -1,18 +1,16 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/layout';
+import { Box, Flex } from '@chakra-ui/layout';
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useOverviewPageDTO } from "../../services/dataService";
-import { EpistoHeader } from "../administration/universal/EpistoHeader";
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
+import Navbar from "../navbar/Navbar";
 import { Tasks } from '../Tasks';
 import { TipOfTheDay } from '../TipOfTheDay';
-import ListItem from "../universal/atomic/listItem/ListItem";
 import { CourseItemList, CourseItemView } from "../universal/CourseItemList";
 import { DashboardSection } from '../universal/DashboardSection';
-import { FlexFloat } from '../universal/FlexFloat';
-import Navbar from "../universal/navigation/navbar/Navbar";
+import ListItem from '../universal/listItem/ListItem';
 import { VideoQuestionnaire } from '../universal/VideoQuestionnaire';
 import { DashoardLeftItemGroup } from "./dashboard_components/DashBoardSpacers";
 
@@ -47,7 +45,8 @@ const HomePage = () => {
                                 <CourseItemView courseItem={currentItem!} />
                             </Box>
 
-                            : <ListItem mainTitle={"Tanfolyamkereső"}
+                            : <ListItem
+                                mainTitle={"Tanfolyamkereső"}
                                 subTitle={"Válaszd ki a legszimpatikusabb tanfolyamot"}
                                 thumbnailUrl={currentItemThumbnailUrl}
                                 to={applicationRoutes.availableCoursesRoute.route} />}

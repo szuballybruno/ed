@@ -8,7 +8,7 @@ import { usePlayerData } from "../../services/playerService";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import { FlexFloat } from "../universal/FlexFloat";
-import Navbar from "../universal/navigation/navbar/Navbar";
+import Navbar from "../navbar/Navbar";
 import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
 import { WatchView } from "./WatchView";

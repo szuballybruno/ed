@@ -5,7 +5,7 @@ import { RouteItemType } from "../../models/types";
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import { NavigationLinkList } from '../NavigationLinkList';
-import Navbar from "../universal/navigation/navbar/Navbar";
+import Navbar from "../navbar/Navbar";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AddCourse } from "./courses/addCourse/AddCourse";
 import { AddVideo } from "./courses/addVideo/AddVideo";

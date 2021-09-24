@@ -1,4 +1,5 @@
-import { ViewColumn, ViewEntity } from "typeorm";
+import { JoinColumn, OneToOne, ViewColumn, ViewEntity } from "typeorm";
+import { Course } from "../entity/Course";
 
 @ViewEntity({
     synchronize: false,
@@ -14,4 +15,9 @@ export class CourseStateView {
 
     @ViewColumn()
     isComplete: boolean;
+
+    // course 
+    @OneToOne(_ => Course, x => x.courseState)
+    @JoinColumn({ name: "courseId" })
+    course: Course;
 }

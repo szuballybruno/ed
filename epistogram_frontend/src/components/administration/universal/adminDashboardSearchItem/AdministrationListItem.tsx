@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './adminDashboardSearchItem.module.scss';
-import ProfileImage from "../../../universal/atomic/profileImage/ProfileImage";
 import { Grid, Typography } from "@mui/material";
+import { Image } from "@chakra-ui/react";
 
 export type DashboardSearchItemAction = {
     to?: string,
@@ -21,7 +21,7 @@ export const AdministrationListItem = (props: {
 
     const showRoundedImageOrNull = (imageUrl?: string) => {
         return imageUrl ? <Grid lg={1} md={1} xs={1} item className={classes.searchItemAvatar}>
-            <ProfileImage imageUrl={imageUrl ? imageUrl : ""} />
+            <Image src={imageUrl} />
         </Grid> : null
     }
 

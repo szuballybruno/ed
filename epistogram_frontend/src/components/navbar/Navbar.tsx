@@ -1,12 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { applicationRoutes } from "../../../../configuration/applicationRoutes";
-import { getAssetUrl, useIsDesktopView } from "../../../../frontendHelpers";
-import { RouteItemType } from "../../../../models/types";
-import { useCurrentCourseItemCode } from "../../../../services/dataService";
-import { FlexFloat } from "../../FlexFloat";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { getAssetUrl, useIsDesktopView } from "../../frontendHelpers";
+import { RouteItemType } from "../../models/types";
+import { useCurrentCourseItemCode } from "../../services/dataService";
+import { FlexFloat } from "../universal/FlexFloat";
 import classes from "./navbar.module.scss";
-import DesktopNavbar from "./navbar_components/DesktopNavbar";
+import DesktopNavbar from "./DesktopNavbar";
 
 const menuItems = [
     applicationRoutes.homeRoute,
