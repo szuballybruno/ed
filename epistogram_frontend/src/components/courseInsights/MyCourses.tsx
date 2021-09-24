@@ -1,4 +1,4 @@
-import { Box, Flex, Grid } from "@chakra-ui/react";
+import { Flex, Grid } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React from 'react';
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
@@ -6,7 +6,9 @@ import { useUserCourseData } from "../../services/courseService";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import CourseTile from "../universal/CourseTile";
 import { DashboardSection } from "../universal/DashboardSection";
+import { EpistoGrid } from "../universal/EpistoGrid";
 import { FlexFloat } from "../universal/FlexFloat";
+import { InfoGrid } from "../universal/InfoGrid";
 
 const CourseStatCard = (props: { course: CourseShortDTO }) => {
 
@@ -31,20 +33,7 @@ const CourseStatCard = (props: { course: CourseShortDTO }) => {
     ]
 
     return <CourseTile course={props.course} borderRadius="0">
-        <Grid
-            gridTemplateColumns="repeat(auto-fill, minmax(150px , 1fr))"
-            columnGap="5px"
-            rowGap="5px"
-            mt="20px">
-            {stats
-                .map(stat => <FlexFloat
-                    p="10px"
-                    boxShadow="0"
-                    borderRadius="0"
-                    borderLeft="4px solid var(--epistoTeal)">
-                    {stat.text}
-                </FlexFloat>)}
-        </Grid>
+        <InfoGrid infos={stats.map(x => x.text)} />
     </CourseTile>
 }
 
@@ -62,32 +51,33 @@ const MyCourses = () => {
         direction="column">
 
         {/* completed courses */}
-        <DashboardSection title="Elvégzett kurzusaim" boxShadow="none">
+        <DashboardSection variant="noShadow" title="Elvégzett kurzusaim" >
             {isAnyCoursesComplete
-                ? <Grid
-                    gridTemplateColumns="repeat(auto-fill, minmax(300px , 1fr))"
+                ? <EpistoGrid
+                    minColumnWidth="300px"
+                    auto="fill"
                     gap="15px"
                     p="20px">
 
                     {completedCourses
                         .map((course, index) => <CourseStatCard key={index} course={course} />)}
-                </Grid>
+                </EpistoGrid>
 
                 : <Flex p="100px">
                     <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>
                 </Flex>}
         </DashboardSection >
 
-        <DashboardSection title="Folyamatban lévő kurzusaim" boxShadow="none">
+        <DashboardSection variant="noShadow" title="Folyamatban lévő kurzusaim">
             {isAnyCoursesInProgress
-                ? <Grid
-                    gridTemplateColumns="repeat(auto-fill, minmax(300px , 1fr))"
-                    columnGap="15px"
-                    rowGap="15px"
+                ? <EpistoGrid
+                    minColumnWidth="300px"
+                    auto="fill"
+                    gap="15px"
                     p="20px">
                     {inProgressCourses
                         .map((course, index) => <CourseStatCard key={index} course={course} />)}
-                </Grid>
+                </EpistoGrid>
                 : <Flex p="100px">
                     <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>
                 </Flex>}

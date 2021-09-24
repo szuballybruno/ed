@@ -6,6 +6,7 @@ import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPa
 import { LearningInsightsOverview as LearningInsightsOverview } from "./LearningInsightsOverview";
 import { NavigationLinkList } from "./NavigationLinkList";
 import Navbar from "./navbar/Navbar";
+import { MyExams } from "./MyExams";
 
 const LearningInsightsPage = () => {
 
@@ -32,7 +33,7 @@ const LearningInsightsPage = () => {
                         <MyCourses />
                     </Route>
                     <Route path={applicationRoutes.learningRoute.myExamsRoute.route}>
-                        {/* <MyExams /> */}
+                        <MyExams />
                     </Route>
                 </Switch>
             </RightPanel>

@@ -4,14 +4,15 @@ import { ReactNode } from "react"
 export const EpistoGrid = (props: {
     children: ReactNode,
     minColumnWidth: string,
-    columnGap: string
+    gap: string,
+    auto: "fit" | "fill"
 } & GridProps) => {
 
-    const { minColumnWidth, columnGap, children, ...css } = props;
+    const { minColumnWidth, gap, children, auto, ...css } = props;
 
     return <Grid
-        templateColumns={`repeat(auto-fit, minmax(${minColumnWidth}, 1fr))`}
-        gap={columnGap}
+        templateColumns={`repeat(auto-${auto}, minmax(${minColumnWidth}, 1fr))`}
+        gap={gap}
         {...css}>
         {children}
     </Grid>

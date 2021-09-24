@@ -142,7 +142,7 @@ const AvailableCoursesPage = () => {
                     {/* courses */}
                     <LoadingFrame overflow="hidden" loadingState={[status]} error={[error]}>
                         <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
-                            <EpistoGrid columnGap="15" minColumnWidth="300px">
+                            <EpistoGrid auto="fit" gap="15" minColumnWidth="300px">
                                 {courses
                                     .map((course: any, index) => {
 

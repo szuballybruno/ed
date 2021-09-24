@@ -1,13 +1,13 @@
 import { Flex, FlexProps } from "@chakra-ui/react"
 import { ReactNode } from "react"
 
-export const FlexFloat = (props: FlexProps & { elevation?: number }) => {
+export const FlexFloat = (props: FlexProps & { elevation?: number, variant?: "normal" | "rect" }) => {
 
-    const { elevation, ...flexProps } = props;
+    const { elevation, variant, ...flexProps } = props;
 
     return <Flex
         id="flexFloat"
-        borderRadius="7px"
+        borderRadius={variant === "rect" ? "none" : "7px"}
         boxShadow={`0 0 ${elevation ?? 8}px #0000001f`}
         bg="white"
         {...flexProps} >
