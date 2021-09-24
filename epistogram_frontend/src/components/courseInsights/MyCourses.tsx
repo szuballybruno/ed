@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import React from 'react';
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { useUserCourseData } from "../../services/courseService";
+import { LoadingFrame } from "../HOC/LoadingFrame";
 import CourseTile from "../universal/CourseTile";
 import { DashboardSection } from "../universal/DashboardSection";
 import { FlexFloat } from "../universal/FlexFloat";
@@ -55,10 +56,10 @@ const MyCourses = () => {
     const completedCourses = coursesData?.completedCourses ?? [];
     const inProgressCourses = coursesData?.inProgressCourses ?? [];
 
-    completedCourses.push(completedCourses[0]);
-    completedCourses.push(completedCourses[0]);
-
-    return <Flex direction="column" >
+    return <LoadingFrame
+        loadingState={coursesDataStatus}
+        error={coursesDataError}
+        direction="column">
 
         {/* completed courses */}
         <DashboardSection title="Elvégzett kurzusaim" boxShadow="none">
@@ -91,7 +92,7 @@ const MyCourses = () => {
                     <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>
                 </Flex>}
         </DashboardSection>
-    </Flex >
+    </LoadingFrame>
 };
 
 export default MyCourses;
