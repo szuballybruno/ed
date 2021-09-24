@@ -8,33 +8,32 @@ import { CourseItemType, CourseModeType } from "../models/shared_models/types/sh
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO, readCourseItemDescriptorCode } from "./encodeService";
-import { toCourseItemDTO, toCourseItemDTOs, toExamDTO } from "./mappings";
+import { toCourseItemDTO, toCourseItemDTOs, toCourseStatDTO, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
 import { getVideoByIdAsync } from "./videoService";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { CourseStateView } from "../models/views/CourseStateView";
+import { CourseView } from "../models/views/CourseView";
 
 export const getUserCoursesDataAsync = async (userId: number) => {
 
-    const completedCOurses = await staticProvider
+    const completedCourses = await staticProvider
         .ormConnection
-        .getRepository(CourseStateView)
+        .getRepository(CourseView)
         .find({
             where: {
                 isComplete: true,
                 userId: userId,
-            },
-            join: {
-                alias: "csv",
-                leftJoinAndSelect: {
-                    course: "csv.course"
-                }
             }
         });
 
+    const inProgressCourses = [] as number[];
+
     return {
-        isAnyCoursesComplete: false,
-        isAnyCoursesInProgress: false
+        isAnyCoursesComplete: completedCourses.any(x => true),
+        isAnyCoursesInProgress: inProgressCourses.any(x => true),
+        completedCourses: completedCourses
+            .map(x => toCourseStatDTO(x))
     } as UserCoursesDataDTO;
 }
 

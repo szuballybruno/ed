@@ -18,6 +18,7 @@ import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizationDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
+import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
 import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
@@ -30,6 +31,7 @@ import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
+import { CourseStateView } from "../models/views/CourseStateView";
 import { CourseView } from "../models/views/CourseView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
@@ -54,6 +56,16 @@ export const toUserDTO = (user: User) => {
             : getAssetUrl("images/defaultAvatar.png"),
         userActivity: user.userActivity ? toUserActivityDTO(user.userActivity) : null
     } as UserDTO;
+}
+
+export const toCourseStatDTO = (courseStateView: CourseView) => {
+
+    return {
+        title: courseStateView.title,
+        coverImageUrl: courseStateView.filePath
+            ? getAssetUrl(courseStateView.filePath)
+            : getAssetUrl("/images/defaultCourseCover.jpg")
+    } as CourseStatDTO;
 }
 
 export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
