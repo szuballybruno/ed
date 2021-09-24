@@ -16,6 +16,9 @@ export class CourseStateView {
     @ViewColumn()
     isComplete: boolean;
 
+    @ViewColumn()
+    isStarted: boolean;
+
     // course 
     @OneToOne(_ => Course, x => x.courseState)
     @JoinColumn({ name: "courseId" })

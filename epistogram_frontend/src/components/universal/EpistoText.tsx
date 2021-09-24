@@ -19,8 +19,6 @@ export const EpistoText = (props: {
         ...style
     } as CSSProperties;
 
-    useEffect(() => console.log(ref.current), [ref]);
-
     return <Typography
         ref={ref}
         style={css}>

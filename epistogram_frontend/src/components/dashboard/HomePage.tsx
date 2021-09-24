@@ -28,8 +28,6 @@ const HomePage = () => {
     const courseItems = pageDTO?.currentCourseItems;
     const recommendedCourses = pageDTO?.recommendedCourses;
 
-    console.log("rendering home");
-
     return <MainWrapper>
 
         <Navbar />

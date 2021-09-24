@@ -2,6 +2,7 @@ SELECT
 	"user"."id" AS "userId",
 	"sf"."filePath",
 	"csv"."isComplete",
+	"csv"."isStarted",
 	
 	-- current exam id
 	CASE WHEN 

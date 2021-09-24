@@ -16,6 +16,9 @@ export class CourseView {
     isComplete: boolean;
 
     @ViewColumn()
+    isStarted: boolean;
+
+    @ViewColumn()
     currentExamId: number;
 
     @ViewColumn()

@@ -33,14 +33,18 @@ export const ProtectedRoute = (props: {
                     console.log("Protected router loading state: " + isLoading);
 
                 // if loading return blank page
-                if (isLoading)
+                if (isLoading) {
+
+                    console.log("Returning loading div...");
                     return <div></div>
+                }
 
                 // if not authenticated or not authorized, redirect to login  
-                if (!authState.isAuthenticated || !handleIsAuthorizedToView(user.userActivity))
-                    return <Redirect to={applicationRoutes.loginRoute.route} />
+                if (!authState.isAuthenticated || !handleIsAuthorizedToView(user.userActivity)) {
 
-                console.log(user);
+                    console.log("Not authenticated or not authorized, redirecting...");
+                    return <Redirect to={applicationRoutes.loginRoute.route} />
+                }
 
                 return render();
             }} />

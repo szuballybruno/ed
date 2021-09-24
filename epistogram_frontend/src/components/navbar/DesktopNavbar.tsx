@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
@@ -36,8 +36,6 @@ const DesktopNavbar = (props: {
     const [popperOpen, setPopperOpen] = useState(false);
     const { hideLinks } = props;
 
-    console.log(user);
-
     const userMenuItems = [
         {
             name: applicationRoutes.settingsRoute.title,
@@ -56,9 +54,15 @@ const DesktopNavbar = (props: {
         <Flex align="center" width="100%" justify="space-between">
 
             {/* logo link */}
-            <NavLink to={homeUrl}>
-                <FlexImage url={getAssetUrl("/images/logo.png")} height="90%" width="100%" />
-            </NavLink>
+            <img
+                src={getAssetUrl("/images/logo.png")}
+                style={{
+                    width: "150px",
+                    height: "70px",
+                    objectFit: "contain",
+                    cursor: "pointer"
+                }}
+                onClick={() => navigate(homeUrl)} />
 
             {/* menu items */}
             <Flex display={hideLinks ? "none" : "flex"} height="50px">

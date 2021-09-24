@@ -8,13 +8,6 @@ import { FlexFloat } from "../universal/FlexFloat";
 import classes from "./navbar.module.scss";
 import DesktopNavbar from "./DesktopNavbar";
 
-const menuItems = [
-    applicationRoutes.homeRoute,
-    applicationRoutes.availableCoursesRoute,
-    applicationRoutes.learningRoute,
-    applicationRoutes.administrationRoute
-] as RouteItemType[];
-
 const Navbar = (props: { hideLinks?: boolean }) => {
 
     const isDesktop = useIsDesktopView();
@@ -37,9 +30,6 @@ const Navbar = (props: { hideLinks?: boolean }) => {
                     </div>
                 </NavLink>
             </div>
-
-            {/* dropdonw */}
-            {/* <MobileDropdown menuItems={menuItems} showHighlightedButton={props.showHighlightedButton} /> */}
         </div>
     }
 

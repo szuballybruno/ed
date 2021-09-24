@@ -1,20 +1,18 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import DoneIcon from '@mui/icons-material/Done';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
-import { httpPostAsync } from "../../services/httpClient";
 import { useNavigation } from "../../services/navigatior";
-import { EpistoButton } from "./EpistoButton";
 import { FlexFloat } from "./FlexFloat";
 import { FlexImage } from "./FlexImage";
 
 const CourseTile = (props: {
     course: CourseShortDTO,
-    itemIndex: number,
-    className?: string
-}) => {
+    className?: string,
+    children?: ReactNode,
+} & FlexProps) => {
 
-    const course = props.course;
+    const { course, children, ...css } = props;
     const colorOne = course.colorOne;
     const colorTwo = course.colorTwo;
     const courseTitle = course.title;
@@ -23,12 +21,6 @@ const CourseTile = (props: {
     const { navigateToPlayer } = useNavigation();
     const isComplete = course.isComplete;
 
-    const playCourse = async () => {
-
-        await httpPostAsync(`/course/start-course?courseId=${course.courseId}`);
-        navigateToPlayer(course.firstItemCode);
-    }
-
     return <FlexFloat
         className="whall"
         direction="column"
@@ -36,12 +28,17 @@ const CourseTile = (props: {
         position="relative"
         overflow="hidden"
         bg="white"
-        border="5px solid white">
+        border="5px solid white"
+        {...css}>
 
         {/* image  */}
         <Box flex="1" position="relative">
 
-            <FlexImage url={thumbnailImageUrl} className="whall" fit="cover" />
+            <FlexImage
+                url={thumbnailImageUrl}
+                className="whall"
+                fit="cover"
+                minHeight="150px" />
 
             {/* done overlay */}
             {isComplete && <Flex
@@ -75,23 +72,7 @@ const CourseTile = (props: {
                     <Text as="text" color="grey">{courseTeacherName}</Text>
                 </Flex>
 
-                <Flex mt="10px">
-
-                    {/* details */}
-                    <EpistoButton
-                        onClick={() => window.location.href = "https://epistogram.com/excel/"}
-                        style={{ flex: "1" }}>
-                        Adatlap
-                    </EpistoButton>
-
-                    {/* start course */}
-                    <EpistoButton
-                        onClick={playCourse}
-                        variant="colored"
-                        style={{ flex: "1" }}>
-                        Indítás
-                    </EpistoButton>
-                </Flex>
+                {children}
             </Flex>
         </Box>
     </FlexFloat>

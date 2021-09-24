@@ -12,6 +12,7 @@ export class UserCourseBridge {
     @Column({ type: "text", default: "beginner" })
     courseMode: CourseModeType;
 
+    // user
     @Column()
     userId: number;
 
@@ -19,6 +20,7 @@ export class UserCourseBridge {
     @JoinColumn({ name: "userId" })
     user: User;
 
+    // course
     @Column()
     courseId: number;
 

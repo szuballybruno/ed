@@ -10,29 +10,36 @@ import { CourseView } from "../models/views/CourseView";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO, readCourseItemDescriptorCode } from "./encodeService";
-import { toCourseItemDTOs, toCourseStatDTO, toExamDTO } from "./mappings";
+import { toCourseItemDTOs, toCourseShortDTO, toCourseStatDTO, toExamDTO } from "./mappings";
 import { getUserById } from "./userService";
 import { getVideoByIdAsync } from "./videoService";
 
 export const getUserCoursesDataAsync = async (userId: number) => {
 
-    const completedCourses = await staticProvider
+    const courses = await staticProvider
         .ormConnection
         .getRepository(CourseView)
         .find({
             where: {
-                isComplete: true,
                 userId: userId,
             }
         });
 
-    const inProgressCourses = [] as number[];
+    const inProgressCourses = courses
+        .filter(x => x.isStarted && !x.isComplete);
+
+    const completedCourses = courses
+        .filter(x => x.isComplete);
 
     return {
         isAnyCoursesComplete: completedCourses.any(x => true),
         isAnyCoursesInProgress: inProgressCourses.any(x => true),
+
         completedCourses: completedCourses
-            .map(x => toCourseStatDTO(x))
+            .map(x => toCourseShortDTO(x)),
+
+        inProgressCourses: inProgressCourses
+            .map(x => toCourseShortDTO(x))
     } as UserCoursesDataDTO;
 }
 

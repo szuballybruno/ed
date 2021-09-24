@@ -1,6 +1,7 @@
 SELECT 
 	"course"."id" AS "courseId",
 	"user"."id" AS "userId",
+	CAST ("ucb"."id" IS NOT NULL AS boolean) AS "isStarted",
 	CASE WHEN
 		
 		-- SUM of incomplete items
@@ -22,6 +23,15 @@ LEFT JOIN public."exam_completed_view" AS "ecv"
 ON "ecv"."courseId" = "course"."id"
 	AND "ecv"."userId" = "user"."id"
 	
+LEFT JOIN public."user_course_bridge" AS "ucb"
+ON "ucb"."userId" = "user"."id"
+	AND "ucb"."courseId" = "course"."id"
+	
 GROUP BY 
 	"course"."id",
-	"user"."id"
+	"user"."id",
+	"ucb"."id"
+	
+ORDER BY 
+	"user"."id",
+	"course"."id"

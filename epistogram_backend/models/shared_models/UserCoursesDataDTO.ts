@@ -1,8 +1,9 @@
+import { CourseShortDTO } from "./CourseShortDTO";
 import { CourseStatDTO } from "./CourseStatDTO";
 
 export type UserCoursesDataDTO = {
     isAnyCoursesComplete: boolean,
     isAnyCoursesInProgress: boolean,
-    completedCourses: CourseStatDTO[],
-    inProgressCourses: CourseStatDTO[]
+    completedCourses: CourseShortDTO[],
+    inProgressCourses: CourseShortDTO[]
 }

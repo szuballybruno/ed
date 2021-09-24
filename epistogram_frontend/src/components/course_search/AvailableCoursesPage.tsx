@@ -11,6 +11,9 @@ import { EpistoGrid } from "../universal/EpistoGrid";
 import { FloatSearch } from "../universal/FloatSearch";
 import Navbar from "../navbar/Navbar";
 import classes from "./courseSearchMain.module.scss";
+import { EpistoButton } from "../universal/EpistoButton";
+import { httpPostAsync } from "../../services/httpClient";
+import { useNavigation } from "../../services/navigatior";
 
 const AvailableCoursesPage = () => {
 
@@ -27,6 +30,8 @@ const AvailableCoursesPage = () => {
     } as GetUserCoursesDTO;
 
     const { courses, status, error } = useUserCourses(getCoursesDTO);
+
+    const { navigateToPlayer } = useNavigation();
 
     const clearFilters = () => {
         setSearchCategory("");
@@ -140,9 +145,33 @@ const AvailableCoursesPage = () => {
                             <EpistoGrid columnGap="15" minColumnWidth="300px">
                                 {courses
                                     .map((course: any, index) => {
-                                        return <GridItem height="350px" >
 
-                                            <CourseTile course={course} itemIndex={index} key={index} />
+                                        const playCourse = async () => {
+
+                                            await httpPostAsync(`/course/start-course?courseId=${course.courseId}`);
+                                            navigateToPlayer(course.firstItemCode);
+                                        }
+
+                                        return <GridItem height="350px" >
+                                            <CourseTile course={course} key={index} >
+                                                <Flex mt="10px">
+
+                                                    {/* details */}
+                                                    <EpistoButton
+                                                        onClick={() => window.location.href = "https://epistogram.com/excel/"}
+                                                        style={{ flex: "1" }}>
+                                                        Adatlap
+                                                    </EpistoButton>
+
+                                                    {/* start course */}
+                                                    <EpistoButton
+                                                        onClick={playCourse}
+                                                        variant="colored"
+                                                        style={{ flex: "1" }}>
+                                                        Indítás
+                                                    </EpistoButton>
+                                                </Flex>
+                                            </CourseTile>
                                         </GridItem>
                                     })}
                             </EpistoGrid>
