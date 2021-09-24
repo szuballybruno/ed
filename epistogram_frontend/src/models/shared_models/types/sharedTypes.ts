@@ -18,6 +18,8 @@ export type CourseItemStateType = "completed" | "locked" | "current" | "availabl
 
 export type CourseModeType = "beginner" | "advanced";
 
+export type TaskPriorityType = "high" | "mid" | "low";
+
 export const UserRoleEnum = {
     administratorId: 1,
     supervisorId: 2,

@@ -37,10 +37,11 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
                 <TableRow>
                     <TableCell align="left"></TableCell>
                     <TableCell align="left">Feladat</TableCell>
-                    <TableCell align="right">Felado</TableCell>
-                    <TableCell align="right">Feladas datuma</TableCell>
-                    <TableCell align="right">Esedekes</TableCell>
-                    <TableCell align="right">Status</TableCell>
+                    <TableCell align="right">Feladó</TableCell>
+                    <TableCell align="right">Feladás datuma</TableCell>
+                    <TableCell align="right">Esedékes</TableCell>
+                    <TableCell align="right">Státusz</TableCell>
+                    <TableCell align="right">Prioritás</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -74,6 +75,9 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
 
                             {/* status */}
                             <TableCell align="right">{task.status}</TableCell>
+
+                            {/* status */}
+                            <TableCell align="right">{task.priority}</TableCell>
                         </TableRow>
                     })}
             </TableBody>

@@ -1,4 +1,4 @@
-import { TaskObjectiveType } from "./types/sharedTypes";
+import { TaskObjectiveType, TaskPriorityType } from "./types/sharedTypes";
 
 export type TaskDTO = {
     name: string;
@@ -7,4 +7,5 @@ export type TaskDTO = {
     creationDate: Date;
     createdBy: string;
     status: string;
+    priority: TaskPriorityType;
 }

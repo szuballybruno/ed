@@ -17,6 +17,7 @@ const tasks = {
             status: "Kesz",
             creationDate: new Date(Date.now()),
             dueDate: new Date(Date.now()),
+            priority: "high"
         }
     ]
 } as CurrentTasksDTO;
