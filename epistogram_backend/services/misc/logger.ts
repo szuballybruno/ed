@@ -1,4 +1,4 @@
-type LogEntryType = "error" | "info" | "warning";
+type LogEntryType = "error" | "info" | "warning" | "strong";
 
 export const logWarning = (content: any) => log(content, "warning");
 
@@ -22,6 +22,13 @@ export const log = (content: any, entryType?: LogEntryType) => {
 
     if (entryType == "info")
         console.log(`[${dateTimeString}.${miliseconds}] ${content}`);
+
+    if (entryType == "strong") {
+
+        console.log("");
+        console.log(`[${dateTimeString}.${miliseconds}] ---> ${content}`);
+        console.log("");
+    }
 }
 
 export const logObject = (obj: any) => {

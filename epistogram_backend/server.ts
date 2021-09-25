@@ -26,6 +26,10 @@ import { deleteUserAction } from './api/userAdministartionActions';
 // require is mandatory here, for some unknown reason
 initailizeDotEnvEnvironmentConfig();
 
+log("");
+log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${staticProvider.globalConfig.misc.environmentName} ----------------`);
+log("");
+
 const initializeAsync = async () => {
 
     // init DB

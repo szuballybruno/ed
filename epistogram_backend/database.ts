@@ -56,7 +56,7 @@ export const initializeDBAsync = async () => {
     //
     if (allowPurge && forcePurge) {
 
-        log("Purging DB...");
+        log("Purging DB...", "strong");
         await purgeDBAsync();
     }
 
@@ -65,7 +65,7 @@ export const initializeDBAsync = async () => {
     //
     try {
 
-        log("Connecting to database with TypeORM...");
+        log("Connecting to database with TypeORM...", "strong");
         const postgresOptions = getPorstgresOptions();
         staticProvider.ormConnection = await createTypeORMConnection(postgresOptions);
     } catch (e) {
@@ -75,22 +75,25 @@ export const initializeDBAsync = async () => {
         //
         if (allowPurge && !forcePurge) {
 
-            log("Purging DB...");
+            log("Purging DB...", "strong");
             await purgeDBAsync();
 
             //
             // CONNECT TYPE ORM AGAIN
             //
-            log("(#2 attempt) Connecting to database with TypeORM...");
+            log("(#2 attempt) Connecting to database with TypeORM...", "strong");
             const postgresOptions = getPorstgresOptions();
             staticProvider.ormConnection = await createTypeORMConnection(postgresOptions);
         }
     }
 
+    log("TypeORM connected!", "strong");
+
     //
     // CREATE VIEWS
     //
-    log("Creating SQL views...")
+    log("Creating SQL views...", "strong")
+
     await recreateViewsAsync([
         "video_completed_view",
         "exam_completed_view",
@@ -107,14 +110,19 @@ export const initializeDBAsync = async () => {
         "user_activity_flat_view"
     ]);
 
+    log("SQL views created!", "strong");
+
     //
     // SEED DB
     //
     const isFreshDB = await getIsFreshDB();
     if (isFreshDB) {
 
-        log("Seeding DB...");
+        log("Seeding DB...", "strong");
+
         await seedDB();
+
+        log("Seeding DB done!", "strong");
     }
 }
 
