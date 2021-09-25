@@ -74,6 +74,7 @@ export class GlobalConfiguration {
         serviceUserPassword: getEnvConfigEntry("DB_SERVICE_USER_PASSWORD"),
         isOrmSyncEnabled: getEnvConfigEntry("DB_IS_ORM_SYNC_ENABLED") == "true",
         isOrmLoggingEnabled: getEnvConfigEntry("DB_IS_ORM_LOGGING_ENABLED") == "true",
-        recreateDatabaseAtStart: getEnvConfigEntry("DB_RECREATE_AT_START") == "true"
+        allowPurge: getEnvConfigEntry("DB_ALLOW_PURGE") == "true",
+        forcePurge: getEnvConfigEntry("DB_FORCE_PURGE") == "true"
     }
 }

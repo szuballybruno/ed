@@ -46,7 +46,19 @@ import { staticProvider } from "./staticProvider";
 
 export type TypeORMConnection = Connection;
 
-export const initializeDBAsync = async (isRecreateDB: boolean) => {
+export const initializeDBAsync = async () => {
+
+    const allowPurge = staticProvider.globalConfig.database.allowPurge;
+    const forcePurge = staticProvider.globalConfig.database.forcePurge;
+
+    // 
+    // PURGE DB
+    //
+    if (allowPurge && forcePurge) {
+
+        log("Purging DB...");
+        await purgeDBAsync();
+    }
 
     //
     // CONNECT TYPE ORM
@@ -61,7 +73,7 @@ export const initializeDBAsync = async (isRecreateDB: boolean) => {
         // 
         // PURGE DB
         //
-        if (isRecreateDB) {
+        if (allowPurge && !forcePurge) {
 
             log("Purging DB...");
             await purgeDBAsync();

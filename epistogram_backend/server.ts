@@ -28,11 +28,9 @@ initailizeDotEnvEnvironmentConfig();
 
 const initializeAsync = async () => {
 
-    const recreateDatabaseAtStart = staticProvider.globalConfig.database.recreateDatabaseAtStart;
-
     // init DB
     log("Initializing DB...");
-    await initializeDBAsync(recreateDatabaseAtStart);
+    await initializeDBAsync();
     log("DB initialized.");
 
     // init express
