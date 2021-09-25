@@ -1,6 +1,3 @@
-# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: node_demo CI
 
 on:
@@ -84,6 +81,12 @@ jobs:
         run: |
           echo In: $PWD
           cp ./config.${{ env.PIPELINE_ENVIRONMENT }}.env ./build/config.env
+        working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
+
+      - name: Copying 'sql' folder to ./build folder
+        run: |
+          echo In: $PWD
+          cp -r ./sql ./build/sql
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
 
       - name: Deploying backend to hosted location
