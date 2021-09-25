@@ -1,6 +1,5 @@
-import { createDatabase, dropDatabase } from "typeorm-extension";
-import { ConnectionOptions } from "typeorm/connection/ConnectionOptions";
 import { TypeORMConnection } from "../database";
+import { Activity } from "../models/entity/Activity";
 import { Course } from "../models/entity/Course";
 import { CourseGroup } from "../models/entity/CourseGroup";
 import { CourseOrganization } from "../models/entity/CourseOrganization";
@@ -9,9 +8,9 @@ import { Exam } from "../models/entity/Exam";
 import { Group } from "../models/entity/Group";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
+import { Role } from "../models/entity/Role";
 import { StorageFile } from "../models/entity/StorageFile";
 import { Tag } from "../models/entity/Tag";
-import { Role } from "../models/entity/Role";
 import { Video } from "../models/entity/Video";
 import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
 import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizationDTO";
@@ -23,16 +22,15 @@ import { executeSeedScriptAsync } from "./rawSqlService";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./signupService";
 import { setUserAvatarFileId } from "./userService";
 import { insertVideoAsync } from "./videoService";
-import { Activity } from "../models/entity/Activity";
 
-export const recreateDB = async (postgresOptions: ConnectionOptions) => {
+// export const recreateDB = async (postgresOptions: ConnectionOptions) => {
 
-    log("Dropping databasea...");
-    await dropDatabase({ ifExist: true }, postgresOptions);
+//     log("Dropping databasea...");
+//     await dropDatabase({ ifExist: true }, postgresOptions);
 
-    log("Creating database...");
-    await createDatabase({ ifNotExist: true, characterSet: "UTF8" }, postgresOptions);
-}
+//     log("Creating database...");
+//     await createDatabase({ ifNotExist: true, characterSet: "UTF8" }, postgresOptions);
+// }
 
 export const seedDB = async () => {
 
