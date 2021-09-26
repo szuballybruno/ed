@@ -1,8 +1,11 @@
 import { Pool, Client } from 'pg';
 import { staticProvider } from '../staticProvider';
 import { getCloudSQLHost } from './environment';
+import { log } from './misc/logger';
 
 export const connectToDB = () => {
+
+    log("Connecting to SQL...");
 
     const dbConfig = staticProvider.globalConfig.database;
 

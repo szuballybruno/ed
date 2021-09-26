@@ -152,6 +152,7 @@ const createTypeORMConnection = (opt: ConnectionOptions) => {
 
     try {
 
+        log("Connecting to SQL trough TypeORM...");
         return createConnection(opt);
     }
     catch (e) {
