@@ -10,3 +10,5 @@ export const userRefreshIntervalInS = 11 * 60 * 1000; // 11 minutes
 
 if (isLocalhost)
     console.warn("Application is running on LOCALHOST, in localhost mode!");
+
+console.log("REACT_APP_ENV_TEST: " + process.env.REACT_APP_ENV_TEST);

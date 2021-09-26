@@ -18,6 +18,7 @@ jobs:
       BRANCH_NAME: docker_spike
       IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}-docker-spike #epistogram-backend
       CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram 
+      GCP_CLOUD_RUN_SERVICE_NAME: epistogram-backend-docker-spike
     
     steps:
 
@@ -53,7 +54,7 @@ jobs:
 
       - name: Deploy Docker image to GCP CloudRun
         run: |
-          gcloud run deploy epistogram-backend-docker-spike \
+          gcloud run deploy $GCP_CLOUD_RUN_SERVICE_NAME \
           --image $IMAGE_NAME \
           --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
           --region europe-west1 \

@@ -42,7 +42,8 @@ const AminStatistics = () => {
                 backgroundColor: "#067daf",
                 borderColor: "#067daf",
                 data: [57, 26, 31, -42, 34],
-            }, {
+            },
+            {
                 label: 'Dashed',
                 fill: false,
                 backgroundColor: "#d9617d",
@@ -88,39 +89,6 @@ const AminStatistics = () => {
         ]
     };
 
-
-    const config = {
-        type: 'line',
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Chart.js Line Chart'
-                },
-            },
-            interaction: {
-                mode: 'index',
-                intersect: false
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Month'
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Value'
-                    }
-                }
-            }
-        },
-    };
     return (
         <div className={classes.statisticsOuterWrapper}>
             <div className={classes.statisticsInfoOuterContainer}>
@@ -138,18 +106,43 @@ const AminStatistics = () => {
             <div className={classes.statisticsInfoOuterContainer}>
                 <LearningStatisticsSeciton title={"Grafikonok"}>
                     <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
-                        <Line options={config} data={data} /*type={"line"}*/ />
+                        <Line options={{
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Chart.js Line Chart'
+                                },
+                            },
+                            interaction: {
+                                mode: 'index',
+                                intersect: false
+                            },
+                            scales: {
+                                x: {
+                                    display: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Month'
+                                    }
+                                },
+                                y: {
+                                    display: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Value'
+                                    }
+                                }
+                            }
+                        }} data={data} /*type={"line"}*/ />
                     </StatisticsCard>
                     <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
-                        <Bar /*type={"bar"}*/ data={data2} />
+                        <Bar data={data2 as any} />
                     </StatisticsCard>
                     <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
                         <Line options={{
                             interaction: {
                                 intersect: false
-                            },
-                            plugins: {
-                                legend: false
                             },
                             scales: {
                                 x: {

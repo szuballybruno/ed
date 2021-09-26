@@ -1,7 +1,6 @@
 import React from 'react';
 import classes from './listItem.module.scss'
 import { NavLink } from "react-router-dom";
-import DynamicFont from 'react-dynamic-font';
 import { Typography } from "@mui/material";
 
 const LinkSelector = (props: {
@@ -41,7 +40,7 @@ const ListItem = (props: {
         <ThumbnailSelector thumbnailUrl={props.thumbnailUrl} />
         <div className={classes.videoDataWrapper}>
             <div className={classes.videoMainTitleWrapper}>
-                <Typography variant={"button"}><DynamicFont content={props.mainTitle} /></Typography>
+                <Typography variant={"button"}>{props.mainTitle}</Typography>
             </div>
             <div className={classes.videoSubTitleWrapper}>
                 <Typography variant={"caption"}>{props.subTitle}</Typography>
