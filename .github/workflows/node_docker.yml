@@ -51,6 +51,12 @@ jobs:
       #   run: docker push $IMAGE_NAME
 
       - name: Deploy Docker image to GCP CloudRun
-        run: gcloud run deploy epistogram-backend-docker-spike --image $IMAGE_NAME --region us-central1 --platform managed
+        run: gcloud run deploy epistogram-backend-docker-spike \
+          --image $IMAGE_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --port 5000 \
+          --allow-unauthenticated
 
   

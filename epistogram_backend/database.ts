@@ -170,15 +170,21 @@ const getPorstgresOptions = () => {
     const isSyncEnabled = dbConfig.isOrmSyncEnabled;
     const isLoggingEnabled = dbConfig.isOrmLoggingEnabled;
 
+    // connect from cloud run 
+    const connectionName = "gifted-country-324010:europe-central2:epistogram";
+
     return {
         type: "postgres",
-        port: port,
-        host: host,
+        // port: port,
+        // host: host,
         username: username,
         password: password,
         database: databaseName,
         synchronize: isSyncEnabled,
         logging: isLoggingEnabled,
+        extra: {
+            socketPath: `/cloudsql/${connectionName}`
+        },
         entities: [
             // "models/entity/**/*.ts"
             Course,
