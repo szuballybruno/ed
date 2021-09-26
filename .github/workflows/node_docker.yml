@@ -36,7 +36,7 @@ jobs:
           path: ${{ env.BRANCH_NAME }}_repository # sets a relative folder to checkout to
         
       - name: Login to GCP
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@master
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_email: ${{ secrets.GCP_EMAIL }}
