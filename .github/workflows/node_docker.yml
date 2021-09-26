@@ -42,18 +42,18 @@ jobs:
           service_account_email: ${{ secrets.GCP_EMAIL }}
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
     
-      - name: Build backend container
-        run: |
-          docker build -t $IMAGE_NAME .
-        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
+      # - name: Build backend container
+      #   run: |
+      #     docker build -t $IMAGE_NAME .
+      #   working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
 
       - name: Configure GCP Docker
         run: gcloud auth configure-docker --quiet
 
-      - name: Push Docker image to GCP Container Registry
-        run: docker push $IMAGE_NAME
+      # - name: Push Docker image to GCP Container Registry
+      #   run: docker push $IMAGE_NAME
 
       - name: Deploy Docker image to GCP CloudRun
-        run: gcloud run deploy --image $IMAGE_NAME --platform managed
+        run: gcloud run deploy --image $IMAGE_NAME --platform managed --service epistogram-backend-docker-spike
 
   
