@@ -11,16 +11,16 @@ COPY package.json .
 RUN npm install
 
 # copy application source files from the project root to the WD
-COPY /api /api
-COPY /emails /emails
-COPY /models /models
-COPY /services /services
-COPY /sql /sql
-COPY /utilities /utilities
+COPY /api ./api
+COPY /models ./models
+COPY /services ./services
+COPY /utilities ./utilities
 
-COPY /database.ts /database.ts
-COPY /server.ts /server.ts
-COPY /staticProvider.ts /staticProvider.ts
+COPY database.ts .
+COPY server.ts .
+COPY staticProvider.ts .
+
+COPY tsconfig.json .
 
 # compile TypeScript to /build folder
 RUN npm run build
@@ -29,9 +29,10 @@ RUN npm run build
 WORKDIR /app/build
 
 # copy runtime misc dependnecy files
-COPY /tsconfig.json /tsconfig.json
-COPY /config.docker.env /config.env
-COPY /epistogram_service_user_key.json /epistogram_service_user_key.json
+COPY config.docker.env ./config.env
+COPY epistogram_service_user_key.json .
+COPY /emails ./emails
+COPY /sql ./sql
 
 # expose port 5000
 EXPOSE 5000
