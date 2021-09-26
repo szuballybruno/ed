@@ -25,9 +25,7 @@ export const log = (content: any, entryType?: LogEntryType) => {
 
     if (entryType == "strong") {
 
-        console.log("");
-        console.log(`[${dateTimeString}.${miliseconds}] ---> ${content}`);
-        console.log("");
+        console.log(`[${dateTimeString}.${miliseconds}] ------------> ${content}`);
     }
 }
 

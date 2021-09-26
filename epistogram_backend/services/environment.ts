@@ -68,19 +68,37 @@ export class GlobalConfiguration {
 
     database = {
         name: getEnvConfigEntry("DB_NAME"),
-        hostAddress: getEnvConfigEntry("DB_HOST_ADDRESS"),
+        publicHostAddress: getEnvConfigEntry("DB_HOST_ADDRESS"),
+        gcpCloudSqlConnectionName: "gifted-country-324010:europe-central2:epistogram",
         port: parseInt(getEnvConfigEntry("DB_PORT")),
         serviceUserName: getEnvConfigEntry("DB_SERVICE_USER_NAME"),
         serviceUserPassword: getEnvConfigEntry("DB_SERVICE_USER_PASSWORD"),
         isOrmSyncEnabled: getEnvConfigEntry("DB_IS_ORM_SYNC_ENABLED") == "true",
         isOrmLoggingEnabled: getEnvConfigEntry("DB_IS_ORM_LOGGING_ENABLED") == "true",
         allowPurge: getEnvConfigEntry("DB_ALLOW_PURGE") == "true",
-        forcePurge: getEnvConfigEntry("DB_FORCE_PURGE") == "true"
+        forcePurge: getEnvConfigEntry("DB_FORCE_PURGE") == "true",
+        isHostedOnGCP: getEnvConfigEntry("IS_HOSTED_ON_GCP") == "true"
     }
 }
 
-export const getCloudSQLHost = () => {
+export const getDatabaseConnectionParameters = () => {
 
-    const connectionName = "gifted-country-324010:europe-central2:epistogram";
-    return `/cloudsql/${connectionName}`;
+    const dbConfig = staticProvider.globalConfig.database;
+    const isHostedOnGCP = dbConfig.isHostedOnGCP;
+    const gcpCloudSqlConnectionString = `/cloudsql/${dbConfig.gcpCloudSqlConnectionName}`;
+
+    return {
+        host: isHostedOnGCP
+            ? gcpCloudSqlConnectionString
+            : dbConfig.publicHostAddress,
+        port: isHostedOnGCP
+            ? undefined
+            : dbConfig.port,
+        username: dbConfig.serviceUserName,
+        password: dbConfig.serviceUserPassword,
+        databaseName: dbConfig.name,
+        socketPath: isHostedOnGCP
+            ? gcpCloudSqlConnectionString
+            : undefined
+    }
 }

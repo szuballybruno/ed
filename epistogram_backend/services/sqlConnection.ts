@@ -1,21 +1,19 @@
-import { Pool, Client } from 'pg';
-import { staticProvider } from '../staticProvider';
-import { getCloudSQLHost } from './environment';
+import { Pool, QueryResult } from 'pg';
+import { getDatabaseConnectionParameters } from './environment';
 import { log } from './misc/logger';
 
-export const connectToDB = () => {
+export const connectToDBAsync = async () => {
 
     log("Connecting to SQL...");
 
-    const dbConfig = staticProvider.globalConfig.database;
+    const dbConfig = getDatabaseConnectionParameters();
 
     const pool = new Pool({
-        // host: dbConfig.hostAddress,
-        // port: dbConfig.port,
-        host: getCloudSQLHost(),
-        user: dbConfig.serviceUserName,
-        database: dbConfig.name,
-        password: dbConfig.serviceUserPassword,
+        port: dbConfig.port,
+        host: dbConfig.host,
+        user: dbConfig.username,
+        database: dbConfig.databaseName,
+        password: dbConfig.password,
     })
 
     const executeSQLAsync = async (sql: string) => {
@@ -25,8 +23,13 @@ export const connectToDB = () => {
         return results;
     }
 
+    // test connection
+    await executeSQLAsync("CREATE TABLE IF NOT EXISTS public.\"test_table\" (\"columnA\" integer);")
+
     return {
-        executeSQL: executeSQLAsync,
+        executeSQL: executeSQLAsync as ExecSQLFunctionType,
         terminateConnectionAsync: () => pool.end()
     }
 }
+
+export type ExecSQLFunctionType = (sql: string) => Promise<QueryResult<any>>;

@@ -18,7 +18,7 @@ import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { log } from "./misc/logger";
-import { executeSeedScriptAsync } from "./rawSqlService";
+import { executeSeedScriptAsync } from "./sqlScriptExecutorService";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./signupService";
 import { setUserAvatarFileId } from "./userService";
 import { insertVideoAsync } from "./videoService";

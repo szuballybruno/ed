@@ -39,10 +39,10 @@ import { UserExamAnswerSessionView } from "./models/views/UserExamAnswerSessionV
 import { VideoCompletedView } from "./models/views/VideoCompletedView";
 import { VideoProgressView } from "./models/views/VideoProgressView";
 import { seedDB } from "./services/dbSeedService";
-import { getCloudSQLHost } from "./services/environment";
-import { log } from "./services/misc/logger";
-import { recreateViewsAsync } from "./services/rawSqlService";
-import { connectToDB } from "./services/sqlConnection";
+import { getDatabaseConnectionParameters } from "./services/environment";
+import { log, logObject } from "./services/misc/logger";
+import { recreateViewsAsync } from "./services/sqlScriptExecutorService";
+import { connectToDBAsync } from "./services/sqlConnection";
 import { staticProvider } from "./staticProvider";
 
 export type TypeORMConnection = Connection;
@@ -51,6 +51,19 @@ export const initializeDBAsync = async () => {
 
     const allowPurge = staticProvider.globalConfig.database.allowPurge;
     const forcePurge = staticProvider.globalConfig.database.forcePurge;
+
+    // 
+    // TEST DB CONNCETION 
+    // 
+
+    log("Testing SQL DB connection...", "strong");
+    log("Connection properties: ")
+    logObject(JSON.stringify(getDatabaseConnectionParameters()));
+
+    const { executeSQL, terminateConnectionAsync: terminateConnection } = await connectToDBAsync();
+    terminateConnection();
+
+    log("Connection successful!", "strong");
 
     // 
     // PURGE DB
@@ -70,6 +83,8 @@ export const initializeDBAsync = async () => {
         const postgresOptions = getPorstgresOptions();
         staticProvider.ormConnection = await createTypeORMConnection(postgresOptions);
     } catch (e) {
+
+        logObject(e);
 
         // 
         // PURGE DB
@@ -131,7 +146,7 @@ const purgeDBAsync = async () => {
 
     const sql = readFileSync(`./sql/misc/dropDB.sql`, 'utf8');
 
-    const { executeSQL, terminateConnectionAsync: terminateConnection } = connectToDB();
+    const { executeSQL, terminateConnectionAsync: terminateConnection } = await connectToDBAsync();
 
     const results = await executeSQL(sql);
 
@@ -148,12 +163,17 @@ const getIsFreshDB = async () => {
     return users.length == 0;
 }
 
-const createTypeORMConnection = (opt: ConnectionOptions) => {
+const createTypeORMConnection = async (opt: ConnectionOptions) => {
 
     try {
 
         log("Connecting to SQL trough TypeORM...");
-        return createConnection(opt);
+        const connection = await createConnection(opt);
+
+        if (!connection.manager)
+            throw new Error("TypeORM manager is null or undefined!");
+
+        return connection;
     }
     catch (e) {
 
@@ -164,25 +184,22 @@ const createTypeORMConnection = (opt: ConnectionOptions) => {
 const getPorstgresOptions = () => {
 
     const dbConfig = staticProvider.globalConfig.database;
-    const host = dbConfig.hostAddress;
-    const port = dbConfig.port;
-    const username = dbConfig.serviceUserName;
-    const password = dbConfig.serviceUserPassword;
-    const databaseName = dbConfig.name;
+
     const isSyncEnabled = dbConfig.isOrmSyncEnabled;
     const isLoggingEnabled = dbConfig.isOrmLoggingEnabled;
+    const dbConnOpts = getDatabaseConnectionParameters();
 
     return {
         type: "postgres",
-        // port: port,
-        // host: host,
-        username: username,
-        password: password,
-        database: databaseName,
+        port: dbConnOpts.port,
+        host: dbConnOpts.host,
+        username: dbConnOpts.username,
+        password: dbConnOpts.password,
+        database: dbConnOpts.databaseName,
         synchronize: isSyncEnabled,
         logging: isLoggingEnabled,
         extra: {
-            socketPath: getCloudSQLHost()
+            socketPath: dbConnOpts.socketPath
         },
         entities: [
             // "models/entity/**/*.ts"
