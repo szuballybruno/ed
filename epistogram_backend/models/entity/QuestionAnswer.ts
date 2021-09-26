@@ -12,6 +12,9 @@ export class QuestionAnswer {
     @CreateDateColumn()
     creationDate: Date;
 
+    @Column({ default: false })
+    isPractiseAnswer: boolean;
+
     // question
     @Column()
     questionId: number;

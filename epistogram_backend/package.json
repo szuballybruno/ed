@@ -3,8 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "scripts": {
-    "build": "webpack",
-    "build2": "react-scripts build",
+    "build": "tsc",
     "start": "react-scripts start",
     "nodemon": "npx nodemon server.ts",
     "migrate": "typeorm migrations:generate -n mig_1",

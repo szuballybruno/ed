@@ -1,0 +1,40 @@
+# Get the latest node image 
+FROM node:latest
+
+# set the working directory, in which every command will run
+WORKDIR /app
+
+# copy package.json from project root to the wd root in the container 
+COPY package.json .
+
+# run npm install in the WD
+RUN npm install
+
+# copy application source files from the project root to the WD
+COPY /api /api
+COPY /emails /emails
+COPY /models /models
+COPY /services /services
+COPY /sql /sql
+COPY /utilities /utilities
+
+COPY /database.ts /database.ts
+COPY /server.ts /server.ts
+COPY /staticProvider.ts /staticProvider.ts
+
+# compile TypeScript to /build folder
+RUN npm run build
+
+# set /build as the WD
+WORKDIR /app/build
+
+# copy runtime misc dependnecy files
+COPY /tsconfig.json /tsconfig.json
+COPY /config.docker.env /config.env
+COPY /epistogram_service_user_key.json /epistogram_service_user_key.json
+
+# expose port 5000
+EXPOSE 5000
+
+# start container 
+CMD node server.js
