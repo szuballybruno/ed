@@ -50,9 +50,6 @@ jobs:
       - name: Configure GCP Docker
         run: gcloud auth configure-docker --quiet
 
-      - name: Test Docker image
-        run: docker run $IMAGE_NAME sh -c "container test -v"
-
       - name: Push Docker image to GCP Container Registry
         run: docker push $IMAGE_NAME
 
