@@ -15,21 +15,21 @@ jobs:
       matrix:
         node-version: [14.x]
     env:
-      PIPELINE_ENVIRONMENT: docker
+      BRANCH_NAME: docker_spike
     
     steps:
 
-      - name: Echo pipeline environment
-        run: echo ${{ env.PIPELINE_ENVIRONMENT }}
+      - name: Echo pipeline branch name
+        run: echo ${{ env.BRANCH_NAME }}
 
       # INITIALIZE
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: ${{ env.PIPELINE_ENVIRONMENT }} # references the target branch
-          path: ${{ env.PIPELINE_ENVIRONMENT }}_repository # sets a relative folder to checkout to
+          ref: ${{ env.BRANCH_NAME }} # references the target branch
+          path: ${{ env.BRANCH_NAME }}_repository # sets a relative folder to checkout to
     
       # BUILD BACKEND
       - name: Build backend container
         run: |
-          docker build ./${{ env.PIPELINE_ENVIRONMENT }}_repository/epistogram_backend -t epistogram-backend
+          docker build ./${{ env.BRANCH_NAME }}_repository/epistogram_backend -t epistogram-backend
