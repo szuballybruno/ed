@@ -39,6 +39,7 @@ import { UserExamAnswerSessionView } from "./models/views/UserExamAnswerSessionV
 import { VideoCompletedView } from "./models/views/VideoCompletedView";
 import { VideoProgressView } from "./models/views/VideoProgressView";
 import { seedDB } from "./services/dbSeedService";
+import { getCloudSQLHost } from "./services/environment";
 import { log } from "./services/misc/logger";
 import { recreateViewsAsync } from "./services/rawSqlService";
 import { connectToDB } from "./services/sqlConnection";
@@ -170,9 +171,6 @@ const getPorstgresOptions = () => {
     const isSyncEnabled = dbConfig.isOrmSyncEnabled;
     const isLoggingEnabled = dbConfig.isOrmLoggingEnabled;
 
-    // connect from cloud run 
-    const connectionName = "gifted-country-324010:europe-central2:epistogram";
-
     return {
         type: "postgres",
         // port: port,
@@ -183,7 +181,7 @@ const getPorstgresOptions = () => {
         synchronize: isSyncEnabled,
         logging: isLoggingEnabled,
         extra: {
-            socketPath: `/cloudsql/${connectionName}`
+            socketPath: getCloudSQLHost()
         },
         entities: [
             // "models/entity/**/*.ts"

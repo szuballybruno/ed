@@ -78,3 +78,9 @@ export class GlobalConfiguration {
         forcePurge: getEnvConfigEntry("DB_FORCE_PURGE") == "true"
     }
 }
+
+export const getCloudSQLHost = () => {
+
+    const connectionName = "gifted-country-324010:europe-central2:epistogram";
+    return `/cloudsql/${connectionName}`;
+}
