@@ -1,12 +1,12 @@
-name: node_docker CI
+# name: node_docker CI
 
-on:
-  push:
-    branches: [ docker_spike ]
-  pull_request:
-    branches: [ docker_spike ]
+# on:
+#   push:
+#     branches: [ docker_spike ]
+#   pull_request:
+#     branches: [ docker_spike ]
 
-jobs:
+# jobs:
 
   checkout_build_deploy_and_start:
     name: CI/CD job for the whole Epistogram applicaiton.
@@ -16,22 +16,48 @@ jobs:
         node-version: [14.x]
     env:
       BRANCH_NAME: docker_spike
+      IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}-${{ env.BRANCH_NAME }} #epistogram-backend
     
     steps:
 
       - name: Echo pipeline branch name
         run: echo ${{ env.BRANCH_NAME }}
 
-      # INITIALIZE
+      - name: Echo image name
+        run: echo ${{ env.IMAGE_NAME }}
+
+      - name: Echo image name2
+        run: echo $IMAGE_NAME
+
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BRANCH_NAME }} # references the target branch
           path: ${{ env.BRANCH_NAME }}_repository # sets a relative folder to checkout to
+        
+      - name: Login to GCP
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
     
-      # BUILD BACKEND
       - name: Build backend container
         run: |
-          ls
-          docker build -t epistogram-backend .
+          docker build -t $IMAGE_NAME .
         working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+
+      - name: Test Docker image
+        run: docker run $IMAGE_NAME sh -c "container test -v"
+
+      - name: Push Docker image to GCP Container Registry
+        run: docker push $IMAGE_NAME
+
+      # - name: Deploy Docker image
+      #   run: gcloud run deploy my-backend --image=gcr.io/my/image
+      #   run: gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} --image $IMAGE_NAME
+
+  
