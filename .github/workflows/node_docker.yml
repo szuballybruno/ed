@@ -1,12 +1,12 @@
-# name: node_docker CI
+name: node_docker CI
 
-# on:
-#   push:
-#     branches: [ docker_spike ]
-#   pull_request:
-#     branches: [ docker_spike ]
+on:
+  push:
+    branches: [ docker_spike ]
+  pull_request:
+    branches: [ docker_spike ]
 
-# jobs:
+jobs:
 
   checkout_build_deploy_and_start:
     name: CI/CD job for the whole Epistogram applicaiton.
