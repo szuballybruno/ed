@@ -32,5 +32,6 @@ jobs:
       # BUILD BACKEND
       - name: Build backend container
         run: |
-          ls ./${{ env.BRANCH_NAME }}_repository
-          docker build ./${{ env.BRANCH_NAME }}_repository/epistogram_backend -t epistogram-backend
+          ls
+          docker build -t epistogram-backend .
+        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
