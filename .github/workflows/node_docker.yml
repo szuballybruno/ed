@@ -51,7 +51,8 @@ jobs:
       #   run: docker push $IMAGE_NAME
 
       - name: Deploy Docker image to GCP CloudRun
-        run: gcloud run deploy epistogram-backend-docker-spike \
+        run: |
+          gcloud run deploy epistogram-backend-docker-spike \
           --image $IMAGE_NAME \
           --region europe-west1 \
           --platform managed \
