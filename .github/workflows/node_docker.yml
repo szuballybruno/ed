@@ -24,9 +24,6 @@ jobs:
         run: echo ${{ env.BRANCH_NAME }}
 
       - name: Echo image name
-        run: echo ${{ env.IMAGE_NAME }}
-
-      - name: Echo image name2
         run: echo $IMAGE_NAME
 
       - name: Checkout branch
@@ -54,6 +51,6 @@ jobs:
       #   run: docker push $IMAGE_NAME
 
       - name: Deploy Docker image to GCP CloudRun
-        run: gcloud run deploy --image $IMAGE_NAME --platform managed --service epistogram-backend-docker-spike
+        run: gcloud run deploy epistogram-backend-docker-spike --image $IMAGE_NAME
 
   
