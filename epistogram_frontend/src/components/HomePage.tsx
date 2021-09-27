@@ -66,7 +66,7 @@ const HomePage = () => {
                     <Flex direction="column">
 
                         {/* test your knowledge */}
-                        <DashboardSection title="A nap kerdese" gridColumnEnd="span 2" >
+                        <DashboardSection title="A nap kerdese" minHeight="300px">
                             <PractiseQuestions />
                         </DashboardSection>
 
@@ -76,7 +76,7 @@ const HomePage = () => {
                         </DashboardSection>
 
                         {/* current tasks */}
-                        <DashboardSection title="Feladatok" gridColumnEnd="span 2">
+                        <DashboardSection title="Feladatok">
                             <Tasks currentTasks={pageDTO?.currentTasks!} className="whall" />
                         </DashboardSection>
 

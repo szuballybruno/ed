@@ -9,6 +9,7 @@ export const PractiseQuestions = () => {
     const { practiseQuestion, practiseQuestionError, practiseQuestionState } = usePractiseQuestion();
 
     return <LoadingFrame
+        className="whall"
         loadingState={practiseQuestionState}
         error={practiseQuestionError}>
 

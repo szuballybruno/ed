@@ -124,7 +124,8 @@ export const initializeDBAsync = async () => {
         "exam_session_answers_view",
         "signup_answers_view",
         "user_activity_view",
-        "user_activity_flat_view"
+        "user_activity_flat_view",
+        "practise_question_view"
     ]);
 
     log("SQL views created!", "strong");

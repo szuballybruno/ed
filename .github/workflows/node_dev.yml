@@ -80,7 +80,7 @@ jobs:
       - name: Copying config file to ./build folder
         run: |
           echo In: $PWD
-          cp ./config.${{ env.PIPELINE_ENVIRONMENT }}.env ./build/config.env
+          cp ./config/${{ env.PIPELINE_ENVIRONMENT }}.env ./build/config.env
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_backend
 
       - name: Copying 'sql' folder to ./build folder
