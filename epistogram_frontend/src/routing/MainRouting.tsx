@@ -2,7 +2,6 @@ import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import AdministrationPage from "../components/administration/AdministrationPage";
 import AvailableCoursesPage from "../components/course_search/AvailableCoursesPage";
-import HomePage from "../components/HomePage";
 import LearningInsightsPage from "../components/LearningInsightsPage";
 import LoginScreen from "../components/login/LoginScreen";
 import { PlayerPage } from "../components/player/PlayerPage";
@@ -11,6 +10,7 @@ import NotFound from "../components/notFound/NotFound";
 import { ProtectedRoute } from "../components/universal/ProtectedRoute";
 import { UserSettingsPage } from "../components/userSettings/UserSettingsPage";
 import { applicationRoutes } from "../configuration/applicationRoutes";
+import HomePage from "../components/HomePage";
 
 export const MainRouting = () => {
     return <Switch>
