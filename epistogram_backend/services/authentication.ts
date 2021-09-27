@@ -209,18 +209,27 @@ const getRefreshToken = (user: UserDTO) => {
         });
 }
 
+
 const setAccessTokenCookie = (res: Response, accessToken: string) => {
+
+    const frontendUrl = staticProvider.globalConfig.misc.frontendUrl;
+
     res.cookie(accessTokenCookieName, accessToken, {
-        secure: false, //set to false because of postman
+        secure: true,
         httpOnly: true,
-        expires: dayjs().add(staticProvider.globalConfig.security.accessTokenLifespanInS, "seconds").toDate()
+        expires: dayjs().add(staticProvider.globalConfig.security.accessTokenLifespanInS, "seconds").toDate(),
+        domain: frontendUrl
     });
 }
 
 const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
+
+    const frontendUrl = staticProvider.globalConfig.misc.frontendUrl;
+
     res.cookie(refreshTokenCookieName, refreshToken, {
-        secure: false, //set to false because of postman
+        secure: true,
         httpOnly: true,
-        expires: dayjs().add(staticProvider.globalConfig.security.refreshTokenLifespanInS, "seconds").toDate()
+        expires: dayjs().add(staticProvider.globalConfig.security.refreshTokenLifespanInS, "seconds").toDate(),
+        domain: frontendUrl
     });
 }

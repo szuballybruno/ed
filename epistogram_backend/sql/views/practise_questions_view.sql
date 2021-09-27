@@ -1,7 +1,9 @@
 SELECT 
 	"subquery".*,
 	"qa"."answerId",
-	"a"."isCorrect"
+	"a"."isCorrect",
+	"qa"."creationDate" AS "answerDate",
+	"qa"."isPractiseAnswer"
 FROM (
 	SELECT 
 		"qa"."questionId" AS "questionId",
@@ -29,4 +31,26 @@ ON "subquery"."questionAnswerId" = "qa"."id"
 LEFT JOIN public."answer" AS "a"
 ON "qa"."answerId" = "a"."id"
 
+WHERE 
+	-- incorrect video answer 6h ago
+	"qa"."isPractiseAnswer" = false 
+	AND "q"."isCorrect" = false
+	AND "qa"."creationDate" + INTERVAL '6 HOURS' < NOW() as date,  
+
 -- 	select * from question_answer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
