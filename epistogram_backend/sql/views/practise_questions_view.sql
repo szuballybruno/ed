@@ -7,6 +7,7 @@ SELECT
 FROM (
 	SELECT 
 		"qa"."questionId" AS "questionId",
+		"as"."userId" AS "userId",
 		MAX("qa"."id") AS "questionAnswerId",
 		"q"."questionText",
 
@@ -16,9 +17,13 @@ FROM (
 
 	LEFT JOIN public."question" AS "q"
 	ON "q"."id" = "qa"."questionId"
+	
+	LEFT JOIN public."answer_session" AS "as"
+	ON "as"."id" = "qa"."answerSessionId"
 
 	GROUP BY 
 		"qa"."questionId",
+		"as"."userId",
 		"q"."questionText"
 
 	ORDER BY
