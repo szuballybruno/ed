@@ -1,4 +1,5 @@
-import { ViewColumn, ViewEntity } from "typeorm";
+import { JoinColumn, OneToMany, ViewColumn, ViewEntity } from "typeorm";
+import { Answer } from "../entity/Answer";
 
 @ViewEntity({
     synchronize: false,
@@ -7,11 +8,16 @@ import { ViewColumn, ViewEntity } from "typeorm";
 export class PractiseQuestionView {
 
     @ViewColumn()
-    questionId: number;
+    id: number;
 
     @ViewColumn()
     userId: number;
 
     @ViewColumn()
-    questionText: number;
+    questionText: string;
+
+    // answers 
+    @OneToMany(_ => Answer, x => x.practiseQuestionView)
+    @JoinColumn()
+    answers: Answer[];
 }

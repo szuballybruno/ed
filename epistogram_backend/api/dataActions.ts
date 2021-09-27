@@ -7,9 +7,17 @@ import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "..
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
 import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
+import { getPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
 import { getUserById } from "../services/userService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+
+export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+
+    return await getPractiseQuestionAsync(userId);
+});
 
 export const getCurrentCourseItemCode = getAsyncActionHandler(async (req: Request) => {
 

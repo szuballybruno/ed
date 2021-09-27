@@ -2,7 +2,7 @@ import Cookies from "universal-cookie";
 import { hasValue, useReactQuery } from "../frontendHelpers";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
-import { PersonalityDataDTO } from "../models/shared_models/PersonalityDataDTO";
+import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { httpGetAsync } from "./httpClient";
 
 export const useCurrentCourseItemCode = () => {
@@ -12,6 +12,21 @@ export const useCurrentCourseItemCode = () => {
         () => httpGetAsync("/get-current-course-item-code"));
 
     return hasValue(qr.data) ? qr.data as string : null;
+}
+
+export const usePractiseQuestion = () => {
+
+    const url = "/misc/get-practise-question";
+
+    const qr = useReactQuery<QuestionDTO>(
+        ["usePractiseQuestion"],
+        () => httpGetAsync(url));
+
+    return {
+        practiseQuestion: qr.data,
+        practiseQuestionState: qr.status,
+        practiseQuestionError: qr.error
+    };
 }
 
 export const usePersonalityData = () => {

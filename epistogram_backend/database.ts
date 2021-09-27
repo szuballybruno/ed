@@ -44,6 +44,7 @@ import { log, logObject } from "./services/misc/logger";
 import { recreateViewsAsync } from "./services/sqlScriptExecutorService";
 import { connectToDBAsync } from "./services/sqlConnection";
 import { staticProvider } from "./staticProvider";
+import { PractiseQuestionView } from "./models/views/PractiseQuestionView";
 
 export type TypeORMConnection = Connection;
 
@@ -230,6 +231,7 @@ const getPorstgresOptions = () => {
             Activity,
             RoleActivityBridge,
             PersonalityCategoryDescription,
+            PractiseQuestionView,
 
             // views,
             VideoCompletedView,

@@ -1,5 +1,5 @@
 SELECT 
-	"subquery".*,
+	"subquery"."questionId" AS "id",
 	"qa"."answerId",
 	"a"."isCorrect",
 	"qa"."creationDate" AS "answerDate",

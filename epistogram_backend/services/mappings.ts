@@ -33,6 +33,7 @@ import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseStateView } from "../models/views/CourseStateView";
 import { CourseView } from "../models/views/CourseView";
+import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
 import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
@@ -301,6 +302,18 @@ export const toOrganizationDTO = (org: Organization) => {
         id: org.id,
         name: org.name
     } as OrganizationDTO;
+}
+
+export const toPractiseQuestionDTO = (q: PractiseQuestionView) => {
+
+    navPropNotNull(q.answers);
+
+    return {
+        questionId: q.id,
+        questionText: q.questionText,
+        answers: q.answers
+            .map(answer => toAnswerDTO(answer))
+    } as QuestionDTO;
 }
 
 export const toQuestionDTO = (q: Question) => {

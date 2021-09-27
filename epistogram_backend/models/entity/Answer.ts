@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { PractiseQuestionView } from "../views/PractiseQuestionView";
 import { Question } from "./Question";
 import { QuestionAnswer } from "./QuestionAnswer";
 
@@ -26,4 +27,9 @@ export class Answer {
     @OneToMany(() => QuestionAnswer, qa => qa.answer)
     @JoinColumn()
     questionAnswers: QuestionAnswer[]
+
+    // practise question
+    @OneToMany(_ => PractiseQuestionView, x => x.answers)
+    @JoinColumn({ name: "questionId" })
+    practiseQuestionView: PractiseQuestionView;
 }
