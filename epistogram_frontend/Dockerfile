@@ -7,8 +7,8 @@ RUN yarn
 
 COPY /src ./src
 COPY /public ./public
-COPY /config ./config
 COPY tsconfig.json .
+COPY .env ./.env
 
 RUN yarn build
 
