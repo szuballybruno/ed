@@ -1,37 +1,24 @@
-# Get the latest node image 
-FROM node:latest
-
-# set the working directory, in which every command will run
+FROM node:latest as builder
 WORKDIR /app
 
-# copy package.json from project root to the wd root in the container 
 COPY package.json .
 COPY .env ./.env
 
-# install YARN cause' fuck NPM
-# RUN npm install --global yarn
-
-# run npm install in the WD
 RUN yarn
 
-# copy application source files from the project root to the WD
 COPY /src ./src
 COPY /public ./public
-
 COPY tsconfig.json .
 
-# compile TypeScript to /build folder
 RUN yarn build
 
-# set /build as the WD
-WORKDIR /app/build
+# build final Nginx image
+FROM nginx:alpine
 
-# expose port 
-EXPOSE 3000
+COPY --from=builder /app/build /usr/share/nginx/html
 
-RUN npm install --global http-server
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d
 
-RUN echo asdaasdasd
-
-# start container 
-CMD ["http-server", "-p 3000 --proxy"]
+EXPOSE 80
+CMD ["nginx", "-g daemon off;"]

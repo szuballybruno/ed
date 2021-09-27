@@ -11,22 +11,29 @@ jobs:
   checkout_build_deploy_and_start:
     name: CI/CD job for the whole Epistogram applicaiton.
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
+    # strategy:
+    #   matrix:
+    #     node-version: [14.x]
     env:
       BRANCH_NAME: docker_spike
-      IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}-docker-spike #epistogram-backend
-      CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram 
-      GCP_CLOUD_RUN_SERVICE_NAME: epistogram-backend-docker-spike
+      CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
+      
+      BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-docker-spike 
+      BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-docker-spike
+      
+      FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-docker-spike 
+      FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-docker-spike
     
     steps:
 
+      #
+      # CHECKOUT, LOGIN TO GCP
+      #
       - name: Echo pipeline branch name
         run: echo ${{ env.BRANCH_NAME }}
 
       - name: Echo image name
-        run: echo $IMAGE_NAME
+        run: echo $BACKEND_IMAGE_NAME
 
       - name: Checkout branch
         uses: actions/checkout@v2
@@ -40,27 +47,51 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_email: ${{ secrets.GCP_EMAIL }}
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-    
-      - name: Build backend container
-        run: |
-          docker build -t $IMAGE_NAME .
-        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
 
       - name: Configure GCP Docker
         run: gcloud auth configure-docker --quiet
+    
+      #
+      # BUILD & DEPLOY BACKEND 
+      #
+      - name: Build backend container
+        run: |
+          docker build -t $BACKEND_IMAGE_NAME .
+        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
 
       - name: Push Docker image to GCP Container Registry
-        run: docker push $IMAGE_NAME
+        run: docker push $BACKEND_IMAGE_NAME
 
       - name: Deploy Docker image to GCP CloudRun
         run: |
-          gcloud run deploy $GCP_CLOUD_RUN_SERVICE_NAME \
-          --image $IMAGE_NAME \
+          gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
+          --image $BACKEND_IMAGE_NAME \
           --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
           --region europe-west1 \
           --platform managed \
           --max-instances 1 \
           --port 5000 \
           --allow-unauthenticated
+          
+      #
+      # BUILD & DEPLOY FRONTEND 
+      #
 
-  
+      - name: Build frontend container
+        run: |
+          docker build -t $FRONTEND_IMAGE_NAME .
+        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_frontend
+
+      - name: Push Docker image to GCP Container Registry
+        run: docker push $FRONTEND_IMAGE_NAME
+
+      - name: Deploy Docker image to GCP CloudRun
+        run: |
+          gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
+          --image $FRONTEND_IMAGE_NAME \
+          --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --port 80 \
+          --allow-unauthenticated
