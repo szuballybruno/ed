@@ -219,7 +219,8 @@ const setAccessTokenCookie = (res: Response, accessToken: string) => {
         secure: true,
         httpOnly: true,
         expires: dayjs().add(staticProvider.globalConfig.security.accessTokenLifespanInS, "seconds").toDate(),
-        domain: isLocalhost ? undefined : frontendUrl
+        sameSite: "none"
+        // domain: isLocalhost ? undefined : frontendUrl
     });
 }
 
@@ -232,6 +233,7 @@ const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
         secure: true,
         httpOnly: true,
         expires: dayjs().add(staticProvider.globalConfig.security.refreshTokenLifespanInS, "seconds").toDate(),
-        domain: isLocalhost ? undefined : frontendUrl
+        sameSite: "none"
+        // domain: isLocalhost ? undefined : frontendUrl
     });
 }
