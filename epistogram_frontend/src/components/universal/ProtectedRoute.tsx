@@ -15,10 +15,9 @@ export const ProtectedRoute = (props: {
     const authState = useContext(AuthenticationStateContext);
     const user = useContext(CurrentUserContext);
     const { render, ...routeProps } = props;
-    const isLoading = authState.isLoading || !user;
 
     if (globalConfig.verboseLogging)
-        console.log(`Navigated to protected route '${props.path}'. Authenticated: ${authState.asString()}`);
+        console.log(`Navigated to protected route '${props.path}'. Authentication state: ${authState}`);
 
     const handleIsAuthorizedToView = props.isAuthorizedToView
         ? props.isAuthorizedToView
@@ -30,19 +29,26 @@ export const ProtectedRoute = (props: {
             render={x => {
 
                 if (globalConfig.verboseLogging)
-                    console.log("Protected router loading state: " + isLoading);
+                    console.log("Protected router loading state: " + authState);
 
                 // if loading return blank page
-                if (isLoading) {
+                if (authState === "loading") {
 
                     console.log("Returning loading div...");
                     return <div></div>
                 }
 
-                // if not authenticated or not authorized, redirect to login  
-                if (!authState.isAuthenticated || !handleIsAuthorizedToView(user.userActivity)) {
+                // check authentication 
+                if (authState === "forbidden") {
 
-                    console.log("Not authenticated or not authorized, redirecting...");
+                    console.log("Forbidden, redirecting...");
+                    return <Redirect to={applicationRoutes.loginRoute.route} />
+                }
+
+                // check authorization 
+                if (!handleIsAuthorizedToView(user!.userActivity)) {
+
+                    console.log("Forbidden, redirecting...");
                     return <Redirect to={applicationRoutes.loginRoute.route} />
                 }
 

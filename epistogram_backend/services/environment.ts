@@ -51,7 +51,8 @@ export class GlobalConfiguration {
     misc = {
         hostPort: getEnvConfigEntry("HOST_PORT"),
         environmentName: getEnvConfigEntry("ENVIRONMENT_NAME"),
-        frontendUrl: getEnvConfigEntry("FRONTEND_URL")
+        frontendUrl: getEnvConfigEntry("FRONTEND_URL"),
+        isLocalhost: getEnvConfigEntry("IS_LOCALHOST") == "true"
     }
 
     fileStorage = {

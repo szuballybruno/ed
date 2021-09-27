@@ -33,11 +33,14 @@ ON "qa"."answerId" = "a"."id"
 
 WHERE 
 	-- incorrect video answer 6h ago
-	"qa"."isPractiseAnswer" = false 
-	AND "q"."isCorrect" = false
-	AND "qa"."creationDate" + INTERVAL '6 HOURS' < NOW() as date,  
-
--- 	select * from question_answer
+	"qa"."isPractiseAnswer" = false AND  
+	"a"."isCorrect" IS NULL AND 
+	"qa"."creationDate" + INTERVAL '6 HOURS' < NOW() OR
+	
+	-- correct video answer 24h ago
+	"qa"."isPractiseAnswer" = false AND  
+	"a"."isCorrect" = true AND 
+	"qa"."creationDate" + INTERVAL '24 HOURS' < NOW() 
 
 
 

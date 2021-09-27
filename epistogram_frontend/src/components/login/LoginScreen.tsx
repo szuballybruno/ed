@@ -56,10 +56,10 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
 
     const authState = useContext(AuthenticationStateContext);
 
-    if (authState.isLoading)
+    if (authState === "loading")
         return <div>loading...</div>
 
-    if (authState.isAuthenticated)
+    if (authState === "authenticated")
         return <Redirect to={applicationRoutes.homeRoute.route}></Redirect>
 
     return (
