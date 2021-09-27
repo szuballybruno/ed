@@ -23,6 +23,7 @@ jobs:
       
       FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-docker-spike 
       FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-docker-spike
+      REACT_APP_SERVER_URL: https://epistogram-backend-docker-spike-lbtd2q64mq-ew.a.run.app
     
     steps:
 
