@@ -29,7 +29,7 @@ RUN npm run build
 WORKDIR /app/build
 
 # copy runtime misc dependnecy files
-COPY config.docker.env ./config.env
+COPY config.env ./config.env
 COPY epistogram_service_user_key.json .
 COPY /emails ./emails
 COPY /sql ./sql

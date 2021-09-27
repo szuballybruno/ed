@@ -56,7 +56,7 @@ jobs:
       #
       - name: Copy proper .env file
         run: |
-          cp -fr ./config/${{ env.BRANCH_NAME }}.env ./.env 
+          cp -fr ./config/${{ env.BRANCH_NAME }}.env ./config.env 
         working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
 
       - name: Build backend container
