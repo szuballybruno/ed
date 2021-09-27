@@ -59,7 +59,7 @@ const initializeAsync = async () => {
     };
 
     const corsMiddleware = cors({
-        origin: "http://localhost",
+        origin: staticProvider.globalConfig.misc.frontendUrl,
         credentials: true,
         allowedHeaders: [
             "Origin",

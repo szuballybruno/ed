@@ -54,6 +54,11 @@ jobs:
       #
       # BUILD & DEPLOY BACKEND 
       #
+      - name: Copy proper .env file
+        run: |
+          cp -fr ./config/${{ env.BRANCH_NAME }}.env ./.env 
+        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
+
       - name: Build backend container
         run: |
           docker build -t $BACKEND_IMAGE_NAME .
