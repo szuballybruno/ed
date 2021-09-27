@@ -2,12 +2,12 @@ FROM node:latest as builder
 WORKDIR /app
 
 COPY package.json .
-COPY .env ./.env
 
 RUN yarn
 
 COPY /src ./src
 COPY /public ./public
+COPY /config ./config
 COPY tsconfig.json .
 
 RUN yarn build

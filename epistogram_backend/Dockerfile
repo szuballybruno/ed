@@ -1,5 +1,5 @@
 # Get the latest node image 
-FROM node:latest
+FROM node:current-alpine
 
 # set the working directory, in which every command will run
 WORKDIR /app
