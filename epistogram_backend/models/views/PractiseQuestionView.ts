@@ -14,9 +14,6 @@ export class PractiseQuestionView {
     @ViewColumn()
     userId: number;
 
-    @ViewColumn()
-    questionText: string;
-
     // answers 
     @OneToMany(_ => Answer, x => x.practiseQuestionView)
     @JoinColumn()

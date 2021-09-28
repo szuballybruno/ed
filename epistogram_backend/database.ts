@@ -41,10 +41,12 @@ import { VideoProgressView } from "./models/views/VideoProgressView";
 import { seedDB } from "./services/dbSeedService";
 import { getDatabaseConnectionParameters } from "./services/environment";
 import { log, logObject } from "./services/misc/logger";
-import { recreateViewsAsync } from "./services/sqlScriptExecutorService";
-import { connectToDBAsync } from "./services/sqlConnection";
+import { connectToDBAsync } from "./services/sqlServices/sqlConnection";
 import { staticProvider } from "./staticProvider";
 import { PractiseQuestionView } from "./models/views/PractiseQuestionView";
+import { recreateViewsAsync } from "./services/sqlServices/sqlViewCreatorService";
+import { recreateFunctionsAsync } from "./services/sqlServices/sqlFunctionCreatorService";
+import { answerQuestionFn } from "./services/sqlServices/sqlFunctionsService";
 
 export type TypeORMConnection = Connection;
 
@@ -57,12 +59,12 @@ export const initializeDBAsync = async () => {
     // TEST DB CONNCETION 
     // 
 
-    log("Testing SQL DB connection...", "strong");
+    log("Making first database connection...", "strong");
     log("Connection properties: ")
     logObject(JSON.stringify(getDatabaseConnectionParameters()));
 
-    const { executeSQL, terminateConnectionAsync: terminateConnection } = await connectToDBAsync();
-    terminateConnection();
+    const { executeSQL, terminateConnectionAsync } = await connectToDBAsync();
+    staticProvider.sqlConnection = { executeSQL, terminateConnectionAsync };
 
     log("Connection successful!", "strong");
 
@@ -131,6 +133,18 @@ export const initializeDBAsync = async () => {
     log("SQL views created!", "strong");
 
     //
+    // CREATE FUNCTIONS
+    //
+    log("Creating SQL functions...", "strong")
+
+    await recreateFunctionsAsync([
+        "answer_signup_question_fn",
+        "answer_question_fn",
+    ]);
+
+    log("SQL functions created!", "strong");
+
+    //
     // SEED DB
     //
     const isFreshDB = await getIsFreshDB();
@@ -142,6 +156,10 @@ export const initializeDBAsync = async () => {
 
         log("Seeding DB done!", "strong");
     }
+
+    const ad = await answerQuestionFn(6, 37, 75);
+
+    console.log(ad);
 }
 
 const purgeDBAsync = async () => {

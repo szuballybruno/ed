@@ -304,18 +304,6 @@ export const toOrganizationDTO = (org: Organization) => {
     } as OrganizationDTO;
 }
 
-export const toPractiseQuestionDTO = (q: PractiseQuestionView) => {
-
-    navPropNotNull(q.answers);
-
-    return {
-        questionId: q.id,
-        questionText: q.questionText,
-        answers: q.answers
-            .map(answer => toAnswerDTO(answer))
-    } as QuestionDTO;
-}
-
 export const toQuestionDTO = (q: Question) => {
 
     navPropNotNull(q.answers);

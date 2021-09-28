@@ -18,8 +18,8 @@ import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { log } from "./misc/logger";
-import { executeSeedScriptAsync } from "./sqlScriptExecutorService";
 import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./signupService";
+import { executeSeedScriptAsync } from "./sqlServices/sqlSeedScriptService";
 import { setUserAvatarFileId } from "./userService";
 import { insertVideoAsync } from "./videoService";
 
@@ -42,8 +42,13 @@ export const seedDB = async () => {
     log("seedUsers")
     await seedUsers(connection, orgIds);
 
+    log("seedSignupQuestions")
     await executeSeedScriptAsync("seedSignupQuestions");
 
+    log("seedSignupAnswers")
+    await executeSeedScriptAsync("seedSignupAnswers");
+
+    log("seedPersonalityCategoryDescriptions")
     await executeSeedScriptAsync("seedPersonalityCategoryDescriptions");
 
     log("seedTags")

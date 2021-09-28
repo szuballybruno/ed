@@ -1,6 +1,6 @@
 import { Pool, QueryResult } from 'pg';
-import { getDatabaseConnectionParameters } from './environment';
-import { log } from './misc/logger';
+import { getDatabaseConnectionParameters } from '../environment';
+import { log } from '../misc/logger';
 
 export const connectToDBAsync = async () => {
 
@@ -30,6 +30,11 @@ export const connectToDBAsync = async () => {
         executeSQL: executeSQLAsync as ExecSQLFunctionType,
         terminateConnectionAsync: () => pool.end()
     }
+}
+
+export type SQLConnectionType = {
+    executeSQL: ExecSQLFunctionType,
+    terminateConnectionAsync: () => Promise<void>
 }
 
 export type ExecSQLFunctionType = (sql: string) => Promise<QueryResult<any>>;

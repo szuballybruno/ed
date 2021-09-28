@@ -1,7 +1,5 @@
-import { readFileSync, stat } from "fs";
-import { staticProvider } from "../staticProvider";
-import { replaceAll } from "../utilities/helpers";
-import { log } from "./misc/logger";
+import { readFileSync } from "fs";
+import { log } from "../misc/logger";
 import { connectToDBAsync, ExecSQLFunctionType } from "./sqlConnection";
 
 export const recreateViewsAsync = async (viewNames: string[]) => {
@@ -14,24 +12,6 @@ export const recreateViewsAsync = async (viewNames: string[]) => {
     await createViews(viewNames, executeSQL);
 
     await terminateConnection();
-}
-
-export const executeSeedScriptAsync = async (seedScriptName: string) => {
-
-    const { executeSQL, terminateConnectionAsync: terminateConnection } = await connectToDBAsync();
-    const sql = readFileSync(`./sql/seed/${seedScriptName}.sql`, 'utf8');
-
-    const replacedSQl = replaceSymbols(sql);
-
-    await executeSQL(replacedSQl);
-
-    await terminateConnection();
-}
-
-const replaceSymbols = (sql: string) => {
-
-    const url = staticProvider.globalConfig.fileStorage.assetStoreUrl;
-    return replaceAll(sql, "{CDN_BUCKET_URL}", url);
 }
 
 const createViews = async (viewNames: string[], execSql: ExecSQLFunctionType) => {

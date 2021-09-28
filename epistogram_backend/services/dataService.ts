@@ -3,14 +3,10 @@ import { Organization } from "../models/entity/Organization";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
-import { PersonalityDataDTO } from "../models/shared_models/PersonalityDataDTO";
-import { PersonalityTraitDataDTO } from "../models/shared_models/PersonalityTraitDataDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { SignupAnswersView } from "../models/views/SignupAnswersView";
 import { staticProvider } from "../staticProvider";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "./courseService";
 import { toOrganizationDTO } from "./mappings";
-import { getReandomQuestion } from "./questionService";
 import { getUserById } from "./userService";
 
 export const getOrganizationsAsync = async (userId: number) => {
@@ -30,14 +26,12 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
     const itemCode = await getCurrentCourseItemDescriptorCodeAsync(userId);
     const courseItems = itemCode ? await getCourseItemsAsync(userId, courseId, itemCode) : [];
     const recommendedCourseDTOs = [] as CourseShortDTO[];
-    const randomQuestion = getReandomQuestion();
     const currntTasks = getCurrentTasks();
     const developmentChartData = getDevelopmentChart();
 
     const overviewPageDTO = {
         tipOfTheDay: tipOfTheDay,
         recommendedCourses: recommendedCourseDTOs,
-        testQuestionDTO: randomQuestion,
         currentTasks: currntTasks,
         developmentChartData: developmentChartData,
         currentCourseItems: courseItems

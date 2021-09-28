@@ -15,6 +15,7 @@ import { hashPasswordAsync } from "./misc/crypt";
 import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
 import { log } from "./misc/logger";
 import { answerQuestionAsync } from "./questionAnswerService";
+import { answerSignupQuestionFn } from "./sqlServices/sqlFunctionsService";
 import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
 
 const SIGNUP_EXAM_ID = 1;
@@ -155,21 +156,23 @@ export const answerSignupQuestionAsync = async (invitationToken: string, questio
 
     const userId = await verifyInvitationTokenAsync(invitationToken);
 
-    const signupAnswerSession = await staticProvider
-        .ormConnection
-        .getRepository(AnswerSession)
-        .findOneOrFail({
-            where: {
-                examId: SIGNUP_EXAM_ID,
-                userId: userId
-            }
-        });
+    await answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
 
-    await answerQuestionAsync(
-        signupAnswerSession.id,
-        questionAnswer.questionId,
-        questionAnswer.answerId,
-        true);
+    // const signupAnswerSession = await staticProvider
+    //     .ormConnection
+    //     .getRepository(AnswerSession)
+    //     .findOneOrFail({
+    //         where: {
+    //             examId: SIGNUP_EXAM_ID,
+    //             userId: userId
+    //         }
+    //     });
+
+    // await answerQuestionAsync(
+    //     signupAnswerSession.id,
+    //     questionAnswer.questionId,
+    //     questionAnswer.answerId,
+    //     true);
 }
 
 export const getSignupDataAsync = async (invitationToken: string) => {
