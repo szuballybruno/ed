@@ -7,12 +7,11 @@ import { toExamResultDTO } from "./mappings";
 import { answerQuestionAsync } from "./questionAnswerService";
 import { getUserById } from "./userService";
 
-export const answerExamQuestionAsync = (userId: number, questionAnswerDTO: QuestionAnswerDTO) => {
+export const answerExamQuestionAsync = (questionAnswerDTO: QuestionAnswerDTO) => {
 
     // validation comes here 
 
     return answerQuestionAsync(
-        userId,
         questionAnswerDTO.answerSessionId,
         questionAnswerDTO.questionId,
         questionAnswerDTO.answerId);

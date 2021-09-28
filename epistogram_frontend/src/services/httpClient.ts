@@ -1,9 +1,9 @@
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
+import { backendUrl } from "../Environemnt";
 import { getErrorTypeByHTTPCode, TypedError } from "../frontendHelpers";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { LoadingStateType } from "../models/types";
-import instance from "./axiosInstance";
 
 export class HTTPResponse {
     code: number;
@@ -14,6 +14,22 @@ export class HTTPResponse {
         this.data = data;
     }
 }
+
+const instance = (() => {
+
+    const axiosInst = axios.create({
+        // .. where we make our configurations
+        baseURL: backendUrl
+    });
+
+    axiosInst.defaults.withCredentials = true
+
+    axiosInst.defaults.headers = {
+        'Content-Type': 'application/json'
+    }
+
+    return axiosInst;
+})();
 
 export const httpPostAsync = async (
     urlEnding: string,

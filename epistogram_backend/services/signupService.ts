@@ -79,6 +79,15 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
             userId: userId
         });
 
+    // insert practise answer session
+    await staticProvider
+        .ormConnection
+        .getRepository(AnswerSession)
+        .insert({
+            userId: userId,
+            isPractiseAnswerSession: true
+        });
+
     // send invitaion mail
     const invitationToken = getJWTToken<InvitationTokenPayload>(
         { userId: userId },
@@ -157,7 +166,6 @@ export const answerSignupQuestionAsync = async (invitationToken: string, questio
         });
 
     await answerQuestionAsync(
-        userId,
         signupAnswerSession.id,
         questionAnswer.questionId,
         questionAnswer.answerId,

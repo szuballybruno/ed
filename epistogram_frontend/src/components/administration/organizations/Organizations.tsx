@@ -1,17 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { Fab } from "@mui/material";
-import { Add } from "@mui/icons-material";
-import { AxiosResponse } from "axios";
-import React, { useEffect } from 'react';
-import { Route, Switch } from "react-router-dom";
-import { backendUrl } from '../../../Environemnt';
-import instance from "../../../services/axiosInstance";
-import AdminDashboardHeader from "../universal/adminDashboardHeader/AdminDashboardHeader";
-import { AdminDashboardList } from "../universal/adminDashboardList/AdminDashboardList";
-import { AdministrationListItem } from "../universal/adminDashboardSearchItem/AdministrationListItem";
-import { AdminDashboardWrapper } from "../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import { AdminDashboardSearch } from "../universal/searchBar/AdminDashboardSearch";
-import { AddOrganization } from "./organizations_components/AddOrganization";
+import React from 'react';
 
 export const Organizations: React.FunctionComponent = () => {
 

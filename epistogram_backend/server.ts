@@ -5,7 +5,7 @@ import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemsAction, getUserPersonalityDataAction, getPractiseQuestionAction } from './api/dataActions';
+import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemsAction, getUserPersonalityDataAction, getPractiseQuestionAction, answerPractiseQuestionAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
@@ -142,6 +142,7 @@ const initializeAsync = async () => {
     expressServer.post('/questions/answer-signup-question', answerSignupQuestionAction);
     expressServer.post("/questions/answer-video-question", authMiddleware, answerVideoQuestionAction);
     expressServer.post("/questions/answer-exam-question", authMiddleware, answerExamQuestionAction);
+    expressServer.post("/questions/answer-practise-question", authMiddleware, answerPractiseQuestionAction);
 
     // 404 - no match
     expressServer.use((req, res) => {

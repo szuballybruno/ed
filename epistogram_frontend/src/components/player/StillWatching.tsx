@@ -26,7 +26,8 @@ export const StillWatching = (props: { onClose: () => void, optionIndex: number 
 
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-    return <QuestionnaireLayout title={`Kérlek válaszd ki a ${correctOption.displayName}!`} buttonsEnabled={true}>
+    return <QuestionnaireLayout loadingProps={{ loadingState: "success" }}
+        title={`Kérlek válaszd ki a ${correctOption.displayName}!`} buttonsEnabled={true}>
         {options
             .map((option, index) => <QuestionnaierAnswer
                 key={index}

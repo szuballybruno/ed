@@ -1,6 +1,8 @@
+import { Answer } from "../models/entity/Answer";
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Question } from "../models/entity/Question";
 import { QuestionAnswer } from "../models/entity/QuestionAnswer";
+import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
 import { staticProvider } from "../staticProvider";
 import { toAnswerDTO } from "./mappings";
 
@@ -24,11 +26,11 @@ export const createAnswerSessionAsync = async (
 }
 
 export const answerQuestionAsync = async (
-    userId: number,
     answerSessionId: number,
     questionId: number,
     answerId: number,
-    noCorrectAnswer?: boolean) => {
+    noCorrectAnswer?: boolean,
+    isPractiseAnswer?: boolean) => {
 
     const repo = staticProvider
         .ormConnection
@@ -38,7 +40,8 @@ export const answerQuestionAsync = async (
     await repo.insert({
         answerId: answerId,
         questionId: questionId,
-        answerSessionId: answerSessionId
+        answerSessionId: answerSessionId,
+        isPractiseAnswer: isPractiseAnswer === true ? true : undefined
     });
 
     // get correct answer
@@ -47,12 +50,14 @@ export const answerQuestionAsync = async (
 
     const correctAnswer = await staticProvider
         .ormConnection
-        .getRepository(Question)
-        .createQueryBuilder("q")
-        .leftJoinAndSelect("q.answers", "a")
-        .where("q.id = :questionId", { questionId })
+        .getRepository(Answer)
+        .createQueryBuilder("a")
+        .where("a.questionId = :questionId", { questionId })
         .andWhere("a.isCorrect = true")
         .getOneOrFail();
 
-    return toAnswerDTO(correctAnswer.answers[0]);
+    return {
+        correctAnswerId: correctAnswer.id,
+        givenAnswerId: answerId
+    } as AnswerResultDTO;
 }

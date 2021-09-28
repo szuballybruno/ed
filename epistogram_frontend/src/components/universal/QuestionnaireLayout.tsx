@@ -1,22 +1,19 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
-import { Divider, Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
-import { LoadingStateType } from '../../models/types';
-import { LoadingFrame } from '../HOC/LoadingFrame';
+import { LoadingFrame, LoadingFramePropsType } from '../HOC/LoadingFrame';
 import { EpistoText } from './EpistoText';
 
 export const QuestionnaireLayout = (props: {
     title: string,
     children: ReactNode,
-    loadingState?: LoadingStateType,
-    loadingError?: any,
-    buttonsEnabled: boolean
+    buttonsEnabled: boolean,
+    loadingProps: LoadingFramePropsType
 } & FlexProps) => {
 
-    const { title, buttonsEnabled, children, loadingError, loadingState, ...css } = props;
+    const { title, buttonsEnabled, children, loadingProps, ...css } = props;
 
     return (
-        <Flex id="questionnaireRoot" direction="column" p="20px" align="center" {...css}>
+        <Flex id="questionnaireLayoutRoot" direction="column" p="20px" align="center" {...css}>
 
             {/* title */}
             <Flex align="center">
@@ -44,7 +41,7 @@ export const QuestionnaireLayout = (props: {
             <Box width="40%" bg="var(--epistoTeal)" height="2px" m="4px" />
 
             {/* answers */}
-            <LoadingFrame loadingState={loadingState ?? "idle"} error={loadingError}>
+            <LoadingFrame {...loadingProps}>
                 <Flex
                     id="answersListContainer"
                     direction="column"

@@ -7,12 +7,11 @@ import { getAssetUrl } from "./misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
 import { answerQuestionAsync } from "./questionAnswerService";
 
-export const answerVideoQuestionAsync = async (
-    userId: number, answerSessionId: number, questionId: number, answerId: number) => {
+export const answerVideoQuestionAsync = async (answerSessionId: number, questionId: number, answerId: number) => {
 
     // validation comes here
 
-    return answerQuestionAsync(userId, answerSessionId, questionId, answerId);
+    return answerQuestionAsync(answerSessionId, questionId, answerId);
 }
 
 export const insertVideoAsync = async (video: Video, filePath: string | null) => {

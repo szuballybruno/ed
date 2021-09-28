@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { PractiseQuestionView } from "../views/PractiseQuestionView";
 import { Answer } from "./Answer";
 import { Exam } from "./Exam";
 import { QuestionAnswer } from "./QuestionAnswer";
@@ -19,6 +20,10 @@ export class Question {
 
     @Column({ nullable: true })
     showUpTimeSeconds: number;
+
+    // practise question view
+    @OneToOne(_ => PractiseQuestionView, x => x.question)
+    practiseQuestionView: PractiseQuestionView;
 
     // category
     @Column({ nullable: true })

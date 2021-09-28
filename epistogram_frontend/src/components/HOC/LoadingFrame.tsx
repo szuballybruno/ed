@@ -5,13 +5,14 @@ import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from 'react';
 import { isArray } from "../../frontendHelpers";
 import { LoadingStateType } from "../../models/types";
-import { DialogStateType } from "./DialogFrame";
 
-export const LoadingFrame = (props: FlexProps & {
+export type LoadingFramePropsType = {
     loadingState: LoadingStateType | LoadingStateType[],
     error?: any | any[],
     onlyRenderIfLoaded?: boolean
-}) => {
+};
+
+export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
 
     const { loadingState, error, onlyRenderIfLoaded, ...rootProps } = props;
     const singleError = getError(error);

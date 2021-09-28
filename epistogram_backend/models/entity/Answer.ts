@@ -29,7 +29,7 @@ export class Answer {
     questionAnswers: QuestionAnswer[]
 
     // practise question
-    @OneToMany(_ => PractiseQuestionView, x => x.answers)
+    @ManyToOne(_ => PractiseQuestionView, x => x.answers)
     @JoinColumn({ name: "questionId" })
     practiseQuestionView: PractiseQuestionView;
 }

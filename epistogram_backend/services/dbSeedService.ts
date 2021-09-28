@@ -23,15 +23,6 @@ import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./
 import { setUserAvatarFileId } from "./userService";
 import { insertVideoAsync } from "./videoService";
 
-// export const recreateDB = async (postgresOptions: ConnectionOptions) => {
-
-//     log("Dropping databasea...");
-//     await dropDatabase({ ifExist: true }, postgresOptions);
-
-//     log("Creating database...");
-//     await createDatabase({ ifNotExist: true, characterSet: "UTF8" }, postgresOptions);
-// }
-
 export const seedDB = async () => {
 
     const connection = staticProvider.ormConnection;

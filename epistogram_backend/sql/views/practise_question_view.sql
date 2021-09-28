@@ -1,5 +1,7 @@
 SELECT 
 	"subquery"."questionId" AS "id",
+	"subquery"."userId" AS "userId",
+	"subquery"."practiseAnswerCount",
 	"qa"."answerId",
 	"a"."isCorrect",
 	"qa"."creationDate" AS "answerDate",
@@ -9,10 +11,9 @@ FROM (
 		"qa"."questionId" AS "questionId",
 		"as"."userId" AS "userId",
 		MAX("qa"."id") AS "questionAnswerId",
-		"q"."questionText",
 
 		SUM (CASE WHEN "qa"."isPractiseAnswer" = true THEN 1 ELSE 0 END) 
-		AS "practiseAnswersCount"
+		AS "practiseAnswerCount"
 	FROM public."question_answer" AS "qa"
 
 	LEFT JOIN public."question" AS "q"
@@ -37,15 +38,35 @@ LEFT JOIN public."answer" AS "a"
 ON "qa"."answerId" = "a"."id"
 
 WHERE 
-	-- incorrect video answer 6h ago
-	"qa"."isPractiseAnswer" = false AND  
-	"a"."isCorrect" IS NULL AND 
-	"qa"."creationDate" + INTERVAL '6 HOURS' < NOW() OR
+	(
+		"subquery"."practiseAnswerCount" < 2
+	)
+	AND 
+	(
+		(
+		-- incorrect video answer 6h ago
+		"qa"."isPractiseAnswer" = false 
+		AND  
+		"a"."isCorrect" IS NULL
+	-- 	AND 
+	-- 	"qa"."creationDate" + INTERVAL '6 HOURS' < NOW() 
+		)
+		OR
+		(
+		-- correct video answer 24h ago
+		"qa"."isPractiseAnswer" = false 
+		AND  
+		"a"."isCorrect" = true 
+	-- 	AND 
+	-- 	"qa"."creationDate" + INTERVAL '24 HOURS' < NOW() 
+		)
+	)
+
+-- 	OR
+-- 	"qa"."isPractiseAnswer" = true
 	
-	-- correct video answer 24h ago
-	"qa"."isPractiseAnswer" = false AND  
-	"a"."isCorrect" = true AND 
-	"qa"."creationDate" + INTERVAL '24 HOURS' < NOW() 
+	
+-- 	select * from question_answer 
 
 
 

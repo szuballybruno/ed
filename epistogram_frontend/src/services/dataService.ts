@@ -1,9 +1,35 @@
 import Cookies from "universal-cookie";
 import { hasValue, useReactQuery } from "../frontendHelpers";
+import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
+import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
-import { httpGetAsync } from "./httpClient";
+import { httpGetAsync, usePostData } from "./httpClient";
+
+export const useAnswerPractiseQuestion = () => {
+
+    const postDataQuery = usePostData<AnswerQuestionDTO, AnswerResultDTO>("questions/answer-practise-question");
+
+    const answerQuestionAsync = (answerId: number, questionId: number) => {
+
+        const dto = {
+            answerId,
+            questionId
+        } as AnswerQuestionDTO;
+
+        return postDataQuery.postDataAsync(dto);
+    }
+
+    return {
+        answerResults: postDataQuery.result,
+        answerQuestionError: postDataQuery.error,
+        answerQuestionState: postDataQuery.state,
+        answerQuestionAsync,
+        clearAnswerResults: postDataQuery.clearCache
+    }
+}
 
 export const useCurrentCourseItemCode = () => {
 
@@ -25,7 +51,8 @@ export const usePractiseQuestion = () => {
     return {
         practiseQuestion: qr.data,
         practiseQuestionState: qr.status,
-        practiseQuestionError: qr.error
+        practiseQuestionError: qr.error,
+        refetchPractiseQuestion: qr.refetch,
     };
 }
 

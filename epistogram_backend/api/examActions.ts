@@ -9,7 +9,7 @@ export const answerExamQuestionAction = getAsyncActionHandler(async (req: Reques
     const userId = getUserIdFromRequest(req);
     const questionAnswerDTO = withValueOrBadRequest(req.body) as QuestionAnswerDTO;
 
-    return answerExamQuestionAsync(userId, questionAnswerDTO);
+    return answerExamQuestionAsync(questionAnswerDTO);
 });
 
 export const getExamResultsAction = getAsyncActionHandler(async (req: Request) => {

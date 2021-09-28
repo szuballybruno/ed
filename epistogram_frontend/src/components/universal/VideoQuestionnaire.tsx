@@ -1,10 +1,8 @@
-import { FlexProps, Text } from "@chakra-ui/react";
+import { FlexProps } from "@chakra-ui/react";
 import React, { useState } from 'react';
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
-import { EpistoText } from "./EpistoText";
-import { QuestionnaierAnswer } from "./QuestionnaireAnswer";
-import { QuestionnaireLayout } from './QuestionnaireLayout';
+import { QuesitionView } from "../QuestionView";
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -15,43 +13,20 @@ export const VideoQuestionnaire = (props: {
     const { question, onAnswered, answerSessionId, ...css } = props;
     const [selectedAnswerId, setSelectedAnswerId] = useState(-1);
     const { answerQuestionAsync, correctAnswer, answerQuestionError, answerQuestionState } = useAnswerQuestion();
-    const correctAnswerId = correctAnswer?.answerId;
+    const correctAnswerId = correctAnswer?.answerId ?? null;
 
-    return (
-        <QuestionnaireLayout
-            buttonsEnabled={!correctAnswerId}
-            loadingError={answerQuestionError}
-            loadingState={answerQuestionState}
-            title={question.questionText}
-            {...css}>
-            {question
-                .answers
-                .map((answer, index) => {
+    const handleAnswerQuestionAsync = async (answerId) => {
 
-                    const answerId = answer.answerId;
+        setSelectedAnswerId(answerId);
+        onAnswered();
 
-                    return <QuestionnaierAnswer
-                        key={index}
-                        isCorrect={correctAnswerId === answerId}
-                        isIncorrect={selectedAnswerId === answerId && correctAnswerId !== answerId}
-                        mb="8px"
-                        onClick={async () => {
+        await answerQuestionAsync(answerSessionId, answerId, question.questionId);
+    }
 
-                            setSelectedAnswerId(answerId);
-                            onAnswered();
-
-                            await answerQuestionAsync(answerSessionId, answerId, question.questionId);
-                        }}>
-                        <EpistoText
-                            isAutoFontSize
-                            text={answer.answerText}
-                            maxFontSize={20}
-                            style={{
-                                width: "100%"
-                            }} />
-                        {/* <Text fontSize="15px" textTransform="none">{answer.answerText}</Text> */}
-                    </QuestionnaierAnswer>;
-                })}
-        </QuestionnaireLayout>
-    );
+    return <QuesitionView
+        answerQuesitonAsync={handleAnswerQuestionAsync}
+        correctAnswerId={correctAnswerId}
+        loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
+        question={question}
+        selectedAnswerId={selectedAnswerId} />
 }
