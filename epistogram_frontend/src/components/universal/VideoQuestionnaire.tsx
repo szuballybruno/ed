@@ -1,5 +1,5 @@
 import { FlexProps } from "@chakra-ui/react";
-import React, { useState } from 'react';
+import React from 'react';
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
 import { QuesitionView } from "../QuestionView";
@@ -11,22 +11,19 @@ export const VideoQuestionnaire = (props: {
 } & FlexProps) => {
 
     const { question, onAnswered, answerSessionId, ...css } = props;
-    const [selectedAnswerId, setSelectedAnswerId] = useState(-1);
-    const { answerQuestionAsync, correctAnswer, answerQuestionError, answerQuestionState } = useAnswerQuestion();
-    const correctAnswerId = correctAnswer?.answerId ?? null;
+    const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = useAnswerQuestion();
 
     const handleAnswerQuestionAsync = async (answerId) => {
 
-        setSelectedAnswerId(answerId);
         onAnswered();
-
         await answerQuestionAsync(answerSessionId, answerId, question.questionId);
     }
 
     return <QuesitionView
         answerQuesitonAsync={handleAnswerQuestionAsync}
-        correctAnswerId={correctAnswerId}
+        correctAnswerId={answerResult?.correctAnswerId ?? null}
         loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
         question={question}
-        selectedAnswerId={selectedAnswerId} />
+        selectedAnswerId={answerResult?.givenAnswerId ?? null}
+        {...css} />
 }

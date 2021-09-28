@@ -2,18 +2,17 @@ import { Box, Flex } from '@chakra-ui/layout';
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useOverviewPageDTO } from "../services/dataService";
+import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
 import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
 import Navbar from "./navbar/Navbar";
+import { PractiseQuestions } from './PractiseQuestions';
 import { Tasks } from './Tasks';
 import { TipOfTheDay } from './TipOfTheDay';
 import { CourseItemList, CourseItemView } from "./universal/CourseItemList";
 import { DashboardSection } from './universal/DashboardSection';
 import ListItem from './universal/listItem/ListItem';
-import { VideoQuestionnaire } from './universal/VideoQuestionnaire';
-import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
-import { PractiseQuestions } from './PractiseQuestions';
 
 const HomePage = () => {
 
