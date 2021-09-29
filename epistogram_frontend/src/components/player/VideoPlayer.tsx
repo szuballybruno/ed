@@ -22,7 +22,8 @@ export const useVideoPlayerState = (
     videoItem: VideoDTO,
     isShowingOverlay: boolean,
     maxWatchedSeconds: number,
-    limitSeek: boolean) => {
+    limitSeek: boolean,
+    onVideoEnded?: () => void) => {
 
     const { url: videoUrl } = videoItem;
     const { subtitles } = { subtitles: [] as SubtitleDTO[] };
@@ -37,7 +38,10 @@ export const useVideoPlayerState = (
     const [isVisualOverlayVisible, setIsVisualOverlayVisible] = useState(false);
     const [isSeeking, setIsSeeking] = useState(false);
     const controlsOpacity = showControls || !shouldBePlaying || isSeeking ? 1 : 0;
-    const isPlaying = shouldBePlaying && !isShowingOverlay && !isSeeking;
+    // const [isVideoEnded, setIsVideoEnded] = useState(false);
+
+    const isVideoEnded = (videoLength > 0) && playedSeconds === videoLength;
+    const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking;
 
     const subtileTracks = subtitles
         .map(x => ({
@@ -106,14 +110,18 @@ export const useVideoPlayerState = (
 
         if (right) {
 
-            const positiveTarget = playedSeconds + jumpSeconds;
-            seekSeconds = positiveTarget > videoLength ? videoLength : positiveTarget;
+            seekSeconds = playedSeconds + jumpSeconds;
+            if (seekSeconds > videoLength)
+                return;
+
             flashVisualOverlay("seekRight");
         }
         else {
 
-            const negativeTarget = playedSeconds - jumpSeconds;
-            seekSeconds = negativeTarget < 0 ? 0 : negativeTarget;
+            seekSeconds = playedSeconds - jumpSeconds;
+            if (seekSeconds < 0)
+                return;
+
             flashVisualOverlay("seekLeft");
         }
 
@@ -123,6 +131,14 @@ export const useVideoPlayerState = (
 
         showControlOverlay();
         seekToSeconds(seekSeconds);
+    }
+
+    const handleOnVideoEnded = () => {
+
+        // setIsVideoEnded(true);
+
+        // if (onVideoEnded)
+        //     onVideoEnded();
     }
 
     useEventListener('keydown', (e) => {
@@ -162,13 +178,15 @@ export const useVideoPlayerState = (
         isPlaying,
         maxWatchedSeconds,
         limitSeek,
+        isVideoEnded,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
         setVideoLength,
         toggleFullScreen,
         seekToSeconds,
-        setIsSeeking
+        setIsSeeking,
+        handleOnVideoEnded
     }
 }
 
@@ -203,7 +221,8 @@ export const VideoPlayer = (props: {
         setVideoLength,
         toggleFullScreen,
         seekToSeconds,
-        setIsSeeking
+        setIsSeeking,
+        handleOnVideoEnded
     } = videoPlayerState;
 
     const iconStyle = { width: "70px", height: "70px", color: "white" } as CSSProperties;
@@ -267,7 +286,9 @@ export const VideoPlayer = (props: {
                                 attributes: { crossOrigin: "true" },
                                 tracks: subtileTracks,
                             }
-                        }} />
+                        }}
+                        loop={false}
+                        onEnded={handleOnVideoEnded} />
                 </Box>
 
                 {/* video controls */}
@@ -280,7 +301,7 @@ export const VideoPlayer = (props: {
 
                     {/* play/pause */}
                     <button onClick={toggleShouldBePlaying}>
-                        {shouldBePlaying ? <Pause /> : <PlayArrow />}
+                        {isPlaying ? <Pause /> : <PlayArrow />}
                     </button>
 
                     {/* timestamp */}

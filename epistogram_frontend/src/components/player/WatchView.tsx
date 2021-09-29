@@ -58,13 +58,16 @@ export const WatchView = (props: {
     const [stillWatchingDilalogMarkers, setStillWatchingDilalogMarkers] = useState<StillWatchingDialogMarker[]>([]);
     const stillWatchingDialogDelaySecs = 60 * 2; // 2 mins
 
+    // video player 
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
     const limitSeek = courseMode === "beginner";
-    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek);
-    const { playedSeconds, videoLength, isSeeking, isPlaying } = videoPlayerState;
+    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek,);
+    const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription description={video!.description} />;
     const VideoComments = () => <Box bg="red" />;
+
+    console.log("isVideoEnded:" + isVideoEnded);
 
     const currentQuestionAnswered = answeredQuestionIds
         .some(qid => currentQuestion?.questionId === qid);

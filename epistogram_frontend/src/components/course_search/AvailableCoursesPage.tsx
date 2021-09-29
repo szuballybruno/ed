@@ -82,11 +82,45 @@ const AvailableCoursesPage = () => {
                 <Flex id="coursesPanelRoot" direction="column" overflow="hidden" className="whall">
 
                     {/* search */}
-                    <Box id="courseSearchRoot" p="20px">
+                    <Box id="courseSearchRoot" p="20px" direction="column">
+
+                        <FloatSearch />
 
                         {/* search */}
-                        <Flex justify="space-between">
-                            <FloatSearch />
+                        <Flex justify="space-between" mt="20px" align="center">
+
+                            {/* toggle buttons */}
+                            <ToggleButtonGroup
+                                size={"small"}>
+
+                                {/* recommended */}
+                                <ToggleButton
+                                    onClick={() => setIsRecommended(!isRecommended)}
+                                    selected={isRecommended}
+                                    value="recommended"
+                                    style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                                    Neked ajánljuk
+                                </ToggleButton>
+
+                                {/* featured */}
+                                <ToggleButton
+                                    onClick={() => setIsFeatured(!isFeatured)}
+                                    selected={isFeatured}
+                                    value="featured"
+                                    style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                                    Kiemelt
+                                </ToggleButton>
+
+                                {/* show all */}
+                                <ToggleButton
+                                    onClick={() => clearFilters()}
+                                    selected={isRecommended && isFeatured}
+                                    value="showAll"
+                                    style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                                    Mind
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+
                             <Select
                                 native
                                 onChange={() => { }}
@@ -104,39 +138,6 @@ const AvailableCoursesPage = () => {
                                 <option value={30}>Régi-Új</option>
                             </Select>
                         </Flex>
-
-                        {/* toggle buttons */}
-                        <ToggleButtonGroup
-                            style={{ marginTop: "20px", width: "100%" }}
-                            size={"small"}>
-
-                            {/* recommended */}
-                            <ToggleButton
-                                onClick={() => setIsRecommended(!isRecommended)}
-                                selected={isRecommended}
-                                value="recommended"
-                                style={{ width: "100%" }}>
-                                Neked ajánljuk
-                            </ToggleButton>
-
-                            {/* featured */}
-                            <ToggleButton
-                                onClick={() => setIsFeatured(!isFeatured)}
-                                selected={isFeatured}
-                                value="featured"
-                                style={{ width: "100%" }}>
-                                Kiemelt
-                            </ToggleButton>
-
-                            {/* show all */}
-                            <ToggleButton
-                                onClick={() => clearFilters()}
-                                selected={isRecommended && isFeatured}
-                                value="showAll"
-                                style={{ width: "100%" }}>
-                                Mind
-                            </ToggleButton>
-                        </ToggleButtonGroup>
                     </Box>
 
                     {/* courses */}
