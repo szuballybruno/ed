@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, ButtonProps } from "@mui/material";
 import { createRef, CSSProperties, forwardRef, ReactNode } from "react";
 
 export type EpistoButtonPropsType = {
@@ -11,7 +11,8 @@ export type EpistoButtonPropsType = {
     variant?: "outlined" | "plain" | "colored",
     style?: CSSProperties,
     className?: string,
-    icon?: ReactNode
+    icon?: ReactNode,
+    buttonProps?: ButtonProps
 };
 
 export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>((props: EpistoButtonPropsType, ref) => {
@@ -28,6 +29,8 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         className,
         icon
     } = props;
+
+    const { variant: _, ...buttonProps } = props.buttonProps ?? { variant: null };
 
     return <Button
         onClick={onClick}
@@ -51,7 +54,8 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             padding: padding ? padding : undefined,
             fontSize: fontSize ? fontSize : undefined,
             ...style
-        }}>
+        }}
+        {...buttonProps}>
         {icon}
         {children}
     </Button>

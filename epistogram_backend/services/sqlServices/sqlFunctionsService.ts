@@ -1,11 +1,20 @@
 import { staticProvider } from "../../staticProvider";
 
-const execSQLFunction = async <T>(fnName: string, args: string[]) => {
+const execSQLFunction = async <T>(fnName: string, args: any[]) => {
 
-    const argsList = args.join(",");
+    // create args indicies
+    const argsIndicies = [] as string[];
+
+    args
+        .forEach((x, index) => argsIndicies.push(`$${index + 1}`));
+
+    // create statement 
+    const statement = `SELECT ${fnName}(${argsIndicies.join(",")})`;
+
+    // get results
     const result = await staticProvider
         .sqlConnection
-        .executeSQL(`SELECT ${fnName}(${argsList})`);
+        .executeSQL(statement, args);
 
     const firstRow = result.rows[0];
     const fnReturnValue = firstRow[fnName];
@@ -18,19 +27,20 @@ export const answerSignupQuestionFn = (userId: number, questionId: number, answe
     return execSQLFunction(
         "answer_signup_question_fn",
         [
-            userId.toString(),
-            questionId.toString(),
-            answerId.toString()
+            userId,
+            questionId,
+            answerId
         ]);
 }
 
-export const answerQuestionFn = (answerSessionId: number, questionId: number, answerId: number) => {
+export const answerQuestionFn = (answerSessionId: number, questionId: number, answerId: number, isPractiseAnswer: boolean) => {
 
     return execSQLFunction<number>(
         "answer_question_fn",
         [
-            answerSessionId.toString(),
-            questionId.toString(),
-            answerId.toString()
+            answerSessionId,
+            questionId,
+            answerId,
+            isPractiseAnswer
         ]);
 }

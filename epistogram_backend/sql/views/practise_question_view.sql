@@ -21,6 +21,8 @@ FROM (
 	
 	LEFT JOIN public."answer_session" AS "as"
 	ON "as"."id" = "qa"."answerSessionId"
+	
+	WHERE "q"."examId" IS DISTINCT FROM 1 
 
 	GROUP BY 
 		"qa"."questionId",

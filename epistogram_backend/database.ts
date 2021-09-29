@@ -156,10 +156,6 @@ export const initializeDBAsync = async () => {
 
         log("Seeding DB done!", "strong");
     }
-
-    const ad = await answerQuestionFn(6, 37, 75);
-
-    console.log(ad);
 }
 
 const purgeDBAsync = async () => {

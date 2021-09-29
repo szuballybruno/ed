@@ -5,7 +5,8 @@ CREATE OR REPLACE FUNCTION "answer_question_fn"
 (
 	"p_answerSessionId" integer,
 	"p_questionId" integer,
-	"p_answerId" integer
+	"p_answerId" integer,
+	"p_isPractiseAnswer" boolean
 )
 RETURNS integer 
 AS $$ 
@@ -33,7 +34,7 @@ BEGIN
 	VALUES 
 	(
 		NOW(),
-		false,
+		"p_isPractiseAnswer",
 		"p_questionId",
 		"p_answerId",
 		"p_answerSessionId"

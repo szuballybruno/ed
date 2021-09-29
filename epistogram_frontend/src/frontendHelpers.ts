@@ -265,3 +265,69 @@ export const getErrorTypeByHTTPCode = (code: number): ErrorType => {
 
     return "http error";
 }
+
+export const useTimer = (callback: () => void, delayMiliseconds: number) => {
+
+    const [remainingMiliseconds, setRemainingMiliseconds] = useState(delayMiliseconds);
+    const [timeoutRef, setTimeoutRef] = useState<null | NodeJS.Timeout>(null);
+    const [startTime, setStartTime] = useState<Date | null>(null);
+    const [isRunning, setIsRunning] = useState(false);
+
+    const getCurrentElapsedMiliseconds = () => {
+
+        if (!startTime)
+            return 0;
+
+        return Math.abs(new Date().getTime() - startTime.getTime());
+    }
+
+    const clear = () => {
+
+        if (!timeoutRef)
+            return;
+
+        clearTimeout(timeoutRef);
+    }
+
+    const start = () => {
+
+        if (isRunning)
+            return;
+
+        const timeout = setTimeout(callback, remainingMiliseconds);
+
+        setIsRunning(true);
+        setStartTime(new Date());
+        setTimeoutRef(timeout);
+    }
+
+    const stop = () => {
+
+        if (!timeoutRef)
+            return;
+
+        setIsRunning(false);
+        clear();
+        setRemainingMiliseconds(remainingMiliseconds - getCurrentElapsedMiliseconds());
+    }
+
+    const getRemainingMiliseconds = () => {
+
+        if (isRunning) {
+
+            stop();
+            start();
+        }
+
+        return remainingMiliseconds;
+    }
+
+    return {
+        start,
+        stop,
+        getRemainingMiliseconds,
+        isRunning
+    }
+}
+
+export type Timer = ReturnType<typeof useTimer>;

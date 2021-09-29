@@ -157,19 +157,18 @@ export const WatchView = (props: {
             {/* questionnaire */}
             <AbsoluteFlexOverlay isVisible={isQuestionVisible} hasPointerEvents={true}>
                 <OverlayDialog
-                    showCloseButton={currentQuestionAnswered}
-                    closeButtonAction={() => {
-
-                        setCurrentQuestion(null);
-                        enableNewDialogPopups();
-                    }}>
+                    showCloseButton={false}>
                     <VideoQuestionnaire
                         answerSessionId={answerSessionId}
                         question={currentQuestion!}
                         onAnswered={() => setAnsweredQuestionIds([
                             ...answeredQuestionIds,
                             currentQuestion?.questionId!
-                        ])} />
+                        ])}
+                        onClosed={() => {
+                            setCurrentQuestion(null);
+                            enableNewDialogPopups();
+                        }} />
                 </OverlayDialog>
             </AbsoluteFlexOverlay>
 

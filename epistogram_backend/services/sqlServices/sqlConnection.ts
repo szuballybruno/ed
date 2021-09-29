@@ -16,15 +16,15 @@ export const connectToDBAsync = async () => {
         password: dbConfig.password,
     })
 
-    const executeSQLAsync = async (sql: string) => {
+    const executeSQLAsync = async (sql: string, values?: any[]) => {
 
-        const results = await pool.query(sql);
+        const results = await pool.query(sql, values);
 
         return results;
     }
 
     // test connection
-    await executeSQLAsync("CREATE TABLE IF NOT EXISTS public.\"test_table\" (\"columnA\" integer);")
+    await executeSQLAsync("CREATE TABLE IF NOT EXISTS public.\"connection_test_table\" (\"columnA\" integer);")
 
     return {
         executeSQL: executeSQLAsync as ExecSQLFunctionType,
@@ -37,4 +37,4 @@ export type SQLConnectionType = {
     terminateConnectionAsync: () => Promise<void>
 }
 
-export type ExecSQLFunctionType = (sql: string) => Promise<QueryResult<any>>;
+export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<QueryResult<any>>;
