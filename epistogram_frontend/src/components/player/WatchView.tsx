@@ -19,6 +19,8 @@ import { OverlayDialog } from "./OverlayDialog";
 import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
 import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
+import { EpistoButton } from "../universal/EpistoButton";
+import { TimeoutFrame, useTimeoutFrameLogic } from "../universal/TimeoutFrame";
 
 export const WatchView = (props: {
     video: VideoDTO,
@@ -46,6 +48,7 @@ export const WatchView = (props: {
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
+    const timeoutLogic = useTimeoutFrameLogic(3, () => console.log("next please!"));
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
@@ -156,6 +159,26 @@ export const WatchView = (props: {
 
         {/* video player */}
         <VideoPlayer videoItem={video} videoPlayerState={videoPlayerState}>
+
+            {/* questionnaire */}
+            <AbsoluteFlexOverlay isVisible={true} hasPointerEvents={false} align="flex-end" justify="flex-end">
+
+                <EpistoButton
+                    style={{
+                        pointerEvents: "all",
+                        margin: "100px",
+                        padding: "0"
+                    }}
+                    variant="colored">
+                    <TimeoutFrame logic={timeoutLogic}>
+                        <Typography style={{
+                            margin: "10px"
+                        }}>
+                            Next video
+                        </Typography>
+                    </TimeoutFrame>
+                </EpistoButton>
+            </AbsoluteFlexOverlay>
 
             {/* questionnaire */}
             <AbsoluteFlexOverlay isVisible={isQuestionVisible} hasPointerEvents={true}>

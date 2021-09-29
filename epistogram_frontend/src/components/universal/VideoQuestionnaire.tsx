@@ -6,6 +6,7 @@ import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
 import { QuesitionView } from "../QuestionView";
 import { EpistoButton } from "./EpistoButton";
+import { TimeoutFrame, useTimeoutFrameLogic } from "./TimeoutFrame";
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -18,7 +19,6 @@ export const VideoQuestionnaire = (props: {
     const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = useAnswerQuestion();
     const isAnswered = !!answerResult?.givenAnswerId;
     const autoCloseSecs = 2;
-    const timeoutMiliseconds = autoCloseSecs * 1000;
 
     const handleAnswerQuestionAsync = async (answerId) => {
 
@@ -28,32 +28,17 @@ export const VideoQuestionnaire = (props: {
 
     const handleCloseDialog = () => {
 
-        if (timer.isRunning) {
-
-            timer.stop();
-        }
-
         onClosed();
     }
 
-    const pauseTimeout = () => {
-
-        timer.stop();
-    }
-
-    const resumeTimeout = () => {
-
-        timer.start();
-    }
-
-    const timer = useTimer(handleCloseDialog, timeoutMiliseconds);
+    const timeoutFrameLogic = useTimeoutFrameLogic(autoCloseSecs, handleCloseDialog);
 
     useEffect(() => {
 
         if (!isAnswered)
             return;
 
-        timer.start();
+        timeoutFrameLogic.start();
 
     }, [isAnswered]);
 
@@ -72,31 +57,17 @@ export const VideoQuestionnaire = (props: {
             <EpistoButton
                 variant="colored"
                 buttonProps={{
-                    onMouseEnter: () => pauseTimeout(),
-                    onMouseLeave: () => resumeTimeout()
+                    // onMouseEnter: () => pauseTimeout(),
+                    // onMouseLeave: () => resumeTimeout()
                 }}
                 style={{ padding: "0" }}
                 onClick={() => handleCloseDialog()}>
 
-                <Box position="relative">
-
-                    <Box
-                        position="absolute"
-                        top="0"
-                        transition={`${autoCloseSecs}s linear`}
-                        className="whall pauseAnimation"
-                        bg="var(--mildGrey)"
-                        style={{
-                            animationName: "rightSlideAnimation",
-                            animationDuration: `${autoCloseSecs}s`,
-                            animationTimingFunction: "linear",
-                            animationPlayState: timer.isRunning ? "running" : "paused"
-                        }} />
-
+                <TimeoutFrame logic={timeoutFrameLogic}>
                     <Typography style={{ position: "relative", margin: "10px" }}>
                         Bezárás
                     </Typography>
-                </Box>
+                </TimeoutFrame>
             </EpistoButton>
         </Flex>
     </Flex>
