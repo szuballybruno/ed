@@ -28,6 +28,7 @@ const DesktopNavbar = (props: {
 
     const { navigateToPlayer, navigate } = useNavigation();
     const currentCourseItemCode = props.currentCourseItemCode;
+    const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
     const homeUrl = applicationRoutes.rootHomeRoute.route;
     const user = useContext(CurrentUserContext)!;
@@ -86,6 +87,7 @@ const DesktopNavbar = (props: {
                         <EpistoButton
                             style={{ flex: "1", color: "var(--epistoTeal)" }}
                             variant="outlined"
+                            onClick={() => continueCourse()}
                             icon={
                                 <img
                                     src={getAssetUrl("/icons/play2.svg")}

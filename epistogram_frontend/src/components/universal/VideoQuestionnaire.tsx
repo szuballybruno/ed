@@ -1,7 +1,7 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
-import React, { useEffect, useState } from 'react';
-import { useTimer, Timer } from "../../frontendHelpers";
+import React, { useEffect } from 'react';
+import { useTimer } from "../../frontendHelpers";
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
 import { QuesitionView } from "../QuestionView";
