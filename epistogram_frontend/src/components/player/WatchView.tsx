@@ -70,8 +70,6 @@ export const WatchView = (props: {
     const VideoDescription = () => <PlayerDescription description={video!.description} />;
     const VideoComments = () => <Box bg="red" />;
 
-    console.log("isVideoEnded:" + isVideoEnded);
-
     const currentQuestionAnswered = answeredQuestionIds
         .some(qid => currentQuestion?.questionId === qid);
 
@@ -85,6 +83,18 @@ export const WatchView = (props: {
         refetchCourseItemList();
         // showNotification("Video unlocked!");
     }
+
+    useEffect(() => {
+
+        if (isVideoEnded) {
+
+
+        }
+        else {
+
+        }
+
+    }, [isVideoEnded]);
 
     // show dialogs 
     useEffect(() => {
@@ -161,7 +171,7 @@ export const WatchView = (props: {
         <VideoPlayer videoItem={video} videoPlayerState={videoPlayerState}>
 
             {/* questionnaire */}
-            <AbsoluteFlexOverlay isVisible={true} hasPointerEvents={false} align="flex-end" justify="flex-end">
+            <AbsoluteFlexOverlay isVisible={isVideoEnded} hasPointerEvents={false} align="flex-end" justify="flex-end">
 
                 <EpistoButton
                     style={{
