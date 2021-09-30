@@ -1,7 +1,4 @@
-# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: node_prod CI
+name: production
 
 on:
   push:
@@ -12,71 +9,98 @@ on:
 jobs:
 
   checkout_build_deploy_and_start:
-    name: Checkout and build 'prod'
-    runs-on: self-hosted
-    strategy:
-      matrix:
-        node-version: [14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    name: CI/CD job for the whole Epistogram applicaiton.
+    runs-on: ubuntu-latest
+    # strategy:
+    #   matrix:
+    #     node-version: [14.x]
     env:
-      REACT_APP_IS_DEPLOYED: true 
+      BRANCH_NAME: main
+      CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
+      
+      BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-main 
+      BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-main
+      
+      FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-main 
+      FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-main
     
     steps:
 
-      # INITIALIZE
-      - name: Checkout 'prod' branch
+      #
+      # CHECKOUT, LOGIN TO GCP
+      #
+      - name: Echo pipeline branch name
+        run: echo ${{ env.BRANCH_NAME }}
+
+      - name: Echo image name
+        run: echo $BACKEND_IMAGE_NAME
+
+      - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: main # references the 'prod' branch
-          path: prod_build # sets a relative folder to checkout to
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+          ref: ${{ env.BRANCH_NAME }} # references the target branch
+          path: ${{ env.BRANCH_NAME }}_repository # sets a relative folder to checkout to
+        
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
         with:
-          node-version: ${{ matrix.node-version }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
     
-      # BUILD BACKEND
-      - name: Installing dependencies for backend
-        run: npm install
-        working-directory: ./prod_build/epistogram_backend
-        
-      - name: Building backend
-        run: npm run build --if-present
-        working-directory: ./prod_build/epistogram_backend
-        
-      # BUILD FRONTEND
-      - run: echo $REACT_APP_IS_DEPLOYED
+      #
+      # BUILD & DEPLOY BACKEND 
+      #
+      - name: Copy proper .env file
+        run: |
+          cp -fr ./config/${{ env.BRANCH_NAME }}.env ./config.env 
+        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
 
-      - name: Installing dependencies for frontend
-        run: npm install
-        working-directory: ./prod_build/epistogram_frontend
-        
-      - name: Building frontend
-        run: CI=false npm run build --if-present
-        working-directory: ./prod_build/epistogram_frontend
+      - name: Build backend container
+        run: |
+          docker build -t $BACKEND_IMAGE_NAME .
+        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
 
-      # DEPLOY BACKEND
-      - name: Deploying backend to hosted location
-        run: cp -r ./dist/. /var/lib/apps/epistogram_backend@production
-        working-directory: ./prod_build/epistogram_backend
+      - name: Push Docker image to GCP Container Registry
+        run: docker push $BACKEND_IMAGE_NAME
 
-      - name: Downloading node_modules to hosting location
-        run: npm install
-        working-directory: /var/lib/apps/epistogram_backend@production
+      - name: Deploy Docker image to GCP CloudRun
+        run: |
+          gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
+          --image $BACKEND_IMAGE_NAME \
+          --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --port 5000 \
+          --allow-unauthenticated
+          
+      #
+      # BUILD & DEPLOY FRONTEND 
+      #
+      - name: Copy proper .env file
+        run: |
+          cp -fr ./config/${{ env.BRANCH_NAME }}.env ./.env 
+        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_frontend
 
-      - name: Deploying 'config.prod.env' file
-        run: cp ./config.prod.env /var/lib/apps/epistogram_backend@production/config.env
-        working-directory: ./prod_build/epistogram_backend
+      - name: Build frontend container
+        run: |
+          docker build -t $FRONTEND_IMAGE_NAME .
+        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_frontend
 
-      # DEPLOY FRONTEND
-      - name: Deploying frontend to hosted location
-        run: cp -r ./build/. /var/lib/apps/epistogram@production
-        working-directory: ./prod_build/epistogram_frontend
+      - name: Push Docker image to GCP Container Registry
+        run: docker push $FRONTEND_IMAGE_NAME
 
-      # RUN BACKEND APPLICATION  
-      - run: pm2 delete epistogram_backend_prod
-        continue-on-error: true
-        working-directory: /var/lib/apps/epistogram_backend@production
-      
-      - run: pm2 start /var/lib/apps/epistogram_backend@production/main.js --name=epistogram_backend_prod
-        working-directory: /var/lib/apps/epistogram_backend@production
+      - name: Deploy Docker image to GCP CloudRun
+        run: |
+          gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
+          --image $FRONTEND_IMAGE_NAME \
+          --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --port 80 \
+          --allow-unauthenticated
