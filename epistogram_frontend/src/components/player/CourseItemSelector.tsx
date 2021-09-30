@@ -1,11 +1,12 @@
-import { Slider } from "@mui/material";
-import React, { useState } from 'react';
+import { Flex } from '@chakra-ui/layout';
+import { FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import React from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
-import { httpPostAsync, usePostData } from "../../services/httpClient";
-import { useDialog, useShowErrorDialog } from "../../services/notifications";
+import { httpPostAsync } from "../../services/httpClient";
+import { useShowErrorDialog } from "../../services/notifications";
 import { CourseItemList } from "../universal/CourseItemList";
-import classes from './videoList.module.scss';
+import { EpistoButton } from '../universal/EpistoButton';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -15,14 +16,12 @@ export const CourseItemSelector = (props: {
 }) => {
 
     const { mode, refetchPlayerData, courseId } = props;
-    const courseModeIndex = mode === "beginner" ? 0 : 1;
     const showErrorDialog = useShowErrorDialog();
 
-    const setCourseMode = async (newIndex: number) => {
+    const setCourseMode = async (mode: CourseModeType) => {
 
         try {
-            const newMode = newIndex === 0 ? "beginner" : "advanced" as CourseModeType;
-            await httpPostAsync(`/course/set-course-mode?courseId=${courseId}&mode=${newMode}`);
+            await httpPostAsync(`/course/set-course-mode?courseId=${courseId}&mode=${mode}`);
             await refetchPlayerData();
         }
         catch (e: any) {
@@ -34,7 +33,33 @@ export const CourseItemSelector = (props: {
     return <>
 
         {/* learning type selector */}
-        <div className={classes.learningTypeSelector}>
+        <RadioGroup value={mode}>
+            <Flex height="120px" padding="20px">
+
+                <EpistoButton
+                    variant="outlined"
+                    onClick={() => setCourseMode("beginner")}
+                    style={{ flex: 1, margin: "5px", padding: "0" }}>
+                    <Typography style={{ fontSize: "14px" }}>
+                        Kezdő Mód
+                    </Typography>
+                    <Radio size="small" value="beginner" />
+                </EpistoButton>
+
+                <EpistoButton
+                    variant="outlined"
+                    onClick={() => setCourseMode("advanced")}
+                    style={{ flex: 1, margin: "5px", padding: "0" }}>
+                    <Typography style={{ fontSize: "14px" }}>
+                        Haladó Mód
+                    </Typography>
+                    <Radio size="small" value="advanced" />
+                </EpistoButton>
+            </Flex>
+        </RadioGroup>
+
+        {/* <div className={classes.learningTypeSelector}>
+
             <Slider
                 className={classes.slider}
                 defaultValue={courseModeIndex}
@@ -53,8 +78,8 @@ export const CourseItemSelector = (props: {
                     }
                 ]}
                 min={0}
-                max={1} />
-        </div>
+                max={1} /> 
+        </div> */}
 
         <CourseItemList courseItems={props.courseItems}></CourseItemList>
     </>
