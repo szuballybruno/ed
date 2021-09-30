@@ -21,6 +21,7 @@ import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
 import { EpistoButton } from "../universal/EpistoButton";
 import { TimeoutFrame, useTimeoutFrameLogic } from "../universal/TimeoutFrame";
+import { useNavigation } from "../../services/navigatior";
 
 export const WatchView = (props: {
     video: VideoDTO,
@@ -42,13 +43,21 @@ export const WatchView = (props: {
         refetchCourseItemList,
         refetchPlayerData
     } = props;
+
+    const currentCourseItemIndex = courseItems
+        .findIndex(x => x.state === "current");
+
+    const nextCourseItem = courseItems[currentCourseItemIndex + 1];
+    const { navigateToPlayer } = useNavigation();
+    const navigateToNextItem = () => navigateToPlayer(nextCourseItem.descriptorCode);
+
     const { questions } = video;
     const isDesktopView = useIsDesktopView();
     const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
-    const timeoutLogic = useTimeoutFrameLogic(3, () => console.log("next please!"));
+    const timeoutLogic = useTimeoutFrameLogic(3, navigateToNextItem);
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
@@ -183,12 +192,13 @@ export const WatchView = (props: {
                         margin: "100px",
                         padding: "0"
                     }}
+                    onClick={navigateToNextItem}
                     variant="colored">
                     <TimeoutFrame logic={timeoutLogic}>
                         <Typography style={{
                             margin: "10px"
                         }}>
-                            Next video
+                            Következő videó
                         </Typography>
                     </TimeoutFrame>
                 </EpistoButton>
