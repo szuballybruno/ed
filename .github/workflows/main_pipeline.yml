@@ -1,10 +1,10 @@
-name: node_docker CI
+name: ci_cd_pipeline_main
 
 on:
   push:
-    branches: [ docker_spike ]
+    branches: [ main ]
   pull_request:
-    branches: [ docker_spike ]
+    branches: [ main ]
 
 jobs:
 
@@ -15,14 +15,13 @@ jobs:
     #   matrix:
     #     node-version: [14.x]
     env:
-      BRANCH_NAME: docker_spike
       CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
       
-      BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-docker-spike 
-      BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-docker-spike
+      BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-main
+      BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-main
       
-      FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-docker-spike 
-      FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-docker-spike
+      FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-main 
+      FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-main
     
     steps:
 
@@ -30,7 +29,7 @@ jobs:
       # CHECKOUT, LOGIN TO GCP
       #
       - name: Echo pipeline branch name
-        run: echo ${{ env.BRANCH_NAME }}
+        run: echo main
 
       - name: Echo image name
         run: echo $BACKEND_IMAGE_NAME
@@ -38,8 +37,8 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: ${{ env.BRANCH_NAME }} # references the target branch
-          path: ${{ env.BRANCH_NAME }}_repository # sets a relative folder to checkout to
+          ref: main # references the target branch
+          path: main_repository # sets a relative folder to checkout to
         
       - name: Login to GCP
         uses: google-github-actions/setup-gcloud@master
@@ -56,13 +55,13 @@ jobs:
       #
       - name: Copy proper .env file
         run: |
-          cp -fr ./config/${{ env.BRANCH_NAME }}.env ./config.env 
-        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
+          cp -fr ./config/main.env ./config.env 
+        working-directory: ./main_repository/epistogram_backend
 
       - name: Build backend container
         run: |
           docker build -t $BACKEND_IMAGE_NAME .
-        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_backend
+        working-directory: ./main_repository/epistogram_backend
 
       - name: Push Docker image to GCP Container Registry
         run: docker push $BACKEND_IMAGE_NAME
@@ -83,13 +82,13 @@ jobs:
       #
       - name: Copy proper .env file
         run: |
-          cp -fr ./config/${{ env.BRANCH_NAME }}.env ./.env 
-        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_frontend
+          cp -fr ./config/main.env ./.env 
+        working-directory: ./main_repository/epistogram_frontend
 
       - name: Build frontend container
         run: |
           docker build -t $FRONTEND_IMAGE_NAME .
-        working-directory: ./${{ env.BRANCH_NAME }}_repository/epistogram_frontend
+        working-directory: ./main_repository/epistogram_frontend
 
       - name: Push Docker image to GCP Container Registry
         run: docker push $FRONTEND_IMAGE_NAME

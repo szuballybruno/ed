@@ -1,0 +1,105 @@
+name: ci_cd_pipeline_demo
+
+on:
+  push:
+    branches: [ demo ]
+  pull_request:
+    branches: [ demo ]
+
+jobs:
+
+  checkout_build_deploy_and_start:
+    name: CI/CD job for the whole Epistogram applicaiton.
+    runs-on: ubuntu-latest
+    # strategy:
+    #   matrix:
+    #     node-version: [14.x]
+    env:
+      CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
+      
+      BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-demo
+      BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-demo
+      
+      FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-demo 
+      FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-demo
+    
+    steps:
+
+      #
+      # CHECKOUT, LOGIN TO GCP
+      #
+      - name: Echo pipeline branch name
+        run: echo demo
+
+      - name: Echo image name
+        run: echo $BACKEND_IMAGE_NAME
+
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: demo # references the target branch
+          path: demo_repository # sets a relative folder to checkout to
+        
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+    
+      #
+      # BUILD & DEPLOY BACKEND 
+      #
+      - name: Copy proper .env file
+        run: |
+          cp -fr ./config/demo.env ./config.env 
+        working-directory: ./demo_repository/epistogram_backend
+
+      - name: Build backend container
+        run: |
+          docker build -t $BACKEND_IMAGE_NAME .
+        working-directory: ./demo_repository/epistogram_backend
+
+      - name: Push Docker image to GCP Container Registry
+        run: docker push $BACKEND_IMAGE_NAME
+
+      - name: Deploy Docker image to GCP CloudRun
+        run: |
+          gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
+          --image $BACKEND_IMAGE_NAME \
+          --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --port 5000 \
+          --allow-unauthenticated
+          
+      #
+      # BUILD & DEPLOY FRONTEND 
+      #
+      - name: Copy proper .env file
+        run: |
+          cp -fr ./config/demo.env ./.env 
+        working-directory: ./demo_repository/epistogram_frontend
+
+      - name: Build frontend container
+        run: |
+          docker build -t $FRONTEND_IMAGE_NAME .
+        working-directory: ./demo_repository/epistogram_frontend
+
+      - name: Push Docker image to GCP Container Registry
+        run: docker push $FRONTEND_IMAGE_NAME
+
+      - name: Deploy Docker image to GCP CloudRun
+        run: |
+          gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
+          --image $FRONTEND_IMAGE_NAME \
+          --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --port 80 \
+          --allow-unauthenticated
