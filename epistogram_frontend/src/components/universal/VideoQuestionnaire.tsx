@@ -56,10 +56,6 @@ export const VideoQuestionnaire = (props: {
 
             <EpistoButton
                 variant="colored"
-                buttonProps={{
-                    // onMouseEnter: () => pauseTimeout(),
-                    // onMouseLeave: () => resumeTimeout()
-                }}
                 style={{ padding: "0" }}
                 onClick={() => handleCloseDialog()}>
 
