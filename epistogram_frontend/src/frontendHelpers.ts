@@ -272,6 +272,7 @@ export const useTimer = (callback: () => void, delayMiliseconds: number) => {
     const [timeoutRef, setTimeoutRef] = useState<null | NodeJS.Timeout>(null);
     const [startTime, setStartTime] = useState<Date | null>(null);
     const [isRunning, setIsRunning] = useState(false);
+    const [isEnded, setIsEnded] = useState(false);
 
     const getCurrentElapsedMiliseconds = () => {
 
@@ -281,34 +282,42 @@ export const useTimer = (callback: () => void, delayMiliseconds: number) => {
         return Math.abs(new Date().getTime() - startTime.getTime());
     }
 
-    const clear = () => {
-
-        if (!timeoutRef)
-            return;
-
-        clearTimeout(timeoutRef);
-    }
-
-    const start = () => {
-
-        if (isRunning)
-            return;
-
-        const timeout = setTimeout(callback, remainingMiliseconds);
-
-        setIsRunning(true);
-        setStartTime(new Date());
-        setTimeoutRef(timeout);
-    }
-
     const stop = () => {
 
         if (!timeoutRef)
             return;
 
         setIsRunning(false);
-        clear();
+        clearTimeout(timeoutRef);
         setRemainingMiliseconds(remainingMiliseconds - getCurrentElapsedMiliseconds());
+    }
+
+    const start = () => {
+
+        if (isRunning || isEnded)
+            return;
+
+        const timeout = setTimeout(() => {
+
+            stop();
+            setIsEnded(true);
+            callback();
+        }, remainingMiliseconds);
+
+        setIsRunning(true);
+        setStartTime(new Date());
+        setTimeoutRef(timeout);
+    }
+
+    const restart = () => {
+
+        if (isRunning)
+            return;
+
+        setIsEnded(false);
+        setRemainingMiliseconds(delayMiliseconds);
+
+        start();
     }
 
     const getRemainingMiliseconds = () => {
@@ -323,6 +332,7 @@ export const useTimer = (callback: () => void, delayMiliseconds: number) => {
     }
 
     return {
+        restart,
         start,
         stop,
         getRemainingMiliseconds,

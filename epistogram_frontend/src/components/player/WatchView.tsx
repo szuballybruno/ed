@@ -84,14 +84,18 @@ export const WatchView = (props: {
         // showNotification("Video unlocked!");
     }
 
+    // handle autoplay timeout if video ended
     useEffect(() => {
 
         if (isVideoEnded) {
 
-
+            console.log("starting timer");
+            timeoutLogic.restart();
         }
         else {
 
+            console.log("stopping timer");
+            timeoutLogic.stop();
         }
 
     }, [isVideoEnded]);

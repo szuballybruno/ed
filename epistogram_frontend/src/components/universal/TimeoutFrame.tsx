@@ -13,6 +13,7 @@ export const useTimeoutFrameLogic = (
         isRunning: timer.isRunning,
         start: timer.start,
         stop: timer.stop,
+        restart: timer.restart,
     }
 }
 

@@ -56,6 +56,11 @@ jobs:
           echo In: $PWD
           yarn
         working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_frontend
+
+      - name: Copy proper .env file
+        run: |
+          cp -fr ./config/${{ env.PIPELINE_ENVIRONMENT }}.env ./.env 
+        working-directory: ./${{ env.PIPELINE_ENVIRONMENT }}_build/epistogram_frontend
         
       - name: Building frontend
         run: |
