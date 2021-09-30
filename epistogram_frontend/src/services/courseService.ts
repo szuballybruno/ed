@@ -1,9 +1,10 @@
 import { hasValue, useReactQuery } from "../frontendHelpers"
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
-import { httpPostAsync } from "./httpClient";
-import {CourseAdminDTO} from "../models/shared_models/CourseAdminDTO";
-import {AdminPageEditCourseDTO} from "../models/shared_models/AdminPageEditCourseDTO";
+import { httpGetAsync, httpPostAsync } from "./httpClient";
+import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
+import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
+import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 
 export const useAdministratedCourses = (searchText: string) => {
 
@@ -12,7 +13,7 @@ export const useAdministratedCourses = (searchText: string) => {
         () => httpPostAsync(hasValue(searchText) ? "/get-admin-courses?searchData=" + searchText : "/get-admin-courses"));
 
     return {
-        courses: data,
+        courses: data ?? [],
         error,
         status
     }
@@ -43,5 +44,18 @@ export const useUserCourses = (dto: GetUserCoursesDTO) => {
         courses: (data ?? []),
         error,
         status
+    }
+}
+
+export const useUserCourseData = () => {
+
+    const { data, status, error } = useReactQuery<UserCoursesDataDTO>(
+        ["getUserCoursesDataDTO"],
+        () => httpGetAsync("/users/get-courses-data"));
+
+    return {
+        coursesData: data,
+        coursesDataError: error,
+        coursesDataStatus: status
     }
 }

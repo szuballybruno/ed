@@ -1,48 +1,78 @@
 import { Course } from "../models/entity/Course";
+import { CourseGroup } from "../models/entity/CourseGroup";
 import { CourseOrganization } from "../models/entity/CourseOrganization";
+import { CourseTag } from "../models/entity/CourseTag";
 import { Group } from "../models/entity/Group";
 import { Organization } from "../models/entity/Organization";
 import { Tag } from "../models/entity/Tag";
-import {
-    AdminPageEditCourseDTO,
-    EditListItemDTO
-} from "../models/shared_models/AdminPageEditCourseDTO";
+import { AdminPageEditCourseDTO, EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
 import { toEditCourseItemsDTO, toUserDTO } from "./mappings";
+import { getAssetUrl } from "./misc/urlProvider";
 import { getTeacherDTOAsync } from "./userService";
-import {getAssetUrl} from "./misc/urlProvider";
 
 export const getEditedVideoAsync = async (videoId: string) => {
     // TODO: Create a method to get the currently edited video by videoId
 }
 
-export const setEditedCourseAsync = async (courseId: number, courseData: AdminPageEditCourseDTO) => {
-    const getCourseFromDTOAsync = async (courseData: AdminPageEditCourseDTO) => {
-        return {
-            id: courseData.courseId,
-            title: courseData.title,
-            category: courseData.category,
-            courseGroup: courseData.courseGroup,
-            permissionLevel: courseData.permissionLevel,
-            colorOne: courseData.colorOne,
-            colorTwo: courseData.colorTwo
-            // courseOrganizations: organizatcourseData.courseOrganizations,
-            // videos: courseData.videos,
-            // exams: courseData.exams,
-            // teacherId: courseData.teacherId,
-            // teacher: courseData.teacher,
-        } as Course
-    }
-    const course = await getCourseFromDTOAsync(courseData)
-    const setCourse = await staticProvider
+export const updateCourseAsync = async (dto: AdminPageEditCourseDTO) => {
+
+    // save related groups
+    await saveCourseGroupsAsync(dto.courseId, dto.groups);
+
+    // Updating courses data
+    await staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .save({
+            id: dto.courseId,
+            title: dto.title,
+            category: dto.category,
+            courseGroup: dto.courseGroup,
+            permissionLevel: dto.permissionLevel,
+            colorOne: dto.colorOne,
+            colorTwo: dto.colorTwo
+        });
+}
+
+const saveCourseGroupsAsync = async (courseId: number, groups: EditListItemDTO[]) => {
+
+    // get the checked groups
+    const checkedGroupIds = groups
+        .filter(group => group.checked)
+        .map(group => group.id);
+
+    // get the unchecked groups
+    const unCheckedGroupIds = groups
+        .filter(group => !group.checked)
+        .map(group => group.id);
+
+    // insert associations between checked groups and current course
+    const checkedCourseGroups = checkedGroupIds
+        .map(groupId => ({ courseId: courseId, groupId: groupId } as CourseGroup));
+
+    await staticProvider
+        .ormConnection
+        .getRepository(CourseGroup)
+        .save(checkedCourseGroups);
+
+    // delete associations between uncheked groups and current course
+    await deleteFromCourseGroupAsync(unCheckedGroupIds);
+}
+
+const deleteFromCourseGroupAsync = async (groupIds: number[]) => {
+
+    if (groupIds.length === 0)
+        return;
+
+    await staticProvider
         .ormConnection
         .createQueryBuilder()
-        .update(Course)
-        .set(course)
-        .where("course.id = :courseId", { courseId: courseId })
-        .execute();
-    return setCourse
+        .delete()
+        .from(CourseGroup)
+        .where("groupId IN (:...groupIds)", { groupIds })
+        .execute()
 }
 
 export const getEditedCourseAsync = async (courseId: number) => {
@@ -57,14 +87,28 @@ export const getEditedCourseAsync = async (courseId: number) => {
         .getRepository(CourseOrganization)
         .createQueryBuilder("co")
         .where("co.courseId = :courseId", { courseId })
-        .leftJoinAndSelect("co.tag", "t")
-        .leftJoinAndSelect("co.group", "g")
         .leftJoinAndSelect("co.organization", "o")
         .getMany();
 
+    const courseGroups = await staticProvider
+        .ormConnection
+        .getRepository(CourseGroup)
+        .createQueryBuilder("cg")
+        .where("cg.courseId = :courseId", { courseId })
+        .leftJoinAndSelect("cg.group", "g")
+        .getMany();
+
+    const courseTags = await staticProvider
+        .ormConnection
+        .getRepository(CourseTag)
+        .createQueryBuilder("ct")
+        .where("ct.courseId = :courseId", { courseId })
+        .leftJoinAndSelect("ct.tag", "t")
+        .getMany();
+
     const assignedOrganizations = courseOrganizations.map(co => co.organization)
-    const assignedGroups = courseOrganizations.map(co => co.group)
-    const assignedTags = courseOrganizations.map(co => co.tag)
+    const assignedGroups = courseGroups.map(cg => cg.group)
+    const assignedTags = courseTags.map(ct => ct.tag)
 
     const course = await staticProvider
         .ormConnection

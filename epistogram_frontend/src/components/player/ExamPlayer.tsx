@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { getAssetUrl, usePaging } from "../../frontendHelpers";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
+import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { useSaveExamAnswer } from "../../services/examService";
-import { ExamResultsTable } from "../exam/ExamResultsTable";
+import { ExamResults } from "../exam/ExamResults";
 import { QuestionSlides } from "../exam/QuestionSlides";
 import { SignupWrapper } from "../signup/SignupWrapper";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
@@ -15,9 +16,16 @@ export const ExamPlayer = (props: {
     setIsExamInProgress: (isExamStarted: boolean) => void
 }) => {
 
-    const { exam, setIsExamInProgress, answerSessionId } = props;
+    const {
+        exam,
+        setIsExamInProgress,
+        answerSessionId,
+    } = props;
     const { questions } = exam;
     const slidesState = usePaging([1, 2, 3, 4]);
+    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
+
+    // save exam answer
     const {
         saveExamAnswer,
         saveExamAnswerError,
@@ -25,8 +33,8 @@ export const ExamPlayer = (props: {
         correctExamAnswerId,
         clearExamAnswerCache
     } = useSaveExamAnswer();
-    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
 
+    // handle save selected answer
     const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
 
         setSelectedAnswerId(questionAnswer.answerId);
@@ -71,12 +79,10 @@ export const ExamPlayer = (props: {
         getCorrectAnswerId={() => correctExamAnswerId}
         questions={questions} />
 
-    const ResultsSlide = () => <SignupWrapper
-        title={exam.title}
-        description={"Sikeresen elvegezve!"}
-        upperTitle="Összegzés">
-        <ExamResultsTable></ExamResultsTable>
-    </SignupWrapper>
+    const ResultsSlide = () =>
+        <ExamResults
+            examTitle={exam.title}
+            answerSessionId={answerSessionId}></ExamResults>
 
     const slides = [
         GreetSlide,
@@ -86,6 +92,7 @@ export const ExamPlayer = (props: {
 
     return (
         <LoadingFrame
+            className="whall"
             loadingState={saveExamAnswerState}
             error={saveExamAnswerError}
             flex="1">

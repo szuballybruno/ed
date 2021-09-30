@@ -1,10 +1,5 @@
-import React, { useEffect } from 'react';
-import classes from "./courseVideoList.module.scss"
-import instance from "../../../../services/axiosInstance";
-import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
-import { Typography } from "@material-ui/core";
-import { backendUrl } from '../../../../Environemnt';
 import { Box } from '@chakra-ui/react';
+import React from 'react';
 
 export const CourseVideoList = (props: { courseId: string }) => {
 

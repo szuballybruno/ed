@@ -1,16 +1,19 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Answer } from "./Answer";
 import { AnswerSession } from "./AnswerSession";
-import { Exam } from "./Exam";
 import { Question } from "./Question";
-import { User } from "./User";
-import { Video } from "./Video";
 
 @Entity()
 export class QuestionAnswer {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @CreateDateColumn()
+    creationDate: Date;
+
+    @Column({ default: false })
+    isPractiseAnswer: boolean;
 
     // question
     @Column()

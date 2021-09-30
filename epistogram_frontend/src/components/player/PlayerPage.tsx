@@ -1,19 +1,16 @@
-import { Box, Flex } from "@chakra-ui/react";
-import React, { useState } from 'react';
+import { Box } from "@chakra-ui/react";
+import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router";
-import menuItems from "../../configuration/menuItems.json";
-import { getQueryParam, useIsDesktopView } from "../../frontendHelpers";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
-import { ContentWrapper, MainWrapper } from "../../HOC/MainPanels";
-import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
+import { useIsDesktopView } from "../../frontendHelpers";
 import { useNavigation } from "../../services/navigatior";
 import { useDialog } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
+import { LoadingFrame } from "../HOC/LoadingFrame";
+import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import { FlexFloat } from "../universal/FlexFloat";
-import Navbar from "../universal/navigation/navbar/Navbar";
+import Navbar from "../navbar/Navbar";
 import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
-import classes from './playerMain.module.scss';
 import { WatchView } from "./WatchView";
 
 export const PlayerPage = () => {
@@ -30,10 +27,25 @@ export const PlayerPage = () => {
         playerDataError,
         refetchPlayerData
     } = usePlayerData(descriptorCode);
-    const courseItems = playerData?.courseItems ?? [];
     const video = playerData?.video;
     const exam = playerData?.exam;
     const answerSessionId = playerData?.answerSessionId;
+    const courseMode = playerData?.mode ?? "beginner";
+    const courseId = playerData?.courseId;
+    const courseItems = playerData?.courseItems ?? [];
+
+    // redirect if current item should be locked 
+    useEffect(() => {
+
+        if (!playerData?.courseItemCode)
+            return;
+
+        if (playerData.courseItemCode === descriptorCode)
+            return;
+
+        navigateToPlayer(playerData.courseItemCode);
+
+    }, [playerData?.courseItemCode]);
 
     const navigateToCourseItem = (descriptorCode: string) => {
 
@@ -64,9 +76,13 @@ export const PlayerPage = () => {
                     <Box id="mainColumn" overflowY="scroll" height="100%" width="100%">
 
                         {video && <WatchView
+                            courseId={courseId!}
+                            courseMode={courseMode}
+                            refetchPlayerData={refetchPlayerData}
                             answerSessionId={answerSessionId!}
                             video={video}
                             courseItems={courseItems}
+                            refetchCourseItemList={refetchPlayerData}
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
@@ -88,9 +104,12 @@ export const PlayerPage = () => {
                         {isDesktopView && <Box
                             id="courseItemSelectorRoot"
                             width="350px"
-                            minWidth="350px"
-                            pl="15px">
-                            <CourseItemSelector courseItems={courseItems} />
+                            minWidth="350px">
+                            <CourseItemSelector
+                                courseId={courseId!}
+                                mode={courseMode}
+                                courseItems={courseItems}
+                                refetchPlayerData={refetchPlayerData} />
                         </Box>}
                     </FlexFloat>
                 </LoadingFrame>

@@ -1,63 +1,50 @@
-import { Box, Flex } from '@chakra-ui/react';
-import { Button, Typography } from "@material-ui/core";
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
-import { LoadingFrame } from '../../HOC/LoadingFrame';
-import { LoadingStateType } from '../../models/types';
-
-export const QuestionnaierAnswer = (props: {
-    children: ReactNode,
-    onClick: () => void,
-    isIncorrect: boolean,
-    isCorrect: boolean
-}) => {
-
-    const { children, onClick, isIncorrect, isCorrect } = props;
-
-    const getBg = () => {
-
-        if (isIncorrect)
-            return "#fa6767";
-
-        if (isCorrect)
-            return "#7cf25e";
-
-        return "white";
-    }
-
-    return <Box p="5px">
-        <Button
-            variant={"contained"}
-            onClick={() => onClick()}
-            style={{ background: getBg() }}>
-            {children}
-        </Button>
-    </Box>
-}
+import { LoadingFrame, LoadingFramePropsType } from '../HOC/LoadingFrame';
+import { EpistoText } from './EpistoText';
 
 export const QuestionnaireLayout = (props: {
     title: string,
     children: ReactNode,
-    loadingState?: LoadingStateType,
-    loadingError?: any,
-    buttonsEnabled: boolean
-}) => {
+    buttonsEnabled: boolean,
+    loadingProps: LoadingFramePropsType
+} & FlexProps) => {
 
-    const { title, buttonsEnabled, children, loadingError, loadingState } = props;
+    const { title, buttonsEnabled, children, loadingProps, ...css } = props;
 
     return (
-        <Flex id="questionnaireRoot" direction="column" p="20px">
+        <Flex id="questionnaireLayoutRoot" direction="column" p="20px" align="center" {...css}>
 
             {/* title */}
-            <Typography variant={"button"} style={{ fontSize: "18px", textAlign: "center" }}>
-                {title}
-            </Typography>
+            <Flex align="center">
+                <img
+                    style={{
+                        borderRadius: "50%",
+                        padding: "8px",
+                        width: "50px",
+                        height: "50px",
+                        marginRight: "30px"
+                    }}
+                    src="https://static.thenounproject.com/png/92068-200.png"
+                    className="tinyShadow" />
+
+                <EpistoText
+                    isAutoFontSize
+                    text={title}
+                    style={{ width: "100%" }} />
+                {/* <Typography variant={"button"} style={{ fontSize: "18px", textAlign: "center" }}>
+                    {title}
+                </Typography> */}
+            </Flex>
+
+            {/* divider */}
+            <Box width="40%" bg="var(--epistoTeal)" height="2px" m="4px" />
 
             {/* answers */}
-            <LoadingFrame loadingState={loadingState ?? "idle"} error={loadingError}>
+            <LoadingFrame {...loadingProps}>
                 <Flex
                     id="answersListContainer"
                     direction="column"
-                    alignItems="center"
                     width="100%"
                     mt="20px"
                     pointerEvents={buttonsEnabled ? "all" : "none"}>

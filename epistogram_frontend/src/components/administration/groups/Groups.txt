@@ -10,8 +10,8 @@ import {AdminDashboardList} from "../universal/adminDashboardList/AdminDashboard
 import {AxiosResponse} from "axios";
 import {UserStatistics} from "../users/userStatistics/UserStatistics";
 import {AddGroup} from "./groups_components/AddGroup";
-import {Add} from "@material-ui/icons";
-import {Fab} from "@material-ui/core";
+import {Add} from "@mui/icons-material";
+import {Fab} from "@mui/material";
 import { backendUrl } from '../../../Environemnt';
 
 export const Groups: React.FunctionComponent = () => {

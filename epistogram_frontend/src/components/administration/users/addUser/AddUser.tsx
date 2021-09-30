@@ -1,8 +1,8 @@
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { disallowWindowNavigation, getEventValueCallback, hasValue, TypedError } from "../../../../frontendHelpers";
 import { AddFrame } from "../../../add_frame/AddFrame";
-import { CurrentUserContext } from "../../../../HOC/AuthenticationFrame";
+import { CurrentUserContext } from "../../../HOC/AuthenticationFrame";
 import { CreateInvitedUserDTO } from "../../../../models/shared_models/CreateInvitedUserDTO";
 import { OrganizationDTO } from "../../../../models/shared_models/OrganizationDTO";
 import { UserDTO } from "../../../../models/shared_models/UserDTO";
@@ -14,30 +14,32 @@ import SelectFromArray, { OptionType } from "../../universal/selectFromArray/Sel
 import SingleInput from "../../universal/singleInput/SingleInput";
 import DoubleInputs from "../../universal/twoInputs/DoubleInputs";
 import classes from "./addUser.module.scss";
+import { applicationRoutes } from "../../../../configuration/applicationRoutes";
+import { RoleDTO } from "../../../../models/shared_models/RoleDTO";
 
-const mapOrganizations = (organizations: OrganizationDTO[]) => {
-    const organizationOptions = organizations
-        .map(x => ({
-            optionValue: "" + x.id,
-            optionText: x.name
-        } as OptionType));
-
-    return organizationOptions;
-}
-
-const roles = [{
-    optionText: "Adminisztrátor",
-    optionValue: "admin"
-}, {
-    optionText: "Vezető",
-    optionValue: "owner"
-}, {
-    optionText: "Csoportvezető",
-    optionValue: "supervisor"
-}, {
-    optionText: "Felhasználó",
-    optionValue: "user"
-}]
+const roles = [
+    {
+        optionText: "Adminisztrátor",
+        optionValue: {
+            name: "admin",
+            id: 1
+        },
+    },
+    {
+        optionText: "Vezető",
+        optionValue: {
+            name: "supervisor",
+            id: 2
+        }
+    },
+    {
+        optionText: "Felhasználó",
+        optionValue: {
+            name: "user",
+            id: 3
+        }
+    }
+] as OptionType<RoleDTO>[];
 
 const AddUser = () => {
 
@@ -45,15 +47,21 @@ const AddUser = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState<RoleDTO>();
     const [jobTitle, setJobTitle] = useState("");
-    const [organizationId, setOrganizationId] = useState("");
+    const [organizationId, setOrganizationId] = useState<number>(-1);
 
     const { showDialog } = useDialog();
     const user = useContext(CurrentUserContext) as UserDTO;
-    const canModifyOrganization = user.role === "admin";
+    const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;
     const { organizations } = useOrganizations();
-    const organizationOptions = mapOrganizations(organizations);
+
+    const organizationOptions = organizations
+        .map(org => ({
+            optionValue: org.id,
+            optionText: org.name
+        } as OptionType<number>));
+
     const unblockHandle = useRef<any>();
     const { navigate, history } = useNavigation();
     const isChanged = hasValue(firstName)
@@ -78,33 +86,33 @@ const AddUser = () => {
     console.log("Changed: " + isChanged);
 
     // display unsaved changes alert when user navigates 
-    useEffect(() => {
-        unblockHandle.current = history.block((targetLocation: any) => {
+    // useEffect(() => {
+    //     unblockHandle.current = history.block((targetLocation: any) => {
 
-            if (!isChanged) {
+    //         if (!isChanged) {
 
-                console.log("Navigation not blocked because there is no changed fields!");
-                return true as any;
-            }
+    //             console.log("Navigation not blocked because there is no changed fields!");
+    //             return true as any;
+    //         }
 
-            console.log("Blocking navigation because there's changed fields!");
+    //         console.log("Blocking navigation because there's changed fields!");
 
-            // take some custom action here
-            // i chose to show my custom modal warning user froim going back
-            // rather than relying on the browser's alert
-            showDialog({
-                title: "Biztosan megszakítod a felhasználó hozzáadását?",
-                description: "Megszakítás esetén a beírt adatok elvesznek.",
-                firstButtonTitle: "Folytatom",
-                secondButtonTitle: "Megszakítom"
-            });
+    //         // take some custom action here
+    //         // i chose to show my custom modal warning user froim going back
+    //         // rather than relying on the browser's alert
+    //         showDialog({
+    //             title: "Biztosan megszakítod a felhasználó hozzáadását?",
+    //             description: "Megszakítás esetén a beírt adatok elvesznek.",
+    //             firstButtonTitle: "Folytatom",
+    //             secondButtonTitle: "Megszakítom"
+    //         });
 
-            return false;
-        });
-        return function () {
-            unblockHandle.current.current && unblockHandle.current.current()
-        }
-    })
+    //         return false;
+    //     });
+    //     return function () {
+    //         unblockHandle.current.current && unblockHandle.current.current()
+    //     }
+    // })
 
     // const discardChangesAndNavigate = () => {
     //     if (unblockHandle) {
@@ -124,7 +132,7 @@ const AddUser = () => {
     //     }
     // }
 
-    disallowWindowNavigation();
+    // disallowWindowNavigation();
 
     const submitAddUserRequestAsync = async () => {
 
@@ -133,7 +141,7 @@ const AddUser = () => {
             lastName,
             email,
             jobTitle,
-            role: hasValue(role) ? role : "admin",
+            roleId: hasValue(role) ? role!.id : 1,
             organizationId
         } as CreateInvitedUserDTO;
 
@@ -144,7 +152,7 @@ const AddUser = () => {
             await createInvitedUserAsync(createInvitedUserDTO);
 
             showNotification("Felhasználó sikeresen hozzáadva");
-            navigate("/admin/manage/users");
+            navigate(applicationRoutes.administrationRoute.usersRoute.route);
         } catch (error) {
 
             // generic JS error
@@ -193,26 +201,28 @@ const AddUser = () => {
             changeHandler={getEventValueCallback(setEmail)} />
 
         {/* organization */}
-        {canModifyOrganization && <SelectFromArray
-            labelText={"Cég"}
-            showNull
-            name={"organizationId"}
-            value={organizationId}
-            optionValues={organizationOptions}
-            changeHandler={getEventValueCallback(setOrganizationId)} />}
+        {canSetInvitedUserOrganization && <SelectFromArray
+            labelText="Cég"
+            name="organizationId"
+            items={organizationOptions}
+            selectedValue={organizationId}
+            onSelected={setOrganizationId}
+            getCompareKey={orgId => orgId.toString()} />}
 
         {/* job title */}
         <SingleInput
-            labelText={"Beosztás"}
+            labelText="Beosztás"
             name={"jobTitle"}
             changeHandler={getEventValueCallback(setJobTitle)} />
 
         {/* role */}
-        <SelectFromArray labelText={"Jogosultsági kör"}
-            name={"role"}
-            value={role}
-            optionValues={roles}
-            changeHandler={getEventValueCallback(setRole)} />
+        <SelectFromArray
+            labelText="Jogosultsági kör"
+            name="role"
+            selectedValue={role}
+            items={roles}
+            onSelected={setRole}
+            getCompareKey={x => "" + x?.id} />
 
         {/* submit button */}
         <Button

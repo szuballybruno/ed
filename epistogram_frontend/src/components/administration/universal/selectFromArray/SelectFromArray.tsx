@@ -1,35 +1,53 @@
 import React from "react";
 import classes from "./selectFromArray.module.scss";
-import {FormControl, Select, Typography} from "@material-ui/core";
+import { FormControl, Select, Typography } from "@mui/material";
 
-export type OptionType = {
-    optionValue: string,
+export type OptionType<T> = {
+    optionValue: T,
     optionText: string
 };
 
-const SelectFromArray = (props: {
+const SelectFromArray = <T,>(props: {
     labelText: string,
     name: string,
-    value: string,
-    showNull?: boolean,
-    optionValues: OptionType[]
-    changeHandler?: (e: React.ChangeEvent<{ value: unknown, name?: string }>) => void
+    selectedValue: T,
+    items: OptionType<T>[]
+    onSelected: (value: T) => void,
+    getCompareKey: (item: T) => string
 }) => {
+
+    const { items, name, labelText, getCompareKey, selectedValue: selectedItem, onSelected } = props;
+
+    const onSelectedValue = (key: string) => {
+
+        const currentItem = items.filter(x => getCompareKey(x.optionValue) === key)[0];
+
+        onSelected(currentItem.optionValue);
+    }
+
+    const currentSelectedKey = getCompareKey(selectedItem);
+
     return <div className={classes.dataRow}>
         <div>
-            <Typography variant={"overline"}>{props.labelText}</Typography>
+            <Typography variant={"overline"}>{labelText}</Typography>
         </div>
         <FormControl variant={"outlined"} className={classes.formControl} size={"small"}>
-            <Select native
-                    name={props.name}
-                    onChange={props.changeHandler}
-                    value={props.value}>
-                {props.showNull ? <option value={""}>Kérem válasszon...</option> : null}
-                {
-                    props.optionValues.map((option) => {
-                        return <option value={option.optionValue}>{option.optionText}</option>
-                    })
-                }
+            <Select
+                native
+                name={name}
+                onChange={(x) => onSelectedValue(x.target.value)}
+                value={currentSelectedKey}>
+
+                {selectedItem && <option value={""}>Kérem válasszon...</option>}
+
+                {items
+                    .map((item) => {
+
+                        return <option
+                            value={getCompareKey(item.optionValue)}>
+                            {item.optionText}
+                        </option>
+                    })}
             </Select>
         </FormControl>
     </div>

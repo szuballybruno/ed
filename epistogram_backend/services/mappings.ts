@@ -1,7 +1,8 @@
 import { Answer } from "../models/entity/Answer";
-import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
+import { CourseGroup } from "../models/entity/CourseGroup";
 import { CourseOrganization } from "../models/entity/CourseOrganization";
+import { CourseTag } from "../models/entity/CourseTag";
 import { Exam } from "../models/entity/Exam";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
@@ -13,21 +14,30 @@ import { EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO"
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
-import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
+import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizationDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
+import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
+import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
+import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
+import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { CourseItemState, CourseItemType } from "../models/shared_models/types/sharedTypes";
+import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { staticProvider } from "../staticProvider";
-import { hasValue, navPropNotNull, throwNotImplemented, withValue } from "../utilities/helpers";
-import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO } from "./encodeService";
+import { CourseItemStateView } from "../models/views/CourseItemStateView";
+import { CourseStateView } from "../models/views/CourseStateView";
+import { CourseView } from "../models/views/CourseView";
+import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
+import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
+import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
+import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
+import { getCourseItemDescriptorCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
 export const toUserDTO = (user: User) => {
@@ -37,14 +47,35 @@ export const toUserDTO = (user: User) => {
         organizationId: user.organizationId,
         firstName: user.firstName,
         lastName: user.lastName,
-        role: user.role,
         jobTitle: user.jobTitle,
         isActive: user.isActive,
         email: user.email,
         phoneNumber: user.phoneNumber,
         name: `${user.lastName} ${user.firstName}`,
-        avatarUrl: getAssetUrl(user.avatarFile?.filePath)
+        avatarUrl: user.avatarFile
+            ? getAssetUrl(user.avatarFile.filePath)
+            : getAssetUrl("images/defaultAvatar.png"),
+        userActivity: user.userActivity ? toUserActivityDTO(user.userActivity) : null
     } as UserDTO;
+}
+
+export const toCourseStatDTO = (courseStateView: CourseView) => {
+
+    return {
+        title: courseStateView.title,
+        coverImageUrl: courseStateView.filePath
+            ? getAssetUrl(courseStateView.filePath)
+            : getAssetUrl("/images/defaultCourseCover.jpg")
+    } as CourseStatDTO;
+}
+
+export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
+
+    return {
+        canSetInvitedUserOrganization: userRightsView.canSetInvitedUserOrganization,
+        canAccessAdministration: userRightsView.canAccessAdministration,
+        canAccessCourseAdministration: userRightsView.canAccessCourseAdministration,
+    } as UserActivityDTO;
 }
 
 export const toAdminPageUserDTO = (user: User) => {
@@ -71,17 +102,31 @@ export const toCourseOrganizationDTO = (courseOrganization: CourseOrganization) 
 
     return {
         courseId: courseOrganization.courseId,
-        organizationId: courseOrganization.organizationId,
-        groupId: courseOrganization.groupId,
-        tagId: courseOrganization.tagId
+        organizationId: courseOrganization.organizationId
     } as CourseOrganizationDTO;
+}
+
+export const toCourseGroupDTO = (courseGroup: CourseGroup) => {
+
+    return {
+        courseId: courseGroup.courseId,
+        groupId: courseGroup.groupId
+    } as CourseGroupDTO;
+}
+
+export const toCourseTagDTO = (courseTag: CourseTag) => {
+
+    return {
+        courseId: courseTag.courseId,
+        tagId: courseTag.tagId
+    } as CourseTagDTO;
 }
 
 export const toTaskDTO = (task: Task) => {
 
     return {
-        text: task.name,
-        dueDate: task.dueData.toString(),
+        name: task.name,
+        dueDate: task.dueData,
         objective: task.objective
     } as TaskDTO;
 }
@@ -92,6 +137,7 @@ export const toExamDTO = (exam: Exam) => {
 
     return {
         id: exam.id,
+        courseId: exam.courseId,
         subTitle: exam.subtitle,
         title: exam.title,
         thumbnailUrl: exam.thumbnailUrl,
@@ -99,160 +145,154 @@ export const toExamDTO = (exam: Exam) => {
     } as ExamDTO;
 }
 
+export const toExamResultDTO = (
+    answerSessionView: UserExamAnswerSessionView,
+    data: User,
+    isFirstTimeComplted: boolean) => {
+
+    navPropNotNull(data.currentExam);
+    navPropNotNull(data.currentExam!.questions);
+
+    const questions = data.currentExam!.questions;
+
+    const questionDTOs = questions
+        .map(question => {
+
+            navPropNotNull(question.questionAnswers);
+            navPropNotNull(question.answers);
+
+            const questionAnswer = question
+                .questionAnswers
+                .single(x => true);
+
+            navPropNotNull(questionAnswer.answer);
+
+            const correctAnswer = question
+                .answers
+                .single(x => x.isCorrect);
+
+            return {
+                text: question.questionText,
+                answerText: questionAnswer.answer.text,
+                correctAnswerText: correctAnswer.text,
+                isCorrect: questionAnswer.answer.isCorrect ?? false
+            } as ExamResultQuestionDTO;
+        })
+
+    return {
+        isSuccessful: answerSessionView.isCompleteSession,
+        correctAnswerCount: answerSessionView.correctAnswerCount,
+        questionCount: answerSessionView.questionCount,
+        questions: questionDTOs,
+        isCompletedPrevoiusly: !isFirstTimeComplted,
+        isFinalExam: answerSessionView.isFinalExam,
+        shouldShowCourseCompleted: isFirstTimeComplted && answerSessionView.isFinalExam
+    } as ExamResultsDTO;
+}
+
 export const toCourseItemDTOs = (
-    course: Course,
-    currentCourseItemDescriptor: CourseItemDescriptorDTO) => {
+    courseItems: CourseItemStateView[],
+    currentItemDescriptorCode: string) => {
 
-    navPropNotNull(course.exams);
-    navPropNotNull(course.videos);
-
-    // map exam items
-    const examItems = course
-        .exams
-        .map(exam => {
-
-            navPropNotNull(exam.questions);
-            navPropNotNull(exam.answerSessions);
-
-            return toCourseItemDTO(exam, getCourseItemState(exam.questions, exam.answerSessions), false);
-        });
-
-    // map video items
-    const videoItems = course
-        .videos
-        .map(video => {
-
-            navPropNotNull(video.questions);
-            navPropNotNull(video.answerSessions);
-
-            return toCourseItemDTO(video, getCourseItemState(video.questions, video.answerSessions), true);
-        });
-
-    // concat to one ordered list
-    const itemsOrdered = examItems
-        .concat(videoItems)
-        .orderBy(x => x.orderIndex);
-
-    // get the index of the last non-locked item
-    // note that there has not been a current calculation so far
-    const lastNonLockedItemIndex = itemsOrdered
-        .findLastIndex(x => x.state != "locked");
-
-    // if there is a last non-locked, 
-    // and it's not the last in the list
-    // set it to available 
-    if (hasValue(lastNonLockedItemIndex) && lastNonLockedItemIndex! + 1 != itemsOrdered.length)
-        itemsOrdered[lastNonLockedItemIndex! + 1].state = "available";
+    const courseItemDTOs = courseItems
+        .map(x => toCourseItemDTO(x));
 
     // set current item's state to 'current'
-    const currentItemDescriptorCode = getCourseItemDescriptorCodeFromDTO(currentCourseItemDescriptor);
-    const currentItem = itemsOrdered
+    let currentItem = courseItemDTOs
         .single(item => item.descriptorCode === currentItemDescriptorCode);
+
+    if (currentItem.state === "locked") {
+
+        const firstLockedIndex = courseItemDTOs
+            .findIndex(x => x.state === "locked");
+
+        currentItem = courseItemDTOs[firstLockedIndex - 1];
+    }
 
     currentItem.state = "current";
 
-    return itemsOrdered;
+    return courseItemDTOs;
 }
 
-const getCourseItemState = (
-    questions: Question[],
-    answerSessions: AnswerSession[]): CourseItemState => {
-
-    const isAnyCompletedAnswerSession = answerSessions
-        .any(answerSession => {
-
-            const isAllQuestionsAnswered = questions
-                .all(quesiton => answerSession
-                    .questionAnswers
-                    .any(qa => qa.questionId == quesiton.id));
-
-            const isAllAnswersCorrect = answerSession
-                .questionAnswers
-                .all(qa => !!qa.answer.isCorrect);
-
-            if (isAllQuestionsAnswered && isAllAnswersCorrect)
-                return true;
-
-            return false;
-        });
-
-    if (isAnyCompletedAnswerSession)
-        return "completed";
-
-    return "locked";
-}
-
-const getVideoState = (video: Video) => {
-
-    return video
-        .questions
-        .map(question => question
-            .questionAnswers
-            .map(questionAnswer => questionAnswer.answer.isCorrect))
-}
-
-export const toVideoDTO = (video: Video) => {
+export const toVideoDTO = (video: Video, maxWatchedSeconds: number) => {
 
     navPropNotNull(video.questions);
     navPropNotNull(video.videoFile);
 
     return {
         id: video.id,
+        courseId: video.courseId,
         subTitle: video.subtitle,
         title: video.title,
         description: video.description,
         thumbnailUrl: "",
         url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl("images/videoImage.jpg"),
-        questions: video.questions.map(q => toQuestionDTO(q))
+        questions: video.questions.map(q => toQuestionDTO(q)),
+        maxWatchedSeconds: maxWatchedSeconds
     } as VideoDTO;
 }
 
-export const toCourseItemDTO = (item: Video | Exam, state: CourseItemState, isVideo: boolean) => {
+export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
 
+    const isVideo = !!courseItemView.videoId;
+
+    // VIDEO
     if (isVideo) {
 
-        const video = item as Video;
+        navPropNotNull(courseItemView.video);
+
+        const video = courseItemView.video as Video;
 
         return {
             subTitle: video.subtitle,
             thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
             title: video.title,
             orderIndex: video.orderIndex,
-            state: state,
-            descriptorCode: getCourseItemDescriptorCode(video.id, "video")
+            state: courseItemView.state,
+            descriptorCode: getCourseItemDescriptorCode(video.id, "video"),
+            type: "video"
         } as CourseItemDTO;
     }
+
+    // EXAM
     else {
 
-        const exam = item as Exam;
+        navPropNotNull(courseItemView.exam);
+
+        const exam = courseItemView.exam as Exam;
 
         return {
             subTitle: exam.subtitle,
             thumbnailUrl: getExamCoverImageUrl(),
             title: exam.title,
             orderIndex: exam.orderIndex,
-            state: state,
-            descriptorCode: getCourseItemDescriptorCode(exam.id, "exam")
+            state: courseItemView.state,
+            descriptorCode: getCourseItemDescriptorCode(exam.id, "exam"),
+            type: "exam"
         } as CourseItemDTO;
     }
 }
 
-export const toCourseShortDTO = (course: Course, itemCode: string) => {
+export const toCourseShortDTO = (course: CourseView) => {
 
-    navPropNotNull(course.videos);
-    navPropNotNull(course.exams);
-
-    const thumbnailImageURL = course.coverFile
-        ? getAssetUrl(course.coverFile.filePath)
+    const thumbnailImageURL = course.filePath
+        ? getAssetUrl(course.filePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
+
+    const firstItemCode = (course.currentExamId || course.currentVideoId)
+        ? course.currentExamId
+            ? getCourseItemDescriptorCode(course.currentExamId, "exam")
+            : getCourseItemDescriptorCode(course.currentVideoId, "video")
+        : null;
 
     return {
         courseId: course.id,
         title: course.title,
         category: course.category,
-        firstItemCode: itemCode,
+        firstItemCode: firstItemCode,
         teacherName: "Mr. Teacher Name",
-        thumbnailImageURL: thumbnailImageURL
+        thumbnailImageURL: thumbnailImageURL,
+        isComplete: course.isComplete
     } as CourseShortDTO;
 }
 
@@ -313,21 +353,21 @@ export const toEditListItemDTO = (id: number, name: string, checked: boolean) =>
 
 export const toEditCourseItemsDTO = (course: Course) => {
 
-    const examItems = course
-        .exams
-        .map(x => toCourseItemDTO(x, "completed", false));
+    // const examItems = course
+    //     .exams
+    //     .map(x => toCourseItemDTO(x, "completed", false));
 
-    const videoItems = course
-        .videos
-        .map(x => toCourseItemDTO(x, "completed", true));
+    // const videoItems = course
+    //     .videos
+    //     .map(x => toCourseItemDTO(x, "completed", true));
 
-    const itemsCombined = examItems
-        .concat(videoItems);
+    // const itemsCombined = examItems
+    //     .concat(videoItems);
 
-    const itemsOrdered = itemsCombined
-        .orderBy(x => x.orderIndex);
+    // const itemsOrdered = itemsCombined
+    //     .orderBy(x => x.orderIndex);
 
-    return itemsOrdered as CourseItemDTO[];
-    //throwNotImplemented();
+    // return itemsOrdered as CourseItemDTO[];
+    throwNotImplemented();
     return [] as CourseItemDTO[];
 }

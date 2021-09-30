@@ -5,12 +5,84 @@ declare global {
     interface Array<T> {
 
         remove(func: (item: T) => boolean): Array<T>;
-        orderBy(func: (item: T) => number | string): Array<T>;
+        orderBy(func: (item: T) => number | string | Date): Array<T>;
+        groupBy(func: (item: T) => any): Grouping<T>[];
         any(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
         findLastIndex(func: (item: T) => boolean): number | null;
         single(func: (item: T) => boolean): T;
+        first(func: (item: T) => boolean): T;
+        last(func: (item: T) => boolean): T;
+        firstOrNull(func: (item: T) => boolean): T | null;
     }
+}
+
+export type Grouping<T> = {
+    key: any,
+    items: T[]
+}
+
+Array.prototype.groupBy = function <T>(func: (item: T) => any) {
+
+    const groups = [] as Grouping<T>[];
+
+    this
+        .forEach(item => {
+
+            const key = func(item);
+            const currentGroup = groups
+                .filter(x => x.key === key)[0];
+            const existingKey = !!currentGroup;
+
+            if (existingKey) {
+
+                currentGroup.items.push(item);
+            }
+            else {
+
+                groups
+                    .push({
+                        key: key,
+                        items: [item]
+                    })
+            }
+        });
+
+    return groups;
+}
+
+Array.prototype.firstOrNull = function <T>(func: (item: T) => T) {
+
+    const filtered = this.filter(func);
+    const first = filtered[0];
+
+    if (first === undefined)
+        return null;
+
+    if (first === null)
+        return null;
+
+    return first;
+}
+
+Array.prototype.last = function <T>(func: (item: T) => T) {
+
+    const filtered = this.filter(func);
+
+    if (filtered.length == 0)
+        throw new Error("Last operaion found no matching elements!");
+
+    return filtered[filtered.length - 1];
+}
+
+Array.prototype.first = function <T>(func: (item: T) => T) {
+
+    const filtered = this.filter(func);
+
+    if (filtered.length == 0)
+        throw new Error("First operaion found no matching elements!");
+
+    return filtered[0];
 }
 
 Array.prototype.single = function <T>(func: (item: T) => T) {
@@ -54,7 +126,7 @@ Array.prototype.remove = function <T>(func: (item: T) => boolean) {
     return this.filter(item => !func(item)) as Array<T>
 }
 
-Array.prototype.orderBy = function <T>(func: (item: T) => number | string) {
+Array.prototype.orderBy = function <T>(func: (item: T) => number | string | Date) {
 
     const sorted = this
         .sort((a, b) => {

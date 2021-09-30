@@ -1,7 +1,7 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import classes from "./selectImage.module.scss"
-import {Add, Edit, EditOutlined} from "@material-ui/icons";
-import {Button, Typography} from "@material-ui/core";
+import { Add, Edit, EditOutlined } from "@mui/icons-material";
+import { Button, Typography } from "@mui/material";
 
 const SelectImage = (props: {
     onChange: (e: any) => any,
@@ -20,10 +20,10 @@ const SelectImage = (props: {
         {props.uploadedImageUrls.map((image) => {
             return image ? <div className={classes.selectedImageWrapper}>
                 <img className={classes.selectedImage}
-                     src={image}
-                     alt={""} />
+                    src={image}
+                    alt={""} />
                 <Button className={classes.selectImagePlaceholder}>
-                    <EditOutlined onClick={handleUpload}/>
+                    <EditOutlined onClick={handleUpload} />
                 </Button>
             </div> : <Button onClick={handleUpload} className={classes.selectedImagePlaceholder}>
                 <Add />
@@ -31,9 +31,9 @@ const SelectImage = (props: {
         })}
 
         <input type="file"
-               ref={hiddenFileInput}
-               style={{display: "none"}}
-               onChange={props.onChange}/>
+            ref={hiddenFileInput}
+            style={{ display: "none" }}
+            onChange={props.onChange} />
     </div>
 };
 

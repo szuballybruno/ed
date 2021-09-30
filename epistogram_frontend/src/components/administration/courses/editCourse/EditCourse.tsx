@@ -1,29 +1,30 @@
-import React, {useEffect, useState} from 'react';
-import classes from "./editCourse.module.scss"
-import {Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography} from "@material-ui/core";
-import EditItem from "../../../universal/atomic/editItem/EditItem";
-import { useParams } from "react-router";
-import AdminDashboardHeader from "../../universal/adminDashboardHeader/AdminDashboardHeader";
-import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSearch";
+import { Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography } from "@mui/material";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import React, { useEffect, useState } from 'react';
 import { HexColorPicker } from "react-colorful";
-import SelectImage from "../../universal/selectImage/SelectImage";
+import { useParams } from "react-router";
+import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
+import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../../models/shared_models/AdminPageEditCourseDTO";
+import { useAdminEditedCourse } from "../../../../services/courseService";
+import { httpPostAsync } from "../../../../services/httpClient";
+import EditItem from "../../../universal/editItem/EditItem";
+import AdminDashboardHeader from "../../universal/adminDashboardHeader/AdminDashboardHeader";
+import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
 import { AdminDashboardWrapper } from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
 import { SaveBar } from "../../universal/saveBar/SaveBar";
-import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
-import { useAdminEditedCourse, useUserCourses } from "../../../../services/courseService";
-import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
-import { getChipWithLabel } from "../courseList/CourseList";
-import {SelectMultiple} from "../../universal/selectMultiple/SelectMultiple";
-import {AdminPageEditCourseDTO, EditListItemDTO} from "../../../../models/shared_models/AdminPageEditCourseDTO";
-import {httpPostAsync} from "../../../../services/httpClient";
+import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSearch";
+import SelectImage from "../../universal/selectImage/SelectImage";
+import { SelectMultiple } from "../../universal/selectMultiple/SelectMultiple";
+import classes from "./editCourse.module.scss";
+import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
 
 /* TODO:
-*   - onClick for save changes button
-*   - editCourseDTO
-*   - fetch all the necessary data
+*   - Create a new CourseItemDTO for this page
+*   - Make the order state editable -> If the orderIndex is not equal with the sent array index
+*
 */
 
-export const TextOrInput = (props: {isEditable: boolean, value: string}) => {
+export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
 }
 
@@ -50,6 +51,7 @@ export const EditCourse = () => {
     const [thumbnailURL, setThumbnailURL] = useState("")
     const [colorOne, setColorOne] = useState("")
     const [colorTwo, setColorTwo] = useState("")
+    const [courseItems, setCourseItems] = useState<CourseItemDTO[]>([])
     const [organizations, setOrganizations] = useState<EditListItemDTO[]>([])
     const [groups, setGroups] = useState<EditListItemDTO[]>([])
     const [tags, setTags] = useState<EditListItemDTO[]>([])
@@ -70,6 +72,7 @@ export const EditCourse = () => {
             thumbnailURL,
             colorOne,
             colorTwo,
+            courseItems,
             organizations,
             tags,
             teachers,
@@ -83,6 +86,7 @@ export const EditCourse = () => {
         setThumbnailURL(thumbnailURL)
         setColorOne(colorOne)
         setColorTwo(colorTwo)
+        setCourseItems(courseItems)
         setOrganizations(organizations)
         setTags(tags)
         setTeachers(teachers)
@@ -114,9 +118,31 @@ export const EditCourse = () => {
         !!course && setEditCourseState(course)
     }, [course])
 
+    const handleOnDragEnd = (dragParams) => {
+        const items = Array.from(courseItems)
+        const [reorderedItem] = items.splice(dragParams.source.index, 1)
+        items.splice(dragParams.destination.index, 0, reorderedItem)
+
+        setCourseItems(items)
+    }
+
+    const DraggableListItemWrapper = ({ ...props }) => <Draggable
+        key={props.key}
+        draggableId={props.draggableId}
+        index={props.index}>
+        {(provided) => (
+            <li className={classes.draggableListItem}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                ref={provided.innerRef}>
+                {props.children}
+            </li>
+        )}
+    </Draggable>
+
     return <AdminDashboardWrapper>
         <Divider style={{
-            width: "100%"
+            width: "100%",
         }} />
         <div className={classes.editDataOuterWrapper}>
 
@@ -162,78 +188,6 @@ export const EditCourse = () => {
                                 name={"permissionLevel"} />
                         </List>
                     </div>
-                    <div className={classes.editTagsWrapper}>
-                        <SelectMultiple
-                            items={course?.organizations}
-                            title={"Cég kiválasztása"}
-                        >
-                            {course?.organizations?.map((item, index) =>
-                                <div key={"org" + index}>
-                                    <ListItem className={classes.listItem}>
-                                        <Checkbox checked={item.checked} />
-                                        <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
-                                    </ListItem>
-                                    <Divider style={{width: "100%"}} />
-                                </div>
-                            )}
-
-                        </SelectMultiple>
-                    </div>
-
-                    <div className={classes.editTagsWrapper}>
-                        <SelectMultiple
-                            items={teachers}
-                            title={"Tanár kiválasztása"}
-                        >
-                            {teachers?.map((item, index) =>
-                                <div key={"teacher" + index}>
-                                    <ListItem className={classes.listItem}>
-                                        <Radio checked={item.checked} />
-                                        <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
-                                    </ListItem>
-                                    <Divider style={{width: "100%"}} />
-                                </div>
-                            )}
-
-                        </SelectMultiple>
-                    </div>
-                    <div className={classes.editTagsWrapper}>
-                        <SelectMultiple
-                            items={tags}
-                            title={"Tagek kiválasztása"}
-                        >
-                            {tags?.map((item, index) =>
-                                <div key={"tag" + index}>
-                                    <ListItem className={classes.listItem}>
-                                        <Checkbox checked={item.checked} />
-                                        <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
-                                    </ListItem>
-                                    <Divider style={{width: "100%"}} />
-                                </div>
-                            )}
-
-                        </SelectMultiple>
-                    </div>
-                    <div className={classes.editTagsWrapper}>
-                        <SelectMultiple
-                            items={groups}
-                            title={"Csoport kiválasztása"}
-                        >
-                            {groups?.map((item, index) =>
-                                <div key={"group" + index}>
-                                    <ListItem className={classes.listItem}>
-                                        <Checkbox checked={item.checked} />
-                                        <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
-                                    </ListItem>
-                                    <Divider style={{width: "100%"}} />
-                                </div>
-                            )}
-
-                        </SelectMultiple>
-                    </div>
-                </div>
-                <Divider orientation={"vertical"} />
-                <div className={classes.editDataRightWrapper}>
                     <div className={classes.tagWrapper}>
                         <Typography variant={"overline"} className={classes.colorPickerTitle}>Elsődleges szín</Typography>
                         <div className={classes.colorPickerWrapper}>
@@ -253,6 +207,107 @@ export const EditCourse = () => {
                         }} />
                     </div>}
                 </div>
+
+
+
+
+                <Divider orientation={"vertical"} />
+
+
+
+
+
+                <div className={classes.editDataRightWrapper}>
+                    <SelectMultiple
+                        items={course?.organizations}
+                        title={"Cég kiválasztása"}
+                    >
+                        {course?.organizations?.map((item, index) =>
+                            <div key={"org" + index}>
+                                <ListItem className={classes.listItem}>
+                                    <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
+                                        let items = [...organizations];
+                                        items[index] = {
+                                            ...items[index],
+                                            checked: e.currentTarget.checked
+                                        };
+                                        setGroups(items);
+                                    })} />
+                                    <TextOrInput value={item.name} />
+                                </ListItem>
+                                <Divider style={{ width: "100%" }} />
+                            </div>
+                        )}
+
+                    </SelectMultiple>
+                    <SelectMultiple
+                        items={groups}
+                        title={"Csoport kiválasztása"}
+                    >
+                        {groups?.map((item, index) =>
+                            <div key={"group" + index}>
+                                <ListItem className={classes.listItem}>
+                                    <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
+                                        let items = [...groups];
+                                        items[index] = {
+                                            ...items[index],
+                                            checked: e.currentTarget.checked
+                                        };
+                                        setGroups(items);
+                                    })} />
+                                    <TextOrInput value={item.name} />
+                                </ListItem>
+                                <Divider style={{ width: "100%" }} />
+                            </div>
+                        )}
+
+                    </SelectMultiple>
+                    <SelectMultiple
+                        items={teachers}
+                        title={"Tanár kiválasztása"}
+                    >
+                        {teachers?.map((item, index) =>
+                            <div key={"teacher" + index}>
+                                <ListItem className={classes.listItem}>
+                                    <Radio disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
+                                        let items = [...teachers];
+                                        items[index] = {
+                                            ...items[index],
+                                            checked: e.currentTarget.checked
+                                        };
+                                        setGroups(items);
+                                    })} />
+                                    <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
+                                </ListItem>
+                                <Divider style={{ width: "100%" }} />
+                            </div>
+                        )}
+
+                    </SelectMultiple>
+                    <SelectMultiple
+                        items={tags}
+                        title={"Tagek kiválasztása"}
+                    >
+                        {tags?.map((item, index) =>
+                            <div key={"tag" + index}>
+                                <ListItem className={classes.listItem}>
+                                    <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
+                                        let items = [...tags];
+                                        items[index] = {
+                                            ...items[index],
+                                            checked: e.currentTarget.checked
+                                        };
+                                        setGroups(items);
+                                    })} />
+                                    <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
+                                </ListItem>
+                                <Divider style={{ width: "100%" }} />
+                            </div>
+                        )}
+
+                    </SelectMultiple>
+
+                </div>
             </div>
 
         </div>
@@ -263,16 +318,36 @@ export const EditCourse = () => {
 
         <div className={classes.editVideosWrapper}>
             <AdminDashboardSearch searchChangeHandler={() => { }} name={"searchData"} title={"A kurzus tartalma"} />
-            {course?.courseItems.map((item, index) => <AdministrationListItem key={"adlistitem" + index} title={item.title} thumbnailUrl={item.thumbnailUrl} chips={[
-                getChipWithLabel("fis" + index, "item.type", "category"),
-                getChipWithLabel("fos" + index, "item.length", "person"),
-                getChipWithLabel("fasz" + index, "item.isEssential", "video")
-            ]} searchItemButtons={[]} />)}
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId={"courseItems"}>
+                    {(provided) => (
+                        <div {...provided.droppableProps} ref={provided.innerRef}>
+                            {courseItems.map((item, index) => <DraggableListItemWrapper key={item.title} draggableId={item.title} index={index}>
+                                <AdministrationListItem
+                                    key={"adlistitem" + index}
+                                    title={item.title}
+                                    thumbnailUrl={item.thumbnailUrl}
+                                    chips={[]/*[
+                                            getChipWithLabel("a" + index, "item.type", "category"),
+                                            getChipWithLabel("b" + index, "item.length", "person"),
+                                            getChipWithLabel("c" + index, "item.isEssential", "video")
+                                        ]*/}
+                                    searchItemButtons={[]}
+                                />
+                            </DraggableListItemWrapper>
+                            )}{provided.placeholder}
+                        </div>
+
+                    )}
+                </Droppable>
+
+            </DragDropContext>
         </div>
 
         <AdminDashboardHeader titleText={""} />
 
-        <SaveBar open={isAllowEditOnPage} onClick={() => setIsAllowEditOnPage(p => !p) } onDoneClick={() => {
+        <SaveBar open={isAllowEditOnPage} onClick={() => setIsAllowEditOnPage(p => !p)} onDoneClick={() => {
+            setIsAllowEditOnPage(p => !p)
             return updateAdminPageEditCourse(getAdminPageEditCourseDTO())
         }} />
 

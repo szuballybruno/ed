@@ -10,6 +10,9 @@ export class AnswerSession {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ default: false })
+    isPractiseAnswerSession: boolean;
+
     // quesiton answers
     @OneToMany(_ => QuestionAnswer, qa => qa.answerSession)
     @JoinColumn()

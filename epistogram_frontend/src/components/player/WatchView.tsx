@@ -1,36 +1,54 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Divider, Typography } from "@material-ui/core";
+import { Divider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../frontendHelpers";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
+import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { StillWatchingDialogMarker } from "../../models/types";
-import { Copyright } from "../universal/footers/copyright/Copyright";
-import { VideoQuestionnaire } from "../universal/VideoQuestionnaire";
+import { NavigateToCourseItemActionType } from "../universal/CourseItemList";
+import { Copyright } from "../universal/Copyright";
 import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
+import { VideoQuestionnaire } from "../universal/VideoQuestionnaire";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
-import { CourseItemList, NavigateToCourseItemActionType } from "../universal/CourseItemList";
+import { CourseItemSelector } from "./CourseItemSelector";
 import PlayerDescription from "./description/PlayerDescription";
 import { OverlayDialog } from "./OverlayDialog";
+import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
 import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
-import { CourseItemSelector } from "./CourseItemSelector";
+import { EpistoButton } from "../universal/EpistoButton";
+import { TimeoutFrame, useTimeoutFrameLogic } from "../universal/TimeoutFrame";
 
 export const WatchView = (props: {
     video: VideoDTO,
     answerSessionId: number,
     courseItems: CourseItemDTO[],
-    navigateToCourseItem: NavigateToCourseItemActionType
+    courseMode: CourseModeType,
+    courseId: number,
+    refetchCourseItemList: () => void,
+    navigateToCourseItem: NavigateToCourseItemActionType,
+    refetchPlayerData: () => Promise<void>,
 }) => {
 
-    const { video, courseItems, navigateToCourseItem, answerSessionId } = props;
+    const {
+        video,
+        courseItems,
+        answerSessionId,
+        courseMode,
+        courseId,
+        refetchCourseItemList,
+        refetchPlayerData
+    } = props;
     const { questions } = video;
     const isDesktopView = useIsDesktopView();
     const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
+    const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
+    const timeoutLogic = useTimeoutFrameLogic(3, () => console.log("next please!"));
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
@@ -43,9 +61,11 @@ export const WatchView = (props: {
     const [stillWatchingDilalogMarkers, setStillWatchingDilalogMarkers] = useState<StillWatchingDialogMarker[]>([]);
     const stillWatchingDialogDelaySecs = 60 * 2; // 2 mins
 
+    // video player 
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
-    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay);
-    const { playedSeconds, videoLength, isSeeking } = videoPlayerState;
+    const limitSeek = courseMode === "beginner";
+    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek,);
+    const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription description={video!.description} />;
     const VideoComments = () => <Box bg="red" />;
@@ -57,6 +77,28 @@ export const WatchView = (props: {
 
         setTimeout(() => setShowNewDialogsEnabled(true), 2000);
     }
+
+    const handleVideoCompletedStateChanged = () => {
+
+        refetchCourseItemList();
+        // showNotification("Video unlocked!");
+    }
+
+    // handle autoplay timeout if video ended
+    useEffect(() => {
+
+        if (isVideoEnded) {
+
+            console.log("starting timer");
+            timeoutLogic.restart();
+        }
+        else {
+
+            console.log("stopping timer");
+            timeoutLogic.stop();
+        }
+
+    }, [isVideoEnded]);
 
     // show dialogs 
     useEffect(() => {
@@ -124,27 +166,49 @@ export const WatchView = (props: {
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
     }, [videoLength]);
 
+    // playback watcher
+    usePlaybackWatcher(playedSeconds, isPlaying, handleVideoCompletedStateChanged, setMaxWatchedSeconds);
+
     return <>
 
         {/* video player */}
         <VideoPlayer videoItem={video} videoPlayerState={videoPlayerState}>
 
             {/* questionnaire */}
+            <AbsoluteFlexOverlay isVisible={isVideoEnded} hasPointerEvents={false} align="flex-end" justify="flex-end">
+
+                <EpistoButton
+                    style={{
+                        pointerEvents: "all",
+                        margin: "100px",
+                        padding: "0"
+                    }}
+                    variant="colored">
+                    <TimeoutFrame logic={timeoutLogic}>
+                        <Typography style={{
+                            margin: "10px"
+                        }}>
+                            Next video
+                        </Typography>
+                    </TimeoutFrame>
+                </EpistoButton>
+            </AbsoluteFlexOverlay>
+
+            {/* questionnaire */}
             <AbsoluteFlexOverlay isVisible={isQuestionVisible} hasPointerEvents={true}>
                 <OverlayDialog
-                    showCloseButton={currentQuestionAnswered}
-                    closeButtonAction={() => {
-
-                        setCurrentQuestion(null);
-                        enableNewDialogPopups();
-                    }}>
+                    showCloseButton={false}>
                     <VideoQuestionnaire
                         answerSessionId={answerSessionId}
                         question={currentQuestion!}
                         onAnswered={() => setAnsweredQuestionIds([
                             ...answeredQuestionIds,
                             currentQuestion?.questionId!
-                        ])} />
+                        ])}
+                        onClosed={() => {
+                            setCurrentQuestion(null);
+                            enableNewDialogPopups();
+                        }} />
                 </OverlayDialog>
             </AbsoluteFlexOverlay>
 
@@ -170,6 +234,9 @@ export const WatchView = (props: {
         <Box>
             {/* <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} /> */}
             {!isDesktopView && <CourseItemSelector
+                courseId={courseId}
+                mode={courseMode}
+                refetchPlayerData={refetchPlayerData}
                 courseItems={courseItems} />}
 
             <Flex id="titleAndSegmentedButtonFlex" justify="space-between" padding="20px" flexWrap="wrap">

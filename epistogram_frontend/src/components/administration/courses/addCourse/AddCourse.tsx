@@ -1,10 +1,10 @@
 import { Box } from "@chakra-ui/react";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import React from 'react';
 import { Cookies } from "react-cookie";
 import { getEventFileCallback } from "../../../../frontendHelpers";
 import { AddFrame } from "../../../add_frame/AddFrame";
-import EditItem from "../../../universal/atomic/editItem/EditItem";
+import EditItem from "../../../universal/editItem/EditItem";
 import { ColorPicker } from "../../universal/colorPicker/ColorPicker";
 import SelectImage from "../../universal/selectImage/SelectImage";
 import { SelectRadio } from "../../universal/SelectRadio";

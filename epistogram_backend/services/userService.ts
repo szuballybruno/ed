@@ -13,11 +13,8 @@ export const getUserById = async (userId: number) => {
         .createQueryBuilder("user")
         .where("user.id = :userId", { userId: userId })
         .leftJoinAndSelect("user.avatarFile", "a")
+        .leftJoinAndSelect("user.userActivity", "ua")
         .getOneOrFail();
-
-    // const cursor = await Connection.db.collection("users").find();
-    // const usersFromDB = (await cursor.toArray());
-    // const foundUser = usersFromDB.filter((x: any) => x?._id == userId)[0] as MongoUser;
 
     return user;
 }
@@ -63,11 +60,11 @@ export const getCurrentUser = async (req: Request) => {
     if (!authTokenPayload)
         throw new TypedError("Token meta is missing!", "forbidden");
 
-    const currentUser = await getUserDTOById(authTokenPayload.userId);
+    const currentUser = await getUserById(authTokenPayload.userId);
     if (!currentUser)
         throw new TypedError("User not found by id: " + authTokenPayload.userId, "bad request");
 
-    return currentUser;
+    return toUserDTO(currentUser);
 }
 
 export const setUserAvatarFileId = async (userId: number, avatarFileId: number) => {

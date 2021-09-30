@@ -1,55 +1,228 @@
+import { readFileSync } from "fs";
 import { Connection, ConnectionOptions, createConnection } from "typeorm";
-import { createDatabase, dropDatabase } from "typeorm-extension";
+import { Activity } from "./models/entity/Activity";
 import { Answer } from "./models/entity/Answer";
+import { AnswerSession } from "./models/entity/AnswerSession";
 import { Course } from "./models/entity/Course";
+import { CourseGroup } from "./models/entity/CourseGroup";
+import { CourseOrganization } from "./models/entity/CourseOrganization";
+import { CourseTag } from "./models/entity/CourseTag";
 import { Exam } from "./models/entity/Exam";
+import { Group } from "./models/entity/Group";
 import { Organization } from "./models/entity/Organization";
+import { PersonalityCategoryDescription } from "./models/entity/PersonalityCategoryDescription";
 import { Question } from "./models/entity/Question";
 import { QuestionAnswer } from "./models/entity/QuestionAnswer";
+import { QuestionCategory } from "./models/entity/QuestionCategory";
+import { Role } from "./models/entity/Role";
+import { RoleActivityBridge } from "./models/entity/RoleActivityBridge";
 import { StorageFile } from "./models/entity/StorageFile";
+import { Tag } from "./models/entity/Tag";
 import { Task } from "./models/entity/Task";
 import { TestChild } from "./models/entity/TestChild";
 import { TestParent } from "./models/entity/TestParent";
 import { TestSubChild } from "./models/entity/TestSubChild";
 import { User } from "./models/entity/User";
+import { UserCourseBridge } from "./models/entity/UserCourseBridge";
 import { Video } from "./models/entity/Video";
-import { RoleType } from "./models/shared_models/types/sharedTypes";
-import { log } from "./services/misc/logger";
-import { setVideoFileIdAsync } from "./services/videoService";
+import { VideoPlaybackData } from "./models/entity/VideoPlaybackData";
+import { VideoPlaybackSample } from "./models/entity/VideoPlaybackSample";
+import { CourseItemAllView } from "./models/views/CourseItemAllView";
+import { CourseItemStateView } from "./models/views/CourseItemStateView";
+import { CourseItemView } from "./models/views/CourseItemView";
+import { CourseStateView } from "./models/views/CourseStateView";
+import { CourseView } from "./models/views/CourseView";
+import { ExamCompletedView } from "./models/views/ExamCompletedView";
+import { SignupAnswersView } from "./models/views/SignupAnswersView";
+import { UserActivityFlatView } from "./models/views/UserActivityFlatView";
+import { UserExamAnswerSessionView } from "./models/views/UserExamAnswerSessionView";
+import { VideoCompletedView } from "./models/views/VideoCompletedView";
+import { VideoProgressView } from "./models/views/VideoProgressView";
+import { seedDB } from "./services/dbSeedService";
+import { getDatabaseConnectionParameters } from "./services/environment";
+import { log, logObject } from "./services/misc/logger";
+import { connectToDBAsync } from "./services/sqlServices/sqlConnection";
 import { staticProvider } from "./staticProvider";
-import { CourseOrganization } from "./models/entity/CourseOrganization";
-import { Group } from "./models/entity/Group";
-import { Tag } from "./models/entity/Tag";
-import { CourseOrganizationDTO } from "./models/shared_models/CourseOrganizationDTO";
-import { setUserAvatarFileId } from "./services/userService";
-import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./services/signupService";
-import { AnswerSession } from "./models/entity/AnswerSession";
+import { PractiseQuestionView } from "./models/views/PractiseQuestionView";
+import { recreateViewsAsync } from "./services/sqlServices/sqlViewCreatorService";
+import { recreateFunctionsAsync } from "./services/sqlServices/sqlFunctionCreatorService";
+import { answerQuestionFn } from "./services/sqlServices/sqlFunctionsService";
 
 export type TypeORMConnection = Connection;
 
-export const initializeDBAsync = async (recreate: boolean) => {
+export const initializeDBAsync = async () => {
 
-    const host = staticProvider.globalConfig.database.hostAddress;
-    const port = staticProvider.globalConfig.database.port;
-    const username = staticProvider.globalConfig.database.serviceUserName;
-    const password = staticProvider.globalConfig.database.serviceUserPassword;
-    const databaseName = staticProvider.globalConfig.database.name;
-    const isSyncEnabled = staticProvider.globalConfig.database.isOrmSyncEnabled;
-    const isLoggingEnabled = staticProvider.globalConfig.database.isOrmLoggingEnabled;
+    const allowPurge = staticProvider.globalConfig.database.allowPurge;
+    const forcePurge = staticProvider.globalConfig.database.forcePurge;
 
-    const postgresOptions = {
+    // 
+    // TEST DB CONNCETION 
+    // 
+
+    log("Making first database connection...", "strong");
+    log("Connection properties: ")
+    logObject(JSON.stringify(getDatabaseConnectionParameters()));
+
+    const { executeSQL, terminateConnectionAsync } = await connectToDBAsync();
+    staticProvider.sqlConnection = { executeSQL, terminateConnectionAsync };
+
+    log("Connection successful!", "strong");
+
+    // 
+    // PURGE DB
+    //
+    if (allowPurge && forcePurge) {
+
+        log("Purging DB...", "strong");
+        await purgeDBAsync();
+    }
+
+    //
+    // CONNECT TYPE ORM
+    //
+    try {
+
+        log("Connecting to database with TypeORM...", "strong");
+        const postgresOptions = getPorstgresOptions();
+        staticProvider.ormConnection = await createTypeORMConnection(postgresOptions);
+    } catch (e) {
+
+        logObject(e);
+
+        // 
+        // PURGE DB
+        //
+        if (allowPurge && !forcePurge) {
+
+            log("Purging DB...", "strong");
+            await purgeDBAsync();
+
+            //
+            // CONNECT TYPE ORM AGAIN
+            //
+            log("(#2 attempt) Connecting to database with TypeORM...", "strong");
+            const postgresOptions = getPorstgresOptions();
+            staticProvider.ormConnection = await createTypeORMConnection(postgresOptions);
+        }
+    }
+
+    log("TypeORM connected!", "strong");
+
+    //
+    // CREATE VIEWS
+    //
+    log("Creating SQL views...", "strong")
+
+    await recreateViewsAsync([
+        "video_completed_view",
+        "exam_completed_view",
+        "user_exam_answer_session_view",
+        "video_progress_view",
+        "course_item_view",
+        "course_item_state_view",
+        "course_state_view",
+        "course_item_all_view",
+        "course_view",
+        "exam_session_answers_view",
+        "signup_answers_view",
+        "user_activity_view",
+        "user_activity_flat_view",
+        "practise_question_view"
+    ]);
+
+    log("SQL views created!", "strong");
+
+    //
+    // CREATE FUNCTIONS
+    //
+    log("Creating SQL functions...", "strong")
+
+    await recreateFunctionsAsync([
+        "answer_signup_question_fn",
+        "answer_question_fn",
+    ]);
+
+    log("SQL functions created!", "strong");
+
+    //
+    // SEED DB
+    //
+    const isFreshDB = await getIsFreshDB();
+    if (isFreshDB) {
+
+        log("Seeding DB...", "strong");
+
+        await seedDB();
+
+        log("Seeding DB done!", "strong");
+    }
+}
+
+const purgeDBAsync = async () => {
+
+    const sql = readFileSync(`./sql/misc/dropDB.sql`, 'utf8');
+
+    const { executeSQL, terminateConnectionAsync: terminateConnection } = await connectToDBAsync();
+
+    const results = await executeSQL(sql);
+
+    await terminateConnection();
+}
+
+const getIsFreshDB = async () => {
+
+    const users = await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .find();
+
+    return users.length == 0;
+}
+
+const createTypeORMConnection = async (opt: ConnectionOptions) => {
+
+    try {
+
+        log("Connecting to SQL trough TypeORM...");
+        const connection = await createConnection(opt);
+
+        if (!connection.manager)
+            throw new Error("TypeORM manager is null or undefined!");
+
+        return connection;
+    }
+    catch (e) {
+
+        throw new Error("Type ORM connection error!" + e);
+    }
+}
+
+const getPorstgresOptions = () => {
+
+    const dbConfig = staticProvider.globalConfig.database;
+
+    const isSyncEnabled = dbConfig.isOrmSyncEnabled;
+    const isLoggingEnabled = dbConfig.isOrmLoggingEnabled;
+    const dbConnOpts = getDatabaseConnectionParameters();
+
+    return {
         type: "postgres",
-        port: port,
-        host: host,
-        username: username,
-        password: password,
-        database: databaseName,
+        port: dbConnOpts.port,
+        host: dbConnOpts.host,
+        username: dbConnOpts.username,
+        password: dbConnOpts.password,
+        database: dbConnOpts.databaseName,
         synchronize: isSyncEnabled,
         logging: isLoggingEnabled,
+        extra: {
+            socketPath: dbConnOpts.socketPath
+        },
         entities: [
             // "models/entity/**/*.ts"
             Course,
             CourseOrganization,
+            CourseGroup,
+            CourseTag,
             Exam,
             Group,
             Organization,
@@ -64,629 +237,29 @@ export const initializeDBAsync = async (recreate: boolean) => {
             TestParent,
             TestSubChild,
             StorageFile,
-            AnswerSession
+            AnswerSession,
+            VideoPlaybackSample,
+            VideoPlaybackData,
+            UserCourseBridge,
+            QuestionCategory,
+            Role,
+            Activity,
+            RoleActivityBridge,
+            PersonalityCategoryDescription,
+            PractiseQuestionView,
+
+            // views,
+            VideoCompletedView,
+            ExamCompletedView,
+            UserExamAnswerSessionView,
+            VideoProgressView,
+            CourseItemView,
+            CourseItemStateView,
+            CourseStateView,
+            CourseItemAllView,
+            CourseView,
+            SignupAnswersView,
+            UserActivityFlatView
         ],
     } as ConnectionOptions;
-
-    log("Database connection options:");
-    log(postgresOptions);
-
-    if (recreate) {
-
-        log("Recreating DB...");
-        await recreateDB(postgresOptions);
-    }
-
-    log("Connecting to database with TypeORM...");
-    staticProvider.ormConnection = await createConnection(postgresOptions);
-
-    // seed DB if no users are found
-    const users = await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .find();
-
-    if (users.length < 1) {
-
-        log("Seeding DB...");
-        await seedDB();
-    }
-}
-
-export const recreateDB = async (postgresOptions: ConnectionOptions) => {
-
-    log("Dropping databasea...");
-    await dropDatabase({ ifExist: true }, postgresOptions);
-
-    log("Creating database...");
-    await createDatabase({ ifNotExist: true, characterSet: "UTF8" }, postgresOptions);
-}
-
-export const seedDB = async () => {
-
-    const connection = staticProvider.ormConnection;
-    const orgIds = await seedOrganizations(connection);
-
-    log("seedUsers")
-    await seedUsers(connection, orgIds);
-
-    log("seedSignupQuestions")
-    await seedSignupQuestions(connection);
-
-    log("seedTags")
-    await seedTags(connection);
-
-    log("seedGroups")
-    await seedGroups(connection, orgIds);
-
-    log("seedCourses")
-    await seedCourses(connection);
-
-    log("seedVideoQuestions")
-    await seedVideoQuestions(connection);
-
-    log("seedExamQuestions")
-    await seedExamQuestions(connection);
-
-    log("seedFiles")
-    await seedFiles(connection);
-
-    log("seedCourseOrganizationsAsync")
-    await seedCourseOrganizationsAsync();
-}
-
-const seedOrganizations = async (connection: TypeORMConnection) => {
-
-    return (await connection
-        .getRepository(Organization)
-        .insert([
-            {
-                name: "Farewell Kft."
-            },
-            {
-                name: "Bruno Muvek"
-            },
-            {
-                name: "Manfredisztan.org"
-            }
-        ]))
-        .identifiers
-        .map(x => x.id as number);
-}
-
-const seedCourses = async (connection: TypeORMConnection) => {
-
-    await connection
-        .getRepository(Course)
-        .save([
-            {
-                title: "Webfejlesztés kezdőknek (HTML, CSS, BOOTSTRAP)",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-                coverFile: {
-                    pending: false,
-                    filePath: "/courseCoverImages/1.png"
-                },
-                exams: [
-                    {
-                        title: "New Exam 1",
-                        subtitle: "Fantastic exam 1",
-                        thumbnailUrl: "",
-                        description: "",
-                        orderIndex: 1
-                    },
-                    {
-                        title: "New Exam 2",
-                        subtitle: "Fantastic exam 2",
-                        thumbnailUrl: "",
-                        description: "",
-                        orderIndex: 3
-                    },
-                    {
-                        title: "New Exam 3",
-                        subtitle: "Fantastic exam 3",
-                        thumbnailUrl: "",
-                        description: "",
-                        orderIndex: 4
-                    }
-                ],
-                videos: [
-                    {
-                        title: "Video 1",
-                        subtitle: "Fantastic Video 1",
-                        description: "Very very fantastic video 1 description",
-                        orderIndex: 0
-                    },
-                    {
-                        title: "Video 2",
-                        subtitle: "Fantastic Video 2",
-                        description: "Very very fantastic video 2 description",
-                        orderIndex: 2
-                    }
-                ]
-            },
-            {
-                title: "Java programozás mesterkurzus",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-                coverFile: {
-                    pending: false,
-                    filePath: "/courseCoverImages/2.png"
-                },
-            },
-            {
-                title: "Angular - Minden amire szükséged lehet",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-                coverFile: {
-                    pending: false,
-                    filePath: "/courseCoverImages/3.png"
-                },
-            },
-            {
-                title: "Microsoft Excel Mesterkurzus",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-                coverFile: {
-                    pending: false,
-                    filePath: "/courseCoverImages/4.png"
-                },
-                videos: [
-                    {
-                        title: "Egyszerűbb számítások",
-                        subtitle: "Alapvető műveletek Excelben",
-                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 0,
-                        videoFile: {
-                            pending: false,
-                            filePath: "/videos/video_2.mp4"
-                        }
-                    },
-                    {
-                        title: "Cellák és területek azonosítása",
-                        subtitle: "Alapvető műveletek Excelben",
-                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 1,
-                        videoFile: {
-                            pending: false,
-                            filePath: "/videos/video_3.m4v"
-                        }
-                    },
-                    {
-                        title: "Adatbevitel, javítás I.",
-                        subtitle: "Alapvető műveletek Excelben",
-                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 2,
-                        videoFile: {
-                            pending: false,
-                            filePath: "/videos/video_4.m4v"
-                        }
-                    },
-                    {
-                        title: "Adatbevitel, javítás II.",
-                        subtitle: "Alapvető műveletek Excelben",
-                        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-                        orderIndex: 3,
-                        videoFile: {
-                            pending: false,
-                            filePath: "/videos/video_5.m4v"
-                        }
-                    },
-                ]
-            },
-            {
-                title: "DevOps kezdőknek - Kubernetes",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-                coverFile: {
-                    pending: false,
-                    filePath: "/courseCoverImages/5.png"
-                },
-            },
-            {
-                title: "Google classroom használata",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-                coverFile: {
-                    pending: false,
-                    filePath: "/courseCoverImages/7.png"
-                },
-            },
-            {
-                title: "Válj szuper tanulóvá - Gyorsolvasás és tanulás fejlesztés",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-            },
-            {
-                title: "Tanulj meg elkészíteni bármilyen karaktert - Adobe Illustrator",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-                coverFile: {
-                    pending: false,
-                    filePath: "/courseCoverImages/6.png"
-                },
-            },
-            {
-                title: "Google Ads Mesterkurzus",
-                category: "Programming",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
-                teacherId: 1,
-                coverFile: {
-                    pending: false,
-                    filePath: "/courseCoverImages/8.png"
-                },
-            }
-        ] as Course[]);
-}
-
-const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
-
-    const { invitationToken, user } = await createInvitedUserWithOrgAsync(
-        {
-            firstName: "Endre",
-            lastName: "Marosi",
-            jobTitle: "IT Manager",
-            role: "admin" as RoleType,
-            email: "marosi.endre@email.com",
-        },
-        orgIds[0],
-        false);
-
-    await finalizeUserRegistrationAsync({
-        invitationToken: invitationToken,
-        phoneNumber: "+36 202020202",
-        password: "admin",
-        controlPassword: "admin"
-    });
-}
-
-const seedSignupQuestions = async (connection: TypeORMConnection) => {
-
-    const questions = [
-        {
-            isSignupQuestion: true,
-            questionText: "Egy csapatban elvégzendő projekt esetén a következőt preferálom:",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes1.png",
-            answers: [
-                {
-                    text: "Szoros együttműködés a többiekkel"
-                },
-                {
-                    text: "Szívesebben oldok meg egyedül részfeladatokat"
-                },
-            ]
-        },
-        {
-            isSignupQuestion: true,
-            questionText: "Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást: ",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes2.png",
-            answers: [
-                {
-                    text: "Mutassa meg az épület alaprajzán/rajzolja le a helyes irányt",
-                },
-                {
-                    text: "Mondja el/írja le, hogy mikor merre kell fordulnom",
-                }
-            ]
-        },
-        {
-            isSignupQuestion: true,
-            questionText: "Jobban preferálom azt a munkában, mikor:",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes3.png",
-            answers: [
-                {
-                    text: "Előre definiált instrukciók alapján végzek el feladatokat",
-                },
-                {
-                    text: "Kutatnom kell a megoldás után és analizálni különböző eseteket",
-                }
-            ]
-        },
-        {
-            isSignupQuestion: true,
-            questionText: "Egy előadás esetén hasznosabb számomra, ha:",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes4.png",
-            answers: [
-                {
-                    text: "Az előadó magyaráz, és megválaszolja a felmerülő kérdéseket",
-                },
-                {
-                    text: "kisfilmekkel, videókkal illusztrálja és egészíti ki a mondanivalóját",
-                }
-            ]
-        },
-        {
-            isSignupQuestion: true,
-            questionText: "Az érzéseimet, gondolataimat a következő módokon fejezem ki szívesebben:",
-            imageUrl: staticProvider.globalConfig.misc.assetStoreUrl + "/application/kerdes5.png",
-            answers: [
-                {
-                    text: "Zenéken, írásokon, a művészet által",
-                },
-                {
-                    text: "Direkt, lényegre törő kommunikációval",
-                }
-            ]
-        }
-    ] as Question[]
-
-    await connection
-        .getRepository(Question)
-        .save(questions);
-}
-
-const seedFiles = async (connection: TypeORMConnection) => {
-
-    const fileRepo = await connection
-        .getRepository(StorageFile);
-
-    // video 1 file
-    const file = {
-        pending: false,
-        filePath: "videos/video_1.mp4",
-    } as StorageFile;
-
-    await fileRepo.insert(file);
-
-    await setVideoFileIdAsync(1, file.id);
-
-    // user avatar 1 file 
-    const avatarFile = {
-        pending: false,
-        filePath: "userAvatars/user_avatar_1.png"
-    } as StorageFile;
-
-    await fileRepo.insert(avatarFile);
-
-    await setUserAvatarFileId(1, avatarFile.id);
-}
-
-const seedVideoQuestions = async (connection: TypeORMConnection) => {
-
-    await connection
-        .getRepository(Question)
-        .save([
-            {
-                questionText: "What Makes You Unique?",
-                isSignupQuestion: false,
-                videoId: 3,
-                showUpTimeSeconds: 150,
-                answers: [
-                    {
-                        text: "Correct answer!",
-                        isCorrect: true
-                    },
-                    {
-                        text: "Incorrect answer 1."
-                    },
-                    {
-                        text: "Incorrect answer 2."
-                    }
-                ]
-            },
-            {
-                questionText: "What Makes You Unique?",
-                isSignupQuestion: false,
-                videoId: 1,
-                showUpTimeSeconds: 150,
-                answers: [
-                    {
-                        text: "Video answer 1",
-                        isCorrect: true
-                    },
-                    {
-                        text: "Video answer 2"
-                    },
-                    {
-                        text: "Video answer 3"
-                    }
-                ]
-            },
-            {
-                questionText: "What are some random fun facts about you?",
-                isSignupQuestion: false,
-                videoId: 1,
-                showUpTimeSeconds: 250,
-                answers: [
-                    {
-                        text: "Video answer 1"
-                    },
-                    {
-                        text: "Video answer 2",
-                        isCorrect: true
-                    },
-                    {
-                        text: "Video answer 3"
-                    }
-                ]
-            },
-            {
-                questionText: "What's Something You Want to Learn or Wish You Were Better At?",
-                isSignupQuestion: false,
-                videoId: 1,
-                showUpTimeSeconds: 400,
-                answers: [
-                    {
-                        text: "Video answer 1"
-                    },
-                    {
-                        text: "Video answer 2"
-                    },
-                    {
-                        text: "Video answer 3",
-                        isCorrect: true
-                    }
-                ]
-            }
-        ]);
-}
-
-const seedExamQuestions = async (connection: TypeORMConnection) => {
-
-    await connection
-        .getRepository(Question)
-        .save([
-            {
-                questionText: "Exam question 1",
-                isSignupQuestion: false,
-                examId: 1,
-                answers: [
-                    {
-                        text: "Exam answer 1",
-                        isCorrect: true
-                    },
-                    {
-                        text: "Exam answer 2"
-                    },
-                    {
-                        text: "Exam answer 3"
-                    }
-                ]
-            },
-            {
-                questionText: "Exam question 2",
-                isSignupQuestion: false,
-                examId: 1,
-                showUpTimeSeconds: 250,
-                answers: [
-                    {
-                        text: "Exam answer 1"
-                    },
-                    {
-                        text: "Exam answer 2",
-                        isCorrect: true
-                    },
-                    {
-                        text: "Exam answer 3"
-                    }
-                ]
-            },
-            {
-                questionText: "Exam question 3",
-                isSignupQuestion: false,
-                examId: 1,
-                showUpTimeSeconds: 400,
-                answers: [
-                    {
-                        text: "Exam answer 1"
-                    },
-                    {
-                        text: "Exam answer 2"
-                    },
-                    {
-                        text: "Exam answer 3",
-                        isCorrect: true
-                    }
-                ]
-            }
-        ]);
-}
-
-const seedCourseOrganizationsAsync = async () => {
-
-    // insert new answers
-    const repo = staticProvider
-        .ormConnection
-        .getRepository(CourseOrganization);
-
-    const courseOrganizationsSeed = [
-        {
-            courseId: 1,
-            organizationId: 1,
-            groupId: 1,
-            tagId: 1
-        }, {
-            courseId: 1,
-            organizationId: 2,
-            groupId: 3,
-            tagId: 1
-        }, {
-            courseId: 1,
-            organizationId: 2,
-            groupId: 3,
-            tagId: 2
-        }
-    ] as CourseOrganizationDTO[]
-
-    const courseOrganizations = courseOrganizationsSeed
-        .map(x => ({
-            courseId: x.courseId,
-            organizationId: x.organizationId,
-            groupId: x.groupId,
-            tagId: x.tagId
-        } as CourseOrganizationDTO))
-
-    await repo.save(courseOrganizations);
-}
-
-const seedTags = (connection: TypeORMConnection) => {
-
-    return connection
-        .getRepository(Tag)
-        .save([
-            {
-                name: "design",
-            },
-            {
-                name: "marketing",
-            },
-            {
-                name: "development",
-            }
-        ])
-}
-
-const seedGroups = (connection: TypeORMConnection, orgIds: number[]) => {
-
-    return connection
-        .getRepository(Group)
-        .save([
-            {
-                name: "Hegesztők",
-                organizationId: orgIds[0]
-            },
-            {
-                name: "Takarítók",
-                organizationId: orgIds[0]
-            },
-            {
-                name: "Műszerészek",
-                organizationId: orgIds[1]
-            }
-        ])
 }

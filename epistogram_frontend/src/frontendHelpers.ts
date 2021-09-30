@@ -6,6 +6,17 @@ import { globalConfig } from "./configuration/config";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 import { LoadingStateType } from "./models/types";
 
+export const dateToString = (date: Date) => {
+
+    if (!date)
+        return "";
+
+    if (isString(date))
+        return new Date(date).toLocaleString();
+
+    return date.toLocaleString();
+}
+
 export const disallowWindowNavigation = () => {
     window.onbeforeunload = (event) => {
         const e = event || window.event;
@@ -17,6 +28,8 @@ export const disallowWindowNavigation = () => {
         return ''; // Legacy method for cross browser support
     };
 }
+
+export const isString = (obj: any) => typeof obj === 'string' || obj instanceof String;
 
 export function distinct<T>(array: T[]) {
 
@@ -139,14 +152,15 @@ export const useReactQuery = <T>(
         enabled: isEnabled
     });
 
-    const { status, refetch, ...queryResult2 } = queryResult;
+    const { status, refetch, isFetching, data, ...queryResult2 } = queryResult;
 
     return {
-        status: (!isEnabled && status == "idle" ? "success" : status) as LoadingStateType,
+        status: isFetching ? "loading" : status as LoadingStateType,
         refetch: async () => {
 
             await refetch();
         },
+        data: data ?? null,
         ...queryResult2
     }
 }
@@ -189,6 +203,23 @@ export const isArray = (obj: any) => {
 
     return Array.isArray(obj);
 }
+
+export const objToArray = (obj: any) => {
+
+    const properties = [] as any[];
+
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+
+            const element = obj[key];
+            properties.push(element);
+        }
+    }
+
+    return properties;
+}
+
+export const isCurrentRoute = (route: string) => window.location.pathname == route;
 
 export class TypedError extends Error {
 
@@ -234,3 +265,91 @@ export const getErrorTypeByHTTPCode = (code: number): ErrorType => {
 
     return "http error";
 }
+
+export const useTimer = (callback: () => void, delayMiliseconds: number) => {
+
+    const [isRunning, setIsRunning] = useState(false);
+    const [timer,] = useState<Timer>(createTimer(callback, setIsRunning, delayMiliseconds));
+
+    return {
+        ...timer!,
+        isRunning
+    }
+}
+
+export const createTimer = (callback: () => void, onIsRunningChanged: (isRunning: boolean) => void, delayMiliseconds: number) => {
+
+    let remainingMiliseconds = delayMiliseconds;
+    let isEnded = false;
+    let timeoutRef = null as null | NodeJS.Timeout;
+    let startTime = null as Date | null;
+    let isRunning = false;
+
+    const getCurrentElapsedMiliseconds = () => {
+
+        if (!startTime)
+            return 0;
+
+        return Math.abs(new Date().getTime() - startTime.getTime());
+    }
+
+    const handleIsRunningChanged = (isRunninga: boolean) => {
+
+        isRunning = isRunninga;
+        onIsRunningChanged(isRunninga);
+    }
+
+    const stop = () => {
+
+        if (!timeoutRef || isEnded)
+            return;
+
+        const remainingMilisecs = remainingMiliseconds - getCurrentElapsedMiliseconds();
+
+        console.log("Stopping timer... remaining secs: " + remainingMilisecs);
+
+        handleIsRunningChanged(false);
+        clearTimeout(timeoutRef);
+        remainingMiliseconds = remainingMilisecs;
+    }
+
+    const start = () => {
+
+        if (isRunning || isEnded)
+            return;
+
+        console.log("Starting timer... remaining secs: " + remainingMiliseconds);
+
+        const timeout = setTimeout(() => {
+
+            stop();
+            isEnded = true;
+            callback();
+        }, remainingMiliseconds);
+
+        handleIsRunningChanged(true);
+        startTime = new Date();
+        timeoutRef = timeout;
+    }
+
+    const restart = () => {
+
+        if (isRunning)
+            return;
+
+        isEnded = false;
+        remainingMiliseconds = delayMiliseconds;
+
+        console.log("Restarting timer... " + remainingMiliseconds);
+
+        start();
+    }
+
+    return {
+        restart,
+        start,
+        stop
+    }
+}
+
+export type Timer = ReturnType<typeof createTimer>;

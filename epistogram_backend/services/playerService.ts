@@ -1,64 +1,162 @@
 import { User } from "../models/entity/User";
-import { Video } from "../models/entity/Video";
+import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
-import { CourseItemType } from "../models/shared_models/types/sharedTypes";
+import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
+import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
+import { VideoCompletedView } from "../models/views/VideoCompletedView";
+import { VideoProgressView } from "../models/views/VideoProgressView";
 import { staticProvider } from "../staticProvider";
-import { getCourseItemAsync, getCourseItemDTOsAsync, getExamDTOAsync } from "./courseService";
+import { getCourseItemByCodeAsync, getCourseItemsAsync, getCurrentCourseItemDescriptor, getExamDTOAsync, getUserCourseBridgeOrFailAsync } from "./courseService";
 import { readCourseItemDescriptorCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
 import { createAnswerSessionAsync } from "./questionAnswerService";
-
-export const getCurrentVideoAsync = async (userId: number, videoId: number) => {
-
-    // return video
-    const user = await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .createQueryBuilder("user")
-        .where("user.id = :userId", { userId: userId })
-        .leftJoinAndSelect("user.currentVideo", "video")
-        .getOneOrFail();
-
-    const currentVideo = user.currentVideo!;
-
-    return toVideoDTO(currentVideo);
-}
+import { getUserById } from "./userService";
+import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
+import { getVideoByIdAsync, saveVideoPlaybackDataAsync } from "./videoService";
 
 export const getPlayerDataAsync = async (
     userId: number,
     descriptorCode: string) => {
 
-    const { itemId: courseItemId, itemType: courseItemType } = readCourseItemDescriptorCode(descriptorCode);
+    // get course id
+    const courseId = (await getCourseItemByCodeAsync(descriptorCode)).courseId;
 
-    // get course item
-    const currentCourseItem = await getCourseItemAsync({ itemId: courseItemId, itemType: courseItemType });
+    // course items 
+    const courseItems = await getCourseItemsAsync(userId, courseId, descriptorCode);
 
-    const videoDTO = courseItemType == "video" ? toVideoDTO(currentCourseItem as Video) : null;
-    const videoId = courseItemType == "video" ? courseItemId : null;
+    const currentCourseItem = courseItems
+        .single(x => x.state === "current");
 
-    const examDTO = courseItemType == "exam" ? await getExamDTOAsync(userId, courseItemId) : null;
-    const examId = courseItemType == "exam" ? courseItemId : null;
+    const { itemId, itemType } = readCourseItemDescriptorCode(currentCourseItem.descriptorCode);
+    const videoDTO = itemType == "video" ? await getVideoDTOAsync(userId, itemId) : null;
+    const examDTO = itemType == "exam" ? await getExamDTOAsync(userId, itemId) : null;
+
+    // set current items 
+    setUserCurrentCourseDataAsync(
+        userId,
+        itemType === "video" ? itemId : null,
+        itemType === "exam" ? itemId : null,
+        courseId);
+
+    // get user course bridge
+    const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, courseId);
+
+    // get new answer session
+    const answerSessionId = await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
+
+    return {
+        video: videoDTO,
+        exam: examDTO,
+        answerSessionId: answerSessionId,
+        mode: userCourseBridge.courseMode,
+        courseId: courseId!,
+        courseItemCode: currentCourseItem.descriptorCode,
+        courseItems: courseItems
+    } as PlayerDataDTO;
+}
+
+const setUserCurrentCourseDataAsync = async (
+    userId: number,
+    videoId: number | null,
+    examId: number | null,
+    courseId: number | null) => {
 
     // set current course item
+    const setCurrentItemData = {
+        id: userId,
+        currentVideoId: videoId,
+        currentExamId: examId,
+        currentCourseId: courseId
+    } as User;
+
     await staticProvider
         .ormConnection
         .getRepository(User)
-        .save({
-            id: userId,
-            currentVideoId: videoId,
-            currentExamId: examId
+        .save(setCurrentItemData);
+}
+
+export const getVideoDTOAsync = async (userId: number, videoId: number) => {
+
+    const maxWathcedSeconds = await getMaxWatchedSeconds(userId, videoId);
+    const video = await getVideoByIdAsync(videoId);
+
+    return toVideoDTO(video, maxWathcedSeconds);
+}
+
+export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlaybackSampleDTO) => {
+
+    const user = await getUserById(userId);
+    const currentItemDesc = getCurrentCourseItemDescriptor(user);
+
+    if (!currentItemDesc)
+        throw new Error("Cannot add video playback sample while current course item is not set!");
+
+    if (currentItemDesc.itemType !== "video")
+        throw new Error("Cannot add video playback sample while current course item is not a video!");
+
+    const videoId = currentItemDesc.itemId;
+
+    await staticProvider
+        .ormConnection
+        .getRepository(VideoPlaybackSample)
+        .insert({
+            videoId: videoId,
+            userId: userId,
+            fromSeconds: dto.fromSeconds,
+            toSeconds: dto.toSeconds
         });
 
-    // get current course items
-    const courseItemDTOs = await getCourseItemDTOsAsync(userId);
+    // get sample chunks
+    const chunks = await getSampleChunksAsync(userId, videoId);
 
-    // get new answer session
-    const answerSessionId = await createAnswerSessionAsync(userId, examId, videoId);
+    // calucate and save watched percent
+    const watchedPercent = await getVideoWatchedPercentAsync(userId, videoId, chunks);
+    // 5% is a very low number only for development
+    const newIsWatchedState = watchedPercent > 5;
+
+    // get old watched state, can be null on first sampling.
+    const isCompletedBefore = await getVideoIsCompletedState(userId, videoId);
+
+    // squish chunks to store less data 
+    await squishSamplesAsync(userId, videoId, chunks);
+    await saveVideoPlaybackDataAsync(userId, videoId, watchedPercent, newIsWatchedState);
+
+    // calculate is watched state changed
+    const isCompletedAfter = await getVideoIsCompletedState(userId, videoId);
+    const isWatchedStateChanged = isCompletedBefore?.isComplete !== isCompletedAfter?.isComplete;
+
+    const maxWathcedSeconds = await getMaxWatchedSeconds(userId, videoId);
 
     return {
-        courseItems: courseItemDTOs,
-        video: videoDTO,
-        exam: examDTO,
-        answerSessionId: answerSessionId
-    } as PlayerDataDTO;
+        isWatchedStateChanged,
+        maxWathcedSeconds
+    } as VideoSamplingResultDTO;
+}
+
+export const getMaxWatchedSeconds = async (userId: number, videoId: number) => {
+
+    const ads = await staticProvider
+        .ormConnection
+        .getRepository(VideoProgressView)
+        .findOneOrFail({
+            where: {
+                userId: userId,
+                videoId: videoId
+            }
+        })
+
+    return ads.toSeconds;
+}
+
+export const getVideoIsCompletedState = async (userId: number, videoId: number) => {
+
+    return await staticProvider
+        .ormConnection
+        .getRepository(VideoCompletedView)
+        .findOne({
+            where: {
+                userId: userId,
+                videoId: videoId
+            }
+        });
 }

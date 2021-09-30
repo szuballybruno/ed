@@ -1,29 +1,23 @@
-import { useQuery } from "react-query";
+import { useReactQuery } from "../frontendHelpers";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
-import { LoadingStateType } from "../models/types";
 import { httpGetAsync } from "./httpClient";
 
 export const useUserListQuery = (userId: number | null, searchText: string) => {
 
     const url = `users/get-user-administartion-user-list?userId=${userId}&searchData=${searchText || ""}`;
 
-    const { data, refetch: fetchUsers, status } = useQuery(
+    const qr = useReactQuery(
         [
             'getCurrentUser',
             userId,
             searchText
         ],
-        () => httpGetAsync(url), {
-        retry: false,
-        refetchOnWindowFocus: false,
-        enabled: !!userId,
-        refetchOnReconnect: true,
-        refetchOnMount: true
-    });
+        () => httpGetAsync(url));
 
     return {
-        users: (data ?? []) as AdminPageUserDTO[],
-        fetchUsers,
-        status: status as LoadingStateType
+        users: (qr.data ?? []) as AdminPageUserDTO[],
+        usersStatus: qr.status,
+        usersError: qr.error,
+        refetchUsers: qr.refetch,
     };
 }

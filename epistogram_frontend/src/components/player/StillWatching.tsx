@@ -1,7 +1,8 @@
-import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from "@material-ui/icons";
+import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from "@mui/icons-material";
 import { useState } from "react";
 import { hasValue } from "../../frontendHelpers";
-import { QuestionnaierAnswer, QuestionnaireLayout } from "../universal/QuestionnaireLayout";
+import { QuestionnaierAnswer } from "../universal/QuestionnaireAnswer";
+import { QuestionnaireLayout } from "../universal/QuestionnaireLayout";
 
 export const StillWatching = (props: { onClose: () => void, optionIndex: number }) => {
 
@@ -25,7 +26,8 @@ export const StillWatching = (props: { onClose: () => void, optionIndex: number 
 
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-    return <QuestionnaireLayout title={`Kérlek válaszd ki a ${correctOption.displayName}!`} buttonsEnabled={true}>
+    return <QuestionnaireLayout loadingProps={{ loadingState: "success" }}
+        title={`Kérlek válaszd ki a ${correctOption.displayName}!`} buttonsEnabled={true}>
         {options
             .map((option, index) => <QuestionnaierAnswer
                 key={index}

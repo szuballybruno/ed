@@ -1,47 +1,70 @@
-import { Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import { Box, Flex, FlexProps } from "@chakra-ui/react";
+import { Typography } from "@mui/material";
+import React, { useEffect } from 'react';
+import { createTimer } from "../../frontendHelpers";
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
-import { QuestionnaierAnswer, QuestionnaireLayout } from './QuestionnaireLayout';
-import { Text } from "@chakra-ui/react"
+import { QuesitionView } from "../QuestionView";
+import { EpistoButton } from "./EpistoButton";
+import { TimeoutFrame, useTimeoutFrameLogic } from "./TimeoutFrame";
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
     answerSessionId: number,
-    onAnswered: () => void
-}) => {
+    onAnswered: () => void,
+    onClosed: () => void
+} & FlexProps) => {
 
-    const { question, onAnswered, answerSessionId } = props;
-    const [selectedAnswerId, setSelectedAnswerId] = useState(-1);
-    const { answerQuestionAsync, correctAnswer, answerQuestionError, answerQuestionState } = useAnswerQuestion();
-    const correctAnswerId = correctAnswer?.answerId;
+    const { question, onAnswered, answerSessionId, onClosed, ...css } = props;
+    const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = useAnswerQuestion();
+    const isAnswered = !!answerResult?.givenAnswerId;
+    const autoCloseSecs = 2;
 
-    return (
-        <QuestionnaireLayout
-            buttonsEnabled={!correctAnswerId}
-            loadingError={answerQuestionError}
-            title={question.questionText}
-            loadingState={answerQuestionState}>
-            {question
-                .answers
-                .map((answer, index) => {
+    const handleAnswerQuestionAsync = async (answerId) => {
 
-                    const answerId = answer.answerId;
+        await answerQuestionAsync(answerSessionId, answerId, question.questionId);
+        onAnswered();
+    }
 
-                    return <QuestionnaierAnswer
-                        key={index}
-                        isCorrect={correctAnswerId === answerId}
-                        isIncorrect={selectedAnswerId === answerId && correctAnswerId !== answerId}
-                        onClick={async () => {
+    const handleCloseDialog = () => {
 
-                            setSelectedAnswerId(answerId);
-                            onAnswered();
+        onClosed();
+    }
 
-                            await answerQuestionAsync(answerSessionId, answerId, question.questionId);
-                        }}>
-                        <Text fontSize="13px">{answer.answerText}</Text>
-                    </QuestionnaierAnswer>;
-                })}
-        </QuestionnaireLayout>
-    );
+    const timeoutFrameLogic = useTimeoutFrameLogic(autoCloseSecs, handleCloseDialog);
+
+    useEffect(() => {
+
+        if (!isAnswered)
+            return;
+
+        timeoutFrameLogic.start();
+
+    }, [isAnswered]);
+
+    return <Flex direction="column">
+
+        <QuesitionView
+            answerQuesitonAsync={handleAnswerQuestionAsync}
+            correctAnswerId={answerResult?.correctAnswerId ?? null}
+            loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
+            question={question}
+            selectedAnswerId={answerResult?.givenAnswerId ?? null}
+            {...css} />
+
+        <Flex display={isAnswered ? undefined : "none"} justify="flex-end">
+
+            <EpistoButton
+                variant="colored"
+                style={{ padding: "0" }}
+                onClick={() => handleCloseDialog()}>
+
+                <TimeoutFrame logic={timeoutFrameLogic}>
+                    <Typography style={{ position: "relative", margin: "10px" }}>
+                        Bezárás
+                    </Typography>
+                </TimeoutFrame>
+            </EpistoButton>
+        </Flex>
+    </Flex>
 }

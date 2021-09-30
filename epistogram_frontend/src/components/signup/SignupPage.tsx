@@ -1,8 +1,8 @@
 import React from 'react';
 import { globalConfig } from "../../configuration/config";
 import { getQueryParam, usePaging } from "../../frontendHelpers";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
-import { MainWrapper } from "../../HOC/MainPanels";
+import { LoadingFrame } from "../HOC/LoadingFrame";
+import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";
@@ -11,7 +11,7 @@ import { showNotification } from "../../services/notifications";
 import { useAnswerSignupQuestion, useSignupData } from "../../services/signupService";
 import { finalizeUserRegistartionAsync } from "../../services/userManagementService";
 import { QuestionSlides } from "../exam/QuestionSlides";
-import Navbar from "../universal/navigation/navbar/Navbar";
+import Navbar from "../navbar/Navbar";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupForm } from "./SignupForm";
 import { useRegistrationFinalizationFormState } from "./SignupFormLogic";
@@ -62,9 +62,6 @@ export const SignupPage = () => {
             await finalizeUserRegistartionAsync(dto);
 
             showNotification("Felhasználó sikeresen frissítve")
-
-            // TODO unnecessary
-            navigate("/login");
         }
         catch (error) {
 
@@ -142,12 +139,14 @@ export const SignupPage = () => {
             {/* navbar */}
             <Navbar hideLinks={true} />
 
-            <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} flex="1">
-                <SlidesDisplay
-                    flex="1"
-                    slides={slides}
-                    index={slidesState.currentIndex} />
-            </LoadingFrame>
+            <ContentWrapper>
+                <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} flex="1">
+                    <SlidesDisplay
+                        flex="1"
+                        slides={slides}
+                        index={slidesState.currentIndex} />
+                </LoadingFrame>
+            </ContentWrapper>
         </MainWrapper >
     );
 };

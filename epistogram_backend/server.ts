@@ -5,9 +5,9 @@ import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction } from './api/dataActions';
+import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemsAction, getUserPersonalityDataAction, getPractiseQuestionAction, answerPractiseQuestionAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
-import { getPlayerDataAction } from './api/playerActions';
+import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/signupActions';
 import { initializeDBAsync } from './database';
@@ -18,19 +18,23 @@ import { staticProvider } from './staticProvider';
 import { getAsyncActionHandler, respond } from './utilities/helpers';
 import './utilities/jsExtensions';
 import { answerVideoQuestionAction } from './api/questionActions';
-import { answerExamQuestionAction } from './api/examActions';
+import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
+import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { deleteUserAction } from './api/userAdministartionActions';
 
 // initialize env
 // require is mandatory here, for some unknown reason
 initailizeDotEnvEnvironmentConfig();
 
-const initializeAsync = async () => {
+log("");
+log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${staticProvider.globalConfig.misc.environmentName} ----------------`);
+log("");
 
-    const recreateDatabaseAtStart = staticProvider.globalConfig.database.recreateDatabaseAtStart;
+const initializeAsync = async () => {
 
     // init DB
     log("Initializing DB...");
-    await initializeDBAsync(recreateDatabaseAtStart);
+    await initializeDBAsync();
     log("DB initialized.");
 
     // init express
@@ -55,7 +59,7 @@ const initializeAsync = async () => {
     };
 
     const corsMiddleware = cors({
-        origin: 'http://localhost:3000',
+        origin: staticProvider.globalConfig.misc.frontendUrl,
         credentials: true,
         allowedHeaders: [
             "Origin",
@@ -78,6 +82,7 @@ const initializeAsync = async () => {
 
     expressServer.use((req, res, next) => {
 
+        log("");
         log("Request arrived: " + req.path);
         next();
     })
@@ -91,6 +96,8 @@ const initializeAsync = async () => {
     // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
     expressServer.get('/get-current-course-item-code', authMiddleware, getCurrentCourseItemCode);
+    expressServer.get('/get-user-personality-data', authMiddleware, getUserPersonalityDataAction);
+    expressServer.get('/misc/get-practise-question', authMiddleware, getPractiseQuestionAction);
 
     // file
     expressServer.post('/file/upload-video', authMiddleware, uploadVideoFileAction);
@@ -101,16 +108,26 @@ const initializeAsync = async () => {
     // data
     expressServer.get("/data/get-overview-page-dto", authMiddleware, getAsyncActionHandler(getOverviewPageDTOAction));
 
-    // player
+    // player 
     expressServer.post('/player/get-player-data', authMiddleware, getPlayerDataAction);
+    expressServer.post('/player/save-video-playback-sample', authMiddleware, saveVideoPlaybackSampleAction);
+    expressServer.post('/player/get-course-items', authMiddleware, getCourseItemsAction);
 
     // users
     expressServer.get("/users/get-user-administartion-user-list", authMiddleware, getUserAdministrationUserListAction);
     expressServer.post("/users/create-invited-user", authMiddleware, getAsyncActionHandler(createInvitedUserAction));
     expressServer.post("/users/finalize-user-registration", authMiddleware, getAsyncActionHandler(finalizeUserRegistrationAction));
+    expressServer.post("/users/delete-user", authMiddleware, deleteUserAction);
+    expressServer.get("/users/get-courses-data", authMiddleware, getUserCoursesDataAction);
 
-    // courses 
+    // course 
+    expressServer.post("/course/start-course", authMiddleware, startCourseAction);
+    expressServer.post("/course/set-course-mode", authMiddleware, setCourseTypeAction);
+
+    // available courses 
     expressServer.post("/get-user-courses", authMiddleware, getUserCoursesAction);
+
+    // course administartion
     expressServer.post("/get-admin-courses", authMiddleware, getAsyncActionHandler(getAdminCoursesAction));
     expressServer.post("/get-admin-edit-course", authMiddleware, getAsyncActionHandler(getEditedCourseAction))
     expressServer.post("/set-admin-edit-course", authMiddleware, getAsyncActionHandler(setEditedCourseAction))
@@ -118,10 +135,14 @@ const initializeAsync = async () => {
     // organizations 
     expressServer.get("/organizations/get-organizations", authMiddleware, getAsyncActionHandler(getOrganizationsAction));
 
+    // exam
+    expressServer.get("/exam/get-exam-results", authMiddleware, getExamResultsAction);
+
     // question answer
     expressServer.post('/questions/answer-signup-question', answerSignupQuestionAction);
     expressServer.post("/questions/answer-video-question", authMiddleware, answerVideoQuestionAction);
     expressServer.post("/questions/answer-exam-question", authMiddleware, answerExamQuestionAction);
+    expressServer.post("/questions/answer-practise-question", authMiddleware, answerPractiseQuestionAction);
 
     // 404 - no match
     expressServer.use((req, res) => {

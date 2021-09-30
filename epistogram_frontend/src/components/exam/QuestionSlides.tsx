@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { useState } from "react";
 import { usePaging } from "../../frontendHelpers";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";

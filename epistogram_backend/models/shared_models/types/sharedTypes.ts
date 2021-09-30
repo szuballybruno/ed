@@ -1,5 +1,4 @@
-
-export type RoleType = "admin" | "notadmin";
+import { type } from "os";
 
 export type InvitationTokenPayload = { userId: number };
 
@@ -15,4 +14,14 @@ export type TaskObjectiveType = "practise" | "continueVideo" | "exam";
 
 export type CourseItemType = "video" | "exam";
 
-export type CourseItemState = "completed" | "locked" | "current" | "available";
+export type CourseItemStateType = "completed" | "locked" | "current" | "available";
+
+export type CourseModeType = "beginner" | "advanced";
+
+export type TaskPriorityType = "high" | "mid" | "low";
+
+export const UserRoleEnum = {
+    administratorId: 1,
+    supervisorId: 2,
+    userId: 3
+}

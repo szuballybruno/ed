@@ -12,6 +12,10 @@ export const getAsyncActionHandler = (action: (req: Request, res: Response) => P
     }
 }
 
+export function replaceAll(str: string, find: string, replace: string) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+
 export const handleAsyncAction = (req: Request, res: Response, action: (req: Request, res: Response) => Promise<any>) => {
 
     action(req, res)

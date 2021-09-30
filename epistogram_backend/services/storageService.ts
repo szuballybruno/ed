@@ -3,8 +3,6 @@ import { UploadedFile } from "express-fileupload";
 import path from "path";
 import { staticProvider } from "../staticProvider";
 
-const bucketName = "epistogram_bucket_dev";
-
 export const uploadToStorageAsync = (file: UploadedFile, path: string) => new Promise<void>((resolve, reject) => {
 
     const bucket = getBucket();
@@ -40,5 +38,5 @@ const getBucket = () => {
         keyFilename: path.join(__dirname, "../epistogram_service_user_key.json")
     });
 
-    return storage.bucket(bucketName);
+    return storage.bucket(staticProvider.globalConfig.fileStorage.bucketName);
 }

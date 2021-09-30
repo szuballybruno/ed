@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { getUserIdFromRequest } from "../services/authentication";
-import { answerExamQuestionAsync } from "../services/examService";
+import { answerExamQuestionAsync, getExamResultsAsync } from "../services/examService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
 export const answerExamQuestionAction = getAsyncActionHandler(async (req: Request) => {
@@ -9,5 +9,13 @@ export const answerExamQuestionAction = getAsyncActionHandler(async (req: Reques
     const userId = getUserIdFromRequest(req);
     const questionAnswerDTO = withValueOrBadRequest(req.body) as QuestionAnswerDTO;
 
-    return answerExamQuestionAsync(userId, questionAnswerDTO);
+    return answerExamQuestionAsync(questionAnswerDTO);
+});
+
+export const getExamResultsAction = getAsyncActionHandler(async (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+    const answerSessionId = parseInt(withValueOrBadRequest(req.query.answerSessionId));
+
+    return getExamResultsAsync(userId, answerSessionId);
 });

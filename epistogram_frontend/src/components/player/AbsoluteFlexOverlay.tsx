@@ -1,11 +1,13 @@
-import { Flex } from "@chakra-ui/react"
+import { Flex, FlexProps } from "@chakra-ui/react"
 import { ReactNode } from "react"
 
 export const AbsoluteFlexOverlay = (props: {
     children: ReactNode,
     isVisible: boolean,
     hasPointerEvents?: boolean
-}) => {
+} & FlexProps) => {
+
+    const { children, isVisible, hasPointerEvents, ...css } = props;
 
     return <Flex
         id="questionnaireOverlay"
@@ -16,8 +18,9 @@ export const AbsoluteFlexOverlay = (props: {
         align="center"
         justify="center"
         transition="0.3s"
-        opacity={props.isVisible ? 1 : 0}
-        pointerEvents={props.isVisible && props.hasPointerEvents ? "all" : "none"}>
-        {props.isVisible && props.children}
+        opacity={isVisible ? 1 : 0}
+        pointerEvents={isVisible && hasPointerEvents ? "all" : "none"}
+        {...css}>
+        {isVisible && children}
     </Flex>
 }

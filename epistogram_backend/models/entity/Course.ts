@@ -1,9 +1,13 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CourseOrganization } from "./CourseOrganization";
 import { Exam } from "./Exam";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
 import { Video } from "./Video";
+import { CourseGroup } from "./CourseGroup";
+import { CourseTag } from "./CourseTag";
+import { UserCourseBridge } from "./UserCourseBridge";
+import { CourseStateView } from "../views/CourseStateView";
 
 @Entity()
 export class Course {
@@ -29,10 +33,26 @@ export class Course {
     @Column()
     colorTwo: string;
 
+    // course state 
+    @OneToOne(_ => CourseStateView, x => x.course)
+    @JoinColumn()
+    courseState: CourseStateView;
+
     // Course's organizations
     @OneToMany(() => CourseOrganization, co => co.course)
     @JoinColumn()
     courseOrganizations: CourseOrganization[];
+
+    // Course's groups
+    @OneToMany(() => CourseGroup, cg => cg.course)
+    @JoinColumn()
+    courseGroups: CourseGroup[];
+
+    // Course's organizations
+
+    @OneToMany(() => CourseTag, ct => ct.course)
+    @JoinColumn()
+    courseTags: CourseTag[];
 
     // videos 
     @OneToMany(type => Video, video => video.course, { cascade: true })
@@ -59,4 +79,14 @@ export class Course {
     @ManyToOne(_ => StorageFile, x => x.courses, { cascade: true })
     @JoinColumn({ name: "coverFileId" })
     coverFile: StorageFile;
+
+    // user course bridges 
+    @OneToMany(_ => UserCourseBridge, x => x.course)
+    @JoinColumn()
+    userCourseBridges: UserCourseBridge[];
+
+    // user 
+    @OneToMany(_ => User, x => x.currentCourse)
+    @JoinColumn()
+    users: User[];
 }

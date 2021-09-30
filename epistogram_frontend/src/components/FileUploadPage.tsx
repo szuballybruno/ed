@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react"
-import { Button, ButtonProps } from "@material-ui/core"
+import { Button, ButtonProps } from "@mui/material"
 import { ReactNode } from "react";
 import { uploadAvatarFileAsync, uploadVideoFileAsync } from "../services/fileService";
 import { httpPostAsync, postFileAsync } from "../services/httpClient";

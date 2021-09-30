@@ -4,6 +4,8 @@ import { Course } from "./Course";
 import { Question } from "./Question";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
+import { VideoPlaybackData } from "./VideoPlaybackData";
+import { VideoPlaybackSample } from "./VideoPlaybackSample";
 
 @Entity()
 export class Video {
@@ -22,6 +24,9 @@ export class Video {
 
     @Column()
     orderIndex: number;
+
+    @Column({ type: "double precision" })
+    lengthSeconds: number;
 
     // video file
     @Column({ nullable: true })
@@ -61,4 +66,14 @@ export class Video {
     @OneToMany(_ => AnswerSession, as => as.video)
     @JoinColumn()
     answerSessions: AnswerSession[];
+
+    // video playback samples 
+    @OneToMany(_ => VideoPlaybackSample, x => x.video)
+    @JoinColumn()
+    videoPlaybackSamples: VideoPlaybackSample[];
+
+    // video playback datas 
+    @OneToMany(_ => VideoPlaybackData, x => x.video)
+    @JoinColumn()
+    videoPlaybackDatas: VideoPlaybackData[];
 }

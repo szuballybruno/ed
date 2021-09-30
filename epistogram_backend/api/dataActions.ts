@@ -1,12 +1,32 @@
 import { Request } from "express";
+import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
+import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
-import { getEditedCourseAsync, getEditedVideoAsync, setEditedCourseAsync } from "../services/courseManagementService";
-import { getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
+import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "../services/courseManagementService";
+import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
+import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
+import { answerPractiseQuestionAsync, getPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
+import { getUserById } from "../services/userService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+
+export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+
+    return await getPractiseQuestionAsync(userId);
+});
+
+export const answerPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+    const dto = withValueOrBadRequest(req.body) as QuestionAnswerDTO;
+
+    return answerPractiseQuestionAsync(userId, dto);
+});
 
 export const getCurrentCourseItemCode = getAsyncActionHandler(async (req: Request) => {
 
@@ -14,6 +34,15 @@ export const getCurrentCourseItemCode = getAsyncActionHandler(async (req: Reques
     const code = await getCurrentCourseItemDescriptorCodeAsync(userId);
 
     return code;
+});
+
+export const getCourseItemsAction = getAsyncActionHandler(async (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+    const code = await getCurrentCourseItemDescriptorCodeAsync(userId);
+    const currentCourseId = (await getUserById(userId)).currentCourseId!;
+
+    return getCourseItemsAsync(userId, currentCourseId, code!);
 });
 
 export const getEditedVideoAction = async (req: Request) => {
@@ -29,12 +58,12 @@ export const getEditedCourseAction = async (req: Request) => {
 
     return await getEditedCourseAsync(courseId);
 };
-export const setEditedCourseAction = async (req: Request) => {
 
-    const courseId = req.body.courseId
-    const courseData = req.body
+export const setEditedCourseAction = (req: Request) => {
 
-    return await setEditedCourseAsync(courseId, courseData);
+    const adminPageEditCourseDTO = withValueOrBadRequest(req.body) as AdminPageEditCourseDTO;
+
+    return updateCourseAsync(adminPageEditCourseDTO);
 };
 
 export const getOverviewPageDTOAction = async (req: Request) => {
@@ -50,6 +79,13 @@ export const getUsersAction = getAsyncActionHandler(async (req: Request) => {
     const adminPageUserDTOs = await getAdminPageUsersList(userId, (req.query.searchData as string) ?? "");
 
     return adminPageUserDTOs;
+});
+
+export const getUserPersonalityDataAction = getAsyncActionHandler(async (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+
+    return getUserPersonalityAssessmentDTOAsync(userId);
 });
 
 export const getOrganizationsAction = (req: Request) => {

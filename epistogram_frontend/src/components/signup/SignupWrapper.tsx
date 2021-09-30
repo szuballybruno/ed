@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Button, Divider, Typography } from "@material-ui/core";
+import { Button, Divider, Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
-import { hasValue } from "../../frontendHelpers";
+import { hasValue, isString } from "../../frontendHelpers";
 import { FlexImage } from "../universal/FlexImage";
 import classes from "./signupWrapper.module.scss";
 
@@ -14,7 +14,7 @@ export const SignupWrapper = (props: {
     onNavPrevious?: () => void
     title?: string,
     upperTitle?: string,
-    description?: string,
+    description?: string | ReactNode,
     bottomComponent?: ReactNode,
     upperComponent?: ReactNode
 }) => {
@@ -79,9 +79,13 @@ export const SignupWrapper = (props: {
 
                 {/* description */}
                 {hasDescription && <div className={classes.descriptionWrapper}>
-                    <Typography>
-                        {description!}
-                    </Typography>
+                    {
+                        isString(description!)
+                            ? <Typography>
+                                {description!}
+                            </Typography>
+                            : description
+                    }
                 </div>}
 
                 {/* content */}

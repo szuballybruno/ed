@@ -1,9 +1,9 @@
 import React from 'react';
 import classes from "./editItemPage.module.scss";
 import SelectImage from "../../universal/selectImage/SelectImage";
-import { Divider, List, Typography } from "@material-ui/core";
+import { Divider, List, Typography } from "@mui/material";
 import { useParams } from "react-router";
-import EditItem from "../../../universal/atomic/editItem/EditItem";
+import EditItem from "../../../universal/editItem/EditItem";
 import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
 
 export const EditVideo = () => {

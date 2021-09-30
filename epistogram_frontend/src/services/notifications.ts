@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { toast } from 'react-toastify';
-import { DialogContext } from "../HOC/DialogFrame";
+import { DialogContext } from "../components/HOC/DialogFrame";
 
 export type NotificationType = "error" | "info" | "warning";
 
@@ -17,17 +17,6 @@ export const showNotification = (text: string, type?: NotificationType) => {
             draggable: true,
             progress: undefined,
         });
-
-    // const app = useState(applicationRunningState);
-
-    // return (text: string, type?: NotificationType) => {
-
-    //     if (type == "error")
-    //         text = "Error: " + text;
-
-    //     app.snack.snackTitle.set(text);
-    //     app.snack.showSnack.set(true);
-    // }
 }
 
 export const useDialog = () => {
@@ -35,4 +24,21 @@ export const useDialog = () => {
     const dialogContext = useContext(DialogContext);
 
     return dialogContext!;
+}
+
+export const useShowErrorDialog = () => {
+
+    const { showDialog, closeDialog } = useDialog();
+
+    const showErrorDialog = (description: string) => {
+
+        showDialog({
+            title: "An error has occured.",
+            description: description ?? "Unknown error.",
+            secondButtonAction: closeDialog,
+            secondButtonTitle: "Ok"
+        });
+    }
+
+    return showErrorDialog;
 }

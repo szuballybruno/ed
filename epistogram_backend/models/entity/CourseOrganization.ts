@@ -27,21 +27,7 @@ export class CourseOrganization {
     @JoinColumn({ name: "organizationId" })
     organization: Organization;
 
-    // group
-    @Column()
-    groupId: number;
 
-    @ManyToOne(type => Group, group => group.courseOrganizations)
-    @JoinColumn({ name: "groupId" })
-    group: Group;
-
-    // teacher
-    @Column()
-    tagId: number;
-
-    @ManyToOne(type => Tag, tag => tag.courseOrganizations)
-    @JoinColumn({ name: "tagId" })
-    tag: Tag;
 
 
 }

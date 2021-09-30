@@ -2,24 +2,11 @@ import { useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { globalConfig } from '../configuration/config';
 import { refreshTokenRefreshIntervalInS as refreshTokenRefreshIntervalInMs, userRefreshIntervalInS as userRefreshIntervalInMs } from '../Environemnt';
-import { RefetchUserFunctionContext } from '../HOC/AuthenticationFrame';
+import { RefetchUserFunctionContext } from '../components/HOC/AuthenticationFrame';
 import { UserDTO } from '../models/shared_models/UserDTO';
 import { httpGetAsync, httpPostAsync, HTTPResponse } from './httpClient';
 
-export class AuthenticationState {
-    isLoading: boolean;
-    isAuthenticated: boolean;
-
-    constructor(isLoading: boolean, isAuthenticated: boolean) {
-        this.isLoading = isLoading;
-        this.isAuthenticated = isAuthenticated;
-    }
-
-    asString() {
-
-        return this.isLoading ? "loading" : this.isAuthenticated ? "authenticated" : "forbidden";
-    }
-}
+export type AuthenticationStateType = "loading" | "authenticated" | "forbidden";
 
 export const useUserFetching = (enabled: boolean) => {
 
@@ -40,17 +27,21 @@ export const useUserFetching = (enabled: boolean) => {
         notifyOnChangeProps: ['data', 'isSuccess', 'isError']
     });
 
-    const { data, refetch: refetchUser, isLoading, isFetching, isSuccess } = queryResult;
+    const { data: currentUser, refetch: refetchUser, isLoading, isFetching, isSuccess } = queryResult;
 
     useEffect(() => {
 
         setIsBgFetchingEnabled(isSuccess);
     }, [isSuccess]);
 
-    const authState = new AuthenticationState(isLoading || isFetching, !!data);
+    const authState = (isLoading || isFetching
+        ? "loading"
+        : currentUser
+            ? "authenticated"
+            : "forbidden") as AuthenticationStateType;
 
     return {
-        currentUser: data as UserDTO,
+        currentUser: currentUser as UserDTO,
         authState,
         refetchUser
     };
