@@ -268,11 +268,22 @@ export const getErrorTypeByHTTPCode = (code: number): ErrorType => {
 
 export const useTimer = (callback: () => void, delayMiliseconds: number) => {
 
-    const [remainingMiliseconds, setRemainingMiliseconds] = useState(delayMiliseconds);
-    const [timeoutRef, setTimeoutRef] = useState<null | NodeJS.Timeout>(null);
-    const [startTime, setStartTime] = useState<Date | null>(null);
     const [isRunning, setIsRunning] = useState(false);
-    const [isEnded, setIsEnded] = useState(false);
+    const [timer,] = useState<Timer>(createTimer(callback, setIsRunning, delayMiliseconds));
+
+    return {
+        ...timer!,
+        isRunning
+    }
+}
+
+export const createTimer = (callback: () => void, onIsRunningChanged: (isRunning: boolean) => void, delayMiliseconds: number) => {
+
+    let remainingMiliseconds = delayMiliseconds;
+    let isEnded = false;
+    let timeoutRef = null as null | NodeJS.Timeout;
+    let startTime = null as Date | null;
+    let isRunning = false;
 
     const getCurrentElapsedMiliseconds = () => {
 
@@ -282,14 +293,24 @@ export const useTimer = (callback: () => void, delayMiliseconds: number) => {
         return Math.abs(new Date().getTime() - startTime.getTime());
     }
 
+    const handleIsRunningChanged = (isRunninga: boolean) => {
+
+        isRunning = isRunninga;
+        onIsRunningChanged(isRunninga);
+    }
+
     const stop = () => {
 
-        if (!timeoutRef)
+        if (!timeoutRef || isEnded)
             return;
 
-        setIsRunning(false);
+        const remainingMilisecs = remainingMiliseconds - getCurrentElapsedMiliseconds();
+
+        console.log("Stopping timer... remaining secs: " + remainingMilisecs);
+
+        handleIsRunningChanged(false);
         clearTimeout(timeoutRef);
-        setRemainingMiliseconds(remainingMiliseconds - getCurrentElapsedMiliseconds());
+        remainingMiliseconds = remainingMilisecs;
     }
 
     const start = () => {
@@ -297,16 +318,18 @@ export const useTimer = (callback: () => void, delayMiliseconds: number) => {
         if (isRunning || isEnded)
             return;
 
+        console.log("Starting timer... remaining secs: " + remainingMiliseconds);
+
         const timeout = setTimeout(() => {
 
             stop();
-            setIsEnded(true);
+            isEnded = true;
             callback();
         }, remainingMiliseconds);
 
-        setIsRunning(true);
-        setStartTime(new Date());
-        setTimeoutRef(timeout);
+        handleIsRunningChanged(true);
+        startTime = new Date();
+        timeoutRef = timeout;
     }
 
     const restart = () => {
@@ -314,30 +337,19 @@ export const useTimer = (callback: () => void, delayMiliseconds: number) => {
         if (isRunning)
             return;
 
-        setIsEnded(false);
-        setRemainingMiliseconds(delayMiliseconds);
+        isEnded = false;
+        remainingMiliseconds = delayMiliseconds;
+
+        console.log("Restarting timer... " + remainingMiliseconds);
 
         start();
-    }
-
-    const getRemainingMiliseconds = () => {
-
-        if (isRunning) {
-
-            stop();
-            start();
-        }
-
-        return remainingMiliseconds;
     }
 
     return {
         restart,
         start,
-        stop,
-        getRemainingMiliseconds,
-        isRunning
+        stop
     }
 }
 
-export type Timer = ReturnType<typeof useTimer>;
+export type Timer = ReturnType<typeof createTimer>;

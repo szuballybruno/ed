@@ -1,5 +1,5 @@
 import { Box, FlexProps } from "@chakra-ui/layout";
-import { useTimer } from "../../frontendHelpers";
+import { createTimer, useTimer } from "../../frontendHelpers";
 
 export const useTimeoutFrameLogic = (
     timeoutSeconds: number,

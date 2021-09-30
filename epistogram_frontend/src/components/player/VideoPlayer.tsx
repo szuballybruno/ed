@@ -40,7 +40,7 @@ export const useVideoPlayerState = (
     const controlsOpacity = showControls || !shouldBePlaying || isSeeking ? 1 : 0;
     // const [isVideoEnded, setIsVideoEnded] = useState(false);
 
-    const isVideoEnded = (videoLength > 0) && playedSeconds === videoLength;
+    const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
     const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking;
 
     const subtileTracks = subtitles
