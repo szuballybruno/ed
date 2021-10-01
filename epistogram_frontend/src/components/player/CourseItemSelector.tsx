@@ -7,7 +7,7 @@ import { httpPostAsync } from "../../services/httpClient";
 import { useShowErrorDialog } from "../../services/notifications";
 import { CourseItemList } from "../universal/CourseItemList";
 import { EpistoButton } from '../universal/EpistoButton';
-import InfoIcon from '@mui/icons-material/Info';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { EpistoPopper } from '../universal/EpistoPopper';
 
 export const CourseItemSelector = (props: {
@@ -81,7 +81,7 @@ export const CourseItemSelector = (props: {
                     right: 10,
                     top: 10
                 }}
-                icon={<InfoIcon />}
+                icon={<HelpOutlineIcon />}
                 onClick={() => setIsInfoDialogOpen(true)} />
         </RadioGroup>
 

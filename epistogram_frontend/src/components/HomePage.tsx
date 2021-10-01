@@ -11,6 +11,7 @@ import { PractiseQuestions } from './PractiseQuestions';
 import { Tasks } from './Tasks';
 import { TipOfTheDay } from './TipOfTheDay';
 import { CourseItemList, CourseItemView } from "./universal/CourseItemList";
+import { CourseProgressBar } from './universal/CourseProgressBar';
 import { DashboardSection } from './universal/DashboardSection';
 import ListItem from './universal/listItem/ListItem';
 
@@ -35,6 +36,14 @@ const HomePage = () => {
         <ContentWrapper>
             <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
                 <LeftPanel align="stretch" justify="stretch">
+
+                    {/* courses progress */}
+                    <DashoardLeftItemGroup title="Haladás a kurzusaiddal">
+                        <Flex direction="column" p="10px">
+                            <CourseProgressBar value={12} label="Excel kurzus" mb="5px" />
+                            <CourseProgressBar value={45} label="Java mesterkurzus" mb="5px" />
+                        </Flex>
+                    </DashoardLeftItemGroup>
 
                     {/* active item */}
                     <DashoardLeftItemGroup title={hasCurrentItem ? "Folytatom" : "Új tanfolyam kiválasztása"}>
