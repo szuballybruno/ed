@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/layout';
 import { FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
-import React from 'react';
+import React, { createRef, useRef, useState } from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { httpPostAsync } from "../../services/httpClient";
@@ -8,6 +8,7 @@ import { useShowErrorDialog } from "../../services/notifications";
 import { CourseItemList } from "../universal/CourseItemList";
 import { EpistoButton } from '../universal/EpistoButton';
 import InfoIcon from '@mui/icons-material/Info';
+import { EpistoPopper } from '../universal/EpistoPopper';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -18,6 +19,8 @@ export const CourseItemSelector = (props: {
 
     const { mode, refetchPlayerData, courseId } = props;
     const showErrorDialog = useShowErrorDialog();
+    const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
+    const ref = useRef<HTMLButtonElement>(null);
 
     const setCourseMode = async (mode: CourseModeType) => {
 
@@ -30,6 +33,8 @@ export const CourseItemSelector = (props: {
             showErrorDialog("Switching coures mode failed!");
         }
     }
+
+    console.log(ref);
 
     return <>
 
@@ -67,6 +72,7 @@ export const CourseItemSelector = (props: {
             </Flex>
 
             <EpistoButton
+                ref={ref}
                 style={{
                     padding: "0",
                     alignSelf: "flex-start",
@@ -76,31 +82,16 @@ export const CourseItemSelector = (props: {
                     top: 10
                 }}
                 icon={<InfoIcon />}
-                onClick={() => { }} />
+                onClick={() => setIsInfoDialogOpen(true)} />
         </RadioGroup>
 
-        {/* <div className={classes.learningTypeSelector}>
-
-            <Slider
-                className={classes.slider}
-                defaultValue={courseModeIndex}
-                value={courseModeIndex}
-                aria-labelledby="discrete-slider"
-                onChangeCommitted={(x) => setCourseMode(courseModeIndex === 0 ? 1 : 0)}
-                step={1}
-                marks={[
-                    {
-                        value: 0,
-                        label: 'Újonc',
-                    },
-                    {
-                        value: 1,
-                        label: 'Haladó',
-                    }
-                ]}
-                min={0}
-                max={1} /> 
-        </div> */}
+        <EpistoPopper
+            isOpen={isInfoDialogOpen}
+            target={ref?.current}
+            placementX="left"
+            handleClose={() => setIsInfoDialogOpen(false)}>
+            <Typography>asd</Typography>
+        </EpistoPopper>
 
         <CourseItemList courseItems={props.courseItems}></CourseItemList>
     </>
