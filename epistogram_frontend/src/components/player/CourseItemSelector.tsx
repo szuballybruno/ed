@@ -7,6 +7,7 @@ import { httpPostAsync } from "../../services/httpClient";
 import { useShowErrorDialog } from "../../services/notifications";
 import { CourseItemList } from "../universal/CourseItemList";
 import { EpistoButton } from '../universal/EpistoButton';
+import InfoIcon from '@mui/icons-material/Info';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -33,16 +34,15 @@ export const CourseItemSelector = (props: {
     return <>
 
         {/* learning type selector */}
-        <RadioGroup value={mode}>
-            <Flex height="120px" padding="20px">
+        <RadioGroup value={mode} style={{ position: "relative" }}>
+            <Flex height="100px" padding="20px" justify="center">
 
                 <EpistoButton
                     variant="outlined"
                     onClick={() => setCourseMode("beginner")}
                     style={{
-                        flex: 1,
                         margin: "5px",
-                        padding: "0",
+                        padding: "0 0 0 10px",
                         border: mode === "beginner" ? "2px solid var(--epistoTeal)" : undefined
                     }}>
                     <Typography style={{ fontSize: "14px" }}>
@@ -55,9 +55,8 @@ export const CourseItemSelector = (props: {
                     variant="outlined"
                     onClick={() => setCourseMode("advanced")}
                     style={{
-                        flex: 1,
                         margin: "5px",
-                        padding: "0",
+                        padding: "0 0 0 10px",
                         border: mode === "advanced" ? "2px solid var(--epistoTeal)" : undefined
                     }}>
                     <Typography style={{ fontSize: "14px" }}>
@@ -66,6 +65,18 @@ export const CourseItemSelector = (props: {
                     <Radio size="small" value="advanced" />
                 </EpistoButton>
             </Flex>
+
+            <EpistoButton
+                style={{
+                    padding: "0",
+                    alignSelf: "flex-start",
+                    color: "var(--epistoTeal)",
+                    position: "absolute",
+                    right: 10,
+                    top: 10
+                }}
+                icon={<InfoIcon />}
+                onClick={() => { }} />
         </RadioGroup>
 
         {/* <div className={classes.learningTypeSelector}>

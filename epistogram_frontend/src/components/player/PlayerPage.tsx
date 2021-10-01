@@ -97,14 +97,14 @@ export const PlayerPage = () => {
                         justify="flex-start"
                         height="100%"
                         bg="white"
-                        maxWidth={isSidebarHidden ? "0px" : "400px"}
+                        maxWidth={isSidebarHidden ? "0px" : "420px"}
                         opacity={isSidebarHidden ? 0 : 1}
                         transition="0.5s">
 
                         {isDesktopView && <Box
                             id="courseItemSelectorRoot"
-                            width="400px"
-                            minWidth="400px">
+                            width="420px"
+                            minWidth="420px">
                             <CourseItemSelector
                                 courseId={courseId!}
                                 mode={courseMode}
