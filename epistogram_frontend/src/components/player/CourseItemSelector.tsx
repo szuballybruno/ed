@@ -39,7 +39,12 @@ export const CourseItemSelector = (props: {
                 <EpistoButton
                     variant="outlined"
                     onClick={() => setCourseMode("beginner")}
-                    style={{ flex: 1, margin: "5px", padding: "0" }}>
+                    style={{
+                        flex: 1,
+                        margin: "5px",
+                        padding: "0",
+                        border: mode === "beginner" ? "2px solid var(--epistoTeal)" : undefined
+                    }}>
                     <Typography style={{ fontSize: "14px" }}>
                         Kezdő Mód
                     </Typography>
@@ -49,7 +54,12 @@ export const CourseItemSelector = (props: {
                 <EpistoButton
                     variant="outlined"
                     onClick={() => setCourseMode("advanced")}
-                    style={{ flex: 1, margin: "5px", padding: "0" }}>
+                    style={{
+                        flex: 1,
+                        margin: "5px",
+                        padding: "0",
+                        border: mode === "advanced" ? "2px solid var(--epistoTeal)" : undefined
+                    }}>
                     <Typography style={{ fontSize: "14px" }}>
                         Haladó Mód
                     </Typography>
