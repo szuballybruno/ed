@@ -68,7 +68,8 @@ export const WatchView = (props: {
     // still watching
     const [currentStillWatchingMarker, setCurrentStillWatchingMarker] = useState<StillWatchingDialogMarker | null>(null);
     const [stillWatchingDilalogMarkers, setStillWatchingDilalogMarkers] = useState<StillWatchingDialogMarker[]>([]);
-    const stillWatchingDialogDelaySecs = 60 * 2; // 2 mins
+    const stillWatchingDialogDelaySecs = 120; // 2 mins
+    const stillWatchingDialogShowUpThresholdSecs = 120; // 2 mins
 
     // video player 
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
@@ -160,11 +161,11 @@ export const WatchView = (props: {
         if (videoLength < stillWatchingDialogDelaySecs)
             return;
 
-        const remainingLength = videoLength - stillWatchingDialogDelaySecs;
+        const remainingLength = videoLength - stillWatchingDialogShowUpThresholdSecs;
         const dialogCount = Math.floor(remainingLength / stillWatchingDialogDelaySecs);
 
         let dialogShowUpSeconds = [] as StillWatchingDialogMarker[];
-        for (let index = 1; index < dialogCount + 1; index++) {
+        for (let index = 1; index <= dialogCount + 1; index++) {
 
             dialogShowUpSeconds.push({
                 showUpTimeSeconds: index * stillWatchingDialogDelaySecs,
@@ -181,64 +182,66 @@ export const WatchView = (props: {
     return <>
 
         {/* video player */}
-        <VideoPlayer videoItem={video} videoPlayerState={videoPlayerState}>
+        <Box height="70%">
+            <VideoPlayer videoItem={video} videoPlayerState={videoPlayerState}>
 
-            {/* questionnaire */}
-            <AbsoluteFlexOverlay isVisible={isVideoEnded} hasPointerEvents={false} align="flex-end" justify="flex-end">
+                {/* questionnaire */}
+                <AbsoluteFlexOverlay isVisible={isVideoEnded} hasPointerEvents={false} align="flex-end" justify="flex-end">
 
-                <EpistoButton
-                    style={{
-                        pointerEvents: "all",
-                        margin: "100px",
-                        padding: "0"
-                    }}
-                    onClick={navigateToNextItem}
-                    variant="colored">
-                    <TimeoutFrame logic={timeoutLogic}>
-                        <Typography style={{
-                            margin: "10px"
-                        }}>
-                            Következő videó
-                        </Typography>
-                    </TimeoutFrame>
-                </EpistoButton>
-            </AbsoluteFlexOverlay>
+                    <EpistoButton
+                        style={{
+                            pointerEvents: "all",
+                            margin: "100px",
+                            padding: "0"
+                        }}
+                        onClick={navigateToNextItem}
+                        variant="colored">
+                        <TimeoutFrame logic={timeoutLogic}>
+                            <Typography style={{
+                                margin: "10px"
+                            }}>
+                                Következő videó
+                            </Typography>
+                        </TimeoutFrame>
+                    </EpistoButton>
+                </AbsoluteFlexOverlay>
 
-            {/* questionnaire */}
-            <AbsoluteFlexOverlay isVisible={isQuestionVisible} hasPointerEvents={true}>
-                <OverlayDialog
-                    showCloseButton={false}>
-                    <VideoQuestionnaire
-                        answerSessionId={answerSessionId}
-                        question={currentQuestion!}
-                        onAnswered={() => setAnsweredQuestionIds([
-                            ...answeredQuestionIds,
-                            currentQuestion?.questionId!
-                        ])}
-                        onClosed={() => {
-                            setCurrentQuestion(null);
-                            enableNewDialogPopups();
-                        }} />
-                </OverlayDialog>
-            </AbsoluteFlexOverlay>
+                {/* questionnaire */}
+                <AbsoluteFlexOverlay isVisible={isQuestionVisible} hasPointerEvents={true}>
+                    <OverlayDialog
+                        showCloseButton={false}>
+                        <VideoQuestionnaire
+                            answerSessionId={answerSessionId}
+                            question={currentQuestion!}
+                            onAnswered={() => setAnsweredQuestionIds([
+                                ...answeredQuestionIds,
+                                currentQuestion?.questionId!
+                            ])}
+                            onClosed={() => {
+                                setCurrentQuestion(null);
+                                enableNewDialogPopups();
+                            }} />
+                    </OverlayDialog>
+                </AbsoluteFlexOverlay>
 
-            {/* still watching */}
-            <AbsoluteFlexOverlay isVisible={!!currentStillWatchingMarker} hasPointerEvents={true}>
-                <OverlayDialog showCloseButton={false}>
-                    <StillWatching
-                        optionIndex={currentStillWatchingMarker?.answerOptionIndex!}
-                        onClose={() => {
+                {/* still watching */}
+                <AbsoluteFlexOverlay isVisible={!!currentStillWatchingMarker} hasPointerEvents={true}>
+                    <OverlayDialog showCloseButton={false}>
+                        <StillWatching
+                            optionIndex={currentStillWatchingMarker?.answerOptionIndex!}
+                            onClose={() => {
 
-                            const removed = [...stillWatchingDilalogMarkers]
-                                .filter(x => !isBetweenThreshold(playedSeconds, x.showUpTimeSeconds, dialogThresholdSecs));
+                                const removed = [...stillWatchingDilalogMarkers]
+                                    .filter(x => !isBetweenThreshold(playedSeconds, x.showUpTimeSeconds, dialogThresholdSecs));
 
-                            setStillWatchingDilalogMarkers(removed);
-                            setCurrentStillWatchingMarker(null);
-                            enableNewDialogPopups();
-                        }} />
-                </OverlayDialog>
-            </AbsoluteFlexOverlay>
-        </VideoPlayer>
+                                setStillWatchingDilalogMarkers(removed);
+                                setCurrentStillWatchingMarker(null);
+                                enableNewDialogPopups();
+                            }} />
+                    </OverlayDialog>
+                </AbsoluteFlexOverlay>
+            </VideoPlayer>
+        </Box>
 
         {/* under video info */}
         <Box>

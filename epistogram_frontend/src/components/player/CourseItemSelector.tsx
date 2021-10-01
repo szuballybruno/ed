@@ -34,8 +34,6 @@ export const CourseItemSelector = (props: {
         }
     }
 
-    console.log(ref);
-
     return <>
 
         {/* learning type selector */}

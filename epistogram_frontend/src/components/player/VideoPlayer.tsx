@@ -238,6 +238,7 @@ export const VideoPlayer = (props: {
             id="fullScreenRoot"
             position="relative"
             p="6px"
+            className="whall"
             ref={playerContainerRef}>
 
             {/* playback */}
@@ -254,7 +255,7 @@ export const VideoPlayer = (props: {
                     id="videoWrapper"
                     width="100%"
                     height="100%"
-                    pt="56.25%" // to keep 16:9 ratio
+                    // pt="56.25%" // to keep 16:9 ratio
                     onClick={toggleShouldBePlaying}
                     onMouseMove={() => {
 
@@ -267,7 +268,14 @@ export const VideoPlayer = (props: {
                     <ReactPlayer
                         playbackRate={1}
                         ref={playerRef}
-                        className={classes.player}
+                        style={{
+                            position: "absolute",
+                            top: "0",
+                            left: "0",
+                            border: "0",
+                            margin: "0",
+                            background: "white"
+                        }}
                         url={videoUrl}
                         width={"100%"}
                         height={"100%"}
