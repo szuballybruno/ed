@@ -8,7 +8,7 @@ import { FloatAddButton } from "../../../FloatAddButton";
 import { EpistoButton } from "../../../universal/EpistoButton";
 import { FlexList } from "../../../universal/FlexList";
 import { FlexListItem } from "../../../universal/FlexListItem";
-import { FloatSearch } from "../../../universal/FloatSearch";
+import { EpistoSearch } from "../../../universal/EpistoSearch";
 import { EpistoHeader } from "../../universal/EpistoHeader";
 
 export const CourseAdministration = () => {
@@ -24,7 +24,7 @@ export const CourseAdministration = () => {
 
         {/* Filter the listed courses */}
         <Flex justify="flex-end">
-            <FloatSearch margin="20px" />
+            <EpistoSearch margin="20px" />
         </Flex>
 
         {/* List of courses */}

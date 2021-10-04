@@ -1,6 +1,7 @@
 import { Flex, FlexProps } from "@chakra-ui/layout";
 import { Box } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { Checkbox } from "@mui/material";
+import { ReactNode, useState } from "react";
 import { FlexImage } from "./FlexImage";
 
 export const FlexListItem = (props: FlexProps & {
@@ -9,10 +10,21 @@ export const FlexListItem = (props: FlexProps & {
     isLocked?: boolean,
     endContent?: ReactNode,
     midContent?: ReactNode,
-    thumbnailBasis?: string
+    thumbnailBasis?: string,
+    isChecked?: boolean,
+    setIsChecked?: (isChecked: boolean) => void
 }) => {
 
-    const { onClick, isLocked, thumbnailUrl, endContent, midContent, thumbnailBasis, ...css } = props;
+    const {
+        onClick,
+        isLocked,
+        thumbnailUrl,
+        endContent,
+        midContent,
+        thumbnailBasis,
+        isChecked,
+        setIsChecked,
+        ...css } = props;
 
     return <Flex
         id="flexListItem"
@@ -24,6 +36,11 @@ export const FlexListItem = (props: FlexProps & {
         onClick={onClick}
         borderBottom="1px solid #eaeaea"
         {...css}>
+
+        {setIsChecked && <Checkbox
+            checked={isChecked}
+            onChange={x => setIsChecked(x.currentTarget.checked)}
+            style={{ alignSelf: "center" }} />}
 
         {thumbnailUrl && <FlexImage height="100%" mr="10px" url={thumbnailUrl} flexBasis={thumbnailBasis ?? "50px"} />}
 

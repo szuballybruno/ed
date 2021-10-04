@@ -8,7 +8,7 @@ import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import CourseTile from "../universal/CourseTile";
 import { EpistoGrid } from "../universal/EpistoGrid";
-import { FloatSearch } from "../universal/FloatSearch";
+import { EpistoSearch } from "../universal/EpistoSearch";
 import Navbar from "../navbar/Navbar";
 import classes from "./courseSearchMain.module.scss";
 import { EpistoButton } from "../universal/EpistoButton";
@@ -84,7 +84,7 @@ const AvailableCoursesPage = () => {
                     {/* search */}
                     <Box id="courseSearchRoot" p="20px" direction="column">
 
-                        <FloatSearch />
+                        <EpistoSearch />
 
                         {/* search */}
                         <Flex justify="space-between" mt="20px" align="center">

@@ -1,3 +1,38 @@
+:root {
+  --intenseGreen: #61ca61;
+  --intenseRed: #e73f3f;
+  --intenseYellow: #efd116;
+  --intenseGray: #8e8e8e;
+  --intenseOrange: #ffc400;
+
+  --mildRed: #fa6767;
+  --mildGreen: #7cf25e;
+  --mildGrey: #e1e1e1;
+
+  --epistoTeal: #97c9cc;
+  --whiteGrey: #f6f6f6;
+}
+
+/* divider borders */
+
+.dividerBorderBottom {
+  border-bottom: 1px solid var(--mildGrey);
+}
+
+.dividerBorderLeft {
+  border-left: 1px solid var(--mildGrey);
+}
+
+.dividerBorderRight {
+  border-right: 1px solid var(--mildGrey);
+}
+
+.dividerBorderTop {
+  border-top: 1px solid var(--mildGrey);
+}
+
+/* misc  */
+
 @font-face {
   font-family: 'Poppins';
   font-style:  normal;
@@ -110,20 +145,5 @@ button {
 
 .shadowOnHover:hover{
   box-shadow: 0 0 4px #0000001f
-}
-
-:root {
-  --intenseGreen: #61ca61;
-  --intenseRed: #e73f3f;
-  --intenseYellow: #efd116;
-  --intenseGray: #8e8e8e;
-  --intenseOrange: #ffc400;
-
-  --mildRed: #fa6767;
-  --mildGreen: #7cf25e;
-  --mildGrey: #e1e1e1;
-
-  --epistoTeal: #97c9cc;
-  --whiteGrey: #f6f6f6;
 }
 

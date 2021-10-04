@@ -14,8 +14,8 @@ import { EditCourse } from "./courses/editCourse/EditCourse";
 import { EditVideo } from "./courses/editVideo/EditVideo";
 import AminStatistics from "./statistics/AminStatistics";
 import { AministrationSubpageHeader } from "./universal/adminAddHeader/AministrationSubpageHeader";
-import AddUser from "./users/addUser/AddUser";
-import { UserAdministration } from "./users/userList/UserAdministration";
+import AddUser from "../AddUser";
+import { UserAdministration } from "../UserAdministration";
 
 const AdministrationPage = () => {
 
@@ -25,7 +25,6 @@ const AdministrationPage = () => {
     const administrationRoutes = applicationRoutes.administrationRoute;
 
     const menuItems = [
-        administrationRoutes.statisticsRoute,
         administrationRoutes.usersRoute
     ] as RouteItemType[];
 
@@ -35,14 +34,13 @@ const AdministrationPage = () => {
     return <MainWrapper>
         <Navbar />
         <ContentWrapper>
+
             <LeftPanel p="20px">
                 <NavigationLinkList
                     items={menuItems} />
             </LeftPanel>
-            <RightPanel noPadding bg="white">
 
-                {/* admin header */}
-                <AministrationSubpageHeader />
+            <RightPanel noPadding bg="white">
 
                 {/* admin subpages */}
                 <Switch>

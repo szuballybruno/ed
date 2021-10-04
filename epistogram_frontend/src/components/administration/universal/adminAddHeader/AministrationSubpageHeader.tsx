@@ -7,7 +7,9 @@ import { NavLink } from 'react-router-dom';
 import { applicationRoutes } from "../../../../configuration/applicationRoutes";
 import { objToArray } from "../../../../frontendHelpers";
 
-export const AministrationSubpageHeader = () => {
+export const AministrationSubpageHeader = (props: { children?: ReactNode }) => {
+
+    const { children } = props;
 
     const currentPath = useLocation().pathname;
     const isMatchingCurrentRoute = (route: string, exact: boolean) => {
@@ -56,7 +58,7 @@ export const AministrationSubpageHeader = () => {
 
     //TODO: Navigate back to previously edited course or video on click e.g.: not to :courseId but the real courseId
 
-    return <Box padding="25px" borderBottom="5px solid var(--epistoTeal)">
+    return <Box padding="25px" className="dividerBorderBottom">
         <Breadcrumbs>
             {currentRoute && <BreadcrumbLink
                 isCurrent={!subRoute}
@@ -70,5 +72,7 @@ export const AministrationSubpageHeader = () => {
                 title={subRoute.title}
                 iconComponent={subRoute.icon} />}
         </Breadcrumbs>
+
+        {children}
     </Box>
 }
