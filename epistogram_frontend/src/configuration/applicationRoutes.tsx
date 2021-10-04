@@ -59,7 +59,7 @@ export const applicationRoutes = {
     },
 
     administrationRoute: {
-        title: "Adminisztracio",
+        title: "Adminisztráció",
         route: "/administration",
 
         statisticsRoute: {
@@ -74,7 +74,7 @@ export const applicationRoutes = {
             icon: <Person color={"secondary"} />,
 
             addRoute: {
-                title: "Felhasznalo hozzaadasa",
+                title: "Felhasználó hozzáadása",
                 route: "/administration/users/add"
             }
         },
@@ -84,19 +84,19 @@ export const applicationRoutes = {
             icon: <Subscriptions color={"secondary"} />,
 
             addRoute: {
-                title: "Kurzus hozzaadasa",
+                title: "Kurzus hozzáadása",
                 route: "/administration/courses/add"
             },
             editCourseRoute: {
-                title: "Kurzus szerkesztese",
+                title: "Kurzus szerkesztése",
                 route: "/administration/courses/:courseId"
             },
             addVideoRoute: {
-                title: "Kurzus szerkesztese",
+                title: "Videó hozzáadása",
                 route: "/administration/courses/:courseId/item/add"
             },
             editVideoRoute: {
-                title: "Kurzus szerkesztese",
+                title: "Videó szerkesztése",
                 route: "/administration/courses/:courseId/item/:itemId"
             }
         }

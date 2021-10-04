@@ -75,7 +75,7 @@ export const UserAdministration = () => {
                         checked={isAllUsersSelected} />
 
                     <Typography>
-                        Osszes kijelolese
+                        Összes kijelölése
                     </Typography>
                 </Flex>
 
@@ -88,7 +88,7 @@ export const UserAdministration = () => {
                     onSelected={x => { }}
                     selectedValue="1"
                     getCompareKey={x => x}
-                    defaultValue="Rendezes..."></EpistoSelect>
+                    defaultValue="Rendezés..."></EpistoSelect>
             </Flex>
         </AministrationSubpageHeader>
 

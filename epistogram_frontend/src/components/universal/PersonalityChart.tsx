@@ -20,7 +20,7 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
 
     const sets = [
         {
-            label: 'Szemelyes preferencia',
+            label: 'Személyes preferenciám',
             fill: true,
             backgroundColor: '#ff810099',
             borderColor: '#ff8100',

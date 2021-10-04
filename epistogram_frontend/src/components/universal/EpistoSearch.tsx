@@ -7,8 +7,7 @@ export const EpistoSearch = (props: {} & InputProps) => {
     return <Input
         outline="none"
         padding="10px"
-        className="whall"
-        placeholder="Seatch..."
+        placeholder="Keresés..."
         border="1px solid var(--mildGrey)"
         borderRadius="5px"
         {...css} />

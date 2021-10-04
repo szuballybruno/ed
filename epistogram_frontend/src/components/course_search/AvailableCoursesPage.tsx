@@ -84,7 +84,7 @@ const AvailableCoursesPage = () => {
                     {/* search */}
                     <Box id="courseSearchRoot" p="20px" direction="column">
 
-                        <EpistoSearch />
+                        <EpistoSearch width="100%" />
 
                         {/* search */}
                         <Flex justify="space-between" mt="20px" align="center">

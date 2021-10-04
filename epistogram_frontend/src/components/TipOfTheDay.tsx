@@ -43,7 +43,7 @@ export const TipOfTheDay = (props: FlexProps) => {
                     previous();
                 }
             }}>
-            {currentIndex == 0 ? "Leiras" : "Video"}
+            {currentIndex == 0 ? "Leírás" : "Videó"}
         </EpistoButton>
     </Flex>
 }

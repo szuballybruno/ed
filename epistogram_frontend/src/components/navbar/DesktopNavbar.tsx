@@ -44,7 +44,7 @@ const DesktopNavbar = (props: {
             onClick: () => navigate(applicationRoutes.settingsRoute.preferencesRoute.route)
         },
         {
-            name: "Kijelentkezes",
+            name: "Kijelentkezés",
             icon: <LogoutIcon></LogoutIcon>,
             color: "var(--mildRed)",
             onClick: () => { }
@@ -61,7 +61,8 @@ const DesktopNavbar = (props: {
                     width: "150px",
                     height: "70px",
                     objectFit: "contain",
-                    cursor: "pointer"
+                    marginLeft: "15px",
+                    cursor: "pointer",
                 }}
                 onClick={() => navigate(homeUrl)} />
 
@@ -103,7 +104,7 @@ const DesktopNavbar = (props: {
             </Flex >
 
             {/* content */}
-            < Flex display={hideLinks ? "none" : undefined} pr="10px" align="center" >
+            <Flex display={hideLinks ? "none" : undefined} pr="10px" align="center" mr="15px">
 
                 <EpistoConinInfo height="45px" />
 
@@ -125,7 +126,7 @@ const DesktopNavbar = (props: {
                         overflow="hidden"
                         url={user.avatarUrl!}></FlexImage>
                 </EpistoButton>}
-            </Flex >
+            </Flex>
 
             {/* user menu */}
             <EpistoPopper

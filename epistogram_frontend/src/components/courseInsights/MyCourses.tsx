@@ -16,19 +16,19 @@ const CourseStatCard = (props: { course: CourseShortDTO }) => {
 
     const stats = [
         {
-            text: "Focus 24%"
+            text: "Fókusz 24%"
         },
         {
-            text: "Accuarcy 24%"
+            text: "Pontosság 24%"
         },
         {
-            text: "Compelted exams: 45"
+            text: "Elvégzett vizsgák: 45"
         },
         {
-            text: "Completed in: 3h"
+            text: "A kurzus teljes időtartalma: 3h"
         },
         {
-            text: "Data: 123"
+            text: "Reakció idő: 12s"
         },
     ]
 
