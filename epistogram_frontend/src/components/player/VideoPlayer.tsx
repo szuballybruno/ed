@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, BoxProps, FlexProps } from "@chakra-ui/react";
 import { Slider, Typography } from "@mui/material";
 import { ClosedCaption, Fullscreen, Pause, PlayArrow } from "@mui/icons-material";
 import FastForwardIcon from '@mui/icons-material/FastForward';
@@ -194,11 +194,10 @@ export type VideoPlayerStateType = ReturnType<typeof useVideoPlayerState>;
 
 export const VideoPlayer = (props: {
     videoItem: VideoDTO,
-    videoPlayerState: VideoPlayerStateType,
-    children?: ReactNode
-}) => {
+    videoPlayerState: VideoPlayerStateType
+} & BoxProps) => {
 
-    const { videoPlayerState } = props;
+    const { videoPlayerState, children, videoItem, ...css } = props;
     const {
         playerContainerRef,
         playerRef,
@@ -238,8 +237,8 @@ export const VideoPlayer = (props: {
             id="fullScreenRoot"
             position="relative"
             p="6px"
-            className="whall"
-            ref={playerContainerRef}>
+            ref={playerContainerRef}
+            {...css}>
 
             {/* playback */}
             <Box
@@ -247,14 +246,12 @@ export const VideoPlayer = (props: {
                 filter={isShowingOverlay ? "blur(4px)" : "blur(0px)"}
                 transition="0.3s"
                 position="relative"
-                height="100%"
-                width="100%">
+                className="whall">
 
                 {/* video wrapper */}
                 <Box
                     id="videoWrapper"
-                    width="100%"
-                    height="100%"
+                    className="whall"
                     // pt="56.25%" // to keep 16:9 ratio
                     onClick={toggleShouldBePlaying}
                     onMouseMove={() => {
@@ -269,16 +266,10 @@ export const VideoPlayer = (props: {
                         playbackRate={1}
                         ref={playerRef}
                         style={{
-                            position: "absolute",
-                            top: "0",
-                            left: "0",
-                            border: "0",
-                            margin: "0",
-                            background: "white"
                         }}
                         url={videoUrl}
-                        width={"100%"}
-                        height={"100%"}
+                        width="100%"
+                        height="100%"
                         controls={false}
                         playing={isPlaying}
                         onProgress={(playedInfo) => {
@@ -356,7 +347,7 @@ export const VideoPlayer = (props: {
                 {visualOverlayType == "seekLeft" && <FastRewindIcon style={iconStyle} />}
             </AbsoluteFlexOverlay>
 
-            {props.children}
+            {children}
         </Box>
     )
 };

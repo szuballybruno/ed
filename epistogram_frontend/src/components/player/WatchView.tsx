@@ -99,12 +99,10 @@ export const WatchView = (props: {
 
         if (isVideoEnded) {
 
-            console.log("starting timer");
             timeoutLogic.restart();
         }
         else {
 
-            console.log("stopping timer");
             timeoutLogic.stop();
         }
 
@@ -182,8 +180,15 @@ export const WatchView = (props: {
     return <>
 
         {/* video player */}
-        <Box height="70%">
-            <VideoPlayer videoItem={video} videoPlayerState={videoPlayerState}>
+        <Flex justify="center">
+            {/* <Box bg="red" height="min((100vw - 420px) / 1.7777, 70vh)" width="calc(min((100vw - 420px) / 1.7777, 70vh) * 1.7777)">
+
+            </Box> */}
+            <VideoPlayer
+                height="min((100vw - 420px) / 1.7777, 70vh)"
+                width="calc(min((100vw - 420px) / 1.7777, 70vh) * 1.7777)"
+                videoItem={video}
+                videoPlayerState={videoPlayerState}>
 
                 {/* questionnaire */}
                 <AbsoluteFlexOverlay isVisible={isVideoEnded} hasPointerEvents={false} align="flex-end" justify="flex-end">
@@ -241,7 +246,7 @@ export const WatchView = (props: {
                     </OverlayDialog>
                 </AbsoluteFlexOverlay>
             </VideoPlayer>
-        </Box>
+        </Flex>
 
         {/* under video info */}
         <Box>

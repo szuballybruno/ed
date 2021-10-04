@@ -74,13 +74,16 @@ const HomePage = () => {
                     <Flex direction="column">
 
                         {/* test your knowledge */}
-                        <DashboardSection title="A nap kerdese" minHeight="300px">
-                            <PractiseQuestions />
-                        </DashboardSection>
-
-                        {/* tip of the day */}
-                        <DashboardSection title="Napi tipped">
-                            <TipOfTheDay />
+                        <DashboardSection title="Gyakorolj!" minHeight="300px">
+                            <Flex>
+                                <Box flexBasis="66.6%">
+                                    <PractiseQuestions />
+                                </Box>
+                                <Box bg="var(--mildGrey)" width="1px" m="15px" />
+                                <Box flexBasis="33.3%">
+                                    <TipOfTheDay />
+                                </Box>
+                            </Flex>
                         </DashboardSection>
 
                         {/* current tasks */}
