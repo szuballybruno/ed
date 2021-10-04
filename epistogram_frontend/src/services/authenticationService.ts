@@ -4,7 +4,7 @@ import { globalConfig } from '../configuration/config';
 import { refreshTokenRefreshIntervalInS as refreshTokenRefreshIntervalInMs, userRefreshIntervalInS as userRefreshIntervalInMs } from '../Environemnt';
 import { RefetchUserFunctionContext } from '../components/HOC/AuthenticationFrame';
 import { UserDTO } from '../models/shared_models/UserDTO';
-import { httpGetAsync, httpPostAsync, HTTPResponse } from './httpClient';
+import { httpGetAsync, httpPostAsync, HTTPResponse, usePostData } from './httpClient';
 
 export type AuthenticationStateType = "loading" | "authenticated" | "forbidden";
 
@@ -67,19 +67,21 @@ export const logOutUserAsync = async () => {
     await httpPostAsync("log-out-user");
 }
 
+type LoginUserDTO = {
+    email: string;
+    password: string;
+}
+
 export const useLogInUser = () => {
 
-    const refetchUser = useContext(RefetchUserFunctionContext);
+    const { result, error, postDataAsync, state } = usePostData<LoginUserDTO, void>("login-user");
 
-    return async (email: string, password: string) => {
-
-        const result = await httpPostAsync("login-user", {
+    return {
+        loginUserState: state,
+        loginUserError: error,
+        loginUserAsync: (email: string, password: string) => postDataAsync({
             email: email,
             password: password
-        });
-
-        refetchUser();
-
-        return result;
+        })
     }
 }

@@ -67,13 +67,17 @@ export const UserAdministration = () => {
         <AministrationSubpageHeader>
             <Flex justify="flex-end" align="center" marginTop="20px">
 
-                <Checkbox
-                    checked={isAllUsersSelected}
-                    onChange={x => selectAllOrNone(x.currentTarget.checked)} />
+                <Flex
+                    align="center"
+                    onClick={() => selectAllOrNone(!isAllUsersSelected)}
+                    cursor="pointer">
+                    <Checkbox
+                        checked={isAllUsersSelected} />
 
-                <Typography>
-                    Osszes kijelolese
-                </Typography>
+                    <Typography>
+                        Osszes kijelolese
+                    </Typography>
+                </Flex>
 
                 <Box flex="1" />
 

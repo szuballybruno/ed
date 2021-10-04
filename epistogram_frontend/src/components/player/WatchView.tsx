@@ -90,6 +90,7 @@ export const WatchView = (props: {
 
     const handleVideoCompletedStateChanged = () => {
 
+        console.log("refetchCourseItemList");
         refetchCourseItemList();
         // showNotification("Video unlocked!");
     }
@@ -127,6 +128,7 @@ export const WatchView = (props: {
 
         if (unansweredQuestion) {
 
+            console.log("asd");
             setShowNewDialogsEnabled(false);
             setCurrentQuestion(unansweredQuestion);
         }
@@ -175,7 +177,12 @@ export const WatchView = (props: {
     }, [videoLength]);
 
     // playback watcher
-    usePlaybackWatcher(playedSeconds, isPlaying, handleVideoCompletedStateChanged, setMaxWatchedSeconds);
+    usePlaybackWatcher(
+        playedSeconds,
+        isPlaying,
+        handleVideoCompletedStateChanged,
+        setMaxWatchedSeconds,
+        !isSeeking);
 
     return <>
 

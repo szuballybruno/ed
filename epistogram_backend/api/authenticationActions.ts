@@ -19,7 +19,7 @@ export const logInUserAction = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     const { accessToken, refreshToken } = await logInUser(email, password);
-    
+
     await setAuthCookies(res, accessToken, refreshToken);
 }
 

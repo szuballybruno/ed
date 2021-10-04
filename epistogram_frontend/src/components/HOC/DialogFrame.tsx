@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 
 export type DialogOptions = {
     title: string,
@@ -12,41 +12,26 @@ export type DialogOptions = {
 
 export const useDialogState = () => {
 
-    const [description, setDescription] = useState<string>();
-    const [firstButtonTitle, setFirstButtonTitle] = useState<string>();
-    const [firstButtonAction, setFirstButtonAction] = useState<() => void>();
-    const [secondButtonTitle, setSecondButtonTitle] = useState<string>();
-    const [secondButtonAction, setSecondButtonAction] = useState<() => void>();
+    const [dialogOptions, setDialogOptions] = useState<DialogOptions>();
     const [isOpen, setIsOpen] = useState(false);
-    const [title, setTitle] = useState<string>();
 
     const showDialog = (options: DialogOptions) => {
 
-        setTitle(options.title);
-        setDescription(options.description);
-        setFirstButtonTitle(options.firstButtonTitle);
-        setFirstButtonAction(options.firstButtonAction);
-        setSecondButtonTitle(options.secondButtonTitle);
-        setSecondButtonAction(options.secondButtonAction);
-
+        setDialogOptions(options);
         setIsOpen(true);
     }
 
     const closeDialog = () => {
 
+        console.log("close dialog");
         setIsOpen(false);
     }
 
     return {
-        title,
+        dialogOptions,
         isOpen,
         closeDialog,
-        showDialog,
-        description,
-        firstButtonTitle,
-        firstButtonAction,
-        secondButtonTitle,
-        secondButtonAction,
+        showDialog
     }
 }
 
@@ -55,7 +40,7 @@ export type DialogStateType = ReturnType<typeof useDialogState>;
 export const DialogContext = React.createContext<DialogStateType | null>(null);
 
 export const DialogFrame = (props: {
-    children: JSX.Element;
+    children: ReactNode
 }) => {
 
     const dialogState = useDialogState();
@@ -63,14 +48,9 @@ export const DialogFrame = (props: {
 
     const {
         isOpen,
-        title,
-        description,
-        firstButtonAction,
-        firstButtonTitle,
-        secondButtonAction,
-        secondButtonTitle,
+        dialogOptions,
         closeDialog
-    } = dialogState
+    } = dialogState;
 
     return <>
         <Dialog
@@ -80,39 +60,44 @@ export const DialogFrame = (props: {
             style={{
                 zIndex: 10000
             }}>
-            <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+
+            <DialogTitle id="alert-dialog-title">
+                {dialogOptions?.title}
+            </DialogTitle>
+
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    {description}
+                    {dialogOptions?.description}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                {(!!firstButtonTitle) && <Button
+                {dialogOptions?.firstButtonTitle && <Button
                     color="primary"
                     onClick={() => {
 
                         closeDialog();
 
-                        if (firstButtonAction)
-                            firstButtonAction();
+                        if (dialogOptions?.firstButtonAction)
+                            dialogOptions?.firstButtonAction();
                     }}>
-                    {firstButtonTitle}
+                    {dialogOptions?.firstButtonTitle}
                 </Button>}
 
-                {(!!secondButtonTitle) && <Button
+                {dialogOptions?.secondButtonTitle && <Button
                     onClick={() => {
 
                         closeDialog();
 
-                        if (secondButtonAction)
-                            secondButtonAction();
+                        if (dialogOptions.secondButtonAction)
+                            dialogOptions.secondButtonAction();
                     }}
                     color="primary"
                     autoFocus>
-                    {secondButtonTitle}
+                    {dialogOptions?.secondButtonTitle}
                 </Button>}
             </DialogActions>
         </Dialog>
+
         <DialogContext.Provider value={dialogState}>
             {children}
         </DialogContext.Provider>

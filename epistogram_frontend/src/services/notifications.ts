@@ -28,14 +28,13 @@ export const useDialog = () => {
 
 export const useShowErrorDialog = () => {
 
-    const { showDialog, closeDialog } = useDialog();
+    const { showDialog } = useDialog();
 
     const showErrorDialog = (description: string) => {
 
         showDialog({
             title: "An error has occured.",
             description: description ?? "Unknown error.",
-            secondButtonAction: closeDialog,
             secondButtonTitle: "Ok"
         });
     }

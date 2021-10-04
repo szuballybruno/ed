@@ -84,7 +84,7 @@ export const httpDeleteAsync = async (urlEnding: string) => {
 export const usePostData = <TData, TResult>(url: string) => {
 
     const [state, setState] = useState<LoadingStateType>("success");
-    const [error, setError] = useState<any>(null);
+    const [error, setError] = useState<TypedError | null>(null);
     const [result, setResult] = useState<TResult | null>(null);
 
     const postDataAsync = async (data: TData) => {
@@ -101,7 +101,7 @@ export const usePostData = <TData, TResult>(url: string) => {
         catch (e) {
 
             setState("error");
-            setError(e);
+            setError(e as TypedError);
         }
     }
 

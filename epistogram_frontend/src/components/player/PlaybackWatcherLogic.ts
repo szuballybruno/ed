@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { globalConfig } from "../../configuration/config";
 import { isBetweenThreshold } from "../../frontendHelpers";
 import { usePostVideoPlaybackSample } from "../../services/playerService";
 
@@ -6,7 +7,8 @@ export const usePlaybackWatcher = (
     playedSeconds: number,
     isPlaying: boolean,
     onVideoWatchedStateChanged: () => void,
-    setMaxWatchedSeconds: (maxWatchedSeconds: number) => void) => {
+    setMaxWatchedSeconds: (maxWatchedSeconds: number) => void,
+    isSamplingEnabled: boolean) => {
 
     // the rate in which new samples are taken
     const sampleRateSeconds = 5;
@@ -26,6 +28,9 @@ export const usePlaybackWatcher = (
 
     const samplePlayedSeconds = () => {
 
+        if (!isSamplingEnabled)
+            return;
+
         setLastSampleSeconds(playedSeconds);
 
         const elapsedSeconds = Math.round((playedSeconds - lastSampleSeconds) * 10) / 10;
@@ -34,7 +39,9 @@ export const usePlaybackWatcher = (
             && elapsedSeconds > 0
             && elapsedSeconds > minSampleSeconds) {
 
-            console.log(`Watched ${elapsedSeconds}s`);
+            if (globalConfig.verboseLogging)
+                console.log(`Watched ${elapsedSeconds}s`);
+
             postVideoPlaybackSampleAsync(lastSampleSeconds, playedSeconds);
         }
     }
@@ -59,6 +66,8 @@ export const usePlaybackWatcher = (
     // watched state changed 
     useEffect(
         () => {
+
+            console.log(videoSamplingResult);
 
             if (videoSamplingResult?.isWatchedStateChanged)
                 onVideoWatchedStateChanged();

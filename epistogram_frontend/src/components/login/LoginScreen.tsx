@@ -1,76 +1,73 @@
-import { Button } from "@mui/material";
-import React, { useContext, useState } from 'react';
-import { Redirect } from "react-router";
+import { Box, Flex } from "@chakra-ui/layout";
+import { Typography } from "@mui/material";
+import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { TypedError } from "../../frontendHelpers";
 import { useLogInUser } from '../../services/authenticationService';
 import { useNavigation } from "../../services/navigatior";
+import { useShowErrorDialog } from "../../services/notifications";
 import SingleInput from "../administration/universal/singleInput/SingleInput";
-import { AuthenticationStateContext } from "../HOC/AuthenticationFrame";
+import { AuthenticationStateContext, RefetchUserFunctionContext } from "../HOC/AuthenticationFrame";
+import { EpistoButton } from "../universal/EpistoButton";
 import classes from './loginScreen.module.scss';
 
 const LoginScreen = (props: { history: any; }): JSX.Element => {
 
     console.warn("[LoginScreen] Started...")
-    const logInUser = useLogInUser();
+    const { loginUserAsync, loginUserError, loginUserState } = useLogInUser();
     const [errorMessage, setErrorMessage] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { navigate } = useNavigation();
+    const showErrorDialog = useShowErrorDialog();
+    const authState = useContext(AuthenticationStateContext);
+    const refetchUser = useContext(RefetchUserFunctionContext);
 
-    const authenticate = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleLoginUserAsync = async () => {
 
-        e.preventDefault();
-
-        try {
-
-            await logInUser(email, password);
-
-            console.log("Login successful, naving to home page!");
-            navigate(applicationRoutes.homeRoute.route);
-
-        } catch (error: any | TypedError) {
-
-            // non typed error
-            if (!error.errorType) {
-
-                setErrorMessage("Ismeretlen hiba történt");
-            }
-
-            // typed error 
-            else {
-
-                const typedError = error as TypedError;
-
-                if (typedError.errorType == "bad request") {
-
-                    setErrorMessage("A megadott adatok hibásak");
-                }
-                else {
-
-                    setErrorMessage("Ismeretlen hiba történt a szerverrel való kommunikáció során");
-                }
-            }
-        }
+        await loginUserAsync(email, password);
+        refetchUser();
     };
 
-    const authState = useContext(AuthenticationStateContext);
+    // watch for auth state change
+    // and navigate to home page if athenticated
+    useEffect(() => {
 
-    if (authState === "loading")
-        return <div>loading...</div>
+        if (authState === "authenticated")
+            navigate(applicationRoutes.homeRoute.route);
+    }, [authState]);
 
-    if (authState === "authenticated")
-        return <Redirect to={applicationRoutes.homeRoute.route}></Redirect>
+    // watch for login call errors 
+    useEffect(() => {
+
+        if (!loginUserError)
+            return;
+
+        if (loginUserError.errorType === "bad request") {
+
+            setErrorMessage("Hibas adatok!");
+        }
+        else if (loginUserError.errorType) {
+
+            showErrorDialog(loginUserError.message);
+        }
+        else {
+
+            showErrorDialog("" + loginUserError);
+        }
+    }, [loginUserError]);
 
     return (
         <div className={classes.loginhatter}>
-            <div className={classes.formkeret}>
-                <div className={classes.cimek}>
+
+            <Flex direction="column" maxWidth="400px">
+
+                <Flex direction="column">
                     <h1 className={classes.loginfocim}>Örülünk, hogy ismét itt vagy velünk!</h1>
                     <h1 className={classes.loginalcim}>Jelentkezz be, és már kezdhetsz is.</h1>
-                </div>
-                <form className={classes.formitem} onSubmit={(e: React.FormEvent<HTMLFormElement>) => authenticate(e)}>
+                </Flex>
 
+                <Box>
                     <SingleInput
                         id="email"
                         labelText={"E-mail"}
@@ -86,17 +83,25 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
                         changeHandler={(x) => setPassword(x.target.value)}
                         style={{ justifySelf: "center" }} />
 
-                    <p className={classes.forgotPassword}>Elfelejtettem a jelszavam</p>
+                    <p className={classes.forgotPassword}>
+                        Elfelejtettem a jelszavam
+                    </p>
 
-                    <Button type="submit" variant={"outlined"}>Bejelentkezés</Button>
-                    <p className={classes.errorLabel}>{errorMessage}</p>
-                </form>
-            </div>
+                    <Typography style={{ color: "var(--mildRed)" }}>
+                        {errorMessage}
+                    </Typography>
+                </Box>
+
+                <EpistoButton variant="colored" padding="15px" onClick={handleLoginUserAsync}>
+                    Bejelentkezés
+                </EpistoButton>
+            </Flex>
+
             <div className={classes.regisztracio}>
                 <h3>Még nem regisztráltál?</h3>
                 <h3>Itt az ideje!</h3>
             </div>
-        </div>
+        </div >
     )
 };
 

@@ -22,7 +22,7 @@ FROM (
 	LEFT JOIN public."answer_session" AS "as"
 	ON "as"."id" = "qa"."answerSessionId"
 	
-	WHERE "q"."examId" IS DISTINCT FROM 1 
+	WHERE "q"."examId" IS NULL 
 
 	GROUP BY 
 		"qa"."questionId",
@@ -46,29 +46,32 @@ WHERE
 	AND 
 	(
 		(
-		-- incorrect video answer 6h ago
-		"qa"."isPractiseAnswer" = false 
-		AND  
-		"a"."isCorrect" IS NULL
-	-- 	AND 
-	-- 	"qa"."creationDate" + INTERVAL '6 HOURS' < NOW() 
+			-- incorrect video answer 6h ago
+			"qa"."isPractiseAnswer" = false 
+			AND  
+			"a"."isCorrect" IS DISTINCT FROM true
+			AND 
+			"qa"."creationDate" + INTERVAL '6 HOURS' < NOW() 
 		)
 		OR
 		(
-		-- correct video answer 24h ago
-		"qa"."isPractiseAnswer" = false 
-		AND  
-		"a"."isCorrect" = true 
-	-- 	AND 
-	-- 	"qa"."creationDate" + INTERVAL '24 HOURS' < NOW() 
+			-- correct video answer 24h ago
+			"qa"."isPractiseAnswer" = false 
+			AND  
+			"a"."isCorrect" = true 
+			AND 
+			"qa"."creationDate" + INTERVAL '24 HOURS' < NOW() 
+		)
+		OR
+		(
+			-- incorrect video answer 6h ago
+			"qa"."isPractiseAnswer" = true 
+			AND  
+			"a"."isCorrect" IS DISTINCT FROM true
+			AND 
+			"qa"."creationDate" + INTERVAL '48 HOURS' < NOW() 
 		)
 	)
-
--- 	OR
--- 	"qa"."isPractiseAnswer" = true
-	
-	
--- 	select * from question_answer 
 
 
 
