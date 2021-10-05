@@ -41,7 +41,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
                 : "text"}
         color="primary"
         ref={ref}
-        className={className}
+        className={className + " fontMid"}
         style={{
             overflow: "hidden",
             whiteSpace: "nowrap",

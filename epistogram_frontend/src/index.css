@@ -35,7 +35,21 @@
   border-top: 1px solid var(--mildGrey);
 }
 
-/* misc  */
+/* font sizes */
+
+.fontSmall {
+  font-size: 12px;
+}
+
+.fontMid {
+  font-size: 14px !important;
+}
+
+.fontLarge {
+  font-size: 16px;
+}
+
+/* sqares  */
 
 .square25 {
   width: 25px; 
@@ -45,6 +59,11 @@
 .square35 {
   width: 35px; 
   height: 35px; 
+}
+
+.square40 {
+ width: 40px !important;
+ height: 40px !important; 
 }
 
 .square50 {

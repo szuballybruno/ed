@@ -4,14 +4,29 @@ import { FlexFloat } from '../universal/FlexFloat';
 
 export const MainWrapper = (props: { children: ReactNode }) => {
 
-    return <Flex id="mainWrapper" direction="column" height="100%" width="100%" maxWidth={"1920px"} overflow="hidden">
+    return <Flex
+        id="mainWrapper"
+        direction="column"
+        height="100%"
+        width="100%"
+        overflow="hidden">
+
         {props.children}
     </Flex>
 };
 
-export const ContentWrapper = (props: { children: ReactNode }) => {
-    return <Flex id="contentWrapper" flex="1" overflow="hidden">
-        {props.children}
+export const ContentWrapper = (props: {
+    children: ReactNode
+} & FlexProps) => {
+
+    const { children, ...css } = props;
+
+    return <Flex
+        id="contentWrapper"
+        flex="1"
+        overflow="hidden"
+        {...css}>
+        {children}
     </Flex>
 };
 

@@ -68,14 +68,14 @@ export const PlayerPage = () => {
 
             <Navbar />
 
-            <ContentWrapper>
+            <ContentWrapper width="min(100vw, 1700px)" margin="auto">
 
                 <LoadingFrame
                     loadingState={[playerDataStatus]}
                     error={[playerDataError]}>
 
                     {/* main column */}
-                    <Box id="mainColumn" overflowY="scroll" height="100%" width="100%">
+                    <Box id="mainColumn" overflowY="scroll" >
 
                         {video && <WatchView
                             courseId={courseId!}
@@ -97,10 +97,10 @@ export const PlayerPage = () => {
                     <FlexFloat
                         id="courseItemListSidebar"
                         justify="flex-start"
-                        height="100%"
                         bg="white"
                         maxWidth={isSidebarHidden ? "0px" : "420px"}
                         opacity={isSidebarHidden ? 0 : 1}
+                        boxShadow="none"
                         transition="0.5s">
 
                         {isDesktopView && <Box

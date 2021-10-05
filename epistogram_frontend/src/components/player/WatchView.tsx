@@ -184,16 +184,16 @@ export const WatchView = (props: {
         setMaxWatchedSeconds,
         !isSeeking);
 
+    // calc(min((100vw - 420px) / 1.7777, 70vh) * 1.7777)
+    // min((100vw - 420px) / 1.7777, 70vh)
+
     return <>
 
         {/* video player */}
-        <Flex justify="center">
-            {/* <Box bg="red" height="min((100vw - 420px) / 1.7777, 70vh)" width="calc(min((100vw - 420px) / 1.7777, 70vh) * 1.7777)">
-
-            </Box> */}
+        <Flex justify="center" mt="20px">
             <VideoPlayer
-                height="min((100vw - 420px) / 1.7777, 70vh)"
-                width="calc(min((100vw - 420px) / 1.7777, 70vh) * 1.7777)"
+                height="calc((min(100vw, 1700px) - 420px) / 1.7777)"
+                width="calc(min(100vw, 1700px) - 420px)"
                 videoItem={video}
                 videoPlayerState={videoPlayerState}>
 
@@ -264,11 +264,22 @@ export const WatchView = (props: {
                 refetchPlayerData={refetchPlayerData}
                 courseItems={courseItems} />}
 
-            <Flex id="titleAndSegmentedButtonFlex" justify="space-between" padding="20px" flexWrap="wrap">
-                <Typography variant={"h4"}>{video!.title}</Typography>
+            <Flex
+                id="titleAndSegmentedButtonFlex"
+                justify="space-between"
+                padding="20px"
+                flexWrap="wrap"
+                align="center">
+
+                <Typography variant={"h6"}>
+                    {video!.title}
+                </Typography>
+
                 <SegmentedButton paging={descCommentPaging}></SegmentedButton>
             </Flex>
+
             <Divider style={{ width: "100%" }} />
+
             <SlidesDisplay
                 index={descCommentPaging.currentIndex}
                 slides={[
@@ -279,3 +290,4 @@ export const WatchView = (props: {
         </Box>
     </>
 }
+

@@ -59,7 +59,7 @@ const DesktopNavbar = (props: {
                 src={getAssetUrl("/images/logo.png")}
                 style={{
                     width: "150px",
-                    height: "70px",
+                    height: "50px",
                     objectFit: "contain",
                     marginLeft: "15px",
                     cursor: "pointer",
@@ -116,7 +116,7 @@ const DesktopNavbar = (props: {
                     onClick={() => setPopperOpen(true)}
                     padding="0px"
                     isRound
-                    size="55px"
+                    size="45px"
                     style={{
                         border: "3px solid var(--epistoTeal)",
                         margin: "0px",
