@@ -6,7 +6,7 @@ import { globalConfig } from "./configuration/config";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 import { LoadingStateType } from "./models/types";
 
-export const dateToString = (date: Date) => {
+export const dateTimeToString = (date: Date) => {
 
     if (!date)
         return "";
@@ -15,6 +15,40 @@ export const dateToString = (date: Date) => {
         return new Date(date).toLocaleString();
 
     return date.toLocaleString();
+}
+
+export const toDateStringFormatted = (date: Date) => {
+
+    const monthIndex = date.getMonth();
+    const dayIndex = date.getDay();
+
+    return `${getMonthName(monthIndex)}. ${dayIndex}`;
+}
+
+export const daysUntil = (firstDate: Date, secondDate: Date) => {
+
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const diffDays = Math.round(Math.abs(((firstDate as any) - (secondDate as any)) / oneDay));
+
+    return diffDays;
+}
+
+export const getMonthName = (index: number) => {
+
+    return [
+        "Jan",
+        "Febr",
+        "Márc",
+        "Ápr",
+        "Máj",
+        "Jún",
+        "Júl",
+        "Aug",
+        "Szept",
+        "Okt",
+        "Nov",
+        "Dec"
+    ][index - 1];
 }
 
 export const disallowWindowNavigation = () => {

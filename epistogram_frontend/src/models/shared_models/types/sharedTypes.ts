@@ -10,7 +10,7 @@ export type CoursePlaybackErrorType = "courseItemNotFound";
 
 export type ErrorType = HTTPErrorType | MiscErrorType | CoursePlaybackErrorType;
 
-export type TaskObjectiveType = "practise" | "continueVideo" | "exam";
+export type TaskObjectiveType = "video" | "playlist" | "course" | "exam";
 
 export type CourseItemType = "video" | "exam";
 
@@ -18,7 +18,9 @@ export type CourseItemStateType = "completed" | "locked" | "current" | "availabl
 
 export type CourseModeType = "beginner" | "advanced";
 
-export type TaskPriorityType = "high" | "mid" | "low";
+export type TaskPriorityType = "normal" | "important" | "urgent";
+
+export type TaskStatusType = "assigned" | "inProgress" | "submitted" | "rejected" | "completed";
 
 export const UserRoleEnum = {
     administratorId: 1,

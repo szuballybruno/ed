@@ -5,9 +5,13 @@
   --intenseGray: #8e8e8e;
   --intenseOrange: #ffc400;
 
+  --deepGreen: #34c110;
+  --deepOrange: #ffbb00;
+
   --mildRed: #fa6767;
   --mildGreen: #7cf25e;
   --mildGrey: #e1e1e1;
+  --mildOrange: #ffcd2b;
 
   --epistoTeal: #97c9cc;
   --whiteGrey: #f6f6f6;
@@ -29,6 +33,23 @@
 
 .dividerBorderTop {
   border-top: 1px solid var(--mildGrey);
+}
+
+/* misc  */
+
+.square25 {
+  width: 25px; 
+  height: 25px; 
+}
+
+.square35 {
+  width: 35px; 
+  height: 35px; 
+}
+
+.square50 {
+ width: 50px !important;
+ height: 50px !important; 
 }
 
 /* misc  */
@@ -99,16 +120,6 @@ button {
 
 .pauseAnimation {
   animation-play-state: paused;
-}
-
-.square25 {
-   width: 25px; 
-   height: 25px; 
-}
-
-.square50 {
-  width: 50px !important;
-  height: 50px !important; 
 }
 
 .whall {
