@@ -199,7 +199,7 @@ export const useReactQuery = <T>(
     }
 }
 
-export const getAssetUrl = (path: string) => globalConfig.assetStorageUrl + path;
+export const getAssetUrl = (path: string) => globalConfig.assetStorageUrl + ("/" + path).replace("//", "/");
 
 export const hasValue = (obj: any) => {
 

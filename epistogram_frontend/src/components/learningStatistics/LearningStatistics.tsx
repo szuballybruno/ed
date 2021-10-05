@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/layout';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Bar } from "react-chartjs-2";
+import { getAssetUrl } from '../../frontendHelpers';
 import StatisticsCard from "../statisticsCard/StatisticsCard";
 import classes from './learningStatistics.module.scss';
 import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
@@ -86,93 +87,244 @@ export const chartDefaultOptions = {
     },
 };
 
+type StatisticsGroupType = {
+    title: string;
+    items: StatisticsItemType[];
+}
+
+type StatisticsItemType = {
+    iconPath: string;
+    value: string;
+    suffix: string;
+    title: string;
+    chart?: ReactNode;
+}
+
 const LearningStatistics = () => {
 
+    const statistics = [
+        {
+            title: "Időbeosztás",
+            items: [
+                {
+                    value: "32",
+                    suffix: "perc",
+                    title: "Session átlagos hossza",
+                    iconPath: getAssetUrl("statistics_icons/average_session_length.svg")
+                },
+                {
+                    value: "12-15",
+                    suffix: "óra",
+                    title: "Mely az általam leginkább preferált idősáv?",
+                    iconPath: getAssetUrl("statistics_icons/most_preferred_time_range.png"),
+                    chart: <Bar
+                        className={classes.progressLineChart}
+                        options={chartDefaultOptions}
+                        data={daysWithActivityInTime} />
+                },
+                {
+                    value: "9-12",
+                    suffix: "óra",
+                    title: "Mely a leghatékonyabb idősáv?",
+                    iconPath: getAssetUrl("statistics_icons/most_productive_time_range.png")
+                },
+                {
+                    value: "Szerda",
+                    suffix: "",
+                    title: "Mely nap(ok)on vagyok a legaktívabb?",
+                    iconPath: getAssetUrl("statistics_icons/most_productive_days.svg"),
+                    chart: <Bar
+                        className={classes.progressLineChart}
+                        options={chartDefaultOptions}
+                        data={howActiveIAm} />
+                },
+            ]
+        },
+        {
+            title: "Videók",
+            items: [
+                {
+                    value: "13",
+                    suffix: "db",
+                    title: "Megtekintett videók a hónapban",
+                    iconPath: getAssetUrl("statistics_icons/watched_videos.svg"),
+                    chart: <Bar
+                        className={classes.progressLineChart}
+                        options={chartDefaultOptions}
+                        data={howActiveIAm} />
+                },
+                {
+                    value: "18.5",
+                    suffix: "óra",
+                    title: "Videónézéssel eltöltött idő a hónapban",
+                    iconPath: getAssetUrl("statistics_icons/total_watching_time.svg"),
+                }
+            ]
+        },
+        {
+            title: "Kurzusok",
+            items: [
+                {
+                    value: "8",
+                    suffix: "db",
+                    title: "Elkezdett kurzusok száma",
+                    iconPath: getAssetUrl("statistics_icons/started_courses.svg"),
+                },
+                {
+                    value: "1",
+                    suffix: "db",
+                    title: "Több mint két hete inaktív kurzusok száma",
+                    iconPath: getAssetUrl("statistics_icons/inactive_courses.svg"),
+                },
+                {
+                    value: "4",
+                    suffix: "db",
+                    title: "Kurzusok száma, amelyek legalább 50%-ban készen vannak",
+                    iconPath: getAssetUrl("statistics_icons/half_done_courses.png"),
+                },
+                {
+                    value: "3",
+                    suffix: "db",
+                    title: "Befejezett kurzusok száma",
+                    iconPath: getAssetUrl("statistics_icons/completed_courses.png"),
+                }
+            ]
+        },
+        {
+            title: "Vizsgák",
+            items: [
+                {
+                    value: "2",
+                    suffix: "db",
+                    title: "Elvégzett vizsgák száma",
+                    iconPath: getAssetUrl("statistics_icons/completed_exams.svg"),
+                },
+                {
+                    value: "75",
+                    suffix: "%",
+                    title: "Átlagos teljesítmény a vizsgákon",
+                    iconPath: getAssetUrl("statistics_icons/average_performance_on_exams.svg"),
+                }
+            ]
+        },
+        {
+            title: "Hatékonyság",
+            items: [
+                {
+                    value: "17",
+                    suffix: "db",
+                    title: "Megválaszolt tudást vizsgáló kérdések száma",
+                    iconPath: getAssetUrl("statistics_icons/answered_questions.svg"),
+                },
+                {
+                    value: "62",
+                    suffix: "%",
+                    title: "Helyes válaszok aránya",
+                    iconPath: getAssetUrl("statistics_icons/correct_answer_rate.svg"),
+                }
+            ]
+        },
+        {
+            title: "Fókusz",
+            items: [
+                {
+                    value: "45",
+                    suffix: "%",
+                    title: "Fókuszálás a videómegtekintések során",
+                    iconPath: getAssetUrl("statistics_icons/focus_during_videos.png"),
+                    chart: <Bar
+                        className={classes.progressLineChart}
+                        options={chartDefaultOptions}
+                        data={howActiveIAm} />
+                },
+                {
+                    value: "3.2",
+                    suffix: "mp",
+                    title: "Reakcióidő fókuszálást vizsgáló kérdésekre",
+                    iconPath: getAssetUrl("statistics_icons/reaction_time_still_watching.svg"),
+                },
+                {
+                    value: "9.5",
+                    suffix: "mp",
+                    title: "Reakcióidő tudást vizsgáló kérdésekre",
+                    iconPath: getAssetUrl("statistics_icons/reaction_time_question.svg"),
+                }
+            ]
+        },
+        {
+            title: "Feladatok",
+            items: [
+                {
+                    value: "8",
+                    suffix: "db",
+                    title: "Elvégzett feladatok",
+                    iconPath: getAssetUrl("statistics_icons/completed_tasks.svg"),
+                },
+                {
+                    value: "12",
+                    suffix: "db",
+                    title: "Fogadott feladatok",
+                    iconPath: getAssetUrl("statistics_icons/assigned_tasks.svg"),
+                },
+                {
+                    value: "0",
+                    suffix: "db",
+                    title: "Megszakított feladatok",
+                    iconPath: getAssetUrl("statistics_icons/left_unfinished_tasks.png"),
+                }
+            ]
+        },
+        {
+            title: "EpistoGram",
+            items: [
+                {
+                    value: "13.82",
+                    suffix: "db",
+                    title: "Mennyi EpistoCoint szereztem az elmúlt hónapban",
+                    iconPath: getAssetUrl("statistics_icons/acquired_episto_coin.svg"),
+                    chart: <Bar
+                        className={classes.progressLineChart}
+                        options={chartDefaultOptions}
+                        data={howActiveIAm} />
+                }
+            ]
+        },
+        {
+            title: "Szorgalom",
+            items: [
+                {
+                    value: "78",
+                    suffix: "%",
+                    title: "Határidők betartása",
+                    iconPath: getAssetUrl("statistics_icons/keeping_up_with_deadlines.svg"),
+                    chart: <Bar
+                        className={classes.progressLineChart}
+                        options={chartDefaultOptions}
+                        data={howActiveIAm} />
+                }
+            ]
+        }
+    ] as StatisticsGroupType[];
+
     return <Flex direction="column" flex="1">
+        {statistics
+            .map(statisticSectionData => {
 
-        {/* time */}
-        <LearningStatisticsSeciton title={"Időbeosztás"}>
-            <StatisticsCard value={"32"} suffix={"perc"} title={"Session átlagos hossza"} />
-            <StatisticsCard value={"12-15"} suffix={"óra"} title={"Mely az általam leginkább preferált idősáv?"}>
-                <Bar className={classes.progressLineChart}
-                    options={chartDefaultOptions}
-                    data={daysWithActivityInTime} />
-            </StatisticsCard>
-            <StatisticsCard value={"9-12"} suffix={"óra"} title={"Mely a leghatékonyabb idősáv?"} />
-            <StatisticsCard value={"Szerda"} suffix={""} title={"Mely nap(ok)on vagyok a legaktívabb?"}>
-                <Bar className={classes.progressLineChart}
-                    options={chartDefaultOptions}
-                    data={howActiveIAm} />
-            </StatisticsCard>
-        </LearningStatisticsSeciton>
+                return <LearningStatisticsSeciton title={statisticSectionData.title}>
+                    {statisticSectionData
+                        .items
+                        .map(item => {
 
-        {/* videos */}
-        <LearningStatisticsSeciton title={"Videók"}>
-            <StatisticsCard value={"13"} suffix={"db"} title={"Megtekintett videók a hónapban"}>
-                <Bar className={classes.progressLineChart}
-                    options={chartDefaultOptions}
-                    data={howActiveIAm} />
-            </StatisticsCard>
-            <StatisticsCard value={"18.5"} suffix={"óra"} title={"Videónézéssel eltöltött idő a hónapban"} />
-        </LearningStatisticsSeciton>
-
-        {/* courses */}
-        <LearningStatisticsSeciton title={"Kurzusok"}>
-            <StatisticsCard value={"8"} suffix={"db"} title={"Elkezdett kurzusok száma"} />
-            <StatisticsCard value={"1"} suffix={"db"} title={"Több mint két hete inaktív kurzusok száma"} />
-            <StatisticsCard value={"4"} suffix={"db"} title={"Kurzusok száma, amelyek legalább 50%-ban készen vannak"} />
-            <StatisticsCard value={"3"} suffix={"db"} title={"Befejezett kurzusok száma"} />
-        </LearningStatisticsSeciton>
-
-        {/* exams */}
-        <LearningStatisticsSeciton title={"Vizsgák"}>
-            <StatisticsCard value={"2"} suffix={"db"} title={"Elvégzett vizsgák száma"} />
-            <StatisticsCard value={"75"} suffix={"%"} title={"Átlagos teljesítmény a vizsgákon"} />
-        </LearningStatisticsSeciton>
-
-        {/* efficiency */}
-        <LearningStatisticsSeciton title={"Hatékonyság"}>
-            <StatisticsCard value={"17"} suffix={"db"} title={"Megválaszolt tudást vizsgáló kérdések száma"} />
-            <StatisticsCard value={"62"} suffix={"%"} title={"Helyes válaszok aránya"} />
-        </LearningStatisticsSeciton>
-
-        {/* focus */}
-        <LearningStatisticsSeciton title={"Fókusz"}>
-            <StatisticsCard value={"45"} suffix={"%"} title={"Fókuszálás a videómegtekintések során"}>
-                <Bar className={classes.progressLineChart}
-                    options={chartDefaultOptions}
-                    /*type={"bar"}*/
-                    data={howActiveIAm} />
-            </StatisticsCard>
-            <StatisticsCard value={"3.2"} suffix={"mp"} title={"Reakcióidő fókuszálást vizsgáló kérdésekre"} />
-            <StatisticsCard value={"9.5"} suffix={"mp"} title={"Reakcióidő tudást vizsgáló kérdésekre"} />
-        </LearningStatisticsSeciton>
-
-        {/* tasks */}
-        <LearningStatisticsSeciton title={"Feladatok"}>
-            <StatisticsCard value={"8"} suffix={"db"} title={"Elvégzett feladatok"} />
-            <StatisticsCard value={"12"} suffix={"db"} title={"Fogadott feladatok"} />
-            <StatisticsCard value={"0"} suffix={"db"} title={"Megszakított feladatok"} />
-        </LearningStatisticsSeciton>
-
-        {/* epistogram */}
-        <LearningStatisticsSeciton title={"EpistoGram"}>
-            <StatisticsCard value={"13.82"} suffix={"db"} title={"Mennyi EpistoCoint szereztem az elmúlt hónapban"}>
-                <Bar className={classes.progressLineChart}
-                    options={chartDefaultOptions}
-                    /*type={"bar"}*/
-                    data={howActiveIAm} />
-            </StatisticsCard>
-        </LearningStatisticsSeciton>
-
-        {/* courage */}
-        <LearningStatisticsSeciton title={"Szorgalom"}>
-            <StatisticsCard value={"0"} suffix={"%"} title={"Határidők betartása"} chartSize={"large"}>
-                <Bar className={classes.progressLineChart}
-                    options={chartDefaultOptions}
-                    data={howActiveIAm} />
-            </StatisticsCard>
-        </LearningStatisticsSeciton>
+                            return <StatisticsCard
+                                title={item.title}
+                                value={item.value}
+                                suffix={item.suffix}
+                                iconPath={item.iconPath}>
+                                {item.chart}
+                            </StatisticsCard>
+                        })}
+                </LearningStatisticsSeciton>
+            })}
     </Flex>
 };
 
