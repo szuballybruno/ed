@@ -255,7 +255,7 @@ export const WatchView = (props: {
             </VideoPlayer>
         </Flex>
 
-        {/* under video info */}
+        {/* under video infoasd */}
         <Box>
             {/* <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} /> */}
             {!isDesktopView && <CourseItemSelector
