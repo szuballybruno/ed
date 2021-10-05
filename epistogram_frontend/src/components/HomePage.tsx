@@ -1,6 +1,7 @@
 import { Box, Flex } from '@chakra-ui/layout';
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { mockTasks } from '../mockData';
 import { useOverviewPageDTO } from "../services/dataService";
 import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
 import { CurrentUserContext } from "./HOC/AuthenticationFrame";
@@ -88,7 +89,7 @@ const HomePage = () => {
 
                         {/* current tasks */}
                         <DashboardSection title="Feladatok">
-                            <Tasks currentTasks={pageDTO?.currentTasks!} className="whall" />
+                            <Tasks currentTasks={mockTasks} className="whall" />
                         </DashboardSection>
 
                     </Flex>

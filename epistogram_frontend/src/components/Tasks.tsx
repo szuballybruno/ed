@@ -117,7 +117,8 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
                                         color: getPriorityColor(task.priority),
                                         border: `2px solid ${getPriorityColor(task.priority)}`,
                                         borderRadius: "5px",
-                                        padding: "0 5px 0 5px"
+                                        padding: "0 5px 0 5px",
+                                        width: "fit-content"
                                     }}>
 
                                     {task.priority === "normal"
