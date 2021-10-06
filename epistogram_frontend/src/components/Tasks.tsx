@@ -78,18 +78,19 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
     }
 
     const rowAling = "left";
+    const headerAling = "left";
 
     return <Flex direction="column" justify="space-between" {...css}>
         <Table>
             <TableHead>
                 <TableRow>
-                    <TableCell align="center"></TableCell>
-                    <TableCell align="center" style={tableHeaderCell}>Feladat</TableCell>
-                    <TableCell align="center" style={tableHeaderCell}>Prioritás</TableCell>
-                    <TableCell align="center" style={tableHeaderCell}>Határidő</TableCell>
-                    <TableCell align="center" style={tableHeaderCell}>Státusz</TableCell>
-                    <TableCell align="center" style={tableHeaderCell}>Feladatot kiadta</TableCell>
-                    <TableCell align="center" style={tableHeaderCell}>Kiadás dátuma</TableCell>
+                    <TableCell align={headerAling}></TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>Feladat</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>Prioritás</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>Határidő</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>Státusz</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>Feladatot kiadta</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>Kiadás dátuma</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
