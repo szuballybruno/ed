@@ -1,6 +1,7 @@
 import { Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
 import { getAssetUrl } from "../frontendHelpers"
+import { EpistoConinImage } from "./universal/EpistoCoinImage"
 
 export const EpistoConinInfo = (props: {} & FlexProps) => {
 
@@ -10,6 +11,6 @@ export const EpistoConinInfo = (props: {} & FlexProps) => {
         <Typography style={{ marginRight: "10px" }} variant={"button"}>23.459</Typography>
 
         {/* coin image */}
-        <img width="30px" height="30px" src={getAssetUrl("/images/epistoCoin.png")} />
+        <EpistoConinImage />
     </Flex>
 }

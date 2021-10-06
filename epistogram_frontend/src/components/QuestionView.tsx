@@ -11,7 +11,8 @@ export const QuesitionView = (props: {
     selectedAnswerId: number | null,
     correctAnswerId: number | null,
     question: QuestionDTO,
-    loadingProps: LoadingFramePropsType
+    loadingProps: LoadingFramePropsType,
+    onlyShowAnswers?: boolean,
 } & FlexProps) => {
 
     const {
@@ -20,6 +21,7 @@ export const QuesitionView = (props: {
         selectedAnswerId,
         question,
         loadingProps,
+        onlyShowAnswers,
         ...css
     } = props;
 
@@ -27,6 +29,7 @@ export const QuesitionView = (props: {
         buttonsEnabled={!correctAnswerId}
         title={question.questionText}
         loadingProps={loadingProps}
+        onlyShowAnswers={onlyShowAnswers}
         {...css}>
         {question
             .answers
@@ -50,7 +53,6 @@ export const QuesitionView = (props: {
                         style={{
                             width: "100%"
                         }} />
-                    {/* <Text fontSize="15px" textTransform="none">{answer.answerText}</Text> */}
                 </QuestionnaierAnswer>;
             })}
     </QuestionnaireLayout>

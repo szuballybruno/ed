@@ -31,6 +31,7 @@ export const UserAdministration = () => {
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
 
     const isAllUsersSelected = !users.some(user => !selectedUserIds.some(uid => uid === user.id));
+    const isAnyUserSelected = selectedUserIds.length > 0;
 
     const deleteUserAsync = async (userId: number) => {
 
@@ -65,23 +66,61 @@ export const UserAdministration = () => {
 
         {/* admin header */}
         <AministrationSubpageHeader>
-            <Flex justify="flex-end" align="center" marginTop="20px">
+            <Flex justify="flex-end" align="stretch" marginTop="20px">
 
                 <Flex
                     align="center"
                     onClick={() => selectAllOrNone(!isAllUsersSelected)}
-                    cursor="pointer">
+                    cursor="pointer"
+                    mr="20px">
                     <Checkbox
                         checked={isAllUsersSelected} />
 
-                    <Typography>
+                    <Typography
+                        style={{ marginLeft: "20px" }}
+                        display={isAnyUserSelected ? "none" : undefined}>
+
                         Összes kijelölése
                     </Typography>
                 </Flex>
 
+                <Flex
+                    display={isAnyUserSelected ? undefined : "none"}>
+                    <Box
+                        className="roundBorders"
+                        bg="var(--epistoTeal)"
+                        p="2px 12px 2px 12px"
+                        color="white"
+                        mr="20px"
+                        alignSelf="center">
+                        <Typography>
+                            {selectedUserIds.length} felhasználó kijelölve
+                        </Typography>
+                    </Box>
+
+                    <EpistoSelect
+                        items={[]}
+                        onSelected={x => { }}
+                        selectedValue="1"
+                        getCompareKey={x => x}
+                        defaultValue="Jogosultságok kezelése..."
+                        mr="20px"></EpistoSelect>
+
+                    <EpistoButton
+                        variant="outlined"
+                        style={{ marginRight: "20px" }}>
+                        Kurzus hozzárendelése
+                    </EpistoButton>
+
+                    <EpistoButton variant="outlined"
+                        style={{ marginRight: "20px" }}>
+                        ...
+                    </EpistoButton>
+                </Flex>
+
                 <Box flex="1" />
 
-                <EpistoSearch mr="10px" width="300px"></EpistoSearch>
+                <EpistoSearch mr="10px" width="200px"></EpistoSearch>
 
                 <EpistoSelect
                     items={[]}

@@ -39,39 +39,39 @@ ON "subquery"."questionAnswerId" = "qa"."id"
 LEFT JOIN public."answer" AS "a"
 ON "qa"."answerId" = "a"."id"
 
-WHERE 
-	(
-		"subquery"."practiseAnswerCount" < 2
-	)
-	AND 
-	(
-		(
-			-- incorrect video answer 6h ago
-			"qa"."isPractiseAnswer" = false 
-			AND  
-			"a"."isCorrect" IS DISTINCT FROM true
-			AND 
-			"qa"."creationDate" + INTERVAL '6 HOURS' < NOW() 
-		)
-		OR
-		(
-			-- correct video answer 24h ago
-			"qa"."isPractiseAnswer" = false 
-			AND  
-			"a"."isCorrect" = true 
-			AND 
-			"qa"."creationDate" + INTERVAL '24 HOURS' < NOW() 
-		)
-		OR
-		(
-			-- incorrect video answer 6h ago
-			"qa"."isPractiseAnswer" = true 
-			AND  
-			"a"."isCorrect" IS DISTINCT FROM true
-			AND 
-			"qa"."creationDate" + INTERVAL '48 HOURS' < NOW() 
-		)
-	)
+-- WHERE 
+-- 	(
+-- 		"subquery"."practiseAnswerCount" < 2
+-- 	)
+-- 	AND 
+-- 	(
+-- 		(
+-- 			-- incorrect video answer 6h ago
+-- 			"qa"."isPractiseAnswer" = false 
+-- 			AND  
+-- 			"a"."isCorrect" IS DISTINCT FROM true
+-- 			AND 
+-- 			"qa"."creationDate" + INTERVAL '6 HOURS' < NOW() 
+-- 		)
+-- 		OR
+-- 		(
+-- 			-- correct video answer 24h ago
+-- 			"qa"."isPractiseAnswer" = false 
+-- 			AND  
+-- 			"a"."isCorrect" = true 
+-- 			AND 
+-- 			"qa"."creationDate" + INTERVAL '24 HOURS' < NOW() 
+-- 		)
+-- 		OR
+-- 		(
+-- 			-- incorrect video answer 6h ago
+-- 			"qa"."isPractiseAnswer" = true 
+-- 			AND  
+-- 			"a"."isCorrect" IS DISTINCT FROM true
+-- 			AND 
+-- 			"qa"."creationDate" + INTERVAL '48 HOURS' < NOW() 
+-- 		)
+-- 	)
 
 
 

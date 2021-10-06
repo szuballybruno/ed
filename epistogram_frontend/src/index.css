@@ -17,7 +17,7 @@
   --whiteGrey: #f6f6f6;
 }
 
-/* divider borders */
+/* borders */
 
 .dividerBorderBottom {
   border-bottom: 1px solid var(--mildGrey);
@@ -33,6 +33,10 @@
 
 .dividerBorderTop {
   border-top: 1px solid var(--mildGrey);
+}
+
+.simpleBorder {
+  border: 1px solid var(--mildGrey);
 }
 
 /* font sizes */
@@ -72,6 +76,14 @@
 }
 
 /* misc  */
+
+.roundBorders{
+  border-radius: 7px;
+}
+
+.controlPadding {
+  padding: 2px 12px 2px 12px
+}
 
 @font-face {
   font-family: 'Poppins';

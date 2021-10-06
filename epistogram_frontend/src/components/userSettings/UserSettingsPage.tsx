@@ -1,95 +1,68 @@
-import React, { useContext } from 'react';
+import { Image } from '@chakra-ui/image';
+import { Input } from '@chakra-ui/input';
+import { Box, Flex } from '@chakra-ui/layout';
+import { Typography } from '@mui/material';
+import React, { ReactNode, useContext } from 'react';
 import { Route, Switch } from 'react-router';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from '../HOC/MainPanels';
-import { NavigationLinkList } from '../NavigationLinkList';
-import EditItem from "../universal/editItem/EditItem";
 import Navbar from '../navbar/Navbar';
-import classes from './settings.module.scss';
-import SettingsItem from "./settings_components/SettingsItem";
-import { Image } from '@chakra-ui/image';
+import { NavigationLinkList } from '../NavigationLinkList';
+
+const EditField = (props: { children: ReactNode, label: string }) => {
+
+    return <Flex
+        className="dividerBorderBottom"
+        justify="space-between">
+
+        <Typography>
+            {props.label}
+        </Typography>
+        {props.children}
+    </Flex>
+}
 
 export const UserSettingsPage = () => {
 
     const user = useContext(CurrentUserContext);
 
-    const dataSheetData = {
-        name: "Név",
-        email: "E-mail",
-        jobTitle: "Beosztás",
-        phoneNumber: "Telefonszám",
-        userDescription: "Bemutatkozás",
-        linkedInUrl: "LinkedIn"
+    const Preferences = () => {
+
+        return <>
+            <Flex direction="column" className="whall">
+
+                <Image
+                    src={user?.avatarUrl!}
+                    borderRadius="50%"
+                    width="200px"
+                    height="200px"
+                    border="2px solid var(--epistoTeal)"
+                    margin="auto" />
+
+                <Flex
+                    direction="column"
+                    flex="5"
+                    maxWidth="500px"
+                    margin="auto"
+                    mt="50px">
+
+                    <EditField label="Vezeték név">
+                        <Input></Input>
+                    </EditField>
+
+                    <EditField label="Kereszt név">
+                    </EditField>
+
+                    <EditField label="Telefonszám">
+                    </EditField>
+
+                    <EditField label="Jelszó">
+                    </EditField>
+                </Flex>
+            </Flex>
+        </>
     }
-
-    const viewSettingsData = [
-        "Téma",
-        "Akadálymentesített mód",
-        "Csökkentett adatforgalom"
-    ]
-
-    const notificationData = [
-        "Új ajánlott kurzus",
-        "Új kurzusok",
-        "Vizsgaeredmény érkezett",
-        "Új hírek az üzenőfalon",
-        "Új vizsgakitöltés (csoportvezető)",
-        "Jelentés elérhető (csoportvezető)",
-        "Segítségkérés (csoportvezető)"
-    ]
-
-    const setSemmi = () => {
-    }
-
-    const Preferences = () => <>
-        <div className={classes.dataSheetWrapper}>
-            <div className={classes.profileImageWrapper}>
-                <Image src={user?.avatarUrl!} />
-            </div>
-            <div className={classes.dataSheetItemWrapper}>
-                <EditItem
-                    name={`asd`}
-                    value={user?.name}
-                    title={dataSheetData.name} />
-                <EditItem
-                    name={`asd`}
-                    value={user?.email}
-                    title={dataSheetData.email} />
-                <EditItem
-                    name={`asd`}
-                    value={user?.phoneNumber}
-                    title={dataSheetData.phoneNumber} />
-                <EditItem
-                    name={`asd`}
-                    value={user?.jobTitle}
-                    title={dataSheetData.jobTitle} />
-            </div>
-        </div>
-    </>
-
-    const DisplaySettings = () => <>
-        <div className={classes.viewSettingsWrapper}>
-            {viewSettingsData.map((item, index) => {
-                return <SettingsItem title={item} switchState={false} switchOnChange={setSemmi} switchProperty={"twoFactorAuth"} />
-            })}
-        </div>
-    </>
-
-    const SecuritySettings = () => <>
-        <div className={classes.securityWrapper}>
-            <SettingsItem title={"Kétfaktoros autentikáció"} switchState={false} switchOnChange={setSemmi} switchProperty={"twoFactorAuth"} />
-            <SettingsItem title={"Engedélyezett otthoni eszközök"} linkTitle={"Eszközök mutatása"} onClick={setSemmi} />
-        </div>
-    </>
-
-    const NotificationSettings = () => <>
-        <div className={classes.notificationsWrapper}>
-            {notificationData.map((item, index) => {
-                return <SettingsItem title={item} switchState={false} switchOnChange={setSemmi} switchProperty={"twoFactorAuth"} />
-            })}
-        </div>
-    </>
 
     return <MainWrapper>
 
@@ -99,10 +72,7 @@ export const UserSettingsPage = () => {
 
             <LeftPanel p="20px">
                 <NavigationLinkList items={[
-                    applicationRoutes.settingsRoute.preferencesRoute,
-                    applicationRoutes.settingsRoute.displayRoute,
-                    applicationRoutes.settingsRoute.securityRoute,
-                    applicationRoutes.settingsRoute.notificationsRoute
+                    applicationRoutes.settingsRoute.preferencesRoute
                 ]}></NavigationLinkList>
             </LeftPanel>
 
@@ -112,20 +82,8 @@ export const UserSettingsPage = () => {
                     <Route path={applicationRoutes.settingsRoute.preferencesRoute.route}>
                         <Preferences></Preferences>
                     </Route>
-
-                    <Route path={applicationRoutes.settingsRoute.displayRoute.route}>
-                        <DisplaySettings />
-                    </Route>
-
-                    <Route path={applicationRoutes.settingsRoute.securityRoute.route}>
-                        <SecuritySettings />
-                    </Route>
-
-                    <Route path={applicationRoutes.settingsRoute.notificationsRoute.route}>
-                        <NotificationSettings />
-                    </Route>
                 </Switch>
             </RightPanel>
         </ContentWrapper>
     </MainWrapper>
-};
+}

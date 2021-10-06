@@ -74,14 +74,19 @@ const HomePage = () => {
                 <RightPanel>
                     <Flex direction="column">
 
-                        {/* test your knowledge */}
                         <DashboardSection title="Gyakorolj!" minHeight="300px">
                             <Flex>
+
+                                {/* test your knowledge */}
                                 <Box flexBasis="66.6%">
                                     <PractiseQuestions />
                                 </Box>
+
+                                {/* divider */}
                                 <Box bg="var(--mildGrey)" width="1px" m="15px" />
-                                <Box flexBasis="33.3%">
+
+                                {/* tip of the day */}
+                                <Box flexBasis="33.3%" p="20px">
                                     <TipOfTheDay />
                                 </Box>
                             </Flex>

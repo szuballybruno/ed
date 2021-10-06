@@ -1,5 +1,6 @@
 import React from "react";
 import { FormControl, Select, Typography } from "@mui/material";
+import { Box, BoxProps } from "@chakra-ui/layout";
 
 export const EpistoSelect = <T,>(props: {
     items: T[],
@@ -8,7 +9,7 @@ export const EpistoSelect = <T,>(props: {
     getCompareKey: (item: T) => string,
     getDisplayValue?: (item: T) => string,
     defaultValue?: string
-}) => {
+} & BoxProps) => {
 
     const {
         items,
@@ -16,7 +17,8 @@ export const EpistoSelect = <T,>(props: {
         selectedValue,
         onSelected,
         getDisplayValue,
-        defaultValue
+        defaultValue,
+        ...css
     } = props;
 
     const onSelectedValue = (key: string) => {
@@ -27,13 +29,17 @@ export const EpistoSelect = <T,>(props: {
     }
 
     const currentSelectedKey = getCompareKey(selectedValue);
-    // , border: "1px solid var(--mildGrey)"    
-    return <FormControl variant={"outlined"} size={"small"} style={{ border: "none" }}>
-        <Select
-            native
+
+    return <Box className="controlPadding simpleBorder roundBorders" {...css} >
+
+        <select
+            className="whall"
             onChange={(x) => onSelectedValue(x.target.value)}
             value={currentSelectedKey}
-            style={{ height: "43px" }}>
+            style={{
+                outline: "none",
+                cursor: "pointer"
+            }}>
 
             {selectedValue && <option value={""}>
                 {defaultValue}
@@ -49,6 +55,6 @@ export const EpistoSelect = <T,>(props: {
                             : "" + item}
                     </option>
                 })}
-        </Select>
-    </FormControl>
+        </select>
+    </Box>
 };
