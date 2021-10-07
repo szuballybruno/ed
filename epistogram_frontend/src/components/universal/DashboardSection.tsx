@@ -9,11 +9,13 @@ export const DashboardSection = (props: FlexProps & { title: string, variant?: "
     return <FlexFloat
         direction="column"
         borderRadius="none"
+        m="5px"
         p="10px"
-        mb="10px"
         boxShadow={variant === "noShadow" ? "none" : undefined}
         {...css}>
-        <EpistoHeader text={title} showDivider variant="strongSub" />
+
+        <EpistoHeader text={title} showDivider variant="strongSub" m="5px 10px 20px 10px" />
+
         <Box className="whall">
             {children}
         </Box>

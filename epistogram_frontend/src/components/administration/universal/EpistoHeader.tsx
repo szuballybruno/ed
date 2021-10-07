@@ -9,10 +9,11 @@ export const EpistoHeader = (props: {
 
     const { text, showDivider, variant, ...css } = props;
 
-    return <Flex id="epistoHeaderRoot" direction="column" p="20px" {...css}>
+    return <Flex id="epistoHeaderRoot" direction="column" {...css}>
 
         <Typography
             variant={variant === "main" ? "h5" : "h6"}
+            className="fontLarge"
             style={{
                 fontWeight: "normal",
                 color: variant === "sub" ? "var(--intenseGray)" : "black"

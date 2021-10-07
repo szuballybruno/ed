@@ -43,32 +43,34 @@ export const PractiseQuestions = () => {
                 {/* gif section */}
                 <Flex
                     display={isAnswered ? undefined : "none"}
-                    direction="column"
                     align="center"
                     flex="1">
 
-                    <Image
-                        minWidth="200px"
-                        minHeight="200px"
-                        flex="1"
-                        alignSelf="stretch"
-                        margin="50px 30px 0 30px"
-                        objectFit="contain"
-                        src={gifSource} />
+                    <Flex direction="column">
+                        <Image
+                            minWidth="200px"
+                            minHeight="200px"
+                            flex="1"
+                            alignSelf="stretch"
+                            margin="20px 30px 0 30px"
+                            objectFit="contain"
+                            src={gifSource} />
 
-                    <Flex
-                        align="center"
-                        flexBasis="50px"
-                        display={isCorrectAnswer ? undefined : "none"}>
-                        <Typography>
-                            Újabb 1
-                        </Typography>
+                        <Flex
+                            align="center"
+                            alignSelf="center"
+                            flexBasis="50px"
+                            display={isCorrectAnswer ? undefined : "none"}>
+                            <Typography>
+                                Újabb 1
+                            </Typography>
 
-                        <EpistoConinImage />
+                            <EpistoConinImage />
 
-                        <Typography>
-                            -al gazdagodtál!
-                        </Typography>
+                            <Typography>
+                                -al gazdagodtál!
+                            </Typography>
+                        </Flex>
                     </Flex>
                 </Flex>
 

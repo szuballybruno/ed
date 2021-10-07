@@ -59,7 +59,6 @@ export const RightPanel = (props: FlexProps & { noPadding?: boolean }) => {
         <Flex
             id="rightPanel"
             //bg="#fafafa"
-            bg="white"
             p={props.noPadding ? undefined : "20px"}
             flex="1"
             overflowX="hidden"

@@ -15,13 +15,18 @@ export const TipOfTheDay = (props: FlexProps) => {
         {tipOfTheDay}
     </Typography>;
 
-    const VideoSlide = () => <FlexImage
-        height="300px"
-        width="100%"
-        url="https://i.stack.imgur.com/z3pLU.png">
-    </FlexImage>
+    const VideoSlide = () => <Box p="20px">
+        <img
+            height="300px"
+            width="100%"
+            src="https://i.stack.imgur.com/z3pLU.png"
+            style={{
+                borderRadius: "15px"
+            }}>
+        </img>
+    </Box>
 
-    return <Flex direction="column" {...css}>
+    return <Flex direction="column" justify="center" {...css}>
         <SlidesDisplay
             index={currentIndex}
             slides={[

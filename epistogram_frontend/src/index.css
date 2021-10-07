@@ -14,7 +14,7 @@
   --mildOrange: #ffcd2b;
 
   --epistoTeal: #97c9cc;
-  --whiteGrey: #f6f6f6;
+  --whiteGrey: #f7f7f7;
 }
 
 /* borders */
@@ -42,7 +42,7 @@
 /* font sizes */
 
 .fontSmall {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 
 .fontMid {
@@ -50,7 +50,7 @@
 }
 
 .fontLarge {
-  font-size: 16px;
+  font-size: 18px !important;
 }
 
 /* sqares  */

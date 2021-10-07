@@ -71,26 +71,35 @@ const HomePage = () => {
                         </DashoardLeftItemGroup>}
 
                 </LeftPanel>
-                <RightPanel>
+                <RightPanel
+                    padding="5px"
+                    bg="var(--whiteGrey)">
+
                     <Flex direction="column">
 
-                        <DashboardSection title="Gyakorolj!" minHeight="300px">
-                            <Flex>
+                        <Flex wrap="wrap">
 
-                                {/* test your knowledge */}
-                                <Box flexBasis="66.6%">
-                                    <PractiseQuestions />
-                                </Box>
+                            {/* test your knowledge */}
+                            <DashboardSection
+                                title="Gyakorolj!"
+                                minHeight="300px"
+                                minWidth="500px"
+                                flex="2">
 
-                                {/* divider */}
-                                <Box bg="var(--mildGrey)" width="1px" m="15px" />
+                                <PractiseQuestions />
+                            </DashboardSection>
 
-                                {/* tip of the day */}
-                                <Box flexBasis="33.3%" p="20px">
-                                    <TipOfTheDay />
-                                </Box>
-                            </Flex>
-                        </DashboardSection>
+                            {/* tip of the day */}
+                            <DashboardSection
+                                title="Napi tipped"
+                                minHeight="300px"
+                                minWidth="300px"
+                                flex="1">
+
+                                <TipOfTheDay />
+                            </DashboardSection>
+
+                        </Flex>
 
                         {/* current tasks */}
                         <DashboardSection title="Feladatok">

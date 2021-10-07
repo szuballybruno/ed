@@ -24,7 +24,10 @@ const LearningInsightsPage = () => {
                 ]} />
             </LeftPanel>
 
-            <RightPanel>
+            <RightPanel
+                padding="5px"
+                bg="var(--whiteGrey)">
+
                 <Switch>
                     <Route path={applicationRoutes.learningRoute.route} exact>
                         <LearningInsightsOverview />
