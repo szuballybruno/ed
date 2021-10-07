@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import { TokenMeta as TokenPayload } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { getCookie, TypedError } from "../utilities/helpers";
@@ -190,23 +189,18 @@ const getPlainObjectUserInfoDTO = (user: UserDTO) => {
 
 const getAccessToken = (user: UserDTO) => {
 
-    const token = jwt.sign(
+    return getJWTToken(
         getPlainObjectUserInfoDTO(user),
-        staticProvider.globalConfig.security.jwtSignSecret, {
-        expiresIn: `${staticProvider.globalConfig.security.accessTokenLifespanInS}s`
-    });
-
-    return token;
+        staticProvider.globalConfig.security.jwtSignSecret,
+        `${staticProvider.globalConfig.security.accessTokenLifespanInS}s`);
 }
 
 const getRefreshToken = (user: UserDTO) => {
 
-    return jwt.sign(
+    return getJWTToken(
         getPlainObjectUserInfoDTO(user),
         staticProvider.globalConfig.security.jwtSignSecret,
-        {
-            expiresIn: staticProvider.globalConfig.security.refreshTokenLifespanInS
-        });
+        `${staticProvider.globalConfig.security.refreshTokenLifespanInS}s`);
 }
 
 

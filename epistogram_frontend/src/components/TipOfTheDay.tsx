@@ -1,9 +1,8 @@
-import { Box, BoxProps, Flex, FlexProps } from "@chakra-ui/layout"
+import { Box, Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
 import { usePaging } from "../frontendHelpers"
 import { tipOfTheDay } from "../services/dataService"
 import { EpistoButton } from "./universal/EpistoButton"
-import { FlexImage } from "./universal/FlexImage"
 import { SlidesDisplay } from "./universal/SlidesDisplay"
 
 export const TipOfTheDay = (props: FlexProps) => {

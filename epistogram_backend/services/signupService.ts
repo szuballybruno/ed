@@ -46,7 +46,7 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
     // does user already exist?
     const existingUser = await getUserByEmail(email);
     if (existingUser)
-        throw new TypedError("User already exists.", "bad request");
+        throw new TypedError("User already exists. Email: " + email, "bad request");
 
     // hash user password 
     const hashedDefaultPassword = await hashPasswordAsync("guest");

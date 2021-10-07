@@ -1,8 +1,7 @@
-import { Box, Flex, Image } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
-import { NavLink } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getAssetUrl } from "../../frontendHelpers";
 import { RouteItemType } from "../../models/types";
@@ -12,7 +11,6 @@ import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoPopper } from "../universal/EpistoPopper";
 import { FlexImage } from "../universal/FlexImage";
-import classes from "./desktopNavbar.module.scss";
 import NavbarButton from "../universal/NavbarButton";
 
 const menuItems = [
@@ -67,66 +65,68 @@ const DesktopNavbar = (props: {
                 onClick={() => navigate(homeUrl)} />
 
             {/* menu items */}
-            <Flex display={hideLinks ? "none" : "flex"} height="50px">
-                {menuItems
-                    .map((item, index) => {
-                        return <NavbarButton
-                            key={index}
-                            menuName={item.title}
-                            menuPath={item.route} />
-                    })}
+            {!hideLinks && <>
+                <Flex height="50px">
+                    {menuItems
+                        .map((item, index) => {
+                            return <NavbarButton
+                                key={index}
+                                menuName={item.title}
+                                menuPath={item.route} />
+                        })}
 
-                {user.userActivity.canAccessAdministration && <NavbarButton
-                    menuName={applicationRoutes.administrationRoute.title}
-                    menuPath={applicationRoutes.administrationRoute.route} />}
+                    {user.userActivity.canAccessAdministration && <NavbarButton
+                        menuName={applicationRoutes.administrationRoute.title}
+                        menuPath={applicationRoutes.administrationRoute.route} />}
 
-                {/* continue watching  */}
-                {currentCourseItemCode &&
-                    <NavbarButton
-                        menuPath={getCourseItemUrl(currentCourseItemCode)}>
+                    {/* continue watching  */}
+                    {currentCourseItemCode &&
+                        <NavbarButton
+                            menuPath={getCourseItemUrl(currentCourseItemCode)}>
 
-                        <EpistoButton
-                            style={{ flex: "1", color: "var(--epistoTeal)" }}
-                            variant="outlined"
-                            onClick={() => continueCourse()}
-                            icon={
-                                <img
-                                    src={getAssetUrl("/icons/play2.svg")}
-                                    style={{
-                                        width: "25px",
-                                        height: "25px",
-                                        marginRight: "5px"
-                                    }} />
-                            }>
-                            Aktuális Kurzus
-                        </EpistoButton>
-                    </NavbarButton>}
-            </Flex >
+                            <EpistoButton
+                                style={{ flex: "1", color: "var(--epistoTeal)" }}
+                                variant="outlined"
+                                onClick={() => continueCourse()}
+                                icon={
+                                    <img
+                                        src={getAssetUrl("/icons/play2.svg")}
+                                        style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            marginRight: "5px"
+                                        }} />
+                                }>
+                                Aktuális Kurzus
+                            </EpistoButton>
+                        </NavbarButton>}
+                </Flex >
 
-            {/* content */}
-            <Flex display={hideLinks ? "none" : undefined} pr="10px" align="center" mr="15px">
+                {/* content */}
+                <Flex pr="10px" align="center" mr="15px">
 
-                <EpistoConinInfo height="45px" />
+                    <EpistoConinInfo height="45px" />
 
-                <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>
+                    <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>
 
-                {!!user && <EpistoButton
-                    ref={ref}
-                    variant="plain"
-                    onClick={() => setPopperOpen(true)}
-                    padding="0px"
-                    isRound
-                    size="45px"
-                    style={{
-                        border: "3px solid var(--epistoTeal)",
-                        margin: "0px",
-                    }}>
-                    <FlexImage
-                        className="whall hoverShine"
-                        overflow="hidden"
-                        url={user.avatarUrl!}></FlexImage>
-                </EpistoButton>}
-            </Flex>
+                    {!!user && <EpistoButton
+                        ref={ref}
+                        variant="plain"
+                        onClick={() => setPopperOpen(true)}
+                        padding="0px"
+                        isRound
+                        size="45px"
+                        style={{
+                            border: "3px solid var(--epistoTeal)",
+                            margin: "0px",
+                        }}>
+                        <FlexImage
+                            className="whall hoverShine"
+                            overflow="hidden"
+                            url={user.avatarUrl!}></FlexImage>
+                    </EpistoButton>}
+                </Flex>
+            </>}
 
             {/* user menu */}
             <EpistoPopper
