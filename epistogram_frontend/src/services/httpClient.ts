@@ -81,6 +81,43 @@ export const httpDeleteAsync = async (urlEnding: string) => {
     return new HTTPResponse(axiosResponse.status, axiosResponse.data);
 }
 
+export const usePostDataUnsafe = <TData, TResult>(url: string) => {
+
+    const [state, setState] = useState<LoadingStateType>("idle");
+    const [result, setResult] = useState<TResult | null>(null);
+
+    const postDataAsync = async (data: TData) => {
+
+        try {
+
+            setState("loading");
+
+            const postResult = await httpPostAsync(url, data);
+
+            setState("idle");
+            setResult(postResult as TResult);
+        }
+        catch (e) {
+
+            setState("idle");
+            throw e;
+        }
+    }
+
+    const clearCache = () => {
+
+        setResult(null);
+        setState("idle");
+    }
+
+    return {
+        postDataAsync,
+        state,
+        result,
+        clearCache
+    };
+}
+
 export const usePostData = <TData, TResult>(url: string) => {
 
     const [state, setState] = useState<LoadingStateType>("success");
@@ -116,6 +153,31 @@ export const usePostData = <TData, TResult>(url: string) => {
         error,
         result,
         clearCache
+    };
+}
+
+export const usePostFile = (url: string) => {
+
+    const [state, setState] = useState<LoadingStateType>("idle");
+
+    return {
+        postFileAsync: async (file: File) => {
+
+            try {
+
+                setState("loading");
+
+                await postFileAsync(url, file);
+
+                setState("idle");
+            }
+            catch (e) {
+
+                setState("idle");
+                throw e;
+            }
+        },
+        state
     };
 }
 

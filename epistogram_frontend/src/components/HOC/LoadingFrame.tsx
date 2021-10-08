@@ -2,7 +2,7 @@ import { Box, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { isArray } from "../../frontendHelpers";
 import { LoadingStateType } from "../../models/types";
 
@@ -14,26 +14,45 @@ export type LoadingFramePropsType = {
 
 export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
 
-    const { loadingState, error, onlyRenderIfLoaded, ...rootProps } = props;
+    const {
+        loadingState,
+        error,
+        onlyRenderIfLoaded,
+        ...rootProps
+    } = props;
+
     const singleError = getError(error);
     const state = getLoadingState(loadingState);
-    const showOverlay = state == "error" || state == "loading";
-    const renderContent = onlyRenderIfLoaded ? !showOverlay : true;
+
     const [prevState, setPrevState] = useState<LoadingStateType>("idle");
+    const showOverlay = prevState == "error" || prevState == "loading";
+    const renderContent = onlyRenderIfLoaded ? !showOverlay : true;
+    const [trigger, setTrigger] = useState(0);
 
     useEffect(() => {
 
         if (prevState === state)
             return;
 
-        setTimeout(() => {
-
-            if (prevState === state)
-                return;
+        if (state !== "loading") {
 
             setPrevState(state);
-        }, 1000);
+            return;
+        }
+
+        setTimeout(() => {
+
+            setTrigger(x => x + 1);
+        }, 200);
     }, [state]);
+
+    useEffect(() => {
+
+        if (prevState === state)
+            return;
+
+        setPrevState(state);
+    }, [trigger]);
 
     const finalState = prevState;
 
@@ -93,10 +112,13 @@ const getLoadingState = (loadingState: LoadingStateType | LoadingStateType[]) =>
         if (loadingStates.some(x => x == "error"))
             return "error" as LoadingStateType;
 
-        if (loadingStates.some(x => x == "idle" || x == "loading"))
+        if (loadingStates.some(x => x == "loading"))
             return "loading" as LoadingStateType;
 
-        return "success" as LoadingStateType;
+        if (loadingStates.some(x => x == "success"))
+            return "success" as LoadingStateType;
+
+        return "idle" as LoadingStateType;
     }
     else {
 

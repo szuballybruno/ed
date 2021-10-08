@@ -215,6 +215,8 @@ export const hasValue = (obj: any) => {
     return true;
 }
 
+export const reloadPage = () => window.location.reload();
+
 export const isBetweenThreshold = (valueA: number, valueB: number, threshold: number) => {
 
     return (valueA - threshold) < valueB && valueB < (valueA + threshold);

@@ -1,9 +1,11 @@
 
 import { Organization } from "../models/entity/Organization";
+import { User } from "../models/entity/User";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
+import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "./courseService";
 import { toOrganizationDTO } from "./mappings";
@@ -18,6 +20,19 @@ export const getOrganizationsAsync = async (userId: number) => {
 
     return orgs
         .map(org => toOrganizationDTO(org));
+}
+
+export const saveUserDataAsync = async (userId: number, dto: UserDTO) => {
+
+    return staticProvider
+        .ormConnection
+        .getRepository(User)
+        .save({
+            id: userId,
+            firstName: dto.firstName,
+            lastName: dto.lastName,
+            phoneNumber: dto.phoneNumber
+        });
 }
 
 export const getOverviewPageDTOAsync = async (userId: number) => {

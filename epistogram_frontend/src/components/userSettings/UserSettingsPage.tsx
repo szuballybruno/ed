@@ -2,19 +2,29 @@ import { Image } from '@chakra-ui/image';
 import { Input } from '@chakra-ui/input';
 import { Box, Flex } from '@chakra-ui/layout';
 import { Typography } from '@mui/material';
-import React, { ReactNode, useContext } from 'react';
+import React, { ReactNode, useContext, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { CurrentUserContext } from "../HOC/AuthenticationFrame";
+import { CurrentUserContext, RefetchUserFunctionContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from '../HOC/MainPanels';
 import Navbar from '../navbar/Navbar';
 import { NavigationLinkList } from '../NavigationLinkList';
+import { EpistoButton } from '../universal/EpistoButton';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import { uploadAvatarFileAsync, useUploadAvatarFile } from '../../services/fileService';
+import { showNotification, useShowErrorDialog } from '../../services/notifications';
+import { reloadPage } from '../../frontendHelpers';
+import { useSaveUserData } from '../../services/dataService';
+import { LoadingFrame } from '../HOC/LoadingFrame';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
     return <Flex
         className="dividerBorderBottom"
-        justify="space-between">
+        justify="space-between"
+        mb="20px"
+        p="10px"
+        align="flex-end">
 
         <Typography>
             {props.label}
@@ -23,46 +33,194 @@ const EditField = (props: { children: ReactNode, label: string }) => {
     </Flex>
 }
 
-export const UserSettingsPage = () => {
+const Preferences = () => {
 
-    const user = useContext(CurrentUserContext);
+    const user = useContext(CurrentUserContext)!;
+    const [firstName, setFirstName] = useState(user.firstName);
+    const [lastName, setLastName] = useState(user.lastName);
+    const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
+    const [avatarSrc, setAvatarSrc] = useState(user.avatarUrl!);
 
-    const Preferences = () => {
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
-        return <>
-            <Flex direction="column" className="whall">
+    const fileBrowseInputRef = useRef<HTMLInputElement>(null);
+    const imageRef = useRef<HTMLImageElement>(null);
+
+    const showErrorDialog = useShowErrorDialog();
+
+    const { saveUserData, saveUserDataState } = useSaveUserData();
+    const { postAvatarFileAsync, postAvatarFileState } = useUploadAvatarFile();
+
+    const refetchUser = useContext(RefetchUserFunctionContext);
+
+    const isChanged = [
+        firstName !== user.firstName,
+        lastName !== user.lastName,
+        phoneNumber !== user.phoneNumber,
+        avatarFile !== null
+    ].some(x => x)
+
+    const [isProfPicHovered, setIsProfPicHovered] = useState(true);
+
+    const saveChangesAsync = async () => {
+
+        try {
+            if (avatarFile)
+                await postAvatarFileAsync(avatarFile);
+
+            await saveUserData(firstName, lastName, phoneNumber);
+
+            // notification 
+            showNotification("A változtatások sikeresen mentésre kerültek.");
+
+            // reload 
+            if (avatarFile) {
+
+                reloadPage();
+            }
+            else {
+
+                refetchUser();
+            }
+        }
+        catch (e: any) {
+
+            showErrorDialog(e);
+        }
+    }
+
+    return <>
+
+        {/* hidden input */}
+        <input
+            ref={fileBrowseInputRef}
+            type="file"
+            id="imgupload"
+            style={{ display: "none" }}
+            onChange={x => {
+
+                const input = x.currentTarget;
+                if (!input)
+                    return;
+
+                if (!input.files)
+                    return;
+
+                const file = input.files[0] as File;
+                input.value = "";
+
+                var reader = new FileReader();
+
+                reader.onloadend = () => {
+
+                    if (!imageRef.current)
+                        return;
+
+                    const src = reader.result as any;
+
+                    setAvatarSrc(src);
+                    setAvatarFile(file);
+                }
+
+                reader.readAsDataURL(file);
+            }} />
+
+        <LoadingFrame
+            direction="column"
+            justify="flex-start"
+            loadingState={[saveUserDataState, postAvatarFileState]}
+            align="center">
+
+            <Box
+                position="relative"
+                borderRadius="50%"
+                overflow="hidden"
+                width="200px"
+                height="200px"
+                border="2px solid var(--epistoTeal)"
+                cursor="pointer"
+                onClick={() => fileBrowseInputRef.current?.click()}
+                onMouseEnter={() => setIsProfPicHovered(true)}
+                onMouseLeave={() => setIsProfPicHovered(false)}>
 
                 <Image
-                    src={user?.avatarUrl!}
-                    borderRadius="50%"
-                    width="200px"
-                    height="200px"
-                    border="2px solid var(--epistoTeal)"
-                    margin="auto" />
+                    ref={imageRef}
+                    className="whall"
+                    objectFit="cover"
+                    src={avatarSrc} />
 
                 <Flex
+                    position="absolute"
+                    className="whall"
+                    height="50%"
+                    transition="0.4s"
+                    top={0}
+                    bg="#ffffffcc"
                     direction="column"
-                    flex="5"
-                    maxWidth="500px"
-                    margin="auto"
-                    mt="50px">
+                    align="center"
+                    justify="center"
+                    transform={isProfPicHovered ? "translateY(100%)" : "translateY(125%)"}
+                    opacity={isProfPicHovered ? 1 : 0}>
 
-                    <EditField label="Vezeték név">
-                        <Input></Input>
-                    </EditField>
+                    <Typography>
+                        Új kép feltöltése
+                    </Typography>
 
-                    <EditField label="Kereszt név">
-                    </EditField>
-
-                    <EditField label="Telefonszám">
-                    </EditField>
-
-                    <EditField label="Jelszó">
-                    </EditField>
+                    <PhotoCameraIcon className="square40"></PhotoCameraIcon>
                 </Flex>
+            </Box>
+
+            <Flex
+                direction="column"
+                maxWidth="500px"
+                width="100%"
+                mt="50px"
+                align="stretch">
+
+                <EditField label="Vezeték név">
+                    <Input
+                        outline="none"
+                        value={lastName}
+                        onChange={x => setLastName(x.currentTarget.value)}></Input>
+                </EditField>
+
+                <EditField label="Kereszt név">
+                    <Input
+                        outline="none"
+                        value={firstName}
+                        onChange={x => setFirstName(x.currentTarget.value)}></Input>
+                </EditField>
+
+                <EditField label="Telefonszám">
+                    <Input
+                        outline="none"
+                        value={phoneNumber}
+                        onChange={x => setPhoneNumber(x.currentTarget.value)}></Input>
+                </EditField>
+
+                <EditField label="Jelszó">
+                    <EpistoButton variant="outlined" padding="1px 8px 1px 8px">
+                        Jelszó visszaállítása
+                    </EpistoButton>
+                </EditField>
             </Flex>
-        </>
-    }
+
+            <EpistoButton
+                isDisabled={!isChanged}
+                variant="colored"
+                onClick={saveChangesAsync}
+                style={{
+                    alignSelf: "center",
+                    marginTop: "30px"
+                }}>
+
+                Változtatások mentése
+            </EpistoButton>
+        </LoadingFrame>
+    </>
+}
+
+export const UserSettingsPage = () => {
 
     return <MainWrapper>
 

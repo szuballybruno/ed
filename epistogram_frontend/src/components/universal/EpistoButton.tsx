@@ -12,6 +12,7 @@ export type EpistoButtonPropsType = {
     style?: CSSProperties,
     className?: string,
     icon?: ReactNode,
+    isDisabled?: boolean,
     buttonProps?: ButtonProps
 };
 
@@ -27,7 +28,8 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         variant,
         style,
         className,
-        icon
+        icon,
+        isDisabled
     } = props;
 
     const { variant: _, ...buttonProps } = props.buttonProps ?? { variant: null };
@@ -46,7 +48,12 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             overflow: "hidden",
             whiteSpace: "nowrap",
             minWidth: "0px",
-            color: variant === "colored" ? "white" : "black",
+            color: isDisabled
+                ? "var(--whiteGray)"
+                : variant === "colored"
+                    ? "white"
+                    : "black",
+            background: isDisabled && variant === "colored" ? "var(--mildGrey)" : undefined,
             margin: "0px",
             borderRadius: isRound ? "50%" : "7px",
             width: size,
@@ -54,6 +61,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             padding: padding ? padding : undefined,
             fontSize: fontSize ? fontSize : undefined,
             borderColor: "var(--mildGrey)",
+            pointerEvents: isDisabled ? "none" : undefined,
             ...style
         }}
         {...buttonProps}>

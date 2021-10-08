@@ -2,11 +2,10 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getAssetUrl, useIsDesktopView } from "../../frontendHelpers";
-import { RouteItemType } from "../../models/types";
 import { useCurrentCourseItemCode } from "../../services/dataService";
 import { FlexFloat } from "../universal/FlexFloat";
-import classes from "./navbar.module.scss";
 import DesktopNavbar from "./DesktopNavbar";
+import classes from "./navbar.module.scss";
 
 const Navbar = (props: { hideLinks?: boolean }) => {
 
@@ -33,7 +32,13 @@ const Navbar = (props: { hideLinks?: boolean }) => {
         </div>
     }
 
-    return <FlexFloat id="flexFloat-navbarRoot" height={isDesktop ? "60px" : "60px"} zIndex={3} >
+    return <FlexFloat
+        id="flexFloat-navbarRoot"
+        height={isDesktop ? "60px" : "60px"}
+        zIndex={3}
+        boxShadow="none"
+        className="dividerBorderBottom" >
+
         {isDesktop
             ? renderDesktopNavbar()
             : renderMobileNavbar()}

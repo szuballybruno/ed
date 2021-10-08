@@ -1,12 +1,31 @@
 import Cookies from "universal-cookie";
 import { hasValue, useReactQuery } from "../frontendHelpers";
-import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
-import { httpGetAsync, usePostData } from "./httpClient";
+import { UserDTO } from "../models/shared_models/UserDTO";
+import { httpGetAsync, usePostData, usePostDataUnsafe } from "./httpClient";
+
+export const useSaveUserData = () => {
+
+    const postDataResult = usePostDataUnsafe<UserDTO, void>("/misc/save-user-data");
+
+    const saveUserData = (firstName: string, lastName: string, phoneNumber: string) => {
+
+        return postDataResult.postDataAsync({
+            firstName: firstName,
+            lastName,
+            phoneNumber
+        } as UserDTO);
+    }
+
+    return {
+        saveUserDataState: postDataResult.state,
+        saveUserData
+    }
+}
 
 export const useAnswerPractiseQuestion = () => {
 

@@ -27,9 +27,10 @@ export const uploadVideoThumbnailFileAsync = (videoId: number, file: UploadedFil
         file);
 };
 
-export const uploadAvatarFileAsync = (userId: number, file: UploadedFile) => {
+export const uploadAvatarFileAsync = async (userId: number, file: UploadedFile) => {
 
-    return uploadAssigendFileAsync<User>(
+    // upload new avatar
+    await uploadAssigendFileAsync<User>(
         getFilePath("userAvatars", "user_avatar", userId, "png"),
         () => getUserById(userId),
         (fileId) => setUserAvatarFileId(userId, fileId),
@@ -53,24 +54,26 @@ const uploadAssigendFileAsync = async <T>(
     filePath: string,
     getEntityAsync: () => Promise<T>,
     assignFileToEntity: (fileId: number) => Promise<void>,
-    getAssignedFileId: (entity: T) => number,
+    getFileEntityId: (entity: T) => number,
     file: UploadedFile) => {
 
     // crate pending storage file
-    const fileEntity = await insertFileAsync(filePath);
+    const newStorageFileEntity = await insertFileEntityAsync(filePath);
 
     // get entity
     const entity = await getEntityAsync();
 
     // assing to entity
-    await assignFileToEntity(fileEntity.id);
+    await assignFileToEntity(newStorageFileEntity.id);
 
-    // delete previous file entity
-    const assignedFileId = getAssignedFileId(entity);
-    if (assignedFileId) {
+    // delete previous file, and file entity
+    const oldFileEntityId = getFileEntityId(entity);
+    if (oldFileEntityId) {
 
-        await deleteFileAsync(assignedFileId);
-        await deleteStorageFileAsync(filePath);
+        const oldFileEntity = await getFileEntityAsync(oldFileEntityId)
+        await deleteFileEntityAsync(oldFileEntityId);
+
+        await deleteStorageFileAsync(oldFileEntity.filePath);
     }
 
     // upload to storage
@@ -79,10 +82,10 @@ const uploadAssigendFileAsync = async <T>(
 
 const getFilePath = (folderPath: string, fileType: string, fileId: number, extension: string) => {
 
-    return `${folderPath}/${fileType}_${fileId}.${extension}`
+    return `${folderPath}/${fileType}_${fileId}_${Date.now()}.${extension}`
 }
 
-const deleteFileAsync = async (id: number) => {
+const deleteFileEntityAsync = async (id: number) => {
 
     await staticProvider
         .ormConnection
@@ -90,7 +93,7 @@ const deleteFileAsync = async (id: number) => {
         .delete(id);
 }
 
-const insertFileAsync = async (path: string) => {
+const insertFileEntityAsync = async (path: string) => {
 
     const file = {
         pending: true,
@@ -103,4 +106,12 @@ const insertFileAsync = async (path: string) => {
         .insert(file);
 
     return file;
+}
+
+const getFileEntityAsync = (id: number) => {
+
+    return staticProvider
+        .ormConnection
+        .getRepository(StorageFile)
+        .findOneOrFail(id);
 }

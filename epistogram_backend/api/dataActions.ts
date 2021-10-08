@@ -2,11 +2,12 @@ import { Request } from "express";
 import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
+import { UserDTO } from "../models/shared_models/UserDTO";
 import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest } from "../services/authentication";
 import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "../services/courseManagementService";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
-import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
+import { getOrganizationsAsync, getOverviewPageDTOAsync, saveUserDataAsync } from "../services/dataService";
 import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
 import { answerPractiseQuestionAsync, getPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
@@ -26,6 +27,14 @@ export const answerPractiseQuestionAction = getAsyncActionHandler(async (req: Re
     const dto = withValueOrBadRequest(req.body) as QuestionAnswerDTO;
 
     return answerPractiseQuestionAsync(userId, dto);
+});
+
+export const saveUserDataAction = getAsyncActionHandler(async (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+    const dto = withValueOrBadRequest(req.body) as UserDTO;
+
+    return saveUserDataAsync(userId, dto);
 });
 
 export const getCurrentCourseItemCode = getAsyncActionHandler(async (req: Request) => {

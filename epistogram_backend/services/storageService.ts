@@ -2,6 +2,7 @@ import { Storage } from "@google-cloud/storage";
 import { UploadedFile } from "express-fileupload";
 import path from "path";
 import { staticProvider } from "../staticProvider";
+import { logError } from "./misc/logger";
 
 export const uploadToStorageAsync = (file: UploadedFile, path: string) => new Promise<void>((resolve, reject) => {
 
@@ -28,8 +29,15 @@ export const uploadToStorageAsync = (file: UploadedFile, path: string) => new Pr
 
 export const deleteStorageFileAsync = async (filePath: string) => {
 
-    const bucket = getBucket();
-    await bucket.file(filePath).delete();
+    try {
+
+        const bucket = getBucket();
+        await bucket.file(filePath).delete();
+    }
+    catch (e) {
+
+        logError(e);
+    }
 }
 
 const getBucket = () => {

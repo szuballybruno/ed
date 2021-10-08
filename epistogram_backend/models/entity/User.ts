@@ -81,7 +81,7 @@ export class User {
 
     @ManyToOne(() => StorageFile, sf => sf.users)
     @JoinColumn({ name: 'avatarFileId' })
-    avatarFile: StorageFile
+    avatarFile: StorageFile | null
 
     // Organization 
     @Column()

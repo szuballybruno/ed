@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
@@ -10,7 +10,6 @@ import { EpistoConinInfo } from "../EpistoCoinInfo";
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoPopper } from "../universal/EpistoPopper";
-import { FlexImage } from "../universal/FlexImage";
 import NavbarButton from "../universal/NavbarButton";
 
 const menuItems = [
@@ -120,10 +119,10 @@ const DesktopNavbar = (props: {
                             border: "3px solid var(--epistoTeal)",
                             margin: "0px",
                         }}>
-                        <FlexImage
+                        <Image
                             className="whall hoverShine"
-                            overflow="hidden"
-                            url={user.avatarUrl!}></FlexImage>
+                            objectFit="cover"
+                            src={user.avatarUrl!}></Image>
                     </EpistoButton>}
                 </Flex>
             </>}

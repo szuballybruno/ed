@@ -43,6 +43,8 @@ export const LeftPanel = (props: FlexProps) => {
             align="stretch"
             padding="0 15px 0 15px"
             justify="flex-start"
+            boxShadow="none"
+            className="dividerBorderRight"
             borderLeft="2px solid #e2e2e2"
             {...props}>
 
