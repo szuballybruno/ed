@@ -32,7 +32,7 @@ const DesktopNavbar = (props: {
 
     const ref = useRef<HTMLButtonElement>(null);
     const [popperOpen, setPopperOpen] = useState(false);
-    const { hideLinks } = props;
+    const hideLinks = props.hideLinks || !user;
 
     const userMenuItems = [
         {

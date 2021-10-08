@@ -27,6 +27,22 @@ export const useSaveUserData = () => {
     }
 }
 
+export const useRequestChangePassword = () => {
+
+    const postDataResult = usePostDataUnsafe("/misc/request-change-password");
+
+    const requestChangePasswordAsync = (oldPassword: string) => {
+
+        return postDataResult
+            .postDataAsync({ oldPassword: oldPassword });
+    }
+
+    return {
+        requestChangePasswordState: postDataResult.state,
+        requestChangePasswordAsync
+    }
+}
+
 export const useAnswerPractiseQuestion = () => {
 
     const postDataQuery = usePostData<AnswerQuestionDTO, AnswerResultDTO>("questions/answer-practise-question");

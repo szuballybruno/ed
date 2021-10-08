@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
-import { getUserIdFromRequest } from "../services/authentication";
+import { getUserIdFromRequest } from "../services/authenticationService";
 import { getUserCoursesAsync } from "../services/userCoursesService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 

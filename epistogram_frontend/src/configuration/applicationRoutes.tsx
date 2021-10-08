@@ -18,6 +18,11 @@ export const applicationRoutes = {
         route: "/signup"
     },
 
+    setNewPasswordRoute: {
+        title: "Új jelszó beállítása",
+        route: "/set-new-password"
+    },
+
     homeRoute: {
         title: "Kezdőlap",
         route: "/home"

@@ -26,9 +26,6 @@ export class User {
     @Column()
     isInvitedOnly: boolean;
 
-    @Column({ nullable: true })
-    invitationToken: string;
-
     @Column()
     email: string;
 
@@ -59,8 +56,15 @@ export class User {
     @Column({ nullable: true })
     password: string;
 
-    @Column({ nullable: true })
-    refreshToken: string;
+    // tokens 
+    @Column({ nullable: true, type: "text" })
+    refreshToken: string | null;
+
+    @Column({ nullable: true, type: "text" })
+    resetPasswordToken: string | null;
+
+    @Column({ nullable: true, type: "text" })
+    invitationToken: string | null;
 
     // user activity 
     @OneToOne(_ => UserActivityFlatView, x => x.user)

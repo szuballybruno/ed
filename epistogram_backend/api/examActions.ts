@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
-import { getUserIdFromRequest } from "../services/authentication";
+import { getUserIdFromRequest } from "../services/authenticationService";
 import { answerExamQuestionAsync, getExamResultsAsync } from "../services/examService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 

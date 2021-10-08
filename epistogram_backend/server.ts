@@ -4,14 +4,14 @@ import express, { NextFunction, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
-import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemsAction, getUserPersonalityDataAction, getPractiseQuestionAction, answerPractiseQuestionAction, saveUserDataAction } from './api/dataActions';
+import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction, changePasswordAction } from './api/authenticationActions';
+import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemsAction, getUserPersonalityDataAction, getPractiseQuestionAction, answerPractiseQuestionAction, saveUserDataAction, requestChangePasswordAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/signupActions';
 import { initializeDBAsync } from './database';
-import { authorizeRequest } from './services/authentication';
+import { authorizeRequest, requestChangePasswordAsync } from './services/authenticationService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
@@ -21,6 +21,7 @@ import { answerVideoQuestionAction } from './api/questionActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
 import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import { deleteUserAction } from './api/userAdministartionActions';
+import { sendResetPasswordMailAsync } from './services/emailService';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -99,6 +100,8 @@ const initializeAsync = async () => {
     expressServer.get('/get-user-personality-data', authMiddleware, getUserPersonalityDataAction);
     expressServer.get('/misc/get-practise-question', authMiddleware, getPractiseQuestionAction);
     expressServer.post('/misc/save-user-data', authMiddleware, saveUserDataAction);
+    expressServer.post('/misc/request-change-password', authMiddleware, requestChangePasswordAction);
+    expressServer.post('/misc/set-new-password', authMiddleware, changePasswordAction);
 
     // file
     expressServer.post('/file/upload-video', authMiddleware, uploadVideoFileAction);

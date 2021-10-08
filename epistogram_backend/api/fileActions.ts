@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { UploadedFile } from "express-fileupload";
-import { getUserIdFromRequest } from "../services/authentication";
+import { getUserIdFromRequest } from "../services/authenticationService";
 import { uploadAvatarFileAsync, uploadCourseCoverFileAsync, uploadVideoFileAsync, uploadVideoThumbnailFileAsync } from "../services/fileService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 

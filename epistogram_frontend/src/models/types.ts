@@ -11,3 +11,12 @@ export type RouteItemType = {
     icon?: any;
     isExact?: boolean;
 }
+
+export type DialogOptions = {
+    title: string,
+    description?: string,
+    firstButtonTitle?: string,
+    firstButtonAction?: () => void,
+    secondButtonTitle?: string,
+    secondButtonAction?: () => void
+}

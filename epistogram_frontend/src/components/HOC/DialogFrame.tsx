@@ -1,14 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import React, { ReactNode, useState } from "react";
-
-export type DialogOptions = {
-    title: string,
-    description: string,
-    firstButtonTitle?: string,
-    firstButtonAction?: () => void,
-    secondButtonTitle?: string,
-    secondButtonAction?: () => void
-}
+import { DialogOptions } from "../../models/types";
 
 export const useDialogState = () => {
 
@@ -23,7 +15,6 @@ export const useDialogState = () => {
 
     const closeDialog = () => {
 
-        console.log("close dialog");
         setIsOpen(false);
     }
 

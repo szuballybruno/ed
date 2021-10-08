@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
-import { getUserIdFromRequest } from "../services/authentication";
+import { getUserIdFromRequest } from "../services/authenticationService";
 import { getPlayerDataAsync, saveVideoPlaybackSample } from "../services/playerService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 

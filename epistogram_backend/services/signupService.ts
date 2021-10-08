@@ -8,7 +8,7 @@ import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { InvitationTokenPayload, UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
-import { getUserLoginTokens } from "./authentication";
+import { getUserLoginTokens } from "./authenticationService";
 import { sendInvitaitionMailAsync } from "./emailService";
 import { toQuestionAnswerDTO, toQuestionDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";

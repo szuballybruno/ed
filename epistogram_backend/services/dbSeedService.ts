@@ -406,8 +406,8 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
 
 const seedFiles = async (connection: TypeORMConnection) => {
 
-    const fileRepo = await connection
-        .getRepository(StorageFile);
+    // const fileRepo = await connection
+    //     .getRepository(StorageFile);
 
     // video 1 file
     // const file = {
@@ -420,14 +420,14 @@ const seedFiles = async (connection: TypeORMConnection) => {
     // await setVideoFileIdAsync(1, file.id);
 
     // user avatar 1 file 
-    const avatarFile = {
-        pending: false,
-        filePath: "userAvatars/user_avatar_1.png"
-    } as StorageFile;
+    // const avatarFile = {
+    //     pending: false,
+    //     filePath: "userAvatars/user_avatar_1.png"
+    // } as StorageFile;
 
-    await fileRepo.insert(avatarFile);
+    // await fileRepo.insert(avatarFile);
 
-    await setUserAvatarFileId(1, avatarFile.id);
+    // await setUserAvatarFileId(1, avatarFile.id);
 }
 
 const seedVideoQuestions = async (connection: TypeORMConnection) => {

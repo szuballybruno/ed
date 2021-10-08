@@ -4,7 +4,7 @@ import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { getAdminPageUsersList } from "../services/adminService";
-import { getUserIdFromRequest } from "../services/authentication";
+import { getUserIdFromRequest, requestChangePasswordAsync } from "../services/authenticationService";
 import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "../services/courseManagementService";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync, saveUserDataAsync } from "../services/dataService";
@@ -20,6 +20,15 @@ export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Reque
 
     return await getPractiseQuestionAsync(userId);
 });
+
+export const requestChangePasswordAction = getAsyncActionHandler(async (req: Request) => {
+
+    const userId = getUserIdFromRequest(req);
+    const dto = withValueOrBadRequest(req.body);
+    const oldPassword = withValueOrBadRequest(dto.oldPassword);
+
+    return await requestChangePasswordAsync(userId, oldPassword);
+})
 
 export const answerPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
 

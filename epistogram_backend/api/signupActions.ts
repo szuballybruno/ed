@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
-import { getUserIdFromRequest, setAuthCookies } from "../services/authentication";
+import { getUserIdFromRequest, setAuthCookies } from "../services/authenticationService";
 import { createInvitedUserAsync, finalizeUserRegistrationAsync } from "../services/signupService";
 import { withValueOrBadRequest } from "../utilities/helpers";
 

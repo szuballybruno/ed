@@ -3,13 +3,14 @@ import { Request, Response } from "express";
 import { TokenMeta as TokenPayload } from "../models/DTOs/TokenMeta";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { getCookie, TypedError } from "../utilities/helpers";
-import { comparePasswordAsync } from "./misc/crypt";
+import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
 import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
 import { log } from "./misc/logger";
 import { toUserDTO } from "./mappings";
 import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserById, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
 import { staticProvider } from "../staticProvider";
 import { sendResetPasswordMailAsync } from "./emailService";
+import { User } from "../models/entity/User";
 
 // CONSTS
 export const accessTokenCookieName = "accessToken";
@@ -50,7 +51,7 @@ export const getUserDTOByCredentials = async (email: string, password: string) =
     if (!user)
         return null;
 
-    const isPasswordCorrect = await comparePasswordAsync(password as string, user.password);
+    const isPasswordCorrect = await comparePasswordAsync(password, user.password);
     if (!isPasswordCorrect)
         return null;
 
@@ -104,6 +105,69 @@ export const renewUserSession = async (req: Request, res: Response) => {
     await setUserActiveRefreshToken(user.id, refreshToken);
 
     await setAuthCookies(res, newAccessToken, newRefreshToken);
+}
+
+export const requestChangePasswordAsync = async (userId: number, oldPassword: string) => {
+
+    const resetPawsswordToken = await getJWTToken(
+        { userId: userId },
+        staticProvider.globalConfig.mail.tokenMailSecret,
+        "24h");
+
+    const user = await getUserById(userId);
+
+    if (!await comparePasswordAsync(oldPassword, user.password))
+        throw new TypedError("Wrong password!", "bad request");
+
+    await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .save({
+            id: user.id,
+            resetPasswordToken: resetPawsswordToken
+        });
+
+    const resetPawsswordUrl = staticProvider.globalConfig.misc.frontendUrl + `/set-new-password?token=${resetPawsswordToken}`;
+
+    await sendResetPasswordMailAsync(user, resetPawsswordUrl);
+}
+
+export const changePasswordAsync = async (
+    userId: number,
+    password: string,
+    passwordCompare: string,
+    passwordResetToken: string) => {
+
+    const user = await getUserById(userId);
+
+    // verify new password with compare password 
+    if (password !== passwordCompare)
+        throw new TypedError("Passwords don't match.", "bad request");
+
+    // verify token
+    const tokenPayload = verifyJWTToken<{ userId: number }>(
+        passwordResetToken,
+        staticProvider.globalConfig.mail.tokenMailSecret);
+
+    // verify token user id 
+    if (tokenPayload.userId !== user.id)
+        throw new TypedError("Wrong token.", "bad request");
+
+    // verify user reset password token
+    if (user.resetPasswordToken !== passwordResetToken)
+        throw new TypedError("Wrong token.", "bad request");
+
+    // hash new password
+    const hashedPassword = await hashPasswordAsync(password);
+
+    await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .save({
+            id: user.id,
+            resetPasswordToken: null,
+            password: hashedPassword
+        } as User);
 }
 
 export const logInUser = async (email: string, password: string) => {
@@ -160,23 +224,6 @@ export const setAuthCookies = (res: Response, accessToken: string, refreshToken:
     setAccessTokenCookie(res, accessToken);
     setRefreshTokenCookie(res, refreshToken);
 }
-
-export const resetUserPasswordAction = async (req: Request) => {
-
-    const userId = parseInt(req.params.userId);
-
-    // get user 
-    const user = await getUserById(userId);
-    if (!user)
-        throw new TypedError("User not found.", "bad request");
-
-    // get reset token
-    const resetPawsswordToken = await getJWTToken({ userId: user.id }, staticProvider.globalConfig.mail.tokenMailSecret, "24h");
-
-    // send mail
-    const userFullName = `${user.lastName} ${user.firstName}`;
-    await sendResetPasswordMailAsync(user.email, userFullName, resetPawsswordToken);
-};
 
 // PRIVATES
 const getPlainObjectUserInfoDTO = (user: UserDTO) => {

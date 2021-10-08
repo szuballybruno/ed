@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
-import { getUserIdFromRequest } from "../services/authentication";
+import { getUserIdFromRequest } from "../services/authenticationService";
 import { getUserCoursesDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService"
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 

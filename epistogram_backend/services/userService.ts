@@ -2,7 +2,7 @@ import { Request } from "express";
 import { User } from "../models/entity/User";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
-import { getRequestAccessTokenPayload } from "./authentication";
+import { getRequestAccessTokenPayload } from "./authenticationService";
 import { toUserDTO } from "./mappings";
 
 export const getUserById = async (userId: number) => {

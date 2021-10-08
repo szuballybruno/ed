@@ -1,8 +1,8 @@
 import { Image } from '@chakra-ui/image';
 import { Input } from '@chakra-ui/input';
 import { Box, Flex } from '@chakra-ui/layout';
-import { Typography } from '@mui/material';
-import React, { ReactNode, useContext, useRef, useState } from 'react';
+import { TextField, Typography } from '@mui/material';
+import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { CurrentUserContext, RefetchUserFunctionContext } from "../HOC/AuthenticationFrame";
@@ -12,10 +12,11 @@ import { NavigationLinkList } from '../NavigationLinkList';
 import { EpistoButton } from '../universal/EpistoButton';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { uploadAvatarFileAsync, useUploadAvatarFile } from '../../services/fileService';
-import { showNotification, useShowErrorDialog } from '../../services/notifications';
+import { showNotification, useDialog, useShowErrorDialog } from '../../services/notifications';
 import { reloadPage } from '../../frontendHelpers';
-import { useSaveUserData } from '../../services/dataService';
+import { useRequestChangePassword, useSaveUserData } from '../../services/dataService';
 import { LoadingFrame } from '../HOC/LoadingFrame';
+import { EpistoDialog, useEpistoDialogLogic } from '../EpistoDialog';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -50,8 +51,13 @@ const Preferences = () => {
 
     const { saveUserData, saveUserDataState } = useSaveUserData();
     const { postAvatarFileAsync, postAvatarFileState } = useUploadAvatarFile();
+    const { requestChangePasswordAsync, requestChangePasswordState } = useRequestChangePassword();
 
     const refetchUser = useContext(RefetchUserFunctionContext);
+
+    const [isPasswordChangeOpen, setIsPasswordChangeOpen] = useState(false);
+
+    const [currentPassword, setCurrentPassword] = useState("");
 
     const isChanged = [
         firstName !== user.firstName,
@@ -88,6 +94,30 @@ const Preferences = () => {
             showErrorDialog(e);
         }
     }
+
+    const handleRequestChangePasswordAsync = async () => {
+
+        try {
+
+            await requestChangePasswordAsync(currentPassword);
+
+            // ok 
+            setIsPasswordChangeOpen(false);
+            showNotification("Sikeresen visszaállítottad a jelszavad, az új jelszó megadásához szükséges linket e-mail-ben elküldtük Neked.");
+        }
+        catch (e: any) {
+
+            showErrorDialog(e);
+        }
+    }
+
+    useEffect(() => {
+
+        if (isPasswordChangeOpen)
+            return;
+
+        setCurrentPassword("");
+    }, [isPasswordChangeOpen]);
 
     return <>
 
@@ -128,7 +158,7 @@ const Preferences = () => {
         <LoadingFrame
             direction="column"
             justify="flex-start"
-            loadingState={[saveUserDataState, postAvatarFileState]}
+            loadingState={[saveUserDataState, postAvatarFileState, requestChangePasswordState]}
             align="center">
 
             <Box
@@ -199,9 +229,41 @@ const Preferences = () => {
                 </EditField>
 
                 <EditField label="Jelszó">
-                    <EpistoButton variant="outlined" padding="1px 8px 1px 8px">
-                        Jelszó visszaállítása
-                    </EpistoButton>
+                    <Flex direction="column">
+                        {!isPasswordChangeOpen && <EpistoButton
+                            onClick={() => setIsPasswordChangeOpen(true)}
+                            variant="outlined"
+                            padding="1px 8px 1px 8px">
+
+                            Jelszó visszaállítása
+                        </EpistoButton>}
+
+                        {isPasswordChangeOpen && <>
+
+                            <TextField
+                                variant="standard"
+                                value={currentPassword}
+                                label="Mostani jelszó"
+                                type="password"
+                                onChange={x => setCurrentPassword(x.currentTarget.value)} />
+
+                            <Flex mt="20px">
+                                <EpistoButton onClick={() => setIsPasswordChangeOpen(false)}>
+                                    Bezárás
+                                </EpistoButton>
+
+                                <EpistoButton
+                                    variant="colored"
+                                    onClick={handleRequestChangePasswordAsync}
+                                    style={{ marginLeft: "20px" }}>
+
+                                    Kérelem elküldése
+                                </EpistoButton>
+                            </Flex>
+                        </>}
+
+
+                    </Flex>
                 </EditField>
             </Flex>
 

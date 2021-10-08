@@ -1,7 +1,18 @@
 import Email from 'email-templates';
 import { createTransport } from 'nodemailer';
+import { User } from '../models/entity/User';
 import { staticProvider } from '../staticProvider';
-import { log } from './misc/logger';
+import { getAssetUrl } from './misc/urlProvider';
+
+type EpistoEmail = {
+
+    to: string;
+    subject: string;
+    template: {
+        name: string;
+        params: any;
+    }
+}
 
 export const sendInvitaitionMailAsync = async (
     invitationToken: string, userEmail: string, userFullName: string) => {
@@ -9,43 +20,59 @@ export const sendInvitaitionMailAsync = async (
     const signupUrl = `${staticProvider.globalConfig.misc.frontendUrl}/signup`;
     const invitationUrl = `${signupUrl}?token=${invitationToken}`;
 
-    log("Invitation link: ");
-    log(invitationUrl);
-    
-    const mail = getEmail();
-
-    await mail.send({
-        template: "setpassword",
-        message: {
-            from: "noreply@epistogram.com",
-            to: userEmail,
-            subject: "Értesítés a regisztrációról"
-        },
-        locals: {
-            nev: userFullName,
-            email: userEmail,
-            url: invitationUrl
+    const epistoEmail = {
+        to: userEmail,
+        subject: "Értesítés a regisztrációról",
+        template: {
+            name: "invitationEmailTemplate",
+            params: {
+                nev: userFullName,
+                email: userEmail,
+                url: invitationUrl
+            }
         }
-    });
+    } as EpistoEmail;
+
+    await sendEpistoEmailAsync(epistoEmail);
 }
 
-export const sendResetPasswordMailAsync = async (userEmail: string, userFullName: string, pwResetToken: string) => {
+export const sendResetPasswordMailAsync = async (user: User, resetPasswordUrl: string) => {
+
+    const { email, firstName, lastName } = user;
+
+    const epistoEmail = {
+        to: email,
+        subject: "Jelszó visszaállítása",
+        template: {
+            name: "resetPasswordEmailTemplate",
+            params: {
+                epistogramLogoUrl: getAssetUrl("images/logo.png"),
+                passwordResetUrl: resetPasswordUrl
+            }
+        }
+    } as EpistoEmail;
+
+    await sendEpistoEmailAsync(epistoEmail);
+}
+
+export const sendEpistoEmailAsync = async (epistoEmail: EpistoEmail) => {
 
     const mail = getEmail();
-    const url = `${staticProvider.globalConfig.misc.frontendUrl}/regisztracio`;
+    const to = staticProvider
+        .globalConfig
+        .misc
+        .isLocalhost
+        ? "manyoki.bence@epistogram.com"
+        : epistoEmail.to;
 
     await mail.send({
-        template: "setpassword",
+        template: epistoEmail.template.name,
         message: {
             from: "noreply@epistogram.com",
-            to: userEmail,
-            subject: "Értesítés a regisztrációról"
+            to: to,
+            subject: epistoEmail.subject
         },
-        locals: {
-            nev: userFullName,
-            email: userEmail,
-            url: `${url}?token=${pwResetToken}`
-        }
+        locals: epistoEmail.template.params
     });
 }
 
