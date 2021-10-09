@@ -261,8 +261,6 @@ const Preferences = () => {
                                 </EpistoButton>
                             </Flex>
                         </>}
-
-
                     </Flex>
                 </EditField>
             </Flex>
