@@ -17,6 +17,7 @@ import { reloadPage } from '../../frontendHelpers';
 import { useRequestChangePassword, useSaveUserData } from '../../services/dataService';
 import { LoadingFrame } from '../HOC/LoadingFrame';
 import { EpistoDialog, useEpistoDialogLogic } from '../EpistoDialog';
+import { ProfileImage } from '../ProfileImage';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -163,21 +164,19 @@ const Preferences = () => {
 
             <Box
                 position="relative"
-                borderRadius="50%"
+                className="circle"
                 overflow="hidden"
                 width="200px"
                 height="200px"
-                border="2px solid var(--epistoTeal)"
                 cursor="pointer"
                 onClick={() => fileBrowseInputRef.current?.click()}
                 onMouseEnter={() => setIsProfPicHovered(true)}
                 onMouseLeave={() => setIsProfPicHovered(false)}>
 
-                <Image
+                <ProfileImage
                     ref={imageRef}
                     className="whall"
-                    objectFit="cover"
-                    src={avatarSrc} />
+                    url={avatarSrc} />
 
                 <Flex
                     position="absolute"

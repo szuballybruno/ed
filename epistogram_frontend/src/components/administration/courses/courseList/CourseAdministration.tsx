@@ -10,6 +10,7 @@ import { FlexList } from "../../../universal/FlexList";
 import { FlexListItem } from "../../../universal/FlexListItem";
 import { EpistoSearch } from "../../../universal/EpistoSearch";
 import { EpistoHeader } from "../../universal/EpistoHeader";
+import { Image } from "@chakra-ui/image";
 
 export const CourseAdministration = () => {
 
@@ -35,8 +36,11 @@ export const CourseAdministration = () => {
                     return <FlexListItem
                         align="center"
                         p="5px"
-                        height="70px"
-                        thumbnailUrl={course.thumbnailImageURL}
+                        thumbnail={<Image
+                            className="square70"
+                            src={course.thumbnailImageURL}
+                            objectFit="cover"
+                            m="10px" />}
                         midContent={<EpistoHeader p="0" text={course.title} />}
                         endContent={<Flex align="center">
                             <EpistoButton variant="colored" style={{ padding: "3px" }}>

@@ -75,7 +75,21 @@
  height: 50px !important; 
 }
 
+.square60 {
+ width: 60px !important;
+ height: 60px !important; 
+}
+
+.square70 {
+ width: 70px !important;
+ height: 70px !important; 
+}
+
 /* misc  */
+
+.circle {
+  border-radius: 50%;
+}
 
 .roundBorders{
   border-radius: 7px;

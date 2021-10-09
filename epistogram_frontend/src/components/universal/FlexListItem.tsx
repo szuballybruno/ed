@@ -5,12 +5,11 @@ import { ReactNode, useState } from "react";
 import { FlexImage } from "./FlexImage";
 
 export const FlexListItem = (props: FlexProps & {
-    thumbnailUrl?: string,
     onClick?: () => void,
     isLocked?: boolean,
+    thumbnail?: ReactNode,
     endContent?: ReactNode,
     midContent?: ReactNode,
-    thumbnailBasis?: string,
     isChecked?: boolean,
     setIsChecked?: (isChecked: boolean) => void
 }) => {
@@ -18,10 +17,9 @@ export const FlexListItem = (props: FlexProps & {
     const {
         onClick,
         isLocked,
-        thumbnailUrl,
+        thumbnail,
         endContent,
         midContent,
-        thumbnailBasis,
         isChecked,
         setIsChecked,
         ...css } = props;
@@ -30,7 +28,7 @@ export const FlexListItem = (props: FlexProps & {
         id="flexListItem"
         className="shadowOnHover"
         cursor="pointer"
-        align="stretch"
+        align="center"
         p="10px"
         pointerEvents={isLocked ? "none" : "all"}
         onClick={onClick}
@@ -42,7 +40,7 @@ export const FlexListItem = (props: FlexProps & {
             onChange={x => setIsChecked(x.currentTarget.checked)}
             style={{ alignSelf: "center" }} />}
 
-        {thumbnailUrl && <FlexImage height="100%" mr="10px" url={thumbnailUrl} flexBasis={thumbnailBasis ?? "50px"} />}
+        {thumbnail}
 
         <Box flex="1">
             {midContent}

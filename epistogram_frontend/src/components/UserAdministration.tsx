@@ -18,6 +18,7 @@ import { FloatChip } from "./universal/FloatChip";
 import { EpistoSearch } from "./universal/EpistoSearch";
 import { AministrationSubpageHeader } from "./administration/universal/adminAddHeader/AministrationSubpageHeader";
 import { Checkbox, Typography } from "@mui/material";
+import { ProfileImage } from "./ProfileImage";
 
 export const UserAdministration = () => {
 
@@ -131,7 +132,7 @@ export const UserAdministration = () => {
             </Flex>
         </AministrationSubpageHeader>
 
-        <LoadingFrame loadingState={usersStatus} error={usersError}>
+        <LoadingFrame loadingState={usersStatus} error={usersError} flex="1">
 
             {/* user list */}
             <FlexList className="whall">
@@ -155,10 +156,12 @@ export const UserAdministration = () => {
 
                         return <FlexListItem
                             key={index}
-                            thumbnailUrl={user.avatarUrl!}
+                            thumbnail={<ProfileImage
+                                className="square70"
+                                url={user.avatarUrl!}
+                                margin="0 30px 0 20px" />}
                             background="white"
                             p="20px"
-                            thumbnailBasis="80px"
                             setIsChecked={x => setSelectedUser(user.id, x)}
                             isChecked={selectedUserIds.some(x => x === user.id)}
                             midContent={<FlexListTitleSubtitle
