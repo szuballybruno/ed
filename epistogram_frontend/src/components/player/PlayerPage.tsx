@@ -64,11 +64,14 @@ export const PlayerPage = () => {
     console.log(playerDataStatus);
 
     return (
-        <MainWrapper>
+        <MainWrapper
+            style={{
+                "--playerWidth": "min(min(100vw, 180vh), 1700px)"
+            } as any}>
 
             <Navbar />
 
-            <ContentWrapper width="min(100vw, 1700px)" margin="auto">
+            <ContentWrapper width="var(--playerWidth)" margin="auto">
 
                 <LoadingFrame
                     loadingState={[playerDataStatus]}

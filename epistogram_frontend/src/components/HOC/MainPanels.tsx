@@ -1,15 +1,16 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import React, { CSSProperties, ReactNode } from 'react';
 import { FlexFloat } from '../universal/FlexFloat';
 
-export const MainWrapper = (props: { children: ReactNode }) => {
+export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode }) => {
 
     return <Flex
         id="mainWrapper"
         direction="column"
         height="100%"
         width="100%"
-        overflow="hidden">
+        overflow="hidden"
+        style={props.style}>
 
         {props.children}
     </Flex>
