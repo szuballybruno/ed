@@ -75,10 +75,11 @@ export const PlayerPage = () => {
 
                 <LoadingFrame
                     loadingState={[playerDataStatus]}
+                    className="whall"
                     error={[playerDataError]}>
 
                     {/* main column */}
-                    <Box id="mainColumn" overflowY="scroll" >
+                    <Box id="mainColumn" className="whall" overflowY="scroll" >
 
                         {video && <WatchView
                             courseId={courseId!}
