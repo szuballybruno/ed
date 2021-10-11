@@ -12,8 +12,7 @@ import { AddVideo } from "./courses/addVideo/AddVideo";
 import { CourseAdministration } from "./courses/courseList/CourseAdministration";
 import { EditCourse } from "./courses/editCourse/EditCourse";
 import { EditVideo } from "./courses/editVideo/EditVideo";
-import AminStatistics from "./statistics/AminStatistics";
-import { AministrationSubpageHeader } from "./universal/adminAddHeader/AministrationSubpageHeader";
+import AdminStatistics from "./statistics/AdminStatistics";
 import AddUser from "../AddUser";
 import { UserAdministration } from "../UserAdministration";
 
@@ -25,11 +24,13 @@ const AdministrationPage = () => {
     const administrationRoutes = applicationRoutes.administrationRoute;
 
     const menuItems = [
-        administrationRoutes.usersRoute
+        administrationRoutes.usersRoute,
     ] as RouteItemType[];
 
     if (user.userActivity.canAccessCourseAdministration)
         menuItems.push(administrationRoutes.coursesRoute);
+
+    menuItems.push(...[administrationRoutes.groupsRoute, administrationRoutes.myCompanyRoute])
 
     return <MainWrapper>
         <Navbar />
@@ -46,8 +47,8 @@ const AdministrationPage = () => {
                 <Switch>
 
                     {/* statistics */}
-                    <Route exact path={administrationRoutes.statisticsRoute.route}>
-                        <AminStatistics />
+                    <Route exact path={administrationRoutes.myCompanyRoute.route}>
+                        <AdminStatistics />
                     </Route>
 
                     {/* user administration */}

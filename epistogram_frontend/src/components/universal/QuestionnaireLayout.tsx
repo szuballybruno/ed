@@ -9,9 +9,10 @@ export const QuestionnaireLayout = (props: {
     buttonsEnabled: boolean,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
+    buttonWrapperStyles?: React.CSSProperties | undefined
 } & FlexProps) => {
 
-    const { title, buttonsEnabled, children, loadingProps, onlyShowAnswers, ...css } = props;
+    const { title, buttonsEnabled, children, loadingProps, onlyShowAnswers, buttonWrapperStyles, ...css } = props;
 
     return (
         <Flex id="questionnaireLayoutRoot" direction="column" p="20px" align="center" {...css}>
@@ -48,6 +49,7 @@ export const QuestionnaireLayout = (props: {
             {/* answers */}
             <LoadingFrame {...loadingProps}>
                 <Flex
+                    style={{...buttonWrapperStyles}}
                     id="answersListContainer"
                     direction="column"
                     width="100%"

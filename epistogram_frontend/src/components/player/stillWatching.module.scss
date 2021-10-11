@@ -1,0 +1,36 @@
+.questionnaierAnswerWrapper {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes hoverOverButton {
+  from {
+    transform: scale(1.0);
+  }
+  to{
+    transform: scale(1.2);
+  }
+}
+@keyframes clickButton {
+  from {
+    transform: scale(1.2);
+  }
+  to{
+    transform: scale(0.9);
+  }
+}
+
+.questionnaierAnswerWrapper:hover {
+  animation-name: hoverOverButton;
+  animation-duration: 200ms;
+  transform: scale(1.2);
+}
+
+.questionnaierAnswerWrapper:active {
+  animation-name: clickButton;
+  animation-duration: 200ms;
+  transform: scale(0.9);
+}

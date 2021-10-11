@@ -77,10 +77,10 @@ const Preferences = () => {
 
             await saveUserData(firstName, lastName, phoneNumber);
 
-            // notification 
+            // notification
             showNotification("A változtatások sikeresen mentésre kerültek.");
 
-            // reload 
+            // reload
             if (avatarFile) {
 
                 reloadPage();
@@ -102,7 +102,7 @@ const Preferences = () => {
 
             await requestChangePasswordAsync(currentPassword);
 
-            // ok 
+            // ok
             setIsPasswordChangeOpen(false);
             showNotification("Sikeresen visszaállítottad a jelszavad, az új jelszó megadásához szükséges linket e-mail-ben elküldtük Neked.");
         }
@@ -206,14 +206,14 @@ const Preferences = () => {
                 mt="50px"
                 align="stretch">
 
-                <EditField label="Vezeték név">
+                <EditField label="Vezetéknév">
                     <Input
                         outline="none"
                         value={lastName}
                         onChange={x => setLastName(x.currentTarget.value)}></Input>
                 </EditField>
 
-                <EditField label="Kereszt név">
+                <EditField label="Keresztnév">
                     <Input
                         outline="none"
                         value={firstName}
