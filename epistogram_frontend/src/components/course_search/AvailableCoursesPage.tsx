@@ -14,6 +14,7 @@ import classes from "./courseSearchMain.module.scss";
 import { EpistoButton } from "../universal/EpistoButton";
 import { httpPostAsync } from "../../services/httpClient";
 import { useNavigation } from "../../services/navigatior";
+import { translatableTexts } from "../../translatableTexts";
 
 const AvailableCoursesPage = () => {
 
@@ -58,7 +59,8 @@ const AvailableCoursesPage = () => {
                     <Typography
                         style={{ margin: "20px", textAlign: "center" }}
                         variant={"h4"}>
-                        Kategóriák
+
+                        {translatableTexts.availableCourses.categoriesTitle}
                     </Typography>
 
                     {/* categories list */}
@@ -99,7 +101,8 @@ const AvailableCoursesPage = () => {
                                     selected={isRecommended}
                                     value="recommended"
                                     style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
-                                    Neked ajánljuk
+
+                                    {translatableTexts.availableCourses.recommendedForYou}
                                 </ToggleButton>
 
                                 {/* featured */}
@@ -108,7 +111,8 @@ const AvailableCoursesPage = () => {
                                     selected={isFeatured}
                                     value="featured"
                                     style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
-                                    Kiemelt
+
+                                    {translatableTexts.availableCourses.highlighted}
                                 </ToggleButton>
 
                                 {/* show all */}
@@ -117,7 +121,8 @@ const AvailableCoursesPage = () => {
                                     selected={isRecommended && isFeatured}
                                     value="showAll"
                                     style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
-                                    Mind
+
+                                    {translatableTexts.availableCourses.all}
                                 </ToggleButton>
                             </ToggleButtonGroup>
 
@@ -132,10 +137,10 @@ const AvailableCoursesPage = () => {
                                 style={{
                                     height: "40px"
                                 }}>
-                                <option value={10}>A-Z</option>
-                                <option value={20}>Z-A</option>
-                                <option value={30}>Új-Régi</option>
-                                <option value={30}>Régi-Új</option>
+                                <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
+                                <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
+                                <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
+                                <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
                             </Select>
                         </Flex>
                     </Box>
@@ -161,7 +166,8 @@ const AvailableCoursesPage = () => {
                                                     <EpistoButton
                                                         onClick={() => window.location.href = "https://epistogram.com/excel/"}
                                                         style={{ flex: "1" }}>
-                                                        Adatlap
+
+                                                        {translatableTexts.availableCourses.courseDataSheet}
                                                     </EpistoButton>
 
                                                     {/* start course */}
@@ -169,7 +175,8 @@ const AvailableCoursesPage = () => {
                                                         onClick={playCourse}
                                                         variant="colored"
                                                         style={{ flex: "1" }}>
-                                                        Indítás
+
+                                                        {translatableTexts.availableCourses.startCourse}
                                                     </EpistoButton>
                                                 </Flex>
                                             </CourseTile>

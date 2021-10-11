@@ -8,6 +8,7 @@ import NextPlanIcon from '@mui/icons-material/NextPlan';
 import { EpistoConinImage } from "./universal/EpistoCoinImage";
 import { Image } from "@chakra-ui/image";
 import { getAssetUrl, getRandomInteger } from "../frontendHelpers";
+import { translatableTexts } from "../translatableTexts";
 
 export const PractiseQuestions = () => {
 
@@ -62,13 +63,13 @@ export const PractiseQuestions = () => {
                             flexBasis="50px"
                             display={isCorrectAnswer ? undefined : "none"}>
                             <Typography>
-                                Újabb 1
+                                {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
                             </Typography>
 
                             <EpistoConinImage />
 
                             <Typography>
-                                -al gazdagodtál!
+                                {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
                             </Typography>
                         </Flex>
                     </Flex>
@@ -85,7 +86,9 @@ export const PractiseQuestions = () => {
                         display={isAnswered ? undefined : "none"}
                         variant="h5"
                         alignSelf="center">
-                        {isCorrectAnswer ? "Helyesen válaszoltál!" : "Helytelen válasz!"}
+                        {isCorrectAnswer
+                            ? translatableTexts.practiseQuestions.answerIsCorrect
+                            : translatableTexts.practiseQuestions.answerIsIncorrect}
                     </Typography>
 
                     <QuesitionView
@@ -103,13 +106,16 @@ export const PractiseQuestions = () => {
                         <EpistoButton
                             variant="outlined"
                             onClick={handleNextQuestion}>
-                            Következő kérdés
+
+                            {translatableTexts.practiseQuestions.nextQuestion}
                         </EpistoButton>
                     </Flex>
                 </Flex>
             </Flex>
             : <Flex>
-                <Typography>There are no available practise questions, go watch some videos!</Typography>
+                <Typography>
+                    {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideos}
+                </Typography>
             </Flex>}
     </LoadingFrame>
 }

@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { mockTasks } from '../mockData';
 import { useOverviewPageDTO } from "../services/dataService";
+import { translatableTexts } from '../translatableTexts';
 import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
 import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 import { LoadingFrame } from "./HOC/LoadingFrame";
@@ -39,23 +40,27 @@ const HomePage = () => {
                 <LeftPanel align="stretch" justify="stretch">
 
                     {/* courses progress */}
-                    <DashoardLeftItemGroup title="Haladás a kurzusaiddal">
+                    <DashoardLeftItemGroup title={translatableTexts.homePage.courseProgress}>
                         <Flex direction="column" p="10px">
-                            <CourseProgressBar value={12} label="Excel kurzus" mb="5px" />
-                            <CourseProgressBar value={45} label="Java mesterkurzus" mb="5px" />
+                            <CourseProgressBar value={12} label={translatableTexts.homePage.excelCourseTitle} mb="5px" />
+                            <CourseProgressBar value={45} label={translatableTexts.homePage.javaCourseTitle} mb="5px" />
                         </Flex>
                     </DashoardLeftItemGroup>
 
                     {/* active item */}
-                    <DashoardLeftItemGroup title={hasCurrentItem ? "Folytatom" : "Új tanfolyam kiválasztása"}>
+                    <DashoardLeftItemGroup
+                        title={hasCurrentItem
+                            ? translatableTexts.homePage.activeCourseContinue
+                            : translatableTexts.homePage.activeCourseEmpty}>
+
                         {hasCurrentItem
                             ? <Box padding="10px">
                                 <CourseItemView courseItem={currentItem!} />
                             </Box>
 
                             : <ListItem
-                                mainTitle={"Tanfolyamkereső"}
-                                subTitle={"Válaszd ki a legszimpatikusabb tanfolyamot"}
+                                mainTitle={translatableTexts.homePage.availableCoursesLinkTitle}
+                                subTitle={translatableTexts.homePage.availableCoursesText}
                                 thumbnailUrl={currentItemThumbnailUrl}
                                 to={applicationRoutes.availableCoursesRoute.route} />}
                     </DashoardLeftItemGroup>
@@ -63,7 +68,7 @@ const HomePage = () => {
                     {/* current course */}
                     {hasCurrentCourse &&
                         <DashoardLeftItemGroup
-                            title={"Jelenlegi kurzus"}
+                            title={translatableTexts.homePage.currentCourseTitle}
                             flex="1"
                             overflow="hidden">
 
@@ -81,7 +86,7 @@ const HomePage = () => {
 
                             {/* test your knowledge */}
                             <DashboardSection
-                                title="Gyakorolj!"
+                                title={translatableTexts.homePage.practiseTitle}
                                 minHeight="300px"
                                 minWidth="500px"
                                 flex="2">
@@ -91,7 +96,7 @@ const HomePage = () => {
 
                             {/* tip of the day */}
                             <DashboardSection
-                                title="Napi tipped"
+                                title={translatableTexts.homePage.tipOfTheDay}
                                 minHeight="300px"
                                 minWidth="300px"
                                 flex="1">
@@ -102,7 +107,7 @@ const HomePage = () => {
                         </Flex>
 
                         {/* current tasks */}
-                        <DashboardSection title="Feladatok">
+                        <DashboardSection title={translatableTexts.homePage.tasks}>
                             <Tasks currentTasks={mockTasks} className="whall" />
                         </DashboardSection>
 

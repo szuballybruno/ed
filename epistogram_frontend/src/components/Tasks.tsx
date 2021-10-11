@@ -1,6 +1,9 @@
 import { Flex, FlexProps } from "@chakra-ui/layout"
 import { Box } from "@chakra-ui/react"
-import { Create, MenuBook, PlayCircleFilled } from "@mui/icons-material"
+import AssignmentIcon from '@mui/icons-material/Assignment'
+import DvrIcon from '@mui/icons-material/Dvr'
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions'
 import { Typography } from "@mui/material"
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -8,14 +11,11 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import * as React from 'react'
-import { dateTimeToString, daysUntil, toDateStringFormatted } from "../frontendHelpers"
+import { daysUntil, toDateStringFormatted } from "../frontendHelpers"
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO"
 import { TaskObjectiveType, TaskPriorityType, TaskStatusType } from "../models/shared_models/types/sharedTypes"
+import { translatableTexts } from "../translatableTexts"
 import { EpistoButton } from "./universal/EpistoButton"
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import DvrIcon from '@mui/icons-material/Dvr';
 
 export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
 
@@ -60,21 +60,35 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
     const getTaskStatusText = (status: TaskStatusType) => {
 
         if (status === "assigned")
-            return "Kiadva";
+            return translatableTexts.tasks.states.assigned;
 
         if (status === "inProgress")
-            return "Folyamatban";
+            return translatableTexts.tasks.states.inProgress;
 
         if (status === "submitted")
-            return "Beadva";
+            return translatableTexts.tasks.states.submitted;
 
         if (status === "rejected")
-            return "Visszautasítva";
+            return translatableTexts.tasks.states.rejected;
 
         if (status === "completed")
-            return "Teljesítve";
+            return translatableTexts.tasks.states.completed;
 
         throw new Error();
+    }
+
+    const getTaskPriorityText = (priority: TaskPriorityType) => {
+
+        if (priority === "normal")
+            return translatableTexts.tasks.priority.normal;
+
+        if (priority === "important")
+            return translatableTexts.tasks.priority.important;
+
+        if (priority === "urgent")
+            return translatableTexts.tasks.priority.urgent;
+
+        throw new Error("Unrecognised task priority: " + priority);
     }
 
     const rowAling = "left";
@@ -85,12 +99,12 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
             <TableHead>
                 <TableRow>
                     <TableCell align={headerAling}></TableCell>
-                    <TableCell align={headerAling} style={tableHeaderCell}>Feladat</TableCell>
-                    <TableCell align={headerAling} style={tableHeaderCell}>Prioritás</TableCell>
-                    <TableCell align={headerAling} style={tableHeaderCell}>Határidő</TableCell>
-                    <TableCell align={headerAling} style={tableHeaderCell}>Státusz</TableCell>
-                    <TableCell align={headerAling} style={tableHeaderCell}>Feladatot kiadta</TableCell>
-                    <TableCell align={headerAling} style={tableHeaderCell}>Kiadás dátuma</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>{translatableTexts.tasks.taskName}</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>{translatableTexts.tasks.taskPriority}</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>{translatableTexts.tasks.taskDueDate}</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>{translatableTexts.tasks.taskState}</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>{translatableTexts.tasks.taskAssigendBy}</TableCell>
+                    <TableCell align={headerAling} style={tableHeaderCell}>{translatableTexts.tasks.taskAssigendDate}</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -122,11 +136,7 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
                                         width: "fit-content"
                                     }}>
 
-                                    {task.priority === "normal"
-                                        ? "Normál"
-                                        : task.priority === "important"
-                                            ? "Fontos"
-                                            : "Sürgős"}
+                                    {getTaskPriorityText(task.priority)}
                                 </Typography>
                             </TableCell>
 
@@ -174,7 +184,8 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
         <EpistoButton
             style={{ marginTop: "20px", width: "fit-content", alignSelf: "center" }}
             variant="outlined">
-            Előzmények
+
+            {translatableTexts.tasks.allTasksButtonLabel}
         </EpistoButton>
     </Flex>
 }

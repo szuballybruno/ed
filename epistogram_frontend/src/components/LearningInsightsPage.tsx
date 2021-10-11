@@ -17,11 +17,12 @@ const LearningInsightsPage = () => {
         <ContentWrapper>
 
             <LeftPanel padding="20px">
-                <NavigationLinkList items={[
-                    applicationRoutes.learningRoute.learningOverviewRoute,
-                    applicationRoutes.learningRoute.myCoursesRoute,
-                    applicationRoutes.learningRoute.myExamsRoute
-                ]} />
+                <NavigationLinkList
+                    items={[
+                        applicationRoutes.learningRoute.learningOverviewRoute,
+                        applicationRoutes.learningRoute.myCoursesRoute,
+                        applicationRoutes.learningRoute.myExamsRoute
+                    ]} />
             </LeftPanel>
 
             <RightPanel

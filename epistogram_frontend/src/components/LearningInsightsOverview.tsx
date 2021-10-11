@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { mockTasks } from '../mockData';
+import { translatableTexts } from '../translatableTexts';
 import { EpistoHeader } from './administration/universal/EpistoHeader';
 import LearningStatistics from "./learningStatistics/LearningStatistics";
 import { Tasks } from './Tasks';
@@ -12,21 +13,21 @@ export const LearningInsightsOverview = () => {
     return <Flex direction="column">
 
         {/* tasks */}
-        <DashboardSection title="Feladataim">
+        <DashboardSection title={translatableTexts.learningOverview.tasksTitle}>
             <Tasks currentTasks={mockTasks} />
         </DashboardSection>
 
         {/* personality */}
-        <DashboardSection title="Személyes tanulási analízis" minHeight="500px">
+        <DashboardSection title={translatableTexts.learningOverview.personalLearningAnalysisTitle} minHeight="500px">
             <PersonalityAssessment className="whall" />
         </DashboardSection>
 
         {/* stats */}
-        <DashboardSection title="Statisztikám" minHeight="500px">
+        <DashboardSection title={translatableTexts.learningOverview.myStatisticsTitle} minHeight="500px">
             <LearningStatistics />
         </DashboardSection>
 
         {/* badges */}
-        <EpistoHeader text="Megszerzett jelvényeim" />
+        <EpistoHeader text={translatableTexts.learningOverview.myBadgesTitle} />
     </Flex>
 };

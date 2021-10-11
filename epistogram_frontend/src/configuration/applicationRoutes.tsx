@@ -1,4 +1,5 @@
 import { Assignment, BarChart, Person, School, Settings, Subscriptions } from "@mui/icons-material";
+import { translatableTexts } from "../translatableTexts";
 
 export type RouteSection = {
     path: string;
@@ -9,127 +10,112 @@ export type RouteSection = {
 export const applicationRoutes = {
 
     loginRoute: {
-        title: "Bejelentkezés",
+        title: translatableTexts.routeTitles.login,
         route: "/login"
     },
 
     signupRoute: {
-        title: "Regisztráció",
+        title: translatableTexts.routeTitles.registration,
         route: "/signup"
     },
 
     setNewPasswordRoute: {
-        title: "Új jelszó beállítása",
+        title: translatableTexts.routeTitles.setNewPassword,
         route: "/set-new-password"
     },
 
     homeRoute: {
-        title: "Kezdőlap",
+        title: translatableTexts.routeTitles.homePage,
         route: "/home"
     },
 
     rootHomeRoute: {
-        title: "Kezdőlap",
+        title: translatableTexts.routeTitles.homePage,
         route: "/",
         exact: true
     },
 
     availableCoursesRoute: {
-        title: "Tanfolyamkereső",
+        title: translatableTexts.routeTitles.availableCourses,
         route: "/courses"
     },
 
     learningRoute: {
-        title: "Tanulás",
+        title: translatableTexts.routeTitles.learning,
         route: "/learning",
 
         learningOverviewRoute: {
-            title: "Áttekintés",
+            title: translatableTexts.routeTitles.learningOverview,
             route: "/learning",
             icon: <School color={"secondary"} />,
             exact: true
         },
 
         myCoursesRoute: {
-            title: "Kurzusaim",
+            title: translatableTexts.routeTitles.learningCourses,
             route: "/learning/myCourses",
             icon: <Subscriptions color={"secondary"} />
         },
 
         myExamsRoute: {
-            title: "Vizsgáim",
+            title: translatableTexts.routeTitles.learningExams,
             route: "/learning/myExams",
             icon: <Assignment color={"secondary"} />
         }
     },
 
     administrationRoute: {
-        title: "Adminisztráció",
+        title: translatableTexts.routeTitles.administration,
         route: "/administration",
 
         statisticsRoute: {
-            title: "Statisztika",
+            title: translatableTexts.routeTitles.administrationStatistics,
             route: "/administration",
             icon: <BarChart color={"secondary"} />,
             exact: true
         },
         usersRoute: {
-            title: "Felhasználók kezelése",
+            title: translatableTexts.routeTitles.administrationUserAdmin,
             route: "/administration/users",
             icon: <Person color={"secondary"} />,
 
             addRoute: {
-                title: "Felhasználó hozzáadása",
+                title: translatableTexts.routeTitles.administrationAddUser,
                 route: "/administration/users/add"
             }
         },
         coursesRoute: {
-            title: "Kurzusok kezelése",
+            title: translatableTexts.routeTitles.administrationCourseAdmin,
             route: "/administration/courses",
             icon: <Subscriptions color={"secondary"} />,
 
             addRoute: {
-                title: "Kurzus hozzáadása",
+                title: translatableTexts.routeTitles.administrationAddCourse,
                 route: "/administration/courses/add"
             },
             editCourseRoute: {
-                title: "Kurzus szerkesztése",
+                title: translatableTexts.routeTitles.administrationEditCourse,
                 route: "/administration/courses/:courseId"
             },
             addVideoRoute: {
-                title: "Videó hozzáadása",
+                title: translatableTexts.routeTitles.administrationAddVideo,
                 route: "/administration/courses/:courseId/item/add"
             },
             editVideoRoute: {
-                title: "Videó szerkesztése",
+                title: translatableTexts.routeTitles.administrationEditVideo,
                 route: "/administration/courses/:courseId/item/:itemId"
             }
         }
     },
 
     settingsRoute: {
-        title: "Beállítások",
+        title: translatableTexts.routeTitles.settings,
         route: "/settings",
         icon: <Settings></Settings>,
 
         preferencesRoute: {
-            title: "Általános",
+            title: translatableTexts.routeTitles.settingsOverview,
             route: "/settings/preferences",
-        },
-
-        displayRoute: {
-            title: "Megjelenítés",
-            route: "/settings/display",
-        },
-
-        securityRoute: {
-            title: "Biztonság",
-            route: "/settings/security",
-        },
-
-        notificationsRoute: {
-            title: "Értesítések",
-            route: "/settings/notifications",
         }
     }
 };

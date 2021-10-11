@@ -2,6 +2,7 @@ import { Box, Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
 import { usePaging } from "../frontendHelpers"
 import { tipOfTheDay } from "../services/dataService"
+import { translatableTexts } from "../translatableTexts"
 import { EpistoButton } from "./universal/EpistoButton"
 import { SlidesDisplay } from "./universal/SlidesDisplay"
 
@@ -47,7 +48,9 @@ export const TipOfTheDay = (props: FlexProps) => {
                     previous();
                 }
             }}>
-            {currentIndex == 0 ? "Leírás" : "Videó"}
+            {currentIndex == 0
+                ? translatableTexts.tipOfTheDay.description
+                : translatableTexts.tipOfTheDay.video}
         </EpistoButton>
     </Flex>
 }

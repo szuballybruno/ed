@@ -61,7 +61,7 @@ export const SignupPage = () => {
 
             await finalizeUserRegistartionAsync(dto);
 
-            showNotification("Felhasználó sikeresen frissítve")
+            showNotification("Sikeres regisztracio!")
         }
         catch (error) {
 
