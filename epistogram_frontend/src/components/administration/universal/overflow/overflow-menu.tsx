@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react";
 import {MoreVert} from "@mui/icons-material";
-import classnames from "classnames";
 import { IconButton, Menu, MenuItem} from "@mui/material";
 import classes from "./stylesheet.module.css"
 
@@ -47,7 +46,7 @@ export default function OverflowMenu({ children, className, visibilityMap }) {
             return (
               <MenuItem key={child} onClick={handleClose}>
                 {React.cloneElement(child, {
-                  className: classnames(child.className, classes.inOverflowMenu)
+                  className: `${child.className} ${classes.inOverflowMenu}`
                 })}
               </MenuItem>
             );
