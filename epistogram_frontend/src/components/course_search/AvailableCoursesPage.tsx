@@ -1,4 +1,4 @@
-import { Box, Flex, GridItem } from "@chakra-ui/react";
+import {Box, Flex, GridItem} from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React from "react";
 import { distinct } from "../../frontendHelpers";
@@ -57,21 +57,22 @@ const AvailableCoursesPage = () => {
 
                     {/* categories title */}
                     <Typography
-                        style={{ margin: "20px", textAlign: "center" }}
+                        style={{ margin: "40px 20px", textAlign: "center" }}
                         variant={"h4"}>
 
                         {translatableTexts.availableCourses.categoriesTitle}
                     </Typography>
 
                     {/* categories list */}
-                    <ToggleButtonGroup className={classes.categoriesList}>
+                    <ToggleButtonGroup className={classes.categoriesList} orientation={"vertical"}>
                         {categoryOptions
                             .map((categoryOption, index) => {
                                 return <ToggleButton
-                                    name={"category"}
                                     className={searchCategory === categoryOption ? `${classes.categoriesListItem} ${classes.categoriesListItemSelected}` : `${classes.categoriesListItem}`}
                                     value={categoryOption}
-                                    onClick={x => setSearchCategory(x.currentTarget.value)}
+                                    onClick={() => {
+                                        setSearchCategory(categoryOption)
+                                    }}
                                     key={index}>
                                     {categoryOption}
                                 </ToggleButton>

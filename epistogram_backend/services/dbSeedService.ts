@@ -159,7 +159,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // course: 1
             {
                 title: "Webfejlesztés kezdőknek (HTML, CSS, BOOTSTRAP)",
-                category: "Programming",
+                category: "Hálózatok",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
@@ -198,7 +198,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // course: 2
             {
                 title: "Java programozás mesterkurzus",
-                category: "Programming",
+                category: "Szoftverfejlesztés",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
@@ -213,7 +213,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // course: 3
             {
                 title: "Angular - Minden amire szükséged lehet",
-                category: "Programming",
+                category: "E-Commerce",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
@@ -228,7 +228,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // course: 4
             {
                 title: "Microsoft Excel Mesterkurzus",
-                category: "Programming",
+                category: "Irodai alkalmazások",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
@@ -253,7 +253,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // etc
             {
                 title: "DevOps kezdőknek - Kubernetes",
-                category: "Programming",
+                category: "Általános IT",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
@@ -266,7 +266,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
             },
             {
                 title: "Google classroom használata",
-                category: "Programming",
+                category: "Biztonság",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
@@ -279,7 +279,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
             },
             {
                 title: "Válj szuper tanulóvá - Gyorsolvasás és tanulás fejlesztés",
-                category: "Programming",
+                category: "Önfejlesztés",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
@@ -288,7 +288,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
             },
             {
                 title: "Tanulj meg elkészíteni bármilyen karaktert - Adobe Illustrator",
-                category: "Programming",
+                category: "Média",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
@@ -301,7 +301,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
             },
             {
                 title: "Google Ads Mesterkurzus",
-                category: "Programming",
+                category: "Marketing",
                 courseGroup: "IT",
                 permissionLevel: "public",
                 colorOne: "#123456",
@@ -419,7 +419,7 @@ const seedFiles = async (connection: TypeORMConnection) => {
 
     // await setVideoFileIdAsync(1, file.id);
 
-    // user avatar 1 file 
+    // user avatar 1 file
     // const avatarFile = {
     //     pending: false,
     //     filePath: "userAvatars/user_avatar_1.png"
