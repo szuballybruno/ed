@@ -13,7 +13,8 @@ export type EpistoButtonPropsType = {
     className?: string,
     icon?: ReactNode,
     isDisabled?: boolean,
-    buttonProps?: ButtonProps
+    buttonProps?: ButtonProps,
+    name?: string
 };
 
 export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>((props: EpistoButtonPropsType, ref) => {
@@ -29,13 +30,16 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         style,
         className,
         icon,
-        isDisabled
+        isDisabled,
+        name
     } = props;
 
     const { variant: _, ...buttonProps } = props.buttonProps ?? { variant: null };
 
+
     return <Button
         onClick={onClick}
+        name={name}
         variant={variant === "colored"
             ? "contained"
             : variant === "outlined"
