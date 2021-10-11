@@ -70,7 +70,7 @@ export const translatableTexts = {
         taskState: "Státusz",
         taskAssigendBy: "Feladatot kiadta",
         taskAssigendDate: "Kiadás dátuma",
-        allTasksButtonLabel: "Előzmények"
+        allTasksButtonLabel: "Összes feladat"
     },
 
     availableCourses: {

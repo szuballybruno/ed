@@ -16,6 +16,7 @@ import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO"
 import { TaskObjectiveType, TaskPriorityType, TaskStatusType } from "../models/shared_models/types/sharedTypes"
 import { translatableTexts } from "../translatableTexts"
 import { EpistoButton } from "./universal/EpistoButton"
+import {NavLink} from "react-router-dom";
 
 export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
 
@@ -142,7 +143,7 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
 
                             {/* due date */}
                             <TableCell align={rowAling} style={tableRowCell}>
-                                {`${toDateStringFormatted(task.dueDate)} | ${daysUntil(new Date(Date.now()), task.dueDate)} nap van hátra`}
+                                {`${toDateStringFormatted(task.dueDate)} | ${daysUntil(new Date(), task.dueDate)} nap van hátra`}
                             </TableCell>
 
                             {/* status */}
@@ -165,7 +166,7 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
                                 <Flex align="center">
                                     <img
                                         className="square35"
-                                        src={"https://storage.googleapis.com/epistogram_bucket_dev/userAvatars/user_avatar_1.png"}
+                                        src={"https://storage.googleapis.com/epistogram_bucket_dev/userAvatars/user_avatar_4.png"}
                                         style={{ marginRight: "5px", borderRadius: "50%" }} />
 
                                     {task.createdBy}
@@ -181,11 +182,14 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
             </TableBody>
         </Table>
 
-        <EpistoButton
-            style={{ marginTop: "20px", width: "fit-content", alignSelf: "center" }}
-            variant="outlined">
+        {window.location.pathname !== "/learning" && <NavLink to={"/learning"} style={{ marginTop: "20px", width: "fit-content", alignSelf: "center" }}>
+            <EpistoButton
+                style={{ marginTop: "20px", width: "fit-content", alignSelf: "center" }}
+                variant="outlined">
 
-            {translatableTexts.tasks.allTasksButtonLabel}
-        </EpistoButton>
+                {translatableTexts.tasks.allTasksButtonLabel}
+            </EpistoButton>
+        </NavLink>}
+
     </Flex>
 }
