@@ -69,9 +69,6 @@ export const seedDB = async () => {
     log("seedExamQuestions")
     await seedExamQuestions(connection);
 
-    log("seedFiles")
-    await seedFiles(connection);
-
     log("seedCourseOrganizationsAsync")
     await seedCourseOrganizationsAsync();
 
@@ -114,6 +111,9 @@ const seedActivities = async (connection: TypeORMConnection) => {
             },
             {
                 name: "canAccessAdministration"
+            },
+            {
+                name: "canAccessApplication"
             }
         ]);
 }
@@ -402,32 +402,6 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
         false);
 
     log("User 2 token: " + it2);
-}
-
-const seedFiles = async (connection: TypeORMConnection) => {
-
-    // const fileRepo = await connection
-    //     .getRepository(StorageFile);
-
-    // video 1 file
-    // const file = {
-    //     pending: false,
-    //     filePath: "videos/video_1.mp4",
-    // } as StorageFile;
-
-    // await fileRepo.insert(file);
-
-    // await setVideoFileIdAsync(1, file.id);
-
-    // user avatar 1 file
-    // const avatarFile = {
-    //     pending: false,
-    //     filePath: "userAvatars/user_avatar_1.png"
-    // } as StorageFile;
-
-    // await fileRepo.insert(avatarFile);
-
-    // await setUserAvatarFileId(1, avatarFile.id);
 }
 
 const seedVideoQuestions = async (connection: TypeORMConnection) => {

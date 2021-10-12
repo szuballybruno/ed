@@ -47,7 +47,7 @@ export const getUserIdFromRequest = (req: Request) => {
     return getRequestAccessTokenPayload(req).userId;
 }
 
-export const renewUserSession = async (req: Request, res: Response) => {
+export const renewUserSessionAsync = async (req: Request, res: Response) => {
 
     log("Renewing user session...");
 

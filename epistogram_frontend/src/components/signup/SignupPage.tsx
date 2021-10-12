@@ -1,21 +1,18 @@
 import React from 'react';
 import { globalConfig } from "../../configuration/config";
-import { getQueryParam, reloadPage, usePaging } from "../../frontendHelpers";
-import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
+import { usePaging } from "../../frontendHelpers";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";
 import { useNavigation } from "../../services/navigatior";
-import { showNotification, useShowErrorDialog } from "../../services/notifications";
+import { useShowErrorDialog } from "../../services/notifications";
 import { useSignupData } from '../../services/openEndpointService';
 import { useAnswerSignupQuestion } from "../../services/signupService";
-import { finalizeUserRegistartionAsync } from "../../services/userManagementService";
 import { QuestionSlides } from "../exam/QuestionSlides";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
-import { RegistrationPage } from '../RegistrationPage';
+import { EpistoButton } from '../universal/EpistoButton';
 import { SlidesDisplay } from "../universal/SlidesDisplay";
-import { SignupForm } from "./SignupForm";
 import { useRegistrationFinalizationFormState } from "./SignupFormLogic";
 import { SignupWrapper } from "./SignupWrapper";
 
@@ -33,9 +30,7 @@ const images = [
 export const SignupPage = () => {
 
     // input
-    const token = getQueryParam("token");
-    const isRegistration = getQueryParam("isRegistration") === "true";
-    const { signupData, signupDataError, signupDataStatus, refetchSignupData } = useSignupData(token, isRegistration);
+    const { signupData, signupDataError, signupDataStatus, refetchSignupData } = useSignupData();
     const questions = signupData?.questions ?? [];
     const questionAnswers = signupData?.questionAnswers ?? [];
 
@@ -47,44 +42,25 @@ export const SignupPage = () => {
     // slides
     const summaryImageUrl = images[6];
     const gereetImageUrl = images[0];
-    const finalizeImageUrl = images[7];
     const slidesState = usePaging([1, 2, 3, 4]);
 
     // save questionnaire answers
-    const { saveAnswersAsync, saveAnswersError, saveAnswersStatus } = useAnswerSignupQuestion();
-
-    const submitFinalizationRequestAsync = async () => {
-
-        const dto = new FinalizeUserRegistrationDTO(
-            regFormState.phoneNumber,
-            regFormState.password,
-            regFormState.passwordControl,
-            token);
-
-        try {
-
-            await finalizeUserRegistartionAsync(dto);
-
-            showNotification("Sikeres regisztracio!");
-
-            reloadPage();
-        }
-        catch (error) {
-
-            showErrorDialog(error)
-        }
-    }
+    const { saveAnswersAsync, saveAnswersStatus } = useAnswerSignupQuestion();
 
     const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
 
         const dto = {
-            invitationToken: token,
             questionAnswer: questionAnswer
         } as SaveQuestionAnswerDTO;
 
-        // save answers 
-        await saveAnswersAsync(dto);
-        await refetchSignupData();
+        try {
+            await saveAnswersAsync(dto);
+            await refetchSignupData();
+        }
+        catch (e) {
+
+            showErrorDialog(e);
+        }
     }
 
     const getSelectedAnswerId = (questionId: number) => {
@@ -119,23 +95,13 @@ export const SignupPage = () => {
         onNavPrevious={() => slidesState.previous()}
         onNext={() => slidesState.next()}
         currentImage={summaryImageUrl}>
-    </SignupWrapper>
-
-    const FinalizeFormSlide = () => <SignupWrapper
-        title={"Személyes adatok és jelszó megadása"}
-        upperTitle="Utolsó simítások"
-        nextButtonTitle="Regisztráció befejezése"
-        onNavPrevious={() => slidesState.previous()}
-        onNext={() => submitFinalizationRequestAsync()}
-        currentImage={finalizeImageUrl}>
-        <SignupForm regFormState={regFormState} />
+        <EpistoButton>continuer to app</EpistoButton>
     </SignupWrapper>
 
     const slides = [
         GreetSlide,
         QuestionnaireSlide,
-        SummarySlide,
-        FinalizeFormSlide
+        SummarySlide
     ];
 
     return (
@@ -156,23 +122,3 @@ export const SignupPage = () => {
         </MainWrapper >
     );
 };
-
-// updateActivity(
-//     invitaionToken,
-//     "answerSignupSurvey",
-//     "" + window.location.href,
-//     "Signup-PersonalitySurvey-SelectAnswer",
-//     e.currentTarget.name,
-//     "collBasedActive",
-//     "A felhasználó válaszol a kezdeti felmérés egyik kérdésére",
-//     true,
-//     localState.currentItemIndex.get() < questions.length ? questions[localState.currentItemIndex.get() - 1].title : "ActionValueOverreached",
-//     e.currentTarget.value,
-//     "exams",
-//     "_id",
-//     "kitöltendő",
-//     undefined,
-//     undefined,
-//     "newQuestion",
-//     localState.currentItemIndex.get() < questions.length ? questions[localState.currentItemIndex.get()].title : "SummaryPage"
-// )

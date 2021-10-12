@@ -82,13 +82,12 @@ export const createUserAsync = async (
     // set default user fileds
     const user = {
         email,
-        roleId,
+        roleId: roleId ?? UserRoleEnum.userId,
         firstName,
         lastName,
         jobTitle,
         phoneNumber,
         password: hashedDefaultPassword,
-        isActive: true,
         isInvitedOnly: true
     } as User;
 

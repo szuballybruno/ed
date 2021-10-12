@@ -20,9 +20,6 @@ export class User {
     @DeleteDateColumn()
     deletionDate: Date;
 
-    @Column({ nullable: true })
-    isActive: boolean;
-
     @Column()
     isInvitedOnly: boolean;
 
@@ -72,8 +69,8 @@ export class User {
     userActivity: UserActivityFlatView;
 
     // user role
-    @Column({ nullable: true, type: "number" })
-    roleId: number | null;
+    @Column()
+    roleId: number;
 
     @ManyToOne(_ => Role, x => x.users)
     @JoinColumn({ name: "roleId" })

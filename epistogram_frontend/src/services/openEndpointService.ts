@@ -11,15 +11,11 @@ type LoginUserDTO = {
     password: string;
 }
 
-export const useSignupData = (invitationToken: string, isRegistration: boolean) => {
+export const useSignupData = () => {
 
-    const url = apiRoutes.open.getSignupData;
     const qr = useReactQuery<SignupDataDTO>(
         ['getSignupData'],
-        () => httpPostAsync(url, {
-            token: invitationToken,
-            isRegistration
-        }));
+        () => httpGetAsync(apiRoutes.open.getSignupData));
 
     return {
         signupData: qr.data,
@@ -77,7 +73,7 @@ export const useRenewUserSessionPooling = () => {
 
     const { isSuccess } = useQuery(
         ['renewUserSession'],
-        () => httpGetAsync("renew-user-session"), {
+        () => httpGetAsync(apiRoutes.open.renewUserSession), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: refreshTokenRefreshIntervalInMs,

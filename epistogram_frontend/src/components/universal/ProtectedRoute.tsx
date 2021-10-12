@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/layout';
 import React, { ReactNode, useContext } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
@@ -9,19 +10,31 @@ export const ProtectedRoute = (props: {
     path: string,
     exact?: boolean,
     isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean
-    render: () => ReactNode
+    render: () => ReactNode,
+    ignoreAppAccessProtection?: boolean
 }) => {
 
     const authState = useContext(AuthenticationStateContext);
     const user = useContext(CurrentUserContext);
-    const { render, ...routeProps } = props;
+    const { render, isAuthorizedToView, ignoreAppAccessProtection, ...routeProps } = props;
 
     if (globalConfig.verboseLogging)
         console.log(`Navigated to protected route '${props.path}'. Authentication state: ${authState}`);
 
-    const handleIsAuthorizedToView = props.isAuthorizedToView
-        ? props.isAuthorizedToView
-        : (activity: UserActivityDTO) => true
+    const handleIsAuthorizedToView = (userActivity: UserActivityDTO) => {
+
+        const externalCheck = isAuthorizedToView
+            ? isAuthorizedToView(userActivity)
+            : true;
+
+        if (!externalCheck)
+            return false;
+
+        if (ignoreAppAccessProtection)
+            return true;
+
+        return userActivity.canAccessApplication;
+    }
 
     return (
         <Route
@@ -48,8 +61,8 @@ export const ProtectedRoute = (props: {
                 // check authorization 
                 if (!handleIsAuthorizedToView(user!.userActivity)) {
 
-                    console.log("Forbidden, redirecting...");
-                    return <Redirect to={applicationRoutes.loginRoute.route} />
+                    console.log("Forbidden.");
+                    return <Box>Forbidden.</Box>
                 }
 
                 return render();

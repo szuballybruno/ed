@@ -18,8 +18,7 @@ export const MainRouting = () => {
     return <Switch>
 
         {/* unprotected paths  */}
-        <Route path={applicationRoutes.loginRoute.route} component={withRouter(LoginScreen)} />
-        <Route path={applicationRoutes.signupRoute.route} component={withRouter(SignupPage)} />
+        <Route path={applicationRoutes.loginRoute.route} component={LoginScreen} />
         <Route path={applicationRoutes.setNewPasswordRoute.route} component={SetNewPasswordPage} />
         <Route path={applicationRoutes.registrationRoute.route} component={RegistrationPage} />
 
@@ -27,6 +26,11 @@ export const MainRouting = () => {
         <ProtectedRoute
             path="/watch/:descriptorCode"
             render={() => <PlayerPage />} />
+
+        <ProtectedRoute
+            path={applicationRoutes.signupRoute.route}
+            render={() => <SignupPage />}
+            ignoreAppAccessProtection={true} />
 
         <ProtectedRoute
             path={applicationRoutes.administrationRoute.route}

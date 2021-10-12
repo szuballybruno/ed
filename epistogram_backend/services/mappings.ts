@@ -48,7 +48,6 @@ export const toUserDTO = (user: User) => {
         firstName: user.firstName,
         lastName: user.lastName,
         jobTitle: user.jobTitle,
-        isActive: user.isActive,
         email: user.email,
         phoneNumber: user.phoneNumber,
         name: `${user.lastName} ${user.firstName}`,
@@ -75,6 +74,7 @@ export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
         canSetInvitedUserOrganization: userRightsView.canSetInvitedUserOrganization,
         canAccessAdministration: userRightsView.canAccessAdministration,
         canAccessCourseAdministration: userRightsView.canAccessCourseAdministration,
+        canAccessApplication: userRightsView.canAccessApplication
     } as UserActivityDTO;
 }
 

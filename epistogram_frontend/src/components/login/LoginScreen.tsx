@@ -6,7 +6,7 @@ import { useNavigation } from "../../services/navigatior";
 import { useShowErrorDialog } from "../../services/notifications";
 import { useLogInUser } from "../../services/openEndpointService";
 import SingleInput from "../administration/universal/singleInput/SingleInput";
-import { AuthenticationStateContext, RefetchUserFunctionContext } from "../HOC/AuthenticationFrame";
+import { AuthenticationStateContext, CurrentUserContext, RefetchUserFunctionContext } from "../HOC/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from './loginScreen.module.scss';
 
@@ -21,6 +21,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
     const refetchUser = useContext(RefetchUserFunctionContext);
+    const user = useContext(CurrentUserContext);
 
     const handleLoginUserAsync = async () => {
 
@@ -32,8 +33,17 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
     // and navigate to home page if athenticated
     useEffect(() => {
 
-        if (authState === "authenticated")
-            navigate(applicationRoutes.homeRoute.route);
+        if (authState === "authenticated") {
+
+            if (user!.userActivity.canAccessApplication) {
+
+                navigate(applicationRoutes.homeRoute.route);
+            }
+            else {
+
+                navigate(applicationRoutes.signupRoute.route);
+            }
+        }
     }, [authState]);
 
     // watch for login call errors 

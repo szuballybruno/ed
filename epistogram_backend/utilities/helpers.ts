@@ -1,31 +1,45 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
 import { log, logError } from "../services/misc/logger";
 
-export const getAsyncActionHandler = (action: (req: Request, res: Response) => Promise<any>) => {
+export const getAsyncActionHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
 
-    return (req: Request, res: Response) => {
+    const wrapperFunction = (req: Request, res: Response, next: NextFunction) => {
 
-        handleAsyncAction(req, res, action);
+        wrappedAction(req, res, next)
+            .then((returnValue: any) => respond(res, 200, returnValue))
+            .catch((error: any) => {
+
+                logError("Async action error: " + error.message);
+
+                respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
+            });
     }
+
+    return wrapperFunction;
+}
+
+export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
+
+    const wrapperFunction = (req: Request, res: Response, next: NextFunction) => {
+
+        wrappedAction(req, res, next)
+            .then(() => next())
+            .catch((error: any) => {
+
+                logError("Middleware error: " + error.message);
+
+                respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
+            });
+    }
+
+    return wrapperFunction;
 }
 
 export function replaceAll(str: string, find: string, replace: string) {
     return str.replace(new RegExp(find, 'g'), replace);
-}
-
-export const handleAsyncAction = (req: Request, res: Response, action: (req: Request, res: Response) => Promise<any>) => {
-
-    action(req, res)
-        .then((returnValue: any) => respond(res, 200, returnValue))
-        .catch((error: any) => {
-
-            logError(error);
-            respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
-            // next(error);
-        });
 }
 
 const respondError = (res: Response, msg: string, type: ErrorType) => {
