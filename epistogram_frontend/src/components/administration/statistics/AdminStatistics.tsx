@@ -326,6 +326,7 @@ const AdminStatistics = () => {
                                 fill: false,
                                 backgroundColor: "#067daf",
                                 borderColor: "#067daf",
+                                //@ts-ignore
                                 lineTension: 0.5,
                                 data: [3, 8, 19, 13, 4, 8, 2],
                             }, {
@@ -333,12 +334,14 @@ const AdminStatistics = () => {
                                 fill: false,
                                 backgroundColor: "#d9617d",
                                 borderColor: "#D9617D",
+                                //@ts-ignore
                                 lineTension: 0.5,
                                 data: [1, 5, 8, 3, 3, 4, 7],
                             }, {
                                 label: 'Kiosztásra került feladatok száma',
                                 backgroundColor: "#7DE8B2FF",
                                 borderColor: "#7DE8B2FF",
+                                //@ts-ignore
                                 lineTension: 0.5,
                                 data: [5, 22, 8, 2, 14, 1, 0],
                                 fill: false,
@@ -346,6 +349,7 @@ const AdminStatistics = () => {
                                 label: 'Beadott feladatok száma',
                                 backgroundColor: "#E8BD7DFF",
                                 borderColor: "#E8BD7DFF",
+                                //@ts-ignore
                                 lineTension: 0.5,
                                 data: [5, 9, 4, 24, 18, 8, 7],
                                 fill: false,
