@@ -3,6 +3,7 @@ import classes from "./statistics.module.scss"
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { Bar, Line, Pie, Scatter } from "react-chartjs-2";
 import { LearningStatisticsSeciton } from '../../learningStatistics/LearningStatisticsSeciton';
+import {getAssetUrl} from "../../../frontendHelpers";
 
 
 const AdminStatistics = () => {
@@ -92,14 +93,14 @@ const AdminStatistics = () => {
     return (
         <div className={classes.statisticsOuterWrapper}>
             <LearningStatisticsSeciton title={"Leggyakoribb adatok"}>
-                <StatisticsCard suffix={"%"} value={"95"} title={"Kurzus teljesítési ráta"} />
-                <StatisticsCard suffix={"perc"} value={"38"} title={"Átlagosan eltöltött idő/belépés"} />
-                <StatisticsCard suffix={"óra"} value={"3,15"} title={"Átlagos tanulással töltött idő/hét"} />
-                <StatisticsCard suffix={"%"} value={"70"} title={"Belépési arány a héten"} />
-                <StatisticsCard suffix={"%"} value={"54"} title={"Teljesítés a vizsgákon"} />
-                <StatisticsCard suffix={"%"} value={"80"} title={"Átlagos fókusztartás"} />
-                <StatisticsCard suffix={"%"} value={"3"} title={"Felejtési görbe javulása"} />
-                <StatisticsCard suffix={"pont"} value={"8.5"} title={"Munkavállalói feedback"} />
+                <StatisticsCard suffix={"%"} value={"95"} title={"Kurzus teljesítési ráta"} iconPath={ getAssetUrl("company_statistics_icons/course_progress_rate.svg")} />
+                <StatisticsCard suffix={"perc"} value={"38"} title={"Átlagosan eltöltött idő/belépés"} iconPath={ getAssetUrl("company_statistics_icons/spent_time_login.svg")} />
+                <StatisticsCard suffix={"óra"} value={"3,15"} title={"Átlagos tanulással töltött idő/hét"} iconPath={ getAssetUrl("company_statistics_icons/spent_time_learning_week.svg")} />
+                <StatisticsCard suffix={"%"} value={"70"} title={"Belépési arány a héten"} iconPath={ getAssetUrl("company_statistics_icons/login_ratio_week.svg")} />
+                <StatisticsCard suffix={"%"} value={"54"} title={"Teljesítés a vizsgákon"} iconPath={ getAssetUrl("company_statistics_icons/exam_progress.svg")} />
+                <StatisticsCard suffix={"%"} value={"80"} title={"Átlagos fókusztartás"} iconPath={ getAssetUrl("company_statistics_icons/focus.svg")} />
+                <StatisticsCard suffix={"%"} value={"3"} title={"Felejtési görbe javulása"} iconPath={ getAssetUrl("company_statistics_icons/knowledge_graph.svg")} />
+                <StatisticsCard suffix={"pont"} value={"8.5"} title={"Munkavállalói feedback"} iconPath={ getAssetUrl("company_statistics_icons/workers_feedback.svg")} />
             </LearningStatisticsSeciton>
 
             <LearningStatisticsSeciton title={"Grafikonok"}>

@@ -22,6 +22,8 @@ import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
 import { EpistoButton } from "../universal/EpistoButton";
 import { TimeoutFrame, useTimeoutFrameLogic } from "../universal/TimeoutFrame";
 import { useNavigation } from "../../services/navigatior";
+import {VideoContent} from "./description/VideoContent";
+import Comments from "./description/Comments";
 
 export const WatchView = (props: {
     video: VideoDTO,
@@ -53,7 +55,7 @@ export const WatchView = (props: {
 
     const { questions } = video;
     const isDesktopView = useIsDesktopView();
-    const descCommentPaging = usePaging<string>(["Leírás", "Hozzászólások"]);
+    const descCommentPaging = usePaging<string>(["Leírás", "A kurzus segédanyagai", "Hozzászólások"]);
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
@@ -78,7 +80,8 @@ export const WatchView = (props: {
     const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription description={video!.description} />;
-    const VideoComments = () => <Box bg="red" />;
+    const VideoContents = () => <VideoContent />;
+    const VideoComments = () => <Comments />;
 
     const currentQuestionAnswered = answeredQuestionIds
         .some(qid => currentQuestion?.questionId === qid);
@@ -283,6 +286,7 @@ export const WatchView = (props: {
                 index={descCommentPaging.currentIndex}
                 slides={[
                     VideoDescription,
+                    VideoContents,
                     VideoComments
                 ]}></SlidesDisplay>
             <Copyright />

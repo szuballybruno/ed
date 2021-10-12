@@ -117,7 +117,7 @@ const LearningStatistics = () => {
                     value: "12-15",
                     suffix: "óra",
                     title: "Mely az általam leginkább preferált idősáv?",
-                    iconPath: getAssetUrl("statistics_icons/most_preferred_time_range.png"),
+                    iconPath: getAssetUrl("statistics_icons/most_preferred_time_range.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
                         options={chartDefaultOptions}
@@ -127,7 +127,7 @@ const LearningStatistics = () => {
                     value: "9-12",
                     suffix: "óra",
                     title: "Mely a leghatékonyabb idősáv?",
-                    iconPath: getAssetUrl("statistics_icons/most_productive_time_range.png")
+                    iconPath: getAssetUrl("statistics_icons/most_productive_time_range.svg")
                 },
                 {
                     value: "Szerda",
@@ -181,13 +181,13 @@ const LearningStatistics = () => {
                     value: "4",
                     suffix: "db",
                     title: "Kurzusok száma, amelyek legalább 50%-ban készen vannak",
-                    iconPath: getAssetUrl("statistics_icons/half_done_courses.png"),
+                    iconPath: getAssetUrl("statistics_icons/half_done_courses.svg"),
                 },
                 {
                     value: "3",
                     suffix: "db",
                     title: "Befejezett kurzusok száma",
-                    iconPath: getAssetUrl("statistics_icons/completed_courses.png"),
+                    iconPath: getAssetUrl("statistics_icons/completed_courses.svg"),
                 }
             ]
         },
@@ -232,7 +232,7 @@ const LearningStatistics = () => {
                     value: "45",
                     suffix: "%",
                     title: "Fókuszálás a videómegtekintések során",
-                    iconPath: getAssetUrl("statistics_icons/focus_during_videos.png"),
+                    iconPath: getAssetUrl("statistics_icons/focus_during_videos.svg"),
                     large: true,
                     chart: <Bar
                         className={classes.progressLineChart}
@@ -272,7 +272,7 @@ const LearningStatistics = () => {
                     value: "0",
                     suffix: "db",
                     title: "Megszakított feladatok",
-                    iconPath: getAssetUrl("statistics_icons/left_unfinished_tasks.png"),
+                    iconPath: getAssetUrl("statistics_icons/left_unfinished_tasks.svg"),
                 }
             ]
         },
