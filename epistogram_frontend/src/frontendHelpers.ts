@@ -95,7 +95,7 @@ export const usePaging = <T>(
 
     const isLast = currentItemIndex == items.length - 1;
     const isFirst = currentItemIndex == 0;
-    const currentItem = items[currentItemIndex];
+    const currentItem = items[currentItemIndex] as T | null;
 
     const next = () => {
 
@@ -151,7 +151,7 @@ export type PagingType<T> = {
     setItem: (itemIndex: number) => void;
 
     items: T[];
-    currentItem: T;
+    currentItem: T | null;
 
     isLast: boolean;
     isFirst: boolean;

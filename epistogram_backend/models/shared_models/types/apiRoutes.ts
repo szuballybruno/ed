@@ -12,7 +12,8 @@ export const apiRoutes = {
 
     signup: {
         answerSignupQuestion: '/signup/answer-signup-question',
-        getSignupData: "/signup/get-signup-data"
+        getSignupData: "/signup/get-signup-data",
+        getUserPersonalityData: "/signup/get-user-personality-data"
     }
 }
 

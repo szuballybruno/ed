@@ -34,7 +34,8 @@ export const getAuthMiddleware = () => getAsyncMiddlewareHandler(async (req: Req
             "/get-current-user",
             "/renew-user-session",
             apiRoutes.signup.getSignupData,
-            apiRoutes.signup.answerSignupQuestion
+            apiRoutes.signup.answerSignupQuestion,
+            apiRoutes.signup.getUserPersonalityData
         ];
 
         if (!unprotectedRoutes.some(x => x === currentRoutePath))

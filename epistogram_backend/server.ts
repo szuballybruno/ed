@@ -60,7 +60,6 @@ const initializeAsync = async () => {
     // misc
     expressServer.get('/get-current-user', getCurrentUserAction);
     expressServer.get('/get-current-course-item-code', getCurrentCourseItemCode);
-    expressServer.get('/get-user-personality-data', getUserPersonalityDataAction);
     expressServer.get('/misc/get-practise-question', getPractiseQuestionAction);
     expressServer.post('/misc/save-user-data', saveUserDataAction);
     expressServer.post('/misc/request-change-password', requestChangePasswordAction);
@@ -70,6 +69,7 @@ const initializeAsync = async () => {
     // signup
     expressServer.post(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction);
     expressServer.get(apiRoutes.signup.getSignupData, getSignupDataAction);
+    expressServer.get(apiRoutes.signup.getUserPersonalityData, getUserPersonalityDataAction);
 
     // file
     expressServer.post('/file/upload-video', uploadVideoFileAction);

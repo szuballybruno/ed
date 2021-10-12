@@ -20,9 +20,12 @@ export const PersonalityAssessment = (props: FlexProps) => {
         loadingState={personalityDataState}
         onlyRenderIfLoaded
         error={personalityDataError}
+        wrap="wrap"
+        className="whall"
+        overflowY="scroll"
         {...css}>
 
-        <Flex direction="column" flexBasis="50%">
+        <Flex minWidth="300px" direction="column" flexBasis="50%" overflow="scroll">
             <Typography >{descriptions?.category1}</Typography>
             <Typography >{descriptions?.category2}</Typography>
             <Typography >{descriptions?.category3}</Typography>
@@ -30,7 +33,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
             <Typography >{descriptions?.category5}</Typography>
         </Flex>
 
-        <Flex flexBasis="50%">
+        <Flex minWidth="300px" height="100%" flexBasis="50%" overflow="hidden">
             <PersonalityChart data={personalityData?.chartData ?? null}></PersonalityChart>
         </Flex>
     </LoadingFrame>

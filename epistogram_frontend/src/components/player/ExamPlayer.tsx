@@ -1,12 +1,7 @@
-import { useState } from "react";
 import { getAssetUrl, usePaging } from "../../frontendHelpers";
-import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
-import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
-import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
-import { useSaveExamAnswer } from "../../services/examService";
 import { ExamResults } from "../exam/ExamResults";
-import { QuestionSlides } from "../exam/QuestionSlides";
+import { ExamQuestions } from "../ExamQuestions";
 import { SignupWrapper } from "../signup/SignupWrapper";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 
@@ -21,37 +16,10 @@ export const ExamPlayer = (props: {
         setIsExamInProgress,
         answerSessionId,
     } = props;
-    const { questions } = exam;
+
     const slidesState = usePaging([1, 2, 3, 4]);
-    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
 
-    // save exam answer
-    const {
-        saveExamAnswer,
-        saveExamAnswerError,
-        saveExamAnswerState,
-        correctExamAnswerId,
-        clearExamAnswerCache
-    } = useSaveExamAnswer();
-
-    // handle save selected answer
-    const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
-
-        setSelectedAnswerId(questionAnswer.answerId);
-        await saveExamAnswer({
-            answerSessionId: answerSessionId,
-            answerId: questionAnswer.answerId,
-            questionId: questionAnswer.questionId
-        });
-    }
-
-    const clearAnswerCache = () => {
-
-        clearExamAnswerCache();
-        setSelectedAnswerId(null);
-    }
-
-    const finishExam = () => {
+    const handleExamFinished = () => {
 
         setIsExamInProgress(false);
         slidesState.next();
@@ -70,14 +38,10 @@ export const ExamPlayer = (props: {
         nextButtonTitle="Kezdés">
     </SignupWrapper>
 
-    const QuestionnaireSlide = () => <QuestionSlides
-        clearAnswerCache={clearAnswerCache}
-        upperTitle={exam.title}
-        onAnswerSelected={handleSaveSelectedAnswerAsync}
-        onNextOverNavigation={finishExam}
-        getSelectedAnswerId={() => selectedAnswerId}
-        getCorrectAnswerId={() => correctExamAnswerId}
-        questions={questions} />
+    const QuestionnaireSlide = () => <ExamQuestions
+        answerSessionId={answerSessionId}
+        questions={exam.questions}
+        onExamFinished={handleExamFinished} />
 
     const ResultsSlide = () =>
         <ExamResults
@@ -91,17 +55,11 @@ export const ExamPlayer = (props: {
     ];
 
     return (
-        <LoadingFrame
-            className="whall"
-            loadingState={saveExamAnswerState}
-            error={saveExamAnswerError}
-            flex="1">
 
-            <SlidesDisplay
-                flex="1"
-                height="100%"
-                slides={slides}
-                index={slidesState.currentIndex} />
-        </LoadingFrame>
+        <SlidesDisplay
+            flex="1"
+            height="100%"
+            slides={slides}
+            index={slidesState.currentIndex} />
     );
 }

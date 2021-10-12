@@ -1,13 +1,13 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
 import { Button, Divider, Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
-import { hasValue, isString } from "../../frontendHelpers";
+import { hasValue, isString, useIsDesktopView } from "../../frontendHelpers";
 import { EpistoHeader } from "../administration/universal/EpistoHeader";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from "./signupWrapper.module.scss";
 
 export const SignupWrapper = (props: {
-    children: ReactNode,
+    children?: ReactNode,
     nextButtonTitle?: string
     currentImage?: string,
 
@@ -38,76 +38,109 @@ export const SignupWrapper = (props: {
     const children = props.children;
     const onNext = props.onNext;
 
+    const isDesktop = useIsDesktopView();
+
     return <Flex id="signupWrapperRoot" p="20px" direction="column" width="100%" height="100%">
 
         {/* header */}
         <Flex id="header" direction="column">
 
-            {/* upper title */}
-            <Flex id="titleAligner" className="dividerBorderBottom" height="40px" justify="start">
-                {hasUpperTitle &&
-                    <Typography
-                        variant={"overline"}>{upperTitle}
-                    </Typography>}
+            {/* header top */}
+            <Flex
+                id="titleAligner"
+                className="dividerBorderBottom"
+                height="40px"
+                justify="space-between">
+
+                <Box>
+                    {hasUpperTitle &&
+                        <Typography
+                            variant={"overline"}>{upperTitle}
+                        </Typography>}
+                </Box>
+
+                {props.upperComponent}
             </Flex>
 
-            {/* back button */}
+            {/* header bottom */}
             {canNavPrevious && <div className={classes.backAndProgress}>
-                <Button onClick={() => onNavPrevious!()}>
+                <EpistoButton onClick={() => onNavPrevious!()} variant="outlined" style={{ marginTop: "10px" }}>
                     Vissza
-                </Button>
-                {props.upperComponent}
+                </EpistoButton>
             </div>}
         </Flex>
 
-        {/* content */}
+        {/* content aligner */}
         <Flex
             id="contentAligner"
             align="center"
             justify="center"
             flex="1">
 
-            {/* image */}
-            {hasImage && <Image width="250px" height="250px" src={currentImage!} mr="20px"></Image>}
-
-            {/* question content */}
+            {/* content */}
             <Flex
                 id="content"
-                direction="column"
-                minWidth="300px">
+                wrap="wrap"
+                justify="center"
+                align="center"
+                width="90vw"
+                maxWidth="850px">
 
-                {/* title */}
-                {hasTitle && <EpistoHeader
-                    variant="strongSub"
-                    m="10px"
-                    alignSelf={hasImage ? "flex-start" : "center"}
-                    text={title!}>
-                </EpistoHeader>}
+                {/* image */}
+                {hasImage && <Flex
+                    flex="4"
+                    minWidth="300px"
+                    justify={isDesktop ? "flex-end" : "center"}>
+                    <Image
+                        height="20vh"
+                        src={currentImage!}
+                        mr="20px"></Image>
+                </Flex>}
 
-                {/* description */}
-                {hasDescription && <Box maxWidth="400px">
-                    {
-                        isString(description!)
-                            ? <Typography>
-                                {description!}
-                            </Typography>
-                            : description
-                    }
-                </Box>}
+                {/* question content */}
+                <Flex
+                    id="content"
+                    flex="5"
+                    minWidth="300px"
+                    direction="column">
 
-                {/* content */}
-                {children}
+                    {/* title */}
+                    {hasTitle && <EpistoHeader
+                        variant="strongSub"
+                        m="10px 10px 10px 0px"
+                        alignSelf={hasImage ? "flex-start" : "center"}
+                        text={title!}>
+                    </EpistoHeader>}
 
-                {/* next button */}
-                {onNext && <EpistoButton
-                    variant={"outlined"}
-                    onClick={() => onNext!()}
-                    style={{
-                        marginTop: "20px",
-                        alignSelf: hasImage ? "flex-start" : "center"
-                    }}>
-                    {nextButtonTitle}
-                </EpistoButton>}
+                    {/* description */}
+                    {hasDescription && <Box maxWidth="400px">
+                        {
+                            isString(description!)
+                                ? <Typography>
+                                    {description!}
+                                </Typography>
+                                : description
+                        }
+                    </Box>}
+
+                    {/* content */}
+                    {children}
+
+                    {/* next button */}
+                    {onNext && <EpistoButton
+                        variant={"outlined"}
+                        onClick={() => onNext!()}
+                        style={{
+                            marginTop: "20px",
+                            alignSelf: isDesktop
+                                ? hasImage
+                                    ? "flex-start"
+                                    : "center"
+                                : "flex-end"
+                        }}>
+                        {nextButtonTitle}
+                    </EpistoButton>}
+                </Flex>
             </Flex>
         </Flex>
 

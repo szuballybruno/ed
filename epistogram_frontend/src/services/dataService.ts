@@ -5,6 +5,7 @@ import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
+import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { httpGetAsync, usePostData, usePostDataUnsafe } from "./httpClient";
 
@@ -115,7 +116,7 @@ export const usePersonalityData = () => {
 
     const qr = useReactQuery<PersonalityAssessmentDTO>(
         ["usePersonalityData"],
-        () => httpGetAsync("/get-user-personality-data"));
+        () => httpGetAsync(apiRoutes.signup.getUserPersonalityData));
 
     return {
         personalityData: qr.data,

@@ -1,34 +1,20 @@
 import { Typography } from "@mui/material";
-import { useState } from "react";
 import { usePaging } from "../../frontendHelpers";
-import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
+import { useShowErrorDialog } from "../../services/notifications";
 import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
 import { SignupRadioGroup } from "../signup/SignupRadioGroup";
 import { SignupWrapper } from "../signup/SignupWrapper";
 
-export const QuestionSlides = (props: {
-    onAnswerSelected: (questionAnswer: QuestionAnswerDTO) => void,
+export const useQuestionSlidesState = (
+    questions: QuestionDTO[],
+    answerQuestionAsync: (answerId: number, questionId: number) => Promise<void>,
+    getSelectedAnswerId: (questionId: number) => number | null,
+    correctAnswerId: number | null,
+    upperTitle?: string,
     onPrevoiusOverNavigation?: () => void,
     onNextOverNavigation?: () => void,
-    upperTitle?: string,
-    questions: QuestionDTO[],
-    getSelectedAnswerId: (questionId: number) => number | null,
-    getCorrectAnswerId?: (questionId: number) => number | null,
-    clearAnswerCache?: () => void,
-}) => {
-
-    const {
-        onNextOverNavigation,
-        onPrevoiusOverNavigation,
-        onAnswerSelected,
-        getSelectedAnswerId,
-        getCorrectAnswerId,
-        clearAnswerCache,
-        upperTitle,
-        questions
-    } = props;
-
+    clearAnswerCache?: () => void,) => {
 
     // questionnaire 
     const questionnaireState = usePaging(questions, onPrevoiusOverNavigation, onNextOverNavigation);
@@ -36,20 +22,7 @@ export const QuestionSlides = (props: {
     const questionnaireProgressbarValue = (questionnaireState.currentIndex / questions.length) * 100;
     const questionnaireProgressLabel = `${questionnaireState.currentIndex + 1}/${questions.length}`;
 
-    const handleAnswerSelectedAsync = async (answerId: number) => {
-
-        const questionAnswerDTO = {
-            answerId,
-            questionId: currentQuestion.questionId
-        } as QuestionAnswerDTO;
-
-        onAnswerSelected(questionAnswerDTO);
-    }
-
-    const selectedAnswerId = getSelectedAnswerId(currentQuestion.questionId);
-    const correctAnswerId = getCorrectAnswerId
-        ? getCorrectAnswerId(currentQuestion.questionId)
-        : null;
+    const selectedAnswerId = currentQuestion ? getSelectedAnswerId(currentQuestion.questionId) : null;
 
     const handleNext = () => {
 
@@ -59,20 +32,66 @@ export const QuestionSlides = (props: {
         questionnaireState.next();
     }
 
-    return <SignupWrapper
-        title={currentQuestion.questionText}
-        upperTitle={upperTitle}
-        nextButtonTitle="Kovetkezo"
-        onNext={selectedAnswerId ? handleNext : undefined}
-        currentImage={currentQuestion.imageUrl!}
-        bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
-        upperComponent={<Typography>{questionnaireProgressLabel}</Typography>}>
+    return {
+        currentQuestion,
+        upperTitle,
+        selectedAnswerId,
+        handleNext,
+        questionnaireState,
+        questionnaireProgressLabel,
+        questionnaireProgressbarValue,
+        answerQuestionAsync,
+        correctAnswerId
+    }
+}
 
-        <SignupRadioGroup
-            answers={currentQuestion.answers}
-            onAnswerSelected={x => handleAnswerSelectedAsync(x)}
-            selectedAnswerId={selectedAnswerId}
-            correctAnswerId={correctAnswerId}
-        />
-    </SignupWrapper>
+export type QuestionSlidesStateType = ReturnType<typeof useQuestionSlidesState>;
+
+export const QuestionSlides = (props: { state: QuestionSlidesStateType }) => {
+
+    const state = props.state;
+    const showError = useShowErrorDialog();
+
+    const {
+        currentQuestion,
+        upperTitle,
+        selectedAnswerId,
+        handleNext,
+        questionnaireState,
+        questionnaireProgressLabel,
+        questionnaireProgressbarValue,
+        answerQuestionAsync,
+        correctAnswerId
+    } = state;
+
+    const handleAnswerSelectedAsync = async (answerId: number) => {
+
+        try {
+
+            await answerQuestionAsync(answerId, currentQuestion!.questionId);
+            handleNext();
+        } catch (e) {
+
+            showError(e);
+        }
+    }
+
+    return <>
+        {currentQuestion && <SignupWrapper
+            title={currentQuestion!.questionText}
+            upperTitle={upperTitle}
+            nextButtonTitle="Kovetkezo"
+            onNext={selectedAnswerId ? handleNext : undefined}
+            currentImage={currentQuestion!.imageUrl!}
+            onNavPrevious={questionnaireState.previous}
+            bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
+            upperComponent={<Typography>{questionnaireProgressLabel}</Typography>}>
+
+            <SignupRadioGroup
+                answers={currentQuestion!.answers}
+                onAnswerSelected={handleAnswerSelectedAsync}
+                selectedAnswerId={selectedAnswerId}
+                correctAnswerId={correctAnswerId} />
+        </SignupWrapper>}
+    </>
 }

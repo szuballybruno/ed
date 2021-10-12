@@ -1,18 +1,13 @@
 import React from 'react';
 import { globalConfig } from "../../configuration/config";
 import { usePaging } from "../../frontendHelpers";
-import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
-import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";
-import { useNavigation } from "../../services/navigatior";
-import { useShowErrorDialog } from "../../services/notifications";
-import { useAnswerSignupQuestion, useSignupData } from '../../services/openEndpointService';
-import { QuestionSlides } from "../exam/QuestionSlides";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
+import { SignupQuestions } from '../SignupQuestions';
 import { EpistoButton } from '../universal/EpistoButton';
+import { PersonalityAssessment } from '../universal/PersonalityAssessment';
 import { SlidesDisplay } from "../universal/SlidesDisplay";
-import { useRegistrationFinalizationFormState } from "./SignupFormLogic";
 import { SignupWrapper } from "./SignupWrapper";
 
 const images = [
@@ -28,47 +23,10 @@ const images = [
 
 export const SignupPage = () => {
 
-    // input
-    const { signupData, signupDataError, signupDataStatus, refetchSignupData } = useSignupData();
-    const questions = signupData?.questions ?? [];
-    const questionAnswers = signupData?.questionAnswers ?? [];
-
-    // util
-    const { navigate } = useNavigation();
-    const showErrorDialog = useShowErrorDialog();
-    const regFormState = useRegistrationFinalizationFormState();
-
     // slides
     const summaryImageUrl = images[6];
     const gereetImageUrl = images[0];
     const slidesState = usePaging([1, 2, 3, 4]);
-
-    // save questionnaire answers
-    const { saveAnswersAsync, saveAnswersStatus } = useAnswerSignupQuestion();
-
-    const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
-
-        const dto = {
-            questionAnswer: questionAnswer
-        } as SaveQuestionAnswerDTO;
-
-        try {
-            await saveAnswersAsync(dto);
-            await refetchSignupData();
-        }
-        catch (e) {
-
-            showErrorDialog(e);
-        }
-    }
-
-    const getSelectedAnswerId = (questionId: number) => {
-
-        const currentQuestionSelectedAnswer = questionAnswers
-            .filter(x => x.questionId == questionId)[0];
-
-        return currentQuestionSelectedAnswer?.answerId as number | null;
-    }
 
     const GreetSlide = () => <SignupWrapper
         title="Regisztráció"
@@ -79,22 +37,17 @@ export const SignupPage = () => {
         nextButtonTitle="Tovabb">
     </SignupWrapper>
 
-    const QuestionnaireSlide = () => <QuestionSlides
-        onAnswerSelected={handleSaveSelectedAnswerAsync}
+    const QuestionnaireSlide = () => <SignupQuestions
         onNextOverNavigation={slidesState.next}
-        onPrevoiusOverNavigation={slidesState.previous}
-        getSelectedAnswerId={getSelectedAnswerId}
-        questions={questions} />
+        onPrevoiusOverNavigation={slidesState.previous} />
 
     const SummarySlide = () => <SignupWrapper
         title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
         description={"Már csak egy-két adatra van szükségünk, hogy elkezdhesd a rendszer használatát"}
         upperTitle="Összegzés"
-        nextButtonTitle="Folytatás"
-        onNavPrevious={() => slidesState.previous()}
-        onNext={() => slidesState.next()}
-        currentImage={summaryImageUrl}>
-        <EpistoButton>continuer to app</EpistoButton>
+        onNavPrevious={() => slidesState.previous()}>
+
+        <PersonalityAssessment height="50vh" mt="20px"></PersonalityAssessment>
     </SignupWrapper>
 
     const slides = [
@@ -111,12 +64,11 @@ export const SignupPage = () => {
             <Navbar hideLinks={true} />
 
             <ContentWrapper>
-                <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} error={signupDataError} flex="1">
-                    <SlidesDisplay
-                        flex="1"
-                        slides={slides}
-                        index={slidesState.currentIndex} />
-                </LoadingFrame>
+                <SlidesDisplay
+                    alwaysRender={true}
+                    flex="1"
+                    slides={slides}
+                    index={slidesState.currentIndex} />
             </ContentWrapper>
         </MainWrapper >
     );
