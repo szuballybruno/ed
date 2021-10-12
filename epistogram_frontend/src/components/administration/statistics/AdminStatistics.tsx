@@ -1,38 +1,49 @@
 import React from 'react';
 import classes from "./statistics.module.scss"
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import { Bar, Line, Pie, Scatter } from "react-chartjs-2";
+import {Bar, Doughnut, Line, Pie, Radar, Scatter} from "react-chartjs-2";
 import { LearningStatisticsSeciton } from '../../learningStatistics/LearningStatisticsSeciton';
 import {getAssetUrl} from "../../../frontendHelpers";
 
 
 const AdminStatistics = () => {
+    function getColors(length: number){
+        let pallet = [
+            "#7dabe8",
+            "#a8c0e7",
+            "#478dea",
+            "#518fe7",
+            "#95baec",
+            "#6199e3",
+            "#bfcde0",
+        ];
+        let colors: string[] = [];
 
-    const data = {
-        labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
+        for(let i = 0; i < length; i++) {
+            colors.push(pallet[i % pallet.length]);
+        }
+
+        return colors;
+    }
+    const dadata1 = {
+        labels: ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"],
         datasets: [
             {
-                label: 'Unfilled',
+                label: 'Múlt hét',
                 fill: false,
                 backgroundColor: "#067daf",
                 borderColor: "#067daf",
-                data: [57, 26, 31, -42, 34],
-            }, {
-                label: 'Dashed',
+                data: [83, 120, 140, 170, 30, 20, 10],
+            },{
+                label: 'Jelenlegi hét',
                 fill: false,
-                backgroundColor: "#d9617d",
-                borderColor: "#D9617DFF",
-                borderDash: [5, 5],
-                data: [5, -59, 72, 32, -19, 23],
-            }, {
-                label: 'Filled',
-                backgroundColor: "#7DE8B2FF",
-                borderColor: "#7DE8B2FF",
-                data: [12, 93, -58, 42, -89, 24],
-                fill: true,
+                backgroundColor: "#067daf",
+                borderColor: "#067daf",
+                data: [95, 110, 165, 142, 70, 30, 90],
             }
         ]
     };
+
 
     const data2 = {
         labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
@@ -105,12 +116,12 @@ const AdminStatistics = () => {
 
             <LearningStatisticsSeciton title={"Grafikonok"}>
                 <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
-                    <Line options={{
+                    <Bar options={{
                         responsive: true,
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Chart.js Line Chart'
+                                text: 'Legaktívabb napok'
                             },
                         },
                         interaction: {
@@ -122,127 +133,227 @@ const AdminStatistics = () => {
                                 display: true,
                                 title: {
                                     display: true,
-                                    text: 'Month'
+                                    text: 'A hét napjai'
                                 }
                             },
                             y: {
                                 display: true,
+                                max: 180,
                                 title: {
                                     display: true,
-                                    text: 'Value'
+                                    text: 'Belépések száma'
                                 }
                             }
                         }
-                    }} data={data} /*type={"line"}*/ />
+                    }} data={dadata1} />
                 </StatisticsCard>
+
+
                 <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
-                    <Bar data={data2 as any} />
-                </StatisticsCard>
-                <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
-                    <Line options={{
-                        interaction: {
-                            intersect: false
+                    <Pie
+                        options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Aktivitás átlagos felosztása'
+                            },
                         },
-                        scales: {
-                            x: {
-                                type: 'linear'
-                            }
-                        }
-                    }} data={data5} /*type={"line"}*/ />
-                </StatisticsCard>
-                <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
-                    <Pie options={{ responsive: true, maintainAspectRatio: false }} /*type={"pie"}*/ data={{
-                        labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
+                    }} /*type={"pie"}*/ data={{
+                        labels: ['Videók megtekintése', 'Kérdések megválaszolása', 'Vizsgakitöltés', 'Nincs tevékenység'],
                         datasets: [
                             {
-                                label: 'Dataset 1',
-                                data: [5, 9, 13, 2, 6, 8],
+                                label: 'Aktivitás átlagos felosztása',
+                                data: [56, 5, 19, 20],
                                 backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
                             }
                         ]
                     }} />
                 </StatisticsCard>
+
+
                 <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
-                    <Scatter options={{
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
+                    <Radar
+                        options={{
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Felhasználók átlagos tanulási stílusa'
+                                },
+                                legend: {
+                                    display: false
+                                }
                             },
-                            title: {
-                                display: true,
-                                text: 'Chart.js Scatter Chart'
+                            scale: {
+                                min: 0,
+                                max: 7
                             }
-                        }
-                    }} /*type={"scatter"}*/ data={{
-                        labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
+
+                        }}
+                        data={{
+                            labels: [
+                                'Egyedüli',
+                                'Hangos kimondás',
+                                'Elméleti',
+                                'Vizuális alapú',
+                                'Analitikus',
+                                'Szociális',
+                                'Térbeli elhelyezés',
+                                'Gyakorlati',
+                                'Audió alapú',
+                                'Kreatív'
+                            ],
+                            datasets: [
+                                {
+                                    data: [5, 4, 5, 5, 3, 5, 5, 5, 4, 5],
+                                    backgroundColor: ["rgba(125,232,178,0.46)", "rgba(125,232,178,0.46)", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"]
+                                }
+                            ]
+                        }} />
+                </StatisticsCard>
+
+
+                <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                    <Doughnut
+                        options={{
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Legnépszerűbb kurzusok'
+                                },
+                            },
+                        }} /*type={"pie"}*/ data={{
+                        labels: ['Excel', 'Word', 'Power Point', 'B2B Sales Masterclass'],
                         datasets: [
                             {
-                                label: 'Unfilled',
-                                backgroundColor: "#067daf",
-                                borderColor: "#067daf",
-                                data: [
-                                    { x: 57, y: 32 },
-                                    { x: 26, y: 31 },
-                                    { x: -42, y: 34 },
-                                    { x: 19, y: 28 },
-                                    { x: 77, y: 40 }
-                                ],
-                            }, {
-                                label: 'Dashed',
-                                backgroundColor: "#d9617d",
-                                borderColor: "#D9617DFF",
-                                data: [
-                                    { y: 77, x: 40 },
-                                    { y: 26, x: 31 },
-                                    { y: -42, x: 34 },
-                                    { x: 57, y: 32 },
-                                    { x: 19, y: 28 },
-                                ],
+                                label: 'Aktivitás átlagos felosztása',
+                                data: [34, 19, 15, 32],
+                                backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
                             }
                         ]
                     }} />
                 </StatisticsCard>
+
                 <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
                     <Bar options={{
-                        indexAxis: 'y',
-                        // Elements options apply to all of the options unless overridden in a dataset
-                        // In this case, we are setting the border of each horizontal bar to be 2px wide
-                        elements: {
-                            bar: {
-                                borderWidth: 2,
-                            }
-                        },
                         responsive: true,
                         plugins: {
-                            legend: {
-                                position: 'right',
-                            },
                             title: {
                                 display: true,
-                                text: 'Chart.js Horizontal Bar Chart'
+                                text: 'Legaktívabb idősávok'
+                            },
+                            legend: {
+                                display: false
+                            }
+                        },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: false,
+                                    text: 'A hét napjai'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                max: 360,
+                                title: {
+                                    display: true,
+                                    text: 'Belépések száma'
+                                }
                             }
                         }
-                    }} /*type={"bar"}*/ data={{
-                        labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
+                    }} data={{
+                        labels: ["6:00", "9:00", "12:00", "15:00", "17:00", "19:00", "21:00"],
                         datasets: [
                             {
-                                label: 'Unfilled',
+                                label: 'Múlt hét',
                                 fill: false,
-                                backgroundColor: "#067daf",
+                                backgroundColor: getColors(7),
                                 borderColor: "#067daf",
-                                data: [57, 26, 31, -42, 34],
-                            }, {
-                                label: 'Dashed',
-                                fill: false,
-                                backgroundColor: "#d9617d",
-                                borderColor: "#D9617DFF",
-                                borderDash: [5, 5],
-                                data: [5, -59, 72, 32, -19, 23],
+                                data: [95, 185, 290, 240, 70, 210, 30],
                             }
                         ]
                     }} />
                 </StatisticsCard>
+
+
+                <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                    <Line options={{
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Kiosztott feladatok megoldása'
+                            },
+                        },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: false,
+                                    text: 'Month'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                max: 25,
+                                min: 0,
+                                title: {
+                                    display: false,
+                                    text: 'Value'
+                                }
+                            }
+                        }
+                    }} data={{
+                        labels: ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"],
+                        datasets: [
+                            {
+                                label: 'Megoldott feladatok száma',
+                                fill: false,
+                                backgroundColor: "#067daf",
+                                borderColor: "#067daf",
+                                lineTension: 0.5,
+                                data: [3, 8, 19, 13, 4, 8, 2],
+                            }, {
+                                label: 'Elutasított feladatok száma',
+                                fill: false,
+                                backgroundColor: "#d9617d",
+                                borderColor: "#D9617D",
+                                lineTension: 0.5,
+                                data: [1, 5, 8, 3, 3, 4, 7],
+                            }, {
+                                label: 'Kiosztásra került feladatok száma',
+                                backgroundColor: "#7DE8B2FF",
+                                borderColor: "#7DE8B2FF",
+                                lineTension: 0.5,
+                                data: [5, 22, 8, 2, 14, 1, 0],
+                                fill: false,
+                            }, {
+                                label: 'Beadott feladatok száma',
+                                backgroundColor: "#E8BD7DFF",
+                                borderColor: "#E8BD7DFF",
+                                lineTension: 0.5,
+                                data: [5, 9, 4, 24, 18, 8, 7],
+                                fill: false,
+                            }
+                        ]
+                    }} /*type={"line"}*/ />
+                </StatisticsCard>
+
             </LearningStatisticsSeciton>
         </div>
     );
