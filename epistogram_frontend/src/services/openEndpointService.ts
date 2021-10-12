@@ -1,7 +1,9 @@
 import { useQuery } from "react-query";
 import { refreshTokenRefreshIntervalInMs } from "../Environemnt";
 import { useReactQuery } from "../frontendHelpers";
+import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
+import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { httpGetAsync, httpPostAsync, usePostData, usePostDataUnsafe } from "./httpClient";
@@ -15,13 +17,24 @@ export const useSignupData = () => {
 
     const qr = useReactQuery<SignupDataDTO>(
         ['getSignupData'],
-        () => httpGetAsync(apiRoutes.open.getSignupData));
+        () => httpGetAsync(apiRoutes.signup.getSignupData));
 
     return {
         signupData: qr.data,
         signupDataStatus: qr.status,
         signupDataError: qr.error,
         refetchSignupData: qr.refetch
+    };
+}
+
+export const useAnswerSignupQuestion = () => {
+
+    const qr = usePostDataUnsafe<SaveQuestionAnswerDTO, AnswerDTO>(apiRoutes.signup.answerSignupQuestion);
+
+    return {
+        saveAnswersStatus: qr.state,
+        saveAnswersAsync: qr.postDataAsync,
+        correctAnswerId: qr.result?.answerId ?? null
     };
 }
 

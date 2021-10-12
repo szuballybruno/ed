@@ -5,8 +5,7 @@ import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO"
 import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";
 import { useNavigation } from "../../services/navigatior";
 import { useShowErrorDialog } from "../../services/notifications";
-import { useSignupData } from '../../services/openEndpointService';
-import { useAnswerSignupQuestion } from "../../services/signupService";
+import { useAnswerSignupQuestion, useSignupData } from '../../services/openEndpointService';
 import { QuestionSlides } from "../exam/QuestionSlides";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";

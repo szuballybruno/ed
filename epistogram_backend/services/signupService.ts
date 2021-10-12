@@ -157,32 +157,13 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
     }
 }
 
-export const answerSignupQuestionAsync = async (invitationToken: string, questionAnswer: QuestionAnswerDTO) => {
-
-    const userId = await verifyInvitationTokenAsync(invitationToken);
+export const answerSignupQuestionAsync = async (userId: number, questionAnswer: QuestionAnswerDTO) => {
 
     await answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
-
-    // const signupAnswerSession = await staticProvider
-    //     .ormConnection
-    //     .getRepository(AnswerSession)
-    //     .findOneOrFail({
-    //         where: {
-    //             examId: SIGNUP_EXAM_ID,
-    //             userId: userId
-    //         }
-    //     });
-
-    // await answerQuestionAsync(
-    //     signupAnswerSession.id,
-    //     questionAnswer.questionId,
-    //     questionAnswer.answerId,
-    //     true);
 }
 
-export const getSignupDataAsync = async (invitationToken: string, isRegistration: boolean) => {
+export const getSignupDataAsync = async (userId: number) => {
 
-    const userId = await verifyInvitationTokenAsync(invitationToken);
     const questions = await getSignupQuestionsAsync();
     const questionAnswers = await getSignupQuestionAnswersAsync(userId);
 

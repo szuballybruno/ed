@@ -17,7 +17,7 @@ import { getUserCoursesAction } from './api/userCoursesActions';
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
-import { authMiddleware, corsMiddleware } from './services/middlewareService';
+import { getAuthMiddleware, getCORSMiddleware } from './services/middlewareService';
 import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
 import { getAsyncActionHandler } from './utilities/helpers';
@@ -46,16 +46,15 @@ const initializeAsync = async () => {
     // add middlewares
     //
 
-    expressServer.use(corsMiddleware);
+    expressServer.use(getCORSMiddleware());
     expressServer.use(bodyParser.json());
     expressServer.use(fileUpload());
-    expressServer.use(authMiddleware);
+    expressServer.use(getAuthMiddleware());
 
     // open routes
     expressServer.get(apiRoutes.open.renewUserSession, renewUserSessionAction);
     expressServer.post(apiRoutes.open.logoutUser, logOutUserAction);
     expressServer.post(apiRoutes.open.loginUser, getAsyncActionHandler(logInUserAction));
-    expressServer.post(apiRoutes.open.getSignupData, getSignupDataAction);
     expressServer.post(apiRoutes.open.registerUser, registerUserAction);
 
     // misc
@@ -67,6 +66,10 @@ const initializeAsync = async () => {
     expressServer.post('/misc/request-change-password', requestChangePasswordAction);
     expressServer.post('/misc/set-new-password', changePasswordAction);
     expressServer.get('/misc/get-registration-link', getRegistrationLinkAction);
+
+    // signup
+    expressServer.post(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction);
+    expressServer.get(apiRoutes.signup.getSignupData, getSignupDataAction);
 
     // file
     expressServer.post('/file/upload-video', uploadVideoFileAction);
@@ -108,7 +111,6 @@ const initializeAsync = async () => {
     expressServer.get("/exam/get-exam-results", getExamResultsAction);
 
     // question answer
-    expressServer.post('/questions/answer-signup-question', answerSignupQuestionAction);
     expressServer.post("/questions/answer-video-question", answerVideoQuestionAction);
     expressServer.post("/questions/answer-exam-question", answerExamQuestionAction);
     expressServer.post("/questions/answer-practise-question", answerPractiseQuestionAction);

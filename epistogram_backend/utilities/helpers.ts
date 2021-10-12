@@ -12,7 +12,7 @@ export const getAsyncActionHandler = (wrappedAction: (req: Request, res: Respons
             .then((returnValue: any) => respond(res, 200, returnValue))
             .catch((error: any) => {
 
-                logError("Async action error: " + error.message);
+                logError(error);
 
                 respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
             });
@@ -29,7 +29,7 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
             .then(() => next())
             .catch((error: any) => {
 
-                logError("Middleware error: " + error.message);
+                logError(error);
 
                 respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
             });

@@ -4,11 +4,16 @@ export const apiRoutes = {
         renewUserSession: "/open/renew-user-session",
         logoutUser: "/open/logout-user",
         loginUser: "/open/login-user",
-        getSignupData: "/open/get-signup-data",
         registerUser: "/open/register-user"
     },
 
+    misc: {
+    },
 
+    signup: {
+        answerSignupQuestion: '/signup/answer-signup-question',
+        getSignupData: "/signup/get-signup-data"
+    }
 }
 
 export const isOpenRoute = (routePath: string) => {

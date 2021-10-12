@@ -1,14 +1,13 @@
 import cors from 'cors';
 import { Request } from 'express';
-import { isOpenRoute } from '../models/shared_models/types/apiRoutes';
+import { apiRoutes, isOpenRoute } from '../models/shared_models/types/apiRoutes';
 import { staticProvider } from '../staticProvider';
 import { getAsyncMiddlewareHandler, TypedError } from '../utilities/helpers';
 import { getRequestAccessTokenPayload } from './authenticationService';
 import { log } from './misc/logger';
 import { getUserById } from './userService';
-import './utilities/jsExtensions';
 
-export const authMiddleware = getAsyncMiddlewareHandler(async (req: Request) => {
+export const getAuthMiddleware = () => getAsyncMiddlewareHandler(async (req: Request) => {
 
     const currentRoutePath = req.path;
 
@@ -33,17 +32,19 @@ export const authMiddleware = getAsyncMiddlewareHandler(async (req: Request) => 
 
         const unprotectedRoutes = [
             "/get-current-user",
-            "/renew-user-session"
+            "/renew-user-session",
+            apiRoutes.signup.getSignupData,
+            apiRoutes.signup.answerSignupQuestion
         ];
 
         if (!unprotectedRoutes.some(x => x === currentRoutePath))
-            throw new TypedError("User has not proper rights to view the requested resource.", "forbidden");
+            throw new TypedError("User has not proper rights to access the requested resource.", "forbidden");
     }
 
     log(`Request [${currentRoutePath}] is permitted. UserId: ${user.id}`);
 });
 
-export const corsMiddleware = cors({
+export const getCORSMiddleware = () => cors({
     origin: staticProvider.globalConfig.misc.frontendUrl,
     credentials: true,
     allowedHeaders: [

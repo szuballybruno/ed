@@ -132,17 +132,16 @@ export const getOrganizationsAction = (req: Request) => {
 
 export const getSignupDataAction = getAsyncActionHandler((req: Request) => {
 
-    const token = withValueOrBadRequest(req.body.token);
-    const isRegistration = withValueOrBadRequest(req.body.isRegistration);
+    const userId = getUserIdFromRequest(req);
 
-    return getSignupDataAsync(token, isRegistration);
+    return getSignupDataAsync(userId);
 });
 
 export const answerSignupQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
+    const userId = getUserIdFromRequest(req);
     const dto = withValueOrBadRequest(req.body) as SaveQuestionAnswerDTO;
-    const token = withValueOrBadRequest(dto.invitationToken);
     const questionAnswer = withValueOrBadRequest(dto.questionAnswer);
 
-    await answerSignupQuestionAsync(token, questionAnswer);
+    await answerSignupQuestionAsync(userId, questionAnswer);
 });
