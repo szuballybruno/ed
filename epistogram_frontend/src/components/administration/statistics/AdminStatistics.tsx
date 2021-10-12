@@ -187,7 +187,7 @@ const AdminStatistics = () => {
                                     display: false
                                 }
                             },
-                            scale: {
+                            scales: {
                                 min: 0,
                                 max: 7
                             }
