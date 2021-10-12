@@ -7,8 +7,8 @@ export const mockTasks = {
             name: "Elme karbantartása",
             createdBy: "Spengler Manfréd",
             status: "assigned",
-            creationDate: new Date(Date.now()),
-            dueDate: new Date(Date.now()),
+            creationDate: new Date(2021, 8, 27),
+            dueDate: new Date(2021, 10, 15),
             priority: "normal"
         },
         {
@@ -16,8 +16,8 @@ export const mockTasks = {
             name: "Gravitációs normák kisimítása",
             createdBy: "Spengler Manfréd",
             status: "inProgress",
-            creationDate: new Date(Date.now()),
-            dueDate: new Date(Date.now()),
+            creationDate: new Date(2021, 9, 1),
+            dueDate: new Date(2021, 10, 24),
             priority: "important"
         },
         {
@@ -25,8 +25,8 @@ export const mockTasks = {
             name: "Összefoglaló írása az office kurzusból",
             createdBy: "Spengler Manfréd",
             status: "submitted",
-            creationDate: new Date(Date.now()),
-            dueDate: new Date(Date.now()),
+            creationDate: new Date(2021, 9, 10),
+            dueDate: new Date(2021, 10, 30),
             priority: "urgent"
         },
         {
@@ -34,8 +34,8 @@ export const mockTasks = {
             name: "Új barátok szerzése",
             createdBy: "Spengler Manfréd",
             status: "rejected",
-            creationDate: new Date(Date.now()),
-            dueDate: new Date(Date.now()),
+            creationDate: new Date(2021, 9, 2),
+            dueDate: new Date(2021, 11, 3),
             priority: "normal"
         },
         {
@@ -43,8 +43,8 @@ export const mockTasks = {
             name: "Epistogram kihasználása, maximális szinten",
             createdBy: "Spengler Manfréd",
             status: "completed",
-            creationDate: new Date(Date.now()),
-            dueDate: new Date(Date.now()),
+            creationDate: new Date(2021, 9, 6),
+            dueDate: new Date(2021, 11, 7),
             priority: "normal"
         }
     ]

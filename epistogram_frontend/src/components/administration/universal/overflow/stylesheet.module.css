@@ -1,0 +1,34 @@
+.navbarButton {
+  display: flex;
+  flex: 0 0 auto;
+  margin: 10px;
+}
+
+.visible {
+  order: 0;
+  visibility: visible;
+  opacity: 1
+}
+
+.inVisible {
+  order: 100;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.toolbarWrapper {
+  display: flex;
+  overflow: hidden;
+  padding: 0 20px;
+  width: 75%;
+}
+
+.overflowStyle {
+  order: 99;
+  position: sticky;
+  right: 0;
+}
+
+.inOverflowMenu:hover {
+  background-color: transparent;
+}

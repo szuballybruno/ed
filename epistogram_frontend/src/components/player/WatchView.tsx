@@ -71,7 +71,7 @@ export const WatchView = (props: {
     const stillWatchingDialogDelaySecs = 120; // 2 mins
     const stillWatchingDialogShowUpThresholdSecs = 120; // 2 mins
 
-    // video player 
+    // video player
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
     const limitSeek = courseMode === "beginner";
     const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek,);
@@ -109,7 +109,7 @@ export const WatchView = (props: {
 
     }, [isVideoEnded]);
 
-    // show dialogs 
+    // show dialogs
     useEffect(() => {
 
         // if not allowed to show new dialogs
@@ -148,7 +148,7 @@ export const WatchView = (props: {
         }
     }, [playedSeconds]);
 
-    // when video length is set, 
+    // when video length is set,
     // calculate are you still watching dialog seconds
     useEffect(() => {
 

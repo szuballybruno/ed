@@ -23,13 +23,18 @@ const StatisticsCard = (props: {
     return <FlexFloat
         direction="column"
         p="0px"
-        width={isOpen ? "600px" : "300px"}
-        height={isOpen ? undefined : "150px"}
+        minW={250}
+        style={{
+            gridColumn: `auto / span ${isOpen ? (props.chartSize === "large" ? 4 : 2) : 1}`,
+            gridRow: `auto / span ${isOpen ? 2 : 1}`
+        }}
+        //width={isOpen ? "600px" : "300px"}
+        //height={isOpen ? undefined : "150px"}
         position="relative"
         m="10px">
 
         {isOpen
-            ? <Flex mt="50px" p="0 20px 20px 20px" direction="column">
+            ? <Flex w={"100%"} mt="50px" p="0 20px 20px 20px" direction="column">
                 <EpistoHeader variant="strongSub" text={props.title} />
                 <Box height="300px">
                     {props.children}

@@ -1,4 +1,4 @@
-import { Assignment, BarChart, Person, School, Settings, Subscriptions } from "@mui/icons-material";
+import { Assignment, BarChart, Person, School, Settings, Subscriptions, Business, People } from "@mui/icons-material";
 import { translatableTexts } from "../translatableTexts";
 
 export type RouteSection = {
@@ -72,13 +72,7 @@ export const applicationRoutes = {
     administrationRoute: {
         title: translatableTexts.routeTitles.administration,
         route: "/administration",
-
-        statisticsRoute: {
-            title: translatableTexts.routeTitles.administrationStatistics,
-            route: "/administration",
-            icon: <BarChart color={"secondary"} />,
-            exact: true
-        },
+        
         usersRoute: {
             title: translatableTexts.routeTitles.administrationUserAdmin,
             route: "/administration/users",
@@ -110,7 +104,19 @@ export const applicationRoutes = {
                 title: translatableTexts.routeTitles.administrationEditVideo,
                 route: "/administration/courses/:courseId/item/:itemId"
             }
-        }
+        },
+        groupsRoute: {
+            title: "Csoportok",
+            route: "/administration/groups",
+            icon: <People color={"secondary"} />,
+            exact: true
+        },
+        myCompanyRoute: {
+            title: "Cégem",
+            route: "/administration/mycompany",
+            icon: <Business color={"secondary"} />,
+            exact: true
+        },
     },
 
     settingsRoute: {

@@ -97,6 +97,7 @@ type StatisticsItemType = {
     value: string;
     suffix: string;
     title: string;
+    large?: boolean;
     chart?: ReactNode;
 }
 
@@ -232,6 +233,7 @@ const LearningStatistics = () => {
                     suffix: "%",
                     title: "Fókuszálás a videómegtekintések során",
                     iconPath: getAssetUrl("statistics_icons/focus_during_videos.png"),
+                    large: true,
                     chart: <Bar
                         className={classes.progressLineChart}
                         options={chartDefaultOptions}
@@ -319,7 +321,8 @@ const LearningStatistics = () => {
                                 title={item.title}
                                 value={item.value}
                                 suffix={item.suffix}
-                                iconPath={item.iconPath}>
+                                iconPath={item.iconPath}
+                                chartSize={item.large ? "large" : undefined}>
                                 {item.chart}
                             </StatisticsCard>
                         })}

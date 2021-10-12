@@ -19,8 +19,10 @@ export const dateTimeToString = (date: Date) => {
 
 export const toDateStringFormatted = (date: Date) => {
 
+    // getting the index of the month 0-11
     const monthIndex = date.getMonth();
-    const dayIndex = date.getDay();
+    // getting day of the month 1-31
+    const dayIndex = date.getDate();
 
     return `${getMonthName(monthIndex)}. ${dayIndex}`;
 }
@@ -33,6 +35,11 @@ export const daysUntil = (firstDate: Date, secondDate: Date) => {
     return diffDays;
 }
 
+
+/**
+ * Gets the month name by monthIndex
+ * @param index Index of the month from 0-11
+ */
 export const getMonthName = (index: number) => {
 
     return [
@@ -48,7 +55,7 @@ export const getMonthName = (index: number) => {
         "Okt",
         "Nov",
         "Dec"
-    ][index - 1];
+    ][index];
 }
 
 export const disallowWindowNavigation = () => {

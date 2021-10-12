@@ -1,43 +1,43 @@
 START TRANSACTION;
 
 -- Question categories
-INSERT INTO "question_category" ("minLabel", "maxLabel") 
-VALUES 
-    ('Category1 - Min', 'Category1 - Max'), 
-    ('Category2 - Min', 'Category2 - Max'), 
-    ('Category3 - Min', 'Category3 - Max'), 
-    ('Category4 - Min', 'Category4 - Max'), 
-    ('Category5 - Min', 'Category5 - Max')
+INSERT INTO "question_category" ("minLabel", "maxLabel")
+VALUES
+    ('Egyedüli', 'Szociális'),
+    ('Hangos kimondás', 'Térbeli elhelyezés'),
+    ('Elméleti', 'Gyakorlati'),
+    ('Vizuális alapú', 'Audio alapú'),
+    ('Analitikus', 'Kreatív')
 RETURNING "id";
 
 -- Questions
 INSERT INTO "question"
 (
-    "questionText", 
-    "imageUrl", 
-    "showUpTimeSeconds", 
-    "categoryId", 
-    "videoId", 
+    "questionText",
+    "imageUrl",
+    "showUpTimeSeconds",
+    "categoryId",
+    "videoId",
     "examId"
-) 
+)
 VALUES
 -- SECTION 1
 -- 1.1 Question
 (
     'Ha egy olyan feladatot kell megoldanom, melyhez kutatnom kell egy témában',
     '{CDN_BUCKET_URL}/signupQuestionImages/1.1.svg',
-    DEFAULT, 
-    1, 
-    DEFAULT, 
+    DEFAULT,
+    1,
+    DEFAULT,
     1
 ),
 -- 1.2 Question
 (
     'Amikor egy bonyolult személyes problémával kell megküzdenem',
     '{CDN_BUCKET_URL}/signupQuestionImages/1.2.svg',
-    DEFAULT, 
-    1, 
-    DEFAULT, 
+    DEFAULT,
+    1,
+    DEFAULT,
     1
 ),
 -- 1.3 Question
@@ -350,10 +350,10 @@ RETURNING "id";
 -- Answers (isCorrect is used here as a flag to determine which end of a category does a question fall into)
 INSERT INTO "answer"
 (
-    "text", 
-    "isCorrect", 
+    "text",
+    "isCorrect",
     "questionId"
-) 
+)
 VALUES
 
 -- SECTION 1

@@ -37,3 +37,31 @@ export const QuestionnaierAnswer = (props: {
         </EpistoButton>
     </Box>
 }
+
+export const QuestionnaierAnswerMinimal = (props: {
+    children: ReactNode,
+    onClick: () => void,
+    isIncorrect: boolean,
+    isCorrect: boolean
+} & BoxProps) => {
+
+    const { children, onClick, isIncorrect, isCorrect, ...css } = props;
+
+    const getBg = () => {
+
+        if (isIncorrect)
+            return "#fa6767";
+
+        if (isCorrect)
+            return "#7cf25e";
+
+        return "white";
+    }
+
+    return <Box {...css}>
+        <div
+            onClick={() => onClick()}>
+            {children}
+        </div>
+    </Box>
+}

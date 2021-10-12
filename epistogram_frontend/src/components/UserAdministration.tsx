@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Email, WorkTwoTone } from "@mui/icons-material";
+import {ApartmentTwoTone, Email, KeyboardVoice, Save, WorkTwoTone} from "@mui/icons-material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useContext, useState } from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { useUserListQuery } from "../services/adminPageUsersService";
 import { httpPostAsync } from "../services/httpClient";
@@ -17,8 +17,9 @@ import { FlexListTitleSubtitle } from "./universal/FlexListTitleSubtitle";
 import { FloatChip } from "./universal/FloatChip";
 import { EpistoSearch } from "./universal/EpistoSearch";
 import { AministrationSubpageHeader } from "./administration/universal/adminAddHeader/AministrationSubpageHeader";
-import { Checkbox, Typography } from "@mui/material";
+import {Button, Checkbox, Typography} from "@mui/material";
 import { ProfileImage } from "./ProfileImage";
+import IntersectionObserverWrap from "./administration/universal/overflow/intersection-observer-wrapper";
 
 export const UserAdministration = () => {
 
@@ -63,11 +64,11 @@ export const UserAdministration = () => {
         }
     }
 
-    return <Flex flex="1" direction="column" bg="white">
+    return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
 
         {/* admin header */}
         <AministrationSubpageHeader>
-            <Flex justify="flex-end" align="stretch" marginTop="20px">
+            <Flex flexDirection={"row"}>
 
                 <Flex
                     align="center"
@@ -86,7 +87,7 @@ export const UserAdministration = () => {
                 </Flex>
 
                 <Flex
-                    display={isAnyUserSelected ? undefined : "none"}>
+                    display={selectedUserIds.length ? undefined : "none"}>
                     <Box
                         className="roundBorders"
                         bg="var(--epistoTeal)"
@@ -99,27 +100,34 @@ export const UserAdministration = () => {
                         </Typography>
                     </Box>
 
-                    <EpistoSelect
+                    {selectedUserIds.length && <EpistoSelect
                         items={[]}
                         onSelected={x => { }}
                         selectedValue="1"
                         getCompareKey={x => x}
                         defaultValue="Jogosultságok kezelése..."
-                        mr="20px"></EpistoSelect>
+                        mr="20px"></EpistoSelect>}
 
+
+
+                </Flex>
+                <IntersectionObserverWrap>
                     <EpistoButton
                         variant="outlined"
-                        style={{ marginRight: "20px" }}>
-                        Kurzus hozzárendelése
+                        name="assignCourses"
+                        style={{ marginRight: "20px", minWidth: "230px" }}>
+                        Kurzusok hozzárendelése
+                    </EpistoButton>
+                    <EpistoButton
+                        name="edit"
+                        style={{ marginRight: "20px", minWidth: "230px" }}
+                        variant={"outlined"}>
+                        Szerkesztés
                     </EpistoButton>
 
-                    <EpistoButton variant="outlined"
-                        style={{ marginRight: "20px" }}>
-                        ...
-                    </EpistoButton>
-                </Flex>
 
-                <Box flex="1" />
+
+                </IntersectionObserverWrap>
 
                 <EpistoSearch mr="10px" width="200px"></EpistoSearch>
 

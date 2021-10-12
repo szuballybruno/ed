@@ -7,6 +7,7 @@ import LearningStatistics from "./learningStatistics/LearningStatistics";
 import { Tasks } from './Tasks';
 import { DashboardSection } from './universal/DashboardSection';
 import { PersonalityAssessment } from './universal/PersonalityAssessment';
+import {Badges} from "./Badges";
 
 export const LearningInsightsOverview = () => {
 
@@ -28,6 +29,8 @@ export const LearningInsightsOverview = () => {
         </DashboardSection>
 
         {/* badges */}
-        <EpistoHeader text={translatableTexts.learningOverview.myBadgesTitle} />
+        <DashboardSection title={translatableTexts.learningOverview.myBadgesTitle} minHeight="200px">
+            <Badges />
+        </DashboardSection>
     </Flex>
 };
