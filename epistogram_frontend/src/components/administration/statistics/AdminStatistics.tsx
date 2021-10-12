@@ -186,11 +186,11 @@ const AdminStatistics = () => {
                                 legend: {
                                     display: false
                                 }
-                            },
+                            },/*
                             scales: {
                                 min: 0,
                                 max: 7
-                            }
+                            }*/
 
                         }}
                         data={{
