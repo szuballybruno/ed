@@ -1,7 +1,8 @@
 import { createContext } from "react";
 import { globalConfig } from "../../configuration/config";
 import { UserDTO } from "../../models/shared_models/UserDTO";
-import { AuthenticationStateType, useRenewUserSessionPooling, useUserFetching } from "../../services/authenticationService";
+import { AuthenticationStateType, useUserFetching } from "../../services/authenticationService";
+import { useRenewUserSessionPooling } from "../../services/openEndpointService";
 import setTheme from "../../services/setTheme";
 
 export const CurrentUserContext = createContext<UserDTO | null>(null);

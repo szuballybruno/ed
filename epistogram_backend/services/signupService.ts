@@ -5,17 +5,16 @@ import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserD
 import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
-import { InvitationTokenPayload, UserRoleEnum } from "../models/shared_models/types/sharedTypes";
+import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authenticationService";
 import { sendInvitaitionMailAsync } from "./emailService";
 import { toQuestionAnswerDTO, toQuestionDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
-import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
 import { log } from "./misc/logger";
-import { answerQuestionAsync } from "./questionAnswerService";
 import { answerSignupQuestionFn } from "./sqlServices/sqlFunctionsService";
+import { createInvitationToken, verifyInvitaionToken, verifyRegistrationToken } from "./tokenService";
 import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
 
 const SIGNUP_EXAM_ID = 1;
@@ -43,6 +42,35 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
     const jobTitle = withValueOrBadRequest(dto.jobTitle);
     const userFullName = `${lastName} ${firstName}`;
 
+    const user = await createUserAsync(email, firstName, lastName, null, roleId, jobTitle);
+    const userId = user.id;
+    const invitationToken = createInvitationToken(userId);
+
+    await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .save({
+            id: userId,
+            invitationToken: invitationToken
+        });
+
+    if (sendEmail) {
+
+        log("Sending mail... to: " + email);
+        await sendInvitaitionMailAsync(invitationToken, email, userFullName);
+    }
+
+    return { invitationToken, user };
+}
+
+export const createUserAsync = async (
+    email: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string | null,
+    roleId: number | null,
+    jobTitle: string | null) => {
+
     // does user already exist?
     const existingUser = await getUserByEmail(email);
     if (existingUser)
@@ -51,25 +79,26 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
     // hash user password 
     const hashedDefaultPassword = await hashPasswordAsync("guest");
 
-    // insert user 
+    // set default user fileds
     const user = {
-        isActive: true,
-        email: email,
-        roleId: roleId,
-        firstName: firstName,
-        lastName: lastName,
-        organizationId: organizationId,
+        email,
+        roleId,
+        firstName,
+        lastName,
+        jobTitle,
+        phoneNumber,
         password: hashedDefaultPassword,
-        jobTitle: jobTitle,
+        isActive: true,
         isInvitedOnly: true
     } as User;
 
+    // insert user
     await staticProvider
         .ormConnection
         .getRepository(User)
         .insert(user);
 
-    const userId = user.id;
+    const userId = (user as User).id;
 
     // insert signup answer session
     await staticProvider
@@ -89,27 +118,7 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
             isPractiseAnswerSession: true
         });
 
-    // send invitaion mail
-    const invitationToken = getJWTToken<InvitationTokenPayload>(
-        { userId: userId },
-        staticProvider.globalConfig.mail.tokenMailSecret,
-        "9924h");
-
-    await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .save({
-            id: userId,
-            invitationToken: invitationToken
-        });
-
-    if (sendEmail) {
-
-        log("Sending mail... to: " + email);
-        await sendInvitaitionMailAsync(invitationToken, email, userFullName);
-    }
-
-    return { invitationToken, user };
+    return user;
 }
 
 export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistrationDTO) => {
@@ -118,10 +127,7 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
     const controlPassword = withValueOrBadRequest(dto.controlPassword);
     const password = withValueOrBadRequest(dto.password);
     const phoneNumber = withValueOrBadRequest(dto.phoneNumber);
-
-    const tokenPayload = verifyJWTToken<InvitationTokenPayload>(invitationToken, staticProvider.globalConfig.mail.tokenMailSecret);
-    if (!tokenPayload)
-        throw new TypedError("Invitation token is invalid or expired!", "forbidden");
+    const tokenPayload = verifyInvitaionToken(invitationToken);
 
     const userDTO = await getUserDTOById(tokenPayload.userId);
     if (!userDTO)
@@ -144,7 +150,7 @@ export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistratio
             isInvitedOnly: false
         });
 
-    const { accessToken, refreshToken } = await getUserLoginTokens(userDTO);
+    const { accessToken, refreshToken } = await getUserLoginTokens(userDTO.id);
 
     return {
         accessToken,
@@ -175,7 +181,7 @@ export const answerSignupQuestionAsync = async (invitationToken: string, questio
     //     true);
 }
 
-export const getSignupDataAsync = async (invitationToken: string) => {
+export const getSignupDataAsync = async (invitationToken: string, isRegistration: boolean) => {
 
     const userId = await verifyInvitationTokenAsync(invitationToken);
     const questions = await getSignupQuestionsAsync();
@@ -191,9 +197,7 @@ export const getSignupDataAsync = async (invitationToken: string) => {
 
 const verifyInvitationTokenAsync = async (invitationToken: string) => {
 
-    const invitationTokenPayload = verifyJWTToken<InvitationTokenPayload>(
-        invitationToken, staticProvider.globalConfig.mail.tokenMailSecret);
-
+    const invitationTokenPayload = verifyInvitaionToken(invitationToken);
     const userId = invitationTokenPayload.userId;
 
     const user = await staticProvider

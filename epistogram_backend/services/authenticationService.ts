@@ -1,16 +1,15 @@
 import dayjs from "dayjs";
 import { Request, Response } from "express";
-import { TokenMeta as TokenPayload } from "../models/DTOs/TokenMeta";
-import { UserDTO } from "../models/shared_models/UserDTO";
-import { getCookie, TypedError } from "../utilities/helpers";
-import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
-import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
-import { log } from "./misc/logger";
-import { toUserDTO } from "./mappings";
-import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserById, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
-import { staticProvider } from "../staticProvider";
-import { sendResetPasswordMailAsync } from "./emailService";
 import { User } from "../models/entity/User";
+import { UserDTO } from "../models/shared_models/UserDTO";
+import { staticProvider } from "../staticProvider";
+import { getCookie, TypedError } from "../utilities/helpers";
+import { sendResetPasswordMailAsync } from "./emailService";
+import { toUserDTO } from "./mappings";
+import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
+import { log } from "./misc/logger";
+import { createAccessToken, createRefreshToken, createResetPasswordToken, verifyAccessToken, verifyPasswordResetToken, verifyRefreshToken } from "./tokenService";
+import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserById, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
 
 // CONSTS
 export const accessTokenCookieName = "accessToken";
@@ -21,28 +20,13 @@ export const getRequestAccessTokenPayload = (req: Request) => {
 
     const accessToken = getCookie(req, accessTokenCookieName)?.value;
     if (!accessToken)
-        return null;
+        throw new TypedError("There's a problem with the sent access token.", "bad request");
 
-    const tokenPayload = verifyJWTToken<TokenPayload>(accessToken, staticProvider.globalConfig.security.jwtSignSecret);
+    const tokenPayload = verifyAccessToken(accessToken);
     if (!tokenPayload)
-        return null;
+        throw new TypedError("There's a problem with the sent access token.", "bad request");
 
     return tokenPayload;
-}
-
-export const authorizeRequest = (req: Request) => {
-    return new Promise<TokenPayload>((resolve, reject) => {
-
-        const accessToken = getCookie(req, accessTokenCookieName)?.value;
-        if (!accessToken)
-            throw new TypedError("Access token missing!", "forbidden");
-
-        const tokenMeta = verifyJWTToken<TokenPayload>(accessToken, staticProvider.globalConfig.security.jwtSignSecret);
-        if (!tokenMeta)
-            throw new TypedError("Invalid token!", "forbidden");
-
-        resolve(tokenMeta);
-    });
 }
 
 export const getUserDTOByCredentials = async (email: string, password: string) => {
@@ -60,17 +44,7 @@ export const getUserDTOByCredentials = async (email: string, password: string) =
 
 export const getUserIdFromRequest = (req: Request) => {
 
-    // check if there is a refresh token sent in the request 
-    const accessToken = getCookie(req, "accessToken")?.value;
-    if (!accessToken)
-        throw new TypedError("Access token not sent.", "bad request");
-
-    // check sent access token if invalid by signature or expired
-    const tokenMeta = verifyJWTToken<TokenPayload>(accessToken, staticProvider.globalConfig.security.jwtSignSecret);
-    if (!tokenMeta)
-        throw new TypedError("Access token validation failed.", "forbidden");
-
-    return tokenMeta.userId;
+    return getRequestAccessTokenPayload(req).userId;
 }
 
 export const renewUserSession = async (req: Request, res: Response) => {
@@ -83,9 +57,7 @@ export const renewUserSession = async (req: Request, res: Response) => {
         throw new TypedError("Refresh token not sent.", "bad request");
 
     // check sent refresh token if invalid by signature or expired
-    const tokenMeta = verifyJWTToken<TokenPayload>(refreshToken, staticProvider.globalConfig.security.jwtSignSecret);
-    if (!tokenMeta)
-        throw new TypedError("Refresh token validation failed.", "forbidden");
+    const tokenMeta = verifyRefreshToken(refreshToken);
 
     // check if this refresh token is associated to the user
     const refreshTokenFromDb = await getActiveTokenByUserId(tokenMeta.userId);
@@ -98,8 +70,8 @@ export const renewUserSession = async (req: Request, res: Response) => {
         throw new TypedError("User not found by id " + tokenMeta.userId, "internal server error");
 
     // get tokens
-    const newAccessToken = getAccessToken(user);
-    const newRefreshToken = getRefreshToken(user);
+    const newAccessToken = createAccessToken(user.id);
+    const newRefreshToken = createRefreshToken(user.id);
 
     // save refresh token to DB
     await setUserActiveRefreshToken(user.id, refreshToken);
@@ -109,11 +81,7 @@ export const renewUserSession = async (req: Request, res: Response) => {
 
 export const requestChangePasswordAsync = async (userId: number, oldPassword: string) => {
 
-    const resetPawsswordToken = await getJWTToken(
-        { userId: userId },
-        staticProvider.globalConfig.mail.tokenMailSecret,
-        "24h");
-
+    const resetPawsswordToken = createResetPasswordToken(userId);
     const user = await getUserById(userId);
 
     if (!await comparePasswordAsync(oldPassword, user.password))
@@ -145,9 +113,7 @@ export const changePasswordAsync = async (
         throw new TypedError("Passwords don't match.", "bad request");
 
     // verify token
-    const tokenPayload = verifyJWTToken<{ userId: number }>(
-        passwordResetToken,
-        staticProvider.globalConfig.mail.tokenMailSecret);
+    const tokenPayload = verifyPasswordResetToken(passwordResetToken);
 
     // verify token user id 
     if (tokenPayload.userId !== user.id)
@@ -186,7 +152,7 @@ export const logInUser = async (email: string, password: string) => {
     log("User logged in: ");
     log(userDTO);
 
-    return await getUserLoginTokens(userDTO);
+    return await getUserLoginTokens(userDTO.id);
 }
 
 export const logOutUser = async (req: Request, res: Response) => {
@@ -203,15 +169,15 @@ export const logOutUser = async (req: Request, res: Response) => {
     res.clearCookie(refreshTokenCookieName);
 }
 
-export const getUserLoginTokens = async (user: UserDTO) => {
+export const getUserLoginTokens = async (userId: number) => {
 
     // get tokens
-    const accessToken = getAccessToken(user);
-    const refreshToken = getRefreshToken(user);
+    const accessToken = createAccessToken(userId);
+    const refreshToken = createRefreshToken(userId);
 
     // save refresh token to DB
-    log(`Setting refresh token of user '${user.id}' to '${refreshToken}'`);
-    await setUserActiveRefreshToken(user.id, refreshToken);
+    log(`Setting refresh token of user '${userId}' to '${refreshToken}'`);
+    await setUserActiveRefreshToken(userId, refreshToken);
 
     return {
         accessToken,
@@ -226,30 +192,6 @@ export const setAuthCookies = (res: Response, accessToken: string, refreshToken:
 }
 
 // PRIVATES
-const getPlainObjectUserInfoDTO = (user: UserDTO) => {
-
-    return {
-        userId: user.id,
-        organizationId: user.organizationId
-    }
-}
-
-const getAccessToken = (user: UserDTO) => {
-
-    return getJWTToken(
-        getPlainObjectUserInfoDTO(user),
-        staticProvider.globalConfig.security.jwtSignSecret,
-        `${staticProvider.globalConfig.security.accessTokenLifespanInS}s`);
-}
-
-const getRefreshToken = (user: UserDTO) => {
-
-    return getJWTToken(
-        getPlainObjectUserInfoDTO(user),
-        staticProvider.globalConfig.security.jwtSignSecret,
-        `${staticProvider.globalConfig.security.refreshTokenLifespanInS}s`);
-}
-
 
 const setAccessTokenCookie = (res: Response, accessToken: string) => {
 

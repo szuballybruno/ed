@@ -1,17 +1,20 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
+import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { getAdminPageUsersList } from "../services/adminService";
-import { getUserIdFromRequest, requestChangePasswordAsync } from "../services/authenticationService";
+import { getUserIdFromRequest, requestChangePasswordAsync, setAuthCookies } from "../services/authenticationService";
 import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "../services/courseManagementService";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
-import { getOrganizationsAsync, getOverviewPageDTOAsync, saveUserDataAsync } from "../services/dataService";
+import { getOrganizationsAsync, getOverviewPageDTOAsync, registerUserAsync, saveUserDataAsync } from "../services/dataService";
 import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
 import { answerPractiseQuestionAsync, getPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
+import { createRegistrationToken } from "../services/tokenService";
 import { getUserById } from "../services/userService";
+import { staticProvider } from "../staticProvider";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
 export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
@@ -19,6 +22,20 @@ export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Reque
     const userId = getUserIdFromRequest(req);
 
     return await getPractiseQuestionAsync(userId);
+});
+
+export const registerUserAction = getAsyncActionHandler(async (req: Request, res: Response) => {
+
+    const dto = withValueOrBadRequest(req.body) as RegisterUserDTO;
+
+    const { accessToken, refreshToken } = await registerUserAsync(dto);
+
+    setAuthCookies(res, accessToken, refreshToken);
+});
+
+export const getRegistrationLinkAction = getAsyncActionHandler(async (req: Request) => {
+
+    return Promise.resolve(`${staticProvider.globalConfig.misc.frontendUrl}/registration?token=${createRegistrationToken()}`);
 });
 
 export const requestChangePasswordAction = getAsyncActionHandler(async (req: Request) => {
@@ -116,8 +133,9 @@ export const getOrganizationsAction = (req: Request) => {
 export const getSignupDataAction = getAsyncActionHandler((req: Request) => {
 
     const token = withValueOrBadRequest(req.body.token);
+    const isRegistration = withValueOrBadRequest(req.body.isRegistration);
 
-    return getSignupDataAsync(token);
+    return getSignupDataAsync(token, isRegistration);
 });
 
 export const answerSignupQuestionAction = getAsyncActionHandler(async (req: Request) => {
@@ -128,144 +146,3 @@ export const answerSignupQuestionAction = getAsyncActionHandler(async (req: Requ
 
     await answerSignupQuestionAsync(token, questionAnswer);
 });
-
-// export const uploadCourseImage = (req: Request, res: Response, next: NextFunction) => {
-//     let uploadedFile: UploadedFile
-//     const updateData = async () => {
-//         if (requestHasFiles(req)) {
-//             uploadedFile = getSingleFileFromRequest(req);
-//         }
-//         createFile(uploadedFile, `/var/lib/assets/epistogram@development/courses/`, req.params.courseId)
-//         return responseReducer(201, "Adatok hozzáadva az adatbázishoz ")
-//     }
-//     updateData().then((r) => {
-//         res.status(r.responseStatus).send(r.responseText)
-//     }).catch((e) => {
-//         res.status(400).send(e.responseText)
-//     });
-// };
-
-// export const updateTag = (req: Request, res: Response, next: NextFunction) => {
-//     const insertData = async () => {
-//         if (req.body.name && req.body.name != "" && req.body._id && req.body._id != "") {
-//             console.log("VanNameVanId")
-//             const tagByName = await Connection.db.collection("tags").findOne({"name": req.body.name as string}).catch(e => {throw new Error("TagByName nem sikerült")})
-//             const tag = await Connection.db.collection("tags").findOne({_id: new ObjectID(req.body._id)}).catch(e => {throw new Error("Tag nem található")})
-//             console.log("VanNameVanId2" + tag + JSON.stringify(tagByName))
-
-//             if (tag && tagByName) {
-//                 console.log("Jó_idJótagName")
-//                 throw new Error("A tag már létezik")
-//             } else if (tag && !tagByName) {
-//                 console.log("Jó_idNincsTagNameAzAdatbazisban")
-//                 await Connection.db.collection("tags").findOneAndUpdate({"_id": new ObjectID(req.body._id)}, {
-//                     $set: {
-//                         name: req.body.name
-//                     }
-//                 })
-//                 return responseReducer(200, "Tag frissítve")
-//             } else if (!tag && !tagByName) {
-//                 console.log("RosszIdNincsTagNameAzAdatbazisban")
-//                 return Connection.db.collection("tags").insertOne({
-//                     name: req.body.name
-//                 }).then((r) => {
-//                     if (req.body.courseId && req.body.courseId != "") {
-//                         Connection.db.collection("courses").findOneAndUpdate({_id: new ObjectID(req.body.courseId)}, {
-//                             $push: {
-//                                 tags: req.body._id || r.insertedId.toString()
-//                             }
-//                         })
-//                     }
-//                     return responseReducer(201, {_id: r.insertedId.toString()})
-//                 }).catch((e) => {
-//                     throw new Error("A tag hozzáadása az adatbázishoz sikertelen")
-//                 })
-//             } else {
-//                 console.log("Van ilyen tag")
-//                 throw new Error("Már van ilyen tag")
-//             }
-//         } else if (req.body.name && req.body.name != "") {
-//             console.log("NincsIdNincsTagNameAzAdatbazisban")
-//             const tagByName = await Connection.db.collection("tags").findOne({"name": (new RegExp(req.body.name as string, 'i'))}).catch(e => {throw new Error("TagByName nem sikerült")})
-//             if (!tagByName) {
-//                 return Connection.db.collection("tags").insertOne({
-//                     name: req.body.name
-//                 }).then((r) => {
-//                     if (req.body.courseId && req.body.courseId != "") {
-//                         Connection.db.collection("courses").findOneAndUpdate({_id: new ObjectID(req.body.courseId)}, {
-//                             $push: {
-//                                 tags: req.body._id || r.insertedId.toString()
-//                             }
-//                         })
-//                     }
-//                     return responseReducer(201, {_id: r.insertedId.toString()})
-//                 }).catch((e) => {
-//                     throw new Error("A tag hozzáadása az adatbázishoz sikertelen")
-//                 })
-//             } else {
-//                 throw new Error("Már van ilyen tag")
-//             }
-
-//         } else {
-//             console.log("NincsIdNincsTagName")
-//             throw new Error("Hibás kérés")
-//         }
-//     }
-//     insertData().then((r) => {
-//         res.status(r.responseStatus).send(r.responseText)
-//     }).catch((e) => {
-//         res.status(400).send(JSON.stringify(e))
-//     });
-// // };
-
-// export const setTask = (req: Request, res: Response, next: NextFunction) => {
-
-//     const taskData = ["userId", "taskToUserId", "taskName", "dueDate", "state"]
-//     // checkRequest(req, res, next, taskData)
-//     const setTaskInDatabase = async () => {
-//         await Connection.db.collection("users").updateOne(
-//             { "_id": new ObjectID(req.body.taskToUserId) },
-//             {
-//                 "$push":
-//                 {
-//                     "userData.tasks":
-//                     {
-//                         "addedDate": Date.now(),
-//                         "name": req.body.taskName,
-//                         "from": new ObjectID(req.body.userId),
-//                         "due": Date.parse(req.body.dueDate),
-//                         "state": req.body.state
-//                     }
-//                 }
-//             }
-//         )
-//         return responseReducer(200, "")
-//     }
-
-//     setTaskInDatabase().then((r) => {
-//         return res.status(r.responseStatus).send(r.responseText)
-//     })
-// }
-
-// export const uploadVideoImage = (req: Request, res: Response, next: NextFunction) => {
-//     let uploadedFile: UploadedFile
-//     const updateData = async () => {
-//         const isItVideo = await Connection.db.collection("videos").findOne({ "_id": new ObjectID(req.params.itemId) })
-//         //const isItExam = await Connection.db.collection("exams").findOne({"_id": new ObjectID(req.params.itemId)})
-//         if (requestHasFiles(req)) {
-//             uploadedFile = getSingleFileFromRequest(req);
-//         }
-//         isItVideo ? createFile(uploadedFile, `/var/lib/assets/epistogram@development/videos/`, req.params.itemId) : createFile(uploadedFile, `/var/lib/assets/epistogram@development/exams/`, req.params.itemId)
-//         isItVideo && await Connection.db.collection("videos").updateOne({ "_id": new ObjectID(req.params.itemId) }, {
-//             $set: {
-//                 videoThumbnailUrl: "https://dev.epistogram.com/assets/epistogram/videos/" + req.params.itemId + "." + getFileExtension(uploadedFile.name)
-//             }
-//         })
-//         return responseReducer(201, "Adatok hozzáadva az adatbázishoz ")
-//     }
-//     updateData().then((r) => {
-//         res.status(r.responseStatus).send(r.responseText)
-//     }).catch((e) => {
-//         res.status(400).send(e.responseText)
-//     });
-// };

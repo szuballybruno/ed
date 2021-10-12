@@ -1,4 +1,5 @@
 import { sign, verify } from 'jsonwebtoken';
+import { TypedError } from '../../utilities/helpers';
 
 export const getJWTToken = <TTokenPayload>(
     tokenData: TTokenPayload,
@@ -10,5 +11,10 @@ export const getJWTToken = <TTokenPayload>(
 
 export const verifyJWTToken = <TTokenPayload>(token: string, secret: string) => {
 
-    return verify(token, secret) as TTokenPayload;
+    const payload = verify(token, secret) as TTokenPayload;
+
+    if (!payload)
+        throw new TypedError("Token verification failed!", "forbidden");
+
+    return payload;
 }

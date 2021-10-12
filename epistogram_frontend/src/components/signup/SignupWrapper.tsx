@@ -1,8 +1,9 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import { Button, Divider, Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { hasValue, isString } from "../../frontendHelpers";
-import { FlexImage } from "../universal/FlexImage";
+import { EpistoHeader } from "../administration/universal/EpistoHeader";
+import { EpistoButton } from "../universal/EpistoButton";
 import classes from "./signupWrapper.module.scss";
 
 export const SignupWrapper = (props: {
@@ -43,14 +44,12 @@ export const SignupWrapper = (props: {
         <Flex id="header" direction="column">
 
             {/* upper title */}
-            <Flex id="titleAligner" height="40px" justify="start">
+            <Flex id="titleAligner" className="dividerBorderBottom" height="40px" justify="start">
                 {hasUpperTitle &&
                     <Typography
                         variant={"overline"}>{upperTitle}
                     </Typography>}
             </Flex>
-
-            <Divider className={classes.divider} />
 
             {/* back button */}
             {canNavPrevious && <div className={classes.backAndProgress}>
@@ -62,23 +61,31 @@ export const SignupWrapper = (props: {
         </Flex>
 
         {/* content */}
-        <Flex id="content" align="center" justify="center" flex="1">
+        <Flex
+            id="contentAligner"
+            align="center"
+            justify="center"
+            flex="1">
 
             {/* image */}
-            {hasImage && <FlexImage width="250px" height="250px" url={currentImage!} mr="20px"></FlexImage>}
+            {hasImage && <Image width="250px" height="250px" src={currentImage!} mr="20px"></Image>}
 
             {/* question content */}
-            <div>
+            <Flex
+                id="content"
+                direction="column"
+                minWidth="300px">
 
                 {/* title */}
-                {hasTitle && <div className={classes.questionWrapper}>
-                    <Typography variant={"h5"}>
-                        {title!}
-                    </Typography>
-                </div>}
+                {hasTitle && <EpistoHeader
+                    variant="strongSub"
+                    m="10px"
+                    alignSelf={hasImage ? "flex-start" : "center"}
+                    text={title!}>
+                </EpistoHeader>}
 
                 {/* description */}
-                {hasDescription && <div className={classes.descriptionWrapper}>
+                {hasDescription && <Box maxWidth="400px">
                     {
                         isString(description!)
                             ? <Typography>
@@ -86,21 +93,22 @@ export const SignupWrapper = (props: {
                             </Typography>
                             : description
                     }
-                </div>}
+                </Box>}
 
                 {/* content */}
                 {children}
 
                 {/* next button */}
-                {onNext && <div>
-                    <Button
-                        variant={"outlined"}
-                        onClick={() => onNext!()}
-                        type="button">
-                        {nextButtonTitle}
-                    </Button>
-                </div>}
-            </div>
+                {onNext && <EpistoButton
+                    variant={"outlined"}
+                    onClick={() => onNext!()}
+                    style={{
+                        marginTop: "20px",
+                        alignSelf: hasImage ? "flex-start" : "center"
+                    }}>
+                    {nextButtonTitle}
+                </EpistoButton>}
+            </Flex>
         </Flex>
 
         {/* progress bar */}

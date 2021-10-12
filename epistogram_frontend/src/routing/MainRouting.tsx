@@ -12,6 +12,7 @@ import { UserSettingsPage } from "../components/userSettings/UserSettingsPage";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import HomePage from "../components/HomePage";
 import { SetNewPasswordPage } from "../components/SetNewPasswordPage";
+import { RegistrationPage } from "../components/RegistrationPage";
 
 export const MainRouting = () => {
     return <Switch>
@@ -20,6 +21,7 @@ export const MainRouting = () => {
         <Route path={applicationRoutes.loginRoute.route} component={withRouter(LoginScreen)} />
         <Route path={applicationRoutes.signupRoute.route} component={withRouter(SignupPage)} />
         <Route path={applicationRoutes.setNewPasswordRoute.route} component={SetNewPasswordPage} />
+        <Route path={applicationRoutes.registrationRoute.route} component={RegistrationPage} />
 
         {/* protected paths */}
         <ProtectedRoute

@@ -45,7 +45,8 @@ export class GlobalConfiguration {
         jwtSignSecret: getEnvConfigEntry("JWT_SIGN_SECRET"),
         accessTokenLifespanInS: 15 * 60, // 15 minutes
         refreshTokenLifespanInS: 604800, // one week
-        passwordHashKey: "abcd"
+        passwordHashKey: "abcd",
+        createPasswordTokenSecret: "Z3Vlc3Q="
     }
 
     misc = {

@@ -5,13 +5,13 @@ import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction, changePasswordAction } from './api/authenticationActions';
-import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemsAction, getUserPersonalityDataAction, getPractiseQuestionAction, answerPractiseQuestionAction, saveUserDataAction, requestChangePasswordAction } from './api/dataActions';
+import { getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getSignupDataAction, getUsersAction as getUserAdministrationUserListAction, answerSignupQuestionAction, getCurrentCourseItemCode, setEditedCourseAction, getCourseItemsAction, getUserPersonalityDataAction, getPractiseQuestionAction, answerPractiseQuestionAction, saveUserDataAction, requestChangePasswordAction, registerUserAction, getRegistrationLinkAction } from './api/dataActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/signupActions';
 import { initializeDBAsync } from './database';
-import { authorizeRequest, requestChangePasswordAsync } from './services/authenticationService';
+import { getRequestAccessTokenPayload, requestChangePasswordAsync } from './services/authenticationService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
@@ -22,6 +22,7 @@ import { answerExamQuestionAction, getExamResultsAction } from './api/examAction
 import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import { deleteUserAction } from './api/userAdministartionActions';
 import { sendResetPasswordMailAsync } from './services/emailService';
+import { apiRoutes } from './models/shared_models/types/apiRoutes';
 
 // initialize env
 // require is mandatory here, for some unknown reason
@@ -46,17 +47,17 @@ const initializeAsync = async () => {
 
         log("Authorizing request...");
 
-        authorizeRequest(req)
-            .then(tokenMeta => {
+        try {
 
-                log("Authorization successful, userId: " + tokenMeta.userId);
-                next();
-            })
-            .catch(() => {
+            const payload = getRequestAccessTokenPayload(req);
+            log("Authorization successful, userId: " + payload.userId);
+            next();
+        }
+        catch (e) {
 
-                log("Authorizing request failed.");
-                respond(res, 403);
-            });
+            log("Authorizing request failed.");
+            respond(res, 403);
+        }
     };
 
     const corsMiddleware = cors({
@@ -89,10 +90,11 @@ const initializeAsync = async () => {
     })
 
     // unprotected routes
-    expressServer.get('/renew-user-session', renewUserSessionAction);
-    expressServer.post('/log-out-user', logOutUserAction);
-    expressServer.post('/login-user', getAsyncActionHandler(logInUserAction));
-    expressServer.post('/get-signup-data', getSignupDataAction);
+    expressServer.get(apiRoutes.open.renewUserSession, renewUserSessionAction);
+    expressServer.post(apiRoutes.open.logoutUser, logOutUserAction);
+    expressServer.post(apiRoutes.open.loginUser, getAsyncActionHandler(logInUserAction));
+    expressServer.post(apiRoutes.open.getSignupData, getSignupDataAction);
+    expressServer.post(apiRoutes.open.registerUser, registerUserAction);
 
     // misc
     expressServer.get('/get-current-user', authMiddleware, getCurrentUserAction);
@@ -102,6 +104,7 @@ const initializeAsync = async () => {
     expressServer.post('/misc/save-user-data', authMiddleware, saveUserDataAction);
     expressServer.post('/misc/request-change-password', authMiddleware, requestChangePasswordAction);
     expressServer.post('/misc/set-new-password', authMiddleware, changePasswordAction);
+    expressServer.get('/misc/get-registration-link', authMiddleware, getRegistrationLinkAction);
 
     // file
     expressServer.post('/file/upload-video', authMiddleware, uploadVideoFileAction);

@@ -16,7 +16,7 @@ export const EpistoHeader = (props: {
             className="fontLarge"
             style={{
                 fontWeight: "normal",
-                color: variant === "sub" ? "var(--intenseGray)" : "black"
+                color: variant === "sub" ? "var(--intenseGray)" : undefined
             }}>
             {text}
         </Typography>

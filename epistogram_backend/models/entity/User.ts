@@ -47,8 +47,8 @@ export class User {
     @Column({ nullable: true })
     linkedInUrl: string;
 
-    @Column()
-    jobTitle: string;
+    @Column({ nullable: true, type: "text" })
+    jobTitle: string | null;
 
     @Column({ default: false })
     isTeacher: boolean;
@@ -72,8 +72,8 @@ export class User {
     userActivity: UserActivityFlatView;
 
     // user role
-    @Column()
-    roleId: number;
+    @Column({ nullable: true, type: "number" })
+    roleId: number | null;
 
     @ManyToOne(_ => Role, x => x.users)
     @JoinColumn({ name: "roleId" })
@@ -88,8 +88,8 @@ export class User {
     avatarFile: StorageFile | null
 
     // Organization 
-    @Column()
-    organizationId: number;
+    @Column({ nullable: true, type: "number" })
+    organizationId: number | null;
 
     @ManyToOne(() => Organization, organization => organization.users)
     @JoinColumn({ name: 'organizationId' })

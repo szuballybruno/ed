@@ -21,7 +21,7 @@ export const logInUserAction = async (req: Request, res: Response) => {
 
     const { accessToken, refreshToken } = await logInUser(email, password);
 
-    await setAuthCookies(res, accessToken, refreshToken);
+    setAuthCookies(res, accessToken, refreshToken);
 }
 
 export const changePasswordAction = getAsyncActionHandler(async (req: Request) => {

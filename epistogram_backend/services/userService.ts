@@ -57,8 +57,6 @@ export const getUserByEmail = async (email: string) => {
 export const getCurrentUser = async (req: Request) => {
 
     const authTokenPayload = getRequestAccessTokenPayload(req);
-    if (!authTokenPayload)
-        throw new TypedError("Token meta is missing!", "forbidden");
 
     const currentUser = await getUserById(authTokenPayload.userId);
     if (!currentUser)

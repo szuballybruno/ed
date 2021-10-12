@@ -1,10 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { globalConfig } from '../configuration/config';
-import { refreshTokenRefreshIntervalInS as refreshTokenRefreshIntervalInMs, userRefreshIntervalInS as userRefreshIntervalInMs } from '../Environemnt';
-import { RefetchUserFunctionContext } from '../components/HOC/AuthenticationFrame';
+import { userRefreshIntervalInMs as userRefreshIntervalInMs } from '../Environemnt';
 import { UserDTO } from '../models/shared_models/UserDTO';
-import { httpGetAsync, httpPostAsync, HTTPResponse, usePostData } from './httpClient';
+import { httpGetAsync } from './httpClient';
 
 export type AuthenticationStateType = "loading" | "authenticated" | "forbidden";
 
@@ -45,43 +44,4 @@ export const useUserFetching = (enabled: boolean) => {
         authState,
         refetchUser
     };
-}
-
-export const useRenewUserSessionPooling = () => {
-
-    const { isSuccess } = useQuery(
-        ['renewUserSession'],
-        () => httpGetAsync("renew-user-session"), {
-        retry: false,
-        refetchOnWindowFocus: false,
-        refetchInterval: refreshTokenRefreshIntervalInMs,
-        refetchIntervalInBackground: true,
-        notifyOnChangeProps: ["isSuccess"]
-    });
-
-    return { isSuccess };
-}
-
-export const logOutUserAsync = async () => {
-
-    await httpPostAsync("log-out-user");
-}
-
-type LoginUserDTO = {
-    email: string;
-    password: string;
-}
-
-export const useLogInUser = () => {
-
-    const { result, error, postDataAsync, state } = usePostData<LoginUserDTO, void>("login-user");
-
-    return {
-        loginUserState: state,
-        loginUserError: error,
-        loginUserAsync: (email: string, password: string) => postDataAsync({
-            email: email,
-            password: password
-        })
-    }
 }

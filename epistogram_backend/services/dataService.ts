@@ -4,11 +4,15 @@ import { User } from "../models/entity/User";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
+import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
+import { getUserLoginTokens } from "./authenticationService";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "./courseService";
 import { toOrganizationDTO } from "./mappings";
+import { createUserAsync } from "./signupService";
+import { verifyRegistrationToken } from "./tokenService";
 import { getUserById } from "./userService";
 
 export const getOrganizationsAsync = async (userId: number) => {
@@ -20,6 +24,22 @@ export const getOrganizationsAsync = async (userId: number) => {
 
     return orgs
         .map(org => toOrganizationDTO(org));
+}
+
+export const registerUserAsync = async (dto: RegisterUserDTO) => {
+
+    const token = dto.registrationToken;
+    verifyRegistrationToken(token);
+
+    const user = await createUserAsync(
+        dto.emailAddress,
+        dto.firstName,
+        dto.lastName,
+        null,
+        null,
+        null);
+
+    return await getUserLoginTokens(user.id);
 }
 
 export const saveUserDataAsync = async (userId: number, dto: UserDTO) => {
@@ -60,21 +80,21 @@ const tipOfTheDay = "Előzetes kérdőívünk alapján Interperszonális (társa
 const getCurrentTasks = () => {
     return {
         tasks: [
-            {
-                name: "Office kurzus gyakorlása",
-                dueDate: new Date(Date.now()),
-                objective: "practise"
-            } as TaskDTO,
-            {
-                name: "PHP videók megtekintése",
-                dueDate: new Date(Date.now()),
-                objective: "continueVideo"
-            } as TaskDTO,
-            {
-                name: "Word kurzus végi vizsga",
-                dueDate: new Date(Date.now()),
-                objective: "exam"
-            } as TaskDTO
+            // {
+            //     name: "Office kurzus gyakorlása",
+            //     dueDate: new Date(Date.now()),
+            //     objective: "practise"
+            // } as TaskDTO,
+            // {
+            //     name: "PHP videók megtekintése",
+            //     dueDate: new Date(Date.now()),
+            //     objective: "continueVideo"
+            // } as TaskDTO,
+            // {
+            //     name: "Word kurzus végi vizsga",
+            //     dueDate: new Date(Date.now()),
+            //     objective: "exam"
+            // } as TaskDTO
         ]
     } as CurrentTasksDTO;
 }

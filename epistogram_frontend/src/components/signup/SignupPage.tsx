@@ -1,17 +1,19 @@
 import React from 'react';
 import { globalConfig } from "../../configuration/config";
-import { getQueryParam, usePaging } from "../../frontendHelpers";
-import { LoadingFrame } from "../HOC/LoadingFrame";
-import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
+import { getQueryParam, reloadPage, usePaging } from "../../frontendHelpers";
 import FinalizeUserRegistrationDTO from "../../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../../models/shared_models/SaveQuestionAnswerDTO";
 import { useNavigation } from "../../services/navigatior";
-import { showNotification } from "../../services/notifications";
-import { useAnswerSignupQuestion, useSignupData } from "../../services/signupService";
+import { showNotification, useShowErrorDialog } from "../../services/notifications";
+import { useSignupData } from '../../services/openEndpointService';
+import { useAnswerSignupQuestion } from "../../services/signupService";
 import { finalizeUserRegistartionAsync } from "../../services/userManagementService";
 import { QuestionSlides } from "../exam/QuestionSlides";
+import { LoadingFrame } from "../HOC/LoadingFrame";
+import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
+import { RegistrationPage } from '../RegistrationPage';
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupForm } from "./SignupForm";
 import { useRegistrationFinalizationFormState } from "./SignupFormLogic";
@@ -31,13 +33,15 @@ const images = [
 export const SignupPage = () => {
 
     // input
-    const invitaionToken = getQueryParam("token");
-    const { signupData, signupDataError, signupDataStatus, refetchSignupData } = useSignupData(invitaionToken);
+    const token = getQueryParam("token");
+    const isRegistration = getQueryParam("isRegistration") === "true";
+    const { signupData, signupDataError, signupDataStatus, refetchSignupData } = useSignupData(token, isRegistration);
     const questions = signupData?.questions ?? [];
     const questionAnswers = signupData?.questionAnswers ?? [];
 
     // util
     const { navigate } = useNavigation();
+    const showErrorDialog = useShowErrorDialog();
     const regFormState = useRegistrationFinalizationFormState();
 
     // slides
@@ -55,24 +59,26 @@ export const SignupPage = () => {
             regFormState.phoneNumber,
             regFormState.password,
             regFormState.passwordControl,
-            invitaionToken);
+            token);
 
         try {
 
             await finalizeUserRegistartionAsync(dto);
 
-            showNotification("Sikeres regisztracio!")
+            showNotification("Sikeres regisztracio!");
+
+            reloadPage();
         }
         catch (error) {
 
-            showNotification("Felhasználó frissítése sikertelen ")
+            showErrorDialog(error)
         }
     }
 
     const handleSaveSelectedAnswerAsync = async (questionAnswer: QuestionAnswerDTO) => {
 
         const dto = {
-            invitationToken: invitaionToken,
+            invitationToken: token,
             questionAnswer: questionAnswer
         } as SaveQuestionAnswerDTO;
 
@@ -95,7 +101,7 @@ export const SignupPage = () => {
         currentImage={gereetImageUrl}
         description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
         onNext={() => slidesState.next()}
-        nextButtonTitle="Kezdés">
+        nextButtonTitle="Tovabb">
     </SignupWrapper>
 
     const QuestionnaireSlide = () => <QuestionSlides
@@ -140,7 +146,7 @@ export const SignupPage = () => {
             <Navbar hideLinks={true} />
 
             <ContentWrapper>
-                <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} flex="1">
+                <LoadingFrame loadingState={[signupDataStatus, saveAnswersStatus]} error={signupDataError} flex="1">
                     <SlidesDisplay
                         flex="1"
                         slides={slides}
