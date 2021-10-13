@@ -5,6 +5,7 @@ import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserD
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
+import { UserSignupCompletedView } from "../models/views/UserSignupCompletedView";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { sendInvitaitionMailAsync } from "./emailService";
@@ -78,7 +79,7 @@ export const createUserAsync = async (
     phoneNumber: string | null,
     roleId: number | null,
     jobTitle: string | null,
-    isPendingInvitation: boolean) => {
+    isInvited: boolean) => {
 
     // does user already exist?
     const existingUser = await getUserByEmail(email);
@@ -98,7 +99,8 @@ export const createUserAsync = async (
         phoneNumber,
         organizationId,
         password: hashedDefaultPassword,
-        isPendingInvitation: isPendingInvitation
+        isPendingInvitation: isInvited,
+        isTrusted: isInvited
     } as User;
 
     // insert user
@@ -115,6 +117,7 @@ export const createUserAsync = async (
         .getRepository(AnswerSession)
         .insert({
             examId: SIGNUP_EXAM_ID,
+            isSignupAnswerSession: true,
             userId: userId
         });
 
@@ -140,9 +143,19 @@ export const getSignupDataAsync = async (userId: number) => {
     const questions = await getSignupQuestionsAsync();
     const questionAnswers = await getSignupQuestionAnswersAsync(userId);
 
+    const userSignupCompltedView = await staticProvider
+        .ormConnection
+        .getRepository(UserSignupCompletedView)
+        .findOneOrFail({
+            where: {
+                userId
+            }
+        });
+
     const dataDTO = {
         questions: questions,
-        questionAnswers: questionAnswers
+        questionAnswers: questionAnswers,
+        isCompleted: userSignupCompltedView.isCompletedSignup
     } as SignupDataDTO;
 
     return dataDTO;

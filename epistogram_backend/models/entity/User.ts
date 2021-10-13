@@ -23,6 +23,12 @@ export class User {
     @Column()
     isPendingInvitation: boolean;
 
+    // a trusted user has been invited to use the application,
+    // users can join without invitation but they will be considered untrusted, 
+    // thus cannot access the application, except the unprotected parts
+    @Column()
+    isTrusted: boolean;
+
     @Column()
     email: string;
 

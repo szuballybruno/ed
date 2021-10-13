@@ -46,7 +46,7 @@ import { staticProvider } from "./staticProvider";
 import { PractiseQuestionView } from "./models/views/PractiseQuestionView";
 import { recreateViewsAsync } from "./services/sqlServices/sqlViewCreatorService";
 import { recreateFunctionsAsync } from "./services/sqlServices/sqlFunctionCreatorService";
-import { answerQuestionFn } from "./services/sqlServices/sqlFunctionsService";
+import { UserSignupCompletedView } from "./models/views/UserSignupCompletedView";
 
 export type TypeORMConnection = Connection;
 
@@ -125,6 +125,7 @@ export const initializeDBAsync = async () => {
         "course_view",
         "exam_session_answers_view",
         "signup_answers_view",
+        "user_signup_completed_view",
         "user_activity_view",
         "user_activity_flat_view",
         "practise_question_view"
@@ -259,7 +260,8 @@ const getPorstgresOptions = () => {
             CourseItemAllView,
             CourseView,
             SignupAnswersView,
-            UserActivityFlatView
+            UserActivityFlatView,
+            UserSignupCompletedView
         ],
     } as ConnectionOptions;
 }

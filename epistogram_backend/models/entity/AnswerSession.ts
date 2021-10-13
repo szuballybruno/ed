@@ -13,6 +13,9 @@ export class AnswerSession {
     @Column({ default: false })
     isPractiseAnswerSession: boolean;
 
+    @Column({ default: false })
+    isSignupAnswerSession: boolean;
+
     // quesiton answers
     @OneToMany(_ => QuestionAnswer, qa => qa.answerSession)
     @JoinColumn()

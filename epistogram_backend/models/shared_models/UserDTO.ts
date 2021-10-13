@@ -9,6 +9,7 @@ export type UserDTO = {
     email: string;
     phoneNumber: string;
     name: string;
+    isPendingInvitation: boolean;
     avatarUrl: string | null;
     userActivity: UserActivityDTO;
 }

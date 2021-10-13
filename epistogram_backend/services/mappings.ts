@@ -48,6 +48,7 @@ export const toUserDTO = (user: User) => {
         jobTitle: user.jobTitle,
         email: user.email,
         phoneNumber: user.phoneNumber,
+        isPendingInvitation: user.isPendingInvitation,
         name: `${user.lastName} ${user.firstName}`,
 
         avatarUrl: user.avatarFile

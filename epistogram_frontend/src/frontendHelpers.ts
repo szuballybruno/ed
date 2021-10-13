@@ -121,7 +121,7 @@ export const usePaging = <T>(
         }
     }
 
-    const setItemIndex = (itemIndex: number) => {
+    const setItem = (itemIndex: number) => {
 
         if (itemIndex < 0)
             throw new Error("Item index is less than 0!");
@@ -132,6 +132,11 @@ export const usePaging = <T>(
         setCurrentItemIndex(itemIndex);
     }
 
+    const jumpToLast = () => {
+
+        setItem(items.length - 1);
+    }
+
     return {
         items,
         next,
@@ -140,7 +145,8 @@ export const usePaging = <T>(
         isFirst,
         currentIndex: currentItemIndex,
         currentItem,
-        setItem: setItemIndex
+        setItem,
+        jumpToLast
     } as PagingType<T>;
 }
 
@@ -149,6 +155,7 @@ export type PagingType<T> = {
     next: () => void;
     previous: () => void;
     setItem: (itemIndex: number) => void;
+    jumpToLast: () => void;
 
     items: T[];
     currentItem: T | null;
