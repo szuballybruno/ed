@@ -81,7 +81,7 @@ const initializeAsync = async () => {
     // data
     expressServer.get("/data/get-overview-page-dto", getAsyncActionHandler(getOverviewPageDTOAction));
 
-    // player 
+    // player
     expressServer.post('/player/get-player-data', getPlayerDataAction);
     expressServer.post('/player/save-video-playback-sample', saveVideoPlaybackSampleAction);
     expressServer.post('/player/get-course-items', getCourseItemsAction);
@@ -92,11 +92,11 @@ const initializeAsync = async () => {
     expressServer.post("/users/delete-user", deleteUserAction);
     expressServer.get("/users/get-courses-data", getUserCoursesDataAction);
 
-    // course 
+    // course
     expressServer.post("/course/start-course", startCourseAction);
     expressServer.post("/course/set-course-mode", setCourseTypeAction);
 
-    // available courses 
+    // available courses
     expressServer.post("/get-user-courses", getUserCoursesAction);
 
     // course administartion
@@ -104,7 +104,7 @@ const initializeAsync = async () => {
     expressServer.post("/get-admin-edit-course", getAsyncActionHandler(getEditedCourseAction))
     expressServer.post("/set-admin-edit-course", getAsyncActionHandler(setEditedCourseAction))
 
-    // organizations 
+    // organizations
     expressServer.get("/organizations/get-organizations", getAsyncActionHandler(getOrganizationsAction));
 
     // exam

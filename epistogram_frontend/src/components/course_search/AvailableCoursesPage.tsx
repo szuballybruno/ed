@@ -15,8 +15,11 @@ import { EpistoButton } from "../universal/EpistoButton";
 import { httpPostAsync } from "../../services/httpClient";
 import { useNavigation } from "../../services/navigatior";
 import { translatableTexts } from "../../translatableTexts";
+import {useHistory} from "react-router";
 
 const AvailableCoursesPage = () => {
+
+    const history = useHistory()
 
     const [searchText, setSearchText] = React.useState("");
     const [searchCategory, setSearchCategory] = React.useState("");
@@ -164,10 +167,12 @@ const AvailableCoursesPage = () => {
                                                 <Flex mt="10px">
 
                                                     {/* details */}
-                                                    <EpistoButton
-                                                        onClick={() => window.location.href = "https://epistogram.com/excel/"}
-                                                        style={{ flex: "1" }}>
 
+                                                    <EpistoButton
+                                                        onClick={() => {
+                                                            history.push(`/courses/${course.courseId}`)
+                                                        }}
+                                                        style={{ flex: "1" }}>
                                                         {translatableTexts.availableCourses.courseDataSheet}
                                                     </EpistoButton>
 
