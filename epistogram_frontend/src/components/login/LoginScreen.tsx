@@ -9,6 +9,7 @@ import SingleInput from "../administration/universal/singleInput/SingleInput";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from './loginScreen.module.scss';
+import {getAssetUrl} from "../../frontendHelpers";
 
 const LoginScreen = (props: { history: any; }): JSX.Element => {
 
@@ -46,7 +47,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
         }
     }, [authState]);
 
-    // watch for login call errors 
+    // watch for login call errors
     useEffect(() => {
 
         if (!loginUserError)
@@ -67,50 +68,78 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
     }, [loginUserError]);
 
     return (
-        <div className={classes.loginhatter}>
+        <Flex h={"100vh"} justifyContent={"center"} alignItems={"flex-start"}>
+            <Flex direction={"column"}
+                  w={"60%"}
+                  h={"100vh"}
+                  hidden={window.innerWidth < 1000 && true}
+                  backgroundSize={"100%"}
+                  bgImage={getAssetUrl("/loginScreen/loginbackground.png")}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  position={"relative"}>
+                <img style={{
+                    zIndex: 1,
+                    width: 200
+                }} src={getAssetUrl("/loginScreen/logofeher.svg")} alt={""} />
+                <Typography zIndex={1} color={"white"} fontSize={"3.5rem"}>Rethink knowledge</Typography>
+                <Flex bg={"#6437AB40"} position={"absolute"} top={0} w={"100%"} zIndex={0} h={"100%"}></Flex>
 
-            <Flex direction="column" maxWidth="400px">
+            </Flex>
+            <Flex direction={"column"} minH={"100%"} w={"40%"} minW={window.innerWidth > 600 ? 500 : "90%"} maxW={"90%"} justifyContent={"center"} alignItems={"center"}>
+                <Flex direction="column" alignItems={"center"}  width={window.innerWidth > 600 ? 450 : "90%"}>
+                    <img style={{
+                        zIndex: 1,
+                        width: 200
+                    }} src={getAssetUrl("/loginScreen/enigmalogo.png")} alt={""} />
 
-                <Flex direction="column">
-                    <h1 className={classes.loginfocim}>Örülünk, hogy ismét itt vagy velünk!</h1>
-                    <h1 className={classes.loginalcim}>Jelentkezz be, és már kezdhetsz is.</h1>
+                    <Flex direction="column" w={"100%"}>
+                        <Typography fontSize={"1.5rem"}>Örülünk, hogy ismét itt vagy velünk!</Typography>
+                    </Flex>
+
+                    <Box w={"100%"}>
+                        <SingleInput
+                            id="email"
+                            labelText={"E-mail"}
+                            name={"currentEmail"}
+                            changeHandler={(e) => setEmail(e.target.value)}
+                            style={{ justifySelf: "center" }} />
+
+                        <SingleInput
+                            id="password"
+                            labelText={"Jelszó"}
+                            name={"currentPassword"}
+                            type={"password"}
+                            changeHandler={(x) => setPassword(x.target.value)}
+                            style={{ justifySelf: "center" }} />
+
+                        <p className={classes.forgotPassword}>
+                            Elfelejtettem a jelszavam
+                        </p>
+
+                        <Typography style={{ color: "var(--mildRed)" }}>
+                            {errorMessage}
+                        </Typography>
+                    </Box>
+
+                    <EpistoButton variant="colored" padding="15px" style={{
+                        marginTop: 15,
+                        marginBottom: 15,
+                        width: "100%",
+                        backgroundColor: "#6437AB"
+                    }} onClick={handleLoginUserAsync}>
+                        Bejelentkezés
+                    </EpistoButton>
+
+                    <Flex direction={"row"} justifyContent={"space-between"} w={"100%"}>
+                        <Typography>Még nincs hozzáférésed?</Typography>
+                        <Typography textAlign={"right"}>Kérvényezd céged illetékesétől ezen a formon keresztül!</Typography>
+                    </Flex>
                 </Flex>
 
-                <Box>
-                    <SingleInput
-                        id="email"
-                        labelText={"E-mail"}
-                        name={"currentEmail"}
-                        changeHandler={(e) => setEmail(e.target.value)}
-                        style={{ justifySelf: "center" }} />
 
-                    <SingleInput
-                        id="password"
-                        labelText={"Jelszó"}
-                        name={"currentPassword"}
-                        type={"password"}
-                        changeHandler={(x) => setPassword(x.target.value)}
-                        style={{ justifySelf: "center" }} />
-
-                    <p className={classes.forgotPassword}>
-                        Elfelejtettem a jelszavam
-                    </p>
-
-                    <Typography style={{ color: "var(--mildRed)" }}>
-                        {errorMessage}
-                    </Typography>
-                </Box>
-
-                <EpistoButton variant="colored" padding="15px" onClick={handleLoginUserAsync}>
-                    Bejelentkezés
-                </EpistoButton>
             </Flex>
-
-            <div className={classes.regisztracio}>
-                <h3>Még nem regisztráltál?</h3>
-                <h3>Itt az ideje!</h3>
-            </div>
-        </div >
+        </Flex>
     )
 };
 
