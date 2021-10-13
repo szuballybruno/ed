@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { globalConfig } from "../../configuration/config";
 import { usePaging } from "../../frontendHelpers";
+import { useNavigation } from '../../services/navigatior';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../HOC/AuthenticationFrame';
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
@@ -17,10 +19,17 @@ export const SignupPage = () => {
     const user = useContext(CurrentUserContext)!;
     const refetchUserAsync = useContext(RefetchUserAsyncContext)!;
 
+    const { navigate } = useNavigation();
+
     const handleGoToSummary = () => {
 
         slidesState.next();
         refetchUserAsync();
+    }
+
+    const handleGoToHomePage = () => {
+
+        navigate(applicationRoutes.homeRoute.route);
     }
 
     const GreetSlide = () => <SignupWrapper
@@ -37,14 +46,15 @@ export const SignupPage = () => {
         onPrevoiusOverNavigation={slidesState.previous}
         onJumpToResults={slidesState.jumpToLast} />
 
-    const SummarySlide = () => <SignupWrapper
+    const SummarySlide = (isCurrent: boolean) => <SignupWrapper
         title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
         description={"Már csak egy-két adatra van szükségünk, hogy elkezdhesd a rendszer használatát"}
         upperTitle="Összegzés"
-        nextButtonTitle={user.userActivity.canAccessApplication ? "Tovabb a fooldalra!" : undefined}
+        nextButtonTitle={"Tovabb a fooldalra!"}
+        onNext={handleGoToHomePage}
         onNavPrevious={() => slidesState.previous()}>
 
-        <PersonalityAssessment height="50vh" mt="20px"></PersonalityAssessment>
+        {isCurrent && <PersonalityAssessment height="50vh" mt="20px"></PersonalityAssessment>}
     </SignupWrapper>
 
     const slides = [

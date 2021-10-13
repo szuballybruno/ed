@@ -2,7 +2,7 @@ import { Box, BoxProps, Flex, FlexProps } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 export const SlidesDisplay = (props: FlexProps & {
-    slides: (() => JSX.Element)[],
+    slides: ((isCurrent: boolean) => JSX.Element)[],
     index: number,
     alwaysRender?: boolean,
 }) => {
@@ -12,15 +12,17 @@ export const SlidesDisplay = (props: FlexProps & {
     const renderSlides = () => slides
         .map((x, xi) => {
 
+            const isCurrent = xi === index;
+
             return <Box
                 className="whall"
-                display={xi === index ? undefined : "none"}>
+                display={isCurrent ? undefined : "none"}>
 
-                {x()}
+                {x(isCurrent)}
             </Box>
         })
 
-    const renderCurrentSlide = slides[index]();
+    const renderCurrentSlide = slides[index](true);
 
     return (
         <Flex id="slidesDisplayRoot" {...flex}>
