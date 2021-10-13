@@ -17,8 +17,7 @@ type EpistoEmail = {
 export const sendInvitaitionMailAsync = async (
     invitationToken: string, userEmail: string, userFullName: string) => {
 
-    const signupUrl = `${staticProvider.globalConfig.misc.frontendUrl}/signup`;
-    const invitationUrl = `${signupUrl}?token=${invitationToken}`;
+    const url = `${staticProvider.globalConfig.misc.frontendUrl}/registration?token=${invitationToken}&isInvited=true`;
 
     const epistoEmail = {
         to: userEmail,
@@ -28,7 +27,7 @@ export const sendInvitaitionMailAsync = async (
             params: {
                 nev: userFullName,
                 email: userEmail,
-                url: invitationUrl
+                url: url
             }
         }
     } as EpistoEmail;

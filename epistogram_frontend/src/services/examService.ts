@@ -1,18 +1,17 @@
 import { useReactQuery } from "../frontendHelpers";
-import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
-import { httpGetAsync, usePostData } from "./httpClient";
+import { httpGetAsync, usePostDataUnsafe } from "./httpClient";
 
 export const useSaveExamAnswer = () => {
 
-    const qr = usePostData<QuestionAnswerDTO, AnswerDTO>("questions/answer-exam-question");
+    const qr = usePostDataUnsafe<QuestionAnswerDTO, AnswerResultDTO>("questions/answer-exam-question");
 
     return {
         saveExamAnswer: qr.postDataAsync,
-        saveExamAnswerError: qr.error,
         saveExamAnswerState: qr.state,
-        correctExamAnswerId: qr.result?.answerId ?? null,
+        answerResult: qr.result ?? null,
         clearExamAnswerCache: qr.clearCache
     }
 }

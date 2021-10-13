@@ -31,9 +31,7 @@ import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
-import { CourseStateView } from "../models/views/CourseStateView";
 import { CourseView } from "../models/views/CourseView";
-import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
 import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
@@ -51,10 +49,14 @@ export const toUserDTO = (user: User) => {
         email: user.email,
         phoneNumber: user.phoneNumber,
         name: `${user.lastName} ${user.firstName}`,
+
         avatarUrl: user.avatarFile
             ? getAssetUrl(user.avatarFile.filePath)
             : getAssetUrl("images/defaultAvatar.png"),
-        userActivity: user.userActivity ? toUserActivityDTO(user.userActivity) : null
+
+        userActivity: user.userActivity
+            ? toUserActivityDTO(user.userActivity)
+            : null
     } as UserDTO;
 }
 
@@ -81,11 +83,10 @@ export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
 export const toAdminPageUserDTO = (user: User) => {
 
     const userDTO = toUserDTO(user);
-    navPropNotNull(user.organization);
 
     return {
         ...userDTO,
-        organizationName: user.organization.name,
+        organizationName: user.organization ? user.organization.name : "",
         tasks: user.tasks.map(x => toTaskDTO(x))
     } as AdminPageUserDTO;
 }

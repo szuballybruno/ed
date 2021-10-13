@@ -21,7 +21,7 @@ export class User {
     deletionDate: Date;
 
     @Column()
-    isInvitedOnly: boolean;
+    isPendingInvitation: boolean;
 
     @Column()
     email: string;

@@ -61,7 +61,11 @@ const DesktopNavbar = (props: {
                     marginLeft: "15px",
                     cursor: "pointer",
                 }}
-                onClick={() => navigate(homeUrl)} />
+                onClick={() => {
+
+                    if (user.userActivity.canAccessApplication)
+                        navigate(homeUrl);
+                }} />
 
             {/* menu items */}
             {!hideLinks && <>

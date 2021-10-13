@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
+import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
@@ -8,7 +9,7 @@ import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest, requestChangePasswordAsync, setAuthCookies } from "../services/authenticationService";
 import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "../services/courseManagementService";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
-import { getOrganizationsAsync, getOverviewPageDTOAsync, registerUserAsync, saveUserDataAsync } from "../services/dataService";
+import { getOrganizationsAsync, getOverviewPageDTOAsync, registerInvitedUserAsync, registerUserAsync, saveUserDataAsync } from "../services/dataService";
 import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
 import { answerPractiseQuestionAsync, getPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
@@ -29,6 +30,15 @@ export const registerUserAction = getAsyncActionHandler(async (req: Request, res
     const dto = withValueOrBadRequest(req.body) as RegisterUserDTO;
 
     const { accessToken, refreshToken } = await registerUserAsync(dto);
+
+    setAuthCookies(res, accessToken, refreshToken);
+});
+
+export const registerInvitedUserAction = getAsyncActionHandler(async (req: Request, res: Response) => {
+
+    const dto = withValueOrBadRequest(req.body) as RegisterInvitedUserDTO;
+
+    const { accessToken, refreshToken } = await registerInvitedUserAsync(dto);
 
     setAuthCookies(res, accessToken, refreshToken);
 });

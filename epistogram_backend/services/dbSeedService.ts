@@ -379,7 +379,7 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
             roleId: UserRoleEnum.administratorId,
             email: "marosi.endre@email.com",
         },
-        orgIds[0],
+        1,
         false);
 
     await finalizeUserRegistrationAsync({
@@ -398,7 +398,7 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
             roleId: UserRoleEnum.supervisorId,
             email: "elon.musk@email.com",
         },
-        orgIds[0],
+        2,
         false);
 
     log("User 2 token: " + it2);

@@ -2,20 +2,18 @@ import { AnswerSession } from "../models/entity/AnswerSession";
 import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
-import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
-import { getUserLoginTokens } from "./authenticationService";
 import { sendInvitaitionMailAsync } from "./emailService";
 import { toQuestionAnswerDTO, toQuestionDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
 import { answerSignupQuestionFn } from "./sqlServices/sqlFunctionsService";
-import { createInvitationToken, verifyInvitaionToken, verifyRegistrationToken } from "./tokenService";
-import { getUserByEmail, getUserById, getUserDTOById } from "./userService";
+import { createInvitationToken, verifyInvitaionToken } from "./tokenService";
+import { getUserByEmail, getUserById } from "./userService";
 
 const SIGNUP_EXAM_ID = 1;
 
@@ -42,7 +40,16 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
     const jobTitle = withValueOrBadRequest(dto.jobTitle);
     const userFullName = `${lastName} ${firstName}`;
 
-    const user = await createUserAsync(email, firstName, lastName, null, roleId, jobTitle);
+    const user = await createUserAsync(
+        email,
+        firstName,
+        lastName,
+        organizationId,
+        null,
+        roleId,
+        jobTitle,
+        true);
+
     const userId = user.id;
     const invitationToken = createInvitationToken(userId);
 
@@ -67,9 +74,11 @@ export const createUserAsync = async (
     email: string,
     firstName: string,
     lastName: string,
+    organizationId: number | null,
     phoneNumber: string | null,
     roleId: number | null,
-    jobTitle: string | null) => {
+    jobTitle: string | null,
+    isPendingInvitation: boolean) => {
 
     // does user already exist?
     const existingUser = await getUserByEmail(email);
@@ -87,8 +96,9 @@ export const createUserAsync = async (
         lastName,
         jobTitle,
         phoneNumber,
+        organizationId,
         password: hashedDefaultPassword,
-        isInvitedOnly: true
+        isPendingInvitation: isPendingInvitation
     } as User;
 
     // insert user
@@ -118,43 +128,6 @@ export const createUserAsync = async (
         });
 
     return user;
-}
-
-export const finalizeUserRegistrationAsync = async (dto: FinalizeUserRegistrationDTO) => {
-
-    const invitationToken = withValueOrBadRequest(dto.invitationToken);
-    const controlPassword = withValueOrBadRequest(dto.controlPassword);
-    const password = withValueOrBadRequest(dto.password);
-    const phoneNumber = withValueOrBadRequest(dto.phoneNumber);
-    const tokenPayload = verifyInvitaionToken(invitationToken);
-
-    const userDTO = await getUserDTOById(tokenPayload.userId);
-    if (!userDTO)
-        throw new TypedError("Invited user not found by id: " + tokenPayload.userId, "bad request");
-
-    if (password != controlPassword)
-        throw new TypedError("Passwords are not equal!", "bad request");
-
-    // hash password
-    const hashedPassword = await hashPasswordAsync(password);
-
-    await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .save({
-            id: tokenPayload.userId,
-            phoneNumber: phoneNumber,
-            password: hashedPassword,
-            invitationToken: "",
-            isInvitedOnly: false
-        });
-
-    const { accessToken, refreshToken } = await getUserLoginTokens(userDTO.id);
-
-    return {
-        accessToken,
-        refreshToken
-    }
 }
 
 export const answerSignupQuestionAsync = async (userId: number, questionAnswer: QuestionAnswerDTO) => {

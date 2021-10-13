@@ -6,12 +6,12 @@ import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
-import { answerPractiseQuestionAction, answerSignupQuestionAction, getCourseItemsAction, getCurrentCourseItemCode, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction, getSignupDataAction, getUserPersonalityDataAction, getUsersAction as getUserAdministrationUserListAction, registerUserAction, requestChangePasswordAction, saveUserDataAction, setEditedCourseAction } from './api/dataActions';
+import { answerPractiseQuestionAction, answerSignupQuestionAction, getCourseItemsAction, getCurrentCourseItemCode, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction, getSignupDataAction, getUserPersonalityDataAction, getUsersAction as getUserAdministrationUserListAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveUserDataAction, setEditedCourseAction } from './api/dataActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction } from './api/questionActions';
-import { createInvitedUserAction, finalizeUserRegistrationAction } from './api/signupActions';
+import { createInvitedUserAction } from './api/signupActions';
 import { deleteUserAction } from './api/userAdministartionActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { initializeDBAsync } from './database';
@@ -56,6 +56,7 @@ const initializeAsync = async () => {
     expressServer.post(apiRoutes.open.logoutUser, logOutUserAction);
     expressServer.post(apiRoutes.open.loginUser, getAsyncActionHandler(logInUserAction));
     expressServer.post(apiRoutes.open.registerUser, registerUserAction);
+    expressServer.post(apiRoutes.open.registerInvitedUser, registerInvitedUserAction);
 
     // misc
     expressServer.get('/get-current-user', getCurrentUserAction);
@@ -88,7 +89,6 @@ const initializeAsync = async () => {
     // users
     expressServer.get("/users/get-user-administartion-user-list", getUserAdministrationUserListAction);
     expressServer.post("/users/create-invited-user", getAsyncActionHandler(createInvitedUserAction));
-    expressServer.post("/users/finalize-user-registration", getAsyncActionHandler(finalizeUserRegistrationAction));
     expressServer.post("/users/delete-user", deleteUserAction);
     expressServer.get("/users/get-courses-data", getUserCoursesDataAction);
 

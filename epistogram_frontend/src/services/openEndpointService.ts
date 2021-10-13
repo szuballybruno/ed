@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { refreshTokenRefreshIntervalInMs } from "../Environemnt";
 import { useReactQuery } from "../frontendHelpers";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
@@ -60,6 +61,29 @@ export const useRegisterUser = () => {
     return {
         registerUserState: postDataResult.state,
         registerUserAsync
+    }
+}
+
+export const useRegisterInvitedUser = () => {
+
+    const postDataResult = usePostDataUnsafe(apiRoutes.open.registerInvitedUser);
+
+    const registerInvitedUserAsync = (
+        invitationToken: string,
+        password: string,
+        passwordCompare: string) => {
+
+        return postDataResult
+            .postDataAsync({
+                invitationToken: invitationToken,
+                password,
+                passwordCompare
+            } as RegisterInvitedUserDTO);
+    }
+
+    return {
+        registerInvitedUserState: postDataResult.state,
+        registerInvitedUserAsync
     }
 }
 

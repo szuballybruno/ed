@@ -6,7 +6,7 @@ import { applicationRoutes } from "../configuration/applicationRoutes";
 import { getAssetUrl, getQueryParam } from "../frontendHelpers";
 import { useNavigation } from "../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/notifications";
-import { useRegisterUser } from "../services/openEndpointService";
+import { useRegisterInvitedUser, useRegisterUser } from "../services/openEndpointService";
 import { EpistoHeader } from "./administration/universal/EpistoHeader";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 import { EpistoButton } from "./universal/EpistoButton";
@@ -28,15 +28,21 @@ export const RegistrationPage = () => {
     const showErrorDialog = useShowErrorDialog();
     const { navigate } = useNavigation();
     const { registerUserAsync, registerUserState } = useRegisterUser();
+    const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();
 
     const handleRegistration = async () => {
 
         try {
 
-            await registerUserAsync(token, emailAddress, firstName, lastName);
+            if (isInvited) {
+
+                await registerInvitedUserAsync(token, password, passwordCompare);
+            } else {
+
+                await registerUserAsync(token, emailAddress, firstName, lastName);
+            }
 
             showNotification("Sikeres regisztracio!");
-
             navigate(applicationRoutes.signupRoute.route);
         }
         catch (e) {
@@ -55,7 +61,7 @@ export const RegistrationPage = () => {
             src={getAssetUrl("images/abstract_background_1.jpg")} />
 
         <LoadingFrame
-            loadingState={registerUserState}
+            loadingState={[registerUserState, registerInvitedUserState]}
             direction="column"
             width="100%"
             maxWidth="500px"
@@ -106,12 +112,14 @@ export const RegistrationPage = () => {
                 <TextField
                     variant="standard"
                     label="Jelszo"
+                    type="password"
                     value={password}
                     onChange={x => setPassword(x.currentTarget.value)}
                     style={{ margin: "10px" }}></TextField>
 
                 <TextField
                     variant="standard"
+                    type="password"
                     label="Jelszo megegyszer"
                     value={passwordCompare}
                     onChange={x => setPasswordCompare(x.currentTarget.value)}

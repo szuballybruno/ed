@@ -1,5 +1,5 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
-import { Button, Divider, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { hasValue, isString, useIsDesktopView } from "../../frontendHelpers";
 import { EpistoHeader } from "../administration/universal/EpistoHeader";
@@ -124,7 +124,9 @@ export const SignupWrapper = (props: {
                     </Box>}
 
                     {/* content */}
-                    {children}
+                    <Flex justify={hasImage ? "flex-start" : "center"}>
+                        {children}
+                    </Flex>
 
                     {/* next button */}
                     {onNext && <EpistoButton

@@ -4,15 +4,18 @@ import { User } from "../models/entity/User";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
+import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
+import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authenticationService";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "./courseService";
 import { toOrganizationDTO } from "./mappings";
+import { hashPasswordAsync } from "./misc/crypt";
 import { createUserAsync } from "./signupService";
-import { verifyRegistrationToken } from "./tokenService";
+import { verifyInvitaionToken, verifyRegistrationToken } from "./tokenService";
 import { getUserById } from "./userService";
 
 export const getOrganizationsAsync = async (userId: number) => {
@@ -37,7 +40,33 @@ export const registerUserAsync = async (dto: RegisterUserDTO) => {
         dto.lastName,
         null,
         null,
-        null);
+        null,
+        null,
+        false);
+
+    return await getUserLoginTokens(user.id);
+}
+
+export const registerInvitedUserAsync = async (dto: RegisterInvitedUserDTO) => {
+
+    const token = dto.invitationToken;
+    const payload = verifyInvitaionToken(token);
+
+    withValueOrBadRequest(dto.password);
+
+    const user = await getUserById(payload.userId);
+    if (!user)
+        throw new TypedError("No such user!", "bad request");
+
+    if (dto.password !== dto.passwordCompare)
+        throw new TypedError("Passwords don't match!", "bad request");
+
+    await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .save({
+            password: await hashPasswordAsync(dto.password)
+        });
 
     return await getUserLoginTokens(user.id);
 }

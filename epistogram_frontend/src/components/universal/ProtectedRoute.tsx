@@ -21,21 +21,6 @@ export const ProtectedRoute = (props: {
     if (globalConfig.verboseLogging)
         console.log(`Navigated to protected route '${props.path}'. Authentication state: ${authState}`);
 
-    const handleIsAuthorizedToView = (userActivity: UserActivityDTO) => {
-
-        const externalCheck = isAuthorizedToView
-            ? isAuthorizedToView(userActivity)
-            : true;
-
-        if (!externalCheck)
-            return false;
-
-        if (ignoreAppAccessProtection)
-            return true;
-
-        return userActivity.canAccessApplication;
-    }
-
     return (
         <Route
             {...routeProps}
@@ -58,12 +43,17 @@ export const ProtectedRoute = (props: {
                     return <Redirect to={applicationRoutes.loginRoute.route} />
                 }
 
-                // check authorization 
-                if (!handleIsAuthorizedToView(user!.userActivity)) {
+                // redirect to signup if application is not accessable yets
+                if (!user!.userActivity.canAccessApplication && !ignoreAppAccessProtection)
+                    return <Redirect to={applicationRoutes.signupRoute.route} />
 
-                    console.log("Forbidden.");
-                    return <Box>Forbidden.</Box>
-                }
+                // redirect to home if external authorization check fails
+                const externalCheck = isAuthorizedToView
+                    ? isAuthorizedToView(user!.userActivity)
+                    : true;
+
+                if (!externalCheck)
+                    return <Redirect to={applicationRoutes.homeRoute.route} />
 
                 return render();
             }} />

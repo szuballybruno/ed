@@ -43,14 +43,14 @@ export const SignupQuestions = (props: {
         await refetchSignupData();
     }
 
-    const state = useQuestionSlidesState(
-        questions,
-        handleSaveSelectedAnswerAsync,
-        getSelectedAnswerId,
-        null,
-        "Szmelyiseg elemzo kerdoiv",
-        onPrevoiusOverNavigation,
-        onNextOverNavigation);
+    const state = useQuestionSlidesState({
+        questions: questions,
+        answerQuestionAsync: handleSaveSelectedAnswerAsync,
+        getSelectedAnswerId: getSelectedAnswerId,
+        upperTitle: "Szmelyiseg elemzo kerdoiv",
+        onPrevoiusOverNavigation: onPrevoiusOverNavigation,
+        onNextOverNavigation: onNextOverNavigation
+    });
 
     console.log(state.questionnaireState.currentIndex)
 

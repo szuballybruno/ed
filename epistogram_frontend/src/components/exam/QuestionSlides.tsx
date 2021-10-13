@@ -6,15 +6,29 @@ import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
 import { SignupRadioGroup } from "../signup/SignupRadioGroup";
 import { SignupWrapper } from "../signup/SignupWrapper";
 
-export const useQuestionSlidesState = (
+export const useQuestionSlidesState = (options: {
     questions: QuestionDTO[],
     answerQuestionAsync: (answerId: number, questionId: number) => Promise<void>,
     getSelectedAnswerId: (questionId: number) => number | null,
-    correctAnswerId: number | null,
+    correctAnswerId?: number | null,
     upperTitle?: string,
     onPrevoiusOverNavigation?: () => void,
     onNextOverNavigation?: () => void,
-    clearAnswerCache?: () => void,) => {
+    clearAnswerCache?: () => void,
+    allowQuickNext?: boolean
+}) => {
+
+    const {
+        questions,
+        answerQuestionAsync,
+        getSelectedAnswerId,
+        correctAnswerId,
+        upperTitle,
+        onPrevoiusOverNavigation,
+        onNextOverNavigation,
+        clearAnswerCache,
+        allowQuickNext
+    } = options;
 
     // questionnaire 
     const questionnaireState = usePaging(questions, onPrevoiusOverNavigation, onNextOverNavigation);
@@ -41,7 +55,8 @@ export const useQuestionSlidesState = (
         questionnaireProgressLabel,
         questionnaireProgressbarValue,
         answerQuestionAsync,
-        correctAnswerId
+        correctAnswerId,
+        allowQuickNext
     }
 }
 
@@ -61,7 +76,8 @@ export const QuestionSlides = (props: { state: QuestionSlidesStateType }) => {
         questionnaireProgressLabel,
         questionnaireProgressbarValue,
         answerQuestionAsync,
-        correctAnswerId
+        correctAnswerId,
+        allowQuickNext
     } = state;
 
     const handleAnswerSelectedAsync = async (answerId: number) => {
@@ -69,7 +85,9 @@ export const QuestionSlides = (props: { state: QuestionSlidesStateType }) => {
         try {
 
             await answerQuestionAsync(answerId, currentQuestion!.questionId);
-            handleNext();
+
+            if (allowQuickNext)
+                handleNext();
         } catch (e) {
 
             showError(e);
@@ -91,7 +109,7 @@ export const QuestionSlides = (props: { state: QuestionSlidesStateType }) => {
                 answers={currentQuestion!.answers}
                 onAnswerSelected={handleAnswerSelectedAsync}
                 selectedAnswerId={selectedAnswerId}
-                correctAnswerId={correctAnswerId} />
+                correctAnswerId={correctAnswerId ?? null} />
         </SignupWrapper>}
     </>
 }

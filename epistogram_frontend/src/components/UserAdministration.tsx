@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/layout";
-import {ApartmentTwoTone, Email, KeyboardVoice, Save, WorkTwoTone} from "@mui/icons-material";
+import { ApartmentTwoTone, Email, KeyboardVoice, Save, WorkTwoTone } from "@mui/icons-material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { useUserListQuery } from "../services/adminPageUsersService";
 import { httpPostAsync } from "../services/httpClient";
@@ -17,9 +17,10 @@ import { FlexListTitleSubtitle } from "./universal/FlexListTitleSubtitle";
 import { FloatChip } from "./universal/FloatChip";
 import { EpistoSearch } from "./universal/EpistoSearch";
 import { AministrationSubpageHeader } from "./administration/universal/adminAddHeader/AministrationSubpageHeader";
-import {Button, Checkbox, Typography} from "@mui/material";
+import { Button, Checkbox, Typography } from "@mui/material";
 import { ProfileImage } from "./ProfileImage";
 import IntersectionObserverWrap from "./administration/universal/overflow/intersection-observer-wrapper";
+import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
 
 export const UserAdministration = () => {
 
@@ -108,8 +109,6 @@ export const UserAdministration = () => {
                         defaultValue="Jogosultságok kezelése..."
                         mr="20px"></EpistoSelect>}
 
-
-
                 </Flex>
                 <IntersectionObserverWrap>
                     <EpistoButton
@@ -124,8 +123,6 @@ export const UserAdministration = () => {
                         variant={"outlined"}>
                         Szerkesztés
                     </EpistoButton>
-
-
 
                 </IntersectionObserverWrap>
 
@@ -147,20 +144,31 @@ export const UserAdministration = () => {
                 {users
                     .map((user, index) => {
 
-                        const chips = [
+                        const chips = [] as { name: string, icon: ReactNode }[];
+
+                        if (!user.userActivity.canAccessApplication)
+                            chips.push({
+                                name: "Nincs hozzaferese az applikaciohoz",
+                                icon: <DesktopAccessDisabledIcon />
+                            });
+
+                        chips.push(
                             {
                                 name: user.email,
                                 icon: <Email />
-                            },
+                            });
+
+                        chips.push(
                             {
                                 name: user.organizationName,
                                 icon: <ApartmentTwoTone />
-                            },
+                            });
+
+                        chips.push(
                             {
                                 name: user.jobTitle,
                                 icon: <WorkTwoTone />
-                            }
-                        ]
+                            })
 
                         return <FlexListItem
                             key={index}

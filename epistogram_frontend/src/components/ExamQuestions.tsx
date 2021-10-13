@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { useSaveExamAnswer } from "../services/examService";
+import { useShowErrorDialog } from "../services/notifications";
 import { QuestionSlides, useQuestionSlidesState } from "./exam/QuestionSlides";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 
@@ -16,49 +17,46 @@ export const ExamQuestions = (props: {
         onExamFinished
     } = props;
 
-    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
+    const showError = useShowErrorDialog();
 
     // save exam answer
     const {
         saveExamAnswer,
-        saveExamAnswerError,
         saveExamAnswerState,
-        correctExamAnswerId,
+        answerResult,
         clearExamAnswerCache
     } = useSaveExamAnswer();
 
     // handle save selected answer
     const answerQuestionAsync = async (answerId: number, questionId: number) => {
 
-        setSelectedAnswerId(answerId);
+        try {
 
-        await saveExamAnswer({
-            answerSessionId: answerSessionId,
-            answerId,
-            questionId
-        });
+            await saveExamAnswer({
+                answerSessionId: answerSessionId,
+                answerId,
+                questionId
+            });
+        } catch (e) {
+
+            showError(e);
+        }
     }
 
-    const clearAnswerCache = () => {
+    const state = useQuestionSlidesState({
+        questions: questions,
+        answerQuestionAsync: answerQuestionAsync,
+        getSelectedAnswerId: () => answerResult?.givenAnswerId ?? null,
+        correctAnswerId: answerResult?.correctAnswerId ?? null,
+        onNextOverNavigation: onExamFinished,
+        clearAnswerCache: clearExamAnswerCache
+    });
 
-        clearExamAnswerCache();
-        setSelectedAnswerId(null);
-    }
-
-    const state = useQuestionSlidesState(
-        questions,
-        answerQuestionAsync,
-        () => selectedAnswerId,
-        correctExamAnswerId,
-        undefined,
-        undefined,
-        onExamFinished,
-    );
+    console.log(answerResult);
 
     return <LoadingFrame
         className="whall"
         loadingState={saveExamAnswerState}
-        error={saveExamAnswerError}
         flex="1">
 
         <QuestionSlides state={state} />

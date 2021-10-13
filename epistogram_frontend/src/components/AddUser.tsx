@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Button, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { getEventValueCallback, hasValue, TypedError } from "../frontendHelpers";
@@ -51,17 +51,11 @@ const AddUser = () => {
     const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;
     const { organizations } = useOrganizations();
 
-    const handleFirstLastNameChange = (changedPropertyName: string, value: string) => {
+    useEffect(() => {
 
-        if (changedPropertyName == "lastName") {
-
-            setLastName(value);
-        }
-        else {
-
-            setFirstName(value);
-        }
-    }
+        if (organizations)
+            setSelectedOrganization(organizations[0]);
+    }, [organizations]);
 
     const submitAddUserRequestAsync = async () => {
 
@@ -120,55 +114,77 @@ const AddUser = () => {
             }}
             title={"Új felhasználó hozzáadása"}>
 
-            {/* first & last name */}
-            <DoubleInputs
-                firstLabelText={"Vezetéknév"}
-                secondLabelText={"Keresztnév"}
-                firstLabelName={"lastName"}
-                secondLabelName={"firstName"}
-                changeHandler={x => handleFirstLastNameChange(x.currentTarget.name, x.currentTarget.value)} />
+            <Flex direction="column" padding="20px">
 
-            {/* email */}
-            <SingleInput
-                labelText={"E-mail"}
-                name={"email"}
-                changeHandler={getEventValueCallback(setEmail)} />
+                {/* first & last name */}
+                <Flex>
+                    <TextField
+                        style={{ flex: "1", margin: "10px" }}
+                        value={firstName}
+                        name="fname"
+                        onChange={x => setFirstName(x.currentTarget.value)}
+                        variant="standard"
+                        label="Keresztnév" />
 
-            {/* organization */}
-            {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" width="100%">
-                <Typography>Cég</Typography>
-                <EpistoSelect
-                    items={organizations}
-                    selectedValue={selectedOrganization}
-                    onSelected={setSelectedOrganization}
-                    getDisplayValue={x => "" + x?.name}
-                    getCompareKey={organization => "" + organization?.id} />
-            </Flex>}
+                    <TextField
+                        style={{ flex: "1", margin: "10px" }}
+                        name="lname"
+                        value={lastName}
+                        onChange={x => setLastName(x.currentTarget.value)}
+                        variant="standard"
+                        label="Vezetéknév" />
+                </Flex>
 
-            {/* job title */}
-            <SingleInput
-                labelText="Beosztás"
-                name={"jobTitle"}
-                changeHandler={getEventValueCallback(setJobTitle)} />
+                {/* email */}
+                <TextField
+                    style={{ flex: "1", margin: "10px" }}
+                    name="email"
+                    value={email}
+                    onChange={getEventValueCallback(setEmail)}
+                    variant="standard"
+                    label="Email" />
 
-            {/* role */}
-            <Flex direction="column" align="stretch" width="100%">
-                <Typography>Jogosultsági kör</Typography>
-                <EpistoSelect
-                    selectedValue={role}
-                    items={roles}
-                    onSelected={setRole}
-                    getDisplayValue={x => "" + x?.name}
-                    getCompareKey={x => "" + x?.id} />
+                {/* organization */}
+                {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
+                    <Typography>Cég</Typography>
+                    <EpistoSelect
+                        items={organizations}
+                        selectedValue={selectedOrganization}
+                        onSelected={setSelectedOrganization}
+                        getDisplayValue={x => "" + x?.name}
+                        getCompareKey={organization => "" + organization?.id} />
+                </Flex>}
+
+                {/* job title */}
+                <TextField
+                    style={{ flex: "1", margin: "10px" }}
+                    name="jobTitle"
+                    value={jobTitle}
+                    onChange={getEventValueCallback(setJobTitle)}
+                    variant="standard"
+                    label="Beosztás" />
+
+                {/* role */}
+                <Flex direction="column" align="stretch" width="100%">
+                    <Typography>Jogosultsági kör</Typography>
+                    <EpistoSelect
+                        selectedValue={role}
+                        items={roles}
+                        onSelected={setRole}
+                        getDisplayValue={x => "" + x?.name}
+                        getCompareKey={x => "" + x?.id} />
+                </Flex>
+
+                {/* submit button */}
+                <Button
+                    type={"submit"}
+                    variant={"outlined"}
+                    color={"secondary"}
+                    style={{ marginTop: "20px" }}>
+                    Feltöltés
+                </Button>
+
             </Flex>
-
-            {/* submit button */}
-            <Button
-                type={"submit"}
-                variant={"outlined"}
-                color={"secondary"}>
-                Feltöltés
-            </Button>
         </AddFrame>
     </Flex>
 };
