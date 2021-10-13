@@ -5,6 +5,7 @@ import { useShowErrorDialog } from "../../services/notifications";
 import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
 import { SignupRadioGroup } from "../signup/SignupRadioGroup";
 import { SignupWrapper } from "../signup/SignupWrapper";
+import {Flex} from "@chakra-ui/react";
 
 export const useQuestionSlidesState = (options: {
     questions: QuestionDTO[],
@@ -30,7 +31,7 @@ export const useQuestionSlidesState = (options: {
         allowQuickNext
     } = options;
 
-    // questionnaire 
+    // questionnaire
     const questionnaireState = usePaging(questions, onPrevoiusOverNavigation, onNextOverNavigation);
     const currentQuestion = questionnaireState.currentItem;
     const questionnaireProgressbarValue = (questionnaireState.currentIndex / questions.length) * 100;
@@ -98,12 +99,12 @@ export const QuestionSlides = (props: { state: QuestionSlidesStateType }) => {
         {currentQuestion && <SignupWrapper
             title={currentQuestion!.questionText}
             upperTitle={upperTitle}
-            nextButtonTitle="Kovetkezo"
+            nextButtonTitle="Következő"
             onNext={selectedAnswerId ? handleNext : undefined}
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
-            upperComponent={<Typography>{questionnaireProgressLabel}</Typography>}>
+            upperComponent={<Flex alignItems={"center"} justifyContent={"flex-end"} w={"30%"}><Typography>{questionnaireProgressLabel}</Typography></Flex>}>
 
             <SignupRadioGroup
                 answers={currentQuestion!.answers}

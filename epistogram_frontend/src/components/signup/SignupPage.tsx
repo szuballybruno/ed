@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { globalConfig } from "../../configuration/config";
-import { usePaging } from "../../frontendHelpers";
+import {getAssetUrl, usePaging} from "../../frontendHelpers";
 import { useNavigation } from '../../services/navigatior';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../HOC/AuthenticationFrame';
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
@@ -35,10 +35,10 @@ export const SignupPage = () => {
     const GreetSlide = () => <SignupWrapper
         title="Regisztráció"
         upperTitle="Üdv a fedélzeten!"
-        currentImage={gereetImageUrl}
+        currentImage={getAssetUrl("/signupQuestionImages/regisztracio.svg")}
         description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
         onNext={() => slidesState.next()}
-        nextButtonTitle="Tovabb">
+        nextButtonTitle="Tovább">
     </SignupWrapper>
 
     const QuestionnaireSlide = () => <SignupQuestions
@@ -68,7 +68,6 @@ export const SignupPage = () => {
         <MainWrapper>
 
             {/* navbar */}
-            <Navbar hideLinks={true} />
 
             <ContentWrapper>
                 <SlidesDisplay

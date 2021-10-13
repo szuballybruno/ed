@@ -88,7 +88,7 @@ export const CourseItemSelector = (props: {
             target={ref?.current}
             placementX="left"
             handleClose={() => setIsInfoDialogOpen(false)}>
-            <Typography>asd</Typography>
+            <Typography>Kezdő módban a meghatározott sorrendben haladhatsz, és előre csak addig részig tekerhetsz, melyet már megtekintettél. Haladó módban korlátlanul váltogathatsz a videók között!</Typography>
         </EpistoPopper>
 
         <CourseItemList courseItems={props.courseItems}></CourseItemList>

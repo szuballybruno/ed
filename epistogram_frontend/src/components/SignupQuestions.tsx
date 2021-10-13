@@ -48,7 +48,7 @@ export const SignupQuestions = (props: {
         questions: questions,
         answerQuestionAsync: handleSaveSelectedAnswerAsync,
         getSelectedAnswerId: getSelectedAnswerId,
-        upperTitle: "Szmelyiseg elemzo kerdoiv",
+        upperTitle: "Személyes tanulási stílus felmérése",
         onPrevoiusOverNavigation: onPrevoiusOverNavigation,
         onNextOverNavigation: onNextOverNavigation,
         allowQuickNext: true
