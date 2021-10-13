@@ -50,7 +50,8 @@ export const SignupQuestions = (props: {
         getSelectedAnswerId: getSelectedAnswerId,
         upperTitle: "Szmelyiseg elemzo kerdoiv",
         onPrevoiusOverNavigation: onPrevoiusOverNavigation,
-        onNextOverNavigation: onNextOverNavigation
+        onNextOverNavigation: onNextOverNavigation,
+        allowQuickNext: true
     });
 
     // navigate to next page if signup is completed
