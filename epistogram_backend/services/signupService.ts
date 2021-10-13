@@ -8,6 +8,7 @@ import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { UserSignupCompletedView } from "../models/views/UserSignupCompletedView";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
+import { base64Encode } from "./base64Service";
 import { sendInvitaitionMailAsync } from "./emailService";
 import { toQuestionAnswerDTO, toQuestionDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
@@ -198,6 +199,7 @@ const getSignupQuestionsAsync = async () => {
 
     return exam
         .questions
+        .orderBy(x => x.questionText.substr(2))
         .map(x => toQuestionDTO(x));
 }
 

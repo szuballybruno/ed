@@ -153,7 +153,7 @@ export const UserAdministration = () => {
                                 icon: <DesktopAccessDisabledIcon />
                             });
 
-                        if (!user.isPendingInvitation)
+                        if (user.isPendingInvitation)
                             chips.push({
                                 name: "A meghivas elfogadasra var",
                                 icon: <Email />
