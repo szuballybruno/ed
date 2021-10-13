@@ -5,9 +5,11 @@ import React, { useContext, useRef, useState } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getAssetUrl } from "../../frontendHelpers";
 import { RouteItemType } from "../../models/types";
+import { useLogout } from "../../services/dataService";
 import { getCourseItemUrl, useNavigation } from "../../services/navigatior";
+import { useShowErrorDialog } from "../../services/notifications";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
-import { CurrentUserContext } from "../HOC/AuthenticationFrame";
+import { CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoPopper } from "../universal/EpistoPopper";
 import NavbarButton from "../universal/NavbarButton";
@@ -29,10 +31,26 @@ const DesktopNavbar = (props: {
 
     const homeUrl = applicationRoutes.rootHomeRoute.route;
     const user = useContext(CurrentUserContext)!;
+    const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     const ref = useRef<HTMLButtonElement>(null);
     const [popperOpen, setPopperOpen] = useState(false);
     const hideLinks = props.hideLinks || !user;
+    const { logoutUserAsync, logoutUserState } = useLogout();
+    const showError = useShowErrorDialog();
+
+    const handleLogout = async () => {
+
+        try {
+
+            await logoutUserAsync();
+            await fetchUserAsync();
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
 
     const userMenuItems = [
         {
@@ -44,7 +62,7 @@ const DesktopNavbar = (props: {
             name: "Kijelentkezés",
             icon: <LogoutIcon></LogoutIcon>,
             color: "var(--mildRed)",
-            onClick: () => { }
+            onClick: handleLogout
         }
     ]
 

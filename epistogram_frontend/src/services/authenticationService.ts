@@ -23,11 +23,13 @@ export const useUserFetching = (enabled: boolean) => {
         refetchOnWindowFocus: false,
         refetchInterval: bgFetchingEnabled ? userRefreshIntervalInMs : false,
         enabled: true,
-        notifyOnChangeProps: ['data', 'isSuccess', 'isError']
+        // notifyOnChangeProps: ['data', 'isSuccess', 'isError']
     });
 
-    const { data: currentUser, refetch, isLoading, isFetching, isSuccess } = queryResult;
+    const { data: fetchedUser, refetch, isLoading, isFetching, isSuccess, isError } = queryResult;
+    const currentUser = isError ? null : fetchedUser as UserDTO;
 
+    // turn on background fetching if fetched successfully
     useEffect(() => {
 
         setIsBgFetchingEnabled(isSuccess);
@@ -41,11 +43,12 @@ export const useUserFetching = (enabled: boolean) => {
 
     const refetchUserAsync = async () => {
 
+        console.log("Refetching user...");
         await refetch();
     }
 
     return {
-        currentUser: currentUser as UserDTO,
+        currentUser: fetchedUser as UserDTO,
         authState,
         refetchUserAsync
     };

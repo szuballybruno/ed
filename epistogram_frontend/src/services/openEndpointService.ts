@@ -87,11 +87,6 @@ export const useRegisterInvitedUser = () => {
     }
 }
 
-export const logOutUserAsync = async () => {
-
-    await httpPostAsync(apiRoutes.open.logoutUser);
-}
-
 export const useLogInUser = () => {
 
     const { result, error, postDataAsync, state } = usePostData<LoginUserDTO, void>(apiRoutes.open.loginUser);

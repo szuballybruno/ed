@@ -10,15 +10,10 @@ import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
 import { createAccessToken, createRefreshToken, createResetPasswordToken, verifyAccessToken, verifyPasswordResetToken, verifyRefreshToken } from "./tokenService";
 import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserById, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
-
-// CONSTS
-export const accessTokenCookieName = "accessToken";
-export const refreshTokenCookieName = "refreshToken";
-
 // PUBLICS
 export const getRequestAccessTokenPayload = (req: Request) => {
 
-    const accessToken = getCookie(req, accessTokenCookieName)?.value;
+    const accessToken = getCookie(req, staticProvider.globalConfig.misc.accessTokenCookieName)?.value;
     if (!accessToken)
         throw new TypedError("There's a problem with the sent access token.", "bad request");
 
@@ -155,18 +150,10 @@ export const logInUser = async (email: string, password: string) => {
     return await getUserLoginTokens(userDTO.id);
 }
 
-export const logOutUser = async (req: Request, res: Response) => {
-
-    const tokenMeta = getRequestAccessTokenPayload(req);
-    if (!tokenMeta)
-        throw new TypedError("Token meta not found.", "internal server error");
+export const logOutUserAsync = async (userId: number) => {
 
     // remove refresh token, basically makes it invalid from now on
-    await removeRefreshToken(tokenMeta.userId);
-
-    // remove browser cookies
-    res.clearCookie(accessTokenCookieName);
-    res.clearCookie(refreshTokenCookieName);
+    await removeRefreshToken(userId);
 }
 
 export const getUserLoginTokens = async (userId: number) => {
@@ -198,7 +185,7 @@ const setAccessTokenCookie = (res: Response, accessToken: string) => {
     const frontendUrl = staticProvider.globalConfig.misc.frontendUrl;
     const isLocalhost = staticProvider.globalConfig.misc.isLocalhost;
 
-    res.cookie(accessTokenCookieName, accessToken, {
+    res.cookie(staticProvider.globalConfig.misc.accessTokenCookieName, accessToken, {
         secure: true,
         httpOnly: true,
         expires: dayjs().add(staticProvider.globalConfig.security.accessTokenLifespanInS, "seconds").toDate(),
@@ -212,7 +199,7 @@ const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
     const frontendUrl = staticProvider.globalConfig.misc.frontendUrl;
     const isLocalhost = staticProvider.globalConfig.misc.isLocalhost;
 
-    res.cookie(refreshTokenCookieName, refreshToken, {
+    res.cookie(staticProvider.globalConfig.misc.refreshTokenCookieName, refreshToken, {
         secure: true,
         httpOnly: true,
         expires: dayjs().add(staticProvider.globalConfig.security.refreshTokenLifespanInS, "seconds").toDate(),

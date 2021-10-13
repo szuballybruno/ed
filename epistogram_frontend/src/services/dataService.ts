@@ -125,6 +125,16 @@ export const usePersonalityData = () => {
     };
 }
 
+export const useLogout = () => {
+
+    const qr = usePostDataUnsafe(apiRoutes.misc.logoutUser);
+
+    return {
+        logoutUserState: qr.state,
+        logoutUserAsync: qr.postDataAsync
+    }
+}
+
 export const useUserId = () => {
 
     const cookies = new Cookies();

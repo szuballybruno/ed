@@ -53,7 +53,6 @@ const initializeAsync = async () => {
 
     // open routes
     expressServer.get(apiRoutes.open.renewUserSession, renewUserSessionAction);
-    expressServer.post(apiRoutes.open.logoutUser, logOutUserAction);
     expressServer.post(apiRoutes.open.loginUser, getAsyncActionHandler(logInUserAction));
     expressServer.post(apiRoutes.open.registerUser, registerUserAction);
     expressServer.post(apiRoutes.open.registerInvitedUser, registerInvitedUserAction);
@@ -66,6 +65,7 @@ const initializeAsync = async () => {
     expressServer.post('/misc/request-change-password', requestChangePasswordAction);
     expressServer.post('/misc/set-new-password', changePasswordAction);
     expressServer.get('/misc/get-registration-link', getRegistrationLinkAction);
+    expressServer.post(apiRoutes.misc.logoutUser, logOutUserAction);
 
     // signup
     expressServer.post(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction);

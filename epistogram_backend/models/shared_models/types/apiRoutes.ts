@@ -2,13 +2,13 @@ export const apiRoutes = {
 
     open: {
         renewUserSession: "/open/renew-user-session",
-        logoutUser: "/open/logout-user",
         loginUser: "/open/login-user",
         registerUser: "/open/register-user",
         registerInvitedUser: "/open/register-invited-user"
     },
 
     misc: {
+        logoutUser: "/misc/logout-user",
     },
 
     signup: {

@@ -1,8 +1,9 @@
 
 import { NextFunction, Request, Response } from "express";
 import { ChangePasswordDTO } from "../models/shared_models/SetNewPasswordDTO";
-import { changePasswordAsync, getUserIdFromRequest, logInUser, logOutUser, renewUserSessionAsync, setAuthCookies } from "../services/authenticationService";
+import { changePasswordAsync, getUserIdFromRequest, logInUser, logOutUserAsync, renewUserSessionAsync, setAuthCookies } from "../services/authenticationService";
 import { getCurrentUser } from "../services/userService";
+import { staticProvider } from "../staticProvider";
 import { getAsyncActionHandler, TypedError, withValueOrBadRequest } from "../utilities/helpers";
 
 export const renewUserSessionAction = getAsyncActionHandler(async (req: Request, res: Response) => {
@@ -42,5 +43,11 @@ export const getCurrentUserAction = getAsyncActionHandler(async (req: Request) =
 
 export const logOutUserAction = getAsyncActionHandler(async (req: Request, res: Response, next: NextFunction) => {
 
-    return logOutUser(req, res);
+    const userId = getUserIdFromRequest(req);
+
+    await logOutUserAsync(userId);
+
+    // remove browser cookies
+    res.clearCookie(staticProvider.globalConfig.misc.accessTokenCookieName);
+    res.clearCookie(staticProvider.globalConfig.misc.refreshTokenCookieName);
 });

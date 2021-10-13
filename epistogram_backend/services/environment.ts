@@ -53,7 +53,9 @@ export class GlobalConfiguration {
         hostPort: getEnvConfigEntry("HOST_PORT"),
         environmentName: getEnvConfigEntry("ENVIRONMENT_NAME"),
         frontendUrl: getEnvConfigEntry("FRONTEND_URL"),
-        isLocalhost: getEnvConfigEntry("IS_LOCALHOST") == "true"
+        isLocalhost: getEnvConfigEntry("IS_LOCALHOST") == "true",
+        accessTokenCookieName: "accessToken",
+        refreshTokenCookieName: "refreshToken"
     }
 
     fileStorage = {
