@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { globalConfig } from "../../configuration/config";
 import { usePaging } from "../../frontendHelpers";
-import { CurrentUserContext } from '../HOC/AuthenticationFrame';
+import { CurrentUserContext, RefetchUserAsyncContext } from '../HOC/AuthenticationFrame';
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { SignupQuestions } from '../SignupQuestions';
@@ -15,6 +15,13 @@ export const SignupPage = () => {
     const gereetImageUrl = "";
     const slidesState = usePaging([1, 2, 3]);
     const user = useContext(CurrentUserContext)!;
+    const refetchUserAsync = useContext(RefetchUserAsyncContext)!;
+
+    const handleGoToSummary = () => {
+
+        slidesState.next();
+        refetchUserAsync();
+    }
 
     const GreetSlide = () => <SignupWrapper
         title="Regisztráció"
@@ -26,7 +33,7 @@ export const SignupPage = () => {
     </SignupWrapper>
 
     const QuestionnaireSlide = () => <SignupQuestions
-        onNextOverNavigation={slidesState.next}
+        onNextOverNavigation={handleGoToSummary}
         onPrevoiusOverNavigation={slidesState.previous}
         onJumpToResults={slidesState.jumpToLast} />
 
@@ -34,6 +41,7 @@ export const SignupPage = () => {
         title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
         description={"Már csak egy-két adatra van szükségünk, hogy elkezdhesd a rendszer használatát"}
         upperTitle="Összegzés"
+        nextButtonTitle={user.userActivity.canAccessApplication ? "Tovabb a fooldalra!" : undefined}
         onNavPrevious={() => slidesState.previous()}>
 
         <PersonalityAssessment height="50vh" mt="20px"></PersonalityAssessment>
