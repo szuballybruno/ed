@@ -1660,7 +1660,7 @@
   dependencies:
     "@chakra-ui/utils" "1.8.2"
 
-"@chakra-ui/tabs@1.5.5":
+"@chakra-ui/tabs@1.5.5", "@chakra-ui/tabs@^1.5.5":
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/@chakra-ui/tabs/-/tabs-1.5.5.tgz#09721f87dbb170df2c67ecd49699f6abda064eab"
   integrity sha512-ZBPV1KlAYRMlwsXeUf3aPRFpcTsBQND6jWo9ZUYK+Kax8E0Qdltzrjxrrw7FpTj70EdFOIWZcn+2eD0c1y2sUA==

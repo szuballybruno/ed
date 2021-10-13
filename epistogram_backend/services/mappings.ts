@@ -370,6 +370,6 @@ export const toEditCourseItemsDTO = (course: Course) => {
     //     .orderBy(x => x.orderIndex);
 
     // return itemsOrdered as CourseItemDTO[];
-    throwNotImplemented();
+    //TODO: SOLVE throwNotImplemented();
     return [] as CourseItemDTO[];
 }

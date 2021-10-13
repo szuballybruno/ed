@@ -13,8 +13,10 @@ import { applicationRoutes } from "../configuration/applicationRoutes";
 import HomePage from "../components/HomePage";
 import { SetNewPasswordPage } from "../components/SetNewPasswordPage";
 import { RegistrationPage } from "../components/RegistrationPage";
+import AvailableCoursesRouting from "./AvailableCoursesRouting";
 
 export const MainRouting = () => {
+
     return <Switch>
 
         {/* unprotected paths  */}
@@ -41,9 +43,9 @@ export const MainRouting = () => {
             path={applicationRoutes.homeRoute.route}
             render={() => <HomePage />} />
 
-        <ProtectedRoute
+        <Route
             path={applicationRoutes.availableCoursesRoute.route}
-            render={() => <AvailableCoursesPage />} />
+            render={() => <AvailableCoursesRouting />} />
 
         <ProtectedRoute
             path={applicationRoutes.settingsRoute.route}

@@ -17,6 +17,7 @@ import { createRegistrationToken } from "../services/tokenService";
 import { getUserById } from "../services/userService";
 import { staticProvider } from "../staticProvider";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+import {log} from "../services/misc/logger";
 
 export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
@@ -100,6 +101,8 @@ export const getEditedVideoAction = async (req: Request) => {
 export const getEditedCourseAction = async (req: Request) => {
 
     const courseId = req.body.courseId
+
+    log("This is the courseId in getEditedCourseAction: " + courseId)
 
     return await getEditedCourseAsync(courseId);
 };
