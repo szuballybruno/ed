@@ -6,7 +6,7 @@ import { useRenewUserSessionPooling } from "../../services/openEndpointService";
 import setTheme from "../../services/setTheme";
 
 export const CurrentUserContext = createContext<UserDTO | null>(null);
-export const RefetchUserFunctionContext = createContext<() => void>(() => { });
+export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());
 export const AuthenticationStateContext = createContext<AuthenticationStateType>("loading");
 
 export const AuthenticationFrame = (props) => {
@@ -21,16 +21,16 @@ export const AuthenticationFrame = (props) => {
         console.log("Renewing token: " + isSuccess);
 
     // fetch current user 
-    const { currentUser, refetchUser, authState } = useUserFetching(isSuccess);
+    const { currentUser, refetchUserAsync, authState } = useUserFetching(isSuccess);
 
     if (globalConfig.verboseLogging)
         console.log("Authentication state: " + authState);
 
     return <AuthenticationStateContext.Provider value={authState}>
-        <RefetchUserFunctionContext.Provider value={refetchUser}>
+        <RefetchUserAsyncContext.Provider value={refetchUserAsync}>
             <CurrentUserContext.Provider value={currentUser}>
                 {props.children}
             </CurrentUserContext.Provider>
-        </RefetchUserFunctionContext.Provider>
+        </RefetchUserAsyncContext.Provider>
     </AuthenticationStateContext.Provider> as JSX.Element
 }

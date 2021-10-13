@@ -1,13 +1,14 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { getAssetUrl, getQueryParam } from "../frontendHelpers";
 import { useNavigation } from "../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/notifications";
 import { useRegisterInvitedUser, useRegisterUser } from "../services/openEndpointService";
 import { EpistoHeader } from "./administration/universal/EpistoHeader";
+import { RefetchUserAsyncContext } from "./HOC/AuthenticationFrame";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 import { EpistoButton } from "./universal/EpistoButton";
 
@@ -30,6 +31,8 @@ export const RegistrationPage = () => {
     const { registerUserAsync, registerUserState } = useRegisterUser();
     const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();
 
+    const refetchUser = useContext(RefetchUserAsyncContext);
+
     const handleRegistration = async () => {
 
         try {
@@ -43,6 +46,7 @@ export const RegistrationPage = () => {
             }
 
             showNotification("Sikeres regisztracio!");
+            await refetchUser();
             navigate(applicationRoutes.signupRoute.route);
         }
         catch (e) {

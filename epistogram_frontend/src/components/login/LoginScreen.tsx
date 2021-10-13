@@ -6,7 +6,7 @@ import { useNavigation } from "../../services/navigatior";
 import { useShowErrorDialog } from "../../services/notifications";
 import { useLogInUser } from "../../services/openEndpointService";
 import SingleInput from "../administration/universal/singleInput/SingleInput";
-import { AuthenticationStateContext, CurrentUserContext, RefetchUserFunctionContext } from "../HOC/AuthenticationFrame";
+import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from './loginScreen.module.scss';
 
@@ -20,7 +20,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
     const { navigate } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
-    const refetchUser = useContext(RefetchUserFunctionContext);
+    const refetchUser = useContext(RefetchUserAsyncContext);
     const user = useContext(CurrentUserContext);
 
     const handleLoginUserAsync = async () => {

@@ -26,7 +26,7 @@ export const useUserFetching = (enabled: boolean) => {
         notifyOnChangeProps: ['data', 'isSuccess', 'isError']
     });
 
-    const { data: currentUser, refetch: refetchUser, isLoading, isFetching, isSuccess } = queryResult;
+    const { data: currentUser, refetch, isLoading, isFetching, isSuccess } = queryResult;
 
     useEffect(() => {
 
@@ -39,9 +39,14 @@ export const useUserFetching = (enabled: boolean) => {
             ? "authenticated"
             : "forbidden") as AuthenticationStateType;
 
+    const refetchUserAsync = async () => {
+
+        await refetch();
+    }
+
     return {
         currentUser: currentUser as UserDTO,
         authState,
-        refetchUser
+        refetchUserAsync
     };
 }

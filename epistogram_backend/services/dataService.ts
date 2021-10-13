@@ -65,6 +65,7 @@ export const registerInvitedUserAsync = async (dto: RegisterInvitedUserDTO) => {
         .ormConnection
         .getRepository(User)
         .save({
+            id: user.id,
             password: await hashPasswordAsync(dto.password)
         });
 

@@ -9,7 +9,6 @@ import { Group } from "../models/entity/Group";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
 import { Role } from "../models/entity/Role";
-import { StorageFile } from "../models/entity/StorageFile";
 import { Tag } from "../models/entity/Tag";
 import { Video } from "../models/entity/Video";
 import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
@@ -17,10 +16,10 @@ import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizatio
 import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
+import { registerInvitedUserAsync } from "./dataService";
 import { log } from "./misc/logger";
-import { createInvitedUserWithOrgAsync, finalizeUserRegistrationAsync } from "./signupService";
+import { createInvitedUserWithOrgAsync } from "./signupService";
 import { executeSeedScriptAsync } from "./sqlServices/sqlSeedScriptService";
-import { setUserAvatarFileId } from "./userService";
 import { insertVideoAsync } from "./videoService";
 
 export const seedDB = async () => {
@@ -382,11 +381,10 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
         1,
         false);
 
-    await finalizeUserRegistrationAsync({
+    await registerInvitedUserAsync({
         invitationToken: invitationToken,
-        phoneNumber: "+36 202020202",
         password: "admin",
-        controlPassword: "admin"
+        passwordCompare: "admin"
     });
 
     log("seeding User 2...")

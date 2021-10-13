@@ -5,7 +5,7 @@ import { TextField, Typography } from '@mui/material';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { CurrentUserContext, RefetchUserFunctionContext } from "../HOC/AuthenticationFrame";
+import { CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from '../HOC/MainPanels';
 import Navbar from '../navbar/Navbar';
 import { NavigationLinkList } from '../NavigationLinkList';
@@ -54,7 +54,7 @@ const Preferences = () => {
     const { postAvatarFileAsync, postAvatarFileState } = useUploadAvatarFile();
     const { requestChangePasswordAsync, requestChangePasswordState } = useRequestChangePassword();
 
-    const refetchUser = useContext(RefetchUserFunctionContext);
+    const refetchUser = useContext(RefetchUserAsyncContext);
 
     const [isPasswordChangeOpen, setIsPasswordChangeOpen] = useState(false);
 
