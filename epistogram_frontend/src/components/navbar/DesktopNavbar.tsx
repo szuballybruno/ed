@@ -74,7 +74,7 @@ const DesktopNavbar = (props: {
                 src={getAssetUrl("/images/logo.svg")}
                 style={{
                     width: "150px",
-                    height: "50px",
+                    height: "80px",
                     objectFit: "contain",
                     marginLeft: "15px",
                     cursor: "pointer",

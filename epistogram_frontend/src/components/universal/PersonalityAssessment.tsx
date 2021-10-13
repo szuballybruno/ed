@@ -30,7 +30,8 @@ export const PersonalityAssessment = (props: FlexProps) => {
                   minWidth={window.innerWidth > 600 ? 350 : "100%"}
                   w={window.innerWidth > 400 ? "50%" : "100%"}
                   maxW={window.innerWidth < 600 ? "100%" : "50%"}
-                  height="350"
+                  height="500"
+                  mt={20}
                   minH={350}
                   mb={10}>
                 <PersonalityChart data={personalityData?.chartData ?? null}></PersonalityChart>

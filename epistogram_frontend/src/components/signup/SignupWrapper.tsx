@@ -47,7 +47,7 @@ export const SignupWrapper = (props: {
         {/* header */}
         <Flex id="header" direction="column" height={"100%"} maxH={100}>
             <Flex h={60} w={"100%"} hidden={window.innerWidth > 1000} justifyContent={"center"} alignItems={"center"}>
-                <Image maxH={50} src={getAssetUrl("/images/logo.svg")} />
+                <Image maxH={80} src={getAssetUrl("/images/logo.svg")} />
             </Flex>
             {/* header top */}
             <Flex
@@ -64,7 +64,7 @@ export const SignupWrapper = (props: {
                 </Flex>
 
                 <Flex h={60} w={"30%"} hidden={window.innerWidth < 1000} justifyContent={"center"} alignItems={"center"}>
-                    <Image maxH={50} src={getAssetUrl("/images/logo.svg")} />
+                    <Image maxH={80} src={getAssetUrl("/images/logo.svg")} />
                 </Flex>
 
 
@@ -93,8 +93,7 @@ export const SignupWrapper = (props: {
                 justify="center"
                 align="center"
                 width="90vw"
-                height={"90%"}
-                maxWidth="850px">
+                height={"90%"}>
 
                 {/* image */}
                 {hasImage && <Flex

@@ -47,9 +47,8 @@ export const SignupPage = () => {
         onJumpToResults={slidesState.jumpToLast} />
 
     const SummarySlide = (isCurrent: boolean) => <SignupWrapper
-        title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
+        title={"Az alábbi grafikonon a saját tanulási stílusod vizualizációja látható"}
         upperTitle="Összegzés"
-        nextButtonTitle={"Tovább a főoldalra!"}
         onNext={handleGoToHomePage}
         onNavPrevious={() => slidesState.previous()}>
 
