@@ -35,6 +35,29 @@ export const sendInvitaitionMailAsync = async (
     await sendEpistoEmailAsync(epistoEmail);
 }
 
+export const sendSuccessfulRegistrationEmailAsync = async (
+    user: User,
+    generatedPassword: string,
+    epistogramAppUrl: string) => {
+
+    const { email, firstName, lastName } = user;
+
+    const epistoEmail = {
+        to: email,
+        subject: "Sikeres regisztracio!",
+        template: {
+            name: "successfulRegistrationEmailTemplate",
+            params: {
+                epistogramLogoUrl: getAssetUrl("images/logo.png"),
+                generatedPassword: generatedPassword,
+                epistogramAppUrl: epistogramAppUrl
+            }
+        }
+    } as EpistoEmail;
+
+    await sendEpistoEmailAsync(epistoEmail);
+}
+
 export const sendResetPasswordMailAsync = async (user: User, resetPasswordUrl: string) => {
 
     const { email, firstName, lastName } = user;

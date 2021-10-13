@@ -12,8 +12,10 @@ import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authenticationService";
 import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "./courseService";
+import { sendSuccessfulRegistrationEmailAsync } from "./emailService";
 import { toOrganizationDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
+import { generateEpistoPassword } from "./passGenService";
 import { createUserAsync } from "./signupService";
 import { verifyInvitaionToken, verifyRegistrationToken } from "./tokenService";
 import { getUserById } from "./userService";
@@ -34,6 +36,8 @@ export const registerUserAsync = async (dto: RegisterUserDTO) => {
     const token = dto.registrationToken;
     verifyRegistrationToken(token);
 
+    const generatedPassword = generateEpistoPassword();
+
     const user = await createUserAsync(
         dto.emailAddress,
         dto.firstName,
@@ -42,7 +46,10 @@ export const registerUserAsync = async (dto: RegisterUserDTO) => {
         null,
         null,
         null,
-        false);
+        false,
+        generatedPassword);
+
+    await sendSuccessfulRegistrationEmailAsync(user, generatedPassword, staticProvider.globalConfig.misc.frontendUrl);
 
     return await getUserLoginTokens(user.id);
 }

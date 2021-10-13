@@ -28,6 +28,7 @@
     "express-fileupload": "^1.2.1",
     "get-video-duration": "^4.0.0",
     "handlebars": "^4.7.7",
+    "password-generator": "^2.3.2",
     "pg": "^8.7.1",
     "react-scripts": "^4.0.3",
     "reflect-metadata": "^0.1.13",

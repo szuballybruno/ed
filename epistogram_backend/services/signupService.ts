@@ -49,7 +49,8 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
         null,
         roleId,
         jobTitle,
-        true);
+        true,
+        "guest");
 
     const userId = user.id;
     const invitationToken = createInvitationToken(userId);
@@ -79,7 +80,8 @@ export const createUserAsync = async (
     phoneNumber: string | null,
     roleId: number | null,
     jobTitle: string | null,
-    isInvited: boolean) => {
+    isInvited: boolean,
+    password: string) => {
 
     // does user already exist?
     const existingUser = await getUserByEmail(email);
@@ -87,7 +89,7 @@ export const createUserAsync = async (
         throw new TypedError("User already exists. Email: " + email, "bad request");
 
     // hash user password 
-    const hashedDefaultPassword = await hashPasswordAsync("guest");
+    const hashedPassword = await hashPasswordAsync(password);
 
     // set default user fileds
     const user = {
@@ -98,7 +100,7 @@ export const createUserAsync = async (
         jobTitle,
         phoneNumber,
         organizationId,
-        password: hashedDefaultPassword,
+        password: hashedPassword,
         isPendingInvitation: isInvited,
         isTrusted: isInvited
     } as User;
