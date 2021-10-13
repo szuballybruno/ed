@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import React from 'react';
 import classes from './playerDescription.module.scss';
+import {Flex} from "@chakra-ui/react";
 
 const PlayerDescription = (props: { description: string }) => {
 
@@ -16,14 +17,10 @@ const PlayerDescription = (props: { description: string }) => {
     // };
 
     return (
-        <div className={classes.descriptionWrapper}>
-            <div className={classes.innerDescriptionWrapper}>
-                <div className={classes.descriptionTextWrapper}>
+        <Flex w={"100%"} minH={600} p={20}>
                     {/* <Typography>{breakText(props.description)}</Typography> */}
-                    {props.description}
-                </div>
-            </div>
-        </div>
+            {props.description}
+        </Flex>
     )
 };
 
