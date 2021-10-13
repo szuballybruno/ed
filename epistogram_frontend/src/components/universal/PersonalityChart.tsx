@@ -49,5 +49,6 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
         data={{
             labels: keys,
             datasets: sets
-        }} />
+        }}
+        style={{height: 400}} />
 }

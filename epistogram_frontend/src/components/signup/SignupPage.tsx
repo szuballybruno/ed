@@ -48,13 +48,12 @@ export const SignupPage = () => {
 
     const SummarySlide = (isCurrent: boolean) => <SignupWrapper
         title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
-        description={"Már csak egy-két adatra van szükségünk, hogy elkezdhesd a rendszer használatát"}
         upperTitle="Összegzés"
-        nextButtonTitle={"Tovabb a fooldalra!"}
+        nextButtonTitle={"Tovább a főoldalra!"}
         onNext={handleGoToHomePage}
         onNavPrevious={() => slidesState.previous()}>
 
-        {isCurrent && <PersonalityAssessment height="50vh" mt="20px"></PersonalityAssessment>}
+        {isCurrent && <PersonalityAssessment height="100%" mt="20px"></PersonalityAssessment>}
     </SignupWrapper>
 
     const slides = [
