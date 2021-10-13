@@ -46,11 +46,6 @@ const AdministrationPage = () => {
                 {/* admin subpages */}
                 <Switch>
 
-                    {/* statistics */}
-                    <Route exact path={administrationRoutes.myCompanyRoute.route}>
-                        <AdminStatistics />
-                    </Route>
-
                     {/* user administration */}
                     <Route path={administrationRoutes.usersRoute.route}>
                         <Switch>
@@ -84,6 +79,11 @@ const AdministrationPage = () => {
                                 <EditVideo />
                             </Route>
                         </Switch>} />
+
+                    {/* statistics */}
+                    <Route exact path={administrationRoutes.myCompanyRoute.route}>
+                        <AdminStatistics />
+                    </Route>
                 </Switch>
             </RightPanel>
         </ContentWrapper>

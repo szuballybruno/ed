@@ -21,6 +21,7 @@ import { Button, Checkbox, Typography } from "@mui/material";
 import { ProfileImage } from "./ProfileImage";
 import IntersectionObserverWrap from "./administration/universal/overflow/intersection-observer-wrapper";
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 
 export const UserAdministration = () => {
 
@@ -152,10 +153,16 @@ export const UserAdministration = () => {
                                 icon: <DesktopAccessDisabledIcon />
                             });
 
+                        if (!user.isPendingInvitation)
+                            chips.push({
+                                name: "A meghivas elfogadasra var",
+                                icon: <Email />
+                            });
+
                         chips.push(
                             {
                                 name: user.email,
-                                icon: <Email />
+                                icon: <AlternateEmailIcon />
                             });
 
                         chips.push(

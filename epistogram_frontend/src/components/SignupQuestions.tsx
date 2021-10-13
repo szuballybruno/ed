@@ -7,19 +7,20 @@ import { LoadingFrame } from "./HOC/LoadingFrame";
 
 export const SignupQuestions = (props: {
     onPrevoiusOverNavigation: () => void,
-    onNextOverNavigation: () => void
+    onNextOverNavigation: () => void,
+    onJumpToResults: () => void
 }) => {
 
     const {
         onNextOverNavigation,
-        onPrevoiusOverNavigation
+        onPrevoiusOverNavigation,
+        onJumpToResults
     } = props;
 
     const { signupData, signupDataError, signupDataStatus, refetchSignupData } = useSignupData();
     const { saveAnswersAsync, saveAnswersStatus } = useAnswerSignupQuestion();
 
-    const questions2 = signupData?.questions ?? [];
-    const questions = [questions2[0], questions2[1], questions2[2]];
+    const questions = signupData?.questions ?? [];
     const questionAnswers = signupData?.questionAnswers ?? [];
 
     const getSelectedAnswerId = (questionId: number) => {
@@ -52,7 +53,12 @@ export const SignupQuestions = (props: {
         onNextOverNavigation: onNextOverNavigation
     });
 
-    console.log(state.questionnaireState.currentIndex)
+    // navigate to next page if signup is completed
+    useEffect(() => {
+
+        if (signupData?.isCompleted)
+            onJumpToResults();
+    }, [signupData?.isCompleted]);
 
     // useEffect(() => {
 

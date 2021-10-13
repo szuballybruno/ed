@@ -66,6 +66,7 @@ export const registerInvitedUserAsync = async (dto: RegisterInvitedUserDTO) => {
         .getRepository(User)
         .save({
             id: user.id,
+            isPendingInvitation: false,
             password: await hashPasswordAsync(dto.password)
         });
 

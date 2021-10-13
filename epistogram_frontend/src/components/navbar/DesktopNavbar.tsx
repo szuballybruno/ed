@@ -80,7 +80,7 @@ const DesktopNavbar = (props: {
 
                     {user.userActivity.canAccessAdministration && <NavbarButton
                         menuName={applicationRoutes.administrationRoute.title}
-                        menuPath={applicationRoutes.administrationRoute.myCompanyRoute.route} />}
+                        menuPath={applicationRoutes.administrationRoute.usersRoute.route} />}
 
                     {/* continue watching  */}
                     {currentCourseItemCode &&
