@@ -37,31 +37,53 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
     <Flex w={"100%"}>
         <Flex direction={"column"} minW={"50%"}>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} />
+
+                </Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} /></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} /></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} /></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} /></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
@@ -69,31 +91,51 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
         </Flex>
         <Flex direction={"column"} minW={"50%"}>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} /></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} /></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} /></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} /></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} >
+                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                        borderRadius: 5,
+                        objectFit: "cover"
+                    }} alt={""} /></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
@@ -199,31 +241,31 @@ export const CoursePageRequirements = () => <Flex mt={10} w={"100%"} h={500} dir
     <Flex w={"100%"}>
         <Flex direction={"column"} minW={"50%"}>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                <Flex w={30} h={30} bg={"purple"}></Flex>
+                <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
@@ -245,7 +287,9 @@ export const CoursePageContent = () => <Flex direction={"column"} mt={10}>
         <AccordionDetails>
             <Flex h={65} w={"100%"}>
                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
-                    <img src={getAssetUrl("")} alt={""} style={{
+
+
+                    <img src={getAssetUrl("/course_page_icons/curriculum_video.svg")} alt={""} style={{
                         width: 60,
                         height: 60
                     }} />
@@ -257,7 +301,7 @@ export const CoursePageContent = () => <Flex direction={"column"} mt={10}>
             </Flex>
             <Flex h={65} w={"100%"}>
                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
-                    <img src={getAssetUrl("")} alt={""} style={{
+                    <img src={getAssetUrl("/course_page_icons/curriculum_video.svg")} alt={""} style={{
                         width: 60,
                         height: 60
                     }} />
@@ -269,7 +313,7 @@ export const CoursePageContent = () => <Flex direction={"column"} mt={10}>
             </Flex>
             <Flex h={65} w={"100%"}>
                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
-                    <img src={getAssetUrl("")} alt={""} style={{
+                    <img src={getAssetUrl("/course_page_icons/curriculum_video.svg")} alt={""} style={{
                         width: 60,
                         height: 60
                     }} />
@@ -281,7 +325,7 @@ export const CoursePageContent = () => <Flex direction={"column"} mt={10}>
             </Flex>
             <Flex h={65} w={"100%"}>
                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
-                    <img src={getAssetUrl("")} alt={""} style={{
+                    <img src={getAssetUrl("/course_page_icons/curriculum_video.svg")} alt={""} style={{
                         width: 60,
                         height: 60
                     }} />
@@ -563,7 +607,12 @@ const CoursePage = () => {
                                 }} alt={""} />
                             </Flex>
                             <Flex w={"100%"} h={30} px={15}  mt={10}>
-                                <Flex w={30} h={30} bg={"purple"}></Flex>
+                                <Flex w={30} h={30} p={5} >
+                                    <img src={getAssetUrl("/course_page_icons/right_panel_course_lenght.svg")} style={{
+                                        borderRadius: 5,
+                                        objectFit: "cover"
+                                    }} alt={""} />
+                                </Flex>
                                 <Flex direction={"row"} flex={1} mx={4} justifyContent={"space-between"} alignItems={"center"}>
                                     <Typography>Kurzus hossza</Typography>
                                     <Typography>4h 12m</Typography>
@@ -571,7 +620,12 @@ const CoursePage = () => {
                             </Flex>
                             <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                             <Flex w={"100%"} h={30} px={15}>
-                                <Flex w={30} h={30} bg={"purple"}></Flex>
+                                <Flex w={30} h={30} p={5} >
+                                    <img src={getAssetUrl("/course_page_icons/right_panel_sections.svg")} style={{
+                                        borderRadius: 5,
+                                        objectFit: "cover"
+                                    }} alt={""} /></Flex>
+
                                 <Flex direction={"row"} flex={1} mx={4} justifyContent={"space-between"} alignItems={"center"}>
                                     <Typography>Témakörök száma</Typography>
                                     <Typography>12</Typography>
@@ -579,7 +633,13 @@ const CoursePage = () => {
                             </Flex>
                             <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                             <Flex w={"100%"} h={30} px={15}>
-                                <Flex w={30} h={30} bg={"purple"}></Flex>
+                                <Flex w={30} h={30} p={5} >
+
+                                    <img src={getAssetUrl("/course_page_icons/right_panel_videos.svg")} style={{
+                                        borderRadius: 5,
+                                        objectFit: "cover"
+                                    }} alt={""} />
+                                </Flex>
                                 <Flex direction={"row"} flex={1} mx={4} justifyContent={"space-between"} alignItems={"center"}>
                                     <Typography>Videók száma</Typography>
                                     <Typography>119</Typography>
@@ -587,7 +647,12 @@ const CoursePage = () => {
                             </Flex>
                             <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                             <Flex w={"100%"} h={30} px={15}>
-                                <Flex w={30} h={30} bg={"purple"}></Flex>
+                                <Flex w={30} h={30} p={5} >
+                                    <img src={getAssetUrl("/course_page_icons/right_panel_questions.svg")} style={{
+                                        borderRadius: 5,
+                                        objectFit: "cover"
+                                    }} alt={""} />
+                                </Flex>
                                 <Flex direction={"row"} flex={1} mx={4} justifyContent={"space-between"} alignItems={"center"}>
                                     <Typography>Tudást felmérő kérdések</Typography>
                                     <Typography>187</Typography>
@@ -595,7 +660,13 @@ const CoursePage = () => {
                             </Flex>
                             <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                             <Flex w={"100%"} h={30} px={15}>
-                                <Flex w={30} h={30} bg={"purple"}></Flex>
+                                <Flex w={30} h={30} p={5} >
+
+                                    <img src={getAssetUrl("/course_page_icons/right_panel_language.svg")} style={{
+                                        borderRadius: 5,
+                                        objectFit: "cover"
+                                    }} alt={""} />
+                                </Flex>
                                 <Flex direction={"row"} flex={1} mx={4} justifyContent={"space-between"} alignItems={"center"}>
                                     <Typography>Nyelv</Typography>
                                     <Typography>magyar</Typography>
@@ -603,7 +674,13 @@ const CoursePage = () => {
                             </Flex>
                             <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                             <Flex w={"100%"} h={30} px={15}>
-                                <Flex w={30} h={30} bg={"purple"}></Flex>
+                                <Flex w={30} h={30} p={5} >
+                                    <img src={getAssetUrl("/course_page_icons/right_panel_enrolled.svg")} style={{
+                                        borderRadius: 5,
+                                        objectFit: "cover"
+                                    }} alt={""} />
+
+                                </Flex>
                                 <Flex direction={"row"} flex={1} mx={4} justifyContent={"space-between"} alignItems={"center"}>
                                     <Typography>Hányan végezték el eddig</Typography>
                                     <Typography>4139</Typography>
@@ -611,7 +688,13 @@ const CoursePage = () => {
                             </Flex>
                             <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                             <Flex w={"100%"} h={30} px={15}>
-                                <Flex w={30} h={30} bg={"purple"}></Flex>
+                                <Flex w={30} h={30} p={5} >
+
+                                    <img src={getAssetUrl("/course_page_icons/right_panel_updated.svg")} style={{
+                                        borderRadius: 5,
+                                        objectFit: "cover"
+                                    }} alt={""} />
+                                </Flex>
                                 <Flex direction={"row"} flex={1} mx={4} justifyContent={"space-between"} alignItems={"center"}>
                                     <Typography>Legutolsó frissítés dátuma</Typography>
                                     <Typography>2021. 10. 13.</Typography>
@@ -652,7 +735,7 @@ const CoursePage = () => {
 
 
                                 <Flex w={"100%"} h={60} px={15}  mt={10}>
-                                    <Flex w={100} h={60} bg={"purple"}></Flex>
+                                    <Flex w={100} h={60} ></Flex>
                                     <Flex direction={"column"} flex={1} mx={4} pl={5} justifyContent={"center"} alignItems={"flex-start"}>
                                         <Typography>Kurzus 1</Typography>
                                         <Typography fontSize={12}>Kurzus 1</Typography>
@@ -660,7 +743,7 @@ const CoursePage = () => {
                                 </Flex>
                                 <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                                 <Flex w={"100%"} h={60} px={15}>
-                                    <Flex w={100} h={60} bg={"purple"}></Flex>
+                                    <Flex w={100} h={60} ></Flex>
                                     <Flex direction={"column"} flex={1} mx={4} pl={5} justifyContent={"center"} alignItems={"flex-start"}>
                                         <Typography>Kurzus 1</Typography>
                                         <Typography fontSize={12}>Kurzus 1</Typography>
@@ -668,7 +751,7 @@ const CoursePage = () => {
                                 </Flex>
                                 <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                                 <Flex w={"100%"} h={60} px={15}>
-                                    <Flex w={100} h={60} bg={"purple"}></Flex>
+                                    <Flex w={100} h={60} ></Flex>
                                     <Flex direction={"column"} flex={1} mx={4} pl={5} justifyContent={"center"} alignItems={"flex-start"}>
                                         <Typography>Kurzus 1</Typography>
                                         <Typography fontSize={12}>Kurzus 1</Typography>
@@ -676,7 +759,7 @@ const CoursePage = () => {
                                 </Flex>
                                 <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                                 <Flex w={"100%"} h={60} px={15}>
-                                    <Flex w={100} h={60} bg={"purple"}></Flex>
+                                    <Flex w={100} h={60} ></Flex>
                                     <Flex direction={"column"} flex={1} mx={4} pl={5} justifyContent={"center"} alignItems={"flex-start"}>
                                         <Typography>Kurzus 1</Typography>
                                         <Typography fontSize={12}>Kurzus 1</Typography>
@@ -684,7 +767,7 @@ const CoursePage = () => {
                                 </Flex>
                                 <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
                                 <Flex w={"100%"} h={60} px={15}>
-                                    <Flex w={100} h={60} bg={"purple"}></Flex>
+                                    <Flex w={100} h={60} ></Flex>
                                     <Flex direction={"column"} flex={1} mx={4} pl={5} justifyContent={"center"} alignItems={"flex-start"}>
                                         <Typography>Kurzus 1</Typography>
                                         <Typography fontSize={12}>Kurzus 1</Typography>
