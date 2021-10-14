@@ -48,7 +48,7 @@ export const sendSuccessfulRegistrationEmailAsync = async (
         template: {
             name: "successfulRegistrationEmailTemplate",
             params: {
-                epistogramLogoUrl: getAssetUrl("images/logo.png"),
+                epistogramLogoUrl: getAssetUrl("images/logo.svg"),
                 generatedPassword: generatedPassword,
                 epistogramAppUrl: epistogramAppUrl
             }
@@ -68,7 +68,7 @@ export const sendResetPasswordMailAsync = async (user: User, resetPasswordUrl: s
         template: {
             name: "resetPasswordEmailTemplate",
             params: {
-                epistogramLogoUrl: getAssetUrl("images/logo.png"),
+                epistogramLogoUrl: getAssetUrl("images/logo.svg"),
                 passwordResetUrl: resetPasswordUrl
             }
         }

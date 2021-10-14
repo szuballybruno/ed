@@ -22,12 +22,12 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
         {
             label: 'Személyes preferenciám',
             fill: true,
-            backgroundColor: '#ff810099',
-            borderColor: '#ff8100',
-            pointBackgroundColor: '#ff8100',
-            pointBorderColor: '#ff8100',
+            backgroundColor: '#97c9cc60',
+            borderColor: '#97c9cc',
+            pointBackgroundColor: '#97c9cc',
+            pointBorderColor: '#97c9cc',
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: '#ff8100',
+            pointHoverBorderColor: '#97c9cc',
             data: values
         }
     ];
@@ -49,5 +49,6 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
         data={{
             labels: keys,
             datasets: sets
-        }} />
+        }}
+        style={{height: 400}} />
 }

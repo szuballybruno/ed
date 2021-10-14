@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import { usePersonalityData } from "../../services/dataService";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { PersonalityChart } from "./PersonalityChart"
+import {AlertDescription} from "@chakra-ui/react";
 
 export const PersonalityAssessment = (props: FlexProps) => {
 
@@ -24,17 +25,29 @@ export const PersonalityAssessment = (props: FlexProps) => {
         className="whall"
         overflowY="scroll"
         {...css}>
+        <Flex direction={"row"} flexWrap={"wrap"} justifyContent={"center"} w={"100%"}>
+            <Flex justifyContent={"flex-start"}
+                  minWidth={window.innerWidth > 600 ? 350 : "100%"}
+                  w={window.innerWidth > 400 ? "50%" : "100%"}
+                  maxW={window.innerWidth < 600 ? "100%" : "50%"}
+                  height="500"
+                  mt={20}
+                  minH={350}
+                  mb={10}>
+                <PersonalityChart data={personalityData?.chartData ?? null}></PersonalityChart>
+            </Flex>
 
-        <Flex minWidth="300px" direction="column" flexBasis="50%" overflow="scroll">
-            <Typography >{descriptions?.category1}</Typography>
-            <Typography >{descriptions?.category2}</Typography>
-            <Typography >{descriptions?.category3}</Typography>
-            <Typography >{descriptions?.category4}</Typography>
-            <Typography >{descriptions?.category5}</Typography>
+            <Flex minWidth={window.innerWidth > 600 ? 350 : "100%"}
+                  w={window.innerWidth > 500 ? "50%" : "100%"} direction="column" p={10} overflow="scroll">
+                <Typography >{descriptions?.category1}</Typography>
+                <Typography mt={1}>{descriptions?.category2}</Typography>
+                <Typography mt={1}>{descriptions?.category3}</Typography>
+                <Typography mt={1}>{descriptions?.category4}</Typography>
+                <Typography mt={1}>{descriptions?.category5}</Typography>
+            </Flex>
         </Flex>
 
-        <Flex minWidth="300px" height="100%" flexBasis="50%" overflow="hidden">
-            <PersonalityChart data={personalityData?.chartData ?? null}></PersonalityChart>
-        </Flex>
+
+
     </LoadingFrame>
 }

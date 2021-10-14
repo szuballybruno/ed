@@ -1,7 +1,7 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
-import { hasValue, isString, useIsDesktopView } from "../../frontendHelpers";
+import {getAssetUrl, hasValue, isString, useIsDesktopView} from "../../frontendHelpers";
 import { EpistoHeader } from "../administration/universal/EpistoHeader";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from "./signupWrapper.module.scss";
@@ -40,26 +40,35 @@ export const SignupWrapper = (props: {
 
     const isDesktop = useIsDesktopView();
 
-    return <Flex id="signupWrapperRoot" p="20px" direction="column" width="100%" height="100%">
+    return <Flex id="signupWrapperRoot" px="20px"
+                 pb={70} direction="column" width="100%" height="100%"
+                 overflow={"scroll"}  maxH={"100vh"}>
 
         {/* header */}
-        <Flex id="header" direction="column">
-
+        <Flex id="header" direction="column" height={"100%"} maxH={100}>
+            <Flex h={60} w={"100%"} hidden={window.innerWidth > 1000} justifyContent={"center"} alignItems={"center"}>
+                <Image maxH={80} src={getAssetUrl("/images/logo.svg")} />
+            </Flex>
             {/* header top */}
             <Flex
                 id="titleAligner"
                 className="dividerBorderBottom"
-                height="40px"
+                height="60px"
                 justify="space-between">
 
-                <Box>
+                <Flex w={window.innerWidth > 400 ? "30%" : "80%"} minW={window.innerWidth > 400 ? 350 : "unset"} h={60} alignItems={"center"} >
                     {hasUpperTitle &&
                         <Typography
                             variant={"overline"}>{upperTitle}
                         </Typography>}
-                </Box>
+                </Flex>
 
-                {props.upperComponent}
+                <Flex h={60} w={"30%"} hidden={window.innerWidth < 1000} justifyContent={"center"} alignItems={"center"}>
+                    <Image maxH={80} src={getAssetUrl("/images/logo.svg")} />
+                </Flex>
+
+
+                {props.upperComponent || <Flex w={"30%"} />}
             </Flex>
 
             {/* header bottom */}
@@ -84,24 +93,24 @@ export const SignupWrapper = (props: {
                 justify="center"
                 align="center"
                 width="90vw"
-                maxWidth="850px">
+                height={"90%"}>
 
                 {/* image */}
                 {hasImage && <Flex
                     flex="4"
-                    minWidth="300px"
-                    justify={isDesktop ? "flex-end" : "center"}>
-                    <Image
-                        height="20vh"
-                        src={currentImage!}
-                        mr="20px"></Image>
+                    minWidth={window.innerWidth > 500 ? 400 : "100%"}
+                    minH={"50%"}
+                    justifyContent={isDesktop ? "flex-end" : "center"}
+                    >
+                    <Image maxW={"100%"} height="100%" src={currentImage!} />
                 </Flex>}
 
                 {/* question content */}
                 <Flex
                     id="content"
                     flex="5"
-                    minWidth="300px"
+                    minWidth={window.innerWidth > 500 ? 300 : "100%"}
+                    ml={20}
                     direction="column">
 
                     {/* title */}
@@ -147,7 +156,7 @@ export const SignupWrapper = (props: {
         </Flex>
 
         {/* progress bar */}
-        <Box id="footerBox" >
+        <Box id="footerBox" position={"absolute"} bottom={0} left={5} w={"100%"}>
             {props.bottomComponent}
         </Box>
     </Flex>

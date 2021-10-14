@@ -1,6 +1,6 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
-import { TextField } from "@mui/material";
+import {Checkbox, TextField, Typography} from "@mui/material";
 import { useContext, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { getAssetUrl, getQueryParam } from "../frontendHelpers";
@@ -16,6 +16,8 @@ export const RegistrationPage = () => {
 
     const token = getQueryParam("token");
     const isInvited = getQueryParam("isInvited") === "true";
+
+    const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false)
 
     // registration
     const [lastName, setLastName] = useState("");
@@ -62,49 +64,48 @@ export const RegistrationPage = () => {
             top="0"
             objectFit="cover"
             className="whall"
-            src={getAssetUrl("images/abstract_background_1.jpg")} />
+            src={getAssetUrl("loginScreen/surveybg.png")} />
 
         <LoadingFrame
             loadingState={[registerUserState, registerInvitedUserState]}
             direction="column"
-            width="100%"
-            maxWidth="500px"
+            width={500}
+            maxWidth="95%"
             position="relative"
             bg="white"
             padding="30px"
+            alignItems="center"
+            justifyContent={"center"}
             className="roundBorders"
             boxShadow="#00000024 10px 30px 50px 0px">
 
-            <Image width="50%" marginLeft="10%" src={getAssetUrl("/images/logo.png")} />
 
-            <EpistoHeader
-                alignSelf="flex-end"
-                color="white"
-                marginRight="20%"
-                bg="var(--deepBlue)"
-                p="5px 25px 5px 25px"
-                borderRight="10px solid var(--epistoTeal)"
-                text="Regisztracio" />
+            <Flex w={"100%"} maxH={100} justifyContent={"center"}>
+                <Image width="50%" src={getAssetUrl("/images/logo.svg")} />
+            </Flex>
+
+
+            <Typography>Tanulási stílust felmérő kérdőív</Typography>
 
             {/* registration */}
             {!isInvited && <>
                 <TextField
                     variant="standard"
-                    label="Keresztnev"
+                    label="Keresztnév"
                     value={firstName}
                     onChange={x => setFirstName(x.currentTarget.value)}
                     style={{ margin: "10px" }}></TextField>
 
                 <TextField
                     variant="standard"
-                    label="Vezeteknev"
+                    label="Vezetéknév"
                     value={lastName}
                     onChange={x => setLastName(x.currentTarget.value)}
                     style={{ margin: "10px" }}></TextField>
 
                 <TextField
                     variant="standard"
-                    label="Email cim"
+                    label="E-mail cím"
                     value={emailAddress}
                     onChange={x => setEmailAddress(x.currentTarget.value)}
                     style={{ margin: "10px" }}></TextField>
@@ -115,7 +116,7 @@ export const RegistrationPage = () => {
 
                 <TextField
                     variant="standard"
-                    label="Jelszo"
+                    label="Jelszó"
                     type="password"
                     value={password}
                     onChange={x => setPassword(x.currentTarget.value)}
@@ -124,21 +125,34 @@ export const RegistrationPage = () => {
                 <TextField
                     variant="standard"
                     type="password"
-                    label="Jelszo megegyszer"
+                    label="Jelszó mégegyszer"
                     value={passwordCompare}
                     onChange={x => setPasswordCompare(x.currentTarget.value)}
-                    style={{ margin: "10px" }}></TextField>
+                    style={{ margin: "10px" }}>
+
+                </TextField>
             </>}
+
+            <Flex direction={"row"} alignItems={"center"}>
+                <Checkbox checked={acceptPrivacyPolicy} value={acceptPrivacyPolicy} onClick={() => {setAcceptPrivacyPolicy(p => !p)}} />
+                <Typography style={{userSelect: "none"}}>Elfogadom az <a style={{color: "#0055CC"}} onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }} href={"https://epistogram.com/adatkezelesi-tajekoztato"}>adatkezelési nyilatkozat</a>ban foglaltakat</Typography>
+            </Flex>
+
 
             <EpistoButton
                 onClick={handleRegistration}
                 variant="outlined"
+                isDisabled={!acceptPrivacyPolicy}
                 style={{
+                    width: "200px",
                     alignSelf: "center",
                     marginTop: "20px"
                 }}>
 
-                Ok
+                Kezdhetjük
             </EpistoButton>
         </LoadingFrame>
     </Flex>

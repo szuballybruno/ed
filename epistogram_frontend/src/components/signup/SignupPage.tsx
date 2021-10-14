@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { globalConfig } from "../../configuration/config";
-import { usePaging } from "../../frontendHelpers";
+import {getAssetUrl, usePaging} from "../../frontendHelpers";
 import { useNavigation } from '../../services/navigatior';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../HOC/AuthenticationFrame';
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
@@ -35,10 +35,10 @@ export const SignupPage = () => {
     const GreetSlide = () => <SignupWrapper
         title="Regisztráció"
         upperTitle="Üdv a fedélzeten!"
-        currentImage={gereetImageUrl}
+        currentImage={getAssetUrl("/signupQuestionImages/regisztracio.svg")}
         description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
         onNext={() => slidesState.next()}
-        nextButtonTitle="Tovabb">
+        nextButtonTitle="Tovább">
     </SignupWrapper>
 
     const QuestionnaireSlide = () => <SignupQuestions
@@ -47,14 +47,12 @@ export const SignupPage = () => {
         onJumpToResults={slidesState.jumpToLast} />
 
     const SummarySlide = (isCurrent: boolean) => <SignupWrapper
-        title={"A bal oldalon a saját egyedi tanulási stílusod vizualizációja látható"}
-        description={"Már csak egy-két adatra van szükségünk, hogy elkezdhesd a rendszer használatát"}
+        title={"Az alábbi grafikonon a saját tanulási stílusod vizualizációja látható"}
         upperTitle="Összegzés"
-        nextButtonTitle={"Tovabb a fooldalra!"}
         onNext={handleGoToHomePage}
         onNavPrevious={() => slidesState.previous()}>
 
-        {isCurrent && <PersonalityAssessment height="50vh" mt="20px"></PersonalityAssessment>}
+        {isCurrent && <PersonalityAssessment height="100%" mt="20px"></PersonalityAssessment>}
     </SignupWrapper>
 
     const slides = [
@@ -68,7 +66,6 @@ export const SignupPage = () => {
         <MainWrapper>
 
             {/* navbar */}
-            <Navbar hideLinks={true} />
 
             <ContentWrapper>
                 <SlidesDisplay

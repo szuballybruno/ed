@@ -1,6 +1,6 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
-import { usePaging } from "../frontendHelpers"
+import {getAssetUrl, usePaging} from "../frontendHelpers"
 import { tipOfTheDay } from "../services/dataService"
 import { translatableTexts } from "../translatableTexts"
 import { EpistoButton } from "./universal/EpistoButton"
@@ -15,11 +15,18 @@ export const TipOfTheDay = (props: FlexProps) => {
         {tipOfTheDay}
     </Typography>;
 
-    const VideoSlide = () => <Box p="20px">
+    const VideoSlide = () => <Box position={"relative"} p="20px">
+        <img src={getAssetUrl("/icons/play2.svg")} style={{
+            position: "absolute",
+            top: "43%",
+            left: "45%",
+            width: 40,
+            height: 40,
+        }} alt={""} />
         <img
             height="300px"
             width="100%"
-            src="https://i.stack.imgur.com/z3pLU.png"
+            src={getAssetUrl("/images/tipoftheday.jpg")}
             style={{
                 borderRadius: "15px"
             }}>

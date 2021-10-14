@@ -25,7 +25,7 @@ const Navbar = (props: { hideLinks?: boolean }) => {
             <div className={classes.mobileNavbarOuterWrapperIn}>
                 <NavLink to={applicationRoutes.homeRoute.route}>
                     <div className={classes.mobileNavbarLogoWrapper}>
-                        <img alt="EpistoGram Logo" src={getAssetUrl("/images/logo.png")} />
+                        <img alt="EpistoGram Logo" src={getAssetUrl("/images/logo.svg")} />
                     </div>
                 </NavLink>
             </div>
