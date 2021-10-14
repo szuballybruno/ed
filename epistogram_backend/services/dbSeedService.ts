@@ -456,38 +456,44 @@ const seedVideoQuestions = async (connection: TypeORMConnection) => {
         .getRepository(Question)
         .save([
             {
-                questionText: "What Makes You Unique?",
-
-                videoId: 3,
-                showUpTimeSeconds: 150,
+                questionText: "Hogy lehet e legyegyszerűbben a munkalapon a X789654-es cellához jutni?",
+                videoId: 4,
+                showUpTimeSeconds: 101,
                 answers: [
                     {
-                        text: "Correct answer!",
+                        text: "Odagörgetek!",
+                    },
+                    {
+                        text: "A szerkesztőlécbe beírom, hogy X789654, majd entert nyomok."
+                    },
+                    {
+                        text: "A név mezőbe (bal oldal) beírom, hogy X789654, majd entert nyomok.",
                         isCorrect: true
                     },
                     {
-                        text: "Incorrect answer 1."
-                    },
-                    {
-                        text: "Incorrect answer 2."
+                        text: "Az A1 cellába beírom, hogy X789654, majd entert nyomok.",
                     }
                 ]
             },
             {
-                questionText: "What Makes You Unique?",
+                questionText: "Hogy érem el, hogy az Excel a Pí szám 15 számjegyű értékével számoljon?",
 
-                videoId: 1,
-                showUpTimeSeconds: 150,
+                videoId: 8,
+                showUpTimeSeconds: 110,
                 answers: [
                     {
-                        text: "Video answer 1",
+                        text: "A számításban a \"Pi()\"-t használom.",
                         isCorrect: true
                     },
                     {
-                        text: "Video answer 2"
+                        text: "A szerkesztőlécen a számításban a \"Pi()\"-t használom.",
+                        isCorrect: true
                     },
                     {
-                        text: "Video answer 3"
+                        text: "A Pi-t használom."
+                    },
+                    {
+                        text: "3,141592653589"
                     }
                 ]
             },
