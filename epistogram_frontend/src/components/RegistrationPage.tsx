@@ -133,11 +133,23 @@ export const RegistrationPage = () => {
             </>}
 
             <Flex direction={"row"} alignItems={"center"}>
-                <Checkbox checked={acceptPrivacyPolicy} value={acceptPrivacyPolicy} onClick={() => { setAcceptPrivacyPolicy(p => !p) }} />
-                <Typography style={{ userSelect: "none" }}>Elfogadom az <a style={{ color: "#0055CC" }} onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }} href={"https://epistogram.com/adatkezelesi-tajekoztato"}>adatkezelési nyilatkozat</a>ban foglaltakat</Typography>
+
+                <Checkbox
+                    checked={acceptPrivacyPolicy}
+                    value={acceptPrivacyPolicy}
+                    onClick={() => setAcceptPrivacyPolicy(p => !p)} />
+
+                <Typography
+                    style={{ userSelect: "none" }}>
+                    Elfogadom az
+                    <a
+                        target="_blank"
+                        style={{ color: "#0055CC" }}
+                        href={"https://epistogram.com/adatkezelesi-tajekoztato"}>
+                        adatkezelési nyilatkozat
+                    </a>
+                    ban foglaltakat
+                </Typography>
             </Flex>
 
 

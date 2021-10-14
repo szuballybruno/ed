@@ -62,7 +62,7 @@ export const disallowWindowNavigation = () => {
     window.onbeforeunload = (event) => {
         const e = event || window.event;
         // Cancel the event
-        e.preventDefault();
+        // e.preventDefault();
         if (e) {
             e.returnValue = ''; // Legacy method for cross browser support
         }

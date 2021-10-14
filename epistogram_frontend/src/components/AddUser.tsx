@@ -109,7 +109,7 @@ const AddUser = () => {
         <AddFrame
             submitHandler={e => {
 
-                e.preventDefault();
+                // e.preventDefault();
                 submitAddUserRequestAsync();
             }}
             title={"Új felhasználó hozzáadása"}>
