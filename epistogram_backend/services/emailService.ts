@@ -1,18 +1,11 @@
 import Email from 'email-templates';
+import { readFileSync } from 'fs';
 import { createTransport } from 'nodemailer';
 import { User } from '../models/entity/User';
+import { EpistoEmail } from '../models/EpistoEmail';
 import { staticProvider } from '../staticProvider';
+import { replaceAll } from '../utilities/helpers';
 import { getAssetUrl } from './misc/urlProvider';
-
-type EpistoEmail = {
-
-    to: string;
-    subject: string;
-    template: {
-        name: string;
-        params: any;
-    }
-}
 
 export const sendInvitaitionMailAsync = async (
     invitationToken: string, userEmail: string, userFullName: string) => {
@@ -25,14 +18,14 @@ export const sendInvitaitionMailAsync = async (
         template: {
             name: "invitationEmailTemplate",
             params: {
-                nev: userFullName,
-                email: userEmail,
-                url: url
+                epistogramLogoUrl: getAssetUrl("images/logo.png"),
+                userFullName: userFullName,
+                registrationUrl: url
             }
         }
     } as EpistoEmail;
 
-    await sendEpistoEmailAsync(epistoEmail);
+    await sendMailNewAsync(epistoEmail);
 }
 
 export const sendSuccessfulRegistrationEmailAsync = async (
@@ -48,14 +41,14 @@ export const sendSuccessfulRegistrationEmailAsync = async (
         template: {
             name: "successfulRegistrationEmailTemplate",
             params: {
-                epistogramLogoUrl: getAssetUrl("images/logo.svg"),
+                epistogramLogoUrl: getAssetUrl("images/logo.png"),
                 generatedPassword: generatedPassword,
                 epistogramAppUrl: epistogramAppUrl
             }
         }
     } as EpistoEmail;
 
-    await sendEpistoEmailAsync(epistoEmail);
+    await sendMailNewAsync(epistoEmail);
 }
 
 export const sendResetPasswordMailAsync = async (user: User, resetPasswordUrl: string) => {
@@ -68,67 +61,103 @@ export const sendResetPasswordMailAsync = async (user: User, resetPasswordUrl: s
         template: {
             name: "resetPasswordEmailTemplate",
             params: {
-                epistogramLogoUrl: getAssetUrl("images/logo.svg"),
+                epistogramLogoUrl: getAssetUrl("images/logo.png"),
                 passwordResetUrl: resetPasswordUrl
             }
         }
     } as EpistoEmail;
 
-    await sendEpistoEmailAsync(epistoEmail);
+    await sendMailNewAsync(epistoEmail);
 }
 
-export const sendEpistoEmailAsync = async (epistoEmail: EpistoEmail) => {
+export const sendMailNewAsync = async (email: EpistoEmail) => {
 
-    const mail = getEmail();
+    const transporter = createNewTransporter();
+
     const to = staticProvider
         .globalConfig
         .misc
         .isLocalhost
         ? "manyoki.bence@epistogram.com"
-        : epistoEmail.to;
+        : email.to;
 
-    await mail.send({
-        template: epistoEmail.template.name,
-        message: {
-            from: "noreply@epistogram.com",
+    const templatePath = `${__dirname}/../emails/${email.template.name}.html`;
+    const templateHtml = readFileSync(templatePath, 'utf8');
+    let replacedHtml = "" + templateHtml;
+
+    const templateParams = email.template.params;
+    for (const paramName in templateParams) {
+        if (Object.prototype.hasOwnProperty.call(templateParams, paramName)) {
+
+            const paramValue = templateParams[paramName];
+            const replaceTag = `{{${paramName}}}`;
+
+            replacedHtml = replaceAll(replacedHtml, replaceTag, paramValue);
+        }
+    }
+
+    const result = await transporter
+        .sendMail({
             to: to,
-            subject: epistoEmail.subject
+            from: "noreply@epistogram.com",
+            subject: email.subject,
+            html: replacedHtml
+        });
+}
+
+export const createNewTransporter = () => {
+
+    return createTransport({
+        host: staticProvider.globalConfig.mail.mailHost,
+        port: 465,
+        secure: true,
+        auth: {
+            user: staticProvider.globalConfig.mail.senderEmail,
+            pass: staticProvider.globalConfig.mail.senderPassword
         },
-        locals: epistoEmail.template.params
+        tls: {
+            rejectUnauthorized: false
+        }
     });
 }
 
-const getEmail = () => new Email(getEmailConfig());
+// export const sendEpistoEmailAsync = async (epistoEmail: EpistoEmail) => {
 
-export const getEmailConfig = () => ({
-    message: {
-        from: "noreply@epistogram.com"
-    },
-    send: true,
-    transport: createNewTransporter(
-        staticProvider.globalConfig.mail.mailHost,
-        staticProvider.globalConfig.mail.senderEmail,
-        staticProvider.globalConfig.mail.senderPassword),
-    views: {
-        options: {
-            extension: "hbs",
-            map: {
-                "hbs": "handlebars"
-            }
-        }
-    },
-    preview: false
-});
+//     const mail = getEmail();
+//     const to = staticProvider
+//         .globalConfig
+//         .misc
+//         .isLocalhost
+//         ? "manyoki.bence@epistogram.com"
+//         : epistoEmail.to;
 
-export const createNewTransporter = (mailHost: string, senderMail: string, pass: string) => createTransport({
-    host: mailHost,
-    port: 465,
-    secure: true,
-    auth: {
-        user: senderMail,
-        pass: pass
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-});
+//     await mail.send({
+//         template: epistoEmail.template.name,
+//         message: {
+//             from: "noreply@epistogram.com",
+//             to: to,
+//             subject: epistoEmail.subject
+//         },
+//         locals: epistoEmail.template.params
+//     });
+// }
+
+// const getEmail = () => {
+
+//     return new Email({
+//         message: {
+//             from: "noreply@epistogram.com"
+//         },
+//         send: true,
+//         transport: createNewTransporter(),
+//         views: {
+//             options: {
+//                 extension: "hbs",
+//                 map: {
+//                     "hbs": "handlebars"
+//                 }
+//             }
+//         },
+//         preview: false
+//     });
+// }
