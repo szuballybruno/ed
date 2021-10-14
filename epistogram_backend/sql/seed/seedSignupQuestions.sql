@@ -199,7 +199,7 @@ VALUES
 ),
 -- 3.6 Question
 (
-    'For a criminal justice course I would prefer to',
+    'Ha egy kerti kisházat szeretnék készíteni, ',
     '{CDN_BUCKET_URL}/signupQuestionImages/3.6.svg',
     DEFAULT,
     3,
@@ -338,7 +338,7 @@ VALUES
 ),
 -- 5.7 Question
 (
-    'HHa kapok egy megbízást, feladatot, jobban szeretem',
+    'Ha kapok egy megbízást, feladatot, jobban szeretem',
     '{CDN_BUCKET_URL}/signupQuestionImages/5.7.svg',
     DEFAULT,
     5,
@@ -421,8 +421,8 @@ VALUES
     ('Pontos, részletes instrukciókat követhetek', true, 19),
     ('Elemzésre van szükség, és következtetéseket kell levonnom', false, 19),
 -- 3.6 answers
-    ('Discover how and when a law can be used', true, 20),
-    ('Learn how and why it became law', false, 20),
+    ('Jobban élvezném a ház megépítését.', true, 20),
+    ('Jobban élvezném a ház megtervezését. ', false, 20),
 -- 3.7 answers
     ('Kipróbálnék több típust is, dolgoznék velük', true, 21),
     ('Utána néznék az alapvető működésüknek, milyen elven operálnak', false, 21),
