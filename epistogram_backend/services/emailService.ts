@@ -14,7 +14,7 @@ export const sendInvitaitionMailAsync = async (
 
     const epistoEmail = {
         to: userEmail,
-        subject: "Értesítés a regisztrációról",
+        subject: "Üdvözlünk az EpistoGram-ban!",
         template: {
             name: "invitationEmailTemplate",
             params: {
@@ -37,7 +37,7 @@ export const sendSuccessfulRegistrationEmailAsync = async (
 
     const epistoEmail = {
         to: email,
-        subject: "Sikeres regisztracio!",
+        subject: "Üdvözlünk az EpistoGram-ban!",
         template: {
             name: "successfulRegistrationEmailTemplate",
             params: {
