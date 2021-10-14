@@ -132,6 +132,7 @@ const DesktopNavbar = (props: {
                     <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>
 
                     {!!user && <ProfileImage
+                        url={user?.avatarUrl ?? null}
                         onClick={() => setPopperOpen(true)}
                         cursor="pointer"
                         className="square50"

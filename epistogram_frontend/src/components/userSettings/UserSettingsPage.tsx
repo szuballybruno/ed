@@ -174,6 +174,7 @@ const Preferences = () => {
                 onMouseLeave={() => setIsProfPicHovered(false)}>
 
                 <ProfileImage
+                    url={avatarSrc ?? null}
                     ref={imageRef}
                     className="whall" />
 

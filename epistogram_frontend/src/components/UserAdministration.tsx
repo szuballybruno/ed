@@ -180,6 +180,9 @@ export const UserAdministration = () => {
                         return <FlexListItem
                             key={index}
                             thumbnail={<ProfileImage
+                                url={user.avatarUrl}
+                                lastName={user.lastName}
+                                firstName={user.firstName}
                                 className="square70"
                                 margin="0 30px 0 20px" />}
                             background="white"
