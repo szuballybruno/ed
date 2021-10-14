@@ -1,13 +1,12 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
-import {Checkbox, TextField, Typography} from "@mui/material";
+import { Checkbox, TextField, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { getAssetUrl, getQueryParam } from "../frontendHelpers";
 import { useNavigation } from "../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/notifications";
 import { useRegisterInvitedUser, useRegisterUser } from "../services/openEndpointService";
-import { EpistoHeader } from "./administration/universal/EpistoHeader";
 import { RefetchUserAsyncContext } from "./HOC/AuthenticationFrame";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 import { EpistoButton } from "./universal/EpistoButton";
@@ -134,8 +133,8 @@ export const RegistrationPage = () => {
             </>}
 
             <Flex direction={"row"} alignItems={"center"}>
-                <Checkbox checked={acceptPrivacyPolicy} value={acceptPrivacyPolicy} onClick={() => {setAcceptPrivacyPolicy(p => !p)}} />
-                <Typography style={{userSelect: "none"}}>Elfogadom az <a style={{color: "#0055CC"}} onClick={(event) => {
+                <Checkbox checked={acceptPrivacyPolicy} value={acceptPrivacyPolicy} onClick={() => { setAcceptPrivacyPolicy(p => !p) }} />
+                <Typography style={{ userSelect: "none" }}>Elfogadom az <a style={{ color: "#0055CC" }} onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
                 }} href={"https://epistogram.com/adatkezelesi-tajekoztato"}>adatkezelési nyilatkozat</a>ban foglaltakat</Typography>

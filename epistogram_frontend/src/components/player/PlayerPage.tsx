@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router";
 import { useIsDesktopView } from "../../frontendHelpers";
@@ -107,7 +107,8 @@ export const PlayerPage = () => {
                         boxShadow="none"
                         transition="0.5s">
 
-                        {isDesktopView && <Box
+                        {isDesktopView && <Flex
+                            direction="column"
                             id="courseItemSelectorRoot"
                             width="420px"
                             minWidth="420px">
@@ -116,7 +117,7 @@ export const PlayerPage = () => {
                                 mode={courseMode}
                                 courseItems={courseItems}
                                 refetchPlayerData={refetchPlayerData} />
-                        </Box>}
+                        </Flex>}
                     </FlexFloat>
                 </LoadingFrame>
             </ContentWrapper>
