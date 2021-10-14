@@ -365,6 +365,54 @@ const seedVideos = async (connection: TypeORMConnection) => {
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
         orderIndex: 3,
     } as Video, "videos/video_5.m4v");
+
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Egyszerűbb számítások 1.",
+        subtitle: "Alapvető műveletek Excelben",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 5,
+    } as Video, "videos/Excel/video6.mp4");
+
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Egyszerűbb számítások 2.",
+        subtitle: "Alapvető műveletek Excelben",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 6,
+    } as Video, "videos/Excel/video4.mp4");
+
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Egyszerűbb számítások 4.",
+        subtitle: "Fix hivatkozás",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 7,
+    } as Video, "videos/Excel/video5.mp4");
+
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Gyakorló feladatok 1.",
+        subtitle: "",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 8,
+    } as Video, "videos/Excel/video7.mp4");
+
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Gyakorló feladatok 2.",
+        subtitle: "",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 9,
+    } as Video, "videos/Excel/video8.mp4");
+
+    await insertVideoAsync({
+        courseId: 4,
+        title: "Gyakorló feladatok 1.",
+        subtitle: "",
+        description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
+        orderIndex: 8,
+    } as Video, "videos/Excel/video9.mp4");
 }
 
 const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
