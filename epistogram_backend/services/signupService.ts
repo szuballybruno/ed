@@ -199,7 +199,7 @@ const getSignupQuestionsAsync = async () => {
 
     return exam
         .questions
-        .orderBy(x => x.questionText.substr(2))
+        .orderBy(x => x.questionText.substr(x.questionText.length - 2, x.questionText.length - 1))
         .map(x => toQuestionDTO(x));
 }
 

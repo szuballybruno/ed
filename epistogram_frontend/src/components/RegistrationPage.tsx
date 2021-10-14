@@ -26,7 +26,7 @@ export const RegistrationPage = () => {
     const [password, setPassword] = useState("");
     const [passwordCompare, setPasswordCompare] = useState("");
 
-    const showErrorDialog = useShowErrorDialog();
+    const showErrorDialog = useShowErrorDialog("Hiba!");
     const { navigate } = useNavigation();
     const { registerUserAsync, registerUserState } = useRegisterUser();
     const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();
@@ -51,7 +51,7 @@ export const RegistrationPage = () => {
         }
         catch (e) {
 
-            showErrorDialog(e);
+            showErrorDialog("Ismeretlen hiba történt, kérjük próbálkozzon újra!");
         }
     }
 
