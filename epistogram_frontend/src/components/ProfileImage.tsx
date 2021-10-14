@@ -14,7 +14,7 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
 
     const { className, url, firstName, lastName, ...css } = props;
     const user = useContext(CurrentUserContext)!;
-    const signature = (firstName ?? user.firstName).substr(0, 1) + (lastName ?? user.lastName).substr(0, 1);
+    const signature = (lastName ?? user.lastName).substr(0, 1) + (firstName ?? user.firstName).substr(0, 1);
 
     return <Flex
         className={className + " circle"}
