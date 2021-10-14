@@ -10,6 +10,7 @@ import { getCourseItemUrl, useNavigation } from "../../services/navigatior";
 import { useShowErrorDialog } from "../../services/notifications";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
 import { CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
+import { ProfileImage } from "../ProfileImage";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoPopper } from "../universal/EpistoPopper";
 import NavbarButton from "../universal/NavbarButton";
@@ -33,7 +34,7 @@ const DesktopNavbar = (props: {
     const user = useContext(CurrentUserContext)!;
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
-    const ref = useRef<HTMLButtonElement>(null);
+    const ref = useRef<HTMLDivElement>(null);
     const [popperOpen, setPopperOpen] = useState(false);
     const hideLinks = props.hideLinks || !user;
     const { logoutUserAsync, logoutUserState } = useLogout();
@@ -130,22 +131,11 @@ const DesktopNavbar = (props: {
 
                     <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>
 
-                    {!!user && <EpistoButton
-                        ref={ref}
-                        variant="plain"
+                    {!!user && <ProfileImage
                         onClick={() => setPopperOpen(true)}
-                        padding="0px"
-                        isRound
-                        size="45px"
-                        style={{
-                            border: "3px solid var(--epistoTeal)",
-                            margin: "0px",
-                        }}>
-                        <Image
-                            className="whall hoverShine"
-                            objectFit="cover"
-                            src={user.avatarUrl!}></Image>
-                    </EpistoButton>}
+                        cursor="pointer"
+                        className="square50"
+                        ref={ref}></ProfileImage>}
                 </Flex>
             </>}
 

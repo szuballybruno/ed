@@ -67,7 +67,7 @@ const Preferences = () => {
         avatarFile !== null
     ].some(x => x)
 
-    const [isProfPicHovered, setIsProfPicHovered] = useState(true);
+    const [isProfPicHovered, setIsProfPicHovered] = useState(false);
 
     const saveChangesAsync = async () => {
 
@@ -175,8 +175,7 @@ const Preferences = () => {
 
                 <ProfileImage
                     ref={imageRef}
-                    className="whall"
-                    url={avatarSrc} />
+                    className="whall" />
 
                 <Flex
                     position="absolute"

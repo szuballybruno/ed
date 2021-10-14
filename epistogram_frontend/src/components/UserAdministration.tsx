@@ -181,7 +181,6 @@ export const UserAdministration = () => {
                             key={index}
                             thumbnail={<ProfileImage
                                 className="square70"
-                                url={user.avatarUrl!}
                                 margin="0 30px 0 20px" />}
                             background="white"
                             p="20px"
