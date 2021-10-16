@@ -48,7 +48,8 @@ const MyCourses = () => {
     return <LoadingFrame
         loadingState={coursesDataStatus}
         error={coursesDataError}
-        direction="column">
+        direction="column"
+        overflowY={"scroll"}>
 
         {/* completed courses */}
         <DashboardSection variant="noShadow" title="Elvégzett kurzusaim" >
