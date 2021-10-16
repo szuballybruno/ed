@@ -1,5 +1,15 @@
 import { Box, Flex } from "@chakra-ui/layout";
-import {ApartmentTwoTone, Edit, Email, Equalizer, KeyboardVoice, Save, Task, WorkTwoTone} from "@mui/icons-material";
+import {
+    ApartmentTwoTone,
+    Close,
+    Edit,
+    Email,
+    Equalizer,
+    KeyboardVoice,
+    Save,
+    Task,
+    WorkTwoTone
+} from "@mui/icons-material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
@@ -99,25 +109,35 @@ export const UserAdministration = () => {
                 <Flex
                     direction={"row"}
                     alignItems={"center"}
-                    justifyContent={"flex-start"}
-                    w={205}
-                    minW={205}
-                    bgColor={"green"}
+                    justifyContent={"space-between"}
+                    w={230}
+                    minW={230}
                     h={"100%"}>
                     <Flex
-                    className="roundBorders"
-                    bg="var(--epistoTeal)"
-                    p="2px 12px 2px 12px"
-                    color="white"
-                    h={30}
-                    ml={10}>
+                        direction={"row"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                        className="roundBorders"
+                        bg="var(--epistoTeal)"
+                        p="0 12px 0 12px"
+                        color="white"
+                        h={30}
+                        ml={10}>
                         <Typography>
                             {selectedUserIds.length} felhasználó kijelölve
                         </Typography>
+                        <Close onClick={() => {
+                            setSelectedUserIds([])
+                        }} style={{
+                            width: 18,
+                            marginLeft: 5
+                        }} />
                     </Flex>
                 </Flex>}
 
-                <IntersectionObserverWrap direction={"row"} alignItems={"center"} justifyContent={"flex-start"}>
+                {selectedUserIds.length !== 1 && <Flex flex={1}></Flex>}
+
+                {(selectedUserIds.length === 1) && <IntersectionObserverWrap direction={"row"} alignItems={"center"} justifyContent={"flex-start"}>
                     <Button
                         size={"small"}
                         variant={"outlined"}
@@ -181,7 +201,7 @@ export const UserAdministration = () => {
                         Feladatok megtekintése
                     </Button>
 
-                </IntersectionObserverWrap>
+                </IntersectionObserverWrap>}
 
                 <Flex
                     h={"100%"}
@@ -224,13 +244,13 @@ export const UserAdministration = () => {
 
                         if (!user.userActivity.canAccessApplication)
                             chips.push({
-                                name: "Nincs hozzaferese az applikaciohoz",
+                                name: "Nincs hozzáférése az applikációhoz",
                                 icon: <DesktopAccessDisabledIcon />
                             });
 
                         if (user.isPendingInvitation)
                             chips.push({
-                                name: "A meghivas elfogadasra var",
+                                name: "A meghívás elfogadásra vár",
                                 icon: <Email />
                             });
 
@@ -264,7 +284,7 @@ export const UserAdministration = () => {
                             isChecked={selectedUserIds.some(x => x === user.id)}
                             midContent={<FlexListTitleSubtitle
                                 title={`${user.lastName} ${user.firstName}`}
-                                subTitle={<Flex wrap="wrap" mt="10px">
+                                subTitle={<Flex wrap="wrap" my="10px">
                                     {chips
                                         .map((chip, index) => <FloatChip
                                             name={chip.name}
@@ -272,24 +292,30 @@ export const UserAdministration = () => {
                                             padding="5px" />)}
                                 </Flex>}
                             />}
-                            endContent={<Flex align="center" justifyContent={"flex-end"} h={"100%"} width={165} px={10} bgColor={"yellow"}>
+                            endContent={<Flex align="center" justifyContent={"flex-end"} h={"100%"} width={165} px={10}>
                                 <EpistoButton
                                     variant={"colored"}
-                                    onClick={() => deleteUserAsync(user.id)}
+                                    onClick={() => {
+                                        navigate(`${administrationRoutes.usersRoute.route}/${user.id}/edit`)
+                                    }}
                                     style={{ width: 20 }}
                                 >
                                     <Edit style={{ width: "20px", height: "20px" }} />
                                 </EpistoButton>
                                 <EpistoButton
                                     variant="colored"
-                                    onClick={() => deleteUserAsync(user.id)}
+                                    onClick={() => {
+                                        navigate(`${administrationRoutes.usersRoute.route}/${user.id}/statistics`)
+                                    }}
                                     style={{ width: 20, marginLeft: 5 }}
                                 >
                                     <Equalizer style={{ width: "20px", height: "20px" }} />
                                 </EpistoButton>
                                 <EpistoButton
                                     variant="colored"
-                                    onClick={() => deleteUserAsync(user.id)}
+                                    onClick={() => {
+                                        navigate(`${administrationRoutes.usersRoute.route}/${user.id}/tasks`)
+                                    }}
                                     style={{ width: 20, marginLeft: 5 }}
                                 >
                                     <Task style={{ width: "20px", height: "20px" }} />

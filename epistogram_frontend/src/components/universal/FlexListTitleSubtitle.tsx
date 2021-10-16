@@ -6,7 +6,7 @@ import { isString } from "../../frontendHelpers";
 export const FlexListTitleSubtitle = (props: { title: string, subTitle: string | ReactNode }) => {
 
     return <Flex className="whall" direction="column">
-        <Flex>
+        <Flex alignItems={"flex-end"} height={40} pl={7}>
             <Typography variant={"button"}>
                 {props.title}
             </Typography>

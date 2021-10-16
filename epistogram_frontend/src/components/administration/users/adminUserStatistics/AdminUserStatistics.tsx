@@ -1,15 +1,13 @@
-
-import {Box, Flex} from '@chakra-ui/react';
-import {Tab, Tabs} from '@mui/material';
 import React, {useEffect, useState} from 'react';
+import LearningStatistics from "../../../learningStatistics/LearningStatistics";
+import {Flex} from "@chakra-ui/react";
 import {AdministrationSubpageHeader} from "../../universal/adminAddHeader/AdministrationSubpageHeader";
-import {applicationRoutes} from "../../../../configuration/applicationRoutes";
-import {useNavigation} from "../../../../services/navigatior";
 import {useParams} from "react-router";
+import {useNavigation} from "../../../../services/navigatior";
+import {applicationRoutes} from "../../../../configuration/applicationRoutes";
+import {Tab, Tabs} from "@mui/material";
 
-const EditUser = () => {
-
-    const {userId} = useParams<{ userId: string }>()
+export const AdminUserStatistics = () => {    const {userId} = useParams<{ userId: string }>()
 
     const [currentTab, setCurrentTab] = useState("")
 
@@ -27,7 +25,7 @@ const EditUser = () => {
         const segments = window.location.pathname.split('/');
         const last = segments.pop() || segments.pop(); // Handle potential trailing slash
         navigate(`${administrationRoutes.usersRoute.route}/${userId}/${newValue}`)
-        newValue && setCurrentTab(newValue);
+        setCurrentTab(newValue);
     };
     return (
         <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
@@ -41,9 +39,8 @@ const EditUser = () => {
                         <Tab label="Feladatok" value={"tasks"}  />
                     </Tabs>
                 </Flex>
-            </AdministrationSubpageHeader>
-        </Flex>
+            <LearningStatistics />
+        </AdministrationSubpageHeader>
+    </Flex>
     );
 };
-
-export default EditUser;

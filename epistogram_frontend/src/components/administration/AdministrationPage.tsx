@@ -16,6 +16,8 @@ import AdminStatistics from "./statistics/AdminStatistics";
 import AddUser from "../AddUser";
 import { UserAdministration } from "../UserAdministration";
 import EditUser from "./users/editUser/EditUser";
+import {AdminUserStatistics} from "./users/adminUserStatistics/AdminUserStatistics";
+import AdminUserTasks from "./users/adminUserTasks/AdminUserTasks";
 
 const AdministrationPage = () => {
 
@@ -62,10 +64,10 @@ const AdministrationPage = () => {
                                 <EditUser />
                             </Route>
                             <Route exact path={administrationRoutes.usersRoute.statsRoute.route}>
-                                <UserAdministration />
+                                <AdminUserStatistics />
                             </Route>
                             <Route exact path={administrationRoutes.usersRoute.tasksRoute.route}>
-                                <UserAdministration />
+                                <AdminUserTasks />
                             </Route>
 
                         </Switch>
