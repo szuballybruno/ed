@@ -234,7 +234,7 @@ const Preferences = () => {
                             variant="outlined"
                             padding="1px 8px 1px 8px">
 
-                            Jelszó visszaállítása
+                            Jelszó megváltoztatása
                         </EpistoButton>}
 
                         {isPasswordChangeOpen && <>
