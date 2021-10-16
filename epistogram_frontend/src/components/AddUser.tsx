@@ -15,8 +15,6 @@ import { AddFrame } from "./add_frame/AddFrame";
 import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 import { EpistoSelect } from "./universal/EpistoSelect";
 import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
-import SingleInput from "./administration/universal/singleInput/SingleInput";
-import DoubleInputs from "./administration/universal/twoInputs/DoubleInputs";
 
 const roles = [
     {
