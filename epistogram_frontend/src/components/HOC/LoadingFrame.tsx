@@ -97,7 +97,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
                 <CircularProgress style={{ 'color': 'black' }} size={50} />
 
                 <Box pt="20px">
-                    <Typography>Loading...</Typography>
+                    <Typography>Betöltés...</Typography>
                 </Box>
             </Flex>}
         </Flex>}
