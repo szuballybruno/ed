@@ -16,20 +16,21 @@ export default function IntersectionObserverWrap(props: {children: JSX.Element[]
     const updatedEntries: any = {};
 
     entries.forEach((entry: IntersectionObserverEntry) => {
-      console.log("THIS" + entry.target.getAttribute("name"))
-      console.log("THISS" + entry.isIntersecting + "    " + entry.intersectionRatio)
       updatedEntries[entry.target.getAttribute("name") as string] = entry.isIntersecting;
+      console.log(entry.intersectionRatio)
     });
+
 
     setVisibilityMap((prev: any) => ({
       ...prev,
       ...updatedEntries
     }));
   };
+
   React.useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
       root: navRef.current,
-      threshold: 1
+      threshold: 1,
     });
 
     // We are addting observers to child elements of the container div

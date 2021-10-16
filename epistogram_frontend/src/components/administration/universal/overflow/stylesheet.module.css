@@ -16,18 +16,11 @@
   pointer-events: none;
 }
 
-.toolbarWrapper {
-  display: flex;
-  overflow: hidden;
-  padding: 0 20px;
-  width: 75%;
-}
-
-.overflowStyle {
+/*.overflowStyle {
   order: 99;
   position: sticky;
   right: 0;
-}
+}*/
 
 .inOverflowMenu:hover {
   background-color: transparent;

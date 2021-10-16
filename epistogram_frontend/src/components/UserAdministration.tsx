@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Email, KeyboardVoice, Save, WorkTwoTone } from "@mui/icons-material";
+import {ApartmentTwoTone, Edit, Email, Equalizer, KeyboardVoice, Save, Task, WorkTwoTone} from "@mui/icons-material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
@@ -22,6 +22,7 @@ import { ProfileImage } from "./ProfileImage";
 import IntersectionObserverWrap from "./administration/universal/overflow/intersection-observer-wrapper";
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import {Stat} from "@chakra-ui/react";
 
 export const UserAdministration = () => {
 
@@ -271,11 +272,33 @@ export const UserAdministration = () => {
                                             padding="5px" />)}
                                 </Flex>}
                             />}
-                            endContent={<Flex align="center">
-                                {(userId != user.id) && <EpistoButton
+                            endContent={<Flex align="center" justifyContent={"flex-end"} h={"100%"} width={165} px={10} bgColor={"yellow"}>
+                                <EpistoButton
+                                    variant={"colored"}
+                                    onClick={() => deleteUserAsync(user.id)}
+                                    style={{ width: 20 }}
+                                >
+                                    <Edit style={{ width: "20px", height: "20px" }} />
+                                </EpistoButton>
+                                <EpistoButton
                                     variant="colored"
-                                    padding="5px"
-                                    onClick={() => deleteUserAsync(user.id)}>
+                                    onClick={() => deleteUserAsync(user.id)}
+                                    style={{ width: 20, marginLeft: 5 }}
+                                >
+                                    <Equalizer style={{ width: "20px", height: "20px" }} />
+                                </EpistoButton>
+                                <EpistoButton
+                                    variant="colored"
+                                    onClick={() => deleteUserAsync(user.id)}
+                                    style={{ width: 20, marginLeft: 5 }}
+                                >
+                                    <Task style={{ width: "20px", height: "20px" }} />
+                                </EpistoButton>
+                                {(userId !== user.id) && <EpistoButton
+                                    variant="colored"
+                                    onClick={() => deleteUserAsync(user.id)}
+                                    style={{ width: 20, marginLeft: 5 }}
+                                >
                                     <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>
                                 </EpistoButton>}
                             </Flex>}

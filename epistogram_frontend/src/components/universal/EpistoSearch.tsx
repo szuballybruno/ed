@@ -2,7 +2,6 @@ import { Input, InputProps } from "@chakra-ui/input";
 import React from "react";
 
 export const EpistoSearch = (props: {} & InputProps) => {
-
     const { ...css } = props;
 
     return <Input
