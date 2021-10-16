@@ -15,6 +15,7 @@ import { EditVideo } from "./courses/editVideo/EditVideo";
 import AdminStatistics from "./statistics/AdminStatistics";
 import AddUser from "../AddUser";
 import { UserAdministration } from "../UserAdministration";
+import EditUser from "./users/editUser/EditUser";
 
 const AdministrationPage = () => {
 
@@ -52,9 +53,21 @@ const AdministrationPage = () => {
                             <Route exact path={administrationRoutes.usersRoute.route}>
                                 <UserAdministration />
                             </Route>
+
+
                             <Route path={administrationRoutes.usersRoute.addRoute.route}>
                                 <AddUser />
                             </Route>
+                            <Route exact path={administrationRoutes.usersRoute.editRoute.route}>
+                                <EditUser />
+                            </Route>
+                            <Route exact path={administrationRoutes.usersRoute.statsRoute.route}>
+                                <UserAdministration />
+                            </Route>
+                            <Route exact path={administrationRoutes.usersRoute.tasksRoute.route}>
+                                <UserAdministration />
+                            </Route>
+
                         </Switch>
                     </Route>
 

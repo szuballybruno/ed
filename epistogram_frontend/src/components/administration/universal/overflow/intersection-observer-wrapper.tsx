@@ -1,11 +1,15 @@
 import React from "react"
 import OverflowMenu from "./overflow-menu";
 import classes from "./stylesheet.module.css"
+import {Flex} from "@chakra-ui/react";
+import {FlexProps} from "@chakra-ui/layout";
 
-export default function IntersectionObserverWrap(props: {children: JSX.Element[]}) {
+export default function IntersectionObserverWrap(props: {children: JSX.Element[]} & FlexProps) {
 
   const navRef = React.useRef<HTMLDivElement>(null);
   const [visibilityMap, setVisibilityMap] = React.useState<any>({});
+
+  const {children, ...css} = props
 
 
   const handleIntersection = (entries: IntersectionObserverEntry[]) => {
@@ -21,7 +25,6 @@ export default function IntersectionObserverWrap(props: {children: JSX.Element[]
       ...prev,
       ...updatedEntries
     }));
-    console.log(visibilityMap)
   };
   React.useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
@@ -43,19 +46,21 @@ export default function IntersectionObserverWrap(props: {children: JSX.Element[]
   }, []);
 
 
-  return (
-      <div className={classes.toolbarWrapper} ref={navRef}>
-        {React.Children.map(props.children, (child) => {
+  return (<Flex overflow={"hidden"}>
+      <Flex className={classes.toolbarWrapper} overflow={"hidden"} ref={navRef} {...css}>
+        {React.Children.map(props.children, (child: JSX.Element) => {
           return React.cloneElement(child, {
             className: visibilityMap[child?.props["name"]] ? classes.visible : classes.inVisible
           });
         })}
+
+      </Flex>
         <OverflowMenu
             visibilityMap={visibilityMap}
             className={classes.overflowStyle}
         >
           {props.children}
         </OverflowMenu>
-      </div>
+  </Flex>
   );
 }

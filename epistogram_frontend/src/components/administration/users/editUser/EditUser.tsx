@@ -1,14 +1,16 @@
 
-import { Box } from '@chakra-ui/react';
+import {Box, Flex} from '@chakra-ui/react';
 import React from 'react';
 import { AdminPageUserDTO } from '../../../../models/shared_models/AdminPageUserDTO';
+import {AdministrationSubpageHeader} from "../../universal/adminAddHeader/AdministrationSubpageHeader";
 
-const EditUser = (props: {
-    user: AdminPageUserDTO
-    index: number
-}) => {
+const EditUser = () => {
 
-    return <Box>WIP</Box>;
+    return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
+        <AdministrationSubpageHeader>
+
+        </AdministrationSubpageHeader>
+    </Flex>;
     // const admin = useState(adminSideState)
     // const app = useState(applicationRunningState)
     // const active = useState(true)

@@ -72,7 +72,7 @@ export const applicationRoutes = {
     administrationRoute: {
         title: translatableTexts.routeTitles.administration,
         route: "/administration",
-        
+
         usersRoute: {
             title: translatableTexts.routeTitles.administrationUserAdmin,
             route: "/administration/users",
@@ -81,6 +81,21 @@ export const applicationRoutes = {
             addRoute: {
                 title: translatableTexts.routeTitles.administrationAddUser,
                 route: "/administration/users/add"
+            },
+
+            editRoute: {
+                title: translatableTexts.routeTitles.administrationEditUser,
+                route: "/administration/users/:userId/edit"
+            },
+
+            statsRoute: {
+                title: translatableTexts.routeTitles.administrationUserStatistics,
+                route: "/administration/users/:userId/statistics"
+            },
+
+            tasksRoute: {
+                title: translatableTexts.routeTitles.administrationUserTasks,
+                route: "/administration/users/:userId/tasks"
             }
         },
         coursesRoute: {
