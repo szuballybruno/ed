@@ -109,7 +109,11 @@ export const applicationRoutes = {
             },
             editCourseRoute: {
                 title: translatableTexts.routeTitles.administrationEditCourse,
-                route: "/administration/courses/:courseId"
+                route: "/administration/courses/:courseId/edit"
+            },
+            statisticsCourseRoute: {
+                title: translatableTexts.routeTitles.administrationCourseStatistics,
+                route: "/administration/courses/:courseId/statistics"
             },
             addVideoRoute: {
                 title: translatableTexts.routeTitles.administrationAddVideo,

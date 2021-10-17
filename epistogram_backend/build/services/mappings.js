@@ -115,7 +115,7 @@ const toCourseShortDTO = (course) => {
         title: course.title,
         category: course.category,
         firstVideoId: course.videos.length != 0 ? course.videos[0].id : null,
-        teacherName: "Mr. Teacher Name",
+        teacherName: course.teacherName,
         thumbnailImageURL: thumbnailImageURL
     };
 };
@@ -150,7 +150,7 @@ const toCourseAdminDTO = (course) => {
         title: course.title,
         category: course.category,
         courseId: course.id,
-        teacherName: "Mr. Teacher Name",
+        teacherName: course.teacherName,
         videosCount: 0,
         thumbnailImageURL: staticProvider_1.staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`
     };

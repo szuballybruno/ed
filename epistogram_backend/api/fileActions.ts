@@ -3,7 +3,6 @@ import { UploadedFile } from "express-fileupload";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { uploadAvatarFileAsync, uploadCourseCoverFileAsync, uploadVideoFileAsync, uploadVideoThumbnailFileAsync } from "../services/fileService";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
-import {log} from "../services/misc/logger";
 
 export const uploadVideoFileAction = getAsyncActionHandler((req: Request) => {
 

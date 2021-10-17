@@ -35,11 +35,11 @@ export const FlexListItem = (props: FlexProps & {
         borderBottom="1px solid #eaeaea"
         {...css}>
 
-        <Flex minW={60} h={"100%"} pt={23} direction={"column"} alignItems={"center"} justifyContent={"flex-start"}>
+        <Flex minW={60} h={"100%"} direction={"column"} alignItems={"center"} justifyContent={"flex-start"}>
             {setIsChecked && <Checkbox
                 checked={isChecked}
                 onChange={x => setIsChecked(x.currentTarget.checked)}
-                style={{ alignSelf: "center" }} />}
+                style={{ alignSelf: "center", marginTop: 23 }} />}
         </Flex>
 
         <Flex
@@ -48,7 +48,6 @@ export const FlexListItem = (props: FlexProps & {
             direction={"column"}
             alignItems={"center"}
             justifyContent={"flex-start"}
-            pt={10}
         >
             {thumbnail}
         </Flex>

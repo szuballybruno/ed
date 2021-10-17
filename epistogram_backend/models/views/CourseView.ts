@@ -13,6 +13,9 @@ export class CourseView {
     userId: number;
 
     @ViewColumn()
+    teacherId: number;
+
+    @ViewColumn()
     isComplete: boolean;
 
     @ViewColumn()

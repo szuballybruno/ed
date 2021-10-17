@@ -1,4 +1,4 @@
-import { Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography } from "@mui/material";
+import {Checkbox, Divider, List, ListItem, Radio, Switch, Tab, Tabs, TextField, Typography} from "@mui/material";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import React, { useEffect, useState } from 'react';
 import { HexColorPicker } from "react-colorful";
@@ -17,6 +17,10 @@ import SelectImage from "../../universal/selectImage/SelectImage";
 import { SelectMultiple } from "../../universal/selectMultiple/SelectMultiple";
 import classes from "./editCourse.module.scss";
 import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
+import {useNavigation} from "../../../../services/navigatior";
+import {applicationRoutes} from "../../../../configuration/applicationRoutes";
+import {AdministrationSubpageHeader} from "../../universal/adminAddHeader/AdministrationSubpageHeader";
+import {Flex} from "@chakra-ui/react";
 
 /* TODO:
 *   - Create a new CourseItemDTO for this page
@@ -140,10 +144,37 @@ export const EditCourse = () => {
         )}
     </Draggable>
 
-    return <AdminDashboardWrapper>
-        <Divider style={{
-            width: "100%",
-        }} />
+    const [currentTab, setCurrentTab] = useState("")
+
+    const { navigate } = useNavigation()
+
+    const administrationRoutes = applicationRoutes.administrationRoute;
+
+    useEffect(() => {
+        const segments = window.location.pathname.split('/');
+        const last = segments.pop() || segments.pop();
+        last && setCurrentTab(last)
+    }, [])
+
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        const segments = window.location.pathname.split('/');
+        const last = segments.pop() || segments.pop(); // Handle potential trailing slash
+        navigate(`${administrationRoutes.coursesRoute.route}/${courseId}/${newValue}`)
+        newValue && setCurrentTab(newValue);
+    };
+
+    return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
+
+            {/* admin header */}
+            <AdministrationSubpageHeader>
+                <Flex mx={20} flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} h={60}>
+                    <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
+                        <Tab label="Szerkesztés" value={"edit"} />
+                        <Tab label="Statisztika" value={"statistics"} />
+                    </Tabs>
+                </Flex>
+            </AdministrationSubpageHeader>
+
         <div className={classes.editDataOuterWrapper}>
 
             <div className={classes.editDataInnerWrapper}>
@@ -351,5 +382,5 @@ export const EditCourse = () => {
             return updateAdminPageEditCourse(getAdminPageEditCourseDTO())
         }} />
 
-    </AdminDashboardWrapper>
+    </Flex>
 };

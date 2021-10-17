@@ -275,6 +275,7 @@ export const UserAdministration = () => {
                         return <FlexListItem
                             key={index}
                             thumbnail={<ProfileImage
+                                mt={10}
                                 url={user.avatarUrl}
                                 lastName={user.lastName}
                                 firstName={user.firstName}

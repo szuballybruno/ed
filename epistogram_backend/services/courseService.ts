@@ -31,15 +31,20 @@ export const getUserCoursesDataAsync = async (userId: number) => {
     const completedCourses = courses
         .filter(x => x.isComplete);
 
+    const inProgressCoursesAsCourseShortDTOs = await Promise.all(inProgressCourses
+        .map(async x => toCourseShortDTO(x)))
+
+    const completedCoursesAsCourseShortDTOs = await Promise.all(completedCourses
+            .map(async x => toCourseShortDTO(x)))
+
+
     return {
         isAnyCoursesComplete: completedCourses.any(x => true),
         isAnyCoursesInProgress: inProgressCourses.any(x => true),
 
-        completedCourses: completedCourses
-            .map(x => toCourseShortDTO(x)),
+        completedCourses: completedCoursesAsCourseShortDTOs,
 
-        inProgressCourses: inProgressCourses
-            .map(x => toCourseShortDTO(x))
+        inProgressCourses: inProgressCoursesAsCourseShortDTOs
     } as UserCoursesDataDTO;
 }
 

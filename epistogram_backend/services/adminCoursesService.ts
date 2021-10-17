@@ -10,5 +10,7 @@ export const getAdminCoursesAsync = async (userId: number, dto: GetUserCoursesDT
         .createQueryBuilder("c")
         .leftJoinAndSelect("c.coverFile", "cf")
         .getMany()
-    return aggregatedCourses.map(course => toCourseAdminDTO(course));
+
+    const aggregatedCoursesAsCourseAdminDTO = await Promise.all(aggregatedCourses.map(async course => toCourseAdminDTO(course)))
+    return aggregatedCoursesAsCourseAdminDTO
 }
