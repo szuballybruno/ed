@@ -59,9 +59,11 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
         ?.traits
         ?.map(x => x.traitScore) ?? [];
 
+    const dummyAverageValues = [4, 3, 4, 2, 3, 3, 4, 3, 5, 4]
+
     const sets = [
         {
-            label: 'Személyes preferenciám',
+            label: 'Saját analízisem',
             fill: true,
             backgroundColor: '#97c9cc60',
             borderColor: '#97c9cc',
@@ -70,6 +72,17 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: '#97c9cc',
             data: values
+        },
+        {
+            label: 'Céges átlag',
+            fill: true,
+            backgroundColor: 'rgba(229,168,111,0.59)',
+            borderColor: '#fda23e',
+            pointBackgroundColor: '#ccb797',
+            pointBorderColor: '#ccb797',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#97c9cc',
+            data: dummyAverageValues
         }
     ];
 

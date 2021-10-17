@@ -16,7 +16,7 @@ import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 import { EpistoSelect } from "./universal/EpistoSelect";
 import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
 
-const roles = [
+export const roles = [
     {
         name: "admin",
         id: 1,
@@ -33,6 +33,14 @@ const roles = [
         optionText: "Felhasználó"
     }
 ];
+
+export const jobTitles = [
+    {
+        name: "jobTitle1",
+        id: 1,
+        optionText: "Beosztás 1"
+    }
+]
 
 const AddUser = () => {
 

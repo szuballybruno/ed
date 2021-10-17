@@ -270,7 +270,8 @@ const Preferences = () => {
                 onClick={saveChangesAsync}
                 style={{
                     alignSelf: "center",
-                    marginTop: "30px"
+                    marginTop: "30px",
+                    marginBottom: "10px"
                 }}>
 
                 Változtatások mentése
