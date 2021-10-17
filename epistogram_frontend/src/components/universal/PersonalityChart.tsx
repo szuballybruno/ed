@@ -7,6 +7,47 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
 
     const personalityData = props.data;
 
+    const splitKeysByCharCount = (keys: string[], maxChar: number) => {
+        return keys.map(k => {
+            let sections: string[] = [];
+            let words = k.split(" ");
+            let temp = "";
+
+            words.forEach(function (item, index) {
+                if (temp.length > 0) {
+                    var concat = temp + ' ' + item;
+
+                    if (concat.length > maxChar) {
+                        sections.push(temp);
+                        temp = "";
+                    } else {
+                        if (index == (words.length - 1)) {
+                            sections.push(concat);
+                            return;
+                        } else {
+                            temp = concat;
+                            return;
+                        }
+                    }
+                }
+
+                if (index == (words.length - 1)) {
+                    sections.push(item);
+                    return;
+                }
+
+                if (item.length < maxChar) {
+                    temp = item;
+                } else {
+                    sections.push(item);
+                }
+
+            });
+
+            return sections as string[];
+        })
+    }
+
     if (!personalityData)
         return <Box></Box>
 
@@ -43,11 +84,11 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
                     },
                     suggestedMin: 0,
                     suggestedMax: 7
-                }
+                },
             }
         }}
         data={{
-            labels: keys,
+            labels: splitKeysByCharCount(keys, 20),
             datasets: sets
         }}
         style={{height: 400}} />
