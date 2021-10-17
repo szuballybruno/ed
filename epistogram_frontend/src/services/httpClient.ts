@@ -42,7 +42,7 @@ export const httpPostAsync = async (
             withCredentials: true
         } as AxiosRequestConfig;
 
-        // set bearer token 
+        // set bearer token
         if (configure) {
 
             configure(config);
@@ -184,6 +184,7 @@ export const usePostFile = (url: string) => {
 export const postFileAsync = async (url: string, file: File, data?: any) => {
 
     var formData = new FormData();
+
     formData.append('file', file);
 
     if (data) {
@@ -229,7 +230,7 @@ const handleHttpError = (error: any) => {
         if (!error.message && !error.errorType)
             throw new TypedError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
 
-        // message only 
+        // message only
         // throw with a more informative message
         if (error.message && !error.errorType)
             throw new TypedError(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
@@ -239,7 +240,7 @@ const handleHttpError = (error: any) => {
             ? `Http response code (${responseCode}) did not indicate success. Message: ${error.message}`
             : `Http response code (${responseCode}) did not indicate success. Code: ${error.errorType}`
 
-        // throw with a more informative message 
+        // throw with a more informative message
         // and error type
         throw new TypedError(message, error.errorType);
     }
