@@ -1,4 +1,4 @@
-import { Image, ImageProps } from "@chakra-ui/image"
+import { Image } from "@chakra-ui/image";
 import { Flex, FlexProps } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
 import { forwardRef, useContext } from "react";
@@ -15,6 +15,8 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
     const { className, url, firstName, lastName, ...css } = props;
     const user = useContext(CurrentUserContext)!;
     const signature = (firstName ?? user.firstName).substr(0, 1) + (lastName ?? user.lastName).substr(0, 1);
+    const showSingature = (!url && user);
+    const showImage = !!url;
 
     return <Flex
         className={className + " circle"}
@@ -26,13 +28,16 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
         justify="center"
         overflow="hidden"
         {...css} >
-        {url && <Image
+
+        <Image
             border="none"
             className="whall"
             objectFit="cover"
-            src={url} />}
-        {(!url && user) && <Typography>
+            src={url!}
+            display={showImage ? undefined : "none"} />
+
+        <Typography display={showSingature ? undefined : "none"}>
             {signature.toUpperCase()}
-        </Typography>}
+        </Typography>
     </Flex>
-})
+});

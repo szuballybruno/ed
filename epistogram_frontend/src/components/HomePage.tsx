@@ -5,6 +5,7 @@ import { mockTasks } from '../mockData';
 import { useOverviewPageDTO } from "../services/dataService";
 import { translatableTexts } from '../translatableTexts';
 import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
+import { EpistoDialog, useEpistoDialogLogic } from './EpistoDialog';
 import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
@@ -36,6 +37,7 @@ const HomePage = () => {
         <Navbar />
 
         <ContentWrapper>
+
             <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
                 <LeftPanel align="stretch" justify="stretch">
 

@@ -1,6 +1,8 @@
+import { Flex } from "@chakra-ui/layout";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { DialogOptions } from "../models/types";
+import { EpistoButton } from "./universal/EpistoButton";
 
 export const useEpistoDialogLogic = (dialogOptions: DialogOptions) => {
 
@@ -28,6 +30,8 @@ export type EpistoDialogLogicType = ReturnType<typeof useEpistoDialogLogic>;
 
 export const EpistoDialog = (props: {
     logic: EpistoDialogLogicType,
+    height?: string,
+    showCloseButton?: boolean,
     buttons?: ReactNode,
     children?: ReactNode
 }) => {
@@ -38,23 +42,37 @@ export const EpistoDialog = (props: {
         closeDialog
     } = props.logic;
 
-    const { children, buttons } = props;
+    const { children, showCloseButton, buttons, height } = props;
 
     return <Dialog
         open={isOpen}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        maxWidth="lg"
         style={{
-            zIndex: 10000
+            zIndex: 10000,
         }}>
 
-        <DialogTitle id="alert-dialog-title">
-            {dialogOptions?.title}
-        </DialogTitle>
+        <Flex direction="column" height={height}>
 
-        <DialogContent>
-            {children}
-        </DialogContent>
+            <Flex justify="space-between">
+                <DialogTitle id="alert-dialog-title">
+                    {dialogOptions?.title}
+                </DialogTitle>
+
+                {showCloseButton && <EpistoButton
+                    onClick={closeDialog}
+                    variant="outlined"
+                    style={{ margin: "5px" }}>
+                    Bezaras
+                </EpistoButton>}
+            </Flex>
+
+            <DialogContent>
+                {children}
+            </DialogContent>
+
+        </Flex>
 
         <DialogActions>
             {buttons}
