@@ -15,6 +15,10 @@ import { EditVideo } from "./courses/editVideo/EditVideo";
 import AdminStatistics from "./statistics/AdminStatistics";
 import AddUser from "../AddUser";
 import { UserAdministration } from "../UserAdministration";
+import EditUser from "./users/editUser/EditUser";
+import {AdminUserStatistics} from "./users/adminUserStatistics/AdminUserStatistics";
+import AdminUserTasks from "./users/adminUserTasks/AdminUserTasks";
+import CourseStatistics from "./courses/courseStatistics/CourseStatistics";
 
 const AdministrationPage = () => {
 
@@ -52,9 +56,21 @@ const AdministrationPage = () => {
                             <Route exact path={administrationRoutes.usersRoute.route}>
                                 <UserAdministration />
                             </Route>
+
+
                             <Route path={administrationRoutes.usersRoute.addRoute.route}>
                                 <AddUser />
                             </Route>
+                            <Route exact path={administrationRoutes.usersRoute.editRoute.route}>
+                                <EditUser />
+                            </Route>
+                            <Route exact path={administrationRoutes.usersRoute.statsRoute.route}>
+                                <AdminUserStatistics />
+                            </Route>
+                            <Route exact path={administrationRoutes.usersRoute.tasksRoute.route}>
+                                <AdminUserTasks />
+                            </Route>
+
                         </Switch>
                     </Route>
 
@@ -69,8 +85,11 @@ const AdministrationPage = () => {
                             <Route path={administrationRoutes.coursesRoute.addRoute.route}>
                                 <AddCourse />
                             </Route>
-                            <Route path={administrationRoutes.coursesRoute.editCourseRoute.route} exact>
+                            <Route path={administrationRoutes.coursesRoute.editCourseRoute.route}>
                                 <EditCourse />
+                            </Route>
+                            <Route path={administrationRoutes.coursesRoute.statisticsCourseRoute.route}>
+                                <CourseStatistics />
                             </Route>
                             <Route path={administrationRoutes.coursesRoute.addVideoRoute.route} exact>
                                 <AddVideo />

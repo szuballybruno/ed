@@ -23,6 +23,11 @@ export const uploadVideoThumbnailFileAction = getAsyncActionHandler((req: Reques
 export const uploadAvatarFileAction = getAsyncActionHandler((req: Request) => {
 
     const file = withValueOrBadRequest(req.files?.file) as UploadedFile;
+
+    //TODO: Create a validation function
+    if (!["image/png", "image/jpeg"].includes(file.mimetype))
+        throw new Error("File upload failed: Only jpeg or png")
+
     const userId = getUserIdFromRequest(req);
 
     return uploadAvatarFileAsync(userId, file);

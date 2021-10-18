@@ -7,6 +7,8 @@ export const uploadVideoFileAsync = (videoId: number, file: File) => {
 
 export const uploadAvatarFileAsync = (file: File) => {
 
+    console.log("EZAZ:" + file.type)
+
     return postFileAsync("file/upload-avatar", file);
 }
 

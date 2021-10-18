@@ -14,11 +14,9 @@ import { createInvitedUserAsync } from "../services/userManagementService";
 import { AddFrame } from "./add_frame/AddFrame";
 import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 import { EpistoSelect } from "./universal/EpistoSelect";
-import { AministrationSubpageHeader } from "./administration/universal/adminAddHeader/AministrationSubpageHeader";
-import SingleInput from "./administration/universal/singleInput/SingleInput";
-import DoubleInputs from "./administration/universal/twoInputs/DoubleInputs";
+import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
 
-const roles = [
+export const roles = [
     {
         name: "admin",
         id: 1,
@@ -35,6 +33,14 @@ const roles = [
         optionText: "Felhasználó"
     }
 ];
+
+export const jobTitles = [
+    {
+        name: "jobTitle1",
+        id: 1,
+        optionText: "Beosztás 1"
+    }
+]
 
 const AddUser = () => {
 
@@ -85,7 +91,7 @@ const AddUser = () => {
                 showNotification("Felhasználó hozzáadása sikertelen", "error");
             }
 
-            // typed error of http call 
+            // typed error of http call
             else {
 
                 const typedError = error as TypedError;
@@ -104,7 +110,7 @@ const AddUser = () => {
     return <Flex direction="column">
 
         {/* admin header */}
-        <AministrationSubpageHeader />
+        <AdministrationSubpageHeader />
 
         <AddFrame
             submitHandler={e => {
@@ -202,7 +208,7 @@ export default AddUser;
 //     || hasValue(jobTitle)
 //     || hasValue(selectedOrganization);
 
-// display unsaved changes alert when user navigates 
+// display unsaved changes alert when user navigates
 // useEffect(() => {
 //     unblockHandle.current = history.block((targetLocation: any) => {
 

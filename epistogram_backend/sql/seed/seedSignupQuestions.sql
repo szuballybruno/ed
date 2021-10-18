@@ -3,11 +3,11 @@ START TRANSACTION;
 -- Question categories
 INSERT INTO "question_category" ("minLabel", "maxLabel")
 VALUES
-    ('Egyedüli', 'Szociális'),
-    ('Hangos kimondás', 'Térbeli elhelyezés'),
-    ('Elméleti', 'Gyakorlati'),
-    ('Vizuális alapú', 'Audio alapú'),
-    ('Analitikus', 'Kreatív')
+    ('Egyedül tanulok szívesebben', 'Közösségben tanulok szívesebben'),
+    ('Hangosan kimondom, amit meg akarok jegyezni', 'Térben vizualizálom, amit meg akarok jegyezni'),
+    ('Elméleti módok érdekelnek inkább', 'Gyakorlati alkalmazás érdekel inkább'),
+    ('Látás után rögzül az információ', 'Hallás alapján rögzül az információ'),
+    ('Az analitikus gondolkodást részesítem előnyben', 'A kreatív gondolkodást részesítem előnyben')
 RETURNING "id";
 
 -- Questions

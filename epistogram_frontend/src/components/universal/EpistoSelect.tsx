@@ -37,6 +37,7 @@ export const EpistoSelect = <T,>(props: {
             onChange={(x) => onSelectedValue(x.target.value)}
             value={currentSelectedKey}
             style={{
+                width: "fit-content",
                 outline: "none",
                 cursor: "pointer"
             }}>

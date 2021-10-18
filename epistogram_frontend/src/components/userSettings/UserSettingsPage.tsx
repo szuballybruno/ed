@@ -234,7 +234,7 @@ const Preferences = () => {
                             variant="outlined"
                             padding="1px 8px 1px 8px">
 
-                            Jelszó visszaállítása
+                            Jelszó megváltoztatása
                         </EpistoButton>}
 
                         {isPasswordChangeOpen && <>
@@ -270,7 +270,8 @@ const Preferences = () => {
                 onClick={saveChangesAsync}
                 style={{
                     alignSelf: "center",
-                    marginTop: "30px"
+                    marginTop: "30px",
+                    marginBottom: "10px"
                 }}>
 
                 Változtatások mentése

@@ -56,9 +56,5 @@ export const MyExams = () => {
                     </FlexFloat>)}
             </EpistoGrid>
         </DashboardSection>
-
-        <DashboardSection variant="noShadow" title="Jelentkezés vizsgára">
-
-        </DashboardSection>
     </Flex>
 }

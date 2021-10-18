@@ -14,8 +14,8 @@ export const useAdministratedCourses = (searchText: string) => {
 
     return {
         courses: data ?? [],
-        error,
-        status
+        coursesError: error,
+        coursesStatus: status
     }
 }
 

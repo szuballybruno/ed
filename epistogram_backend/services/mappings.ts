@@ -37,6 +37,7 @@ import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSession
 import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
 import { getCourseItemDescriptorCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
+import {getUserById} from "./userService";
 
 export const toUserDTO = (user: User) => {
 
@@ -275,7 +276,7 @@ export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
     }
 }
 
-export const toCourseShortDTO = (course: CourseView) => {
+export const toCourseShortDTO = async (course: CourseView) => {
 
     const thumbnailImageURL = course.filePath
         ? getAssetUrl(course.filePath)
@@ -287,12 +288,15 @@ export const toCourseShortDTO = (course: CourseView) => {
             : getCourseItemDescriptorCode(course.currentVideoId, "video")
         : null;
 
+
+    const teacher = await getUserById(course.teacherId).then(t => t)
+
     return {
         courseId: course.id,
         title: course.title,
         category: course.category,
         firstItemCode: firstItemCode,
-        teacherName: "Mr. Teacher Name",
+        teacherName: teacher.lastName + " " + teacher.firstName,
         thumbnailImageURL: thumbnailImageURL,
         isComplete: course.isComplete
     } as CourseShortDTO;
@@ -329,17 +333,19 @@ export const toAnswerDTO = (a: Answer) => {
     } as AnswerDTO;
 }
 
-export const toCourseAdminDTO = (course: Course) => {
+export const toCourseAdminDTO = async (course: Course) => {
 
     const thumbnailImageURL = course.coverFile
         ? getAssetUrl(course.coverFile.filePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
 
+    const teacher = await getUserById(course.teacherId)
+
     return {
         title: course.title,
         category: course.category,
         courseId: course.id,
-        teacherName: "Mr. Teacher Name",
+        teacherName: teacher.lastName + " " + teacher.firstName,
         videosCount: 0,
         thumbnailImageURL: thumbnailImageURL
     } as CourseAdminDTO;

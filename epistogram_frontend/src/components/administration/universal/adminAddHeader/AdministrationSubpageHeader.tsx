@@ -6,8 +6,9 @@ import { matchPath, useLocation } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { applicationRoutes } from "../../../../configuration/applicationRoutes";
 import { objToArray } from "../../../../frontendHelpers";
+import {Flex} from "@chakra-ui/react";
 
-export const AministrationSubpageHeader = (props: { children?: ReactNode }) => {
+export const AdministrationSubpageHeader = (props: { children?: ReactNode }) => {
 
     const { children } = props;
 
@@ -58,21 +59,24 @@ export const AministrationSubpageHeader = (props: { children?: ReactNode }) => {
 
     //TODO: Navigate back to previously edited course or video on click e.g.: not to :courseId but the real courseId
 
-    return <Box padding="25px" className="dividerBorderBottom">
-        <Breadcrumbs>
-            {currentRoute && <BreadcrumbLink
-                isCurrent={!subRoute}
-                to={currentRoute.route}
-                title={currentRoute.title}
-                iconComponent={currentRoute.icon} />}
+    return <Flex direction={"column"} >
+        <Flex flexDirection={"row"} h={60} pl={20} justifyContent={"flex-start"} alignItems={"center"} className="dividerBorderBottom">
+            <Breadcrumbs>
+                {currentRoute && <BreadcrumbLink
+                    isCurrent={!subRoute}
+                    to={currentRoute.route}
+                    title={currentRoute.title}
+                    iconComponent={currentRoute.icon} />}
 
-            {subRoute && <BreadcrumbLink
-                isCurrent
-                to={subRoute.route}
-                title={subRoute.title}
-                iconComponent={subRoute.icon} />}
-        </Breadcrumbs>
+                {subRoute && <BreadcrumbLink
+                    isCurrent
+                    to={subRoute.route}
+                    title={subRoute.title}
+                    iconComponent={subRoute.icon} />}
+            </Breadcrumbs>
+        </Flex>
+
 
         {children}
-    </Box>
+    </Flex>
 }

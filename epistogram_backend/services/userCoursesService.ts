@@ -25,8 +25,8 @@ export const getUserCoursesAsync = async (userId: number, dto: GetUserCoursesDTO
             }
         });
 
-    const courseShortDTOs = courses
-        .map(course => toCourseShortDTO(course));
+    const courseShortDTOs = await Promise.all(courses
+        .map(async course => toCourseShortDTO(course)))
 
     return courseShortDTOs;
 }

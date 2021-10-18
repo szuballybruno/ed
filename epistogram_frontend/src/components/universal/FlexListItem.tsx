@@ -29,22 +29,32 @@ export const FlexListItem = (props: FlexProps & {
         className="shadowOnHover"
         cursor="pointer"
         align="center"
-        p="10px"
+        minH={100}
         pointerEvents={isLocked ? "none" : "all"}
         onClick={onClick}
         borderBottom="1px solid #eaeaea"
         {...css}>
 
-        {setIsChecked && <Checkbox
-            checked={isChecked}
-            onChange={x => setIsChecked(x.currentTarget.checked)}
-            style={{ alignSelf: "center" }} />}
+        <Flex minW={60} h={"100%"} direction={"column"} alignItems={"center"} justifyContent={"flex-start"}>
+            {setIsChecked && <Checkbox
+                checked={isChecked}
+                onChange={x => setIsChecked(x.currentTarget.checked)}
+                style={{ alignSelf: "center", marginTop: 23 }} />}
+        </Flex>
 
-        {thumbnail}
+        <Flex
+            w={100}
+            h={"100%"}
+            direction={"column"}
+            alignItems={"center"}
+            justifyContent={"flex-start"}
+        >
+            {thumbnail}
+        </Flex>
 
-        <Box flex="1">
+        <Flex flex="1" direction={"column"} alignItems={"center"} justifyContent={"flex-start"}>
             {midContent}
-        </Box>
+        </Flex>
 
         {endContent}
     </Flex>

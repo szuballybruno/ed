@@ -1,5 +1,15 @@
 import { Box, Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Email, KeyboardVoice, Save, WorkTwoTone } from "@mui/icons-material";
+import {
+    ApartmentTwoTone,
+    Close,
+    Edit,
+    Email,
+    Equalizer,
+    KeyboardVoice,
+    Save,
+    Task,
+    WorkTwoTone
+} from "@mui/icons-material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
@@ -16,12 +26,13 @@ import { FlexListItem } from "./universal/FlexListItem";
 import { FlexListTitleSubtitle } from "./universal/FlexListTitleSubtitle";
 import { FloatChip } from "./universal/FloatChip";
 import { EpistoSearch } from "./universal/EpistoSearch";
-import { AministrationSubpageHeader } from "./administration/universal/adminAddHeader/AministrationSubpageHeader";
+import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
 import { Button, Checkbox, Typography } from "@mui/material";
 import { ProfileImage } from "./ProfileImage";
 import IntersectionObserverWrap from "./administration/universal/overflow/intersection-observer-wrapper";
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import {Stat} from "@chakra-ui/react";
 
 export const UserAdministration = () => {
 
@@ -31,6 +42,8 @@ export const UserAdministration = () => {
     const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(userId, searchText);
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
+
+    const administrationRoutes = applicationRoutes.administrationRoute;
 
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
 
@@ -69,74 +82,156 @@ export const UserAdministration = () => {
     return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
 
         {/* admin header */}
-        <AministrationSubpageHeader>
-            <Flex flexDirection={"row"}>
+        <AdministrationSubpageHeader>
+            <Flex flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} h={60}>
+                <Flex direction={"row"} alignItems={"center"} justifyContent={"center"} minW={60} h={"100%"}>
+                    <Checkbox checked={isAllUsersSelected} onClick={() => selectAllOrNone(!isAllUsersSelected)} />
+                </Flex>
 
-                <Flex
-                    align="center"
+                {!isAllUsersSelected && <Flex
+                    w={240}
+                    minW={165}
+                    h={"100%"}
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"flex-start"}
                     onClick={() => selectAllOrNone(!isAllUsersSelected)}
-                    cursor="pointer"
-                    mr="20px">
-                    <Checkbox
-                        checked={isAllUsersSelected} />
+                    cursor="pointer">
 
                     <Typography
-                        style={{ marginLeft: "20px" }}
-                        display={isAnyUserSelected ? "none" : undefined}>
+                        style={{ marginLeft: "20px" }}>
 
                         Összes kijelölése
                     </Typography>
-                </Flex>
+                </Flex>}
 
+                {selectedUserIds.length > 0 &&
                 <Flex
-                    display={selectedUserIds.length ? undefined : "none"}>
-                    <Box
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"space-between"}
+                    w={230}
+                    minW={230}
+                    h={"100%"}>
+                    <Flex
+                        direction={"row"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
                         className="roundBorders"
                         bg="var(--epistoTeal)"
-                        p="2px 12px 2px 12px"
+                        p="0 12px 0 12px"
                         color="white"
-                        mr="20px"
-                        alignSelf="center">
+                        h={30}
+                        ml={10}>
                         <Typography>
                             {selectedUserIds.length} felhasználó kijelölve
                         </Typography>
-                    </Box>
+                        <Close onClick={() => {
+                            setSelectedUserIds([])
+                        }} style={{
+                            width: 18,
+                            marginLeft: 5
+                        }} />
+                    </Flex>
+                </Flex>}
 
-                    {selectedUserIds.length && <EpistoSelect
-                        items={[]}
-                        onSelected={x => { }}
-                        selectedValue="1"
-                        getCompareKey={x => x}
-                        defaultValue="Jogosultságok kezelése..."
-                        mr="20px"></EpistoSelect>}
+                {selectedUserIds.length !== 1 && <Flex flex={1}></Flex>}
 
-                </Flex>
-                <IntersectionObserverWrap>
-                    <EpistoButton
-                        variant="outlined"
-                        name="assignCourses"
-                        style={{ marginRight: "20px", minWidth: "230px" }}>
-                        Kurzusok hozzárendelése
-                    </EpistoButton>
-                    <EpistoButton
-                        name="edit"
-                        style={{ marginRight: "20px", minWidth: "230px" }}
-                        variant={"outlined"}>
+                {(selectedUserIds.length === 1) && <IntersectionObserverWrap direction={"row"} alignItems={"center"} justifyContent={"flex-start"}>
+                    <Button
+                        size={"small"}
+                        variant={"outlined"}
+                        name={"edit"}
+                        style={{
+                            marginRight: "20px",
+                            minWidth: "fit-content",
+                            borderRadius: 7,
+                            borderColor: "var(--mildGrey)",
+                            color: "black"
+                        }}
+                        onClick={() => {
+                            navigate(`${administrationRoutes.usersRoute.route}/${user.id}/edit`)
+                        }}
+                    >
                         Szerkesztés
-                    </EpistoButton>
+                    </Button>
+                    <Button
+                        size={"small"}
+                        name="remove"
+                        style={{
+                            marginRight: "20px",
+                            minWidth: "fit-content",
+                            borderRadius: 7,
+                            borderColor: "var(--mildGrey)",
+                            color: "black"
+                        }}
+                        variant={"outlined"}>
+                        Törlés
+                    </Button>
+                    <Button
+                        size={"small"}
+                        name="stats"
+                        style={{
+                            marginRight: "20px",
+                            minWidth: "fit-content",
+                            borderRadius: 7,
+                            borderColor: "var(--mildGrey)",
+                            color: "black"
+                        }}
+                        variant={"outlined"}
+                        onClick={() => {
+                            navigate(`${administrationRoutes.usersRoute.route}/${user.id}/statistics`)
+                        }}>
+                        Statisztika megjelenítése
+                    </Button>
+                    <Button
+                        size={"small"}
+                        name="tasks"
+                        style={{
+                            marginRight: "20px",
+                            minWidth: "fit-content",
+                            borderRadius: 7,
+                            borderColor: "var(--mildGrey)",
+                            color: "black"
+                        }}
+                        variant={"outlined"}
+                        onClick={() => {
+                            navigate(`${administrationRoutes.usersRoute.route}/${user.id}/tasks`)
+                        }}>
+                        Feladatok megtekintése
+                    </Button>
 
-                </IntersectionObserverWrap>
+                </IntersectionObserverWrap>}
 
-                <EpistoSearch mr="10px" width="200px"></EpistoSearch>
+                <Flex
+                    h={"100%"}
+                    direction={"row"}
+                    justifyContent={"flex-start"}
+                    alignItems={"center"}
+                    w={140}
+                    mx={10}>
+                    <EpistoSearch w={140}></EpistoSearch>
+                </Flex>
 
-                <EpistoSelect
+
+                <Flex
+                    direction={"row"}
+                    justifyContent={"flex-start"}
+                    alignItems={"center"}
+                    h={"100%"}
+                    mx={10}>
+                    <EpistoSelect
+                        minW={"fit-content"}
                     items={[]}
                     onSelected={x => { }}
                     selectedValue="1"
                     getCompareKey={x => x}
-                    defaultValue="Rendezés..."></EpistoSelect>
+                    defaultValue="Rendezés...">
+
+                    </EpistoSelect>
+                </Flex>
             </Flex>
-        </AministrationSubpageHeader>
+        </AdministrationSubpageHeader>
 
         <LoadingFrame loadingState={usersStatus} error={usersError} flex="1">
 
@@ -149,13 +244,13 @@ export const UserAdministration = () => {
 
                         if (!user.userActivity.canAccessApplication)
                             chips.push({
-                                name: "Nincs hozzaferese az applikaciohoz",
+                                name: "Nincs hozzáférése az applikációhoz",
                                 icon: <DesktopAccessDisabledIcon />
                             });
 
                         if (user.isPendingInvitation)
                             chips.push({
-                                name: "A meghivas elfogadasra var",
+                                name: "A meghívás elfogadásra vár",
                                 icon: <Email />
                             });
 
@@ -180,18 +275,17 @@ export const UserAdministration = () => {
                         return <FlexListItem
                             key={index}
                             thumbnail={<ProfileImage
+                                mt={10}
                                 url={user.avatarUrl}
                                 lastName={user.lastName}
                                 firstName={user.firstName}
-                                className="square70"
-                                margin="0 30px 0 20px" />}
+                                className="square70" />}
                             background="white"
-                            p="20px"
                             setIsChecked={x => setSelectedUser(user.id, x)}
                             isChecked={selectedUserIds.some(x => x === user.id)}
                             midContent={<FlexListTitleSubtitle
                                 title={`${user.lastName} ${user.firstName}`}
-                                subTitle={<Flex wrap="wrap" mt="10px">
+                                subTitle={<Flex wrap="wrap" my="10px">
                                     {chips
                                         .map((chip, index) => <FloatChip
                                             name={chip.name}
@@ -199,11 +293,39 @@ export const UserAdministration = () => {
                                             padding="5px" />)}
                                 </Flex>}
                             />}
-                            endContent={<Flex align="center">
-                                {(userId != user.id) && <EpistoButton
+                            endContent={<Flex align="center" justifyContent={"flex-end"} h={"100%"} width={165} px={10}>
+                                <EpistoButton
+                                    variant={"colored"}
+                                    onClick={() => {
+                                        navigate(`${administrationRoutes.usersRoute.route}/${user.id}/edit`)
+                                    }}
+                                    style={{ width: 20 }}
+                                >
+                                    <Edit style={{ width: "20px", height: "20px" }} />
+                                </EpistoButton>
+                                <EpistoButton
                                     variant="colored"
-                                    padding="5px"
-                                    onClick={() => deleteUserAsync(user.id)}>
+                                    onClick={() => {
+                                        navigate(`${administrationRoutes.usersRoute.route}/${user.id}/statistics`)
+                                    }}
+                                    style={{ width: 20, marginLeft: 5 }}
+                                >
+                                    <Equalizer style={{ width: "20px", height: "20px" }} />
+                                </EpistoButton>
+                                <EpistoButton
+                                    variant="colored"
+                                    onClick={() => {
+                                        navigate(`${administrationRoutes.usersRoute.route}/${user.id}/tasks`)
+                                    }}
+                                    style={{ width: 20, marginLeft: 5 }}
+                                >
+                                    <Task style={{ width: "20px", height: "20px" }} />
+                                </EpistoButton>
+                                {(userId !== user.id) && <EpistoButton
+                                    variant="colored"
+                                    onClick={() => deleteUserAsync(user.id)}
+                                    style={{ width: 20, marginLeft: 5 }}
+                                >
                                     <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>
                                 </EpistoButton>}
                             </Flex>}

@@ -17,6 +17,7 @@ import { TaskObjectiveType, TaskPriorityType, TaskStatusType } from "../models/s
 import { translatableTexts } from "../translatableTexts"
 import { EpistoButton } from "./universal/EpistoButton"
 import {NavLink} from "react-router-dom";
+import {ProfileImage} from "./ProfileImage";
 
 export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
 
@@ -164,10 +165,7 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
                             {/* created by  */}
                             <TableCell align={rowAling} style={tableRowCell}>
                                 <Flex align="center">
-                                    <img
-                                        className="square35"
-                                        src={"https://storage.googleapis.com/epistogram_bucket_dev/userAvatars/user_avatar_4.png"}
-                                        style={{ marginRight: "5px", borderRadius: "50%" }} />
+                                    <ProfileImage url={""} p={5} mr={3} />
 
                                     {task.createdBy}
                                 </Flex>

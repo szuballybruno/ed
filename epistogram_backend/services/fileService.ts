@@ -28,7 +28,6 @@ export const uploadVideoThumbnailFileAsync = (videoId: number, file: UploadedFil
 };
 
 export const uploadAvatarFileAsync = async (userId: number, file: UploadedFile) => {
-
     // upload new avatar
     await uploadAssigendFileAsync<User>(
         getFilePath("userAvatars", "user_avatar", userId, "png"),

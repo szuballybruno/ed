@@ -72,7 +72,7 @@ export const applicationRoutes = {
     administrationRoute: {
         title: translatableTexts.routeTitles.administration,
         route: "/administration",
-        
+
         usersRoute: {
             title: translatableTexts.routeTitles.administrationUserAdmin,
             route: "/administration/users",
@@ -81,6 +81,21 @@ export const applicationRoutes = {
             addRoute: {
                 title: translatableTexts.routeTitles.administrationAddUser,
                 route: "/administration/users/add"
+            },
+
+            editRoute: {
+                title: translatableTexts.routeTitles.administrationEditUser,
+                route: "/administration/users/:userId/edit"
+            },
+
+            statsRoute: {
+                title: translatableTexts.routeTitles.administrationUserStatistics,
+                route: "/administration/users/:userId/statistics"
+            },
+
+            tasksRoute: {
+                title: translatableTexts.routeTitles.administrationUserTasks,
+                route: "/administration/users/:userId/tasks"
             }
         },
         coursesRoute: {
@@ -94,7 +109,11 @@ export const applicationRoutes = {
             },
             editCourseRoute: {
                 title: translatableTexts.routeTitles.administrationEditCourse,
-                route: "/administration/courses/:courseId"
+                route: "/administration/courses/:courseId/edit"
+            },
+            statisticsCourseRoute: {
+                title: translatableTexts.routeTitles.administrationCourseStatistics,
+                route: "/administration/courses/:courseId/statistics"
             },
             addVideoRoute: {
                 title: translatableTexts.routeTitles.administrationAddVideo,
