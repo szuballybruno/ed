@@ -98,5 +98,9 @@ export const translatableTexts = {
         personalLearningAnalysisTitle: "Személyes tanulási analízis",
         myStatisticsTitle: "Statisztikám",
         myBadgesTitle: "Megszerzett jelvényeim"
+    },
+
+    signup: {
+        goToHomePage: "Irany az app!"
     }
 }

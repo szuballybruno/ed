@@ -37,7 +37,7 @@ import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSession
 import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
 import { getCourseItemDescriptorCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
-import {getUserById} from "./userService";
+import { getUserById } from "./userService";
 
 export const toUserDTO = (user: User) => {
 
@@ -49,6 +49,7 @@ export const toUserDTO = (user: User) => {
         jobTitle: user.jobTitle,
         email: user.email,
         phoneNumber: user.phoneNumber,
+        isTrusted: user.isTrusted,
         isPendingInvitation: user.isPendingInvitation,
         name: `${user.lastName} ${user.firstName}`,
 

@@ -5,6 +5,7 @@ export type UserDTO = {
     firstName: string;
     lastName: string;
     organizationId: number;
+    isTrusted: boolean;
     jobTitle: string;
     email: string;
     phoneNumber: string;

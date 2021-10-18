@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { globalConfig } from "../../configuration/config";
-import {getAssetUrl, usePaging} from "../../frontendHelpers";
+import { getAssetUrl, usePaging } from "../../frontendHelpers";
 import { useNavigation } from '../../services/navigatior';
+import { translatableTexts } from '../../translatableTexts';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../HOC/AuthenticationFrame';
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
@@ -18,6 +19,7 @@ export const SignupPage = () => {
     const slidesState = usePaging([1, 2, 3]);
     const user = useContext(CurrentUserContext)!;
     const refetchUserAsync = useContext(RefetchUserAsyncContext)!;
+    const isInvitedUser = user.isTrusted;
 
     const { navigate } = useNavigation();
 
@@ -49,7 +51,8 @@ export const SignupPage = () => {
     const SummarySlide = (isCurrent: boolean) => <SignupWrapper
         title={"Az alábbi grafikonon a saját tanulási stílusod vizualizációja látható"}
         upperTitle="Összegzés"
-        onNext={handleGoToHomePage}
+        onNext={isInvitedUser ? handleGoToHomePage : undefined}
+        nextButtonTitle={isInvitedUser ? translatableTexts.signup.goToHomePage : undefined}
         onNavPrevious={() => slidesState.previous()}>
 
         {isCurrent && <PersonalityAssessment height="100%" mt="20px"></PersonalityAssessment>}
