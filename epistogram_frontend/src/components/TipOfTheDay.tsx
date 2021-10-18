@@ -1,5 +1,7 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
+import { m } from "framer-motion"
+import { useEffect, useRef } from "react"
 import { getAssetUrl, usePaging } from "../frontendHelpers"
 import { tipOfTheDay } from "../services/dataService"
 import { translatableTexts } from "../translatableTexts"
@@ -22,16 +24,22 @@ export const TipOfTheDay = (props: {} & FlexProps) => {
         {tipOfTheDay}
     </Typography>;
 
-    const VideoSlide = () => <Box position={"relative"} p="20px" onClick={openDialog} cursor="pointer">
-        <img src={getAssetUrl("/icons/play2.svg")} style={{
-            position: "absolute",
-            top: "43%",
-            left: "45%",
-            width: 40,
-            height: 40,
-        }} alt={""} />
+    const VideoSlide = () => <Box position={"relative"} onClick={openDialog} cursor="pointer">
+        <Flex top="0" position="absolute" align="center" justify="center" className="whall">
+            <Box
+                className="square70 circle"
+                padding="10px"
+                background="#0000004f"
+                boxShadow="0 0 20px 16px #0000004f">
+                <img
+                    style={{
+                        transform: "translateX(5px)",
+                        filter: "brightness(2)"
+                    }}
+                    src={getAssetUrl("/icons/play2.svg")} />
+            </Box>
+        </Flex>
         <img
-            height="300px"
             width="100%"
             src={getAssetUrl("/images/tipoftheday.jpg")}
             style={{
@@ -40,13 +48,51 @@ export const TipOfTheDay = (props: {} & FlexProps) => {
         </img>
     </Box>
 
+    const toggleDisplayModes = () => {
+
+        if (currentIndex == 0) {
+
+            next();
+        }
+        else {
+
+            previous();
+        }
+    }
+
     return <Flex direction="column" justify="center" {...css}>
 
-        <EpistoDialog logic={dialogLogic} height="90vh" showCloseButton={true}>
-            <Flex width="90vw" >
+        <EpistoDialog logic={dialogLogic} fullScreenX={true} showCloseButton={true}>
+            <Flex direction="column" align="center">
+                <Flex
+                    id="customContentRoot"
+                    position={"relative"}
+                    height="calc(min(min(80vw, 1400px), 140vh) * 0.5625)"
+                    cursor="pointer"
+                    width="min(min(80vw, 1400px), 140vh)"
+                    align="center"
+                    justify="center"
+                    margin="auto">
 
+                    <SlidesDisplay
+                        index={currentIndex}
+                        slides={[
+                            VideoSlide,
+                            DescriptionSlide
+                        ]} />
+                </Flex>
+
+                <Flex>
+                    <EpistoButton variant="outlined" style={{ margin: "10px" }}>
+                        {translatableTexts.tipOfTheDay.prevoiusVideos}
+                    </EpistoButton>
+
+                    <EpistoButton variant="outlined" style={{ margin: "10px" }} onClick={toggleDisplayModes}>
+                        {translatableTexts.tipOfTheDay.description}
+                    </EpistoButton>
+                </Flex>
             </Flex>
-        </EpistoDialog>
+        </EpistoDialog >
 
         <SlidesDisplay
             index={currentIndex}
@@ -58,20 +104,10 @@ export const TipOfTheDay = (props: {} & FlexProps) => {
         <EpistoButton
             style={{ alignSelf: "center" }}
             variant="outlined"
-            onClick={() => {
-
-                if (currentIndex == 0) {
-
-                    next();
-                }
-                else {
-
-                    previous();
-                }
-            }}>
+            onClick={toggleDisplayModes}>
             {currentIndex == 0
                 ? translatableTexts.tipOfTheDay.description
                 : translatableTexts.tipOfTheDay.video}
         </EpistoButton>
-    </Flex>
+    </Flex >
 }

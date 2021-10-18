@@ -30,7 +30,8 @@ export type EpistoDialogLogicType = ReturnType<typeof useEpistoDialogLogic>;
 
 export const EpistoDialog = (props: {
     logic: EpistoDialogLogicType,
-    height?: string,
+    fullScreenX?: boolean,
+    fullScreenY?: boolean,
     showCloseButton?: boolean,
     buttons?: ReactNode,
     children?: ReactNode
@@ -42,18 +43,19 @@ export const EpistoDialog = (props: {
         closeDialog
     } = props.logic;
 
-    const { children, showCloseButton, buttons, height } = props;
+    const { children, showCloseButton, buttons, fullScreenX, fullScreenY } = props;
 
     return <Dialog
         open={isOpen}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        maxWidth="lg"
+        maxWidth={fullScreenX ? "xl" : undefined}
+        fullWidth={fullScreenX}
         style={{
-            zIndex: 10000,
+            zIndex: 10000
         }}>
 
-        <Flex direction="column" height={height}>
+        <Flex direction="column" height={fullScreenY ? "90vh" : undefined}>
 
             <Flex justify="space-between">
                 <DialogTitle id="alert-dialog-title">
@@ -68,7 +70,7 @@ export const EpistoDialog = (props: {
                 </EpistoButton>}
             </Flex>
 
-            <DialogContent>
+            <DialogContent style={{ padding: "0px" }}>
                 {children}
             </DialogContent>
 

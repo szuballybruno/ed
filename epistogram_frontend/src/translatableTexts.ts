@@ -52,7 +52,8 @@ export const translatableTexts = {
 
     tipOfTheDay: {
         video: "Videó",
-        description: "Leírás"
+        description: "Leírás",
+        prevoiusVideos: "Elozo videok",
     },
 
     tasks: {
