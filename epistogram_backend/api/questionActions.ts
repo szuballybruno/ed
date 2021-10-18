@@ -5,10 +5,10 @@ import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpe
 
 export const answerVideoQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
-    const dto = withValueOrBadRequest(req.body) as AnswerQuestionDTO;
-    const answerId = withValueOrBadRequest(dto.answerId);
-    const questionId = withValueOrBadRequest(dto.questionId);
-    const answerSessionId = withValueOrBadRequest(dto.answerSessionId);
+    const dto = withValueOrBadRequest<AnswerQuestionDTO>(req.body);
+    const answerId = withValueOrBadRequest<number>(dto.answerId);
+    const questionId = withValueOrBadRequest<number>(dto.questionId);
+    const answerSessionId = withValueOrBadRequest<number>(dto.answerSessionId);
 
     return answerVideoQuestionAsync(answerSessionId, questionId, answerId);
 });

@@ -4,5 +4,5 @@ export type CreateInvitedUserDTO = {
     email: string;
     organizationId?: number;
     roleId: number;
-    jobTitle: string;
+    jobTitleId: number;
 }

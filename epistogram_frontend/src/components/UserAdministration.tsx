@@ -32,7 +32,7 @@ import { ProfileImage } from "./ProfileImage";
 import IntersectionObserverWrap from "./administration/universal/overflow/intersection-observer-wrapper";
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import {Stat} from "@chakra-ui/react";
+import { Stat } from "@chakra-ui/react";
 
 export const UserAdministration = () => {
 
@@ -106,34 +106,34 @@ export const UserAdministration = () => {
                 </Flex>}
 
                 {selectedUserIds.length > 0 &&
-                <Flex
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                    w={230}
-                    minW={230}
-                    h={"100%"}>
                     <Flex
                         direction={"row"}
-                        justifyContent={"center"}
                         alignItems={"center"}
-                        className="roundBorders"
-                        bg="var(--epistoTeal)"
-                        p="0 12px 0 12px"
-                        color="white"
-                        h={30}
-                        ml={10}>
-                        <Typography>
-                            {selectedUserIds.length} felhasználó kijelölve
-                        </Typography>
-                        <Close onClick={() => {
-                            setSelectedUserIds([])
-                        }} style={{
-                            width: 18,
-                            marginLeft: 5
-                        }} />
-                    </Flex>
-                </Flex>}
+                        justifyContent={"space-between"}
+                        w={230}
+                        minW={230}
+                        h={"100%"}>
+                        <Flex
+                            direction={"row"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            className="roundBorders"
+                            bg="var(--epistoTeal)"
+                            p="0 12px 0 12px"
+                            color="white"
+                            h={30}
+                            ml={10}>
+                            <Typography>
+                                {selectedUserIds.length} felhasználó kijelölve
+                            </Typography>
+                            <Close onClick={() => {
+                                setSelectedUserIds([])
+                            }} style={{
+                                width: 18,
+                                marginLeft: 5
+                            }} />
+                        </Flex>
+                    </Flex>}
 
                 {selectedUserIds.length !== 1 && <Flex flex={1}></Flex>}
 
@@ -222,11 +222,11 @@ export const UserAdministration = () => {
                     mx={10}>
                     <EpistoSelect
                         minW={"fit-content"}
-                    items={[]}
-                    onSelected={x => { }}
-                    selectedValue="1"
-                    getCompareKey={x => x}
-                    defaultValue="Rendezés...">
+                        items={[]}
+                        onSelected={x => { }}
+                        selectedValue="1"
+                        getCompareKey={x => x}
+                        defaultValue="Rendezés...">
 
                     </EpistoSelect>
                 </Flex>
@@ -266,11 +266,12 @@ export const UserAdministration = () => {
                                 icon: <ApartmentTwoTone />
                             });
 
-                        chips.push(
-                            {
-                                name: user.jobTitle,
-                                icon: <WorkTwoTone />
-                            })
+                        if (user.jobTitle)
+                            chips.push(
+                                {
+                                    name: user.jobTitle.name,
+                                    icon: <WorkTwoTone />
+                                })
 
                         return <FlexListItem
                             key={index}

@@ -47,6 +47,7 @@ import { PractiseQuestionView } from "./models/views/PractiseQuestionView";
 import { recreateViewsAsync } from "./services/sqlServices/sqlViewCreatorService";
 import { recreateFunctionsAsync } from "./services/sqlServices/sqlFunctionCreatorService";
 import { UserSignupCompletedView } from "./models/views/UserSignupCompletedView";
+import { JobTitle } from "./models/entity/JobTitle";
 
 export type TypeORMConnection = Connection;
 
@@ -248,6 +249,7 @@ const getPorstgresOptions = () => {
             RoleActivityBridge,
             PersonalityCategoryDescription,
             PractiseQuestionView,
+            JobTitle,
 
             // views,
             VideoCompletedView,

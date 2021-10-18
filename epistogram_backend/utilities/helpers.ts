@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
+import { getUserIdFromRequest } from "../services/authenticationService";
 import { log, logError } from "../services/misc/logger";
 
 export const getAsyncActionHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
@@ -19,6 +20,35 @@ export const getAsyncActionHandler = (wrappedAction: (req: Request, res: Respons
     }
 
     return wrapperFunction;
+}
+
+
+export type ActionParamsType = { req: Request, res: Response, next: NextFunction, userId: number | null };
+export type EndpointOptionsType = { isPublic?: boolean, isPost?: boolean };
+
+export const getAsyncActionHandlerNew = (wrappedAction: (params: ActionParamsType) => Promise<any>, options: EndpointOptionsType) => {
+
+    const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
+
+        const asyncActionWrapper = async () => {
+
+            const userId = options.isPublic ? null : await getUserIdFromRequest(req);
+            return await wrappedAction({ req, res, next, userId })
+        }
+
+        asyncActionWrapper()
+            .then((returnValue: any) => {
+
+                respond(res, 200, returnValue)
+            })
+            .catch((error: any) => {
+
+                logError(error);
+                respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
+            });
+    }
+
+    return syncActionWrapper;
 }
 
 export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
@@ -106,7 +136,7 @@ export const hasValue = (obj: any) => {
     return true;
 }
 
-export const withValue = (obj: any, errorFunc?: () => void) => {
+export const withValue = <T>(obj: T, errorFunc?: () => void) => {
 
     if (!errorFunc)
         errorFunc = () => { throw new Error("Object has no value!"); };
@@ -132,7 +162,7 @@ export const getSingleFileFromRequest = (req: Request) => {
     return req.files.file as UploadedFile;
 }
 
-export const withValueOrBadRequest = (obj: any) => withValue(obj, () => {
+export const withValueOrBadRequest = <T>(obj: any) => withValue<T>(obj, () => {
 
     throw new TypedError("Requied field has no value!", "bad request");
 });

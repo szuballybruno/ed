@@ -25,3 +25,4 @@ DROP TABLE IF EXISTS public.question_category CASCADE;
 DROP TABLE IF EXISTS public.role CASCADE;
 DROP TABLE IF EXISTS public.role_activity_bridge CASCADE;
 DROP TABLE IF EXISTS public.activity CASCADE;
+DROP TABLE IF EXISTS public.job_title CASCADE;

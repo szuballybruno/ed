@@ -75,6 +75,7 @@ export const TipOfTheDay = (props: {} & FlexProps) => {
                     margin="auto">
 
                     <SlidesDisplay
+                        alwaysRender
                         index={currentIndex}
                         slides={[
                             VideoSlide,
@@ -95,6 +96,7 @@ export const TipOfTheDay = (props: {} & FlexProps) => {
         </EpistoDialog >
 
         <SlidesDisplay
+            alwaysRender
             index={currentIndex}
             slides={[
                 VideoSlide,

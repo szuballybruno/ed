@@ -15,8 +15,8 @@ import { EditVideo } from "./courses/editVideo/EditVideo";
 import AdminStatistics from "./statistics/AdminStatistics";
 import AddUser from "../AddUser";
 import { UserAdministration } from "../UserAdministration";
-import EditUser from "./users/editUser/EditUser";
-import {AdminUserStatistics} from "./users/adminUserStatistics/AdminUserStatistics";
+import EditUser from "../EditUser";
+import { AdminUserStatistics } from "./users/adminUserStatistics/AdminUserStatistics";
 import AdminUserTasks from "./users/adminUserTasks/AdminUserTasks";
 import CourseStatistics from "./courses/courseStatistics/CourseStatistics";
 

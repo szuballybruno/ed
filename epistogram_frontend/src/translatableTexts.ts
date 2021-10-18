@@ -1,5 +1,9 @@
 export const translatableTexts = {
 
+    misc: {
+        selectOption: "Nincs kivalasztas..."
+    },
+
     homePage: {
         courseProgress: "Haladás a kurzusaiddal",
         excelCourseTitle: "Excel kurzus",

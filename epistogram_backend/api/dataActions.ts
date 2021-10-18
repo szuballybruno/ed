@@ -17,7 +17,7 @@ import { createRegistrationToken } from "../services/tokenService";
 import { getUserById } from "../services/userService";
 import { staticProvider } from "../staticProvider";
 import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
-import {log} from "../services/misc/logger";
+import { log } from "../services/misc/logger";
 
 export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
@@ -28,7 +28,7 @@ export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Reque
 
 export const registerUserAction = getAsyncActionHandler(async (req: Request, res: Response) => {
 
-    const dto = withValueOrBadRequest(req.body) as RegisterUserDTO;
+    const dto = withValueOrBadRequest<RegisterUserDTO>(req.body);
 
     const { accessToken, refreshToken } = await registerUserAsync(dto);
 
@@ -37,7 +37,7 @@ export const registerUserAction = getAsyncActionHandler(async (req: Request, res
 
 export const registerInvitedUserAction = getAsyncActionHandler(async (req: Request, res: Response) => {
 
-    const dto = withValueOrBadRequest(req.body) as RegisterInvitedUserDTO;
+    const dto = withValueOrBadRequest<RegisterInvitedUserDTO>(req.body);
 
     const { accessToken, refreshToken } = await registerInvitedUserAsync(dto);
 
@@ -52,8 +52,8 @@ export const getRegistrationLinkAction = getAsyncActionHandler(async (req: Reque
 export const requestChangePasswordAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest(req.body);
-    const oldPassword = withValueOrBadRequest(dto.oldPassword);
+    const dto = withValueOrBadRequest<any>(req.body);
+    const oldPassword = withValueOrBadRequest<string>(dto.oldPassword);
 
     return await requestChangePasswordAsync(userId, oldPassword);
 })
@@ -61,7 +61,7 @@ export const requestChangePasswordAction = getAsyncActionHandler(async (req: Req
 export const answerPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest(req.body) as QuestionAnswerDTO;
+    const dto = withValueOrBadRequest<QuestionAnswerDTO>(req.body);
 
     return answerPractiseQuestionAsync(userId, dto);
 });
@@ -69,7 +69,7 @@ export const answerPractiseQuestionAction = getAsyncActionHandler(async (req: Re
 export const saveUserDataAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest(req.body) as UserDTO;
+    const dto = withValueOrBadRequest<UserDTO>(req.body);
 
     return saveUserDataAsync(userId, dto);
 });
@@ -109,7 +109,7 @@ export const getEditedCourseAction = async (req: Request) => {
 
 export const setEditedCourseAction = (req: Request) => {
 
-    const adminPageEditCourseDTO = withValueOrBadRequest(req.body) as AdminPageEditCourseDTO;
+    const adminPageEditCourseDTO = withValueOrBadRequest<AdminPageEditCourseDTO>(req.body);
 
     return updateCourseAsync(adminPageEditCourseDTO);
 };
@@ -153,8 +153,8 @@ export const getSignupDataAction = getAsyncActionHandler((req: Request) => {
 export const answerSignupQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest(req.body) as SaveQuestionAnswerDTO;
-    const questionAnswer = withValueOrBadRequest(dto.questionAnswer);
+    const dto = withValueOrBadRequest<SaveQuestionAnswerDTO>(req.body);
+    const questionAnswer = withValueOrBadRequest<QuestionAnswerDTO>(dto.questionAnswer);
 
     await answerSignupQuestionAsync(userId, questionAnswer);
 });

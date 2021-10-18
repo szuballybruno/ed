@@ -7,7 +7,7 @@ import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpe
 export const saveVideoPlaybackSampleAction = getAsyncActionHandler((req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest(req.body) as VideoPlaybackSampleDTO;
+    const dto = withValueOrBadRequest<VideoPlaybackSampleDTO>(req.body);
 
     return saveVideoPlaybackSample(userId, dto);
 });
@@ -15,7 +15,7 @@ export const saveVideoPlaybackSampleAction = getAsyncActionHandler((req: Request
 export const getPlayerDataAction = getAsyncActionHandler((req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const descriptorCode = withValueOrBadRequest(req.query.descriptorCode);
+    const descriptorCode = withValueOrBadRequest<string>(req.query.descriptorCode);
 
     return getPlayerDataAsync(userId, descriptorCode);
 });

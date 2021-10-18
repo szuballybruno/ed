@@ -1,5 +1,4 @@
 import bodyParser from 'body-parser';
-import cors from 'cors';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
@@ -9,20 +8,19 @@ import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from
 import { answerPractiseQuestionAction, answerSignupQuestionAction, getCourseItemsAction, getCurrentCourseItemCode, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction, getSignupDataAction, getUserPersonalityDataAction, getUsersAction as getUserAdministrationUserListAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveUserDataAction, setEditedCourseAction } from './api/dataActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
+import { getJobTitles } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction } from './api/questionActions';
 import { createInvitedUserAction } from './api/signupActions';
 import { deleteUserAction } from './api/userAdministartionActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { initializeDBAsync } from './database';
-import { EpistoEmail } from './models/EpistoEmail';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
-import { sendMailNewAsync } from './services/emailService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { getAuthMiddleware, getCORSMiddleware } from './services/middlewareService';
 import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
-import { getAsyncActionHandler } from './utilities/helpers';
+import { ActionParamsType, EndpointOptionsType, getAsyncActionHandler, getAsyncActionHandlerNew } from './utilities/helpers';
 import './utilities/jsExtensions';
 
 // initialize env
@@ -43,6 +41,26 @@ const initializeAsync = async () => {
     // init express
     log("Initializing express...");
     const expressServer = express();
+
+    const addEndpoint = (path: string, action: (params: ActionParamsType) => Promise<any>, options?: EndpointOptionsType) => {
+
+        const opts = options
+            ? options
+            : {
+                isPost: false,
+                isPublic: false
+            } as EndpointOptionsType;
+
+        const wrappedSyncAction = getAsyncActionHandlerNew(action, opts);
+
+        if (opts.isPost) {
+
+            expressServer.post(path, wrappedSyncAction);
+        } else {
+
+            expressServer.get(path, wrappedSyncAction);
+        }
+    }
 
     //
     // add middlewares
@@ -68,6 +86,7 @@ const initializeAsync = async () => {
     expressServer.post('/misc/set-new-password', changePasswordAction);
     expressServer.get('/misc/get-registration-link', getRegistrationLinkAction);
     expressServer.post(apiRoutes.misc.logoutUser, logOutUserAction);
+    addEndpoint(apiRoutes.misc.getJobTitles, getJobTitles); // new way to declare endpoints
 
     // signup
     expressServer.post(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction);

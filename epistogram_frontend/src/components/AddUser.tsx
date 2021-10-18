@@ -15,6 +15,8 @@ import { AddFrame } from "./add_frame/AddFrame";
 import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 import { EpistoSelect } from "./universal/EpistoSelect";
 import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
+import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
+import { useJobTitles } from "../services/dataService";
 
 export const roles = [
     {
@@ -49,13 +51,15 @@ const AddUser = () => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [role, setRole] = useState<RoleDTO | null>(null);
-    const [jobTitle, setJobTitle] = useState("");
+    const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
     const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(null);
 
     const { navigate } = useNavigation();
     const user = useContext(CurrentUserContext) as UserDTO;
     const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;
+
     const { organizations } = useOrganizations();
+    const { jobTitles } = useJobTitles();
 
     useEffect(() => {
 
@@ -69,12 +73,10 @@ const AddUser = () => {
             firstName,
             lastName,
             email,
-            jobTitle,
+            jobTitleId: hasValue(selectedJobTitle) ? selectedJobTitle!.id : null,
             roleId: hasValue(role) ? role!.id : 1,
             organizationId: selectedOrganization!.id
         } as CreateInvitedUserDTO;
-
-        console.log(createInvitedUserDTO);
 
         try {
 
@@ -106,6 +108,8 @@ const AddUser = () => {
             }
         }
     }
+
+    console.log(selectedJobTitle);
 
     return <Flex direction="column">
 
@@ -162,13 +166,15 @@ const AddUser = () => {
                 </Flex>}
 
                 {/* job title */}
-                <TextField
-                    style={{ flex: "1", margin: "10px" }}
-                    name="jobTitle"
-                    value={jobTitle}
-                    onChange={getEventValueCallback(setJobTitle)}
-                    variant="standard"
-                    label="Beosztás" />
+                {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
+                    <Typography>Beosztás</Typography>
+                    <EpistoSelect
+                        items={jobTitles}
+                        selectedValue={selectedJobTitle}
+                        onSelected={setSelectedJobTitle}
+                        getDisplayValue={jt => "" + jt?.name}
+                        getCompareKey={jt => "" + jt?.id} />
+                </Flex>}
 
                 {/* role */}
                 <Flex direction="column" align="stretch" width="100%">

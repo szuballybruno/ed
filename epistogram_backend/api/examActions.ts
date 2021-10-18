@@ -7,7 +7,7 @@ import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpe
 export const answerExamQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const questionAnswerDTO = withValueOrBadRequest(req.body) as QuestionAnswerDTO;
+    const questionAnswerDTO = withValueOrBadRequest<QuestionAnswerDTO>(req.body);
 
     return answerExamQuestionAsync(questionAnswerDTO);
 });
@@ -15,7 +15,7 @@ export const answerExamQuestionAction = getAsyncActionHandler(async (req: Reques
 export const getExamResultsAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const answerSessionId = parseInt(withValueOrBadRequest(req.query.answerSessionId));
+    const answerSessionId = withValueOrBadRequest<number>(req.query.answerSessionId);
 
     return getExamResultsAsync(userId, answerSessionId);
 });

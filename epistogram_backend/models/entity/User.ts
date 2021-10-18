@@ -3,6 +3,7 @@ import { UserActivityFlatView } from "../views/UserActivityFlatView";
 import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { Exam } from "./Exam";
+import { JobTitle } from "./JobTitle";
 import { Organization } from "./Organization";
 import { Role } from "./Role";
 import { StorageFile } from "./StorageFile";
@@ -49,9 +50,6 @@ export class User {
 
     @Column({ nullable: true })
     linkedInUrl: string;
-
-    @Column({ nullable: true, type: "text" })
-    jobTitle: string | null;
 
     @Column({ default: false })
     isTeacher: boolean;
@@ -121,6 +119,14 @@ export class User {
     @ManyToOne(_ => Course, x => x.users)
     @JoinColumn({ name: "currentCourseId" })
     currentCourse: Course;
+
+    // job title 
+    @Column({ nullable: true, type: "number" })
+    jobTitleId: number | null;
+
+    @ManyToOne(_ => JobTitle, x => x.users)
+    @JoinColumn({ name: "jobTitleId" })
+    jobTitle: JobTitle | null;
 
     // Tasks
     @OneToMany(() => Task, task => task.user)

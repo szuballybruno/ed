@@ -1,6 +1,9 @@
 import React from "react";
 import { FormControl, Select, Typography } from "@mui/material";
 import { Box, BoxProps } from "@chakra-ui/layout";
+import { translatableTexts } from "../../translatableTexts";
+
+const defaultKey = "___default___";
 
 export const EpistoSelect = <T,>(props: {
     items: T[],
@@ -28,7 +31,7 @@ export const EpistoSelect = <T,>(props: {
         onSelected(currentItem);
     }
 
-    const currentSelectedKey = getCompareKey(selectedValue);
+    const currentSelectedKey = selectedValue ? getCompareKey(selectedValue) : defaultKey;
 
     return <Box className="controlPadding simpleBorder roundBorders" {...css} >
 
@@ -42,8 +45,8 @@ export const EpistoSelect = <T,>(props: {
                 cursor: "pointer"
             }}>
 
-            {selectedValue && <option value={""}>
-                {defaultValue}
+            {!selectedValue && <option value={defaultKey}>
+                {defaultValue ?? translatableTexts.misc.selectOption}
             </option>}
 
             {items

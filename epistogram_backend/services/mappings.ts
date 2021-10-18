@@ -4,6 +4,7 @@ import { CourseGroup } from "../models/entity/CourseGroup";
 import { CourseOrganization } from "../models/entity/CourseOrganization";
 import { CourseTag } from "../models/entity/CourseTag";
 import { Exam } from "../models/entity/Exam";
+import { JobTitle } from "../models/entity/JobTitle";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
 import { QuestionAnswer } from "../models/entity/QuestionAnswer";
@@ -23,6 +24,7 @@ import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
+import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
@@ -34,7 +36,7 @@ import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
-import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
+import { navPropNotNull } from "../utilities/helpers";
 import { getCourseItemDescriptorCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 import { getUserById } from "./userService";
@@ -46,12 +48,15 @@ export const toUserDTO = (user: User) => {
         organizationId: user.organizationId,
         firstName: user.firstName,
         lastName: user.lastName,
-        jobTitle: user.jobTitle,
         email: user.email,
         phoneNumber: user.phoneNumber,
         isTrusted: user.isTrusted,
         isPendingInvitation: user.isPendingInvitation,
         name: `${user.lastName} ${user.firstName}`,
+
+        jobTitle: user.jobTitle
+            ? toJobTitleDTO(user.jobTitle)
+            : null,
 
         avatarUrl: user.avatarFile
             ? getAssetUrl(user.avatarFile.filePath)
@@ -61,6 +66,14 @@ export const toUserDTO = (user: User) => {
             ? toUserActivityDTO(user.userActivity)
             : null
     } as UserDTO;
+}
+
+export const toJobTitleDTO = (jobTitle: JobTitle) => {
+
+    return {
+        id: jobTitle.id,
+        name: jobTitle.name
+    } as JobTitleDTO;
 }
 
 export const toCourseStatDTO = (courseStateView: CourseView) => {

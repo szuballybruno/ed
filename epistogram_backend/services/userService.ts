@@ -14,6 +14,7 @@ export const getUserById = async (userId: number) => {
         .where("user.id = :userId", { userId: userId })
         .leftJoinAndSelect("user.avatarFile", "a")
         .leftJoinAndSelect("user.userActivity", "ua")
+        .leftJoinAndSelect("user.jobTitle", "jt")
         .getOneOrFail();
 
     return user;

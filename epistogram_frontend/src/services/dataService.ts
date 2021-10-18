@@ -2,6 +2,7 @@ import Cookies from "universal-cookie";
 import { hasValue, useReactQuery } from "../frontendHelpers";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
+import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
@@ -141,6 +142,19 @@ export const useUserId = () => {
     const userId = cookies.get("userId");
 
     return userId ? userId as number : null;
+}
+
+export const useJobTitles = () => {
+
+    const queryRes = useReactQuery<JobTitleDTO[]>(
+        ["jobTitlesQuery"],
+        () => httpGetAsync(apiRoutes.misc.getJobTitles));
+
+    return {
+        jobTitles: queryRes.data ?? [],
+        jobTitlesStatus: queryRes.status,
+        jobTitlesError: queryRes.error
+    }
 }
 
 export const useOverviewPageDTO = () => {

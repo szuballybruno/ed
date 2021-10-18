@@ -7,7 +7,7 @@ import { getAdminCoursesAsync } from "../services/adminCoursesService";
 export const getAdminCoursesAction = (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest(req.body) as GetUserCoursesDTO;
+    const dto = withValueOrBadRequest<GetUserCoursesDTO>(req.body);
 
     return getAdminCoursesAsync(userId, dto);
 }

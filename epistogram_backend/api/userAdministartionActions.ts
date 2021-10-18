@@ -6,7 +6,8 @@ import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpe
 export const deleteUserAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const deleteUserId = withValueOrBadRequest(withValueOrBadRequest(req.body).userId);
+    const dto = withValueOrBadRequest<any>(req.body);
+    const deleteUserId = withValueOrBadRequest<number>(dto.userId);
 
     return deleteUserAsync(userId, deleteUserId);
 });

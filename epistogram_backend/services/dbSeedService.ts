@@ -38,8 +38,11 @@ export const seedDB = async () => {
     log("seedSignupExam");
     await seedSignupExam(connection);
 
+    log("seedJobRoles")
+    await executeSeedScriptAsync("seedJobRoles");
+
     log("seedUsers")
-    await seedUsers(connection, orgIds);
+    await seedUsersAsync(connection, orgIds);
 
     log("seedSignupQuestions")
     await executeSeedScriptAsync("seedSignupQuestions");
@@ -415,14 +418,14 @@ const seedVideos = async (connection: TypeORMConnection) => {
     } as Video, "videos/Excel/video9.mp4");
 }
 
-const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
+const seedUsersAsync = async (connection: TypeORMConnection, orgIds: number[]) => {
 
     log("seeding User 1...")
     const { invitationToken, user } = await createInvitedUserWithOrgAsync(
         {
             firstName: "Endre",
             lastName: "Marosi",
-            jobTitle: "IT Manager",
+            jobTitleId: 1,
             roleId: UserRoleEnum.administratorId,
             email: "marosi.endre@email.com",
         },
@@ -440,7 +443,7 @@ const seedUsers = async (connection: TypeORMConnection, orgIds: number[]) => {
         {
             firstName: "Elon",
             lastName: "Musk",
-            jobTitle: "Tech God",
+            jobTitleId: 2,
             roleId: UserRoleEnum.supervisorId,
             email: "elon.musk@email.com",
         },

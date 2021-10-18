@@ -9,13 +9,16 @@ export const apiRoutes = {
 
     misc: {
         logoutUser: "/misc/logout-user",
+        getJobTitles: "/get-job-titles"
     },
 
     signup: {
         answerSignupQuestion: '/signup/answer-signup-question',
         getSignupData: "/signup/get-signup-data",
         getUserPersonalityData: "/signup/get-user-personality-data"
-    }
+    },
+
+
 }
 
 export const isOpenRoute = (routePath: string) => {

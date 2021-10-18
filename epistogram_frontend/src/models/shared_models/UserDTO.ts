@@ -1,3 +1,4 @@
+import { JobTitleDTO } from "./JobTitleDTO";
 import { UserActivityDTO } from "./UserActivityDTO";
 
 export type UserDTO = {
@@ -6,11 +7,11 @@ export type UserDTO = {
     lastName: string;
     organizationId: number;
     isTrusted: boolean;
-    jobTitle: string;
     email: string;
     phoneNumber: string;
     name: string;
     isPendingInvitation: boolean;
     avatarUrl: string | null;
+    jobTitle: JobTitleDTO | null;
     userActivity: UserActivityDTO;
 }

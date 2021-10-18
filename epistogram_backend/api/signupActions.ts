@@ -7,7 +7,7 @@ import { withValueOrBadRequest } from "../utilities/helpers";
 export const createInvitedUserAction = async (req: Request) => {
 
     const currentUserId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest(req.body) as CreateInvitedUserDTO;
+    const dto = withValueOrBadRequest<CreateInvitedUserDTO>(req.body);
 
     await createInvitedUserAsync(dto, currentUserId);
 };

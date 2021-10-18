@@ -8,7 +8,6 @@ import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { UserSignupCompletedView } from "../models/views/UserSignupCompletedView";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
-import { base64Encode } from "./base64Service";
 import { sendInvitaitionMailAsync } from "./emailService";
 import { toQuestionAnswerDTO, toQuestionDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
@@ -26,8 +25,11 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
     // if user is admin require organizationId to be provided
     // otherwise use the current user's organization
     const organizationId = currentUser.roleId === UserRoleEnum.administratorId
-        ? withValueOrBadRequest(dto.organizationId)
+        ? withValueOrBadRequest<number>(dto.organizationId)
         : currentUser.organizationId;
+
+    if (!organizationId)
+        throw new TypedError("Current user is not an administrator, but has rights to add users, but has no organization, in which he/she could add users.", "bad request")
 
     return createInvitedUserWithOrgAsync(dto, organizationId, true);
 }
@@ -35,11 +37,11 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
 export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, organizationId: number, sendEmail: boolean) => {
 
     // get and check sent data 
-    const email = withValueOrBadRequest(dto.email);
-    const roleId = withValueOrBadRequest(dto.roleId);
-    const firstName = withValueOrBadRequest(dto.firstName);
-    const lastName = withValueOrBadRequest(dto.lastName);
-    const jobTitle = withValueOrBadRequest(dto.jobTitle);
+    const email = withValueOrBadRequest<string>(dto.email);
+    const roleId = withValueOrBadRequest<number>(dto.roleId);
+    const firstName = withValueOrBadRequest<string>(dto.firstName);
+    const lastName = withValueOrBadRequest<string>(dto.lastName);
+    const jobTitleId = withValueOrBadRequest<number>(dto.jobTitleId);
     const userFullName = `${lastName} ${firstName}`;
 
     const user = await createUserAsync(
@@ -49,7 +51,7 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
         organizationId,
         null,
         roleId,
-        jobTitle,
+        jobTitleId,
         true,
         "guest");
 
@@ -80,7 +82,7 @@ export const createUserAsync = async (
     organizationId: number | null,
     phoneNumber: string | null,
     roleId: number | null,
-    jobTitle: string | null,
+    jobTitleId: number | null,
     isInvited: boolean,
     password: string) => {
 
@@ -98,7 +100,7 @@ export const createUserAsync = async (
         roleId: roleId ?? UserRoleEnum.userId,
         firstName,
         lastName,
-        jobTitle,
+        jobTitleId,
         phoneNumber,
         organizationId,
         password: hashedPassword,

@@ -59,7 +59,7 @@ export const registerInvitedUserAsync = async (dto: RegisterInvitedUserDTO) => {
     const token = dto.invitationToken;
     const payload = verifyInvitaionToken(token);
 
-    withValueOrBadRequest(dto.password);
+    withValueOrBadRequest<string>(dto.password);
 
     const user = await getUserById(payload.userId);
     if (!user)
