@@ -8,6 +8,7 @@ import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAss
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { UserDTO } from "../models/shared_models/UserDTO";
+import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { httpGetAsync, usePostData, usePostDataUnsafe } from "./httpClient";
 
 export const useSaveUserData = () => {
@@ -142,6 +143,19 @@ export const useUserId = () => {
     const userId = cookies.get("userId");
 
     return userId ? userId as number : null;
+}
+
+export const useEditUserData = (editedUserId: number) => {
+
+    const queryRes = useReactQuery<UserEditDTO>(
+        ["userEditDataQuery"],
+        () => httpGetAsync(apiRoutes.misc.getEditUserData, { editedUserId: editedUserId }));
+
+    return {
+        userEditData: queryRes.data,
+        userEditDataStatus: queryRes.status,
+        userEditDataError: queryRes.error
+    }
 }
 
 export const useJobTitles = () => {

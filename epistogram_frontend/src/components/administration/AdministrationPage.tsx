@@ -57,20 +57,21 @@ const AdministrationPage = () => {
                                 <UserAdministration />
                             </Route>
 
-
                             <Route path={administrationRoutes.usersRoute.addRoute.route}>
                                 <AddUser />
                             </Route>
+
                             <Route exact path={administrationRoutes.usersRoute.editRoute.route}>
                                 <EditUser />
                             </Route>
+
                             <Route exact path={administrationRoutes.usersRoute.statsRoute.route}>
                                 <AdminUserStatistics />
                             </Route>
+
                             <Route exact path={administrationRoutes.usersRoute.tasksRoute.route}>
                                 <AdminUserTasks />
                             </Route>
-
                         </Switch>
                     </Route>
 

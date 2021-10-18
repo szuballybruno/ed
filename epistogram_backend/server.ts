@@ -8,7 +8,7 @@ import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from
 import { answerPractiseQuestionAction, answerSignupQuestionAction, getCourseItemsAction, getCurrentCourseItemCode, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction, getSignupDataAction, getUserPersonalityDataAction, getUsersAction as getUserAdministrationUserListAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveUserDataAction, setEditedCourseAction } from './api/dataActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
-import { getJobTitles } from './api/miscActions';
+import { getEditUserDataAction, getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction } from './api/questionActions';
 import { createInvitedUserAction } from './api/signupActions';
@@ -86,7 +86,8 @@ const initializeAsync = async () => {
     expressServer.post('/misc/set-new-password', changePasswordAction);
     expressServer.get('/misc/get-registration-link', getRegistrationLinkAction);
     expressServer.post(apiRoutes.misc.logoutUser, logOutUserAction);
-    addEndpoint(apiRoutes.misc.getJobTitles, getJobTitles); // new way to declare endpoints
+    addEndpoint(apiRoutes.misc.getJobTitles, getJobTitlesAction); // new way to declare endpoints
+    addEndpoint(apiRoutes.misc.getEditUserData, getEditUserDataAction); // new way to declare endpoints
 
     // signup
     expressServer.post(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction);

@@ -9,7 +9,8 @@ export const apiRoutes = {
 
     misc: {
         logoutUser: "/misc/logout-user",
-        getJobTitles: "/get-job-titles"
+        getJobTitles: "/get-job-titles",
+        getEditUserData: "/get-edit-user-data"
     },
 
     signup: {

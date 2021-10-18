@@ -8,6 +8,7 @@ import { JobTitle } from "../models/entity/JobTitle";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
 import { QuestionAnswer } from "../models/entity/QuestionAnswer";
+import { Role } from "../models/entity/Role";
 import { Task } from "../models/entity/Task";
 import { User } from "../models/entity/User";
 import { Video } from "../models/entity/Video";
@@ -28,9 +29,11 @@ import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
+import { RoleDTO } from "../models/shared_models/RoleDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
+import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
@@ -66,6 +69,36 @@ export const toUserDTO = (user: User) => {
             ? toUserActivityDTO(user.userActivity)
             : null
     } as UserDTO;
+}
+
+export const toUserEditDTO = (user: User) => {
+
+    return {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+
+        jobTitle: user.jobTitle
+            ? toJobTitleDTO(user.jobTitle)
+            : null,
+
+        organization: user.organization
+            ? toOrganizationDTO(user.organization)
+            : null,
+
+        role: user.role
+            ? toRoleDTO(user.role)
+            : null
+    } as UserEditDTO;
+}
+
+export const toRoleDTO = (role: Role) => {
+
+    return {
+        id: role.id,
+        name: role.name
+    } as RoleDTO;
 }
 
 export const toJobTitleDTO = (jobTitle: JobTitle) => {

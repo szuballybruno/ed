@@ -58,10 +58,13 @@ export const httpPostAsync = async (
     }
 }
 
-export const httpGetAsync = async (urlEnding: string) => {
+export const httpGetAsync = async (urlEnding: string, queryObject?: any) => {
 
     try {
-        const axiosResponse = await instance.get(urlEnding, {
+
+        const queryString = queryObject ? stringifyQueryObject(queryObject) : ""
+
+        const axiosResponse = await instance.get(urlEnding + queryString, {
             withCredentials: true
         });
 
@@ -208,6 +211,25 @@ export const addBearerToken = (config: AxiosRequestConfig, bearerToken: string) 
     config.headers = {
         'Authorization': "Bearer " + bearerToken
     };
+}
+
+const stringifyQueryObject = (queryObj: any) => {
+
+    let qs = "?";
+
+    for (const key in queryObj) {
+        if (Object.prototype.hasOwnProperty.call(queryObj, key)) {
+
+            const element = queryObj[key];
+            const andMark = qs === "?"
+                ? ""
+                : "&";
+
+            qs += andMark + key + "=" + element;
+        }
+    }
+
+    return qs;
 }
 
 const handleHttpError = (error: any) => {

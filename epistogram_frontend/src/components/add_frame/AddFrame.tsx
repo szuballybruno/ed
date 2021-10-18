@@ -3,7 +3,7 @@ import classes from "./addFrame.module.scss"
 
 export const AddFrame = (props: {
     children: any,
-    submitHandler: (e: any) => any,
+    submitHandler?: (e: any) => any,
     title: string
 }) => {
 
