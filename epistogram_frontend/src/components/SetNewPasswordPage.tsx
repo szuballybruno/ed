@@ -6,7 +6,7 @@ import { getAssetUrl, getQueryParam } from "../frontendHelpers";
 import { useSetNewPassword } from "../services/dataService";
 import { useNavigation } from "../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/notifications";
-import { EpistoHeader } from "./administration/universal/EpistoHeader";
+import { EpistoHeader } from "./EpistoHeader";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "./HOC/MainPanels";
 import Navbar from "./navbar/Navbar";

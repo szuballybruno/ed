@@ -1,6 +1,6 @@
-import {Flex} from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/layout";
 import React, { ReactNode } from 'react';
-import { EpistoHeader } from "../administration/universal/EpistoHeader";
+import { EpistoHeader } from "../EpistoHeader";
 import classes from "./learningStatistics.module.scss"
 
 export const LearningStatisticsSeciton = (props: {

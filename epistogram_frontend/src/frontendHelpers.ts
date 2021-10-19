@@ -2,6 +2,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { matchPath, useLocation } from "react-router-dom";
 import { globalConfig } from "./configuration/config";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 import { LoadingStateType } from "./models/types";
@@ -68,6 +69,26 @@ export const disallowWindowNavigation = () => {
         }
         return ''; // Legacy method for cross browser support
     };
+}
+
+export const useIsMatchingCurrentRoute = () => {
+
+    const currentPath = useLocation().pathname;
+
+    const isMatchingCurrentRoute = (route: string, exact?: boolean) => {
+
+        const match = matchPath(
+            currentPath,
+            {
+                path: route,
+                exact: !!exact,
+                strict: false
+            });
+
+        return !!match;
+    };
+
+    return isMatchingCurrentRoute;
 }
 
 export const isString = (obj: any) => typeof obj === 'string' || obj instanceof String;

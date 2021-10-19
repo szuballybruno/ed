@@ -6,10 +6,24 @@ export const getCourseItemUrl = (descriptorCode: string) =>
 export const useNavigation = () => {
 
     const history = useHistory();
-    const navigate = (path: string) => {
+    const navigate = (path: string, params?: any) => {
 
-        console.log("Navigating to: " + path);
-        history.push(path);
+        let replacedPath = path;
+
+        if (params) {
+            for (const key in params) {
+                if (Object.prototype.hasOwnProperty.call(params, key)) {
+
+                    const element = params[key];
+                    const token = ":" + key;
+
+                    replacedPath = replacedPath.replace(token, element);
+                }
+            }
+        }
+
+        console.log("Navigating to: " + replacedPath);
+        history.push(replacedPath);
     }
 
     return {

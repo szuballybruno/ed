@@ -1,13 +1,12 @@
 import React from 'react';
-import classes from "./statistics.module.scss"
-import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import {Bar, Doughnut, Line, Pie, Radar, Scatter} from "react-chartjs-2";
-import { LearningStatisticsSeciton } from '../../learningStatistics/LearningStatisticsSeciton';
-import {getAssetUrl} from "../../../frontendHelpers";
+import StatisticsCard from "../statisticsCard/StatisticsCard";
+import { Bar, Doughnut, Line, Pie, Radar, Scatter } from "react-chartjs-2";
+import { LearningStatisticsSeciton } from '../learningStatistics/LearningStatisticsSeciton';
+import { getAssetUrl } from "../../frontendHelpers";
 
 
 const AdminStatistics = () => {
-    function getColors(length: number){
+    function getColors(length: number) {
         let pallet = [
             "#7dabe8",
             "#a8c0e7",
@@ -19,7 +18,7 @@ const AdminStatistics = () => {
         ];
         let colors: string[] = [];
 
-        for(let i = 0; i < length; i++) {
+        for (let i = 0; i < length; i++) {
             colors.push(pallet[i % pallet.length]);
         }
 
@@ -34,7 +33,7 @@ const AdminStatistics = () => {
                 backgroundColor: "#067daf",
                 borderColor: "#067daf",
                 data: [83, 120, 140, 170, 30, 20, 10],
-            },{
+            }, {
                 label: 'Jelenlegi hét',
                 fill: false,
                 backgroundColor: "#067daf",
@@ -102,16 +101,16 @@ const AdminStatistics = () => {
     };
 
     return (
-        <div className={classes.statisticsOuterWrapper}>
+        <div >
             <LearningStatisticsSeciton title={"Leggyakoribb adatok"}>
-                <StatisticsCard suffix={"%"} value={"95"} title={"Kurzus teljesítési ráta"} iconPath={ getAssetUrl("company_statistics_icons/course_progress_rate.svg")} />
-                <StatisticsCard suffix={"perc"} value={"38"} title={"Átlagosan eltöltött idő/belépés"} iconPath={ getAssetUrl("company_statistics_icons/spent_time_login.svg")} />
-                <StatisticsCard suffix={"óra"} value={"3,15"} title={"Átlagos tanulással töltött idő/hét"} iconPath={ getAssetUrl("company_statistics_icons/spent_time_learning_week.svg")} />
-                <StatisticsCard suffix={"%"} value={"70"} title={"Belépési arány a héten"} iconPath={ getAssetUrl("company_statistics_icons/login_ratio_week.svg")} />
-                <StatisticsCard suffix={"%"} value={"54"} title={"Teljesítés a vizsgákon"} iconPath={ getAssetUrl("company_statistics_icons/exam_progress.svg")} />
-                <StatisticsCard suffix={"%"} value={"80"} title={"Átlagos fókusztartás"} iconPath={ getAssetUrl("company_statistics_icons/focus.svg")} />
-                <StatisticsCard suffix={"%"} value={"3"} title={"Felejtési görbe javulása"} iconPath={ getAssetUrl("company_statistics_icons/knowledge_graph.svg")} />
-                <StatisticsCard suffix={"pont"} value={"8.5"} title={"Munkavállalói feedback"} iconPath={ getAssetUrl("company_statistics_icons/workers_feedback.svg")} />
+                <StatisticsCard suffix={"%"} value={"95"} title={"Kurzus teljesítési ráta"} iconPath={getAssetUrl("company_statistics_icons/course_progress_rate.svg")} />
+                <StatisticsCard suffix={"perc"} value={"38"} title={"Átlagosan eltöltött idő/belépés"} iconPath={getAssetUrl("company_statistics_icons/spent_time_login.svg")} />
+                <StatisticsCard suffix={"óra"} value={"3,15"} title={"Átlagos tanulással töltött idő/hét"} iconPath={getAssetUrl("company_statistics_icons/spent_time_learning_week.svg")} />
+                <StatisticsCard suffix={"%"} value={"70"} title={"Belépési arány a héten"} iconPath={getAssetUrl("company_statistics_icons/login_ratio_week.svg")} />
+                <StatisticsCard suffix={"%"} value={"54"} title={"Teljesítés a vizsgákon"} iconPath={getAssetUrl("company_statistics_icons/exam_progress.svg")} />
+                <StatisticsCard suffix={"%"} value={"80"} title={"Átlagos fókusztartás"} iconPath={getAssetUrl("company_statistics_icons/focus.svg")} />
+                <StatisticsCard suffix={"%"} value={"3"} title={"Felejtési görbe javulása"} iconPath={getAssetUrl("company_statistics_icons/knowledge_graph.svg")} />
+                <StatisticsCard suffix={"pont"} value={"8.5"} title={"Munkavállalói feedback"} iconPath={getAssetUrl("company_statistics_icons/workers_feedback.svg")} />
             </LearningStatisticsSeciton>
 
             <LearningStatisticsSeciton title={"Grafikonok"}>
@@ -152,24 +151,24 @@ const AdminStatistics = () => {
                 <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
                     <Pie
                         options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Aktivitás átlagos felosztása'
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Aktivitás átlagos felosztása'
+                                },
                             },
-                        },
-                    }} /*type={"pie"}*/ data={{
-                        labels: ['Videók megtekintése', 'Kérdések megválaszolása', 'Vizsgakitöltés', 'Nincs tevékenység'],
-                        datasets: [
-                            {
-                                label: 'Aktivitás átlagos felosztása',
-                                data: [56, 5, 19, 20],
-                                backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
-                            }
-                        ]
-                    }} />
+                        }} /*type={"pie"}*/ data={{
+                            labels: ['Videók megtekintése', 'Kérdések megválaszolása', 'Vizsgakitöltés', 'Nincs tevékenység'],
+                            datasets: [
+                                {
+                                    label: 'Aktivitás átlagos felosztása',
+                                    data: [56, 5, 19, 20],
+                                    backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
+                                }
+                            ]
+                        }} />
                 </StatisticsCard>
 
 
@@ -228,15 +227,15 @@ const AdminStatistics = () => {
                                 },
                             },
                         }} /*type={"pie"}*/ data={{
-                        labels: ['Excel', 'Word', 'Power Point', 'B2B Sales Masterclass'],
-                        datasets: [
-                            {
-                                label: 'Aktivitás átlagos felosztása',
-                                data: [34, 19, 15, 32],
-                                backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
-                            }
-                        ]
-                    }} />
+                            labels: ['Excel', 'Word', 'Power Point', 'B2B Sales Masterclass'],
+                            datasets: [
+                                {
+                                    label: 'Aktivitás átlagos felosztása',
+                                    data: [34, 19, 15, 32],
+                                    backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
+                                }
+                            ]
+                        }} />
                 </StatisticsCard>
 
                 <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>

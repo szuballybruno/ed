@@ -12,15 +12,15 @@ import { AddVideo } from "./courses/addVideo/AddVideo";
 import { CourseAdministration } from "./courses/courseList/CourseAdministration";
 import { EditCourse } from "./courses/editCourse/EditCourse";
 import { EditVideo } from "./courses/editVideo/EditVideo";
-import AdminStatistics from "./statistics/AdminStatistics";
-import AddUser from "../AddUser";
-import { UserAdministration } from "../UserAdministration";
-import EditUser from "../EditUser";
-import { AdminUserStatistics } from "./users/adminUserStatistics/AdminUserStatistics";
-import AdminUserTasks from "./users/adminUserTasks/AdminUserTasks";
+import AdminStatistics from "./AdminStatisticsSubpage";
+import AdminAddUserSubpage from "./AdminAddUserSubpage";
+import { AdminUserListSubpage } from "./AdminUserListSubpage";
+import { AdminUserStatisticsSubpage } from "./AdminUserStatisticsSubpage";
 import CourseStatistics from "./courses/courseStatistics/CourseStatistics";
+import AdminUserTasksSubpage from './AdminUserTasksSubpage';
+import AdminEditUserSubpage from './AdminEditUserSubpage';
 
-const AdministrationPage = () => {
+const AdminPage = () => {
 
     // const user = useState(userDetailsState)
 
@@ -54,23 +54,23 @@ const AdministrationPage = () => {
                     <Route path={administrationRoutes.usersRoute.route}>
                         <Switch>
                             <Route exact path={administrationRoutes.usersRoute.route}>
-                                <UserAdministration />
+                                <AdminUserListSubpage />
                             </Route>
 
                             <Route path={administrationRoutes.usersRoute.addRoute.route}>
-                                <AddUser />
+                                <AdminAddUserSubpage />
                             </Route>
 
                             <Route exact path={administrationRoutes.usersRoute.editRoute.route}>
-                                <EditUser />
+                                <AdminEditUserSubpage />
                             </Route>
 
                             <Route exact path={administrationRoutes.usersRoute.statsRoute.route}>
-                                <AdminUserStatistics />
+                                <AdminUserStatisticsSubpage />
                             </Route>
 
                             <Route exact path={administrationRoutes.usersRoute.tasksRoute.route}>
-                                <AdminUserTasks />
+                                <AdminUserTasksSubpage />
                             </Route>
                         </Switch>
                     </Route>
@@ -110,4 +110,4 @@ const AdministrationPage = () => {
     </MainWrapper>
 };
 
-export default withRouter(AdministrationPage);
+export default withRouter(AdminPage);

@@ -13,7 +13,7 @@ import { getAssetUrl } from "../../frontendHelpers";
 import { AdminPageEditCourseDTO } from "../../models/shared_models/AdminPageEditCourseDTO";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { useAdminEditedCourse } from "../../services/courseService";
-import { EpistoHeader } from "../administration/universal/EpistoHeader";
+import { EpistoHeader } from "../EpistoHeader";
 import { MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { EpistoButton } from "../universal/EpistoButton";

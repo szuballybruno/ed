@@ -1,6 +1,6 @@
 import React from "react";
 import { getEventValueCallback } from "../../frontendHelpers";
-import SingleInput from "../administration/universal/singleInput/SingleInput";
+import SingleInput from "../singleInput/SingleInput";
 import { RegFormStateType } from "./SignupFormLogic";
 
 export const SignupForm = (props: { regFormState: RegFormStateType }) => {

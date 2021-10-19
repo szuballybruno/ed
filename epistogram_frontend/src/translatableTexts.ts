@@ -51,7 +51,7 @@ export const translatableTexts = {
         answerIsCorrect: "Helyesen válaszoltál!",
         answerIsIncorrect: "Helytelen válasz!",
         nextQuestion: "Következő kérdés",
-        noMoreQuestionsGoWatchVideos: "There are no available practise questions, go watch some videos!"
+        noMoreQuestionsGoWatchVideos: "There are no <b>available</b> practise questions, go watch some videos!"
     },
 
     editUserControl: {

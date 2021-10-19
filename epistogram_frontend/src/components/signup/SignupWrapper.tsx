@@ -1,8 +1,8 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
-import {getAssetUrl, hasValue, isString, useIsDesktopView} from "../../frontendHelpers";
-import { EpistoHeader } from "../administration/universal/EpistoHeader";
+import { getAssetUrl, hasValue, isString, useIsDesktopView } from "../../frontendHelpers";
+import { EpistoHeader } from "../EpistoHeader";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from "./signupWrapper.module.scss";
 
@@ -41,8 +41,8 @@ export const SignupWrapper = (props: {
     const isDesktop = useIsDesktopView();
 
     return <Flex id="signupWrapperRoot" px="20px"
-                 pb={70} direction="column" width="100%" height="100%"
-                 overflow={"scroll"}  maxH={"100vh"}>
+        pb={70} direction="column" width="100%" height="100%"
+        overflow={"scroll"} maxH={"100vh"}>
 
         {/* header */}
         <Flex id="header" direction="column" height={"100%"} maxH={100}>
@@ -101,7 +101,7 @@ export const SignupWrapper = (props: {
                     minWidth={window.innerWidth > 500 ? 400 : "100%"}
                     minH={"50%"}
                     justifyContent={isDesktop ? "flex-end" : "center"}
-                    >
+                >
                     <Image maxW={"100%"} height="100%" src={currentImage!} />
                 </Flex>}
 

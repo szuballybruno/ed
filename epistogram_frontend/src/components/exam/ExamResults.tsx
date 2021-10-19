@@ -9,7 +9,7 @@ import React from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useExamResults } from '../../services/examService';
 import { useNavigation } from '../../services/navigatior';
-import { EpistoHeader } from '../administration/universal/EpistoHeader';
+import { EpistoHeader } from '../EpistoHeader';
 import { SignupWrapper } from '../signup/SignupWrapper';
 import { EpistoButton } from '../universal/EpistoButton';
 import { FlexFloat } from '../universal/FlexFloat';

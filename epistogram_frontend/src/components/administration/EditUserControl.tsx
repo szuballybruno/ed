@@ -1,19 +1,19 @@
 import { Flex } from "@chakra-ui/react";
 import { Button, TextField, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from 'react';
-import { getEventValueCallback } from "../frontendHelpers";
-import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
-import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
-import { RoleDTO } from "../models/shared_models/RoleDTO";
-import { UserDTO } from "../models/shared_models/UserDTO";
-import { UserEditDTO } from "../models/shared_models/UserEditDTO";
-import { useJobTitles } from "../services/dataService";
-import { useOrganizations } from "../services/organizationsService";
-import { translatableTexts } from "../translatableTexts";
-import { AddFrame } from "./add_frame/AddFrame";
-import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
-import { CurrentUserContext } from "./HOC/AuthenticationFrame";
-import { EpistoSelect } from "./universal/EpistoSelect";
+import { getEventValueCallback } from "../../frontendHelpers";
+import { JobTitleDTO } from "../../models/shared_models/JobTitleDTO";
+import { OrganizationDTO } from "../../models/shared_models/OrganizationDTO";
+import { RoleDTO } from "../../models/shared_models/RoleDTO";
+import { UserDTO } from "../../models/shared_models/UserDTO";
+import { UserEditDTO } from "../../models/shared_models/UserEditDTO";
+import { useJobTitles } from "../../services/dataService";
+import { useOrganizations } from "../../services/organizationsService";
+import { translatableTexts } from "../../translatableTexts";
+import { AddFrame } from "../add_frame/AddFrame";
+import { CurrentUserContext } from "../HOC/AuthenticationFrame";
+import { EpistoSelect } from "../universal/EpistoSelect";
+import { AdminSubpageHeader } from "./AdminSubpageHeader";
 
 export const roles = [
     {
@@ -85,7 +85,7 @@ export const EditUserControl = (props: {
     return <Flex direction="column">
 
         {/* admin header */}
-        <AdministrationSubpageHeader />
+        <AdminSubpageHeader />
 
         <AddFrame
             title={"Új felhasználó hozzáadása"}>

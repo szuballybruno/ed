@@ -2,7 +2,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import { Fullscreen, FullscreenExit } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React, { useState } from 'react';
-import { EpistoHeader } from '../administration/universal/EpistoHeader';
+import { EpistoHeader } from '../EpistoHeader';
 import { EpistoButton } from '../universal/EpistoButton';
 import { FlexFloat } from '../universal/FlexFloat';
 import classes from "./learningStatisticsItem.module.scss";

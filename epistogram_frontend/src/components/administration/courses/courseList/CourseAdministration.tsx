@@ -1,35 +1,28 @@
+import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
 import {
     ApartmentTwoTone,
     Close,
-    Edit,
-    EditTwoTone,
-    Email,
-    Equalizer,
-    EqualizerTwoTone, Task,
-    WorkTwoTone
+    Edit, Equalizer, WorkTwoTone
 } from "@mui/icons-material";
-import React, {ReactNode, useState} from "react";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Button, Checkbox, Typography } from "@mui/material";
+import React, { ReactNode, useState } from "react";
 import { applicationRoutes } from "../../../../configuration/applicationRoutes";
 import { useAdministratedCourses } from "../../../../services/courseService";
 import { useNavigation } from "../../../../services/navigatior";
 import { FloatAddButton } from "../../../FloatAddButton";
+import { LoadingFrame } from "../../../HOC/LoadingFrame";
+import IntersectionObserverWrap from "../../../IntersectionObserverWrapper";
 import { EpistoButton } from "../../../universal/EpistoButton";
+import { EpistoSearch } from "../../../universal/EpistoSearch";
+import { EpistoSelect } from "../../../universal/EpistoSelect";
 import { FlexList } from "../../../universal/FlexList";
 import { FlexListItem } from "../../../universal/FlexListItem";
-import { EpistoSearch } from "../../../universal/EpistoSearch";
-import { EpistoHeader } from "../../universal/EpistoHeader";
-import { Image } from "@chakra-ui/image";
-import {AdministrationSubpageHeader} from "../../universal/adminAddHeader/AdministrationSubpageHeader";
-import {Button, Checkbox, Typography} from "@mui/material";
-import IntersectionObserverWrap from "../../universal/overflow/intersection-observer-wrapper";
-import {EpistoSelect} from "../../../universal/EpistoSelect";
-import {LoadingFrame} from "../../../HOC/LoadingFrame";
-import {FloatChip} from "../../../universal/FloatChip";
-import {FlexListTitleSubtitle} from "../../../universal/FlexListTitleSubtitle";
-import DesktopAccessDisabledIcon from "@mui/icons-material/DesktopAccessDisabled";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { FlexListTitleSubtitle } from "../../../universal/FlexListTitleSubtitle";
+import { FloatChip } from "../../../universal/FloatChip";
+import { AdminSubpageHeader } from "../../AdminSubpageHeader";
 
 export const CourseAdministration = () => {
 
@@ -71,7 +64,7 @@ export const CourseAdministration = () => {
     return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
 
         {/* admin header */}
-        <AdministrationSubpageHeader>
+        <AdminSubpageHeader>
             <Flex flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} h={60}>
                 <Flex direction={"row"} alignItems={"center"} justifyContent={"center"} minW={60} h={"100%"}>
                     <Checkbox checked={isAllCoursesSelected} onClick={() => selectAllOrNone(!isAllCoursesSelected)} />
@@ -95,34 +88,34 @@ export const CourseAdministration = () => {
                 </Flex>}
 
                 {selectedCourseIds.length > 0 &&
-                <Flex
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                    w={230}
-                    minW={230}
-                    h={"100%"}>
                     <Flex
                         direction={"row"}
-                        justifyContent={"center"}
                         alignItems={"center"}
-                        className="roundBorders"
-                        bg="var(--epistoTeal)"
-                        p="0 12px 0 12px"
-                        color="white"
-                        h={30}
-                        ml={10}>
-                        <Typography>
-                            {selectedCourseIds.length} kurzus kijelölve
-                        </Typography>
-                        <Close onClick={() => {
-                            setSelectedCourseIds([])
-                        }} style={{
-                            width: 18,
-                            marginLeft: 5
-                        }} />
-                    </Flex>
-                </Flex>}
+                        justifyContent={"space-between"}
+                        w={230}
+                        minW={230}
+                        h={"100%"}>
+                        <Flex
+                            direction={"row"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            className="roundBorders"
+                            bg="var(--epistoTeal)"
+                            p="0 12px 0 12px"
+                            color="white"
+                            h={30}
+                            ml={10}>
+                            <Typography>
+                                {selectedCourseIds.length} kurzus kijelölve
+                            </Typography>
+                            <Close onClick={() => {
+                                setSelectedCourseIds([])
+                            }} style={{
+                                width: 18,
+                                marginLeft: 5
+                            }} />
+                        </Flex>
+                    </Flex>}
 
 
 
@@ -206,7 +199,7 @@ export const CourseAdministration = () => {
                     </EpistoSelect>
                 </Flex>
             </Flex>
-        </AdministrationSubpageHeader>
+        </AdminSubpageHeader>
 
         <LoadingFrame loadingState={coursesStatus} error={coursesError} flex="1">
             {/* List of courses */}
@@ -220,19 +213,19 @@ export const CourseAdministration = () => {
                         chips.push(
                             {
                                 name: course.category,
-                                icon: <AlternateEmailIcon/>
+                                icon: <AlternateEmailIcon />
                             });
 
                         chips.push(
                             {
                                 name: course.teacherName,
-                                icon: <ApartmentTwoTone/>
+                                icon: <ApartmentTwoTone />
                             });
 
                         chips.push(
                             {
                                 name: course.videosCount + "",
-                                icon: <WorkTwoTone/>
+                                icon: <WorkTwoTone />
                             })
 
                         return <FlexListItem
@@ -243,7 +236,7 @@ export const CourseAdministration = () => {
                                     src={course.thumbnailImageURL}
                                     objectFit="cover"
                                     h={"100%"}
-                                    w={300}/>
+                                    w={300} />
                             }
                             setIsChecked={x => setSelectedCourse(course.courseId, x)}
                             isChecked={selectedCourseIds.some(x => x === course.courseId)}
@@ -256,7 +249,7 @@ export const CourseAdministration = () => {
                                                 .map((chip, index) => <FloatChip
                                                     name={chip.name}
                                                     icon={chip.icon}
-                                                    padding="5px"/>)}
+                                                    padding="5px" />)}
                                         </Flex>
                                     }
                                 />
@@ -282,7 +275,7 @@ export const CourseAdministration = () => {
                                 </EpistoButton>
                                 <EpistoButton
                                     variant="colored"
-                                    onClick={() => {}}
+                                    onClick={() => { }}
                                     style={{ width: 20, marginLeft: 5 }}
                                 >
                                     <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>

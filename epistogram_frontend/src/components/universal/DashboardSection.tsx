@@ -1,5 +1,5 @@
 import { Box, FlexProps } from "@chakra-ui/react";
-import { EpistoHeader } from "../administration/universal/EpistoHeader";
+import { EpistoHeader } from "../EpistoHeader";
 import { FlexFloat } from "./FlexFloat";
 
 export const DashboardSection = (props: FlexProps & { title: string, variant?: "noShadow" | "normal" }) => {

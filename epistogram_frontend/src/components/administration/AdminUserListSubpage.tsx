@@ -12,25 +12,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
 import { Button, Checkbox, Typography } from "@mui/material";
 import React, { ReactNode, useContext, useState } from "react";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import { useUserListQuery } from "../services/adminPageUsersService";
-import { httpPostAsync } from "../services/httpClient";
-import { useNavigation } from "../services/navigatior";
-import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
-import IntersectionObserverWrap from "./administration/universal/overflow/intersection-observer-wrapper";
-import { FloatAddButton } from "./FloatAddButton";
-import { CurrentUserContext } from "./HOC/AuthenticationFrame";
-import { LoadingFrame } from "./HOC/LoadingFrame";
-import { ProfileImage } from "./ProfileImage";
-import { EpistoButton } from "./universal/EpistoButton";
-import { EpistoSearch } from "./universal/EpistoSearch";
-import { EpistoSelect } from "./universal/EpistoSelect";
-import { FlexList } from "./universal/FlexList";
-import { FlexListItem } from "./universal/FlexListItem";
-import { FlexListTitleSubtitle } from "./universal/FlexListTitleSubtitle";
-import { FloatChip } from "./universal/FloatChip";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { useUserListQuery } from "../../services/adminPageUsersService";
+import { httpPostAsync } from "../../services/httpClient";
+import { useNavigation } from "../../services/navigatior";
+import IntersectionObserverWrap from "../IntersectionObserverWrapper";
+import { FloatAddButton } from "../FloatAddButton";
+import { CurrentUserContext } from "../HOC/AuthenticationFrame";
+import { LoadingFrame } from "../HOC/LoadingFrame";
+import { ProfileImage } from "../ProfileImage";
+import { EpistoButton } from "../universal/EpistoButton";
+import { EpistoSearch } from "../universal/EpistoSearch";
+import { EpistoSelect } from "../universal/EpistoSelect";
+import { FlexList } from "../universal/FlexList";
+import { FlexListItem } from "../universal/FlexListItem";
+import { FlexListTitleSubtitle } from "../universal/FlexListTitleSubtitle";
+import { FloatChip } from "../universal/FloatChip";
+import { AdminSubpageHeader } from "./AdminSubpageHeader";
 
-export const UserAdministration = () => {
+export const AdminUserListSubpage = () => {
 
     const user = useContext(CurrentUserContext)!;
     const userId = user.id;
@@ -78,9 +78,9 @@ export const UserAdministration = () => {
     return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
 
         {/* admin header */}
-        <AdministrationSubpageHeader>
-            <Flex flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} h={60}>
-                <Flex direction={"row"} alignItems={"center"} justifyContent={"center"} minW={60} h={"100%"}>
+        <AdminSubpageHeader>
+            <Flex direction="row" justifyContent="space-between" alignItems="center" h={60}>
+                <Flex direction="row" alignItems="center" justifyContent="center" minW={60} h="100%">
                     <Checkbox checked={isAllUsersSelected} onClick={() => selectAllOrNone(!isAllUsersSelected)} />
                 </Flex>
 
@@ -146,9 +146,8 @@ export const UserAdministration = () => {
                             color: "black"
                         }}
                         onClick={() => {
-                            navigate(`${administrationRoutes.usersRoute.route}/${user.id}/edit`)
-                        }}
-                    >
+                            navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })
+                        }}>
                         Szerkesztés
                     </Button>
                     <Button
@@ -176,7 +175,7 @@ export const UserAdministration = () => {
                         }}
                         variant={"outlined"}
                         onClick={() => {
-                            navigate(`${administrationRoutes.usersRoute.route}/${user.id}/statistics`)
+                            navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
                         }}>
                         Statisztika megjelenítése
                     </Button>
@@ -192,7 +191,7 @@ export const UserAdministration = () => {
                         }}
                         variant={"outlined"}
                         onClick={() => {
-                            navigate(`${administrationRoutes.usersRoute.route}/${user.id}/tasks`)
+                            navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: user.id })
                         }}>
                         Feladatok megtekintése
                     </Button>
@@ -227,7 +226,7 @@ export const UserAdministration = () => {
                     </EpistoSelect>
                 </Flex>
             </Flex>
-        </AdministrationSubpageHeader>
+        </AdminSubpageHeader>
 
         <LoadingFrame loadingState={usersStatus} error={usersError} flex="1">
 
@@ -301,7 +300,7 @@ export const UserAdministration = () => {
                                 <EpistoButton
                                     variant={"colored"}
                                     onClick={() => {
-                                        navigate(`${administrationRoutes.usersRoute.route}/${user.id}/edit`)
+                                        navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })
                                     }}
                                     style={{ width: 20 }}>
                                     <Edit style={{ width: "20px", height: "20px" }} />
@@ -311,7 +310,7 @@ export const UserAdministration = () => {
                                 <EpistoButton
                                     variant="colored"
                                     onClick={() => {
-                                        navigate(`${administrationRoutes.usersRoute.route}/${user.id}/statistics`)
+                                        navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
                                     }}
                                     style={{ width: 20, marginLeft: 5 }}>
                                     <Equalizer style={{ width: "20px", height: "20px" }} />
@@ -321,7 +320,7 @@ export const UserAdministration = () => {
                                 <EpistoButton
                                     variant="colored"
                                     onClick={() => {
-                                        navigate(`${administrationRoutes.usersRoute.route}/${user.id}/tasks`)
+                                        navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: userId })
                                     }}
                                     style={{ width: 20, marginLeft: 5 }}>
 

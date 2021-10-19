@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {Flex} from "@chakra-ui/react";
-import {AdministrationSubpageHeader} from "../../universal/adminAddHeader/AdministrationSubpageHeader";
-import {Tab, Tabs} from "@mui/material";
-import {useParams} from "react-router";
-import {applicationRoutes} from "../../../../configuration/applicationRoutes";
-import {useNavigation} from "../../../../services/navigatior";
+import React, { useEffect, useState } from 'react';
+import { Flex } from "@chakra-ui/react";
+import { Tab, Tabs } from "@mui/material";
+import { useParams } from "react-router";
+import { applicationRoutes } from "../../../../configuration/applicationRoutes";
+import { useNavigation } from "../../../../services/navigatior";
+import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 
 const CourseStatistics = () => {
-    const {courseId} = useParams<{ courseId: string }>()
+    const { courseId } = useParams<{ courseId: string }>()
 
     const [currentTab, setCurrentTab] = useState("")
 
@@ -32,14 +32,14 @@ const CourseStatistics = () => {
         <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
 
             {/* admin header */}
-            <AdministrationSubpageHeader>
+            <AdminSubpageHeader>
                 <Flex mx={20} flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} h={60}>
                     <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="Szerkesztés" value={"edit"} />
                         <Tab label="Statisztika" value={"statistics"} />
                     </Tabs>
                 </Flex>
-            </AdministrationSubpageHeader>
+            </AdminSubpageHeader>
             Course Stats
         </Flex>
     );

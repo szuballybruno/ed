@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useEditUserData } from '../services/userManagementService';
+import { useEditUserData } from '../../services/userManagementService';
 import { EditUserControl } from './EditUserControl';
 
-const EditUser = () => {
+const AdminEditUserSubpage = () => {
 
     const params = useParams<{ userId: string }>();
     const editedUserId = parseInt(params.userId);
@@ -20,4 +20,4 @@ const EditUser = () => {
         saveUserAsync={handleSaveUserAsync}></EditUserControl>
 };
 
-export default EditUser;
+export default AdminEditUserSubpage;

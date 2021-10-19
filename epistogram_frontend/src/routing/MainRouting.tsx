@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import AdministrationPage from "../components/administration/AdministrationPage";
+import AdminPage from "../components/administration/AdminPage";
 import HomePage from "../components/HomePage";
 import LearningInsightsPage from "../components/LearningInsightsPage";
 import LoginScreen from "../components/login/LoginScreen";
@@ -36,7 +36,7 @@ export const MainRouting = () => {
         <ProtectedRoute
             path={applicationRoutes.administrationRoute.route}
             isAuthorizedToView={x => x.canAccessAdministration}
-            render={() => <AdministrationPage />} />
+            render={() => <AdminPage />} />
 
         <ProtectedRoute
             path={applicationRoutes.homeRoute.route}

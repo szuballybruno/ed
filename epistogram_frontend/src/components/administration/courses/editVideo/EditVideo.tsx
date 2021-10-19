@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from "./editItemPage.module.scss";
-import SelectImage from "../../universal/selectImage/SelectImage";
+import SelectImage from "../../../selectImage/SelectImage";
 import { Divider, List, Typography } from "@mui/material";
 import { useParams } from "react-router";
 import EditItem from "../../../universal/editItem/EditItem";

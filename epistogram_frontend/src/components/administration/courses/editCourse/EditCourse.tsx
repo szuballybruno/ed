@@ -1,4 +1,4 @@
-import {Checkbox, Divider, List, ListItem, Radio, Switch, Tab, Tabs, TextField, Typography} from "@mui/material";
+import { Checkbox, Divider, List, ListItem, Radio, Switch, Tab, Tabs, TextField, Typography } from "@mui/material";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import React, { useEffect, useState } from 'react';
 import { HexColorPicker } from "react-colorful";
@@ -8,19 +8,18 @@ import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../../models/shar
 import { useAdminEditedCourse } from "../../../../services/courseService";
 import { httpPostAsync } from "../../../../services/httpClient";
 import EditItem from "../../../universal/editItem/EditItem";
-import AdminDashboardHeader from "../../universal/adminDashboardHeader/AdminDashboardHeader";
-import { AdministrationListItem } from "../../universal/adminDashboardSearchItem/AdministrationListItem";
-import { AdminDashboardWrapper } from "../../universal/adminDashboardWrapper/AdminDashboardWrapper";
-import { SaveBar } from "../../universal/saveBar/SaveBar";
-import { AdminDashboardSearch } from "../../universal/searchBar/AdminDashboardSearch";
-import SelectImage from "../../universal/selectImage/SelectImage";
-import { SelectMultiple } from "../../universal/selectMultiple/SelectMultiple";
+import AdminDashboardHeader from "../adminDashboardHeader/AdminDashboardHeader";
+import { AdministrationListItem } from "../adminDashboardSearchItem/AdministrationListItem";
+import { SaveBar } from "../saveBar/SaveBar";
+import { AdminDashboardSearch } from "../searchBar/AdminDashboardSearch";
+import SelectImage from "../../../selectImage/SelectImage";
+import { SelectMultiple } from "../selectMultiple/SelectMultiple";
 import classes from "./editCourse.module.scss";
 import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
-import {useNavigation} from "../../../../services/navigatior";
-import {applicationRoutes} from "../../../../configuration/applicationRoutes";
-import {AdministrationSubpageHeader} from "../../universal/adminAddHeader/AdministrationSubpageHeader";
-import {Flex} from "@chakra-ui/react";
+import { useNavigation } from "../../../../services/navigatior";
+import { applicationRoutes } from "../../../../configuration/applicationRoutes";
+import { Flex } from "@chakra-ui/react";
+import { AdminSubpageHeader } from "../../AdminSubpageHeader";
 
 /* TODO:
 *   - Create a new CourseItemDTO for this page
@@ -60,9 +59,6 @@ export const EditCourse = () => {
     const [groups, setGroups] = useState<EditListItemDTO[]>([])
     const [tags, setTags] = useState<EditListItemDTO[]>([])
     const [teachers, setTeachers] = useState<EditListItemDTO[]>([])
-
-
-
     const { course, status, error } = useAdminEditedCourse(Number(courseId));
 
     useCreateObjectURL(thumbnailImage, setThumbnailURL)
@@ -165,15 +161,15 @@ export const EditCourse = () => {
 
     return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
 
-            {/* admin header */}
-            <AdministrationSubpageHeader>
-                <Flex mx={20} flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} h={60}>
-                    <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Szerkesztés" value={"edit"} />
-                        <Tab label="Statisztika" value={"statistics"} />
-                    </Tabs>
-                </Flex>
-            </AdministrationSubpageHeader>
+        {/* admin header */}
+        <AdminSubpageHeader>
+            <Flex mx={20} flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} h={60}>
+                <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
+                    <Tab label="Szerkesztés" value={"edit"} />
+                    <Tab label="Statisztika" value={"statistics"} />
+                </Tabs>
+            </Flex>
+        </AdminSubpageHeader>
 
         <div className={classes.editDataOuterWrapper}>
 
