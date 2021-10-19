@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import classes from "./learningStatisticsItem.module.scss";
-import { Button, Card, Typography } from "@mui/material";
-import { Fullscreen, FullscreenExit } from "@mui/icons-material";
-import { FlexFloat } from '../universal/FlexFloat';
-import { EpistoButton } from '../universal/EpistoButton';
 import { Box, Flex } from '@chakra-ui/react';
+import { Fullscreen, FullscreenExit } from "@mui/icons-material";
+import { Typography } from "@mui/material";
+import React, { useState } from 'react';
 import { EpistoHeader } from '../administration/universal/EpistoHeader';
+import { EpistoButton } from '../universal/EpistoButton';
+import { FlexFloat } from '../universal/FlexFloat';
+import classes from "./learningStatisticsItem.module.scss";
 
 const StatisticsCard = (props: {
     iconPath?: string
@@ -47,6 +47,7 @@ const StatisticsCard = (props: {
                 {iconPath && <img
                     className="square50"
                     style={{ margin: "10px 10px 10px 20px" }}
+                    alt=""
                     src={iconPath} />}
 
                 {/* texts */}

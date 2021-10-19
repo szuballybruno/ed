@@ -19,7 +19,7 @@ const getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
     const fullEntryName = entryName;
     const value = process.env[fullEntryName];
 
-    if (!value && value != "false" && !allowEmptyStr)
+    if (!value && value !== "false" && !allowEmptyStr)
         throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${getCurrentEnvironmentName()}'!`);
 
     log(entryName + " -> " + value);
@@ -53,7 +53,7 @@ export class GlobalConfiguration {
         hostPort: getEnvConfigEntry("HOST_PORT"),
         environmentName: getEnvConfigEntry("ENVIRONMENT_NAME"),
         frontendUrl: getEnvConfigEntry("FRONTEND_URL"),
-        isLocalhost: getEnvConfigEntry("IS_LOCALHOST") == "true",
+        isLocalhost: getEnvConfigEntry("IS_LOCALHOST") === "true",
         accessTokenCookieName: "accessToken",
         refreshTokenCookieName: "refreshToken"
     }
@@ -77,11 +77,11 @@ export class GlobalConfiguration {
         port: parseInt(getEnvConfigEntry("DB_PORT")),
         serviceUserName: getEnvConfigEntry("DB_SERVICE_USER_NAME"),
         serviceUserPassword: getEnvConfigEntry("DB_SERVICE_USER_PASSWORD"),
-        isOrmSyncEnabled: getEnvConfigEntry("DB_IS_ORM_SYNC_ENABLED") == "true",
-        isOrmLoggingEnabled: getEnvConfigEntry("DB_IS_ORM_LOGGING_ENABLED") == "true",
-        allowPurge: getEnvConfigEntry("DB_ALLOW_PURGE") == "true",
-        forcePurge: getEnvConfigEntry("DB_FORCE_PURGE") == "true",
-        isHostedOnGCP: getEnvConfigEntry("IS_HOSTED_ON_GCP") == "true"
+        isOrmSyncEnabled: getEnvConfigEntry("DB_IS_ORM_SYNC_ENABLED") === "true",
+        isOrmLoggingEnabled: getEnvConfigEntry("DB_IS_ORM_LOGGING_ENABLED") === "true",
+        allowPurge: getEnvConfigEntry("DB_ALLOW_PURGE") === "true",
+        forcePurge: getEnvConfigEntry("DB_FORCE_PURGE") === "true",
+        isHostedOnGCP: getEnvConfigEntry("IS_HOSTED_ON_GCP") === "true"
     }
 }
 

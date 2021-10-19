@@ -24,7 +24,7 @@ const HomePage = () => {
     const { pageDTO, status, error } = useOverviewPageDTO();
 
     const currentItem = pageDTO?.currentCourseItems
-        .filter(x => x.state == "current")[0];
+        .filter(x => x.state === "current")[0];
 
     const currentItemThumbnailUrl = currentItem?.thumbnailUrl;
     const hasCurrentItem = !!currentItem;

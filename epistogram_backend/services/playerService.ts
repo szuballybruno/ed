@@ -28,8 +28,8 @@ export const getPlayerDataAsync = async (
         .single(x => x.state === "current");
 
     const { itemId, itemType } = readCourseItemDescriptorCode(currentCourseItem.descriptorCode);
-    const videoDTO = itemType == "video" ? await getVideoDTOAsync(userId, itemId) : null;
-    const examDTO = itemType == "exam" ? await getExamDTOAsync(userId, itemId) : null;
+    const videoDTO = itemType === "video" ? await getVideoDTOAsync(userId, itemId) : null;
+    const examDTO = itemType === "exam" ? await getExamDTOAsync(userId, itemId) : null;
 
     // set current items 
     setUserCurrentCourseDataAsync(

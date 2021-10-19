@@ -50,7 +50,7 @@ export const TipOfTheDay = (props: {} & FlexProps) => {
 
     const toggleDisplayModes = () => {
 
-        if (currentIndex == 0) {
+        if (currentIndex === 0) {
 
             next();
         }
@@ -107,7 +107,7 @@ export const TipOfTheDay = (props: {} & FlexProps) => {
             style={{ alignSelf: "center" }}
             variant="outlined"
             onClick={toggleDisplayModes}>
-            {currentIndex == 0
+            {currentIndex === 0
                 ? translatableTexts.tipOfTheDay.description
                 : translatableTexts.tipOfTheDay.video}
         </EpistoButton>

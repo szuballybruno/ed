@@ -54,6 +54,10 @@ export const translatableTexts = {
         noMoreQuestionsGoWatchVideos: "There are no available practise questions, go watch some videos!"
     },
 
+    editUserControl: {
+        saveUser: "Mentes"
+    },
+
     tipOfTheDay: {
         video: "Videó",
         description: "Leírás",

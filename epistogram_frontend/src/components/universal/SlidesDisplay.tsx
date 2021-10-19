@@ -1,5 +1,4 @@
-import { Box, BoxProps, Flex, FlexProps } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { Box, Flex, FlexProps } from "@chakra-ui/react";
 
 export const SlidesDisplay = (props: FlexProps & {
     slides: ((isCurrent: boolean) => JSX.Element)[],

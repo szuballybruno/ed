@@ -182,7 +182,7 @@ const verifyInvitationTokenAsync = async (invitationToken: string) => {
     // this also protects agains modifying users data 
     // with the same token after the user is registerd,
     // since the token is removed from the DB after finalization
-    if (user.invitationToken != invitationToken)
+    if (user.invitationToken !== invitationToken)
         throw new TypedError("Bad token.", "bad request");
 
     return userId;

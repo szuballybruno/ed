@@ -7,5 +7,6 @@ export const EpistoConinImage = (props: { style?: CSSProperties }) => {
         width="25px"
         height="25px"
         src={getAssetUrl("/images/epistoCoin.png")}
-        style={props.style} />
+        style={props.style}
+        alt="" />
 }

@@ -1,5 +1,4 @@
 import { Box, BoxProps } from '@chakra-ui/react';
-import { Button } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { EpistoButton } from './EpistoButton';
 
@@ -47,16 +46,16 @@ export const QuestionnaierAnswerMinimal = (props: {
 
     const { children, onClick, isIncorrect, isCorrect, ...css } = props;
 
-    const getBg = () => {
+    // const getBg = () => {
 
-        if (isIncorrect)
-            return "#fa6767";
+    //     if (isIncorrect)
+    //         return "#fa6767";
 
-        if (isCorrect)
-            return "#7cf25e";
+    //     if (isCorrect)
+    //         return "#7cf25e";
 
-        return "white";
-    }
+    //     return "white";
+    // }
 
     return <Box {...css}>
         <div

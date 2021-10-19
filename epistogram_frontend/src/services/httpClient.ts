@@ -241,7 +241,7 @@ const handleHttpError = (error: any) => {
     const response = new HTTPResponse(error.response.status, error.response.data);
     const responseCode = response.code;
 
-    if (responseCode != 200) {
+    if (responseCode !== 200) {
 
         // get & check error response data
         const error = response.data as HttpErrorResponseDTO;

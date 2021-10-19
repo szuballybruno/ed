@@ -1,15 +1,11 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
+import { Flex } from "@chakra-ui/react";
+import DoneIcon from '@mui/icons-material/Done';
 import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import React from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
-import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
-import { FlexImage } from "./FlexImage";
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import DoneIcon from '@mui/icons-material/Done';
 import { useNavigation } from "../../services/navigatior";
-import { AddBoxOutlined } from "@mui/icons-material";
 import { FlexList } from "./FlexList";
 import { FlexListItem } from "./FlexListItem";
 import { FlexListTitleSubtitle } from "./FlexListTitleSubtitle";
@@ -18,8 +14,8 @@ export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
 
-    const { title, subTitle, thumbnailUrl, state, descriptorCode, type } = props.courseItem;
-    const isLocked = state == "locked";
+    const { title, subTitle, state, descriptorCode, type } = props.courseItem;
+    const isLocked = state === "locked";
     const { navigateToPlayer } = useNavigation();
 
     const navigate = () => navigateToPlayer(descriptorCode);

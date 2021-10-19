@@ -16,8 +16,8 @@ import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO"
 import { TaskObjectiveType, TaskPriorityType, TaskStatusType } from "../models/shared_models/types/sharedTypes"
 import { translatableTexts } from "../translatableTexts"
 import { EpistoButton } from "./universal/EpistoButton"
-import {NavLink} from "react-router-dom";
-import {ProfileImage} from "./ProfileImage";
+import { NavLink } from "react-router-dom";
+import { ProfileImage } from "./ProfileImage";
 
 export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
 
@@ -26,16 +26,16 @@ export const Tasks = (props: FlexProps & { currentTasks: CurrentTasksDTO }) => {
 
     const getListIcon = (objective: TaskObjectiveType) => {
 
-        if (objective == "video")
+        if (objective === "video")
             return <PlayArrowIcon />
 
-        if (objective == "playlist")
+        if (objective === "playlist")
             return <SubscriptionsIcon />
 
-        if (objective == "course")
+        if (objective === "course")
             return <DvrIcon />
 
-        if (objective == "exam")
+        if (objective === "exam")
             return <AssignmentIcon />
     }
 

@@ -1,4 +1,4 @@
-import { Flex, Grid } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React from 'react';
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
@@ -7,12 +7,11 @@ import { LoadingFrame } from "../HOC/LoadingFrame";
 import CourseTile from "../universal/CourseTile";
 import { DashboardSection } from "../universal/DashboardSection";
 import { EpistoGrid } from "../universal/EpistoGrid";
-import { FlexFloat } from "../universal/FlexFloat";
 import { InfoGrid } from "../universal/InfoGrid";
 
 const CourseStatCard = (props: { course: CourseShortDTO }) => {
 
-    const { title, thumbnailImageURL } = props.course;
+    // const { title, thumbnailImageURL } = props.course;
 
     const stats = [
         {

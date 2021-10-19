@@ -14,16 +14,16 @@ export const log = (content: any, entryType?: LogEntryType) => {
     if (!entryType)
         entryType = "info";
 
-    if (entryType == "warning")
+    if (entryType === "warning")
         console.warn(content);
 
-    if (entryType == "error")
+    if (entryType === "error")
         console.error(content);
 
-    if (entryType == "info")
+    if (entryType === "info")
         console.log(`[${dateTimeString}.${miliseconds}] ${content}`);
 
-    if (entryType == "strong") {
+    if (entryType === "strong") {
 
         console.log(`[${dateTimeString}.${miliseconds}] ------------> ${content}`);
     }

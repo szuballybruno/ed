@@ -35,7 +35,7 @@ export const getUserCoursesDataAsync = async (userId: number) => {
         .map(async x => toCourseShortDTO(x)))
 
     const completedCoursesAsCourseShortDTOs = await Promise.all(completedCourses
-            .map(async x => toCourseShortDTO(x)))
+        .map(async x => toCourseShortDTO(x)))
 
 
     return {
@@ -97,7 +97,7 @@ export const getCourseItemsAsync = async (userId: number, courseId: number, curr
 
 export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {
 
-    if (descriptor.itemType == "video") {
+    if (descriptor.itemType === "video") {
 
         const video = await getVideoByIdAsync(descriptor.itemId);
         if (!video)
@@ -149,7 +149,7 @@ export const getExamDTOAsync = async (userId: number, examId: number) => {
 
     const questionIds = exam.questions.map(x => x.id);
 
-    if (questionIds.length == 0)
+    if (questionIds.length === 0)
         throw new Error("Exam has no questions assigend.");
 
     return toExamDTO(exam);

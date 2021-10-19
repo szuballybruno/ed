@@ -7,8 +7,8 @@ import { useDialog } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
-import { FlexFloat } from "../universal/FlexFloat";
 import Navbar from "../navbar/Navbar";
+import { FlexFloat } from "../universal/FlexFloat";
 import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
 import { WatchView } from "./WatchView";
@@ -16,7 +16,7 @@ import { WatchView } from "./WatchView";
 export const PlayerPage = () => {
 
     const { showDialog } = useDialog();
-    const { navigate, navigateToPlayer } = useNavigation();
+    const { navigateToPlayer } = useNavigation();
     const { descriptorCode } = useParams<{ descriptorCode: string }>();
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
@@ -45,7 +45,7 @@ export const PlayerPage = () => {
 
         navigateToPlayer(playerData.courseItemCode);
 
-    }, [playerData?.courseItemCode]);
+    }, [playerData?.courseItemCode, descriptorCode, navigateToPlayer]);
 
     const navigateToCourseItem = (descriptorCode: string) => {
 

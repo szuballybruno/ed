@@ -1,7 +1,6 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/react";
+import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { useEffect } from 'react';
-import { createTimer } from "../../frontendHelpers";
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
 import { QuesitionView } from "../QuestionView";
@@ -40,7 +39,7 @@ export const VideoQuestionnaire = (props: {
 
         timeoutFrameLogic.start();
 
-    }, [isAnswered]);
+    }, [isAnswered, timeoutFrameLogic]);
 
     return <Flex direction="column">
 

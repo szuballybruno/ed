@@ -1,21 +1,16 @@
-import React from 'react';
-import {Flex} from "@chakra-ui/react";
-import {AdministrationListItem} from "../../administration/universal/adminDashboardSearchItem/AdministrationListItem";
+import { Image } from "@chakra-ui/image";
+import { Box } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/react";
 import {
     CalendarToday,
-    Download, EditTwoTone, EqualizerTwoTone,
-    FileCopy,
-    Pages, Pageview,
+    Download, FileCopy
 } from "@mui/icons-material";
-import {EpistoButton} from "../../universal/EpistoButton";
-import {FloatChip} from "../../universal/FloatChip";
-import {getAssetUrl, isString} from "../../../frontendHelpers";
-import {Image} from "@chakra-ui/image";
-import {EpistoHeader} from "../../administration/universal/EpistoHeader";
-import {FlexListItem} from "../../universal/FlexListItem";
-import {FlexListTitleSubtitle} from "../../universal/FlexListTitleSubtitle";
-import {Typography} from "@mui/material";
-import {Box} from "@chakra-ui/layout";
+import { Typography } from "@mui/material";
+import React from 'react';
+import { getAssetUrl } from "../../../frontendHelpers";
+import { EpistoButton } from "../../universal/EpistoButton";
+import { FlexListItem } from "../../universal/FlexListItem";
+import { FloatChip } from "../../universal/FloatChip";
 
 export const VideoContent = () => {
     const chips = [

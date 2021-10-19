@@ -1,45 +1,40 @@
-import { Box, Flex } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/layout";
 import {
     ApartmentTwoTone,
     Close,
     Edit,
     Email,
-    Equalizer,
-    KeyboardVoice,
-    Save,
-    Task,
+    Equalizer, Task,
     WorkTwoTone
 } from "@mui/icons-material";
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
+import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
+import { Button, Checkbox, Typography } from "@mui/material";
+import React, { ReactNode, useContext, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { useUserListQuery } from "../services/adminPageUsersService";
 import { httpPostAsync } from "../services/httpClient";
 import { useNavigation } from "../services/navigatior";
+import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
+import IntersectionObserverWrap from "./administration/universal/overflow/intersection-observer-wrapper";
 import { FloatAddButton } from "./FloatAddButton";
 import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 import { LoadingFrame } from "./HOC/LoadingFrame";
+import { ProfileImage } from "./ProfileImage";
 import { EpistoButton } from "./universal/EpistoButton";
+import { EpistoSearch } from "./universal/EpistoSearch";
 import { EpistoSelect } from "./universal/EpistoSelect";
 import { FlexList } from "./universal/FlexList";
 import { FlexListItem } from "./universal/FlexListItem";
 import { FlexListTitleSubtitle } from "./universal/FlexListTitleSubtitle";
 import { FloatChip } from "./universal/FloatChip";
-import { EpistoSearch } from "./universal/EpistoSearch";
-import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
-import { Button, Checkbox, Typography } from "@mui/material";
-import { ProfileImage } from "./ProfileImage";
-import IntersectionObserverWrap from "./administration/universal/overflow/intersection-observer-wrapper";
-import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import { Stat } from "@chakra-ui/react";
 
 export const UserAdministration = () => {
 
     const user = useContext(CurrentUserContext)!;
     const userId = user.id;
-    const [searchText, setSearchText] = React.useState("");
-    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(userId, searchText);
+    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery();
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
 
@@ -47,8 +42,9 @@ export const UserAdministration = () => {
 
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
 
+    console.log(users);
     const isAllUsersSelected = !users.some(user => !selectedUserIds.some(uid => uid === user.id));
-    const isAnyUserSelected = selectedUserIds.length > 0;
+    // const isAnyUserSelected = selectedUserIds.length > 0;
 
     const deleteUserAsync = async (userId: number) => {
 
@@ -294,39 +290,49 @@ export const UserAdministration = () => {
                                             padding="5px" />)}
                                 </Flex>}
                             />}
-                            endContent={<Flex align="center" justifyContent={"flex-end"} h={"100%"} width={165} px={10}>
+                            endContent={<Flex
+                                align="center"
+                                justifyContent={"flex-end"}
+                                h={"100%"}
+                                width={165}
+                                px={10}>
+
+                                {/* go to edit */}
                                 <EpistoButton
                                     variant={"colored"}
                                     onClick={() => {
                                         navigate(`${administrationRoutes.usersRoute.route}/${user.id}/edit`)
                                     }}
-                                    style={{ width: 20 }}
-                                >
+                                    style={{ width: 20 }}>
                                     <Edit style={{ width: "20px", height: "20px" }} />
                                 </EpistoButton>
+
+                                {/* go to stats */}
                                 <EpistoButton
                                     variant="colored"
                                     onClick={() => {
                                         navigate(`${administrationRoutes.usersRoute.route}/${user.id}/statistics`)
                                     }}
-                                    style={{ width: 20, marginLeft: 5 }}
-                                >
+                                    style={{ width: 20, marginLeft: 5 }}>
                                     <Equalizer style={{ width: "20px", height: "20px" }} />
                                 </EpistoButton>
+
+                                {/* open tasks */}
                                 <EpistoButton
                                     variant="colored"
                                     onClick={() => {
                                         navigate(`${administrationRoutes.usersRoute.route}/${user.id}/tasks`)
                                     }}
-                                    style={{ width: 20, marginLeft: 5 }}
-                                >
+                                    style={{ width: 20, marginLeft: 5 }}>
+
                                     <Task style={{ width: "20px", height: "20px" }} />
                                 </EpistoButton>
+
+                                {/* delete user */}
                                 {(userId !== user.id) && <EpistoButton
                                     variant="colored"
                                     onClick={() => deleteUserAsync(user.id)}
-                                    style={{ width: 20, marginLeft: 5 }}
-                                >
+                                    style={{ width: 20, marginLeft: 5 }}>
                                     <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>
                                 </EpistoButton>}
                             </Flex>}

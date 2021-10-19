@@ -1,10 +1,10 @@
-import { Flex, FlexProps } from "@chakra-ui/layout"
+import { Flex, FlexProps } from "@chakra-ui/layout";
+import { Divider } from "@chakra-ui/react";
+import { InfoOutlined } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { usePersonalityData } from "../../services/dataService";
 import { LoadingFrame } from "../HOC/LoadingFrame";
-import { PersonalityChart } from "./PersonalityChart"
-import {Divider} from "@chakra-ui/react";
-import {Info, InfoOutlined, InfoRounded} from "@mui/icons-material";
+import { PersonalityChart } from "./PersonalityChart";
 
 export const PersonalityAssessment = (props: FlexProps) => {
 
@@ -28,13 +28,13 @@ export const PersonalityAssessment = (props: FlexProps) => {
         {...css}>
         <Flex direction={"row"} flexWrap={"wrap"} justifyContent={"center"} alignItems={"flex-start"} w={"100%"} h={"100%"}>
             <Flex justifyContent={"flex-start"}
-                  direction={"column"}
-                  minWidth={window.innerWidth < 600 ? "100%" : 450}
-                  w={"100%"}
-                  maxW={window.innerWidth < 600 ? "100%" : "50%"}
-                  mt={20}
-                  mx={20}
-                  mb={10}>
+                direction={"column"}
+                minWidth={window.innerWidth < 600 ? "100%" : 450}
+                w={"100%"}
+                maxW={window.innerWidth < 600 ? "100%" : "50%"}
+                mt={20}
+                mx={20}
+                mb={10}>
                 <Flex>
                     <PersonalityChart data={personalityData?.chartData ?? null} />
                 </Flex>
@@ -42,15 +42,15 @@ export const PersonalityAssessment = (props: FlexProps) => {
                     <Flex minW={40} pt={2} h={"100%"} direction={"column"} alignItems={"center"} justifyContent={"flex-start"}>
                         <InfoOutlined />
                     </Flex>
-                    <Typography style={{maxWidth: "100%"}}>A fenti grafikonon 5-5 tulajdonság párt láthatsz, melyek 0-7 között vehetnek fel értéket, attól függően, hogy az adott tulajdonság mennyire jellemző rád. Ezek általában ellentétben állnak egymással, így minél több pontod van az egyik oldalon, annál kevesebb lesz a másikon. </Typography>
+                    <Typography style={{ maxWidth: "100%" }}>A fenti grafikonon 5-5 tulajdonság párt láthatsz, melyek 0-7 között vehetnek fel értéket, attól függően, hogy az adott tulajdonság mennyire jellemző rád. Ezek általában ellentétben állnak egymással, így minél több pontod van az egyik oldalon, annál kevesebb lesz a másikon. </Typography>
                 </Flex>
             </Flex>
 
             <Flex flex={1}
-                  minW={300}
-                  direction="column"
-                  p={10}
-                  overflow="scroll">
+                minW={300}
+                direction="column"
+                p={10}
+                overflow="scroll">
                 <Typography fontWeight={"bold"} style={{
                     marginTop: 20
                 }}>{"Egyedül vagy csoportosan tanulsz szívesebben?"}</Typography>

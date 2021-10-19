@@ -1,11 +1,11 @@
-import { Box, BoxProps, FlexProps } from "@chakra-ui/react";
-import { Slider, Typography } from "@mui/material";
+import { Box, BoxProps } from "@chakra-ui/react";
 import { ClosedCaption, Fullscreen, Pause, PlayArrow } from "@mui/icons-material";
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import React, { CSSProperties, ReactNode, useEffect, useRef, useState } from "react";
+import { Slider, Typography } from "@mui/material";
+import React, { CSSProperties, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { TrackProps } from "react-player/file";
 import useEventListener from 'react-use-event-listener';
@@ -22,8 +22,7 @@ export const useVideoPlayerState = (
     videoItem: VideoDTO,
     isShowingOverlay: boolean,
     maxWatchedSeconds: number,
-    limitSeek: boolean,
-    onVideoEnded?: () => void) => {
+    limitSeek: boolean) => {
 
     const { url: videoUrl } = videoItem;
     const { subtitles } = { subtitles: [] as SubtitleDTO[] };
@@ -148,13 +147,13 @@ export const useVideoPlayerState = (
         if (isShowingOverlay)
             return;
 
-        if (e.key == " ")
+        if (e.key === " ")
             toggleShouldBePlaying();
 
-        if (e.key == "ArrowLeft")
+        if (e.key === "ArrowLeft")
             jump();
 
-        if (e.key == "ArrowRight")
+        if (e.key === "ArrowRight")
             jump(true);
     });
 
@@ -205,7 +204,6 @@ export const VideoPlayer = (props: {
         visualOverlayType,
         controlOverlayTimer,
         videoUrl,
-        shouldBePlaying,
         subtileTracks,
         controlsOpacity,
         playedSeconds,
@@ -213,7 +211,6 @@ export const VideoPlayer = (props: {
         isShowingOverlay,
         isPlaying,
         maxWatchedSeconds,
-        limitSeek,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -341,10 +338,10 @@ export const VideoPlayer = (props: {
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>
-                {visualOverlayType == "pause" && <PauseIcon style={iconStyle} />}
-                {visualOverlayType == "start" && <PlayArrowIcon style={iconStyle} />}
-                {visualOverlayType == "seekRight" && <FastForwardIcon style={iconStyle} />}
-                {visualOverlayType == "seekLeft" && <FastRewindIcon style={iconStyle} />}
+                {visualOverlayType === "pause" && <PauseIcon style={iconStyle} />}
+                {visualOverlayType === "start" && <PlayArrowIcon style={iconStyle} />}
+                {visualOverlayType === "seekRight" && <FastForwardIcon style={iconStyle} />}
+                {visualOverlayType === "seekLeft" && <FastRewindIcon style={iconStyle} />}
             </AbsoluteFlexOverlay>
 
             {children}

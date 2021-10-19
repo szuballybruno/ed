@@ -4,7 +4,7 @@ import { httpGetAsync } from "./httpClient";
 
 export const useOrganizations = () => {
     const url = "organizations/get-organizations";
-    const { data, status, isLoading } = useQuery(
+    const { data, isLoading } = useQuery(
         ["getOrganizations"],
         () => httpGetAsync(url), {
         retry: false,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { globalConfig } from '../configuration/config';
-import { userRefreshIntervalInMs as userRefreshIntervalInMs } from '../Environemnt';
+import { userRefreshIntervalInMs } from '../Environemnt';
 import { UserDTO } from '../models/shared_models/UserDTO';
 import { httpGetAsync } from './httpClient';
 

@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
-import classes from "./dashBoardSpacers.module.scss";
+import { Flex, FlexProps } from '@chakra-ui/layout';
 import { Divider, Typography } from "@mui/material";
-import { Box, BoxProps, Flex, FlexProps } from '@chakra-ui/layout';
+import React from 'react';
+import classes from "./dashBoardSpacers.module.scss";
 
 export const DashoardLeftItemGroup = (props: FlexProps & { title: string }) => {
 

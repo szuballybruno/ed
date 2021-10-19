@@ -1,5 +1,4 @@
-import { Flex, FlexProps } from "@chakra-ui/react"
-import { ReactNode } from "react"
+import { Flex, FlexProps } from "@chakra-ui/react";
 
 export const FlexFloat = (props: FlexProps & { elevation?: number, variant?: "normal" | "rect" }) => {
 

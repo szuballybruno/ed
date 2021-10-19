@@ -22,7 +22,7 @@ export const getExamResultsAsync = async (userId: number, answerSessionId: numbe
     const user = await getUserById(userId);
     const descriptor = await getCurrentCourseItemDescriptor(user);
 
-    if (descriptor?.itemType != "exam")
+    if (descriptor?.itemType !== "exam")
         throw new Error("Current course item type is not 'exam'!");
 
     const answerSession = await staticProvider

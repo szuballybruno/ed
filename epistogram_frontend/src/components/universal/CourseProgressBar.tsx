@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/layout";
+import { Flex, FlexProps } from "@chakra-ui/layout";
 import { LinearProgress, Typography } from "@mui/material";
 
 export const CourseProgressBar = (props: { value: number, label: string } & FlexProps) => {

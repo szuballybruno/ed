@@ -9,7 +9,7 @@ export const EpistoText = (props: {
     allowedLines?: number
 }) => {
 
-    const { style, text, maxFontSize, isAutoFontSize, allowedLines } = props;
+    const { style, text, maxFontSize, allowedLines } = props;
     const ref = useRef<HTMLSpanElement>(null);
     const fontSize = useAutoFontSize(ref, text, allowedLines ?? 2, maxFontSize ?? 20);
     const css = {
@@ -42,25 +42,27 @@ export const useAutoFontSize = (
 
     useEffect(() => {
 
-        if (!ref?.current)
+        const savedRef = ref?.current;
+
+        if (!savedRef)
             return;
 
-        setContainerWidth(ref?.current.offsetWidth ?? null);
+        setContainerWidth(savedRef.offsetWidth ?? null);
         // create observer
         const observer = new ResizeObserver(resizeListener);
-        observer.observe(ref?.current);
+        observer.observe(savedRef);
 
         return () => {
 
             if (observer) {
 
-                if (ref?.current)
-                    observer.unobserve(ref?.current);
+                if (savedRef)
+                    observer.unobserve(savedRef);
 
                 observer.disconnect();
             }
         }
-    }, [ref]);
+    }, [ref, resizeListener]);
 
     const characterCount = text.length;
     const offset = 1.9;

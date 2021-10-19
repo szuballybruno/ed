@@ -33,6 +33,7 @@ export const QuestionnaireLayout = (props: {
                             height: "50px",
                             marginRight: "30px"
                         }}
+                        alt=""
                         src="https://static.thenounproject.com/png/92068-200.png"
                         className="tinyShadow" />
 
@@ -49,7 +50,7 @@ export const QuestionnaireLayout = (props: {
             {/* answers */}
             <LoadingFrame {...loadingProps}>
                 <Flex
-                    style={{...buttonWrapperStyles}}
+                    style={{ ...buttonWrapperStyles }}
                     id="answersListContainer"
                     direction="column"
                     width="100%"

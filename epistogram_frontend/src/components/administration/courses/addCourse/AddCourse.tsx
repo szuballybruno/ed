@@ -1,42 +1,32 @@
 import { Box } from "@chakra-ui/react";
-import { Button } from "@mui/material";
 import React from 'react';
-import { Cookies } from "react-cookie";
-import { getEventFileCallback } from "../../../../frontendHelpers";
-import { AddFrame } from "../../../add_frame/AddFrame";
-import EditItem from "../../../universal/editItem/EditItem";
-import { ColorPicker } from "../../universal/colorPicker/ColorPicker";
-import SelectImage from "../../universal/selectImage/SelectImage";
-import { SelectRadio } from "../../universal/SelectRadio";
-import SingleInput from "../../universal/singleInput/SingleInput";
-import classes from "../../users/addUser/addUser.module.scss";
 
 export const AddCourse = () => {
 
-    const [file, setFile] = React.useState<string | Blob>("")
-    const [permissionLevel, setPermissionLevel] = React.useState("")
-    const [courseName, setCourseName] = React.useState("")
+    // const [file, setFile] = React.useState<string | Blob>("")
+    // const [permissionLevel, setPermissionLevel] = React.useState("")
+    // const [courseName, setCourseName] = React.useState("")
 
-    const inputChangeHandler = (e: React.ChangeEvent<{ value: unknown, name?: string }>) => {
+    // const inputChangeHandler = (e: React.ChangeEvent<{ value: unknown, name?: string }>) => {
 
-        // admin.currentlyEdited.course[e.currentTarget.name as keyof typeof admin.currentlyEdited.course].set(e.currentTarget.value as string)
-    }
+    //     // admin.currentlyEdited.course[e.currentTarget.name as keyof typeof admin.currentlyEdited.course].set(e.currentTarget.value as string)
+    // }
 
-    const selectImage = (e) => {
-        if (e.currentTarget.files) {
+    // const selectImage = (e) => {
+    //     if (e.currentTarget.files) {
 
-            // admin.currentlyEdited.course.uploadedFileUrl.set(URL.createObjectURL(e.currentTarget.files[0]));
-            setFile(e.currentTarget.files[0])
-        }
-    }
+    //         // admin.currentlyEdited.course.uploadedFileUrl.set(URL.createObjectURL(e.currentTarget.files[0]));
+    //         setFile(e.currentTarget.files[0])
+    //     }
+    // }
 
-    const createAddCourseDTO = () => {
+    // const createAddCourseDTO = () => {
 
-    }
+    // }
 
-    const submitHandler = () => {
-        const formData = createAddCourseDTO
-    }
+    // const submitHandler = () => {
+    //     const formData = createAddCourseDTO
+    // }
 
     return <Box>WIP</Box>;
 

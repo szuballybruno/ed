@@ -1,6 +1,5 @@
-import React from "react";
-import { FormControl, Select, Typography } from "@mui/material";
 import { Box, BoxProps } from "@chakra-ui/layout";
+import React from "react";
 import { translatableTexts } from "../../translatableTexts";
 
 const defaultKey = "___default___";

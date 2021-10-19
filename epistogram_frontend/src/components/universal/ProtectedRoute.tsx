@@ -1,10 +1,9 @@
-import { Box } from '@chakra-ui/layout';
 import React, { ReactNode, useContext } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { globalConfig } from '../../configuration/config';
 import { UserActivityDTO } from '../../models/shared_models/UserActivityDTO';
-import { AuthenticationStateContext as AuthenticationStateContext, CurrentUserContext } from '../HOC/AuthenticationFrame';
+import { AuthenticationStateContext, CurrentUserContext } from '../HOC/AuthenticationFrame';
 
 export const ProtectedRoute = (props: {
     path: string,

@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { globalConfig } from "./configuration/config";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
@@ -93,8 +93,8 @@ export const usePaging = <T>(
 
     const [currentItemIndex, setCurrentItemIndex] = useState(0);
 
-    const isLast = currentItemIndex == items.length - 1;
-    const isFirst = currentItemIndex == 0;
+    const isLast = currentItemIndex === items.length - 1;
+    const isFirst = currentItemIndex === 0;
     const currentItem = items[currentItemIndex] as T | null;
 
     const next = () => {
@@ -269,7 +269,7 @@ export const objToArray = (obj: any) => {
     return properties;
 }
 
-export const isCurrentRoute = (route: string) => window.location.pathname == route;
+export const isCurrentRoute = (route: string) => window.location.pathname === route;
 
 export class TypedError extends Error {
 
@@ -304,13 +304,13 @@ export const getEventFileCallback = (callback: (value: any) => void) => {
 
 export const getErrorTypeByHTTPCode = (code: number): ErrorType => {
 
-    if (code == 400)
+    if (code === 400)
         return "bad request";
 
-    if (code == 500)
+    if (code === 500)
         return "internal server error";
 
-    if (code == 403)
+    if (code === 403)
         return "forbidden";
 
     return "http error";

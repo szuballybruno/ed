@@ -4,7 +4,7 @@ import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserD
 import { UserEditDTO } from '../models/shared_models/UserEditDTO';
 import { useNavigation } from "../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/notifications";
-import { createInvitedUserAsync } from "../services/userManagementService";
+import { inviteUserAsync } from "../services/userManagementService";
 import { EditUserControl } from "./EditUserControl";
 
 const AddUser = () => {
@@ -25,7 +25,7 @@ const AddUser = () => {
 
         try {
 
-            await createInvitedUserAsync(createInvitedUserDTO);
+            await inviteUserAsync(createInvitedUserDTO);
 
             showNotification("Felhasználó sikeresen hozzáadva");
             navigate(applicationRoutes.administrationRoute.usersRoute.route);

@@ -4,12 +4,12 @@ import { ChangePasswordDTO } from "../models/shared_models/SetNewPasswordDTO";
 import { changePasswordAsync, getUserIdFromRequest, logInUser, logOutUserAsync, renewUserSessionAsync, setAuthCookies } from "../services/authenticationService";
 import { getCurrentUser } from "../services/userService";
 import { staticProvider } from "../staticProvider";
-import { getAsyncActionHandler, TypedError, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParamsType, getAsyncActionHandler, TypedError, withValueOrBadRequest } from "../utilities/helpers";
 
-export const renewUserSessionAction = getAsyncActionHandler(async (req: Request, res: Response) => {
+export const renewUserSessionAction = async (params: ActionParamsType) => {
 
-    return renewUserSessionAsync(req, res);
-});
+    return renewUserSessionAsync(params.req, params.res);
+};
 
 export const logInUserAction = async (req: Request, res: Response) => {
 
@@ -36,10 +36,10 @@ export const changePasswordAction = getAsyncActionHandler(async (req: Request) =
     return changePasswordAsync(userId, password, passwordCompare, passwordResetToken);
 });
 
-export const getCurrentUserAction = getAsyncActionHandler(async (req: Request) => {
+export const getCurrentUserAction = async (params: ActionParamsType) => {
 
-    return getCurrentUser(req);
-});
+    return getCurrentUser(params.req);
+};
 
 export const logOutUserAction = getAsyncActionHandler(async (req: Request, res: Response, next: NextFunction) => {
 

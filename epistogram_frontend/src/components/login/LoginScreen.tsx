@@ -9,12 +9,12 @@ import SingleInput from "../administration/universal/singleInput/SingleInput";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from './loginScreen.module.scss';
-import {getAssetUrl} from "../../frontendHelpers";
+import { getAssetUrl } from "../../frontendHelpers";
 
-const LoginScreen = (props: { history: any; }): JSX.Element => {
+const LoginScreen = (): JSX.Element => {
 
     console.warn("[LoginScreen] Started...")
-    const { loginUserAsync, loginUserError, loginUserState } = useLogInUser();
+    const { loginUserAsync, loginUserError } = useLogInUser();
     const [errorMessage, setErrorMessage] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -70,14 +70,14 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
     return (
         <Flex h={"100vh"} justifyContent={"center"} alignItems={"flex-start"}>
             <Flex direction={"column"}
-                  w={"60%"}
-                  h={"100vh"}
-                  hidden={window.innerWidth < 1000 && true}
-                  backgroundSize={"100%"}
-                  bgImage={getAssetUrl("/loginScreen/loginbackground.png")}
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                  position={"relative"}>
+                w={"60%"}
+                h={"100vh"}
+                hidden={window.innerWidth < 1000 && true}
+                backgroundSize={"100%"}
+                bgImage={getAssetUrl("/loginScreen/loginbackground.png")}
+                alignItems={"center"}
+                justifyContent={"center"}
+                position={"relative"}>
                 <img style={{
                     zIndex: 1,
                     width: 200
@@ -87,7 +87,7 @@ const LoginScreen = (props: { history: any; }): JSX.Element => {
 
             </Flex>
             <Flex direction={"column"} minH={"100%"} w={"40%"} minW={window.innerWidth > 600 ? 500 : "90%"} maxW={"90%"} justifyContent={"center"} alignItems={"center"}>
-                <Flex direction="column" alignItems={"center"}  width={window.innerWidth > 600 ? 450 : "90%"}>
+                <Flex direction="column" alignItems={"center"} width={window.innerWidth > 600 ? 450 : "90%"}>
                     <img style={{
                         zIndex: 1,
                         width: 200

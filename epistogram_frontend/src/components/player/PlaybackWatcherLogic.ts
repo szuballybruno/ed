@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react";
 import { globalConfig } from "../../configuration/config";
 import { isBetweenThreshold } from "../../frontendHelpers";
 import { usePostVideoPlaybackSample } from "../../services/playerService";

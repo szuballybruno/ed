@@ -1,4 +1,4 @@
-import { Assignment, BarChart, Person, School, Settings, Subscriptions, Business, People } from "@mui/icons-material";
+import { Assignment, Business, People, Person, School, Settings, Subscriptions } from "@mui/icons-material";
 import { translatableTexts } from "../translatableTexts";
 
 export type RouteSection = {

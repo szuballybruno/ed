@@ -12,7 +12,7 @@ export const SegmentedButton = (props: { paging: PagingType<string> }) => {
                 .items
                 .map((buttonText, index) => {
 
-                    const isActive = index == paging.currentIndex;
+                    const isActive = index === paging.currentIndex;
 
                     return (
                         <ToggleButton

@@ -178,7 +178,7 @@ const getIsFreshDB = async () => {
         .getRepository(User)
         .find();
 
-    return users.length == 0;
+    return users.length === 0;
 }
 
 const createTypeORMConnection = async (opt: ConnectionOptions) => {

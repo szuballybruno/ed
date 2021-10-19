@@ -28,7 +28,7 @@ const getPersonalityDescriptionsDTOAsync = async (userId: number) => {
 
     const getCategoryDescription = (catId: number) => {
 
-        const cat = categoryViews.single(x => x.categoryId == 1);
+        const cat = categoryViews.single(x => x.categoryId === 1);
         const description = descriptions.single(x => x.questionCategoryId === catId);
 
         if (cat.maxScore > cat.minScore)

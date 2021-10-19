@@ -3,7 +3,7 @@ import { User } from '../models/entity/User';
 import { staticProvider } from '../staticProvider';
 import { toAdminPageUserDTO } from './mappings';
 
-export const getAdminPageUsersList = async (userId: number, searchText: string) => {
+export const getAdminPageUsersList = async () => {
 
     const users = await staticProvider
         .ormConnection

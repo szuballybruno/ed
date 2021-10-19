@@ -1,23 +1,21 @@
-import { Image } from '@chakra-ui/image';
 import { Input } from '@chakra-ui/input';
 import { Box, Flex } from '@chakra-ui/layout';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { TextField, Typography } from '@mui/material';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { reloadPage } from '../../frontendHelpers';
+import { useRequestChangePassword, useSaveUserData } from '../../services/dataService';
+import { useUploadAvatarFile } from '../../services/fileService';
+import { showNotification, useShowErrorDialog } from '../../services/notifications';
 import { CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
+import { LoadingFrame } from '../HOC/LoadingFrame';
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from '../HOC/MainPanels';
 import Navbar from '../navbar/Navbar';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { EpistoButton } from '../universal/EpistoButton';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import { uploadAvatarFileAsync, useUploadAvatarFile } from '../../services/fileService';
-import { showNotification, useDialog, useShowErrorDialog } from '../../services/notifications';
-import { reloadPage } from '../../frontendHelpers';
-import { useRequestChangePassword, useSaveUserData } from '../../services/dataService';
-import { LoadingFrame } from '../HOC/LoadingFrame';
-import { EpistoDialog, useEpistoDialogLogic } from '../EpistoDialog';
 import { ProfileImage } from '../ProfileImage';
+import { EpistoButton } from '../universal/EpistoButton';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 

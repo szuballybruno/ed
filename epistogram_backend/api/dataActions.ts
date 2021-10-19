@@ -16,7 +16,7 @@ import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signu
 import { createRegistrationToken } from "../services/tokenService";
 import { getUserById } from "../services/userService";
 import { staticProvider } from "../staticProvider";
-import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 import { log } from "../services/misc/logger";
 
 export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
@@ -120,14 +120,6 @@ export const getOverviewPageDTOAction = async (req: Request) => {
 
     return getOverviewPageDTOAsync(userId);
 }
-
-export const getUsersAction = getAsyncActionHandler(async (req: Request) => {
-
-    const userId = getUserIdFromRequest(req);
-    const adminPageUserDTOs = await getAdminPageUsersList(userId, (req.query.searchData as string) ?? "");
-
-    return adminPageUserDTOs;
-});
 
 export const getUserPersonalityDataAction = getAsyncActionHandler(async (req: Request) => {
 

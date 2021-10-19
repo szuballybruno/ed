@@ -5,14 +5,17 @@ import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
-import { answerPractiseQuestionAction, answerSignupQuestionAction, getCourseItemsAction, getCurrentCourseItemCode, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction, getSignupDataAction, getUserPersonalityDataAction, getUsersAction as getUserAdministrationUserListAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveUserDataAction, setEditedCourseAction } from './api/dataActions';
+import {
+    answerPractiseQuestionAction, answerSignupQuestionAction, getCourseItemsAction,
+    getCurrentCourseItemCode, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
+    getSignupDataAction, getUserPersonalityDataAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveUserDataAction, setEditedCourseAction
+} from './api/dataActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
-import { getEditUserDataAction, getJobTitlesAction } from './api/miscActions';
+import { getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction } from './api/questionActions';
-import { createInvitedUserAction } from './api/signupActions';
-import { deleteUserAction } from './api/userAdministartionActions';
+import { deleteUserAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
@@ -72,13 +75,13 @@ const initializeAsync = async () => {
     expressServer.use(getAuthMiddleware());
 
     // open routes
-    expressServer.get(apiRoutes.open.renewUserSession, renewUserSessionAction);
+    addEndpoint(apiRoutes.open.renewUserSession, renewUserSessionAction, { isPublic: true });
     expressServer.post(apiRoutes.open.loginUser, getAsyncActionHandler(logInUserAction));
     expressServer.post(apiRoutes.open.registerUser, registerUserAction);
     expressServer.post(apiRoutes.open.registerInvitedUser, registerInvitedUserAction);
 
     // misc
-    expressServer.get('/get-current-user', getCurrentUserAction);
+    addEndpoint('/get-current-user', getCurrentUserAction);
     expressServer.get('/get-current-course-item-code', getCurrentCourseItemCode);
     expressServer.get('/misc/get-practise-question', getPractiseQuestionAction);
     expressServer.post('/misc/save-user-data', saveUserDataAction);
@@ -86,8 +89,14 @@ const initializeAsync = async () => {
     expressServer.post('/misc/set-new-password', changePasswordAction);
     expressServer.get('/misc/get-registration-link', getRegistrationLinkAction);
     expressServer.post(apiRoutes.misc.logoutUser, logOutUserAction);
-    addEndpoint(apiRoutes.misc.getJobTitles, getJobTitlesAction); // new way to declare endpoints
-    addEndpoint(apiRoutes.misc.getEditUserData, getEditUserDataAction); // new way to declare endpoints
+    addEndpoint(apiRoutes.misc.getJobTitles, getJobTitlesAction);
+
+    // user management
+    addEndpoint(apiRoutes.userManagement.getEditUserData, getEditUserDataAction);
+    addEndpoint(apiRoutes.userManagement.getUserListForAdministration, getUserAdministrationUserListAction);
+    addEndpoint(apiRoutes.userManagement.inviteUser, inviteUserAction, { isPost: true });
+    addEndpoint(apiRoutes.userManagement.deleteUser, deleteUserAction, { isPost: true });
+    addEndpoint(apiRoutes.userManagement.upadateUser, updateUserAction, { isPost: true });
 
     // signup
     expressServer.post(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction);
@@ -109,9 +118,6 @@ const initializeAsync = async () => {
     expressServer.post('/player/get-course-items', getCourseItemsAction);
 
     // users
-    expressServer.get("/users/get-user-administartion-user-list", getUserAdministrationUserListAction);
-    expressServer.post("/users/create-invited-user", getAsyncActionHandler(createInvitedUserAction));
-    expressServer.post("/users/delete-user", deleteUserAction);
     expressServer.get("/users/get-courses-data", getUserCoursesDataAction);
 
     // course

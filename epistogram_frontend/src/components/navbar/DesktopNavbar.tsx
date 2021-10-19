@@ -1,4 +1,4 @@
-import { Box, Flex, Image } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
@@ -37,7 +37,7 @@ const DesktopNavbar = (props: {
     const ref = useRef<HTMLDivElement>(null);
     const [popperOpen, setPopperOpen] = useState(false);
     const hideLinks = props.hideLinks || !user;
-    const { logoutUserAsync, logoutUserState } = useLogout();
+    const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();
 
     const handleLogout = async () => {
@@ -80,6 +80,7 @@ const DesktopNavbar = (props: {
                     marginLeft: "15px",
                     cursor: "pointer",
                 }}
+                alt=""
                 onClick={() => {
 
                     if (user.userActivity.canAccessApplication)
@@ -112,6 +113,7 @@ const DesktopNavbar = (props: {
                                 onClick={() => continueCourse()}
                                 icon={
                                     <img
+                                        alt=""
                                         src={getAssetUrl("/icons/play2.svg")}
                                         style={{
                                             width: "25px",

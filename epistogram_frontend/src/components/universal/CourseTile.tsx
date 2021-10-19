@@ -2,7 +2,6 @@ import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import DoneIcon from '@mui/icons-material/Done';
 import React, { ReactNode } from 'react';
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
-import { useNavigation } from "../../services/navigatior";
 import { FlexFloat } from "./FlexFloat";
 import { FlexImage } from "./FlexImage";
 
@@ -13,12 +12,9 @@ const CourseTile = (props: {
 } & FlexProps) => {
 
     const { course, children, ...css } = props;
-    const colorOne = course.colorOne;
-    const colorTwo = course.colorTwo;
     const courseTitle = course.title;
     const courseTeacherName = course.teacherName;
     const thumbnailImageUrl = course.thumbnailImageURL;
-    const { navigateToPlayer } = useNavigation();
     const isComplete = course.isComplete;
 
     return <FlexFloat
@@ -79,9 +75,3 @@ const CourseTile = (props: {
 };
 
 export default CourseTile;
-
-{/* <Gradient className={classes.courseTitleBorder}
-    gradients={[[colorOne || "grey", colorTwo || "grey"]]}
-    property="background"
-    duration={3000}
-    angle="45deg" /> */}

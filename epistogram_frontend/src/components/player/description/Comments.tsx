@@ -1,9 +1,9 @@
+import { Input } from "@chakra-ui/input";
+import { Flex } from "@chakra-ui/react";
+import { Avatar, Divider, Grid, Paper } from "@mui/material";
 import React from 'react';
-import {Button, Flex} from "@chakra-ui/react";
-import {Avatar, Divider, Grid, Paper} from "@mui/material";
-import {getAssetUrl} from "../../../frontendHelpers";
-import {Input} from "@chakra-ui/input";
-import {EpistoButton} from "../../universal/EpistoButton";
+import { getAssetUrl } from "../../../frontendHelpers";
+import { EpistoButton } from "../../universal/EpistoButton";
 
 const Comments = () => {
     return (
@@ -17,7 +17,7 @@ const Comments = () => {
                     placeholder="Hozzászólás írása"
                     border="1px solid var(--mildGrey)"
                     borderRadius="5px" />
-                <EpistoButton style={{marginLeft: 10}} variant={"outlined"}>
+                <EpistoButton style={{ marginLeft: 10 }} variant={"outlined"}>
                     Küldés
                 </EpistoButton>
             </Flex>

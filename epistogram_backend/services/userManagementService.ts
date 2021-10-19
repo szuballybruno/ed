@@ -1,5 +1,5 @@
-import { User } from "../models/entity/User"
-import { staticProvider } from "../staticProvider"
+import { User } from "../models/entity/User";
+import { staticProvider } from "../staticProvider";
 
 export const deleteUserAsync = async (userId: number, deletedUserId: number) => {
 

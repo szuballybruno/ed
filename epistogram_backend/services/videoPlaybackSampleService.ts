@@ -10,7 +10,7 @@ export type VideoPlaybackSampleChunk = {
 
 export const getVideoWatchedPercentAsync = async (userId: number, videoId: number, chunks: VideoPlaybackSampleChunk[]) => {
 
-    if (chunks.length == 0)
+    if (chunks.length === 0)
         return 0;
 
     const video = await staticProvider
@@ -20,7 +20,7 @@ export const getVideoWatchedPercentAsync = async (userId: number, videoId: numbe
         .where("v.id = :videoId", { videoId })
         .getOneOrFail();
 
-    if (video.lengthSeconds == 0)
+    if (video.lengthSeconds === 0)
         return 0;
 
     const netWatchedSeconds = chunks

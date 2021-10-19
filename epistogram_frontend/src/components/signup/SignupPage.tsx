@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { globalConfig } from "../../configuration/config";
 import { getAssetUrl, usePaging } from "../../frontendHelpers";
 import { useNavigation } from '../../services/navigatior';
 import { translatableTexts } from '../../translatableTexts';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../HOC/AuthenticationFrame';
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
-import Navbar from "../navbar/Navbar";
 import { SignupQuestions } from '../SignupQuestions';
 import { PersonalityAssessment } from '../universal/PersonalityAssessment';
 import { SlidesDisplay } from "../universal/SlidesDisplay";
@@ -15,7 +13,6 @@ import { SignupWrapper } from "./SignupWrapper";
 export const SignupPage = () => {
 
     // slides
-    const gereetImageUrl = "";
     const slidesState = usePaging([1, 2, 3]);
     const user = useContext(CurrentUserContext)!;
     const refetchUserAsync = useContext(RefetchUserAsyncContext)!;

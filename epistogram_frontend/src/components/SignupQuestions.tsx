@@ -26,7 +26,7 @@ export const SignupQuestions = (props: {
     const getSelectedAnswerId = (questionId: number) => {
 
         const currentQuestionSelectedAnswer = questionAnswers
-            .filter(x => x.questionId == questionId)[0];
+            .filter(x => x.questionId === questionId)[0];
 
         return currentQuestionSelectedAnswer?.answerId as number | null;
     }

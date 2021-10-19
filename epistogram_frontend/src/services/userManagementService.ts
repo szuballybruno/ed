@@ -1,13 +1,23 @@
+import { useReactQuery } from "../frontendHelpers";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
-import FinalizeUserRegistrationDTO from "../models/shared_models/FinalizeUserRegistrationDTO";
-import { httpPostAsync } from "./httpClient";
+import { apiRoutes } from "../models/shared_models/types/apiRoutes";
+import { UserEditDTO } from "../models/shared_models/UserEditDTO";
+import { httpGetAsync, httpPostAsync } from "./httpClient";
 
-export const createInvitedUserAsync = (dto: CreateInvitedUserDTO) => {
+export const inviteUserAsync = (dto: CreateInvitedUserDTO) => {
 
-    return httpPostAsync("users/create-invited-user", dto);
+    return httpPostAsync(apiRoutes.userManagement.inviteUser, dto);
 }
 
-export const finalizeUserRegistartionAsync = (dto: FinalizeUserRegistrationDTO) => {
+export const useEditUserData = (editedUserId: number) => {
 
-    return httpPostAsync("users/finalize-user-registration", dto);
+    const queryRes = useReactQuery<UserEditDTO>(
+        ["userEditDataQuery"],
+        () => httpGetAsync(apiRoutes.userManagement.getEditUserData, { editedUserId: editedUserId }));
+
+    return {
+        userEditData: queryRes.data,
+        userEditDataStatus: queryRes.status,
+        userEditDataError: queryRes.error
+    }
 }

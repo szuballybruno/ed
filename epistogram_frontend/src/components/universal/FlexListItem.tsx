@@ -1,8 +1,6 @@
 import { Flex, FlexProps } from "@chakra-ui/layout";
-import { Box } from "@chakra-ui/react";
 import { Checkbox } from "@mui/material";
-import { ReactNode, useState } from "react";
-import { FlexImage } from "./FlexImage";
+import { ReactNode } from "react";
 
 export const FlexListItem = (props: FlexProps & {
     onClick?: () => void,

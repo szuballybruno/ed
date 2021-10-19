@@ -23,7 +23,7 @@ export const getAsyncActionHandler = (wrappedAction: (req: Request, res: Respons
 }
 
 
-export type ActionParamsType = { req: Request, res: Response, next: NextFunction, userId: number | null };
+export type ActionParamsType = { req: Request, res: Response, next: NextFunction, userId: number };
 export type EndpointOptionsType = { isPublic?: boolean, isPost?: boolean };
 
 export const getAsyncActionHandlerNew = (wrappedAction: (params: ActionParamsType) => Promise<any>, options: EndpointOptionsType) => {
@@ -32,7 +32,7 @@ export const getAsyncActionHandlerNew = (wrappedAction: (params: ActionParamsTyp
 
         const asyncActionWrapper = async () => {
 
-            const userId = options.isPublic ? null : await getUserIdFromRequest(req);
+            const userId = options.isPublic ? -1 : await getUserIdFromRequest(req);
             return await wrappedAction({ req, res, next, userId })
         }
 
@@ -53,15 +53,15 @@ export const getAsyncActionHandlerNew = (wrappedAction: (params: ActionParamsTyp
 
 export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
 
-    const wrapperFunction = (req: Request, res: Response, next: NextFunction) => {
+    const wrapperFunction = (wrapperReq: Request, wrapperRes: Response, wrapperNext: NextFunction) => {
 
-        wrappedAction(req, res, next)
-            .then(() => next())
+        wrappedAction(wrapperReq, wrapperRes, wrapperNext)
+            .then(() => wrapperNext())
             .catch((error: any) => {
 
                 logError(error);
 
-                respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
+                respondError(wrapperRes, error.message, (error.type ?? "internal server error") as ErrorType);
             });
     }
 
@@ -187,7 +187,7 @@ export const getCookies = (req: Request) => {
         }));
 }
 
-export const getCookie = (req: Request, key: string) => getCookies(req).filter(x => x.key == key)[0];
+export const getCookie = (req: Request, key: string) => getCookies(req).filter(x => x.key === key)[0];
 
 export class TypedError extends Error {
 

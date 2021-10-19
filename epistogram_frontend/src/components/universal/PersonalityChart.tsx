@@ -21,7 +21,7 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
                         sections.push(temp);
                         temp = "";
                     } else {
-                        if (index == (words.length - 1)) {
+                        if (index === (words.length - 1)) {
                             sections.push(concat);
                             return;
                         } else {
@@ -31,7 +31,7 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
                     }
                 }
 
-                if (index == (words.length - 1)) {
+                if (index === (words.length - 1)) {
                     sections.push(item);
                     return;
                 }
@@ -104,5 +104,5 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
             labels: splitKeysByCharCount(keys, 20),
             datasets: sets
         }}
-        style={{height: 400}} />
+        style={{ height: 400 }} />
 }

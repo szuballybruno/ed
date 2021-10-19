@@ -1,13 +1,13 @@
 import { Flex } from '@chakra-ui/layout';
-import { FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
-import React, { createRef, useRef, useState } from 'react';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { Radio, RadioGroup, Typography } from '@mui/material';
+import React, { useRef, useState } from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { httpPostAsync } from "../../services/httpClient";
 import { useShowErrorDialog } from "../../services/notifications";
 import { CourseItemList } from "../universal/CourseItemList";
 import { EpistoButton } from '../universal/EpistoButton';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { EpistoPopper } from '../universal/EpistoPopper';
 
 export const CourseItemSelector = (props: {

@@ -2,7 +2,7 @@ import { Box, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { isArray } from "../../frontendHelpers";
 import { LoadingStateType } from "../../models/types";
 
@@ -25,7 +25,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     const state = getLoadingState(loadingState);
 
     const [prevState, setPrevState] = useState<LoadingStateType>("idle");
-    const showOverlay = prevState == "error" || prevState == "loading";
+    const showOverlay = prevState === "error" || prevState === "loading";
     const renderContent = onlyRenderIfLoaded ? !showOverlay : true;
     const [trigger, setTrigger] = useState(0);
 
@@ -81,14 +81,14 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
             p="30px">
 
             {/* error */}
-            {finalState == "error" && <Flex align="center" direction="column">
+            {finalState === "error" && <Flex align="center" direction="column">
                 <ErrorOutlineIcon style={{ width: "100px", height: "100px" }}></ErrorOutlineIcon>
                 <Heading as="h1">Az alkalmazás betöltése sikertelen</Heading>
                 <Text maxWidth="300px">{singleError?.message}</Text>
             </Flex>}
 
             {/* loading */}
-            {finalState == "loading" && <Flex
+            {finalState === "loading" && <Flex
                 id="loadingDisplayContainer"
                 direction="column"
                 justify="center"
@@ -110,13 +110,13 @@ const getLoadingState = (loadingState: LoadingStateType | LoadingStateType[]) =>
 
         const loadingStates = loadingState as LoadingStateType[];
 
-        if (loadingStates.some(x => x == "error"))
+        if (loadingStates.some(x => x === "error"))
             return "error" as LoadingStateType;
 
-        if (loadingStates.some(x => x == "loading"))
+        if (loadingStates.some(x => x === "loading"))
             return "loading" as LoadingStateType;
 
-        if (loadingStates.some(x => x == "success"))
+        if (loadingStates.some(x => x === "success"))
             return "success" as LoadingStateType;
 
         return "idle" as LoadingStateType;

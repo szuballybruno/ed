@@ -9,6 +9,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { useJobTitles } from "../services/dataService";
 import { useOrganizations } from "../services/organizationsService";
+import { translatableTexts } from "../translatableTexts";
 import { AddFrame } from "./add_frame/AddFrame";
 import { AdministrationSubpageHeader } from "./administration/universal/adminAddHeader/AdministrationSubpageHeader";
 import { CurrentUserContext } from "./HOC/AuthenticationFrame";
@@ -40,12 +41,12 @@ export const EditUserControl = (props: {
     const { editDTO, saveUserAsync } = props;
 
     // editable fields
-    const [firstName, setFirstName] = useState(editDTO?.firstName ?? "");
-    const [lastName, setLastName] = useState(editDTO?.lastName ?? "");
-    const [email, setEmail] = useState(editDTO?.email ?? "");
-    const [selectedRole, setSelectedRole] = useState<RoleDTO | null>(editDTO?.role ?? null);
-    const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(editDTO?.jobTitle ?? null);
-    const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(editDTO?.organization ?? null);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [selectedRole, setSelectedRole] = useState<RoleDTO | null>(null);
+    const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
+    const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(null);
 
     const user = useContext(CurrentUserContext) as UserDTO;
     const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;
@@ -55,9 +56,16 @@ export const EditUserControl = (props: {
 
     useEffect(() => {
 
-        if (organizations)
-            setSelectedOrganization(organizations[0]);
-    }, [organizations]);
+        if (!editDTO)
+            return;
+
+        setFirstName(editDTO.firstName);
+        setLastName(editDTO.lastName);
+        setEmail(editDTO.email);
+        setSelectedRole(editDTO.role);
+        setSelectedJobTitle(editDTO.jobTitle);
+        setSelectedOrganization(editDTO.organization);
+    }, [editDTO]);
 
     const handleSaveUserAsync = async () => {
 
@@ -152,7 +160,7 @@ export const EditUserControl = (props: {
                     onClick={() => handleSaveUserAsync()}
                     style={{ marginTop: "20px" }}>
 
-                    Feltöltés
+                    {translatableTexts.editUserControl.saveUser}
                 </Button>
 
             </Flex>

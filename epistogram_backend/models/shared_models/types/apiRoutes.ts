@@ -9,8 +9,15 @@ export const apiRoutes = {
 
     misc: {
         logoutUser: "/misc/logout-user",
-        getJobTitles: "/get-job-titles",
-        getEditUserData: "/get-edit-user-data"
+        getJobTitles: "/get-job-titles"
+    },
+
+    userManagement: {
+        getEditUserData: "/users/get-edit-user-data",
+        inviteUser: "/users/invite-user",
+        deleteUser: "/users/delete-user",
+        upadateUser: "/users/update-user",
+        getUserListForAdministration: "/users/get-user-administartion-user-list"
     },
 
     signup: {

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useEditUserData } from '../services/dataService';
+import { useEditUserData } from '../services/userManagementService';
 import { EditUserControl } from './EditUserControl';
 
 const EditUser = () => {

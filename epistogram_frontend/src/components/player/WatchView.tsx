@@ -22,7 +22,7 @@ import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
 import { EpistoButton } from "../universal/EpistoButton";
 import { TimeoutFrame, useTimeoutFrameLogic } from "../universal/TimeoutFrame";
 import { useNavigation } from "../../services/navigatior";
-import {VideoContent} from "./description/VideoContent";
+import { VideoContent } from "./description/VideoContent";
 import Comments from "./description/Comments";
 
 export const WatchView = (props: {
@@ -83,8 +83,8 @@ export const WatchView = (props: {
     const VideoContents = () => <VideoContent />;
     const VideoComments = () => <Comments />;
 
-    const currentQuestionAnswered = answeredQuestionIds
-        .some(qid => currentQuestion?.questionId === qid);
+    // const currentQuestionAnswered = answeredQuestionIds
+    //     .some(qid => currentQuestion?.questionId === qid);
 
     const enableNewDialogPopups = () => {
 
@@ -110,7 +110,7 @@ export const WatchView = (props: {
             timeoutLogic.stop();
         }
 
-    }, [isVideoEnded]);
+    }, [isVideoEnded, timeoutLogic]);
 
     // show dialogs
     useEffect(() => {
@@ -149,7 +149,7 @@ export const WatchView = (props: {
             setShowNewDialogsEnabled(false);
             setCurrentStillWatchingMarker(showStillPlayingDialog);
         }
-    }, [playedSeconds]);
+    }, [playedSeconds, answeredQuestionIds, hasQuestions, isSeeking, isShowNewDialogsEnabled, questions, stillWatchingDilalogMarkers]);
 
     // when video length is set,
     // calculate are you still watching dialog seconds
@@ -177,7 +177,7 @@ export const WatchView = (props: {
         }
 
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
-    }, [videoLength]);
+    }, [videoLength, hasQuestions]);
 
     // playback watcher
     usePlaybackWatcher(

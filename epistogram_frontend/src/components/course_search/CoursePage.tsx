@@ -1,25 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import Navbar from "../navbar/Navbar";
-import {useParams} from "react-router";
 import {
-    AccordionButton, AccordionIcon,
-    AccordionItem, AccordionPanel,
     Box,
     Container,
     Divider,
     Flex
 } from "@chakra-ui/react";
-import {useAdminEditedCourse} from "../../services/courseService";
-import {CourseItemDTO} from "../../models/shared_models/CourseItemDTO";
-import {AdminPageEditCourseDTO} from "../../models/shared_models/AdminPageEditCourseDTO";
-import {MainWrapper} from "../HOC/MainPanels";
-import {Accordion, AccordionDetails, AccordionSummary, Tab, Tabs, Typography} from "@mui/material";
-import {getAssetUrl} from "../../frontendHelpers";
-import {EpistoButton} from "../universal/EpistoButton";
-import {LearningStatisticsSeciton} from "../learningStatistics/LearningStatisticsSeciton";
-import {EpistoHeader} from "../administration/universal/EpistoHeader";
-import {Radar} from "react-chartjs-2";
-import {ExpandMore} from "@mui/icons-material";
+import { ExpandMore } from "@mui/icons-material";
+import { Accordion, AccordionDetails, AccordionSummary, Tab, Tabs, Typography } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { Radar } from "react-chartjs-2";
+import { useParams } from "react-router";
+import { getAssetUrl } from "../../frontendHelpers";
+import { AdminPageEditCourseDTO } from "../../models/shared_models/AdminPageEditCourseDTO";
+import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { useAdminEditedCourse } from "../../services/courseService";
+import { EpistoHeader } from "../administration/universal/EpistoHeader";
+import { MainWrapper } from "../HOC/MainPanels";
+import Navbar from "../navbar/Navbar";
+import { EpistoButton } from "../universal/EpistoButton";
 
 export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} direction={"column"} alignItems={"flex-start"}>
     <EpistoHeader text={"A kurzus rövid leírása"} my={10} />
@@ -33,10 +30,10 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
     }}>
         Bővebben
     </EpistoButton>
-    <EpistoHeader text={"Mit tanulhatsz ezen a kurzuson?"} my={10} mt={40}  />
+    <EpistoHeader text={"Mit tanulhatsz ezen a kurzuson?"} my={10} mt={40} />
     <Flex w={"100%"}>
         <Flex direction={"column"} minW={"50%"}>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -48,7 +45,7 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -58,7 +55,7 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -68,7 +65,7 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -78,7 +75,7 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -90,7 +87,7 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
             </Flex>
         </Flex>
         <Flex direction={"column"} minW={"50%"}>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -100,7 +97,7 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -110,7 +107,7 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -120,7 +117,7 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -130,7 +127,7 @@ export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} directio
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} >
                     <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                         borderRadius: 5,
@@ -237,34 +234,34 @@ export const CoursePageRequirements = () => <Flex mt={10} w={"100%"} h={500} dir
         </Flex>
     </Flex>
 
-    <EpistoHeader text={"Milyen technikai követelményei vannak a kurzusnak?"} my={10} mt={40}  />
+    <EpistoHeader text={"Milyen technikai követelményei vannak a kurzusnak?"} my={10} mt={40} />
     <Flex w={"100%"}>
         <Flex direction={"column"} minW={"50%"}>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
                 </Flex>
             </Flex>
-            <Flex w={"100%"} h={30} px={15}  mt={10}>
+            <Flex w={"100%"} h={30} px={15} mt={10}>
                 <Flex w={30} h={30} p={5} ></Flex>
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
                     <Typography>Lorem ipsum dolor sit amet</Typography>
@@ -382,34 +379,29 @@ const CoursePage = () => {
     const [currentTab, setCurrentTab] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+
+        console.log(event);
         setCurrentTab(newValue);
     };
 
     const [thumbnailURL, setThumbnailURL] = useState("")
-    const [colorOne, setColorOne] = useState("")
-    const [colorTwo, setColorTwo] = useState("")
     const [title, setTitle] = useState("")
-    const [teacherName, setTeacherName] = useState("")
     const [category, setCategory] = useState("")
-    const [courseItems, setCourseItems] = useState<CourseItemDTO[]>([])
+    const [, setCourseItems] = useState<CourseItemDTO[]>([])
 
-    const { course, status, error } = useAdminEditedCourse(Number(params.courseId));
+    const { course } = useAdminEditedCourse(Number(params.courseId));
 
     const setEditCourseState = (course: AdminPageEditCourseDTO) => {
         const {
             title,
             category,
             thumbnailURL,
-            colorOne,
-            colorTwo,
             courseItems
         } = course
 
         setTitle(title)
         setCategory(category)
         setThumbnailURL(thumbnailURL)
-        setColorOne(colorOne)
-        setColorTwo(colorTwo)
         setCourseItems(courseItems)
     }
     useEffect(() => {
@@ -454,11 +446,11 @@ const CoursePage = () => {
             <Navbar />
             <Flex position={"relative"} id="rightPanel"
                 //bg="#fafafa"
-                  p={0}
-                  flex="1"
-                  overflowX="hidden"
-                  overflowY="scroll"
-                  direction="column">
+                p={0}
+                flex="1"
+                overflowX="hidden"
+                overflowY="scroll"
+                direction="column">
                 <Flex
                     w={"100%"}
                     pl={110}
@@ -478,12 +470,12 @@ const CoursePage = () => {
                         </Container>
                         <Flex direction={"row"} mt={20} w={"100%"} justifyContent={"space-evenly"}>
                             <Flex direction={"row"}
-                                  w={200}
-                                  h={60}
-                                  bg={"white"}
-                                  borderWidth={1}
-                                  borderRadius={5}
-                                  shadow={"#00000024 0px 0px 3px 0px"}>
+                                w={200}
+                                h={60}
+                                bg={"white"}
+                                borderWidth={1}
+                                borderRadius={5}
+                                shadow={"#00000024 0px 0px 3px 0px"}>
                                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
                                     <img src={getAssetUrl("")} alt={""} style={{
                                         width: 50,
@@ -497,12 +489,12 @@ const CoursePage = () => {
                             </Flex>
 
                             <Flex direction={"row"}
-                                  w={200}
-                                  h={60}
-                                  bg={"white"}
-                                  borderWidth={1}
-                                  borderRadius={5}
-                                  shadow={"#00000024 0px 0px 3px 0px"}>
+                                w={200}
+                                h={60}
+                                bg={"white"}
+                                borderWidth={1}
+                                borderRadius={5}
+                                shadow={"#00000024 0px 0px 3px 0px"}>
                                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
                                     <img src={getAssetUrl("")} alt={""} style={{
                                         width: 50,
@@ -516,12 +508,12 @@ const CoursePage = () => {
                             </Flex>
 
                             <Flex direction={"row"}
-                                  w={200}
-                                  h={60}
-                                  bg={"white"}
-                                  borderWidth={1}
-                                  borderRadius={5}
-                                  shadow={"#00000024 0px 0px 3px 0px"}>
+                                w={200}
+                                h={60}
+                                bg={"white"}
+                                borderWidth={1}
+                                borderRadius={5}
+                                shadow={"#00000024 0px 0px 3px 0px"}>
                                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
                                     <img src={getAssetUrl("")} alt={""} style={{
                                         width: 50,
@@ -534,12 +526,12 @@ const CoursePage = () => {
                                 </Flex>
                             </Flex>
                             <Flex direction={"row"}
-                                  w={200}
-                                  h={60}
-                                  bg={"white"}
-                                  borderWidth={1}
-                                  borderRadius={5}
-                                  shadow={"#00000024 0px 0px 3px 0px"}>
+                                w={200}
+                                h={60}
+                                bg={"white"}
+                                borderWidth={1}
+                                borderRadius={5}
+                                shadow={"#00000024 0px 0px 3px 0px"}>
                                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
                                     <img src={getAssetUrl("")} alt={""} style={{
                                         width: 50,
@@ -606,7 +598,7 @@ const CoursePage = () => {
                                     objectFit: "cover"
                                 }} alt={""} />
                             </Flex>
-                            <Flex w={"100%"} h={30} px={15}  mt={10}>
+                            <Flex w={"100%"} h={30} px={15} mt={10}>
                                 <Flex w={30} h={30} p={5} >
                                     <img src={getAssetUrl("/course_page_icons/right_panel_course_lenght.svg")} style={{
                                         borderRadius: 5,
@@ -703,10 +695,11 @@ const CoursePage = () => {
                             <EpistoButton
                                 style={{ flex: "1", color: "var(--epistoTeal)", maxHeight: 40, marginTop: 15, marginBottom: 15 }}
                                 variant="outlined"
-                                onClick={() => {}}
+                                onClick={() => { }}
                                 icon={
                                     <img
                                         src={getAssetUrl("/icons/play2.svg")}
+                                        alt=""
                                         style={{
                                             width: "25px",
                                             height: "25px",
@@ -734,7 +727,7 @@ const CoursePage = () => {
                                 </Flex>
 
 
-                                <Flex w={"100%"} h={60} px={15}  mt={10}>
+                                <Flex w={"100%"} h={60} px={15} mt={10}>
                                     <Flex w={100} h={60} ></Flex>
                                     <Flex direction={"column"} flex={1} mx={4} pl={5} justifyContent={"center"} alignItems={"flex-start"}>
                                         <Typography>Kurzus 1</Typography>
@@ -778,10 +771,11 @@ const CoursePage = () => {
                                 <EpistoButton
                                     style={{ flex: "1", color: "var(--epistoTeal)", maxHeight: 40, marginTop: 15, marginBottom: 15 }}
                                     variant="outlined"
-                                    onClick={() => {}}
+                                    onClick={() => { }}
                                     icon={
                                         <img
                                             src={getAssetUrl("/icons/play2.svg")}
+                                            alt=""
                                             style={{
                                                 width: "25px",
                                                 height: "25px",

@@ -31,8 +31,8 @@ export const SignupRadioGroup = (
         {answers
             .map((answer) => {
 
-                const isIncorrect = correctAnswerId != answer.answerId && selectedAnswerId == answer.answerId;
-                const isCorrect = correctAnswerId == answer.answerId && !!selectedAnswerId;
+                const isIncorrect = correctAnswerId !== answer.answerId && selectedAnswerId === answer.answerId;
+                const isCorrect = correctAnswerId === answer.answerId && !!selectedAnswerId;
 
                 let borderColor = "black";
 
@@ -54,7 +54,7 @@ export const SignupRadioGroup = (
                                 : "none"
                             : undefined
                     }}
-                    control={<Radio checked={answer.answerId == selectedAnswerId} />}
+                    control={<Radio checked={answer.answerId === selectedAnswerId} />}
                     label={answer.answerText} />
             })}
     </RadioGroup>

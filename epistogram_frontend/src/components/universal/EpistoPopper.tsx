@@ -29,31 +29,3 @@ export const EpistoPopper = (props: {
         </FlexFloat>
     </Popover>
 }
-
-{/* <Popper
-        open={!!target}
-        placement={`bottom${placementXSlug}` as any}
-        anchorEl={target}
-        disablePortal={true}
-        modifiers={[
-            {
-                name: 'flip',
-                enabled: true,
-                options: {
-                    altBoundary: false,
-                    rootBoundary: 'document',
-                    padding: 8,
-                },
-            },
-            {
-                name: 'preventOverflow',
-                enabled: false,
-                options: {
-                    altAxis: false,
-                    altBoundary: true,
-                    tether: true,
-                    rootBoundary: 'document',
-                    padding: 8,
-                },
-            }
-        ]}></Popper> */}
