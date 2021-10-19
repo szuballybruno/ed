@@ -59,6 +59,8 @@ export const SignupQuestions = (props: {
 
         if (signupData?.isCompleted)
             onJumpToResults();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [signupData?.isCompleted]);
 
     // useEffect(() => {

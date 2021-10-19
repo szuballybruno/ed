@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { useSaveExamAnswer } from "../services/examService";
 import { useShowErrorDialog } from "../services/notifications";

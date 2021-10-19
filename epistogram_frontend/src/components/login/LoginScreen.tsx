@@ -45,6 +45,8 @@ const LoginScreen = (): JSX.Element => {
                 navigate(applicationRoutes.signupRoute.route);
             }
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authState]);
 
     // watch for login call errors
@@ -65,6 +67,8 @@ const LoginScreen = (): JSX.Element => {
 
             showErrorDialog("" + loginUserError);
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loginUserError]);
 
     return (

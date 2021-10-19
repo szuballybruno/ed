@@ -144,6 +144,7 @@ export const RegistrationPage = () => {
                     Elfogadom az
                     <a
                         target="_blank"
+                        rel="noreferrer"
                         style={{ color: "#0055CC" }}
                         href={"https://epistogram.com/adatkezelesi-tajekoztato"}>
                         adatkezelési nyilatkozat

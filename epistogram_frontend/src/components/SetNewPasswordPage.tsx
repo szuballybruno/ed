@@ -1,4 +1,4 @@
-import { Flex, Image } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
@@ -11,7 +11,6 @@ import { LoadingFrame } from "./HOC/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "./HOC/MainPanels";
 import Navbar from "./navbar/Navbar";
 import { EpistoButton } from "./universal/EpistoButton";
-import { FlexFloat } from "./universal/FlexFloat";
 
 export const SetNewPasswordPage = () => {
 

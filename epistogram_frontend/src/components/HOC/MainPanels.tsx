@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import React, { CSSProperties, ReactNode } from 'react';
 import { FlexFloat } from '../universal/FlexFloat';
 

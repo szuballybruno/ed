@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import MyCourses from "./courseInsights/MyCourses";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
-import { LearningInsightsOverview as LearningInsightsOverview } from "./LearningInsightsOverview";
+import { LearningInsightsOverview } from "./LearningInsightsOverview";
 import { NavigationLinkList } from "./NavigationLinkList";
 import Navbar from "./navbar/Navbar";
 import { MyExams } from "./MyExams";

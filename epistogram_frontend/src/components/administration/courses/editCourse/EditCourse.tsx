@@ -1,25 +1,23 @@
-import { Checkbox, Divider, List, ListItem, Radio, Switch, Tab, Tabs, TextField, Typography } from "@mui/material";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import { Flex } from "@chakra-ui/react";
+import { Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { HexColorPicker } from "react-colorful";
 import { useParams } from "react-router";
 import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
 import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../../models/shared_models/AdminPageEditCourseDTO";
+import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
 import { useAdminEditedCourse } from "../../../../services/courseService";
 import { httpPostAsync } from "../../../../services/httpClient";
+import SelectImage from "../../../selectImage/SelectImage";
 import EditItem from "../../../universal/editItem/EditItem";
+import { AdminSubpageHeader } from "../../AdminSubpageHeader";
 import AdminDashboardHeader from "../adminDashboardHeader/AdminDashboardHeader";
 import { AdministrationListItem } from "../adminDashboardSearchItem/AdministrationListItem";
 import { SaveBar } from "../saveBar/SaveBar";
 import { AdminDashboardSearch } from "../searchBar/AdminDashboardSearch";
-import SelectImage from "../../../selectImage/SelectImage";
 import { SelectMultiple } from "../selectMultiple/SelectMultiple";
 import classes from "./editCourse.module.scss";
-import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
-import { useNavigation } from "../../../../services/navigatior";
-import { applicationRoutes } from "../../../../configuration/applicationRoutes";
-import { Flex } from "@chakra-ui/react";
-import { AdminSubpageHeader } from "../../AdminSubpageHeader";
 
 /* TODO:
 *   - Create a new CourseItemDTO for this page
@@ -31,12 +29,12 @@ export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
 }
 
-const updateEditPage = (data?: AdminPageEditCourseDTO) => {
-    console.log("Data is updated on the server")
+// const updateEditPage = (data?: AdminPageEditCourseDTO) => {
+//     console.log("Data is updated on the server")
 
-    console.log("This is the data: " + JSON.stringify(data))
-    //Send data in post request here
-}
+//     console.log("This is the data: " + JSON.stringify(data))
+//     //Send data in post request here
+// }
 
 export const EditCourse = () => {
     console.log("EditCourse loaded")
@@ -59,7 +57,7 @@ export const EditCourse = () => {
     const [groups, setGroups] = useState<EditListItemDTO[]>([])
     const [tags, setTags] = useState<EditListItemDTO[]>([])
     const [teachers, setTeachers] = useState<EditListItemDTO[]>([])
-    const { course, status, error } = useAdminEditedCourse(Number(courseId));
+    const { course } = useAdminEditedCourse(Number(courseId));
 
     useCreateObjectURL(thumbnailImage, setThumbnailURL)
 
@@ -140,36 +138,10 @@ export const EditCourse = () => {
         )}
     </Draggable>
 
-    const [currentTab, setCurrentTab] = useState("")
-
-    const { navigate } = useNavigation()
-
-    const administrationRoutes = applicationRoutes.administrationRoute;
-
-    useEffect(() => {
-        const segments = window.location.pathname.split('/');
-        const last = segments.pop() || segments.pop();
-        last && setCurrentTab(last)
-    }, [])
-
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        const segments = window.location.pathname.split('/');
-        const last = segments.pop() || segments.pop(); // Handle potential trailing slash
-        navigate(`${administrationRoutes.coursesRoute.route}/${courseId}/${newValue}`)
-        newValue && setCurrentTab(newValue);
-    };
-
     return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
 
         {/* admin header */}
-        <AdminSubpageHeader>
-            <Flex mx={20} flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} h={60}>
-                <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Szerkesztés" value={"edit"} />
-                    <Tab label="Statisztika" value={"statistics"} />
-                </Tabs>
-            </Flex>
-        </AdminSubpageHeader>
+        <AdminSubpageHeader />
 
         <div className={classes.editDataOuterWrapper}>
 

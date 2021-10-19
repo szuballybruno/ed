@@ -13,7 +13,6 @@ import { translatableTexts } from "../../translatableTexts";
 import { AddFrame } from "../add_frame/AddFrame";
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { EpistoSelect } from "../universal/EpistoSelect";
-import { AdminSubpageHeader } from "./AdminSubpageHeader";
 
 export const roles = [
     {

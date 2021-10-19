@@ -44,6 +44,8 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
 
             setTrigger(x => x + 1);
         }, 200);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state]);
 
     useEffect(() => {
@@ -52,6 +54,8 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
             return;
 
         setPrevState(state);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [trigger]);
 
     const finalState = prevState;

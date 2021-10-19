@@ -50,6 +50,8 @@ export const usePlaybackWatcher = (
     useEffect(() => {
 
         samplePlayedSeconds();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isPlaying]);
 
     // sample
@@ -61,6 +63,7 @@ export const usePlaybackWatcher = (
 
         samplePlayedSeconds();
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [playedSeconds]);
 
     // watched state changed 
@@ -74,9 +77,7 @@ export const usePlaybackWatcher = (
 
             if (videoSamplingResult?.maxWathcedSeconds)
                 setMaxWatchedSeconds(videoSamplingResult.maxWathcedSeconds);
-        },
-        [
-            videoSamplingResult?.isWatchedStateChanged,
-            videoSamplingResult?.maxWathcedSeconds
-        ])
+
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [videoSamplingResult?.isWatchedStateChanged, videoSamplingResult?.maxWathcedSeconds])
 }

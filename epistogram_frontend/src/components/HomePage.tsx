@@ -1,12 +1,9 @@
 import { Box, Flex } from '@chakra-ui/layout';
-import React, { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { mockTasks } from '../mockData';
 import { useOverviewPageDTO } from "../services/dataService";
 import { translatableTexts } from '../translatableTexts';
 import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
-import { EpistoDialog, useEpistoDialogLogic } from './EpistoDialog';
-import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
 import Navbar from "./navbar/Navbar";
@@ -20,7 +17,6 @@ import ListItem from './universal/listItem/ListItem';
 
 const HomePage = () => {
 
-    const user = useContext(CurrentUserContext);
     const { pageDTO, status, error } = useOverviewPageDTO();
 
     const currentItem = pageDTO?.currentCourseItems
@@ -30,7 +26,6 @@ const HomePage = () => {
     const hasCurrentItem = !!currentItem;
     const hasCurrentCourse = hasCurrentItem;
     const courseItems = pageDTO?.currentCourseItems;
-    const recommendedCourses = pageDTO?.recommendedCourses;
 
     return <MainWrapper>
 

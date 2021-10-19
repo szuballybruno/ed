@@ -26,7 +26,7 @@ import { AdminSubpageHeader } from "../../AdminSubpageHeader";
 
 export const CourseAdministration = () => {
 
-    const [searchText, setSearchText] = React.useState("");
+    const [searchText] = React.useState("");
     const { courses, coursesStatus, coursesError } = useAdministratedCourses(searchText);
 
     const administrationRoutes = applicationRoutes.administrationRoute;

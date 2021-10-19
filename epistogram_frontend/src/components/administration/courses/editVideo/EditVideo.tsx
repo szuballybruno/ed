@@ -1,22 +1,18 @@
-import React from 'react';
-import classes from "./editItemPage.module.scss";
-import SelectImage from "../../../selectImage/SelectImage";
 import { Divider, List, Typography } from "@mui/material";
-import { useParams } from "react-router";
-import EditItem from "../../../universal/editItem/EditItem";
+import React from 'react';
 import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
+import SelectImage from "../../../selectImage/SelectImage";
+import EditItem from "../../../universal/editItem/EditItem";
+import classes from "./editItemPage.module.scss";
 
 export const EditVideo = () => {
 
-    const { courseId, itemId } = useParams<{ courseId: string, itemId: string }>();
     const [editedVideoTitle, setEditedVideoTitle] = React.useState("")
     const [editedVideoSubTitle, setEditedVideoSubTitle] = React.useState("")
     const [editedVideoURL, setEditedVideoURL] = React.useState("")
     const [editedVideoDescription, setEditedVideoDescription] = React.useState("")
     const [editedVideoThumbnailImage, setEditedVideoThumbnailImage] = React.useState("")
     const [editedVideoThumbnailURL, setEditedVideoThumbnailURL] = React.useState("")
-    const [editedVideoTags, setEditedVideoTags] = React.useState([])
-    const [editedVideoOverlays, setEditedVideoOverlays] = React.useState([])
 
     useCreateObjectURL(editedVideoThumbnailImage, setEditedVideoThumbnailURL)
 

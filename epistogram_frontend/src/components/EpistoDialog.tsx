@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/layout";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { DialogOptions } from "../models/types";
 import { EpistoButton } from "./universal/EpistoButton";

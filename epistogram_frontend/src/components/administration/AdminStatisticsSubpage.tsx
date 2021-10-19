@@ -1,6 +1,6 @@
 import React from 'react';
 import StatisticsCard from "../statisticsCard/StatisticsCard";
-import { Bar, Doughnut, Line, Pie, Radar, Scatter } from "react-chartjs-2";
+import { Bar, Doughnut, Line, Pie, Radar } from "react-chartjs-2";
 import { LearningStatisticsSeciton } from '../learningStatistics/LearningStatisticsSeciton';
 import { getAssetUrl } from "../../frontendHelpers";
 
@@ -44,27 +44,27 @@ const AdminStatistics = () => {
     };
 
 
-    const data2 = {
-        labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
-        datasets: [
-            {
-                label: 'Unfilled',
-                fill: false,
-                backgroundColor: "#067daf",
-                borderColor: "#067daf",
-                data: [57, 26, 31, -42, 34],
-            },
-            {
-                label: 'Dashed',
-                fill: false,
-                backgroundColor: "#d9617d",
-                borderColor: "#D9617DFF",
-                borderDash: [5, 5],
-                data: [5, -59, 72, 32, -19, 23],
-                type: 'line'
-            }
-        ]
-    };
+    // const data2 = {
+    //     labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
+    //     datasets: [
+    //         {
+    //             label: 'Unfilled',
+    //             fill: false,
+    //             backgroundColor: "#067daf",
+    //             borderColor: "#067daf",
+    //             data: [57, 26, 31, -42, 34],
+    //         },
+    //         {
+    //             label: 'Dashed',
+    //             fill: false,
+    //             backgroundColor: "#d9617d",
+    //             borderColor: "#D9617DFF",
+    //             borderDash: [5, 5],
+    //             data: [5, -59, 72, 32, -19, 23],
+    //             type: 'line'
+    //         }
+    //     ]
+    // };
 
 
     const data3 = [];
@@ -80,25 +80,25 @@ const AdminStatistics = () => {
         data4.push({ x: i, y: prev2 });
     }
 
-    const data5 = {
-        labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
-        datasets: [
-            {
-                label: 'Unfilled',
-                backgroundColor: "#067daf",
-                borderColor: "#067daf",
-                data: data3,
-                radius: 0
-            }, {
-                label: 'Dashed',
-                backgroundColor: "#d9617d",
-                borderColor: "#D9617DFF",
-                borderDash: [5, 5],
-                radius: 0,
-                data: data4,
-            }
-        ]
-    };
+    // const data5 = {
+    //     labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
+    //     datasets: [
+    //         {
+    //             label: 'Unfilled',
+    //             backgroundColor: "#067daf",
+    //             borderColor: "#067daf",
+    //             data: data3,
+    //             radius: 0
+    //         }, {
+    //             label: 'Dashed',
+    //             backgroundColor: "#d9617d",
+    //             borderColor: "#D9617DFF",
+    //             borderDash: [5, 5],
+    //             radius: 0,
+    //             data: data4,
+    //         }
+    //     ]
+    // };
 
     return (
         <div >

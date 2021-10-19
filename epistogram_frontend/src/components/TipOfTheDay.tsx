@@ -1,7 +1,5 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
-import { m } from "framer-motion"
-import { useEffect, useRef } from "react"
 import { getAssetUrl, usePaging } from "../frontendHelpers"
 import { tipOfTheDay } from "../services/dataService"
 import { translatableTexts } from "../translatableTexts"
@@ -36,12 +34,14 @@ export const TipOfTheDay = (props: {} & FlexProps) => {
                         transform: "translateX(5px)",
                         filter: "brightness(2)"
                     }}
+                    alt=""
                     src={getAssetUrl("/icons/play2.svg")} />
             </Box>
         </Flex>
         <img
             width="100%"
             src={getAssetUrl("/images/tipoftheday.jpg")}
+            alt=""
             style={{
                 borderRadius: "15px"
             }}>

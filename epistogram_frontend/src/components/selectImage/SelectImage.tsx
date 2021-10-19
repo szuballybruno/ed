@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
-import classes from "./selectImage.module.scss"
-import { Add, Edit, EditOutlined } from "@mui/icons-material";
+import { Add, EditOutlined } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
+import React, { useRef } from 'react';
+import classes from "./selectImage.module.scss";
 
 const SelectImage = (props: {
     onChange: (e: any) => any,
