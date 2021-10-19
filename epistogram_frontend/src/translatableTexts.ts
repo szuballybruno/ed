@@ -51,7 +51,12 @@ export const translatableTexts = {
         answerIsCorrect: "Helyesen válaszoltál!",
         answerIsIncorrect: "Helytelen válasz!",
         nextQuestion: "Következő kérdés",
-        noMoreQuestionsGoWatchVideos: "Jelenleg nincs több megválaszolatlan kérdésed. Új kérdésekre akkor tehetsz szert, ha videókat tekintesz meg, így minél aktívabb vagy, annál több EpistoCoint zsebelhetsz be! Folytasd legutoljára megkezdett kurzusodat a bal oldali sávból indítva, vagy böngészd át kínálatunkat a Tanfolyamkeresőben!"
+        noMoreQuestionsGoWatchVideosOne: "Jelenleg nincs több megválaszolatlan kérdésed. Új kérdésekre akkor tehetsz szert, ha videókat tekintesz meg, így minél aktívabb vagy, annál több EpistoCoint zsebelhetsz be!",
+        noMoreQuestionsGoWatchVideosTwo: "Folytasd legutoljára megkezdett kurzusodat a bal oldali sávból indítva, vagy böngészd át kínálatunkat a Tanfolyamkeresőben!",
+        initialGreetingsFirst: "Kedves",
+        initialGreetingsSecond: "Nagy örömünkre szolgál, hogy platformunkon köszönthetünk! Reméljük, hogy tanfolyamaink segítségével mind a munkádban, mind pedig a hétköznapokban is fejlődést érhetsz el.",
+        initialGreetingsThird: "Készen állsz, hogy belekezdj első tanfolyamodba?",
+        goToCourses: "Irány a Tanfolyamkereső!"
     },
 
     editUserControl: {
