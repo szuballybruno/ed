@@ -1,3 +1,15 @@
+import {Text, Box, Flex} from "@chakra-ui/layout";
+import {Typography} from "@mui/material";
+import {useAnswerPractiseQuestion, usePractiseQuestion} from "../services/dataService";
+import {LoadingFrame} from "./HOC/LoadingFrame";
+import {QuesitionView} from "./QuestionView";
+import {EpistoButton} from "./universal/EpistoButton";
+import NextPlanIcon from '@mui/icons-material/NextPlan';
+import {EpistoConinImage} from "./universal/EpistoCoinImage";
+import {Image} from "@chakra-ui/image";
+import {getAssetUrl, getRandomInteger} from "../frontendHelpers";
+import {translatableTexts} from "../translatableTexts";
+import {Player} from "@lottiefiles/react-lottie-player";
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
@@ -11,8 +23,19 @@ import { EpistoConinImage } from "./universal/EpistoCoinImage";
 
 export const PractiseQuestions = () => {
 
-    const { practiseQuestion, practiseQuestionError, practiseQuestionState, refetchPractiseQuestion } = usePractiseQuestion();
-    const { answerQuestionAsync, answerResults, answerQuestionError, answerQuestionState, clearAnswerResults } = useAnswerPractiseQuestion();
+    const {
+        practiseQuestion,
+        practiseQuestionError,
+        practiseQuestionState,
+        refetchPractiseQuestion
+    } = usePractiseQuestion();
+    const {
+        answerQuestionAsync,
+        answerResults,
+        answerQuestionError,
+        answerQuestionState,
+        clearAnswerResults
+    } = useAnswerPractiseQuestion();
 
     const handleAnswerQuestionAsync = async (answerId) => {
 
@@ -112,9 +135,19 @@ export const PractiseQuestions = () => {
                 </Flex>
             </Flex>
             : <Flex>
-                <Typography>
-                    {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideos}
-                </Typography>
+                <Flex direction={"column"}>
+                    <Text as={"text"} p={20}>
+                        {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideos}
+                    </Text>
+                </Flex>
+                <Flex>
+                    <Player
+                        autoplay
+                        loop
+                        src={getAssetUrl("test_your_knowledge_lotties/writing_exam.json")}
+                        style={{height: '300px', width: '300px'}}
+                    />
+                </Flex>
             </Flex>}
     </LoadingFrame>
 }

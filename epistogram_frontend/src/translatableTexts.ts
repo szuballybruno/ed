@@ -13,8 +13,8 @@ export const translatableTexts = {
         availableCoursesLinkTitle: "Tanfolyamkereső",
         availableCoursesText: "Válaszd ki a legszimpatikusabb tanfolyamot",
         currentCourseTitle: "Jelenlegi kurzus",
-        practiseTitle: "Gyakorolj!",
-        tipOfTheDay: "Napi tipped",
+        practiseTitle: "Gyakorolj, hogy a legjobb lehess!",
+        tipOfTheDay: "Hozd ki  magadból a legöbbet - Napi tipped",
         tasks: "Feladatok"
     },
 
@@ -51,17 +51,17 @@ export const translatableTexts = {
         answerIsCorrect: "Helyesen válaszoltál!",
         answerIsIncorrect: "Helytelen válasz!",
         nextQuestion: "Következő kérdés",
-        noMoreQuestionsGoWatchVideos: "There are no <b>available</b> practise questions, go watch some videos!"
+        noMoreQuestionsGoWatchVideos: "Jelenleg nincs több megválaszolatlan kérdésed. Új kérdésekre akkor tehetsz szert, ha videókat tekintesz meg, így minél aktívabb vagy, annál több EpistoCoint zsebelhetsz be! <br /> <br /> Folytasd legutoljára megkezdett kurzusodat a bal oldali sávból indítva, vagy böngészd át kínálatunkat a Tanfolyamkeresőben!"
     },
 
     editUserControl: {
-        saveUser: "Mentes"
+        saveUser: "Mentés"
     },
 
     tipOfTheDay: {
         video: "Videó",
         description: "Leírás",
-        prevoiusVideos: "Elozo videok",
+        prevoiusVideos: "Előző videók",
     },
 
     tasks: {
