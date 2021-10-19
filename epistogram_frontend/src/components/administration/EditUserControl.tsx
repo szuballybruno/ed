@@ -84,9 +84,6 @@ export const EditUserControl = (props: {
 
     return <Flex direction="column">
 
-        {/* admin header */}
-        <AdminSubpageHeader />
-
         <AddFrame
             title={"Új felhasználó hozzáadása"}>
 

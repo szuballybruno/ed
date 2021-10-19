@@ -89,13 +89,14 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
     const [state, setState] = useState<LoadingStateType>("idle");
     const [result, setResult] = useState<TResult | null>(null);
 
-    const postDataAsync = async (data?: TData) => {
+    const postDataAsync = async (data: TData) => {
 
         try {
 
             setState("loading");
 
-            const postResult = await httpPostAsync(url, data);
+            const postData = data ? data : undefined;
+            const postResult = await httpPostAsync(url, postData);
 
             setState("idle");
             setResult(postResult as TResult);

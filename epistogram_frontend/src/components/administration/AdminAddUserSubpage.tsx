@@ -5,6 +5,7 @@ import { UserEditDTO } from '../../models/shared_models/UserEditDTO';
 import { useNavigation } from "../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../services/notifications";
 import { inviteUserAsync } from "../../services/userManagementService";
+import { AdminSubpageHeader } from './AdminSubpageHeader';
 import { EditUserControl } from "./EditUserControl";
 
 const AdminAddUserSubpage = () => {
@@ -39,9 +40,11 @@ const AdminAddUserSubpage = () => {
         }
     }
 
-    return <EditUserControl
-        editDTO={null}
-        saveUserAsync={submitAddUserRequestAsync}></EditUserControl>
+    return <AdminSubpageHeader>
+        <EditUserControl
+            editDTO={null}
+            saveUserAsync={submitAddUserRequestAsync}></EditUserControl>
+    </AdminSubpageHeader>
 };
 
 export default AdminAddUserSubpage;

@@ -128,7 +128,7 @@ export const usePersonalityData = () => {
 
 export const useLogout = () => {
 
-    const qr = usePostDataUnsafe(apiRoutes.misc.logoutUser);
+    const qr = usePostDataUnsafe<void, void>(apiRoutes.misc.logoutUser);
 
     return {
         logoutUserState: qr.state,
