@@ -10,16 +10,6 @@ import {Image} from "@chakra-ui/image";
 import {getAssetUrl, getRandomInteger} from "../frontendHelpers";
 import {translatableTexts} from "../translatableTexts";
 import {Player} from "@lottiefiles/react-lottie-player";
-import { Image } from "@chakra-ui/image";
-import { Flex } from "@chakra-ui/layout";
-import { Typography } from "@mui/material";
-import { getAssetUrl, getRandomInteger } from "../frontendHelpers";
-import { useAnswerPractiseQuestion, usePractiseQuestion } from "../services/dataService";
-import { translatableTexts } from "../translatableTexts";
-import { LoadingFrame } from "./HOC/LoadingFrame";
-import { QuesitionView } from "./QuestionView";
-import { EpistoButton } from "./universal/EpistoButton";
-import { EpistoConinImage } from "./universal/EpistoCoinImage";
 
 export const PractiseQuestions = () => {
 

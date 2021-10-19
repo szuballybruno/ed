@@ -51,7 +51,7 @@ export const translatableTexts = {
         answerIsCorrect: "Helyesen válaszoltál!",
         answerIsIncorrect: "Helytelen válasz!",
         nextQuestion: "Következő kérdés",
-        noMoreQuestionsGoWatchVideos: "Jelenleg nincs több megválaszolatlan kérdésed. Új kérdésekre akkor tehetsz szert, ha videókat tekintesz meg, így minél aktívabb vagy, annál több EpistoCoint zsebelhetsz be! <br /> <br /> Folytasd legutoljára megkezdett kurzusodat a bal oldali sávból indítva, vagy böngészd át kínálatunkat a Tanfolyamkeresőben!"
+        noMoreQuestionsGoWatchVideos: "Jelenleg nincs több megválaszolatlan kérdésed. Új kérdésekre akkor tehetsz szert, ha videókat tekintesz meg, így minél aktívabb vagy, annál több EpistoCoint zsebelhetsz be! Folytasd legutoljára megkezdett kurzusodat a bal oldali sávból indítva, vagy böngészd át kínálatunkat a Tanfolyamkeresőben!"
     },
 
     editUserControl: {
