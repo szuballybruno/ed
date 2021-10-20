@@ -19,6 +19,10 @@ import { AdminUserStatisticsSubpage } from "./AdminUserStatisticsSubpage";
 import CourseStatistics from "./courses/courseStatistics/CourseStatistics";
 import AdminUserTasksSubpage from './AdminUserTasksSubpage';
 import AdminEditUserSubpage from './AdminEditUserSubpage';
+import {AdminGroupListSubpage} from "./groups/AdminGroupListSubpage";
+import {AdminAddGroupSubpage} from "./groups/AdminAddGroupSubpage";
+import {AdminEditGroupSubpage} from "./groups/AdminEditGroupSubpage";
+import {AdminGroupStatisticsSubpage} from "./groups/AdminGroupStatisticsSubpage";
 
 const AdminPage = () => {
 
@@ -79,26 +83,50 @@ const AdminPage = () => {
                     <ProtectedRoute
                         path={administrationRoutes.coursesRoute.route}
                         isAuthorizedToView={x => x.canAccessCourseAdministration}
-                        render={() => <Switch>
-                            <Route exact path={administrationRoutes.coursesRoute.route}>
-                                <CourseAdministration />
-                            </Route>
-                            <Route path={administrationRoutes.coursesRoute.addRoute.route}>
-                                <AddCourse />
-                            </Route>
-                            <Route path={administrationRoutes.coursesRoute.editCourseRoute.route}>
-                                <EditCourse />
-                            </Route>
-                            <Route path={administrationRoutes.coursesRoute.statisticsCourseRoute.route}>
-                                <CourseStatistics />
-                            </Route>
-                            <Route path={administrationRoutes.coursesRoute.addVideoRoute.route} exact>
-                                <AddVideo />
-                            </Route>
-                            <Route path={administrationRoutes.coursesRoute.editVideoRoute.route}>
-                                <EditVideo />
-                            </Route>
-                        </Switch>} />
+                        render={
+                            () => <Switch>
+                                <Route exact path={administrationRoutes.coursesRoute.route}>
+                                    <CourseAdministration />
+                                </Route>
+                                <Route path={administrationRoutes.coursesRoute.addRoute.route}>
+                                    <AddCourse />
+                                </Route>
+                                <Route path={administrationRoutes.coursesRoute.editCourseRoute.route}>
+                                    <EditCourse />
+                                </Route>
+                                <Route path={administrationRoutes.coursesRoute.statisticsCourseRoute.route}>
+                                    <CourseStatistics />
+                                </Route>
+                                <Route path={administrationRoutes.coursesRoute.addVideoRoute.route} exact>
+                                    <AddVideo />
+                                </Route>
+                                <Route path={administrationRoutes.coursesRoute.editVideoRoute.route}>
+                                    <EditVideo />
+                                </Route>
+                            </Switch>
+                        }
+                    />
+
+                    {/* group administartion */}
+                    <Route
+                        path={administrationRoutes.groupsRoute.route}
+                        render={
+                            () => <Switch>
+                                <Route exact path={administrationRoutes.groupsRoute.route}>
+                                    <AdminGroupListSubpage />
+                                </Route>
+                                <Route path={administrationRoutes.groupsRoute.addRoute.route}>
+                                    <AdminAddGroupSubpage />
+                                </Route>
+                                <Route path={administrationRoutes.groupsRoute.editRoute.route}>
+                                    <AdminEditGroupSubpage />
+                                </Route>
+                                <Route path={administrationRoutes.groupsRoute.statisticsRoute.route}>
+                                    <AdminGroupStatisticsSubpage />
+                                </Route>
+                            </Switch>
+                        }
+                    />
 
                     {/* statistics */}
                     <Route exact path={administrationRoutes.myCompanyRoute.route}>

@@ -128,7 +128,19 @@ export const applicationRoutes = {
             title: "Csoportok",
             route: "/administration/groups",
             icon: <People color={"secondary"} />,
-            exact: true
+
+            addRoute: {
+                title: translatableTexts.routeTitles.administrationAddCourse,
+                route: "/administration/groups/add"
+            },
+            editRoute: {
+                title: translatableTexts.routeTitles.administrationEditCourse,
+                route: "/administration/groups/:groupId/edit"
+            },
+            statisticsRoute: {
+                title: translatableTexts.routeTitles.administrationCourseStatistics,
+                route: "/administration/groups/:groupId/statistics"
+            },
         },
         myCompanyRoute: {
             title: "Cégem",
