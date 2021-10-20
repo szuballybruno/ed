@@ -42,11 +42,23 @@ export const AdminSubpageHeader = (props: {
         isCurrent?: boolean
     }) => {
 
-        const Content = () => <Typography
-            style={{ fontWeight: props.isCurrent ? "bold" : undefined }}>
-            {props.iconComponent}
-            {props.title}
-        </Typography>
+        const Content = () => <Flex>
+            {props.iconComponent && <Flex w={27} h="100%" p={2}>
+                {props.iconComponent}
+            </Flex>}
+
+            <Typography
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    fontWeight: props.isCurrent ? "bold" : undefined,
+                    alignItems: "center",
+                    padding: "0 2px 0 5px"
+                }}
+            >
+                {props.title}
+            </Typography>
+        </Flex>
 
         return <Box>
 
@@ -70,7 +82,7 @@ export const AdminSubpageHeader = (props: {
         navigate(path, { userId: userId });
     };
 
-    return <Flex direction={"column"} >
+    return <Flex direction={"column"} w="100%">
         <Flex flexDirection={"row"} h={60} pl={20} justifyContent={"flex-start"} alignItems={"center"} className="dividerBorderBottom">
             <Breadcrumbs>
                 {currentRoute && <BreadcrumbLink

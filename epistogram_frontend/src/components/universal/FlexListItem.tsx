@@ -44,12 +44,12 @@ export const FlexListItem = (props: FlexProps & {
                 style={{ alignSelf: "center" }} />
         </Flex>}
 
-        <Flex
+        {thumbnailContent && <Flex
             alignItems={"center"}
             justifyContent={"center"}>
 
             {thumbnailContent}
-        </Flex>
+        </Flex>}
 
         <Flex flex="1" direction={"column"} alignItems={"center"} justifyContent={"flex-start"}>
             {midContent}

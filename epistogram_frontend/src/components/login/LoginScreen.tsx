@@ -73,32 +73,71 @@ const LoginScreen = (): JSX.Element => {
 
     return (
         <Flex h={"100vh"} justifyContent={"center"} alignItems={"flex-start"}>
-            <Flex direction={"column"}
+
+            <Flex
+                direction={"column"}
                 w={"60%"}
                 h={"100vh"}
                 hidden={window.innerWidth < 1000 && true}
                 backgroundSize={"100%"}
-                bgImage={getAssetUrl("/loginScreen/loginbackground.png")}
+                backgroundRepeat={"space"}
                 alignItems={"center"}
                 justifyContent={"center"}
                 position={"relative"}>
+                <img
+                    src={getAssetUrl("/loginScreen/loginbackground.png")}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "absolute",
+                        objectFit: "cover"
+                    }}
+                    alt={""}
+                />
                 <img style={{
                     zIndex: 1,
                     width: 200
                 }} src={getAssetUrl("/loginScreen/logofeher.svg")} alt={""} />
                 <Typography zIndex={1} color={"white"} fontSize={"3.5rem"}>Rethink knowledge</Typography>
-                <Flex bg={"#6437AB40"} position={"absolute"} top={0} w={"100%"} zIndex={0} h={"100%"}></Flex>
+
+                <Flex bg={"#AAAAAA40"} position={"absolute"} top={0} w={"100%"} zIndex={0} h={"100%"}></Flex>
 
             </Flex>
-            <Flex direction={"column"} minH={"100%"} w={"40%"} minW={window.innerWidth > 600 ? 500 : "90%"} maxW={"90%"} justifyContent={"center"} alignItems={"center"}>
-                <Flex direction="column" alignItems={"center"} width={window.innerWidth > 600 ? 450 : "90%"}>
+
+            <Flex
+                direction={"column"}
+                minH={"100%"}
+                w={"40%"}
+                minW={window.innerWidth > 600 ? 500 : "90%"}
+                maxW={"90%"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                bgColor={"white"}
+                zIndex={5}
+            >
+
+                <Flex
+                    direction="column"
+                    alignItems={"center"}
+                    width={window.innerWidth > 600 ? 450 : "90%"}
+                >
+
                     <img style={{
                         zIndex: 1,
-                        width: 200
-                    }} src={getAssetUrl("/loginScreen/enigmalogo.png")} alt={""} />
+                        width: 320,
+                        marginBottom: 25,
+                    }} src={getAssetUrl("/loginScreen/pcworldloginlogo.png")} alt={""} />
 
-                    <Flex direction="column" w={"100%"}>
-                        <Typography fontSize={"1.5rem"}>Örülünk, hogy ismét itt vagy velünk!</Typography>
+                    <Flex
+                        direction="column"
+                        w={"100%"}
+                        alignItems="center"
+                    >
+
+                        <Typography fontSize={"1.5rem"}>
+                            Örülünk, hogy ismét itt vagy velünk!
+                        </Typography>
+
                     </Flex>
 
                     <Box w={"100%"}>
@@ -130,14 +169,16 @@ const LoginScreen = (): JSX.Element => {
                         marginTop: 15,
                         marginBottom: 15,
                         width: "100%",
-                        backgroundColor: "#6437AB"
+                        backgroundColor: "#AE1E2E"//"#6437AB"
                     }} onClick={handleLoginUserAsync}>
                         Bejelentkezés
                     </EpistoButton>
 
                     <Flex direction={"row"} justifyContent={"space-between"} w={"100%"}>
                         <Typography>Még nincs hozzáférésed?</Typography>
-                        <Typography textAlign={"right"}>Kérvényezd céged illetékesétől ezen a formon keresztül!</Typography>
+                        <Typography textAlign={"right"} style={{
+                            color: "#AE1E2E"
+                        }}>Aktiváld a PCWorld Ultimate kódodat az alábbi oldalon</Typography>
                     </Flex>
                 </Flex>
 

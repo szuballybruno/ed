@@ -18,6 +18,8 @@ import { SaveBar } from "../saveBar/SaveBar";
 import { AdminDashboardSearch } from "../searchBar/AdminDashboardSearch";
 import { SelectMultiple } from "../selectMultiple/SelectMultiple";
 import classes from "./editCourse.module.scss";
+import {applicationRoutes} from "../../../../configuration/applicationRoutes";
+import {EditUserControl} from "../../EditUserControl";
 
 /* TODO:
 *   - Create a new CourseItemDTO for this page
@@ -141,7 +143,15 @@ export const EditCourse = () => {
     return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
 
         {/* admin header */}
-        <AdminSubpageHeader />
+        <AdminSubpageHeader tabMenuItems={[
+            applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
+            /*applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,*/
+        ]}>
+            {/*<EditUserControl
+                editDTO={userEditData}
+                saveUserAsync={handleSaveUserAsync}></EditUserControl>*/}
+        </AdminSubpageHeader>
+
 
         <div className={classes.editDataOuterWrapper}>
 
@@ -187,24 +197,6 @@ export const EditCourse = () => {
                                 name={"permissionLevel"} />
                         </List>
                     </div>
-                    <div className={classes.tagWrapper}>
-                        <Typography variant={"overline"} className={classes.colorPickerTitle}>Elsődleges szín</Typography>
-                        <div className={classes.colorPickerWrapper}>
-                            <HexColorPicker style={{ width: "100%" }} color={colorOne} onChange={(color) => {
-                                !showSecondColorPicker && setColorTwo(color)
-                                setColorOne(color)
-                            }} />
-                        </div>
-                    </div>
-                    <div className={classes.colorPickerSwitchWrapper}>
-                        <Typography>Második szín kiválasztása a színátmenethez</Typography><Switch onChange={() => { setShowSecondColorPicker(p => !p) }} />
-                    </div>
-                    {showSecondColorPicker && <div className={classes.tagWrapper}>
-                        <Typography variant={"overline"}>Másodlagos szín</Typography>
-                        <HexColorPicker style={{ width: "100%" }} color={colorTwo} onChange={(color) => {
-                            setColorTwo(color)
-                        }} />
-                    </div>}
                 </div>
 
 
@@ -315,7 +307,9 @@ export const EditCourse = () => {
             width: "100%"
         }} />
 
-        <div className={classes.editVideosWrapper}>
+        <Flex
+            direction={"column"}
+            px={10}>
             <AdminDashboardSearch searchChangeHandler={() => { }} name={"searchData"} title={"A kurzus tartalma"} />
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId={"courseItems"}>
@@ -341,7 +335,7 @@ export const EditCourse = () => {
                 </Droppable>
 
             </DragDropContext>
-        </div>
+        </Flex>
 
         <AdminDashboardHeader titleText={""} />
 

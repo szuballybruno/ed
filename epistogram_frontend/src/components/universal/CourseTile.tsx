@@ -2,8 +2,11 @@ import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import DoneIcon from '@mui/icons-material/Done';
 import React, { ReactNode } from 'react';
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
+import { useNavigation } from "../../services/navigatior";
 import { FlexFloat } from "./FlexFloat";
 import { FlexImage } from "./FlexImage";
+import {Rating} from "@mui/material";
+import {getAssetUrl} from "../../frontendHelpers";
 
 const CourseTile = (props: {
     course: CourseShortDTO,
@@ -14,6 +17,7 @@ const CourseTile = (props: {
     const { course, children, ...css } = props;
     const courseTitle = course.title;
     const courseTeacherName = course.teacherName;
+    const courseCategory = course.category;
     const thumbnailImageUrl = course.thumbnailImageURL;
     const isComplete = course.isComplete;
 
@@ -28,13 +32,19 @@ const CourseTile = (props: {
         {...css}>
 
         {/* image  */}
-        <Box flex="1" position="relative">
-
-            <FlexImage
-                url={thumbnailImageUrl}
-                className="whall"
-                fit="cover"
-                minHeight="150px" />
+        <Box flex="1" position="relative" maxH={230}>
+            <Box position="relative"
+                 className="whall"
+                 minHeight="150px">
+                <Box position="absolute" top="0" height="100%" width="100%">
+                    <img style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: 10
+                    }} src={thumbnailImageUrl} alt="" />
+                </Box>
+            </Box>
 
             {/* done overlay */}
             {isComplete && <Flex
@@ -59,12 +69,41 @@ const CourseTile = (props: {
         </Box>
 
         {/* title */}
-        <Box flexBasis="80px" borderTop="1px solid var(--mildGrey)" zIndex={1}>
+        <Box flexBasis="80px" zIndex={1}>
 
             <Flex direction="column" p="10px" >
-
-                <Flex direction="column" >
-                    <Text as="h6" fontSize="large">{courseTitle}</Text>
+                <Text as="text" color="grey">{courseCategory}</Text>
+                <Flex direction="column">
+                    <Text as="h6" fontWeight={"bold"} fontSize="large">{courseTitle}</Text>
+                </Flex>
+                <Flex>
+                    <Flex direction={"row"} alignItems={"center"} mr={5}>
+                        <img src={getAssetUrl("course_exam_tile_icons/tile_lenght_left.svg")} alt={""} style={{width: 15, height: 15, margin: "0 2px"}} />
+                        <Text as={"text"} color={"grey"}>{"0h 00m"}</Text>
+                    </Flex>
+                    <Flex direction={"row"} alignItems={"center"} mr={5}>
+                        <img src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")} alt={""} style={{width: 15, height: 15, margin: "0 2px"}} />
+                        <Text as={"text"} color={"grey"}>{"119"}</Text>
+                    </Flex>
+                    <Flex direction={"row"} alignItems={"center"} mr={5}>
+                        <img src={getAssetUrl("course_exam_tile_icons/tile_language.svg")} alt={""} style={{width: 15, height: 15, margin: "0 2px"}} />
+                        <Text as={"text"} color={"grey"}>{"magyar"}</Text>
+                    </Flex>
+                    <Flex direction={"row"} alignItems={"center"}>
+                        <img src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")} alt={""} style={{width: 15, height: 15, margin: "0 2px"}} />
+                        <Text as={"text"} color={"grey"}>{"6.9/10"}</Text>
+                    </Flex>
+                </Flex>
+                <Flex direction={"row"} alignItems={"center"}>
+                    <Rating name="read-only" style={{
+                        color: "var(--epistoTeal)",
+                    }} value={4} readOnly />
+                    <Text as={"text"} color={"grey"} ml={5}>
+                        4.1 (189 értékelés)
+                    </Text>
+                </Flex>
+                <Flex direction={"row"} alignItems={"center"}>
+                    <img src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")} alt={""} style={{width: 20, height: 20, margin: "0 2px"}} />
                     <Text as="text" color="grey">{courseTeacherName}</Text>
                 </Flex>
 
@@ -75,3 +114,9 @@ const CourseTile = (props: {
 };
 
 export default CourseTile;
+
+{/* <Gradient className={classes.courseTitleBorder}
+    gradients={[[colorOne || "grey", colorTwo || "grey"]]}
+    property="background"
+    duration={3000}
+    angle="45deg" /> */}

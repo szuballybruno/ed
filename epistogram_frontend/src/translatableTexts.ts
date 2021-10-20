@@ -13,8 +13,8 @@ export const translatableTexts = {
         availableCoursesLinkTitle: "Tanfolyamkereső",
         availableCoursesText: "Válaszd ki a legszimpatikusabb tanfolyamot",
         currentCourseTitle: "Jelenlegi kurzus",
-        practiseTitle: "Gyakorolj!",
-        tipOfTheDay: "Napi tipped",
+        practiseTitle: "Gyakorolj, hogy a legjobb lehess!",
+        tipOfTheDay: "Hozd ki  magadból a legöbbet - Napi tipped",
         tasks: "Feladatok"
     },
 
@@ -30,17 +30,24 @@ export const translatableTexts = {
         learningExams: "Vizsgáim",
         administration: "Adminisztráció",
         administrationStatistics: "Statisztika",
-        administrationUserAdmin: "Felhasználók kezelése",
+
+        administrationUserAdmin: "Felhasználók",
         administrationAddUser: "Felhasználó hozzáadása",
         administrationEditUser: "Szerkesztés",
         administrationUserStatistics: "Statisztika",
         administrationUserTasks: "Feladatok",
-        administrationCourseAdmin: "Kurzusok kezelése",
+
+        administrationCourseAdmin: "Kurzusok",
         administrationAddCourse: "Kurzus hozzáadása",
         administrationEditCourse: "Szerkesztés",
         administrationCourseStatistics: "Statisztika",
         administrationAddVideo: "Videó hozzáadása",
         administrationEditVideo: "Videó szerkesztése",
+
+        administrationAddGroup: "Csoport hozzáadása",
+        administrationEditGroup: "Csoport szerkesztése",
+        administrationGroupStatistics: "Statisztika",
+
         settings: "Beállítások",
         settingsOverview: "Általános"
     },
@@ -51,17 +58,22 @@ export const translatableTexts = {
         answerIsCorrect: "Helyesen válaszoltál!",
         answerIsIncorrect: "Helytelen válasz!",
         nextQuestion: "Következő kérdés",
-        noMoreQuestionsGoWatchVideos: "There are no <b>available</b> practise questions, go watch some videos!"
+        noMoreQuestionsGoWatchVideosOne: "Jelenleg nincs több megválaszolatlan kérdésed. Új kérdésekre akkor tehetsz szert, ha videókat tekintesz meg, így minél aktívabb vagy, annál több EpistoCoint zsebelhetsz be!",
+        noMoreQuestionsGoWatchVideosTwo: "Folytasd legutoljára megkezdett kurzusodat a bal oldali sávból indítva, vagy böngészd át kínálatunkat a Tanfolyamkeresőben!",
+        initialGreetingsFirst: "Kedves",
+        initialGreetingsSecond: "Nagy örömünkre szolgál, hogy platformunkon köszönthetünk! Reméljük, hogy tanfolyamaink segítségével mind a munkádban, mind pedig a hétköznapokban is fejlődést érhetsz el.",
+        initialGreetingsThird: "Készen állsz, hogy belekezdj első tanfolyamodba?",
+        goToCourses: "Irány a Tanfolyamkereső!"
     },
 
     editUserControl: {
-        saveUser: "Mentes"
+        saveUser: "Mentés"
     },
 
     tipOfTheDay: {
         video: "Videó",
         description: "Leírás",
-        prevoiusVideos: "Elozo videok",
+        prevoiusVideos: "Előző videók",
     },
 
     tasks: {
