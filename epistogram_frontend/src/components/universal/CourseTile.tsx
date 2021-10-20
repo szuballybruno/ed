@@ -2,9 +2,7 @@ import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import DoneIcon from '@mui/icons-material/Done';
 import React, { ReactNode } from 'react';
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
-import { useNavigation } from "../../services/navigatior";
 import { FlexFloat } from "./FlexFloat";
-import { FlexImage } from "./FlexImage";
 import {Rating} from "@mui/material";
 import {getAssetUrl} from "../../frontendHelpers";
 
