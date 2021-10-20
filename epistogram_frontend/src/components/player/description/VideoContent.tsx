@@ -27,7 +27,7 @@ export const VideoContent = () => {
         <FlexListItem
             align="center"
             p="5px"
-            thumbnail={<Image
+            thumbnailContent={<Image
                 className="square70"
                 src={getAssetUrl("file_extension_icons/001-xlsx-1.svg")}
                 objectFit="cover"

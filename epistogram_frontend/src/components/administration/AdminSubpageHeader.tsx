@@ -9,6 +9,7 @@ import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { objToArray, useIsMatchingCurrentRoute } from "../../frontendHelpers";
 import { RouteItemType } from "../../models/types";
 import { useNavigation } from "../../services/navigatior";
+import { useBriefUserData } from "../../services/userManagementService";
 
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: RouteItemType[],
@@ -19,15 +20,23 @@ export const AdminSubpageHeader = (props: {
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
     const urlParams = useParams<{ userId: string }>();
+    const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
 
     const currentRoute = objToArray(applicationRoutes.administrationRoute)
         .filter(x => isMatchingCurrentRoute(x.route, x.exact))[0];
 
-    const subRoute = objToArray(currentRoute)
-        .filter(x => isMatchingCurrentRoute(x.route, true))[0];
+    // const subRoute = objToArray(currentRoute)
+    //     .filter(x => isMatchingCurrentRoute(x.route, true))[0];
+
+    const { briefUserData } = useBriefUserData(userId);
+    const subRoute = briefUserData
+        ? {
+            title: briefUserData.fullName
+        }
+        : null;
 
     const BreadcrumbLink = (props: {
-        to: string,
+        to?: string,
         title: string,
         iconComponent?: ReactNode,
         isCurrent?: boolean
@@ -57,7 +66,7 @@ export const AdminSubpageHeader = (props: {
             {!!props.isCurrent && <Content></Content>}
 
             {/* otherwise is a link */}
-            {!props.isCurrent && <NavLink to={props.to}>
+            {!props.isCurrent && <NavLink to={props.to ?? ""}>
                 {<Content></Content>}
             </NavLink>}
         </Box>
@@ -68,10 +77,9 @@ export const AdminSubpageHeader = (props: {
     const currentMatchingRoute = (tabMenuItems ?? [])
         .filter(x => isMatchingCurrentRoute(x.route, x.isExact))[0];
 
-
     const navigateToTab = (path: string) => {
 
-        navigate(path, { userId: urlParams.userId });
+        navigate(path, { userId: userId });
     };
 
     return <Flex direction={"column"} w="100%">
@@ -85,9 +93,7 @@ export const AdminSubpageHeader = (props: {
 
                 {subRoute && <BreadcrumbLink
                     isCurrent
-                    to={subRoute.route}
-                    title={subRoute.title}
-                    iconComponent={subRoute.icon} />}
+                    title={subRoute.title} />}
             </Breadcrumbs>
         </Flex>
 

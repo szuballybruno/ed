@@ -15,11 +15,11 @@ export const getRequestAccessTokenPayload = (req: Request) => {
 
     const accessToken = getCookie(req, staticProvider.globalConfig.misc.accessTokenCookieName)?.value;
     if (!accessToken)
-        throw new TypedError("There's a problem with the sent access token.", "bad request");
+        throw new TypedError("Token not sent.", "bad request");
 
     const tokenPayload = verifyAccessToken(accessToken);
     if (!tokenPayload)
-        throw new TypedError("There's a problem with the sent access token.", "bad request");
+        throw new TypedError("Token is invalid.", "bad request");
 
     return tokenPayload;
 }

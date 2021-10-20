@@ -5,18 +5,16 @@ import { isString } from "../../frontendHelpers";
 
 export const FlexListTitleSubtitle = (props: { title: string, subTitle: string | ReactNode }) => {
 
-    return <Flex className="whall" direction="column">
-        <Flex alignItems={"flex-end"} height={40} pl={7}>
-            <Typography variant={"button"}>
-                {props.title}
+    return <Flex direction="column">
+
+        <Typography variant={"button"}>
+            {props.title}
+        </Typography>
+
+        {isString(props.subTitle)
+            ? <Typography variant={"caption"}>
+                {props.subTitle}
             </Typography>
-        </Flex>
-        <Box>
-            {isString(props.subTitle)
-                ? <Typography variant={"caption"}>
-                    {props.subTitle}
-                </Typography>
-                : props.subTitle}
-        </Box>
+            : props.subTitle}
     </Flex>;
 }

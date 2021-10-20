@@ -110,7 +110,8 @@ export const WatchView = (props: {
             timeoutLogic.stop();
         }
 
-    }, [isVideoEnded, timeoutLogic]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isVideoEnded]);
 
     // show dialogs
     useEffect(() => {
@@ -149,7 +150,9 @@ export const WatchView = (props: {
             setShowNewDialogsEnabled(false);
             setCurrentStillWatchingMarker(showStillPlayingDialog);
         }
-    }, [playedSeconds, answeredQuestionIds, hasQuestions, isSeeking, isShowNewDialogsEnabled, questions, stillWatchingDilalogMarkers]);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [playedSeconds]);
 
     // when video length is set,
     // calculate are you still watching dialog seconds
@@ -177,7 +180,9 @@ export const WatchView = (props: {
         }
 
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
-    }, [videoLength, hasQuestions]);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [videoLength]);
 
     // playback watcher
     usePlaybackWatcher(
@@ -186,9 +191,6 @@ export const WatchView = (props: {
         handleVideoCompletedStateChanged,
         setMaxWatchedSeconds,
         !isSeeking);
-
-    // calc(min((100vw - 420px) / 1.7777, 70vh) * 1.7777)
-    // min((100vw - 420px) / 1.7777, 70vh)
 
     return <>
 
