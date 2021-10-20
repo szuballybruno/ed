@@ -1,4 +1,5 @@
 import { User } from "../models/entity/User";
+import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { getAdminPageUsersList } from "../services/adminService";
@@ -6,7 +7,7 @@ import { toUserEditDTO } from "../services/mappings";
 import { createInvitedUserAsync } from "../services/signupService";
 import { deleteUserAsync } from "../services/userManagementService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParamsType, getFullName, withValueOrBadRequest } from "../utilities/helpers";
 
 export const deleteUserAction = async (params: ActionParamsType) => {
 
@@ -55,6 +56,27 @@ export const getUserAdministrationUserListAction = async () => {
 
     return await getAdminPageUsersList();
 };
+
+export const getBriefUserDataAction = async (params: ActionParamsType) => {
+
+    const userId = withValueOrBadRequest(params.req?.query?.userId);
+
+    const user = await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .findOneOrFail({
+            where: {
+                id: userId
+            }
+        });
+
+    return {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        fullName: getFullName(user)
+    } as BriefUserDataDTO;
+}
 
 export const inviteUserAction = async (params: ActionParamsType) => {
 

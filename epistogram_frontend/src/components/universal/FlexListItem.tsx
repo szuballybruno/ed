@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 export const FlexListItem = (props: FlexProps & {
     onClick?: () => void,
     isLocked?: boolean,
-    thumbnail?: ReactNode,
+    thumbnailContent?: ReactNode,
     endContent?: ReactNode,
     midContent?: ReactNode,
     isChecked?: boolean,
@@ -15,7 +15,7 @@ export const FlexListItem = (props: FlexProps & {
     const {
         onClick,
         isLocked,
-        thumbnail,
+        thumbnailContent,
         endContent,
         midContent,
         isChecked,
@@ -33,21 +33,22 @@ export const FlexListItem = (props: FlexProps & {
         borderBottom="1px solid #eaeaea"
         {...css}>
 
-        <Flex minW={60} h={"100%"} direction={"column"} alignItems={"center"} justifyContent={"flex-start"}>
-            {setIsChecked && <Checkbox
+        {setIsChecked && <Flex
+            minW={60}
+            alignItems={"center"}
+            justifyContent={"center"}>
+
+            <Checkbox
                 checked={isChecked}
                 onChange={x => setIsChecked(x.currentTarget.checked)}
-                style={{ alignSelf: "center", marginTop: 23 }} />}
-        </Flex>
+                style={{ alignSelf: "center" }} />
+        </Flex>}
 
         <Flex
-            w={100}
-            h={"100%"}
-            direction={"column"}
             alignItems={"center"}
-            justifyContent={"flex-start"}
-        >
-            {thumbnail}
+            justifyContent={"center"}>
+
+            {thumbnailContent}
         </Flex>
 
         <Flex flex="1" direction={"column"} alignItems={"center"} justifyContent={"flex-start"}>

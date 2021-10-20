@@ -15,7 +15,7 @@ import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAct
 import { getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction } from './api/questionActions';
-import { deleteUserAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
+import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
@@ -94,6 +94,7 @@ const initializeAsync = async () => {
     // user management
     addEndpoint(apiRoutes.userManagement.getEditUserData, getEditUserDataAction);
     addEndpoint(apiRoutes.userManagement.getUserListForAdministration, getUserAdministrationUserListAction);
+    addEndpoint(apiRoutes.userManagement.getBriefUserData, getBriefUserDataAction);
     addEndpoint(apiRoutes.userManagement.inviteUser, inviteUserAction, { isPost: true });
     addEndpoint(apiRoutes.userManagement.deleteUser, deleteUserAction, { isPost: true });
     addEndpoint(apiRoutes.userManagement.upadateUser, updateUserAction, { isPost: true });

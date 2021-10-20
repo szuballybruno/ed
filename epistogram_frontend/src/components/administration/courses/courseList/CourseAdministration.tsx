@@ -231,7 +231,7 @@ export const CourseAdministration = () => {
                         return <FlexListItem
                             align="center"
                             h={100}
-                            thumbnail={
+                            thumbnailContent={
                                 <Image
                                     src={course.thumbnailImageURL}
                                     objectFit="cover"

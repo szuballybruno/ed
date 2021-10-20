@@ -1,4 +1,5 @@
 import { useReactQuery } from "../frontendHelpers";
+import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
@@ -19,6 +20,20 @@ export const useEditUserData = (editedUserId: number) => {
         userEditData: queryRes.data,
         userEditDataStatus: queryRes.status,
         userEditDataError: queryRes.error
+    }
+}
+
+export const useBriefUserData = (userId: number | null) => {
+
+    const queryRes = useReactQuery<BriefUserDataDTO>(
+        ["briefUserDataQuery", userId],
+        () => httpGetAsync(apiRoutes.userManagement.getBriefUserData, { userId: userId }),
+        !!userId);
+
+    return {
+        briefUserData: queryRes.data,
+        briefUserDataStatus: queryRes.status,
+        briefUserDataError: queryRes.error
     }
 }
 

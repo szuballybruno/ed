@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Image } from "@chakra-ui/react";
 import DoneIcon from '@mui/icons-material/Done';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -14,7 +14,7 @@ export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
 
-    const { title, subTitle, state, descriptorCode, type } = props.courseItem;
+    const { title, subTitle, thumbnailUrl, state, descriptorCode, type } = props.courseItem;
     const isLocked = state === "locked";
     const { navigateToPlayer } = useNavigation();
 
@@ -34,6 +34,12 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
         isLocked={isLocked}
         onClick={navigate}
         borderLeft={`${borderWidth}px solid ${borderColor}`}
+        thumbnailContent={<Image
+            mr="10px"
+            ml="10px"
+            className="square70"
+            objectFit="cover"
+            src={thumbnailUrl}></Image>}
         midContent={<FlexListTitleSubtitle title={title} subTitle={subTitle} />}
         endContent={<Flex align="center" justify="center" flexBasis="50px">
             {state === "current" && <VisibilityIcon style={{ color: "var(--epistoTeal)" }} />}

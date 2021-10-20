@@ -1,25 +1,21 @@
 import { Flex } from "@chakra-ui/layout";
-import {
-    ApartmentTwoTone,
-    Close,
-    Edit,
-    Email,
-    Equalizer, Task,
-    WorkTwoTone
-} from "@mui/icons-material";
+import { ApartmentTwoTone, Close, Edit, Email, Equalizer, Task, WorkTwoTone } from "@mui/icons-material";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
 import { Button, Checkbox, Typography } from "@mui/material";
 import React, { ReactNode, useContext, useState } from "react";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { AdminPageUserDTO } from "../../models/shared_models/AdminPageUserDTO";
+import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { useUserListQuery } from "../../services/adminPageUsersService";
 import { httpPostAsync } from "../../services/httpClient";
 import { useNavigation } from "../../services/navigatior";
-import IntersectionObserverWrap from "../IntersectionObserverWrapper";
 import { FloatAddButton } from "../FloatAddButton";
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
+import { DialogContext } from "../HOC/DialogFrame";
 import { LoadingFrame } from "../HOC/LoadingFrame";
+import IntersectionObserverWrap from "../IntersectionObserverWrapper";
 import { ProfileImage } from "../ProfileImage";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoSearch } from "../universal/EpistoSearch";
@@ -33,7 +29,7 @@ import { AdminSubpageHeader } from "./AdminSubpageHeader";
 export const AdminUserListSubpage = () => {
 
     const user = useContext(CurrentUserContext)!;
-    const userId = user.id;
+    const currentUserId = user.id;
     const { users, usersStatus, usersError, refetchUsers } = useUserListQuery();
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
@@ -41,15 +37,27 @@ export const AdminUserListSubpage = () => {
     const administrationRoutes = applicationRoutes.administrationRoute;
 
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
-
-    console.log(users);
     const isAllUsersSelected = !users.some(user => !selectedUserIds.some(uid => uid === user.id));
-    // const isAnyUserSelected = selectedUserIds.length > 0;
+    const isAnyUserSelected = selectedUserIds.length > 0;
 
-    const deleteUserAsync = async (userId: number) => {
+    const dilaogContext = useContext(DialogContext);
 
-        await httpPostAsync("users/delete-user", { userId });
-        await refetchUsers();
+    const showDeleteUserDialog = (user: AdminPageUserDTO) => {
+
+        dilaogContext!.showDialog({
+            title: "Biztonsan torlod a felhasznalot?",
+            description: `A ${user.firstName} ${user.lastName} nevu felhasznalo visszavonhatatlanul torove lesz!`,
+
+            firstButtonTitle: "Torles",
+            firstButtonAction: async () => {
+
+                await httpPostAsync(apiRoutes.userManagement.deleteUser, { userId: user.id });
+                await refetchUsers();
+            },
+
+            secondButtonTitle: "Megse",
+            secondButtonAction: dilaogContext!.closeDialog
+        });
     }
 
     const setSelectedUser = (userId: number, isSelected: boolean) => {
@@ -74,6 +82,49 @@ export const AdminUserListSubpage = () => {
             setSelectedUserIds([]);
         }
     }
+
+    const headerButtons = [
+        {
+            name: "editUserButton",
+            text: "Szerkesztés",
+            onClick: () => navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id }),
+        },
+        {
+            name: "deleteUserButton",
+            text: "Törlés",
+            onClick: () => navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })
+        },
+        {
+            name: "viewUserStatsButton",
+            text: "Statisztika megjelenítése",
+            onClick: () => navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
+        },
+        {
+            name: "viewUserTasks",
+            text: "Feladatok megtekintése",
+            onclick: () => navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: user.id })
+        }
+    ]
+
+    const rowButtons = [
+        {
+            icon: <Edit style={{ width: "20px", height: "20px" }} />,
+            onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })
+        },
+        {
+            icon: <Equalizer style={{ width: "20px", height: "20px" }} />,
+            onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
+        },
+        {
+            icon: <Task style={{ width: "20px", height: "20px" }} />,
+            onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: user.id })
+        },
+        {
+            icon: <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>,
+            getIsVisible: (userId: number) => currentUserId !== userId,
+            onClick: (user: AdminPageUserDTO) => showDeleteUserDialog(user)
+        },
+    ]
 
     return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
 
@@ -101,103 +152,64 @@ export const AdminUserListSubpage = () => {
                     </Typography>
                 </Flex>}
 
-                {selectedUserIds.length > 0 &&
+                {/* selected users label */}
+                {isAnyUserSelected && <Flex
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"space-between"}
+                    w={230}
+                    minW={230}
+                    h={"100%"}>
                     <Flex
                         direction={"row"}
+                        justifyContent={"center"}
                         alignItems={"center"}
-                        justifyContent={"space-between"}
-                        w={230}
-                        minW={230}
-                        h={"100%"}>
-                        <Flex
-                            direction={"row"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            className="roundBorders"
-                            bg="var(--epistoTeal)"
-                            p="0 12px 0 12px"
-                            color="white"
-                            h={30}
-                            ml={10}>
-                            <Typography>
-                                {selectedUserIds.length} felhasználó kijelölve
-                            </Typography>
-                            <Close onClick={() => {
-                                setSelectedUserIds([])
-                            }} style={{
+                        className="roundBorders"
+                        bg="var(--epistoTeal)"
+                        padding="0 12px 0 12px"
+                        color="white"
+                        height={30}
+                        ml={10}>
+                        <Typography>
+                            {selectedUserIds.length} felhasználó kijelölve
+                        </Typography>
+                        <Close
+                            onClick={() => setSelectedUserIds([])}
+                            style={{
                                 width: 18,
                                 marginLeft: 5
                             }} />
-                        </Flex>
-                    </Flex>}
+                    </Flex>
+                </Flex>}
 
                 {selectedUserIds.length !== 1 && <Flex flex={1}></Flex>}
 
-                {(selectedUserIds.length === 1) && <IntersectionObserverWrap direction={"row"} alignItems={"center"} justifyContent={"flex-start"}>
-                    <Button
-                        size={"small"}
-                        variant={"outlined"}
-                        name={"edit"}
-                        style={{
-                            marginRight: "20px",
-                            minWidth: "fit-content",
-                            borderRadius: 7,
-                            borderColor: "var(--mildGrey)",
-                            color: "black"
-                        }}
-                        onClick={() => {
-                            navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })
-                        }}>
-                        Szerkesztés
-                    </Button>
-                    <Button
-                        size={"small"}
-                        name="remove"
-                        style={{
-                            marginRight: "20px",
-                            minWidth: "fit-content",
-                            borderRadius: 7,
-                            borderColor: "var(--mildGrey)",
-                            color: "black"
-                        }}
-                        variant={"outlined"}>
-                        Törlés
-                    </Button>
-                    <Button
-                        size={"small"}
-                        name="stats"
-                        style={{
-                            marginRight: "20px",
-                            minWidth: "fit-content",
-                            borderRadius: 7,
-                            borderColor: "var(--mildGrey)",
-                            color: "black"
-                        }}
-                        variant={"outlined"}
-                        onClick={() => {
-                            navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
-                        }}>
-                        Statisztika megjelenítése
-                    </Button>
-                    <Button
-                        size={"small"}
-                        name="tasks"
-                        style={{
-                            marginRight: "20px",
-                            minWidth: "fit-content",
-                            borderRadius: 7,
-                            borderColor: "var(--mildGrey)",
-                            color: "black"
-                        }}
-                        variant={"outlined"}
-                        onClick={() => {
-                            navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: user.id })
-                        }}>
-                        Feladatok megtekintése
-                    </Button>
+                {/* bulk edit buttons */}
+                {(selectedUserIds.length === 1) && <IntersectionObserverWrap
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"flex-start"}>
+
+                    {headerButtons
+                        .map(x => <Button
+                            size={"small"}
+                            name={x.name}
+                            key={x.name}
+                            style={{
+                                marginRight: "20px",
+                                minWidth: "fit-content",
+                                borderRadius: 7,
+                                borderColor: "var(--mildGrey)",
+                                color: "black"
+                            }}
+                            onClick={x.onClick}
+                            variant={"outlined"}>
+                            {x.text}
+                        </Button>)}
 
                 </IntersectionObserverWrap>}
 
+                {/* search */}
                 <Flex
                     h={"100%"}
                     direction={"row"}
@@ -208,7 +220,7 @@ export const AdminUserListSubpage = () => {
                     <EpistoSearch w={140}></EpistoSearch>
                 </Flex>
 
-
+                {/* order by */}
                 <Flex
                     direction={"row"}
                     justifyContent={"flex-start"}
@@ -270,7 +282,7 @@ export const AdminUserListSubpage = () => {
 
                         return <FlexListItem
                             key={index}
-                            thumbnail={<ProfileImage
+                            thumbnailContent={<ProfileImage
                                 mt={10}
                                 url={user.avatarUrl}
                                 lastName={user.lastName}
@@ -297,43 +309,15 @@ export const AdminUserListSubpage = () => {
                                 px={10}>
 
                                 {/* go to edit */}
-                                <EpistoButton
-                                    variant={"colored"}
-                                    onClick={() => {
-                                        navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })
-                                    }}
-                                    style={{ width: 20 }}>
-                                    <Edit style={{ width: "20px", height: "20px" }} />
-                                </EpistoButton>
+                                {rowButtons
+                                    .filter(x => x?.getIsVisible ? x.getIsVisible(user.id) : true)
+                                    .map(x => <EpistoButton
+                                        variant={"colored"}
+                                        onClick={() => x.onClick(user)}
+                                        style={{ width: 20, margin: "3px" }}>
 
-                                {/* go to stats */}
-                                <EpistoButton
-                                    variant="colored"
-                                    onClick={() => {
-                                        navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
-                                    }}
-                                    style={{ width: 20, marginLeft: 5 }}>
-                                    <Equalizer style={{ width: "20px", height: "20px" }} />
-                                </EpistoButton>
-
-                                {/* open tasks */}
-                                <EpistoButton
-                                    variant="colored"
-                                    onClick={() => {
-                                        navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: userId })
-                                    }}
-                                    style={{ width: 20, marginLeft: 5 }}>
-
-                                    <Task style={{ width: "20px", height: "20px" }} />
-                                </EpistoButton>
-
-                                {/* delete user */}
-                                {(userId !== user.id) && <EpistoButton
-                                    variant="colored"
-                                    onClick={() => deleteUserAsync(user.id)}
-                                    style={{ width: 20, marginLeft: 5 }}>
-                                    <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>
-                                </EpistoButton>}
+                                        {x.icon}
+                                    </EpistoButton>)}
                             </Flex>}
                         />
                     })}

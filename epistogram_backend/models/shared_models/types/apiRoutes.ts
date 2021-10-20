@@ -17,6 +17,7 @@ export const apiRoutes = {
         inviteUser: "/users/invite-user",
         deleteUser: "/users/delete-user",
         upadateUser: "/users/update-user",
+        getBriefUserData: "/users/get-brief-user-data",
         getUserListForAdministration: "/users/get-user-administartion-user-list"
     },
 

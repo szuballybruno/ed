@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
+import { User } from "../models/entity/User";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
 import { getUserIdFromRequest } from "../services/authenticationService";
@@ -67,6 +68,8 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
 
     return wrapperFunction;
 }
+
+export const getFullName = (user: User) => `${user.firstName} ${user.lastName}`;
 
 export function replaceAll(str: string, find: string, replace: string) {
     return str.replace(new RegExp(find, 'g'), replace);
