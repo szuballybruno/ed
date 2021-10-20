@@ -283,7 +283,6 @@ export const AdminUserListSubpage = () => {
                         return <FlexListItem
                             key={index}
                             thumbnailContent={<ProfileImage
-                                mt={10}
                                 url={user.avatarUrl}
                                 lastName={user.lastName}
                                 firstName={user.firstName}
@@ -293,7 +292,7 @@ export const AdminUserListSubpage = () => {
                             isChecked={selectedUserIds.some(x => x === user.id)}
                             midContent={<FlexListTitleSubtitle
                                 title={`${user.lastName} ${user.firstName}`}
-                                subTitle={<Flex wrap="wrap" my="10px">
+                                subTitle={<Flex wrap="wrap">
                                     {chips
                                         .map((chip, index) => <FloatChip
                                             name={chip.name}

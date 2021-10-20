@@ -27,7 +27,6 @@ export const FlexListItem = (props: FlexProps & {
         className="shadowOnHover"
         cursor="pointer"
         align="center"
-        minH={100}
         pointerEvents={isLocked ? "none" : "all"}
         onClick={onClick}
         borderBottom="1px solid #eaeaea"
@@ -51,7 +50,12 @@ export const FlexListItem = (props: FlexProps & {
             {thumbnailContent}
         </Flex>}
 
-        <Flex flex="1" direction={"column"} alignItems={"center"} justifyContent={"flex-start"}>
+        <Flex
+            flex="1"
+            p="10px"
+            alignItems={"center"}
+            justifyContent={"flex-start"}>
+
             {midContent}
         </Flex>
 
