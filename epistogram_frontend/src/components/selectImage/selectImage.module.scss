@@ -21,6 +21,8 @@
 }
 
 .selectedImage {
+  position: absolute;
+  top: 0;
   object-fit: cover;
   width: 200px;
   height: 100px;
