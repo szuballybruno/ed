@@ -1,4 +1,4 @@
-import { Flex, Box } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
 import { ReactNode } from "react";
 import { isString } from "../../frontendHelpers";

@@ -1,30 +1,27 @@
 import { Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Close, Edit, Email, Equalizer, Task, WorkTwoTone } from "@mui/icons-material";
+import { ApartmentTwoTone, Edit, Email, Equalizer, Task, WorkTwoTone } from "@mui/icons-material";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
-import { Button, Checkbox, Typography } from "@mui/material";
 import React, { ReactNode, useContext, useState } from "react";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { AdminPageUserDTO } from "../../models/shared_models/AdminPageUserDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { useUserListQuery } from "../../services/adminPageUsersService";
-import { httpPostAsync } from "../../services/httpClient";
-import { useNavigation } from "../../services/navigatior";
-import { FloatAddButton } from "../FloatAddButton";
-import { CurrentUserContext } from "../HOC/AuthenticationFrame";
-import { DialogContext } from "../HOC/DialogFrame";
-import { LoadingFrame } from "../HOC/LoadingFrame";
-import IntersectionObserverWrap from "../IntersectionObserverWrapper";
-import { ProfileImage } from "../ProfileImage";
-import { EpistoButton } from "../universal/EpistoButton";
-import { EpistoSearch } from "../universal/EpistoSearch";
-import { EpistoSelect } from "../universal/EpistoSelect";
-import { FlexList } from "../universal/FlexList";
-import { FlexListItem } from "../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../universal/FlexListTitleSubtitle";
-import { FloatChip } from "../universal/FloatChip";
-import { AdminSubpageHeader } from "./AdminSubpageHeader";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { AdminPageUserDTO } from "../../../models/shared_models/AdminPageUserDTO";
+import { apiRoutes } from "../../../models/shared_models/types/apiRoutes";
+import { useUserListQuery } from "../../../services/adminPageUsersService";
+import { httpPostAsync } from "../../../services/httpClient";
+import { useNavigation } from "../../../services/navigatior";
+import { FloatAddButton } from "../../FloatAddButton";
+import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
+import { DialogContext } from "../../HOC/DialogFrame";
+import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { ProfileImage } from "../../ProfileImage";
+import { EpistoButton } from "../../universal/EpistoButton";
+import { FlexList } from "../../universal/FlexList";
+import { FlexListItem } from "../../universal/FlexListItem";
+import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
+import { FloatChip } from "../../universal/FloatChip";
+import { AdminListEditHeader } from "../AdminListEditHeader";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const AdminUserListSubpage = () => {
 
@@ -38,7 +35,6 @@ export const AdminUserListSubpage = () => {
 
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
     const isAllUsersSelected = !users.some(user => !selectedUserIds.some(uid => uid === user.id));
-    const isAnyUserSelected = selectedUserIds.length > 0;
 
     const dilaogContext = useContext(DialogContext);
 
@@ -92,7 +88,7 @@ export const AdminUserListSubpage = () => {
         {
             name: "deleteUserButton",
             text: "Törlés",
-            onClick: () => navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })
+            onClick: () => showDeleteUserDialog(users.filter(x => x.id === selectedUserIds[0])[0])
         },
         {
             name: "viewUserStatsButton",
@@ -102,7 +98,7 @@ export const AdminUserListSubpage = () => {
         {
             name: "viewUserTasks",
             text: "Feladatok megtekintése",
-            onclick: () => navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: user.id })
+            onClick: () => navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: user.id })
         }
     ]
 
@@ -130,114 +126,12 @@ export const AdminUserListSubpage = () => {
 
         {/* admin header */}
         <AdminSubpageHeader>
-            <Flex direction="row" justifyContent="space-between" alignItems="center" h={60}>
-                <Flex direction="row" alignItems="center" justifyContent="center" minW={60} h="100%">
-                    <Checkbox checked={isAllUsersSelected} onClick={() => selectAllOrNone(!isAllUsersSelected)} />
-                </Flex>
-
-                {!isAllUsersSelected && <Flex
-                    w={240}
-                    minW={165}
-                    h={"100%"}
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent={"flex-start"}
-                    onClick={() => selectAllOrNone(!isAllUsersSelected)}
-                    cursor="pointer">
-
-                    <Typography
-                        style={{ marginLeft: "20px" }}>
-
-                        Összes kijelölése
-                    </Typography>
-                </Flex>}
-
-                {/* selected users label */}
-                {isAnyUserSelected && <Flex
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                    w={230}
-                    minW={230}
-                    h={"100%"}>
-                    <Flex
-                        direction={"row"}
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                        className="roundBorders"
-                        bg="var(--epistoTeal)"
-                        padding="0 12px 0 12px"
-                        color="white"
-                        height={30}
-                        ml={10}>
-                        <Typography>
-                            {selectedUserIds.length} felhasználó kijelölve
-                        </Typography>
-                        <Close
-                            onClick={() => setSelectedUserIds([])}
-                            style={{
-                                width: 18,
-                                marginLeft: 5
-                            }} />
-                    </Flex>
-                </Flex>}
-
-                {selectedUserIds.length !== 1 && <Flex flex={1}></Flex>}
-
-                {/* bulk edit buttons */}
-                {(selectedUserIds.length === 1) && <IntersectionObserverWrap
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent={"flex-start"}>
-
-                    {headerButtons
-                        .map(x => <Button
-                            size={"small"}
-                            name={x.name}
-                            key={x.name}
-                            style={{
-                                marginRight: "20px",
-                                minWidth: "fit-content",
-                                borderRadius: 7,
-                                borderColor: "var(--mildGrey)",
-                                color: "black"
-                            }}
-                            onClick={x.onClick}
-                            variant={"outlined"}>
-                            {x.text}
-                        </Button>)}
-
-                </IntersectionObserverWrap>}
-
-                {/* search */}
-                <Flex
-                    h={"100%"}
-                    direction={"row"}
-                    justifyContent={"flex-start"}
-                    alignItems={"center"}
-                    w={140}
-                    mx={10}>
-                    <EpistoSearch w={140}></EpistoSearch>
-                </Flex>
-
-                {/* order by */}
-                <Flex
-                    direction={"row"}
-                    justifyContent={"flex-start"}
-                    alignItems={"center"}
-                    h={"100%"}
-                    mx={10}>
-                    <EpistoSelect
-                        minW={"fit-content"}
-                        items={[]}
-                        onSelected={x => { }}
-                        selectedValue="1"
-                        getCompareKey={x => x}
-                        defaultValue="Rendezés...">
-
-                    </EpistoSelect>
-                </Flex>
-            </Flex>
+            <AdminListEditHeader
+                headerButtons={headerButtons}
+                isAllSelected={isAllUsersSelected}
+                selectAllOrNone={selectAllOrNone}
+                selectedIds={selectedUserIds}
+                itemLabel="felhasznalo" />
         </AdminSubpageHeader>
 
         <LoadingFrame loadingState={usersStatus} error={usersError} flex="1">

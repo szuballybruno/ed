@@ -1,9 +1,9 @@
 import { Flex } from "@chakra-ui/react";
 import React from 'react';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { mockTasks } from "../../mockData";
-import { Tasks } from "../Tasks";
-import { AdminSubpageHeader } from "./AdminSubpageHeader";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { mockTasks } from "../../../mockData";
+import { Tasks } from "../../Tasks";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 const AdminUserTasksSubpage = () => {
 

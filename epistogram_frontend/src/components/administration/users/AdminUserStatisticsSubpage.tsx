@@ -1,8 +1,8 @@
 import { Flex } from "@chakra-ui/react";
 import React from 'react';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import LearningStatistics from "../learningStatistics/LearningStatistics";
-import { AdminSubpageHeader } from "./AdminSubpageHeader";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import LearningStatistics from "../../learningStatistics/LearningStatistics";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const AdminUserStatisticsSubpage = () => {
 

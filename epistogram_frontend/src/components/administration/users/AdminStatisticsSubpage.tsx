@@ -1,10 +1,10 @@
 import React from 'react';
-import StatisticsCard from "../statisticsCard/StatisticsCard";
+import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { Bar, Doughnut, Line, Pie, Radar } from "react-chartjs-2";
-import { LearningStatisticsSeciton } from '../learningStatistics/LearningStatisticsSeciton';
-import { getAssetUrl } from "../../frontendHelpers";
-import {Flex} from "@chakra-ui/react";
-import {AdminSubpageHeader} from "./AdminSubpageHeader";
+import { LearningStatisticsSeciton } from '../../learningStatistics/LearningStatisticsSeciton';
+import { getAssetUrl } from "../../../frontendHelpers";
+import { Flex } from "@chakra-ui/react";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 
 const AdminStatistics = () => {
@@ -163,15 +163,15 @@ const AdminStatistics = () => {
                                     },
                                 },
                             }} /*type={"pie"}*/ data={{
-                            labels: ['Videók megtekintése', 'Kérdések megválaszolása', 'Vizsgakitöltés', 'Nincs tevékenység'],
-                            datasets: [
-                                {
-                                    label: 'Aktivitás átlagos felosztása',
-                                    data: [56, 5, 19, 20],
-                                    backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
-                                }
-                            ]
-                        }} />
+                                labels: ['Videók megtekintése', 'Kérdések megválaszolása', 'Vizsgakitöltés', 'Nincs tevékenység'],
+                                datasets: [
+                                    {
+                                        label: 'Aktivitás átlagos felosztása',
+                                        data: [56, 5, 19, 20],
+                                        backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
+                                    }
+                                ]
+                            }} />
                     </StatisticsCard>
 
 
@@ -230,15 +230,15 @@ const AdminStatistics = () => {
                                     },
                                 },
                             }} /*type={"pie"}*/ data={{
-                            labels: ['Excel', 'Word', 'Power Point', 'B2B Sales Masterclass'],
-                            datasets: [
-                                {
-                                    label: 'Aktivitás átlagos felosztása',
-                                    data: [34, 19, 15, 32],
-                                    backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
-                                }
-                            ]
-                        }} />
+                                labels: ['Excel', 'Word', 'Power Point', 'B2B Sales Masterclass'],
+                                datasets: [
+                                    {
+                                        label: 'Aktivitás átlagos felosztása',
+                                        data: [34, 19, 15, 32],
+                                        backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
+                                    }
+                                ]
+                            }} />
                     </StatisticsCard>
 
                     <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>

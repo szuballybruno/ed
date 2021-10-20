@@ -1,9 +1,9 @@
 import { Flex } from "@chakra-ui/react";
-import { Checkbox, Divider, List, ListItem, Radio, Switch, TextField, Typography } from "@mui/material";
+import { Checkbox, Divider, List, ListItem, Radio, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { HexColorPicker } from "react-colorful";
 import { useParams } from "react-router";
+import { applicationRoutes } from "../../../../configuration/applicationRoutes";
 import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
 import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../../models/shared_models/AdminPageEditCourseDTO";
 import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
@@ -18,8 +18,6 @@ import { SaveBar } from "../saveBar/SaveBar";
 import { AdminDashboardSearch } from "../searchBar/AdminDashboardSearch";
 import { SelectMultiple } from "../selectMultiple/SelectMultiple";
 import classes from "./editCourse.module.scss";
-import {applicationRoutes} from "../../../../configuration/applicationRoutes";
-import {EditUserControl} from "../../EditUserControl";
 
 /* TODO:
 *   - Create a new CourseItemDTO for this page
@@ -39,11 +37,9 @@ export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
 // }
 
 export const EditCourse = () => {
+
     console.log("EditCourse loaded")
-    const [showSecondColorPicker, setShowSecondColorPicker] = useState(false)
-
     const { courseId } = useParams<{ courseId: string }>();
-
     const [isAllowEditOnPage, setIsAllowEditOnPage] = useState(false)
 
     const [title, setTitle] = useState("")

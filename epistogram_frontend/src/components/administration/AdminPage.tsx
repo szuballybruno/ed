@@ -7,22 +7,22 @@ import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainP
 import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../navbar/Navbar";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
-import { AddCourse } from "./courses/addCourse/AddCourse";
-import { AddVideo } from "./courses/addVideo/AddVideo";
-import { CourseAdministration } from "./courses/courseList/CourseAdministration";
+import { AddCourse } from "./courses/AdminAddCourseSubpage";
+import { AddVideo } from "./courses/AdminAddVideoSubpage";
+import { CourseAdministration } from "./courses/AdminCourseListSubpage";
 import { EditCourse } from "./courses/editCourse/EditCourse";
 import { EditVideo } from "./courses/editVideo/EditVideo";
-import AdminStatistics from "./AdminStatisticsSubpage";
-import AdminAddUserSubpage from "./AdminAddUserSubpage";
-import { AdminUserListSubpage } from "./AdminUserListSubpage";
-import { AdminUserStatisticsSubpage } from "./AdminUserStatisticsSubpage";
+import AdminStatistics from "./users/AdminStatisticsSubpage";
+import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
+import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
+import { AdminUserStatisticsSubpage } from "./users/AdminUserStatisticsSubpage";
 import CourseStatistics from "./courses/courseStatistics/CourseStatistics";
-import AdminUserTasksSubpage from './AdminUserTasksSubpage';
-import AdminEditUserSubpage from './AdminEditUserSubpage';
-import {AdminGroupListSubpage} from "./groups/AdminGroupListSubpage";
-import {AdminAddGroupSubpage} from "./groups/AdminAddGroupSubpage";
-import {AdminEditGroupSubpage} from "./groups/AdminEditGroupSubpage";
-import {AdminGroupStatisticsSubpage} from "./groups/AdminGroupStatisticsSubpage";
+import AdminUserTasksSubpage from './users/AdminUserTasksSubpage';
+import AdminEditUserSubpage from './users/AdminEditUserSubpage';
+import { AdminGroupListSubpage } from "./groups/AdminGroupListSubpage";
+import { AdminAddGroupSubpage } from "./groups/AdminAddGroupSubpage";
+import { AdminEditGroupSubpage } from "./groups/AdminEditGroupSubpage";
+import { AdminGroupStatisticsSubpage } from "./groups/AdminGroupStatisticsSubpage";
 
 const AdminPage = () => {
 

@@ -1,22 +1,22 @@
-import React, {ReactNode, useContext, useState} from 'react';
-import {AdminSubpageHeader} from "../AdminSubpageHeader";
-import {Flex} from "@chakra-ui/react";
-import {Button, Checkbox, Typography} from "@mui/material";
-import {ApartmentTwoTone, Close, Edit, Email, Equalizer, Task, WorkTwoTone} from "@mui/icons-material";
-import IntersectionObserverWrap from "../../IntersectionObserverWrapper";
-import {EpistoSearch} from "../../universal/EpistoSearch";
-import {EpistoSelect} from "../../universal/EpistoSelect";
-import {LoadingFrame} from "../../HOC/LoadingFrame";
-import {FlexList} from "../../universal/FlexList";
+import { Flex } from "@chakra-ui/react";
+import { ApartmentTwoTone, Close, Edit, Equalizer } from "@mui/icons-material";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import {FlexListItem} from "../../universal/FlexListItem";
-import {FlexListTitleSubtitle} from "../../universal/FlexListTitleSubtitle";
-import {FloatChip} from "../../universal/FloatChip";
-import {EpistoButton} from "../../universal/EpistoButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {FloatAddButton} from "../../FloatAddButton";
-import {useNavigation} from "../../../services/navigatior";
-import {applicationRoutes} from "../../../configuration/applicationRoutes";
+import { Button, Checkbox, Typography } from "@mui/material";
+import React, { ReactNode, useState } from 'react';
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { useNavigation } from "../../../services/navigatior";
+import { FloatAddButton } from "../../FloatAddButton";
+import { LoadingFrame } from "../../HOC/LoadingFrame";
+import IntersectionObserverWrap from "../../IntersectionObserverWrapper";
+import { EpistoButton } from "../../universal/EpistoButton";
+import { EpistoSearch } from "../../universal/EpistoSearch";
+import { EpistoSelect } from "../../universal/EpistoSelect";
+import { FlexList } from "../../universal/FlexList";
+import { FlexListItem } from "../../universal/FlexListItem";
+import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
+import { FloatChip } from "../../universal/FloatChip";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const AdminGroupListSubpage = () => {
 
@@ -89,34 +89,34 @@ export const AdminGroupListSubpage = () => {
                     </Flex>}
 
                     {selectedGroupIds.length > 0 &&
-                    <Flex
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                        w={230}
-                        minW={230}
-                        h={"100%"}>
                         <Flex
                             direction={"row"}
-                            justifyContent={"center"}
                             alignItems={"center"}
-                            className="roundBorders"
-                            bg="var(--epistoTeal)"
-                            p="0 12px 0 12px"
-                            color="white"
-                            h={30}
-                            ml={10}>
-                            <Typography>
-                                {selectedGroupIds.length} csoport kijelölve
-                            </Typography>
-                            <Close onClick={() => {
-                                setSelectedGroupIds([])
-                            }} style={{
-                                width: 18,
-                                marginLeft: 5
-                            }} />
-                        </Flex>
-                    </Flex>}
+                            justifyContent={"space-between"}
+                            w={230}
+                            minW={230}
+                            h={"100%"}>
+                            <Flex
+                                direction={"row"}
+                                justifyContent={"center"}
+                                alignItems={"center"}
+                                className="roundBorders"
+                                bg="var(--epistoTeal)"
+                                p="0 12px 0 12px"
+                                color="white"
+                                h={30}
+                                ml={10}>
+                                <Typography>
+                                    {selectedGroupIds.length} csoport kijelölve
+                                </Typography>
+                                <Close onClick={() => {
+                                    setSelectedGroupIds([])
+                                }} style={{
+                                    width: 18,
+                                    marginLeft: 5
+                                }} />
+                            </Flex>
+                        </Flex>}
 
                     {selectedGroupIds.length !== 1 && <Flex flex={1}></Flex>}
 
@@ -265,7 +265,7 @@ export const AdminGroupListSubpage = () => {
                                     {/* delete group */}
                                     <EpistoButton
                                         variant="colored"
-                                        onClick={() => {}}
+                                        onClick={() => { }}
                                         style={{ width: 20, marginLeft: 5 }}>
                                         <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>
                                     </EpistoButton>

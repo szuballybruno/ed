@@ -1,11 +1,11 @@
 import React from 'react';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { CreateInvitedUserDTO } from "../../models/shared_models/CreateInvitedUserDTO";
-import { UserEditDTO } from '../../models/shared_models/UserEditDTO';
-import { useNavigation } from "../../services/navigatior";
-import { showNotification, useShowErrorDialog } from "../../services/notifications";
-import { inviteUserAsync } from "../../services/userManagementService";
-import { AdminSubpageHeader } from './AdminSubpageHeader';
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { CreateInvitedUserDTO } from "../../../models/shared_models/CreateInvitedUserDTO";
+import { UserEditDTO } from '../../../models/shared_models/UserEditDTO';
+import { useNavigation } from "../../../services/navigatior";
+import { showNotification, useShowErrorDialog } from "../../../services/notifications";
+import { inviteUserAsync } from "../../../services/userManagementService";
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditUserControl } from "./EditUserControl";
 
 const AdminAddUserSubpage = () => {
