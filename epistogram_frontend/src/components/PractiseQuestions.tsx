@@ -14,24 +14,37 @@ import {applicationRoutes} from "../configuration/applicationRoutes";
 import {useContext} from "react";
 import {CurrentUserContext} from "./HOC/AuthenticationFrame";
 
-const NoQuestionsAvailable = () => <Flex>
-    <Flex direction={"column"}>
-        <Text as={"text"} p={"20px 20px 10px 20px"}>
-            {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
-        </Text>
-        <Text as={"text"} p={"20px 20px 10px 20px"}>
-            {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
-        </Text>
+const NoQuestionsAvailable = () => {
+    const { navigate } = useNavigation()
+    return <Flex>
+        <Flex direction={"column"}>
+            <Text as={"text"} p={"20px 20px 10px 20px"}>
+                {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
+            </Text>
+            <Text as={"text"} p={"20px 20px 10px 20px"}>
+                {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
+                <Text
+                    as="text"
+                    onClick={() => navigate("/courses")}
+                    color="var(--epistoTeal)"
+                    fontWeight="bold"
+                    cursor="pointer"
+                >
+                    {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosButton}
+                </Text>
+            </Text>
+
+        </Flex>
+        <Flex>
+            <Player
+                autoplay
+                loop
+                src={getAssetUrl("test_your_knowledge_lotties/writing_exam.json")}
+                style={{height: '300px', width: '300px'}}
+            />
+        </Flex>
     </Flex>
-    <Flex>
-        <Player
-            autoplay
-            loop
-            src={getAssetUrl("test_your_knowledge_lotties/writing_exam.json")}
-            style={{height: '300px', width: '300px'}}
-        />
-    </Flex>
-</Flex>
+}
 
 const InitialGreetings = (props: {firstName: string}) => {
     const { navigate } = useNavigation()
