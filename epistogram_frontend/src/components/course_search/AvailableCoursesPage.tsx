@@ -162,7 +162,7 @@ const AvailableCoursesPage = () => {
                                             navigateToPlayer(course.firstItemCode);
                                         }
 
-                                        return <GridItem height="450px">
+                                        return <GridItem>
                                             <CourseTile course={course} key={index} >
                                                 <Flex mt="10px">
 

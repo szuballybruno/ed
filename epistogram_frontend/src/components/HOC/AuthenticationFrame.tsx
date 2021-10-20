@@ -4,6 +4,7 @@ import { UserDTO } from "../../models/shared_models/UserDTO";
 import { AuthenticationStateType, useUserFetching } from "../../services/authenticationService";
 import { useRenewUserSessionPooling } from "../../services/openEndpointService";
 import setTheme from "../../services/setTheme";
+import { hotjar } from "react-hotjar";
 
 export const CurrentUserContext = createContext<UserDTO | null>(null);
 export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());
@@ -14,13 +15,15 @@ export const AuthenticationFrame = (props) => {
     //SET THEME
     setTheme(globalConfig.currentTheme);
 
-    // start auth pooling 
+    hotjar.initialize(2659369, 6)
+
+    // start auth pooling
     const { isSuccess } = useRenewUserSessionPooling();
 
     if (globalConfig.verboseLogging)
         console.log("Renewing token: " + isSuccess);
 
-    // fetch current user 
+    // fetch current user
     const { currentUser, refetchUserAsync, authState } = useUserFetching(isSuccess);
 
     if (globalConfig.verboseLogging)
