@@ -30,17 +30,24 @@ export const translatableTexts = {
         learningExams: "Vizsgáim",
         administration: "Adminisztráció",
         administrationStatistics: "Statisztika",
+
         administrationUserAdmin: "Felhasználók",
         administrationAddUser: "Felhasználó hozzáadása",
         administrationEditUser: "Szerkesztés",
         administrationUserStatistics: "Statisztika",
         administrationUserTasks: "Feladatok",
+
         administrationCourseAdmin: "Kurzusok",
         administrationAddCourse: "Kurzus hozzáadása",
         administrationEditCourse: "Szerkesztés",
         administrationCourseStatistics: "Statisztika",
         administrationAddVideo: "Videó hozzáadása",
         administrationEditVideo: "Videó szerkesztése",
+
+        administrationAddGroup: "Csoport hozzáadása",
+        administrationEditGroup: "Csoport szerkesztése",
+        administrationGroupStatistics: "Statisztika",
+
         settings: "Beállítások",
         settingsOverview: "Általános"
     },

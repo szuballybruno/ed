@@ -130,15 +130,15 @@ export const applicationRoutes = {
             icon: <People color={"secondary"} />,
 
             addRoute: {
-                title: translatableTexts.routeTitles.administrationAddCourse,
+                title: translatableTexts.routeTitles.administrationAddGroup,
                 route: "/administration/groups/add"
             },
             editRoute: {
-                title: translatableTexts.routeTitles.administrationEditCourse,
+                title: translatableTexts.routeTitles.administrationEditGroup,
                 route: "/administration/groups/:groupId/edit"
             },
             statisticsRoute: {
-                title: translatableTexts.routeTitles.administrationCourseStatistics,
+                title: translatableTexts.routeTitles.administrationGroupStatistics,
                 route: "/administration/groups/:groupId/statistics"
             },
         },
