@@ -10,7 +10,7 @@ import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AddCourse } from "./courses/AdminAddCourseSubpage";
 import { AddVideo } from "./courses/AdminAddVideoSubpage";
 import { CourseAdministration } from "./courses/AdminCourseListSubpage";
-import { EditCourse } from "./courses/editCourse/EditCourse";
+import { AdminEditCourseSubpage } from "./courses/AdminEditCourseSubpage";
 import { EditVideo } from "./courses/editVideo/EditVideo";
 import AdminStatistics from "./users/AdminStatisticsSubpage";
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
@@ -92,7 +92,7 @@ const AdminPage = () => {
                                     <AddCourse />
                                 </Route>
                                 <Route path={administrationRoutes.coursesRoute.editCourseRoute.route}>
-                                    <EditCourse />
+                                    <AdminEditCourseSubpage />
                                 </Route>
                                 <Route path={administrationRoutes.coursesRoute.statisticsCourseRoute.route}>
                                     <CourseStatistics />

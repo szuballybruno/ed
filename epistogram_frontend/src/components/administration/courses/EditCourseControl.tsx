@@ -1,44 +1,51 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Image } from "@chakra-ui/react";
 import { Checkbox, Divider, List, ListItem, Radio, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useParams } from "react-router";
-import { applicationRoutes } from "../../../../configuration/applicationRoutes";
-import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
-import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../../models/shared_models/AdminPageEditCourseDTO";
-import { CourseItemDTO } from "../../../../models/shared_models/CourseItemDTO";
-import { useAdminEditedCourse } from "../../../../services/courseService";
-import { httpPostAsync } from "../../../../services/httpClient";
-import SelectImage from "../../../selectImage/SelectImage";
-import EditItem from "../../../universal/editItem/EditItem";
-import { AdminSubpageHeader } from "../../AdminSubpageHeader";
-import AdminDashboardHeader from "../adminDashboardHeader/AdminDashboardHeader";
-import { AdministrationListItem } from "../adminDashboardSearchItem/AdministrationListItem";
-import { SaveBar } from "../saveBar/SaveBar";
-import { AdminDashboardSearch } from "../searchBar/AdminDashboardSearch";
-import { SelectMultiple } from "../selectMultiple/SelectMultiple";
-import classes from "./editCourse.module.scss";
-
-/* TODO:
-*   - Create a new CourseItemDTO for this page
-*   - Make the order state editable -> If the orderIndex is not equal with the sent array index
-*
-*/
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { getEventFileCallback, getEventValueCallback } from "../../../frontendHelpers";
+import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../models/shared_models/AdminPageEditCourseDTO";
+import { CourseItemDTO } from "../../../models/shared_models/CourseItemDTO";
+import { useAdminEditedCourse } from "../../../services/courseService";
+import EditItem from "../../universal/editItem/EditItem";
+import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
+import { SelectImage } from "../../universal/SelectImage";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import AdminDashboardHeader from "./adminDashboardHeader/AdminDashboardHeader";
+import { AdministrationListItem } from "./adminDashboardSearchItem/AdministrationListItem";
+import classes from "./editCourse/editCourse.module.scss";
+import { SaveBar } from "./saveBar/SaveBar";
+import { AdminDashboardSearch } from "./searchBar/AdminDashboardSearch";
+import { SelectMultiple } from "./selectMultiple/SelectMultiple";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
 }
 
-// const updateEditPage = (data?: AdminPageEditCourseDTO) => {
-//     console.log("Data is updated on the server")
+const EditSection = (props: {
+    title: string,
+    children: ReactNode
+}) => {
 
-//     console.log("This is the data: " + JSON.stringify(data))
-//     //Send data in post request here
-// }
+    const { children, title } = props;
 
-export const EditCourse = () => {
+    return <Flex direction="column" mt="10px">
 
-    console.log("EditCourse loaded")
+        <Typography variant={"overline"}>
+            {title}
+        </Typography>
+
+        {children}
+
+    </Flex>
+}
+
+export const EditCourseControl = (props: {
+    saveCourseAsync: (dto: AdminPageEditCourseDTO) => Promise<void>
+}) => {
+
+    const { saveCourseAsync } = props;
     const { courseId } = useParams<{ courseId: string }>();
     const [isAllowEditOnPage, setIsAllowEditOnPage] = useState(false)
 
@@ -46,8 +53,7 @@ export const EditCourse = () => {
     const [category, setCategory] = useState("")
     const [courseGroup, setCourseGroup] = useState("")
     const [permissionLevel, setPermissionLevel] = useState("")
-    const [thumbnailImage, setThumbnailImage] = useState("")
-    const [thumbnailURL, setThumbnailURL] = useState("")
+    const [thumbnailSrc, setThumbnailSrc] = useState("")
     const [colorOne, setColorOne] = useState("")
     const [colorTwo, setColorTwo] = useState("")
     const [courseItems, setCourseItems] = useState<CourseItemDTO[]>([])
@@ -57,9 +63,34 @@ export const EditCourse = () => {
     const [teachers, setTeachers] = useState<EditListItemDTO[]>([])
     const { course } = useAdminEditedCourse(Number(courseId));
 
-    useCreateObjectURL(thumbnailImage, setThumbnailURL)
+    const handleSaveCourseAsync = async () => {
 
-    const setEditCourseState = (course: AdminPageEditCourseDTO) => {
+        const dto = {
+            courseId: course?.courseId,
+            title: title,
+            category: category,
+            courseGroup: courseGroup,
+            permissionLevel: permissionLevel,
+            thumbnailURL: thumbnailSrc,
+            colorOne: colorOne,
+            colorTwo: colorTwo,
+            courseItems: course?.courseItems,
+            organizations: organizations,
+            tags: tags,
+            teachers: teachers,
+            groups: groups
+        } as AdminPageEditCourseDTO;
+
+        setIsAllowEditOnPage(p => !p)
+        return saveCourseAsync(dto);
+    }
+
+    // set default values 
+    useEffect(() => {
+
+        if (!course)
+            return;
+
         const {
             title,
             category,
@@ -79,7 +110,7 @@ export const EditCourse = () => {
         setCategory(category)
         setCourseGroup(courseGroup)
         setPermissionLevel(permissionLevel)
-        setThumbnailURL(thumbnailURL)
+        setThumbnailSrc(thumbnailURL)
         setColorOne(colorOne)
         setColorTwo(colorTwo)
         setCourseItems(courseItems)
@@ -87,32 +118,7 @@ export const EditCourse = () => {
         setTags(tags)
         setTeachers(teachers)
         setGroups(groups)
-    }
-
-    const getAdminPageEditCourseDTO = () => {
-        return {
-            courseId: course?.courseId,
-            title: title,
-            category: category,
-            courseGroup: courseGroup,
-            permissionLevel: permissionLevel,
-            thumbnailURL: thumbnailURL,
-            colorOne: colorOne,
-            colorTwo: colorTwo,
-            courseItems: course?.courseItems,
-            organizations: organizations,
-            tags: tags,
-            teachers: teachers,
-            groups: groups
-        } as AdminPageEditCourseDTO
-    }
-    const updateAdminPageEditCourse = (course: AdminPageEditCourseDTO) => {
-        return httpPostAsync("set-admin-edit-course", course)
-    }
-
-    useEffect(() => {
-        !!course && setEditCourseState(course)
-    }, [course])
+    }, [course]);
 
     const handleOnDragEnd = (dragParams) => {
         const items = Array.from(courseItems)
@@ -136,18 +142,29 @@ export const EditCourse = () => {
         )}
     </Draggable>
 
-    return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
+    const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
+    const fileBrowseInputRef = useRef<HTMLInputElement>(null);
+
+    const setBrowsedImage = (src: string, file: File) => {
+
+        setThumbnailSrc(src);
+        setThumbnailImageFile(file);
+    }
+
+    return <Flex direction="column">
+
+        {/* hidden input */}
+        <HiddenFileUploadInput
+            ref={fileBrowseInputRef}
+            onImageSelected={setBrowsedImage} />
 
         {/* admin header */}
-        <AdminSubpageHeader tabMenuItems={[
-            applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
-            /*applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,*/
-        ]}>
-            {/*<EditUserControl
-                editDTO={userEditData}
-                saveUserAsync={handleSaveUserAsync}></EditUserControl>*/}
+        <AdminSubpageHeader
+            tabMenuItems={[
+                applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
+                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
+            ]}>
         </AdminSubpageHeader>
-
 
         <div className={classes.editDataOuterWrapper}>
 
@@ -155,43 +172,49 @@ export const EditCourse = () => {
                 <div className={classes.editDataLeftWrapper}>
 
                     <div className={classes.editDataListWrapper}>
-                        <SelectImage onChange={getEventFileCallback(setThumbnailImage)}
-                            uploadedImageUrls={[thumbnailURL]}
-                            title={"Borítókép"} />
-                        <Typography variant={"overline"}>Alapadatok</Typography>
-                        <List
-                            component="nav"
-                            aria-labelledby="nested-list-subheader"
-                            className={classes.tagList}
-                        >
-                            <EditItem
-                                isEditing={isAllowEditOnPage}
-                                value={title}
-                                title={"Név"}
-                                onChange={getEventValueCallback(setTitle)}
-                                name={"name"} />
 
-                            <EditItem
-                                isEditing={isAllowEditOnPage}
-                                value={category}
-                                title={"Kategória"}
-                                onChange={getEventValueCallback(setCategory)}
-                                name={"category"} />
+                        <EditSection title="Borítókép">
+                            <SelectImage
+                                width="300px"
+                                height="200px"
+                                onClick={() => fileBrowseInputRef?.current?.click()}>
+                                <Image className="whall" objectFit="cover" src={thumbnailSrc}></Image>
+                            </SelectImage>
+                        </EditSection>
 
-                            <EditItem
-                                isEditing={isAllowEditOnPage}
-                                value={courseGroup}
-                                title={"Kategória csoport"}
-                                onChange={getEventValueCallback(setCourseGroup)}
-                                name={"courseGroup"} />
+                        {/* basic info edit */}
+                        <EditSection title="Alapadatok">
+                            <Flex direction="column">
 
-                            <EditItem
-                                isEditing={isAllowEditOnPage}
-                                value={permissionLevel}
-                                title={"Elérés"}
-                                onChange={getEventValueCallback(setPermissionLevel)}
-                                name={"permissionLevel"} />
-                        </List>
+                                <EditItem
+                                    isEditing={isAllowEditOnPage}
+                                    value={title}
+                                    title={"Név"}
+                                    onChange={getEventValueCallback(setTitle)}
+                                    name={"name"} />
+
+                                <EditItem
+                                    isEditing={isAllowEditOnPage}
+                                    value={category}
+                                    title={"Kategória"}
+                                    onChange={getEventValueCallback(setCategory)}
+                                    name={"category"} />
+
+                                <EditItem
+                                    isEditing={isAllowEditOnPage}
+                                    value={courseGroup}
+                                    title={"Kategória csoport"}
+                                    onChange={getEventValueCallback(setCourseGroup)}
+                                    name={"courseGroup"} />
+
+                                <EditItem
+                                    isEditing={isAllowEditOnPage}
+                                    value={permissionLevel}
+                                    title={"Elérés"}
+                                    onChange={getEventValueCallback(setPermissionLevel)}
+                                    name={"permissionLevel"} />
+                            </Flex>
+                        </EditSection>
                     </div>
                 </div>
 
@@ -335,10 +358,10 @@ export const EditCourse = () => {
 
         <AdminDashboardHeader titleText={""} />
 
-        <SaveBar open={isAllowEditOnPage} onClick={() => setIsAllowEditOnPage(p => !p)} onDoneClick={() => {
-            setIsAllowEditOnPage(p => !p)
-            return updateAdminPageEditCourse(getAdminPageEditCourseDTO())
-        }} />
+        <SaveBar
+            open={isAllowEditOnPage}
+            onClick={() => setIsAllowEditOnPage(p => !p)}
+            onDoneClick={handleSaveCourseAsync} />
 
     </Flex>
 };

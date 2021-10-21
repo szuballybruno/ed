@@ -1,6 +1,5 @@
 import { Input } from '@chakra-ui/input';
 import { Box, Flex } from '@chakra-ui/layout';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { TextField, Typography } from '@mui/material';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router';
@@ -16,6 +15,8 @@ import Navbar from '../navbar/Navbar';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { ProfileImage } from '../ProfileImage';
 import { EpistoButton } from '../universal/EpistoButton';
+import { HiddenFileUploadInput } from '../universal/HiddenFileUploadInput';
+import { SelectImage } from '../universal/SelectImage';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -64,8 +65,6 @@ const Preferences = () => {
         phoneNumber !== user.phoneNumber,
         avatarFile !== null
     ].some(x => x)
-
-    const [isProfPicHovered, setIsProfPicHovered] = useState(false);
 
     const saveChangesAsync = async () => {
 
@@ -118,41 +117,21 @@ const Preferences = () => {
         setCurrentPassword("");
     }, [isPasswordChangeOpen]);
 
+    const setBrowsedImage = (src: string, file: File) => {
+
+        if (!imageRef.current)
+            return;
+
+        setAvatarSrc(src);
+        setAvatarFile(file);
+    }
+
     return <>
 
         {/* hidden input */}
-        <input
+        <HiddenFileUploadInput
             ref={fileBrowseInputRef}
-            type="file"
-            id="imgupload"
-            style={{ display: "none" }}
-            onChange={x => {
-
-                const input = x.currentTarget;
-                if (!input)
-                    return;
-
-                if (!input.files)
-                    return;
-
-                const file = input.files[0] as File;
-                input.value = "";
-
-                var reader = new FileReader();
-
-                reader.onloadend = () => {
-
-                    if (!imageRef.current)
-                        return;
-
-                    const src = reader.result as any;
-
-                    setAvatarSrc(src);
-                    setAvatarFile(file);
-                }
-
-                reader.readAsDataURL(file);
-            }} />
+            onImageSelected={setBrowsedImage} />
 
         <LoadingFrame
             direction="column"
@@ -160,42 +139,16 @@ const Preferences = () => {
             loadingState={[saveUserDataState, postAvatarFileState, requestChangePasswordState]}
             align="center">
 
-            <Box
-                position="relative"
-                className="circle"
-                overflow="hidden"
+            <SelectImage
                 width="200px"
                 height="200px"
-                cursor="pointer"
-                onClick={() => fileBrowseInputRef.current?.click()}
-                onMouseEnter={() => setIsProfPicHovered(true)}
-                onMouseLeave={() => setIsProfPicHovered(false)}>
-
+                className="circle"
+                onClick={() => fileBrowseInputRef.current?.click()}>
                 <ProfileImage
                     url={avatarSrc ?? null}
                     ref={imageRef}
                     className="whall" />
-
-                <Flex
-                    position="absolute"
-                    className="whall"
-                    height="50%"
-                    transition="0.4s"
-                    top={0}
-                    bg="#ffffffcc"
-                    direction="column"
-                    align="center"
-                    justify="center"
-                    transform={isProfPicHovered ? "translateY(100%)" : "translateY(125%)"}
-                    opacity={isProfPicHovered ? 1 : 0}>
-
-                    <Typography>
-                        Új kép feltöltése
-                    </Typography>
-
-                    <PhotoCameraIcon className="square40"></PhotoCameraIcon>
-                </Flex>
-            </Box>
+            </SelectImage>
 
             <Flex
                 direction="column"

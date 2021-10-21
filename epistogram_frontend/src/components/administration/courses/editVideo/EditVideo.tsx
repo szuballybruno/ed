@@ -1,6 +1,6 @@
 import { Divider, List, Typography } from "@mui/material";
 import React from 'react';
-import { getEventFileCallback, getEventValueCallback, useCreateObjectURL } from "../../../../frontendHelpers";
+import { getEventFileCallback, getEventValueCallback } from "../../../../frontendHelpers";
 import SelectImage from "../../../selectImage/SelectImage";
 import EditItem from "../../../universal/editItem/EditItem";
 import classes from "./editItemPage.module.scss";
@@ -13,8 +13,6 @@ export const EditVideo = () => {
     const [editedVideoDescription, setEditedVideoDescription] = React.useState("")
     const [editedVideoThumbnailImage, setEditedVideoThumbnailImage] = React.useState("")
     const [editedVideoThumbnailURL, setEditedVideoThumbnailURL] = React.useState("")
-
-    useCreateObjectURL(editedVideoThumbnailImage, setEditedVideoThumbnailURL)
 
     return <div className={classes.editCourseWrapper}>
         <Divider style={{
