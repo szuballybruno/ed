@@ -8,6 +8,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { objToArray, useIsMatchingCurrentRoute } from "../../frontendHelpers";
 import { RouteItemType } from "../../models/types";
+import { useCourseBriefData } from "../../services/courseService";
 import { useNavigation } from "../../services/navigatior";
 import { useBriefUserData } from "../../services/userManagementService";
 import { EpistoButton } from "../universal/EpistoButton";
@@ -32,9 +33,11 @@ export const AdminSubpageHeader = (props: {
     //     .filter(x => isMatchingCurrentRoute(x.route, true))[0];
 
     const { briefUserData } = useBriefUserData(userId);
-    const subRoute = briefUserData
-        ? { title: briefUserData.fullName }
-        : null;
+    const { courseBriefData } = useCourseBriefData(courseId);
+
+    const subRoute = {
+        title: (briefUserData?.fullName || courseBriefData?.title) ?? ""
+    }
 
     const BreadcrumbLink = (props: {
         to?: string,
@@ -79,7 +82,7 @@ export const AdminSubpageHeader = (props: {
 
     const navigateToTab = (path: string) => {
 
-        navigate(path, { userId: userId });
+        navigate(path, { userId: userId, courseId: courseId });
     };
 
     return <Flex

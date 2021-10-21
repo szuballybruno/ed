@@ -127,6 +127,7 @@ const initializeAsync = async () => {
     expressServer.post("/course/set-course-mode", setCourseTypeAction);
     expressServer.post("/get-admin-courses", getAsyncActionHandler(getAdminCoursesAction));
     addEndpoint(apiRoutes.course.getCourseEditData, getEditedCourseAction);
+    addEndpoint(apiRoutes.course.getCourseBriefData, getEditedCourseAction);
     expressServer.post("/set-admin-edit-course", getAsyncActionHandler(setEditedCourseAction))
 
     // video 

@@ -29,6 +29,7 @@ export const apiRoutes = {
 
     course: {
         getCourseEditData: '/course/get-course-edit-data',
+        getCourseBriefData: '/course/get-course-brief-data',
     },
 
     video: {

@@ -18,6 +18,8 @@ import { getUserById } from "../services/userService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 import { log } from "../services/misc/logger";
+import { Course } from "../models/entity/Course";
+import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 
 export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
@@ -103,6 +105,21 @@ export const getEditedCourseAction = async (params: ActionParamsType) => {
     const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId);
 
     return await getEditedCourseAsync(courseId);
+};
+
+export const getCourseBriefDataAction = async (params: ActionParamsType) => {
+
+    const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId);
+
+    const course = await staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .findOneOrFail(courseId);
+
+    return {
+        id: course.id,
+        title: course.title
+    } as CourseBriefData;
 };
 
 export const setEditedCourseAction = (req: Request) => {

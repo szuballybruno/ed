@@ -6,6 +6,7 @@ import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
 import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
+import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 
 export const useAdministratedCourses = (searchText: string) => {
 
@@ -30,6 +31,20 @@ export const useAdminEditedCourse = (courseId: number) => {
         courseEditData: qr.data,
         courseEditDataError: qr.error,
         courseEditDataState: qr.status
+    }
+}
+
+export const useCourseBriefData = (courseId: number | null) => {
+
+    const qr = useReactQuery<CourseBriefData>(
+        ["courseBriefDataQuery", courseId],
+        () => httpGetAsync(apiRoutes.course.getCourseBriefData, { courseId: courseId }),
+        !!courseId)
+
+    return {
+        courseBriefData: qr.data,
+        courseBriefDataError: qr.error,
+        courseBriefDataState: qr.status
     }
 }
 

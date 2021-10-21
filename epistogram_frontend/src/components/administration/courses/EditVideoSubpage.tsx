@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/layout";
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useSaveVideo, useVideoEditData } from "../../../services/videoService";
 import { EpistoButton } from "../../universal/EpistoButton";
@@ -55,7 +56,12 @@ export const EditVideoSubpage = () => {
     }
 
     return <AdminSubpageHeader
-        onSave={handleSaveAsync}>
+        onSave={handleSaveAsync}
+        tabMenuItems={[
+            applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
+            applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+            applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
+        ]}>
 
         <Flex direction="column" p="20px">
 
