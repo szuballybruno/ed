@@ -7,11 +7,8 @@ import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainP
 import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../navbar/Navbar";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
-import { AddCourse } from "./courses/AdminAddCourseSubpage";
-import { AddVideo } from "./courses/AdminAddVideoSubpage";
 import { CourseAdministration } from "./courses/AdminCourseListSubpage";
 import { AdminEditCourseSubpage } from "./courses/AdminEditCourseSubpage";
-import { EditVideo } from "./courses/editVideo/EditVideo";
 import AdminStatistics from "./users/AdminStatisticsSubpage";
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
 import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
@@ -23,6 +20,7 @@ import { AdminGroupListSubpage } from "./groups/AdminGroupListSubpage";
 import { AdminAddGroupSubpage } from "./groups/AdminAddGroupSubpage";
 import { AdminEditGroupSubpage } from "./groups/AdminEditGroupSubpage";
 import { AdminGroupStatisticsSubpage } from "./groups/AdminGroupStatisticsSubpage";
+import { EditVideoSubpage } from './courses/EditVideoSubpage';
 
 const AdminPage = () => {
 
@@ -85,23 +83,21 @@ const AdminPage = () => {
                         isAuthorizedToView={x => x.canAccessCourseAdministration}
                         render={
                             () => <Switch>
+
                                 <Route exact path={administrationRoutes.coursesRoute.route}>
                                     <CourseAdministration />
                                 </Route>
-                                <Route path={administrationRoutes.coursesRoute.addRoute.route}>
-                                    <AddCourse />
-                                </Route>
+
                                 <Route path={administrationRoutes.coursesRoute.editCourseRoute.route}>
                                     <AdminEditCourseSubpage />
                                 </Route>
+
                                 <Route path={administrationRoutes.coursesRoute.statisticsCourseRoute.route}>
                                     <CourseStatisticsSubpage />
                                 </Route>
-                                <Route path={administrationRoutes.coursesRoute.addVideoRoute.route} exact>
-                                    <AddVideo />
-                                </Route>
+
                                 <Route path={administrationRoutes.coursesRoute.editVideoRoute.route}>
-                                    <EditVideo />
+                                    <EditVideoSubpage />
                                 </Route>
                             </Switch>
                         }

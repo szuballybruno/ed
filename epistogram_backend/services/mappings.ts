@@ -309,6 +309,7 @@ export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
 export const toCourseItemDTOExam = (exam: Exam, state?: CourseItemStateType) => {
 
     return {
+        id: exam.id,
         subTitle: exam.subtitle,
         thumbnailUrl: getExamCoverImageUrl(),
         title: exam.title,
@@ -322,6 +323,7 @@ export const toCourseItemDTOExam = (exam: Exam, state?: CourseItemStateType) => 
 export const toCourseItemDTOVideo = (video: Video, state?: CourseItemStateType) => {
 
     return {
+        id: video.id,
         subTitle: video.subtitle,
         thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
         title: video.title,

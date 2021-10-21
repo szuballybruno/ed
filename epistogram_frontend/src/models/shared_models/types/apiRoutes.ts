@@ -30,6 +30,13 @@ export const apiRoutes = {
     course: {
         getCourseEditData: '/course/get-course-edit-data',
     },
+
+    video: {
+        createVideo: "/video/create-video",
+        deleteVideo: "/video/delete-video",
+        saveVideo: "/video/save-video",
+        getVideoEditData: "/video/get-video-edit-data",
+    }
 }
 
 export const isOpenRoute = (routePath: string) => {

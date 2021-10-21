@@ -1,43 +1,29 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { Checkbox, Divider, ListItem, Radio, TextField, Typography } from "@mui/material";
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { getEventValueCallback } from "../../../frontendHelpers";
 import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../models/shared_models/AdminPageEditCourseDTO";
 import { CourseItemDTO } from "../../../models/shared_models/CourseItemDTO";
 import { useAdminEditedCourse } from "../../../services/courseService";
+import { useNavigation } from "../../../services/navigatior";
+import { showNotification, useShowErrorDialog } from "../../../services/notifications";
+import { useCreateVideo, useDeleteVideo } from "../../../services/videoService";
 import { DragAndDropList } from "../../universal/DragAndDropList";
 import EditItem from "../../universal/editItem/EditItem";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoSearch } from "../../universal/EpistoSearch";
-import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import classes from "./editCourse/editCourse.module.scss";
+import { EditSection } from "./EditSection";
 import { SelectMultiple } from "./selectMultiple/SelectMultiple";
-import EditIcon from '@mui/icons-material/Edit';
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
-}
-
-const EditSection = (props: {
-    title: string,
-    children: ReactNode
-}) => {
-
-    const { children, title } = props;
-
-    return <Flex direction="column" mt="20px">
-
-        <Typography variant={"overline"}>
-            {title}
-        </Typography>
-
-        {children}
-
-    </Flex>
 }
 
 export const EditCourseControl = (props: {
@@ -47,7 +33,9 @@ export const EditCourseControl = (props: {
     const { saveCourseAsync } = props;
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
-    const [isAllowEditOnPage, setIsAllowEditOnPage] = useState(false)
+    const [isAllowEditOnPage, setIsAllowEditOnPage] = useState(false);
+    const { navigate } = useNavigation();
+    const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
 
     const [title, setTitle] = useState("")
     const [category, setCategory] = useState("")
@@ -62,7 +50,15 @@ export const EditCourseControl = (props: {
     const [tags, setTags] = useState<EditListItemDTO[]>([])
     const [teachers, setTeachers] = useState<EditListItemDTO[]>([])
 
+    // http
     const { courseEditData } = useAdminEditedCourse(courseId);
+    const { createVideoAsync, createVideoState, createVideoResult } = useCreateVideo();
+    const { deleteVideoAsync, deleteVideoState } = useDeleteVideo();
+
+    const showError = useShowErrorDialog();
+
+    const navToVideoEdit = (videoId: number) => navigate(courseRoutes.editVideoRoute.route, { courseId, videoId });
+    const navToExamEdit = (examId: number) => navigate(courseRoutes.editExamRoute.route, { courseId, examId });
 
     const handleSaveCourseAsync = async () => {
 
@@ -122,7 +118,6 @@ export const EditCourseControl = (props: {
     }, [courseEditData]);
 
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
-    const fileBrowseInputRef = useRef<HTMLInputElement>(null);
 
     const setBrowsedImage = (src: string, file: File) => {
 
@@ -130,12 +125,62 @@ export const EditCourseControl = (props: {
         setThumbnailImageFile(file);
     }
 
-    return <Flex direction="column">
+    const handleEditCourseItem = (courseItem: CourseItemDTO) => {
 
-        {/* hidden input */}
-        <HiddenFileUploadInput
-            ref={fileBrowseInputRef}
-            onImageSelected={setBrowsedImage} />
+        if (courseItem.type === "exam") {
+
+            navToExamEdit(courseItem.id);
+        }
+        else {
+
+            navToVideoEdit(courseItem.id);
+        }
+    }
+
+    const handleAddNewVideoAsync = async () => {
+
+        try {
+
+            const idResult = await createVideoAsync(courseId);
+
+            showNotification("Uj video sikeresen hozzaadva!");
+
+            navToVideoEdit(idResult.id);
+        } catch (e) {
+
+            showError(e);
+        }
+    }
+
+    const handleDeleteCourseItemAsync = async (courseItem: CourseItemDTO) => {
+
+        try {
+
+            if (courseItem.type === "exam") {
+
+                // await deleteVideoAsync(videoId);
+                // showNotification("Video sikeresen torolve!");
+            }
+            else {
+
+                await deleteVideoAsync(courseItem.id);
+                showNotification("Video sikeresen torolve!");
+            }
+
+            setCourseItems(courseItems.filter(x => x.descriptorCode !== courseItem.descriptorCode));
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
+
+    const handleAddNewExam = () => {
+
+
+    }
+
+    return <Flex direction="column">
 
         {/* admin header */}
         <AdminSubpageHeader
@@ -156,7 +201,7 @@ export const EditCourseControl = (props: {
                     <SelectImage
                         width="300px"
                         height="200px"
-                        onClick={() => fileBrowseInputRef?.current?.click()}>
+                        onImageSelected={setBrowsedImage}>
                         <Image className="whall" objectFit="cover" src={thumbnailSrc}></Image>
                     </SelectImage>
                 </EditSection>
@@ -316,14 +361,29 @@ export const EditCourseControl = (props: {
                         </Typography>
 
                         <Flex>
-                            <EpistoButton>
+                            <EpistoButton
+                                onClick={() => handleEditCourseItem(item)}>
                                 <EditIcon></EditIcon>
+                            </EpistoButton>
+                            <EpistoButton
+                                onClick={() => handleDeleteCourseItemAsync(item)}>
+                                <DeleteIcon></DeleteIcon>
                             </EpistoButton>
                         </Flex>
                     </Flex>} />
 
-                <EpistoButton style={{ alignSelf: "center" }} variant="outlined">
-                    Add new
+                <EpistoButton
+                    onClick={() => handleAddNewVideoAsync()}
+                    style={{ alignSelf: "center" }}
+                    variant="outlined">
+                    Add new video
+                </EpistoButton>
+
+                <EpistoButton
+                    onClick={() => handleAddNewExam()}
+                    style={{ alignSelf: "center" }}
+                    variant="outlined">
+                    Add new exam
                 </EpistoButton>
             </Flex>
         </Flex>

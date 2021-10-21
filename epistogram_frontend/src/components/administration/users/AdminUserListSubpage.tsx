@@ -122,7 +122,7 @@ export const AdminUserListSubpage = () => {
         },
     ]
 
-    return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
+    return <LoadingFrame loadingState={usersStatus} error={usersError} className="whall">
 
         {/* admin header */}
         <AdminSubpageHeader>
@@ -132,9 +132,6 @@ export const AdminUserListSubpage = () => {
                 selectAllOrNone={selectAllOrNone}
                 selectedIds={selectedUserIds}
                 itemLabel="felhasznalo" />
-        </AdminSubpageHeader>
-
-        <LoadingFrame loadingState={usersStatus} error={usersError} flex="1">
 
             {/* user list */}
             <FlexList className="whall">
@@ -217,7 +214,6 @@ export const AdminUserListSubpage = () => {
             </FlexList>
 
             <FloatAddButton onClick={navigateToAddUser} />
-
-        </LoadingFrame>
-    </Flex>
+        </AdminSubpageHeader>
+    </LoadingFrame>
 }

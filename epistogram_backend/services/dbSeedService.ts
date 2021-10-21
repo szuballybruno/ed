@@ -334,7 +334,7 @@ const seedVideos = async (connection: TypeORMConnection) => {
         subtitle: "Fantastic Video 2",
         description: "Very very fantastic video 2 description",
         orderIndex: 2
-    } as Video, null);
+    } as Video);
 
     // course 4 videos
     await insertVideoAsync({

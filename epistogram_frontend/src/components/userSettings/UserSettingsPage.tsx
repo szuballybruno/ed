@@ -44,7 +44,6 @@ const Preferences = () => {
 
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
-    const fileBrowseInputRef = useRef<HTMLInputElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
 
     const showErrorDialog = useShowErrorDialog();
@@ -128,11 +127,6 @@ const Preferences = () => {
 
     return <>
 
-        {/* hidden input */}
-        <HiddenFileUploadInput
-            ref={fileBrowseInputRef}
-            onImageSelected={setBrowsedImage} />
-
         <LoadingFrame
             direction="column"
             justify="flex-start"
@@ -143,7 +137,7 @@ const Preferences = () => {
                 width="200px"
                 height="200px"
                 className="circle"
-                onClick={() => fileBrowseInputRef.current?.click()}>
+                onImageSelected={setBrowsedImage}>
                 <ProfileImage
                     url={avatarSrc ?? null}
                     ref={imageRef}

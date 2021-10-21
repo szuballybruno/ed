@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/layout";
+import { Box, FlexProps } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
 import { Tab, Tabs } from "@mui/material";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -10,17 +10,20 @@ import { objToArray, useIsMatchingCurrentRoute } from "../../frontendHelpers";
 import { RouteItemType } from "../../models/types";
 import { useNavigation } from "../../services/navigatior";
 import { useBriefUserData } from "../../services/userManagementService";
+import { EpistoButton } from "../universal/EpistoButton";
 
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: RouteItemType[],
-    children?: ReactNode
-}) => {
+    children?: ReactNode,
+    onSave?: () => void
+} & FlexProps) => {
 
-    const { children, tabMenuItems } = props;
+    const { children, tabMenuItems, onSave, ...css } = props;
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
-    const urlParams = useParams<{ userId: string }>();
+    const urlParams = useParams<{ userId: string, courseId: string }>();
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
+    const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
 
     const currentRoute = objToArray(applicationRoutes.administrationRoute)
         .filter(x => isMatchingCurrentRoute(x.route, x.exact))[0];
@@ -30,9 +33,7 @@ export const AdminSubpageHeader = (props: {
 
     const { briefUserData } = useBriefUserData(userId);
     const subRoute = briefUserData
-        ? {
-            title: briefUserData.fullName
-        }
+        ? { title: briefUserData.fullName }
         : null;
 
     const BreadcrumbLink = (props: {
@@ -54,8 +55,7 @@ export const AdminSubpageHeader = (props: {
                     fontWeight: props.isCurrent ? "bold" : undefined,
                     alignItems: "center",
                     padding: "0 2px 0 5px"
-                }}
-            >
+                }}>
                 {props.title}
             </Typography>
         </Flex>
@@ -82,8 +82,22 @@ export const AdminSubpageHeader = (props: {
         navigate(path, { userId: userId });
     };
 
-    return <Flex direction={"column"} w="100%">
-        <Flex flexDirection={"row"} h={60} pl={20} justifyContent={"flex-start"} alignItems={"center"} className="dividerBorderBottom">
+    return <Flex
+        direction={"column"}
+        className="whall"
+        position="relative"
+        overflowY="scroll"
+        {...css}>
+
+        {/* breadcrumbs */}
+        <Flex
+            direction={"row"}
+            height={60}
+            pl={20}
+            justify={"flex-start"}
+            align={"center"}
+            className="dividerBorderBottom">
+
             <Breadcrumbs>
                 {currentRoute && <BreadcrumbLink
                     isCurrent={!subRoute}
@@ -120,5 +134,18 @@ export const AdminSubpageHeader = (props: {
 
         {/* children  */}
         {children}
-    </Flex >
+
+        {/* save button */}
+        {onSave && <EpistoButton
+            style={{
+                position: "absolute",
+                right: "40px",
+                bottom: "40px"
+            }}
+            variant="colored"
+            onClick={() => onSave()}>
+
+            Mentes
+        </EpistoButton>}
+    </Flex>
 }

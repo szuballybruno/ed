@@ -1,12 +1,13 @@
 import { forwardRef } from "react";
 
 export type HiddenFileUploadInputPropsType = {
-    onImageSelected: (src: string, file: File) => void
+    type: "image" | "video",
+    onFileSelected: (file: File, src: string) => void
 }
 
 export const HiddenFileUploadInput = forwardRef<HTMLInputElement, HiddenFileUploadInputPropsType>((props, ref) => {
 
-    const { onImageSelected } = props;
+    const { onFileSelected, type } = props;
 
     return <input
         ref={ref}
@@ -25,15 +26,24 @@ export const HiddenFileUploadInput = forwardRef<HTMLInputElement, HiddenFileUplo
             const file = input.files[0] as File;
             input.value = "";
 
-            var reader = new FileReader();
+            // image
+            if (type === "image") {
+                var reader = new FileReader();
 
-            reader.onloadend = () => {
+                reader.onloadend = () => {
 
-                const src = reader.result as any;
+                    const src = reader.result as any;
 
-                onImageSelected(src, file);
+                    onFileSelected(file, src);
+                }
+
+                reader.readAsDataURL(file);
             }
 
-            reader.readAsDataURL(file);
+            // video
+            else {
+
+                onFileSelected(file, "");
+            }
         }} />
 });

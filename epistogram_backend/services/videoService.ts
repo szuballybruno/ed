@@ -14,7 +14,7 @@ export const answerVideoQuestionAsync = async (answerSessionId: number, question
     return answerQuestionAsync(answerSessionId, questionId, answerId);
 }
 
-export const insertVideoAsync = async (video: Video, filePath: string | null) => {
+export const insertVideoAsync = async (video: Video, filePath?: string) => {
 
     if (video.id)
         throw new Error("Cannot insert with id!");

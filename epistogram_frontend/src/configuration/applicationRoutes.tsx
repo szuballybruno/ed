@@ -121,7 +121,11 @@ export const applicationRoutes = {
             },
             editVideoRoute: {
                 title: translatableTexts.routeTitles.administrationEditVideo,
-                route: "/administration/courses/:courseId/item/:itemId"
+                route: "/administration/courses/:courseId/video/:videoId"
+            },
+            editExamRoute: {
+                title: translatableTexts.routeTitles.administrationEditVideo,
+                route: "/administration/courses/:courseId/exam/:examId"
             }
         },
         groupsRoute: {

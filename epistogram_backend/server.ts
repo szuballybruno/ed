@@ -17,6 +17,7 @@ import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/player
 import { answerVideoQuestionAction } from './api/questionActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
+import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction } from './api/videoActions';
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
@@ -127,6 +128,12 @@ const initializeAsync = async () => {
     expressServer.post("/get-admin-courses", getAsyncActionHandler(getAdminCoursesAction));
     addEndpoint(apiRoutes.course.getCourseEditData, getEditedCourseAction);
     expressServer.post("/set-admin-edit-course", getAsyncActionHandler(setEditedCourseAction))
+
+    // video 
+    addEndpoint(apiRoutes.video.createVideo, createVideoAction, { isPost: true });
+    addEndpoint(apiRoutes.video.deleteVideo, deleteVideoAction, { isPost: true });
+    addEndpoint(apiRoutes.video.saveVideo, saveVideoAction, { isPost: true });
+    addEndpoint(apiRoutes.video.getVideoEditData, getVideoEditDataAction);
 
     // available courses
     expressServer.post("/get-user-courses", getUserCoursesAction);

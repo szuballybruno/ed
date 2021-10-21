@@ -1,23 +1,31 @@
 import { Box, BoxProps, Flex } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import { HiddenFileUploadInput } from "./HiddenFileUploadInput";
 
 export const SelectImage = (props: {
-    onClick: () => void
+    onImageSelected: (src: string, file: File) => void,
 } & BoxProps) => {
 
     const [isHovered, setIsHovered] = useState(false);
-    const { children, onClick, ...css } = props;
+    const { children, onImageSelected, ...css } = props;
+    const fileBrowseInputRef = useRef<HTMLInputElement>(null);
 
     return <Box
         position="relative"
         overflow="hidden"
         cursor="pointer"
-        onClick={() => onClick()}
+        onClick={() => fileBrowseInputRef?.current?.click()}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         {...css}>
+
+        {/* hidden input */}
+        <HiddenFileUploadInput
+            ref={fileBrowseInputRef}
+            type="image"
+            onFileSelected={(file, src) => onImageSelected(src, file)} />
 
         {children}
 

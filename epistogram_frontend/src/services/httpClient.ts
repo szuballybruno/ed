@@ -96,10 +96,12 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
             setState("loading");
 
             const postData = data ? data : undefined;
-            const postResult = await httpPostAsync(url, postData);
+            const postResult = await httpPostAsync(url, postData) as TResult;
 
             setState("idle");
-            setResult(postResult as TResult);
+            setResult(postResult);
+
+            return postResult;
         }
         catch (e) {
 

@@ -76,7 +76,7 @@ export const CourseAdministration = () => {
         }
     ]
 
-    return <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
+    return <LoadingFrame loadingState={coursesStatus} error={coursesError} className="whall">
 
         {/* admin header */}
         <AdminSubpageHeader>
@@ -86,9 +86,7 @@ export const CourseAdministration = () => {
                 selectAllOrNone={selectAllOrNone}
                 selectedIds={selectedCourseIds}
                 itemLabel="kurzus" />
-        </AdminSubpageHeader>
 
-        <LoadingFrame loadingState={coursesStatus} error={coursesError} flex="1">
             {/* List of courses */}
             <FlexList flex={1}>
                 {courses
@@ -169,8 +167,8 @@ export const CourseAdministration = () => {
                         />
                     })}
             </FlexList>
-        </LoadingFrame>
 
-        <FloatAddButton onClick={navigateToAddUser} />
-    </Flex>
+            <FloatAddButton onClick={navigateToAddUser} />
+        </AdminSubpageHeader>
+    </LoadingFrame>
 }
