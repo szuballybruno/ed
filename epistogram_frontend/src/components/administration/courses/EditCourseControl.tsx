@@ -1,7 +1,6 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
 import { Checkbox, Divider, ListItem, Radio, TextField, Typography } from "@mui/material";
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { getEventValueCallback } from "../../../frontendHelpers";
@@ -10,13 +9,14 @@ import { CourseItemDTO } from "../../../models/shared_models/CourseItemDTO";
 import { useAdminEditedCourse } from "../../../services/courseService";
 import { DragAndDropList } from "../../universal/DragAndDropList";
 import EditItem from "../../universal/editItem/EditItem";
+import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoSearch } from "../../universal/EpistoSearch";
 import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { AdministrationListItem } from "./adminDashboardSearchItem/AdministrationListItem";
 import classes from "./editCourse/editCourse.module.scss";
 import { SelectMultiple } from "./selectMultiple/SelectMultiple";
+import EditIcon from '@mui/icons-material/Edit';
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
@@ -45,7 +45,8 @@ export const EditCourseControl = (props: {
 }) => {
 
     const { saveCourseAsync } = props;
-    const { courseId } = useParams<{ courseId: string }>();
+    const params = useParams<{ courseId: string }>();
+    const courseId = parseInt(params.courseId);
     const [isAllowEditOnPage, setIsAllowEditOnPage] = useState(false)
 
     const [title, setTitle] = useState("")
@@ -60,12 +61,13 @@ export const EditCourseControl = (props: {
     const [groups, setGroups] = useState<EditListItemDTO[]>([])
     const [tags, setTags] = useState<EditListItemDTO[]>([])
     const [teachers, setTeachers] = useState<EditListItemDTO[]>([])
-    const { course } = useAdminEditedCourse(Number(courseId));
+
+    const { courseEditData } = useAdminEditedCourse(courseId);
 
     const handleSaveCourseAsync = async () => {
 
         const dto = {
-            courseId: course?.courseId,
+            courseId: courseId,
             title: title,
             category: category,
             courseGroup: courseGroup,
@@ -73,7 +75,7 @@ export const EditCourseControl = (props: {
             thumbnailURL: thumbnailSrc,
             colorOne: colorOne,
             colorTwo: colorTwo,
-            courseItems: course?.courseItems,
+            courseItems: courseItems,
             organizations: organizations,
             tags: tags,
             teachers: teachers,
@@ -87,7 +89,7 @@ export const EditCourseControl = (props: {
     // set default values 
     useEffect(() => {
 
-        if (!course)
+        if (!courseEditData)
             return;
 
         const {
@@ -103,7 +105,7 @@ export const EditCourseControl = (props: {
             tags,
             teachers,
             groups
-        } = course
+        } = courseEditData;
 
         setTitle(title)
         setCategory(category)
@@ -117,7 +119,7 @@ export const EditCourseControl = (props: {
         setTags(tags)
         setTeachers(teachers)
         setGroups(groups)
-    }, [course]);
+    }, [courseEditData]);
 
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
     const fileBrowseInputRef = useRef<HTMLInputElement>(null);
@@ -127,14 +129,6 @@ export const EditCourseControl = (props: {
         setThumbnailSrc(src);
         setThumbnailImageFile(file);
     }
-
-    const [list, setList] = useState([
-        "listItem_A",
-        "listItem_B",
-        "listItem_C",
-        "listItem_D",
-        "listItem_E"
-    ]);
 
     return <Flex direction="column">
 
@@ -202,31 +196,35 @@ export const EditCourseControl = (props: {
                 </EditSection>
 
                 <EditSection title="">
+
+                    {/* organizations */}
                     <SelectMultiple
-                        items={course?.organizations}
+                        items={organizations}
                         title={"Cég kiválasztása"} >
-                        {course?.organizations?.map((item, index) =>
-                            <div key={"org" + index}>
-                                <ListItem className={classes.listItem}>
-                                    <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
-                                        let items = [...organizations];
-                                        items[index] = {
-                                            ...items[index],
-                                            checked: e.currentTarget.checked
-                                        };
-                                        setGroups(items);
-                                    })} />
-                                    <TextOrInput value={item.name} />
-                                </ListItem>
-                                <Divider style={{ width: "100%" }} />
-                            </div>
-                        )}
+                        {organizations
+                            .map((item, index) =>
+                                <div key={"org" + index}>
+                                    <ListItem className={classes.listItem}>
+                                        <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
+                                            let items = [...organizations];
+                                            items[index] = {
+                                                ...items[index],
+                                                checked: e.currentTarget.checked
+                                            };
+                                            setGroups(items);
+                                        })} />
+                                        <TextOrInput value={item.name} />
+                                    </ListItem>
+                                    <Divider style={{ width: "100%" }} />
+                                </div>
+                            )}
 
                     </SelectMultiple>
+
+                    {/* groups */}
                     <SelectMultiple
                         items={groups}
-                        title={"Csoport kiválasztása"}
-                    >
+                        title={"Csoport kiválasztása"} >
                         {groups?.map((item, index) =>
                             <div key={"group" + index}>
                                 <ListItem className={classes.listItem}>
@@ -245,10 +243,11 @@ export const EditCourseControl = (props: {
                         )}
 
                     </SelectMultiple>
+
+                    {/* teacher */}
                     <SelectMultiple
                         items={teachers}
-                        title={"Tanár kiválasztása"}
-                    >
+                        title={"Tanár kiválasztása"}>
                         {teachers?.map((item, index) =>
                             <div key={"teacher" + index}>
                                 <ListItem className={classes.listItem}>
@@ -267,10 +266,11 @@ export const EditCourseControl = (props: {
                         )}
 
                     </SelectMultiple>
+
+                    {/* tags */}
                     <SelectMultiple
                         items={tags}
-                        title={"Tagek kiválasztása"}
-                    >
+                        title={"Tagek kiválasztása"}>
                         {tags?.map((item, index) =>
                             <div key={"tag" + index}>
                                 <ListItem className={classes.listItem}>
@@ -301,30 +301,31 @@ export const EditCourseControl = (props: {
                 <EpistoSearch />
 
                 <DragAndDropList
-                    list={list}
-                    setList={setList}
-                    getKey={x => x}
-                    renderListItem={(item) => <Flex height="200px">
-                        {item}
+                    list={courseItems}
+                    setList={setCourseItems}
+                    getKey={x => x.descriptorCode}
+                    renderListItem={(item) => <Flex
+                        flex="1"
+                        borderLeft={`5px solid var(--${item.type === "exam" ? "intenseOrange" : "deepBlue"})`}
+                        p="10px"
+                        justify="space-between"
+                        m="3px">
+
+                        <Typography alignSelf="center">
+                            {item.title}
+                        </Typography>
+
+                        <Flex>
+                            <EpistoButton>
+                                <EditIcon></EditIcon>
+                            </EpistoButton>
+                        </Flex>
                     </Flex>} />
+
+                <EpistoButton style={{ alignSelf: "center" }} variant="outlined">
+                    Add new
+                </EpistoButton>
             </Flex>
         </Flex>
     </Flex>
 };
-
-// <div {...provided.droppableProps} ref={provided.innerRef}>
-//                                 {courseItems.map((item, index) => <DraggableListItemWrapper key={item.title} draggableId={item.title} index={index}>
-//                                     <AdministrationListItem
-//                                         key={"adlistitem" + index}
-//                                         title={item.title}
-//                                         thumbnailUrl={item.thumbnailUrl}
-//                                         chips={[]/*[
-//                                             getChipWithLabel("a" + index, "item.type", "category"),
-//                                             getChipWithLabel("b" + index, "item.length", "person"),
-//                                             getChipWithLabel("c" + index, "item.isEssential", "video")
-//                                         ]*/}
-//                                         searchItemButtons={[]}
-//                                     />
-//                                 </DraggableListItemWrapper>
-//                                 )}{provided.placeholder}
-//                             </div>

@@ -8,7 +8,7 @@ import { Tag } from "../models/entity/Tag";
 import { AdminPageEditCourseDTO, EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
-import { toEditCourseItemsDTO, toUserDTO } from "./mappings";
+import { toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toEditCourseItemsDTO, toUserDTO } from "./mappings";
 import { getAssetUrl } from "./misc/urlProvider";
 import { getTeacherDTOAsync } from "./userService";
 
@@ -77,11 +77,13 @@ const deleteFromCourseGroupAsync = async (groupIds: number[]) => {
 
 export const getEditedCourseAsync = async (courseId: number) => {
 
+    // get connected entity options
     const organizations = await getOrganizationAsync();
     const teachers = await getTeacherDTOAsync();
     const groups = await getGroupAsync();
     const tags = await getTagsAsync();
 
+    // get assinged entities
     const courseOrganizations = await staticProvider
         .ormConnection
         .getRepository(CourseOrganization)
@@ -110,6 +112,7 @@ export const getEditedCourseAsync = async (courseId: number) => {
     const assignedGroups = courseGroups.map(cg => cg.group)
     const assignedTags = courseTags.map(ct => ct.tag)
 
+    // get course 
     const course = await staticProvider
         .ormConnection
         .getRepository(Course)
@@ -121,18 +124,30 @@ export const getEditedCourseAsync = async (courseId: number) => {
         .leftJoinAndSelect("course.videos", "videos")
         .getOneOrFail();
 
-    //const thumbnailImageURL = staticProvider.globalConfig.misc.assetStoreUrl + `/courses/${course.id}.png`;
-
+    // get thumbnail 
     const thumbnailImageURL = course.coverFile
         ? getAssetUrl(course.coverFile.filePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
 
-    const courseItems = toEditCourseItemsDTO(course)
+    // get assined entity lists
     const courseTeacher = toUserDTO(course.teacher);
     const courseOrganizationsChecked = createCheckedById(organizations, assignedOrganizations)
     const courseGroupsChecked = createCheckedById(groups, assignedGroups)
     const courseTagsChecked = createCheckedById(tags, assignedTags)
     const courseTeachersChecked = createCheckedById(teachers, [courseTeacher]);
+
+    // get course items 
+    const videoCourseItemDTOs = course
+        .videos
+        .map(x => toCourseItemDTOVideo(x));
+
+    const examCourseItemDTOs = course
+        .exams
+        .map(x => toCourseItemDTOExam(x));
+
+    const courseItemDTOs = videoCourseItemDTOs
+        .concat(examCourseItemDTOs)
+        .orderBy(x => x.orderIndex);
 
     return {
         courseId: course.id,
@@ -143,7 +158,7 @@ export const getEditedCourseAsync = async (courseId: number) => {
         thumbnailURL: thumbnailImageURL,
         colorOne: course.colorOne,
         colorTwo: course.colorTwo,
-        courseItems: courseItems,
+        courseItems: courseItemDTOs,
         organizations: courseOrganizationsChecked,
         groups: courseGroupsChecked,
         teachers: courseTeachersChecked,

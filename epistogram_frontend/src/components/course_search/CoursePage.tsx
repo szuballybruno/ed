@@ -389,7 +389,8 @@ const CoursePage = () => {
     const [category, setCategory] = useState("")
     const [, setCourseItems] = useState<CourseItemDTO[]>([])
 
-    const { course } = useAdminEditedCourse(Number(params.courseId));
+    // const { course } = useAdminEditedCourse(Number(params.courseId));
+    const course = null;
 
     const setEditCourseState = (course: AdminPageEditCourseDTO) => {
         const {

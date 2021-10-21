@@ -31,6 +31,7 @@ import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { RoleDTO } from "../models/shared_models/RoleDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
+import { CourseItemStateType } from "../models/shared_models/types/sharedTypes";
 import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
@@ -292,16 +293,7 @@ export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
         navPropNotNull(courseItemView.video);
 
         const video = courseItemView.video as Video;
-
-        return {
-            subTitle: video.subtitle,
-            thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
-            title: video.title,
-            orderIndex: video.orderIndex,
-            state: courseItemView.state,
-            descriptorCode: getCourseItemDescriptorCode(video.id, "video"),
-            type: "video"
-        } as CourseItemDTO;
+        return toCourseItemDTOVideo(video, courseItemView.state);
     }
 
     // EXAM
@@ -310,17 +302,34 @@ export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
         navPropNotNull(courseItemView.exam);
 
         const exam = courseItemView.exam as Exam;
-
-        return {
-            subTitle: exam.subtitle,
-            thumbnailUrl: getExamCoverImageUrl(),
-            title: exam.title,
-            orderIndex: exam.orderIndex,
-            state: courseItemView.state,
-            descriptorCode: getCourseItemDescriptorCode(exam.id, "exam"),
-            type: "exam"
-        } as CourseItemDTO;
+        return toCourseItemDTOExam(exam, courseItemView.state);
     }
+}
+
+export const toCourseItemDTOExam = (exam: Exam, state?: CourseItemStateType) => {
+
+    return {
+        subTitle: exam.subtitle,
+        thumbnailUrl: getExamCoverImageUrl(),
+        title: exam.title,
+        orderIndex: exam.orderIndex,
+        state: state ?? "available",
+        descriptorCode: getCourseItemDescriptorCode(exam.id, "exam"),
+        type: "exam"
+    } as CourseItemDTO;
+}
+
+export const toCourseItemDTOVideo = (video: Video, state?: CourseItemStateType) => {
+
+    return {
+        subTitle: video.subtitle,
+        thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
+        title: video.title,
+        orderIndex: video.orderIndex,
+        state: state ?? "available",
+        descriptorCode: getCourseItemDescriptorCode(video.id, "video"),
+        type: "video"
+    } as CourseItemDTO;
 }
 
 export const toCourseShortDTO = async (course: CourseView) => {

@@ -98,11 +98,9 @@ export const getEditedVideoAction = async (req: Request) => {
     return await getEditedVideoAsync(videoId);
 };
 
-export const getEditedCourseAction = async (req: Request) => {
+export const getEditedCourseAction = async (params: ActionParamsType) => {
 
-    const courseId = req.body.courseId
-
-    log("This is the courseId in getEditedCourseAction: " + courseId)
+    const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId);
 
     return await getEditedCourseAsync(courseId);
 };

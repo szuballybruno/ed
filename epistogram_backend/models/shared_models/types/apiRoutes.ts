@@ -27,7 +27,9 @@ export const apiRoutes = {
         getUserPersonalityData: "/signup/get-user-personality-data"
     },
 
-
+    course: {
+        getCourseEditData: '/course/get-course-edit-data',
+    },
 }
 
 export const isOpenRoute = (routePath: string) => {

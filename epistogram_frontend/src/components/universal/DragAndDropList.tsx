@@ -31,7 +31,7 @@ export const DragAndDropList = <T,>(props: {
         {/* drop container */}
         <Droppable droppableId={"courseItemsDroppableContextId"}>
             {(provided, _) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
+                <div id="dndListRoot" ref={provided.innerRef} {...provided.droppableProps}>
 
                     {/* drag list container */}
                     {list

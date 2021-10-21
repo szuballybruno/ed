@@ -5,6 +5,7 @@ import { httpGetAsync, httpPostAsync } from "./httpClient";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
 import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
+import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 
 export const useAdministratedCourses = (searchText: string) => {
 
@@ -21,16 +22,14 @@ export const useAdministratedCourses = (searchText: string) => {
 
 export const useAdminEditedCourse = (courseId: number) => {
 
-    const { data, status, error } = useReactQuery<AdminPageEditCourseDTO>(
+    const qr = useReactQuery<AdminPageEditCourseDTO>(
         ["getCourseEditQuery", courseId],
-        () => httpPostAsync("/get-admin-edit-course", {
-            courseId: courseId
-        }))
+        () => httpGetAsync(apiRoutes.course.getCourseEditData, { courseId: courseId }))
 
     return {
-        course: data,
-        error,
-        status
+        courseEditData: qr.data,
+        courseEditDataError: qr.error,
+        courseEditDataState: qr.status
     }
 }
 

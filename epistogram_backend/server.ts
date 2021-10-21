@@ -15,8 +15,8 @@ import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAct
 import { getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction } from './api/questionActions';
-import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
+import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
@@ -124,14 +124,12 @@ const initializeAsync = async () => {
     // course
     expressServer.post("/course/start-course", startCourseAction);
     expressServer.post("/course/set-course-mode", setCourseTypeAction);
+    expressServer.post("/get-admin-courses", getAsyncActionHandler(getAdminCoursesAction));
+    addEndpoint(apiRoutes.course.getCourseEditData, getEditedCourseAction);
+    expressServer.post("/set-admin-edit-course", getAsyncActionHandler(setEditedCourseAction))
 
     // available courses
     expressServer.post("/get-user-courses", getUserCoursesAction);
-
-    // course administartion
-    expressServer.post("/get-admin-courses", getAsyncActionHandler(getAdminCoursesAction));
-    expressServer.post("/get-admin-edit-course", getAsyncActionHandler(getEditedCourseAction))
-    expressServer.post("/set-admin-edit-course", getAsyncActionHandler(setEditedCourseAction))
 
     // organizations
     expressServer.get("/organizations/get-organizations", getAsyncActionHandler(getOrganizationsAction));
