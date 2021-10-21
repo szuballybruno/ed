@@ -1,9 +1,11 @@
-import { getAssetUrl, usePaging } from "../../frontendHelpers";
+import { usePaging } from "../../frontendHelpers";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
-import { ExamResults } from "../exam/ExamResults";
-import { ExamQuestions } from "../ExamQuestions";
-import { SignupWrapper } from "../signup/SignupWrapper";
+import { QuestionnaireSlide } from "../QuestionnaireSlide";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
+import React from "react";
+import {useExamResults} from "../../services/examService";
+import ResultsSlide from "../exam/ResultsSlide";
+import {GreetSlide} from "../exam/GreetSlide";
 
 export const ExamPlayer = (props: {
     exam: ExamDTO,
@@ -17,6 +19,9 @@ export const ExamPlayer = (props: {
         answerSessionId,
     } = props;
 
+    const { examResults } = useExamResults(answerSessionId);
+    const questions = examResults?.questions ?? [];
+
     const slidesState = usePaging([1, 2, 3, 4]);
 
     const handleExamFinished = () => {
@@ -25,41 +30,22 @@ export const ExamPlayer = (props: {
         slidesState.next();
     }
 
-    const GreetSlide = () => <SignupWrapper
-        title={exam.title}
-        upperTitle="Üdv!"
-        currentImage={getAssetUrl("/images/examCover.jpg")}
-        description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
-        onNext={() => {
-
-            setIsExamInProgress(true);
-            slidesState.next();
-        }}
-        nextButtonTitle="Kezdés">
-    </SignupWrapper>
-
-    const QuestionnaireSlide = () => <ExamQuestions
-        answerSessionId={answerSessionId}
-        questions={exam.questions}
-        onExamFinished={handleExamFinished} />
-
-    const ResultsSlide = () =>
-        <ExamResults
-            examTitle={exam.title}
-            answerSessionId={answerSessionId}></ExamResults>
-
     const slides = [
-        GreetSlide,
-        QuestionnaireSlide,
-        ResultsSlide
+        () => <GreetSlide
+            slidesState={slidesState}
+            {...props}  />,
+        () => <QuestionnaireSlide
+            slidesState={slidesState}
+            answerSessionId={answerSessionId}
+            questions={exam.questions}
+            onExamFinished={handleExamFinished}  />,
+        () => <ResultsSlide {...props} />
     ];
 
-    return (
-
-        <SlidesDisplay
-            flex="1"
-            height="100%"
-            slides={slides}
-            index={slidesState.currentIndex} />
-    );
+    return <SlidesDisplay
+        flex="1"
+        height="100%"
+        slides={slides}
+        index={slidesState.currentIndex}
+    />
 }
