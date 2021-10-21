@@ -16,7 +16,7 @@ import AdminStatistics from "./users/AdminStatisticsSubpage";
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
 import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
 import { AdminUserStatisticsSubpage } from "./users/AdminUserStatisticsSubpage";
-import CourseStatistics from "./courses/courseStatistics/CourseStatistics";
+import CourseStatisticsSubpage from "./courses/CourseStatisticsSubpage";
 import AdminUserTasksSubpage from './users/AdminUserTasksSubpage';
 import AdminEditUserSubpage from './users/AdminEditUserSubpage';
 import { AdminGroupListSubpage } from "./groups/AdminGroupListSubpage";
@@ -95,7 +95,7 @@ const AdminPage = () => {
                                     <AdminEditCourseSubpage />
                                 </Route>
                                 <Route path={administrationRoutes.coursesRoute.statisticsCourseRoute.route}>
-                                    <CourseStatistics />
+                                    <CourseStatisticsSubpage />
                                 </Route>
                                 <Route path={administrationRoutes.coursesRoute.addVideoRoute.route} exact>
                                     <AddVideo />

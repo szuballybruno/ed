@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { matchPath, useLocation } from "react-router-dom";
 import { globalConfig } from "./configuration/config";

@@ -1,8 +1,8 @@
 import { Flex } from "@chakra-ui/react";
 import React from 'react';
-import { AdminSubpageHeader } from '../../AdminSubpageHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
-const CourseStatistics = () => {
+const CourseStatisticsSubpage = () => {
 
     return (
         <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
@@ -15,4 +15,4 @@ const CourseStatistics = () => {
     );
 };
 
-export default CourseStatistics;
+export default CourseStatisticsSubpage;

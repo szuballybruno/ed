@@ -1,5 +1,5 @@
 import { Input } from '@chakra-ui/input';
-import { Box, Flex } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/layout';
 import { TextField, Typography } from '@mui/material';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router';
