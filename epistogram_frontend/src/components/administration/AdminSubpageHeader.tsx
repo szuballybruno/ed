@@ -35,9 +35,10 @@ export const AdminSubpageHeader = (props: {
     const { briefUserData } = useBriefUserData(userId);
     const { courseBriefData } = useCourseBriefData(courseId);
 
-    const subRoute = {
-        title: (briefUserData?.fullName || courseBriefData?.title) ?? ""
-    }
+    const subRouteName = (briefUserData?.fullName || courseBriefData?.title);
+    const subRoute = subRouteName
+        ? { title: subRouteName! }
+        : null;
 
     const BreadcrumbLink = (props: {
         to?: string,
@@ -74,8 +75,6 @@ export const AdminSubpageHeader = (props: {
             </NavLink>}
         </Box>
     }
-
-    //TODO: Navigate back to previously edited course or video on click e.g.: not to :courseId but the real courseId
 
     const currentMatchingRoute = (tabMenuItems ?? [])
         .filter(x => isMatchingCurrentRoute(x.route, x.isExact))[0];
