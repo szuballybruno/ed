@@ -43,6 +43,7 @@ import { UserSignupCompletedView } from "./models/views/UserSignupCompletedView"
 import { VideoCompletedView } from "./models/views/VideoCompletedView";
 import { VideoProgressView } from "./models/views/VideoProgressView";
 
+// asd
 export const dbSchema = {
 
     viewScripts: [
