@@ -1,12 +1,12 @@
 import { hasValue, useReactQuery } from "../frontendHelpers"
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
-import { httpGetAsync, httpPostAsync } from "./httpClient";
+import { httpGetAsync, httpPostAsync, usePostDataUnsafe } from "./httpClient";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
-import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
+import { EditCourseDataDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 
 export const useAdministratedCourses = (searchText: string) => {
 
@@ -23,7 +23,7 @@ export const useAdministratedCourses = (searchText: string) => {
 
 export const useAdminEditedCourse = (courseId: number) => {
 
-    const qr = useReactQuery<AdminPageEditCourseDTO>(
+    const qr = useReactQuery<EditCourseDataDTO>(
         ["getCourseEditQuery", courseId],
         () => httpGetAsync(apiRoutes.course.getCourseEditData, { courseId: courseId }))
 
@@ -31,6 +31,26 @@ export const useAdminEditedCourse = (courseId: number) => {
         courseEditData: qr.data,
         courseEditDataError: qr.error,
         courseEditDataState: qr.status
+    }
+}
+
+export const useSaveCourseData = () => {
+
+    const qr = usePostDataUnsafe<EditCourseDataDTO, void>(apiRoutes.course.saveCourseData);
+
+    return {
+        saveCourseDataAsync: qr.postDataAsync,
+        saveCourseDataState: qr.state,
+    };
+}
+
+export const useUploadCourseThumbnailAsync = () => {
+
+    const qr = usePostDataUnsafe<{ courseId: number }, void>(apiRoutes.course.saveCourseThumbnail);
+
+    return {
+        saveCourseThumbnailAsync: (courseId: number, file: File) => qr.postDataAsync({ courseId }, file),
+        saveCourseThumbnailState: qr.state,
     }
 }
 

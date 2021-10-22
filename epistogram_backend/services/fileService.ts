@@ -7,16 +7,6 @@ import { deleteStorageFileAsync, uploadToStorageAsync } from "./storageService";
 import { getUserById, setUserAvatarFileId } from "./userService";
 import { getVideoByIdAsync, setVideoFileIdAsync, setVideoThumbnailFileId } from "./videoService";
 
-export const uploadVideoThumbnailFileAsync = (videoId: number, file: UploadedFile) => {
-
-    return uploadAssigendFileAsync<Video>(
-        getFilePath("videoThumbnails", "video_thumbnail", videoId, "png"),
-        () => getVideoByIdAsync(videoId),
-        (fileId) => setVideoThumbnailFileId(videoId, fileId),
-        (entity) => entity.thumbnailFileId,
-        file);
-};
-
 export const uploadAvatarFileAsync = async (userId: number, file: UploadedFile) => {
     // upload new avatar
     await uploadAssigendFileAsync<User>(
@@ -27,23 +17,11 @@ export const uploadAvatarFileAsync = async (userId: number, file: UploadedFile) 
         file);
 };
 
-export const uploadCourseCoverFileAsync = (courseId: number, file: UploadedFile) => {
-
-    // return uploadAssigendFileAsync<Video>(
-    //     getFilePath("videos", "video_thumbnail", videoId, ".png"),
-    //     () => getVideoByIdAsync(videoId),
-    //     (fileId) => setVideoThumbnailFileId(videoId, fileId),
-    //     (entity) => entity.thumbnailFileId,
-    //     file);
-
-    return Promise.resolve();
-};
-
 export const uploadAssigendFileAsync = async <T>(
     filePath: string,
     getEntityAsync: () => Promise<T>,
-    assignFileToEntity: (fileId: number) => Promise<void>,
-    getFileEntityId: (entity: T) => number,
+    assignFileToEntity: (fileId: number) => Promise<any>,
+    getFileEntityId: (entity: T) => number | null,
     file: UploadedFile) => {
 
     // crate pending storage file

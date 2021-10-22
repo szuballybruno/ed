@@ -10,9 +10,8 @@ import React, { useEffect, useState } from 'react';
 import { Radar } from "react-chartjs-2";
 import { useParams } from "react-router";
 import { getAssetUrl } from "../../frontendHelpers";
-import { AdminPageEditCourseDTO } from "../../models/shared_models/AdminPageEditCourseDTO";
+import { EditCourseDataDTO } from "../../models/shared_models/AdminPageEditCourseDTO";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
-import { useAdminEditedCourse } from "../../services/courseService";
 import { EpistoHeader } from "../EpistoHeader";
 import { MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
@@ -392,7 +391,7 @@ const CoursePage = () => {
     // const { course } = useAdminEditedCourse(Number(params.courseId));
     const course = null;
 
-    const setEditCourseState = (course: AdminPageEditCourseDTO) => {
+    const setEditCourseState = (course: EditCourseDataDTO) => {
         const {
             title,
             category,

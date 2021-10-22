@@ -3,18 +3,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Checkbox, Divider, ListItem, Radio, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { getEventValueCallback } from "../../../frontendHelpers";
-import { AdminPageEditCourseDTO, EditListItemDTO } from "../../../models/shared_models/AdminPageEditCourseDTO";
+import { EditCourseDataDTO, EditListItemDTO } from "../../../models/shared_models/AdminPageEditCourseDTO";
 import { CourseItemDTO } from "../../../models/shared_models/CourseItemDTO";
-import { useAdminEditedCourse } from "../../../services/courseService";
 import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useCreateVideo, useDeleteVideo } from "../../../services/videoService";
 import { DragAndDropList } from "../../universal/DragAndDropList";
-import EditItem from "../../universal/editItem/EditItem";
 import { EpistoButton } from "../../universal/EpistoButton";
+import { EpistoEntry } from "../../universal/EpistoEntry";
 import { EpistoSearch } from "../../universal/EpistoSearch";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
@@ -27,13 +24,12 @@ export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
 }
 
 export const EditCourseControl = (props: {
-    saveCourseAsync: (dto: AdminPageEditCourseDTO) => Promise<void>
+    saveCourseAsync: (dto: EditCourseDataDTO, thumbnailFile: null | File) => Promise<void>,
+    courseEditData: EditCourseDataDTO | null,
+    courseId: number
 }) => {
 
-    const { saveCourseAsync } = props;
-    const params = useParams<{ courseId: string }>();
-    const courseId = parseInt(params.courseId);
-    const [isAllowEditOnPage, setIsAllowEditOnPage] = useState(false);
+    const { saveCourseAsync, courseId, courseEditData } = props;
     const { navigate } = useNavigation();
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
 
@@ -41,21 +37,20 @@ export const EditCourseControl = (props: {
     const [category, setCategory] = useState("")
     const [courseGroup, setCourseGroup] = useState("")
     const [permissionLevel, setPermissionLevel] = useState("")
-    const [thumbnailSrc, setThumbnailSrc] = useState("")
-    const [colorOne, setColorOne] = useState("")
-    const [colorTwo, setColorTwo] = useState("")
     const [courseItems, setCourseItems] = useState<CourseItemDTO[]>([])
     const [organizations, setOrganizations] = useState<EditListItemDTO[]>([])
     const [groups, setGroups] = useState<EditListItemDTO[]>([])
     const [tags, setTags] = useState<EditListItemDTO[]>([])
     const [teachers, setTeachers] = useState<EditListItemDTO[]>([])
+    const [thumbnailSrc, setThumbnailSrc] = useState("")
+    const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
 
     // http
-    const { courseEditData } = useAdminEditedCourse(courseId);
-    const { createVideoAsync, createVideoState, createVideoResult } = useCreateVideo();
+    const { createVideoAsync, createVideoState } = useCreateVideo();
     const { deleteVideoAsync, deleteVideoState } = useDeleteVideo();
 
     const showError = useShowErrorDialog();
+    const isAllowEditOnPage = false;
 
     const navToVideoEdit = (videoId: number) => navigate(courseRoutes.editVideoRoute.route, { courseId, videoId });
     const navToExamEdit = (examId: number) => navigate(courseRoutes.editExamRoute.route, { courseId, examId });
@@ -69,17 +64,14 @@ export const EditCourseControl = (props: {
             courseGroup: courseGroup,
             permissionLevel: permissionLevel,
             thumbnailURL: thumbnailSrc,
-            colorOne: colorOne,
-            colorTwo: colorTwo,
             courseItems: courseItems,
             organizations: organizations,
             tags: tags,
             teachers: teachers,
             groups: groups
-        } as AdminPageEditCourseDTO;
+        } as EditCourseDataDTO;
 
-        setIsAllowEditOnPage(p => !p)
-        return saveCourseAsync(dto);
+        return saveCourseAsync(dto, thumbnailImageFile);
     }
 
     // set default values 
@@ -94,8 +86,6 @@ export const EditCourseControl = (props: {
             courseGroup,
             permissionLevel,
             thumbnailURL,
-            colorOne,
-            colorTwo,
             courseItems,
             organizations,
             tags,
@@ -108,8 +98,6 @@ export const EditCourseControl = (props: {
         setCourseGroup(courseGroup)
         setPermissionLevel(permissionLevel)
         setThumbnailSrc(thumbnailURL)
-        setColorOne(colorOne)
-        setColorTwo(colorTwo)
         setCourseItems(courseItems)
         setOrganizations(organizations)
         setTags(tags)
@@ -117,12 +105,20 @@ export const EditCourseControl = (props: {
         setGroups(groups)
     }, [courseEditData]);
 
-    const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
 
     const setBrowsedImage = (src: string, file: File) => {
 
         setThumbnailSrc(src);
         setThumbnailImageFile(file);
+    }
+
+    const handleSetReorderedCourseItems = (courseItems: CourseItemDTO[]) => {
+
+        // set order indexes according to list item order
+        courseItems
+            .forEach((x, index) => x.orderIndex = index);
+
+        setCourseItems(courseItems);
     }
 
     const handleEditCourseItem = (courseItem: CourseItemDTO) => {
@@ -180,101 +176,58 @@ export const EditCourseControl = (props: {
 
     }
 
-    return <Flex direction="column">
+    return <AdminSubpageHeader
+        tabMenuItems={[
+            applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
+            applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
+        ]}
+        onSave={handleSaveCourseAsync}
+        direction="row">
 
-        {/* admin header */}
-        <AdminSubpageHeader
-            tabMenuItems={[
-                applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
-                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
-            ]}>
-        </AdminSubpageHeader>
+        {/* settings */}
+        <Box px="20px" flex="1" className="dividerBorderRight">
 
-        {/* content columns */}
-        <Flex>
+            {/* thumbnaul image */}
+            <EditSection title="Borítókép">
+                <SelectImage
+                    width="300px"
+                    height="200px"
+                    onImageSelected={setBrowsedImage}>
+                    <Image className="whall" objectFit="cover" src={thumbnailSrc}></Image>
+                </SelectImage>
+            </EditSection>
 
-            {/* settings */}
-            <Box p="20px" flex="1" className="dividerBorderRight">
+            {/* basic info edit */}
+            <EditSection title="Alapadatok">
 
-                {/* thumbnaul image */}
-                <EditSection title="Borítókép">
-                    <SelectImage
-                        width="300px"
-                        height="200px"
-                        onImageSelected={setBrowsedImage}>
-                        <Image className="whall" objectFit="cover" src={thumbnailSrc}></Image>
-                    </SelectImage>
-                </EditSection>
+                <EpistoEntry
+                    value={title}
+                    label="Név"
+                    setValue={setTitle} />
 
-                {/* basic info edit */}
-                <EditSection title="Alapadatok">
-                    <Flex direction="column">
+                <EpistoEntry
+                    value={courseGroup}
+                    label="Fokategória"
+                    setValue={setCourseGroup} />
 
-                        <EditItem
-                            isEditing={isAllowEditOnPage}
-                            value={title}
-                            title={"Név"}
-                            onChange={getEventValueCallback(setTitle)}
-                            name={"name"} />
+                <EpistoEntry
+                    value={category}
+                    label="Alkategória"
+                    setValue={setCategory} />
+            </EditSection>
 
-                        <EditItem
-                            isEditing={isAllowEditOnPage}
-                            value={category}
-                            title={"Kategória"}
-                            onChange={getEventValueCallback(setCategory)}
-                            name={"category"} />
+            <EditSection title="">
 
-                        <EditItem
-                            isEditing={isAllowEditOnPage}
-                            value={courseGroup}
-                            title={"Kategória csoport"}
-                            onChange={getEventValueCallback(setCourseGroup)}
-                            name={"courseGroup"} />
-
-                        <EditItem
-                            isEditing={isAllowEditOnPage}
-                            value={permissionLevel}
-                            title={"Elérés"}
-                            onChange={getEventValueCallback(setPermissionLevel)}
-                            name={"permissionLevel"} />
-                    </Flex>
-                </EditSection>
-
-                <EditSection title="">
-
-                    {/* organizations */}
-                    <SelectMultiple
-                        items={organizations}
-                        title={"Cég kiválasztása"} >
-                        {organizations
-                            .map((item, index) =>
-                                <div key={"org" + index}>
-                                    <ListItem className={classes.listItem}>
-                                        <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
-                                            let items = [...organizations];
-                                            items[index] = {
-                                                ...items[index],
-                                                checked: e.currentTarget.checked
-                                            };
-                                            setGroups(items);
-                                        })} />
-                                        <TextOrInput value={item.name} />
-                                    </ListItem>
-                                    <Divider style={{ width: "100%" }} />
-                                </div>
-                            )}
-
-                    </SelectMultiple>
-
-                    {/* groups */}
-                    <SelectMultiple
-                        items={groups}
-                        title={"Csoport kiválasztása"} >
-                        {groups?.map((item, index) =>
-                            <div key={"group" + index}>
+                {/* organizations */}
+                <SelectMultiple
+                    items={organizations}
+                    title={"Cég kiválasztása"} >
+                    {organizations
+                        .map((item, index) =>
+                            <div key={"org" + index}>
                                 <ListItem className={classes.listItem}>
                                     <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
-                                        let items = [...groups];
+                                        let items = [...organizations];
                                         items[index] = {
                                             ...items[index],
                                             checked: e.currentTarget.checked
@@ -287,105 +240,128 @@ export const EditCourseControl = (props: {
                             </div>
                         )}
 
-                    </SelectMultiple>
+                </SelectMultiple>
 
-                    {/* teacher */}
-                    <SelectMultiple
-                        items={teachers}
-                        title={"Tanár kiválasztása"}>
-                        {teachers?.map((item, index) =>
-                            <div key={"teacher" + index}>
-                                <ListItem className={classes.listItem}>
-                                    <Radio disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
-                                        let items = [...teachers];
-                                        items[index] = {
-                                            ...items[index],
-                                            checked: e.currentTarget.checked
-                                        };
-                                        setGroups(items);
-                                    })} />
-                                    <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
-                                </ListItem>
-                                <Divider style={{ width: "100%" }} />
-                            </div>
-                        )}
+                {/* groups */}
+                <SelectMultiple
+                    items={groups}
+                    title={"Csoport kiválasztása"} >
+                    {groups?.map((item, index) =>
+                        <div key={"group" + index}>
+                            <ListItem className={classes.listItem}>
+                                <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
+                                    let items = [...groups];
+                                    items[index] = {
+                                        ...items[index],
+                                        checked: e.currentTarget.checked
+                                    };
+                                    setGroups(items);
+                                })} />
+                                <TextOrInput value={item.name} />
+                            </ListItem>
+                            <Divider style={{ width: "100%" }} />
+                        </div>
+                    )}
 
-                    </SelectMultiple>
+                </SelectMultiple>
 
-                    {/* tags */}
-                    <SelectMultiple
-                        items={tags}
-                        title={"Tagek kiválasztása"}>
-                        {tags?.map((item, index) =>
-                            <div key={"tag" + index}>
-                                <ListItem className={classes.listItem}>
-                                    <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
-                                        let items = [...tags];
-                                        items[index] = {
-                                            ...items[index],
-                                            checked: e.currentTarget.checked
-                                        };
-                                        setGroups(items);
-                                    })} />
-                                    <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
-                                </ListItem>
-                                <Divider style={{ width: "100%" }} />
-                            </div>
-                        )}
+                {/* teacher */}
+                <SelectMultiple
+                    items={teachers}
+                    title={"Tanár kiválasztása"}>
+                    {teachers?.map((item, index) =>
+                        <div key={"teacher" + index}>
+                            <ListItem className={classes.listItem}>
+                                <Radio disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
+                                    let items = [...teachers];
+                                    items[index] = {
+                                        ...items[index],
+                                        checked: e.currentTarget.checked
+                                    };
+                                    setGroups(items);
+                                })} />
+                                <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
+                            </ListItem>
+                            <Divider style={{ width: "100%" }} />
+                        </div>
+                    )}
 
-                    </SelectMultiple>
-                </EditSection>
-            </Box>
+                </SelectMultiple>
 
-            {/* course items */}
-            <Flex
-                flex="1"
-                direction={"column"}
-                px={10}>
+                {/* tags */}
+                <SelectMultiple
+                    items={tags}
+                    title={"Tagek kiválasztása"}>
+                    {tags?.map((item, index) =>
+                        <div key={"tag" + index}>
+                            <ListItem className={classes.listItem}>
+                                <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
+                                    let items = [...tags];
+                                    items[index] = {
+                                        ...items[index],
+                                        checked: e.currentTarget.checked
+                                    };
+                                    setGroups(items);
+                                })} />
+                                <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
+                            </ListItem>
+                            <Divider style={{ width: "100%" }} />
+                        </div>
+                    )}
 
-                <EpistoSearch />
+                </SelectMultiple>
+            </EditSection>
+        </Box>
 
-                <DragAndDropList
-                    list={courseItems}
-                    setList={setCourseItems}
-                    getKey={x => x.descriptorCode}
-                    renderListItem={(item) => <Flex
-                        flex="1"
-                        borderLeft={`5px solid var(--${item.type === "exam" ? "intenseOrange" : "deepBlue"})`}
-                        p="10px"
-                        justify="space-between"
-                        m="3px">
+        {/* course items */}
+        <Flex
+            flex="1"
+            direction={"column"}
+            px={10}>
 
-                        <Typography alignSelf="center">
-                            {item.title}
-                        </Typography>
+            <EpistoSearch />
 
-                        <Flex>
-                            <EpistoButton
-                                onClick={() => handleEditCourseItem(item)}>
-                                <EditIcon></EditIcon>
-                            </EpistoButton>
-                            <EpistoButton
-                                onClick={() => handleDeleteCourseItemAsync(item)}>
-                                <DeleteIcon></DeleteIcon>
-                            </EpistoButton>
-                        </Flex>
-                    </Flex>} />
+            <DragAndDropList
+                list={courseItems}
+                setList={handleSetReorderedCourseItems}
+                getKey={x => x.descriptorCode}
+                renderListItem={(item) => <Flex
+                    flex="1"
+                    borderLeft={`5px solid var(--${item.type === "exam" ? "intenseOrange" : "deepBlue"})`}
+                    p="10px"
+                    justify="space-between"
+                    m="3px">
 
-                <EpistoButton
-                    onClick={() => handleAddNewVideoAsync()}
-                    style={{ alignSelf: "center" }}
-                    variant="outlined">
-                    Add new video
-                </EpistoButton>
+                    <Typography alignSelf="center">
+                        {item.title}
+                    </Typography>
 
-                <EpistoButton
-                    onClick={() => handleAddNewExam()}
-                    style={{ alignSelf: "center" }}
-                    variant="outlined">
-                    Add new exam
-                </EpistoButton>
-            </Flex>
+                    <Flex>
+                        <EpistoButton
+                            onClick={() => handleEditCourseItem(item)}>
+                            <EditIcon></EditIcon>
+                        </EpistoButton>
+                        <EpistoButton
+                            onClick={() => handleDeleteCourseItemAsync(item)}>
+                            <DeleteIcon></DeleteIcon>
+                        </EpistoButton>
+                    </Flex>
+                </Flex>} />
+
+            <EpistoButton
+                onClick={() => handleAddNewVideoAsync()}
+                style={{ alignSelf: "center" }}
+                variant="outlined">
+                Add new video
+            </EpistoButton>
+
+            <EpistoButton
+                onClick={() => handleAddNewExam()}
+                style={{ alignSelf: "center" }}
+                variant="outlined">
+                Add new exam
+            </EpistoButton>
         </Flex>
-    </Flex>
+
+    </AdminSubpageHeader>
 };

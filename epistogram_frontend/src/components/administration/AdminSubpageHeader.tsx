@@ -87,9 +87,7 @@ export const AdminSubpageHeader = (props: {
     return <Flex
         direction={"column"}
         className="whall"
-        position="relative"
-        overflowY="scroll"
-        {...css}>
+        position="relative">
 
         {/* breadcrumbs */}
         <Flex
@@ -135,7 +133,9 @@ export const AdminSubpageHeader = (props: {
         }
 
         {/* children  */}
-        {children}
+        <Flex direction="column" flex="1" overflowY="scroll" {...css}>
+            {children}
+        </Flex>
 
         {/* save button */}
         {onSave && <EpistoButton

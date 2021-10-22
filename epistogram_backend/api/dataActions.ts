@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AdminPageEditCourseDTO } from "../models/shared_models/AdminPageEditCourseDTO";
+import { EditCourseDataDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
@@ -20,6 +20,10 @@ import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "
 import { log } from "../services/misc/logger";
 import { Course } from "../models/entity/Course";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
+import { Video } from "../models/entity/Video";
+import { Exam } from "../models/entity/Exam";
+import { UploadedFile } from "express-fileupload";
+import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 
 export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
@@ -107,6 +111,80 @@ export const getEditedCourseAction = async (params: ActionParamsType) => {
     return await getEditedCourseAsync(courseId);
 };
 
+export const saveCourseThumbnailAction = async (params: ActionParamsType) => {
+
+    const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
+    const courseId = withValueOrBadRequest<number>(params.req.body.courseId, "number");
+
+    const getCourseAsync = () => staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .findOneOrFail(courseId);
+
+    const setCourseThumbnailIdAsync = (thumbnailFileId: number) => staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .save({
+            id: courseId,
+            coverFileId: thumbnailFileId
+        });
+
+    return uploadAssigendFileAsync<Course>(
+        getFilePath("courseCoverImages", "courseCoverImage", courseId, ".jpg"),
+        getCourseAsync,
+        setCourseThumbnailIdAsync,
+        course => course.coverFileId,
+        file);
+}
+
+export const saveCourseDataAction = async (params: ActionParamsType) => {
+
+    const dto = withValueOrBadRequest<EditCourseDataDTO>(params.req?.body);
+
+    // save basic info
+    await staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .save({
+            id: dto.courseId,
+            title: dto.title,
+            category: dto.category,
+            courseGroup: dto.courseGroup
+        });
+
+    // const course = await staticProvider
+    //     .ormConnection
+    //     .getRepository(Course)
+    //     .createQueryBuilder("c")
+    //     .leftJoinAndSelect("c.videos", "v")
+    //     .leftJoinAndSelect("c.exams", "e")
+    //     .getOneOrFail();
+
+    // save video orders
+    await staticProvider
+        .ormConnection
+        .getRepository(Video)
+        .save(dto
+            .courseItems
+            .filter(x => x.type === "video")
+            .map(x => ({
+                id: x.id,
+                orderIndex: x.orderIndex
+            } as Video)));
+
+    // save exam orders
+    await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .save(dto
+            .courseItems
+            .filter(x => x.type === "exam")
+            .map(x => ({
+                id: x.id,
+                orderIndex: x.orderIndex
+            } as Video)));
+};
+
 export const getCourseBriefDataAction = async (params: ActionParamsType) => {
 
     const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
@@ -124,7 +202,7 @@ export const getCourseBriefDataAction = async (params: ActionParamsType) => {
 
 export const setEditedCourseAction = (req: Request) => {
 
-    const adminPageEditCourseDTO = withValueOrBadRequest<AdminPageEditCourseDTO>(req.body);
+    const adminPageEditCourseDTO = withValueOrBadRequest<EditCourseDataDTO>(req.body);
 
     return updateCourseAsync(adminPageEditCourseDTO);
 };

@@ -1,4 +1,4 @@
-import {CourseItemDTO} from "./CourseItemDTO";
+import { CourseItemDTO } from "./CourseItemDTO";
 
 export type EditListItemDTO = {
     id: number,
@@ -6,7 +6,7 @@ export type EditListItemDTO = {
     checked: boolean
 }
 
-export type AdminPageEditCourseDTO = {
+export type EditCourseDataDTO = {
     courseId: number,
     title: string,
     category: string,

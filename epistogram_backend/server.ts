@@ -6,12 +6,12 @@ import { getAdminCoursesAction } from "./api/adminCourses";
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
-    answerPractiseQuestionAction, answerSignupQuestionAction, getCourseItemsAction,
+    answerPractiseQuestionAction, answerSignupQuestionAction, getCourseBriefDataAction, getCourseItemsAction,
     getCurrentCourseItemCode, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
-    getSignupDataAction, getUserPersonalityDataAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveUserDataAction, setEditedCourseAction
+    getSignupDataAction, getUserPersonalityDataAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveCourseDataAction, saveCourseThumbnailAction, saveUserDataAction, setEditedCourseAction
 } from './api/dataActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
-import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
+import { uploadAvatarFileAction } from './api/fileActions';
 import { getDailyTipAction, getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction } from './api/questionActions';
@@ -71,7 +71,8 @@ const initializeAsync = async () => {
     //
 
     expressServer.use(getCORSMiddleware());
-    expressServer.use(bodyParser.json());
+    expressServer.use(bodyParser.json({ limit: '5mb' }));
+    expressServer.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
     expressServer.use(fileUpload());
     expressServer.use(getAuthMiddleware());
 
@@ -107,10 +108,7 @@ const initializeAsync = async () => {
     expressServer.get(apiRoutes.signup.getUserPersonalityData, getUserPersonalityDataAction);
 
     // file
-    expressServer.post('/file/upload-video', uploadVideoFileAction);
-    expressServer.post('/file/upload-video-thumbnail', uploadVideoThumbnailFileAction);
     expressServer.post('/file/upload-avatar', uploadAvatarFileAction);
-    expressServer.post('/file/upload-course-cover', uploadCourseCoverFileAction);
 
     // data
     expressServer.get("/data/get-overview-page-dto", getAsyncActionHandler(getOverviewPageDTOAction));
@@ -128,7 +126,9 @@ const initializeAsync = async () => {
     expressServer.post("/course/set-course-mode", setCourseTypeAction);
     expressServer.post("/get-admin-courses", getAsyncActionHandler(getAdminCoursesAction));
     addEndpoint(apiRoutes.course.getCourseEditData, getEditedCourseAction);
-    addEndpoint(apiRoutes.course.getCourseBriefData, getEditedCourseAction);
+    addEndpoint(apiRoutes.course.getCourseBriefData, getCourseBriefDataAction);
+    addEndpoint(apiRoutes.course.saveCourseData, saveCourseDataAction, { isPost: true });
+    addEndpoint(apiRoutes.course.saveCourseThumbnail, saveCourseThumbnailAction, { isPost: true });
     expressServer.post("/set-admin-edit-course", getAsyncActionHandler(setEditedCourseAction))
 
     // video 

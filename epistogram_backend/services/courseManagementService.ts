@@ -5,7 +5,7 @@ import { CourseTag } from "../models/entity/CourseTag";
 import { Group } from "../models/entity/Group";
 import { Organization } from "../models/entity/Organization";
 import { Tag } from "../models/entity/Tag";
-import { AdminPageEditCourseDTO, EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO";
+import { EditCourseDataDTO, EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
 import { toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toEditCourseItemsDTO, toUserDTO } from "./mappings";
@@ -16,7 +16,7 @@ export const getEditedVideoAsync = async (videoId: string) => {
     // TODO: Create a method to get the currently edited video by videoId
 }
 
-export const updateCourseAsync = async (dto: AdminPageEditCourseDTO) => {
+export const updateCourseAsync = async (dto: EditCourseDataDTO) => {
 
     // save related groups
     await saveCourseGroupsAsync(dto.courseId, dto.groups);
@@ -163,7 +163,7 @@ export const getEditedCourseAsync = async (courseId: number) => {
         groups: courseGroupsChecked,
         teachers: courseTeachersChecked,
         tags: courseTagsChecked,
-    } as AdminPageEditCourseDTO;
+    } as EditCourseDataDTO;
 }
 
 const getOrganizationAsync = async () => {

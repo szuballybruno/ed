@@ -184,7 +184,7 @@ export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => 
         throw new TypedError("Requied field has no value!", "bad request");
     });
 
-    return parseType(objWithValue, type ?? "any");
+    return parseType(objWithValue, type ?? "any") as T;
 };
 
 export const getBearerTokenFromRequest = (req: Request) => {
