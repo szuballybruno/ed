@@ -97,13 +97,13 @@ export const QuestionSlides = (props: { state: QuestionSlidesStateType }) => {
 
     return <>
         {currentQuestion && <SignupWrapper
-            title={currentQuestion!.questionText}
+            title={currentQuestion!.questionText} //replaced
             upperTitle={upperTitle}
-            nextButtonTitle="Következő"
-            onNext={selectedAnswerId ? handleNext : undefined}
+            nextButtonTitle="Következő" //replaced
+            onNext={selectedAnswerId ? handleNext : undefined} //replaced
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
-            bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
+            bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />} //replaced
             upperComponent={<Flex alignItems={"center"} justifyContent={"flex-end"} w={"30%"}><Typography>{questionnaireProgressLabel}</Typography></Flex>}>
 
             <SignupRadioGroup

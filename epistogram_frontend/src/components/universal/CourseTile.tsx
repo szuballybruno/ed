@@ -49,21 +49,32 @@ const CourseTile = (props: {
                 {/* done overlay */}
                 {isComplete && <Flex
                     position="absolute"
-                    top={0}
+                    top={10}
                     left={0}
                     width="100%"
                     justify="flex-end">
 
-                    <Flex padding="4px 10px 8px 14px" bg="white" borderRadius="0 0 0 10px">
-                        <Text pr="10px">Teljesítve!</Text>
+                    <Flex
+                        direction="row"
+                        justifyContent="space-around"
+                        alignItems="center"
+                        padding="4px"
+                        w={130}
+                        bg="#97CC9B"
+                        borderRadius="7px 0 0 7px"
+                    >
                         <DoneIcon
-                            width="25px"
-                            height="25px"
+                            width="20px"
+                            height="20px"
                             style={{
                                 color: "white",
-                                borderRadius: "50%",
-                                background: "var(--mildGreen)"
+                                borderRadius: "50%"
                             }} />
+                        <Text
+                            textTransform={"uppercase"}
+                            color="white">
+                            Teljesítve!
+                        </Text>
                     </Flex>
                 </Flex>}
             </Box>
