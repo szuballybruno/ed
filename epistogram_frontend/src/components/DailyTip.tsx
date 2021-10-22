@@ -9,6 +9,21 @@ import { EpistoDialog, useEpistoDialogLogic } from "./EpistoDialog"
 import { EpistoButton } from "./universal/EpistoButton"
 import { SlidesDisplay } from "./universal/SlidesDisplay"
 
+const ModalPlayer = (props: {
+    videoUrl: string
+}) => {
+
+    return <ReactPlayer
+        width="100%"
+        height="100%"
+        style={{
+            margin: "auto"
+        }}
+        playing={true}
+        controls={true}
+        url={props.videoUrl} />
+}
+
 export const DailyTip = (props: {} & FlexProps) => {
 
     const { ...css } = props;
@@ -60,45 +75,7 @@ export const DailyTip = (props: {} & FlexProps) => {
         </Box>
     }
 
-    const VideoSlide = () => {
-
-        const [isPlaying, setIsPlaying] = useState(true);
-
-        return <Box position={"relative"} onClick={openDialog} cursor="pointer">
-            <Flex
-                display={isPlaying ? "none" : undefined}
-                top="0"
-                position="absolute"
-                align="center"
-                justify="center"
-                className="whall">
-                <Box
-                    className="square70 circle"
-                    padding="10px"
-                    background="#0000004f"
-                    boxShadow="0 0 20px 16px #0000004f">
-                    <img
-                        style={{
-                            transform: "translateX(5px)",
-                            filter: "brightness(2)"
-                        }}
-                        alt=""
-                        src={getAssetUrl("/icons/play2.svg")} />
-                </Box>
-            </Flex>
-            <ReactPlayer
-                width="100%"
-                height="100%"
-                style={{
-                    margin: "auto"
-                }}
-                playing={isPlaying}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                controls={true}
-                url={dailyTipData?.videoUrl} />
-        </Box>
-    }
+    const VideoSlide = () => <ModalPlayer videoUrl={dailyTipData?.videoUrl ?? ""}></ModalPlayer>
 
     const toggleDisplayModes = () => {
 
@@ -131,7 +108,7 @@ export const DailyTip = (props: {} & FlexProps) => {
                         index={currentIndex}
                         slides={[
                             VideoSlide,
-                            DescriptionSlide
+                            DescriptionSlide,
                         ]} />
                 </Flex>
 
