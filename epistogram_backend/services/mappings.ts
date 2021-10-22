@@ -22,6 +22,7 @@ import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizatio
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
 import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
+import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
@@ -38,6 +39,7 @@ import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
+import { DailyTipView } from "../models/views/DailyTipView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
 import { navPropNotNull } from "../utilities/helpers";
@@ -318,6 +320,14 @@ export const toCourseItemDTOExam = (exam: Exam, state?: CourseItemStateType) => 
         descriptorCode: getCourseItemDescriptorCode(exam.id, "exam"),
         type: "exam"
     } as CourseItemDTO;
+}
+
+export const toDailyTipDTO = (view: DailyTipView) => {
+
+    return {
+        description: view.description,
+        videoUrl: getAssetUrl(view.videoFilePath)
+    } as DailyTipDTO;
 }
 
 export const toCourseItemDTOVideo = (video: Video, state?: CourseItemStateType) => {

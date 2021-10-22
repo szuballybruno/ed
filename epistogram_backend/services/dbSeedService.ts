@@ -53,6 +53,9 @@ export const seedDB = async () => {
     log("seedPersonalityCategoryDescriptions")
     await executeSeedScriptAsync("seedPersonalityCategoryDescriptions");
 
+    log("seedDailyTips")
+    await executeSeedScriptAsync("seedDailyTips");
+
     log("seedTags")
     await seedTags(connection);
 
@@ -168,7 +171,6 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
-                    pending: false,
                     filePath: "/courseCoverImages/1.png"
                 },
                 exams: [
@@ -207,7 +209,6 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
-                    pending: false,
                     filePath: "/courseCoverImages/2.png"
                 },
             },
@@ -222,7 +223,6 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
-                    pending: false,
                     filePath: "/courseCoverImages/3.png"
                 },
             },
@@ -237,7 +237,6 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
-                    pending: false,
                     filePath: "/courseCoverImages/4.png"
                 },
                 exams: [
@@ -262,7 +261,6 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
-                    pending: false,
                     filePath: "/courseCoverImages/5.png"
                 },
             },
@@ -275,7 +273,6 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
-                    pending: false,
                     filePath: "/courseCoverImages/7.png"
                 },
             },
@@ -297,7 +294,6 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
-                    pending: false,
                     filePath: "/courseCoverImages/6.png"
                 },
             },
@@ -310,7 +306,6 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
-                    pending: false,
                     filePath: "/courseCoverImages/8.png"
                 },
             }

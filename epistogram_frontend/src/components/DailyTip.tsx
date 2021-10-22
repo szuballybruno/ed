@@ -1,13 +1,15 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
+import { useState } from "react"
+import ReactPlayer from "react-player"
 import { getAssetUrl, usePaging } from "../frontendHelpers"
-import { tipOfTheDay } from "../services/dataService"
+import { useDailyTip } from "../services/miscService"
 import { translatableTexts } from "../translatableTexts"
 import { EpistoDialog, useEpistoDialogLogic } from "./EpistoDialog"
 import { EpistoButton } from "./universal/EpistoButton"
 import { SlidesDisplay } from "./universal/SlidesDisplay"
 
-export const TipOfTheDay = (props: {} & FlexProps) => {
+export const DailyTip = (props: {} & FlexProps) => {
 
     const { ...css } = props;
     const { currentIndex, next, previous } = usePaging([1, 2]);
@@ -16,37 +18,52 @@ export const TipOfTheDay = (props: {} & FlexProps) => {
         title: "Napi tipped",
     });
 
+    const { dailyTipData, dailyTipError, dailyTipState } = useDailyTip();
+
     const openDialog = () => dialogLogic.openDialog();
 
     const DescriptionSlide = () => <Typography variant={"h6"} fontSize="16px">
-        {tipOfTheDay}
+        {dailyTipData?.description}
     </Typography>;
 
-    const VideoSlide = () => <Box position={"relative"} onClick={openDialog} cursor="pointer">
-        <Flex top="0" position="absolute" align="center" justify="center" className="whall">
-            <Box
-                className="square70 circle"
-                padding="10px"
-                background="#0000004f"
-                boxShadow="0 0 20px 16px #0000004f">
-                <img
-                    style={{
-                        transform: "translateX(5px)",
-                        filter: "brightness(2)"
-                    }}
-                    alt=""
-                    src={getAssetUrl("/icons/play2.svg")} />
-            </Box>
-        </Flex>
-        <img
-            width="100%"
-            src={getAssetUrl("/images/tipoftheday.jpg")}
-            alt=""
-            style={{
-                borderRadius: "15px"
-            }}>
-        </img>
-    </Box>
+    const VideoSlide = () => {
+
+        const [isPlaying, setIsPlaying] = useState(false);
+
+        return <Box position={"relative"} onClick={openDialog} cursor="pointer">
+            <Flex
+                display={isPlaying ? "none" : undefined}
+                top="0"
+                position="absolute"
+                align="center"
+                justify="center"
+                className="whall">
+                <Box
+                    className="square70 circle"
+                    padding="10px"
+                    background="#0000004f"
+                    boxShadow="0 0 20px 16px #0000004f">
+                    <img
+                        style={{
+                            transform: "translateX(5px)",
+                            filter: "brightness(2)"
+                        }}
+                        alt=""
+                        src={getAssetUrl("/icons/play2.svg")} />
+                </Box>
+            </Flex>
+            <ReactPlayer
+                width="100%"
+                height="100%"
+                style={{
+                    margin: "auto"
+                }}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                controls={true}
+                url={dailyTipData?.videoUrl} />
+        </Box>
+    }
 
     const toggleDisplayModes = () => {
 

@@ -23,7 +23,6 @@ export const insertVideoAsync = async (video: Video, filePath?: string) => {
         const videoFileUrl = getAssetUrl(filePath)!;
 
         video.videoFile = {
-            pending: false,
             filePath: filePath
         } as StorageFile;
 

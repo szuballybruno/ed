@@ -95,7 +95,6 @@ const deleteFileEntityAsync = async (id: number) => {
 const insertFileEntityAsync = async (path: string) => {
 
     const file = {
-        pending: true,
         filePath: path
     } as StorageFile;
 

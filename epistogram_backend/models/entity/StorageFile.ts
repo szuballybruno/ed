@@ -10,9 +10,6 @@ export class StorageFile {
     id: number;
 
     @Column()
-    pending: boolean;
-
-    @Column()
     filePath: string;
 
     // videos

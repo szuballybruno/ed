@@ -9,7 +9,7 @@ import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPa
 import Navbar from "./navbar/Navbar";
 import { PractiseQuestions } from './PractiseQuestions';
 import { Tasks } from './Tasks';
-import { TipOfTheDay } from './TipOfTheDay';
+import { DailyTip } from './DailyTip';
 import { CourseItemList, CourseItemView } from "./universal/CourseItemList";
 import { CourseProgressBar } from './universal/CourseProgressBar';
 import { DashboardSection } from './universal/DashboardSection';
@@ -98,7 +98,7 @@ const HomePage = () => {
                                 minWidth="300px"
                                 flex="1">
 
-                                <TipOfTheDay />
+                                <DailyTip />
                             </DashboardSection>
 
                         </Flex>

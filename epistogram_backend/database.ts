@@ -48,6 +48,9 @@ import { recreateViewsAsync } from "./services/sqlServices/sqlViewCreatorService
 import { recreateFunctionsAsync } from "./services/sqlServices/sqlFunctionCreatorService";
 import { UserSignupCompletedView } from "./models/views/UserSignupCompletedView";
 import { JobTitle } from "./models/entity/JobTitle";
+import { DailyTip } from "./models/entity/DailyTip";
+import { DailyTipOccurrence } from "./models/entity/DailyTipOccurrence";
+import { dbSchema } from "./dbSchema";
 
 export type TypeORMConnection = Connection;
 
@@ -114,23 +117,7 @@ export const initializeDBAsync = async () => {
     //
     log("Creating SQL views...", "strong")
 
-    await recreateViewsAsync([
-        "video_completed_view",
-        "exam_completed_view",
-        "user_exam_answer_session_view",
-        "video_progress_view",
-        "course_item_view",
-        "course_item_state_view",
-        "course_state_view",
-        "course_item_all_view",
-        "course_view",
-        "exam_session_answers_view",
-        "signup_answers_view",
-        "user_signup_completed_view",
-        "user_activity_view",
-        "user_activity_flat_view",
-        "practise_question_view"
-    ]);
+    await recreateViewsAsync(dbSchema.viewScripts);
 
     log("SQL views created!", "strong");
 
@@ -139,10 +126,7 @@ export const initializeDBAsync = async () => {
     //
     log("Creating SQL functions...", "strong")
 
-    await recreateFunctionsAsync([
-        "answer_signup_question_fn",
-        "answer_question_fn",
-    ]);
+    await recreateFunctionsAsync(dbSchema.functionScripts);
 
     log("SQL functions created!", "strong");
 
@@ -219,51 +203,10 @@ const getPorstgresOptions = () => {
         extra: {
             socketPath: dbConnOpts.socketPath
         },
+        // "models/entity/**/*.ts"
         entities: [
-            // "models/entity/**/*.ts"
-            Course,
-            CourseOrganization,
-            CourseGroup,
-            CourseTag,
-            Exam,
-            Group,
-            Organization,
-            User,
-            Video,
-            Task,
-            QuestionAnswer,
-            Question,
-            Answer,
-            Tag,
-            TestChild,
-            TestParent,
-            TestSubChild,
-            StorageFile,
-            AnswerSession,
-            VideoPlaybackSample,
-            VideoPlaybackData,
-            UserCourseBridge,
-            QuestionCategory,
-            Role,
-            Activity,
-            RoleActivityBridge,
-            PersonalityCategoryDescription,
-            PractiseQuestionView,
-            JobTitle,
-
-            // views,
-            VideoCompletedView,
-            ExamCompletedView,
-            UserExamAnswerSessionView,
-            VideoProgressView,
-            CourseItemView,
-            CourseItemStateView,
-            CourseStateView,
-            CourseItemAllView,
-            CourseView,
-            SignupAnswersView,
-            UserActivityFlatView,
-            UserSignupCompletedView
+            ...dbSchema.entities,
+            ...dbSchema.viewEntities
         ],
     } as ConnectionOptions;
 }

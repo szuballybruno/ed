@@ -12,7 +12,7 @@ import {
 } from './api/dataActions';
 import { answerExamQuestionAction, getExamResultsAction } from './api/examActions';
 import { uploadAvatarFileAction, uploadCourseCoverFileAction, uploadVideoFileAction, uploadVideoThumbnailFileAction } from './api/fileActions';
-import { getJobTitlesAction } from './api/miscActions';
+import { getDailyTipAction, getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction } from './api/questionActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
@@ -91,6 +91,7 @@ const initializeAsync = async () => {
     expressServer.get('/misc/get-registration-link', getRegistrationLinkAction);
     expressServer.post(apiRoutes.misc.logoutUser, logOutUserAction);
     addEndpoint(apiRoutes.misc.getJobTitles, getJobTitlesAction);
+    addEndpoint(apiRoutes.misc.getDailyTip, getDailyTipAction);
 
     // user management
     addEndpoint(apiRoutes.userManagement.getEditUserData, getEditUserDataAction);
