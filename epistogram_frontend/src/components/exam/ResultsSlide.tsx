@@ -36,16 +36,9 @@ const ResultsSlide = (props: {
             >
 
                 <Flex>
-                    <img
-                        src={""}
-                        style={{
-                            width: 30,
-                            height: 30,
-                        }}
-                        alt={""} />
                 </Flex>
                 <Flex mx={3}>
-                    <Text as="text">{"Üdv!"}</Text>
+                    <Text as="text">{""}</Text>
                 </Flex>
 
             </Flex>
@@ -64,56 +57,26 @@ const ResultsSlide = (props: {
             </Flex>
             <Flex
                 w={"20%"}>
-                <EpistoButton variant={"outlined"}>
-                    Kilépek a tesztből
-                </EpistoButton>
             </Flex>
         </Flex>
         <Divider w={"100%"} h={1} bgColor={"grey"} />
         <Flex
-            justifyContent={"flex-start"}
+            direction={"row"}
             alignItems={"center"}
+            justifyContent={"flex-start"}
+            w={"100%"}
+            mt={30}
         >
-            <Flex
-                direction={"column"}
-                justifyContent={"flex-end"}
-                alignItems={"flex-start"}
-                w={"100%"}
-                px={7}
-                flex={1}
+            <Text
+                as="text"
+                fontSize={"1.3rem"}
             >
-                <Flex
-                    direction={"column"}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                    maxW={800}
-                >
-                    <Text
-                        as="text"
-                        fontSize={"1.3rem"}
-                    >
-                        {"Ez egy kurva bonyolult kérdés, amit meg kellene válaszolnod! Ez magának a kérdésnek a fejéce."}
-                    </Text>
-                </Flex>
-                <Flex
-                    direction={"column"}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                    maxW={600}
-                    py={20}
-                >
-                    <Text
-                        as="text"
-                        fontSize={"1.1rem"}
-                    >
-                        {"De benne van az is, hogy a kérdés értelmezéséhez szükség van valamilyen kisebb-nagyon descriptionre is, például ha jogászokat akarunk képezni (márpedig akarunk), akkor egy-egy törvény paragrafusát ne a headingbe, hanem inkább a descriptionba írják bele az okosok."}
-                    </Text>
-                </Flex>
-            </Flex>
-
+                {"Egy újabb tesztet oldottál meg, íme az eredményed:"}
+            </Text>
         </Flex>
 
-        <Flex w={"100%"}>
+
+        <Flex w={"100%"} h={170}>
             <StatisticsCard suffix={"%"} title={"Helyes válaszok aránya"} value={"66"} />
             <StatisticsCard suffix={""} title={"Helyes válasz a kérdésekre"} value={"10/15"} />
             <StatisticsCard suffix={"perc"} title={"Alatt teljesítetted a tesztet"} value={"66"} />
@@ -123,26 +86,45 @@ const ResultsSlide = (props: {
         <Flex
             direction={"row"}
             alignItems={"center"}
-            justifyContent={"flex-start"}
+            justifyContent={"space-between"}
             w={"100%"}
+            mt={20}
+            pl={15}
         >
             <Text
                 as="text"
                 fontSize={"1.3rem"}
             >
-                {"Válaszok"}
+                {"Kérdések"}
             </Text>
+            <Flex w={"25%"}>
+                <Text
+                    as="text"
+                    fontSize={"1.3rem"}
+                >
+                    {"Válaszod"}
+                </Text>
+            </Flex>
         </Flex>
 
-        <Flex direction={"column"} flex={1}>
+        <Flex direction={"column"} flex={1} mt={10}>
             {props.exam.questions.map((question, index) => {
-                return <Accordion expanded>
+                return <Accordion>
                     <AccordionSummary
                         expandIcon={<ExpandMore />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
-                        <Typography>{question.questionText}</Typography>
+                        <Flex w={"77%"}>
+                            <Typography>{question.questionText}</Typography>
+                        </Flex>
+                        <Flex w={"23%"}>
+                            <Typography style={{
+                                padding: "2px 15px",
+                                backgroundColor: "#97CC9B",
+                                borderRadius: 7
+                            }}>{"Válasz"}</Typography>
+                        </Flex>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Flex
@@ -242,7 +224,7 @@ const ResultsSlide = (props: {
                             width: 200,
                             height: 46
                         }}>
-                        Tanfolyamkereső
+                        Kurzus folytatása
                         <ArrowForward />
                     </EpistoButton>
                 </Flex>
