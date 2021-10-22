@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { Connection, ConnectionOptions, createConnection } from "typeorm";
-import { dbSchema } from "./dbSchema";
+import { dbSchema } from "./services/misc/dbSchema";
 import { User } from "./models/entity/User";
 import { seedDB } from "./services/dbSeedService";
 import { getDatabaseConnectionParameters } from "./services/environment";
