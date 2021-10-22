@@ -26,9 +26,43 @@ export const DailyTip = (props: {} & FlexProps) => {
         {dailyTipData?.description}
     </Typography>;
 
+    const VideoPreviewSlide = () => {
+
+        return <Box position={"relative"} onClick={openDialog} cursor="pointer">
+            <Flex
+                top="0"
+                position="absolute"
+                align="center"
+                justify="center"
+                className="whall">
+                <Box
+                    className="square70 circle"
+                    padding="10px"
+                    background="#0000004f"
+                    boxShadow="0 0 20px 16px #0000004f">
+                    <img
+                        style={{
+                            transform: "translateX(5px)",
+                            filter: "brightness(2)"
+                        }}
+                        alt=""
+                        src={getAssetUrl("/icons/play2.svg")} />
+                </Box>
+            </Flex>
+            <ReactPlayer
+                width="100%"
+                height="100%"
+                style={{
+                    margin: "auto"
+                }}
+                playing={false}
+                url={dailyTipData?.videoUrl} />
+        </Box>
+    }
+
     const VideoSlide = () => {
 
-        const [isPlaying, setIsPlaying] = useState(false);
+        const [isPlaying, setIsPlaying] = useState(true);
 
         return <Box position={"relative"} onClick={openDialog} cursor="pointer">
             <Flex
@@ -58,6 +92,7 @@ export const DailyTip = (props: {} & FlexProps) => {
                 style={{
                     margin: "auto"
                 }}
+                playing={isPlaying}
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 controls={true}
@@ -116,7 +151,7 @@ export const DailyTip = (props: {} & FlexProps) => {
             alwaysRender
             index={currentIndex}
             slides={[
-                VideoSlide,
+                VideoPreviewSlide,
                 DescriptionSlide
             ]} />
 
