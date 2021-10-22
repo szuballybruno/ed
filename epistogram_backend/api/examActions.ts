@@ -15,7 +15,7 @@ export const answerExamQuestionAction = getAsyncActionHandler(async (req: Reques
 export const getExamResultsAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const answerSessionId = withValueOrBadRequest<number>(req.query.answerSessionId);
+    const answerSessionId = withValueOrBadRequest<number>(req.query.answerSessionId, "number");
 
     return getExamResultsAsync(userId, answerSessionId);
 });

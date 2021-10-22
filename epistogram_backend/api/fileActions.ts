@@ -1,21 +1,13 @@
 import { Request } from "express";
 import { UploadedFile } from "express-fileupload";
 import { getUserIdFromRequest } from "../services/authenticationService";
-import { uploadAvatarFileAsync, uploadCourseCoverFileAsync, uploadVideoFileAsync, uploadVideoThumbnailFileAsync } from "../services/fileService";
+import { uploadAvatarFileAsync, uploadCourseCoverFileAsync, uploadVideoThumbnailFileAsync } from "../services/fileService";
 import { getAsyncActionHandler, TypedError, withValueOrBadRequest } from "../utilities/helpers";
-
-export const uploadVideoFileAction = getAsyncActionHandler((req: Request) => {
-
-    const file = withValueOrBadRequest<UploadedFile>(req.files?.file);
-    const videoId = withValueOrBadRequest<number>(req.body.videoId);
-
-    return uploadVideoFileAsync(videoId, file);
-});
 
 export const uploadVideoThumbnailFileAction = getAsyncActionHandler((req: Request) => {
 
     const file = withValueOrBadRequest<UploadedFile>(req.files?.file);
-    const videoId = withValueOrBadRequest<number>(req.body.videoId);
+    const videoId = withValueOrBadRequest<number>(req.body.videoId, "number");
 
     return uploadVideoThumbnailFileAsync(videoId, file);
 });
@@ -36,7 +28,7 @@ export const uploadAvatarFileAction = getAsyncActionHandler((req: Request) => {
 export const uploadCourseCoverFileAction = getAsyncActionHandler((req: Request) => {
 
     const file = withValueOrBadRequest<UploadedFile>(req.files?.file);
-    const courseId = withValueOrBadRequest<number>(req.body.courseId);
+    const courseId = withValueOrBadRequest<number>(req.body.courseId, "number");
 
     return uploadCourseCoverFileAsync(courseId, file);
 });

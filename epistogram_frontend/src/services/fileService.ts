@@ -1,10 +1,5 @@
 import { postFileAsync, usePostFile } from "./httpClient";
 
-export const uploadVideoFileAsync = (videoId: number, file: File) => {
-
-    return postFileAsync("file/upload-video", file, { videoId });
-}
-
 export const uploadAvatarFileAsync = (file: File) => {
 
     console.log("EZAZ:" + file.type)

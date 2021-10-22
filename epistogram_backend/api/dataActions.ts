@@ -102,14 +102,14 @@ export const getEditedVideoAction = async (req: Request) => {
 
 export const getEditedCourseAction = async (params: ActionParamsType) => {
 
-    const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId);
+    const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
 
     return await getEditedCourseAsync(courseId);
 };
 
 export const getCourseBriefDataAction = async (params: ActionParamsType) => {
 
-    const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId);
+    const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
 
     const course = await staticProvider
         .ormConnection

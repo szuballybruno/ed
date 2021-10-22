@@ -1,0 +1,1 @@
+export type ParsableValueType = "number" | "string" | "any";

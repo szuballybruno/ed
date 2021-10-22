@@ -7,7 +7,7 @@ import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpe
 export const startCourseAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const courseId = withValueOrBadRequest<number>(req.query.courseId);
+    const courseId = withValueOrBadRequest<number>(req.query.courseId, "number");
 
     return startCourseAsync(userId, courseId);
 });
@@ -15,7 +15,7 @@ export const startCourseAction = getAsyncActionHandler(async (req: Request) => {
 export const setCourseTypeAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const courseId = withValueOrBadRequest<number>(req.query.courseId);
+    const courseId = withValueOrBadRequest<number>(req.query.courseId, "number");
     const modeType = withValueOrBadRequest<CourseModeType>(req.query.mode);
 
     return setCourseTypeAsync(userId, courseId, modeType);

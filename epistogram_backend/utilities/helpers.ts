@@ -3,6 +3,7 @@ import { UploadedFile } from "express-fileupload";
 import { User } from "../models/entity/User";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
+import { ParsableValueType } from "../models/Types";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { log, logError } from "../services/misc/logger";
 
@@ -150,6 +151,17 @@ export const withValue = <T>(obj: T, errorFunc?: () => void) => {
     return obj;
 }
 
+export const parseType = (obj: any, type: ParsableValueType) => {
+
+    if (type === "number")
+        return parseInt(obj);
+
+    if (type === "string")
+        return "" + obj;
+
+    return obj;
+}
+
 export const requestHasFiles = (req: Request) => {
 
     return !!req.files;
@@ -165,10 +177,15 @@ export const getSingleFileFromRequest = (req: Request) => {
     return req.files.file as UploadedFile;
 }
 
-export const withValueOrBadRequest = <T>(obj: any) => withValue<T>(obj, () => {
+export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => {
 
-    throw new TypedError("Requied field has no value!", "bad request");
-});
+    const objWithValue = withValue<T>(obj, () => {
+
+        throw new TypedError("Requied field has no value!", "bad request");
+    });
+
+    return parseType(objWithValue, type ?? "any");
+};
 
 export const getBearerTokenFromRequest = (req: Request) => {
 

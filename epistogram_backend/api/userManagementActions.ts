@@ -12,14 +12,14 @@ import { ActionParamsType, getFullName, withValueOrBadRequest } from "../utiliti
 export const deleteUserAction = async (params: ActionParamsType) => {
 
     const dto = withValueOrBadRequest<any>(params.req.body);
-    const deleteUserId = withValueOrBadRequest<number>(dto.userId);
+    const deleteUserId = withValueOrBadRequest<number>(dto.userId, "number");
 
     return deleteUserAsync(params.userId, deleteUserId);
 };
 
 export const getEditUserDataAction = async (params: ActionParamsType) => {
 
-    const editedUserId = withValueOrBadRequest<number>(params.req.query?.editedUserId);
+    const editedUserId = withValueOrBadRequest<number>(params.req.query?.editedUserId, "number");
 
     const user = await staticProvider
         .ormConnection

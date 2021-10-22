@@ -64,3 +64,13 @@ export const useVideoEditData = (videoId: number) => {
         videoEditDataError: qr.error
     }
 }
+
+export const useUploadVideoFileAsync = () => {
+
+    const qr = usePostDataUnsafe<{ videoId: number }, void>(apiRoutes.video.uploadVideoFile);
+
+    return {
+        saveVideoFileAsync: (videoId: number, file: File) => qr.postDataAsync({ videoId }, file),
+        saveVideoFileState: qr.state,
+    }
+}

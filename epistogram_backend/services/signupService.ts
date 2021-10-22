@@ -25,7 +25,7 @@ export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentU
     // if user is admin require organizationId to be provided
     // otherwise use the current user's organization
     const organizationId = currentUser.roleId === UserRoleEnum.administratorId
-        ? withValueOrBadRequest<number>(dto.organizationId)
+        ? withValueOrBadRequest<number>(dto.organizationId, "number")
         : currentUser.organizationId;
 
     if (!organizationId)
@@ -38,10 +38,10 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
 
     // get and check sent data 
     const email = withValueOrBadRequest<string>(dto.email);
-    const roleId = withValueOrBadRequest<number>(dto.roleId);
+    const roleId = withValueOrBadRequest<number>(dto.roleId, "number");
     const firstName = withValueOrBadRequest<string>(dto.firstName);
     const lastName = withValueOrBadRequest<string>(dto.lastName);
-    const jobTitleId = withValueOrBadRequest<number>(dto.jobTitleId);
+    const jobTitleId = withValueOrBadRequest<number>(dto.jobTitleId, "number");
     const userFullName = `${lastName} ${firstName}`;
 
     const user = await createUserAsync(

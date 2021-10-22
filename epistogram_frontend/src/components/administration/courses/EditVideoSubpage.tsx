@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
-import { useSaveVideo, useVideoEditData } from "../../../services/videoService";
+import { useSaveVideo, useUploadVideoFileAsync, useVideoEditData } from "../../../services/videoService";
+import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
 import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
@@ -25,6 +26,7 @@ export const EditVideoSubpage = () => {
 
     const { saveVideoAsync, saveVideoState } = useSaveVideo();
     const { videoEditData, videoEditDataError, videoEditDataState } = useVideoEditData(videoId);
+    const { saveVideoFileAsync, saveVideoFileState } = useUploadVideoFileAsync();
 
     useEffect(() => {
 
@@ -40,12 +42,21 @@ export const EditVideoSubpage = () => {
 
         try {
 
+            // only save video file if selected
+            if (videoFile) {
+
+                await saveVideoFileAsync(videoId, videoFile);
+            }
+
             await saveVideoAsync({
                 id: videoId,
                 title: videoTitle,
                 description: videoDescription,
                 subtitle: videoSubtitle
             });
+
+            // cleanup
+            setVideoFile(null);
 
             showNotification("Video sikeresen mentve!");
         }
@@ -55,60 +66,60 @@ export const EditVideoSubpage = () => {
         }
     }
 
-    return <AdminSubpageHeader
-        onSave={handleSaveAsync}
-        tabMenuItems={[
-            applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
-            applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-            applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
-        ]}>
+    return <LoadingFrame
+        loadingState={[saveVideoState, videoEditDataState, saveVideoFileState]}
+        error={[videoEditDataError]}
+        className="whall">
 
-        <Flex direction="column" p="20px">
+        <AdminSubpageHeader
+            onSave={handleSaveAsync}
+            tabMenuItems={[
+                applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
+                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
+            ]}>
 
-            <HiddenFileUploadInput
-                type="video"
-                ref={videoUploadInputRef}
-                onFileSelected={(file) => setVideoFile(file)} />
+            <Flex direction="column" p="20px">
 
-            <EditSection title="Video file" align="flex-start">
-                <EpistoButton
-                    variant="outlined"
-                    style={{ margin: "10px 0 10px 0" }}
-                    onClick={() => videoUploadInputRef?.current?.click()}>
-                    Video kivalasztasa
-                </EpistoButton>
+                <HiddenFileUploadInput
+                    type="video"
+                    ref={videoUploadInputRef}
+                    onFileSelected={(file) => setVideoFile(file)} />
 
-                {videoFile && <>
-                    <EpistoEntry
+                <EditSection title="Video file" align="flex-start">
+                    <EpistoButton
+                        variant="outlined"
+                        style={{ margin: "10px 0 10px 0" }}
+                        onClick={() => videoUploadInputRef?.current?.click()}>
+                        Video kivalasztasa
+                    </EpistoButton>
+
+                    {videoFile && <EpistoEntry
                         label="Video file"
                         disabled
-                        value={videoFile?.name ?? ""} />
+                        value={videoFile?.name ?? ""} />}
+                </EditSection>
 
-                    <EpistoButton variant="outlined">
-                        Feltoltes
-                    </EpistoButton>
-                </>}
-            </EditSection>
+                <EditSection title="Altalanos adatok">
 
-            <EditSection title="Altalanos adatok">
+                    <EpistoEntry
+                        label="Cim"
+                        setValue={setVideoTitle}
+                        value={videoTitle} />
 
-                <EpistoEntry
-                    label="Cim"
-                    setValue={setVideoTitle}
-                    value={videoTitle} />
+                    <EpistoEntry
+                        label="Alcim"
+                        setValue={setVideoSubtitle}
+                        value={videoSubtitle} />
 
-                <EpistoEntry
-                    label="Alcim"
-                    setValue={setVideoSubtitle}
-                    value={videoSubtitle} />
+                    <EpistoEntry
+                        label="Leiras"
+                        setValue={setVideoDescription}
+                        value={videoDescription}
+                        isMultiline />
 
-                <EpistoEntry
-                    label="Leiras"
-                    setValue={setVideoDescription}
-                    value={videoDescription}
-                    isMultiline />
-
-            </EditSection>
-        </Flex>
-    </AdminSubpageHeader>
+                </EditSection>
+            </Flex>
+        </AdminSubpageHeader>
+    </LoadingFrame>
 }

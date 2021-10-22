@@ -7,16 +7,6 @@ import { deleteStorageFileAsync, uploadToStorageAsync } from "./storageService";
 import { getUserById, setUserAvatarFileId } from "./userService";
 import { getVideoByIdAsync, setVideoFileIdAsync, setVideoThumbnailFileId } from "./videoService";
 
-export const uploadVideoFileAsync = (videoId: number, file: UploadedFile) => {
-
-    return uploadAssigendFileAsync<Video>(
-        getFilePath("videos", "video", videoId, "mp4"),
-        () => getVideoByIdAsync(videoId),
-        (fileId) => setVideoFileIdAsync(videoId, fileId),
-        (entity) => entity.videoFileId,
-        file);
-}
-
 export const uploadVideoThumbnailFileAsync = (videoId: number, file: UploadedFile) => {
 
     return uploadAssigendFileAsync<Video>(
@@ -49,7 +39,7 @@ export const uploadCourseCoverFileAsync = (courseId: number, file: UploadedFile)
     return Promise.resolve();
 };
 
-const uploadAssigendFileAsync = async <T>(
+export const uploadAssigendFileAsync = async <T>(
     filePath: string,
     getEntityAsync: () => Promise<T>,
     assignFileToEntity: (fileId: number) => Promise<void>,
@@ -79,7 +69,7 @@ const uploadAssigendFileAsync = async <T>(
     await uploadToStorageAsync(file, filePath);
 }
 
-const getFilePath = (folderPath: string, fileType: string, fileId: number, extension: string) => {
+export const getFilePath = (folderPath: string, fileType: string, fileId: number, extension: string) => {
 
     return `${folderPath}/${fileType}_${fileId}_${Date.now()}.${extension}`
 }

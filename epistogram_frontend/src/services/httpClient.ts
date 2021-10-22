@@ -89,14 +89,16 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
     const [state, setState] = useState<LoadingStateType>("idle");
     const [result, setResult] = useState<TResult | null>(null);
 
-    const postDataAsync = async (data: TData) => {
+    const postDataAsync = async (data: TData, file?: File) => {
 
         try {
 
             setState("loading");
 
             const postData = data ? data : undefined;
-            const postResult = await httpPostAsync(url, postData) as TResult;
+            const postResult = file
+                ? await postFileAsync(url, file, data) as TResult
+                : await httpPostAsync(url, postData) as TResult;
 
             setState("idle");
             setResult(postResult);
@@ -204,7 +206,7 @@ export const postFileAsync = async (url: string, file: File, data?: any) => {
         }
     }
 
-    await httpPostAsync(
+    return await httpPostAsync(
         url,
         formData,
         x => x.headers = { ...x.headers, "Content-Type": 'multipart/form-data' });

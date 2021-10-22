@@ -1,3 +1,4 @@
+import { UploadedFile } from "express-fileupload";
 import { Course } from "../models/entity/Course";
 import { Video } from "../models/entity/Video";
 import { CreateVideoDTO } from "../models/shared_models/CreateVideoDTO";
@@ -5,7 +6,8 @@ import { IdBodyDTO } from "../models/shared_models/IdBodyDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
 import { VideoSaveDTO } from "../models/shared_models/VideoSaveDTO";
-import { insertVideoAsync } from "../services/videoService";
+import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
+import { getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers"
 
@@ -66,7 +68,7 @@ export const saveVideoAction = async (params: ActionParamsType) => {
 
 export const getVideoEditDataAction = async (params: ActionParamsType) => {
 
-    const videoId = withValueOrBadRequest<number>(params.req.query.videoId);
+    const videoId = withValueOrBadRequest<number>(params.req.query.videoId, "number");
 
     const video = await staticProvider
         .ormConnection
@@ -81,19 +83,15 @@ export const getVideoEditDataAction = async (params: ActionParamsType) => {
     } as VideoEditDTO;
 }
 
-// export const getVideoEditDataAction = async (params: ActionParamsType) => {
+export const uploadVideoFileAction = (params: ActionParamsType) => {
 
-//     const videoId = withValueOrBadRequest<number>(params.req.query.videoId);
+    const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
+    const videoId = withValueOrBadRequest<number>(params.req.body.videoId, "number");
 
-//     const video = await staticProvider
-//         .ormConnection
-//         .getRepository(Video)
-//         .findOneOrFail(videoId);
-
-//     return {
-//         id: video.id,
-//         title: video.title,
-//         description: video.description,
-//         subtitle: video.subtitle
-//     } as VideoEditDTO;
-// }
+    return uploadAssigendFileAsync<Video>(
+        getFilePath("videos", "video", videoId, "mp4"),
+        () => getVideoByIdAsync(videoId),
+        (fileId) => setVideoFileIdAsync(videoId, fileId),
+        (entity) => entity.videoFileId,
+        file);
+}
