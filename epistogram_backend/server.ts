@@ -136,6 +136,7 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.video.deleteVideo, deleteVideoAction, { isPost: true });
     addEndpoint(apiRoutes.video.saveVideo, saveVideoAction, { isPost: true });
     addEndpoint(apiRoutes.video.getVideoEditData, getVideoEditDataAction);
+    addEndpoint(apiRoutes.video.uploadVideoFile, getVideoEditDataAction);
 
     // available courses
     expressServer.post("/get-user-courses", getUserCoursesAction);

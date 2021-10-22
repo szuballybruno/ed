@@ -80,3 +80,20 @@ export const getVideoEditDataAction = async (params: ActionParamsType) => {
         subtitle: video.subtitle
     } as VideoEditDTO;
 }
+
+// export const getVideoEditDataAction = async (params: ActionParamsType) => {
+
+//     const videoId = withValueOrBadRequest<number>(params.req.query.videoId);
+
+//     const video = await staticProvider
+//         .ormConnection
+//         .getRepository(Video)
+//         .findOneOrFail(videoId);
+
+//     return {
+//         id: video.id,
+//         title: video.title,
+//         description: video.description,
+//         subtitle: video.subtitle
+//     } as VideoEditDTO;
+// }
