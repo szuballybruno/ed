@@ -9,6 +9,7 @@ import { DialogFrame } from "./components/HOC/DialogFrame";
 import { NotificationsFrame } from "./components/HOC/NotificationsFrame";
 import { theme } from "./configuration/defaultMUITheme";
 import './index.css';
+import './jsExtensions.ts'; // extensions, important
 import { MainRouting } from "./routing/MainRouting";
 
 const queryClient = new QueryClient();

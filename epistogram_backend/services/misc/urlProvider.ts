@@ -1,12 +1,8 @@
 import { staticProvider } from "../../staticProvider";
 
-export const getAssetUrl = (assetPath: string | null | undefined) => {
-
-    if (!assetPath)
-        return null;
+export const getAssetUrl = (assetPath: string) => {
 
     assetPath = ("/" + assetPath).replace("//", "/");
-
     return staticProvider.globalConfig.fileStorage.assetStoreUrl + assetPath;
 }
 

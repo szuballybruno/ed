@@ -1,14 +1,25 @@
-import { TextField } from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
 
 export const EpistoEntry = (props: {
-    label: string,
     value: string,
+    label?: string,
     setValue?: (value: string) => void,
+    onFocusLost?: (value: string) => void,
     disabled?: boolean,
     isMultiline?: boolean,
+    postfix?: string,
+    isNumeric?: boolean
 }) => {
 
-    const { label, disabled, value, setValue, isMultiline } = props;
+    const { label, disabled, value, setValue, isMultiline, onFocusLost, postfix, isNumeric } = props;
+
+    const onChanged = (value: string) => {
+
+        if (!setValue)
+            return;
+
+        setValue(value);
+    }
 
     return <TextField
         disabled={disabled}
@@ -16,12 +27,20 @@ export const EpistoEntry = (props: {
         label={label}
         value={value}
         multiline={isMultiline}
+        type={isNumeric ? "number" : undefined}
+        InputProps={postfix
+            ? {
+                endAdornment: <InputAdornment position="end">{postfix}</InputAdornment>
+            }
+            : undefined}
+        onBlur={x => {
+
+            if (onFocusLost)
+                onFocusLost(x.currentTarget.value);
+        }}
         onChange={x => {
 
-            if (!setValue)
-                return;
-
-            setValue(x.currentTarget.value);
+            onChanged(x.currentTarget.value);
         }}
         style={{
             margin: "10px 0px 10px 0px",

@@ -3,4 +3,6 @@ export type VideoEditDTO = {
     title: string;
     subtitle: string;
     description: string;
+    videoLengthSeconds: number;
+    videoFileUrl: string | null;
 }

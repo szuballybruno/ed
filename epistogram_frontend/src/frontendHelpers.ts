@@ -18,6 +18,31 @@ export const dateTimeToString = (date: Date) => {
     return date.toLocaleString();
 }
 
+export const roundNumber = (num: number, decimalPlaces?: number) => {
+
+    if (!decimalPlaces)
+        decimalPlaces = 1;
+
+    const multiplier = decimalPlaces * 10;
+
+    return Math.round(num * multiplier) / multiplier;
+}
+
+export const parseIntOrNull = (str: string) => {
+
+    try {
+
+        if (str === "" || str === null || str === undefined)
+            str = "0";
+
+        return parseInt(str);
+    }
+    catch (e) {
+
+        return null;
+    }
+}
+
 export const toDateStringFormatted = (date: Date) => {
 
     // getting the index of the month 0-11

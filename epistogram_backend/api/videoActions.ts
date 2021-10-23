@@ -7,6 +7,8 @@ import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
 import { VideoSaveDTO } from "../models/shared_models/VideoSaveDTO";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
+import { getAssetUrl } from "../services/misc/urlProvider";
+import { getVideoLengthSecondsAsync } from "../services/misc/videoDurationService";
 import { getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers"
@@ -73,25 +75,47 @@ export const getVideoEditDataAction = async (params: ActionParamsType) => {
     const video = await staticProvider
         .ormConnection
         .getRepository(Video)
-        .findOneOrFail(videoId);
+        .createQueryBuilder("v")
+        .leftJoinAndSelect("v.videoFile", "vf")
+        .where("v.id = :videoId", { videoId })
+        .getOneOrFail();
 
     return {
         id: video.id,
         title: video.title,
         description: video.description,
-        subtitle: video.subtitle
+        subtitle: video.subtitle,
+        videoLengthSeconds: video.lengthSeconds,
+        videoFileUrl: video.videoFile
+            ? getAssetUrl(video.videoFile.filePath)
+            : null
     } as VideoEditDTO;
 }
 
-export const uploadVideoFileAction = (params: ActionParamsType) => {
+export const uploadVideoFileAction = async (params: ActionParamsType) => {
 
     const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
     const videoId = withValueOrBadRequest<number>(params.req.body.videoId, "number");
 
-    return uploadAssigendFileAsync<Video>(
-        getFilePath("videos", "video", videoId, "mp4"),
+    // upload file
+    const filePath = getFilePath("videos", "video", videoId, "mp4");
+
+    await uploadAssigendFileAsync<Video>(
+        filePath,
         () => getVideoByIdAsync(videoId),
         (fileId) => setVideoFileIdAsync(videoId, fileId),
         (entity) => entity.videoFileId,
         file);
+
+    // set video length
+    const videoFileUrl = getAssetUrl(filePath);
+    const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
+
+    await staticProvider
+        .ormConnection
+        .getRepository(Video)
+        .save({
+            id: videoId,
+            lengthSeconds: lengthSeconds
+        })
 }
