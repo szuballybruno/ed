@@ -18,7 +18,7 @@ export class Question {
     @Column({ nullable: true })
     imageUrl: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, type: "double precision" })
     showUpTimeSeconds: number;
 
     // practise question view

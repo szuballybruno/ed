@@ -1,3 +1,5 @@
+import { QuestionDTO } from "./QuestionDTO";
+
 export type VideoEditDTO = {
     id: number;
     title: string;
@@ -5,4 +7,5 @@ export type VideoEditDTO = {
     description: string;
     videoLengthSeconds: number;
     videoFileUrl: string | null;
+    questions: QuestionDTO[];
 }

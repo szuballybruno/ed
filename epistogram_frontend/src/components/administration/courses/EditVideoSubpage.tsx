@@ -1,12 +1,16 @@
 import { Box, Flex } from "@chakra-ui/layout";
+import { Delete } from "@mui/icons-material";
+import EditIcon from '@mui/icons-material/Edit';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import TimerIcon from '@mui/icons-material/Timer';
 import { Slider } from "@mui/material";
 import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from "react-player";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { parseIntOrNull, roundNumber } from "../../../frontendHelpers";
+import { roundNumber } from "../../../frontendHelpers";
 import { QuestionDTO } from "../../../models/shared_models/QuestionDTO";
+import { VideoEditDTO } from "../../../models/shared_models/VideoEditDTO";
 import { getVirtualId } from "../../../services/idService";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useSaveVideo, useUploadVideoFileAsync, useVideoEditData } from "../../../services/videoService";
@@ -18,15 +22,15 @@ import { FlexListItem } from "../../universal/FlexListItem";
 import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "./EditSection";
-import TimerIcon from '@mui/icons-material/Timer';
 
 const QuestionItem = (props: {
     currentSeconds: number,
     onChanged: (text: string, showUpSecs: number) => void,
-    question: QuestionDTO
+    question: QuestionDTO,
+    onDeleted: () => void
 }) => {
 
-    const { question, onChanged, currentSeconds } = props;
+    const { question, onChanged, currentSeconds, onDeleted } = props;
     const [text, setText] = useState("");
     const [showUpSecs, setShowUpSecs] = useState("");
 
@@ -43,7 +47,7 @@ const QuestionItem = (props: {
         thumbnailContent={<LiveHelpIcon className="square40" />}
 
         midContent={<EpistoEntry
-            onFocusLost={() => onChanged(text, parseInt(showUpSecs))}
+            onFocusLost={() => onChanged(text, parseFloat(showUpSecs))}
             setValue={setText}
             value={text} />}
 
@@ -53,16 +57,24 @@ const QuestionItem = (props: {
 
                 onChanged(text, roundNumber(currentSeconds));
             }}>
-                <TimerIcon className="square40" />
+                <TimerIcon className="square30" />
             </EpistoButton>
 
             <EpistoEntry
-                onFocusLost={() => onChanged(text, parseInt(showUpSecs))}
+                onFocusLost={() => onChanged(text, parseFloat(showUpSecs))}
                 setValue={setShowUpSecs}
                 postfix="s"
                 isNumeric
                 value={showUpSecs} />
-        </Flex>}
+
+            <EpistoButton isDisabled={question.questionId >= 0 ? false : true}>
+                <EditIcon className="square30" />
+            </EpistoButton>
+
+            <EpistoButton onClick={() => onDeleted()}>
+                <Delete className="square30" />
+            </EpistoButton>
+        </Flex >}
         pr="20px" />
 }
 
@@ -80,11 +92,18 @@ export const EditVideoSubpage = () => {
     const videoId = parseInt(params.videoId);
 
     const { saveVideoAsync, saveVideoState } = useSaveVideo();
-    const { videoEditData, videoEditDataError, videoEditDataState } = useVideoEditData(videoId);
+    const { videoEditData, videoEditDataError, videoEditDataState, refetchVideoEditDataAsync } = useVideoEditData(videoId);
     const { saveVideoFileAsync, saveVideoFileState } = useUploadVideoFileAsync();
 
     const [playedSeconds, setPlayedSeconds] = useState(0);
     const videoLength = videoEditData?.videoLengthSeconds ?? 0;
+
+    const [questions, setQuestions] = useState<QuestionDTO[]>([]);
+
+    const setQuestionListOrdered = (newList: QuestionDTO[]) => {
+
+        setQuestions(newList.orderBy(x => x.showUpTimeSeconds ?? 0));
+    }
 
     useEffect(() => {
 
@@ -94,6 +113,7 @@ export const EditVideoSubpage = () => {
         setVideoTitle(videoEditData.title);
         setVideoSubtitle(videoEditData.subtitle);
         setVideoDescription(videoEditData.description);
+        setQuestionListOrdered(videoEditData.questions);
     }, [videoEditData]);
 
     const handleSaveAsync = async () => {
@@ -110,13 +130,17 @@ export const EditVideoSubpage = () => {
                 id: videoId,
                 title: videoTitle,
                 description: videoDescription,
-                subtitle: videoSubtitle
-            });
+                subtitle: videoSubtitle,
+                questions: questions
+            } as VideoEditDTO);
 
             // cleanup
             setVideoFile(null);
 
             showNotification("Video sikeresen mentve!");
+
+            // reload
+            refetchVideoEditDataAsync();
         }
         catch (e) {
 
@@ -124,24 +148,11 @@ export const EditVideoSubpage = () => {
         }
     }
 
-    const [questionsList, setQuestionList] = useState<QuestionDTO[]>([
-        {
-            questionText: "asdasdasd",
-            showUpTimeSeconds: 12
-        },
-
-    ] as QuestionDTO[]);
-
-    const marks = questionsList
+    const marks = questions
         .map(x => ({
             value: x.showUpTimeSeconds ?? 0,
             label: x.showUpTimeSeconds + "s",
         }));
-
-    const setQuestionListOrdered = (newList: QuestionDTO[]) => {
-
-        setQuestionList(newList.orderBy(x => x.showUpTimeSeconds ?? 0));
-    }
 
     const handleAddNewQuestion = () => {
 
@@ -153,12 +164,17 @@ export const EditVideoSubpage = () => {
             showUpTimeSeconds: playedSecondsRound
         } as QuestionDTO;
 
-        setQuestionListOrdered([...questionsList, newQuestion]);
+        setQuestionListOrdered([...questions, newQuestion]);
+    }
+
+    const handleDeleteQuestion = (deletedId: number) => {
+
+        setQuestionListOrdered(questions.filter(x => x.questionId !== deletedId));
     }
 
     const setQuestionValues = (questionId: number, text: string, showUpSeconds: number) => {
 
-        const newList = [...questionsList];
+        const newList = [...questions];
         const question = newList.filter(x => x.questionId === questionId)[0];
 
         question.questionText = text;
@@ -249,10 +265,11 @@ export const EditVideoSubpage = () => {
 
                 <Box minHeight="300px" mb="100px">
                     <FlexList>
-                        {questionsList
+                        {questions
                             .map(question => <QuestionItem
                                 currentSeconds={playedSeconds}
                                 onChanged={(x, y) => setQuestionValues(question.questionId, x, y)}
+                                onDeleted={() => handleDeleteQuestion(question.questionId)}
                                 question={question} />)}
                     </FlexList>
                 </Box>

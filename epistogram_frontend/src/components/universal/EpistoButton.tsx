@@ -47,6 +47,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
                 : "text"}
         color="primary"
         ref={ref}
+        disabled={isDisabled}
         className={`${className} fontMid`}
         style={{
             overflow: "hidden",
@@ -61,6 +62,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             margin: "0px",
             borderRadius: isRound ? "50%" : "7px",
             width: size,
+            filter: isDisabled ? "contrast(0.01)" : undefined,
             height: size,
             padding: padding ? padding : undefined,
             fontSize: fontSize ? fontSize : undefined,

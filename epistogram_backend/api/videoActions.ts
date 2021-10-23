@@ -1,12 +1,13 @@
 import { UploadedFile } from "express-fileupload";
 import { Course } from "../models/entity/Course";
+import { Question } from "../models/entity/Question";
 import { Video } from "../models/entity/Video";
 import { CreateVideoDTO } from "../models/shared_models/CreateVideoDTO";
 import { IdBodyDTO } from "../models/shared_models/IdBodyDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
-import { VideoSaveDTO } from "../models/shared_models/VideoSaveDTO";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
+import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "../services/misc/videoDurationService";
 import { getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync } from "../services/videoService";
@@ -55,8 +56,9 @@ export const deleteVideoAction = async (params: ActionParamsType) => {
 
 export const saveVideoAction = async (params: ActionParamsType) => {
 
-    const dto = withValueOrBadRequest<VideoSaveDTO>(params.req.body);
+    const dto = withValueOrBadRequest<VideoEditDTO>(params.req.body);
 
+    // update vidoeo data
     await staticProvider
         .ormConnection
         .getRepository(Video)
@@ -66,6 +68,58 @@ export const saveVideoAction = async (params: ActionParamsType) => {
             subtitle: dto.subtitle,
             description: dto.description
         });
+
+    // delete quesitons 
+    const videoQuestions = await staticProvider
+        .ormConnection
+        .getRepository(Question)
+        .find({
+            where: {
+                videoId: dto.id
+            }
+        });
+
+    const deletedQuesitonIds = videoQuestions
+        .filter(x => !dto.questions.some(dtoQ => dtoQ.questionId === x.id))
+        .map(x => x.id);
+
+    if (deletedQuesitonIds.length > 0)
+        await staticProvider
+            .ormConnection
+            .getRepository(Question)
+            .delete(deletedQuesitonIds);
+
+    // update questions
+    const updateQuestions = dto
+        .questions
+        .filter(x => x.questionId >= 0)
+        .map(x => ({
+            id: x.questionId,
+            questionText: x.questionText,
+            showUpTimeSeconds: x.showUpTimeSeconds
+        } as Question));
+
+    if (updateQuestions.length > 0)
+        await staticProvider
+            .ormConnection
+            .getRepository(Question)
+            .save(updateQuestions);
+
+    // insert questions 
+    const insertQuestions = dto
+        .questions
+        .filter(x => x.questionId < 0)
+        .map(x => ({
+            showUpTimeSeconds: x.showUpTimeSeconds,
+            questionText: x.questionText,
+            videoId: dto.id
+        } as Question));
+
+    if (insertQuestions.length > 0)
+        await staticProvider
+            .ormConnection
+            .getRepository(Question)
+            .insert(insertQuestions);
 }
 
 export const getVideoEditDataAction = async (params: ActionParamsType) => {
@@ -77,6 +131,8 @@ export const getVideoEditDataAction = async (params: ActionParamsType) => {
         .getRepository(Video)
         .createQueryBuilder("v")
         .leftJoinAndSelect("v.videoFile", "vf")
+        .leftJoinAndSelect("v.questions", "vq")
+        .leftJoinAndSelect("vq.answers", "vqa")
         .where("v.id = :videoId", { videoId })
         .getOneOrFail();
 
@@ -86,6 +142,11 @@ export const getVideoEditDataAction = async (params: ActionParamsType) => {
         description: video.description,
         subtitle: video.subtitle,
         videoLengthSeconds: video.lengthSeconds,
+
+        questions: video
+            .questions
+            .map(x => toQuestionDTO(x)),
+
         videoFileUrl: video.videoFile
             ? getAssetUrl(video.videoFile.filePath)
             : null
