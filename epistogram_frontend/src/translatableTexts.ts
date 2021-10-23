@@ -43,6 +43,7 @@ export const translatableTexts = {
         administrationCourseStatistics: "Statisztika",
         administrationAddVideo: "Videó hozzáadása",
         administrationEditVideo: "Videó szerkesztése",
+        administrationEditQuestion: "Kerdes szerkesztése",
 
         administrationAddGroup: "Csoport hozzáadása",
         administrationEditGroup: "Csoport szerkesztése",

@@ -2,9 +2,9 @@ import { Flex } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { isCurrentRoute } from "../frontendHelpers";
-import { RouteItemType } from "../models/types";
+import { ApplicationRoute } from "../models/types";
 
-export const NavigationLinkList = (props: { items: RouteItemType[] }) => {
+export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
 
     const { items } = props;
 

@@ -7,14 +7,14 @@ import React, { ReactNode } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { objToArray, useIsMatchingCurrentRoute } from "../../frontendHelpers";
-import { RouteItemType } from "../../models/types";
+import { ApplicationRoute } from "../../models/types";
 import { useCourseBriefData } from "../../services/courseService";
 import { useNavigation } from "../../services/navigatior";
 import { useBriefUserData } from "../../services/userManagementService";
 import { EpistoButton } from "../universal/EpistoButton";
 
 export const AdminSubpageHeader = (props: {
-    tabMenuItems?: RouteItemType[],
+    tabMenuItems?: ApplicationRoute[],
     children?: ReactNode,
     onSave?: () => void
 } & FlexProps) => {
@@ -22,12 +22,13 @@ export const AdminSubpageHeader = (props: {
     const { children, tabMenuItems, onSave, ...css } = props;
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
-    const urlParams = useParams<{ userId: string, courseId: string }>();
+    const urlParams = useParams<{ userId: string, courseId: string, videoId: string }>();
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
     const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
+    const videoId = urlParams.videoId ? parseInt(urlParams.videoId) : null;
 
     const currentRoute = objToArray(applicationRoutes.administrationRoute)
-        .filter(x => isMatchingCurrentRoute(x.route, x.exact))[0];
+        .filter(route => isMatchingCurrentRoute(route, false))[0];
 
     // const subRoute = objToArray(currentRoute)
     //     .filter(x => isMatchingCurrentRoute(x.route, true))[0];
@@ -77,11 +78,11 @@ export const AdminSubpageHeader = (props: {
     }
 
     const currentMatchingRoute = (tabMenuItems ?? [])
-        .filter(x => isMatchingCurrentRoute(x.route, x.isExact))[0];
+        .filter(route => isMatchingCurrentRoute(route))[0];
 
     const navigateToTab = (path: string) => {
 
-        navigate(path, { userId: userId, courseId: courseId });
+        navigate(path, { userId, courseId, videoId });
     };
 
     return <Flex

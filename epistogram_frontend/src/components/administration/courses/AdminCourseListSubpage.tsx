@@ -19,7 +19,7 @@ import { FloatChip } from "../../universal/FloatChip";
 import { AdminListEditHeader } from "../AdminListEditHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
-export const CourseAdministration = () => {
+export const AdminCourseListSubpage = () => {
 
     const [searchText] = React.useState("");
     const { courses, coursesStatus, coursesError } = useAdministratedCourses(searchText);

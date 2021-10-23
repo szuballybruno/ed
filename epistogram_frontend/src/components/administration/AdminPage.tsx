@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import { Route, Switch, withRouter } from "react-router-dom";
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { RouteItemType } from "../../models/types";
+import { ApplicationRoute } from "../../models/types";
 import { CurrentUserContext } from "../HOC/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../navbar/Navbar";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
-import { CourseAdministration } from "./courses/AdminCourseListSubpage";
+import { AdminCourseListSubpage } from "./courses/AdminCourseListSubpage";
 import { AdminEditCourseSubpage } from "./courses/AdminEditCourseSubpage";
 import AdminStatistics from "./users/AdminStatisticsSubpage";
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
@@ -21,6 +21,7 @@ import { AdminAddGroupSubpage } from "./groups/AdminAddGroupSubpage";
 import { AdminEditGroupSubpage } from "./groups/AdminEditGroupSubpage";
 import { AdminGroupStatisticsSubpage } from "./groups/AdminGroupStatisticsSubpage";
 import { EditVideoSubpage } from './courses/EditVideoSubpage';
+import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 
 const AdminPage = () => {
 
@@ -31,12 +32,19 @@ const AdminPage = () => {
 
     const menuItems = [
         administrationRoutes.usersRoute,
-    ] as RouteItemType[];
+    ] as ApplicationRoute[];
 
     if (user.userActivity.canAccessCourseAdministration)
         menuItems.push(administrationRoutes.coursesRoute);
 
     menuItems.push(...[administrationRoutes.groupsRoute, administrationRoutes.myCompanyRoute])
+
+    const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
+
+        return <Route exact={route.exact} path={route.route}>
+            {renderRoute}
+        </Route>
+    }
 
     return <MainWrapper>
         <Navbar />
@@ -84,24 +92,13 @@ const AdminPage = () => {
                         render={
                             () => <Switch>
 
-                                <Route exact path={administrationRoutes.coursesRoute.route}>
-                                    <CourseAdministration />
-                                </Route>
-
-                                <Route path={administrationRoutes.coursesRoute.editCourseRoute.route}>
-                                    <AdminEditCourseSubpage />
-                                </Route>
-
-                                <Route path={administrationRoutes.coursesRoute.statisticsCourseRoute.route}>
-                                    <CourseStatisticsSubpage />
-                                </Route>
-
-                                <Route path={administrationRoutes.coursesRoute.editVideoRoute.route}>
-                                    <EditVideoSubpage />
-                                </Route>
+                                {getRoute(administrationRoutes.coursesRoute, <AdminCourseListSubpage />)}
+                                {getRoute(administrationRoutes.coursesRoute.editCourseRoute, <AdminEditCourseSubpage />)}
+                                {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
+                                {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
+                                {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}
                             </Switch>
-                        }
-                    />
+                        } />
 
                     {/* group administartion */}
                     <Route
@@ -121,8 +118,7 @@ const AdminPage = () => {
                                     <AdminGroupStatisticsSubpage />
                                 </Route>
                             </Switch>
-                        }
-                    />
+                        } />
 
                     {/* statistics */}
                     <Route exact path={administrationRoutes.myCompanyRoute.route}>

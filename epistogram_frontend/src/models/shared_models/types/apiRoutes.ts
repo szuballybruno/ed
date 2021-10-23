@@ -41,6 +41,11 @@ export const apiRoutes = {
         uploadVideoFile: "/video/upload-video-file",
         saveVideo: "/video/save-video",
         getVideoEditData: "/video/get-video-edit-data",
+    },
+
+    questions: {
+        getQuestionEditData: "/questions/get-question-edit-data",
+        saveQuestion: "/questions/save-question"
     }
 }
 

@@ -15,6 +15,7 @@ import { Video } from "../models/entity/Video";
 import { EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { AnswerEditDTO } from "../models/shared_models/AnswerEditDTO";
 import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
 import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
@@ -399,6 +400,15 @@ export const toAnswerDTO = (a: Answer) => {
         answerId: a.id,
         answerText: a.text
     } as AnswerDTO;
+}
+
+export const toAnswerEditDTO = (a: Answer) => {
+
+    return {
+        id: a.id,
+        isCorrect: a.isCorrect,
+        text: a.text
+    } as AnswerEditDTO;
 }
 
 export const toCourseAdminDTO = async (course: Course) => {

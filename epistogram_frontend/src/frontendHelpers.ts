@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { matchPath, useLocation } from "react-router-dom";
 import { globalConfig } from "./configuration/config";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
-import { LoadingStateType } from "./models/types";
+import { ApplicationRoute, LoadingStateType } from "./models/types";
 
 export const dateTimeToString = (date: Date) => {
 
@@ -100,13 +100,13 @@ export const useIsMatchingCurrentRoute = () => {
 
     const currentPath = useLocation().pathname;
 
-    const isMatchingCurrentRoute = (route: string, exact?: boolean) => {
+    const isMatchingCurrentRoute = (route: ApplicationRoute, exactOverride?: boolean) => {
 
         const match = matchPath(
             currentPath,
             {
-                path: route,
-                exact: !!exact,
+                path: route.route,
+                exact: exactOverride !== undefined ? exactOverride : !!route.exact,
                 strict: false
             });
 

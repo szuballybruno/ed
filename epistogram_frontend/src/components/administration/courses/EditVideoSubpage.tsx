@@ -12,6 +12,7 @@ import { roundNumber } from "../../../frontendHelpers";
 import { QuestionDTO } from "../../../models/shared_models/QuestionDTO";
 import { VideoEditDTO } from "../../../models/shared_models/VideoEditDTO";
 import { getVirtualId } from "../../../services/idService";
+import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useSaveVideo, useUploadVideoFileAsync, useVideoEditData } from "../../../services/videoService";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
@@ -27,10 +28,11 @@ const QuestionItem = (props: {
     currentSeconds: number,
     onChanged: (text: string, showUpSecs: number) => void,
     question: QuestionDTO,
-    onDeleted: () => void
+    onDeleted: () => void,
+    navToEditQuestion: (questionId: number) => void
 }) => {
 
-    const { question, onChanged, currentSeconds, onDeleted } = props;
+    const { question, onChanged, currentSeconds, onDeleted, navToEditQuestion } = props;
     const [text, setText] = useState("");
     const [showUpSecs, setShowUpSecs] = useState("");
 
@@ -67,7 +69,10 @@ const QuestionItem = (props: {
                 isNumeric
                 value={showUpSecs} />
 
-            <EpistoButton isDisabled={question.questionId >= 0 ? false : true}>
+            <EpistoButton
+                onClick={() => navToEditQuestion(question.questionId)}
+                isDisabled={question.questionId >= 0 ? false : true}>
+
                 <EditIcon className="square30" />
             </EpistoButton>
 
@@ -88,8 +93,11 @@ export const EditVideoSubpage = () => {
     const videoUploadInputRef = useRef<HTMLInputElement>(null);
     const showError = useShowErrorDialog();
 
-    const params = useParams<{ videoId: string }>();
+    const params = useParams<{ videoId: string, courseId: string }>();
     const videoId = parseInt(params.videoId);
+    const courseId = parseInt(params.videoId);
+
+    const { navigate } = useNavigation();
 
     const { saveVideoAsync, saveVideoState } = useSaveVideo();
     const { videoEditData, videoEditDataError, videoEditDataState, refetchVideoEditDataAsync } = useVideoEditData(videoId);
@@ -141,10 +149,13 @@ export const EditVideoSubpage = () => {
 
             // reload
             refetchVideoEditDataAsync();
+
+            return true;
         }
         catch (e) {
 
             showError(e);
+            return false;
         }
     }
 
@@ -181,6 +192,15 @@ export const EditVideoSubpage = () => {
         question.showUpTimeSeconds = showUpSeconds;
 
         setQuestionListOrdered(newList);
+    }
+
+    const navToEditQuestion = async (questionId: number) => {
+
+        const isSuccessful = handleSaveAsync();
+        if (!isSuccessful)
+            return;
+
+        navigate(applicationRoutes.administrationRoute.coursesRoute.editVideoQuestionRoute.route, { questionId, videoId, courseId })
     }
 
     return <LoadingFrame
@@ -267,6 +287,7 @@ export const EditVideoSubpage = () => {
                     <FlexList>
                         {questions
                             .map(question => <QuestionItem
+                                navToEditQuestion={navToEditQuestion}
                                 currentSeconds={playedSeconds}
                                 onChanged={(x, y) => setQuestionValues(question.questionId, x, y)}
                                 onDeleted={() => handleDeleteQuestion(question.questionId)}

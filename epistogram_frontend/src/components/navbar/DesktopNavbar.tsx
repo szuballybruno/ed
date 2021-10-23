@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getAssetUrl } from "../../frontendHelpers";
-import { RouteItemType } from "../../models/types";
+import { ApplicationRoute } from "../../models/types";
 import { useLogout } from "../../services/dataService";
 import { getCourseItemUrl, useNavigation } from "../../services/navigatior";
 import { useShowErrorDialog } from "../../services/notifications";
@@ -19,7 +19,7 @@ const menuItems = [
     applicationRoutes.homeRoute,
     applicationRoutes.availableCoursesRoute,
     applicationRoutes.learningRoute
-] as RouteItemType[];
+] as ApplicationRoute[];
 
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,

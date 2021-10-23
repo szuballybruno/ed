@@ -14,7 +14,7 @@ import { answerExamQuestionAction, getExamResultsAction } from './api/examAction
 import { uploadAvatarFileAction } from './api/fileActions';
 import { getDailyTipAction, getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
-import { answerVideoQuestionAction } from './api/questionActions';
+import { answerVideoQuestionAction, getQuestionEditDataAction, saveQuestionAction } from './api/questionActions';
 import { getUserCoursesAction } from './api/userCoursesActions';
 import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
 import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileAction } from './api/videoActions';
@@ -137,6 +137,10 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.video.saveVideo, saveVideoAction, { isPost: true });
     addEndpoint(apiRoutes.video.uploadVideoFile, uploadVideoFileAction, { isPost: true });
     addEndpoint(apiRoutes.video.getVideoEditData, getVideoEditDataAction);
+
+    // questions
+    addEndpoint(apiRoutes.questions.getQuestionEditData, getQuestionEditDataAction);
+    addEndpoint(apiRoutes.questions.saveQuestion, saveQuestionAction, { isPost: true });
 
     // available courses
     expressServer.post("/get-user-courses", getUserCoursesAction);

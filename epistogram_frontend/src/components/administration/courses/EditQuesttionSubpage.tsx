@@ -1,0 +1,147 @@
+import { Flex } from "@chakra-ui/layout";
+import { FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { AnswerEditDTO } from "../../../models/shared_models/AnswerEditDTO";
+import { getVirtualId } from "../../../services/idService";
+import { showNotification, useShowErrorDialog } from "../../../services/notifications";
+import { useEditQuestionData, useSaveQuestion } from "../../../services/questionsService";
+import { LoadingFrame } from "../../HOC/LoadingFrame"
+import { EpistoButton } from "../../universal/EpistoButton";
+import { EpistoEntry } from "../../universal/EpistoEntry";
+import { FlexList } from "../../universal/FlexList";
+import { FlexListItem } from "../../universal/FlexListItem";
+import { AdminSubpageHeader } from "../AdminSubpageHeader"
+
+export const EditQuestionSubpage = () => {
+
+    const params = useParams<{ questionId: string }>();
+    const questionId = parseInt(params.questionId);
+
+    const { questionEditData, questionEditDataError, questionEditDataState, refetchQuestionEditData } = useEditQuestionData(questionId);
+    const { saveQuesitonAsync, saveQuesitonState } = useSaveQuestion();
+
+    const showError = useShowErrorDialog();
+
+    const [questionText, setQuestionText] = useState("");
+    const [answers, setAnswers] = useState<AnswerEditDTO[]>([]);
+
+    const setAnswerValues = (answerId: number, isCorrect?: boolean, text?: string) => {
+
+        const newAnswers = [...answers];
+
+        if (isCorrect)
+            newAnswers
+                .forEach(x => x.isCorrect = x.id === answerId);
+
+        const answer = newAnswers
+            .filter(x => x.id === answerId)[0];
+
+        if (text)
+            answer.text = text;
+
+        setAnswers(newAnswers);
+    }
+
+    const correctAnswer = answers.filter(x => x.isCorrect)[0];
+
+    const handleAddNewAnswer = () => {
+
+        const newAnswer = {
+            id: getVirtualId(),
+            text: "Uj valasz"
+        } as AnswerEditDTO;
+
+        setAnswers([...answers, newAnswer])
+    }
+
+    const handleSaveQuesitonAsync = async () => {
+
+        try {
+
+            await saveQuesitonAsync({
+                questionId,
+                answers: answers,
+                questionText: questionText
+            });
+
+            showNotification("kerdes sikeresn mentve!");
+
+            refetchQuestionEditData();
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
+
+    useEffect(() => {
+
+        if (!questionEditData)
+            return;
+
+        setQuestionText(questionEditData.questionText);
+        setAnswers(questionEditData.answers);
+    }, [questionEditData]);
+
+    return <LoadingFrame
+        className="whall"
+        loadingState={[questionEditDataState, saveQuesitonState]}
+        error={questionEditDataError}>
+
+        <AdminSubpageHeader
+            tabMenuItems={[
+                applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
+                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
+                applicationRoutes.administrationRoute.coursesRoute.editVideoQuestionRoute,
+            ]}
+            px="20px"
+            onSave={handleSaveQuesitonAsync}>
+
+            <EpistoEntry
+                label="Kerdes szovege"
+                value={questionText}
+                setValue={setQuestionText}
+                isMultiline />
+
+            {correctAnswer && <EpistoEntry
+                label="A valasz"
+                value={correctAnswer.text}
+                disabled />}
+
+            <Flex direction="column" className="dividerBorderTop">
+
+                <EpistoButton
+                    variant="outlined"
+                    onClick={handleAddNewAnswer}
+                    style={{ margin: "10px", alignSelf: "flex-end" }}>
+                    Uj valasz hozzaadasa
+                </EpistoButton>
+
+                <RadioGroup
+                    value={correctAnswer?.id + ""}
+                    onChange={x => {
+
+                        const answerId = parseInt(x.currentTarget.value);
+                        setAnswerValues(answerId, true);
+                    }}>
+                    <FlexList >
+                        {answers
+                            .map(x => <FlexListItem
+                                pr="20px"
+                                midContent={<EpistoEntry
+                                    value={x.text}
+                                    setValue={value => setAnswerValues(x.id, undefined, value)} />}
+                                endContent={<FormControlLabel
+                                    value={x.id + ""}
+                                    labelPlacement="start"
+                                    control={<Radio />}
+                                    label="Helyes valasz" />} />)}
+                    </FlexList>
+                </RadioGroup>
+            </Flex>
+        </AdminSubpageHeader>
+    </LoadingFrame>
+}

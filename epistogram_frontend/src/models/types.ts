@@ -5,11 +5,11 @@ export type StillWatchingDialogMarker = {
     answerOptionIndex: number;
 }
 
-export type RouteItemType = {
+export type ApplicationRoute = {
     title: string;
     route: string;
     icon?: any;
-    isExact?: boolean;
+    exact?: boolean;
 }
 
 export type DialogOptions = {

@@ -1,12 +1,6 @@
 import { Assignment, Business, People, Person, School, Settings, Subscriptions } from "@mui/icons-material";
 import { translatableTexts } from "../translatableTexts";
 
-export type RouteSection = {
-    path: string;
-    isExact?: boolean;
-    subRoutes: RouteSection[];
-}
-
 export const applicationRoutes = {
 
     loginRoute: {
@@ -102,6 +96,7 @@ export const applicationRoutes = {
             title: translatableTexts.routeTitles.administrationCourseAdmin,
             route: "/administration/courses",
             icon: <Subscriptions color={"secondary"} />,
+            exact: true,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationAddCourse,
@@ -121,7 +116,12 @@ export const applicationRoutes = {
             },
             editVideoRoute: {
                 title: translatableTexts.routeTitles.administrationEditVideo,
-                route: "/administration/courses/:courseId/video/:videoId"
+                route: "/administration/courses/:courseId/video/:videoId",
+                exact: true,
+            },
+            editVideoQuestionRoute: {
+                title: translatableTexts.routeTitles.administrationEditQuestion,
+                route: "/administration/courses/:courseId/video/:videoId/question/:questionId"
             },
             editExamRoute: {
                 title: translatableTexts.routeTitles.administrationEditVideo,
