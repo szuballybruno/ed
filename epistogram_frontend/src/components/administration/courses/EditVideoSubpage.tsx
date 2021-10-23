@@ -95,7 +95,7 @@ export const EditVideoSubpage = () => {
 
     const params = useParams<{ videoId: string, courseId: string }>();
     const videoId = parseInt(params.videoId);
-    const courseId = parseInt(params.videoId);
+    const courseId = parseInt(params.courseId);
 
     const { navigate } = useNavigation();
 
