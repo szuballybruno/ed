@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/layout";
+import { Delete } from "@mui/icons-material";
 import { FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -76,6 +77,11 @@ export const EditQuestionSubpage = () => {
         }
     }
 
+    const handleDeleteAnswer = (answerId: number) => {
+
+        setAnswers(answers.filter(x => x.id !== answerId));
+    }
+
     useEffect(() => {
 
         if (!questionEditData)
@@ -134,11 +140,18 @@ export const EditQuestionSubpage = () => {
                                 midContent={<EpistoEntry
                                     value={x.text}
                                     setValue={value => setAnswerValues(x.id, undefined, value)} />}
-                                endContent={<FormControlLabel
-                                    value={x.id + ""}
-                                    labelPlacement="start"
-                                    control={<Radio />}
-                                    label="Helyes valasz" />} />)}
+                                endContent={<Flex>
+                                    <FormControlLabel
+                                        value={x.id + ""}
+                                        labelPlacement="start"
+                                        control={<Radio />}
+                                        label="Helyes valasz" />
+
+                                    <EpistoButton
+                                        onClick={() => handleDeleteAnswer(x.id)}>
+                                        <Delete className="square30" />
+                                    </EpistoButton>
+                                </Flex>} />)}
                     </FlexList>
                 </RadioGroup>
             </Flex>
