@@ -73,6 +73,10 @@ const AvailableCoursesPage = () => {
                                 return <ToggleButton
                                     className={searchCategory === categoryOption ? `${classes.categoriesListItem} ${classes.categoriesListItemSelected}` : `${classes.categoriesListItem}`}
                                     value={categoryOption}
+                                    style={{
+                                        alignItems: "flex-start",
+                                        paddingLeft: "30px",
+                                    }}
                                     onClick={() => {
                                         setSearchCategory(categoryOption)
                                     }}

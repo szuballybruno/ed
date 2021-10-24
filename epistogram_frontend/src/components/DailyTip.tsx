@@ -112,7 +112,7 @@ export const DailyTip = (props: {} & FlexProps) => {
                         ]} />
                 </Flex>
 
-                <Flex>
+                {/*<Flex>
                     <EpistoButton variant="outlined" style={{ margin: "10px" }}>
                         {translatableTexts.tipOfTheDay.prevoiusVideos}
                     </EpistoButton>
@@ -120,7 +120,7 @@ export const DailyTip = (props: {} & FlexProps) => {
                     <EpistoButton variant="outlined" style={{ margin: "10px" }} onClick={toggleDisplayModes}>
                         {translatableTexts.tipOfTheDay.description}
                     </EpistoButton>
-                </Flex>
+                </Flex>*/}
             </Flex>
         </EpistoDialog >
 
@@ -132,13 +132,13 @@ export const DailyTip = (props: {} & FlexProps) => {
                 DescriptionSlide
             ]} />
 
-        <EpistoButton
+        {/*<EpistoButton
             style={{ alignSelf: "center" }}
             variant="outlined"
             onClick={toggleDisplayModes}>
             {currentIndex === 0
                 ? translatableTexts.tipOfTheDay.description
                 : translatableTexts.tipOfTheDay.video}
-        </EpistoButton>
+        </EpistoButton>*/}
     </Flex >
 }

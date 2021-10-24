@@ -57,7 +57,7 @@ export const EditQuestionSubpage = () => {
 
         const newAnswer = {
             id: getVirtualId(),
-            text: "Uj valasz"
+            text: "Új válasz"
         } as AnswerEditDTO;
 
         setAnswers([...answers, newAnswer])
@@ -73,7 +73,7 @@ export const EditQuestionSubpage = () => {
                 questionText: questionText
             });
 
-            showNotification("kerdes sikeresn mentve!");
+            showNotification("Kérdés sikeresen mentve!");
 
             refetchQuestionEditData();
         }
@@ -123,13 +123,13 @@ export const EditQuestionSubpage = () => {
             onSave={handleSaveQuesitonAsync}>
 
             <EpistoEntry
-                label="Kerdes szovege"
+                label="Kérdés szövege"
                 value={questionText}
                 setValue={setQuestionText}
                 isMultiline />
 
             {correctAnswer && <EpistoEntry
-                label="A valasz"
+                label="A válasz"
                 value={correctAnswer.text}
                 disabled />}
 
@@ -139,7 +139,7 @@ export const EditQuestionSubpage = () => {
                     variant="outlined"
                     onClick={handleAddNewAnswer}
                     style={{ margin: "10px", alignSelf: "flex-end" }}>
-                    Uj valasz hozzaadasa
+                    Új válasz hozzáadása
                 </EpistoButton>
 
                 <RadioGroup
@@ -161,7 +161,7 @@ export const EditQuestionSubpage = () => {
                                         value={x.id + ""}
                                         labelPlacement="start"
                                         control={<Radio />}
-                                        label="Helyes valasz" />
+                                        label="Helyes válasz" />
 
                                     <EpistoButton
                                         onClick={() => handleDeleteAnswer(x.id)}>

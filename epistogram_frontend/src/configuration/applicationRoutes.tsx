@@ -152,7 +152,7 @@ export const applicationRoutes = {
             },
         },
         myCompanyRoute: {
-            title: "Cégem",
+            title: "Céges statisztika",
             route: "/administration/mycompany",
             icon: <Business color={"secondary"} />,
             exact: true

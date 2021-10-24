@@ -171,7 +171,7 @@ export const EditVideoSubpage = () => {
 
         const newQuestion = {
             questionId: getVirtualId(),
-            questionText: "Uj kerdes",
+            questionText: "Új kérdés",
             showUpTimeSeconds: playedSecondsRound
         } as QuestionDTO;
 
@@ -223,32 +223,32 @@ export const EditVideoSubpage = () => {
                     ref={videoUploadInputRef}
                     onFileSelected={(file) => setVideoFile(file)} />
 
-                <EditSection title="Altalanos adatok">
+                <EditSection title="Általános adatok">
 
                     <EpistoEntry
-                        label="Cim"
+                        label="Cím"
                         setValue={setVideoTitle}
                         value={videoTitle} />
 
                     <EpistoEntry
-                        label="Alcim"
+                        label="Alcím"
                         setValue={setVideoSubtitle}
                         value={videoSubtitle} />
 
                     <EpistoEntry
-                        label="Leiras"
+                        label="Leírás"
                         setValue={setVideoDescription}
                         value={videoDescription}
                         isMultiline />
 
                 </EditSection>
 
-                <EditSection title="Video file" align="flex-start">
+                <EditSection title="Videó fájl" align="flex-start">
                     <EpistoButton
                         variant="outlined"
                         style={{ margin: "10px 0 10px 0" }}
                         onClick={() => videoUploadInputRef?.current?.click()}>
-                        Video kivalasztasa
+                        Videó kiválasztása
                     </EpistoButton>
 
                     {/* player */}
@@ -260,7 +260,7 @@ export const EditVideoSubpage = () => {
                         url={videoEditData.videoFileUrl} />}
 
                     {videoFile && <EpistoEntry
-                        label="Video file"
+                        label="Videó fájl"
                         disabled
                         value={videoFile?.name ?? ""} />}
                 </EditSection>
@@ -279,7 +279,7 @@ export const EditVideoSubpage = () => {
                     <EpistoButton
                         onClick={handleAddNewQuestion}
                         variant="outlined">
-                        Kerdes hozzaadasa
+                        Kérdés hozzáadása
                     </EpistoButton>
                 </Box>
 

@@ -16,7 +16,7 @@ const LearningInsightsPage = () => {
 
         <ContentWrapper>
 
-            <LeftPanel padding="20px">
+            <LeftPanel padding="20px" flexBasis="300px">
                 <NavigationLinkList
                     items={[
                         applicationRoutes.learningRoute.learningOverviewRoute,

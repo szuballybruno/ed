@@ -100,7 +100,7 @@ export const EditExamSubpage = () => {
     const handleAddNewQuesiton = () => {
 
         const newQuestion = {
-            questionText: "Uj kerdes",
+            questionText: "Új kérdés",
             questionId: getVirtualId()
         } as QuestionDTO;
 
@@ -121,12 +121,12 @@ export const EditExamSubpage = () => {
             onSave={handleSaveAsync}>
 
             <EpistoEntry
-                label="Cim"
+                label="Cím"
                 value={title}
                 setValue={setTitle} />
 
             <EpistoEntry
-                label="Alcim"
+                label="Alcím"
                 value={subtitle}
                 setValue={setSubtitle} />
 
@@ -134,7 +134,7 @@ export const EditExamSubpage = () => {
                 variant="outlined"
                 style={{ margin: "10px", alignSelf: "flex-end" }}
                 onClick={handleAddNewQuesiton}>
-                Uj kerdes hozzaadasa
+                Új kérdés hozzáadása
             </EpistoButton>
 
             <DragAndDropList

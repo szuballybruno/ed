@@ -98,7 +98,7 @@ const CourseTile = (props: {
                                     margin: "0 2px 0 2px"
                                 }}
                             />
-                            <Text as={"text"} color={"grey"}>{"0h 00m"}</Text>
+                            <Text as={"text"} color={"grey"}>{"14h 10m"}</Text>
                         </Flex>
                         <Flex direction={"row"} alignItems={"center"} mr={5}>
                             <img

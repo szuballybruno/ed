@@ -79,7 +79,7 @@ export const EditCourseControl = (props: {
         return saveCourseAsync(dto, thumbnailImageFile);
     }
 
-    // set default values 
+    // set default values
     useEffect(() => {
 
         if (!courseEditData)
@@ -109,6 +109,7 @@ export const EditCourseControl = (props: {
         setTeachers(teachers)
         setGroups(groups)
     }, [courseEditData]);
+
 
     const setBrowsedImage = (src: string, file: File) => {
 
@@ -144,13 +145,13 @@ export const EditCourseControl = (props: {
             if (type === "video") {
 
                 const idResult = await createVideoAsync(courseId)
-                showNotification("Uj video sikeresen hozzaadva!");
+                showNotification("Új videó sikeresen hozzáadva!");
                 navToVideoEdit(idResult.id);
             }
             else {
 
                 const idResult = await createExamAsync(courseId);
-                showNotification("Uj vizsga sikeresen hozzaadva!");
+                showNotification("Új vizsga sikeresen hozzáadva!");
                 navToExamEdit(idResult.id);
             }
         } catch (e) {
@@ -166,17 +167,17 @@ export const EditCourseControl = (props: {
 
             deleteWarningDialogLogic
                 .openDialog({
-                    title: "Biztosan torlod a vizsgat?",
-                    description: "A benne levo osszes kerdes el fog veszni.",
+                    title: "Biztosan törlöd a vizsgát?",
+                    description: "A benne lévő összes kérdés el fog veszni.",
                     buttons: [
                         {
-                            title: "Vizsga torlese",
+                            title: "Vizsga törlése",
                             action: async () => {
 
                                 try {
 
                                     await deleteExamAsync(courseItem.id);
-                                    showNotification("Vizsga sikeresen torolve!");
+                                    showNotification("Vizsga sikeresen törölve!");
                                     setCourseItems(courseItems.filter(x => x.descriptorCode !== courseItem.descriptorCode));
                                 }
                                 catch (e) {
@@ -189,22 +190,22 @@ export const EditCourseControl = (props: {
                 });
         }
 
-        // video 
+        // video
         else {
 
             deleteWarningDialogLogic
                 .openDialog({
-                    title: "Biztosan torlod a videot?",
-                    description: "A feltoltott file, es az osszes kerdes el fog veszni.",
+                    title: "Biztosan törlöd a videót?",
+                    description: "A feltöltött fájl, és az összes kérdés el fog veszni.",
                     buttons: [
                         {
-                            title: "Video torlese",
+                            title: "Videó törlése",
                             action: async () => {
 
                                 try {
 
                                     await deleteVideoAsync(courseItem.id);
-                                    showNotification("Video sikeresen torolve!");
+                                    showNotification("Videó sikeresen törölve!");
                                     setCourseItems(courseItems.filter(x => x.descriptorCode !== courseItem.descriptorCode));
                                 }
                                 catch (e) {
@@ -251,7 +252,7 @@ export const EditCourseControl = (props: {
 
                 <EpistoEntry
                     value={courseGroup}
-                    label="Fokategória"
+                    label="Főkategória"
                     setValue={setCourseGroup} />
 
                 <EpistoEntry
@@ -396,14 +397,14 @@ export const EditCourseControl = (props: {
                 onClick={() => handleAddCourseItemAsync("video")}
                 style={{ alignSelf: "center" }}
                 variant="outlined">
-                Add new video
+                Új videó hozzáadása
             </EpistoButton>
 
             <EpistoButton
                 onClick={() => handleAddCourseItemAsync("exam")}
                 style={{ alignSelf: "center" }}
                 variant="outlined">
-                Add new exam
+                Új vizsga hozzáadása
             </EpistoButton>
         </Flex>
 

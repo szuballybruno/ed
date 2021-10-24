@@ -211,7 +211,7 @@ const Preferences = () => {
 
             <EpistoButton
                 isDisabled={!isChanged}
-                variant="colored"
+                variant="outlined"
                 onClick={saveChangesAsync}
                 style={{
                     alignSelf: "center",
@@ -233,7 +233,7 @@ export const UserSettingsPage = () => {
 
         <ContentWrapper>
 
-            <LeftPanel p="20px">
+            <LeftPanel p="20px" flexBasis="300px" >
                 <NavigationLinkList items={[
                     applicationRoutes.settingsRoute.preferencesRoute
                 ]}></NavigationLinkList>

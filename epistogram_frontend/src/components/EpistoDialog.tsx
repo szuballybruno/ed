@@ -3,6 +3,7 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material
 import React, { ReactNode, useState } from "react";
 import { DialogButtonType, DialogOptions } from "../models/types";
 import { EpistoButton } from "./universal/EpistoButton";
+import {Close} from "@mui/icons-material";
 
 export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
 
@@ -91,12 +92,11 @@ export const EpistoDialog = (props: {
                     {title}
                 </DialogTitle>
 
-                {showCloseButton && <EpistoButton
+                {showCloseButton && <Close
                     onClick={closeDialog}
-                    variant="outlined"
-                    style={{ margin: "5px" }}>
+                    style={{ margin: "20px", cursor: "pointer" }}>
                     Bezaras
-                </EpistoButton>}
+                </Close>}
             </Flex>
 
             <DialogContent style={{ padding: "0px" }}>

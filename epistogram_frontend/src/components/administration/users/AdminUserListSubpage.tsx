@@ -45,11 +45,11 @@ export const AdminUserListSubpage = () => {
 
         deleteWaningDialogLogic
             .openDialog({
-                title: "Biztonsan torlod a felhasznalot?",
-                description: `A ${user.firstName} ${user.lastName} nevu felhasznalo visszavonhatatlanul torove lesz!`,
+                title: "Biztosan törlöd a felhasználót?",
+                description: `A ${user.firstName} ${user.lastName} nevű felhasználó visszavonhatatlanul törölve lesz!`,
                 buttons: [
                     {
-                        title: "Torles",
+                        title: "Törlés",
                         action: async () => {
 
                             try {
@@ -142,7 +142,7 @@ export const AdminUserListSubpage = () => {
                 isAllSelected={isAllUsersSelected}
                 selectAllOrNone={selectAllOrNone}
                 selectedIds={selectedUserIds}
-                itemLabel="felhasznalo" />
+                itemLabel="felhasználó" />
 
             <EpistoDialog logic={deleteWaningDialogLogic} />
 

@@ -20,8 +20,6 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
                     key={index}>
                     <Flex
                         p="20px"
-                        borderRadius="10px"
-                        className={`leftBorderOnHover ${isCurrent ? "mildShadow" : ""}`}
                         // background={isCurrent ? "var(--epistoTeal)" : undefined}
                         align="center">
 
@@ -34,7 +32,7 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
                             variant={"button"}
                             style={{
                                 marginLeft: "10px",
-                                // color: isCurrent ? "white" : undefined
+                                fontWeight: isCurrent ? "bold" : undefined
                             }}>
                             {menuItem.title}
                         </Typography>
