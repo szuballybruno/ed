@@ -51,6 +51,8 @@ export const apiRoutes = {
     exam: {
         getExamEditData: "/exam/get-exam-edit-data",
         saveExam: "/exam/save-exam",
+        createExam: "/exam/create-exam",
+        deleteExam: "/exam/delete-exam",
     }
 }
 

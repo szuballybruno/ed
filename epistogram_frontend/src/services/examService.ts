@@ -1,7 +1,9 @@
 import { useReactQuery } from "../frontendHelpers";
 import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
+import { CreateExamDTO } from "../models/shared_models/CreateExamDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
+import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { httpGetAsync, usePostDataUnsafe } from "./httpClient";
@@ -17,6 +19,30 @@ export const useEditExamData = (examId: number) => {
         examEditDataError: qr.error,
         examEditDataState: qr.status,
         refetchEditDataAsync: qr.refetch
+    }
+}
+
+export const useDeleteExam = () => {
+
+    const qr = usePostDataUnsafe<IdResultDTO, void>(apiRoutes.exam.deleteExam);
+
+    return {
+        deleteExamAsync: (examId: number) => qr.postDataAsync({ id: examId }),
+        deleteExamState: qr.state,
+    }
+}
+
+export const useCreateExam = () => {
+
+    const qr = usePostDataUnsafe<CreateExamDTO, IdResultDTO>(apiRoutes.exam.createExam);
+
+    return {
+        createExamAsync: (courseId: number) => qr.postDataAsync({
+            courseId,
+            subtitle: "",
+            title: "Uj vizsga"
+        }),
+        createExamState: qr.state,
     }
 }
 

@@ -1,96 +1,20 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import React, { ReactNode, useState } from "react";
-import { DialogOptions } from "../../models/types";
+import React, { ReactNode } from "react";
+import { EpistoDialog, EpistoDialogLogicType, useEpistoDialogLogic } from "../EpistoDialog";
 
-export const useDialogState = () => {
+export const ErrorDialogContext = React.createContext<EpistoDialogLogicType | null>(null);
 
-    const [dialogOptions, setDialogOptions] = useState<DialogOptions>();
-    const [isOpen, setIsOpen] = useState(false);
-
-    const showDialog = (options: DialogOptions) => {
-
-        setDialogOptions(options);
-        setIsOpen(true);
-    }
-
-    const closeDialog = () => {
-
-        setIsOpen(false);
-    }
-
-    return {
-        dialogOptions,
-        isOpen,
-        closeDialog,
-        showDialog
-    }
-}
-
-export type DialogStateType = ReturnType<typeof useDialogState>;
-
-export const DialogContext = React.createContext<DialogStateType | null>(null);
-
-export const DialogFrame = (props: {
+export const ErrorDialogFrame = (props: {
     children: ReactNode
 }) => {
 
-    const dialogState = useDialogState();
+    const dialogLogic = useEpistoDialogLogic();
     const { children } = props;
 
-    const {
-        isOpen,
-        dialogOptions,
-        closeDialog
-    } = dialogState;
-
     return <>
-        <Dialog
-            open={isOpen}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            style={{
-                zIndex: 10000
-            }}>
+        <EpistoDialog logic={dialogLogic}></EpistoDialog>
 
-            <DialogTitle id="alert-dialog-title">
-                {dialogOptions?.title}
-            </DialogTitle>
-
-            <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    {dialogOptions?.description}
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                {dialogOptions?.firstButtonTitle && <Button
-                    color="primary"
-                    onClick={() => {
-
-                        closeDialog();
-
-                        if (dialogOptions?.firstButtonAction)
-                            dialogOptions?.firstButtonAction();
-                    }}>
-                    {dialogOptions?.firstButtonTitle}
-                </Button>}
-
-                {dialogOptions?.secondButtonTitle && <Button
-                    onClick={() => {
-
-                        closeDialog();
-
-                        if (dialogOptions.secondButtonAction)
-                            dialogOptions.secondButtonAction();
-                    }}
-                    color="primary"
-                    autoFocus>
-                    {dialogOptions?.secondButtonTitle}
-                </Button>}
-            </DialogActions>
-        </Dialog>
-
-        <DialogContext.Provider value={dialogState}>
+        <ErrorDialogContext.Provider value={dialogLogic}>
             {children}
-        </DialogContext.Provider>
+        </ErrorDialogContext.Provider>
     </>
 }

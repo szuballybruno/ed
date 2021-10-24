@@ -1,3 +1,4 @@
+import { Answer } from "../models/entity/Answer";
 import { Question } from "../models/entity/Question";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { staticProvider } from "../staticProvider";
@@ -12,24 +13,26 @@ export const saveQuestionsAsync = async (
         .getRepository(Question);
 
     // delete quesitons 
-    const existingQuestions = await questionRepo
-        .find({
-            where: {
-                videoId,
-                examId
-            }
-        });
+    const existingQuestions = videoId
+        ? await questionRepo
+            .find({
+                where: {
+                    videoId: videoId
+                }
+            })
+        : await questionRepo
+            .find({
+                where: {
+                    examId: examId
+                }
+            });
 
     const deletedQuesitonIds = existingQuestions
         .filter(x => !questions
             .some(question => question.questionId === x.id))
         .map(x => x.id);
 
-    if (deletedQuesitonIds.length > 0)
-        await staticProvider
-            .ormConnection
-            .getRepository(Question)
-            .delete(deletedQuesitonIds);
+    await deleteQuesitonsAsync(deletedQuesitonIds);
 
     // update questions
     const updateQuestions = questions
@@ -59,4 +62,23 @@ export const saveQuestionsAsync = async (
     if (insertQuestions.length > 0)
         await questionRepo
             .insert(insertQuestions);
+}
+
+export const deleteQuesitonsAsync = async (quesitonIds: number[]) => {
+
+    if (quesitonIds.length === 0)
+        return;
+
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(Answer)
+        .where("questionId in (:...quesitonIds)", { quesitonIds })
+        .execute();
+
+    await staticProvider
+        .ormConnection
+        .getRepository(Question)
+        .delete(quesitonIds);
 }

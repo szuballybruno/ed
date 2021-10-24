@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router";
 import { useIsDesktopView } from "../../frontendHelpers";
 import { useNavigation } from "../../services/navigatior";
-import { useDialog } from "../../services/notifications";
 import { usePlayerData } from "../../services/playerService";
+import { EpistoDialog, useEpistoDialogLogic } from "../EpistoDialog";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
@@ -15,7 +15,7 @@ import { WatchView } from "./WatchView";
 
 export const PlayerPage = () => {
 
-    const { showDialog } = useDialog();
+    const warningDialogLogic = useEpistoDialogLogic();
     const { navigateToPlayer } = useNavigation();
     const { descriptorCode } = useParams<{ descriptorCode: string }>();
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
@@ -49,12 +49,17 @@ export const PlayerPage = () => {
 
     const navigateToCourseItem = (descriptorCode: string) => {
 
-        showDialog({
-            title: "Biztosan megszakítod a vizsgát?",
-            description: "Figyelem! Ha most kilépsz, a jelenlegi vizsgád elveszik és nem kezdhető újra.",
-            firstButtonTitle: "Mégse",
-            secondButtonTitle: "Igen",
-        });
+        warningDialogLogic
+            .openDialog({
+                title: "Biztosan megszakítod a vizsgát?",
+                description: "Figyelem! Ha most kilépsz, a jelenlegi vizsgád elveszik és nem kezdhető újra.",
+                buttons: [
+                    {
+                        title: "Igen",
+                        action: () => { }
+                    }
+                ],
+            });
 
         navigateToPlayer(descriptorCode);
     }
@@ -70,6 +75,8 @@ export const PlayerPage = () => {
             } as any}>
 
             <Navbar />
+
+            <EpistoDialog logic={warningDialogLogic} />
 
             <ContentWrapper width="var(--playerWidth)" margin="auto">
 

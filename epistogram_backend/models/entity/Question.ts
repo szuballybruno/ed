@@ -37,7 +37,7 @@ export class Question {
     category: QuestionCategory | null;
 
     // answers
-    @OneToMany(type => Answer, answer => answer.question, { cascade: true })
+    @OneToMany(type => Answer, answer => answer.question, { onDelete: "CASCADE", cascade: true })
     @JoinColumn()
     answers: Answer[];
 

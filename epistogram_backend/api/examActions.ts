@@ -1,11 +1,15 @@
 import { Request } from "express";
+import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
+import { Question } from "../models/entity/Question";
+import { CreateExamDTO } from "../models/shared_models/CreateExamDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
+import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { answerExamQuestionAsync, getExamResultsAsync } from "../services/examService";
 import { toQuestionDTO } from "../services/mappings";
-import { saveQuestionsAsync } from "../services/questionService";
+import { deleteQuesitonsAsync, saveQuestionsAsync } from "../services/questionService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -66,4 +70,57 @@ export const saveExamAction = async (params: ActionParamsType) => {
         });
 
     await saveQuestionsAsync(dto.questions, undefined, examId);
+}
+
+export const createExamAction = async (params: ActionParamsType) => {
+
+    const dto = withValueOrBadRequest<CreateExamDTO>(params.req.body);
+
+    const course = await staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .createQueryBuilder("c")
+        .leftJoinAndSelect("c.videos", "v")
+        .leftJoinAndSelect("c.exams", "e")
+        .where("c.id = :courseId", { courseId: dto.courseId })
+        .getOneOrFail();
+
+    const courseItemsLength = course.videos.length + course.exams.length;
+
+    const newExam = {
+        courseId: dto.courseId,
+        title: dto.title,
+        subtitle: dto.subtitle,
+        orderIndex: courseItemsLength
+    } as Exam;
+
+    await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .insert(newExam);
+
+    return {
+        id: newExam.id
+    } as IdResultDTO;
+}
+
+export const deleteExamAction = async (params: ActionParamsType) => {
+
+    const examId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
+
+    const questions = await staticProvider
+        .ormConnection
+        .getRepository(Question)
+        .find({
+            where: {
+                examId
+            }
+        });
+
+    await deleteQuesitonsAsync(questions.map(x => x.id));
+
+    await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .delete(examId);
 }
