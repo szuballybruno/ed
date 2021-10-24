@@ -125,7 +125,8 @@ export const applicationRoutes = {
             },
             editExamRoute: {
                 title: translatableTexts.routeTitles.administrationEditVideo,
-                route: "/administration/courses/:courseId/exam/:examId"
+                route: "/administration/courses/:courseId/exam/:examId",
+                exact: true,
             }
         },
         groupsRoute: {

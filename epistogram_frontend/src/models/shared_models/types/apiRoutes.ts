@@ -46,6 +46,10 @@ export const apiRoutes = {
     questions: {
         getQuestionEditData: "/questions/get-question-edit-data",
         saveQuestion: "/questions/save-question"
+    },
+
+    exam: {
+        getExamEditData: "/exam/get-exam-edit-data"
     }
 }
 

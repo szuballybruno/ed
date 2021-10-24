@@ -22,6 +22,7 @@ import { AdminEditGroupSubpage } from "./groups/AdminEditGroupSubpage";
 import { AdminGroupStatisticsSubpage } from "./groups/AdminGroupStatisticsSubpage";
 import { EditVideoSubpage } from './courses/EditVideoSubpage';
 import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
+import { EditExamSubpage } from './courses/EditExamSubpage';
 
 const AdminPage = () => {
 
@@ -97,6 +98,7 @@ const AdminPage = () => {
                                 {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
                                 {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
                                 {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}
+                                {getRoute(administrationRoutes.coursesRoute.editExamRoute, <EditExamSubpage />)}
                             </Switch>
                         } />
 
