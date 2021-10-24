@@ -116,11 +116,16 @@ export const AdminCourseListSubpage = () => {
                         return <FlexListItem
                             align="center"
                             h={100}
+                            mb="1"
                             thumbnailContent={
                                 <Image
                                     src={course.thumbnailImageURL}
                                     objectFit="cover"
-                                    className="square70" />
+                                    style={{
+                                        height: 100,
+                                        width: 180
+                                    }}
+                                />
                             }
                             setIsChecked={x => setSelectedCourse(course.courseId, x)}
                             isChecked={selectedCourseIds.some(x => x === course.courseId)}

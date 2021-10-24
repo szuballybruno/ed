@@ -51,7 +51,7 @@ const AdminPage = () => {
         <Navbar />
         <ContentWrapper>
 
-            <LeftPanel p="20px">
+            <LeftPanel p="20px" flexBasis="300px">
                 <NavigationLinkList
                     items={menuItems} />
             </LeftPanel>

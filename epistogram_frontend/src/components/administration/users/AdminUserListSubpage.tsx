@@ -41,17 +41,17 @@ export const AdminUserListSubpage = () => {
     const showDeleteUserDialog = (user: AdminPageUserDTO) => {
 
         dilaogContext!.showDialog({
-            title: "Biztonsan torlod a felhasznalot?",
-            description: `A ${user.firstName} ${user.lastName} nevu felhasznalo visszavonhatatlanul torove lesz!`,
+            title: "Biztosan törlöd a felhasználót?",
+            description: `A ${user.firstName} ${user.lastName} nevű felhasználó visszavonhatatlanul törölve lesz!`,
 
-            firstButtonTitle: "Torles",
+            firstButtonTitle: "Törlés",
             firstButtonAction: async () => {
 
                 await httpPostAsync(apiRoutes.userManagement.deleteUser, { userId: user.id });
                 await refetchUsers();
             },
 
-            secondButtonTitle: "Megse",
+            secondButtonTitle: "Mégse",
             secondButtonAction: dilaogContext!.closeDialog
         });
     }
@@ -131,7 +131,7 @@ export const AdminUserListSubpage = () => {
                 isAllSelected={isAllUsersSelected}
                 selectAllOrNone={selectAllOrNone}
                 selectedIds={selectedUserIds}
-                itemLabel="felhasznalo" />
+                itemLabel="felhasználó" />
 
             {/* user list */}
             <FlexList className="whall">

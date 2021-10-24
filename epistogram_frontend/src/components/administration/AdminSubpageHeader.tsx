@@ -149,7 +149,7 @@ export const AdminSubpageHeader = (props: {
             variant="colored"
             onClick={() => onSave()}>
 
-            Mentes
+            Mentés
         </EpistoButton>}
     </Flex>
 }

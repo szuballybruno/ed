@@ -74,7 +74,7 @@ export const EditCourseControl = (props: {
         return saveCourseAsync(dto, thumbnailImageFile);
     }
 
-    // set default values 
+    // set default values
     useEffect(() => {
 
         if (!courseEditData)
@@ -139,7 +139,7 @@ export const EditCourseControl = (props: {
 
             const idResult = await createVideoAsync(courseId);
 
-            showNotification("Uj video sikeresen hozzaadva!");
+            showNotification("Új videó sikeresen hozzáadva!");
 
             navToVideoEdit(idResult.id);
         } catch (e) {
@@ -160,7 +160,7 @@ export const EditCourseControl = (props: {
             else {
 
                 await deleteVideoAsync(courseItem.id);
-                showNotification("Video sikeresen torolve!");
+                showNotification("Videó sikeresen törölve!");
             }
 
             setCourseItems(courseItems.filter(x => x.descriptorCode !== courseItem.descriptorCode));
@@ -207,7 +207,7 @@ export const EditCourseControl = (props: {
 
                 <EpistoEntry
                     value={courseGroup}
-                    label="Fokategória"
+                    label="Főkategória"
                     setValue={setCourseGroup} />
 
                 <EpistoEntry
@@ -352,14 +352,14 @@ export const EditCourseControl = (props: {
                 onClick={() => handleAddNewVideoAsync()}
                 style={{ alignSelf: "center" }}
                 variant="outlined">
-                Add new video
+                Új videó hozzáadása
             </EpistoButton>
 
             <EpistoButton
                 onClick={() => handleAddNewExam()}
                 style={{ alignSelf: "center" }}
                 variant="outlined">
-                Add new exam
+                Új vizsga hozzáadása
             </EpistoButton>
         </Flex>
 

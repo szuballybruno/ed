@@ -21,7 +21,7 @@ const AdminEditUserSubpage = () => {
         try {
 
             await updateUserAsync(dto);
-            showNotification("A valtoztatasok sikeresen mentesre kerultek.");
+            showNotification("A változtatások sikeresen mentésre kerültek.");
         }
         catch (e) {
 
@@ -37,7 +37,7 @@ const AdminEditUserSubpage = () => {
         ]}>
         <EditUserControl
             editDTO={userEditData}
-            saveUserAsync={handleSaveUserAsync}></EditUserControl>
+            saveUserAsync={handleSaveUserAsync} />
     </AdminSubpageHeader>
 };
 
