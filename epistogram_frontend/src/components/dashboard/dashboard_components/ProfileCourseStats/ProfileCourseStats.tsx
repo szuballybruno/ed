@@ -1,5 +1,5 @@
 import React from 'react';
-import { globalConfig } from "../../../../configuration/config";
+import { getAssetUrl } from '../../../../frontendHelpers';
 import classes from "./profileCourseStats.module.scss";
 
 const ProfileCourseStats = (props: { style?: React.CSSProperties }) => {
@@ -26,10 +26,10 @@ const ProfileCourseStats = (props: { style?: React.CSSProperties }) => {
                 </div>
 
                 <div className={classes.firstRowStatsWrapper}>
-                    <ProfileCourseStatsItem dataCount={182} dataString={" videó"} imageSrc={`${globalConfig.assetStorageUrl}/application/statisztikavideo.png`} />
-                    <ProfileCourseStatsItem dataCount={23} dataString={" kurzus"} imageSrc={`${globalConfig.assetStorageUrl}/application/courseding.svg`} />
-                    <ProfileCourseStatsItem dataCount={92} dataString={" teszt"} imageSrc={`${globalConfig.assetStorageUrl}/application/completed-task.svg`} />
-                    <ProfileCourseStatsItem dataCount={3} dataString={" vizsga"} imageSrc={`${globalConfig.assetStorageUrl}/application/online-learning.svg`} />
+                    <ProfileCourseStatsItem dataCount={182} dataString={"videó"} imageSrc={getAssetUrl("/application/statisztikavideo.png")} />
+                    <ProfileCourseStatsItem dataCount={23} dataString={"kurzus"} imageSrc={getAssetUrl("/application/courseding.svg")} />
+                    <ProfileCourseStatsItem dataCount={92} dataString={"teszt"} imageSrc={getAssetUrl("/application/completed-task.svg")} />
+                    <ProfileCourseStatsItem dataCount={3} dataString={"vizsga"} imageSrc={getAssetUrl("/application/online-learning.svg")} />
                 </div>
             </div>
         </div>

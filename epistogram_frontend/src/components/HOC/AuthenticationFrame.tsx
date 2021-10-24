@@ -13,7 +13,7 @@ export const AuthenticationStateContext = createContext<AuthenticationStateType>
 export const AuthenticationFrame = (props) => {
 
     //SET THEME
-    setTheme(globalConfig.currentTheme);
+    setTheme("nextGenTheme");
 
     hotjar.initialize(2659369, 6)
 

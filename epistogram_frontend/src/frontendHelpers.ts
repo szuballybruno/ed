@@ -3,7 +3,7 @@ import queryString from "query-string";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { matchPath, useLocation } from "react-router-dom";
-import { globalConfig } from "./configuration/config";
+import { assetStorageUrl } from "./Environemnt";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 import { ApplicationRoute, LoadingStateType } from "./models/types";
 
@@ -252,7 +252,7 @@ export const useReactQuery = <T>(
     }
 }
 
-export const getAssetUrl = (path: string) => globalConfig.assetStorageUrl + ("/" + path).replace("//", "/");
+export const getAssetUrl = (path: string) => assetStorageUrl + ("/" + path).replace("//", "/");
 
 export const hasValue = (obj: any) => {
 
