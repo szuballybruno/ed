@@ -18,6 +18,9 @@ export class Question {
     @Column({ nullable: true })
     imageUrl: string;
 
+    @Column({ nullable: true, type: "integer" })
+    orderIndex: number | null;
+
     @Column({ nullable: true, type: "double precision" })
     showUpTimeSeconds: number;
 

@@ -124,10 +124,14 @@ export const applicationRoutes = {
                 route: "/administration/courses/:courseId/video/:videoId/question/:questionId"
             },
             editExamRoute: {
-                title: translatableTexts.routeTitles.administrationEditVideo,
+                title: translatableTexts.routeTitles.administrationEditExam,
                 route: "/administration/courses/:courseId/exam/:examId",
                 exact: true,
-            }
+            },
+            editExamQuestionRoute: {
+                title: translatableTexts.routeTitles.administrationEditQuestion,
+                route: "/administration/courses/:courseId/exam/:examId/question/:questionId"
+            },
         },
         groupsRoute: {
             title: "Csoportok",

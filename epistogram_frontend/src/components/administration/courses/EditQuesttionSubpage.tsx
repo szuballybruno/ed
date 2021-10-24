@@ -4,6 +4,7 @@ import { FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { useIsMatchingCurrentRoute } from "../../../frontendHelpers";
 import { AnswerEditDTO } from "../../../models/shared_models/AnswerEditDTO";
 import { getVirtualId } from "../../../services/idService";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
@@ -24,6 +25,11 @@ export const EditQuestionSubpage = () => {
     const { saveQuesitonAsync, saveQuesitonState } = useSaveQuestion();
 
     const showError = useShowErrorDialog();
+
+    const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
+
+    const isVideoQuestion = isMatchingCurrentRoute(applicationRoutes.administrationRoute.coursesRoute.editVideoQuestionRoute);
+    const isExamQuestion = isMatchingCurrentRoute(applicationRoutes.administrationRoute.coursesRoute.editExamQuestionRoute);
 
     const [questionText, setQuestionText] = useState("");
     const [answers, setAnswers] = useState<AnswerEditDTO[]>([]);
@@ -100,8 +106,18 @@ export const EditQuestionSubpage = () => {
             tabMenuItems={[
                 applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
                 applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
-                applicationRoutes.administrationRoute.coursesRoute.editVideoQuestionRoute,
+                ...(isVideoQuestion
+                    ? [
+                        applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
+                        applicationRoutes.administrationRoute.coursesRoute.editVideoQuestionRoute,
+                    ]
+                    : []),
+                ...(isExamQuestion
+                    ? [
+                        applicationRoutes.administrationRoute.coursesRoute.editExamRoute,
+                        applicationRoutes.administrationRoute.coursesRoute.editExamQuestionRoute,
+                    ]
+                    : [])
             ]}
             px="20px"
             onSave={handleSaveQuesitonAsync}>

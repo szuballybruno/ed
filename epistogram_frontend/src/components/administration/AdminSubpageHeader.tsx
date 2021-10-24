@@ -22,10 +22,11 @@ export const AdminSubpageHeader = (props: {
     const { children, tabMenuItems, onSave, ...css } = props;
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
-    const urlParams = useParams<{ userId: string, courseId: string, videoId: string }>();
+    const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string }>();
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
     const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
     const videoId = urlParams.videoId ? parseInt(urlParams.videoId) : null;
+    const examId = urlParams.examId ? parseInt(urlParams.examId) : null;
 
     const currentRoute = objToArray(applicationRoutes.administrationRoute)
         .filter(route => isMatchingCurrentRoute(route, false))[0];
@@ -82,7 +83,7 @@ export const AdminSubpageHeader = (props: {
 
     const navigateToTab = (path: string) => {
 
-        navigate(path, { userId, courseId, videoId });
+        navigate(path, { userId, courseId, videoId, examId });
     };
 
     return <Flex

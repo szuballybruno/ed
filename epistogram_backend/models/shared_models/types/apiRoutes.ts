@@ -49,7 +49,8 @@ export const apiRoutes = {
     },
 
     exam: {
-        getExamEditData: "/exam/get-exam-edit-data"
+        getExamEditData: "/exam/get-exam-edit-data",
+        saveExam: "/exam/save-exam",
     }
 }
 

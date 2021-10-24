@@ -99,6 +99,7 @@ const AdminPage = () => {
                                 {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
                                 {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}
                                 {getRoute(administrationRoutes.coursesRoute.editExamRoute, <EditExamSubpage />)}
+                                {getRoute(administrationRoutes.coursesRoute.editExamQuestionRoute, <EditQuestionSubpage />)}
                             </Switch>
                         } />
 

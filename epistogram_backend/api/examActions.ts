@@ -5,6 +5,7 @@ import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { answerExamQuestionAsync, getExamResultsAsync } from "../services/examService";
 import { toQuestionDTO } from "../services/mappings";
+import { saveQuestionsAsync } from "../services/questionService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -46,4 +47,23 @@ export const getExamEditDataAction = async (params: ActionParamsType) => {
             .questions
             .map(x => toQuestionDTO(x))
     } as ExamEditDataDTO;
+}
+
+export const saveExamAction = async (params: ActionParamsType) => {
+
+    const dto = withValueOrBadRequest<ExamEditDataDTO>(params.req.body);
+    const examId = dto.id;
+
+    // save exam 
+    await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .save({
+            id: examId,
+            title: dto.title,
+            subtitle: dto.subTitle,
+            courseId: dto.courseId,
+        });
+
+    await saveQuestionsAsync(dto.questions, undefined, examId);
 }

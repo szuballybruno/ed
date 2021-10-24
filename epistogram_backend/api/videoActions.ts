@@ -10,6 +10,7 @@ import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "../services/misc/videoDurationService";
+import { saveQuestionsAsync } from "../services/questionService";
 import { getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers"
@@ -57,69 +58,20 @@ export const deleteVideoAction = async (params: ActionParamsType) => {
 export const saveVideoAction = async (params: ActionParamsType) => {
 
     const dto = withValueOrBadRequest<VideoEditDTO>(params.req.body);
+    const videoId = dto.id;
 
     // update vidoeo data
     await staticProvider
         .ormConnection
         .getRepository(Video)
         .save({
-            id: dto.id,
+            id: videoId,
             title: dto.title,
             subtitle: dto.subtitle,
             description: dto.description
         });
 
-    // delete quesitons 
-    const videoQuestions = await staticProvider
-        .ormConnection
-        .getRepository(Question)
-        .find({
-            where: {
-                videoId: dto.id
-            }
-        });
-
-    const deletedQuesitonIds = videoQuestions
-        .filter(x => !dto.questions.some(dtoQ => dtoQ.questionId === x.id))
-        .map(x => x.id);
-
-    if (deletedQuesitonIds.length > 0)
-        await staticProvider
-            .ormConnection
-            .getRepository(Question)
-            .delete(deletedQuesitonIds);
-
-    // update questions
-    const updateQuestions = dto
-        .questions
-        .filter(x => x.questionId >= 0)
-        .map(x => ({
-            id: x.questionId,
-            questionText: x.questionText,
-            showUpTimeSeconds: x.showUpTimeSeconds
-        } as Question));
-
-    if (updateQuestions.length > 0)
-        await staticProvider
-            .ormConnection
-            .getRepository(Question)
-            .save(updateQuestions);
-
-    // insert questions 
-    const insertQuestions = dto
-        .questions
-        .filter(x => x.questionId < 0)
-        .map(x => ({
-            showUpTimeSeconds: x.showUpTimeSeconds,
-            questionText: x.questionText,
-            videoId: dto.id
-        } as Question));
-
-    if (insertQuestions.length > 0)
-        await staticProvider
-            .ormConnection
-            .getRepository(Question)
-            .insert(insertQuestions);
+    await saveQuestionsAsync(dto.questions, videoId);
 }
 
 export const getVideoEditDataAction = async (params: ActionParamsType) => {

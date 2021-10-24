@@ -10,7 +10,7 @@ import {
     getCurrentCourseItemCode, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
     getSignupDataAction, getUserPersonalityDataAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveCourseDataAction, saveCourseThumbnailAction, saveUserDataAction, setEditedCourseAction
 } from './api/dataActions';
-import { answerExamQuestionAction, getExamEditDataAction, getExamResultsAction } from './api/examActions';
+import { answerExamQuestionAction, getExamEditDataAction, getExamResultsAction, saveExamAction } from './api/examActions';
 import { uploadAvatarFileAction } from './api/fileActions';
 import { getDailyTipAction, getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
@@ -151,6 +151,7 @@ const initializeAsync = async () => {
     // exam
     expressServer.get("/exam/get-exam-results", getExamResultsAction);
     addEndpoint(apiRoutes.exam.getExamEditData, getExamEditDataAction);
+    addEndpoint(apiRoutes.exam.saveExam, saveExamAction, { isPost: true });
 
     // question answer
     expressServer.post("/questions/answer-video-question", answerVideoQuestionAction);

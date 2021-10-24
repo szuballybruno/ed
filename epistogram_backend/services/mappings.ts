@@ -385,6 +385,7 @@ export const toQuestionDTO = (q: Question) => {
 
     return {
         questionId: q.id,
+        orderIndex: q.orderIndex,
         questionText: q.questionText,
         imageUrl: q.imageUrl,
         showUpTimeSeconds: q.showUpTimeSeconds,

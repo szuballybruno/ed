@@ -15,7 +15,18 @@ export const useEditExamData = (examId: number) => {
     return {
         examEditData: qr.data,
         examEditDataError: qr.error,
-        examEditDataState: qr.status
+        examEditDataState: qr.status,
+        refetchEditDataAsync: qr.refetch
+    }
+}
+
+export const useSaveExam = () => {
+
+    const qr = usePostDataUnsafe<ExamEditDataDTO, void>(apiRoutes.exam.saveExam);
+
+    return {
+        saveExamAsync: qr.postDataAsync,
+        saveExamState: qr.state,
     }
 }
 
