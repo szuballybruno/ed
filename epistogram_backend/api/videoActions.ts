@@ -10,7 +10,7 @@ import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "../services/misc/videoDurationService";
-import { saveQuestionsAsync } from "../services/questionService";
+import { deleteQuesitonsAsync, saveQuestionsAsync } from "../services/questionService";
 import { getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers"
@@ -47,12 +47,23 @@ export const createVideoAction = async (params: ActionParamsType) => {
 
 export const deleteVideoAction = async (params: ActionParamsType) => {
 
-    const idBody = withValueOrBadRequest<IdBodyDTO>(params.req.body);
+    const videoId = withValueOrBadRequest<IdBodyDTO>(params.req.body).id;
+
+    const questions = await staticProvider
+        .ormConnection
+        .getRepository(Question)
+        .find({
+            where: {
+                videoId
+            }
+        });
+
+    await deleteQuesitonsAsync(questions.map(x => x.id));
 
     await staticProvider
         .ormConnection
         .getRepository(Video)
-        .delete(idBody.id);
+        .delete(videoId);
 }
 
 export const saveVideoAction = async (params: ActionParamsType) => {

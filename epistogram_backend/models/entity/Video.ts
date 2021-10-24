@@ -45,7 +45,7 @@ export class Video {
     thumbnailFile: StorageFile
 
     // questions
-    @OneToMany(type => Question, q => q.video, { cascade: true })
+    @OneToMany(type => Question, q => q.video, { onDelete: "CASCADE", cascade: true })
     @JoinColumn()
     questions: Question[];
 

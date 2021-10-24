@@ -13,10 +13,12 @@ export type ApplicationRoute = {
 }
 
 export type DialogOptions = {
-    title: string,
+    title?: string,
     description?: string,
-    firstButtonTitle?: string,
-    firstButtonAction?: () => void,
-    secondButtonTitle?: string,
-    secondButtonAction?: () => void
+    buttons?: DialogButtonType[]
+}
+
+export type DialogButtonType = {
+    title: string,
+    action: () => void
 }

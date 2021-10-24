@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from "react-router-dom";
 import { AuthenticationFrame } from "./components/HOC/AuthenticationFrame";
-import { DialogFrame } from "./components/HOC/DialogFrame";
+import { ErrorDialogFrame } from "./components/HOC/DialogFrame";
 import { NotificationsFrame } from "./components/HOC/NotificationsFrame";
 import { theme } from "./configuration/defaultMUITheme";
 import './index.css';
@@ -20,11 +20,11 @@ ReactDOM.render(
             <ChakraProvider>
                 <ThemeProvider theme={theme}>
                     <AuthenticationFrame>
-                        <DialogFrame>
+                        <ErrorDialogFrame>
                             <NotificationsFrame>
                                 <MainRouting />
                             </NotificationsFrame>
-                        </DialogFrame>
+                        </ErrorDialogFrame>
                     </AuthenticationFrame>
                 </ThemeProvider>
             </ChakraProvider>

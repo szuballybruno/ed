@@ -42,7 +42,7 @@ export class Exam {
     course: Course | null
 
     // questions 
-    @OneToMany(_ => Question, q => q.exam)
+    @OneToMany(_ => Question, q => q.exam, { onDelete: "CASCADE", cascade: ["remove"] })
     @JoinColumn()
     questions: Question[];
 

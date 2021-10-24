@@ -1,26 +1,54 @@
 import { Flex } from "@chakra-ui/layout";
 import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import React, { ReactNode, useState } from "react";
-import { DialogOptions } from "../models/types";
+import { DialogButtonType, DialogOptions } from "../models/types";
 import { EpistoButton } from "./universal/EpistoButton";
 import {Close} from "@mui/icons-material";
 
-export const useEpistoDialogLogic = (dialogOptions: DialogOptions) => {
+export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
 
     const [isOpen, setIsOpen] = useState(false);
-
-    const openDialog = () => {
-
-        setIsOpen(true);
-    }
+    const [title, setTitle] = useState(dialogOptions?.title ?? "");
+    const [description, setDescription] = useState(dialogOptions?.description ?? "");
 
     const closeDialog = () => {
 
         setIsOpen(false);
     }
 
+    const [buttons, setButtons] = useState<DialogButtonType[]>([]);
+
+    const openDialog = (opt?: DialogOptions) => {
+
+        if (opt) {
+
+            if (opt.title)
+                setTitle(opt.title);
+
+            if (opt.description)
+                setDescription(opt.description);
+
+            let defaultButtons = [
+                {
+                    title: "Bezaras",
+                    action: closeDialog
+                }
+            ];
+
+            if (opt.buttons)
+                defaultButtons = defaultButtons.concat(opt.buttons);
+
+            setButtons(defaultButtons);
+        }
+
+        setIsOpen(true);
+    }
+
     return {
         isOpen,
+        title,
+        description,
+        buttons,
         dialogOptions,
         openDialog,
         closeDialog
@@ -34,17 +62,18 @@ export const EpistoDialog = (props: {
     fullScreenX?: boolean,
     fullScreenY?: boolean,
     showCloseButton?: boolean,
-    buttons?: ReactNode,
+    buttonComponents?: ReactNode,
     children?: ReactNode
 }) => {
 
     const {
         isOpen,
-        dialogOptions,
-        closeDialog
+        title,
+        buttons,
+        closeDialog,
     } = props.logic;
 
-    const { children, showCloseButton, buttons, fullScreenX, fullScreenY } = props;
+    const { children, showCloseButton, buttonComponents, fullScreenX, fullScreenY } = props;
 
     return <Dialog
         open={isOpen}
@@ -56,11 +85,11 @@ export const EpistoDialog = (props: {
             zIndex: 10000
         }}>
 
-        <Flex direction="column" height={fullScreenY ? "90vh" : undefined}>
+        <Flex id="dialogTitle" direction="column" minWidth="500px" height={fullScreenY ? "90vh" : undefined}>
 
             <Flex justify="space-between">
                 <DialogTitle id="alert-dialog-title">
-                    {dialogOptions?.title}
+                    {title}
                 </DialogTitle>
 
                 {showCloseButton && <Close
@@ -77,7 +106,17 @@ export const EpistoDialog = (props: {
         </Flex>
 
         <DialogActions>
-            {buttons}
+            {buttons
+                .map(x => <EpistoButton
+                    variant="outlined"
+                    onClick={() => {
+
+                        x.action();
+                        closeDialog();
+                    }}>
+                    {x.title}
+                </EpistoButton>)}
+            {buttonComponents}
         </DialogActions>
     </Dialog>
 }

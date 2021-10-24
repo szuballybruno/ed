@@ -10,9 +10,11 @@ import { apiRoutes } from "../../../models/shared_models/types/apiRoutes";
 import { useUserListQuery } from "../../../services/adminPageUsersService";
 import { httpPostAsync } from "../../../services/httpClient";
 import { useNavigation } from "../../../services/navigatior";
+import { useShowErrorDialog } from "../../../services/notifications";
+import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { FloatAddButton } from "../../FloatAddButton";
 import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
-import { DialogContext } from "../../HOC/DialogFrame";
+import { ErrorDialogContext } from "../../HOC/DialogFrame";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ProfileImage } from "../../ProfileImage";
 import { EpistoButton } from "../../universal/EpistoButton";
@@ -30,30 +32,39 @@ export const AdminUserListSubpage = () => {
     const { users, usersStatus, usersError, refetchUsers } = useUserListQuery();
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
+    const showError = useShowErrorDialog();
 
     const administrationRoutes = applicationRoutes.administrationRoute;
 
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
     const isAllUsersSelected = !users.some(user => !selectedUserIds.some(uid => uid === user.id));
 
-    const dilaogContext = useContext(DialogContext);
+    const deleteWaningDialogLogic = useEpistoDialogLogic();
 
     const showDeleteUserDialog = (user: AdminPageUserDTO) => {
 
-        dilaogContext!.showDialog({
-            title: "Biztosan törlöd a felhasználót?",
-            description: `A ${user.firstName} ${user.lastName} nevű felhasználó visszavonhatatlanul törölve lesz!`,
+        deleteWaningDialogLogic
+            .openDialog({
+                title: "Biztosan törlöd a felhasználót?",
+                description: `A ${user.firstName} ${user.lastName} nevű felhasználó visszavonhatatlanul törölve lesz!`,
+                buttons: [
+                    {
+                        title: "Törlés",
+                        action: async () => {
 
-            firstButtonTitle: "Törlés",
-            firstButtonAction: async () => {
+                            try {
 
-                await httpPostAsync(apiRoutes.userManagement.deleteUser, { userId: user.id });
-                await refetchUsers();
-            },
+                                await httpPostAsync(apiRoutes.userManagement.deleteUser, { userId: user.id });
+                                await refetchUsers();
+                            }
+                            catch (e) {
 
-            secondButtonTitle: "Mégse",
-            secondButtonAction: dilaogContext!.closeDialog
-        });
+                                showError(e);
+                            }
+                        }
+                    }
+                ]
+            });
     }
 
     const setSelectedUser = (userId: number, isSelected: boolean) => {
@@ -132,6 +143,8 @@ export const AdminUserListSubpage = () => {
                 selectAllOrNone={selectAllOrNone}
                 selectedIds={selectedUserIds}
                 itemLabel="felhasználó" />
+
+            <EpistoDialog logic={deleteWaningDialogLogic} />
 
             {/* user list */}
             <FlexList className="whall">

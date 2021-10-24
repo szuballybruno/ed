@@ -6,9 +6,11 @@ import React, { useEffect, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { EditCourseDataDTO, EditListItemDTO } from "../../../models/shared_models/AdminPageEditCourseDTO";
 import { CourseItemDTO } from "../../../models/shared_models/CourseItemDTO";
+import { useCreateExam, useDeleteExam } from "../../../services/examService";
 import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useCreateVideo, useDeleteVideo } from "../../../services/videoService";
+import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { DragAndDropList } from "../../universal/DragAndDropList";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
@@ -47,10 +49,13 @@ export const EditCourseControl = (props: {
 
     // http
     const { createVideoAsync, createVideoState } = useCreateVideo();
+    const { createExamAsync, createExamState } = useCreateExam();
     const { deleteVideoAsync, deleteVideoState } = useDeleteVideo();
+    const { deleteExamAsync, deleteExamState } = useDeleteExam();
 
     const showError = useShowErrorDialog();
     const isAllowEditOnPage = false;
+    const deleteWarningDialogLogic = useEpistoDialogLogic();
 
     const navToVideoEdit = (videoId: number) => navigate(courseRoutes.editVideoRoute.route, { courseId, videoId });
     const navToExamEdit = (examId: number) => navigate(courseRoutes.editExamRoute.route, { courseId, examId });
@@ -133,15 +138,22 @@ export const EditCourseControl = (props: {
         }
     }
 
-    const handleAddNewVideoAsync = async () => {
+    const handleAddCourseItemAsync = async (type: "video" | "exam") => {
 
         try {
 
-            const idResult = await createVideoAsync(courseId);
+            if (type === "video") {
 
-            showNotification("Új videó sikeresen hozzáadva!");
+                const idResult = await createVideoAsync(courseId)
+                showNotification("Új videó sikeresen hozzáadva!");
+                navToVideoEdit(idResult.id);
+            }
+            else {
 
-            navToVideoEdit(idResult.id);
+                const idResult = await createExamAsync(courseId);
+                showNotification("Új vizsga sikeresen hozzáadva!");
+                navToExamEdit(idResult.id);
+            }
         } catch (e) {
 
             showError(e);
@@ -150,30 +162,61 @@ export const EditCourseControl = (props: {
 
     const handleDeleteCourseItemAsync = async (courseItem: CourseItemDTO) => {
 
-        try {
+        // exam
+        if (courseItem.type === "exam") {
 
-            if (courseItem.type === "exam") {
+            deleteWarningDialogLogic
+                .openDialog({
+                    title: "Biztosan törlöd a vizsgát?",
+                    description: "A benne lévő összes kérdés el fog veszni.",
+                    buttons: [
+                        {
+                            title: "Vizsga törlése",
+                            action: async () => {
 
-                // await deleteVideoAsync(videoId);
-                // showNotification("Video sikeresen torolve!");
-            }
-            else {
+                                try {
 
-                await deleteVideoAsync(courseItem.id);
-                showNotification("Videó sikeresen törölve!");
-            }
+                                    await deleteExamAsync(courseItem.id);
+                                    showNotification("Vizsga sikeresen törölve!");
+                                    setCourseItems(courseItems.filter(x => x.descriptorCode !== courseItem.descriptorCode));
+                                }
+                                catch (e) {
 
-            setCourseItems(courseItems.filter(x => x.descriptorCode !== courseItem.descriptorCode));
+                                    showError(e);
+                                }
+                            }
+                        }
+                    ]
+                });
         }
-        catch (e) {
 
-            showError(e);
+        // video
+        else {
+
+            deleteWarningDialogLogic
+                .openDialog({
+                    title: "Biztosan törlöd a videót?",
+                    description: "A feltöltött fájl, és az összes kérdés el fog veszni.",
+                    buttons: [
+                        {
+                            title: "Videó törlése",
+                            action: async () => {
+
+                                try {
+
+                                    await deleteVideoAsync(courseItem.id);
+                                    showNotification("Videó sikeresen törölve!");
+                                    setCourseItems(courseItems.filter(x => x.descriptorCode !== courseItem.descriptorCode));
+                                }
+                                catch (e) {
+
+                                    showError(e);
+                                }
+                            }
+                        }
+                    ]
+                });
         }
-    }
-
-    const handleAddNewExam = () => {
-
-
     }
 
     return <AdminSubpageHeader
@@ -183,6 +226,8 @@ export const EditCourseControl = (props: {
         ]}
         onSave={handleSaveCourseAsync}
         direction="row">
+
+        <EpistoDialog logic={deleteWarningDialogLogic} />
 
         {/* settings */}
         <Box px="20px" flex="1" className="dividerBorderRight">
@@ -349,14 +394,14 @@ export const EditCourseControl = (props: {
                 </Flex>} />
 
             <EpistoButton
-                onClick={() => handleAddNewVideoAsync()}
+                onClick={() => handleAddCourseItemAsync("video")}
                 style={{ alignSelf: "center" }}
                 variant="outlined">
                 Új videó hozzáadása
             </EpistoButton>
 
             <EpistoButton
-                onClick={() => handleAddNewExam()}
+                onClick={() => handleAddCourseItemAsync("exam")}
                 style={{ alignSelf: "center" }}
                 variant="outlined">
                 Új vizsga hozzáadása
