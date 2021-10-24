@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { globalConfig } from "../../configuration/config";
+import { verboseLogging } from "../../Environemnt";
 import { isBetweenThreshold } from "../../frontendHelpers";
 import { usePostVideoPlaybackSample } from "../../services/playerService";
 
@@ -39,7 +39,7 @@ export const usePlaybackWatcher = (
             && elapsedSeconds > 0
             && elapsedSeconds > minSampleSeconds) {
 
-            if (globalConfig.verboseLogging)
+            if (verboseLogging)
                 console.log(`Watched ${elapsedSeconds}s`);
 
             postVideoPlaybackSampleAsync(lastSampleSeconds, playedSeconds);

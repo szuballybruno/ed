@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { globalConfig } from "../../configuration/config";
+import { hotjar } from "react-hotjar";
+import { verboseLogging } from "../../Environemnt";
 import { UserDTO } from "../../models/shared_models/UserDTO";
 import { AuthenticationStateType, useUserFetching } from "../../services/authenticationService";
 import { useRenewUserSessionPooling } from "../../services/openEndpointService";
 import setTheme from "../../services/setTheme";
-import { hotjar } from "react-hotjar";
 
 export const CurrentUserContext = createContext<UserDTO | null>(null);
 export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());
@@ -20,13 +20,13 @@ export const AuthenticationFrame = (props) => {
     // start auth pooling
     const { isSuccess } = useRenewUserSessionPooling();
 
-    if (globalConfig.verboseLogging)
+    if (verboseLogging)
         console.log("Renewing token: " + isSuccess);
 
     // fetch current user
     const { currentUser, refetchUserAsync, authState } = useUserFetching(isSuccess);
 
-    if (globalConfig.verboseLogging)
+    if (verboseLogging)
         console.log("Authentication state: " + authState);
 
     return <AuthenticationStateContext.Provider value={authState}>
