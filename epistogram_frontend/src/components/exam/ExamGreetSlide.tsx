@@ -16,6 +16,8 @@ export const ExamGreetSlide = (props: {
     } = props;
 
     return <ExamLayout
+        headerLeftText="Udv!"
+        headerCenterText={exam.title}
         content={<Flex direction="column" align="center">
             <img
                 src={getAssetUrl("/images/examCover.jpg")}

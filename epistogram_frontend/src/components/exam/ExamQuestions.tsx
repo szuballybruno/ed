@@ -1,17 +1,17 @@
 import { Grid } from "@chakra-ui/layout";
 import { Flex, Text } from "@chakra-ui/react";
-import { Checkbox, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { PagingType, usePaging } from "../../frontendHelpers";
+import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { useSaveExamAnswer } from "../../services/examService";
 import { useShowErrorDialog } from "../../services/notifications";
-import { ExamLayout } from "./ExamLayout";
 import { LoadingFrame } from "../HOC/LoadingFrame";
-import { FlexFloat } from "../universal/FlexFloat";
+import { ExamLayout } from "./ExamLayout";
 import { QuestionAnswer } from "./QuestionAnswer";
 
 export const ExamQuestions = (props: {
+    exam: ExamDTO,
     slidesState: PagingType<number>
     questions: QuestionDTO[],
     answerSessionId: number,
@@ -21,7 +21,8 @@ export const ExamQuestions = (props: {
     const {
         questions,
         answerSessionId,
-        onExamFinished
+        onExamFinished,
+        exam
     } = props;
 
     const showError = useShowErrorDialog();
@@ -114,7 +115,7 @@ export const ExamQuestions = (props: {
         px={40}>
 
         <ExamLayout
-            headerCenterText="TODO"
+            headerCenterText={exam.title}
             exitExamAction={() => { }}
             handleNext={handleNextAsync}
             showNextButton={!!selectedAnswerId}

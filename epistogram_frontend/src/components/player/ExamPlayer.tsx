@@ -48,6 +48,7 @@ export const ExamPlayer = (props: {
             startExam={handleStartExam} />,
 
         () => <ExamQuestions
+            exam={exam}
             slidesState={slidesState}
             answerSessionId={answerSessionId}
             questions={exam.questions}

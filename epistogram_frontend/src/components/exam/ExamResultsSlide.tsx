@@ -135,6 +135,7 @@ export const ExamResultsSlide = (props: {
     </Flex>;
 
     return <ExamLayout
+        headerCenterText={exam.title}
         handleNext={continueCourse}
         nextButtonTitle="Kurzus folytatasa"
         showNextButton

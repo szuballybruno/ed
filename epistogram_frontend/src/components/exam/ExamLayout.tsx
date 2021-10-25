@@ -2,7 +2,6 @@ import { Flex, Text } from "@chakra-ui/react";
 import { ArrowForward } from "@mui/icons-material";
 import { LinearProgress, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
-import classes from "./signup/signupWrapper.module.scss";
 import { EpistoButton } from "../universal/EpistoButton";
 
 export const ExamLayout = (props: {
@@ -27,7 +26,6 @@ export const ExamLayout = (props: {
         {/* header */}
         <Flex
             direction={"row"}
-            justifyContent={"space-between"}
             alignItems={"center"}
             className="dividerBorderBottom"
             w={"100%"}
@@ -38,11 +36,13 @@ export const ExamLayout = (props: {
                 {headerLeftText}
             </Text>
 
-            <Text
-                as="text"
-                fontSize={"1.1rem"}>
-                {headerCenterText}
-            </Text>
+            <Flex flex="1" align="center" justify="center">
+                <Text
+                    as="text"
+                    fontSize={"1.1rem"}>
+                    {headerCenterText}
+                </Text>
+            </Flex>
 
             {exitExamAction && <EpistoButton
                 onClick={exitExamAction}
