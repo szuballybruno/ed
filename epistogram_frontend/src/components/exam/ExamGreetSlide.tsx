@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import React from "react";
 import { getAssetUrl, PagingType } from "../../frontendHelpers";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
+import { translatableTexts } from "../../translatableTexts";
 import { ExamLayout } from "./ExamLayout";
 
 export const ExamGreetSlide = (props: {
@@ -16,7 +17,7 @@ export const ExamGreetSlide = (props: {
     } = props;
 
     return <ExamLayout
-        headerLeftText="Udv!"
+        headerLeftItem={translatableTexts.exam.hello}
         headerCenterText={exam.title}
         content={<Flex direction="column" align="center">
             <img
@@ -39,10 +40,10 @@ export const ExamGreetSlide = (props: {
                     maxWidth: "400px"
                 }}>
 
-                Keszulj fel, ha a kezdes gombra kattintasz a vizsga elindul.
+                {translatableTexts.exam.greetText}
             </Typography>
         </Flex>}
         showNextButton
         handleNext={startExam}
-        nextButtonTitle="Kezdes!" />
+        nextButtonTitle={translatableTexts.exam.startExam} />
 }

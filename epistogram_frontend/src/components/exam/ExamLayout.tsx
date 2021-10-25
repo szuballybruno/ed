@@ -2,6 +2,7 @@ import { Flex, Text } from "@chakra-ui/react";
 import { ArrowForward } from "@mui/icons-material";
 import { LinearProgress, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
+import { isString } from "../../frontendHelpers";
 import { EpistoButton } from "../universal/EpistoButton";
 
 export const ExamLayout = (props: {
@@ -11,11 +12,11 @@ export const ExamLayout = (props: {
     showNextButton: boolean,
     exitExamAction?: () => void,
     headerCenterText?: string,
-    headerLeftText?: string,
+    headerLeftItem?: string | ReactNode,
     progressValue?: number,
 }) => {
 
-    const { exitExamAction, headerCenterText, showNextButton, headerLeftText, content, progressValue, handleNext, nextButtonTitle } = props;
+    const { exitExamAction, headerCenterText, showNextButton, headerLeftItem, content, progressValue, handleNext, nextButtonTitle } = props;
 
     return <Flex
         className="whall"
@@ -32,9 +33,10 @@ export const ExamLayout = (props: {
             h={60}
             pl={5}>
 
-            <Text as="text">
-                {headerLeftText}
-            </Text>
+            {(headerLeftItem && isString(headerLeftItem)) && <Text as="text">
+                {headerLeftItem}
+            </Text>}
+            {(headerLeftItem && !isString(headerLeftItem)) && headerLeftItem}
 
             <Flex flex="1" align="center" justify="center">
                 <Text

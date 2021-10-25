@@ -4,6 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/
 import React from 'react';
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { useExamResults } from "../../services/examService";
+import { translatableTexts } from "../../translatableTexts";
 import StatisticsCard from "../statisticsCard/StatisticsCard";
 import { ExamLayout } from './ExamLayout';
 import { QuestionAnswer } from "./QuestionAnswer";
@@ -27,7 +28,7 @@ export const ExamResultsSlide = (props: {
             style={{
                 padding: "20px 0 20px 0"
             }}>
-            {"Egy újabb tesztet oldottál meg, íme az eredményed:"}
+            {translatableTexts.exam.resultsTitle}
         </Text>
 
         {/* stats */}
@@ -49,14 +50,14 @@ export const ExamResultsSlide = (props: {
                 <Text
                     as="text"
                     className="fontHuge">
-                    {"Kérdések"}
+                    {translatableTexts.exam.questionsLabel}
                 </Text>
 
                 <Flex w={"25%"}>
                     <Text
                         as="text"
                         className="fontHuge">
-                        {"Válaszod"}
+                        {translatableTexts.exam.answerLabel}
                     </Text>
                 </Flex>
             </Flex>
@@ -104,7 +105,9 @@ export const ExamResultsSlide = (props: {
                                         backgroundColor: bgColor,
                                         borderRadius: 7
                                     }}>
-                                        {isCorrectAnswer ? "Helyes" : "Hibas"}
+                                        {isCorrectAnswer
+                                            ? translatableTexts.exam.correctAnswer
+                                            : translatableTexts.exam.incorrectAnswer}
                                     </Typography>
                                 </Flex>
                             </AccordionSummary>
@@ -137,7 +140,7 @@ export const ExamResultsSlide = (props: {
     return <ExamLayout
         headerCenterText={exam.title}
         handleNext={continueCourse}
-        nextButtonTitle="Kurzus folytatasa"
+        nextButtonTitle={translatableTexts.exam.continueCourse}
         showNextButton
         content={content} />
 };

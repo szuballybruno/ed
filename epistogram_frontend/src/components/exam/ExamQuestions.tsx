@@ -1,11 +1,13 @@
 import { Grid } from "@chakra-ui/layout";
 import { Flex, Text } from "@chakra-ui/react";
+import { Typography } from "@mui/material";
 import React, { useState } from "react";
-import { PagingType, usePaging } from "../../frontendHelpers";
+import { getAssetUrl, PagingType, usePaging } from "../../frontendHelpers";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { useSaveExamAnswer } from "../../services/examService";
 import { useShowErrorDialog } from "../../services/notifications";
+import { translatableTexts } from "../../translatableTexts";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ExamLayout } from "./ExamLayout";
 import { QuestionAnswer } from "./QuestionAnswer";
@@ -115,11 +117,19 @@ export const ExamQuestions = (props: {
         px={40}>
 
         <ExamLayout
+            headerLeftItem={<Flex align="center">
+                <img
+                    src={getAssetUrl("course_page_icons/curriculum_test.svg")}
+                    className="square35" />
+                <Typography style={{ marginLeft: "10px" }}>
+                    {questions.length}/{questionPaging.currentIndex + 1}
+                </Typography>
+            </Flex>}
             headerCenterText={exam.title}
             exitExamAction={() => { }}
             handleNext={handleNextAsync}
             showNextButton={!!selectedAnswerId}
-            nextButtonTitle="Következő"
+            nextButtonTitle={translatableTexts.exam.nextQuestion}
             content={examContent}
             progressValue={progressPercentage} />
     </LoadingFrame>

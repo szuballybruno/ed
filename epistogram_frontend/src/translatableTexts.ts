@@ -125,5 +125,18 @@ export const translatableTexts = {
 
     signup: {
         goToHomePage: "Irany az app!"
+    },
+
+    exam: {
+        greetText: "Készülj fel, ha a kezdés gombra kattintasz a vizsga elindul!",
+        hello: "üdv!",
+        nextQuestion: "Következő",
+        resultsTitle: "Egy újabb tesztet oldottál meg, íme az eredményed:",
+        questionsLabel: "Kérdések",
+        answerLabel: "Válaszod",
+        continueCourse: "Kurzus folytatása",
+        correctAnswer: "Helyes!",
+        incorrectAnswer: "Hibás!",
+        startExam: "Kezdés!"
     }
 }
