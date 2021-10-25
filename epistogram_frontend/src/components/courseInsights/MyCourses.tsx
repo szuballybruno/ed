@@ -8,6 +8,9 @@ import CourseTile from "../universal/CourseTile";
 import { DashboardSection } from "../universal/DashboardSection";
 import { EpistoGrid } from "../universal/EpistoGrid";
 import { InfoGrid } from "../universal/InfoGrid";
+import { EpistoButton } from "../universal/EpistoButton";
+import { translatableTexts } from "../../translatableTexts";
+import { httpPostAsync } from "../../services/httpClient";
 
 const CourseStatCard = (props: { course: CourseShortDTO }) => {
 
@@ -60,7 +63,9 @@ const MyCourses = () => {
                     p="20px">
 
                     {completedCourses
-                        .map((course, index) => <CourseStatCard key={index} course={course} />)}
+                        .map((course, index) => <CourseTile  course={course} />)}
+
+
                 </EpistoGrid>
 
                 : <Flex p="100px">
@@ -76,7 +81,28 @@ const MyCourses = () => {
                     gap="15px"
                     p="20px">
                     {inProgressCourses
-                        .map((course, index) => <CourseStatCard key={index} course={course} />)}
+                        .map((course, index) => {
+                            return <CourseTile tempIsStartedSwitch={true} course={course}>
+                                <Flex mt="10px">
+
+                                    {/* details */}
+
+                                    <EpistoButton
+                                        style={{ flex: "1" }}>
+                                        {"Statisztika"}
+                                    </EpistoButton>
+
+                                    {/* start course */}
+                                    <EpistoButton
+                                        variant="colored"
+                                        style={{ flex: "1" }}>
+
+                                        {"Folytatom"}
+                                    </EpistoButton>
+                                </Flex>
+                            </CourseTile>
+                        })
+                    }
                 </EpistoGrid>
                 : <Flex p="100px">
                     <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>

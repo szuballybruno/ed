@@ -1,10 +1,7 @@
 import { Box, Flex } from "@chakra-ui/layout"
-import { Typography } from "@mui/material"
 import { DashboardSection } from "./universal/DashboardSection"
 import { EpistoGrid } from "./universal/EpistoGrid"
-import { FlexFloat } from "./universal/FlexFloat"
-import { InfoGrid } from "./universal/InfoGrid"
-import VerifiedIcon from '@mui/icons-material/Verified';
+import { ExamTile } from "./universal/ExamTile";
 
 const finisedExams = [
     {
@@ -37,9 +34,9 @@ export const MyExams = () => {
 
     return <Flex direction="column">
         <DashboardSection variant="noShadow" title="Teljesített vizsgáim">
-            <EpistoGrid auto="fill" gap="15px" minColumnWidth="200px">
+            <EpistoGrid auto="fill" gap="15px" minColumnWidth="330px">
                 {finisedExams
-                    .map(x => <FlexFloat variant="rect" direction="column">
+                    .map(x => <ExamTile /> /*<FlexFloat variant="rect" direction="column">
 
                         <Flex align="center">
 
@@ -53,7 +50,7 @@ export const MyExams = () => {
                         </Flex>
 
                         <InfoGrid infos={stats.map(x => x.text)} />
-                    </FlexFloat>)}
+                    </FlexFloat>*/)}
             </EpistoGrid>
         </DashboardSection>
     </Flex>

@@ -1,6 +1,6 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import DoneIcon from '@mui/icons-material/Done';
-import { Rating } from "@mui/material";
+import { LinearProgress, Rating } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { getAssetUrl } from "../../frontendHelpers";
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
@@ -10,6 +10,7 @@ const CourseTile = (props: {
     course: CourseShortDTO,
     className?: string,
     children?: ReactNode,
+    tempIsStartedSwitch?: boolean,
 } & FlexProps) => {
 
     const { course, children, ...css } = props;
@@ -18,6 +19,52 @@ const CourseTile = (props: {
     const courseCategory = course.category;
     const thumbnailImageUrl = course.thumbnailImageURL;
     const isComplete = course.isComplete;
+
+    const CourseTileHowManyApplicantsLabel = () => <Flex
+        position="absolute"
+        bottom={10}
+        left={0}
+        justify="flex-end">
+
+        <Flex
+            direction="row"
+            justifyContent="space-around"
+            alignItems="center"
+            padding="4px"
+            w={140}
+            bg="var(--epistoTeal)"
+            borderRadius="0 7px 7px 0">
+            <Text
+                fontSize="0.85em"
+                textTransform={"uppercase"}
+                color="white">
+                4798 jelentkező
+            </Text>
+        </Flex>
+    </Flex>
+
+    const CourseTileNewCourseLabel = () => <Flex
+        position="absolute"
+        bottom={10}
+        right={0}
+        justify="flex-end">
+
+        <Flex
+            direction="row"
+            justifyContent="space-around"
+            alignItems="center"
+            padding="4px"
+            w={110}
+            bg="#98A4CC"
+            borderRadius="7px 0 0 7px">
+            <Text
+                fontSize="0.85em"
+                textTransform={"uppercase"}
+                color="white">
+                Új kurzus
+            </Text>
+        </Flex>
+    </Flex>
 
     return <FlexFloat
         className="whall"
@@ -36,13 +83,18 @@ const CourseTile = (props: {
                 <Box position="relative"
                     className="whall"
                     minHeight="150px">
-                    <Box position="absolute" top="0" height="100%" width="100%">
+                    <Box position="absolute" top="0" height="100%" width="100%" p="4px">
+
                         <img style={{
                             width: "100%",
                             height: "100%",
                             objectFit: "cover",
                             borderRadius: 10
                         }} src={thumbnailImageUrl} alt="" />
+                        <Flex position="relative">
+                            {props.tempIsStartedSwitch && <CourseTileHowManyApplicantsLabel/>}
+                            {props.tempIsStartedSwitch && <CourseTileNewCourseLabel />}
+                        </Flex>
                     </Box>
                 </Box>
 
@@ -135,24 +187,65 @@ const CourseTile = (props: {
                             <Text as={"text"} color={"grey"}>{"6.9/10"}</Text>
                         </Flex>
                     </Flex>
-                    <Flex
-                        direction={"row"}
-                        alignItems={"center"}
-                        mt={7}>
-                        <Rating name="read-only" style={{
-                            color: "var(--epistoTeal)",
-                        }} value={4} readOnly />
-                        <Text as={"text"} color={"grey"} ml={5}>
-                            4.1 (189 értékelés)
-                        </Text>
-                    </Flex>
-                    <Flex
-                        direction={"row"}
-                        alignItems={"center"}
-                        mt={7}>
-                        <img src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")} alt={""} style={{ width: 20, height: 20, margin: "0 2px" }} />
-                        <Text as="text" color="grey">{courseTeacherName}</Text>
-                    </Flex>
+                    {
+                        props.tempIsStartedSwitch ?
+                        <Flex
+                            direction={"row"}
+                            alignItems={"center"}
+                            mt={7}
+                            w="100%"
+                            h="10px"
+                        >
+                            <LinearProgress variant="determinate" style={{
+                                width: "100%",
+                            }} value={60} />
+                        </Flex> :
+                        <Flex
+                            direction={"row"}
+                            alignItems={"center"}
+                            mt={7}>
+                            <Rating name="read-only" style={{
+                                color: "var(--epistoTeal)",
+                            }} value={4} readOnly />
+                            <Text as={"text"} color={"grey"} ml={5}>
+                                4.1 (189 értékelés)
+                            </Text>
+                        </Flex>
+                    }
+                    {
+                        props.tempIsStartedSwitch ?
+                            <Flex
+                                direction={"row"}
+                                alignItems={"center"}
+                                mt={7}>
+                                <img
+                                    src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
+                                    alt={""}
+                                    style={{width: 20, height: 20, margin: "0 2px"}}/>
+                                <Text
+                                    as="text"
+                                    color="white">{"8.9/10 nehézség"}</Text>
+                                <img
+                                    src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
+                                    alt={""}
+                                    style={{width: 20, height: 20, margin: "0 2px"}}/>
+                                <Text
+                                    as="text"
+                                    color="white">{"16/23 helyes válasz"}</Text>
+                            </Flex> :
+                            <Flex
+                                direction={"row"}
+                                alignItems={"center"}
+                                mt={7}>
+                                <img
+                                    src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
+                                    alt={""}
+                                    style={{width: 20, height: 20, margin: "0 2px"}}/>
+                                <Text
+                                    as="text"
+                                    color="grey">{courseTeacherName}</Text>
+                            </Flex>
+                    }
 
 
                 </Flex>
