@@ -5,7 +5,7 @@ import { useShowErrorDialog } from "../../services/notifications";
 import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
 import { SignupRadioGroup } from "../signup/SignupRadioGroup";
 import { SignupWrapper } from "../signup/SignupWrapper";
-import {Flex} from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 
 export const useQuestionSlidesState = (options: {
     questions: QuestionDTO[],
@@ -63,7 +63,7 @@ export const useQuestionSlidesState = (options: {
 
 export type QuestionSlidesStateType = ReturnType<typeof useQuestionSlidesState>;
 
-export const QuestionSlides = (props: { state: QuestionSlidesStateType }) => {
+export const SingupQuestionSlides = (props: { state: QuestionSlidesStateType }) => {
 
     const state = props.state;
     const showError = useShowErrorDialog();

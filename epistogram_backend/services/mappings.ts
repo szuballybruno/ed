@@ -31,6 +31,7 @@ import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
+import { ResultAnswerDTO } from "../models/shared_models/ResultAnswerDTO";
 import { RoleDTO } from "../models/shared_models/RoleDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { CourseItemStateType } from "../models/shared_models/types/sharedTypes";
@@ -221,15 +222,12 @@ export const toExamResultDTO = (
 
             navPropNotNull(questionAnswer.answer);
 
-            const correctAnswer = question
-                .answers
-                .single(x => x.isCorrect);
-
             return {
                 text: question.questionText,
-                answerText: questionAnswer.answer.text,
-                correctAnswerText: correctAnswer.text,
-                isCorrect: questionAnswer.answer.isCorrect ?? false
+                givenAnswerId: questionAnswer.answer.id,
+                answers: question
+                    .answers
+                    .map(x => toResultAnswerDTO(x)),
             } as ExamResultQuestionDTO;
         })
 
@@ -401,6 +399,15 @@ export const toAnswerDTO = (a: Answer) => {
         answerId: a.id,
         answerText: a.text
     } as AnswerDTO;
+}
+
+export const toResultAnswerDTO = (a: Answer) => {
+
+    return {
+        answerId: a.id,
+        answerText: a.text,
+        isCorrect: a.isCorrect
+    } as ResultAnswerDTO;
 }
 
 export const toAnswerEditDTO = (a: Answer) => {

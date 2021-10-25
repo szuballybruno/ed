@@ -1,7 +1,9 @@
+import { AnswerDTO } from "./AnswerDTO";
+import { ResultAnswerDTO } from "./ResultAnswerDTO";
+
 export type ExamResultQuestionDTO = {
 
     text: string;
-    answerText: string;
-    correctAnswerText: string;
-    isCorrect: boolean;
+    answers: ResultAnswerDTO[];
+    givenAnswerId: number;
 }

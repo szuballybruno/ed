@@ -29,8 +29,7 @@ export default function OverflowMenu({ children, className, visibilityMap }) {
         aria-label="more"
         aria-controls="long-menu"
         aria-haspopup="true"
-        onClick={handleClick}
-      >
+        onClick={handleClick}>
         <MoreVert />
       </IconButton>
 
@@ -40,8 +39,7 @@ export default function OverflowMenu({ children, className, visibilityMap }) {
         anchorEl={anchorEl}
         keepMounted
         open={open}
-        onClose={handleClose}
-      >
+        onClose={handleClose}>
         {React.Children.map(children, (child) => {
           if (!visibilityMap[child.props["name"]]) {
             return (

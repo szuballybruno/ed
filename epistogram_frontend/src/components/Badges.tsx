@@ -1,6 +1,6 @@
 import React from 'react';
-import {Flex} from "@chakra-ui/react";
-import {getAssetUrl} from "../frontendHelpers";
+import { Flex } from "@chakra-ui/react";
+import { getAssetUrl } from "../frontendHelpers";
 
 export const Badges = () => {
     const badges = [
@@ -12,8 +12,8 @@ export const Badges = () => {
     ]
     return (
         <Flex direction={"row"}
-              justifyContent={"flex-start"}
-              padding={10}>
+            justifyContent={"flex-start"}
+            padding={10}>
             {badges.map(badge => <Flex
                 bgColor={"orange"}
                 w={120}
@@ -21,9 +21,8 @@ export const Badges = () => {
                 ml={10}
                 justifyContent={"center"}
                 alignItems={"center"}
-                borderRadius={10}
-            >
-                <img style={{width: 100}} src={badge} alt={""} />
+                borderRadius={10}>
+                <img style={{ width: 100 }} src={badge} alt={""} />
             </Flex>)}
         </Flex>
     );

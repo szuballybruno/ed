@@ -1,13 +1,15 @@
-import { usePaging } from "../../frontendHelpers";
-import { ExamDTO } from "../../models/shared_models/ExamDTO";
-import { QuestionnaireSlide } from "../QuestionnaireSlide";
-import { SlidesDisplay } from "../universal/SlidesDisplay";
 import React from "react";
-import {useExamResults} from "../../services/examService";
-import ResultsSlide from "../exam/ResultsSlide";
-import {GreetSlide} from "../exam/GreetSlide";
+import { usePaging } from "../../frontendHelpers";
+import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { ExamDTO } from "../../models/shared_models/ExamDTO";
+import { useNavigation } from "../../services/navigatior";
+import { ExamGreetSlide } from "../exam/ExamGreetSlide";
+import { ExamQuestions } from "../exam/ExamQuestions";
+import { ExamResultsSlide } from "../exam/ExamResultsSlide";
+import { SlidesDisplay } from "../universal/SlidesDisplay";
 
 export const ExamPlayer = (props: {
+    nextCourseItem: CourseItemDTO,
     exam: ExamDTO,
     answerSessionId: number,
     setIsExamInProgress: (isExamStarted: boolean) => void
@@ -17,12 +19,17 @@ export const ExamPlayer = (props: {
         exam,
         setIsExamInProgress,
         answerSessionId,
+        nextCourseItem
     } = props;
 
-    const { examResults } = useExamResults(answerSessionId);
-    const questions = examResults?.questions ?? [];
+    const slidesState = usePaging([1, 2, 3]);
+    const { navigateToPlayer } = useNavigation();
 
-    const slidesState = usePaging([1, 2, 3, 4]);
+    const handleStartExam = () => {
+
+        setIsExamInProgress(true);
+        slidesState.next();
+    }
 
     const handleExamFinished = () => {
 
@@ -30,22 +37,31 @@ export const ExamPlayer = (props: {
         slidesState.next();
     }
 
+    const handleContinueCourse = () => {
+
+        navigateToPlayer(nextCourseItem.descriptorCode);
+    }
+
     const slides = [
-        () => <GreetSlide
-            slidesState={slidesState}
-            {...props}  />,
-        () => <QuestionnaireSlide
+        () => <ExamGreetSlide
+            exam={exam}
+            startExam={handleStartExam} />,
+
+        () => <ExamQuestions
             slidesState={slidesState}
             answerSessionId={answerSessionId}
             questions={exam.questions}
-            onExamFinished={handleExamFinished}  />,
-        () => <ResultsSlide {...props} />
+            onExamFinished={handleExamFinished} />,
+
+        () => <ExamResultsSlide
+            continueCourse={handleContinueCourse}
+            exam={exam}
+            answerSessionId={answerSessionId} />
     ];
 
     return <SlidesDisplay
         flex="1"
         height="100%"
         slides={slides}
-        index={slidesState.currentIndex}
-    />
+        index={slidesState.currentIndex} />
 }

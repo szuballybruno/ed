@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { useAnswerSignupQuestion, useSignupData } from "../services/openEndpointService";
-import { QuestionSlides, useQuestionSlidesState } from "./exam/QuestionSlides";
+import { SingupQuestionSlides, useQuestionSlidesState } from "./exam/SingupQuestionSlides";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 
 export const SignupQuestions = (props: {
@@ -73,6 +73,6 @@ export const SignupQuestions = (props: {
         loadingState={[saveAnswersStatus, signupDataStatus]}
         error={signupDataError} >
 
-        <QuestionSlides state={state} />
+        <SingupQuestionSlides state={state} />
     </LoadingFrame>
 }

@@ -113,14 +113,12 @@ const LoginScreen = (): JSX.Element => {
                 justifyContent={"center"}
                 alignItems={"center"}
                 bgColor={"white"}
-                zIndex={5}
-            >
+                zIndex={5}>
 
                 <Flex
                     direction="column"
                     alignItems={"center"}
-                    width={window.innerWidth > 600 ? 450 : "90%"}
-                >
+                    width={window.innerWidth > 600 ? 450 : "90%"}>
 
                     <img style={{
                         zIndex: 1,
@@ -131,8 +129,7 @@ const LoginScreen = (): JSX.Element => {
                     <Flex
                         direction="column"
                         w={"100%"}
-                        alignItems="center"
-                    >
+                        alignItems="center">
 
                         <Typography fontSize={"1.5rem"}>
                             Örülünk, hogy ismét itt vagy velünk!

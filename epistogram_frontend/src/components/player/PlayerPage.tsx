@@ -33,6 +33,9 @@ export const PlayerPage = () => {
     const courseMode = playerData?.mode ?? "beginner";
     const courseId = playerData?.courseId;
     const courseItems = playerData?.courseItems ?? [];
+    const currentCourseItemIndex = courseItems
+        .findIndex(x => x.state === "current");
+    const nextCourseItem = courseItems[currentCourseItemIndex + 1];
 
     // redirect if current item should be locked 
     useEffect(() => {
@@ -99,6 +102,7 @@ export const PlayerPage = () => {
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
+                            nextCourseItem={nextCourseItem}
                             answerSessionId={answerSessionId!}
                             setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
                             exam={exam} />}

@@ -201,7 +201,7 @@ export const WatchView = (props: {
                 videoItem={video}
                 videoPlayerState={videoPlayerState}>
 
-                {/* questionnaire */}
+                {/* next video */}
                 <AbsoluteFlexOverlay isVisible={isVideoEnded} hasPointerEvents={false} align="flex-end" justify="flex-end">
 
                     <EpistoButton

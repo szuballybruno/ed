@@ -58,8 +58,7 @@ export default function IntersectionObserverWrap(props: { children: JSX.Element[
     </Flex>
     <OverflowMenu
       visibilityMap={visibilityMap}
-      className={classes.overflowStyle}
-    >
+      className={classes.overflowStyle}>
       {props.children}
     </OverflowMenu>
   </Flex>

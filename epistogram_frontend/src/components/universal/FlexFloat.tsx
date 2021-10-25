@@ -7,7 +7,7 @@ export const FlexFloat = (props: FlexProps & { elevation?: number, variant?: "no
     return <Flex
         id="flexFloat"
         borderRadius={variant === "rect" ? "none" : "7px"}
-        boxShadow={`0 0 ${elevation ?? 8}px #0000001f`}
+        boxShadow={`0 0 ${elevation ?? 15}px #00000008`}
         bg="white"
         {...flexProps} >
         {props.children}

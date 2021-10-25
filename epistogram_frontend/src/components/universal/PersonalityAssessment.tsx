@@ -8,7 +8,7 @@ import { PersonalityChart } from "./PersonalityChart";
 
 export const PersonalityAssessment = (props: FlexProps) => {
 
-    const {...css} = props;
+    const { ...css } = props;
 
     const {
         personalityData,
@@ -20,15 +20,13 @@ export const PersonalityAssessment = (props: FlexProps) => {
 
     const PersonalityAssesmentDescriptionItem = (props: { title: string, description?: string }) => {
         return <Flex
-            direction={"column"}
-        >
+            direction={"column"}>
             <Typography
                 fontWeight={"bold"}
                 fontSize={"0.9em"}
                 style={{
                     marginTop: 20
-                }}
-            >
+                }}>
                 {props.title}
             </Typography>
             <Divider
@@ -39,8 +37,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                 bgColor={"black"}
             />
             <Typography
-                fontSize={"0.9em"}
-            >
+                fontSize={"0.9em"}>
                 {props.description}
             </Typography>
         </Flex>
@@ -60,8 +57,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
             justifyContent={"center"}
             alignItems={"flex-start"}
             w={"100%"}
-            h={"100%"}
-        >
+            h={"100%"}>
             <Flex
                 justifyContent={"flex-start"}
                 direction={"column"}
@@ -70,27 +66,24 @@ export const PersonalityAssessment = (props: FlexProps) => {
                 maxW={window.innerWidth < 600 ? "100%" : "50%"}
                 mt={20}
                 mx={20}
-                mb={10}
-            >
+                mb={10}>
                 <Flex>
-                    <PersonalityChart data={personalityData?.chartData ?? null}/>
+                    <PersonalityChart data={personalityData?.chartData ?? null} />
                 </Flex>
                 <Flex
                     flex={1}
                     maxW={"100%"}
-                    mt={40}
-                >
+                    mt={40}>
                     <Flex
                         minW={40}
                         pt={2}
                         h={"100%"}
                         direction={"column"}
                         alignItems={"center"}
-                        justifyContent={"flex-start"}
-                    >
-                        <InfoOutlined/>
+                        justifyContent={"flex-start"}>
+                        <InfoOutlined />
                     </Flex>
-                    <Typography style={{maxWidth: "100%", fontSize: "0.9em"}}>
+                    <Typography style={{ maxWidth: "100%", fontSize: "0.9em" }}>
                         A fenti grafikonon 5-5 tulajdonság párt láthatsz, melyek 0-7
                         között vehetnek fel értéket, attól függően, hogy az adott tulajdonság mennyire jellemző rád.
                         Ezek általában ellentétben állnak egymással, így minél több pontod van az egyik oldalon, annál
@@ -104,8 +97,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                 minW={300}
                 direction="column"
                 p={10}
-                overflow="scroll"
-            >
+                overflow="scroll">
                 <PersonalityAssesmentDescriptionItem
                     title={"Egyedül, vagy csoportosan tanulsz szívesebben?"}
                     description={descriptions?.category1}

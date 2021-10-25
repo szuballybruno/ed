@@ -276,8 +276,7 @@ export const CoursePageContent = () => <Flex direction={"column"} mt={10}>
         <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1a-content"
-            id="panel1a-header"
-        >
+            id="panel1a-header">
             <Typography>Bemutatkozás</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -337,8 +336,7 @@ export const CoursePageContent = () => <Flex direction={"column"} mt={10}>
         <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel2a-content"
-            id="panel2a-header"
-        >
+            id="panel2a-header">
             <Typography>A program bemutatása</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -352,8 +350,7 @@ export const CoursePageContent = () => <Flex direction={"column"} mt={10}>
         <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel3a-content"
-            id="panel3a-header"
-        >
+            id="panel3a-header">
             <Typography>Makrók használata az Excelben</Typography>
         </AccordionSummary>
     </Accordion>
@@ -423,8 +420,7 @@ const CoursePage = () => {
                 hidden={value !== index}
                 id={`simple-tabpanel-${index}`}
                 aria-labelledby={`simple-tab-${index}`}
-                {...other}
-            >
+                {...other}>
                 {value === index && (
                     <Box sx={{ p: 3 }}>
                         <Typography>{children}</Typography>

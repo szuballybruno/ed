@@ -1,18 +1,18 @@
-import {Text, Flex} from "@chakra-ui/layout";
-import {Typography} from "@mui/material";
-import {useAnswerPractiseQuestion, usePractiseQuestion} from "../services/dataService";
-import {LoadingFrame} from "./HOC/LoadingFrame";
-import {QuesitionView} from "./QuestionView";
-import {EpistoButton} from "./universal/EpistoButton";
-import {EpistoConinImage} from "./universal/EpistoCoinImage";
-import {Image} from "@chakra-ui/image";
-import {getAssetUrl, getRandomInteger} from "../frontendHelpers";
-import {translatableTexts} from "../translatableTexts";
-import {Player} from "@lottiefiles/react-lottie-player";
-import {useNavigation} from "../services/navigatior";
-import {applicationRoutes} from "../configuration/applicationRoutes";
-import {useContext} from "react";
-import {CurrentUserContext} from "./HOC/AuthenticationFrame";
+import { Text, Flex } from "@chakra-ui/layout";
+import { Typography } from "@mui/material";
+import { useAnswerPractiseQuestion, usePractiseQuestion } from "../services/dataService";
+import { LoadingFrame } from "./HOC/LoadingFrame";
+import { QuesitionView } from "./QuestionView";
+import { EpistoButton } from "./universal/EpistoButton";
+import { EpistoConinImage } from "./universal/EpistoCoinImage";
+import { Image } from "@chakra-ui/image";
+import { getAssetUrl, getRandomInteger } from "../frontendHelpers";
+import { translatableTexts } from "../translatableTexts";
+import { Player } from "@lottiefiles/react-lottie-player";
+import { useNavigation } from "../services/navigatior";
+import { applicationRoutes } from "../configuration/applicationRoutes";
+import { useContext } from "react";
+import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 
 const NoQuestionsAvailable = () => {
     const { navigate } = useNavigation()
@@ -28,8 +28,7 @@ const NoQuestionsAvailable = () => {
                     onClick={() => navigate("/courses")}
                     color="var(--epistoTeal)"
                     fontWeight="bold"
-                    cursor="pointer"
-                >
+                    cursor="pointer">
                     {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosButton}
                 </Text>
             </Text>
@@ -40,24 +39,22 @@ const NoQuestionsAvailable = () => {
                 autoplay
                 loop
                 src={getAssetUrl("test_your_knowledge_lotties/writing_exam.json")}
-                style={{height: '300px', width: '300px'}}
+                style={{ height: '300px', width: '300px' }}
             />
         </Flex>
     </Flex>
 }
 
-const InitialGreetings = (props: {firstName: string}) => {
+const InitialGreetings = (props: { firstName: string }) => {
     const { navigate } = useNavigation()
 
     return <Flex
         direction="row"
-        alignItems="center"
-    >
+        alignItems="center">
         <Flex
             direction="column"
             justifyContent="flex-start"
-            h="100%"
-        >
+            h="100%">
             <Text as={"text"} p="20px 20px 10px 20px">
                 {translatableTexts.practiseQuestions.initialGreetingsFirst + " " + props.firstName + ","}
             </Text>
@@ -70,14 +67,12 @@ const InitialGreetings = (props: {firstName: string}) => {
             <Flex
                 direction="column"
                 width="100%"
-                alignItems="center"
-            >
+                alignItems="center">
                 <EpistoButton
                     variant={"outlined"}
                     onClick={() => {
                         navigate(applicationRoutes.availableCoursesRoute.route)
-                    }}
-                >
+                    }}>
                     {translatableTexts.practiseQuestions.goToCourses}
                 </EpistoButton>
             </Flex>
@@ -87,7 +82,7 @@ const InitialGreetings = (props: {firstName: string}) => {
                 autoplay
                 loop
                 src={getAssetUrl("test_your_knowledge_lotties/initial_greetings.json")}
-                style={{height: '300px', width: '300px'}}
+                style={{ height: '300px', width: '300px' }}
             />
         </Flex>
     </Flex>

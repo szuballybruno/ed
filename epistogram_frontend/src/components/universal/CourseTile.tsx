@@ -61,8 +61,7 @@ const CourseTile = (props: {
                         padding="4px"
                         w={130}
                         bg="#97CC9B"
-                        borderRadius="7px 0 0 7px"
-                    >
+                        borderRadius="7px 0 0 7px">
                         <DoneIcon
                             width="20px"
                             height="20px"
@@ -139,8 +138,7 @@ const CourseTile = (props: {
                     <Flex
                         direction={"row"}
                         alignItems={"center"}
-                        mt={7}
-                    >
+                        mt={7}>
                         <Rating name="read-only" style={{
                             color: "var(--epistoTeal)",
                         }} value={4} readOnly />
@@ -151,8 +149,7 @@ const CourseTile = (props: {
                     <Flex
                         direction={"row"}
                         alignItems={"center"}
-                        mt={7}
-                    >
+                        mt={7}>
                         <img src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")} alt={""} style={{ width: 20, height: 20, margin: "0 2px" }} />
                         <Text as="text" color="grey">{courseTeacherName}</Text>
                     </Flex>
