@@ -7,6 +7,8 @@ import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { EditCourseDataDTO } from "../models/shared_models/AdminPageEditCourseDTO";
+import { IdResultDTO } from "../models/shared_models/IdResultDTO";
+import { TextDTO } from "../models/shared_models/TextDTO";
 
 export const useAdministratedCourses = (searchText: string) => {
 
@@ -42,6 +44,16 @@ export const useSaveCourseData = () => {
         saveCourseDataAsync: qr.postDataAsync,
         saveCourseDataState: qr.state,
     };
+}
+
+export const useStartCourse = () => {
+
+    const qr = usePostDataUnsafe<IdResultDTO, TextDTO>(apiRoutes.course.startCourse);
+
+    return {
+        startCourseAsync: (courseId: number) => qr.postDataAsync({ id: courseId }),
+        startCourseState: qr.state,
+    }
 }
 
 export const useUploadCourseThumbnailAsync = () => {

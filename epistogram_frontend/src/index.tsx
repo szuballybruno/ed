@@ -10,7 +10,7 @@ import { NotificationsFrame } from "./components/HOC/NotificationsFrame";
 import { theme } from "./configuration/defaultMUITheme";
 import './index.css';
 import './jsExtensions.ts'; // extensions, important
-import { MainRouting } from "./routing/MainRouting";
+import { MainRouting } from "./MainRouting";
 
 const queryClient = new QueryClient();
 

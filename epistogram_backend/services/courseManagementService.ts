@@ -8,7 +8,7 @@ import { Tag } from "../models/entity/Tag";
 import { EditCourseDataDTO, EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
-import { toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toEditCourseItemsDTO, toUserDTO } from "./mappings";
+import { toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toEditCourseItemsDTO, toSimpleCourseItemDTOs, toUserDTO } from "./mappings";
 import { getAssetUrl } from "./misc/urlProvider";
 import { getTeacherDTOAsync } from "./userService";
 
@@ -137,17 +137,7 @@ export const getEditedCourseAsync = async (courseId: number) => {
     const courseTeachersChecked = createCheckedById(teachers, [courseTeacher]);
 
     // get course items 
-    const videoCourseItemDTOs = course
-        .videos
-        .map(x => toCourseItemDTOVideo(x));
-
-    const examCourseItemDTOs = course
-        .exams
-        .map(x => toCourseItemDTOExam(x));
-
-    const courseItemDTOs = videoCourseItemDTOs
-        .concat(examCourseItemDTOs)
-        .orderBy(x => x.orderIndex);
+    const courseItemDTOs = toSimpleCourseItemDTOs(course);
 
     return {
         courseId: course.id,

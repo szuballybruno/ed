@@ -1,17 +1,17 @@
 import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
-import { User } from "../models/entity/User";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { Video } from "../models/entity/Video";
 import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
-import { CourseItemType, CourseModeType } from "../models/shared_models/types/sharedTypes";
+import { TextDTO } from "../models/shared_models/TextDTO";
+import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
-import { getCourseItemDescriptorCode, getCourseItemDescriptorCodeFromDTO, readCourseItemDescriptorCode } from "./encodeService";
-import { toCourseItemDTOs, toCourseShortDTO, toCourseStatDTO, toExamDTO } from "./mappings";
-import { getUserById } from "./userService";
+import { getCourseItemDescriptorCode, readCourseItemDescriptorCode } from "./encodeService";
+import { toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toCourseShortDTO, toExamDTO, toSimpleCourseItemDTOs } from "./mappings";
 import { getVideoByIdAsync } from "./videoService";
 
 export const getUserCoursesDataAsync = async (userId: number) => {
@@ -31,11 +31,11 @@ export const getUserCoursesDataAsync = async (userId: number) => {
     const completedCourses = courses
         .filter(x => x.isComplete);
 
-    const inProgressCoursesAsCourseShortDTOs = await Promise.all(inProgressCourses
-        .map(async x => toCourseShortDTO(x)))
+    const inProgressCoursesAsCourseShortDTOs = inProgressCourses
+        .map(x => toCourseShortDTO(x));
 
-    const completedCoursesAsCourseShortDTOs = await Promise.all(completedCourses
-        .map(async x => toCourseShortDTO(x)))
+    const completedCoursesAsCourseShortDTOs = completedCourses
+        .map(x => toCourseShortDTO(x));
 
 
     return {
@@ -69,17 +69,37 @@ export const getCourseItemsDescriptorCodesAsync = async (userId: number, courseI
     return codes.orderBy(x => x.order).map(x => x.code);
 }
 
-export const getCurrentCourseItemDescriptorCodeAsync = async (userId: number) => {
+export const getCurrentCourseItemsAsync = async (userId: number) => {
 
-    const user = await getUserById(userId);
-    const dsc = getCurrentCourseItemDescriptor(user);
-    if (!dsc)
-        return null;
+    // get current item 
+    const courseBridge = await staticProvider
+        .ormConnection
+        .getRepository(UserCourseBridge)
+        .findOne({
+            where: {
+                userId,
+                isCurrent: true
+            }
+        });
 
-    return getCourseItemDescriptorCodeFromDTO(dsc);
+    if (!courseBridge)
+        return [];
+
+    const currentItemCode = getCourseItemCode(courseBridge.currentVideoId, courseBridge.currentExamId);
+
+    // get course items 
+    const courseItems = await getCourseItemsAsync(userId, courseBridge.courseId);
+
+    // set current item's state to 'current'
+    let currentItem = courseItems
+        .single(item => item.descriptorCode === currentItemCode);
+
+    currentItem.state = "current";
+
+    return courseItems;
 }
 
-export const getCourseItemsAsync = async (userId: number, courseId: number, currentItemDescriptorCode: string) => {
+export const getCourseItemsAsync = async (userId: number, courseId: number) => {
 
     const courseItems = await staticProvider
         .ormConnection
@@ -92,7 +112,8 @@ export const getCourseItemsAsync = async (userId: number, courseId: number, curr
         .orderBy("cisv.orderIndex")
         .getMany();
 
-    return toCourseItemDTOs(courseItems, currentItemDescriptorCode);
+    return courseItems
+        .map(x => toCourseItemDTO(x));
 }
 
 export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {
@@ -122,18 +143,15 @@ export const getCourseItemByCodeAsync = async (descriptorCode: string) => {
     return getCourseItemAsync(dto);
 }
 
-export const getCurrentCourseItemDescriptor = (user: User) => {
+export const getCourseItemCode = (videoId?: number | null, examId?: number | null) => {
 
-    const currentCourseItemId = user.currentVideoId || user.currentExamId;
-    if (!currentCourseItemId)
-        return null;
+    if (videoId)
+        return getCourseItemDescriptorCode(videoId, "video");
 
-    const currentCourseItemType = user.currentVideoId ? "video" as CourseItemType : "exam" as CourseItemType;
+    if (examId)
+        return getCourseItemDescriptorCode(examId, "exam");
 
-    return {
-        itemType: currentCourseItemType,
-        itemId: currentCourseItemId
-    } as CourseItemDescriptorDTO
+    throw new Error("Arguments are null or undefined");
 }
 
 export const getExamDTOAsync = async (userId: number, examId: number) => {
@@ -181,15 +199,83 @@ export const getUserCourseBridgeOrFailAsync = async (userId: number, courseId: n
 
 export const startCourseAsync = async (userId: number, courseId: number) => {
 
-    const userCourseBridge = await getUserCourseBridgeAsync(userId, courseId);
-    if (!userCourseBridge)
+    // get irtem
+    const courseItems = await getSimpleCourseItemDTOs(courseId);
+    const firstCourseItem = courseItems[0];
+    const firstItemDescriptor = firstCourseItem?.descriptorCode ?? null;
+
+    if (!firstItemDescriptor)
+        return {
+            text: null
+        } as TextDTO;
+
+    // set current course 
+    await setCurrentCourse(
+        userId,
+        courseId,
+        firstCourseItem.type === "video" ? firstCourseItem.id : null,
+        firstCourseItem.type === "exam" ? firstCourseItem.id : null);
+
+    return {
+        text: firstItemDescriptor
+    } as TextDTO;
+}
+
+export const setCurrentCourse = async (
+    userId: number,
+    courseId: number,
+    videoId: number | null,
+    examId: number | null) => {
+
+    const currentCourseBridge = await getUserCourseBridgeAsync(userId, courseId);
+
+    // insert new bridge
+    if (!currentCourseBridge) {
+
+        await staticProvider
+            .ormConnection
+            .getRepository(UserCourseBridge)
+            .insert({
+                courseId: courseId,
+                userId: userId,
+                courseMode: "beginner",
+                currentVideoId: videoId,
+                currentExamId: examId
+            } as UserCourseBridge);
+    }
+
+    // update current video/exam id 
+    else {
+
         await staticProvider
             .ormConnection
             .getRepository(UserCourseBridge)
             .save({
-                courseId: courseId,
-                userId: userId,
+                id: currentCourseBridge.id,
+                currentVideoId: videoId,
+                currentExamId: examId
             } as UserCourseBridge);
+    }
+
+    // get all bridges for user 
+    const bridges = await staticProvider
+        .ormConnection
+        .getRepository(UserCourseBridge)
+        .find({
+            where: {
+                userId
+            }
+        });
+
+    // update current bridge 
+    await staticProvider
+        .ormConnection
+        .getRepository(UserCourseBridge)
+        .save(bridges
+            .map(bridge => ({
+                id: bridge.id,
+                isCurrent: bridge.courseId === courseId,
+            } as UserCourseBridge)));
 }
 
 export const setCourseTypeAsync = async (userId: number, courseId: number, mode: CourseModeType) => {
@@ -215,4 +301,93 @@ const getExamByIdAsync = (examId: number) => {
         .ormConnection
         .getRepository(Exam)
         .findOne(examId);
+}
+
+export const unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?: number) => {
+
+    const isExam = !!examId;
+
+    // unset user current course item
+    const item = isExam
+        ? await staticProvider
+            .ormConnection
+            .getRepository(Exam)
+            .findOneOrFail(examId)
+        : await staticProvider
+            .ormConnection
+            .getRepository(Video)
+            .findOneOrFail(videoId);
+
+    const currentItemDTO = isExam
+        ? toCourseItemDTOExam(item as Exam)
+        : toCourseItemDTOVideo(item as Video);
+
+    const courseId = item.courseId;
+
+    const courseItemDTOs = await getSimpleCourseItemDTOs(courseId);
+
+    const prevIndex = courseItemDTOs
+        .findIndex(x => x.descriptorCode === currentItemDTO.descriptorCode) - 1;
+
+    const courseItemsWithoutCurrent = courseItemDTOs
+        .filter(x => x.descriptorCode !== currentItemDTO.descriptorCode);
+
+    const previousCourseItem = prevIndex > 0
+        ? courseItemDTOs[prevIndex - 1]
+        : courseItemsWithoutCurrent.length > 0
+            ? courseItemsWithoutCurrent[0]
+            : null;
+
+    // update bridges
+    const courseBridges = await staticProvider
+        .ormConnection
+        .getRepository(UserCourseBridge)
+        .find({
+            where: isExam
+                ? {
+                    currentExamId: examId,
+                    courseId
+                }
+                : {
+                    currentVideoId: videoId,
+                    courseId
+                }
+        });
+
+    courseBridges
+        .forEach(x => {
+            x.currentExamId = previousCourseItem?.type === "exam" ? previousCourseItem.id : null;
+            x.currentVideoId = previousCourseItem?.type === "video" ? previousCourseItem.id : null;
+        });
+
+    await staticProvider
+        .ormConnection
+        .getRepository(UserCourseBridge)
+        .save(courseBridges);
+
+    // remove current course bridge
+    if (!previousCourseItem)
+        await staticProvider
+            .ormConnection
+            .createQueryBuilder()
+            .delete()
+            .from(UserCourseBridge)
+            .where("courseId = :courseId", { courseId })
+            .execute();
+}
+
+export const getSimpleCourseItemDTOs = async (courseId: number) => {
+
+    const course = await staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .createQueryBuilder("c")
+        .leftJoinAndSelect("c.videos", "v")
+        .leftJoinAndSelect("c.exams", "e")
+        .where("c.id = :courseId", { courseId })
+        .getOneOrFail();
+
+    const courseItemDTOs = toSimpleCourseItemDTOs(course);
+
+    return courseItemDTOs;
 }

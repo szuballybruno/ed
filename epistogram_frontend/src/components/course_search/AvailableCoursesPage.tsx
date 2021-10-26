@@ -1,9 +1,9 @@
-import {Box, Flex, GridItem} from "@chakra-ui/react";
+import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React from "react";
 import { distinct } from "../../frontendHelpers";
 import { GetUserCoursesDTO } from "../../models/shared_models/GetUserCoursesDTO";
-import { useUserCourses } from "../../services/courseService";
+import { useStartCourse, useUserCourses } from "../../services/courseService";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import CourseTile from "../universal/CourseTile";
@@ -15,7 +15,8 @@ import { EpistoButton } from "../universal/EpistoButton";
 import { httpPostAsync } from "../../services/httpClient";
 import { useNavigation } from "../../services/navigatior";
 import { translatableTexts } from "../../translatableTexts";
-import {useHistory} from "react-router";
+import { useHistory } from "react-router";
+import { showNotification, useShowErrorDialog } from "../../services/notifications";
 
 const AvailableCoursesPage = () => {
 
@@ -34,8 +35,10 @@ const AvailableCoursesPage = () => {
     } as GetUserCoursesDTO;
 
     const { courses, status, error } = useUserCourses(getCoursesDTO);
+    const { startCourseAsync, startCourseState } = useStartCourse();
 
     const { navigateToPlayer } = useNavigation();
+    const showError = useShowErrorDialog();
 
     const clearFilters = () => {
         setSearchCategory("");
@@ -46,6 +49,34 @@ const AvailableCoursesPage = () => {
 
     const categoryOptions = distinct(courses
         .map((course, index) => course.category));
+
+    const playCourse = async (courseId: number, currentItemDescriptior: string | null) => {
+
+        try {
+
+            if (currentItemDescriptior) {
+
+                navigateToPlayer(currentItemDescriptior);
+            }
+            else {
+
+                const { text: firstItemDescriptor } = await startCourseAsync(courseId);
+
+                if (firstItemDescriptor) {
+
+                    navigateToPlayer(firstItemDescriptor);
+                }
+                else {
+
+                    showNotification("A kurzus jelenleg nem indítható, ez annak lehet a jele, hogy folyamatban van a feltöltése, kérjük próbáld meg később!");
+                }
+            }
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
 
     return <MainWrapper>
 
@@ -154,17 +185,11 @@ const AvailableCoursesPage = () => {
                     </Box>
 
                     {/* courses */}
-                    <LoadingFrame overflow="hidden" loadingState={[status]} error={[error]}>
+                    <LoadingFrame overflow="hidden" loadingState={[status, startCourseState]} error={[error]}>
                         <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
                             <EpistoGrid auto="fit" gap="15" minColumnWidth="300px">
                                 {courses
-                                    .map((course: any, index) => {
-
-                                        const playCourse = async () => {
-
-                                            await httpPostAsync(`/course/start-course?courseId=${course.courseId}`);
-                                            navigateToPlayer(course.firstItemCode);
-                                        }
+                                    .map((course, index) => {
 
                                         return <GridItem>
                                             <CourseTile course={course} key={index} >
@@ -182,7 +207,7 @@ const AvailableCoursesPage = () => {
 
                                                     {/* start course */}
                                                     <EpistoButton
-                                                        onClick={playCourse}
+                                                        onClick={() => playCourse(course.courseId, course.firstItemCode)}
                                                         variant="colored"
                                                         style={{ flex: "1" }}>
 
@@ -202,14 +227,3 @@ const AvailableCoursesPage = () => {
 }
 
 export default AvailableCoursesPage
-
-// // <Grid id="gridFlex" wrap="wrap" className="whall">
-//                             {courses
-//                                 .map((course: any, index) => {
-//                                     return <Box bg="red" flexBasis="33%" padding="10px">
-
-//                                         <Box bg="grey" className="whall"></Box>
-//                                         {/* <CourseTile course={course} itemIndex={index} key={index} /> */}
-//                                     </Box>
-//                                 })}
-//                         </Flex>

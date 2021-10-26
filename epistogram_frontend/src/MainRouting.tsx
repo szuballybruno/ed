@@ -1,18 +1,19 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import AdminPage from "../components/administration/AdminPage";
-import HomePage from "../components/HomePage";
-import LearningInsightsPage from "../components/LearningInsightsPage";
-import LoginScreen from "../components/login/LoginScreen";
-import NotFound from "../components/notFound/NotFound";
-import { PlayerPage } from "../components/player/PlayerPage";
-import { RegistrationPage } from "../components/RegistrationPage";
-import { SetNewPasswordPage } from "../components/SetNewPasswordPage";
-import { SignupPage } from "../components/signup/SignupPage";
-import { ProtectedRoute } from "../components/universal/ProtectedRoute";
-import { UserSettingsPage } from "../components/userSettings/UserSettingsPage";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import AvailableCoursesRouting from "./AvailableCoursesRouting";
+import AdminPage from "./components/administration/AdminPage";
+import AvailableCoursesPage from "./components/course_search/AvailableCoursesPage";
+import CoursePage from "./components/course_search/CoursePage";
+import HomePage from "./components/HomePage";
+import LearningInsightsPage from "./components/LearningInsightsPage";
+import LoginScreen from "./components/login/LoginScreen";
+import NotFound from "./components/notFound/NotFound";
+import { PlayerPage } from "./components/player/PlayerPage";
+import { RegistrationPage } from "./components/RegistrationPage";
+import { SetNewPasswordPage } from "./components/SetNewPasswordPage";
+import { SignupPage } from "./components/signup/SignupPage";
+import { ProtectedRoute } from "./components/universal/ProtectedRoute";
+import { UserSettingsPage } from "./components/userSettings/UserSettingsPage";
+import { applicationRoutes } from "./configuration/applicationRoutes";
 
 export const MainRouting = () => {
 
@@ -44,7 +45,17 @@ export const MainRouting = () => {
 
         <Route
             path={applicationRoutes.availableCoursesRoute.route}
-            render={() => <AvailableCoursesRouting />} />
+            render={() => <Switch>
+
+                <Route exact path={"/courses/:courseId"}>
+                    <CoursePage />
+                </Route>
+
+                <Route path={"/courses"}>
+                    <AvailableCoursesPage />
+                </Route>
+
+            </Switch>} />
 
         <ProtectedRoute
             path={applicationRoutes.settingsRoute.route}

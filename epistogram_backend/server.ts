@@ -4,10 +4,10 @@ import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { getAdminCoursesAction } from "./api/adminCourses";
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { getAvailableCoursesAction, getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
     answerPractiseQuestionAction, answerSignupQuestionAction, getCourseBriefDataAction, getCourseItemsAction,
-    getCurrentCourseItemCode, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
+    getCurrentCourseItemCodeAction, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
     getSignupDataAction, getUserPersonalityDataAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveCourseDataAction, saveCourseThumbnailAction, saveUserDataAction, setEditedCourseAction
 } from './api/dataActions';
 import { answerExamQuestionAction, createExamAction, deleteExamAction, getExamEditDataAction, getExamResultsAction, saveExamAction } from './api/examActions';
@@ -15,7 +15,6 @@ import { uploadAvatarFileAction } from './api/fileActions';
 import { getDailyTipAction, getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction, getQuestionEditDataAction, saveQuestionAction } from './api/questionActions';
-import { getUserCoursesAction } from './api/userCoursesActions';
 import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
 import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileAction } from './api/videoActions';
 import { initializeDBAsync } from './database';
@@ -84,7 +83,7 @@ const initializeAsync = async () => {
 
     // misc
     addEndpoint('/get-current-user', getCurrentUserAction);
-    expressServer.get('/get-current-course-item-code', getCurrentCourseItemCode);
+    addEndpoint('/get-current-course-item-code', getCurrentCourseItemCodeAction);
     expressServer.get('/misc/get-practise-question', getPractiseQuestionAction);
     expressServer.post('/misc/save-user-data', saveUserDataAction);
     expressServer.post('/misc/request-change-password', requestChangePasswordAction);
@@ -122,13 +121,14 @@ const initializeAsync = async () => {
     expressServer.get("/users/get-courses-data", getUserCoursesDataAction);
 
     // course
-    expressServer.post("/course/start-course", startCourseAction);
     expressServer.post("/course/set-course-mode", setCourseTypeAction);
     expressServer.post("/get-admin-courses", getAsyncActionHandler(getAdminCoursesAction));
+    addEndpoint(apiRoutes.course.startCourse, startCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.getCourseEditData, getEditedCourseAction);
     addEndpoint(apiRoutes.course.getCourseBriefData, getCourseBriefDataAction);
     addEndpoint(apiRoutes.course.saveCourseData, saveCourseDataAction, { isPost: true });
     addEndpoint(apiRoutes.course.saveCourseThumbnail, saveCourseThumbnailAction, { isPost: true });
+    addEndpoint(apiRoutes.course.getAvailableCourses, getAvailableCoursesAction, { isPost: true });
     expressServer.post("/set-admin-edit-course", getAsyncActionHandler(setEditedCourseAction))
 
     // video 
@@ -141,9 +141,6 @@ const initializeAsync = async () => {
     // questions
     addEndpoint(apiRoutes.questions.getQuestionEditData, getQuestionEditDataAction);
     addEndpoint(apiRoutes.questions.saveQuestion, saveQuestionAction, { isPost: true });
-
-    // available courses
-    expressServer.post("/get-user-courses", getUserCoursesAction);
 
     // organizations
     expressServer.get("/organizations/get-organizations", getAsyncActionHandler(getOrganizationsAction));

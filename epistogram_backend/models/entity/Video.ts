@@ -4,6 +4,7 @@ import { Course } from "./Course";
 import { Question } from "./Question";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
+import { UserCourseBridge } from "./UserCourseBridge";
 import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
 
@@ -50,9 +51,9 @@ export class Video {
     questions: Question[];
 
     // users 
-    @OneToMany(type => User, user => user.currentVideo)
+    @OneToMany(type => UserCourseBridge, x => x.currentVideo)
     @JoinColumn()
-    users: User[];
+    userCourseBridges: UserCourseBridge[];
 
     // course
     @Column()

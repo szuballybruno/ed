@@ -3,6 +3,7 @@ import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { Question } from "./Question";
 import { User } from "./User";
+import { UserCourseBridge } from "./UserCourseBridge";
 
 @Entity()
 export class Exam {
@@ -29,9 +30,9 @@ export class Exam {
     isFinalExam: boolean;
 
     // users
-    @OneToMany(type => User, user => user.currentExam)
+    @OneToMany(type => UserCourseBridge, x => x.currentExam)
     @JoinColumn()
-    users: User[];
+    userCourseBridges: UserCourseBridge[];
 
     // course
     @Column({ nullable: true })

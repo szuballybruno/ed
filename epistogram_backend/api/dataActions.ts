@@ -1,29 +1,27 @@
 import { Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
+import { Course } from "../models/entity/Course";
+import { Exam } from "../models/entity/Exam";
+import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { Video } from "../models/entity/Video";
 import { EditCourseDataDTO } from "../models/shared_models/AdminPageEditCourseDTO";
+import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
-import { getAdminPageUsersList } from "../services/adminService";
 import { getUserIdFromRequest, requestChangePasswordAsync, setAuthCookies } from "../services/authenticationService";
 import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "../services/courseManagementService";
-import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "../services/courseService";
+import { getCourseItemCode, getCurrentCourseItemsAsync } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync, registerInvitedUserAsync, registerUserAsync, saveUserDataAsync } from "../services/dataService";
+import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
 import { answerPractiseQuestionAsync, getPractiseQuestionAsync } from "../services/practiseQuestionsService";
-import { getSignupDataAsync, answerSignupQuestionAsync } from "../services/signupService";
+import { answerSignupQuestionAsync, getSignupDataAsync } from "../services/signupService";
 import { createRegistrationToken } from "../services/tokenService";
-import { getUserById } from "../services/userService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
-import { log } from "../services/misc/logger";
-import { Course } from "../models/entity/Course";
-import { CourseBriefData } from "../models/shared_models/CourseBriefData";
-import { Video } from "../models/entity/Video";
-import { Exam } from "../models/entity/Exam";
-import { UploadedFile } from "express-fileupload";
-import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 
 export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
@@ -80,21 +78,29 @@ export const saveUserDataAction = getAsyncActionHandler(async (req: Request) => 
     return saveUserDataAsync(userId, dto);
 });
 
-export const getCurrentCourseItemCode = getAsyncActionHandler(async (req: Request) => {
+export const getCurrentCourseItemCodeAction = async (parms: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-    const code = await getCurrentCourseItemDescriptorCodeAsync(userId);
+    const currentBridge = await staticProvider
+        .ormConnection
+        .getRepository(UserCourseBridge)
+        .findOne({
+            where: {
+                isCurrent: true,
+                userId: parms.userId
+            }
+        });
 
-    return code;
-});
+    if (!currentBridge)
+        return null;
+
+    return getCourseItemCode(currentBridge.currentVideoId, currentBridge.currentExamId);
+};
 
 export const getCourseItemsAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const code = await getCurrentCourseItemDescriptorCodeAsync(userId);
-    const currentCourseId = (await getUserById(userId)).currentCourseId!;
 
-    return getCourseItemsAsync(userId, currentCourseId, code!);
+    return getCurrentCourseItemsAsync(userId);
 });
 
 export const getEditedVideoAction = async (req: Request) => {

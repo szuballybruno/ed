@@ -1,16 +1,25 @@
 import { Request } from "express";
+import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
+import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { getUserCoursesDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService"
-import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+import { getAvailableCoursesAsync } from "../services/userCoursesService";
+import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
-export const startCourseAction = getAsyncActionHandler(async (req: Request) => {
+export const startCourseAction = async (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-    const courseId = withValueOrBadRequest<number>(req.query.courseId, "number");
+    const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
-    return startCourseAsync(userId, courseId);
-});
+    return startCourseAsync(params.userId, courseId);
+};
+
+export const getAvailableCoursesAction = async (params: ActionParamsType) => {
+
+    const dto = withValueOrBadRequest<GetUserCoursesDTO>(params.req.body);
+
+    return getAvailableCoursesAsync(params.userId, dto);
+};
 
 export const setCourseTypeAction = getAsyncActionHandler(async (req: Request) => {
 

@@ -6,12 +6,11 @@ import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
-import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { getUserLoginTokens } from "./authenticationService";
-import { getCourseItemsAsync, getCurrentCourseItemDescriptorCodeAsync } from "./courseService";
+import { getCurrentCourseItemsAsync } from "./courseService";
 import { sendSuccessfulRegistrationEmailAsync } from "./emailService";
 import { toOrganizationDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
@@ -95,9 +94,7 @@ export const saveUserDataAsync = async (userId: number, dto: UserDTO) => {
 
 export const getOverviewPageDTOAsync = async (userId: number) => {
 
-    const courseId = (await getUserById(userId)).currentCourseId!;
-    const itemCode = await getCurrentCourseItemDescriptorCodeAsync(userId);
-    const courseItems = itemCode ? await getCourseItemsAsync(userId, courseId, itemCode) : [];
+    const courseItems = await getCurrentCourseItemsAsync(userId);
     const recommendedCourseDTOs = [] as CourseShortDTO[];
     const currntTasks = getCurrentTasks();
     const developmentChartData = getDevelopmentChart();
