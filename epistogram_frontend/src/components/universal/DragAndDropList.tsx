@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex, FlexProps } from "@chakra-ui/layout";
+import { Box, Flex, FlexProps } from "@chakra-ui/layout";
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { ReactNode } from "react";
 import { DragDropContext, Draggable, DraggableStateSnapshot, Droppable } from "react-beautiful-dnd";

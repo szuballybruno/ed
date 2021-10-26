@@ -1,18 +1,15 @@
-import { Text, Flex } from "@chakra-ui/layout";
+import { Image } from "@chakra-ui/image";
+import { Flex, Text } from "@chakra-ui/layout";
+import { Player } from "@lottiefiles/react-lottie-player";
 import { Typography } from "@mui/material";
+import { getAssetUrl, getRandomInteger } from "../frontendHelpers";
 import { useAnswerPractiseQuestion, usePractiseQuestion } from "../services/dataService";
+import { useNavigation } from "../services/navigatior";
+import { translatableTexts } from "../translatableTexts";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 import { QuesitionView } from "./QuestionView";
 import { EpistoButton } from "./universal/EpistoButton";
 import { EpistoConinImage } from "./universal/EpistoCoinImage";
-import { Image } from "@chakra-ui/image";
-import { getAssetUrl, getRandomInteger } from "../frontendHelpers";
-import { translatableTexts } from "../translatableTexts";
-import { Player } from "@lottiefiles/react-lottie-player";
-import { useNavigation } from "../services/navigatior";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import { useContext } from "react";
-import { CurrentUserContext } from "./HOC/AuthenticationFrame";
 
 const NoQuestionsAvailable = () => {
     const { navigate } = useNavigation()
@@ -45,48 +42,48 @@ const NoQuestionsAvailable = () => {
     </Flex>
 }
 
-const InitialGreetings = (props: { firstName: string }) => {
-    const { navigate } = useNavigation()
+// const InitialGreetings = (props: { firstName: string }) => {
+//     const { navigate } = useNavigation()
 
-    return <Flex
-        direction="row"
-        alignItems="center">
-        <Flex
-            direction="column"
-            justifyContent="flex-start"
-            h="100%">
-            <Text as={"text"} p="20px 20px 10px 20px">
-                {translatableTexts.practiseQuestions.initialGreetingsFirst + " " + props.firstName + ","}
-            </Text>
-            <Text as={"text"} p="20px 20px 10px 20px">
-                {translatableTexts.practiseQuestions.initialGreetingsSecond}
-            </Text>
-            <Text as={"text"} p="20px 20px 10px 20px">
-                {translatableTexts.practiseQuestions.initialGreetingsThird}
-            </Text>
-            <Flex
-                direction="column"
-                width="100%"
-                alignItems="center">
-                <EpistoButton
-                    variant={"outlined"}
-                    onClick={() => {
-                        navigate(applicationRoutes.availableCoursesRoute.route)
-                    }}>
-                    {translatableTexts.practiseQuestions.goToCourses}
-                </EpistoButton>
-            </Flex>
-        </Flex>
-        <Flex>
-            <Player
-                autoplay
-                loop
-                src={getAssetUrl("test_your_knowledge_lotties/initial_greetings.json")}
-                style={{ height: '300px', width: '300px' }}
-            />
-        </Flex>
-    </Flex>
-}
+//     return <Flex
+//         direction="row"
+//         alignItems="center">
+//         <Flex
+//             direction="column"
+//             justifyContent="flex-start"
+//             h="100%">
+//             <Text as={"text"} p="20px 20px 10px 20px">
+//                 {translatableTexts.practiseQuestions.initialGreetingsFirst + " " + props.firstName + ","}
+//             </Text>
+//             <Text as={"text"} p="20px 20px 10px 20px">
+//                 {translatableTexts.practiseQuestions.initialGreetingsSecond}
+//             </Text>
+//             <Text as={"text"} p="20px 20px 10px 20px">
+//                 {translatableTexts.practiseQuestions.initialGreetingsThird}
+//             </Text>
+//             <Flex
+//                 direction="column"
+//                 width="100%"
+//                 alignItems="center">
+//                 <EpistoButton
+//                     variant={"outlined"}
+//                     onClick={() => {
+//                         navigate(applicationRoutes.availableCoursesRoute.route)
+//                     }}>
+//                     {translatableTexts.practiseQuestions.goToCourses}
+//                 </EpistoButton>
+//             </Flex>
+//         </Flex>
+//         <Flex>
+//             <Player
+//                 autoplay
+//                 loop
+//                 src={getAssetUrl("test_your_knowledge_lotties/initial_greetings.json")}
+//                 style={{ height: '300px', width: '300px' }}
+//             />
+//         </Flex>
+//     </Flex>
+// }
 
 export const PractiseQuestions = () => {
 
@@ -114,8 +111,6 @@ export const PractiseQuestions = () => {
         clearAnswerResults();
         refetchPractiseQuestion();
     }
-
-    const user = useContext(CurrentUserContext)
 
     const isCorrectAnswer = answerResults?.correctAnswerId === answerResults?.givenAnswerId;
     const isAnswered = !!answerResults?.givenAnswerId;

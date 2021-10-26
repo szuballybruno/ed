@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React from "react";
-import { getAssetUrl, PagingType } from "../../frontendHelpers";
+import { getAssetUrl } from "../../frontendHelpers";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { translatableTexts } from "../../translatableTexts";
 import { ExamLayout } from "./ExamLayout";

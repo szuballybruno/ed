@@ -1,5 +1,4 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import DoneIcon from '@mui/icons-material/Done';
 import { LinearProgress, Rating } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { getAssetUrl } from "../../frontendHelpers";
@@ -134,7 +133,7 @@ const CourseTile = (props: {
                             left="4"
                             position="absolute">
                             {isComplete && <CourseTileCompletedLabel />}
-                            {props.tempIsStartedSwitch && <CourseTileHowManyApplicantsLabel/>}
+                            {props.tempIsStartedSwitch && <CourseTileHowManyApplicantsLabel />}
                             {props.tempIsStartedSwitch && <CourseTileNewCourseLabel />}
 
                         </Flex>
@@ -168,108 +167,108 @@ const CourseTile = (props: {
                         </Flex>
 
                         {props.tempIsStartedSwitch ?
-                        <Flex direction={"row"} alignItems={"center"} mr={5}>
-                            <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
-                                alt={""}
-                                style={{
-                                    width: 15,
-                                    height: 15,
-                                    margin: "0 2px 0 4px"
-                                }}
-                            />
-                            <Text as={"text"} color={"grey"}>{"105/119"}</Text>
-                        </Flex> :
-                        <Flex direction={"row"} alignItems={"center"} mr={5}>
-                            <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
-                                alt={""}
-                                style={{
-                                    width: 15,
-                                    height: 15,
-                                    margin: "0 2px 0 4px"
-                                }}
-                            />
-                            <Text as={"text"} color={"grey"}>{"119"}</Text>
-                        </Flex>}
+                            <Flex direction={"row"} alignItems={"center"} mr={5}>
+                                <img
+                                    src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
+                                    alt={""}
+                                    style={{
+                                        width: 15,
+                                        height: 15,
+                                        margin: "0 2px 0 4px"
+                                    }}
+                                />
+                                <Text as={"text"} color={"grey"}>{"105/119"}</Text>
+                            </Flex> :
+                            <Flex direction={"row"} alignItems={"center"} mr={5}>
+                                <img
+                                    src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
+                                    alt={""}
+                                    style={{
+                                        width: 15,
+                                        height: 15,
+                                        margin: "0 2px 0 4px"
+                                    }}
+                                />
+                                <Text as={"text"} color={"grey"}>{"119"}</Text>
+                            </Flex>}
 
                         {props.tempIsStartedSwitch ?
-                        <Flex direction={"row"} alignItems={"center"} mr={5}>
-                            <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_questions.svg")}
-                                alt={""}
-                                style={{
-                                    width: 15,
-                                    height: 15,
-                                    margin: "0 2px 0 4px"
-                                }}
-                            />
-                            <Text as={"text"} color={"grey"}>{"112/119"}</Text>
-                        </Flex> :
-                        <Flex direction={"row"} alignItems={"center"} mr={5}>
-                            <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_language.svg")}
-                                alt={""}
-                                style={{
-                                    width: 15,
-                                    height: 15,
-                                    margin: "0 2px 0 4px"
-                                }}
-                            />
-                            <Text as={"text"} color={"grey"}>{"magyar"}</Text>
-                        </Flex>}
+                            <Flex direction={"row"} alignItems={"center"} mr={5}>
+                                <img
+                                    src={getAssetUrl("course_exam_tile_icons/tile_questions.svg")}
+                                    alt={""}
+                                    style={{
+                                        width: 15,
+                                        height: 15,
+                                        margin: "0 2px 0 4px"
+                                    }}
+                                />
+                                <Text as={"text"} color={"grey"}>{"112/119"}</Text>
+                            </Flex> :
+                            <Flex direction={"row"} alignItems={"center"} mr={5}>
+                                <img
+                                    src={getAssetUrl("course_exam_tile_icons/tile_language.svg")}
+                                    alt={""}
+                                    style={{
+                                        width: 15,
+                                        height: 15,
+                                        margin: "0 2px 0 4px"
+                                    }}
+                                />
+                                <Text as={"text"} color={"grey"}>{"magyar"}</Text>
+                            </Flex>}
 
 
                         {props.tempIsStartedSwitch ?
-                        <Flex direction={"row"} alignItems={"center"}>
-                            <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_test.svg")}
-                                alt={""}
-                                style={{
-                                    width: 15,
-                                    height: 15,
-                                    margin: "0 2px 0 4px"
-                                }} />
-                            <Text as={"text"} color={"grey"}>{"nincs kitöltve"}</Text>
-                        </Flex> :
-                        <Flex direction={"row"} alignItems={"center"}>
-                            <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
-                                alt={""}
-                                style={{
-                                    width: 15,
-                                    height: 15,
-                                    margin: "0 2px 0 4px"
-                                }} />
-                            <Text as={"text"} color={"grey"}>{"6.9/10"}</Text>
-                        </Flex>}
+                            <Flex direction={"row"} alignItems={"center"}>
+                                <img
+                                    src={getAssetUrl("course_exam_tile_icons/tile_test.svg")}
+                                    alt={""}
+                                    style={{
+                                        width: 15,
+                                        height: 15,
+                                        margin: "0 2px 0 4px"
+                                    }} />
+                                <Text as={"text"} color={"grey"}>{"nincs kitöltve"}</Text>
+                            </Flex> :
+                            <Flex direction={"row"} alignItems={"center"}>
+                                <img
+                                    src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
+                                    alt={""}
+                                    style={{
+                                        width: 15,
+                                        height: 15,
+                                        margin: "0 2px 0 4px"
+                                    }} />
+                                <Text as={"text"} color={"grey"}>{"6.9/10"}</Text>
+                            </Flex>}
 
 
                     </Flex>
                     {
                         props.tempIsStartedSwitch ?
-                        <Flex
-                            direction={"row"}
-                            alignItems={"center"}
-                            mt={7}
-                            w="100%"
-                            h="10px"
-                        >
-                            <LinearProgress variant="determinate" style={{
-                                width: "100%",
-                            }} value={60} />
-                        </Flex> :
-                        <Flex
-                            direction={"row"}
-                            alignItems={"center"}
-                            mt={7}>
-                            <Rating name="read-only" style={{
-                                color: "var(--epistoTeal)",
-                            }} value={4} readOnly />
-                            <Text as={"text"} color={"grey"} ml={5}>
-                                4.1 (189 értékelés)
-                            </Text>
-                        </Flex>
+                            <Flex
+                                direction={"row"}
+                                alignItems={"center"}
+                                mt={7}
+                                w="100%"
+                                h="10px"
+                            >
+                                <LinearProgress variant="determinate" style={{
+                                    width: "100%",
+                                }} value={60} />
+                            </Flex> :
+                            <Flex
+                                direction={"row"}
+                                alignItems={"center"}
+                                mt={7}>
+                                <Rating name="read-only" style={{
+                                    color: "var(--epistoTeal)",
+                                }} value={4} readOnly />
+                                <Text as={"text"} color={"grey"} ml={5}>
+                                    4.1 (189 értékelés)
+                                </Text>
+                            </Flex>
                     }
                     {
                         props.tempIsStartedSwitch ?
@@ -281,7 +280,7 @@ const CourseTile = (props: {
                                     <img
                                         src={getAssetUrl("course_exam_tile_icons/tile_progress.svg")}
                                         alt={""}
-                                        style={{width: 20, height: 20, margin: "0 2px"}}/>
+                                        style={{ width: 20, height: 20, margin: "0 2px" }} />
                                     <Text
                                         as="text"
                                         fontSize="0.85em"
@@ -292,7 +291,7 @@ const CourseTile = (props: {
                                     <img
                                         src={getAssetUrl("course_exam_tile_icons/tile_achivement.svg")}
                                         alt={""}
-                                        style={{width: 20, height: 20, margin: "0 2px"}}/>
+                                        style={{ width: 20, height: 20, margin: "0 2px" }} />
                                     <Text
                                         as="text"
                                         fontSize="0.85em"
@@ -306,7 +305,7 @@ const CourseTile = (props: {
                                 <img
                                     src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
                                     alt={""}
-                                    style={{width: 20, height: 20, margin: "0 2px"}}/>
+                                    style={{ width: 20, height: 20, margin: "0 2px" }} />
                                 <Text
                                     as="text"
                                     color="grey">{courseTeacherName}</Text>

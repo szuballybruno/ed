@@ -48,10 +48,10 @@ export const EditCourseControl = (props: {
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
 
     // http
-    const { createVideoAsync, createVideoState } = useCreateVideo();
-    const { createExamAsync, createExamState } = useCreateExam();
-    const { deleteVideoAsync, deleteVideoState } = useDeleteVideo();
-    const { deleteExamAsync, deleteExamState } = useDeleteExam();
+    const { createVideoAsync } = useCreateVideo();
+    const { createExamAsync } = useCreateExam();
+    const { deleteVideoAsync } = useDeleteVideo();
+    const { deleteExamAsync } = useDeleteExam();
 
     const showError = useShowErrorDialog();
     const isAllowEditOnPage = false;

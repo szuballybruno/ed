@@ -1,22 +1,21 @@
 import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React from "react";
+import { useHistory } from "react-router";
 import { distinct } from "../../frontendHelpers";
 import { GetUserCoursesDTO } from "../../models/shared_models/GetUserCoursesDTO";
 import { useStartCourse, useUserCourses } from "../../services/courseService";
+import { useNavigation } from "../../services/navigatior";
+import { showNotification, useShowErrorDialog } from "../../services/notifications";
+import { translatableTexts } from "../../translatableTexts";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
+import Navbar from "../navbar/Navbar";
 import CourseTile from "../universal/CourseTile";
+import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoGrid } from "../universal/EpistoGrid";
 import { EpistoSearch } from "../universal/EpistoSearch";
-import Navbar from "../navbar/Navbar";
 import classes from "./courseSearchMain.module.scss";
-import { EpistoButton } from "../universal/EpistoButton";
-import { httpPostAsync } from "../../services/httpClient";
-import { useNavigation } from "../../services/navigatior";
-import { translatableTexts } from "../../translatableTexts";
-import { useHistory } from "react-router";
-import { showNotification, useShowErrorDialog } from "../../services/notifications";
 
 const AvailableCoursesPage = () => {
 

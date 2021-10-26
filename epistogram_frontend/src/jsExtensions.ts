@@ -9,11 +9,13 @@ declare global {
     }
 }
 
+// eslint-disable-next-line no-extend-native
 Array.prototype.remove = function <T>(func: (item: T) => boolean) {
 
     return this.filter(item => !func(item)) as Array<T>
 }
 
+// eslint-disable-next-line no-extend-native
 Array.prototype.orderBy = function <T>(func: (item: T) => number | string) {
 
     const sorted = this

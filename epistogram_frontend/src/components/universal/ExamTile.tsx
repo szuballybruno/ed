@@ -1,9 +1,7 @@
 import { Box, css, Flex, FlexProps, Text } from "@chakra-ui/react";
-import DoneIcon from "@mui/icons-material/Done";
-import { getAssetUrl } from "../../frontendHelpers";
-import { LinearProgress, Rating } from "@mui/material";
+import { LinearProgress } from "@mui/material";
 import React from "react";
-import { ExamDTO } from "../../models/shared_models/ExamDTO";
+import { getAssetUrl } from "../../frontendHelpers";
 import { EpistoButton } from "./EpistoButton";
 
 export const ExamTile = (props: {
@@ -73,8 +71,8 @@ export const ExamTile = (props: {
         <Flex direction={"column"}>
             <Box flex="1" position="relative" minH={200} maxH={200}>
                 <Box position="relative"
-                     className="whall"
-                     minHeight="150px">
+                    className="whall"
+                    minHeight="150px">
                     <Box position="absolute" top="0" height="100%" width="100%" p="4px">
                         <img style={{
                             width: "100%",

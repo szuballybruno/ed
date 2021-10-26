@@ -1,4 +1,4 @@
-import { Flex, Image } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import DoneIcon from '@mui/icons-material/Done';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -14,7 +14,7 @@ export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
 
-    const { title, subTitle, thumbnailUrl, state, descriptorCode, type } = props.courseItem;
+    const { title, subTitle, state, descriptorCode, type } = props.courseItem;
     const isLocked = state === "locked";
     const { navigateToPlayer } = useNavigation();
 

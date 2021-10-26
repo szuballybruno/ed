@@ -1,44 +1,39 @@
 import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React from 'react';
-import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { useUserCourseData } from "../../services/courseService";
 import { LoadingFrame } from "../HOC/LoadingFrame";
 import CourseTile from "../universal/CourseTile";
 import { DashboardSection } from "../universal/DashboardSection";
-import { EpistoGrid } from "../universal/EpistoGrid";
-import { InfoGrid } from "../universal/InfoGrid";
 import { EpistoButton } from "../universal/EpistoButton";
-import { translatableTexts } from "../../translatableTexts";
-import { httpPostAsync } from "../../services/httpClient";
-import { assetStorageUrl } from "../../Environemnt";
+import { EpistoGrid } from "../universal/EpistoGrid";
 
-const CourseStatCard = (props: { course: CourseShortDTO }) => {
+// const CourseStatCard = (props: { course: CourseShortDTO }) => {
 
-    // const { title, thumbnailImageURL } = props.course;
+//     // const { title, thumbnailImageURL } = props.course;
 
-    const stats = [
-        {
-            text: "Fókusz 24%"
-        },
-        {
-            text: "Pontosság 24%"
-        },
-        {
-            text: "Elvégzett vizsgák: 45"
-        },
-        {
-            text: "A kurzus teljes időtartalma: 3h"
-        },
-        {
-            text: "Reakció idő: 12s"
-        },
-    ]
+//     const stats = [
+//         {
+//             text: "Fókusz 24%"
+//         },
+//         {
+//             text: "Pontosság 24%"
+//         },
+//         {
+//             text: "Elvégzett vizsgák: 45"
+//         },
+//         {
+//             text: "A kurzus teljes időtartalma: 3h"
+//         },
+//         {
+//             text: "Reakció idő: 12s"
+//         },
+//     ]
 
-    return <CourseTile course={props.course} borderRadius="0">
-        <InfoGrid infos={stats.map(x => x.text)} />
-    </CourseTile>
-}
+//     return <CourseTile course={props.course} borderRadius="0">
+//         <InfoGrid infos={stats.map(x => x.text)} />
+//     </CourseTile>
+// }
 
 const MyCourses = () => {
 
@@ -64,7 +59,7 @@ const MyCourses = () => {
                     p="20px">
 
                     {completedCourses
-                        .map((course, index) => <CourseTile  course={course} />)}
+                        .map((course, index) => <CourseTile course={course} />)}
 
 
                 </EpistoGrid>

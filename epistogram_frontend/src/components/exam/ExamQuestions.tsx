@@ -119,6 +119,7 @@ export const ExamQuestions = (props: {
         <ExamLayout
             headerLeftItem={<Flex align="center">
                 <img
+                    alt=""
                     src={getAssetUrl("course_page_icons/curriculum_test.svg")}
                     className="square35" />
                 <Typography style={{ marginLeft: "10px" }}>

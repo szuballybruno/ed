@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/layout";
 import { Delete } from "@mui/icons-material";
-import { FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
@@ -9,12 +9,12 @@ import { AnswerEditDTO } from "../../../models/shared_models/AnswerEditDTO";
 import { getVirtualId } from "../../../services/idService";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useEditQuestionData, useSaveQuestion } from "../../../services/questionsService";
-import { LoadingFrame } from "../../HOC/LoadingFrame"
+import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
-import { AdminSubpageHeader } from "../AdminSubpageHeader"
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const EditQuestionSubpage = () => {
 

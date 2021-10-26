@@ -1,6 +1,5 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
-import { useState } from "react"
 import ReactPlayer from "react-player"
 import { getAssetUrl, usePaging } from "../frontendHelpers"
 import { useDailyTip } from "../services/miscService"
@@ -33,7 +32,7 @@ export const DailyTip = (props: {} & FlexProps) => {
         title: "Napi tipped",
     });
 
-    const { dailyTipData, dailyTipError, dailyTipState } = useDailyTip();
+    const { dailyTipData } = useDailyTip();
 
     const openDialog = () => dialogLogic.openDialog();
 
@@ -41,9 +40,62 @@ export const DailyTip = (props: {} & FlexProps) => {
         {dailyTipData?.description}
     </Typography>;
 
-    const VideoPreviewSlide = () => {
+    const VideoSlide = () => <ModalPlayer videoUrl={dailyTipData?.videoUrl ?? ""}></ModalPlayer>
 
-        return <Box position={"relative"} onClick={openDialog} cursor="pointer">
+    const toggleDisplayModes = () => {
+
+        if (currentIndex === 0) {
+
+            next();
+        }
+        else {
+
+            previous();
+        }
+    }
+
+    return <Flex direction="column" justify="center" {...css}>
+
+        {/* dialog */}
+        <EpistoDialog logic={dialogLogic} fullScreenX={true} showCloseButton={true}>
+            <Flex direction="column" align="center">
+                <Flex
+                    id="customContentRoot"
+                    position={"relative"}
+                    height="calc(min(min(80vw, 1400px), 140vh) * 0.5625)"
+                    cursor="pointer"
+                    width="min(min(80vw, 1400px), 140vh)"
+                    align="center"
+                    justify="center"
+                    margin="auto">
+
+                    <SlidesDisplay
+                        alwaysRender
+                        index={currentIndex}
+                        slides={[
+                            VideoSlide,
+                            DescriptionSlide,
+                        ]} />
+                </Flex>
+
+                <Flex>
+                    <EpistoButton variant="outlined" style={{ margin: "10px" }}>
+                        {translatableTexts.tipOfTheDay.prevoiusVideos}
+                    </EpistoButton>
+
+                    <EpistoButton
+                        variant="outlined"
+                        style={{ margin: "10px" }}
+                        onClick={toggleDisplayModes}>
+
+                        {currentIndex === 0 ? translatableTexts.tipOfTheDay.description : translatableTexts.tipOfTheDay.video}
+                    </EpistoButton>
+                </Flex>
+            </Flex>
+        </EpistoDialog >
+
+        {/* preview */}
+        <Box position={"relative"} onClick={openDialog} cursor="pointer">
             <Flex
                 top="0"
                 position="absolute"
@@ -73,72 +125,5 @@ export const DailyTip = (props: {} & FlexProps) => {
                 playing={false}
                 url={dailyTipData?.videoUrl} />
         </Box>
-    }
-
-    const VideoSlide = () => <ModalPlayer videoUrl={dailyTipData?.videoUrl ?? ""}></ModalPlayer>
-
-    const toggleDisplayModes = () => {
-
-        if (currentIndex === 0) {
-
-            next();
-        }
-        else {
-
-            previous();
-        }
-    }
-
-    return <Flex direction="column" justify="center" {...css}>
-
-        <EpistoDialog logic={dialogLogic} fullScreenX={true} showCloseButton={true}>
-            <Flex direction="column" align="center">
-                <Flex
-                    id="customContentRoot"
-                    position={"relative"}
-                    height="calc(min(min(80vw, 1400px), 140vh) * 0.5625)"
-                    cursor="pointer"
-                    width="min(min(80vw, 1400px), 140vh)"
-                    align="center"
-                    justify="center"
-                    margin="auto">
-
-                    <SlidesDisplay
-                        alwaysRender
-                        index={currentIndex}
-                        slides={[
-                            VideoSlide,
-                            DescriptionSlide,
-                        ]} />
-                </Flex>
-
-                {/*<Flex>
-                    <EpistoButton variant="outlined" style={{ margin: "10px" }}>
-                        {translatableTexts.tipOfTheDay.prevoiusVideos}
-                    </EpistoButton>
-
-                    <EpistoButton variant="outlined" style={{ margin: "10px" }} onClick={toggleDisplayModes}>
-                        {translatableTexts.tipOfTheDay.description}
-                    </EpistoButton>
-                </Flex>*/}
-            </Flex>
-        </EpistoDialog >
-
-        <SlidesDisplay
-            alwaysRender
-            index={currentIndex}
-            slides={[
-                VideoPreviewSlide,
-                DescriptionSlide
-            ]} />
-
-        {/*<EpistoButton
-            style={{ alignSelf: "center" }}
-            variant="outlined"
-            onClick={toggleDisplayModes}>
-            {currentIndex === 0
-                ? translatableTexts.tipOfTheDay.description
-                : translatableTexts.tipOfTheDay.video}
-        </EpistoButton>*/}
     </Flex >
 }

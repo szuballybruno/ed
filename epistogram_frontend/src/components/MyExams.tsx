@@ -1,6 +1,6 @@
-import { Box, Flex } from "@chakra-ui/layout"
-import { DashboardSection } from "./universal/DashboardSection"
-import { EpistoGrid } from "./universal/EpistoGrid"
+import { Flex } from "@chakra-ui/layout";
+import { DashboardSection } from "./universal/DashboardSection";
+import { EpistoGrid } from "./universal/EpistoGrid";
 import { ExamTile } from "./universal/ExamTile";
 
 const finisedExams = [
@@ -12,23 +12,23 @@ const finisedExams = [
     }
 ]
 
-const stats = [
-    {
-        text: "Fókusz 24%"
-    },
-    {
-        text: "Pontosság 24%"
-    },
-    {
-        text: "Elvégzett vizsgák: 45"
-    },
-    {
-        text: "A kurzus teljes időtartalma: 3h"
-    },
-    {
-        text: "Reakció idő: 12s"
-    },
-]
+// const stats = [
+//     {
+//         text: "Fókusz 24%"
+//     },
+//     {
+//         text: "Pontosság 24%"
+//     },
+//     {
+//         text: "Elvégzett vizsgák: 45"
+//     },
+//     {
+//         text: "A kurzus teljes időtartalma: 3h"
+//     },
+//     {
+//         text: "Reakció idő: 12s"
+//     },
+// ]
 
 export const MyExams = () => {
 

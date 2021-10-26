@@ -15,7 +15,6 @@ import Navbar from '../navbar/Navbar';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { ProfileImage } from '../ProfileImage';
 import { EpistoButton } from '../universal/EpistoButton';
-import { HiddenFileUploadInput } from '../universal/HiddenFileUploadInput';
 import { SelectImage } from '../universal/SelectImage';
 
 const EditField = (props: { children: ReactNode, label: string }) => {

@@ -14,7 +14,6 @@ import { useShowErrorDialog } from "../../../services/notifications";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { FloatAddButton } from "../../FloatAddButton";
 import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
-import { ErrorDialogContext } from "../../HOC/DialogFrame";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { ProfileImage } from "../../ProfileImage";
 import { EpistoButton } from "../../universal/EpistoButton";

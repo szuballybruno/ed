@@ -1,24 +1,22 @@
-import { Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { useEditExamData, useSaveExam } from "../../../services/examService";
-import { LoadingFrame } from "../../HOC/LoadingFrame"
-import { EpistoEntry } from "../../universal/EpistoEntry";
-import { FlexList } from "../../universal/FlexList";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { AdminSubpageHeader } from "../AdminSubpageHeader"
-import LiveHelpIcon from '@mui/icons-material/LiveHelp';
-import { EpistoButton } from "../../universal/EpistoButton";
+import { Flex } from "@chakra-ui/layout";
 import { Delete } from "@mui/icons-material";
 import EditIcon from '@mui/icons-material/Edit';
-import { Flex } from "@chakra-ui/layout";
-import { QuestionDTO } from "../../../models/shared_models/QuestionDTO";
-import { useNavigation } from "../../../services/navigatior";
-import { getVirtualId } from "../../../services/idService";
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { ExamEditDataDTO } from "../../../models/shared_models/ExamEditDataDTO";
+import { QuestionDTO } from "../../../models/shared_models/QuestionDTO";
+import { useEditExamData, useSaveExam } from "../../../services/examService";
+import { getVirtualId } from "../../../services/idService";
+import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
+import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { DragAndDropList } from "../../universal/DragAndDropList";
+import { EpistoButton } from "../../universal/EpistoButton";
+import { EpistoEntry } from "../../universal/EpistoEntry";
+import { FlexListItem } from "../../universal/FlexListItem";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const EditExamSubpage = () => {
 

@@ -43,6 +43,8 @@ const QuestionItem = (props: {
 
         setText(question.questionText);
         setShowUpSecs(question.showUpTimeSeconds + "");
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [question.questionText, question.questionId, question.showUpTimeSeconds]);
 
     return <FlexListItem

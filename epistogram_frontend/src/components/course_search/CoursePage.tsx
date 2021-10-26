@@ -1,14 +1,8 @@
-import {
-    Box,
-    Container,
-    Divider,
-    Flex
-} from "@chakra-ui/react";
+import { Box, Container, Divider, Flex } from "@chakra-ui/react";
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Tab, Tabs, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { Radar } from "react-chartjs-2";
-import { useParams } from "react-router";
 import { getAssetUrl } from "../../frontendHelpers";
 import { EditCourseDataDTO } from "../../models/shared_models/AdminPageEditCourseDTO";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
@@ -368,9 +362,9 @@ export type GetCourseShortDTO = {
 }
 
 const CoursePage = () => {
-    const params: {
-        courseId: string
-    } = useParams()
+    // const params: {
+    //     courseId: string
+    // } = useParams()
 
     const [currentTab, setCurrentTab] = React.useState(0);
 
