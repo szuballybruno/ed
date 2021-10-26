@@ -18,6 +18,8 @@ export const AuthenticationFrame = (props) => {
 
     hotjar.initialize(2659369, 6)
 
+
+    // This appId only work on dev
     useEffect(() => {
         OneSignal.init({
             appId: "117106bf-0050-495b-b7f2-fd8f1aae7849"
