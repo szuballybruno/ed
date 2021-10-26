@@ -18,15 +18,9 @@ export const AuthenticationFrame = (props) => {
 
     hotjar.initialize(2659369, 6)
 
-    const oneSignalAppId = process.env.ONE_SIGNAL_APP_ID;
-
     useEffect(() => {
-        (
-            process.env.NODE_ENV === "development" ||
-            process.env.NODE_ENV === "production"
-        ) &&
         OneSignal.init({
-            appId: oneSignalAppId
+            appId: process.env.ONE_SIGNAL_APP_ID
         });
     }, []);
 
