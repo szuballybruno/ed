@@ -33,12 +33,12 @@ export const ExamPlayer = (props: {
 
     const handleExamFinished = () => {
 
-        setIsExamInProgress(false);
         slidesState.next();
     }
 
     const handleContinueCourse = () => {
 
+        setIsExamInProgress(false);
         navigateToPlayer(nextCourseItem.descriptorCode);
     }
 
