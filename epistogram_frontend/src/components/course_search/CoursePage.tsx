@@ -417,7 +417,7 @@ const CoursePage = () => {
                                 borderRadius={5}
                                 shadow={"#00000024 0px 0px 3px 0px"}>
                                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
-                                    <img src={getAssetUrl("")} alt={""} style={{
+                                    <img src={getAssetUrl("/course_page_icons/about_category.svg")} alt={""} style={{
                                         width: 50,
                                         height: 50
                                     }} />
@@ -428,18 +428,27 @@ const CoursePage = () => {
                                 </Flex>
                             </Flex>
 
-                            <Flex direction={"row"}
+                            <Flex
+                                direction={"row"}
                                 w={200}
                                 h={60}
                                 bg={"white"}
                                 borderWidth={1}
                                 borderRadius={5}
+                                alignItems="center"
+                                justifyContent="center"
                                 shadow={"#00000024 0px 0px 3px 0px"}>
-                                <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
-                                    <img src={getAssetUrl("")} alt={""} style={{
-                                        width: 50,
-                                        height: 50
-                                    }} />
+                                <Flex w={50}
+                                      h={50}
+                                      className={"circle"}
+                                      border="2px solid var(--epistoTeal)"
+                                      bg="var(--deepBlue)"
+                                      color="white"
+                                      alignItems={"center"}
+                                      justifyContent={"center"}>
+                                    <Typography>
+                                        OM
+                                    </Typography>
                                 </Flex>
                                 <Flex ml={5} w={135} direction={"column"} justifyContent={"center"} alignItems={"flex-start"}>
                                     <Typography fontSize={12} fontWeight={"bold"}>Tanár</Typography>
@@ -455,7 +464,7 @@ const CoursePage = () => {
                                 borderRadius={5}
                                 shadow={"#00000024 0px 0px 3px 0px"}>
                                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
-                                    <img src={getAssetUrl("")} alt={""} style={{
+                                    <img src={getAssetUrl("/course_page_icons/about_difficulty.svg")} alt={""} style={{
                                         width: 50,
                                         height: 50
                                     }} />
@@ -473,7 +482,7 @@ const CoursePage = () => {
                                 borderRadius={5}
                                 shadow={"#00000024 0px 0px 3px 0px"}>
                                 <Flex w={60} h={60} alignItems={"center"} justifyContent={"center"}>
-                                    <img src={getAssetUrl("")} alt={""} style={{
+                                    <img src={getAssetUrl("/course_page_icons/about_learning_experience.svg")} alt={""} style={{
                                         width: 50,
                                         height: 50
                                     }} />
