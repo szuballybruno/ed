@@ -51,7 +51,7 @@ WHERE
 			AND  
 			"a"."isCorrect" IS DISTINCT FROM true
 			AND 
-			"qa"."creationDate" + INTERVAL '1 HOURS' < NOW() 
+			"qa"."creationDate" + INTERVAL '2 MINUTES' < NOW() 
 		)
 		OR
 		(
@@ -60,7 +60,7 @@ WHERE
 			AND  
 			"a"."isCorrect" = true 
 			AND 
-			"qa"."creationDate" + INTERVAL '2 HOURS' < NOW() 
+			"qa"."creationDate" + INTERVAL '4 MINUTES' < NOW() 
 		)
 		OR
 		(
@@ -69,7 +69,7 @@ WHERE
 			AND  
 			"a"."isCorrect" IS DISTINCT FROM true
 			AND 
-			"qa"."creationDate" + INTERVAL '3 HOURS' < NOW() 
+			"qa"."creationDate" + INTERVAL '6 MINUTES' < NOW() 
 		)
 	)
 
