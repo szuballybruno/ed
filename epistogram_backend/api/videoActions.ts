@@ -1,11 +1,15 @@
 import { UploadedFile } from "express-fileupload";
+import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
 import { Question } from "../models/entity/Question";
 import { Video } from "../models/entity/Video";
+import { VideoPlaybackData } from "../models/entity/VideoPlaybackData";
+import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { CreateVideoDTO } from "../models/shared_models/CreateVideoDTO";
 import { IdBodyDTO } from "../models/shared_models/IdBodyDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
+import { unsetUsersCurrentCourseItemAsync } from "../services/courseService";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
@@ -49,6 +53,7 @@ export const deleteVideoAction = async (params: ActionParamsType) => {
 
     const videoId = withValueOrBadRequest<IdBodyDTO>(params.req.body).id;
 
+    // delete questions
     const questions = await staticProvider
         .ormConnection
         .getRepository(Question)
@@ -60,6 +65,37 @@ export const deleteVideoAction = async (params: ActionParamsType) => {
 
     await deleteQuesitonsAsync(questions.map(x => x.id));
 
+    // delete answer sessions
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(AnswerSession)
+        .where("videoId = :videoId", { videoId })
+        .execute();
+
+    // set current course item on users
+    await unsetUsersCurrentCourseItemAsync(undefined, videoId);
+
+    // delete playback samples 
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(VideoPlaybackSample)
+        .where("videoId = :videoId", { videoId })
+        .execute();
+
+    // delete playback samples 
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(VideoPlaybackData)
+        .where("videoId = :videoId", { videoId })
+        .execute();
+
+    // delete video
     await staticProvider
         .ormConnection
         .getRepository(Video)

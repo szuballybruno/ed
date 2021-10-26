@@ -94,31 +94,7 @@ export class User {
 
     @ManyToOne(() => Organization, organization => organization.users)
     @JoinColumn({ name: 'organizationId' })
-    organization: Organization
-
-    // Current video
-    @Column({ nullable: true })
-    currentVideoId: number | null;
-
-    @ManyToOne(() => Video, video => video.users)
-    @JoinColumn({ name: 'currentVideoId' })
-    currentVideo: Video | null
-
-    // Current exam
-    @Column({ nullable: true })
-    currentExamId: number | null;
-
-    @ManyToOne(() => Exam, exam => exam.users)
-    @JoinColumn({ name: 'currentExamId' })
-    currentExam: Exam | null;
-
-    // course 
-    @Column({ nullable: true })
-    currentCourseId: number | null;
-
-    @ManyToOne(_ => Course, x => x.users)
-    @JoinColumn({ name: "currentCourseId" })
-    currentCourse: Course;
+    organization: Organization;
 
     // job title 
     @Column({ nullable: true, type: "number" })

@@ -33,6 +33,7 @@ export const apiRoutes = {
         getCourseBriefData: '/course/get-course-brief-data',
         saveCourseData: '/course/save-course-data',
         saveCourseThumbnail: '/course/save-course-thumbnail',
+        startCourse: "/course/start-course"
     },
 
     video: {

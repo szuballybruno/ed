@@ -4,7 +4,7 @@ import { staticProvider } from "../staticProvider";
 import { toCourseShortDTO } from "./mappings";
 import { getUserDTOById } from "./userService";
 
-export const getUserCoursesAsync = async (userId: number, dto: GetUserCoursesDTO) => {
+export const getAvailableCoursesAsync = async (userId: number, dto: GetUserCoursesDTO) => {
 
     const user = (await getUserDTOById(userId))!;
     const organizationId = user.organizationId;
@@ -16,17 +16,11 @@ export const getUserCoursesAsync = async (userId: number, dto: GetUserCoursesDTO
     const courses = await staticProvider
         .ormConnection
         .getRepository(CourseView)
-        .find({
-            where: {
-                userId: userId
-            },
-            order: {
-                title: "DESC"
-            }
-        });
+        .createQueryBuilder("cv")
+        .where("cv.userId = :userId", { userId })
+        .leftJoinAndSelect("cv.teacher", "t")
+        .getMany();
 
-    const courseShortDTOs = await Promise.all(courses
-        .map(async course => toCourseShortDTO(course)))
-
-    return courseShortDTOs;
+    return courses
+        .map(course => toCourseShortDTO(course));
 }

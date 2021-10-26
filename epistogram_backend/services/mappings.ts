@@ -200,15 +200,35 @@ export const toExamDTO = (exam: Exam) => {
     } as ExamDTO;
 }
 
+export const toSimpleCourseItemDTOs = (course: Course) => {
+
+    navPropNotNull(course.videos);
+    navPropNotNull(course.exams);
+
+    const videoCourseItemDTOs = course
+        .videos
+        .map(x => toCourseItemDTOVideo(x));
+
+    const examCourseItemDTOs = course
+        .exams
+        .map(x => toCourseItemDTOExam(x));
+
+    const courseItemDTOs = videoCourseItemDTOs
+        .concat(examCourseItemDTOs)
+        .orderBy(x => x.orderIndex);
+
+    return courseItemDTOs;
+}
+
 export const toExamResultDTO = (
     answerSessionView: UserExamAnswerSessionView,
-    data: User,
+    currentExam: Exam,
     isFirstTimeComplted: boolean) => {
 
-    navPropNotNull(data.currentExam);
-    navPropNotNull(data.currentExam!.questions);
+    navPropNotNull(currentExam);
+    navPropNotNull(currentExam.questions);
 
-    const questions = data.currentExam!.questions;
+    const questions = currentExam.questions;
 
     const questionDTOs = questions
         .map(question => {
@@ -240,30 +260,6 @@ export const toExamResultDTO = (
         isFinalExam: answerSessionView.isFinalExam,
         shouldShowCourseCompleted: isFirstTimeComplted && answerSessionView.isFinalExam
     } as ExamResultsDTO;
-}
-
-export const toCourseItemDTOs = (
-    courseItems: CourseItemStateView[],
-    currentItemDescriptorCode: string) => {
-
-    const courseItemDTOs = courseItems
-        .map(x => toCourseItemDTO(x));
-
-    // set current item's state to 'current'
-    let currentItem = courseItemDTOs
-        .single(item => item.descriptorCode === currentItemDescriptorCode);
-
-    if (currentItem.state === "locked") {
-
-        const firstLockedIndex = courseItemDTOs
-            .findIndex(x => x.state === "locked");
-
-        currentItem = courseItemDTOs[firstLockedIndex - 1];
-    }
-
-    currentItem.state = "current";
-
-    return courseItemDTOs;
 }
 
 export const toVideoDTO = (video: Video, maxWatchedSeconds: number) => {
@@ -343,20 +339,19 @@ export const toCourseItemDTOVideo = (video: Video, state?: CourseItemStateType) 
     } as CourseItemDTO;
 }
 
-export const toCourseShortDTO = async (course: CourseView) => {
+export const toCourseShortDTO = (course: CourseView) => {
 
     const thumbnailImageURL = course.filePath
         ? getAssetUrl(course.filePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
 
-    const firstItemCode = (course.currentExamId || course.currentVideoId)
+    const firstItemCode = course.isStarted
         ? course.currentExamId
             ? getCourseItemDescriptorCode(course.currentExamId, "exam")
             : getCourseItemDescriptorCode(course.currentVideoId, "video")
         : null;
 
-
-    const teacher = await getUserById(course.teacherId).then(t => t)
+    const teacher = course.teacher;
 
     return {
         courseId: course.id,

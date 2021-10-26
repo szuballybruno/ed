@@ -1,5 +1,5 @@
 SELECT 
-	"user"."id" AS "userId",
+	"csv"."userId" AS "userId",
 	"sf"."filePath",
 	"csv"."isComplete",
 	"csv"."isStarted",
@@ -30,20 +30,24 @@ ON "csv"."courseId" = "course"."id"
 LEFT JOIN public."storage_file" AS "sf"
 ON "sf"."id" = "course"."coverFileId"
 
-LEFT JOIN public."user"
-ON "user"."id" = "csv"."userId"
+LEFT JOIN public."user_course_bridge" AS "ucb"
+ON "ucb"."userId" = "csv"."userId"
+	AND "ucb"."courseId" = "course"."id"
 
 LEFT JOIN public."exam" 
-ON "user"."currentExamId" = "exam"."id"
+ON "ucb"."currentExamId" = "exam"."id"
 	AND "exam"."courseId" = "course"."id"
 
 LEFT JOIN public."video" 
-ON "user"."currentVideoId" = "video"."id"
+ON "ucb"."currentVideoId" = "video"."id"
 	AND "video"."courseId" = "course"."id"
 
 LEFT JOIN public."course_item_all_view" AS "ciav"
 ON "ciav"."courseId" = "course"."id"
 	AND "ciav"."orderIndex" = 0
 	
+ORDER BY 
+	"course"."title" DESC,
+	"csv"."userId"
 
 

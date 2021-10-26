@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
 import { Question } from "../models/entity/Question";
@@ -7,6 +8,7 @@ import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { getUserIdFromRequest } from "../services/authenticationService";
+import { unsetUsersCurrentCourseItemAsync } from "../services/courseService";
 import { answerExamQuestionAsync, getExamResultsAsync } from "../services/examService";
 import { toQuestionDTO } from "../services/mappings";
 import { deleteQuesitonsAsync, saveQuestionsAsync } from "../services/questionService";
@@ -108,6 +110,7 @@ export const deleteExamAction = async (params: ActionParamsType) => {
 
     const examId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
+    // delete exam quesitons 
     const questions = await staticProvider
         .ormConnection
         .getRepository(Question)
@@ -119,6 +122,19 @@ export const deleteExamAction = async (params: ActionParamsType) => {
 
     await deleteQuesitonsAsync(questions.map(x => x.id));
 
+    // delete answer sessions
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(AnswerSession)
+        .where("examId = :examId", { examId })
+        .execute();
+
+    // set current course item on users
+    await unsetUsersCurrentCourseItemAsync(examId);
+
+    // delete exam
     await staticProvider
         .ormConnection
         .getRepository(Exam)

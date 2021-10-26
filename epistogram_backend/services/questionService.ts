@@ -1,5 +1,6 @@
 import { Answer } from "../models/entity/Answer";
 import { Question } from "../models/entity/Question";
+import { QuestionAnswer } from "../models/entity/QuestionAnswer";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { staticProvider } from "../staticProvider";
 
@@ -69,14 +70,32 @@ export const deleteQuesitonsAsync = async (quesitonIds: number[]) => {
     if (quesitonIds.length === 0)
         return;
 
+    // get answers 
+    const answers = await staticProvider
+        .ormConnection
+        .getRepository(Answer)
+        .createQueryBuilder()
+        .where('"questionId" in (:...quesitonIds)', { quesitonIds })
+        .getMany();
+
+    const answerIds = answers.map(x => x.id);
+
+    // delete questionanswers
     await staticProvider
         .ormConnection
         .createQueryBuilder()
         .delete()
-        .from(Answer)
-        .where("questionId in (:...quesitonIds)", { quesitonIds })
+        .from(QuestionAnswer)
+        .where("answerId in (:...answerIds)", { answerIds })
         .execute();
 
+    // delete answers 
+    await staticProvider
+        .ormConnection
+        .getRepository(Answer)
+        .delete(answerIds);
+
+    // delete questions
     await staticProvider
         .ormConnection
         .getRepository(Question)

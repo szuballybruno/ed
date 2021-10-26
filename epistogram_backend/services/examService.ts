@@ -2,10 +2,11 @@ import { User } from "../models/entity/User";
 import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { staticProvider } from "../staticProvider";
-import { getCurrentCourseItemDescriptor } from "./courseService";
 import { toExamResultDTO } from "./mappings";
 import { answerQuestionAsync } from "./questionAnswerService";
 import { getUserById } from "./userService";
+import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { Exam } from "../models/entity/Exam";
 
 export const answerExamQuestionAsync = (questionAnswerDTO: QuestionAnswerDTO) => {
 
@@ -19,18 +20,26 @@ export const answerExamQuestionAsync = (questionAnswerDTO: QuestionAnswerDTO) =>
 
 export const getExamResultsAsync = async (userId: number, answerSessionId: number) => {
 
-    const user = await getUserById(userId);
-    const descriptor = await getCurrentCourseItemDescriptor(user);
+    const bridge = await staticProvider
+        .ormConnection
+        .getRepository(UserCourseBridge)
+        .findOneOrFail({
+            where: {
+                userId,
+                isCurrent: true
+            }
+        });
 
-    if (descriptor?.itemType !== "exam")
-        throw new Error("Current course item type is not 'exam'!");
+    const currentExamId = bridge.currentExamId;
+    if (!currentExamId)
+        throw new Error("Current exam id is null or undefined!");
 
     const answerSession = await staticProvider
         .ormConnection
         .getRepository(UserExamAnswerSessionView)
         .findOneOrFail({
             where: {
-                examId: descriptor.itemId,
+                examId: currentExamId,
                 userId: userId,
                 answerSessionId: answerSessionId
             }
@@ -41,7 +50,7 @@ export const getExamResultsAsync = async (userId: number, answerSessionId: numbe
         .getRepository(UserExamAnswerSessionView)
         .find({
             where: {
-                examId: descriptor.itemId,
+                examId: currentExamId,
                 userId: userId,
                 isCompleteSession: true
             }
@@ -52,17 +61,16 @@ export const getExamResultsAsync = async (userId: number, answerSessionId: numbe
     // than the current session is the first one completed.  
     const isFirstTimeComplted = prevoiuslyCompletedSessions.length === 1 && answerSession.isCompleteSession;
 
-    const data = await staticProvider
+    const exam = await staticProvider
         .ormConnection
-        .getRepository(User)
-        .createQueryBuilder("u")
-        .leftJoinAndSelect("u.currentExam", "ce")
-        .leftJoinAndSelect("ce.questions", "q")
+        .getRepository(Exam)
+        .createQueryBuilder("e")
+        .leftJoinAndSelect("e.questions", "q")
         .leftJoinAndSelect("q.answers", "allA")
         .leftJoinAndSelect("q.questionAnswers", "qa", "qa.answerSessionId = :answerSessionId", { answerSessionId })
         .leftJoinAndSelect("qa.answer", "ans")
-        .where("u.id = :userId", { userId })
+        .where("e.id = :examId", { examId: bridge.currentExamId })
         .getOneOrFail();
 
-    return toExamResultDTO(answerSession, data, isFirstTimeComplted);
+    return toExamResultDTO(answerSession, exam, isFirstTimeComplted);
 }

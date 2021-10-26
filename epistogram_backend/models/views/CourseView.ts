@@ -1,4 +1,5 @@
-import { ViewColumn, ViewEntity } from "typeorm";
+import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from "typeorm";
+import { User } from "../entity/User";
 
 @ViewEntity({
     synchronize: false,
@@ -35,4 +36,9 @@ export class CourseView {
 
     @ViewColumn()
     category: string;
+
+    // user
+    @ManyToOne(_ => User)
+    @JoinColumn({ name: "teacherId" })
+    teacher: User;
 }
