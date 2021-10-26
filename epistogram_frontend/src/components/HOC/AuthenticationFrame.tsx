@@ -20,7 +20,7 @@ export const AuthenticationFrame = (props) => {
 
     useEffect(() => {
         OneSignal.init({
-            appId: process.env.ONE_SIGNAL_APP_ID
+            appId: "117106bf-0050-495b-b7f2-fd8f1aae7849"
         });
     }, []);
 
