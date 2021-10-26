@@ -66,6 +66,36 @@ const CourseTile = (props: {
         </Flex>
     </Flex>
 
+    const CourseTileCompletedLabel = () => <Flex
+        position="absolute"
+        top={10}
+        right={0}
+        justify="flex-end">
+
+        <Flex
+            direction="row"
+            justifyContent="space-around"
+            alignItems="center"
+            padding="4px"
+            w={130}
+            bg="#97CC9B"
+            borderRadius="7px 0 0 7px">
+            <img
+                src={getAssetUrl("course_exam_tile_icons/tile_badge_completed.svg")}
+                alt={""}
+                style={{
+                    width: 20,
+                    height: 20
+                }}
+            />
+            <Text
+                textTransform={"uppercase"}
+                color="white">
+                Teljesítve!
+            </Text>
+        </Flex>
+    </Flex>
+
     return <FlexFloat
         className="whall"
         direction="column"
@@ -83,7 +113,12 @@ const CourseTile = (props: {
                 <Box position="relative"
                     className="whall"
                     minHeight="150px">
-                    <Box position="absolute" top="0" height="100%" width="100%" p="4px">
+                    <Box
+                        position="absolute"
+                        top="0"
+                        height="100%"
+                        width="100%"
+                        p="4px">
 
                         <img style={{
                             width: "100%",
@@ -91,43 +126,23 @@ const CourseTile = (props: {
                             objectFit: "cover",
                             borderRadius: 10
                         }} src={thumbnailImageUrl} alt="" />
-                        <Flex position="relative">
+
+                        <Flex
+                            h="calc(100% - 8px)"
+                            width="calc(100% - 8px)"
+                            top="4"
+                            left="4"
+                            position="absolute">
+                            {isComplete && <CourseTileCompletedLabel />}
                             {props.tempIsStartedSwitch && <CourseTileHowManyApplicantsLabel/>}
                             {props.tempIsStartedSwitch && <CourseTileNewCourseLabel />}
+
                         </Flex>
                     </Box>
                 </Box>
 
                 {/* done overlay */}
-                {isComplete && <Flex
-                    position="absolute"
-                    top={10}
-                    left={0}
-                    width="100%"
-                    justify="flex-end">
 
-                    <Flex
-                        direction="row"
-                        justifyContent="space-around"
-                        alignItems="center"
-                        padding="4px"
-                        w={130}
-                        bg="#97CC9B"
-                        borderRadius="7px 0 0 7px">
-                        <DoneIcon
-                            width="20px"
-                            height="20px"
-                            style={{
-                                color: "white",
-                                borderRadius: "50%"
-                            }} />
-                        <Text
-                            textTransform={"uppercase"}
-                            color="white">
-                            Teljesítve!
-                        </Text>
-                    </Flex>
-                </Flex>}
             </Box>
 
             {/* title */}
@@ -151,6 +166,20 @@ const CourseTile = (props: {
                             />
                             <Text as={"text"} color={"grey"}>{"14h 10m"}</Text>
                         </Flex>
+
+                        {props.tempIsStartedSwitch ?
+                        <Flex direction={"row"} alignItems={"center"} mr={5}>
+                            <img
+                                src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
+                                alt={""}
+                                style={{
+                                    width: 15,
+                                    height: 15,
+                                    margin: "0 2px 0 4px"
+                                }}
+                            />
+                            <Text as={"text"} color={"grey"}>{"105/119"}</Text>
+                        </Flex> :
                         <Flex direction={"row"} alignItems={"center"} mr={5}>
                             <img
                                 src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
@@ -162,7 +191,21 @@ const CourseTile = (props: {
                                 }}
                             />
                             <Text as={"text"} color={"grey"}>{"119"}</Text>
-                        </Flex>
+                        </Flex>}
+
+                        {props.tempIsStartedSwitch ?
+                        <Flex direction={"row"} alignItems={"center"} mr={5}>
+                            <img
+                                src={getAssetUrl("course_exam_tile_icons/tile_questions.svg")}
+                                alt={""}
+                                style={{
+                                    width: 15,
+                                    height: 15,
+                                    margin: "0 2px 0 4px"
+                                }}
+                            />
+                            <Text as={"text"} color={"grey"}>{"112/119"}</Text>
+                        </Flex> :
                         <Flex direction={"row"} alignItems={"center"} mr={5}>
                             <img
                                 src={getAssetUrl("course_exam_tile_icons/tile_language.svg")}
@@ -174,7 +217,21 @@ const CourseTile = (props: {
                                 }}
                             />
                             <Text as={"text"} color={"grey"}>{"magyar"}</Text>
-                        </Flex>
+                        </Flex>}
+
+
+                        {props.tempIsStartedSwitch ?
+                        <Flex direction={"row"} alignItems={"center"}>
+                            <img
+                                src={getAssetUrl("course_exam_tile_icons/tile_test.svg")}
+                                alt={""}
+                                style={{
+                                    width: 15,
+                                    height: 15,
+                                    margin: "0 2px 0 4px"
+                                }} />
+                            <Text as={"text"} color={"grey"}>{"nincs kitöltve"}</Text>
+                        </Flex> :
                         <Flex direction={"row"} alignItems={"center"}>
                             <img
                                 src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
@@ -185,7 +242,9 @@ const CourseTile = (props: {
                                     margin: "0 2px 0 4px"
                                 }} />
                             <Text as={"text"} color={"grey"}>{"6.9/10"}</Text>
-                        </Flex>
+                        </Flex>}
+
+
                     </Flex>
                     {
                         props.tempIsStartedSwitch ?
@@ -218,20 +277,27 @@ const CourseTile = (props: {
                                 direction={"row"}
                                 alignItems={"center"}
                                 mt={7}>
-                                <img
-                                    src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
-                                    alt={""}
-                                    style={{width: 20, height: 20, margin: "0 2px"}}/>
-                                <Text
-                                    as="text"
-                                    color="white">{"8.9/10 nehézség"}</Text>
-                                <img
-                                    src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
-                                    alt={""}
-                                    style={{width: 20, height: 20, margin: "0 2px"}}/>
-                                <Text
-                                    as="text"
-                                    color="white">{"16/23 helyes válasz"}</Text>
+                                <Flex ml="5">
+                                    <img
+                                        src={getAssetUrl("course_exam_tile_icons/tile_progress.svg")}
+                                        alt={""}
+                                        style={{width: 20, height: 20, margin: "0 2px"}}/>
+                                    <Text
+                                        as="text"
+                                        fontSize="0.85em"
+                                        color="grey">{"79%-os haladás"}</Text>
+                                </Flex>
+
+                                <Flex ml="5">
+                                    <img
+                                        src={getAssetUrl("course_exam_tile_icons/tile_achivement.svg")}
+                                        alt={""}
+                                        style={{width: 20, height: 20, margin: "0 2px"}}/>
+                                    <Text
+                                        as="text"
+                                        fontSize="0.85em"
+                                        color="grey">{"65%-ban helyes válaszok"}</Text>
+                                </Flex>
                             </Flex> :
                             <Flex
                                 direction={"row"}

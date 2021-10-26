@@ -157,9 +157,9 @@ export const ExamTile = (props: {
                         direction={"row"}
                         alignItems={"center"}
                         mt={7}>
-                        <img src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")} alt={""} style={{ width: 20, height: 20, margin: "0 2px" }} />
+                        <img src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")} alt={""} style={{ width: 20, height: 20, margin: "0 2px" }} />
                         <Text as="text" color="white">{"8.9/10 nehézség"}</Text>
-                        <img src={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")} alt={""} style={{ width: 20, height: 20, margin: "0 2px" }} />
+                        <img src={getAssetUrl("course_exam_tile_icons/tile_questions.svg")} alt={""} style={{ width: 20, height: 20, margin: "0 2px" }} />
                         <Text as="text" color="white">{"16/23 helyes válasz"}</Text>
                     </Flex>
 

@@ -11,6 +11,7 @@ import { InfoGrid } from "../universal/InfoGrid";
 import { EpistoButton } from "../universal/EpistoButton";
 import { translatableTexts } from "../../translatableTexts";
 import { httpPostAsync } from "../../services/httpClient";
+import { assetStorageUrl } from "../../Environemnt";
 
 const CourseStatCard = (props: { course: CourseShortDTO }) => {
 
