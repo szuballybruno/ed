@@ -90,13 +90,10 @@ const seedOrganizations = async (connection: TypeORMConnection) => {
         .getRepository(Organization)
         .insert([
             {
-                name: "Farewell Kft."
+                name: "P029"
             },
             {
-                name: "Bruno Muvek"
-            },
-            {
-                name: "Manfredisztan.org"
+                name: "EpistoGram"
             }
         ]))
         .identifiers
@@ -438,7 +435,7 @@ const seedUsersAsync = async (connection: TypeORMConnection, orgIds: number[]) =
         {
             firstName: "Elon",
             lastName: "Musk",
-            jobTitleId: 2,
+            jobTitleId: 1,
             roleId: UserRoleEnum.supervisorId,
             email: "elon.musk@email.com",
         },

@@ -1,4 +1,9 @@
-import { Box, Container, Divider, Flex } from "@chakra-ui/react";
+import {
+    Box,
+    Container,
+    Divider,
+    Flex
+} from "@chakra-ui/react";
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Tab, Tabs, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
@@ -11,170 +16,92 @@ import { MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { EpistoButton } from "../universal/EpistoButton";
 
-export const CoursePageSummary = () => <Flex mt={10} w={"100%"} h={500} direction={"column"} alignItems={"flex-start"}>
-    <EpistoHeader text={"A kurzus rövid leírása"} my={10} />
-    <Typography>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique suscipit tempor. Pellentesque dictum, augue a egestas faucibus, augue ipsum vehicula dui, faucibus eleifend risus orci quis ante. Curabitur porttitor fringilla blandit. Suspendisse placerat tempus vehicula. In dignissim tellus magna. Donec non tincidunt risus. Morbi sit amet turpis dolor. Proin vulputate leo eu leo bibendum, in condimentum ex efficitur.
+export const CoursePageSummary = (props: {
+    overviewSectionShortDescription: string
+    whatCanYouLearnFromCourseList: string[]
+    whatSkillsTheCourseImprovingDescription: string
+}) => {
 
-        Maecenas risus sem, pharetra eu magna vel, gravida luctus urna. Sed diam urna, blandit id justo a, consectetur lacinia risus. Donec porttitor, sem vitae posuere lacinia, mauris libero sagittis dui, non viverra purus lectus ut urna. Pellentesque semper, eros ac maximus vehicula, orci odio tempor magna, vel rutrum nisi nisl id mauris. Cras ullamcorper lacus elementum venenatis feugiat. Donec magna dui, vulputate ac massa ut, placerat imperdiet mauris. Fusce pellentesque ipsum nunc, eu lobortis libero porttitor id. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc tempor euismod erat, finibus commodo felis mollis a. Ut rhoncus convallis sem, in varius tortor dapibus et. Donec ultricies accumsan neque, eget bibendum ante fringilla sed.
-    </Typography>
-    <EpistoButton style={{
-        marginTop: 20
-    }}>
-        Bővebben
-    </EpistoButton>
-    <EpistoHeader text={"Mit tanulhatsz ezen a kurzuson?"} my={10} mt={40} />
-    <Flex w={"100%"}>
-        <Flex direction={"column"} minW={"50%"}>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} />
+    const WhatCanYouLearnInCourseListItem = (props: {title: string}) => <Flex w={"100%"} h={30} px={15} mt={10}>
+        <Flex w={30} h={30} p={5} >
+            <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
+                borderRadius: 5,
+                objectFit: "cover"
+            }} alt={""} />
 
-                </Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} /></Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} /></Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} /></Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} /></Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
         </Flex>
-        <Flex direction={"column"} minW={"50%"}>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} /></Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} /></Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} /></Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} /></Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} >
-                    <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                        borderRadius: 5,
-                        objectFit: "cover"
-                    }} alt={""} /></Flex>
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
-                </Flex>
-            </Flex>
+        <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
+            <Typography>{props.title}</Typography>
         </Flex>
     </Flex>
-    <EpistoHeader text={"Milyen készségeket fejleszt a tanfolyam?"} my={10} mt={40} />
-    <Flex w={"100%"} mb={100}>
-        <Flex direction={"column"} minW={"50%"} >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique suscipit tempor. Pellentesque dictum, augue a egestas faucibus, augue ipsum vehicula dui, faucibus eleifend risus orci quis ante. Curabitur porttitor fringilla blandit. Suspendisse placerat tempus vehicula. In dignissim tellus magna. Donec non tincidunt risus. Morbi sit amet turpis dolor. Proin vulputate leo eu leo bibendum, in condimentum ex efficitur. Maecenas risus sem, pharetra eu magna vel, gravida luctus urna. Sed diam urna, blandit id justo a, consectetur lacinia risus.
+
+    return <Flex mt={10} w={"100%"} h={500} direction={"column"} alignItems={"flex-start"}>
+        <EpistoHeader text={"A kurzus rövid leírása"} my={10} />
+        <Typography>
+            {props.overviewSectionShortDescription}
+        </Typography>
+        <EpistoButton style={{
+            marginTop: 20
+        }}>
+            Bővebben
+        </EpistoButton>
+        <EpistoHeader text={"Mit tanulhatsz ezen a kurzuson?"} my={10} mt={40} />
+        <Flex w={"100%"}>
+            <Flex direction={"column"} minW={"50%"}>
+                {props.whatCanYouLearnFromCourseList.map((title, index) => {
+                    return index % 2 !== 0 && <WhatCanYouLearnInCourseListItem title={title} />
+                })}
+            </Flex>
+            <Flex direction={"column"} minW={"50%"}>
+                {props.whatCanYouLearnFromCourseList.map((title, index) => {
+                    return index % 2 === 0 && <WhatCanYouLearnInCourseListItem title={title} />
+                })}
+            </Flex>
         </Flex>
-        <Flex direction={"column"} minW={"50%"}>
-            <Radar
-                options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: false,
-                            text: 'Felhasználók átlagos tanulási stílusa'
+        <EpistoHeader text={"Milyen készségeket fejleszt a tanfolyam?"} my={10} mt={40} />
+        <Flex w={"100%"} mb={100}>
+            <Flex direction={"column"} minW={"50%"} >
+                {props.whatSkillsTheCourseImprovingDescription}
+            </Flex>
+            <Flex direction={"column"} minW={"50%"}>
+                <Radar
+                    options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: false,
+                                text: 'Felhasználók átlagos tanulási stílusa'
+                            },
+                            legend: {
+                                display: false
+                            }
                         },
-                        legend: {
-                            display: false
-                        }
-                    },
-                }}
-                data={{
-                    labels: [
-                        'Egyedüli',
-                        'Hangos kimondás',
-                        'Elméleti',
-                        'Vizuális alapú',
-                        'Analitikus',
-                        'Szociális',
-                        'Térbeli elhelyezés',
-                        'Gyakorlati',
-                        'Audió alapú',
-                        'Kreatív'
-                    ],
-                    datasets: [
-                        {
-                            data: [5, 4, 5, 5, 3, 5, 5, 5, 4, 5],
-                            backgroundColor: ["rgba(125,232,178,0.46)", "rgba(125,232,178,0.46)", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"]
-                        }
-                    ]
-                }} />
+                    }}
+                    data={{
+                        labels: [
+                            'Egyedüli',
+                            'Hangos kimondás',
+                            'Elméleti',
+                            'Vizuális alapú',
+                            'Analitikus',
+                            'Szociális',
+                            'Térbeli elhelyezés',
+                            'Gyakorlati',
+                            'Audió alapú',
+                            'Kreatív'
+                        ],
+                        datasets: [
+                            {
+                                data: [5, 4, 5, 5, 3, 5, 5, 5, 4, 5],
+                                backgroundColor: ["rgba(125,232,178,0.46)", "rgba(125,232,178,0.46)", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"]
+                            }
+                        ]
+                    }} />
+            </Flex>
         </Flex>
     </Flex>
-</Flex>
+}
 
 export const CoursePageRequirements = () => <Flex mt={10} w={"100%"} h={500} direction={"column"} alignItems={"flex-start"}>
     <EpistoHeader text={"Mikor való neked a kurzus?"} my={10} />
@@ -366,6 +293,29 @@ const CoursePage = () => {
     //     courseId: string
     // } = useParams()
 
+    const courseDummyData = {
+        upperOverviewBelowTitle: "Formázások, képletek, függvények. Sokunk számára már rájuk gondolni is kellemetlen, dolgozni, pedig végképp nem szeretnénk velük.\n" +
+            "Office tanfolyamsorozatunk oszlopos tagjaként Excel kurzusunk sallangmentesen, és mindenki számára közérthetően segít megérteni,\n" +
+            "hogyan használhatjuk hatékonyan a Microsoft zöld táblázatkezelőjét.",
+        overviewSectionShortDescription: "Excel alapozó kurzusunk egészen az alapoktól mutatja be a program működését. Részletesen ismerheted meg a különböző menüpontokat, elrendezéseket, majd a munkaterület feltérképezése után az alapvető műveletek elvégzésének kezdhetsz neki.\n" +
+            "\n" +
+            "A formázások elsajátítása után a függvények tárházával ismerkedhetsz meg, melyek hatalmas segítséget jelentenek bonyolultnak tűnő feladatok szempillantás alatt való megoldásában, és a különböző képek, alakzatok beszúrását is elsajátíthatod.\n" +
+            "\n" +
+            "Az Excel rendkívül erős társad lehet egy-egy adat, kimutatás, riport prezentálásában is, elengedhetetlen tehát, hogy az ehhez illő diagramokat, grafikonokat is mesterien kezeld.",
+        whatCanYouLearnFromCourseList: [
+            "Táblázatok, munkalapok kezelése",
+            "Alapvető műveletek elvégzése",
+            "Függvényekkel való munkavégzés",
+            "Grafikai elemek használata",
+            "Riportok készítése",
+            "Grafikonok és diagramok létrehozása"
+        ],
+        whatSkillsTheCourseImprovingDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique suscipit tempor. Pellentesque dictum, augue a egestas faucibus, augue ipsum vehicula dui, faucibus eleifend risus orci quis ante. Curabitur porttitor fringilla blandit. Suspendisse placerat tempus vehicula. In dignissim tellus magna. Donec non tincidunt risus. Morbi sit amet turpis dolor. Proin vulputate leo eu leo bibendum, in condimentum ex efficitur. Maecenas risus sem, pharetra eu magna vel, gravida luctus urna. Sed diam urna, blandit id justo a, consectetur lacinia risus."
+
+
+    }
+
+
     const [currentTab, setCurrentTab] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -456,7 +406,7 @@ const CoursePage = () => {
                 <Flex direction={"row"} px={100} w={"100%"} minH={1200} h={"100%"} mb={100}>
                     <Flex flex={"1 1 0"} direction={"column"} mr={30}>
                         <Container pr={20} pt={20}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultrices suscipit risus, sit amet hendrerit massa posuere in. Phasellus at convallis elit, eget iaculis lacus. Maecenas nec nulla ligula. Nullam facilisis tempus nibh sed sodales. Quisque id fermentum diam, non pharetra justo. Donec a consectetur ligula. Fusce faucibus tincidunt sem quis suscipit. Interdum et malesuada fames ac ante ipsum primis in faucibus. Quisque dapibus ligula in metus pulvinar ultrices. Nulla vel lectus mauris.
+                            {courseDummyData.upperOverviewBelowTitle}
                         </Container>
                         <Flex direction={"row"} mt={20} w={"100%"} justifyContent={"space-evenly"}>
                             <Flex direction={"row"}
@@ -547,7 +497,11 @@ const CoursePage = () => {
                                 </Tabs>
                             </Box>
                             <TabPanel value={currentTab} index={0}>
-                                <CoursePageSummary />
+                                <CoursePageSummary
+                                    whatCanYouLearnFromCourseList={courseDummyData.whatCanYouLearnFromCourseList}
+                                    overviewSectionShortDescription={courseDummyData.overviewSectionShortDescription}
+                                    whatSkillsTheCourseImprovingDescription={courseDummyData.whatSkillsTheCourseImprovingDescription}
+                                />
                             </TabPanel>
                             <TabPanel value={currentTab} index={1}>
                                 <CoursePageRequirements />

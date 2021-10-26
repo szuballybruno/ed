@@ -6,16 +6,7 @@ INSERT INTO "job_title"
     )
 VALUES
     (
-        'IT Generalist'
-    ),
-    (
-        'Tech Manager'
-    ),
-    (
-        'Developer'
-    ),
-    (
-        'HR'
+        'Tesztelő'
     )
 RETURNING "id";
 

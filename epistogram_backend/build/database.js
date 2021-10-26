@@ -106,13 +106,10 @@ const seedDB = () => __awaiter(void 0, void 0, void 0, function* () {
         .getRepository(Organization_1.Organization)
         .insert([
         {
-            name: "Farewell Kft."
+            name: "P029"
         },
         {
-            name: "Bruno Muvek"
-        },
-        {
-            name: "Manfredisztan.org"
+            name: "EpistoGram"
         }
     ]))
         .identifiers
@@ -172,7 +169,7 @@ const seedDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const { invitationToken, user } = yield userManagementService_1.createInvitedUserWithOrgAsync({
         firstName: "Edina",
         lastName: "Sandor",
-        jobTitle: "IT manager",
+        jobTitle: "Tesztelő",
         role: "admin",
         email: "edina.sandor@email.com",
     }, insertedOrganizationIds[0], false);
