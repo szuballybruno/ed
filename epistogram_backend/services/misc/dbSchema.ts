@@ -2,13 +2,10 @@ import { Activity } from "../../models/entity/Activity";
 import { Answer } from "../../models/entity/Answer";
 import { AnswerSession } from "../../models/entity/AnswerSession";
 import { Course } from "../../models/entity/Course";
-import { CourseGroup } from "../../models/entity/CourseGroup";
-import { CourseOrganization } from "../../models/entity/CourseOrganization";
-import { CourseTag } from "../../models/entity/CourseTag";
+import { CourseCategory } from "../../models/entity/CourseCategory";
 import { DailyTip } from "../../models/entity/DailyTip";
 import { DailyTipOccurrence } from "../../models/entity/DailyTipOccurrence";
 import { Exam } from "../../models/entity/Exam";
-import { Group } from "../../models/entity/Group";
 import { JobTitle } from "../../models/entity/JobTitle";
 import { Organization } from "../../models/entity/Organization";
 import { PersonalityCategoryDescription } from "../../models/entity/PersonalityCategoryDescription";
@@ -18,7 +15,6 @@ import { QuestionCategory } from "../../models/entity/QuestionCategory";
 import { Role } from "../../models/entity/Role";
 import { RoleActivityBridge } from "../../models/entity/RoleActivityBridge";
 import { StorageFile } from "../../models/entity/StorageFile";
-import { Tag } from "../../models/entity/Tag";
 import { Task } from "../../models/entity/Task";
 import { TestChild } from "../../models/entity/TestChild";
 import { TestParent } from "../../models/entity/TestParent";
@@ -89,11 +85,8 @@ export const dbSchema = {
 
     entities: [
         Course,
-        CourseOrganization,
-        CourseGroup,
-        CourseTag,
+        CourseCategory,
         Exam,
-        Group,
         Organization,
         User,
         Video,
@@ -101,7 +94,6 @@ export const dbSchema = {
         QuestionAnswer,
         Question,
         Answer,
-        Tag,
         TestChild,
         TestParent,
         TestSubChild,

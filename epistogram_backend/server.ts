@@ -2,13 +2,12 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
-import { getAdminCoursesAction } from "./api/adminCourses";
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { getAvailableCoursesAction, getUserCoursesDataAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseEditDataAction, getUserCoursesDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
     answerPractiseQuestionAction, answerSignupQuestionAction, getCourseBriefDataAction, getCourseItemsAction,
-    getCurrentCourseItemCodeAction, getEditedCourseAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
-    getSignupDataAction, getUserPersonalityDataAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveCourseDataAction, saveCourseThumbnailAction, saveUserDataAction, setEditedCourseAction
+    getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
+    getSignupDataAction, getUserPersonalityDataAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveCourseThumbnailAction, saveUserDataAction
 } from './api/dataActions';
 import { answerExamQuestionAction, createExamAction, deleteExamAction, getExamEditDataAction, getExamResultsAction, saveExamAction } from './api/examActions';
 import { uploadAvatarFileAction } from './api/fileActions';
@@ -122,14 +121,15 @@ const initializeAsync = async () => {
 
     // course
     expressServer.post("/course/set-course-mode", setCourseTypeAction);
-    expressServer.post("/get-admin-courses", getAsyncActionHandler(getAdminCoursesAction));
+    addEndpoint(apiRoutes.course.getAdminCourseList, getAdminCourseListAction);
     addEndpoint(apiRoutes.course.startCourse, startCourseAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getCourseEditData, getEditedCourseAction);
+    addEndpoint(apiRoutes.course.getCourseEditData, getCourseEditDataAction);
     addEndpoint(apiRoutes.course.getCourseBriefData, getCourseBriefDataAction);
-    addEndpoint(apiRoutes.course.saveCourseData, saveCourseDataAction, { isPost: true });
+    addEndpoint(apiRoutes.course.saveCourseData, saveCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.saveCourseThumbnail, saveCourseThumbnailAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getAvailableCourses, getAvailableCoursesAction, { isPost: true });
-    expressServer.post("/set-admin-edit-course", getAsyncActionHandler(setEditedCourseAction))
+    addEndpoint(apiRoutes.course.getAvailableCourses, getAvailableCoursesAction);
+    addEndpoint(apiRoutes.course.deleteCourse, deleteCourseAction, { isPost: true });
+    addEndpoint(apiRoutes.course.createCourse, createCourseAction, { isPost: true });
 
     // video 
     addEndpoint(apiRoutes.video.createVideo, createVideoAction, { isPost: true });

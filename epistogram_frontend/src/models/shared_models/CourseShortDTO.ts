@@ -7,6 +7,7 @@ export type CourseShortDTO = {
     colorTwo: any;
     title: string;
     teacherName: string;
-    category: string;
+    categoryName: string;
+    subCategoryName: string;
     isComplete: boolean;
 }

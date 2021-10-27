@@ -34,7 +34,10 @@ export const apiRoutes = {
         saveCourseData: '/course/save-course-data',
         saveCourseThumbnail: '/course/save-course-thumbnail',
         startCourse: "/course/start-course",
-        getAvailableCourses: "/get-user-courses"
+        getAvailableCourses: "/course/get-available-courses",
+        deleteCourse: "/course/delete-course",
+        createCourse: "/course/create-course",
+        getAdminCourseList: "/course/get-admin-course-list"
     },
 
     video: {

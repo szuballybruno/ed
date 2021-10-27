@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { EditCourseDataDTO } from '../../../models/shared_models/AdminPageEditCourseDTO';
+import { CourseEditDataDTO } from '../../../models/shared_models/CourseEditDataDTO';
 import { useAdminEditedCourse, useSaveCourseData, useUploadCourseThumbnailAsync } from '../../../services/courseService';
 import { showNotification, useShowErrorDialog } from '../../../services/notifications';
 import { LoadingFrame } from '../../HOC/LoadingFrame';
@@ -17,7 +17,7 @@ export const AdminEditCourseSubpage = () => {
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseData();
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = useUploadCourseThumbnailAsync();
 
-    const handleSaveCourseDataAsync = async (dto: EditCourseDataDTO, thumbnailFile: File | null) => {
+    const handleSaveCourseDataAsync = async (dto: CourseEditDataDTO, thumbnailFile: File | null) => {
 
         try {
 
@@ -36,7 +36,8 @@ export const AdminEditCourseSubpage = () => {
 
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseEditDataState, saveCourseThumbnailState]}
-        error={courseEditDataError}>
+        error={courseEditDataError}
+        className="whall">
 
         <EditCourseControl
             courseEditData={courseEditData}

@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { Course } from "../models/entity/Course";
-import { Exam } from "../models/entity/Exam";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { Video } from "../models/entity/Video";
-import { EditCourseDataDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
@@ -12,7 +9,6 @@ import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
 import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { getUserIdFromRequest, requestChangePasswordAsync, setAuthCookies } from "../services/authenticationService";
-import { getEditedCourseAsync, getEditedVideoAsync, updateCourseAsync } from "../services/courseManagementService";
 import { getCourseItemCode, getCurrentCourseItemsAsync } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync, registerInvitedUserAsync, registerUserAsync, saveUserDataAsync } from "../services/dataService";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
@@ -103,20 +99,6 @@ export const getCourseItemsAction = getAsyncActionHandler(async (req: Request) =
     return getCurrentCourseItemsAsync(userId);
 });
 
-export const getEditedVideoAction = async (req: Request) => {
-
-    const videoId = req.body.videoId
-
-    return await getEditedVideoAsync(videoId);
-};
-
-export const getEditedCourseAction = async (params: ActionParamsType) => {
-
-    const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
-
-    return await getEditedCourseAsync(courseId);
-};
-
 export const saveCourseThumbnailAction = async (params: ActionParamsType) => {
 
     const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
@@ -143,54 +125,6 @@ export const saveCourseThumbnailAction = async (params: ActionParamsType) => {
         file);
 }
 
-export const saveCourseDataAction = async (params: ActionParamsType) => {
-
-    const dto = withValueOrBadRequest<EditCourseDataDTO>(params.req?.body);
-
-    // save basic info
-    await staticProvider
-        .ormConnection
-        .getRepository(Course)
-        .save({
-            id: dto.courseId,
-            title: dto.title,
-            category: dto.category,
-            courseGroup: dto.courseGroup
-        });
-
-    // const course = await staticProvider
-    //     .ormConnection
-    //     .getRepository(Course)
-    //     .createQueryBuilder("c")
-    //     .leftJoinAndSelect("c.videos", "v")
-    //     .leftJoinAndSelect("c.exams", "e")
-    //     .getOneOrFail();
-
-    // save video orders
-    await staticProvider
-        .ormConnection
-        .getRepository(Video)
-        .save(dto
-            .courseItems
-            .filter(x => x.type === "video")
-            .map(x => ({
-                id: x.id,
-                orderIndex: x.orderIndex
-            } as Video)));
-
-    // save exam orders
-    await staticProvider
-        .ormConnection
-        .getRepository(Exam)
-        .save(dto
-            .courseItems
-            .filter(x => x.type === "exam")
-            .map(x => ({
-                id: x.id,
-                orderIndex: x.orderIndex
-            } as Video)));
-};
-
 export const getCourseBriefDataAction = async (params: ActionParamsType) => {
 
     const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
@@ -204,13 +138,6 @@ export const getCourseBriefDataAction = async (params: ActionParamsType) => {
         id: course.id,
         title: course.title
     } as CourseBriefData;
-};
-
-export const setEditedCourseAction = (req: Request) => {
-
-    const adminPageEditCourseDTO = withValueOrBadRequest<EditCourseDataDTO>(req.body);
-
-    return updateCourseAsync(adminPageEditCourseDTO);
 };
 
 export const getOverviewPageDTOAction = async (req: Request) => {

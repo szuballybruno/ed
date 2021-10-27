@@ -15,7 +15,8 @@ const CourseTile = (props: {
     const { course, children, ...css } = props;
     const courseTitle = course.title;
     const courseTeacherName = course.teacherName;
-    const courseCategory = course.category;
+    const courseCategory = course.categoryName;
+    const courseSubCategory = course.subCategoryName;
     const thumbnailImageUrl = course.thumbnailImageURL;
     const isComplete = course.isComplete;
 
@@ -148,7 +149,13 @@ const CourseTile = (props: {
             <Box flexBasis="80px" zIndex={1}>
 
                 <Flex direction="column" p="10px" >
-                    <Text as="text" color="grey">{courseCategory}</Text>
+
+                    {/* category  */}
+                    <Text as="text" color="grey">
+                        {courseCategory} / {courseSubCategory}
+                    </Text>
+
+                    {/* title */}
                     <Flex direction="column">
                         <Text as="h6" fontWeight={"bold"} fontSize="large">{courseTitle}</Text>
                     </Flex>

@@ -1,11 +1,16 @@
+import { AnswerSession } from "../models/entity/AnswerSession";
+import { Question } from "../models/entity/Question";
 import { StorageFile } from "../models/entity/StorageFile";
 import { Video } from "../models/entity/Video";
 import { VideoPlaybackData } from "../models/entity/VideoPlaybackData";
+import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { staticProvider } from "../staticProvider";
+import { unsetUsersCurrentCourseItemAsync } from "./courseService";
 import { log } from "./misc/logger";
 import { getAssetUrl } from "./misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
 import { answerQuestionAsync } from "./questionAnswerService";
+import { deleteQuesitonsAsync } from "./questionService";
 
 export const answerVideoQuestionAsync = async (answerSessionId: number, questionId: number, answerId: number) => {
 
@@ -76,6 +81,67 @@ export const saveVideoPlaybackDataAsync = async (
 
     await repo
         .save(videoPlaybackData);
+}
+
+export const deleteVideosAsync = async (videoIds: number[], unsetCurrentCourseItem: boolean) => {
+
+    if (videoIds.length === 0)
+        return;
+
+    // delete questions
+    const questions = await staticProvider
+        .ormConnection
+        .getRepository(Question)
+        .createQueryBuilder("q")
+        .where('"videoId" IN (:...videoIds)', { videoIds })
+        .getMany();
+
+    await deleteQuesitonsAsync(questions.map(x => x.id));
+
+    // delete answer sessions
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(AnswerSession)
+        .where('"videoId" IN (:...videoIds)', { videoIds })
+        .execute();
+
+    // set current course item on users
+    if (unsetCurrentCourseItem) {
+        for (let index = 0; index < videoIds.length; index++) {
+
+            const videoId = videoIds[index];
+            await unsetUsersCurrentCourseItemAsync(undefined, videoId);
+        }
+    }
+
+    // delete playback samples 
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(VideoPlaybackSample)
+        .where('"videoId" IN (:...videoIds)', { videoIds })
+        .execute();
+
+    // delete playback samples 
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(VideoPlaybackData)
+        .where('"videoId" IN (:...videoIds)', { videoIds })
+        .execute();
+
+    // delete video
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(Video)
+        .where("id IN (:...videoIds)", { videoIds })
+        .execute();
 }
 
 export const getVideoPlaybackData = async (userId: number, videoId: number) => {

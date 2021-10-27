@@ -9,7 +9,7 @@ import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { unsetUsersCurrentCourseItemAsync } from "../services/courseService";
-import { answerExamQuestionAsync, getExamResultsAsync } from "../services/examService";
+import { answerExamQuestionAsync, deleteExamsAsync, getExamResultsAsync } from "../services/examService";
 import { toQuestionDTO } from "../services/mappings";
 import { deleteQuesitonsAsync, saveQuestionsAsync } from "../services/questionService";
 import { staticProvider } from "../staticProvider";
@@ -110,33 +110,5 @@ export const deleteExamAction = async (params: ActionParamsType) => {
 
     const examId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
-    // delete exam quesitons 
-    const questions = await staticProvider
-        .ormConnection
-        .getRepository(Question)
-        .find({
-            where: {
-                examId
-            }
-        });
-
-    await deleteQuesitonsAsync(questions.map(x => x.id));
-
-    // delete answer sessions
-    await staticProvider
-        .ormConnection
-        .createQueryBuilder()
-        .delete()
-        .from(AnswerSession)
-        .where("examId = :examId", { examId })
-        .execute();
-
-    // set current course item on users
-    await unsetUsersCurrentCourseItemAsync(examId);
-
-    // delete exam
-    await staticProvider
-        .ormConnection
-        .getRepository(Exam)
-        .delete(examId);
+    await deleteExamsAsync([examId], true);
 }

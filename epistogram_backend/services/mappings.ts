@@ -1,8 +1,6 @@
 import { Answer } from "../models/entity/Answer";
 import { Course } from "../models/entity/Course";
-import { CourseGroup } from "../models/entity/CourseGroup";
-import { CourseOrganization } from "../models/entity/CourseOrganization";
-import { CourseTag } from "../models/entity/CourseTag";
+import { CourseCategory } from "../models/entity/CourseCategory";
 import { Exam } from "../models/entity/Exam";
 import { JobTitle } from "../models/entity/JobTitle";
 import { Organization } from "../models/entity/Organization";
@@ -12,17 +10,15 @@ import { Role } from "../models/entity/Role";
 import { Task } from "../models/entity/Task";
 import { User } from "../models/entity/User";
 import { Video } from "../models/entity/Video";
-import { EditListItemDTO } from "../models/shared_models/AdminPageEditCourseDTO";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { AnswerEditDTO } from "../models/shared_models/AnswerEditDTO";
-import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
-import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
+import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
+import { CourseCategoryDTO } from "../models/shared_models/CourseCategoryDTO";
+import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
-import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizationDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
-import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
@@ -47,7 +43,7 @@ import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSession
 import { navPropNotNull } from "../utilities/helpers";
 import { getCourseItemDescriptorCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
-import { getUserById } from "./userService";
+import { getUserDTOById } from "./userService";
 
 export const toUserDTO = (user: User) => {
 
@@ -68,7 +64,7 @@ export const toUserDTO = (user: User) => {
 
         avatarUrl: user.avatarFile
             ? getAssetUrl(user.avatarFile.filePath)
-            : null,// : getAssetUrl("images/defaultAvatar.png"),
+            : null,
 
         userActivity: user.userActivity
             ? toUserActivityDTO(user.userActivity)
@@ -151,30 +147,6 @@ export const toQuestionAnswerDTO = (questionAnswer: QuestionAnswer) => {
         answerId: questionAnswer.answerId,
         questionId: questionAnswer.questionId,
     } as QuestionAnswerDTO;
-}
-
-export const toCourseOrganizationDTO = (courseOrganization: CourseOrganization) => {
-
-    return {
-        courseId: courseOrganization.courseId,
-        organizationId: courseOrganization.organizationId
-    } as CourseOrganizationDTO;
-}
-
-export const toCourseGroupDTO = (courseGroup: CourseGroup) => {
-
-    return {
-        courseId: courseGroup.courseId,
-        groupId: courseGroup.groupId
-    } as CourseGroupDTO;
-}
-
-export const toCourseTagDTO = (courseTag: CourseTag) => {
-
-    return {
-        courseId: courseTag.courseId,
-        tagId: courseTag.tagId
-    } as CourseTagDTO;
 }
 
 export const toTaskDTO = (task: Task) => {
@@ -356,7 +328,8 @@ export const toCourseShortDTO = (course: CourseView) => {
     return {
         courseId: course.id,
         title: course.title,
-        category: course.category,
+        categoryName: course.categoryName,
+        subCategoryName: course.subCategoryName,
         firstItemCode: firstItemCode,
         teacherName: teacher.lastName + " " + teacher.firstName,
         thumbnailImageURL: thumbnailImageURL,
@@ -388,6 +361,30 @@ export const toQuestionDTO = (q: Question) => {
     } as QuestionDTO;
 }
 
+export const toCourseEditDataDTO = (course: Course) => {
+
+    const thumbnailImageURL = course.coverFile
+        ? getAssetUrl(course.coverFile.filePath)
+        : getAssetUrl("/images/defaultCourseCover.jpg");
+
+    const courseItemDTOs = toSimpleCourseItemDTOs(course);
+
+    return {
+        courseId: course.id,
+        title: course.title,
+        thumbnailURL: thumbnailImageURL,
+        courseItems: courseItemDTOs,
+
+        category: toCourseCategoryDTO(course.category),
+        subCategory: toCourseCategoryDTO(course.subCategory),
+        teacher: toUserDTO(course.teacher),
+
+        teachers: [],
+        categories: [],
+        subCategories: []
+    } as CourseEditDataDTO;
+}
+
 export const toAnswerDTO = (a: Answer) => {
 
     return {
@@ -414,49 +411,27 @@ export const toAnswerEditDTO = (a: Answer) => {
     } as AnswerEditDTO;
 }
 
-export const toCourseAdminDTO = async (course: Course) => {
+export const toCourseAdminListItemDTO = (course: Course) => {
 
     const thumbnailImageURL = course.coverFile
         ? getAssetUrl(course.coverFile.filePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
 
-    const teacher = await getUserById(course.teacherId)
-
     return {
         title: course.title,
-        category: course.category,
         courseId: course.id,
-        teacherName: teacher.lastName + " " + teacher.firstName,
         videosCount: 0,
-        thumbnailImageURL: thumbnailImageURL
-    } as CourseAdminDTO;
+        thumbnailImageURL,
+        category: toCourseCategoryDTO(course.category),
+        subCategory: toCourseCategoryDTO(course.subCategory),
+        teacher: toUserDTO(course.teacher)
+    } as CourseAdminListItemDTO;
 }
 
-export const toEditListItemDTO = (id: number, name: string, checked: boolean) => {
+export const toCourseCategoryDTO = (cc: CourseCategory) => {
+
     return {
-        id: id,
-        name: name,
-        checked: checked
-    } as EditListItemDTO
-}
-
-export const toEditCourseItemsDTO = (course: Course) => {
-
-    // const examItems = course
-    //     .exams
-    //     .map(x => toCourseItemDTO(x, "completed", false));
-
-    // const videoItems = course
-    //     .videos
-    //     .map(x => toCourseItemDTO(x, "completed", true));
-
-    // const itemsCombined = examItems
-    //     .concat(videoItems);
-
-    // const itemsOrdered = itemsCombined
-    //     .orderBy(x => x.orderIndex);
-
-    // return itemsOrdered as CourseItemDTO[];
-    //TODO: SOLVE throwNotImplemented();
-    return [] as CourseItemDTO[];
+        id: cc.id,
+        name: cc.name
+    } as CourseCategoryDTO;
 }

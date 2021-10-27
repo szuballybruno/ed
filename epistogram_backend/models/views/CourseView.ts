@@ -35,7 +35,10 @@ export class CourseView {
     filePath: string;
 
     @ViewColumn()
-    category: string;
+    categoryName: string;
+
+    @ViewColumn()
+    subCategoryName: string;
 
     // user
     @ManyToOne(_ => User)

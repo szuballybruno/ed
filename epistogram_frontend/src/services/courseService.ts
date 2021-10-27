@@ -1,31 +1,32 @@
 import { hasValue, useReactQuery } from "../frontendHelpers"
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
-import { GetUserCoursesDTO } from "../models/shared_models/GetUserCoursesDTO";
 import { httpGetAsync, httpPostAsync, usePostDataUnsafe } from "./httpClient";
-import { CourseAdminDTO } from "../models/shared_models/CourseAdminDTO";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
-import { EditCourseDataDTO } from "../models/shared_models/AdminPageEditCourseDTO";
-import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { TextDTO } from "../models/shared_models/TextDTO";
+import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
+import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
+import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
+import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 
-export const useAdministratedCourses = (searchText: string) => {
+export const useAdminCourseList = (searchText: string) => {
 
-    const { data, status, error } = useReactQuery<CourseAdminDTO[]>(
+    const qr = useReactQuery<CourseAdminListItemDTO[]>(
         ["getCoursesQuery", searchText],
-        () => httpPostAsync(hasValue(searchText) ? "/get-admin-courses?searchData=" + searchText : "/get-admin-courses"));
+        () => httpGetAsync(apiRoutes.course.getAdminCourseList));
 
     return {
-        courses: data ?? [],
-        coursesError: error,
-        coursesStatus: status
+        courses: qr.data ?? [],
+        coursesError: qr.error,
+        coursesStatus: qr.status,
+        refetchCoursesAsync: qr.refetch
     }
 }
 
 export const useAdminEditedCourse = (courseId: number) => {
 
-    const qr = useReactQuery<EditCourseDataDTO>(
+    const qr = useReactQuery<CourseEditDataDTO>(
         ["getCourseEditQuery", courseId],
         () => httpGetAsync(apiRoutes.course.getCourseEditData, { courseId: courseId }))
 
@@ -36,9 +37,29 @@ export const useAdminEditedCourse = (courseId: number) => {
     }
 }
 
+export const useCreateCourse = () => {
+
+    const qr = usePostDataUnsafe<CreateCourseDTO, void>(apiRoutes.course.createCourse);
+
+    return {
+        createCourseAsync: qr.postDataAsync,
+        createCourseState: qr.state,
+    };
+}
+
+export const useDeleteCourse = () => {
+
+    const qr = usePostDataUnsafe<IdResultDTO, void>(apiRoutes.course.deleteCourse);
+
+    return {
+        deleteCourseAsync: qr.postDataAsync,
+        deleteCourseState: qr.state,
+    };
+}
+
 export const useSaveCourseData = () => {
 
-    const qr = usePostDataUnsafe<EditCourseDataDTO, void>(apiRoutes.course.saveCourseData);
+    const qr = usePostDataUnsafe<CourseEditDataDTO, void>(apiRoutes.course.saveCourseData);
 
     return {
         saveCourseDataAsync: qr.postDataAsync,
@@ -80,11 +101,11 @@ export const useCourseBriefData = (courseId: number | null) => {
     }
 }
 
-export const useUserCourses = (dto: GetUserCoursesDTO) => {
+export const useUserCourses = () => {
 
     const { data, status, error } = useReactQuery<CourseShortDTO[]>(
-        ["getCoursesQuery", dto.isFeatured, dto.isRecommended, dto.searchCategory, dto.searchText],
-        () => httpPostAsync("/get-user-courses", dto));
+        ["getCoursesQuery"],
+        () => httpGetAsync(apiRoutes.course.getAvailableCourses));
 
     return {
         courses: (data ?? []),

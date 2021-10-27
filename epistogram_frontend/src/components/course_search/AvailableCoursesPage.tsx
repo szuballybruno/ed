@@ -3,7 +3,6 @@ import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/materi
 import React from "react";
 import { useHistory } from "react-router";
 import { distinct } from "../../frontendHelpers";
-import { GetUserCoursesDTO } from "../../models/shared_models/GetUserCoursesDTO";
 import { useStartCourse, useUserCourses } from "../../services/courseService";
 import { useNavigation } from "../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../services/notifications";
@@ -26,14 +25,7 @@ const AvailableCoursesPage = () => {
     const [isFeatured, setIsFeatured] = React.useState(false);
     const [isRecommended, setIsRecommended] = React.useState(false);
 
-    const getCoursesDTO = {
-        searchText: searchText,
-        searchCategory: searchCategory,
-        isFeatured: isFeatured,
-        isRecommended: isRecommended
-    } as GetUserCoursesDTO;
-
-    const { courses, status, error } = useUserCourses(getCoursesDTO);
+    const { courses, status, error } = useUserCourses();
     const { startCourseAsync, startCourseState } = useStartCourse();
 
     const { navigateToPlayer } = useNavigation();
@@ -47,7 +39,7 @@ const AvailableCoursesPage = () => {
     }
 
     const categoryOptions = distinct(courses
-        .map((course, index) => course.category));
+        .map((course, index) => course.categoryName + " / " + course.subCategoryName));
 
     const playCourse = async (courseId: number, currentItemDescriptior: string | null) => {
 

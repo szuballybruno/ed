@@ -1,13 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { CourseOrganization } from "./CourseOrganization";
+import { CourseStateView } from "../views/CourseStateView";
+import { CourseCategory } from "./CourseCategory";
 import { Exam } from "./Exam";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
-import { Video } from "./Video";
-import { CourseGroup } from "./CourseGroup";
-import { CourseTag } from "./CourseTag";
 import { UserCourseBridge } from "./UserCourseBridge";
-import { CourseStateView } from "../views/CourseStateView";
+import { Video } from "./Video";
 
 @Entity()
 export class Course {
@@ -18,41 +16,26 @@ export class Course {
     @Column()
     title: string;
 
-    @Column()
-    category: string;
-
-    @Column()
-    courseGroup: string;
-
-    @Column()
-    permissionLevel: string;
-
-    @Column()
-    colorOne: string;
-
-    @Column()
-    colorTwo: string;
-
-    // course state 
+    // course state view
     @OneToOne(_ => CourseStateView, x => x.course)
     @JoinColumn()
     courseState: CourseStateView;
 
-    // Course's organizations
-    @OneToMany(() => CourseOrganization, co => co.course)
-    @JoinColumn()
-    courseOrganizations: CourseOrganization[];
+    // course category
+    @Column()
+    categoryId: number;
 
-    // Course's groups
-    @OneToMany(() => CourseGroup, cg => cg.course)
-    @JoinColumn()
-    courseGroups: CourseGroup[];
+    @ManyToOne(() => CourseCategory, x => x.categoryCourses)
+    @JoinColumn({ name: "categoryId" })
+    category: CourseCategory;
 
-    // Course's organizations
+    // course sub category
+    @Column()
+    subCategoryId: number;
 
-    @OneToMany(() => CourseTag, ct => ct.course)
-    @JoinColumn()
-    courseTags: CourseTag[];
+    @ManyToOne(() => CourseCategory, x => x.subCategoryCourses)
+    @JoinColumn({ name: "subCategoryId" })
+    subCategory: CourseCategory;
 
     // videos 
     @OneToMany(type => Video, video => video.course, { cascade: true })

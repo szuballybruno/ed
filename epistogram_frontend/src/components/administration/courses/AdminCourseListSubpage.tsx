@@ -1,14 +1,14 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
-import {
-    ApartmentTwoTone, Edit, Equalizer, WorkTwoTone
-} from "@mui/icons-material";
+import { ApartmentTwoTone, Edit, Equalizer, WorkTwoTone } from "@mui/icons-material";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { ReactNode, useState } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useAdministratedCourses } from "../../../services/courseService";
+import { useAdminCourseList, useCreateCourse, useDeleteCourse } from "../../../services/courseService";
 import { useNavigation } from "../../../services/navigatior";
+import { showNotification, useShowErrorDialog } from "../../../services/notifications";
+import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { FloatAddButton } from "../../FloatAddButton";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { EpistoButton } from "../../universal/EpistoButton";
@@ -22,11 +22,19 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 export const AdminCourseListSubpage = () => {
 
     const [searchText] = React.useState("");
-    const { courses, coursesStatus, coursesError } = useAdministratedCourses(searchText);
+
+    // http 
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList(searchText);
+    const { createCourseAsync, createCourseState } = useCreateCourse();
+    const { deleteCourseAsync, deleteCourseState } = useDeleteCourse();
+
+    console.log(courses);
 
     const administrationRoutes = applicationRoutes.administrationRoute;
 
     const { navigate } = useNavigation();
+    const showError = useShowErrorDialog();
+    const warnDialogLogic = useEpistoDialogLogic();
 
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.coursesRoute.addRoute.route);
 
@@ -56,6 +64,52 @@ export const AdminCourseListSubpage = () => {
         }
     }
 
+    const handleDeleteCourseAsync = async (courseId: number) => {
+
+        warnDialogLogic
+            .openDialog({
+                title: "Biztosan torlod a kurzust?",
+                description: "Az osszes benne talalhato adata el fog veszni!",
+                buttons: [
+                    {
+                        title: "Torlom a kurzust",
+                        action: async () => {
+                            try {
+
+                                await deleteCourseAsync({ id: courseId });
+
+                                showNotification("Kurzus sikeresen torolve!");
+
+                                await refetchCoursesAsync();
+                            }
+                            catch (e) {
+
+                                showError(e);
+                            }
+                        }
+                    }
+                ]
+            })
+    }
+
+    const handleCreateCourseAsync = async () => {
+
+        try {
+
+            await createCourseAsync({
+                title: "Uj kurzus"
+            });
+
+            showNotification("Uj kurzus sikeresen letrehozva!");
+
+            await refetchCoursesAsync();
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
+
     const singleSelectedCourse = courses.filter(x => x.courseId === selectedCourseIds[0])[0];
 
     const bulkEditButtons = [
@@ -76,7 +130,12 @@ export const AdminCourseListSubpage = () => {
         }
     ]
 
-    return <LoadingFrame loadingState={coursesStatus} error={coursesError} className="whall">
+    return <LoadingFrame
+        loadingState={[coursesStatus, createCourseState, deleteCourseState]}
+        error={coursesError}
+        className="whall">
+
+        <EpistoDialog logic={warnDialogLogic} />
 
         {/* admin header */}
         <AdminSubpageHeader>
@@ -88,22 +147,21 @@ export const AdminCourseListSubpage = () => {
                 itemLabel="kurzus" />
 
             {/* List of courses */}
-            <FlexList flex={1}>
+            <FlexList flex={1} pb="300px">
                 {courses
                     .map(course => {
 
                         const chips = [] as { name: string, icon: ReactNode }[];
 
-
                         chips.push(
                             {
-                                name: course.category,
+                                name: course.category.name + " / " + course.subCategory.name,
                                 icon: <AlternateEmailIcon />
                             });
 
                         chips.push(
                             {
-                                name: course.teacherName,
+                                name: course.teacher.name,
                                 icon: <ApartmentTwoTone />
                             });
 
@@ -123,7 +181,8 @@ export const AdminCourseListSubpage = () => {
                                     objectFit="cover"
                                     style={{
                                         height: 100,
-                                        width: 180
+                                        width: 180,
+                                        padding: "10px"
                                     }}
                                 />
                             }
@@ -147,7 +206,7 @@ export const AdminCourseListSubpage = () => {
                                 <EpistoButton
                                     variant={"colored"}
                                     onClick={() => {
-                                        navigate(`${administrationRoutes.coursesRoute.route}/${course.courseId}/edit`)
+                                        navigate(administrationRoutes.coursesRoute.editCourseRoute.route, { courseId: course.courseId })
                                     }}
                                     style={{ width: 20 }}>
                                     <Edit style={{ width: "20px", height: "20px" }} />
@@ -156,7 +215,7 @@ export const AdminCourseListSubpage = () => {
                                 <EpistoButton
                                     variant="colored"
                                     onClick={() => {
-                                        navigate(`${administrationRoutes.coursesRoute.route}/${course.courseId}/statistics`)
+                                        navigate(administrationRoutes.coursesRoute.statisticsCourseRoute.route, { courseId: course.courseId })
                                     }}
                                     style={{ width: 20, marginLeft: 5 }} >
                                     <Equalizer style={{ width: "20px", height: "20px" }} />
@@ -164,7 +223,7 @@ export const AdminCourseListSubpage = () => {
 
                                 <EpistoButton
                                     variant="colored"
-                                    onClick={() => { }}
+                                    onClick={() => handleDeleteCourseAsync(course.courseId)}
                                     style={{ width: 20, marginLeft: 5 }}>
                                     <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>
                                 </EpistoButton>
@@ -173,7 +232,7 @@ export const AdminCourseListSubpage = () => {
                     })}
             </FlexList>
 
-            <FloatAddButton onClick={navigateToAddUser} />
+            <FloatAddButton onClick={handleCreateCourseAsync} />
         </AdminSubpageHeader>
     </LoadingFrame>
 }

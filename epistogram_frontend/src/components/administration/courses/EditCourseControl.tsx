@@ -4,8 +4,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Checkbox, Divider, ListItem, Radio, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { EditCourseDataDTO, EditListItemDTO } from "../../../models/shared_models/AdminPageEditCourseDTO";
+import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
+import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
 import { CourseItemDTO } from "../../../models/shared_models/CourseItemDTO";
+import { UserDTO } from "../../../models/shared_models/UserDTO";
 import { useCreateExam, useDeleteExam } from "../../../services/examService";
 import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
@@ -15,6 +17,7 @@ import { DragAndDropList } from "../../universal/DragAndDropList";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
 import { EpistoSearch } from "../../universal/EpistoSearch";
+import { EpistoSelect } from "../../universal/EpistoSelect";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import classes from "./editCourse/editCourse.module.scss";
@@ -26,26 +29,23 @@ export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
 }
 
 export const EditCourseControl = (props: {
-    saveCourseAsync: (dto: EditCourseDataDTO, thumbnailFile: null | File) => Promise<void>,
-    courseEditData: EditCourseDataDTO | null,
+    saveCourseAsync: (dto: CourseEditDataDTO, thumbnailFile: null | File) => Promise<void>,
+    courseEditData: CourseEditDataDTO | null,
     courseId: number
 }) => {
 
     const { saveCourseAsync, courseId, courseEditData } = props;
+    const categories = courseEditData?.categories ?? [];
+    const subCategories = courseEditData?.subCategories ?? [];
     const { navigate } = useNavigation();
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
 
     const [title, setTitle] = useState("")
-    const [category, setCategory] = useState("")
-    const [courseGroup, setCourseGroup] = useState("")
-    const [permissionLevel, setPermissionLevel] = useState("")
     const [courseItems, setCourseItems] = useState<CourseItemDTO[]>([])
-    const [organizations, setOrganizations] = useState<EditListItemDTO[]>([])
-    const [groups, setGroups] = useState<EditListItemDTO[]>([])
-    const [tags, setTags] = useState<EditListItemDTO[]>([])
-    const [teachers, setTeachers] = useState<EditListItemDTO[]>([])
     const [thumbnailSrc, setThumbnailSrc] = useState("")
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
+    const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
+    const [subCategory, setSubCategory] = useState<CourseCategoryDTO | null>(null);
 
     // http
     const { createVideoAsync } = useCreateVideo();
@@ -65,16 +65,12 @@ export const EditCourseControl = (props: {
         const dto = {
             courseId: courseId,
             title: title,
-            category: category,
-            courseGroup: courseGroup,
-            permissionLevel: permissionLevel,
             thumbnailURL: thumbnailSrc,
             courseItems: courseItems,
-            organizations: organizations,
-            tags: tags,
-            teachers: teachers,
-            groups: groups
-        } as EditCourseDataDTO;
+            teacher: {
+                id: 1,
+            } as UserDTO
+        } as CourseEditDataDTO;
 
         return saveCourseAsync(dto, thumbnailImageFile);
     }
@@ -87,27 +83,13 @@ export const EditCourseControl = (props: {
 
         const {
             title,
-            category,
-            courseGroup,
-            permissionLevel,
             thumbnailURL,
             courseItems,
-            organizations,
-            tags,
-            teachers,
-            groups
         } = courseEditData;
 
         setTitle(title)
-        setCategory(category)
-        setCourseGroup(courseGroup)
-        setPermissionLevel(permissionLevel)
         setThumbnailSrc(thumbnailURL)
         setCourseItems(courseItems)
-        setOrganizations(organizations)
-        setTags(tags)
-        setTeachers(teachers)
-        setGroups(groups)
     }, [courseEditData]);
 
 
@@ -250,111 +232,25 @@ export const EditCourseControl = (props: {
                     label="Név"
                     setValue={setTitle} />
 
-                <EpistoEntry
-                    value={courseGroup}
-                    label="Főkategória"
-                    setValue={setCourseGroup} />
+                {/* category */}
+                <Typography style={{ color: "gray", marginTop: "10px" }}>
+                    Főkategória
+                </Typography>
+                <EpistoSelect
+                    getCompareKey={x => x?.id + ""}
+                    items={categories}
+                    selectedValue={category}
+                    onSelected={setCategory} />
 
-                <EpistoEntry
-                    value={category}
-                    label="Alkategória"
-                    setValue={setCategory} />
-            </EditSection>
-
-            <EditSection title="">
-
-                {/* organizations */}
-                <SelectMultiple
-                    items={organizations}
-                    title={"Cég kiválasztása"} >
-                    {organizations
-                        .map((item, index) =>
-                            <div key={"org" + index}>
-                                <ListItem className={classes.listItem}>
-                                    <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
-                                        let items = [...organizations];
-                                        items[index] = {
-                                            ...items[index],
-                                            checked: e.currentTarget.checked
-                                        };
-                                        setGroups(items);
-                                    })} />
-                                    <TextOrInput value={item.name} />
-                                </ListItem>
-                                <Divider style={{ width: "100%" }} />
-                            </div>
-                        )}
-
-                </SelectMultiple>
-
-                {/* groups */}
-                <SelectMultiple
-                    items={groups}
-                    title={"Csoport kiválasztása"} >
-                    {groups?.map((item, index) =>
-                        <div key={"group" + index}>
-                            <ListItem className={classes.listItem}>
-                                <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
-                                    let items = [...groups];
-                                    items[index] = {
-                                        ...items[index],
-                                        checked: e.currentTarget.checked
-                                    };
-                                    setGroups(items);
-                                })} />
-                                <TextOrInput value={item.name} />
-                            </ListItem>
-                            <Divider style={{ width: "100%" }} />
-                        </div>
-                    )}
-
-                </SelectMultiple>
-
-                {/* teacher */}
-                <SelectMultiple
-                    items={teachers}
-                    title={"Tanár kiválasztása"}>
-                    {teachers?.map((item, index) =>
-                        <div key={"teacher" + index}>
-                            <ListItem className={classes.listItem}>
-                                <Radio disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
-                                    let items = [...teachers];
-                                    items[index] = {
-                                        ...items[index],
-                                        checked: e.currentTarget.checked
-                                    };
-                                    setGroups(items);
-                                })} />
-                                <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
-                            </ListItem>
-                            <Divider style={{ width: "100%" }} />
-                        </div>
-                    )}
-
-                </SelectMultiple>
-
-                {/* tags */}
-                <SelectMultiple
-                    items={tags}
-                    title={"Tagek kiválasztása"}>
-                    {tags?.map((item, index) =>
-                        <div key={"tag" + index}>
-                            <ListItem className={classes.listItem}>
-                                <Checkbox disabled={!isAllowEditOnPage} checked={item.checked} onChange={((e) => {
-                                    let items = [...tags];
-                                    items[index] = {
-                                        ...items[index],
-                                        checked: e.currentTarget.checked
-                                    };
-                                    setGroups(items);
-                                })} />
-                                <TextOrInput isEditable={isAllowEditOnPage} value={item.name} />
-                            </ListItem>
-                            <Divider style={{ width: "100%" }} />
-                        </div>
-                    )}
-
-                </SelectMultiple>
+                {/* subcategory */}
+                <Typography style={{ color: "gray", marginTop: "10px" }}>
+                    Alkategória
+                </Typography>
+                <EpistoSelect
+                    getCompareKey={x => x?.id + ""}
+                    items={subCategories}
+                    selectedValue={subCategory}
+                    onSelected={setSubCategory} />
             </EditSection>
         </Box>
 
@@ -408,5 +304,5 @@ export const EditCourseControl = (props: {
             </EpistoButton>
         </Flex>
 
-    </AdminSubpageHeader>
+    </AdminSubpageHeader >
 };

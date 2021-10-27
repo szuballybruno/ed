@@ -84,7 +84,7 @@ export const PlayerPage = () => {
             <ContentWrapper width="var(--playerWidth)" margin="auto">
 
                 <LoadingFrame
-                    loadingState={[playerDataStatus]}
+                    loadingState={[]}
                     className="whall"
                     error={[playerDataError]}>
 

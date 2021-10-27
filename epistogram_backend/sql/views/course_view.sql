@@ -3,6 +3,8 @@ SELECT
 	"sf"."filePath",
 	"csv"."isComplete",
 	"csv"."isStarted",
+	"cc"."name" AS "categoryName",
+	"csc"."name" AS "subCategoryName",
 	
 	-- current exam id
 	CASE WHEN 
@@ -45,6 +47,12 @@ ON "ucb"."currentVideoId" = "video"."id"
 LEFT JOIN public."course_item_all_view" AS "ciav"
 ON "ciav"."courseId" = "course"."id"
 	AND "ciav"."orderIndex" = 0
+	
+LEFT JOIN public."course_category" AS "cc"
+ON "cc"."id" = "course"."categoryId"
+	
+LEFT JOIN public."course_category" AS "csc"
+ON "csc"."id" = "course"."subCategoryId"
 	
 ORDER BY 
 	"course"."title" DESC,

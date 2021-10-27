@@ -22,7 +22,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     } = props;
 
     const singleError = getError(error);
-    const state = getLoadingState(loadingState);
+    const state = getLoadingState(loadingState, singleError);
 
     const [prevState, setPrevState] = useState<LoadingStateType>("idle");
     const showOverlay = prevState === "error" || prevState === "loading";
@@ -108,7 +108,10 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     </Flex>
 }
 
-const getLoadingState = (loadingState: LoadingStateType | LoadingStateType[]) => {
+const getLoadingState = (loadingState: LoadingStateType | LoadingStateType[], error?: any) => {
+
+    if (error)
+        return "error" as LoadingStateType;
 
     if (isArray(loadingState)) {
 

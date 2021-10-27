@@ -15,7 +15,7 @@ import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "../services/misc/videoDurationService";
 import { deleteQuesitonsAsync, saveQuestionsAsync } from "../services/questionService";
-import { getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync } from "../services/videoService";
+import { deleteVideosAsync, getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers"
 
@@ -53,53 +53,7 @@ export const deleteVideoAction = async (params: ActionParamsType) => {
 
     const videoId = withValueOrBadRequest<IdBodyDTO>(params.req.body).id;
 
-    // delete questions
-    const questions = await staticProvider
-        .ormConnection
-        .getRepository(Question)
-        .find({
-            where: {
-                videoId
-            }
-        });
-
-    await deleteQuesitonsAsync(questions.map(x => x.id));
-
-    // delete answer sessions
-    await staticProvider
-        .ormConnection
-        .createQueryBuilder()
-        .delete()
-        .from(AnswerSession)
-        .where("videoId = :videoId", { videoId })
-        .execute();
-
-    // set current course item on users
-    await unsetUsersCurrentCourseItemAsync(undefined, videoId);
-
-    // delete playback samples 
-    await staticProvider
-        .ormConnection
-        .createQueryBuilder()
-        .delete()
-        .from(VideoPlaybackSample)
-        .where("videoId = :videoId", { videoId })
-        .execute();
-
-    // delete playback samples 
-    await staticProvider
-        .ormConnection
-        .createQueryBuilder()
-        .delete()
-        .from(VideoPlaybackData)
-        .where("videoId = :videoId", { videoId })
-        .execute();
-
-    // delete video
-    await staticProvider
-        .ormConnection
-        .getRepository(Video)
-        .delete(videoId);
+    await deleteVideosAsync([videoId], true);
 }
 
 export const saveVideoAction = async (params: ActionParamsType) => {

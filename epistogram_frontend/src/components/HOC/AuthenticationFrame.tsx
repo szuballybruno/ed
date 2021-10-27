@@ -16,9 +16,10 @@ export const AuthenticationFrame = (props) => {
     //SET THEME
     setTheme("nextGenTheme");
 
+    // initialize hotjar
     hotjar.initialize(2659369, 6)
 
-
+    // initialzie OneSignal
     // This appId only work on dev
     useEffect(() => {
         OneSignal.init({

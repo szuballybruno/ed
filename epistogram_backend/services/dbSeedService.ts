@@ -1,19 +1,12 @@
 import { TypeORMConnection } from "../database";
 import { Activity } from "../models/entity/Activity";
 import { Course } from "../models/entity/Course";
-import { CourseGroup } from "../models/entity/CourseGroup";
-import { CourseOrganization } from "../models/entity/CourseOrganization";
-import { CourseTag } from "../models/entity/CourseTag";
+import { CourseCategory } from "../models/entity/CourseCategory";
 import { Exam } from "../models/entity/Exam";
-import { Group } from "../models/entity/Group";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
 import { Role } from "../models/entity/Role";
-import { Tag } from "../models/entity/Tag";
 import { Video } from "../models/entity/Video";
-import { CourseGroupDTO } from "../models/shared_models/CourseGroupDTO";
-import { CourseOrganizationDTO } from "../models/shared_models/CourseOrganizationDTO";
-import { CourseTagDTO } from "../models/shared_models/CourseTagDTO";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { registerInvitedUserAsync } from "./dataService";
@@ -56,11 +49,8 @@ export const seedDB = async () => {
     log("seedDailyTips")
     await executeSeedScriptAsync("seedDailyTips");
 
-    log("seedTags")
-    await seedTags(connection);
-
-    log("seedGroups")
-    await seedGroups(connection, orgIds);
+    log("seedCourseCategories")
+    await seedCourseCategories(connection);
 
     log("seedCourses")
     await seedCourses(connection);
@@ -73,15 +63,6 @@ export const seedDB = async () => {
 
     log("seedExamQuestions")
     await seedExamQuestions(connection);
-
-    log("seedCourseOrganizationsAsync")
-    await seedCourseOrganizationsAsync();
-
-    log("seedCourseGroupsAsync")
-    await seedCourseGroupsAsync();
-
-    log("seedCourseTagsAsync")
-    await seedCourseTagsAsync();
 }
 
 const seedOrganizations = async (connection: TypeORMConnection) => {
@@ -152,6 +133,66 @@ const seedSignupExam = async (connection: TypeORMConnection) => {
         });
 }
 
+const seedCourseCategories = async (connection: TypeORMConnection) => {
+
+    await connection
+        .getRepository(CourseCategory)
+        .save([
+
+            // id:1
+            {
+                name: "IT",
+                childCategories: [
+
+                    // id:2
+                    {
+                        name: "Hálózatok"
+                    },
+
+                    // id:3
+                    {
+                        name: "Szoftverfejlesztés"
+                    },
+
+                    // id:4
+                    {
+                        name: "E-Commerce"
+                    },
+
+                    // id:5
+                    {
+                        name: "Irodai alkalmazások"
+                    },
+
+                    // id:6
+                    {
+                        name: "Általános IT"
+                    },
+
+                    // id:7
+                    {
+                        name: "Biztonság"
+                    },
+
+                    // id:8
+                    {
+                        name: "Önfejlesztés"
+                    },
+
+                    // id:9
+                    {
+                        name: "Média"
+                    },
+
+                    // id:10
+                    {
+                        name: "Marketing"
+                    }
+                ]
+            }
+        ])
+}
+
 const seedCourses = async (connection: TypeORMConnection) => {
 
     await connection
@@ -161,11 +202,8 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // course: 1
             {
                 title: "Webfejlesztés kezdőknek (HTML, CSS, BOOTSTRAP)",
-                category: "Hálózatok",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
+                categoryId: 1,
+                subCategoryId: 2,
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/1.png"
@@ -199,11 +237,8 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // course: 2
             {
                 title: "Java programozás mesterkurzus",
-                category: "Szoftverfejlesztés",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
+                categoryId: 1,
+                subCategoryId: 3,
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/2.png"
@@ -213,11 +248,8 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // course: 3
             {
                 title: "Angular - Minden amire szükséged lehet",
-                category: "E-Commerce",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
+                categoryId: 1,
+                subCategoryId: 4,
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/3.png"
@@ -227,11 +259,8 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // course: 4
             {
                 title: "Microsoft Excel Mesterkurzus",
-                category: "Irodai alkalmazások",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
+                categoryId: 1,
+                subCategoryId: 5,
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/4.png"
@@ -251,11 +280,8 @@ const seedCourses = async (connection: TypeORMConnection) => {
             // etc
             {
                 title: "DevOps kezdőknek - Kubernetes",
-                category: "Általános IT",
-                courseGroup: "IT",
-                permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
+                categoryId: 1,
+                subCategoryId: 6,
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/5.png"
@@ -263,11 +289,9 @@ const seedCourses = async (connection: TypeORMConnection) => {
             },
             {
                 title: "Google classroom használata",
-                category: "Biztonság",
-                courseGroup: "IT",
+                categoryId: 1,
+                subCategoryId: 7,
                 permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/7.png"
@@ -275,20 +299,16 @@ const seedCourses = async (connection: TypeORMConnection) => {
             },
             {
                 title: "Válj szuper tanulóvá - Gyorsolvasás és tanulás fejlesztés",
-                category: "Önfejlesztés",
-                courseGroup: "IT",
+                categoryId: 1,
+                subCategoryId: 8,
                 permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
                 teacherId: 1,
             },
             {
                 title: "Tanulj meg elkészíteni bármilyen karaktert - Adobe Illustrator",
-                category: "Média",
-                courseGroup: "IT",
+                categoryId: 1,
+                subCategoryId: 9,
                 permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/6.png"
@@ -296,11 +316,9 @@ const seedCourses = async (connection: TypeORMConnection) => {
             },
             {
                 title: "Google Ads Mesterkurzus",
-                category: "Marketing",
-                courseGroup: "IT",
+                categoryId: 1,
+                subCategoryId: 10,
                 permissionLevel: "public",
-                colorOne: "#123456",
-                colorTwo: "#ABCDEF",
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/8.png"
@@ -610,119 +628,4 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
                 ]
             }
         ]);
-}
-
-const seedCourseOrganizationsAsync = async () => {
-
-    // insert new answers
-    const repo = staticProvider
-        .ormConnection
-        .getRepository(CourseOrganization);
-
-    const courseOrganizationsSeed = [
-        {
-            courseId: 1,
-            organizationId: 1,
-        }, {
-            courseId: 1,
-            organizationId: 2,
-        }
-    ] as CourseOrganizationDTO[]
-
-    const courseOrganizations = courseOrganizationsSeed
-        .map(x => ({
-            courseId: x.courseId,
-            organizationId: x.organizationId,
-        } as CourseOrganizationDTO))
-
-    await repo.save(courseOrganizations);
-}
-
-const seedCourseGroupsAsync = async () => {
-
-    // insert new answers
-    const repo = staticProvider
-        .ormConnection
-        .getRepository(CourseGroup);
-
-    const courseGroupsSeed = [
-        {
-            courseId: 1,
-            groupId: 1,
-        }, {
-            courseId: 1,
-            groupId: 3,
-        }
-    ] as CourseGroupDTO[]
-
-    const courseGroups = courseGroupsSeed
-        .map(x => ({
-            courseId: x.courseId,
-            groupId: x.groupId,
-        } as CourseGroupDTO))
-
-    await repo.save(courseGroups);
-}
-
-const seedCourseTagsAsync = async () => {
-
-    // insert new answers
-    const repo = staticProvider
-        .ormConnection
-        .getRepository(CourseTag);
-
-    const courseTagsSeed = [
-        {
-            courseId: 1,
-            tagId: 1,
-        }, {
-            courseId: 1,
-            tagId: 2,
-        }
-    ] as CourseTagDTO[]
-
-    const courseTags = courseTagsSeed
-        .map(x => ({
-            courseId: x.courseId,
-            tagId: x.tagId,
-        } as CourseTagDTO))
-
-    await repo.save(courseTags);
-}
-
-const seedTags = (connection: TypeORMConnection) => {
-
-    return connection
-        .getRepository(Tag)
-        .save([
-            {
-                name: "design",
-            },
-            {
-                name: "marketing",
-            },
-            {
-                name: "development",
-            }
-        ])
-}
-
-const seedGroups = (connection: TypeORMConnection, orgIds: number[]) => {
-
-    return connection
-        .getRepository(Group)
-        .save([
-            {
-                name: "Hegesztők",
-                organizationId: orgIds[0]
-            },
-            {
-                name: "Takarítók",
-                organizationId: orgIds[0]
-            },
-            {
-                name: "Műszerészek",
-                organizationId: orgIds[1]
-            }
-        ])
 }

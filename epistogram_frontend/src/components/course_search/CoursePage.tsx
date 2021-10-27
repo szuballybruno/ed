@@ -1,15 +1,10 @@
-import {
-    Box,
-    Container,
-    Divider,
-    Flex
-} from "@chakra-ui/react";
+import { Box, Container, Divider, Flex } from "@chakra-ui/react";
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Tab, Tabs, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { Radar } from "react-chartjs-2";
 import { getAssetUrl } from "../../frontendHelpers";
-import { EditCourseDataDTO } from "../../models/shared_models/AdminPageEditCourseDTO";
+import { CourseEditDataDTO } from "../../models/shared_models/CourseEditDataDTO";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { EpistoHeader } from "../EpistoHeader";
 import { MainWrapper } from "../HOC/MainPanels";
@@ -22,7 +17,7 @@ export const CoursePageSummary = (props: {
     whatSkillsTheCourseImprovingDescription: string
 }) => {
 
-    const WhatCanYouLearnInCourseListItem = (props: {title: string}) => <Flex w={"100%"} h={30} px={15} mt={10}>
+    const WhatCanYouLearnInCourseListItem = (props: { title: string }) => <Flex w={"100%"} h={30} px={15} mt={10}>
         <Flex w={30} h={30} p={5} >
             <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
                 borderRadius: 5,
@@ -332,7 +327,7 @@ const CoursePage = () => {
     // const { course } = useAdminEditedCourse(Number(params.courseId));
     const course = null;
 
-    const setEditCourseState = (course: EditCourseDataDTO) => {
+    const setEditCourseState = (course: CourseEditDataDTO) => {
         const {
             title,
             category,
@@ -341,7 +336,6 @@ const CoursePage = () => {
         } = course
 
         setTitle(title)
-        setCategory(category)
         setThumbnailURL(thumbnailURL)
         setCourseItems(courseItems)
     }
@@ -439,13 +433,13 @@ const CoursePage = () => {
                                 justifyContent="center"
                                 shadow={"#00000024 0px 0px 3px 0px"}>
                                 <Flex w={50}
-                                      h={50}
-                                      className={"circle"}
-                                      border="2px solid var(--epistoTeal)"
-                                      bg="var(--deepBlue)"
-                                      color="white"
-                                      alignItems={"center"}
-                                      justifyContent={"center"}>
+                                    h={50}
+                                    className={"circle"}
+                                    border="2px solid var(--epistoTeal)"
+                                    bg="var(--deepBlue)"
+                                    color="white"
+                                    alignItems={"center"}
+                                    justifyContent={"center"}>
                                     <Typography>
                                         OM
                                     </Typography>
