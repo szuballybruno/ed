@@ -69,8 +69,8 @@ const initializeAsync = async () => {
     //
 
     expressServer.use(getCORSMiddleware());
-    expressServer.use(bodyParser.json({ limit: '5mb' }));
-    expressServer.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
+    expressServer.use(bodyParser.json({ limit: '500mb' }));
+    expressServer.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
     expressServer.use(fileUpload());
     expressServer.use(getAuthMiddleware());
 
