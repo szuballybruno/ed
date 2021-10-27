@@ -19,6 +19,13 @@ export const ExamResultsSlide = (props: {
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
 
+    const correctAnswersCount = questionsAnswers
+        .filter(x => x.answers.some(y => y.isCorrect && y.answerId === x.givenAnswerId))
+        .length;
+
+    const questionsCount = questionsAnswers.length;
+    const correctPercentage = Math.round((correctAnswersCount / questionsCount) * 100);
+
     const content = <Flex direction="column" className="whall" p="20px">
 
         {/* title */}
@@ -33,8 +40,8 @@ export const ExamResultsSlide = (props: {
 
         {/* stats */}
         <Flex w={"100%"} h={170} overflow="hidden">
-            <StatisticsCard suffix={"%"} title={"Helyes válaszok aránya"} value={"66"} />
-            <StatisticsCard suffix={""} title={"Helyes válasz a kérdésekre"} value={"10/15"} />
+            <StatisticsCard suffix={"%"} title={"Helyes válaszok aránya"} value={"" + correctPercentage} />
+            <StatisticsCard suffix={""} title={"Helyes válasz a kérdésekre"} value={`${correctAnswersCount}/${questionsCount}`} />
             <StatisticsCard suffix={"perc"} title={"Alatt teljesítetted a tesztet"} value={"66"} />
             <StatisticsCard suffix={"%"} title={"Az összes felhaszáló között"} value={"top 20"} />
         </Flex>

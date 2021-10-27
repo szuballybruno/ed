@@ -1,5 +1,5 @@
 import React, { ReactNode, useContext, useEffect } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { verboseLogging } from '../../Environemnt';
 import { UserActivityDTO } from '../../models/shared_models/UserActivityDTO';
@@ -22,7 +22,6 @@ export const ProtectedRoute = (props: {
         console.log(`Navigated to protected route '${props.path}'. Authentication state: ${authState}`);
 
     // refetch user on every route render 
-    refetchUserAsync();
 
     return (
         <Route

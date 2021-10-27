@@ -6,6 +6,7 @@ import { AuthenticationStateType, useUserFetching } from "../../services/authent
 import { useRenewUserSessionPooling } from "../../services/openEndpointService";
 import setTheme from "../../services/setTheme";
 import OneSignal from 'react-onesignal';
+import { useLocation } from "react-router-dom";
 
 export const CurrentUserContext = createContext<UserDTO | null>(null);
 export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());
@@ -38,6 +39,14 @@ export const AuthenticationFrame = (props) => {
 
     if (verboseLogging)
         console.log("Authentication state: " + authState);
+
+    // refetch user on route change
+    const location = useLocation();
+
+    useEffect(() => {
+
+        refetchUserAsync();
+    }, [location.pathname]);
 
     return <AuthenticationStateContext.Provider value={authState}>
         <RefetchUserAsyncContext.Provider value={refetchUserAsync}>
