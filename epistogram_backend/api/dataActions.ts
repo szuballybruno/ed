@@ -122,7 +122,7 @@ export const saveCourseThumbnailAction = async (params: ActionParamsType) => {
         getCourseAsync,
         setCourseThumbnailIdAsync,
         course => course.coverFileId,
-        file);
+        file.data);
 }
 
 export const getCourseBriefDataAction = async (params: ActionParamsType) => {

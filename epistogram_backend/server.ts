@@ -15,7 +15,7 @@ import { getDailyTipAction, getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction, getQuestionEditDataAction, saveQuestionAction } from './api/questionActions';
 import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
-import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileAction } from './api/videoActions';
+import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileChunksAction } from './api/videoActions';
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
@@ -69,8 +69,8 @@ const initializeAsync = async () => {
     //
 
     expressServer.use(getCORSMiddleware());
-    expressServer.use(bodyParser.json({ limit: '500mb' }));
-    expressServer.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
+    expressServer.use(bodyParser.json({ limit: '32mb' }));
+    expressServer.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
     expressServer.use(fileUpload());
     expressServer.use(getAuthMiddleware());
 
@@ -136,7 +136,7 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.video.createVideo, createVideoAction, { isPost: true });
     addEndpoint(apiRoutes.video.deleteVideo, deleteVideoAction, { isPost: true });
     addEndpoint(apiRoutes.video.saveVideo, saveVideoAction, { isPost: true });
-    addEndpoint(apiRoutes.video.uploadVideoFile, uploadVideoFileAction, { isPost: true });
+    addEndpoint(apiRoutes.video.uploadVideoFileChunks, uploadVideoFileChunksAction, { isPost: true });
     addEndpoint(apiRoutes.video.getVideoEditData, getVideoEditDataAction);
 
     // questions

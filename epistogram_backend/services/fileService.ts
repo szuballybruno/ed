@@ -1,11 +1,9 @@
 import { UploadedFile } from "express-fileupload";
 import { StorageFile } from "../models/entity/StorageFile";
 import { User } from "../models/entity/User";
-import { Video } from "../models/entity/Video";
 import { staticProvider } from "../staticProvider";
-import { deleteStorageFileAsync, uploadToStorageAsync } from "./storageService";
+import { deleteStorageFileAsync, uploadBufferToStorageAsync } from "./storageService";
 import { getUserById, setUserAvatarFileId } from "./userService";
-import { getVideoByIdAsync, setVideoFileIdAsync, setVideoThumbnailFileId } from "./videoService";
 
 export const uploadAvatarFileAsync = async (userId: number, file: UploadedFile) => {
     // upload new avatar
@@ -14,7 +12,7 @@ export const uploadAvatarFileAsync = async (userId: number, file: UploadedFile) 
         () => getUserById(userId),
         (fileId) => setUserAvatarFileId(userId, fileId),
         (entity) => entity.avatarFileId,
-        file);
+        file.data);
 };
 
 export const uploadAssigendFileAsync = async <T>(
@@ -22,7 +20,7 @@ export const uploadAssigendFileAsync = async <T>(
     getEntityAsync: () => Promise<T>,
     assignFileToEntity: (fileId: number) => Promise<any>,
     getFileEntityId: (entity: T) => number | null,
-    file: UploadedFile) => {
+    fileBuffer: Buffer) => {
 
     // crate pending storage file
     const newStorageFileEntity = await insertFileEntityAsync(filePath);
@@ -44,7 +42,7 @@ export const uploadAssigendFileAsync = async <T>(
     }
 
     // upload to storage
-    await uploadToStorageAsync(file, filePath);
+    await uploadBufferToStorageAsync(fileBuffer, filePath);
 }
 
 export const getFilePath = (folderPath: string, fileType: string, fileId: number, extension: string) => {
