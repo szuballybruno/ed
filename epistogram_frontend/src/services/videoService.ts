@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { useReactQuery } from "../frontendHelpers";
 import { CreateVideoDTO } from "../models/shared_models/CreateVideoDTO";
 import { IdBodyDTO } from "../models/shared_models/IdBodyDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
+import { LoadingStateType } from "../models/types";
+import { uploadeFileChunksAsync } from "./fileUploadClient";
 import { httpGetAsync, usePostDataUnsafe } from "./httpClient";
 
 export const useCreateVideo = () => {
@@ -67,10 +70,34 @@ export const useVideoEditData = (videoId: number) => {
 
 export const useUploadVideoFileAsync = () => {
 
-    const qr = usePostDataUnsafe<{ videoId: number }, void>(apiRoutes.video.uploadVideoFile);
+    const [uploadState, setUploadState] = useState<LoadingStateType>("idle");
+
+    const saveVideoFileAsync = async (videoId: number, file: File) => {
+
+        setUploadState("loading");
+
+        try {
+
+            await uploadeFileChunksAsync(apiRoutes.video.uploadVideoFileChunks, file, { videoId });
+        }
+        catch (e) {
+
+            setUploadState("idle");
+            throw e;
+        }
+
+        setUploadState("success");
+    }
 
     return {
-        saveVideoFileAsync: (videoId: number, file: File) => qr.postDataAsync({ videoId }, file),
-        saveVideoFileState: qr.state,
+        saveVideoFileAsync: saveVideoFileAsync,
+        saveVideoFileState: uploadState
     }
 }
+
+// const qr = usePostDataUnsafe<{ videoId: number }, void>(apiRoutes.video.uploadVideoFile);
+
+// return {
+//     saveVideoFileAsync: (videoId: number, file: File) => qr.postDataAsync({ videoId }, file),
+//     saveVideoFileState: qr.state,
+// }

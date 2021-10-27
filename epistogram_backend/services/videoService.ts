@@ -6,6 +6,7 @@ import { VideoPlaybackData } from "../models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { staticProvider } from "../staticProvider";
 import { unsetUsersCurrentCourseItemAsync } from "./courseService";
+import { getFilePath, uploadAssigendFileAsync } from "./fileService";
 import { log } from "./misc/logger";
 import { getAssetUrl } from "./misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
@@ -142,6 +143,31 @@ export const deleteVideosAsync = async (videoIds: number[], unsetCurrentCourseIt
         .from(Video)
         .where("id IN (:...videoIds)", { videoIds })
         .execute();
+}
+
+export const uploadVideoFileAsync = async (videoId: number, videoFileBuffer: Buffer) => {
+
+    // upload file
+    const filePath = getFilePath("videos", "video", videoId, "mp4");
+
+    await uploadAssigendFileAsync<Video>(
+        filePath,
+        () => getVideoByIdAsync(videoId),
+        (fileId) => setVideoFileIdAsync(videoId, fileId),
+        (entity) => entity.videoFileId,
+        videoFileBuffer);
+
+    // set video length
+    const videoFileUrl = getAssetUrl(filePath);
+    const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
+
+    await staticProvider
+        .ormConnection
+        .getRepository(Video)
+        .save({
+            id: videoId,
+            lengthSeconds: lengthSeconds
+        })
 }
 
 export const getVideoPlaybackData = async (userId: number, videoId: number) => {

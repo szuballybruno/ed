@@ -4,10 +4,16 @@ import path from "path";
 import { staticProvider } from "../staticProvider";
 import { logError } from "./misc/logger";
 
-export const uploadToStorageAsync = (file: UploadedFile, path: string) => new Promise<void>((resolve, reject) => {
+export const uploadFileToStorageAsync = (file: UploadedFile, path: string) => {
+
+    const { data: buffer } = file;
+
+    return uploadBufferToStorageAsync(buffer, path);
+}
+
+export const uploadBufferToStorageAsync = (buffer: Buffer, path: string) => new Promise<void>((resolve, reject) => {
 
     const bucket = getBucket();
-    const { data: buffer } = file;
     const blob = bucket.file(path.replace(/ /g, "_"));
 
     const blobStream = blob
@@ -25,7 +31,7 @@ export const uploadToStorageAsync = (file: UploadedFile, path: string) => new Pr
             reject(e);
         })
         .end(buffer);
-})
+});
 
 export const deleteStorageFileAsync = async (filePath: string) => {
 

@@ -49,6 +49,7 @@ export const apiRoutes = {
         createVideo: "/video/create-video",
         deleteVideo: "/video/delete-video",
         uploadVideoFile: "/video/upload-video-file",
+        uploadVideoFileChunks: "/video/upload-video-file-chunks",
         saveVideo: "/video/save-video",
         getVideoEditData: "/video/get-video-edit-data",
     },

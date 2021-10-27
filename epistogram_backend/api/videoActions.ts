@@ -1,23 +1,19 @@
 import { UploadedFile } from "express-fileupload";
-import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
-import { Question } from "../models/entity/Question";
 import { Video } from "../models/entity/Video";
-import { VideoPlaybackData } from "../models/entity/VideoPlaybackData";
-import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { CreateVideoDTO } from "../models/shared_models/CreateVideoDTO";
 import { IdBodyDTO } from "../models/shared_models/IdBodyDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
-import { unsetUsersCurrentCourseItemAsync } from "../services/courseService";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "../services/misc/videoDurationService";
-import { deleteQuesitonsAsync, saveQuestionsAsync } from "../services/questionService";
-import { deleteVideosAsync, getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync } from "../services/videoService";
+import { saveQuestionsAsync } from "../services/questionService";
+import { deleteVideosAsync, getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync, uploadVideoFileAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers"
+import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
+import fs from "fs"
 
 export const createVideoAction = async (params: ActionParamsType) => {
 
@@ -106,30 +102,45 @@ export const getVideoEditDataAction = async (params: ActionParamsType) => {
     } as VideoEditDTO;
 }
 
-export const uploadVideoFileAction = async (params: ActionParamsType) => {
+export const uploadVideoFileChunksAction = async (params: ActionParamsType) => {
 
     const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
     const videoId = withValueOrBadRequest<number>(params.req.body.videoId, "number");
+    const chunkIndex = withValueOrBadRequest<number>(params.req.body.chunkIndex, "number");
+    const chunksCount = withValueOrBadRequest<number>(params.req.body.chunksCount, "number");
 
-    // upload file
-    const filePath = getFilePath("videos", "video", videoId, "mp4");
+    console.log("Recieved file chunk: #" + chunkIndex);
 
-    await uploadAssigendFileAsync<Video>(
-        filePath,
-        () => getVideoByIdAsync(videoId),
-        (fileId) => setVideoFileIdAsync(videoId, fileId),
-        (entity) => entity.videoFileId,
-        file);
+    const tempFolder = staticProvider.rootDirectory + "\\uploads_temp";
+    const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
 
-    // set video length
-    const videoFileUrl = getAssetUrl(filePath);
-    const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
+    // create temp folder 
+    if (!fs.existsSync(tempFolder)) {
+        fs.mkdirSync(tempFolder);
+    }
 
-    await staticProvider
-        .ormConnection
-        .getRepository(Video)
-        .save({
-            id: videoId,
-            lengthSeconds: lengthSeconds
-        })
+    // create & append file
+    if (chunkIndex === 0) {
+
+        fs.writeFileSync(filePath, file.data);
+    }
+    else {
+
+        fs.appendFileSync(filePath, file.data);
+    }
+
+    // upload is done 
+    if (chunkIndex + 1 === chunksCount) {
+
+        console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
+
+        // read tmp file 
+        const fullFile = fs.readFileSync(filePath);
+
+        // delete tmp file 
+        fs.rmSync(filePath);
+
+        // upload to cloud 
+        await uploadVideoFileAsync(videoId, fullFile);
+    }
 }

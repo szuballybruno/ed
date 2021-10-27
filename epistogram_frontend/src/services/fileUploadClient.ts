@@ -1,27 +1,39 @@
 import { backendUrl } from "../Environemnt";
 import { postFileAsync } from "./httpClient";
 
-const maxChunkSizeBytes = 1000000; // 1 mb
+const mbToByte = 1000000;
+const maxChunkSizeBytes = 10 * mbToByte; // 10 mb
 
-export const uploadeFileAsync = async (urlEnding: string, file: File) => {
+export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data?: any) => {
 
     let uploadedBytesCount = 0;
-    const url = backendUrl + urlEnding;
+    let chunkIndex = 0;
+    const trimmedUrlEnding = urlEnding.substring(0, 1) === "/"
+        ? urlEnding.substring(1)
+        : urlEnding;
+    const url = backendUrl + trimmedUrlEnding;
     const bytesToBeUploaded = file.size;
+    const chunksCount = Math.ceil(bytesToBeUploaded / maxChunkSizeBytes);
+
+    console.log(`Starting upload, chunks count: ${chunksCount}...`)
 
     while (uploadedBytesCount < bytesToBeUploaded) {
 
-        console.log("Uploaded bytes: ");
-        console.log(uploadedBytesCount);
-
         const currentChunkArrayBuffer = await getFileChunkAsync(uploadedBytesCount, file);
 
-        console.log("Uploading chunk: ");
-        console.log(currentChunkArrayBuffer);
-        await postFileAsync(url, new File([currentChunkArrayBuffer], "chunk"));
+        console.log(`Uploading chunk: #${chunkIndex} - ${currentChunkArrayBuffer.byteLength * 0.000001}mb`);
+
+        await postFileAsync(url, new File([currentChunkArrayBuffer], "chunk"), {
+            chunkIndex,
+            chunksCount,
+            ...data
+        });
 
         uploadedBytesCount += currentChunkArrayBuffer.byteLength;
+        chunkIndex++;
     }
+
+    console.log("Upload finished!");
 }
 
 const getFileChunkAsync = (uploadedBytesCount: number, file: File): Promise<ArrayBuffer> => {
