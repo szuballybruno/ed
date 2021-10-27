@@ -99,7 +99,8 @@ export const SignupWrapper = (props: {
                 {hasImage && <Flex
                     flex="4"
                     minWidth={window.innerWidth > 500 ? 400 : "100%"}
-                    minH={"50%"}
+                    minH={400}
+                    h="400"
                     justifyContent={isDesktop ? "flex-end" : "center"}>
                     <Image maxW={"100%"} height="100%" src={currentImage!} />
                 </Flex>}

@@ -14,7 +14,7 @@ export const translatableTexts = {
         availableCoursesText: "Válaszd ki a legszimpatikusabb tanfolyamot",
         currentCourseTitle: "Jelenlegi kurzus",
         practiseTitle: "Gyakorolj, hogy a legjobb lehess!",
-        tipOfTheDay: "Hozd ki  magadból a legöbbet - Napi tipped",
+        tipOfTheDay: "Hozd ki  magadból a legtöbbet - Napi tipped",
         tasks: "Feladatok"
     },
 
@@ -70,7 +70,7 @@ export const translatableTexts = {
     },
 
     editUserControl: {
-        saveUser: "Mentés"
+        saveUser: "Felhasználó hozzáadása"
     },
 
     tipOfTheDay: {
@@ -124,7 +124,7 @@ export const translatableTexts = {
     },
 
     signup: {
-        goToHomePage: "Irany az app!"
+        goToHomePage: "Irány az EpistoGram"
     },
 
     exam: {

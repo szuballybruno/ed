@@ -38,7 +38,7 @@ const AdminPage = () => {
     if (user.userActivity.canAccessCourseAdministration)
         menuItems.push(administrationRoutes.coursesRoute);
 
-    menuItems.push(...[administrationRoutes.groupsRoute, administrationRoutes.myCompanyRoute])
+    menuItems.push(...[/*administrationRoutes.groupsRoute,*/ administrationRoutes.myCompanyRoute])
 
     const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
 

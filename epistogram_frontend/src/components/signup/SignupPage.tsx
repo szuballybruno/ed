@@ -35,7 +35,7 @@ export const SignupPage = () => {
         title="Regisztráció"
         upperTitle="Üdv a fedélzeten!"
         currentImage={getAssetUrl("/signupQuestionImages/regisztracio.svg")}
-        description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Epistogramot"}
+        description={"A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az EpistoGramot"}
         onNext={() => slidesState.next()}
         nextButtonTitle="Tovább">
     </SignupWrapper>
