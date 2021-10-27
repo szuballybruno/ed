@@ -14,5 +14,4 @@ export type CourseEditDataDTO = {
 
     teachers: UserDTO[];
     categories: CourseCategoryDTO[];
-    subCategories: CourseCategoryDTO[];
 }

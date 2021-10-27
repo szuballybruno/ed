@@ -132,7 +132,8 @@ export const createCourseAction = async (params: ActionParamsType) => {
         .insert({
             title: dto.title,
             teacherId: 1,
-
+            categoryId: 1,
+            subCategoryId: 1,
         });
 }
 

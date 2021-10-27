@@ -36,7 +36,6 @@ export const EditCourseControl = (props: {
 
     const { saveCourseAsync, courseId, courseEditData } = props;
     const categories = courseEditData?.categories ?? [];
-    const subCategories = courseEditData?.subCategories ?? [];
     const { navigate } = useNavigation();
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
 
@@ -67,9 +66,18 @@ export const EditCourseControl = (props: {
             title: title,
             thumbnailURL: thumbnailSrc,
             courseItems: courseItems,
+
             teacher: {
                 id: 1,
-            } as UserDTO
+            } as UserDTO,
+
+            category: {
+                id: category?.id!
+            },
+
+            subCategory: {
+                id: subCategory?.id!
+            }
         } as CourseEditDataDTO;
 
         return saveCourseAsync(dto, thumbnailImageFile);
@@ -81,15 +89,18 @@ export const EditCourseControl = (props: {
         if (!courseEditData)
             return;
 
-        const {
-            title,
-            thumbnailURL,
-            courseItems,
-        } = courseEditData;
+        setTitle(courseEditData.title);
+        setThumbnailSrc(courseEditData.thumbnailURL);
+        setCourseItems(courseEditData.courseItems);
 
-        setTitle(title)
-        setThumbnailSrc(thumbnailURL)
-        setCourseItems(courseItems)
+        // set category
+        const currentCategory = categories
+            .filter(x => x.id === courseEditData.category.id)[0];
+
+        setCategory(currentCategory);
+
+        // set sub category
+        setSubCategory(courseEditData.subCategory);
     }, [courseEditData]);
 
 
@@ -238,6 +249,7 @@ export const EditCourseControl = (props: {
                 </Typography>
                 <EpistoSelect
                     getCompareKey={x => x?.id + ""}
+                    getDisplayValue={x => x?.name + ""}
                     items={categories}
                     selectedValue={category}
                     onSelected={setCategory} />
@@ -248,7 +260,8 @@ export const EditCourseControl = (props: {
                 </Typography>
                 <EpistoSelect
                     getCompareKey={x => x?.id + ""}
-                    items={subCategories}
+                    getDisplayValue={x => x?.name + ""}
+                    items={category?.childCategories ?? []}
                     selectedValue={subCategory}
                     onSelected={setSubCategory} />
             </EditSection>

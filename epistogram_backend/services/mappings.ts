@@ -361,7 +361,9 @@ export const toQuestionDTO = (q: Question) => {
     } as QuestionDTO;
 }
 
-export const toCourseEditDataDTO = (course: Course) => {
+export const toCourseEditDataDTO = (
+    course: Course,
+    categories: CourseCategory[]) => {
 
     const thumbnailImageURL = course.coverFile
         ? getAssetUrl(course.coverFile.filePath)
@@ -380,8 +382,7 @@ export const toCourseEditDataDTO = (course: Course) => {
         teacher: toUserDTO(course.teacher),
 
         teachers: [],
-        categories: [],
-        subCategories: []
+        categories: categories.map(x => toCourseCategoryDTO(x)),
     } as CourseEditDataDTO;
 }
 
@@ -428,10 +429,14 @@ export const toCourseAdminListItemDTO = (course: Course) => {
     } as CourseAdminListItemDTO;
 }
 
-export const toCourseCategoryDTO = (cc: CourseCategory) => {
+export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
 
     return {
         id: cc.id,
-        name: cc.name
+        name: cc.name,
+        childCategories: cc.childCategories
+            ? cc.childCategories
+                .map(x => toCourseCategoryDTO(x))
+            : []
     } as CourseCategoryDTO;
 }

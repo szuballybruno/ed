@@ -1,4 +1,5 @@
 import { Course } from "../models/entity/Course";
+import { CourseCategory } from "../models/entity/CourseCategory";
 import { Exam } from "../models/entity/Exam";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
@@ -319,7 +320,15 @@ export const getCourseEditDataAsync = async (courseId: number) => {
         .leftJoinAndSelect("course.subCategory", "sc")
         .getOneOrFail();
 
-    return toCourseEditDataDTO(course,);
+    const categories = await staticProvider
+        .ormConnection
+        .getRepository(CourseCategory)
+        .createQueryBuilder("cc")
+        .leftJoinAndSelect("cc.childCategories", "ccc")
+        .where("cc.parentCategoryId IS NULL")
+        .getMany();
+
+    return toCourseEditDataDTO(course, categories);
 }
 
 export const getAdminCoursesAsync = async () => {
@@ -332,6 +341,7 @@ export const getAdminCoursesAsync = async () => {
         .leftJoinAndSelect("c.teacher", "t")
         .leftJoinAndSelect("c.category", "ca")
         .leftJoinAndSelect("c.subCategory", "sc")
+        .orderBy("c.title", "DESC")
         .getMany();
 
     return courses
