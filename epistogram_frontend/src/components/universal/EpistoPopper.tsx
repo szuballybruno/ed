@@ -1,5 +1,5 @@
 import { Popover } from "@mui/material";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { FlexFloat } from "./FlexFloat";
 
 export const EpistoPopper = (props: {
@@ -7,10 +7,11 @@ export const EpistoPopper = (props: {
     target: any,
     placementX?: "left" | "center" | "right",
     handleClose: () => void,
-    children?: ReactNode
+    children?: ReactNode,
+    style?: React.CSSProperties
 }) => {
 
-    const { target, children, isOpen, placementX, handleClose } = props;
+    const { target, children, isOpen, placementX, handleClose, style } = props;
 
     return <Popover
         open={isOpen && !!target}
@@ -24,7 +25,7 @@ export const EpistoPopper = (props: {
         elevation={0}
         className="normalizeChild">
 
-        <FlexFloat borderRadius="10px" direction="column" p="20px">
+        <FlexFloat style={style} borderRadius="10px" direction="column" p="20px">
             {children}
         </FlexFloat>
     </Popover>

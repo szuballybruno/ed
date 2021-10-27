@@ -86,6 +86,9 @@ export const CourseItemSelector = (props: {
         <EpistoPopper
             isOpen={isInfoDialogOpen}
             target={ref?.current}
+            style={{
+                width: 400
+            }}
             placementX="left"
             handleClose={() => setIsInfoDialogOpen(false)}>
             <Typography>Kezdő módban a meghatározott sorrendben haladhatsz, és előre csak addig részig tekerhetsz, melyet már megtekintettél. Haladó módban korlátlanul váltogathatsz a videók között!</Typography>
