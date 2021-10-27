@@ -3,7 +3,7 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseEditDataAction, getCourseDetailsAction, getUserCoursesDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseEditDataAction, getCourseDetailsAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
     answerPractiseQuestionAction, answerSignupQuestionAction, getCourseBriefDataAction, getCourseItemsAction,
     getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
@@ -117,7 +117,7 @@ const initializeAsync = async () => {
     expressServer.post('/player/get-course-items', getCourseItemsAction);
 
     // users
-    expressServer.get("/users/get-courses-data", getUserCoursesDataAction);
+    addEndpoint(apiRoutes.learning.getCourseProgressData, getCourseProgressDataAction);
 
     // course
     expressServer.post("/course/set-course-mode", setCourseTypeAction);

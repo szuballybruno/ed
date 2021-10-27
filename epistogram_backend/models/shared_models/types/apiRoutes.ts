@@ -28,6 +28,10 @@ export const apiRoutes = {
         getUserPersonalityData: "/signup/get-user-personality-data"
     },
 
+    learning: {
+        getCourseProgressData: "/learning/get-course-progress-data"
+    },
+
     course: {
         getCourseEditData: '/course/get-course-edit-data',
         getCourseBriefData: '/course/get-course-brief-data',

@@ -8,33 +8,6 @@ import { DashboardSection } from "../universal/DashboardSection";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoGrid } from "../universal/EpistoGrid";
 
-// const CourseStatCard = (props: { course: CourseShortDTO }) => {
-
-//     // const { title, thumbnailImageURL } = props.course;
-
-//     const stats = [
-//         {
-//             text: "Fókusz 24%"
-//         },
-//         {
-//             text: "Pontosság 24%"
-//         },
-//         {
-//             text: "Elvégzett vizsgák: 45"
-//         },
-//         {
-//             text: "A kurzus teljes időtartalma: 3h"
-//         },
-//         {
-//             text: "Reakció idő: 12s"
-//         },
-//     ]
-
-//     return <CourseTile course={props.course} borderRadius="0">
-//         <InfoGrid infos={stats.map(x => x.text)} />
-//     </CourseTile>
-// }
-
 const MyCourses = () => {
 
     const { coursesData, coursesDataError, coursesDataStatus } = useUserCourseData();
@@ -60,7 +33,6 @@ const MyCourses = () => {
 
                     {completedCourses
                         .map((course, index) => <CourseTile course={course} />)}
-
 
                 </EpistoGrid>
 

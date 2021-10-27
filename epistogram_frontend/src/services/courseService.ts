@@ -130,7 +130,7 @@ export const useUserCourseData = () => {
 
     const { data, status, error } = useReactQuery<UserCoursesDataDTO>(
         ["getUserCoursesDataDTO"],
-        () => httpGetAsync("/users/get-courses-data"));
+        () => httpGetAsync(apiRoutes.learning.getCourseProgressData));
 
     return {
         coursesData: data,

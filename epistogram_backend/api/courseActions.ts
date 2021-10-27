@@ -9,7 +9,7 @@ import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { getUserIdFromRequest } from "../services/authenticationService";
-import { getAdminCoursesAsync, getAvailableCoursesAsync, getCourseEditDataAsync, getUserCoursesDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService"
+import { getAdminCoursesAsync, getAvailableCoursesAsync, getCourseEditDataAsync, getCourseProgressDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService"
 import { deleteExamsAsync } from "../services/examService";
 import { toCourseDetailsDTO } from "../services/mappings";
 import { deleteVideosAsync } from "../services/videoService";
@@ -164,9 +164,7 @@ export const setCourseTypeAction = getAsyncActionHandler(async (req: Request) =>
     return setCourseTypeAsync(userId, courseId, modeType);
 });
 
-export const getUserCoursesDataAction = getAsyncActionHandler(async (req: Request) => {
+export const getCourseProgressDataAction = async (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-
-    return getUserCoursesDataAsync(userId);
-});
+    return getCourseProgressDataAsync(params.userId);
+};

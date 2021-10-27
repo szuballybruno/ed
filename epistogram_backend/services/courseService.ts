@@ -15,16 +15,15 @@ import { getCourseItemDescriptorCode, readCourseItemDescriptorCode } from "./enc
 import { toCourseAdminListItemDTO, toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toCourseShortDTO, toCourseEditDataDTO, toExamDTO, toSimpleCourseItemDTOs } from "./mappings";
 import { getVideoByIdAsync } from "./videoService";
 
-export const getUserCoursesDataAsync = async (userId: number) => {
+export const getCourseProgressDataAsync = async (userId: number) => {
 
     const courses = await staticProvider
         .ormConnection
         .getRepository(CourseView)
-        .find({
-            where: {
-                userId: userId,
-            }
-        });
+        .createQueryBuilder("cv")
+        .leftJoinAndSelect("cv.teacher", "t")
+        .where("cv.userId = :userId", { userId })
+        .getMany();
 
     const inProgressCourses = courses
         .filter(x => x.isStarted && !x.isComplete);
