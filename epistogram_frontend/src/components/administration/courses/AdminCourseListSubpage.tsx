@@ -23,7 +23,7 @@ export const AdminCourseListSubpage = () => {
 
     const [searchText] = React.useState("");
 
-    // http 
+    // http
     const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList(searchText);
     const { createCourseAsync, createCourseState } = useCreateCourse();
     const { deleteCourseAsync, deleteCourseState } = useDeleteCourse();
@@ -68,17 +68,17 @@ export const AdminCourseListSubpage = () => {
 
         warnDialogLogic
             .openDialog({
-                title: "Biztosan torlod a kurzust?",
-                description: "Az osszes benne talalhato adata el fog veszni!",
+                title: "Biztosan törlöd a kurzust?",
+                description: "Az összes benne található adat el fog veszni!",
                 buttons: [
                     {
-                        title: "Torlom a kurzust",
+                        title: "Törlöm a kurzust",
                         action: async () => {
                             try {
 
                                 await deleteCourseAsync({ id: courseId });
 
-                                showNotification("Kurzus sikeresen torolve!");
+                                showNotification("Kurzus sikeresen törölve!");
 
                                 await refetchCoursesAsync();
                             }

@@ -317,7 +317,7 @@ const CourseDetailsPage = () => {
                     alignItems={"flex-end"}
                     minH={140}
                     h={140}>
-                    <Typography variant={"h4"}>{JSON.stringify(title)}</Typography>
+                    <Typography variant={"h4"}>{title}</Typography>
                 </Flex>
 
                 <Flex direction={"row"} px={100} w={"100%"} minH={1200} h={"100%"} mb={100}>

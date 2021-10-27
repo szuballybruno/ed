@@ -33,12 +33,18 @@ export const ExamLayout = (props: {
             h={60}
             pl={5}>
 
-            {(headerLeftItem && isString(headerLeftItem)) && <Text as="text">
-                {headerLeftItem}
-            </Text>}
-            {(headerLeftItem && !isString(headerLeftItem)) && headerLeftItem}
+            <Flex minW="200">
+                {(headerLeftItem && isString(headerLeftItem)) && <Text as="text">
+                    {headerLeftItem}
+                </Text>}
+                {(headerLeftItem && !isString(headerLeftItem)) && headerLeftItem}
+            </Flex>
 
-            <Flex flex="1" align="center" justify="center">
+
+            <Flex
+                flex="1"
+                align="center"
+                justify="center">
                 <Text
                     as="text"
                     fontSize={"1.1rem"}>
@@ -46,15 +52,18 @@ export const ExamLayout = (props: {
                 </Text>
             </Flex>
 
-            {exitExamAction && <EpistoButton
-                onClick={exitExamAction}
-                style={{
-                    minWidth: 170
-                }}
-                variant={"outlined"}>
+            <Flex minW="200" justify="flex-end">
+                {exitExamAction && <EpistoButton
+                    onClick={exitExamAction}
+                    style={{
+                        minWidth: 170
+                    }}
+                    variant={"outlined"}>
 
-                Kilépek a tesztből
-            </EpistoButton>}
+                    Kilépek a tesztből
+                </EpistoButton>}
+            </Flex>
+
         </Flex>
 
         {/* content */}
