@@ -1,9 +1,9 @@
-import React, { ReactNode, useContext } from 'react';
+import React, { ReactNode, useContext, useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { verboseLogging } from '../../Environemnt';
 import { UserActivityDTO } from '../../models/shared_models/UserActivityDTO';
-import { AuthenticationStateContext, CurrentUserContext } from '../HOC/AuthenticationFrame';
+import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../HOC/AuthenticationFrame';
 
 export const ProtectedRoute = (props: {
     path: string,
@@ -14,11 +14,15 @@ export const ProtectedRoute = (props: {
 }) => {
 
     const authState = useContext(AuthenticationStateContext);
+    const refetchUserAsync = useContext(RefetchUserAsyncContext);
     const user = useContext(CurrentUserContext);
     const { render, isAuthorizedToView, ignoreAppAccessProtection, ...routeProps } = props;
 
     if (verboseLogging)
         console.log(`Navigated to protected route '${props.path}'. Authentication state: ${authState}`);
+
+    // refetch user on every route render 
+    refetchUserAsync();
 
     return (
         <Route
@@ -26,7 +30,7 @@ export const ProtectedRoute = (props: {
             render={x => {
 
                 if (verboseLogging)
-                    console.log("Protected router loading state: " + authState);
+                    console.log("Auth state: " + authState);
 
                 // if loading return blank page
                 if (authState === "loading") {

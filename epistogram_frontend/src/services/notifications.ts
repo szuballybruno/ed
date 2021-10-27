@@ -10,7 +10,7 @@ export const showNotification = (text: string, type?: NotificationType) => {
         text,
         {
             position: "bottom-right",
-            autoClose: type === undefined ? 2000 : 4000,
+            autoClose: type === undefined ? 2000 : 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,

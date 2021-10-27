@@ -43,7 +43,7 @@ export const MainRouting = () => {
             path={applicationRoutes.homeRoute.route}
             render={() => <HomePage />} />
 
-        <Route
+        <ProtectedRoute
             path={applicationRoutes.availableCoursesRoute.route}
             render={() => <Switch>
 

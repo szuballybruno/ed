@@ -1,4 +1,5 @@
 import { useHistory } from "react-router";
+import { verboseLogging } from "../Environemnt";
 
 export const getCourseItemUrl = (descriptorCode: string) =>
     `/watch/${descriptorCode}`;
@@ -22,7 +23,9 @@ export const useNavigation = () => {
             }
         }
 
-        console.log("Navigating to: " + replacedPath);
+        if (verboseLogging)
+            console.log("Navigating to: " + replacedPath);
+
         history.push(replacedPath);
     }
 
