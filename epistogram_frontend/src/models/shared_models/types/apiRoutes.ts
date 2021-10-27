@@ -37,6 +37,7 @@ export const apiRoutes = {
         getAvailableCourses: "/course/get-available-courses",
         deleteCourse: "/course/delete-course",
         createCourse: "/course/create-course",
+        getCourseDetails: "/course/get-course-details",
         getAdminCourseList: "/course/get-admin-course-list"
     },
 

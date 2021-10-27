@@ -2,19 +2,19 @@ import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router";
-import { distinct } from "../../frontendHelpers";
-import { useStartCourse, useUserCourses } from "../../services/courseService";
-import { useNavigation } from "../../services/navigatior";
-import { showNotification, useShowErrorDialog } from "../../services/notifications";
-import { translatableTexts } from "../../translatableTexts";
-import { LoadingFrame } from "../HOC/LoadingFrame";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
-import Navbar from "../navbar/Navbar";
-import CourseTile from "../universal/CourseTile";
-import { EpistoButton } from "../universal/EpistoButton";
-import { EpistoGrid } from "../universal/EpistoGrid";
-import { EpistoSearch } from "../universal/EpistoSearch";
-import classes from "./courseSearchMain.module.scss";
+import { distinct } from "../frontendHelpers";
+import { useStartCourse, useUserCourses } from "../services/courseService";
+import { useNavigation } from "../services/navigatior";
+import { showNotification, useShowErrorDialog } from "../services/notifications";
+import { translatableTexts } from "../translatableTexts";
+import { LoadingFrame } from "./HOC/LoadingFrame";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
+import Navbar from "./navbar/Navbar";
+import CourseTile from "./universal/CourseTile";
+import { EpistoButton } from "./universal/EpistoButton";
+import { EpistoGrid } from "./universal/EpistoGrid";
+import { EpistoSearch } from "./universal/EpistoSearch";
+import classes from "./css/courseSearchMain.module.scss";
 
 const AvailableCoursesPage = () => {
 
@@ -39,7 +39,7 @@ const AvailableCoursesPage = () => {
     }
 
     const categoryOptions = distinct(courses
-        .map((course, index) => course.categoryName + " / " + course.subCategoryName));
+        .map((course, index) => course.subCategoryName));
 
     const playCourse = async (courseId: number, currentItemDescriptior: string | null) => {
 

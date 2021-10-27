@@ -15,6 +15,7 @@ import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { AnswerEditDTO } from "../models/shared_models/AnswerEditDTO";
 import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
 import { CourseCategoryDTO } from "../models/shared_models/CourseCategoryDTO";
+import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
 import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
@@ -427,6 +428,21 @@ export const toCourseAdminListItemDTO = (course: Course) => {
         subCategory: toCourseCategoryDTO(course.subCategory),
         teacher: toUserDTO(course.teacher)
     } as CourseAdminListItemDTO;
+}
+
+export const toCourseDetailsDTO = (course: Course) => {
+
+    const thumbnailImageURL = course.coverFile
+        ? getAssetUrl(course.coverFile.filePath)
+        : getAssetUrl("/images/defaultCourseCover.jpg");
+
+    return {
+        title: course.title,
+        description: "",
+        categoryName: course.category.name,
+        subCategoryName: course.subCategory.name,
+        thumbnailURL: thumbnailImageURL
+    } as CourseDetailsDTO;
 }
 
 export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {

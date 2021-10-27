@@ -3,6 +3,7 @@ import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
+import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
 import { CourseEditDataDTO as CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
@@ -10,6 +11,7 @@ import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { getAdminCoursesAsync, getAvailableCoursesAsync, getCourseEditDataAsync, getUserCoursesDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService"
 import { deleteExamsAsync } from "../services/examService";
+import { toCourseDetailsDTO } from "../services/mappings";
 import { deleteVideosAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
@@ -36,6 +38,22 @@ export const getCourseEditDataAction = async (params: ActionParamsType) => {
 export const getAdminCourseListAction = (params: ActionParamsType) => {
 
     return getAdminCoursesAsync();
+}
+
+export const getCourseDetailsAction = async (params: ActionParamsType) => {
+
+    const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
+
+    const course = await staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .createQueryBuilder("c")
+        .leftJoinAndSelect("c.category", "cat")
+        .leftJoinAndSelect("c.subCategory", "scat")
+        .where("c.id = :courseId", { courseId })
+        .getOneOrFail();
+
+    return toCourseDetailsDTO(course);
 }
 
 export const saveCourseAction = async (params: ActionParamsType) => {

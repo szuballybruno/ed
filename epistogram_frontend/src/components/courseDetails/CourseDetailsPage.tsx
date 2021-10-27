@@ -1,15 +1,17 @@
 import { Box, Container, Divider, Flex } from "@chakra-ui/react";
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Tab, Tabs, Typography } from "@mui/material";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Radar } from "react-chartjs-2";
+import { useParams } from "react-router-dom";
 import { getAssetUrl } from "../../frontendHelpers";
-import { CourseEditDataDTO } from "../../models/shared_models/CourseEditDataDTO";
-import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { useCourseDetails } from "../../services/courseService";
 import { EpistoHeader } from "../EpistoHeader";
 import { MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { EpistoButton } from "../universal/EpistoButton";
+import { courseDummyData } from "./mockData";
+import { TabPanel } from "./TabPanel";
 
 export const CoursePageSummary = (props: {
     overviewSectionShortDescription: string
@@ -272,101 +274,22 @@ export const CoursePageContent = () => <Flex direction={"column"} mt={10}>
     </Accordion>
 </Flex>
 
-export type GetCourseShortDTO = {
-    firstItemCode: string;
-    thumbnailImageURL: string;
-    colorOne: any;
-    colorTwo: any;
-    title: string;
-    teacherName: string;
-    category: string;
-    isComplete: boolean;
-}
+const CourseDetailsPage = () => {
 
-const CoursePage = () => {
-    // const params: {
-    //     courseId: string
-    // } = useParams()
+    const params = useParams<{ courseId: string }>();
+    const courseId = parseInt(params.courseId);
+    const [currentTab, setCurrentTab] = useState(0);
 
-    const courseDummyData = {
-        upperOverviewBelowTitle: "Formázások, képletek, függvények. Sokunk számára már rájuk gondolni is kellemetlen, dolgozni, pedig végképp nem szeretnénk velük.\n" +
-            "Office tanfolyamsorozatunk oszlopos tagjaként Excel kurzusunk sallangmentesen, és mindenki számára közérthetően segít megérteni,\n" +
-            "hogyan használhatjuk hatékonyan a Microsoft zöld táblázatkezelőjét.",
-        overviewSectionShortDescription: "Excel alapozó kurzusunk egészen az alapoktól mutatja be a program működését. Részletesen ismerheted meg a különböző menüpontokat, elrendezéseket, majd a munkaterület feltérképezése után az alapvető műveletek elvégzésének kezdhetsz neki.\n" +
-            "\n" +
-            "A formázások elsajátítása után a függvények tárházával ismerkedhetsz meg, melyek hatalmas segítséget jelentenek bonyolultnak tűnő feladatok szempillantás alatt való megoldásában, és a különböző képek, alakzatok beszúrását is elsajátíthatod.\n" +
-            "\n" +
-            "Az Excel rendkívül erős társad lehet egy-egy adat, kimutatás, riport prezentálásában is, elengedhetetlen tehát, hogy az ehhez illő diagramokat, grafikonokat is mesterien kezeld.",
-        whatCanYouLearnFromCourseList: [
-            "Táblázatok, munkalapok kezelése",
-            "Alapvető műveletek elvégzése",
-            "Függvényekkel való munkavégzés",
-            "Grafikai elemek használata",
-            "Riportok készítése",
-            "Grafikonok és diagramok létrehozása"
-        ],
-        whatSkillsTheCourseImprovingDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique suscipit tempor. Pellentesque dictum, augue a egestas faucibus, augue ipsum vehicula dui, faucibus eleifend risus orci quis ante. Curabitur porttitor fringilla blandit. Suspendisse placerat tempus vehicula. In dignissim tellus magna. Donec non tincidunt risus. Morbi sit amet turpis dolor. Proin vulputate leo eu leo bibendum, in condimentum ex efficitur. Maecenas risus sem, pharetra eu magna vel, gravida luctus urna. Sed diam urna, blandit id justo a, consectetur lacinia risus."
-
-
-    }
-
-
-    const [currentTab, setCurrentTab] = React.useState(0);
+    const { courseDetails } = useCourseDetails(courseId);
+    const thumbnailURL = courseDetails?.thumbnailURL;
+    const title = courseDetails?.title;
+    const subCategory = courseDetails?.subCategoryName;
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
 
         console.log(event);
         setCurrentTab(newValue);
     };
-
-    const [thumbnailURL, setThumbnailURL] = useState("")
-    const [title, setTitle] = useState("")
-    const [category, setCategory] = useState("")
-    const [, setCourseItems] = useState<CourseItemDTO[]>([])
-
-    // const { course } = useAdminEditedCourse(Number(params.courseId));
-    const course = null;
-
-    const setEditCourseState = (course: CourseEditDataDTO) => {
-        const {
-            title,
-            category,
-            thumbnailURL,
-            courseItems
-        } = course
-
-        setTitle(title)
-        setThumbnailURL(thumbnailURL)
-        setCourseItems(courseItems)
-    }
-    useEffect(() => {
-        !!course && setEditCourseState(course)
-    }, [course])
-
-    interface TabPanelProps {
-        children?: React.ReactNode;
-        index: number;
-        value: number;
-    }
-
-    function TabPanel(props: TabPanelProps) {
-        const { children, value, index, ...other } = props;
-
-        return (
-            <div
-                role="tabpanel"
-                hidden={value !== index}
-                id={`simple-tabpanel-${index}`}
-                aria-labelledby={`simple-tab-${index}`}
-                {...other}>
-                {value === index && (
-                    <Box sx={{ p: 3 }}>
-                        <Typography>{children}</Typography>
-                    </Box>
-                )}
-            </div>
-        );
-    }
 
     function a11yProps(index: number) {
         return {
@@ -418,7 +341,7 @@ const CoursePage = () => {
                                 </Flex>
                                 <Flex ml={5} w={135} direction={"column"} justifyContent={"center"} alignItems={"flex-start"}>
                                     <Typography fontSize={12} fontWeight={"bold"}>Kategória</Typography>
-                                    <Typography fontSize={12}>{category}</Typography>
+                                    <Typography fontSize={12}>{subCategory}</Typography>
                                 </Flex>
                             </Flex>
 
@@ -752,4 +675,4 @@ const CoursePage = () => {
     );
 };
 
-export default CoursePage;
+export default CourseDetailsPage;

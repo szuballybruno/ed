@@ -46,6 +46,7 @@ export const EditUserControl = (props: {
     const [selectedRole, setSelectedRole] = useState<RoleDTO | null>(null);
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
     const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(null);
+    const [isTeacher, setIsTeacher] = useState(false);
 
     const user = useContext(CurrentUserContext) as UserDTO;
     const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;

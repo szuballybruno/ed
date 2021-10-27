@@ -9,6 +9,7 @@ import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListI
 import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
+import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
 
 export const useAdminCourseList = (searchText: string) => {
 
@@ -98,6 +99,17 @@ export const useCourseBriefData = (courseId: number | null) => {
         courseBriefData: qr.data,
         courseBriefDataError: qr.error,
         courseBriefDataState: qr.status
+    }
+}
+
+export const useCourseDetails = (courseId: number) => {
+
+    const { data, status, error } = useReactQuery<CourseDetailsDTO>(
+        ["useCourseDetails"],
+        () => httpGetAsync(apiRoutes.course.getCourseDetails, { courseId }));
+
+    return {
+        courseDetails: data
     }
 }
 

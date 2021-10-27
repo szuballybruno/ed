@@ -152,7 +152,7 @@ const CourseTile = (props: {
 
                     {/* category  */}
                     <Text as="text" color="grey">
-                        {courseCategory} / {courseSubCategory}
+                        {courseSubCategory}
                     </Text>
 
                     {/* title */}

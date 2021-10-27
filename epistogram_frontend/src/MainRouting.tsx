@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import AdminPage from "./components/administration/AdminPage";
-import AvailableCoursesPage from "./components/course_search/AvailableCoursesPage";
-import CoursePage from "./components/course_search/CoursePage";
+import AvailableCoursesPage from "./components/AvailableCoursesPage";
+import CourseDetailsPage from "./components/courseDetails/CourseDetailsPage";
 import HomePage from "./components/HomePage";
 import LearningInsightsPage from "./components/LearningInsightsPage";
 import LoginScreen from "./components/login/LoginScreen";
@@ -48,7 +48,7 @@ export const MainRouting = () => {
             render={() => <Switch>
 
                 <Route exact path={"/courses/:courseId"}>
-                    <CoursePage />
+                    <CourseDetailsPage />
                 </Route>
 
                 <Route path={"/courses"}>
