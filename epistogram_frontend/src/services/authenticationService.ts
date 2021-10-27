@@ -22,7 +22,7 @@ export const useUserFetching = (enabled: boolean) => {
         refetchOnWindowFocus: false,
         refetchInterval: bgFetchingEnabled ? userRefreshIntervalInMs : false,
         enabled: true,
-        notifyOnChangeProps: ['data', 'isSuccess']
+        notifyOnChangeProps: ['data', 'isSuccess', 'status']
     });
 
     const { data: fetchedUser, refetch, isLoading, isFetching, isSuccess, isError } = queryResult;

@@ -10,12 +10,13 @@ export const showNotification = (text: string, type?: NotificationType) => {
         text,
         {
             position: "bottom-right",
-            autoClose: 1000,
-            hideProgressBar: true,
+            autoClose: type === undefined ? 2000 : 4000,
+            hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
+            type: type === "warning" ? "warning" : "info"
         });
 }
 
