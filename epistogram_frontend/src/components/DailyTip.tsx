@@ -29,7 +29,7 @@ export const DailyTip = (props: {} & FlexProps) => {
     const { currentIndex, next, previous } = usePaging([1, 2]);
 
     const dialogLogic = useEpistoDialogLogic({
-        title: "Napi tipped",
+        title: translatableTexts.homePage.tipOfTheDay,
     });
 
     const { dailyTipData } = useDailyTip();
@@ -78,7 +78,7 @@ export const DailyTip = (props: {} & FlexProps) => {
                         ]} />
                 </Flex>
 
-                <Flex>
+                {/*<Flex>
                     <EpistoButton variant="outlined" style={{ margin: "10px" }}>
                         {translatableTexts.tipOfTheDay.prevoiusVideos}
                     </EpistoButton>
@@ -90,7 +90,7 @@ export const DailyTip = (props: {} & FlexProps) => {
 
                         {currentIndex === 0 ? translatableTexts.tipOfTheDay.description : translatableTexts.tipOfTheDay.video}
                     </EpistoButton>
-                </Flex>
+                </Flex>*/}
             </Flex>
         </EpistoDialog >
 
