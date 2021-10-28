@@ -90,8 +90,8 @@ jobs:
 
       - name: Append version to .env file 
         run: |
-          echo "REACT_APP_CURRENT_VERSION=`date '%(%Y.%m.%d.%H:%M)T\n'`"
-          echo "REACT_APP_CURRENT_VERSION=`date '%(%Y.%m.%d.%H:%M)T\n'`" >> ./.env
+          echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`"
+          echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
         working-directory: ./main_repository/epistogram_frontend
 
       - name: Build frontend container
