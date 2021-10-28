@@ -104,43 +104,55 @@ export const getVideoEditDataAction = async (params: ActionParamsType) => {
 
 export const uploadVideoFileChunksAction = async (params: ActionParamsType) => {
 
-    const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
     const videoId = withValueOrBadRequest<number>(params.req.body.videoId, "number");
-    const chunkIndex = withValueOrBadRequest<number>(params.req.body.chunkIndex, "number");
-    const chunksCount = withValueOrBadRequest<number>(params.req.body.chunksCount, "number");
-
-    console.log("Recieved file chunk: #" + chunkIndex);
-
     const tempFolder = staticProvider.rootDirectory + "\\uploads_temp";
     const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
 
-    // create temp folder 
-    if (!fs.existsSync(tempFolder)) {
-        fs.mkdirSync(tempFolder);
+    try {
+
+        const chunkIndex = withValueOrBadRequest<number>(params.req.body.chunkIndex, "number");
+
+        if (chunkIndex !== 0 && !fs.existsSync(filePath))
+            throw new Error("Trying to append file that does not exist!");
+
+        const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
+        const chunksCount = withValueOrBadRequest<number>(params.req.body.chunksCount, "number");
+
+        console.log("Recieved file chunk: #" + chunkIndex);
+
+        // create temp folder 
+        if (!fs.existsSync(tempFolder)) {
+            fs.mkdirSync(tempFolder);
+        }
+
+        // create & append file
+        if (chunkIndex === 0) {
+
+            fs.writeFileSync(filePath, file.data);
+        }
+        else {
+
+            fs.appendFileSync(filePath, file.data);
+        }
+
+        // upload is done 
+        if (chunkIndex + 1 === chunksCount) {
+
+            console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
+
+            // read tmp file 
+            const fullFile = fs.readFileSync(filePath);
+
+            // delete tmp file 
+            fs.rmSync(filePath);
+
+            // upload to cloud 
+            await uploadVideoFileAsync(videoId, fullFile);
+        }
     }
+    catch (e) {
 
-    // create & append file
-    if (chunkIndex === 0) {
-
-        fs.writeFileSync(filePath, file.data);
-    }
-    else {
-
-        fs.appendFileSync(filePath, file.data);
-    }
-
-    // upload is done 
-    if (chunkIndex + 1 === chunksCount) {
-
-        console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
-
-        // read tmp file 
-        const fullFile = fs.readFileSync(filePath);
-
-        // delete tmp file 
-        fs.rmSync(filePath);
-
-        // upload to cloud 
-        await uploadVideoFileAsync(videoId, fullFile);
+        fs.unlinkSync(filePath);
+        throw e;
     }
 }

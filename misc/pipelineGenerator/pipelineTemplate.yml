@@ -88,6 +88,12 @@ jobs:
           cp -fr ./config/$BRANCH_NAME$.env ./.env 
         working-directory: ./$BRANCH_NAME$_repository/epistogram_frontend
 
+      - name: Append version to .env file 
+        run: |
+          echo "REACT_APP_CURRENT_VERSION=`date -u`"
+          echo "REACT_APP_CURRENT_VERSION=`date -u`" >> ./.env
+        working-directory: ./$BRANCH_NAME$_repository/epistogram_frontend
+
       - name: Build frontend container
         run: |
           docker build -t $FRONTEND_IMAGE_NAME .
