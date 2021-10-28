@@ -55,14 +55,11 @@ export const MainRouting = () => {
             path={applicationRoutes.availableCoursesRoute.route}
             render={() => <Switch>
 
-                <Route exact path={"/courses/:courseId"}>
-                    <CourseDetailsPage />
-                </Route>
-
-                <Route path={"/courses"}>
+                <Route exact path={"/courses"}>
                     <AvailableCoursesPage />
                 </Route>
 
+                {getRoute(applicationRoutes.availableCoursesRoute.courseDetailsRoute, <CourseDetailsPage />)}
             </Switch>} />
 
         <ProtectedRoute

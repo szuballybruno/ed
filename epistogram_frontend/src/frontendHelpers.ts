@@ -308,6 +308,26 @@ export const objToArray = (obj: any) => {
     return properties;
 }
 
+export const stringifyQueryObject = (queryObj: any) => {
+
+    let qs = "?";
+
+    for (const key in queryObj) {
+        if (Object.prototype.hasOwnProperty.call(queryObj, key)) {
+
+            const element = queryObj[key];
+            const andMark = qs === "?"
+                ? ""
+                : "&";
+
+            if (element !== undefined && element !== null)
+                qs += andMark + key + "=" + element;
+        }
+    }
+
+    return qs;
+}
+
 export const isCurrentRoute = (route: string) => window.location.pathname === route;
 
 export class TypedError extends Error {

@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
 import { backendUrl } from "../Environemnt";
-import { getErrorTypeByHTTPCode, TypedError } from "../frontendHelpers";
+import { getErrorTypeByHTTPCode, stringifyQueryObject, TypedError } from "../frontendHelpers";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { LoadingStateType } from "../models/types";
 
@@ -216,25 +216,6 @@ export const addBearerToken = (config: AxiosRequestConfig, bearerToken: string) 
     config.headers = {
         'Authorization': "Bearer " + bearerToken
     };
-}
-
-const stringifyQueryObject = (queryObj: any) => {
-
-    let qs = "?";
-
-    for (const key in queryObj) {
-        if (Object.prototype.hasOwnProperty.call(queryObj, key)) {
-
-            const element = queryObj[key];
-            const andMark = qs === "?"
-                ? ""
-                : "&";
-
-            qs += andMark + key + "=" + element;
-        }
-    }
-
-    return qs;
 }
 
 const handleHttpError = (error: any) => {

@@ -4,8 +4,10 @@ import { Accordion, AccordionDetails, AccordionSummary, Tab, Tabs, Typography } 
 import React, { useState } from 'react';
 import { Radar } from "react-chartjs-2";
 import { useParams } from "react-router-dom";
-import { getAssetUrl } from "../../frontendHelpers";
-import { useCourseDetails } from "../../services/courseService";
+import { getAssetUrl, getQueryParam } from "../../frontendHelpers";
+import { useCourseDetails, useStartCourse } from "../../services/courseService";
+import { useNavigation } from "../../services/navigatior";
+import { showNotification, useShowErrorDialog } from "../../services/notifications";
 import { EpistoHeader } from "../EpistoHeader";
 import { MainWrapper } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
@@ -279,11 +281,43 @@ const CourseDetailsPage = () => {
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
     const [currentTab, setCurrentTab] = useState(0);
+    const { navigateToPlayer } = useNavigation();
+    const showError = useShowErrorDialog();
+    const { startCourseAsync } = useStartCourse();
+    const currentItemDescriptior = getQueryParam("code");
 
     const { courseDetails } = useCourseDetails(courseId);
     const thumbnailURL = courseDetails?.thumbnailURL;
     const title = courseDetails?.title;
     const subCategory = courseDetails?.subCategoryName;
+
+    const playCourseAsync = async () => {
+
+        try {
+
+            if (currentItemDescriptior) {
+
+                navigateToPlayer(currentItemDescriptior);
+            }
+            else {
+
+                const { text: firstItemDescriptor } = await startCourseAsync(courseId);
+
+                if (firstItemDescriptor) {
+
+                    navigateToPlayer(firstItemDescriptor);
+                }
+                else {
+
+                    showNotification("A kurzus jelenleg nem indítható, ez annak lehet a jele, hogy folyamatban van a feltöltése, kérjük próbáld meg később!", "warning");
+                }
+            }
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
 
@@ -440,17 +474,6 @@ const CourseDetailsPage = () => {
 
                     </Flex>
 
-
-
-
-
-
-
-
-
-
-
-
                     <Flex direction={"column"} w={400}>
                         <Flex
                             direction={"column"}
@@ -562,10 +585,12 @@ const CourseDetailsPage = () => {
                                     <Typography>2021. 10. 13.</Typography>
                                 </Flex>
                             </Flex>
+
+                            {/* start coures */}
                             <EpistoButton
                                 style={{ flex: "1", color: "var(--epistoTeal)", maxHeight: 40, marginTop: 15, marginBottom: 15 }}
                                 variant="outlined"
-                                onClick={() => { }}
+                                onClick={playCourseAsync}
                                 icon={
                                     <img
                                         src={getAssetUrl("/icons/play2.svg")}
@@ -637,23 +662,6 @@ const CourseDetailsPage = () => {
                                     </Flex>
                                 </Flex>
                                 <Divider h={1} w={"89%"} bg={"lightgray"} my={3} />
-
-                                <EpistoButton
-                                    style={{ flex: "1", color: "var(--epistoTeal)", maxHeight: 40, marginTop: 15, marginBottom: 15 }}
-                                    variant="outlined"
-                                    onClick={() => { }}
-                                    icon={
-                                        <img
-                                            src={getAssetUrl("/icons/play2.svg")}
-                                            alt=""
-                                            style={{
-                                                width: "25px",
-                                                height: "25px",
-                                                marginRight: "5px"
-                                            }} />
-                                    }>
-                                    Elkezdem a kurzus
-                                </EpistoButton>
                             </Flex>
                         </Flex>
                     </Flex>

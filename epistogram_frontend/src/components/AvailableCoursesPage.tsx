@@ -15,6 +15,7 @@ import { EpistoButton } from "./universal/EpistoButton";
 import { EpistoGrid } from "./universal/EpistoGrid";
 import { EpistoSearch } from "./universal/EpistoSearch";
 import classes from "./css/courseSearchMain.module.scss";
+import { applicationRoutes } from "../configuration/applicationRoutes";
 
 const AvailableCoursesPage = () => {
 
@@ -28,7 +29,7 @@ const AvailableCoursesPage = () => {
     const { courses, status, error } = useUserCourses();
     const { startCourseAsync, startCourseState } = useStartCourse();
 
-    const { navigateToPlayer } = useNavigation();
+    const { navigate, navigateToPlayer } = useNavigation();
     const showError = useShowErrorDialog();
 
     const clearFilters = () => {
@@ -40,6 +41,11 @@ const AvailableCoursesPage = () => {
 
     const categoryOptions = distinct(courses
         .map((course, index) => course.subCategoryName));
+
+    const navigateToDetailsPage = (courseId: number, currentItemDescriptior: string | null) => {
+
+        navigate(applicationRoutes.availableCoursesRoute.courseDetailsRoute.route, { courseId }, { code: currentItemDescriptior });
+    }
 
     const playCourse = async (courseId: number, currentItemDescriptior: string | null) => {
 
@@ -187,11 +193,8 @@ const AvailableCoursesPage = () => {
                                                 <Flex mt="10px">
 
                                                     {/* details */}
-
                                                     <EpistoButton
-                                                        onClick={() => {
-                                                            history.push(`/courses/${course.courseId}`)
-                                                        }}
+                                                        onClick={() => navigateToDetailsPage(course.courseId, course.firstItemCode)}
                                                         style={{ flex: "1" }}>
                                                         {translatableTexts.availableCourses.courseDataSheet}
                                                     </EpistoButton>

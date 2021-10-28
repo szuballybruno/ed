@@ -37,7 +37,12 @@ export const applicationRoutes = {
 
     availableCoursesRoute: {
         title: translatableTexts.routeTitles.availableCourses,
-        route: "/courses"
+        route: "/courses",
+
+        courseDetailsRoute: {
+            title: "",
+            route: "/courses/:courseId",
+        },
     },
 
     learningRoute: {

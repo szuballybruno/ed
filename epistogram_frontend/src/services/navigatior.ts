@@ -1,5 +1,6 @@
 import { useHistory } from "react-router";
 import { verboseLogging } from "../Environemnt";
+import { stringifyQueryObject } from "../frontendHelpers";
 
 export const getCourseItemUrl = (descriptorCode: string) =>
     `/watch/${descriptorCode}`;
@@ -7,7 +8,7 @@ export const getCourseItemUrl = (descriptorCode: string) =>
 export const useNavigation = () => {
 
     const history = useHistory();
-    const navigate = (path: string, params?: any) => {
+    const navigate = (path: string, params?: any, query?: any) => {
 
         let replacedPath = path;
 
@@ -21,6 +22,11 @@ export const useNavigation = () => {
                     replacedPath = replacedPath.replace(token, element);
                 }
             }
+        }
+
+        if (query) {
+
+            replacedPath += stringifyQueryObject(query);
         }
 
         if (verboseLogging)
