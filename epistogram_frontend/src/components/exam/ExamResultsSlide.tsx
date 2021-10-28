@@ -8,6 +8,7 @@ import { translatableTexts } from "../../translatableTexts";
 import StatisticsCard from "../statisticsCard/StatisticsCard";
 import { ExamLayout } from './ExamLayout';
 import { QuestionAnswer } from "./QuestionAnswer";
+import { getAssetUrl } from "../../frontendHelpers";
 
 export const ExamResultsSlide = (props: {
     exam: ExamDTO,
@@ -40,10 +41,10 @@ export const ExamResultsSlide = (props: {
 
         {/* stats */}
         <Flex w={"100%"} h={170} overflow="hidden">
-            <StatisticsCard suffix={"%"} title={"Helyes válaszok aránya"} value={"" + correctPercentage} />
-            <StatisticsCard suffix={""} title={"Helyes válasz a kérdésekre"} value={`${correctAnswersCount}/${questionsCount}`} />
-            <StatisticsCard suffix={"perc"} title={"Alatt teljesítetted a tesztet"} value={"66"} />
-            <StatisticsCard suffix={"%"} title={"Az összes felhaszáló között"} value={"top 20"} />
+            <StatisticsCard iconPath={getAssetUrl("/icons/exam_result_good_answer_count.svg")} suffix={"%"} title={"Helyes válaszok aránya"} value={"" + correctPercentage} />
+            <StatisticsCard iconPath={getAssetUrl("/icons/exam_result_good_answer_percent.svg")} suffix={""} title={"Helyes válasz a kérdésekre"} value={`${correctAnswersCount}/${questionsCount}`} />
+            <StatisticsCard iconPath={getAssetUrl("/icons/exam_result_time.svg")} suffix={"perc"} title={"Alatt teljesítetted a tesztet"} value={"66"} />
+            <StatisticsCard iconPath={getAssetUrl("/icons/exam_result_top_percent.svg")} suffix={"%"} title={"Az összes felhaszáló között"} value={"top 20"} />
         </Flex>
 
         {/* results */}
