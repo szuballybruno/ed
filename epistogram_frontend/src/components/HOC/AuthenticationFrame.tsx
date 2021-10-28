@@ -1,6 +1,6 @@
 import { createContext, useEffect } from "react";
 import { hotjar } from "react-hotjar";
-import { verboseLogging } from "../../Environemnt";
+import { oneSignalAppId, verboseLogging } from "../../Environemnt";
 import { UserDTO } from "../../models/shared_models/UserDTO";
 import { AuthenticationStateType, useUserFetching } from "../../services/authenticationService";
 import { useRenewUserSessionPooling } from "../../services/openEndpointService";
@@ -23,9 +23,14 @@ export const AuthenticationFrame = (props) => {
     // initialzie OneSignal
     // This appId only work on dev
     useEffect(() => {
-        OneSignal.init({
-            appId: "117106bf-0050-495b-b7f2-fd8f1aae7849"
-        });
+
+        if (oneSignalAppId)
+            return;
+
+        OneSignal
+            .init({
+                appId: oneSignalAppId
+            });
     }, []);
 
     // start auth pooling

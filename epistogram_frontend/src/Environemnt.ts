@@ -14,5 +14,6 @@ console.log("REACT_APP_CDN_URL: " + process.env.REACT_APP_CDN_URL);
 export const verboseLogging = false;
 export const assetStorageUrl = process.env.REACT_APP_CDN_URL; // "https://storage.googleapis.com/epistogram_bucket_dev"
 export const currentVersion = process.env.REACT_APP_CURRENT_VERSION;
+export const oneSignalAppId = process.env.REACT_APP_ONE_SIGNAL_APP_ID;
 
 console.log("Current version: " + currentVersion);
