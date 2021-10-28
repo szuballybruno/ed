@@ -27,7 +27,7 @@ export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode 
                 color: "gray"
             }}
             className="fontSmall">
-            {currentVersion ?? "currentVersion"}
+            Verzió: {currentVersion ?? "currentVersion"}
         </Typography>
     </Flex>
 };
