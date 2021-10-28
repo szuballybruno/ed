@@ -279,7 +279,10 @@ export const VideoPlayer = (props: {
                         }}
                         config={{
                             file: {
-                                attributes: { crossOrigin: "true" },
+                                attributes: {
+                                    crossOrigin: "true",
+                                    onContextMenu: e => e.preventDefault()
+                                },
                                 tracks: subtileTracks,
                             }
                         }}
