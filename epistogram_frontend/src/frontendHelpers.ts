@@ -2,7 +2,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { matchPath, useLocation } from "react-router-dom";
+import { matchPath, Route, useLocation } from "react-router-dom";
 import { assetStorageUrl } from "./Environemnt";
 import { ErrorType } from "./models/shared_models/types/sharedTypes";
 import { ApplicationRoute, LoadingStateType } from "./models/types";

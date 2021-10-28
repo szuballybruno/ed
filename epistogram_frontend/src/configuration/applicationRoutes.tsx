@@ -1,4 +1,5 @@
 import { Assignment, Business, People, Person, School, Settings, Subscriptions } from "@mui/icons-material";
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { translatableTexts } from "../translatableTexts";
 
 export const applicationRoutes = {
@@ -167,6 +168,12 @@ export const applicationRoutes = {
         preferencesRoute: {
             title: translatableTexts.routeTitles.settingsOverview,
             route: "/settings/preferences",
+        },
+
+        featurePreviewRoute: {
+            title: translatableTexts.routeTitles.featurePreview,
+            route: "/settings/feature-preview",
+            icon: <AutoAwesomeIcon />
         }
     }
 };

@@ -51,7 +51,8 @@ export const translatableTexts = {
         administrationGroupStatistics: "Statisztika",
 
         settings: "Beállítások",
-        settingsOverview: "Általános"
+        settingsOverview: "Beállítások",
+        featurePreview: "Várható funkciók"
     },
 
     practiseQuestions: {

@@ -60,6 +60,11 @@ const DesktopNavbar = (props: {
             onClick: () => navigate(applicationRoutes.settingsRoute.preferencesRoute.route)
         },
         {
+            name: applicationRoutes.settingsRoute.featurePreviewRoute.title,
+            icon: applicationRoutes.settingsRoute.featurePreviewRoute.icon,
+            onClick: () => navigate(applicationRoutes.settingsRoute.featurePreviewRoute.route)
+        },
+        {
             name: "Kijelentkezés",
             icon: <LogoutIcon></LogoutIcon>,
             color: "var(--mildRed)",
@@ -148,28 +153,26 @@ const DesktopNavbar = (props: {
                 target={ref?.current}
                 placementX="left"
                 handleClose={() => setPopperOpen(false)}>
-                {
-                    userMenuItems
-                        .map(x => {
+                {userMenuItems
+                    .map(x => {
 
-                            return <EpistoButton
-                                variant={x.color ? "colored" : undefined}
-                                style={{ background: x.color }}
-                                onClick={x.onClick}>
-                                <Flex className="whall" m="5px" align="center">
-                                    {x.icon}
-                                    <Typography
-                                        style={{
-                                            marginLeft: "14px",
-                                            textAlign: "left",
-                                            fontSize: "14px"
-                                        }}>
-                                        {x.name}
-                                    </Typography>
-                                </Flex>
-                            </EpistoButton>
-                        })
-                }
+                        return <EpistoButton
+                            variant={x.color ? "colored" : undefined}
+                            style={{ background: x.color }}
+                            onClick={x.onClick}>
+                            <Flex className="whall" m="5px" align="center">
+                                {x.icon}
+                                <Typography
+                                    style={{
+                                        marginLeft: "14px",
+                                        textAlign: "left",
+                                        fontSize: "14px"
+                                    }}>
+                                    {x.name}
+                                </Typography>
+                            </Flex>
+                        </EpistoButton>
+                    })}
             </EpistoPopper >
         </Flex >
     );

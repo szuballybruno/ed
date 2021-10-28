@@ -23,6 +23,7 @@ import { AdminGroupStatisticsSubpage } from "./groups/AdminGroupStatisticsSubpag
 import { EditVideoSubpage } from './courses/EditVideoSubpage';
 import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditExamSubpage } from './courses/EditExamSubpage';
+import { getRoute } from "../../MainRouting";
 
 const AdminPage = () => {
 
@@ -38,14 +39,7 @@ const AdminPage = () => {
     if (user.userActivity.canAccessCourseAdministration)
         menuItems.push(administrationRoutes.coursesRoute);
 
-    menuItems.push(...[/*administrationRoutes.groupsRoute,*/ administrationRoutes.myCompanyRoute])
-
-    const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
-
-        return <Route exact={route.exact} path={route.route}>
-            {renderRoute}
-        </Route>
-    }
+    menuItems.push(...[/*administrationRoutes.groupsRoute,*/ administrationRoutes.myCompanyRoute]);
 
     return <MainWrapper>
         <Navbar />

@@ -1,10 +1,11 @@
 import { Input } from '@chakra-ui/input';
-import { Flex } from '@chakra-ui/layout';
+import { Box, Flex } from '@chakra-ui/layout';
 import { TextField, Typography } from '@mui/material';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { reloadPage } from '../../frontendHelpers';
+import { getRoute } from '../../MainRouting';
 import { useRequestChangePassword, useSaveUserData } from '../../services/dataService';
 import { useUploadAvatarFile } from '../../services/fileService';
 import { showNotification, useShowErrorDialog } from '../../services/notifications';
@@ -224,6 +225,13 @@ const Preferences = () => {
     </>
 }
 
+const FeaturePreview = () => {
+
+    return <Box>
+        asd
+    </Box>
+}
+
 export const UserSettingsPage = () => {
 
     return <MainWrapper>
@@ -241,9 +249,8 @@ export const UserSettingsPage = () => {
             <RightPanel>
 
                 <Switch>
-                    <Route path={applicationRoutes.settingsRoute.preferencesRoute.route}>
-                        <Preferences></Preferences>
-                    </Route>
+                    {getRoute(applicationRoutes.settingsRoute.preferencesRoute, <Preferences />)}
+                    {getRoute(applicationRoutes.settingsRoute.featurePreviewRoute, <FeaturePreview />)}
                 </Switch>
             </RightPanel>
         </ContentWrapper>

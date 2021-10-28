@@ -8,10 +8,13 @@ export type HiddenFileUploadInputPropsType = {
 export const HiddenFileUploadInput = forwardRef<HTMLInputElement, HiddenFileUploadInputPropsType>((props, ref) => {
 
     const { onFileSelected, type } = props;
+    const acceptImage = ".jpg, .png, .jpeg";
+    const acceptVideo = ".mp4";
 
     return <input
         ref={ref}
         type="file"
+        accept={type === "image" ? acceptImage : acceptVideo}
         id="imgupload"
         style={{ display: "none" }}
         onChange={x => {

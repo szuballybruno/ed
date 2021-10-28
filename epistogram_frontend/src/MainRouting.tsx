@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Route, Switch } from "react-router-dom";
 import AdminPage from "./components/administration/AdminPage";
 import AvailableCoursesPage from "./components/AvailableCoursesPage";
@@ -14,6 +14,14 @@ import { SignupPage } from "./components/signup/SignupPage";
 import { ProtectedRoute } from "./components/universal/ProtectedRoute";
 import { UserSettingsPage } from "./components/userSettings/UserSettingsPage";
 import { applicationRoutes } from "./configuration/applicationRoutes";
+import { ApplicationRoute } from "./models/types";
+
+export const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
+
+    return <Route exact={route.exact} path={route.route}>
+        {renderRoute}
+    </Route>
+}
 
 export const MainRouting = () => {
 
