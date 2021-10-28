@@ -168,6 +168,7 @@ export const applicationRoutes = {
         preferencesRoute: {
             title: translatableTexts.routeTitles.settingsOverview,
             route: "/settings/preferences",
+            icon: <Settings></Settings>,
         },
 
         featurePreviewRoute: {

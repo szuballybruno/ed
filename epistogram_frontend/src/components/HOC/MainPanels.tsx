@@ -1,5 +1,7 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
 import React, { CSSProperties, ReactNode } from 'react';
+import { currentVersion } from '../../Environemnt';
 import { FlexFloat } from '../universal/FlexFloat';
 
 export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode }) => {
@@ -10,9 +12,23 @@ export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode 
         height="100%"
         width="100%"
         overflow="hidden"
+        position="relative"
         style={props.style}>
 
         {props.children}
+
+        {/* version */}
+        <Typography
+            style={{
+                position: "absolute",
+                bottom: 20,
+                left: 20,
+                zIndex: 3,
+                color: "gray"
+            }}
+            className="fontSmall">
+            {currentVersion ?? "currentVersion"}
+        </Typography>
     </Flex>
 };
 

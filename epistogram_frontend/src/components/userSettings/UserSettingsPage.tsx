@@ -227,9 +227,9 @@ const Preferences = () => {
 
 const FeaturePreview = () => {
 
-    return <Box>
-        asd
-    </Box>
+    return <Flex className="whall">
+        <iframe src="https://epistogram.com/release-notes" className="whall"></iframe>
+    </Flex>
 }
 
 export const UserSettingsPage = () => {
@@ -242,7 +242,8 @@ export const UserSettingsPage = () => {
 
             <LeftPanel p="20px" flexBasis="300px" >
                 <NavigationLinkList items={[
-                    applicationRoutes.settingsRoute.preferencesRoute
+                    applicationRoutes.settingsRoute.preferencesRoute,
+                    applicationRoutes.settingsRoute.featurePreviewRoute
                 ]}></NavigationLinkList>
             </LeftPanel>
 
