@@ -24,7 +24,7 @@ export const AuthenticationFrame = (props) => {
     // This appId only work on dev
     useEffect(() => {
 
-        if (oneSignalAppId)
+        if (!oneSignalAppId)
             return;
 
         OneSignal
