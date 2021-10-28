@@ -50,7 +50,8 @@ export const SignupPage = () => {
         upperTitle="Összegzés"
         onNext={isInvitedUser ? handleGoToHomePage : undefined}
         nextButtonTitle={isInvitedUser ? translatableTexts.signup.goToHomePage : undefined}
-        onNavPrevious={() => slidesState.previous()}>
+        onNavPrevious={() => slidesState.previous()}
+        headerRightButton={isInvitedUser ? { name: translatableTexts.signup.goToHomePage, action: handleGoToHomePage } : undefined}>
 
         {isCurrent && <PersonalityAssessment height="100%" mt="20px"></PersonalityAssessment>}
     </SignupWrapper>

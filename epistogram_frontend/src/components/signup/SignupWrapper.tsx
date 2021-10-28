@@ -17,10 +17,11 @@ export const SignupWrapper = (props: {
     upperTitle?: string,
     description?: string | ReactNode,
     bottomComponent?: ReactNode,
-    upperComponent?: ReactNode
+    upperComponent?: ReactNode,
+    headerRightButton?: { name: string, action: () => void }
 }) => {
 
-    const onNavPrevious = props.onNavPrevious;
+    const { onNavPrevious, headerRightButton } = props;
     const canNavPrevious = !!onNavPrevious;
 
     const description = props.description;
@@ -46,9 +47,12 @@ export const SignupWrapper = (props: {
 
         {/* header */}
         <Flex id="header" direction="column" height={"100%"} maxH={100}>
+
+            {/* logo */}
             <Flex h={60} w={"100%"} hidden={window.innerWidth > 1000} justifyContent={"center"} alignItems={"center"}>
                 <Image maxH={80} src={getAssetUrl("/images/logo.svg")} />
             </Flex>
+
             {/* header top */}
             <Flex
                 id="titleAligner"
@@ -72,11 +76,23 @@ export const SignupWrapper = (props: {
             </Flex>
 
             {/* header bottom */}
-            {canNavPrevious && <div className={classes.backAndProgress}>
-                <EpistoButton onClick={() => onNavPrevious!()} variant="outlined" style={{ marginTop: "10px" }}>
+            {<Flex justify="space-between">
+
+                {canNavPrevious && <EpistoButton
+                    onClick={() => onNavPrevious!()}
+                    variant="outlined"
+                    style={{ marginTop: "10px" }}>
                     Vissza
-                </EpistoButton>
-            </div>}
+                </EpistoButton>}
+
+                {headerRightButton && <EpistoButton
+                    onClick={() => headerRightButton.action()}
+                    variant="outlined"
+                    style={{ marginTop: "10px" }}>
+                    {headerRightButton.name}
+                </EpistoButton>}
+
+            </Flex>}
         </Flex>
 
         {/* content aligner */}
