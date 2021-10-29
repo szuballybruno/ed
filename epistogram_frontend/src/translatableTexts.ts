@@ -52,7 +52,8 @@ export const translatableTexts = {
 
         settings: "Beállítások",
         settingsOverview: "Beállítások",
-        featurePreview: "Várható funkciók"
+        featurePreview: "Várható funkciók",
+        developmentNotes: "Fejlesztési napló"
     },
 
     practiseQuestions: {

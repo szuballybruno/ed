@@ -229,6 +229,14 @@ const FeaturePreview = () => {
 
     return <Flex className="whall">
         <iframe src="https://epistogram.com/release-notes" className="whall"></iframe>
+        {/* https://epistogram.com/upcoming-features */}
+    </Flex>
+}
+
+const DevelopmentNotes = () => {
+
+    return <Flex className="whall">
+        <iframe src="https://epistogram.com/release-notes" className="whall"></iframe>
     </Flex>
 }
 
@@ -241,10 +249,12 @@ export const UserSettingsPage = () => {
         <ContentWrapper>
 
             <LeftPanel p="20px" flexBasis="300px" >
-                <NavigationLinkList items={[
-                    applicationRoutes.settingsRoute.preferencesRoute,
-                    applicationRoutes.settingsRoute.featurePreviewRoute
-                ]}></NavigationLinkList>
+                <NavigationLinkList
+                    items={[
+                        applicationRoutes.settingsRoute.preferencesRoute,
+                        applicationRoutes.settingsRoute.featurePreviewRoute,
+                        applicationRoutes.settingsRoute.developmentNotes
+                    ]}></NavigationLinkList>
             </LeftPanel>
 
             <RightPanel>
@@ -252,6 +262,7 @@ export const UserSettingsPage = () => {
                 <Switch>
                     {getRoute(applicationRoutes.settingsRoute.preferencesRoute, <Preferences />)}
                     {getRoute(applicationRoutes.settingsRoute.featurePreviewRoute, <FeaturePreview />)}
+                    {getRoute(applicationRoutes.settingsRoute.developmentNotes, <DevelopmentNotes />)}
                 </Switch>
             </RightPanel>
         </ContentWrapper>

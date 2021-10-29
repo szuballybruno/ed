@@ -1,6 +1,7 @@
 import { Assignment, Business, People, Person, School, Settings, Subscriptions } from "@mui/icons-material";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { translatableTexts } from "../translatableTexts";
+import EventNoteIcon from '@mui/icons-material/EventNote';
 
 export const applicationRoutes = {
 
@@ -174,6 +175,12 @@ export const applicationRoutes = {
             title: translatableTexts.routeTitles.settingsOverview,
             route: "/settings/preferences",
             icon: <Settings></Settings>,
+        },
+
+        developmentNotes: {
+            title: translatableTexts.routeTitles.developmentNotes,
+            route: "/settings/development-notes",
+            icon: <EventNoteIcon />
         },
 
         featurePreviewRoute: {
