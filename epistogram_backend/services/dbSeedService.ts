@@ -22,6 +22,9 @@ export const seedDB = async () => {
     log("seedOrganizations");
     const orgIds = await seedOrganizations(connection);
 
+    log("seedQuestionTypes");
+    await executeSeedScriptAsync("seedQuestionTypes");
+
     log("seedActivities");
     await seedActivities(connection);
 

@@ -26,3 +26,8 @@ export const UserRoleEnum = {
     supervisorId: 2,
     userId: 3
 }
+
+export const QuestionTypeEnum = {
+    singleAnswer: 1,
+    multipleAnswers: 2
+}

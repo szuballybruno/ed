@@ -4,6 +4,7 @@ import { Answer } from "./Answer";
 import { Exam } from "./Exam";
 import { QuestionAnswer } from "./QuestionAnswer";
 import { QuestionCategory } from "./QuestionCategory";
+import { QuestionType } from "./QuestionType";
 import { Video } from "./Video";
 
 @Entity()
@@ -35,6 +36,14 @@ export class Question {
     @ManyToOne(_ => QuestionCategory, x => x.questions)
     @JoinColumn({ name: "categoryId" })
     category: QuestionCategory | null;
+
+    // type 
+    @Column({ default: 1 })
+    typeId: number;
+
+    @ManyToOne(_ => QuestionType, x => x.questions)
+    @JoinColumn({ name: "typeId" })
+    type: QuestionType;
 
     // answers
     @OneToMany(type => Answer, answer => answer.question, { onDelete: "CASCADE", cascade: true })

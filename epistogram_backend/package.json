@@ -6,6 +6,7 @@
     "build": "tsc",
     "start": "react-scripts start",
     "nodemon": "npx nodemon server.ts",
+    "nodestart": "npx node server.ts",
     "migrate": "typeorm migrations:generate -n mig_1",
     "syncDTOsToFrontend": "xcopy /s ..\\epistogram_backend\\models\\shared_models ..\\epistogram_frontend\\src\\models\\shared_models /Y /D",
     "syncDTOsToBackend": "xcopy /s ..\\epistogram_frontend\\src\\models\\shared_models ..\\epistogram_backend\\models\\shared_models /Y /D"

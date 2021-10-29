@@ -12,6 +12,7 @@ import { PersonalityCategoryDescription } from "../../models/entity/PersonalityC
 import { Question } from "../../models/entity/Question";
 import { QuestionAnswer } from "../../models/entity/QuestionAnswer";
 import { QuestionCategory } from "../../models/entity/QuestionCategory";
+import { QuestionType } from "../../models/entity/QuestionType";
 import { Role } from "../../models/entity/Role";
 import { RoleActivityBridge } from "../../models/entity/RoleActivityBridge";
 import { StorageFile } from "../../models/entity/StorageFile";
@@ -111,5 +112,6 @@ export const dbSchema = {
         JobTitle,
         DailyTip,
         DailyTipOccurrence,
+        QuestionType
     ]
 }

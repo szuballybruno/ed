@@ -1,17 +1,19 @@
 import { Flex } from "@chakra-ui/layout";
 import { Delete } from "@mui/icons-material";
-import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { Checkbox, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useIsMatchingCurrentRoute } from "../../../frontendHelpers";
 import { AnswerEditDTO } from "../../../models/shared_models/AnswerEditDTO";
+import { QuestionTypeEnum } from "../../../models/shared_models/types/sharedTypes";
 import { getVirtualId } from "../../../services/idService";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useEditQuestionData, useSaveQuestion } from "../../../services/questionsService";
 import { LoadingFrame } from "../../HOC/LoadingFrame";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
+import { EpistoSelect } from "../../universal/EpistoSelect";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
@@ -32,26 +34,50 @@ export const EditQuestionSubpage = () => {
     const isExamQuestion = isMatchingCurrentRoute(applicationRoutes.administrationRoute.coursesRoute.editExamQuestionRoute);
 
     const [questionText, setQuestionText] = useState("");
+    const [selectedQuestionType, setSelectedQuestionType] = useState<{ name: string, id: number } | null>(null);
     const [answers, setAnswers] = useState<AnswerEditDTO[]>([]);
+    const correctAnswers = answers.filter(x => x.isCorrect);
+    const correctAnswer = correctAnswers[0];
+    const isSingleAnswerMode = selectedQuestionType?.id === QuestionTypeEnum.singleAnswer;
+    const isMultiAnswerMode = selectedQuestionType?.id === QuestionTypeEnum.multipleAnswers;
+
+    const questionTypes = [
+        {
+            name: "Egy valasz",
+            id: QuestionTypeEnum.singleAnswer
+        },
+        {
+            name: "Tobb valasz",
+            id: QuestionTypeEnum.multipleAnswers
+        }
+    ]
 
     const setAnswerValues = (answerId: number, isCorrect?: boolean, text?: string) => {
 
         const newAnswers = [...answers];
 
-        if (isCorrect)
-            newAnswers
-                .forEach(x => x.isCorrect = x.id === answerId);
-
         const answer = newAnswers
             .filter(x => x.id === answerId)[0];
 
+        // set text
         if (text)
             answer.text = text;
 
+        // set isCorrect
+        if (isCorrect !== undefined) {
+
+            if (isSingleAnswerMode) {
+
+                newAnswers
+                    .filter(x => x.id !== answerId)
+                    .forEach(x => x.isCorrect = false);
+            }
+
+            answer.isCorrect = isCorrect;
+        }
+
         setAnswers(newAnswers);
     }
-
-    const correctAnswer = answers.filter(x => x.isCorrect)[0];
 
     const handleAddNewAnswer = () => {
 
@@ -70,7 +96,8 @@ export const EditQuestionSubpage = () => {
             await saveQuesitonAsync({
                 questionId,
                 answers: answers,
-                questionText: questionText
+                questionText: questionText,
+                typeId: selectedQuestionType?.id!
             });
 
             showNotification("Kérdés sikeresen mentve!");
@@ -95,6 +122,7 @@ export const EditQuestionSubpage = () => {
 
         setQuestionText(questionEditData.questionText);
         setAnswers(questionEditData.answers);
+        setSelectedQuestionType(questionTypes.filter(x => x.id === questionEditData.typeId)[0]);
     }, [questionEditData]);
 
     return <LoadingFrame
@@ -128,10 +156,24 @@ export const EditQuestionSubpage = () => {
                 setValue={setQuestionText}
                 isMultiline />
 
-            {correctAnswer && <EpistoEntry
+            <EpistoSelect
+                items={questionTypes}
+                getDisplayValue={x => x?.name + ""}
+                onSelected={setSelectedQuestionType}
+                selectedValue={selectedQuestionType}
+                getCompareKey={x => x?.id + ""} />
+
+            {/* correct answer display */}
+            {(correctAnswer && isSingleAnswerMode) && <EpistoEntry
                 label="A válasz"
                 value={correctAnswer.text}
                 disabled />}
+
+            {/* correct answers display */}
+            {isMultiAnswerMode && <FlexList>
+                {correctAnswers
+                    .map(x => <FlexListItem midContent={x.text} />)}
+            </FlexList>}
 
             <Flex direction="column" className="dividerBorderTop">
 
@@ -151,20 +193,28 @@ export const EditQuestionSubpage = () => {
                     }}>
                     <FlexList >
                         {answers
-                            .map(x => <FlexListItem
+                            .map(answer => <FlexListItem
                                 pr="20px"
                                 midContent={<EpistoEntry
-                                    value={x.text}
-                                    setValue={value => setAnswerValues(x.id, undefined, value)} />}
+                                    value={answer.text}
+                                    setValue={value => setAnswerValues(answer.id, undefined, value)} />}
                                 endContent={<Flex>
-                                    <FormControlLabel
-                                        value={x.id + ""}
+                                    {isSingleAnswerMode && <FormControlLabel
+                                        value={answer.id + ""}
                                         labelPlacement="start"
                                         control={<Radio />}
-                                        label="Helyes válasz" />
+                                        label="Helyes válasz" />}
+
+                                    {isMultiAnswerMode && <FormControlLabel
+                                        value={answer.id + ""}
+                                        labelPlacement="start"
+                                        control={<Checkbox
+                                            checked={answer.isCorrect}
+                                            onChange={y => setAnswerValues(answer.id, y.currentTarget.checked)} />}
+                                        label="Helyes válasz" />}
 
                                     <EpistoButton
-                                        onClick={() => handleDeleteAnswer(x.id)}>
+                                        onClick={() => handleDeleteAnswer(answer.id)}>
                                         <Delete className="square30" />
                                     </EpistoButton>
                                 </Flex>} />)}

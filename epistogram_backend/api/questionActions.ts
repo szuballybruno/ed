@@ -33,6 +33,7 @@ export const getQuestionEditDataAction = async (params: ActionParamsType) => {
     return {
         questionId: question.id,
         questionText: question.questionText,
+        typeId: question.typeId,
         answers: (question.answers ?? []).map(x => toAnswerEditDTO(x))
     } as QuestionEditDataDTO;
 }
@@ -48,7 +49,8 @@ export const saveQuestionAction = async (params: ActionParamsType) => {
         .getRepository(Question)
         .save({
             id: dto.questionId,
-            questionText: dto.questionText
+            questionText: dto.questionText,
+            typeId: dto.typeId
         });
 
     // delete answers 
