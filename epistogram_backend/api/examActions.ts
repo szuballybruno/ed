@@ -11,7 +11,7 @@ import { getUserIdFromRequest } from "../services/authenticationService";
 import { unsetUsersCurrentCourseItemAsync } from "../services/courseService";
 import { answerExamQuestionAsync, deleteExamsAsync, getExamResultsAsync } from "../services/examService";
 import { toQuestionDTO } from "../services/mappings";
-import { deleteQuesitonsAsync, saveQuestionsAsync } from "../services/questionService";
+import { deleteQuesitonsAsync, saveAssociatedQuestionsAsync } from "../services/questionService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -71,7 +71,7 @@ export const saveExamAction = async (params: ActionParamsType) => {
             courseId: dto.courseId,
         });
 
-    await saveQuestionsAsync(dto.questions, undefined, examId);
+    await saveAssociatedQuestionsAsync(dto.questions, undefined, examId);
 }
 
 export const createExamAction = async (params: ActionParamsType) => {

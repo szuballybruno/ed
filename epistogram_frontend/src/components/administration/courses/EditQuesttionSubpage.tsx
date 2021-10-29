@@ -125,6 +125,22 @@ export const EditQuestionSubpage = () => {
         setSelectedQuestionType(questionTypes.filter(x => x.id === questionEditData.typeId)[0]);
     }, [questionEditData]);
 
+    useEffect(() => {
+
+        if (!isSingleAnswerMode)
+            return;
+
+        // only allow a single correct answer
+        const newAnswers = [...answers];
+
+        newAnswers
+            .filter(x => x.isCorrect)
+            .forEach((x, index) => x.isCorrect = (x.isCorrect && index === 0));
+
+        setAnswers(newAnswers);
+
+    }, [isSingleAnswerMode]);
+
     return <LoadingFrame
         className="whall"
         loadingState={[questionEditDataState, saveQuesitonState]}

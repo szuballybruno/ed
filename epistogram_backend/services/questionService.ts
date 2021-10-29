@@ -1,10 +1,15 @@
 import { Answer } from "../models/entity/Answer";
 import { Question } from "../models/entity/Question";
 import { QuestionAnswer } from "../models/entity/QuestionAnswer";
+import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { AnswerEditDTO } from "../models/shared_models/AnswerEditDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
+import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO";
+import { QuestionTypeEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
+import { TypedError } from "../utilities/helpers";
 
-export const saveQuestionsAsync = async (
+export const saveAssociatedQuestionsAsync = async (
     questions: QuestionDTO[],
     videoId?: number,
     examId?: number) => {
@@ -100,4 +105,77 @@ export const deleteQuesitonsAsync = async (quesitonIds: number[]) => {
         .ormConnection
         .getRepository(Question)
         .delete(quesitonIds);
+}
+
+export const saveQuestionAsync = async (questionId: number, dto: QuestionEditDataDTO) => {
+
+    if (dto.typeId === QuestionTypeEnum.singleAnswer && dto.answers.filter(x => x.isCorrect).length > 1)
+        throw new TypedError("Can't save multiple correct answers for an answer that allows only one correct answer!", "bad request");
+
+    // save quesiton data
+    await staticProvider
+        .ormConnection
+        .getRepository(Question)
+        .save({
+            id: dto.questionId,
+            questionText: dto.questionText,
+            typeId: dto.typeId
+        });
+
+    // save answers
+    await saveAssociatedAnswersAsync(questionId, dto.answers);
+}
+
+export const saveAssociatedAnswersAsync = async (questionId: number, answers: AnswerEditDTO[]) => {
+
+    // delete answers 
+    const questionAnswers = await staticProvider
+        .ormConnection
+        .getRepository(Answer)
+        .find({
+            where: {
+                questionId
+            }
+        });
+
+    const deletedAnswerIds = questionAnswers
+        .filter(x => !answers.some(dtoAnswer => dtoAnswer.id === x.id))
+        .map(x => x.id);
+
+    if (deletedAnswerIds.length > 0)
+        await staticProvider
+            .ormConnection
+            .getRepository(Answer)
+            .delete(deletedAnswerIds);
+
+    // update answers
+    const updateAnswers = answers
+        .filter(x => x.id >= 0)
+        .map(x => ({
+            id: x.id,
+            text: x.text,
+            isCorrect: x.isCorrect,
+        } as Answer));
+
+    if (updateAnswers.length > 0)
+        await staticProvider
+            .ormConnection
+            .getRepository(Answer)
+            .save(updateAnswers);
+
+    // insert questions 
+    const insertAnswers = answers
+        .filter(x => x.id < 0)
+        .map(x => ({
+            id: x.id,
+            text: x.text,
+            isCorrect: x.isCorrect,
+            questionId
+        } as Answer));
+
+    if (insertAnswers.length > 0)
+        await staticProvider
+            .ormConnection
+            .getRepository(Answer)
+            .insert(insertAnswers);
 }

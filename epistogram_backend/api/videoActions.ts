@@ -9,7 +9,7 @@ import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "../services/misc/videoDurationService";
-import { saveQuestionsAsync } from "../services/questionService";
+import { saveAssociatedQuestionsAsync } from "../services/questionService";
 import { deleteVideosAsync, getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync, uploadVideoFileAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
@@ -68,7 +68,7 @@ export const saveVideoAction = async (params: ActionParamsType) => {
             description: dto.description
         });
 
-    await saveQuestionsAsync(dto.questions, videoId);
+    await saveAssociatedQuestionsAsync(dto.questions, videoId);
 }
 
 export const getVideoEditDataAction = async (params: ActionParamsType) => {

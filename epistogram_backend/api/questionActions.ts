@@ -4,6 +4,7 @@ import { Question } from "../models/entity/Question";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO";
 import { toAnswerDTO, toAnswerEditDTO } from "../services/mappings";
+import { saveQuestionAsync } from "../services/questionService";
 import { answerVideoQuestionAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
@@ -43,66 +44,5 @@ export const saveQuestionAction = async (params: ActionParamsType) => {
     const dto = withValueOrBadRequest<QuestionEditDataDTO>(params.req.body);
     const questionId = dto.questionId;
 
-    // save quesiton data
-    await staticProvider
-        .ormConnection
-        .getRepository(Question)
-        .save({
-            id: dto.questionId,
-            questionText: dto.questionText,
-            typeId: dto.typeId
-        });
-
-    // delete answers 
-    const questionAnswers = await staticProvider
-        .ormConnection
-        .getRepository(Answer)
-        .find({
-            where: {
-                questionId
-            }
-        });
-
-    const deletedAnswerIds = questionAnswers
-        .filter(x => !dto.answers.some(dtoAnswer => dtoAnswer.id === x.id))
-        .map(x => x.id);
-
-    if (deletedAnswerIds.length > 0)
-        await staticProvider
-            .ormConnection
-            .getRepository(Answer)
-            .delete(deletedAnswerIds);
-
-    // update answers
-    const updateAnswers = dto
-        .answers
-        .filter(x => x.id >= 0)
-        .map(x => ({
-            id: x.id,
-            text: x.text,
-            isCorrect: x.isCorrect,
-        } as Answer));
-
-    if (updateAnswers.length > 0)
-        await staticProvider
-            .ormConnection
-            .getRepository(Answer)
-            .save(updateAnswers);
-
-    // insert questions 
-    const insertAnswers = dto
-        .answers
-        .filter(x => x.id < 0)
-        .map(x => ({
-            id: x.id,
-            text: x.text,
-            isCorrect: x.isCorrect,
-            questionId
-        } as Answer));
-
-    if (insertAnswers.length > 0)
-        await staticProvider
-            .ormConnection
-            .getRepository(Answer)
-            .insert(insertAnswers);
+    await saveQuestionAsync(questionId, dto);
 }
