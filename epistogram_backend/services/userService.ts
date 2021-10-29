@@ -20,6 +20,16 @@ export const getUserById = async (userId: number) => {
     return user;
 }
 
+export const deleteUserAsync = async (userId: number, deletedUserId: number) => {
+
+    // TODO permissions
+
+    return await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .softDelete(deletedUserId);
+}
+
 export const getUserDTOById = async (userId: number) => {
 
     const foundUser = await getUserById(userId);

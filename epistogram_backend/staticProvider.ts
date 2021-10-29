@@ -7,5 +7,5 @@ export const staticProvider = {
     globalConfig: {} as GlobalConfiguration,
     ormConnection: {} as TypeORMConnection,
     sqlConnection: {} as SQLConnectionType,
-    rootDirectory: __dirname
+    rootDirectory: __dirname,
 }

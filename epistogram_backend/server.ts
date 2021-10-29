@@ -14,7 +14,7 @@ import { uploadAvatarFileAction } from './api/fileActions';
 import { getDailyTipAction, getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction, getQuestionEditDataAction, saveQuestionAction } from './api/questionActions';
-import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userManagementActions';
+import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userActions';
 import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileChunksAction } from './api/videoActions';
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';

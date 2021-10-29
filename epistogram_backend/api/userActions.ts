@@ -5,7 +5,7 @@ import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { getAdminPageUsersList } from "../services/adminService";
 import { toUserEditDTO } from "../services/mappings";
 import { createInvitedUserAsync } from "../services/signupService";
-import { deleteUserAsync } from "../services/userManagementService";
+import { deleteUserAsync } from "../services/userService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getFullName, withValueOrBadRequest } from "../utilities/helpers";
 
