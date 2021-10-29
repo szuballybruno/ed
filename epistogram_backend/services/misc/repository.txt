@@ -1,0 +1,30 @@
+import { EntityTarget } from "typeorm";
+import { staticProvider } from "../../staticProvider";
+
+export const getORMRepository = <TEntity>(entityType: EntityTarget<TEntity>) => {
+
+    const connection = staticProvider.ormConnection;
+
+    const expression = connection
+        .createQueryBuilder();
+
+    const deleteEntitiesAsync = async (where: string, params: any) => {
+
+        expression
+            .delete()
+            .from(entityType)
+            .where(where, params);
+
+        return this;
+    }
+
+    const getWhere = async()
+
+    return {
+        deleteEntitiesAsync,
+        execute: expression.execute,
+        getMany: expression.getMany,
+        getOne: expression.getOne,
+        getOneOrFail: expression.getOneOrFail
+    }
+}

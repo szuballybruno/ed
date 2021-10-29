@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { Course } from "../models/entity/Course";
 import { User } from "../models/entity/User";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
@@ -23,6 +24,18 @@ export const getUserById = async (userId: number) => {
 export const deleteUserAsync = async (userId: number, deletedUserId: number) => {
 
     // TODO permissions
+
+    const connectedCourses = await staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .find({
+            where: {
+                teacherId: deletedUserId
+            }
+        });
+
+    if (connectedCourses.length > 0)
+        throw new TypedError("Cannot delete user when it's set as teacher on undeleted courses!", "bad request");
 
     return await staticProvider
         .ormConnection
