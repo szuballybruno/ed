@@ -2,7 +2,7 @@ import { AnswerSession } from "../models/entity/AnswerSession";
 import { Exam } from "../models/entity/Exam";
 import { Question } from "../models/entity/Question";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
+import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
 import { staticProvider } from "../staticProvider";
 import { unsetUsersCurrentCourseItemAsync } from "./courseService";
@@ -10,14 +10,16 @@ import { toExamResultDTO } from "./mappings";
 import { answerQuestionAsync } from "./questionAnswerService";
 import { deleteQuesitonsAsync } from "./questionService";
 
-export const answerExamQuestionAsync = (questionAnswerDTO: QuestionAnswerDTO) => {
+export const answerExamQuestionAsync = (dto: AnswerQuestionDTO) => {
 
     // validation comes here 
 
+    // throwNotImplemented();
+
     return answerQuestionAsync(
-        questionAnswerDTO.answerSessionId,
-        questionAnswerDTO.questionId,
-        questionAnswerDTO.answerId);
+        dto.answerSessionId,
+        dto.questionId,
+        dto.answerIds);
 }
 
 export const deleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem: boolean) => {

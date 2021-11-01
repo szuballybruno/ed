@@ -69,10 +69,10 @@ export const useAnswerPractiseQuestion = () => {
 
     const postDataQuery = usePostData<AnswerQuestionDTO, AnswerResultDTO>("questions/answer-practise-question");
 
-    const answerQuestionAsync = (answerId: number, questionId: number) => {
+    const answerQuestionAsync = (answerIds: number[], questionId: number) => {
 
         const dto = {
-            answerId,
+            answerIds,
             questionId
         } as AnswerQuestionDTO;
 

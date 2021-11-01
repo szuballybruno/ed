@@ -1,4 +1,5 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
+import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
 import { staticProvider } from "../staticProvider";
@@ -23,13 +24,11 @@ export const getPractiseQuestionAsync = async (userId: number) => {
     return toQuestionDTO(questionView.question);
 }
 
-export const answerPractiseQuestionAsync = async (userId: number, qu: QuestionAnswerDTO) => {
+export const answerPractiseQuestionAsync = async (userId: number, qu: AnswerQuestionDTO) => {
 
     const practiseAnswerSession = await getUserPractiseAnswerSession(userId);
 
-    const result = await answerQuestionAsync(practiseAnswerSession.id, qu.questionId, qu.answerId, true);
-
-    return result;
+    return await answerQuestionAsync(practiseAnswerSession.id, qu.questionId, qu.answerIds, true);
 }
 
 export const getUserPractiseAnswerSession = async (userId: number) => {

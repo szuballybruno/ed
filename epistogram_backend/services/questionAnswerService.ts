@@ -25,13 +25,15 @@ export const createAnswerSessionAsync = async (
 export const answerQuestionAsync = async (
     answerSessionId: number,
     questionId: number,
-    answerId: number,
+    answerIds: number[],
     isPractiseAnswer?: boolean) => {
 
-    const correctAnswerId = await answerQuestionFn(answerSessionId, questionId, answerId, !!isPractiseAnswer);
+    const correctAnswerIds = await answerQuestionFn(answerSessionId, questionId, answerIds, !!isPractiseAnswer);
+    const isCorrect = correctAnswerIds.sort().join(',') === answerIds.sort().join(',');
 
     return {
-        correctAnswerId: correctAnswerId,
-        givenAnswerId: answerId
+        correctAnswerIds: correctAnswerIds,
+        givenAnswerIds: answerIds,
+        isCorrect: isCorrect
     } as AnswerResultDTO;
 }

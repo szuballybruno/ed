@@ -6,10 +6,10 @@ export const useAnswerQuestion = () => {
 
     const queryRes = usePostData<AnswerQuestionDTO, AnswerResultDTO>("questions/answer-video-question");
 
-    const answerQuestionAsync = (answerSessionId: number, answerId: number, questionId: number) => {
+    const answerQuestionAsync = (answerSessionId: number, answerIds: number[], questionId: number) => {
 
         const dto = {
-            answerId,
+            answerIds,
             questionId,
             answerSessionId
         } as AnswerQuestionDTO;

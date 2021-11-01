@@ -1,6 +1,6 @@
 import { staticProvider } from "../../staticProvider";
 
-const execSQLFunction = async <T>(fnName: string, args: any[]) => {
+export const execSQLFunctionAsync = async <T>(fnName: string, args: any[]) => {
 
     // create args indicies
     const argsIndicies = [] as string[];
@@ -24,7 +24,7 @@ const execSQLFunction = async <T>(fnName: string, args: any[]) => {
 
 export const answerSignupQuestionFn = (userId: number, questionId: number, answerId: number) => {
 
-    return execSQLFunction(
+    return execSQLFunctionAsync(
         "answer_signup_question_fn",
         [
             userId,
@@ -33,14 +33,14 @@ export const answerSignupQuestionFn = (userId: number, questionId: number, answe
         ]);
 }
 
-export const answerQuestionFn = (answerSessionId: number, questionId: number, answerId: number, isPractiseAnswer: boolean) => {
+export const answerQuestionFn = (answerSessionId: number, questionId: number, answerIds: number[], isPractiseAnswer: boolean) => {
 
-    return execSQLFunction<number>(
+    return execSQLFunctionAsync<number[]>(
         "answer_question_fn",
         [
             answerSessionId,
             questionId,
-            answerId,
+            answerIds,
             isPractiseAnswer
         ]);
 }

@@ -120,8 +120,8 @@ export const PractiseQuestions = () => {
         refetchPractiseQuestion();
     }
 
-    const isCorrectAnswer = answerResults?.correctAnswerId === answerResults?.givenAnswerId;
-    const isAnswered = !!answerResults?.givenAnswerId;
+    const isCorrectAnswer = answerResults?.isCorrect;
+    const isAnswered = !!answerResults;
 
     const gifSource = getAssetUrl("feedback_gifs/" + (isCorrectAnswer
         ? "correct_" + getRandomInteger(1, 3)
@@ -186,8 +186,8 @@ export const PractiseQuestions = () => {
 
                 <QuesitionView
                     answerQuesitonAsync={handleAnswerQuestionAsync}
-                    correctAnswerId={answerResults?.correctAnswerId ?? null}
-                    selectedAnswerId={answerResults?.givenAnswerId ?? null}
+                    correctAnswerIds={answerResults?.correctAnswerIds ?? []}
+                    selectedAnswerIds={answerResults?.givenAnswerIds ?? []}
                     loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
                     question={practiseQuestion}
                     onlyShowAnswers={isAnswered} />

@@ -1,4 +1,5 @@
 export type AnswerResultDTO = {
-    givenAnswerId: number;
-    correctAnswerId: number;
+    givenAnswerIds: number[];
+    correctAnswerIds: number[];
+    isCorrect: boolean;
 }

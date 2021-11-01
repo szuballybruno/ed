@@ -64,6 +64,7 @@ export const apiRoutes = {
         saveExam: "/exam/save-exam",
         createExam: "/exam/create-exam",
         deleteExam: "/exam/delete-exam",
+        answerExamQuestion: "/exam/answer-exam-question"
     }
 }
 

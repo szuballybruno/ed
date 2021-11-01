@@ -356,6 +356,7 @@ export const toQuestionDTO = (q: Question) => {
         questionText: q.questionText,
         imageUrl: q.imageUrl,
         showUpTimeSeconds: q.showUpTimeSeconds,
+        typeId: q.typeId,
         answers: q.answers
             .map(x => toAnswerDTO(x))
 

@@ -7,4 +7,5 @@ export type QuestionDTO = {
     answers: AnswerDTO[];
     imageUrl?: string;
     showUpTimeSeconds?: number;
+    typeId: number;
 }

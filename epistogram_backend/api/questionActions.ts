@@ -7,16 +7,17 @@ import { toAnswerDTO, toAnswerEditDTO } from "../services/mappings";
 import { saveQuestionAsync } from "../services/questionService";
 import { answerVideoQuestionAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParamsType, getAsyncActionHandler, throwNotImplemented, withValueOrBadRequest } from "../utilities/helpers";
 
 export const answerVideoQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
     const dto = withValueOrBadRequest<AnswerQuestionDTO>(req.body);
-    const answerId = withValueOrBadRequest<number>(dto.answerId, "number");
+    const answerIds = withValueOrBadRequest<number[]>(dto.answerIds);
     const questionId = withValueOrBadRequest<number>(dto.questionId, "number");
     const answerSessionId = withValueOrBadRequest<number>(dto.answerSessionId, "number");
 
-    return answerVideoQuestionAsync(answerSessionId, questionId, answerId);
+    throwNotImplemented();
+    return answerVideoQuestionAsync(answerSessionId, questionId, answerIds);
 });
 
 export const getQuestionEditDataAction = async (params: ActionParamsType) => {

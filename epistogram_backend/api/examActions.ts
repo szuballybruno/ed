@@ -1,27 +1,25 @@
 import { Request } from "express";
-import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
-import { Question } from "../models/entity/Question";
+import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { CreateExamDTO } from "../models/shared_models/CreateExamDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { getUserIdFromRequest } from "../services/authenticationService";
-import { unsetUsersCurrentCourseItemAsync } from "../services/courseService";
 import { answerExamQuestionAsync, deleteExamsAsync, getExamResultsAsync } from "../services/examService";
 import { toQuestionDTO } from "../services/mappings";
-import { deleteQuesitonsAsync, saveAssociatedQuestionsAsync } from "../services/questionService";
+import { saveAssociatedQuestionsAsync } from "../services/questionService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
-export const answerExamQuestionAction = getAsyncActionHandler(async (req: Request) => {
+export const answerExamQuestionAction = async (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-    const questionAnswerDTO = withValueOrBadRequest<QuestionAnswerDTO>(req.body);
+    const userId = getUserIdFromRequest(params.req);
+    const questionAnswerDTO = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
 
     return answerExamQuestionAsync(questionAnswerDTO);
-});
+};
 
 export const getExamResultsAction = getAsyncActionHandler(async (req: Request) => {
 

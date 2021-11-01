@@ -1,4 +1,5 @@
 import { useReactQuery } from "../frontendHelpers";
+import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
 import { CreateExamDTO } from "../models/shared_models/CreateExamDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
@@ -58,7 +59,7 @@ export const useSaveExam = () => {
 
 export const useSaveExamAnswer = () => {
 
-    const qr = usePostDataUnsafe<QuestionAnswerDTO, AnswerResultDTO>("questions/answer-exam-question");
+    const qr = usePostDataUnsafe<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.exam.answerExamQuestion);
 
     return {
         saveExamAnswer: qr.postDataAsync,

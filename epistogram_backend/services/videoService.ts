@@ -13,11 +13,11 @@ import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
 import { answerQuestionAsync } from "./questionAnswerService";
 import { deleteQuesitonsAsync } from "./questionService";
 
-export const answerVideoQuestionAsync = async (answerSessionId: number, questionId: number, answerId: number) => {
+export const answerVideoQuestionAsync = async (answerSessionId: number, questionId: number, answerIds: number[]) => {
 
     // validation comes here
 
-    return answerQuestionAsync(answerSessionId, questionId, answerId);
+    return answerQuestionAsync(answerSessionId, questionId, answerIds);
 }
 
 export const insertVideoAsync = async (video: Video, filePath?: string) => {

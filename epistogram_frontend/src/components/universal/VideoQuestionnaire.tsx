@@ -16,7 +16,7 @@ export const VideoQuestionnaire = (props: {
 
     const { question, onAnswered, answerSessionId, onClosed, ...css } = props;
     const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = useAnswerQuestion();
-    const isAnswered = !!answerResult?.givenAnswerId;
+    const isAnswered = !!answerResult;
     const autoCloseSecs = 2;
 
     const handleAnswerQuestionAsync = async (answerId) => {
@@ -45,10 +45,10 @@ export const VideoQuestionnaire = (props: {
 
         <QuesitionView
             answerQuesitonAsync={handleAnswerQuestionAsync}
-            correctAnswerId={answerResult?.correctAnswerId ?? null}
+            correctAnswerIds={answerResult?.correctAnswerIds ?? []}
             loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
             question={question}
-            selectedAnswerId={answerResult?.givenAnswerId ?? null}
+            selectedAnswerIds={answerResult?.givenAnswerIds ?? []}
             {...css} />
 
         <Flex display={isAnswered ? undefined : "none"} justify="flex-end">

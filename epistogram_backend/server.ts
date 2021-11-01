@@ -21,6 +21,7 @@ import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { getAuthMiddleware, getCORSMiddleware } from './services/middlewareService';
 import { log, logError } from "./services/misc/logger";
+import { execSQLFunctionAsync } from './services/sqlServices/sqlFunctionsService';
 import { staticProvider } from './staticProvider';
 import { ActionParamsType, EndpointOptionsType, getAsyncActionHandler, getAsyncActionHandlerNew } from './utilities/helpers';
 import './utilities/jsExtensions';
@@ -152,6 +153,7 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.exam.saveExam, saveExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.createExam, createExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.deleteExam, deleteExamAction, { isPost: true });
+    addEndpoint(apiRoutes.exam.answerExamQuestion, answerExamQuestionAction, { isPost: true });
 
     // question answer
     expressServer.post("/questions/answer-video-question", answerVideoQuestionAction);

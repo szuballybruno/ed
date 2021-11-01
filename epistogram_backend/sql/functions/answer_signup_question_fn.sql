@@ -41,10 +41,3 @@ BEGIN
 	
 END 
 $$ LANGUAGE 'plpgsql';
-
--- userId
--- questionId
--- answerId
--- SELECT answer_signup_question_fn(1, 1, 1);
-
--- select * from output_table

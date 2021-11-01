@@ -3,7 +3,7 @@ import { Checkbox, Typography } from "@mui/material";
 import { FlexFloat } from "../universal/FlexFloat";
 
 export const QuestionAnswer = (props: {
-    onClick?: () => void,
+    onClick?: (selected: boolean) => void,
     isSelected: boolean,
     answerText: string,
     isCorrect?: boolean
@@ -30,7 +30,7 @@ export const QuestionAnswer = (props: {
         borderRadius={7}
         minW={150}
         cursor={onClick ? "pointer" : undefined}
-        onClick={onClick}
+        onClick={onClick ? () => onClick(!isSelected) : undefined}
         style={{
             backgroundColor: getBgColor(),
             padding: "10px",

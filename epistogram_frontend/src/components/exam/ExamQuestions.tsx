@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { getAssetUrl, PagingType, usePaging } from "../../frontendHelpers";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
+import { QuestionTypeEnum } from "../../models/shared_models/types/sharedTypes";
 import { useSaveExamAnswer } from "../../services/examService";
 import { useShowErrorDialog } from "../../services/notifications";
 import { translatableTexts } from "../../translatableTexts";
@@ -31,8 +32,10 @@ export const ExamQuestions = (props: {
     const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
     const questionPaging = usePaging(questions, undefined, onExamFinished);
     const currentQuestion = questionPaging.currentItem!;
-    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
+    const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([]);
     const progressPercentage = (100 / questions.length) * questionPaging.currentIndex;
+    const isSingleAnswerMode = currentQuestion.typeId === QuestionTypeEnum.singleAnswer;
+    const hasSelectedAnswer = selectedAnswerIds.length > 0;
 
     const handleNextAsync = async () => {
 
@@ -40,15 +43,35 @@ export const ExamQuestions = (props: {
 
             await saveExamAnswer({
                 answerSessionId: answerSessionId,
-                answerId: selectedAnswerId!,
+                answerIds: selectedAnswerIds!,
                 questionId: currentQuestion.questionId
             });
 
-            setSelectedAnswerId(null);
+            setSelectedAnswerIds([]);
             questionPaging.next();
         } catch (e) {
 
             showError(e);
+        }
+    }
+
+    const setAnswerSelectedState = (answerId: number, isSelected: boolean) => {
+
+        if (isSelected) {
+
+            if (isSingleAnswerMode) {
+
+                setSelectedAnswerIds([answerId]);
+            }
+            else {
+
+                setSelectedAnswerIds([...selectedAnswerIds, answerId]);
+            }
+        }
+        else {
+
+            setSelectedAnswerIds(selectedAnswerIds
+                .filter(x => x !== answerId));
         }
     }
 
@@ -96,10 +119,11 @@ export const ExamQuestions = (props: {
                     .answers
                     .map((answer, index) => {
 
-                        const isAnswerSelected = answer.answerId === selectedAnswerId;
+                        const isAnswerSelected = selectedAnswerIds
+                            .some(x => x === answer.answerId);
 
                         return <QuestionAnswer
-                            onClick={() => setSelectedAnswerId(answer.answerId)}
+                            onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
                             answerText={answer.answerText}
                             isSelected={isAnswerSelected} />
                     })}
@@ -129,7 +153,7 @@ export const ExamQuestions = (props: {
             headerCenterText={exam.title}
             exitExamAction={() => { }}
             handleNext={handleNextAsync}
-            showNextButton={!!selectedAnswerId}
+            showNextButton={hasSelectedAnswer}
             nextButtonTitle={translatableTexts.exam.nextQuestion}
             content={examContent}
             progressValue={progressPercentage} />

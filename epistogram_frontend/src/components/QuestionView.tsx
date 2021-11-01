@@ -8,8 +8,8 @@ import { QuestionnaireLayout } from "./universal/QuestionnaireLayout";
 
 export const QuesitionView = (props: {
     answerQuesitonAsync: (answerId: number) => Promise<void>,
-    selectedAnswerId: number | null,
-    correctAnswerId: number | null,
+    selectedAnswerIds: number[],
+    correctAnswerIds: number[],
     question: QuestionDTO,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
@@ -17,8 +17,8 @@ export const QuesitionView = (props: {
 
     const {
         answerQuesitonAsync,
-        correctAnswerId,
-        selectedAnswerId,
+        correctAnswerIds,
+        selectedAnswerIds,
         question,
         loadingProps,
         onlyShowAnswers,
@@ -26,7 +26,7 @@ export const QuesitionView = (props: {
     } = props;
 
     return <QuestionnaireLayout
-        buttonsEnabled={!correctAnswerId}
+        buttonsEnabled={correctAnswerIds.length > 0}
         title={question.questionText}
         loadingProps={loadingProps}
         onlyShowAnswers={onlyShowAnswers}
@@ -39,8 +39,8 @@ export const QuesitionView = (props: {
 
                 return <QuestionnaierAnswer
                     key={index}
-                    isCorrect={correctAnswerId === answerId}
-                    isIncorrect={selectedAnswerId === answerId && correctAnswerId !== answerId}
+                    isCorrect={correctAnswerIds.some(x => x === answerId)}
+                    isIncorrect={selectedAnswerIds.some(x => x === answerId) && !correctAnswerIds.some(x => x === answerId)}
                     mb="8px"
                     onClick={async () => {
 

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { Course } from "../models/entity/Course";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
@@ -61,7 +62,7 @@ export const requestChangePasswordAction = getAsyncActionHandler(async (req: Req
 export const answerPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest<QuestionAnswerDTO>(req.body);
+    const dto = withValueOrBadRequest<AnswerQuestionDTO>(req.body);
 
     return answerPractiseQuestionAsync(userId, dto);
 });
