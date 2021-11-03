@@ -11,7 +11,7 @@ declare global {
         all(func: (item: T) => boolean): boolean;
         findLastIndex(func: (item: T) => boolean): number | null;
         single(func: (item: T) => boolean): T;
-        first(func: (item: T) => boolean): T;
+        first(func?: (item: T) => boolean): T;
         last(func: (item: T) => boolean): T;
         firstOrNull(func: (item: T) => boolean): T | null;
     }
@@ -75,7 +75,10 @@ Array.prototype.last = function <T>(func: (item: T) => T) {
     return filtered[filtered.length - 1];
 }
 
-Array.prototype.first = function <T>(func: (item: T) => T) {
+Array.prototype.first = function <T>(func?: (item: T) => boolean) {
+
+    if (!func)
+        func = (x: T) => true;
 
     const filtered = this.filter(func);
 

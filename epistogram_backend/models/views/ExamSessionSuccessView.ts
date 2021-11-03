@@ -4,7 +4,7 @@ import { ViewColumn, ViewEntity } from "typeorm";
 	synchronize: false,
 	expression: ``
 })
-export class UserExamAnswerSessionView {
+export class ExamSessionSuccessView {
 
 	@ViewColumn()
 	examId: number;
@@ -19,11 +19,11 @@ export class UserExamAnswerSessionView {
 	userId: number;
 
 	@ViewColumn()
-	correctAnswerCount: number;
+	correctGivenAnswerCount: number;
 
 	@ViewColumn()
 	questionCount: number;
 
 	@ViewColumn()
-	isCompleteSession: boolean;
+	isCompletedSession: boolean;
 }

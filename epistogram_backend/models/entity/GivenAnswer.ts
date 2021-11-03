@@ -1,16 +1,20 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Answer } from "./Answer";
+import { AnswerGivenAnswerBridge } from "./AnswerGivenAnswerBridge";
 import { AnswerSession } from "./AnswerSession";
 import { Question } from "./Question";
 
 @Entity()
-export class QuestionAnswer {
+export class GivenAnswer {
 
     @PrimaryGeneratedColumn()
     id: number;
 
     @CreateDateColumn()
     creationDate: Date;
+
+    @Column()
+    isCorrect: boolean;
 
     @Column({ default: false })
     isPractiseAnswer: boolean;
@@ -19,23 +23,20 @@ export class QuestionAnswer {
     @Column()
     questionId: number;
 
-    @ManyToOne(type => Question, question => question.questionAnswers)
+    @ManyToOne(_ => Question, x => x.givenAnswers)
     @JoinColumn({ name: "questionId" })
     question: Question;
-
-    // answer
-    @Column()
-    answerId: number;
-
-    @ManyToOne(type => Answer, answer => answer.questionAnswers)
-    @JoinColumn({ name: "answerId" })
-    answer: Answer;
 
     // answer session
     @Column()
     answerSessionId: number;
 
-    @ManyToOne(_ => AnswerSession, as => as.questionAnswers)
+    @ManyToOne(_ => AnswerSession, x => x.givenAnswers)
     @JoinColumn({ name: "answerSessionId" })
     answerSession: AnswerSession;
+
+    // answer bridges
+    @OneToMany(_ => AnswerGivenAnswerBridge, x => x.givenAnswer)
+    @JoinColumn()
+    answerBridges: AnswerGivenAnswerBridge[];
 }

@@ -1,16 +1,17 @@
 import { Activity } from "../../models/entity/Activity";
 import { Answer } from "../../models/entity/Answer";
+import { AnswerGivenAnswerBridge } from "../../models/entity/AnswerGivenAnswerBridge";
 import { AnswerSession } from "../../models/entity/AnswerSession";
 import { Course } from "../../models/entity/Course";
 import { CourseCategory } from "../../models/entity/CourseCategory";
 import { DailyTip } from "../../models/entity/DailyTip";
 import { DailyTipOccurrence } from "../../models/entity/DailyTipOccurrence";
 import { Exam } from "../../models/entity/Exam";
+import { GivenAnswer } from "../../models/entity/GivenAnswer";
 import { JobTitle } from "../../models/entity/JobTitle";
 import { Organization } from "../../models/entity/Organization";
 import { PersonalityCategoryDescription } from "../../models/entity/PersonalityCategoryDescription";
 import { Question } from "../../models/entity/Question";
-import { QuestionAnswer } from "../../models/entity/QuestionAnswer";
 import { QuestionCategory } from "../../models/entity/QuestionCategory";
 import { QuestionType } from "../../models/entity/QuestionType";
 import { Role } from "../../models/entity/Role";
@@ -35,31 +36,32 @@ import { ExamCompletedView } from "../../models/views/ExamCompletedView";
 import { PractiseQuestionView } from "../../models/views/PractiseQuestionView";
 import { SignupAnswersView } from "../../models/views/SignupAnswersView";
 import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
-import { UserExamAnswerSessionView } from "../../models/views/UserExamAnswerSessionView";
+import { ExamSessionSuccessView } from "../../models/views/ExamSessionSuccessView";
 import { UserSignupCompletedView } from "../../models/views/UserSignupCompletedView";
 import { VideoCompletedView } from "../../models/views/VideoCompletedView";
 import { VideoProgressView } from "../../models/views/VideoProgressView";
+import { ExamResultView } from "../../models/views/ExamResultView";
 
 // asd
 export const dbSchema = {
 
     viewScripts: [
         "video_completed_view",
+        "exam_session_success_view",
         "exam_completed_view",
-        "user_exam_answer_session_view",
         "video_progress_view",
         "course_item_view",
         "course_item_state_view",
         "course_state_view",
         "course_item_all_view",
         "course_view",
-        "exam_session_answers_view",
         "signup_answers_view",
         "user_signup_completed_view",
         "user_activity_view",
         "user_activity_flat_view",
-        "practise_question_view",
-        "daily_tip_view"
+        "exam_result_view"
+        // "practise_question_view",
+        // "daily_tip_view"
     ],
 
     functionScripts: [
@@ -71,7 +73,7 @@ export const dbSchema = {
     viewEntities: [
         VideoCompletedView,
         ExamCompletedView,
-        UserExamAnswerSessionView,
+        ExamSessionSuccessView,
         VideoProgressView,
         CourseItemView,
         CourseItemStateView,
@@ -81,7 +83,8 @@ export const dbSchema = {
         SignupAnswersView,
         UserActivityFlatView,
         UserSignupCompletedView,
-        DailyTipView
+        DailyTipView,
+        ExamResultView
     ],
 
     entities: [
@@ -92,7 +95,8 @@ export const dbSchema = {
         User,
         Video,
         Task,
-        QuestionAnswer,
+        GivenAnswer,
+        AnswerGivenAnswerBridge,
         Question,
         Answer,
         TestChild,

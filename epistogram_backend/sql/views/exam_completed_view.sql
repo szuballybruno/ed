@@ -1,60 +1,28 @@
 SELECT 
-	"subquery"."userId",
-	"subquery"."examId",
-	"subquery"."courseId",
-	"subquery"."orderIndex",
-	"subquery"."isFinalExam",
-	CAST(CASE WHEN 
-		SUM("subquery"."isCompleteSession") > 0
-		THEN 1 
-		ELSE 0 
-	END AS boolean) AS "isCompleted"
-FROM (
-	SELECT 
-		"exam"."id" AS "examId",
-		"exam"."courseId" AS "courseId",
-		"exam"."orderIndex" AS "orderIndex",
-		"exam"."isFinalExam" AS "isFinalExam",
-		"answer_session"."id" AS "answerSessionId",
-		"user"."id" AS "userId",
-		COUNT ("answer"."isCorrect") AS "correctAnswerCount",
-		COUNT ("question"."id") AS "questionCount",
-		CASE WHEN 
-			COUNT ("answer"."isCorrect") = COUNT ("question"."id") 
-				AND COUNT ("answer"."isCorrect") > 0
-			THEN 1
-			ELSE 0
-		END AS "isCompleteSession"
-	FROM public."exam"
+	"u"."id" AS "userId",
+	"e"."id" AS "examId",
+	"e"."courseId" AS "courseId",
+	"e"."isFinalExam" AS "isFinalExam",
+	"e"."orderIndex" AS "orderIndex",
+	SUM ("essv"."isSuccessfulSession"::int) AS "successfulSessionCount",
+	SUM ("essv"."isSuccessfulSession"::int) > 0 AS "hasSuccessfulSession",
+	SUM ("essv"."isSuccessfulSession"::int) = 1 AS "singleSuccessfulSession"
+FROM public."exam" AS "e"
 
-	LEFT JOIN public."user"
-	ON 1 = 1
+LEFT JOIN public."user" AS "u"
+ON 1 = 1
 
-	LEFT JOIN public."question"
-	ON "question"."examId" = "exam"."id"
+LEFT JOIN public."exam_session_success_view" AS "essv"
+ON "essv"."examId" = "e"."id"
+	AND "essv"."userId" = "u"."id"
 
-	LEFT JOIN public."answer_session"
-	ON "answer_session"."examId" = "exam"."id"
-
-	LEFT JOIN public."question_answer"
-	ON "question_answer"."answerSessionId" = "answer_session"."id"
-		AND "question_answer"."questionId" = "question"."id"
-
-	LEFT JOIN public."answer"
-	ON "answer"."id" = "question_answer"."answerId"
-
-	GROUP BY
-		"exam"."id",
-		"exam"."courseId",
-		"exam"."orderIndex",
-		"answer_session"."id",
-		"exam"."isFinalExam",
-		"user"."id"
-) AS "subquery"
-
-GROUP BY 
-	"subquery"."examId", 	
-	"subquery"."userId",
-	"subquery"."courseId",
-	"subquery"."isFinalExam",
-	"subquery"."orderIndex" 
+GROUP BY
+	"e"."id",
+	"u"."id",
+	"e"."courseId",
+	"e"."orderIndex",
+	"e"."isFinalExam"
+	
+ORDER BY 
+	"u"."id",
+	"e"."id"

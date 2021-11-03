@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { PractiseQuestionView } from "../views/PractiseQuestionView";
 import { Question } from "./Question";
-import { QuestionAnswer } from "./QuestionAnswer";
+import { AnswerGivenAnswerBridge } from "./AnswerGivenAnswerBridge";
 
 @Entity()
 export class Answer {
@@ -21,12 +21,12 @@ export class Answer {
 
     @ManyToOne(() => Question, question => question.answers)
     @JoinColumn({ name: "questionId" })
-    question: Question
+    question: Question;
 
-    // question answers
-    @OneToMany(() => QuestionAnswer, qa => qa.answer)
+    // given answer bridges
+    @OneToMany(() => AnswerGivenAnswerBridge, x => x.answer)
     @JoinColumn()
-    questionAnswers: QuestionAnswer[]
+    givenAnswerBridges: AnswerGivenAnswerBridge[];
 
     // practise question
     @ManyToOne(_ => PractiseQuestionView, x => x.answers)

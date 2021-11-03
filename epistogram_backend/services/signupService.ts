@@ -3,13 +3,12 @@ import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
-import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { UserSignupCompletedView } from "../models/views/UserSignupCompletedView";
 import { staticProvider } from "../staticProvider";
-import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
+import { throwNotImplemented, TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { sendInvitaitionMailAsync } from "./emailService";
-import { toQuestionAnswerDTO, toQuestionDTO } from "./mappings";
+import { toQuestionDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
 import { answerSignupQuestionFn } from "./sqlServices/sqlFunctionsService";
@@ -157,13 +156,15 @@ export const getSignupDataAsync = async (userId: number) => {
             }
         });
 
-    const dataDTO = {
-        questions: questions,
-        questionAnswers: questionAnswers,
-        isCompleted: userSignupCompltedView.isCompletedSignup
-    } as SignupDataDTO;
+    throwNotImplemented();
 
-    return dataDTO;
+    // const dataDTO = {
+    //     questions: questions,
+    //     questionAnswers: questionAnswers,
+    //     isCompleted: userSignupCompltedView.isCompletedSignup
+    // } as SignupDataDTO;
+
+    // return dataDTO;
 }
 
 const verifyInvitationTokenAsync = async (invitationToken: string) => {
@@ -218,11 +219,12 @@ const getSignupQuestionAnswersAsync = async (userId: number) => {
         .where("as.userId = :userId", { userId })
         .getOne();
 
-    return exam
-        ?.questions
-        ?.flatMap(question => question
-            .questionAnswers
-            .orderBy(x => x.creationDate)
-            .last(x => true))
-        ?.map(qa => toQuestionAnswerDTO(qa)) ?? [];
+    throwNotImplemented();
+    // return exam
+    //     ?.questions
+    //     ?.flatMap(question => question
+    //         .questionAnswers
+    //         .orderBy(x => x.creationDate)
+    //         .last(x => true))
+    //     ?.map(qa => toQuestionAnswerDTO(qa)) ?? [];
 }

@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { Connection, ConnectionOptions, createConnection } from "typeorm";
 import { dbSchema } from "./services/misc/dbSchema";
 import { User } from "./models/entity/User";
@@ -104,13 +104,24 @@ export const initializeDBAsync = async () => {
 
 const purgeDBAsync = async () => {
 
-    const sql = readFileSync(`./sql/misc/dropDB.sql`, 'utf8');
+    const dropDBScript = dbSchema
+        .entities
+        .map(x => `DROP TABLE IF EXISTS public.${toSQLName(x.name)} CASCADE;`)
+        .join("\n");
+
+    const dropDBScriptPath = `./sql/misc/dropDB.sql`;
+
+    writeFileSync(dropDBScriptPath, dropDBScript, { encoding: "utf-8" });
 
     const { executeSQL, terminateConnectionAsync: terminateConnection } = await connectToDBAsync();
-
-    const results = await executeSQL(sql);
+    const results = await executeSQL(dropDBScript);
 
     await terminateConnection();
+}
+
+const toSQLName = (name: string) => {
+
+    return name.split(/(?=[A-Z])/).join('_').toLowerCase();
 }
 
 const getIsFreshDB = async () => {

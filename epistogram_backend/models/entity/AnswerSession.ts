@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Exam } from "./Exam";
-import { QuestionAnswer } from "./QuestionAnswer";
+import { GivenAnswer } from "./GivenAnswer";
 import { User } from "./User";
 import { Video } from "./Video";
 
@@ -16,10 +16,10 @@ export class AnswerSession {
     @Column({ default: false })
     isSignupAnswerSession: boolean;
 
-    // quesiton answers
-    @OneToMany(_ => QuestionAnswer, qa => qa.answerSession)
+    // given answers
+    @OneToMany(_ => GivenAnswer, x => x.answerSession)
     @JoinColumn()
-    questionAnswers: QuestionAnswer[];
+    givenAnswers: GivenAnswer[];
 
     // exam
     @Column({ nullable: true })

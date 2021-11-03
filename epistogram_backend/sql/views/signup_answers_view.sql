@@ -1,22 +1,30 @@
 SELECT
-	 "esav".*,
-	 "answer"."id" AS "answerId",
-	 "answer"."isCorrect" AS "isCorrect",
-	 "qc"."id" AS "categoryId",
-	 "qc"."minLabel" AS "minLabel",
-	 "qc"."maxLabel" AS "maxLabel"
-FROM public."exam_session_answers_view" AS "esav"
+	"u"."id" AS "userId",
+	"as"."id" AS "answerSessionId",
+	"qc"."id" AS "categoryId",
+	"qc"."minLabel" AS "minLabel",
+	"qc"."maxLabel" AS "maxLabel",
+	"ga"."isCorrect" AS "isCorrect"
+FROM public."exam" AS "e"
 
-LEFT JOIN public."question_answer" AS "qa"
-ON "qa"."id" = "esav"."questionAnswerId"
+LEFT JOIN public."user" AS "u"
+ON 1 = 1
+
+LEFT JOIN public."answer_session" AS "as"
+ON "as"."examId" = "e"."id"
+	AND "as"."userId" = "u"."id"
+
+LEFT JOIN public."given_answer" AS "ga"
+ON "ga"."answerSessionId" = "as"."id"
 
 LEFT JOIN public."question" AS "q"
-ON "q"."id" = "esav"."questionId"
+ON "q"."examId" = "e"."id"
 
 LEFT JOIN public."question_category" AS "qc"
 ON "qc"."id" = "q"."categoryId"
 
-LEFT JOIN public."answer"
-ON "qa"."answerId" = "answer"."id"
+WHERE "e"."id" = 1
 
-WHERE "esav"."rank" = 1 AND "esav"."examId" = 1
+ORDER BY 
+	"u"."id",
+	"qc"."id"

@@ -3,7 +3,9 @@ import { Exam } from "../models/entity/Exam";
 import { Question } from "../models/entity/Question";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
-import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
+import { ExamCompletedView } from "../models/views/ExamCompletedView";
+import { ExamResultView } from "../models/views/ExamResultView";
+import { ExamSessionSuccessView } from "../models/views/ExamSessionSuccessView";
 import { staticProvider } from "../staticProvider";
 import { unsetUsersCurrentCourseItemAsync } from "./courseService";
 import { toExamResultDTO } from "./mappings";
@@ -81,10 +83,10 @@ export const getExamResultsAsync = async (userId: number, answerSessionId: numbe
     if (!currentExamId)
         throw new Error("Current exam id is null or undefined!");
 
-    const answerSession = await staticProvider
+    const examCompletedViews = await staticProvider
         .ormConnection
-        .getRepository(UserExamAnswerSessionView)
-        .findOneOrFail({
+        .getRepository(ExamResultView)
+        .find({
             where: {
                 examId: currentExamId,
                 userId: userId,
@@ -92,32 +94,5 @@ export const getExamResultsAsync = async (userId: number, answerSessionId: numbe
             }
         });
 
-    const prevoiuslyCompletedSessions = await staticProvider
-        .ormConnection
-        .getRepository(UserExamAnswerSessionView)
-        .find({
-            where: {
-                examId: currentExamId,
-                userId: userId,
-                isCompleteSession: true
-            }
-        });
-
-    // if only one previous session is completed, 
-    // and the current session is completed
-    // than the current session is the first one completed.  
-    const isFirstTimeComplted = prevoiuslyCompletedSessions.length === 1 && answerSession.isCompleteSession;
-
-    const exam = await staticProvider
-        .ormConnection
-        .getRepository(Exam)
-        .createQueryBuilder("e")
-        .leftJoinAndSelect("e.questions", "q")
-        .leftJoinAndSelect("q.answers", "allA")
-        .leftJoinAndSelect("q.questionAnswers", "qa", "qa.answerSessionId = :answerSessionId", { answerSessionId })
-        .leftJoinAndSelect("qa.answer", "ans")
-        .where("e.id = :examId", { examId: bridge.currentExamId })
-        .getOneOrFail();
-
-    return toExamResultDTO(answerSession, exam, isFirstTimeComplted);
+    return toExamResultDTO(examCompletedViews);
 }

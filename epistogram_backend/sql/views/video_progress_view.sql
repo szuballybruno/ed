@@ -18,6 +18,10 @@ ON "vps"."videoId" = "video"."id"
 GROUP BY 
     "video"."id",
     "user"."id"
+	
+ORDER BY 
+    "user"."id",
+	"video"."id"
 
 -- SELECT
 -- 	"vps"."userId" AS "userId",

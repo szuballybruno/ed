@@ -23,4 +23,4 @@ LEFT JOIN public."activity"
 	OR "role"."id" = 1 
 
 	--if signup is completed	
-	OR ("activity"."id" = 4 AND "uscv"."isCompletedSignup" AND "user"."isTrusted")
+	OR ("activity"."id" = 4 AND "uscv"."isSignupComplete" AND "user"."isTrusted")

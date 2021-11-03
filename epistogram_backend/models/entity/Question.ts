@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGene
 import { PractiseQuestionView } from "../views/PractiseQuestionView";
 import { Answer } from "./Answer";
 import { Exam } from "./Exam";
-import { QuestionAnswer } from "./QuestionAnswer";
+import { GivenAnswer } from "./GivenAnswer";
 import { QuestionCategory } from "./QuestionCategory";
 import { QuestionType } from "./QuestionType";
 import { Video } from "./Video";
@@ -50,10 +50,10 @@ export class Question {
     @JoinColumn()
     answers: Answer[];
 
-    // question answers
-    @OneToMany(() => QuestionAnswer, qa => qa.question)
+    // given answers
+    @OneToMany(_ => GivenAnswer, x => x.question)
     @JoinColumn()
-    questionAnswers: QuestionAnswer[]
+    givenAnswers: GivenAnswer[];
 
     // video 
     @Column({ nullable: true })

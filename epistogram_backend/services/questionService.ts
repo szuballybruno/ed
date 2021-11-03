@@ -1,7 +1,7 @@
 import { Answer } from "../models/entity/Answer";
+import { AnswerGivenAnswerBridge } from "../models/entity/AnswerGivenAnswerBridge";
+import { GivenAnswer } from "../models/entity/GivenAnswer";
 import { Question } from "../models/entity/Question";
-import { QuestionAnswer } from "../models/entity/QuestionAnswer";
-import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { AnswerEditDTO } from "../models/shared_models/AnswerEditDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO";
@@ -75,7 +75,17 @@ export const deleteQuesitonsAsync = async (quesitonIds: number[]) => {
     if (quesitonIds.length === 0)
         return;
 
-    // get answers 
+    // delete given answers 
+    const givenAnswers = await staticProvider
+        .ormConnection
+        .getRepository(GivenAnswer)
+        .createQueryBuilder("ga")
+        .where("ga.questionId IN (:...questionIds)", { quesitonIds })
+        .getMany();
+
+    await deleteGivenAnswers(givenAnswers.map(x => x.id));
+
+    // delete answers 
     const answers = await staticProvider
         .ormConnection
         .getRepository(Answer)
@@ -83,28 +93,47 @@ export const deleteQuesitonsAsync = async (quesitonIds: number[]) => {
         .where('"questionId" in (:...quesitonIds)', { quesitonIds })
         .getMany();
 
-    const answerIds = answers.map(x => x.id);
-
-    // delete questionanswers
-    await staticProvider
-        .ormConnection
-        .createQueryBuilder()
-        .delete()
-        .from(QuestionAnswer)
-        .where("answerId in (:...answerIds)", { answerIds })
-        .execute();
-
-    // delete answers 
-    await staticProvider
-        .ormConnection
-        .getRepository(Answer)
-        .delete(answerIds);
+    await deleteAnswersAsync(answers.map(x => x.id));
 
     // delete questions
     await staticProvider
         .ormConnection
         .getRepository(Question)
         .delete(quesitonIds);
+}
+
+export const deleteGivenAnswers = async (givenAnswerIds: number[]) => {
+
+    // delete given answer bridges
+    const givenAnswerBridges = await staticProvider
+        .ormConnection
+        .getRepository(AnswerGivenAnswerBridge)
+        .createQueryBuilder("agab")
+        .where("agab.givenAnswerId IN (:...givenAnswerIds)", { givenAnswerIds })
+        .getMany();
+
+    await staticProvider
+        .ormConnection
+        .getRepository(AnswerGivenAnswerBridge)
+        .delete(givenAnswerBridges.map(x => x.id));
+
+    // delete given answers 
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(GivenAnswer)
+        .where("id IN (:...givenAnswerIds)", { givenAnswerIds })
+        .execute();
+}
+
+export const deleteAnswersAsync = async (answerIds: number[]) => {
+
+    // delete answers 
+    await staticProvider
+        .ormConnection
+        .getRepository(Answer)
+        .delete(answerIds);
 }
 
 export const saveQuestionAsync = async (questionId: number, dto: QuestionEditDataDTO) => {

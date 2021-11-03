@@ -7,11 +7,26 @@ import { ViewColumn, ViewEntity } from "typeorm";
 export class ExamCompletedView {
 
 	@ViewColumn()
-	examId: number;
-
-	@ViewColumn()
 	userId: number;
 
 	@ViewColumn()
-	isCompleted: boolean;
+	examId: number;
+
+	@ViewColumn()
+	courseId: number;
+
+	@ViewColumn()
+	isFinalExam: number;
+
+	@ViewColumn()
+	orderIndex: number;
+
+	@ViewColumn()
+	successfulSessionCount: boolean;
+
+	@ViewColumn()
+	hasSuccessfulSession: boolean;
+
+	@ViewColumn()
+	singleSuccessfulSession: boolean;
 }

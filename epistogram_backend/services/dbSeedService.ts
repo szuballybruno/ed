@@ -7,7 +7,7 @@ import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
 import { Role } from "../models/entity/Role";
 import { Video } from "../models/entity/Video";
-import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
+import { QuestionTypeEnum, UserRoleEnum } from "../models/shared_models/types/sharedTypes";
 import { staticProvider } from "../staticProvider";
 import { registerInvitedUserAsync } from "./dataService";
 import { log } from "./misc/logger";
@@ -42,9 +42,6 @@ export const seedDB = async () => {
 
     log("seedSignupQuestions")
     await executeSeedScriptAsync("seedSignupQuestions");
-
-    log("seedSignupAnswers")
-    await executeSeedScriptAsync("seedSignupAnswers");
 
     log("seedPersonalityCategoryDescriptions")
     await executeSeedScriptAsync("seedPersonalityCategoryDescriptions");
@@ -561,7 +558,7 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
             // NEW EXAM 1
             {
                 questionText: "Exam question 1",
-
+                typeId: QuestionTypeEnum.multipleAnswers,
                 examId: 2,
                 answers: [
                     {
@@ -569,7 +566,8 @@ const seedExamQuestions = async (connection: TypeORMConnection) => {
                         isCorrect: true
                     },
                     {
-                        text: "Exam answer 2"
+                        text: "Exam answer 2",
+                        isCorrect: true
                     },
                     {
                         text: "Exam answer 3"

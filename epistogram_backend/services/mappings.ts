@@ -5,7 +5,6 @@ import { Exam } from "../models/entity/Exam";
 import { JobTitle } from "../models/entity/JobTitle";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
-import { QuestionAnswer } from "../models/entity/QuestionAnswer";
 import { Role } from "../models/entity/Role";
 import { Task } from "../models/entity/Task";
 import { User } from "../models/entity/User";
@@ -40,11 +39,12 @@ import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { UserExamAnswerSessionView } from "../models/views/UserExamAnswerSessionView";
-import { navPropNotNull } from "../utilities/helpers";
+import { ExamSessionSuccessView } from "../models/views/ExamSessionSuccessView";
+import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
 import { getCourseItemDescriptorCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 import { getUserDTOById } from "./userService";
+import { ExamResultView } from "../models/views/ExamResultView";
 
 export const toUserDTO = (user: User) => {
 
@@ -142,14 +142,6 @@ export const toAdminPageUserDTO = (user: User) => {
     } as AdminPageUserDTO;
 }
 
-export const toQuestionAnswerDTO = (questionAnswer: QuestionAnswer) => {
-
-    return {
-        answerId: questionAnswer.answerId,
-        questionId: questionAnswer.questionId,
-    } as QuestionAnswerDTO;
-}
-
 export const toTaskDTO = (task: Task) => {
 
     return {
@@ -193,46 +185,43 @@ export const toSimpleCourseItemDTOs = (course: Course) => {
     return courseItemDTOs;
 }
 
-export const toExamResultDTO = (
-    answerSessionView: UserExamAnswerSessionView,
-    currentExam: Exam,
-    isFirstTimeComplted: boolean) => {
+export const toExamResultDTO = (views: ExamResultView[]) => {
 
-    navPropNotNull(currentExam);
-    navPropNotNull(currentExam.questions);
+    const viewAsExam = views.first();
 
-    const questions = currentExam.questions;
+    const questionDTOs = views
+        .groupBy(x => x.questionId)
+        .map(questsionGroup => {
 
-    const questionDTOs = questions
-        .map(question => {
-
-            navPropNotNull(question.questionAnswers);
-            navPropNotNull(question.answers);
-
-            const questionAnswer = question
-                .questionAnswers
-                .single(x => true);
-
-            navPropNotNull(questionAnswer.answer);
+            const viewAsQuestion = questsionGroup.items.first();
 
             return {
-                text: question.questionText,
-                givenAnswerId: questionAnswer.answer.id,
-                answers: question
-                    .answers
+                text: viewAsQuestion.questionText,
+                answers: questsionGroup
+                    .items
                     .map(x => toResultAnswerDTO(x)),
             } as ExamResultQuestionDTO;
         })
 
     return {
-        isSuccessful: answerSessionView.isCompleteSession,
-        correctAnswerCount: answerSessionView.correctAnswerCount,
-        questionCount: answerSessionView.questionCount,
+        isSuccessful: viewAsExam.isCompletedSession,
+        correctAnswerCount: viewAsExam.correctGivenAnswerCount,
+        questionCount: viewAsExam.questionCount,
         questions: questionDTOs,
-        isCompletedPrevoiusly: !isFirstTimeComplted,
-        isFinalExam: answerSessionView.isFinalExam,
-        shouldShowCourseCompleted: isFirstTimeComplted && answerSessionView.isFinalExam
+        isCompletedPrevoiusly: !viewAsExam.onlySuccessfulSession,
+        isFinalExam: viewAsExam.isFinalExam,
+        shouldShowCourseCompleted: viewAsExam.onlySuccessfulSession && viewAsExam.isFinalExam
     } as ExamResultsDTO;
+}
+
+export const toResultAnswerDTO = (view: ExamResultView) => {
+
+    return {
+        answerId: view.answerId,
+        answerText: view.answerText,
+        isCorrect: view.isCorrectAnswer,
+        isGiven: view.isGivenAnswer
+    } as ResultAnswerDTO;
 }
 
 export const toVideoDTO = (video: Video, maxWatchedSeconds: number) => {
@@ -394,15 +383,6 @@ export const toAnswerDTO = (a: Answer) => {
         answerId: a.id,
         answerText: a.text
     } as AnswerDTO;
-}
-
-export const toResultAnswerDTO = (a: Answer) => {
-
-    return {
-        answerId: a.id,
-        answerText: a.text,
-        isCorrect: a.isCorrect
-    } as ResultAnswerDTO;
 }
 
 export const toAnswerEditDTO = (a: Answer) => {
