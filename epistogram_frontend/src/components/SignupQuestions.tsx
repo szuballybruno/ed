@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
-import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
+import { AnswerSignupQuestionDTO } from "../models/shared_models/AnswerSignupQuestionDTO";
 import { useAnswerSignupQuestion, useSignupData } from "../services/openEndpointService";
-import { SingupQuestionSlides, useQuestionSlidesState } from "./exam/SingupQuestionSlides";
+import { SingupQuestionSlides, useSignupQuestionsState } from "./exam/SingupQuestionSlides";
 import { LoadingFrame } from "./HOC/LoadingFrame";
 
 export const SignupQuestions = (props: {
@@ -21,33 +20,21 @@ export const SignupQuestions = (props: {
     const { saveAnswersAsync, saveAnswersStatus } = useAnswerSignupQuestion();
 
     const questions = signupData?.questions ?? [];
-    const questionAnswers = signupData?.questionAnswers ?? [];
-
-    const getSelectedAnswerId = (questionId: number) => {
-
-        const currentQuestionSelectedAnswer = questionAnswers
-            .filter(x => x.questionId === questionId)[0];
-
-        return currentQuestionSelectedAnswer?.answerId as number | null;
-    }
 
     const handleSaveSelectedAnswerAsync = async (answerId: number, questionId: number) => {
 
         const dto = {
-            questionAnswer: {
-                answerId,
-                questionId
-            } as QuestionAnswerDTO
-        } as SaveQuestionAnswerDTO;
+            answerId,
+            questionId
+        } as AnswerSignupQuestionDTO;
 
         await saveAnswersAsync(dto);
         await refetchSignupData();
     }
 
-    const state = useQuestionSlidesState({
+    const state = useSignupQuestionsState({
         questions: questions,
         answerQuestionAsync: handleSaveSelectedAnswerAsync,
-        getSelectedAnswerId: getSelectedAnswerId,
         upperTitle: "Személyes tanulási stílus felmérése",
         onPrevoiusOverNavigation: onPrevoiusOverNavigation,
         onNextOverNavigation: onNextOverNavigation,
@@ -62,11 +49,6 @@ export const SignupQuestions = (props: {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [signupData?.isCompleted]);
-
-    // useEffect(() => {
-
-    //     console.log(window.history);
-    // }, [state.questionnaireState.currentIndex]);
 
     return <LoadingFrame
         className="whall"

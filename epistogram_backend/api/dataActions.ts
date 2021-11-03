@@ -4,18 +4,14 @@ import { Course } from "../models/entity/Course";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
-import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
-import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { getUserIdFromRequest, requestChangePasswordAsync, setAuthCookies } from "../services/authenticationService";
 import { getCourseItemCode, getCurrentCourseItemsAsync } from "../services/courseService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync, registerInvitedUserAsync, registerUserAsync, saveUserDataAsync } from "../services/dataService";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
-import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
 import { answerPractiseQuestionAsync, getPractiseQuestionAsync } from "../services/practiseQuestionsService";
-import { answerSignupQuestionAsync, getSignupDataAsync } from "../services/signupService";
 import { createRegistrationToken } from "../services/tokenService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
@@ -148,32 +144,9 @@ export const getOverviewPageDTOAction = async (req: Request) => {
     return getOverviewPageDTOAsync(userId);
 }
 
-export const getUserPersonalityDataAction = getAsyncActionHandler(async (req: Request) => {
-
-    const userId = getUserIdFromRequest(req);
-
-    return getUserPersonalityAssessmentDTOAsync(userId);
-});
-
 export const getOrganizationsAction = (req: Request) => {
 
     const userId = getUserIdFromRequest(req);
 
     return getOrganizationsAsync(userId);
 }
-
-export const getSignupDataAction = getAsyncActionHandler((req: Request) => {
-
-    const userId = getUserIdFromRequest(req);
-
-    return getSignupDataAsync(userId);
-});
-
-export const answerSignupQuestionAction = getAsyncActionHandler(async (req: Request) => {
-
-    const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest<SaveQuestionAnswerDTO>(req.body);
-    const questionAnswer = withValueOrBadRequest<QuestionAnswerDTO>(dto.questionAnswer);
-
-    await answerSignupQuestionAsync(userId, questionAnswer);
-});

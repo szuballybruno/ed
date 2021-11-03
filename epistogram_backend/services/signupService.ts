@@ -1,18 +1,18 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
-import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
+import { AnswerSignupQuestionDTO } from "../models/shared_models/AnswerSignupQuestionDTO";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
-import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
-import { UserSignupCompletedView } from "../models/views/UserSignupCompletedView";
+import { SignupQuestionView } from "../models/views/SignupQuestionView";
+import { SignupCompletedView } from "../models/views/SignupCompletedView";
 import { staticProvider } from "../staticProvider";
-import { throwNotImplemented, TypedError, withValueOrBadRequest } from "../utilities/helpers";
+import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
 import { sendInvitaitionMailAsync } from "./emailService";
-import { toQuestionDTO } from "./mappings";
+import { toSignupDataDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
 import { answerSignupQuestionFn } from "./sqlServices/sqlFunctionsService";
-import { createInvitationToken, verifyInvitaionToken } from "./tokenService";
+import { createInvitationToken } from "./tokenService";
 import { getUserByEmail, getUserById } from "./userService";
 
 const SIGNUP_EXAM_ID = 1;
@@ -137,94 +137,28 @@ export const createUserAsync = async (
     return user;
 }
 
-export const answerSignupQuestionAsync = async (userId: number, questionAnswer: QuestionAnswerDTO) => {
+export const answerSignupQuestionAsync = async (userId: number, questionAnswer: AnswerSignupQuestionDTO) => {
 
     await answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
 }
 
 export const getSignupDataAsync = async (userId: number) => {
 
-    const questions = await getSignupQuestionsAsync();
-    const questionAnswers = await getSignupQuestionAnswersAsync(userId);
-
     const userSignupCompltedView = await staticProvider
         .ormConnection
-        .getRepository(UserSignupCompletedView)
+        .getRepository(SignupCompletedView)
         .findOneOrFail({
             where: {
                 userId
             }
         });
 
-    throwNotImplemented();
-
-    // const dataDTO = {
-    //     questions: questions,
-    //     questionAnswers: questionAnswers,
-    //     isCompleted: userSignupCompltedView.isCompletedSignup
-    // } as SignupDataDTO;
-
-    // return dataDTO;
-}
-
-const verifyInvitationTokenAsync = async (invitationToken: string) => {
-
-    const invitationTokenPayload = verifyInvitaionToken(invitationToken);
-    const userId = invitationTokenPayload.userId;
-
-    const user = await staticProvider
+    const questions = await staticProvider
         .ormConnection
-        .getRepository(User)
-        .createQueryBuilder("u")
-        .where("u.id = :userId", { userId })
-        .getOneOrFail();
+        .getRepository(SignupQuestionView)
+        .createQueryBuilder("sqv")
+        .where("sqv.userId = :userId", { userId })
+        .getMany();
 
-    // check if token matches user's in the DB
-    // this also protects agains modifying users data 
-    // with the same token after the user is registerd,
-    // since the token is removed from the DB after finalization
-    if (user.invitationToken !== invitationToken)
-        throw new TypedError("Bad token.", "bad request");
-
-    return userId;
-}
-
-const getSignupQuestionsAsync = async () => {
-
-    const exam = await staticProvider
-        .ormConnection
-        .getRepository(Exam)
-        .createQueryBuilder("e")
-        .where("e.courseId IS NULL AND e.id = 1")
-        .leftJoinAndSelect("e.questions", "q")
-        .leftJoinAndSelect("q.answers", "a")
-        .getOneOrFail();
-
-    return exam
-        .questions
-        .orderBy(x => x.questionText.substr(x.questionText.length - 2, x.questionText.length - 1))
-        .map(x => toQuestionDTO(x));
-}
-
-const getSignupQuestionAnswersAsync = async (userId: number) => {
-
-    const exam = await staticProvider
-        .ormConnection
-        .getRepository(Exam)
-        .createQueryBuilder("e")
-        .where("e.courseId IS NULL AND e.id = 1")
-        .leftJoinAndSelect("e.questions", "q")
-        .leftJoinAndSelect("q.questionAnswers", "qa")
-        .leftJoinAndSelect("qa.answerSession", "as")
-        .where("as.userId = :userId", { userId })
-        .getOne();
-
-    throwNotImplemented();
-    // return exam
-    //     ?.questions
-    //     ?.flatMap(question => question
-    //         .questionAnswers
-    //         .orderBy(x => x.creationDate)
-    //         .last(x => true))
-    //     ?.map(qa => toQuestionAnswerDTO(qa)) ?? [];
+    return toSignupDataDTO(questions, userSignupCompltedView.isSignupComplete);
 }

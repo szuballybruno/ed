@@ -129,7 +129,7 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
 
     // calculate is watched state changed
     const isCompletedAfter = await getVideoIsCompletedState(userId, videoId);
-    const isWatchedStateChanged = isCompletedBefore?.isComplete !== isCompletedAfter?.isComplete;
+    const isWatchedStateChanged = isCompletedBefore?.isCompleted !== isCompletedAfter?.isCompleted;
 
     const maxWathcedSeconds = await getMaxWatchedSeconds(userId, videoId);
 

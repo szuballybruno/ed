@@ -1,8 +1,8 @@
 SELECT 
 	"csv"."userId" AS "userId",
-	"sf"."filePath",
-	"csv"."isComplete",
-	"csv"."isStarted",
+	"sf"."filePath" AS "filePath",
+	"csv"."isCompleted" AS "isCompleted",
+	"csv"."isStarted" AS "isStarted",
 	"cc"."name" AS "categoryName",
 	"csc"."name" AS "subCategoryName",
 	

@@ -1,6 +1,5 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
-import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
 import { staticProvider } from "../staticProvider";
 import { toQuestionDTO } from "./mappings";

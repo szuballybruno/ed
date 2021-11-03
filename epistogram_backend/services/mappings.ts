@@ -25,10 +25,12 @@ import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestio
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
-import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { ResultAnswerDTO } from "../models/shared_models/ResultAnswerDTO";
 import { RoleDTO } from "../models/shared_models/RoleDTO";
+import { SignupAnswerDTO } from "../models/shared_models/SignupAnswerDTO";
+import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
+import { SignupQuestionDTO } from "../models/shared_models/SignupQuestionDTO";
 import { TaskDTO } from "../models/shared_models/TaskDTO";
 import { CourseItemStateType } from "../models/shared_models/types/sharedTypes";
 import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
@@ -38,13 +40,12 @@ import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { DailyTipView } from "../models/views/DailyTipView";
+import { ExamResultView } from "../models/views/ExamResultView";
+import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { ExamSessionSuccessView } from "../models/views/ExamSessionSuccessView";
-import { navPropNotNull, throwNotImplemented } from "../utilities/helpers";
+import { navPropNotNull } from "../utilities/helpers";
 import { getCourseItemDescriptorCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
-import { getUserDTOById } from "./userService";
-import { ExamResultView } from "../models/views/ExamResultView";
 
 export const toUserDTO = (user: User) => {
 
@@ -324,7 +325,7 @@ export const toCourseShortDTO = (course: CourseView) => {
         firstItemCode: firstItemCode,
         teacherName: teacher.lastName + " " + teacher.firstName,
         thumbnailImageURL: thumbnailImageURL,
-        isComplete: course.isComplete
+        isComplete: course.isCompleted
     } as CourseShortDTO;
 }
 
@@ -351,6 +352,36 @@ export const toQuestionDTO = (q: Question) => {
             .map(x => toAnswerDTO(x))
 
     } as QuestionDTO;
+}
+
+export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSignup: boolean) => {
+
+    return {
+        questions: questions
+            .groupBy(x => x.questionId)
+            .map(questionGrouping => {
+
+                const viewAsQuestion = questionGrouping.items.first();
+
+                return {
+                    questionId: viewAsQuestion.questionId,
+                    questionText: viewAsQuestion.questionText,
+                    imageUrl: viewAsQuestion.imageUrl,
+                    typeId: viewAsQuestion.typeId,
+                    answers: questionGrouping
+                        .items
+                        .map(viewAsAnswer => {
+
+                            return {
+                                answerId: viewAsAnswer.answerId,
+                                answerText: viewAsAnswer.answerText,
+                                isGiven: viewAsAnswer.isGivenAnswer
+                            } as SignupAnswerDTO;
+                        })
+                } as SignupQuestionDTO;
+            }),
+        isCompleted: isCompletedSignup
+    } as SignupDataDTO;
 }
 
 export const toCourseEditDataDTO = (

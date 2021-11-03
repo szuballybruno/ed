@@ -17,7 +17,7 @@ export class CourseView {
     teacherId: number;
 
     @ViewColumn()
-    isComplete: boolean;
+    isCompleted: boolean;
 
     @ViewColumn()
     isStarted: boolean;

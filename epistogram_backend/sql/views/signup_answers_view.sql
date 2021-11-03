@@ -1,24 +1,30 @@
-SELECT
+SELECT DISTINCT
 	"u"."id" AS "userId",
-	"as"."id" AS "answerSessionId",
+	"q"."id" AS "questionId",
 	"qc"."id" AS "categoryId",
 	"qc"."minLabel" AS "minLabel",
 	"qc"."maxLabel" AS "maxLabel",
-	"ga"."isCorrect" AS "isCorrect"
+	"sqv"."givenAnswerId" IS NOT NULL AS "isAnswered",
+	"sqv"."isCorrect" IS NOT DISTINCT FROM true AS "isCorrect",
+	
+	CASE WHEN "sqv"."givenAnswerId" IS NOT NULL
+		THEN 
+			CASE WHEN "sqv"."isCorrect"
+				THEN "qc"."maxLabel"
+				ELSE "qc"."minLabel"
+			END
+		ELSE NULL
+	END AS "activeLabel"
 FROM public."exam" AS "e"
 
 LEFT JOIN public."user" AS "u"
 ON 1 = 1
 
-LEFT JOIN public."answer_session" AS "as"
-ON "as"."examId" = "e"."id"
-	AND "as"."userId" = "u"."id"
-
-LEFT JOIN public."given_answer" AS "ga"
-ON "ga"."answerSessionId" = "as"."id"
+LEFT JOIN public."signup_question_view" AS "sqv"
+ON "sqv"."userId" = "u"."id"
 
 LEFT JOIN public."question" AS "q"
-ON "q"."examId" = "e"."id"
+ON "sqv"."questionId" = "q"."id"
 
 LEFT JOIN public."question_category" AS "qc"
 ON "qc"."id" = "q"."categoryId"
@@ -27,4 +33,5 @@ WHERE "e"."id" = 1
 
 ORDER BY 
 	"u"."id",
+	"q"."id",
 	"qc"."id"

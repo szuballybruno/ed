@@ -11,32 +11,23 @@ RETURNS void
 AS $$ 
 
 DECLARE
-	"signupAnswerSessionId" integer; 
+	"var_signup_answer_session_id" integer; 
 
 BEGIN
 
+	-- get signup answer session id
 	SELECT 
 		"as"."id"
-	INTO "signupAnswerSessionId"
+	INTO "var_signup_answer_session_id"
 	FROM public."answer_session" AS "as"
 	WHERE "as"."examId" = 1 
 		AND "as"."userId" = "p_userId";
 
-	INSERT INTO public."question_answer" 
-	(
-		"creationDate",
-		"isPractiseAnswer",
-		"questionId",
-		"answerId",
-		"answerSessionId"
-	)
-	VALUES 
-	(
-		NOW(),
-		false,
+	PERFORM answer_question_fn(
+		var_signup_answer_session_id,
 		"p_questionId",
-		"p_answerId",
-		"signupAnswerSessionId"
+		ARRAY["p_answerId"],
+		false
 	);
 	
 END 

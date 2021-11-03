@@ -26,10 +26,10 @@ export const getCourseProgressDataAsync = async (userId: number) => {
         .getMany();
 
     const inProgressCourses = courses
-        .filter(x => x.isStarted && !x.isComplete);
+        .filter(x => x.isStarted && !x.isCompleted);
 
     const completedCourses = courses
-        .filter(x => x.isComplete);
+        .filter(x => x.isCompleted);
 
     const inProgressCoursesAsCourseShortDTOs = inProgressCourses
         .map(x => toCourseShortDTO(x));

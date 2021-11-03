@@ -1,14 +1,22 @@
 SELECT 
-	"course"."id" AS "courseId",
 	"user"."id" AS "userId",
+	"course"."id" AS "courseId",
 	"civ"."videoId" AS "videoId",
-	"civ"."isComplete" AS "isVideoCompleted",
+	CASE WHEN "civ"."isCompleted" = true 
+		AND "civ"."videoId" IS NOT NULL
+		THEN true 
+		ELSE false 
+	END AS "isVideoCompleted",
 	"civ"."examId" AS "examId",
-	"civ"."isComplete" AS "isExamCompleted",
+	CASE WHEN "civ"."isCompleted" = true 
+		AND "civ"."examId" IS NOT NULL
+		THEN true 
+		ELSE false 
+	END AS "isExamCompleted",
 	"civ"."orderIndex" AS "orderIndex",
 	"ucb"."courseMode" AS "courseMode",
 	CASE WHEN 
-		"civ"."isComplete" = true
+		"civ"."isCompleted" = true
 		THEN 'completed'
 		ELSE CASE WHEN 
 			"ucb"."courseMode" = 'advanced'
@@ -27,8 +35,11 @@ LEFT JOIN public."user_course_bridge" AS "ucb"
 ON "ucb"."userId" = "user"."id"
 	AND "ucb"."courseId" = "course"."id"
 
-LEFT JOIN public.course_item_view AS "civ"
+LEFT JOIN public."course_item_view" AS "civ"
 ON "civ"."courseId" = "course"."id"
 	AND "civ"."userId" = "user"."id"
 	
-ORDER BY "civ"."courseId", "orderIndex"
+ORDER BY 
+	"user"."id",
+	"civ"."courseId", 
+	"orderIndex"

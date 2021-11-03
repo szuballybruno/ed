@@ -37,10 +37,11 @@ import { PractiseQuestionView } from "../../models/views/PractiseQuestionView";
 import { SignupAnswersView } from "../../models/views/SignupAnswersView";
 import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
 import { ExamSessionSuccessView } from "../../models/views/ExamSessionSuccessView";
-import { UserSignupCompletedView } from "../../models/views/UserSignupCompletedView";
+import { SignupCompletedView } from "../../models/views/SignupCompletedView";
 import { VideoCompletedView } from "../../models/views/VideoCompletedView";
 import { VideoProgressView } from "../../models/views/VideoProgressView";
 import { ExamResultView } from "../../models/views/ExamResultView";
+import { SignupQuestionView } from "../../models/views/SignupQuestionView";
 
 // asd
 export const dbSchema = {
@@ -55,11 +56,12 @@ export const dbSchema = {
         "course_state_view",
         "course_item_all_view",
         "course_view",
+        "signup_question_view",
         "signup_answers_view",
-        "user_signup_completed_view",
+        "signup_completed_view",
         "user_activity_view",
         "user_activity_flat_view",
-        "exam_result_view"
+        "exam_result_view",
         // "practise_question_view",
         // "daily_tip_view"
     ],
@@ -82,9 +84,10 @@ export const dbSchema = {
         CourseView,
         SignupAnswersView,
         UserActivityFlatView,
-        UserSignupCompletedView,
+        SignupCompletedView,
         DailyTipView,
-        ExamResultView
+        ExamResultView,
+        SignupQuestionView
     ],
 
     entities: [

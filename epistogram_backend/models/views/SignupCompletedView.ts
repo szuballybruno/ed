@@ -4,11 +4,11 @@ import { ViewColumn, ViewEntity } from "typeorm";
     synchronize: false,
     expression: ``
 })
-export class UserSignupCompletedView {
+export class SignupCompletedView {
 
     @ViewColumn()
     userId: number;
 
     @ViewColumn()
-    isCompletedSignup: boolean;
+    isSignupComplete: boolean;
 }

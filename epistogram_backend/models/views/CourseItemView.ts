@@ -19,5 +19,5 @@ export class CourseItemView {
     examId: number;
 
     @ViewColumn()
-    isComplete: number;
+    isCompleted: number;
 }

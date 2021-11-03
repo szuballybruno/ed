@@ -5,15 +5,16 @@ import "reflect-metadata"; // needs to be imported for TypeORM
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
 import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseEditDataAction, getCourseDetailsAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
-    answerPractiseQuestionAction, answerSignupQuestionAction, getCourseBriefDataAction, getCourseItemsAction,
+    answerPractiseQuestionAction, getCourseBriefDataAction, getCourseItemsAction,
     getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
-    getSignupDataAction, getUserPersonalityDataAction, registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveCourseThumbnailAction, saveUserDataAction
+    registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveCourseThumbnailAction, saveUserDataAction
 } from './api/dataActions';
 import { answerExamQuestionAction, createExamAction, deleteExamAction, getExamEditDataAction, getExamResultsAction, saveExamAction } from './api/examActions';
 import { uploadAvatarFileAction } from './api/fileActions';
 import { getDailyTipAction, getJobTitlesAction } from './api/miscActions';
 import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction, getQuestionEditDataAction, saveQuestionAction } from './api/questionActions';
+import { answerSignupQuestionAction, getSignupDataAction, getUserPersonalityDataAction } from './api/signupActions';
 import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userActions';
 import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileChunksAction } from './api/videoActions';
 import { initializeDBAsync } from './database';
@@ -102,9 +103,9 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.userManagement.upadateUser, updateUserAction, { isPost: true });
 
     // signup
-    expressServer.post(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction);
-    expressServer.get(apiRoutes.signup.getSignupData, getSignupDataAction);
-    expressServer.get(apiRoutes.signup.getUserPersonalityData, getUserPersonalityDataAction);
+    addEndpoint(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction, { isPost: true });
+    addEndpoint(apiRoutes.signup.getSignupData, getSignupDataAction);
+    addEndpoint(apiRoutes.signup.getUserPersonalityData, getUserPersonalityDataAction);
 
     // file
     expressServer.post('/file/upload-avatar', uploadAvatarFileAction);

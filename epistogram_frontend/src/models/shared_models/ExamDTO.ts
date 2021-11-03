@@ -1,4 +1,3 @@
-import { QuestionAnswerDTO } from "./QuestionAnswerDTO";
 import { QuestionDTO } from "./QuestionDTO";
 
 export type ExamDTO = {

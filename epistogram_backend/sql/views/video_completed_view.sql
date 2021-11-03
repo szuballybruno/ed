@@ -1,10 +1,10 @@
 SELECT 
+	"user"."id" AS "userId",
 	"video"."id" AS "videoId",
 	"video"."courseId" AS "courseId",
 	"video"."orderIndex" AS "orderIndex",
-	"user"."id" AS "userId",
 	"vpd"."watchedPercent",
-	"vpd"."isWatched" IS NOT DISTINCT FROM true AS "isWatched"
+	"vpd"."isWatched" IS NOT DISTINCT FROM true AS "isCompleted"
 FROM public."video" AS "video"
 
 LEFT JOIN public."user" AS "user"

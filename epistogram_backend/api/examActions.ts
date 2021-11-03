@@ -5,7 +5,6 @@ import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { CreateExamDTO } from "../models/shared_models/CreateExamDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
-import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { answerExamQuestionAsync, deleteExamsAsync, getExamResultsAsync } from "../services/examService";
 import { toQuestionDTO } from "../services/mappings";

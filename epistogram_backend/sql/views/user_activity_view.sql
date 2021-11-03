@@ -13,7 +13,7 @@ LEFT JOIN public."role_activity_bridge" AS "rab"
 	ON "rab"."roleId" = "role"."id"
 		AND  "role"."id" <> 1 -- ignore bridges if roledId = Administrator 
 
-LEFT JOIN public."user_signup_completed_view" AS "uscv"
+LEFT JOIN public."signup_completed_view" AS "uscv"
 	ON "uscv"."userId" = "user"."id"
 
 LEFT JOIN public."activity"

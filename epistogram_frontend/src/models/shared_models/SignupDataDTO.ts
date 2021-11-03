@@ -1,8 +1,6 @@
-import { QuestionAnswerDTO } from "./QuestionAnswerDTO";
-import { QuestionDTO } from "./QuestionDTO";
+import { SignupQuestionDTO } from "./SignupQuestionDTO";
 
 export type SignupDataDTO = {
-    questionAnswers: QuestionAnswerDTO[],
-    questions: QuestionDTO[];
+    questions: SignupQuestionDTO[];
     isCompleted: boolean;
 }

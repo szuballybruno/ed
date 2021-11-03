@@ -2,9 +2,9 @@ import { useQuery } from "react-query";
 import { refreshTokenRefreshIntervalInMs } from "../Environemnt";
 import { useReactQuery } from "../frontendHelpers";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
+import { AnswerSignupQuestionDTO } from "../models/shared_models/AnswerSignupQuestionDTO";
 import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
-import { SaveQuestionAnswerDTO } from "../models/shared_models/SaveQuestionAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { httpGetAsync, usePostData, usePostDataUnsafe } from "./httpClient";
@@ -30,7 +30,7 @@ export const useSignupData = () => {
 
 export const useAnswerSignupQuestion = () => {
 
-    const qr = usePostDataUnsafe<SaveQuestionAnswerDTO, AnswerDTO>(apiRoutes.signup.answerSignupQuestion);
+    const qr = usePostDataUnsafe<AnswerSignupQuestionDTO, AnswerDTO>(apiRoutes.signup.answerSignupQuestion);
 
     return {
         saveAnswersStatus: qr.state,

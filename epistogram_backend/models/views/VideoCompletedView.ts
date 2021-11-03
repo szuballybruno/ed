@@ -19,14 +19,8 @@ export class VideoCompletedView {
 	orderIndex: number;
 
 	@ViewColumn()
-	isAnswered: boolean;
-
-	@ViewColumn()
 	watchedPercent: number;
 
 	@ViewColumn()
-	isWatched: boolean;
-
-	@ViewColumn()
-	isComplete: boolean;
+	isCompleted: boolean;
 }

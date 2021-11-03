@@ -1,17 +1,14 @@
-import { Typography } from "@mui/material";
+import { Flex } from "@chakra-ui/react";
+import { FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
 import { usePaging } from "../../frontendHelpers";
-import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
+import { SignupQuestionDTO } from "../../models/shared_models/SignupQuestionDTO";
 import { useShowErrorDialog } from "../../services/notifications";
 import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
-import { SignupRadioGroup } from "../signup/SignupRadioGroup";
 import { SignupWrapper } from "../signup/SignupWrapper";
-import { Flex } from "@chakra-ui/react";
 
-export const useQuestionSlidesState = (options: {
-    questions: QuestionDTO[],
+export const useSignupQuestionsState = (options: {
+    questions: SignupQuestionDTO[],
     answerQuestionAsync: (answerId: number, questionId: number) => Promise<void>,
-    getSelectedAnswerId: (questionId: number) => number | null,
-    correctAnswerId?: number | null,
     upperTitle?: string,
     onPrevoiusOverNavigation?: () => void,
     onNextOverNavigation?: () => void,
@@ -22,8 +19,6 @@ export const useQuestionSlidesState = (options: {
     const {
         questions,
         answerQuestionAsync,
-        getSelectedAnswerId,
-        correctAnswerId,
         upperTitle,
         onPrevoiusOverNavigation,
         onNextOverNavigation,
@@ -37,8 +32,6 @@ export const useQuestionSlidesState = (options: {
     const questionnaireProgressbarValue = (questionnaireState.currentIndex / questions.length) * 100;
     const questionnaireProgressLabel = `${questionnaireState.currentIndex + 1}/${questions.length}`;
 
-    const selectedAnswerId = currentQuestion ? getSelectedAnswerId(currentQuestion.questionId) : null;
-
     const handleNext = () => {
 
         if (clearAnswerCache)
@@ -50,20 +43,18 @@ export const useQuestionSlidesState = (options: {
     return {
         currentQuestion,
         upperTitle,
-        selectedAnswerId,
         handleNext,
         questionnaireState,
         questionnaireProgressLabel,
         questionnaireProgressbarValue,
         answerQuestionAsync,
-        correctAnswerId,
         allowQuickNext
     }
 }
 
-export type QuestionSlidesStateType = ReturnType<typeof useQuestionSlidesState>;
+export type SignupQuestionsStateType = ReturnType<typeof useSignupQuestionsState>;
 
-export const SingupQuestionSlides = (props: { state: QuestionSlidesStateType }) => {
+export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType }) => {
 
     const state = props.state;
     const showError = useShowErrorDialog();
@@ -71,13 +62,11 @@ export const SingupQuestionSlides = (props: { state: QuestionSlidesStateType }) 
     const {
         currentQuestion,
         upperTitle,
-        selectedAnswerId,
         handleNext,
         questionnaireState,
         questionnaireProgressLabel,
         questionnaireProgressbarValue,
         answerQuestionAsync,
-        correctAnswerId,
         allowQuickNext
     } = state;
 
@@ -95,22 +84,40 @@ export const SingupQuestionSlides = (props: { state: QuestionSlidesStateType }) 
         }
     }
 
+    const selectedAnswerId = (currentQuestion?.answers ?? [])
+        .filter(x => x.isGiven)[0]?.answerId as null | number;
+
     return <>
         {currentQuestion && <SignupWrapper
-            title={currentQuestion!.questionText} //replaced
+            title={currentQuestion!.questionText}
             upperTitle={upperTitle}
-            nextButtonTitle="Következő" //replaced
-            onNext={selectedAnswerId ? handleNext : undefined} //replaced
+            nextButtonTitle="Következő"
+            onNext={selectedAnswerId ? handleNext : undefined}
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
-            bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />} //replaced
+            bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
             upperComponent={<Flex alignItems={"center"} justifyContent={"flex-end"} w={"30%"}><Typography>{questionnaireProgressLabel}</Typography></Flex>}>
 
-            <SignupRadioGroup
-                answers={currentQuestion!.answers}
-                onAnswerSelected={handleAnswerSelectedAsync}
-                selectedAnswerId={selectedAnswerId}
-                correctAnswerId={correctAnswerId ?? null} />
+            <RadioGroup
+                id="answers"
+                style={{ marginBottom: "30px" }}
+                name="radioGroup1"
+                onChange={(e) => {
+
+                    const selectedAnswerId = parseInt(e.currentTarget.value);
+                    handleAnswerSelectedAsync(selectedAnswerId);
+                }}>
+                {currentQuestion!
+                    .answers
+                    .map((answer) => <FormControlLabel
+                        key={answer.answerId}
+                        value={answer.answerId}
+                        style={{
+                            margin: "1px 0px 0px 0px",
+                        }}
+                        control={<Radio checked={answer.answerId === selectedAnswerId} />}
+                        label={answer.answerText} />)}
+            </RadioGroup>
         </SignupWrapper>}
     </>
 }

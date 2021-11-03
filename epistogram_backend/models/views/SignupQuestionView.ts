@@ -4,7 +4,7 @@ import { ViewColumn, ViewEntity } from "typeorm";
 	synchronize: false,
 	expression: ``
 })
-export class SignupAnswersView {
+export class SignupQuestionView {
 
 	@ViewColumn()
 	userId: number;
@@ -13,20 +13,26 @@ export class SignupAnswersView {
 	questionId: number;
 
 	@ViewColumn()
-	isCorrect: boolean;
+	questionText: string;
 
 	@ViewColumn()
-	isAnswered: boolean;
+	imageUrl: string;
 
 	@ViewColumn()
-	categoryId: number;
+	typeId: number;
 
 	@ViewColumn()
-	minLabel: string;
+	answerId: number;
 
 	@ViewColumn()
-	maxLabel: string;
+	answerText: string;
 
 	@ViewColumn()
-	activeLabel: string;
+	givenAnswerId: number;
+
+	@ViewColumn()
+	userAnswerId: number;
+
+	@ViewColumn()
+	isGivenAnswer: boolean;
 }

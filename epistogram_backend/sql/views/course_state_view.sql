@@ -2,7 +2,7 @@ SELECT
 	"course"."id" AS "courseId",
 	"user"."id" AS "userId",
 	"ucb"."id" IS NOT NULL AS "isStarted",
-	"ecv"."hasSuccessfulSession" AS "isComplete"
+	"ecv"."hasSuccessfulSession" AS "isCompleted"
 FROM public."course" 
 
 LEFT JOIN public."user"

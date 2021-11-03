@@ -80,7 +80,7 @@ const getUserPersonalityDataAsync = async (userId: number) => {
 
 const getCategoryViewsAsync = async (userId: number) => {
 
-    const signupQuestions = await staticProvider
+    const signupAnswers = await staticProvider
         .ormConnection
         .getRepository(SignupAnswersView)
         .find({
@@ -89,7 +89,7 @@ const getCategoryViewsAsync = async (userId: number) => {
             }
         });
 
-    const categoryGroups = signupQuestions
+    const categoryGroups = signupAnswers
         .groupBy(x => x.categoryId);
 
     return categoryGroups
