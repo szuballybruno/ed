@@ -228,8 +228,7 @@ const Preferences = () => {
 const FeaturePreview = () => {
 
     return <Flex className="whall">
-        <iframe src="https://epistogram.com/release-notes" className="whall"></iframe>
-        {/* https://epistogram.com/upcoming-features */}
+        <iframe src="https://epistogram.com/upcoming-features" className="whall"></iframe>
     </Flex>
 }
 
