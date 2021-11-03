@@ -43,7 +43,7 @@ export class ExamResultView {
     givenAnswerId: number;
 
     @ViewColumn()
-    isCorrectAnswer: boolean;
+    isCorrect: boolean;
 
     @ViewColumn()
     answerBridgeId: number;
@@ -53,6 +53,9 @@ export class ExamResultView {
 
     @ViewColumn()
     answerId: number;
+
+    @ViewColumn()
+    isAnswerCorrect: boolean;
 
     @ViewColumn()
     isGivenAnswer: boolean;

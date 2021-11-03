@@ -20,12 +20,9 @@ export const ExamResultsSlide = (props: {
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
 
-    const correctAnswersCount = questionsAnswers
-        .filter(x => x.answers.some(y => y.isCorrect && y.answerId === x.givenAnswerId))
-        .length;
-
-    const questionsCount = questionsAnswers.length;
-    const correctPercentage = Math.round((correctAnswersCount / questionsCount) * 100);
+    const correctPercentage = examResults && examResults
+        ? Math.round((examResults.correctAnswerCount / examResults.questionCount) * 100)
+        : 0;
 
     const content = <Flex direction="column" className="whall" p="20px">
 
@@ -41,10 +38,29 @@ export const ExamResultsSlide = (props: {
 
         {/* stats */}
         <Flex w={"100%"} h={170} overflow="hidden">
-            <StatisticsCard iconPath={getAssetUrl("/icons/exam_result_good_answer_count.svg")} suffix={"%"} title={"Helyes válaszok aránya"} value={"" + correctPercentage} />
-            <StatisticsCard iconPath={getAssetUrl("/icons/exam_result_good_answer_percent.svg")} suffix={""} title={"Helyes válasz a kérdésekre"} value={`${correctAnswersCount}/${questionsCount}`} />
-            <StatisticsCard iconPath={getAssetUrl("/icons/exam_result_time.svg")} suffix={"perc"} title={"Alatt teljesítetted a tesztet"} value={"66"} />
-            <StatisticsCard iconPath={getAssetUrl("/icons/exam_result_top_percent.svg")} suffix={"%"} title={"Az összes felhaszáló között"} value={"top 20"} />
+            <StatisticsCard
+                iconPath={getAssetUrl("/icons/exam_result_good_answer_count.svg")}
+                suffix={"%"}
+                title={"Helyes válaszok aránya"}
+                value={"" + correctPercentage} />
+
+            <StatisticsCard
+                iconPath={getAssetUrl("/icons/exam_result_good_answer_percent.svg")}
+                suffix={""}
+                title={"Helyes válasz a kérdésekre"}
+                value={`${examResults?.correctAnswerCount ?? 0}/${examResults?.questionCount ?? 0}`} />
+
+            <StatisticsCard
+                iconPath={getAssetUrl("/icons/exam_result_time.svg")}
+                suffix={"perc"}
+                title={"Alatt teljesítetted a tesztet"}
+                value={"66"} />
+
+            <StatisticsCard
+                iconPath={getAssetUrl("/icons/exam_result_top_percent.svg")}
+                suffix={"%"}
+                title={"Az összes felhaszáló között"}
+                value={"top 20"} />
         </Flex>
 
         {/* results */}
@@ -81,13 +97,9 @@ export const ExamResultsSlide = (props: {
                 {questionsAnswers
                     .map((question, index) => {
 
-                        const isCorrectAnswer = question
-                            .answers
-                            .some(x => x.answerId === question.givenAnswerId && x.isCorrect);
-
                         const bgColor = (() => {
 
-                            if (isCorrectAnswer)
+                            if (question.isCorrect)
                                 return "var(--mildGreen)";
 
                             return "var(--mildRed)";
@@ -113,7 +125,7 @@ export const ExamResultsSlide = (props: {
                                         backgroundColor: bgColor,
                                         borderRadius: 7
                                     }}>
-                                        {isCorrectAnswer
+                                        {question.isCorrect
                                             ? translatableTexts.exam.correctAnswer
                                             : translatableTexts.exam.incorrectAnswer}
                                     </Typography>
@@ -129,12 +141,10 @@ export const ExamResultsSlide = (props: {
                                         .answers
                                         .map((answer, index) => {
 
-                                            const isSelected = answer.answerId === question.givenAnswerId;
-
                                             return <QuestionAnswer
                                                 margin="5px"
                                                 answerText={answer.answerText}
-                                                isSelected={isSelected}
+                                                isSelected={answer.isGiven}
                                                 isCorrect={answer.isCorrect} />
                                         })}
                                 </Flex>

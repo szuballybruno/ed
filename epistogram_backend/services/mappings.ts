@@ -197,6 +197,7 @@ export const toExamResultDTO = (views: ExamResultView[]) => {
 
             return {
                 text: viewAsQuestion.questionText,
+                isCorrect: viewAsQuestion.isCorrect,
                 answers: questsionGroup
                     .items
                     .map(x => toResultAnswerDTO(x)),
@@ -219,7 +220,7 @@ export const toResultAnswerDTO = (view: ExamResultView) => {
     return {
         answerId: view.answerId,
         answerText: view.answerText,
-        isCorrect: view.isCorrectAnswer,
+        isCorrect: view.isAnswerCorrect,
         isGiven: view.isGivenAnswer
     } as ResultAnswerDTO;
 }
