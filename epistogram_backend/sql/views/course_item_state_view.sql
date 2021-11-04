@@ -1,20 +1,26 @@
 SELECT 
 	"user"."id" AS "userId",
 	"course"."id" AS "courseId",
+	"ucb"."courseMode" AS "courseMode",
+	"civ"."orderIndex" AS "orderIndex",
 	"civ"."videoId" AS "videoId",
+	"civ"."examId" AS "examId",
+
+	-- isVideoCompleted
 	CASE WHEN "civ"."isCompleted" = true 
 		AND "civ"."videoId" IS NOT NULL
 		THEN true 
 		ELSE false 
 	END AS "isVideoCompleted",
-	"civ"."examId" AS "examId",
+	
+	-- isExamCompleted
 	CASE WHEN "civ"."isCompleted" = true 
 		AND "civ"."examId" IS NOT NULL
 		THEN true 
 		ELSE false 
 	END AS "isExamCompleted",
-	"civ"."orderIndex" AS "orderIndex",
-	"ucb"."courseMode" AS "courseMode",
+	
+	-- state
 	CASE WHEN 
 		"civ"."isCompleted" = true
 		THEN 'completed'
@@ -22,7 +28,17 @@ SELECT
 			"ucb"."courseMode" = 'advanced'
 				OR "civ"."orderIndex" = 0
 			THEN 'available'
-			ELSE 'locked'
+			ELSE CASE WHEN 
+				LAG("civ"."isCompleted", 1) OVER (
+					PARTITION BY "course"."id"
+					ORDER BY 
+						"civ"."userId",
+						"civ"."courseId",
+						"civ"."orderIndex"
+				) IS NOT DISTINCT FROM true 
+				THEN 'available'
+				ELSE 'locked'
+			END 
 		END 
 	END AS "state"
 	
