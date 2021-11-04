@@ -286,9 +286,17 @@ export const EditCourseControl = (props: {
                     justify="space-between"
                     m="3px">
 
-                    <Typography alignSelf="center">
-                        {item.title}
-                    </Typography>
+                    <Flex flexDirection={"column"} alignItems={"flex-start"}>
+                        <Typography>
+                            {item.title}
+                        </Typography>
+                        <Typography style={{
+                            fontSize: "0.8em"
+                        }}>
+                            {item.subTitle}
+                        </Typography>
+                    </Flex>
+
 
                     <Flex>
                         <EpistoButton
@@ -301,20 +309,23 @@ export const EditCourseControl = (props: {
                         </EpistoButton>
                     </Flex>
                 </Flex>} />
+            <Flex h={100} w={"100%"} justifyContent={"space-evenly"}>
+                <EpistoButton
+                    onClick={() => handleAddCourseItemAsync("video")}
+                    style={{ alignSelf: "center" }}
+                    variant="outlined">
+                    Új videó hozzáadása
+                </EpistoButton>
 
-            <EpistoButton
-                onClick={() => handleAddCourseItemAsync("video")}
-                style={{ alignSelf: "center" }}
-                variant="outlined">
-                Új videó hozzáadása
-            </EpistoButton>
+                <EpistoButton
+                    onClick={() => handleAddCourseItemAsync("exam")}
+                    style={{ alignSelf: "center" }}
+                    variant="outlined">
+                    Új vizsga hozzáadása
+                </EpistoButton>
+            </Flex>
 
-            <EpistoButton
-                onClick={() => handleAddCourseItemAsync("exam")}
-                style={{ alignSelf: "center" }}
-                variant="outlined">
-                Új vizsga hozzáadása
-            </EpistoButton>
+
         </Flex>
 
     </AdminSubpageHeader >
