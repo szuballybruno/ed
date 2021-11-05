@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { Course } from "../models/entity/Course";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
@@ -6,70 +5,38 @@ import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
-import { UserDTO } from "../models/shared_models/UserDTO";
-import { getUserIdFromRequest, requestChangePasswordAsync, setAuthCookies } from "../services/authenticationService";
-import { getCourseItemCode, getCurrentCourseItemsAsync } from "../services/courseService";
-import { getOrganizationsAsync, getOverviewPageDTOAsync, registerInvitedUserAsync, registerUserAsync, saveUserDataAsync } from "../services/dataService";
+import { setAuthCookies } from "../services/authenticationService";
+import { getCourseItemCode } from "../services/courseService";
+import { getOrganizationsAsync, getOverviewPageDTOAsync, registerInvitedUserAsync, registerUserAsync } from "../services/dataService";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
-import { answerPractiseQuestionAsync, getPractiseQuestionAsync } from "../services/practiseQuestionsService";
-import { createRegistrationToken } from "../services/tokenService";
+import { answerPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
 
-export const getPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
+export const registerUserAction = async (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-
-    return await getPractiseQuestionAsync(userId);
-});
-
-export const registerUserAction = getAsyncActionHandler(async (req: Request, res: Response) => {
-
-    const dto = withValueOrBadRequest<RegisterUserDTO>(req.body);
+    const dto = withValueOrBadRequest<RegisterUserDTO>(params.req.body);
 
     const { accessToken, refreshToken } = await registerUserAsync(dto);
 
-    setAuthCookies(res, accessToken, refreshToken);
-});
+    setAuthCookies(params.res, accessToken, refreshToken);
+};
 
-export const registerInvitedUserAction = getAsyncActionHandler(async (req: Request, res: Response) => {
+export const registerInvitedUserAction = async (params: ActionParamsType) => {
 
-    const dto = withValueOrBadRequest<RegisterInvitedUserDTO>(req.body);
+    const dto = withValueOrBadRequest<RegisterInvitedUserDTO>(params.req.body);
 
     const { accessToken, refreshToken } = await registerInvitedUserAsync(dto);
 
-    setAuthCookies(res, accessToken, refreshToken);
-});
+    setAuthCookies(params.res, accessToken, refreshToken);
+};
 
-export const getRegistrationLinkAction = getAsyncActionHandler(async (req: Request) => {
+export const answerPractiseQuestionAction = async (params: ActionParamsType) => {
 
-    return Promise.resolve(`${staticProvider.globalConfig.misc.frontendUrl}/registration?token=${createRegistrationToken()}`);
-});
+    const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
 
-export const requestChangePasswordAction = getAsyncActionHandler(async (req: Request) => {
-
-    const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest<any>(req.body);
-    const oldPassword = withValueOrBadRequest<string>(dto.oldPassword);
-
-    return await requestChangePasswordAsync(userId, oldPassword);
-})
-
-export const answerPractiseQuestionAction = getAsyncActionHandler(async (req: Request) => {
-
-    const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest<AnswerQuestionDTO>(req.body);
-
-    return answerPractiseQuestionAsync(userId, dto);
-});
-
-export const saveUserDataAction = getAsyncActionHandler(async (req: Request) => {
-
-    const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest<UserDTO>(req.body);
-
-    return saveUserDataAsync(userId, dto);
-});
+    return answerPractiseQuestionAsync(params.userId, dto);
+};
 
 export const getCurrentCourseItemCodeAction = async (parms: ActionParamsType) => {
 
@@ -88,13 +55,6 @@ export const getCurrentCourseItemCodeAction = async (parms: ActionParamsType) =>
 
     return getCourseItemCode(currentBridge.currentVideoId, currentBridge.currentExamId);
 };
-
-export const getCourseItemsAction = getAsyncActionHandler(async (req: Request) => {
-
-    const userId = getUserIdFromRequest(req);
-
-    return getCurrentCourseItemsAsync(userId);
-});
 
 export const saveCourseThumbnailAction = async (params: ActionParamsType) => {
 
@@ -137,16 +97,12 @@ export const getCourseBriefDataAction = async (params: ActionParamsType) => {
     } as CourseBriefData;
 };
 
-export const getOverviewPageDTOAction = async (req: Request) => {
+export const getOverviewPageDTOAction = async (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-
-    return getOverviewPageDTOAsync(userId);
+    return getOverviewPageDTOAsync(params.userId);
 }
 
-export const getOrganizationsAction = (req: Request) => {
+export const getOrganizationsAction = (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-
-    return getOrganizationsAsync(userId);
+    return getOrganizationsAsync(params.userId);
 }

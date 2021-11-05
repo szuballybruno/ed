@@ -1,9 +1,14 @@
 import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
 import { JobTitle } from "../models/entity/JobTitle";
+import { UserDTO } from "../models/shared_models/UserDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
+import { requestChangePasswordAsync } from "../services/authenticationService";
+import { saveUserDataAsync } from "../services/dataService";
 import { toDailyTipDTO } from "../services/mappings";
+import { getPractiseQuestionAsync } from "../services/practiseQuestionsService";
+import { createRegistrationToken } from "../services/tokenService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType } from "../utilities/helpers";
+import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
 
 export const getJobTitlesAction = async (params: ActionParamsType) => {
 
@@ -11,6 +16,31 @@ export const getJobTitlesAction = async (params: ActionParamsType) => {
         .ormConnection
         .getRepository(JobTitle)
         .find();
+};
+
+export const getRegistrationLinkAction = async (params: ActionParamsType) => {
+
+    return Promise.resolve(`${staticProvider.globalConfig.misc.frontendUrl}/registration?token=${createRegistrationToken()}`);
+};
+
+export const requestChangePasswordAction = async (params: ActionParamsType) => {
+
+    const dto = withValueOrBadRequest<any>(params.req.body);
+    const oldPassword = withValueOrBadRequest<string>(dto.oldPassword);
+
+    return await requestChangePasswordAsync(params.userId, oldPassword);
+};
+
+export const saveUserDataAction = async (params: ActionParamsType) => {
+
+    const dto = withValueOrBadRequest<UserDTO>(params.req.body);
+
+    return saveUserDataAsync(params.userId, dto);
+};
+
+export const getPractiseQuestionAction = async (params: ActionParamsType) => {
+
+    return await getPractiseQuestionAsync(params.userId);
 };
 
 export const getDailyTipAction = async (params: ActionParamsType) => {

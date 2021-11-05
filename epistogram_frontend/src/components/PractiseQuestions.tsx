@@ -109,7 +109,7 @@ export const PractiseQuestions = () => {
 
     const currentCourseItemCode = useCurrentCourseItemCode();
 
-    const handleAnswerQuestionAsync = async (answerId) => {
+    const handleAnswerQuestionAsync = async (answerId: number[]) => {
 
         await answerQuestionAsync(answerId, practiseQuestion!.questionId);
     }
@@ -187,7 +187,6 @@ export const PractiseQuestions = () => {
                 <QuesitionView
                     answerQuesitonAsync={handleAnswerQuestionAsync}
                     correctAnswerIds={answerResults?.correctAnswerIds ?? []}
-                    selectedAnswerIds={answerResults?.givenAnswerIds ?? []}
                     loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
                     question={practiseQuestion}
                     onlyShowAnswers={isAnswered} />

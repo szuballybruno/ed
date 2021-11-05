@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
-import { backendUrl } from "../Environemnt";
+import { serverUrl } from "../Environemnt";
 import { getErrorTypeByHTTPCode, stringifyQueryObject, TypedError } from "../frontendHelpers";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { LoadingStateType } from "../models/types";
@@ -19,7 +19,7 @@ const instance = (() => {
 
     const axiosInst = axios.create({
         // .. where we make our configurations
-        baseURL: backendUrl
+        baseURL: serverUrl
     });
 
     axiosInst.defaults.withCredentials = true

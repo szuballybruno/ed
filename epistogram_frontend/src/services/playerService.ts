@@ -3,13 +3,13 @@ import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
-import { httpPostAsync, usePostData } from "./httpClient";
+import { httpGetAsync, httpPostAsync, usePostData } from "./httpClient";
 
 export const usePlayerData = (descriptorCode: string) => {
 
     const qr = useReactQuery<PlayerDataDTO>(
         ["getPlayerData", descriptorCode],
-        () => httpPostAsync(`player/get-player-data?descriptorCode=${descriptorCode}`));
+        () => httpGetAsync("player/get-player-data", { descriptorCode }));
 
     return {
         playerData: qr.data,

@@ -155,14 +155,13 @@ export const createCourseAction = async (params: ActionParamsType) => {
         });
 }
 
-export const setCourseTypeAction = getAsyncActionHandler(async (req: Request) => {
+export const setCourseTypeAction = async (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-    const courseId = withValueOrBadRequest<number>(req.query.courseId, "number");
-    const modeType = withValueOrBadRequest<CourseModeType>(req.query.mode);
+    const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
+    const modeType = withValueOrBadRequest<CourseModeType>(params.req.query.mode);
 
-    return setCourseTypeAsync(userId, courseId, modeType);
-});
+    return setCourseTypeAsync(params.userId, courseId, modeType);
+};
 
 export const getCourseProgressDataAction = async (params: ActionParamsType) => {
 

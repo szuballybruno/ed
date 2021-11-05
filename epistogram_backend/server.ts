@@ -3,16 +3,16 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseEditDataAction, getCourseDetailsAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseDetailsAction, getCourseEditDataAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
-    answerPractiseQuestionAction, getCourseBriefDataAction, getCourseItemsAction,
-    getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction, getPractiseQuestionAction, getRegistrationLinkAction,
-    registerInvitedUserAction, registerUserAction, requestChangePasswordAction, saveCourseThumbnailAction, saveUserDataAction
+    answerPractiseQuestionAction, getCourseBriefDataAction,
+    getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction,
+    registerInvitedUserAction, registerUserAction, saveCourseThumbnailAction
 } from './api/dataActions';
 import { answerExamQuestionAction, createExamAction, deleteExamAction, getExamEditDataAction, getExamResultsAction, saveExamAction } from './api/examActions';
 import { uploadAvatarFileAction } from './api/fileActions';
-import { getDailyTipAction, getJobTitlesAction } from './api/miscActions';
-import { getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
+import { getDailyTipAction, getJobTitlesAction, getPractiseQuestionAction, getRegistrationLinkAction, requestChangePasswordAction, saveUserDataAction } from './api/miscActions';
+import { getCourseItemsAction, getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction, getQuestionEditDataAction, saveQuestionAction } from './api/questionActions';
 import { answerSignupQuestionAction, getSignupDataAction, getUserPersonalityDataAction } from './api/signupActions';
 import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userActions';
@@ -22,9 +22,8 @@ import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { getAuthMiddleware, getCORSMiddleware } from './services/middlewareService';
 import { log, logError } from "./services/misc/logger";
-import { execSQLFunctionAsync } from './services/sqlServices/sqlFunctionsService';
 import { staticProvider } from './staticProvider';
-import { ActionParamsType, EndpointOptionsType, getAsyncActionHandler, getAsyncActionHandlerNew } from './utilities/helpers';
+import { ActionParamsType, EndpointOptionsType, getAsyncActionHandlerNew } from './utilities/helpers';
 import './utilities/jsExtensions';
 
 // initialize env
@@ -78,21 +77,22 @@ const initializeAsync = async () => {
 
     // open routes
     addEndpoint(apiRoutes.open.renewUserSession, renewUserSessionAction, { isPublic: true });
-    expressServer.post(apiRoutes.open.loginUser, getAsyncActionHandler(logInUserAction));
-    expressServer.post(apiRoutes.open.registerUser, registerUserAction);
-    expressServer.post(apiRoutes.open.registerInvitedUser, registerInvitedUserAction);
+    addEndpoint(apiRoutes.open.loginUser, logInUserAction, { isPost: true });
+    addEndpoint(apiRoutes.open.registerUser, registerUserAction);
+    addEndpoint(apiRoutes.open.registerInvitedUser, registerInvitedUserAction);
 
     // misc
     addEndpoint('/get-current-user', getCurrentUserAction);
     addEndpoint('/get-current-course-item-code', getCurrentCourseItemCodeAction);
-    expressServer.get('/misc/get-practise-question', getPractiseQuestionAction);
-    expressServer.post('/misc/save-user-data', saveUserDataAction);
-    expressServer.post('/misc/request-change-password', requestChangePasswordAction);
-    expressServer.post('/misc/set-new-password', changePasswordAction);
-    expressServer.get('/misc/get-registration-link', getRegistrationLinkAction);
-    expressServer.post(apiRoutes.misc.logoutUser, logOutUserAction);
+    addEndpoint('/misc/get-practise-question', getPractiseQuestionAction);
+    addEndpoint('/misc/save-user-data', saveUserDataAction, { isPost: true });
+    addEndpoint('/misc/request-change-password', requestChangePasswordAction, { isPost: true });
+    addEndpoint('/misc/set-new-password', changePasswordAction, { isPost: true });
+    addEndpoint('/misc/get-registration-link', getRegistrationLinkAction);
+    addEndpoint(apiRoutes.misc.logoutUser, logOutUserAction, { isPost: true });
     addEndpoint(apiRoutes.misc.getJobTitles, getJobTitlesAction);
     addEndpoint(apiRoutes.misc.getDailyTip, getDailyTipAction);
+    addEndpoint("/organizations/get-organizations", getOrganizationsAction);
 
     // user management
     addEndpoint(apiRoutes.userManagement.getEditUserData, getEditUserDataAction);
@@ -101,28 +101,28 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.userManagement.inviteUser, inviteUserAction, { isPost: true });
     addEndpoint(apiRoutes.userManagement.deleteUser, deleteUserAction, { isPost: true });
     addEndpoint(apiRoutes.userManagement.upadateUser, updateUserAction, { isPost: true });
+    addEndpoint('/file/upload-avatar', uploadAvatarFileAction, { isPost: true });
 
     // signup
     addEndpoint(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction, { isPost: true });
     addEndpoint(apiRoutes.signup.getSignupData, getSignupDataAction);
     addEndpoint(apiRoutes.signup.getUserPersonalityData, getUserPersonalityDataAction);
 
-    // file
-    expressServer.post('/file/upload-avatar', uploadAvatarFileAction);
-
-    // data
-    expressServer.get("/data/get-overview-page-dto", getAsyncActionHandler(getOverviewPageDTOAction));
+    // home
+    addEndpoint("/data/get-overview-page-dto", getOverviewPageDTOAction);
+    addEndpoint("/questions/answer-practise-question", answerPractiseQuestionAction, { isPost: true });
 
     // player
-    expressServer.post('/player/get-player-data', getPlayerDataAction);
-    expressServer.post('/player/save-video-playback-sample', saveVideoPlaybackSampleAction);
-    expressServer.post('/player/get-course-items', getCourseItemsAction);
+    addEndpoint('/player/get-player-data', getPlayerDataAction);
+    addEndpoint('/player/save-video-playback-sample', saveVideoPlaybackSampleAction, { isPost: true });
+    addEndpoint('/player/get-course-items', getCourseItemsAction);
+    addEndpoint("/questions/answer-video-question", answerVideoQuestionAction, { isPost: true });
 
     // users
     addEndpoint(apiRoutes.learning.getCourseProgressData, getCourseProgressDataAction);
 
     // course
-    expressServer.post("/course/set-course-mode", setCourseTypeAction);
+    addEndpoint("/course/set-course-mode", setCourseTypeAction, { isPost: true });
     addEndpoint(apiRoutes.course.getAdminCourseList, getAdminCourseListAction);
     addEndpoint(apiRoutes.course.startCourse, startCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.getCourseEditData, getCourseEditDataAction);
@@ -145,21 +145,13 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.questions.getQuestionEditData, getQuestionEditDataAction);
     addEndpoint(apiRoutes.questions.saveQuestion, saveQuestionAction, { isPost: true });
 
-    // organizations
-    expressServer.get("/organizations/get-organizations", getAsyncActionHandler(getOrganizationsAction));
-
     // exam
-    expressServer.get("/exam/get-exam-results", getExamResultsAction);
+    addEndpoint("/exam/get-exam-results", getExamResultsAction);
     addEndpoint(apiRoutes.exam.getExamEditData, getExamEditDataAction);
     addEndpoint(apiRoutes.exam.saveExam, saveExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.createExam, createExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.deleteExam, deleteExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.answerExamQuestion, answerExamQuestionAction, { isPost: true });
-
-    // question answer
-    expressServer.post("/questions/answer-video-question", answerVideoQuestionAction);
-    expressServer.post("/questions/answer-exam-question", answerExamQuestionAction);
-    expressServer.post("/questions/answer-practise-question", answerPractiseQuestionAction);
 
     // 404 - no match
     expressServer.use((req, res) => {

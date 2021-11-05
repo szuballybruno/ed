@@ -48,7 +48,6 @@ export const VideoQuestionnaire = (props: {
             correctAnswerIds={answerResult?.correctAnswerIds ?? []}
             loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
             question={question}
-            selectedAnswerIds={answerResult?.givenAnswerIds ?? []}
             {...css} />
 
         <Flex display={isAnswered ? undefined : "none"} justify="flex-end">

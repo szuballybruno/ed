@@ -62,8 +62,8 @@ export const dbSchema = {
         "user_activity_view",
         "user_activity_flat_view",
         "exam_result_view",
-        // "practise_question_view",
-        // "daily_tip_view"
+        "practise_question_view",
+        "daily_tip_view"
     ],
 
     functionScripts: [

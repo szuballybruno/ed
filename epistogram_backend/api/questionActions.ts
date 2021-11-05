@@ -9,16 +9,15 @@ import { answerVideoQuestionAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, getAsyncActionHandler, throwNotImplemented, withValueOrBadRequest } from "../utilities/helpers";
 
-export const answerVideoQuestionAction = getAsyncActionHandler(async (req: Request) => {
+export const answerVideoQuestionAction = async (params: ActionParamsType) => {
 
-    const dto = withValueOrBadRequest<AnswerQuestionDTO>(req.body);
+    const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
     const answerIds = withValueOrBadRequest<number[]>(dto.answerIds);
     const questionId = withValueOrBadRequest<number>(dto.questionId, "number");
     const answerSessionId = withValueOrBadRequest<number>(dto.answerSessionId, "number");
 
-    throwNotImplemented();
     return answerVideoQuestionAsync(answerSessionId, questionId, answerIds);
-});
+};
 
 export const getQuestionEditDataAction = async (params: ActionParamsType) => {
 

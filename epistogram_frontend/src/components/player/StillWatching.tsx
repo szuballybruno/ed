@@ -1,7 +1,7 @@
 import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from "@mui/icons-material";
 import { useState } from "react";
 import { hasValue } from "../../frontendHelpers";
-import {QuestionnaierAnswerMinimal} from "../universal/QuestionnaireAnswer";
+import { QuestionnaierAnswerMinimal } from "../universal/QuestionnaireAnswerMinimal";
 import { QuestionnaireLayout } from "../universal/QuestionnaireLayout";
 import classes from "./stillWatching.module.scss"
 
@@ -31,7 +31,7 @@ export const StillWatching = (props: { onClose: () => void, optionIndex: number 
         display: "flex",
         flexDirection: "row",
     }} loadingProps={{ loadingState: "success" }}
-        title={`Kérlek válaszd ki a ${correctOption.displayName}!`} buttonsEnabled={true}>
+        title={`Kérlek válaszd ki a ${correctOption.displayName}!`} contentClickable={true}>
         {options
             .map((option, index) => <QuestionnaierAnswerMinimal
                 key={index}

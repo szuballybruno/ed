@@ -20,13 +20,12 @@ export const answerExamQuestionAction = async (params: ActionParamsType) => {
     return answerExamQuestionAsync(questionAnswerDTO);
 };
 
-export const getExamResultsAction = getAsyncActionHandler(async (req: Request) => {
+export const getExamResultsAction = async (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-    const answerSessionId = withValueOrBadRequest<number>(req.query.answerSessionId, "number");
+    const answerSessionId = withValueOrBadRequest<number>(params.req.query.answerSessionId, "number");
 
-    return getExamResultsAsync(userId, answerSessionId);
-});
+    return getExamResultsAsync(params.userId, answerSessionId);
+};
 
 export const getExamEditDataAction = async (params: ActionParamsType) => {
 

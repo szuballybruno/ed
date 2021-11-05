@@ -1,21 +1,23 @@
-import { Request } from "express";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
-import { getUserIdFromRequest } from "../services/authenticationService";
+import { getCurrentCourseItemsAsync } from "../services/courseService";
 import { getPlayerDataAsync, saveVideoPlaybackSample } from "../services/playerService";
-import { getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
 
-export const saveVideoPlaybackSampleAction = getAsyncActionHandler((req: Request) => {
+export const saveVideoPlaybackSampleAction = (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-    const dto = withValueOrBadRequest<VideoPlaybackSampleDTO>(req.body);
+    const dto = withValueOrBadRequest<VideoPlaybackSampleDTO>(params.req.body);
 
-    return saveVideoPlaybackSample(userId, dto);
-});
+    return saveVideoPlaybackSample(params.userId, dto);
+};
 
-export const getPlayerDataAction = getAsyncActionHandler((req: Request) => {
+export const getPlayerDataAction = (params: ActionParamsType) => {
 
-    const userId = getUserIdFromRequest(req);
-    const descriptorCode = withValueOrBadRequest<string>(req.query.descriptorCode);
+    const descriptorCode = withValueOrBadRequest<string>(params.req.query.descriptorCode);
 
-    return getPlayerDataAsync(userId, descriptorCode);
-});
+    return getPlayerDataAsync(params.userId, descriptorCode);
+};
+
+export const getCourseItemsAction = async (params: ActionParamsType) => {
+
+    return getCurrentCourseItemsAsync(params.userId);
+};

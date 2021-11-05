@@ -1,4 +1,4 @@
-import { backendUrl } from "../Environemnt";
+import { serverUrl } from "../Environemnt";
 import { postFileAsync } from "./httpClient";
 
 const mbToByte = 1000000;
@@ -11,7 +11,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
     const trimmedUrlEnding = urlEnding.substring(0, 1) === "/"
         ? urlEnding.substring(1)
         : urlEnding;
-    const url = backendUrl + trimmedUrlEnding;
+    const url = serverUrl + trimmedUrlEnding;
     const bytesToBeUploaded = file.size;
     const chunksCount = Math.ceil(bytesToBeUploaded / maxChunkSizeBytes);
 

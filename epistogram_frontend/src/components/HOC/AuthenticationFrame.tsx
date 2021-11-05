@@ -1,6 +1,6 @@
 import { createContext, useEffect } from "react";
 import { hotjar } from "react-hotjar";
-import { oneSignalAppId, verboseLogging } from "../../Environemnt";
+import { isLocalhost, oneSignalAppId, verboseLogging } from "../../Environemnt";
 import { UserDTO } from "../../models/shared_models/UserDTO";
 import { AuthenticationStateType, useUserFetching } from "../../services/authenticationService";
 import { useRenewUserSessionPooling } from "../../services/openEndpointService";
@@ -18,7 +18,11 @@ export const AuthenticationFrame = (props) => {
     setTheme("nextGenTheme");
 
     // initialize hotjar
-    hotjar.initialize(2675412, 6)
+    if (!isLocalhost) {
+
+        console.log("Initing hotjar");
+        hotjar.initialize(2675412, 6)
+    }
 
     // initialzie OneSignal
     // This appId only work on dev

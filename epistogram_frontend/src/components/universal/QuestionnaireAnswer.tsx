@@ -5,22 +5,26 @@ import { EpistoButton } from './EpistoButton';
 export const QuestionnaierAnswer = (props: {
     children: ReactNode,
     onClick: () => void,
+    isSelected: boolean,
     isIncorrect: boolean,
     isCorrect: boolean
 } & BoxProps) => {
 
-    const { children, onClick, isIncorrect, isCorrect, ...css } = props;
+    const { children, onClick, isSelected, isIncorrect, isCorrect, ...css } = props;
 
-    const getBg = () => {
+    const colors = (() => {
 
         if (isIncorrect)
-            return "#fa6767";
+            return { bg: "#fa6767", fg: "black" };
 
         if (isCorrect)
-            return "#7cf25e";
+            return { bg: "#7cf25e", fg: "black" };
 
-        return "white";
-    }
+        if (isSelected)
+            return { bg: "var(--deepBlue)", fg: "white" };
+
+        return { bg: "white", fg: "black" };
+    })();
 
     return <Box {...css}>
         <EpistoButton
@@ -28,39 +32,12 @@ export const QuestionnaierAnswer = (props: {
             variant="outlined"
             onClick={() => onClick()}
             style={{
-                background: getBg(),
+                background: colors.bg,
+                color: colors.fg,
                 borderRadius: "0",
                 borderWidth: "2px"
             }}>
             {children}
         </EpistoButton>
-    </Box>
-}
-
-export const QuestionnaierAnswerMinimal = (props: {
-    children: ReactNode,
-    onClick: () => void,
-    isIncorrect: boolean,
-    isCorrect: boolean
-} & BoxProps) => {
-
-    const { children, onClick, isIncorrect, isCorrect, ...css } = props;
-
-    // const getBg = () => {
-
-    //     if (isIncorrect)
-    //         return "#fa6767";
-
-    //     if (isCorrect)
-    //         return "#7cf25e";
-
-    //     return "white";
-    // }
-
-    return <Box {...css}>
-        <div
-            onClick={() => onClick()}>
-            {children}
-        </div>
     </Box>
 }
