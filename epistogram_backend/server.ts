@@ -22,7 +22,8 @@ import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { getAuthMiddleware, getCORSMiddleware } from './services/middlewareService';
 import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
-import { ActionParamsType, EndpointOptionsType, getAsyncActionHandler, getAsyncActionHandlerNew } from './utilities/helpers';
+import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
+import { getAsyncActionHandler } from './utilities/helpers';
 import './utilities/jsExtensions';
 
 // initialize env
@@ -44,25 +45,7 @@ const initializeAsync = async () => {
     log("Initializing express...");
     const expressServer = express();
 
-    const addEndpoint = (path: string, action: (params: ActionParamsType) => Promise<any>, options?: EndpointOptionsType) => {
-
-        const opts = options
-            ? options
-            : {
-                isPost: false,
-                isPublic: false
-            } as EndpointOptionsType;
-
-        const wrappedSyncAction = getAsyncActionHandlerNew(action, opts);
-
-        if (opts.isPost) {
-
-            expressServer.post(path, wrappedSyncAction);
-        } else {
-
-            expressServer.get(path, wrappedSyncAction);
-        }
-    }
+    const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) => addAPIEndpoint(expressServer, path, action, opt);
 
     //
     // add middlewares
