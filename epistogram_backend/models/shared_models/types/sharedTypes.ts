@@ -19,6 +19,8 @@ export type CourseItemType = "video" | "exam";
 
 export type CourseItemStateType = "completed" | "locked" | "current" | "available";
 
+export type SessionActivityType = "login" | "logout" | "generic";
+
 export type CourseModeType = "beginner" | "advanced";
 
 export const UserRoleEnum = {
