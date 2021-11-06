@@ -20,7 +20,7 @@ export const answerExamQuestionAction = getAsyncActionHandler(async (req: Reques
     const userId = getUserIdFromRequest(req);
     const questionAnswerDTO = withValueOrBadRequest<QuestionAnswerDTO>(req.body);
 
-    return answerExamQuestionAsync(questionAnswerDTO);
+    return answerExamQuestionAsync(userId, questionAnswerDTO);
 });
 
 export const getExamResultsAction = getAsyncActionHandler(async (req: Request) => {
