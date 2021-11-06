@@ -40,7 +40,8 @@ import { UserSignupCompletedView } from "../../models/views/UserSignupCompletedV
 import { VideoCompletedView } from "../../models/views/VideoCompletedView";
 import { VideoProgressView } from "../../models/views/VideoProgressView";
 
-// asd
+// asdasdasd
+// adsasdasds
 export const dbSchema = {
 
     viewScripts: [
