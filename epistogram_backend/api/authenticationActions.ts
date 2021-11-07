@@ -3,8 +3,9 @@ import { NextFunction, Request, Response } from "express";
 import { ChangePasswordDTO } from "../models/shared_models/SetNewPasswordDTO";
 import { changePasswordAsync, getUserIdFromRequest, logInUser, logOutUserAsync, renewUserSessionAsync, setAuthCookies } from "../services/authenticationService";
 import { getCurrentUser } from "../services/userService";
+import { saveUserSessionActivityAsync } from "../services/userSessionActivity";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, getAsyncActionHandler, TypedError, withValueOrBadRequest } from "../utilities/helpers";
+import { TypedError, getAsyncActionHandler, withValueOrBadRequest, ActionParamsType } from "../utilities/helpers";
 
 export const renewUserSessionAction = async (params: ActionParamsType) => {
 
@@ -38,7 +39,11 @@ export const changePasswordAction = getAsyncActionHandler(async (req: Request) =
 
 export const getCurrentUserAction = async (params: ActionParamsType) => {
 
-    return getCurrentUser(params.req);
+    const currentUser = await getCurrentUser(params.req);
+
+    await saveUserSessionActivityAsync(currentUser.id, "generic");
+
+    return currentUser;
 };
 
 export const logOutUserAction = getAsyncActionHandler(async (req: Request, res: Response, next: NextFunction) => {

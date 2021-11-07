@@ -20,6 +20,7 @@ export const translatableTexts = {
 
     routeTitles: {
         login: "Bejelentkezés",
+        underMaintanence: "Under maintanence",
         registration: "Regisztráció",
         setNewPassword: "Új jelszó beállítása",
         homePage: "Kezdőlap",
