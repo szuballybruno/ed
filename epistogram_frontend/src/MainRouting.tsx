@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import { Route, Switch } from "react-router-dom";
 import AdminPage from "./components/administration/AdminPage";
@@ -11,9 +12,11 @@ import { PlayerPage } from "./components/player/PlayerPage";
 import { RegistrationPage } from "./components/RegistrationPage";
 import { SetNewPasswordPage } from "./components/SetNewPasswordPage";
 import { SignupPage } from "./components/signup/SignupPage";
+import { UnderMaintanence } from "./components/UnderMaintanence";
 import { ProtectedRoute } from "./components/universal/ProtectedRoute";
 import { UserSettingsPage } from "./components/userSettings/UserSettingsPage";
 import { applicationRoutes } from "./configuration/applicationRoutes";
+import { isUnderMaintenance } from "./Environemnt";
 import { ApplicationRoute } from "./models/types";
 
 export const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
@@ -26,6 +29,9 @@ export const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
 export const MainRouting = () => {
 
     return <Switch>
+
+        {/* under maintanence */}
+        {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
 
         {/* unprotected paths  */}
         <Route path={applicationRoutes.loginRoute.route} component={LoginScreen} />

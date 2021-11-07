@@ -26,7 +26,8 @@ const environemnts = [
         branchName: "demo"
     },
     {
-        branchName: "dev"
+        branchName: "dev",
+        isUnderMaintenance: false
     }
 ]
 
@@ -43,7 +44,10 @@ removeAllFilesInFolder(outputDirectoryPath);
 environemnts
     .forEach(environemnt => {
 
-        const replaced = replaceAll(pipelineText, "$BRANCH_NAME$", environemnt.branchName);
+        let replaced = pipelineText;
+
+        replaced = replaceAll(replaced, "$BRANCH_NAME$", environemnt.branchName);
+        replaced = replaceAll(replaced, "$IS_UNDER_MAINTENANCE$", !!environemnt.isUnderMaintenance);
 
         fs.writeFileSync(`${outputDirectoryPath}/${environemnt.branchName}_pipeline.yml`, replaced)
     });
