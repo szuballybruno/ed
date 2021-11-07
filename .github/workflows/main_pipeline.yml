@@ -61,7 +61,7 @@ jobs:
       - name: Set .env additional variables
         run: |
           echo "" >> ./config.env
-          echo "IS_UNDER_MAINTENANCE=false" >> ./config.env
+          echo "IS_UNDER_MAINTENANCE=true" >> ./config.env
           cat ./config.env
         working-directory: ./main_repository/epistogram_backend
 
@@ -99,7 +99,7 @@ jobs:
         run: |
           echo "" >> ./.env
           echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
-          echo "REACT_APP_UNDER_MAINTENANCE=false" >> ./.env
+          echo "REACT_APP_UNDER_MAINTENANCE=true" >> ./.env
         working-directory: ./main_repository/epistogram_frontend
 
       - name: Build frontend container

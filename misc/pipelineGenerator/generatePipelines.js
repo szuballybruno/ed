@@ -20,14 +20,14 @@ const removeAllFilesInFolder = (directoryPath) => {
 
 const environemnts = [
     {
-        branchName: "main"
+        branchName: "main",
+        isUnderMaintenance: true
     },
     {
         branchName: "demo"
     },
     {
-        branchName: "dev",
-        isUnderMaintenance: true
+        branchName: "dev"
     }
 ]
 
