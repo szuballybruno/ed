@@ -59,6 +59,7 @@ export const dbSchema = {
         "user_activity_flat_view",
         "practise_question_view",
         "daily_tip_view",
+        "user_session_activity_view",
         "user_session_view"
     ],
 
