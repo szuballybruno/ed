@@ -60,7 +60,8 @@ jobs:
 
       - name: Set .env additional variables
         run: |
-          echo "\nIS_UNDER_MAINTENANCE=$IS_UNDER_MAINTENANCE$" >> ./config.env
+          echo "" >> ./config.env
+          echo "IS_UNDER_MAINTENANCE=$IS_UNDER_MAINTENANCE$" >> ./config.env
           cat ./config.env
         working-directory: ./$BRANCH_NAME$_repository/epistogram_backend
 
@@ -96,8 +97,9 @@ jobs:
 
       - name: Append additional values to .env file 
         run: |
-          echo "\nREACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
-          echo "\nREACT_APP_UNDER_MAINTENANCE=$IS_UNDER_MAINTENANCE$" >> ./.env
+          echo "" >> ./.env
+          echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
+          echo "REACT_APP_UNDER_MAINTENANCE=$IS_UNDER_MAINTENANCE$" >> ./.env
         working-directory: ./$BRANCH_NAME$_repository/epistogram_frontend
 
       - name: Build frontend container
