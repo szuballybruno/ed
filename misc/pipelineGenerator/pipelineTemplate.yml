@@ -61,6 +61,7 @@ jobs:
       - name: Set .env additional variables
         run: |
           echo "IS_UNDER_MAINTENANCE=$IS_UNDER_MAINTENANCE$" >> ./config.env
+          cat ./config.env
         working-directory: ./$BRANCH_NAME$_repository/epistogram_backend
 
       - name: Build backend container
