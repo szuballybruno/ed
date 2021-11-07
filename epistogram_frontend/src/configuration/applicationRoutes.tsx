@@ -10,6 +10,11 @@ export const applicationRoutes = {
         route: "/login"
     },
 
+    underMaintanenceRoute: {
+        title: translatableTexts.routeTitles.underMaintanence,
+        route: "/under-maintanence"
+    },
+
     registrationRoute: {
         title: translatableTexts.routeTitles.registration,
         route: "/registration"

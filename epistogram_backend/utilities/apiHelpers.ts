@@ -109,6 +109,10 @@ export const respondError = (res: Response, msg: string, type: ErrorType) => {
             respond(res, 500, errorDTO);
             break;
 
+        case "under maintenance":
+            respond(res, 503, errorDTO);
+            break;
+
         default:
             break;
     }

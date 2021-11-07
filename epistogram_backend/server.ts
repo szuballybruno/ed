@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import express from 'express';
+import express, { Request, Response, response } from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
@@ -19,11 +19,11 @@ import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideo
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
-import { getAuthMiddleware, getCORSMiddleware } from './services/middlewareService';
+import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/middlewareService';
 import { log, logError } from "./services/misc/logger";
 import { staticProvider } from './staticProvider';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
-import { getAsyncActionHandler } from './utilities/helpers';
+import { getAsyncActionHandler, TypedError } from './utilities/helpers';
 import './utilities/jsExtensions';
 
 // initialize env
@@ -47,14 +47,12 @@ const initializeAsync = async () => {
 
     const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) => addAPIEndpoint(expressServer, path, action, opt);
 
-    //
     // add middlewares
-    //
-
     expressServer.use(getCORSMiddleware());
     expressServer.use(bodyParser.json({ limit: '32mb' }));
     expressServer.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
     expressServer.use(fileUpload());
+    expressServer.use(getUnderMaintanenceMiddleware());
     expressServer.use(getAuthMiddleware());
 
     // open routes

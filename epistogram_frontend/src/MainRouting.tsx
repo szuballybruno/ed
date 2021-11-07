@@ -30,9 +30,6 @@ export const MainRouting = () => {
 
     return <Switch>
 
-        {/* under maintanence */}
-        {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
-
         {/* unprotected paths  */}
         <Route path={applicationRoutes.loginRoute.route} component={LoginScreen} />
         <Route path={applicationRoutes.setNewPasswordRoute.route} component={SetNewPasswordPage} />

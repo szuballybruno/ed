@@ -58,6 +58,11 @@ jobs:
           cp -fr ./config/main.env ./config.env 
         working-directory: ./main_repository/epistogram_backend
 
+      - name: Set .env additional variables
+        run: |
+          echo "IS_UNDER_MAINTENANCE=false" >> ./config.env
+        working-directory: ./main_repository/epistogram_backend
+
       - name: Build backend container
         run: |
           docker build -t $BACKEND_IMAGE_NAME .

@@ -27,7 +27,7 @@ const environemnts = [
     },
     {
         branchName: "dev",
-        isUnderMaintenance: false
+        isUnderMaintenance: true
     }
 ]
 

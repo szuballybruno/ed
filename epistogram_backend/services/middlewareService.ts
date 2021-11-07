@@ -46,6 +46,14 @@ export const getAuthMiddleware = () => getAsyncMiddlewareHandler(async (req: Req
     log(`Request [${currentRoutePath}] is permitted. UserId: ${user.id}`);
 });
 
+export const getUnderMaintanenceMiddleware = () => getAsyncMiddlewareHandler(async (req, res, next) => {
+
+    if (!staticProvider.globalConfig.misc.isUnderMaintanence)
+        return;
+
+    throw new TypedError("Server is under maintanence!", "under maintenance")
+});
+
 export const getCORSMiddleware = () => cors({
     origin: staticProvider.globalConfig.misc.frontendUrl,
     credentials: true,

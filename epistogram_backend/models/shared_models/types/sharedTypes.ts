@@ -2,7 +2,7 @@ import { type } from "os";
 
 export type InvitationTokenPayload = { userId: number };
 
-export type HTTPErrorType = "forbidden" | "internal server error" | "bad request" | "http error";
+export type HTTPErrorType = "forbidden" | "internal server error" | "bad request" | "http error" | "under maintenance";
 
 export type MiscErrorType = "passwordInvalid" | "unknown";
 
