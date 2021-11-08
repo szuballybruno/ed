@@ -27,9 +27,4 @@ export class Answer {
     @OneToMany(() => AnswerGivenAnswerBridge, x => x.answer)
     @JoinColumn()
     givenAnswerBridges: AnswerGivenAnswerBridge[];
-
-    // practise question
-    @ManyToOne(_ => PractiseQuestionView, x => x.answers)
-    @JoinColumn({ name: "questionId" })
-    practiseQuestionView: PractiseQuestionView;
 }

@@ -9,18 +9,29 @@ import { Question } from "../entity/Question";
 export class PractiseQuestionView {
 
     @ViewColumn()
-    id: number;
+    questionId: number;
 
     @ViewColumn()
     userId: number;
 
-    // answers 
-    @OneToMany(_ => Answer, x => x.practiseQuestionView)
-    @JoinColumn()
-    answers: Answer[];
+    @ViewColumn()
+    latestGivenAnswerId: number;
 
-    // question 
-    @OneToOne(_ => Question, x => x.practiseQuestionView)
-    @JoinColumn({ name: "id" })
-    question: Question;
+    @ViewColumn()
+    givenAnswerCount: number;
+
+    @ViewColumn()
+    practiseAnswerCount: number;
+
+    @ViewColumn()
+    questionText: string;
+
+    @ViewColumn()
+    questionTypeId: number;
+
+    @ViewColumn()
+    answerId: number;
+
+    @ViewColumn()
+    answerText: string;
 }

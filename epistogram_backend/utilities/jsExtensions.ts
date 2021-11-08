@@ -13,7 +13,7 @@ declare global {
         single(func: (item: T) => boolean): T;
         first(func?: (item: T) => boolean): T;
         last(func: (item: T) => boolean): T;
-        firstOrNull(func: (item: T) => boolean): T | null;
+        firstOrNull(func?: (item: T) => boolean): T | null;
     }
 }
 
@@ -51,7 +51,10 @@ Array.prototype.groupBy = function <T>(func: (item: T) => any) {
     return groups;
 }
 
-Array.prototype.firstOrNull = function <T>(func: (item: T) => T) {
+Array.prototype.firstOrNull = function <T>(func?: (item: T) => boolean) {
+
+    if (!func)
+        func = (x: T) => true;
 
     const filtered = this.filter(func);
     const first = filtered[0];

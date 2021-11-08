@@ -25,10 +25,6 @@ export class Question {
     @Column({ nullable: true, type: "double precision" })
     showUpTimeSeconds: number;
 
-    // practise question view
-    @OneToOne(_ => PractiseQuestionView, x => x.question)
-    practiseQuestionView: PractiseQuestionView;
-
     // category
     @Column({ nullable: true })
     categoryId: number;

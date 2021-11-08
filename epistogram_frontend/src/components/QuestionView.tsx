@@ -1,5 +1,5 @@
 import { FlexProps } from "@chakra-ui/react";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../models/shared_models/types/sharedTypes";
 import { LoadingFramePropsType } from "./HOC/LoadingFrame";
@@ -48,6 +48,14 @@ export const QuesitionView = (props: {
     }
 
     const isAnswered = correctAnswerIds.length > 0;
+
+    console.log(question.questionId);
+
+    useEffect(() => {
+
+        console.log("clear")
+        setSelectedAnswerIds([]);
+    }, [question.questionId]);
 
     return <QuestionnaireLayout
         contentClickable={!isAnswered}

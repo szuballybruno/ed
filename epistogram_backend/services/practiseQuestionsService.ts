@@ -1,8 +1,8 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
+import { PractiseQuestionDTO } from "../models/shared_models/PractiseQuestionDTO";
 import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
 import { staticProvider } from "../staticProvider";
-import { toQuestionDTO } from "./mappings";
 import { answerQuestionAsync } from "./questionAnswerService";
 
 export const getPractiseQuestionAsync = async (userId: number) => {
@@ -12,15 +12,30 @@ export const getPractiseQuestionAsync = async (userId: number) => {
         .getRepository(PractiseQuestionView)
         .createQueryBuilder("pq")
         .where("pq.userId = :userId", { userId })
-        .leftJoinAndSelect("pq.question", "q")
-        .leftJoinAndSelect("q.answers", "a")
         .getMany();
 
-    const questionView = questionViews[0];
-    if (!questionView)
+    if (!questionViews.any())
         return null;
 
-    return toQuestionDTO(questionView.question);
+    const questionGroup = questionViews
+        .groupBy(x => x.questionId)
+        .first();
+
+    const viewAsQuesiton = questionGroup.items.first();
+
+    const questionDTO = {
+        questionId: viewAsQuesiton.questionId,
+        questionText: viewAsQuesiton.questionText,
+        typeId: viewAsQuesiton.questionTypeId,
+        answers: questionGroup
+            .items
+            .map(x => ({
+                answerId: x.answerId,
+                answerText: x.answerText
+            }))
+    } as PractiseQuestionDTO;
+
+    return questionDTO;
 }
 
 export const answerPractiseQuestionAsync = async (userId: number, qu: AnswerQuestionDTO) => {
