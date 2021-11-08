@@ -45,7 +45,7 @@ LEFT JOIN public."answer_given_answer_bridge" AS "agab"
 ON "agab"."givenAnswerId" = "ga"."id"
 	AND "agab"."answerId" = "a"."id"
 
-WHERE "e"."id" = 2
+WHERE "e"."id" != 1
 
 ORDER BY 
 	"u"."id",
