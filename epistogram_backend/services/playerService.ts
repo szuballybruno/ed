@@ -9,6 +9,7 @@ import { staticProvider } from "../staticProvider";
 import { getCourseItemByCodeAsync, getCourseItemsAsync, getCurrentCourseItemsAsync, getExamDTOAsync, getUserCourseBridgeOrFailAsync, setCurrentCourse } from "./courseService";
 import { toVideoDTO } from "./mappings";
 import { createAnswerSessionAsync } from "./questionAnswerService";
+import { saveUserSessionActivityAsync } from "./userSessionActivity";
 import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
 import { getVideoByIdAsync, saveVideoPlaybackDataAsync } from "./videoService";
 
@@ -131,6 +132,9 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
     const isWatchedStateChanged = isCompletedBefore?.isCompleted !== isCompletedAfter?.isCompleted;
 
     const maxWathcedSeconds = await getMaxWatchedSeconds(userId, videoId);
+
+    // save user activity
+    await saveUserSessionActivityAsync(userId, "video");
 
     return {
         isWatchedStateChanged,

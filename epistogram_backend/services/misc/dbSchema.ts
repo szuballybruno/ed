@@ -23,6 +23,7 @@ import { TestParent } from "../../models/entity/TestParent";
 import { TestSubChild } from "../../models/entity/TestSubChild";
 import { User } from "../../models/entity/User";
 import { UserCourseBridge } from "../../models/entity/UserCourseBridge";
+import { UserSessionActivity } from "../../models/entity/UserSessionActivity";
 import { Video } from "../../models/entity/Video";
 import { VideoPlaybackData } from "../../models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "../../models/entity/VideoPlaybackSample";
@@ -43,7 +44,6 @@ import { VideoProgressView } from "../../models/views/VideoProgressView";
 import { ExamResultView } from "../../models/views/ExamResultView";
 import { SignupQuestionView } from "../../models/views/SignupQuestionView";
 
-// asd
 export const dbSchema = {
 
     viewScripts: [
@@ -63,7 +63,9 @@ export const dbSchema = {
         "user_activity_flat_view",
         "exam_result_view",
         "practise_question_view",
-        "daily_tip_view"
+        "daily_tip_view",
+        "user_session_activity_view",
+        "user_session_view"
     ],
 
     functionScripts: [
@@ -119,6 +121,7 @@ export const dbSchema = {
         JobTitle,
         DailyTip,
         DailyTipOccurrence,
-        QuestionType
+        QuestionType,
+        UserSessionActivity
     ]
 }

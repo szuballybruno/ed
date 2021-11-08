@@ -58,6 +58,13 @@ jobs:
           cp -fr ./config/demo.env ./config.env 
         working-directory: ./demo_repository/epistogram_backend
 
+      - name: Set .env additional variables
+        run: |
+          echo "" >> ./config.env
+          echo "IS_UNDER_MAINTENANCE=false" >> ./config.env
+          cat ./config.env
+        working-directory: ./demo_repository/epistogram_backend
+
       - name: Build backend container
         run: |
           docker build -t $BACKEND_IMAGE_NAME .
@@ -88,10 +95,11 @@ jobs:
           cp -fr ./config/demo.env ./.env 
         working-directory: ./demo_repository/epistogram_frontend
 
-      - name: Append version to .env file 
+      - name: Append additional values to .env file 
         run: |
-          echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`"
+          echo "" >> ./.env
           echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
+          echo "REACT_APP_UNDER_MAINTENANCE=false" >> ./.env
         working-directory: ./demo_repository/epistogram_frontend
 
       - name: Build frontend container

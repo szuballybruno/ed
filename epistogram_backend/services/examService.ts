@@ -11,12 +11,14 @@ import { unsetUsersCurrentCourseItemAsync } from "./courseService";
 import { toExamResultDTO } from "./mappings";
 import { answerQuestionAsync } from "./questionAnswerService";
 import { deleteQuesitonsAsync } from "./questionService";
+import { saveUserSessionActivityAsync } from "./userSessionActivity";
 
-export const answerExamQuestionAsync = (dto: AnswerQuestionDTO) => {
+export const answerExamQuestionAsync = async (userId: number, dto: AnswerQuestionDTO) => {
 
     // validation comes here 
 
-    // throwNotImplemented();
+    // save user activity
+    await saveUserSessionActivityAsync(userId, "exam");
 
     return answerQuestionAsync(
         dto.answerSessionId,

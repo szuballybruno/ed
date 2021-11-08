@@ -1,12 +1,18 @@
 import { Assignment, Business, People, Person, School, Settings, Subscriptions } from "@mui/icons-material";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { translatableTexts } from "../translatableTexts";
+import EventNoteIcon from '@mui/icons-material/EventNote';
 
 export const applicationRoutes = {
 
     loginRoute: {
         title: translatableTexts.routeTitles.login,
         route: "/login"
+    },
+
+    underMaintanenceRoute: {
+        title: translatableTexts.routeTitles.underMaintanence,
+        route: "/under-maintanence"
     },
 
     registrationRoute: {
@@ -174,6 +180,12 @@ export const applicationRoutes = {
             title: translatableTexts.routeTitles.settingsOverview,
             route: "/settings/preferences",
             icon: <Settings></Settings>,
+        },
+
+        developmentNotes: {
+            title: translatableTexts.routeTitles.developmentNotes,
+            route: "/settings/development-notes",
+            icon: <EventNoteIcon />
         },
 
         featurePreviewRoute: {

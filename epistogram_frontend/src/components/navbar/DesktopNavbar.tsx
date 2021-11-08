@@ -65,6 +65,11 @@ const DesktopNavbar = (props: {
             onClick: () => navigate(applicationRoutes.settingsRoute.featurePreviewRoute.route)
         },
         {
+            name: applicationRoutes.settingsRoute.developmentNotes.title,
+            icon: applicationRoutes.settingsRoute.developmentNotes.icon,
+            onClick: () => navigate(applicationRoutes.settingsRoute.developmentNotes.route)
+        },
+        {
             name: "Kijelentkezés",
             icon: <LogoutIcon></LogoutIcon>,
             color: "var(--mildRed)",

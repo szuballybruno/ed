@@ -26,6 +26,7 @@ export const RegistrationPage = () => {
     // invitation
     const [password, setPassword] = useState("");
     const [passwordCompare, setPasswordCompare] = useState("");
+    const [passwordError, setPasswordError] = useState<string | null>(null);
 
     const showErrorDialog = useShowErrorDialog("Hiba!");
     const { navigate } = useNavigation();
@@ -53,6 +54,22 @@ export const RegistrationPage = () => {
         catch (e) {
 
             showErrorDialog("Ismeretlen hiba történt, kérjük próbálkozzon újra!");
+        }
+    }
+
+    const validatePassowrd = () => {
+
+        if (password !== passwordCompare) {
+
+            setPasswordError("A jelszavak nem egyeznek!");
+        }
+        else if (password.length < 3) {
+
+            setPasswordError("A jelszó túl rövid!");
+        }
+        else {
+
+            setPasswordError(null);
         }
     }
 
@@ -118,6 +135,9 @@ export const RegistrationPage = () => {
                     label="Jelszó"
                     type="password"
                     value={password}
+                    error={!!passwordError}
+                    helperText={passwordError}
+                    onBlur={validatePassowrd}
                     onChange={x => setPassword(x.currentTarget.value)}
                     style={{ margin: "10px" }}></TextField>
 
@@ -126,6 +146,9 @@ export const RegistrationPage = () => {
                     type="password"
                     label="Jelszó mégegyszer"
                     value={passwordCompare}
+                    error={!!passwordError}
+                    helperText={passwordError}
+                    onBlur={validatePassowrd}
                     onChange={x => setPasswordCompare(x.currentTarget.value)}
                     style={{ margin: "10px" }}>
 
@@ -157,7 +180,7 @@ export const RegistrationPage = () => {
             <EpistoButton
                 onClick={handleRegistration}
                 variant="outlined"
-                isDisabled={!acceptPrivacyPolicy}
+                isDisabled={!acceptPrivacyPolicy || (isInvited && !!passwordError)}
                 style={{
                     width: "200px",
                     alignSelf: "center",

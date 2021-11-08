@@ -17,7 +17,7 @@ export const answerExamQuestionAction = async (params: ActionParamsType) => {
     const userId = getUserIdFromRequest(params.req);
     const questionAnswerDTO = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
 
-    return answerExamQuestionAsync(questionAnswerDTO);
+    return answerExamQuestionAsync(userId, questionAnswerDTO);
 };
 
 export const getExamResultsAction = async (params: ActionParamsType) => {

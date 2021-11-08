@@ -27,3 +27,4 @@ DROP TABLE IF EXISTS public.job_title CASCADE;
 DROP TABLE IF EXISTS public.daily_tip CASCADE;
 DROP TABLE IF EXISTS public.daily_tip_occurrence CASCADE;
 DROP TABLE IF EXISTS public.question_type CASCADE;
+DROP TABLE IF EXISTS public.user_session_activity CASCADE;

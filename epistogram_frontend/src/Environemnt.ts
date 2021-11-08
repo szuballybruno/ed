@@ -2,6 +2,7 @@ export const serverUrl = process.env.REACT_APP_SERVER_URL;
 export const assetStorageUrl = process.env.REACT_APP_CDN_URL;
 export const currentVersion = process.env.REACT_APP_CURRENT_VERSION;
 export const oneSignalAppId = process.env.REACT_APP_ONE_SIGNAL_APP_ID;
+export const isUnderMaintenance = process.env.REACT_APP_UNDER_MAINTENANCE === "true";
 
 export const isLocalhost = !currentVersion;
 export const currentOrigin = window.location.origin;

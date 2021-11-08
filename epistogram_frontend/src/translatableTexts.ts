@@ -20,6 +20,7 @@ export const translatableTexts = {
 
     routeTitles: {
         login: "Bejelentkezés",
+        underMaintanence: "Under maintanence",
         registration: "Regisztráció",
         setNewPassword: "Új jelszó beállítása",
         homePage: "Kezdőlap",
@@ -52,7 +53,8 @@ export const translatableTexts = {
 
         settings: "Beállítások",
         settingsOverview: "Beállítások",
-        featurePreview: "Várható funkciók"
+        featurePreview: "Várható funkciók",
+        developmentNotes: "Fejlesztési napló"
     },
 
     practiseQuestions: {

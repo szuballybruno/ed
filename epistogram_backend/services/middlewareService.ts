@@ -2,7 +2,8 @@ import cors from 'cors';
 import { Request } from 'express';
 import { apiRoutes, isOpenRoute } from '../models/shared_models/types/apiRoutes';
 import { staticProvider } from '../staticProvider';
-import { getAsyncMiddlewareHandler, TypedError } from '../utilities/helpers';
+import { getAsyncMiddlewareHandler } from '../utilities/apiHelpers';
+import { TypedError } from '../utilities/helpers';
 import { getRequestAccessTokenPayload } from './authenticationService';
 import { log } from './misc/logger';
 import { getUserById } from './userService';
@@ -43,6 +44,14 @@ export const getAuthMiddleware = () => getAsyncMiddlewareHandler(async (req: Req
     }
 
     log(`Request [${currentRoutePath}] is permitted. UserId: ${user.id}`);
+});
+
+export const getUnderMaintanenceMiddleware = () => getAsyncMiddlewareHandler(async (req, res, next) => {
+
+    if (!staticProvider.globalConfig.misc.isUnderMaintanence)
+        return;
+
+    throw new TypedError("Server is under maintanence!", "under maintenance")
 });
 
 export const getCORSMiddleware = () => cors({

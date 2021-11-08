@@ -2,7 +2,7 @@ import { type } from "os";
 
 export type InvitationTokenPayload = { userId: number };
 
-export type HTTPErrorType = "forbidden" | "internal server error" | "bad request" | "http error";
+export type HTTPErrorType = "forbidden" | "internal server error" | "bad request" | "http error" | "under maintenance";
 
 export type MiscErrorType = "passwordInvalid" | "unknown";
 
@@ -18,6 +18,8 @@ export type TaskStatusType = "assigned" | "inProgress" | "submitted" | "rejected
 export type CourseItemType = "video" | "exam";
 
 export type CourseItemStateType = "completed" | "locked" | "current" | "available";
+
+export type SessionActivityType = "login" | "logout" | "generic" | "video" | "exam";
 
 export type CourseModeType = "beginner" | "advanced";
 

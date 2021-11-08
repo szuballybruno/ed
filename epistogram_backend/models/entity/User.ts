@@ -9,6 +9,7 @@ import { Role } from "./Role";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
 import { UserCourseBridge } from "./UserCourseBridge";
+import { UserSessionActivity } from "./UserSessionActivity";
 import { Video } from "./Video";
 import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
@@ -133,4 +134,9 @@ export class User {
     @OneToMany(_ => UserCourseBridge, x => x.user)
     @JoinColumn()
     userCourseBridges: UserCourseBridge[];
+
+    // session activity 
+    @OneToMany(_ => UserSessionActivity, x => x.user)
+    @JoinColumn()
+    sessionActivity: UserSessionActivity;
 }

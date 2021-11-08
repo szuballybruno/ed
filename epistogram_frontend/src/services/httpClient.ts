@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
+import { applicationRoutes } from "../configuration/applicationRoutes";
 import { serverUrl } from "../Environemnt";
 import { getErrorTypeByHTTPCode, stringifyQueryObject, TypedError } from "../frontendHelpers";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
@@ -226,6 +227,11 @@ const handleHttpError = (error: any) => {
 
     const response = new HTTPResponse(error.response.status, error.response.data);
     const responseCode = response.code;
+
+    if (responseCode === 503) // under maintanence
+    {
+        window.location.href = window.location.origin + applicationRoutes.underMaintanenceRoute.route;
+    }
 
     if (responseCode !== 200) {
 

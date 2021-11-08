@@ -55,7 +55,8 @@ export class GlobalConfiguration {
         frontendUrl: getEnvConfigEntry("FRONTEND_URL"),
         isLocalhost: getEnvConfigEntry("IS_LOCALHOST") === "true",
         accessTokenCookieName: "accessToken",
-        refreshTokenCookieName: "refreshToken"
+        refreshTokenCookieName: "refreshToken",
+        isUnderMaintanence: getEnvConfigEntry("IS_UNDER_MAINTENANCE") === "true"
     }
 
     fileStorage = {
