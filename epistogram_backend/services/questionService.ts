@@ -138,8 +138,7 @@ export const deleteAnswersAsync = async (answerIds: number[]) => {
 
 export const saveQuestionAsync = async (questionId: number, dto: QuestionEditDataDTO) => {
 
-    if (dto.typeId === QuestionTypeEnum.singleAnswer && dto.answers.filter(x => x.isCorrect).length > 1)
-        throw new TypedError("Can't save multiple correct answers for an answer that allows only one correct answer!", "bad request");
+    const isMultiAnswer = dto.answers.filter(x => x.isCorrect).length > 1;
 
     // save quesiton data
     await staticProvider
@@ -148,7 +147,7 @@ export const saveQuestionAsync = async (questionId: number, dto: QuestionEditDat
         .save({
             id: dto.questionId,
             questionText: dto.questionText,
-            typeId: dto.typeId
+            typeId: isMultiAnswer ? QuestionTypeEnum.multipleAnswers : QuestionTypeEnum.singleAnswer
         });
 
     // save answers
