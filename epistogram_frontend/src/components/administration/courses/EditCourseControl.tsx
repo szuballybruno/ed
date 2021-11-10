@@ -277,7 +277,7 @@ export const EditCourseControl = (props: {
                 list={courseItems}
                 setList={handleSetReorderedCourseItems}
                 getKey={x => x.descriptorCode}
-                renderListItem={(item) => <Flex
+                renderListItem={(item, _, index) => <Flex
                     flex="1"
                     borderLeft={`5px solid var(--${item.type === "exam" ? "intenseOrange" : "deepBlue"})`}
                     p="10px"
@@ -286,6 +286,11 @@ export const EditCourseControl = (props: {
 
                     <Flex flexDirection={"column"} alignItems={"flex-start"}>
                         <Flex>
+
+                            {/* index */}
+                            <Typography style={{ marginRight: "10px" }}>
+                                {index + 1}
+                            </Typography>
 
                             {/* title */}
                             <Typography>
@@ -306,11 +311,25 @@ export const EditCourseControl = (props: {
                                 {item.questionCount}
                             </Typography>
                         </Flex>
-                        <Typography style={{
-                            fontSize: "0.8em"
-                        }}>
-                            {item.subTitle}
-                        </Typography>
+
+                        <Flex>
+                            {/* subtitle */}
+                            <Typography
+                                style={{
+                                    fontSize: "0.8em"
+                                }}>
+                                {item.subTitle}
+                            </Typography>
+
+                            {item.videoLength !== null && <Typography
+                                style={{
+                                    fontSize: "0.8em",
+                                    marginLeft: "5px",
+                                    color: item.videoLength ? "var(--deepGreen)" : "var(--mildRed)"
+                                }}>
+                                {"- "}{!!item.videoLength ? `${Math.round(item.videoLength)}s` : "Nincs feltoltott video"}
+                            </Typography>}
+                        </Flex>
                     </Flex>
 
 

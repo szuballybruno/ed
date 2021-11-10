@@ -68,4 +68,7 @@ export class CourseAdminDetailedView {
 
     @ViewColumn()
     itemQuestionCount: number;
+
+    @ViewColumn()
+    videoLength: number;
 }

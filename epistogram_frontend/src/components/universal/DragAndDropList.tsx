@@ -7,7 +7,7 @@ export const DragAndDropList = <T,>(props: {
     list: T[],
     setList: (list: T[]) => void,
     getKey: (item: T) => string,
-    renderListItem: (itme: T, snapshot: DraggableStateSnapshot) => ReactNode
+    renderListItem: (itme: T, snapshot: DraggableStateSnapshot, index: number) => ReactNode
 } & FlexProps) => {
 
     const { list, setList, getKey, renderListItem, ...css } = props;
@@ -58,7 +58,7 @@ export const DragAndDropList = <T,>(props: {
                                             </Box>
 
                                             {/* render list item */}
-                                            {renderListItem(listItem, snapshot)}
+                                            {renderListItem(listItem, snapshot, listItemIndex)}
                                         </Flex>
                                     )}
                                 </Draggable>

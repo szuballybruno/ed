@@ -13,6 +13,7 @@ FROM
 		"v"."subtitle" AS "itemSubtitle",
 		"v"."title" AS "itemTitle",
 		"v"."orderIndex" AS "itemOrderIndex",
+		"v"."lengthSeconds" AS "videoLength",
 		(SELECT encode(("v"."id" || '@video')::bytea, 'base64')) AS "itemCode",
 		(SELECT COUNT("q"."id") FROM public."question" AS "q" WHERE "q"."videoId" = "v"."id")::int AS "itemQuestionCount"
 	FROM public."course_admin_short_view" AS "casv"
@@ -28,6 +29,7 @@ FROM
 		"e"."subtitle" AS "itemSubtitle",
 		"e"."title" AS "itemTitle",
 		"e"."orderIndex" AS "itemOrderIndex",
+		NULL AS "videoLength",
 		(SELECT encode(("e"."id" || '@exam')::bytea, 'base64')) AS "itemCode",
 		(SELECT COUNT("q"."id") FROM public."question" AS "q" WHERE "q"."examId" = "e"."id")::int AS "itemQuestionCount"
 	FROM public."course_admin_short_view" AS "casv"

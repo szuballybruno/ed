@@ -8,4 +8,5 @@ export class CourseAdminItemShortDTO {
     descriptorCode: string;
     type: CourseItemType;
     questionCount: number;
+    videoLength: number;
 }

@@ -91,7 +91,8 @@ addMapperFunction<CourseAdminDetailedView, CourseAdminItemShortDTO>(CourseAdminD
     orderIndex: view.itemOrderIndex,
     descriptorCode: view.itemCode,
     type: view.isVideo ? "video" : "exam",
-    questionCount: view.itemQuestionCount
+    questionCount: view.itemQuestionCount,
+    videoLength: view.videoLength
 }));
 
 export const toUserDTO = (user: User) => {
