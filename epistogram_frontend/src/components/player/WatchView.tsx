@@ -24,6 +24,7 @@ import { TimeoutFrame, useTimeoutFrameLogic } from "../universal/TimeoutFrame";
 import { useNavigation } from "../../services/navigatior";
 import { VideoContent } from "./description/VideoContent";
 import Comments from "./description/Comments";
+import { EpistoHeader } from "../EpistoHeader";
 
 export const WatchView = (props: {
     video: VideoDTO,
@@ -259,9 +260,8 @@ export const WatchView = (props: {
             </VideoPlayer>
         </Flex>
 
-        {/* under video infoasd */}
+        {/* under video info */}
         <Box>
-            {/* <GeneratedInfo videoLength={video!.length!} videoTitle={video!.title!} /> */}
             {!isDesktopView && <CourseItemSelector
                 courseId={courseId}
                 mode={courseMode}
@@ -275,9 +275,13 @@ export const WatchView = (props: {
                 flexWrap="wrap"
                 align="center">
 
-                <Typography variant={"h6"}>
-                    {video!.title}
-                </Typography>
+                <Flex direction="column">
+                    <Typography variant={"h6"}>
+                        {video!.title}
+                    </Typography>
+
+                    <EpistoHeader variant="sub" text={video!.subTitle} />
+                </Flex>
 
                 <SegmentedButton paging={descCommentPaging}></SegmentedButton>
             </Flex>

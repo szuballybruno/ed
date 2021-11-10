@@ -23,6 +23,8 @@ import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { FloatChip } from "../../universal/FloatChip";
 import { AdminListEditHeader } from "../AdminListEditHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import AccessibilityIcon from '@mui/icons-material/Accessibility';
+import { getRoleName } from "../../../frontendHelpers";
 
 export const AdminUserListSubpage = () => {
 
@@ -132,6 +134,50 @@ export const AdminUserListSubpage = () => {
         },
     ]
 
+    const getChips = (user: AdminPageUserDTO) => {
+
+        const chips = [] as { name: string, icon: ReactNode }[];
+
+        if (!user.userActivity.canAccessApplication)
+            chips.push({
+                name: "Nincs hozzáférése az applikációhoz",
+                icon: <DesktopAccessDisabledIcon />
+            });
+
+        if (user.isPendingInvitation)
+            chips.push({
+                name: "A meghívás elfogadásra vár",
+                icon: <Email />
+            });
+
+        chips.push(
+            {
+                name: user.email,
+                icon: <AlternateEmailIcon />
+            });
+
+        chips.push(
+            {
+                name: user.organizationName,
+                icon: <ApartmentTwoTone />
+            });
+
+        chips.push(
+            {
+                name: getRoleName(user.roleId),
+                icon: <AccessibilityIcon />
+            });
+
+        if (user.jobTitle)
+            chips.push(
+                {
+                    name: user.jobTitle.name,
+                    icon: <WorkTwoTone />
+                })
+
+        return chips;
+    }
+
     return <LoadingFrame loadingState={usersStatus} error={usersError} className="whall">
 
         {/* admin header */}
@@ -150,39 +196,6 @@ export const AdminUserListSubpage = () => {
                 {users
                     .map((user, index) => {
 
-                        const chips = [] as { name: string, icon: ReactNode }[];
-
-                        if (!user.userActivity.canAccessApplication)
-                            chips.push({
-                                name: "Nincs hozzáférése az applikációhoz",
-                                icon: <DesktopAccessDisabledIcon />
-                            });
-
-                        if (user.isPendingInvitation)
-                            chips.push({
-                                name: "A meghívás elfogadásra vár",
-                                icon: <Email />
-                            });
-
-                        chips.push(
-                            {
-                                name: user.email,
-                                icon: <AlternateEmailIcon />
-                            });
-
-                        chips.push(
-                            {
-                                name: user.organizationName,
-                                icon: <ApartmentTwoTone />
-                            });
-
-                        if (user.jobTitle)
-                            chips.push(
-                                {
-                                    name: user.jobTitle.name,
-                                    icon: <WorkTwoTone />
-                                })
-
                         return <FlexListItem
                             key={index}
                             thumbnailContent={<ProfileImage
@@ -196,7 +209,7 @@ export const AdminUserListSubpage = () => {
                             midContent={<FlexListTitleSubtitle
                                 title={`${user.lastName} ${user.firstName}`}
                                 subTitle={<Flex wrap="wrap">
-                                    {chips
+                                    {getChips(user)
                                         .map((chip, index) => <FloatChip
                                             name={chip.name}
                                             icon={chip.icon}

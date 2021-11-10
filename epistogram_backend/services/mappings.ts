@@ -139,7 +139,8 @@ export const toAdminPageUserDTO = (user: User) => {
     return {
         ...userDTO,
         organizationName: user.organization ? user.organization.name : "",
-        tasks: user.tasks.map(x => toTaskDTO(x))
+        tasks: user.tasks.map(x => toTaskDTO(x)),
+        roleId: user.roleId
     } as AdminPageUserDTO;
 }
 

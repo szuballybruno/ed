@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { matchPath, Route, useLocation } from "react-router-dom";
 import { assetStorageUrl } from "./Environemnt";
-import { ErrorType } from "./models/shared_models/types/sharedTypes";
+import { ErrorType, UserRoleEnum } from "./models/shared_models/types/sharedTypes";
 import { ApplicationRoute, LoadingStateType } from "./models/types";
+import { translatableTexts } from "./translatableTexts";
 
 export const dateTimeToString = (date: Date) => {
 
@@ -16,6 +17,17 @@ export const dateTimeToString = (date: Date) => {
         return new Date(date).toLocaleString();
 
     return date.toLocaleString();
+}
+
+export const getRoleName = (roleId: number) => {
+
+    if (roleId === UserRoleEnum.administratorId)
+        return translatableTexts.roleNames.administrator;
+
+    if (roleId === UserRoleEnum.supervisorId)
+        return translatableTexts.roleNames.supervisor;
+
+    return translatableTexts.roleNames.user;
 }
 
 export const roundNumber = (num: number, decimalPlaces?: number) => {

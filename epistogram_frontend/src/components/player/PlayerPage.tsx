@@ -69,8 +69,6 @@ export const PlayerPage = () => {
 
     const isDesktopView = useIsDesktopView();
 
-    console.log(playerDataStatus);
-
     return (
         <MainWrapper
             style={{

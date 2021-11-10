@@ -82,6 +82,7 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.userManagement.deleteUser, deleteUserAction, { isPost: true });
     addEndpoint(apiRoutes.userManagement.upadateUser, updateUserAction, { isPost: true });
     addEndpoint('/file/upload-avatar', uploadAvatarFileAction, { isPost: true });
+    addEndpoint(apiRoutes.learning.getCourseProgressData, getCourseProgressDataAction);
 
     // signup
     addEndpoint(apiRoutes.signup.answerSignupQuestion, answerSignupQuestionAction, { isPost: true });
@@ -97,9 +98,6 @@ const initializeAsync = async () => {
     addEndpoint('/player/save-video-playback-sample', saveVideoPlaybackSampleAction, { isPost: true });
     addEndpoint('/player/get-course-items', getCourseItemsAction);
     addEndpoint("/questions/answer-video-question", answerVideoQuestionAction, { isPost: true });
-
-    // users
-    addEndpoint(apiRoutes.learning.getCourseProgressData, getCourseProgressDataAction);
 
     // course
     addEndpoint("/course/set-course-mode", setCourseTypeAction, { isPost: true });

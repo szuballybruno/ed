@@ -4,6 +4,12 @@ export const translatableTexts = {
         selectOption: "Nincs kivalasztas..."
     },
 
+    roleNames: {
+        administrator: "Adminisztátor",
+        supervisor: "Vezető",
+        user: "Felhasználó"
+    },
+
     homePage: {
         courseProgress: "Haladás a kurzusaiddal",
         excelCourseTitle: "Excel kurzus",
