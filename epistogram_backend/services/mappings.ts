@@ -37,13 +37,14 @@ import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
+import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { ExamResultView } from "../models/views/ExamResultView";
 import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { navPropNotNull } from "../utilities/helpers";
+import { getFullName, navPropNotNull, toFullName } from "../utilities/helpers";
 import { getCourseItemDescriptorCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
@@ -427,20 +428,32 @@ export const toAnswerEditDTO = (a: Answer) => {
     } as AnswerEditDTO;
 }
 
-export const toCourseAdminListItemDTO = (course: Course) => {
+export const toCourseAdminListItemDTO = (view: CourseAdminShortView) => {
 
-    const thumbnailImageURL = course.coverFile
-        ? getAssetUrl(course.coverFile.filePath)
+    const thumbnailImageURL = view.coverFilePath
+        ? getAssetUrl(view.coverFilePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
 
     return {
-        title: course.title,
-        courseId: course.id,
-        videosCount: 0,
+        title: view.title,
+        courseId: view.id,
+        videosCount: view.videoCount,
+        examCount: view.examCount,
         thumbnailImageURL,
-        category: toCourseCategoryDTO(course.category),
-        subCategory: toCourseCategoryDTO(course.subCategory),
-        teacher: toUserDTO(course.teacher)
+        category: {
+            id: view.categoryId,
+            name: view.categoryName
+        },
+        subCategory: {
+            id: view.subCategoryId,
+            name: view.subCategoryName
+        },
+        teacher: {
+            id: view.teacherId,
+            name: toFullName(view.teacherFirstName, view.teacherLastName),
+            firstName: view.teacherFirstName,
+            lastName: view.teacherLastName,
+        }
     } as CourseAdminListItemDTO;
 }
 

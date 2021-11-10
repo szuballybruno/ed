@@ -7,6 +7,7 @@ import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescr
 import { TextDTO } from "../models/shared_models/TextDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
+import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { staticProvider } from "../staticProvider";
@@ -332,19 +333,14 @@ export const getCourseEditDataAsync = async (courseId: number) => {
 
 export const getAdminCoursesAsync = async () => {
 
-    const courses = await staticProvider
+    const courseAdminShortViews = await staticProvider
         .ormConnection
-        .getRepository(Course)
-        .createQueryBuilder("c")
-        .leftJoinAndSelect("c.coverFile", "cf")
-        .leftJoinAndSelect("c.teacher", "t")
-        .leftJoinAndSelect("c.category", "ca")
-        .leftJoinAndSelect("c.subCategory", "sc")
-        .orderBy("c.title", "DESC")
+        .getRepository(CourseAdminShortView)
+        .createQueryBuilder()
         .getMany();
 
-    return courses
-        .map(x => toCourseAdminListItemDTO(x));
+    return courseAdminShortViews
+        .map(casv => toCourseAdminListItemDTO(casv));
 }
 
 export const unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?: number) => {

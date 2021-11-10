@@ -6,7 +6,9 @@ import { ParsableValueType } from "../models/Types";
 import { logError } from "../services/misc/logger";
 import { respond, respondError } from "./apiHelpers";
 
-export const getFullName = (user: User) => `${user.firstName} ${user.lastName}`;
+export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
+
+export const toFullName = (firstName: string, lastName: string) => `${firstName} ${lastName}`;
 
 export function replaceAll(str: string, find: string, replace: string) {
     return str.replace(new RegExp(find, 'g'), replace);

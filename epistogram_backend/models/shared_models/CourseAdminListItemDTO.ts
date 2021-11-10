@@ -6,6 +6,7 @@ export type CourseAdminListItemDTO = {
     title: string,
     thumbnailImageURL: string,
     videosCount: number,
+    examCount: number,
     category: CourseCategoryDTO,
     subCategory: CourseCategoryDTO,
     teacher: UserDTO,

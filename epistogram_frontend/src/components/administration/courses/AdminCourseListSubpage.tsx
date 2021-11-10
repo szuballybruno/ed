@@ -18,6 +18,10 @@ import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { FloatChip } from "../../universal/FloatChip";
 import { AdminListEditHeader } from "../AdminListEditHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
+import CategoryIcon from '@mui/icons-material/Category';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 export const AdminCourseListSubpage = () => {
 
@@ -156,19 +160,25 @@ export const AdminCourseListSubpage = () => {
                         chips.push(
                             {
                                 name: course.category.name + " / " + course.subCategory.name,
-                                icon: <AlternateEmailIcon />
+                                icon: <CategoryIcon />
                             });
 
                         chips.push(
                             {
                                 name: course.teacher.name,
-                                icon: <ApartmentTwoTone />
+                                icon: <EmojiPeopleIcon />
                             });
 
                         chips.push(
                             {
+                                name: course.examCount + "",
+                                icon: <AssignmentIcon />
+                            })
+
+                        chips.push(
+                            {
                                 name: course.videosCount + "",
-                                icon: <WorkTwoTone />
+                                icon: <VideocamIcon />
                             })
 
                         return <FlexListItem
