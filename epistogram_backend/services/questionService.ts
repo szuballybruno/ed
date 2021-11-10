@@ -80,7 +80,7 @@ export const deleteQuesitonsAsync = async (quesitonIds: number[]) => {
         .ormConnection
         .getRepository(GivenAnswer)
         .createQueryBuilder("ga")
-        .where("ga.questionId IN (:...questionIds)", { quesitonIds })
+        .where('"questionId" IN (:...quesitonIds)', { quesitonIds })
         .getMany();
 
     await deleteGivenAnswers(givenAnswers.map(x => x.id));
@@ -90,7 +90,7 @@ export const deleteQuesitonsAsync = async (quesitonIds: number[]) => {
         .ormConnection
         .getRepository(Answer)
         .createQueryBuilder()
-        .where('"questionId" in (:...quesitonIds)', { quesitonIds })
+        .where('"questionId" IN (:...quesitonIds)', { quesitonIds })
         .getMany();
 
     await deleteAnswersAsync(answers.map(x => x.id));
@@ -105,11 +105,14 @@ export const deleteQuesitonsAsync = async (quesitonIds: number[]) => {
 export const deleteGivenAnswers = async (givenAnswerIds: number[]) => {
 
     // delete given answer bridges
+    if (givenAnswerIds.length === 0)
+        return;
+
     const givenAnswerBridges = await staticProvider
         .ormConnection
         .getRepository(AnswerGivenAnswerBridge)
         .createQueryBuilder("agab")
-        .where("agab.givenAnswerId IN (:...givenAnswerIds)", { givenAnswerIds })
+        .where('"givenAnswerId" IN (:...givenAnswerIds)', { givenAnswerIds })
         .getMany();
 
     await staticProvider
@@ -128,6 +131,9 @@ export const deleteGivenAnswers = async (givenAnswerIds: number[]) => {
 }
 
 export const deleteAnswersAsync = async (answerIds: number[]) => {
+
+    if (answerIds.length === 0)
+        return;
 
     // delete answers 
     await staticProvider

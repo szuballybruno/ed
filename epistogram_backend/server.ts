@@ -58,8 +58,8 @@ const initializeAsync = async () => {
     // open routes
     addEndpoint(apiRoutes.open.renewUserSession, renewUserSessionAction, { isPublic: true });
     addEndpoint(apiRoutes.open.loginUser, logInUserAction, { isPost: true, isPublic: true });
-    addEndpoint(apiRoutes.open.registerUser, registerUserAction, { isPublic: true });
-    addEndpoint(apiRoutes.open.registerInvitedUser, registerInvitedUserAction, { isPublic: true });
+    addEndpoint(apiRoutes.open.registerUser, registerUserAction, { isPublic: true, isPost: true });
+    addEndpoint(apiRoutes.open.registerInvitedUser, registerInvitedUserAction, { isPublic: true, isPost: true });
 
     // misc
     addEndpoint('/get-current-user', getCurrentUserAction);
