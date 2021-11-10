@@ -1,4 +1,4 @@
-import { ChakraProvider, extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { ChakraProvider, ColorModeScript, extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
 import React from "react";
@@ -21,7 +21,7 @@ const queryClient = new QueryClient();
 // chakra theme
 const config: ThemeConfig = {
     initialColorMode: "light",
-    useSystemColorMode: false,
+    useSystemColorMode: false
 }
 const chakraTheme = extendTheme({ config })
 
@@ -47,29 +47,32 @@ const muiTheme = createTheme({
 ReactDOM.render(
     <BrowserRouter getUserConfirmation={(msg, callback) => { console.log("What??") }}>
         <QueryClientProvider client={queryClient}>
-            <ChakraProvider theme={chakraTheme}>
-                <ThemeProvider theme={muiTheme}>
-                    <Switch>
+            <>
+                <ColorModeScript initialColorMode={"light"} />
+                <ChakraProvider theme={chakraTheme}>
+                    <ThemeProvider theme={muiTheme}>
+                        <Switch>
 
-                        {/* under maintanence */}
-                        {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
+                            {/* under maintanence */}
+                            {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
 
-                        {/* under maintanence */}
-                        <Route path={applicationRoutes.underMaintanenceRoute.route} component={UnderMaintanence} />
+                            {/* under maintanence */}
+                            <Route path={applicationRoutes.underMaintanenceRoute.route} component={UnderMaintanence} />
 
-                        {/* app */}
-                        <Route path="/">
-                            <AuthenticationFrame>
-                                <ErrorDialogFrame>
-                                    <NotificationsFrame>
-                                        <MainRouting />
-                                    </NotificationsFrame>
-                                </ErrorDialogFrame>
-                            </AuthenticationFrame>
-                        </Route>
-                    </Switch>
-                </ThemeProvider>
-            </ChakraProvider>
+                            {/* app */}
+                            <Route path="/">
+                                <AuthenticationFrame>
+                                    <ErrorDialogFrame>
+                                        <NotificationsFrame>
+                                            <MainRouting />
+                                        </NotificationsFrame>
+                                    </ErrorDialogFrame>
+                                </AuthenticationFrame>
+                            </Route>
+                        </Switch>
+                    </ThemeProvider>
+                </ChakraProvider>
+            </>
         </QueryClientProvider>
     </BrowserRouter>,
     document.getElementById('root')
