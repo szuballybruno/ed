@@ -14,13 +14,20 @@ import { isUnderMaintenance } from "./Environemnt";
 import './index.css';
 import './jsExtensions.ts'; // extensions, important
 import { MainRouting } from "./MainRouting";
+import { extendTheme, ThemeConfig } from "@chakra-ui/react"
 
 const queryClient = new QueryClient();
+
+const config: ThemeConfig = {
+    initialColorMode: "light",
+    useSystemColorMode: false,
+}
+const chakraTheme = extendTheme({ config })
 
 ReactDOM.render(
     <BrowserRouter getUserConfirmation={(msg, callback) => { console.log("What??") }}>
         <QueryClientProvider client={queryClient}>
-            <ChakraProvider>
+            <ChakraProvider theme={chakraTheme}>
                 <ThemeProvider theme={theme}>
                     <Switch>
 
