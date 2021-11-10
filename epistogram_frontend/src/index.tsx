@@ -1,5 +1,6 @@
-import { ChakraProvider } from "@chakra-ui/react";
-import { ThemeProvider } from "@mui/material/styles";
+import { ChakraProvider, extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { createTheme } from "@mui/material";
+import { ThemeProvider } from "@mui/system";
 import React from "react";
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -13,8 +14,6 @@ import { isUnderMaintenance } from "./Environemnt";
 import './index.css';
 import './jsExtensions.ts'; // extensions, important
 import { MainRouting } from "./MainRouting";
-import { extendTheme, ThemeConfig } from "@chakra-ui/react"
-import { createTheme } from "@mui/system";
 
 // react query 
 const queryClient = new QueryClient();
@@ -29,21 +28,19 @@ const chakraTheme = extendTheme({ config })
 // mui theme
 const muiTheme = createTheme({
     palette: {
+        mode: "light",
         primary: {
             light: '#c8e8ff',
             main: '#97c9cc',
-            dark: '#c8e8ff',
             contrastText: '#000000',
         },
         secondary: {
             light: '#5495b4',
             main: "#1d6784",
-            dark: '#5495b4',
             contrastText: '#fff',
         }
-
     }
-})
+});
 
 ReactDOM.render(
     <BrowserRouter getUserConfirmation={(msg, callback) => { console.log("What??") }}>
