@@ -44,6 +44,7 @@ import { VideoProgressView } from "../../models/views/VideoProgressView";
 import { ExamResultView } from "../../models/views/ExamResultView";
 import { SignupQuestionView } from "../../models/views/SignupQuestionView";
 import { CourseAdminShortView } from "../../models/views/CourseAdminShortView";
+import { CourseAdminDetailedView } from "../../models/views/CourseAdminDetailedView";
 
 export const dbSchema = {
 
@@ -67,7 +68,8 @@ export const dbSchema = {
         "daily_tip_view",
         "user_session_activity_view",
         "user_session_view",
-        "course_admin_short_view"
+        "course_admin_short_view",
+        "course_admin_detailed_view"
     ],
 
     functionScripts: [
@@ -92,7 +94,8 @@ export const dbSchema = {
         DailyTipView,
         ExamResultView,
         SignupQuestionView,
-        CourseAdminShortView
+        CourseAdminShortView,
+        CourseAdminDetailedView
     ],
 
     entities: [

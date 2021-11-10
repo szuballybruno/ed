@@ -7,13 +7,14 @@ import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescr
 import { TextDTO } from "../models/shared_models/TextDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
+import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getCourseItemDescriptorCode, readCourseItemDescriptorCode } from "./encodeService";
-import { toCourseAdminListItemDTO, toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toCourseShortDTO, toCourseEditDataDTO, toExamDTO, toSimpleCourseItemDTOs } from "./mappings";
+import { toCourseAdminShortDTO, toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toCourseShortDTO, toCourseEditDataDTO, toExamDTO, toSimpleCourseItemDTOs } from "./mappings";
 import { getVideoByIdAsync } from "./videoService";
 
 export const getCourseProgressDataAsync = async (userId: number) => {
@@ -307,18 +308,12 @@ const getExamByIdAsync = (examId: number) => {
 export const getCourseEditDataAsync = async (courseId: number) => {
 
     // get course 
-    const course = await staticProvider
+    const views = await staticProvider
         .ormConnection
-        .getRepository(Course)
+        .getRepository(CourseAdminDetailedView)
         .createQueryBuilder("course")
         .where("course.id = :courseId", { courseId: courseId })
-        .leftJoinAndSelect("course.coverFile", "cf")
-        .leftJoinAndSelect("course.teacher", "teacher")
-        .leftJoinAndSelect("course.exams", "exams")
-        .leftJoinAndSelect("course.videos", "videos")
-        .leftJoinAndSelect("course.category", "cat")
-        .leftJoinAndSelect("course.subCategory", "sc")
-        .getOneOrFail();
+        .getMany();
 
     const categories = await staticProvider
         .ormConnection
@@ -328,7 +323,7 @@ export const getCourseEditDataAsync = async (courseId: number) => {
         .where("cc.parentCategoryId IS NULL")
         .getMany();
 
-    return toCourseEditDataDTO(course, categories);
+    return toCourseEditDataDTO(views, categories);
 }
 
 export const getAdminCoursesAsync = async () => {
@@ -340,7 +335,7 @@ export const getAdminCoursesAsync = async () => {
         .getMany();
 
     return courseAdminShortViews
-        .map(casv => toCourseAdminListItemDTO(casv));
+        .map(casv => toCourseAdminShortDTO(casv));
 }
 
 export const unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?: number) => {

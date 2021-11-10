@@ -65,6 +65,16 @@
 
 /* sqares  */
 
+.square15 {
+  width: 15px; 
+  height: 15px; 
+}
+
+.square20 {
+  width: 20px; 
+  height: 20px; 
+}
+
 .square25 {
   width: 25px; 
   height: 25px; 

@@ -1,12 +1,12 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Checkbox, Divider, ListItem, Radio, TextField, Typography } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
 import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
-import { CourseItemDTO } from "../../../models/shared_models/CourseItemDTO";
 import { UserDTO } from "../../../models/shared_models/UserDTO";
 import { useCreateExam, useDeleteExam } from "../../../services/examService";
 import { useNavigation } from "../../../services/navigatior";
@@ -20,9 +20,7 @@ import { EpistoSearch } from "../../universal/EpistoSearch";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import classes from "./editCourse/editCourse.module.scss";
 import { EditSection } from "./EditSection";
-import { SelectMultiple } from "./selectMultiple/SelectMultiple";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
@@ -40,7 +38,7 @@ export const EditCourseControl = (props: {
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
 
     const [title, setTitle] = useState("")
-    const [courseItems, setCourseItems] = useState<CourseItemDTO[]>([])
+    const [courseItems, setCourseItems] = useState<CourseAdminItemShortDTO[]>([])
     const [thumbnailSrc, setThumbnailSrc] = useState("")
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
     const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
@@ -110,7 +108,7 @@ export const EditCourseControl = (props: {
         setThumbnailImageFile(file);
     }
 
-    const handleSetReorderedCourseItems = (courseItems: CourseItemDTO[]) => {
+    const handleSetReorderedCourseItems = (courseItems: CourseAdminItemShortDTO[]) => {
 
         // set order indexes according to list item order
         courseItems
@@ -119,7 +117,7 @@ export const EditCourseControl = (props: {
         setCourseItems(courseItems);
     }
 
-    const handleEditCourseItem = (courseItem: CourseItemDTO) => {
+    const handleEditCourseItem = (courseItem: CourseAdminItemShortDTO) => {
 
         if (courseItem.type === "exam") {
 
@@ -153,7 +151,7 @@ export const EditCourseControl = (props: {
         }
     }
 
-    const handleDeleteCourseItemAsync = async (courseItem: CourseItemDTO) => {
+    const handleDeleteCourseItemAsync = async (courseItem: CourseAdminItemShortDTO) => {
 
         // exam
         if (courseItem.type === "exam") {
@@ -287,9 +285,27 @@ export const EditCourseControl = (props: {
                     m="3px">
 
                     <Flex flexDirection={"column"} alignItems={"flex-start"}>
-                        <Typography>
-                            {item.title}
-                        </Typography>
+                        <Flex>
+
+                            {/* title */}
+                            <Typography>
+                                {item.title}
+                            </Typography>
+
+                            {/* question count */}
+                            <Typography
+                                style={{
+                                    marginLeft: "10px",
+                                    background: item.questionCount == 0
+                                        ? "var(--mildOrange)"
+                                        : "var(--intenseGreen)",
+                                    textAlign: "center",
+                                    color: "white"
+                                }}
+                                className="circle square20">
+                                {item.questionCount}
+                            </Typography>
+                        </Flex>
                         <Typography style={{
                             fontSize: "0.8em"
                         }}>

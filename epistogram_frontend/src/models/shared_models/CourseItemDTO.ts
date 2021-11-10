@@ -1,6 +1,6 @@
 import { CourseItemStateType, CourseItemType } from "./types/sharedTypes";
 
-export type CourseItemDTO = {
+export class CourseItemDTO {
     id: number;
     title: string;
     subTitle: string;

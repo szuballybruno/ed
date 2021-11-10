@@ -12,11 +12,13 @@ import { Video } from "../models/entity/Video";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { AnswerEditDTO } from "../models/shared_models/AnswerEditDTO";
+import { CourseAdminItemShortDTO } from "../models/shared_models/CourseAdminItemShortDTO";
 import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
 import { CourseCategoryDTO } from "../models/shared_models/CourseCategoryDTO";
 import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
 import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
+import { CourseItemShortDTO } from "../models/shared_models/CourseItemShortDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
 import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
@@ -37,6 +39,7 @@ import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
+import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
@@ -47,6 +50,49 @@ import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { getFullName, navPropNotNull, toFullName } from "../utilities/helpers";
 import { getCourseItemDescriptorCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
+
+const mapperFunctions = [] as {
+    fromTypeName: string;
+    toTypeName: string;
+    func: (from: any) => any;
+}[];
+
+const addMapperFunction = <TFromType, TToType>(fromType: Function, toType: Function, func: (from: TFromType) => TToType) => {
+
+    const mapping = mapperFunctions
+        .filter(x => x.fromTypeName === fromType.name && x.toTypeName === toType.name)[0];
+
+    if (mapping)
+        throw new Error(`Mapping '${fromType.name}' -> ${toType.name} already exists!`);
+
+    mapperFunctions
+        .push({
+            fromTypeName: fromType.name,
+            toTypeName: toType.name,
+            func
+        });
+}
+
+export const useMapperFunction = <TToType>(fromType: Function, toType: Function, obj: any): TToType => {
+
+    const mapping = mapperFunctions
+        .filter(x => x.fromTypeName === fromType.name && x.toTypeName === toType.name)[0];
+
+    if (!mapping)
+        throw new Error(`Mapping '${fromType.name} -> ${toType.name}' not found!`);
+
+    return mapping.func(obj);
+}
+
+addMapperFunction<CourseAdminDetailedView, CourseAdminItemShortDTO>(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
+    id: view.itemId,
+    subTitle: view.itemSubtitle,
+    title: view.itemTitle,
+    orderIndex: view.itemOrderIndex,
+    descriptorCode: view.itemCode,
+    type: view.isVideo ? "video" : "exam",
+    questionCount: view.itemQuestionCount
+}));
 
 export const toUserDTO = (user: User) => {
 
@@ -283,14 +329,6 @@ export const toCourseItemDTOExam = (exam: Exam, state?: CourseItemStateType) => 
     } as CourseItemDTO;
 }
 
-export const toDailyTipDTO = (view: DailyTipView) => {
-
-    return {
-        description: view.description,
-        videoUrl: getAssetUrl(view.videoFilePath)
-    } as DailyTipDTO;
-}
-
 export const toCourseItemDTOVideo = (video: Video, state?: CourseItemStateType) => {
 
     return {
@@ -303,6 +341,14 @@ export const toCourseItemDTOVideo = (video: Video, state?: CourseItemStateType) 
         descriptorCode: getCourseItemDescriptorCode(video.id, "video"),
         type: "video"
     } as CourseItemDTO;
+}
+
+export const toDailyTipDTO = (view: DailyTipView) => {
+
+    return {
+        description: view.description,
+        videoUrl: getAssetUrl(view.videoFilePath)
+    } as DailyTipDTO;
 }
 
 export const toCourseShortDTO = (course: CourseView) => {
@@ -387,26 +433,38 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
 }
 
 export const toCourseEditDataDTO = (
-    course: Course,
+    courseViews: CourseAdminDetailedView[],
     categories: CourseCategory[]) => {
 
-    const thumbnailImageURL = course.coverFile
-        ? getAssetUrl(course.coverFile.filePath)
+    const view = courseViews.first();
+
+    const thumbnailImageURL = view.coverFilePath
+        ? getAssetUrl(view.coverFilePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
 
-    const courseItemDTOs = toSimpleCourseItemDTOs(course);
+    const courseItemDTOs = courseViews
+        .map(x => useMapperFunction<CourseAdminItemShortDTO>(CourseAdminDetailedView, CourseAdminItemShortDTO, x));
 
     return {
-        courseId: course.id,
-        title: course.title,
+        title: view.title,
+        courseId: view.id,
         thumbnailURL: thumbnailImageURL,
+        category: {
+            id: view.categoryId,
+            name: view.categoryName
+        },
+        subCategory: {
+            id: view.subCategoryId,
+            name: view.subCategoryName
+        },
+        teacher: {
+            id: view.teacherId,
+            name: toFullName(view.teacherFirstName, view.teacherLastName),
+            firstName: view.teacherFirstName,
+            lastName: view.teacherLastName,
+        },
+
         courseItems: courseItemDTOs,
-
-        category: toCourseCategoryDTO(course.category),
-        subCategory: toCourseCategoryDTO(course.subCategory),
-        teacher: toUserDTO(course.teacher),
-
-        teachers: [],
         categories: categories.map(x => toCourseCategoryDTO(x)),
     } as CourseEditDataDTO;
 }
@@ -428,7 +486,7 @@ export const toAnswerEditDTO = (a: Answer) => {
     } as AnswerEditDTO;
 }
 
-export const toCourseAdminListItemDTO = (view: CourseAdminShortView) => {
+export const toCourseAdminShortDTO = (view: CourseAdminShortView) => {
 
     const thumbnailImageURL = view.coverFilePath
         ? getAssetUrl(view.coverFilePath)
