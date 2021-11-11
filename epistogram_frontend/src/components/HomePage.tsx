@@ -18,14 +18,16 @@ import ListItem from './universal/listItem/ListItem';
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
+    const modules = pageDTO?.modules ?? [];
 
-    const currentItem = pageDTO?.currentCourseItems
+    const currentItem = modules
+        .flatMap(x => x.items)
         .filter(x => x.state === "current")[0];
 
     const currentItemThumbnailUrl = currentItem?.thumbnailUrl;
     const hasCurrentItem = !!currentItem;
+
     const hasCurrentCourse = hasCurrentItem;
-    const courseItems = pageDTO?.currentCourseItems;
 
     return <MainWrapper>
 
@@ -69,7 +71,7 @@ const HomePage = () => {
                             flex="1"
                             overflow="hidden">
 
-                            <CourseItemList courseItems={courseItems!} />
+                            <CourseItemList modules={modules} />
                         </DashoardLeftItemGroup>}
 
                 </LeftPanel>

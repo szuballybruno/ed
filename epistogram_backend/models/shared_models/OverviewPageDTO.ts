@@ -1,6 +1,7 @@
 import { CourseItemDTO } from "./CourseItemDTO";
 import { CourseShortDTO } from "./CourseShortDTO";
 import { CurrentTasksDTO } from "./CurrentTasksDTO";
+import { ModuleDTO } from "./ModuleDTO";
 import { QuestionDTO } from "./QuestionDTO";
 
 export type OverviewPageDTO = {
@@ -10,7 +11,7 @@ export type OverviewPageDTO = {
     currentTasks: CurrentTasksDTO;
     tipOfTheDay: string;
 
-    currentCourseItems: CourseItemDTO[];
+    modules: ModuleDTO[];
 
     recommendedCourses: CourseShortDTO[];
 }

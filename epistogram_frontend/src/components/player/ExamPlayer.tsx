@@ -1,6 +1,7 @@
 import React from "react";
 import { usePaging } from "../../frontendHelpers";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { CourseNextItemDTO } from "../../models/shared_models/CourseNextItemDTO";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { useNavigation } from "../../services/navigatior";
 import { ExamGreetSlide } from "../exam/ExamGreetSlide";
@@ -9,9 +10,9 @@ import { ExamResultsSlide } from "../exam/ExamResultsSlide";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 
 export const ExamPlayer = (props: {
-    nextCourseItem: CourseItemDTO,
     exam: ExamDTO,
     answerSessionId: number,
+    continueCourse: () => void,
     setIsExamInProgress: (isExamStarted: boolean) => void
 }) => {
 
@@ -19,11 +20,10 @@ export const ExamPlayer = (props: {
         exam,
         setIsExamInProgress,
         answerSessionId,
-        nextCourseItem
+        continueCourse
     } = props;
 
     const slidesState = usePaging([1, 2, 3]);
-    const { navigateToPlayer } = useNavigation();
 
     const handleStartExam = () => {
 
@@ -39,7 +39,7 @@ export const ExamPlayer = (props: {
     const handleContinueCourse = () => {
 
         setIsExamInProgress(false);
-        navigateToPlayer(nextCourseItem.descriptorCode);
+        continueCourse();
     }
 
     const slides = [

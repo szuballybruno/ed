@@ -3,9 +3,9 @@ import { CourseCategory } from "../models/entity/CourseCategory";
 import { Exam } from "../models/entity/Exam";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
-import { CourseItemDescriptorDTO } from "../models/shared_models/CourseItemDescriptorDTO";
+import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { TextDTO } from "../models/shared_models/TextDTO";
-import { CourseModeType } from "../models/shared_models/types/sharedTypes";
+import { CourseItemType, CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
@@ -13,8 +13,8 @@ import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
-import { getCourseItemDescriptorCode, readCourseItemDescriptorCode } from "./encodeService";
-import { toCourseAdminShortDTO, toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toCourseShortDTO, toCourseEditDataDTO, toExamDTO, toSimpleCourseItemDTOs } from "./mappings";
+import { getItemCode, readItemCode } from "./encodeService";
+import { toCourseAdminShortDTO, toCourseEditDataDTO, toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toCourseShortDTO, toExamDTO, toSimpleCourseItemDTOs } from "./mappings";
 import { getVideoByIdAsync } from "./videoService";
 
 export const getCourseProgressDataAsync = async (userId: number) => {
@@ -63,10 +63,10 @@ export const getCourseItemsDescriptorCodesAsync = async (userId: number, courseI
 
     const codes = course
         .videos
-        .map(x => ({ code: getCourseItemDescriptorCode(x.id, "video"), order: x.orderIndex }))
+        .map(x => ({ code: getItemCode(x.id, "video"), order: x.orderIndex }))
         .concat(course
             .exams
-            .map(e => ({ code: getCourseItemDescriptorCode(e.id, "exam"), order: e.orderIndex })));
+            .map(e => ({ code: getItemCode(e.id, "exam"), order: e.orderIndex })));
 
     return codes.orderBy(x => x.order).map(x => x.code);
 }
@@ -90,49 +90,62 @@ export const getCurrentCourseItemsAsync = async (userId: number) => {
     const currentItemCode = getCourseItemCode(courseBridge.currentVideoId, courseBridge.currentExamId);
 
     // get course items 
-    const courseItems = await getCourseItemsAsync(userId, courseBridge.courseId);
+    const modules = await getCourseItemsAsync(userId, courseBridge.courseId);
 
     // set current item's state to 'current'
-    let currentItem = courseItems
+    let currentItem = modules
+        .flatMap(x => x.items)
         .single(item => item.descriptorCode === currentItemCode);
 
     currentItem.state = "current";
 
-    return courseItems;
+    return modules;
 }
 
 export const getCourseItemsAsync = async (userId: number, courseId: number) => {
 
-    const courseItems = await staticProvider
+    const views = await staticProvider
         .ormConnection
         .getRepository(CourseItemStateView)
         .createQueryBuilder("cisv")
-        .leftJoinAndSelect("cisv.exam", "e")
-        .leftJoinAndSelect("cisv.video", "v")
         .where("cisv.courseId = :courseId", { courseId })
         .andWhere("cisv.userId = :userId", { userId })
-        .orderBy("cisv.orderIndex")
         .getMany();
 
-    return courseItems
-        .map(x => toCourseItemDTO(x));
+    const modules = views
+        .groupBy(x => x.moduleId)
+        .map(x => {
+
+            const viewAsModule = x.items.first();
+
+            return {
+                id: viewAsModule.moduleId,
+                name: viewAsModule.moduleName,
+                orderIndex: viewAsModule.moduleOrderIndex,
+                items: x
+                    .items
+                    .map(x => toCourseItemDTO(x))
+            } as ModuleDTO;
+        });
+
+    return modules;
 }
 
-export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) => {
+export const getCourseItemAsync = async (itemId: number, itemType: CourseItemType) => {
 
-    if (descriptor.itemType === "video") {
+    if (itemType === "video") {
 
-        const video = await getVideoByIdAsync(descriptor.itemId);
+        const video = await getVideoByIdAsync(itemId);
         if (!video)
-            throw new TypedError("Video not found by id: " + descriptor.itemId, "courseItemNotFound");
+            throw new TypedError("Video not found by id: " + itemId, "courseItemNotFound");
 
         return video;
     }
     else {
 
-        const exam = await getExamByIdAsync(descriptor.itemId);
+        const exam = await getExamByIdAsync(itemId);
         if (!exam)
-            throw new TypedError("Exam not found by id: " + descriptor.itemId, "courseItemNotFound");
+            throw new TypedError("Exam not found by id: " + itemId, "courseItemNotFound");
 
         return exam;
     }
@@ -140,18 +153,18 @@ export const getCourseItemAsync = async (descriptor: CourseItemDescriptorDTO) =>
 
 export const getCourseItemByCodeAsync = async (descriptorCode: string) => {
 
-    const dto = readCourseItemDescriptorCode(descriptorCode);
+    const { itemId, itemType } = readItemCode(descriptorCode);
 
-    return getCourseItemAsync(dto);
+    return getCourseItemAsync(itemId, itemType);
 }
 
 export const getCourseItemCode = (videoId?: number | null, examId?: number | null) => {
 
     if (videoId)
-        return getCourseItemDescriptorCode(videoId, "video");
+        return getItemCode(videoId, "video");
 
     if (examId)
-        return getCourseItemDescriptorCode(examId, "exam");
+        return getItemCode(examId, "exam");
 
     throw new Error("Arguments are null or undefined");
 }

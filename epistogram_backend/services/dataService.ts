@@ -94,7 +94,7 @@ export const saveUserDataAsync = async (userId: number, dto: UserDTO) => {
 
 export const getOverviewPageDTOAsync = async (userId: number) => {
 
-    const courseItems = await getCurrentCourseItemsAsync(userId);
+    const modules = await getCurrentCourseItemsAsync(userId);
     const recommendedCourseDTOs = [] as CourseShortDTO[];
     const currntTasks = getCurrentTasks();
     const developmentChartData = getDevelopmentChart();
@@ -104,7 +104,7 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
         recommendedCourses: recommendedCourseDTOs,
         currentTasks: currntTasks,
         developmentChartData: developmentChartData,
-        currentCourseItems: courseItems
+        modules: modules
     } as OverviewPageDTO;
 
     return overviewPageDTO;

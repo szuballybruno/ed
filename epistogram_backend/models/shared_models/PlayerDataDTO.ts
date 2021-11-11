@@ -1,5 +1,5 @@
-import { CourseItemDTO } from "./CourseItemDTO";
 import { ExamDTO } from "./ExamDTO";
+import { ModuleDTO } from "./ModuleDTO";
 import { CourseModeType } from "./types/sharedTypes";
 import { VideoDTO } from "./VideoDTO";
 
@@ -10,5 +10,6 @@ export type PlayerDataDTO = {
     mode: CourseModeType;
     courseId: number;
     courseItemCode: string;
-    courseItems: CourseItemDTO[];
+    modules: ModuleDTO[];
+    nextItemCode: string | null;
 }

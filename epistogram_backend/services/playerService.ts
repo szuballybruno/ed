@@ -7,6 +7,7 @@ import { VideoCompletedView } from "../models/views/VideoCompletedView";
 import { VideoProgressView } from "../models/views/VideoProgressView";
 import { staticProvider } from "../staticProvider";
 import { getCourseItemByCodeAsync, getCourseItemsAsync, getCurrentCourseItemsAsync, getExamDTOAsync, getUserCourseBridgeOrFailAsync, setCurrentCourse } from "./courseService";
+import { getItemCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
 import { createAnswerSessionAsync } from "./questionAnswerService";
 import { saveUserSessionActivityAsync } from "./userSessionActivity";
@@ -22,27 +23,44 @@ export const getPlayerDataAsync = async (
     const courseId = currentCourseItem.courseId;
 
     // get valid course item code
-    const validCourseItem = await getValidCourseItem(userId, courseId, descriptorCode);
+    const validCurrentCourseItem = await getValidCourseItem(userId, courseId, descriptorCode);
 
     // set current course 
     await setCurrentCourse(
         userId,
         courseId,
-        validCourseItem.type === "video" ? validCourseItem.id : null,
-        validCourseItem.type === "exam" ? validCourseItem.id : null);
+        validCurrentCourseItem.type === "video" ? validCurrentCourseItem.id : null,
+        validCurrentCourseItem.type === "exam" ? validCurrentCourseItem.id : null);
 
     // course items 
-    const courseItems = await getCurrentCourseItemsAsync(userId);
+    const modules = await getCurrentCourseItemsAsync(userId);
 
     // get course item dto
-    const videoDTO = validCourseItem.type === "video" ? await getVideoDTOAsync(userId, validCourseItem.id) : null;
-    const examDTO = validCourseItem.type === "exam" ? await getExamDTOAsync(userId, validCourseItem.id) : null;
+    const videoDTO = validCurrentCourseItem.type === "video" ? await getVideoDTOAsync(userId, validCurrentCourseItem.id) : null;
+    const examDTO = validCurrentCourseItem.type === "exam" ? await getExamDTOAsync(userId, validCurrentCourseItem.id) : null;
 
     // get user course bridge
     const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, courseId);
 
     // get new answer session
     const answerSessionId = await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
+
+    // next 
+    const currentModule = modules
+        .single(x => x.items.any(x => x.state === "current"));
+
+    const nextItem = currentModule
+        .items
+        .filter(x => x.orderIndex === validCurrentCourseItem.orderIndex + 1)[0];
+
+    const nextModule = modules
+        .filter(x => x.orderIndex === currentModule.orderIndex + 1)[0];
+
+    const nextItemCode = nextItem
+        ? nextItem.descriptorCode
+        : nextModule
+            ? getItemCode(nextModule.id, "module")
+            : null;
 
     return {
         video: videoDTO,
@@ -51,13 +69,16 @@ export const getPlayerDataAsync = async (
         mode: userCourseBridge.courseMode,
         courseId: courseId!,
         courseItemCode: descriptorCode,
-        courseItems: courseItems
+        modules: modules,
+        nextItemCode
     } as PlayerDataDTO;
 }
 
 export const getValidCourseItem = async (userId: number, courseId: number, itemCode: string) => {
 
-    const courseItems = await getCourseItemsAsync(userId, courseId);
+    const modules = await getCourseItemsAsync(userId, courseId);
+    const courseItems = modules
+        .flatMap(x => x.items);
 
     const targetItem = courseItems
         .single(x => x.descriptorCode === itemCode);

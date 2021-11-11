@@ -1,6 +1,8 @@
+import Module from "module";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CourseStateView } from "../views/CourseStateView";
 import { CourseCategory } from "./CourseCategory";
+import { CourseModule } from "./CourseModule";
 import { Exam } from "./Exam";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
@@ -67,4 +69,9 @@ export class Course {
     @OneToMany(_ => UserCourseBridge, x => x.course)
     @JoinColumn()
     userCourseBridges: UserCourseBridge[];
+
+    // modules 
+    @OneToMany(_ => CourseModule, x => x.course)
+    @JoinColumn()
+    modules: Module[];
 }

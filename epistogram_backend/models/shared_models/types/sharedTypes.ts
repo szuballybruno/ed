@@ -15,7 +15,7 @@ export type TaskObjectiveType = "video" | "playlist" | "course" | "exam";
 export type TaskPriorityType = "normal" | "important" | "urgent";
 export type TaskStatusType = "assigned" | "inProgress" | "submitted" | "rejected" | "completed";
 
-export type CourseItemType = "video" | "exam";
+export type CourseItemType = "video" | "exam" | "module";
 
 export type CourseItemStateType = "completed" | "locked" | "current" | "available";
 

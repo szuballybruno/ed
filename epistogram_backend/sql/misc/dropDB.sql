@@ -28,3 +28,4 @@ DROP TABLE IF EXISTS public.daily_tip CASCADE;
 DROP TABLE IF EXISTS public.daily_tip_occurrence CASCADE;
 DROP TABLE IF EXISTS public.question_type CASCADE;
 DROP TABLE IF EXISTS public.user_session_activity CASCADE;
+DROP TABLE IF EXISTS public.course_module CASCADE;

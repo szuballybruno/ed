@@ -1,10 +1,15 @@
 import { Flex } from "@chakra-ui/react";
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DoneIcon from '@mui/icons-material/Done';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import TreeItem from '@mui/lab/TreeItem';
+import TreeView from '@mui/lab/TreeView';
 import React from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { ModuleDTO } from "../../models/shared_models/ModuleDTO";
 import { useNavigation } from "../../services/navigatior";
 import { FlexList } from "./FlexList";
 import { FlexListItem } from "./FlexListItem";
@@ -45,18 +50,38 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
 }
 
 export const CourseItemList = (props: {
-    courseItems: CourseItemDTO[]
+    modules: ModuleDTO[]
 }) => {
 
-    const courseItems = props.courseItems;
-    // const navigateToCourseItem = props.navigateToCourseItem;
+    const { modules } = props;
+    const currentModuleId = modules
+        .filter(module => module
+            .items
+            .some(item => item.state === "current"))[0]?.id;
+
+    console.log(currentModuleId);
 
     return (
-        <FlexList id="courseItemListContainer" p="10px">
-            {courseItems
-                .map((courseItem, index) => <CourseItemView
-                    key={index}
-                    courseItem={courseItem} />)}
-        </FlexList>
+        <TreeView
+            defaultCollapseIcon={<ExpandMoreIcon />}
+            defaultExpandIcon={<ChevronRightIcon />}
+            disableSelection
+            defaultExpanded={[currentModuleId + ""]}
+            sx={{ background: "transparent" }}>
+
+            {modules
+                .map(module => {
+
+                    return <TreeItem className="forceTransparentBgOnChildren" nodeId={module.id + ""} label={module.name}>
+                        <FlexList id="courseItemListContainer" p="10px">
+                            {module
+                                .items
+                                .map((courseItem, index) => <CourseItemView
+                                    key={index}
+                                    courseItem={courseItem} />)}
+                        </FlexList>
+                    </TreeItem>
+                })}
+        </TreeView>
     );
 }

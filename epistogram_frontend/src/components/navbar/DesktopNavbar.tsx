@@ -3,10 +3,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { getAssetUrl } from "../../frontendHelpers";
+import { getAssetUrl, getUrl } from "../../frontendHelpers";
 import { ApplicationRoute } from "../../models/types";
 import { useLogout } from "../../services/dataService";
-import { getCourseItemUrl, useNavigation } from "../../services/navigatior";
+import { useNavigation } from "../../services/navigatior";
 import { useShowErrorDialog } from "../../services/notifications";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
 import { CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
@@ -115,7 +115,7 @@ const DesktopNavbar = (props: {
                     {/* continue watching  */}
                     {currentCourseItemCode &&
                         <NavbarButton
-                            menuPath={getCourseItemUrl(currentCourseItemCode)}>
+                            menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
 
                             <EpistoButton
                                 style={{ flex: "1", color: "var(--epistoTeal)" }}

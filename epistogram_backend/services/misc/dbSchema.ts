@@ -29,7 +29,6 @@ import { VideoPlaybackData } from "../../models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "../../models/entity/VideoPlaybackSample";
 import { CourseItemAllView } from "../../models/views/CourseItemAllView";
 import { CourseItemStateView } from "../../models/views/CourseItemStateView";
-import { CourseItemView } from "../../models/views/CourseItemView";
 import { CourseStateView } from "../../models/views/CourseStateView";
 import { CourseView } from "../../models/views/CourseView";
 import { DailyTipView } from "../../models/views/DailyTipView";
@@ -45,6 +44,7 @@ import { ExamResultView } from "../../models/views/ExamResultView";
 import { SignupQuestionView } from "../../models/views/SignupQuestionView";
 import { CourseAdminShortView } from "../../models/views/CourseAdminShortView";
 import { CourseAdminDetailedView } from "../../models/views/CourseAdminDetailedView";
+import { CourseModule } from "../../models/entity/CourseModule";
 
 export const dbSchema = {
 
@@ -83,7 +83,6 @@ export const dbSchema = {
         ExamCompletedView,
         ExamSessionSuccessView,
         VideoProgressView,
-        CourseItemView,
         CourseItemStateView,
         CourseStateView,
         CourseItemAllView,
@@ -128,6 +127,7 @@ export const dbSchema = {
         DailyTip,
         DailyTipOccurrence,
         QuestionType,
-        UserSessionActivity
+        UserSessionActivity,
+        CourseModule
     ]
 }

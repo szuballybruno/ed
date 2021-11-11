@@ -1,6 +1,8 @@
+import Module from "module";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
+import { CourseModule } from "./CourseModule";
 import { Question } from "./Question";
 import { User } from "./User";
 import { UserCourseBridge } from "./UserCourseBridge";
@@ -51,4 +53,12 @@ export class Exam {
     @OneToMany(_ => AnswerSession, as => as.exam)
     @JoinColumn()
     answerSessions: AnswerSession[];
+
+    // module
+    @Column()
+    moduleId: number;
+
+    @ManyToOne(_ => CourseModule, x => x.exams)
+    @JoinColumn({ name: "moduleId" })
+    module: CourseModule;
 }

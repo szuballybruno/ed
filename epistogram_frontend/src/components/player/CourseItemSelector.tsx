@@ -3,6 +3,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { ModuleDTO } from '../../models/shared_models/ModuleDTO';
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { httpPostAsync } from "../../services/httpClient";
 import { useShowErrorDialog } from "../../services/notifications";
@@ -12,12 +13,12 @@ import { EpistoPopper } from '../universal/EpistoPopper';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
-    courseItems: CourseItemDTO[],
+    modules: ModuleDTO[],
     courseId: number,
     refetchPlayerData: () => Promise<void>,
 }) => {
 
-    const { mode, refetchPlayerData, courseId } = props;
+    const { mode, refetchPlayerData, courseId, modules } = props;
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
@@ -94,6 +95,6 @@ export const CourseItemSelector = (props: {
             <Typography>Kezdő módban a meghatározott sorrendben haladhatsz, és előre csak addig részig tekerhetsz, melyet már megtekintettél. Haladó módban korlátlanul váltogathatsz a videók között!</Typography>
         </EpistoPopper>
 
-        <CourseItemList courseItems={props.courseItems}></CourseItemList>
+        <CourseItemList modules={modules}></CourseItemList>
     </>
 }

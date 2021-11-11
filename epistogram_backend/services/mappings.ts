@@ -48,7 +48,7 @@ import { ExamResultView } from "../models/views/ExamResultView";
 import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { getFullName, navPropNotNull, toFullName } from "../utilities/helpers";
-import { getCourseItemDescriptorCode } from "./encodeService";
+import { getItemCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
 const mapperFunctions = [] as {
@@ -295,25 +295,15 @@ export const toVideoDTO = (video: Video, maxWatchedSeconds: number) => {
 
 export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
 
-    const isVideo = !!courseItemView.videoId;
-
-    // VIDEO
-    if (isVideo) {
-
-        navPropNotNull(courseItemView.video);
-
-        const video = courseItemView.video as Video;
-        return toCourseItemDTOVideo(video, courseItemView.state);
-    }
-
-    // EXAM
-    else {
-
-        navPropNotNull(courseItemView.exam);
-
-        const exam = courseItemView.exam as Exam;
-        return toCourseItemDTOExam(exam, courseItemView.state);
-    }
+    return {
+        id: courseItemView.itemId,
+        subTitle: courseItemView.itemSubtitle,
+        title: courseItemView.itemTitle,
+        orderIndex: courseItemView.itemOrderIndex,
+        state: courseItemView.state,
+        descriptorCode: courseItemView.itemCode,
+        type: courseItemView.itemIsVideo ? "video" : "exam"
+    } as CourseItemDTO;
 }
 
 export const toCourseItemDTOExam = (exam: Exam, state?: CourseItemStateType) => {
@@ -325,7 +315,7 @@ export const toCourseItemDTOExam = (exam: Exam, state?: CourseItemStateType) => 
         title: exam.title,
         orderIndex: exam.orderIndex,
         state: state ?? "available",
-        descriptorCode: getCourseItemDescriptorCode(exam.id, "exam"),
+        descriptorCode: getItemCode(exam.id, "exam"),
         type: "exam"
     } as CourseItemDTO;
 }
@@ -339,7 +329,7 @@ export const toCourseItemDTOVideo = (video: Video, state?: CourseItemStateType) 
         title: video.title,
         orderIndex: video.orderIndex,
         state: state ?? "available",
-        descriptorCode: getCourseItemDescriptorCode(video.id, "video"),
+        descriptorCode: getItemCode(video.id, "video"),
         type: "video"
     } as CourseItemDTO;
 }
@@ -360,8 +350,8 @@ export const toCourseShortDTO = (course: CourseView) => {
 
     const firstItemCode = course.isStarted
         ? course.currentExamId
-            ? getCourseItemDescriptorCode(course.currentExamId, "exam")
-            : getCourseItemDescriptorCode(course.currentVideoId, "video")
+            ? getItemCode(course.currentExamId, "exam")
+            : getItemCode(course.currentVideoId, "video")
         : null;
 
     const teacher = course.teacher;

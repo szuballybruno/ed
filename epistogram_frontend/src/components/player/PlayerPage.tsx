@@ -32,10 +32,8 @@ export const PlayerPage = () => {
     const answerSessionId = playerData?.answerSessionId;
     const courseMode = playerData?.mode ?? "beginner";
     const courseId = playerData?.courseId;
-    const courseItems = playerData?.courseItems ?? [];
-    const currentCourseItemIndex = courseItems
-        .findIndex(x => x.state === "current");
-    const nextCourseItem = courseItems[currentCourseItemIndex + 1];
+    const courseModules = playerData?.modules ?? [];
+    const nextItemCode = playerData?.nextItemCode;
 
     // redirect if current item should be locked 
     useEffect(() => {
@@ -69,6 +67,12 @@ export const PlayerPage = () => {
 
     const isDesktopView = useIsDesktopView();
 
+    const handleContinueCourse = () => {
+
+        if (nextItemCode)
+            navigateToPlayer(nextItemCode);
+    }
+
     return (
         <MainWrapper
             style={{
@@ -95,12 +99,13 @@ export const PlayerPage = () => {
                             refetchPlayerData={refetchPlayerData}
                             answerSessionId={answerSessionId!}
                             video={video}
-                            courseItems={courseItems}
+                            modules={courseModules}
+                            continueCourse={handleContinueCourse}
                             refetchCourseItemList={refetchPlayerData}
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
-                            nextCourseItem={nextCourseItem}
+                            continueCourse={handleContinueCourse}
                             answerSessionId={answerSessionId!}
                             setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
                             exam={exam} />}
@@ -124,7 +129,7 @@ export const PlayerPage = () => {
                             <CourseItemSelector
                                 courseId={courseId!}
                                 mode={courseMode}
-                                courseItems={courseItems}
+                                modules={courseModules}
                                 refetchPlayerData={refetchPlayerData} />
                         </Flex>}
                     </FlexFloat>

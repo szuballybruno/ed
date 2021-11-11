@@ -2,6 +2,7 @@ import { TypeORMConnection } from "../database";
 import { Activity } from "../models/entity/Activity";
 import { Course } from "../models/entity/Course";
 import { CourseCategory } from "../models/entity/CourseCategory";
+import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
@@ -127,9 +128,18 @@ const seedSignupExam = async (connection: TypeORMConnection) => {
 
     await staticProvider
         .ormConnection
+        .getRepository(CourseModule)
+        .insert({
+            name: "Signup module exam",
+            orderIndex: 0
+        });
+
+    await staticProvider
+        .ormConnection
         .getRepository(Exam)
         .insert({
             title: "Signup exam",
+            moduleId: 1
         });
 }
 
@@ -195,6 +205,7 @@ const seedCourseCategories = async (connection: TypeORMConnection) => {
 
 const seedCourses = async (connection: TypeORMConnection) => {
 
+    // courses 
     await connection
         .getRepository(Course)
         .save([
@@ -207,31 +218,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/1.png"
-                },
-                exams: [
-                    {
-                        title: "New Exam 1",
-                        subtitle: "Fantastic exam 1",
-                        thumbnailUrl: "",
-                        description: "",
-                        orderIndex: 1
-                    },
-                    {
-                        title: "New Exam 2",
-                        subtitle: "Fantastic exam 2",
-                        thumbnailUrl: "",
-                        description: "",
-                        orderIndex: 3
-                    },
-                    {
-                        title: "New Exam 3",
-                        subtitle: "Fantastic exam 3",
-                        thumbnailUrl: "",
-                        description: "",
-                        orderIndex: 4,
-                        isFinalExam: true
-                    }
-                ]
+                }
             } as Course,
 
             // course: 2
@@ -242,7 +229,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/2.png"
-                },
+                }
             },
 
             // course: 3
@@ -253,7 +240,7 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/3.png"
-                },
+                }
             },
 
             // course: 4
@@ -264,67 +251,90 @@ const seedCourses = async (connection: TypeORMConnection) => {
                 teacherId: 1,
                 coverFile: {
                     filePath: "/courseCoverImages/4.png"
-                },
-                exams: [
-                    {
-                        title: "Excel Final Exam",
-                        subtitle: "Excel Final Exam",
-                        thumbnailUrl: "",
-                        description: "",
-                        orderIndex: 4,
-                        isFinalExam: true
-                    }
-                ]
-            },
-
-            // etc
-            {
-                title: "DevOps kezdőknek - Kubernetes",
-                categoryId: 1,
-                subCategoryId: 6,
-                teacherId: 1,
-                coverFile: {
-                    filePath: "/courseCoverImages/5.png"
-                },
-            },
-            {
-                title: "Google classroom használata",
-                categoryId: 1,
-                subCategoryId: 7,
-                permissionLevel: "public",
-                teacherId: 1,
-                coverFile: {
-                    filePath: "/courseCoverImages/7.png"
-                },
-            },
-            {
-                title: "Válj szuper tanulóvá - Gyorsolvasás és tanulás fejlesztés",
-                categoryId: 1,
-                subCategoryId: 8,
-                permissionLevel: "public",
-                teacherId: 1,
-            },
-            {
-                title: "Tanulj meg elkészíteni bármilyen karaktert - Adobe Illustrator",
-                categoryId: 1,
-                subCategoryId: 9,
-                permissionLevel: "public",
-                teacherId: 1,
-                coverFile: {
-                    filePath: "/courseCoverImages/6.png"
-                },
-            },
-            {
-                title: "Google Ads Mesterkurzus",
-                categoryId: 1,
-                subCategoryId: 10,
-                permissionLevel: "public",
-                teacherId: 1,
-                coverFile: {
-                    filePath: "/courseCoverImages/8.png"
-                },
+                }
             }
         ] as Course[]);
+
+    // modules 
+    await staticProvider
+        .ormConnection
+        .getRepository(CourseModule)
+        .insert([
+            {
+                courseId: 1,
+                name: "Első modul",
+                orderIndex: 0
+            },
+            {
+                courseId: 2,
+                name: "Module",
+                orderIndex: 0
+            },
+            {
+                courseId: 3,
+                name: "Module",
+                orderIndex: 0
+            },
+            {
+                courseId: 4,
+                name: "Első modul",
+                orderIndex: 0
+            },
+            {
+                courseId: 4,
+                name: "Masodik modul",
+                orderIndex: 1
+            },
+        ]);
+
+    // exams 
+    await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .insert([
+
+            // course  2
+            {
+                courseId: 1,
+                title: "New Exam 1",
+                subtitle: "Fantastic exam 1",
+                thumbnailUrl: "",
+                description: "",
+                orderIndex: 1,
+                moduleId: 2
+            },
+            {
+                courseId: 1,
+                title: "New Exam 2",
+                subtitle: "Fantastic exam 2",
+                thumbnailUrl: "",
+                description: "",
+                orderIndex: 3,
+                moduleId: 2
+            },
+            {
+                courseId: 1,
+                title: "New Exam 3",
+                subtitle: "Fantastic exam 3",
+                thumbnailUrl: "",
+                description: "",
+                orderIndex: 4,
+                isFinalExam: true,
+                moduleId: 2
+            },
+
+            // course 5
+            {
+                courseId: 4,
+                title: "Excel Final Exam",
+                subtitle: "Excel Final Exam",
+                thumbnailUrl: "",
+                description: "",
+                orderIndex: 5,
+                isFinalExam: true,
+                moduleId: 6
+            }
+        ]);
 }
 
 const seedVideos = async (connection: TypeORMConnection) => {
@@ -335,7 +345,8 @@ const seedVideos = async (connection: TypeORMConnection) => {
         title: "Ben Awad Rant 1/1",
         subtitle: "Fantastic Video 1",
         description: "Very very fantastic video 1 description",
-        orderIndex: 0
+        orderIndex: 0,
+        moduleId: 2
     } as Video, "videos/video_1.mp4");
 
     await insertVideoAsync({
@@ -343,7 +354,8 @@ const seedVideos = async (connection: TypeORMConnection) => {
         title: "Video 1/2",
         subtitle: "Fantastic Video 2",
         description: "Very very fantastic video 2 description",
-        orderIndex: 2
+        orderIndex: 2,
+        moduleId: 2
     } as Video);
 
     // course 4 videos
@@ -353,6 +365,7 @@ const seedVideos = async (connection: TypeORMConnection) => {
         subtitle: "Alapvető műveletek Excelben",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
         orderIndex: 0,
+        moduleId: 5
     } as Video, "videos/video_2.mp4");
 
     await insertVideoAsync({
@@ -361,6 +374,7 @@ const seedVideos = async (connection: TypeORMConnection) => {
         subtitle: "Alapvető műveletek Excelben",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
         orderIndex: 1,
+        moduleId: 5
     } as Video, "videos/video_3.m4v");
 
     await insertVideoAsync({
@@ -369,6 +383,7 @@ const seedVideos = async (connection: TypeORMConnection) => {
         subtitle: "Alapvető műveletek Excelben",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
         orderIndex: 2,
+        moduleId: 5
     } as Video, "videos/video_4.m4v");
 
     await insertVideoAsync({
@@ -377,6 +392,7 @@ const seedVideos = async (connection: TypeORMConnection) => {
         subtitle: "Alapvető műveletek Excelben",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
         orderIndex: 3,
+        moduleId: 5
     } as Video, "videos/video_5.m4v");
 
     await insertVideoAsync({
@@ -384,7 +400,8 @@ const seedVideos = async (connection: TypeORMConnection) => {
         title: "Egyszerűbb számítások 1.",
         subtitle: "Alapvető műveletek Excelben",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-        orderIndex: 5,
+        orderIndex: 0,
+        moduleId: 6
     } as Video, "videos/Excel/video6.mp4");
 
     await insertVideoAsync({
@@ -392,7 +409,8 @@ const seedVideos = async (connection: TypeORMConnection) => {
         title: "Egyszerűbb számítások 2.",
         subtitle: "Alapvető műveletek Excelben",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-        orderIndex: 6,
+        orderIndex: 1,
+        moduleId: 6
     } as Video, "videos/Excel/video4.mp4");
 
     await insertVideoAsync({
@@ -400,7 +418,8 @@ const seedVideos = async (connection: TypeORMConnection) => {
         title: "Egyszerűbb számítások 4.",
         subtitle: "Fix hivatkozás",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-        orderIndex: 7,
+        orderIndex: 2,
+        moduleId: 6
     } as Video, "videos/Excel/video5.mp4");
 
     await insertVideoAsync({
@@ -408,7 +427,8 @@ const seedVideos = async (connection: TypeORMConnection) => {
         title: "Gyakorló feladatok 1.",
         subtitle: "",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-        orderIndex: 8,
+        orderIndex: 3,
+        moduleId: 6
     } as Video, "videos/Excel/video7.mp4");
 
     await insertVideoAsync({
@@ -416,15 +436,17 @@ const seedVideos = async (connection: TypeORMConnection) => {
         title: "Gyakorló feladatok 2.",
         subtitle: "",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-        orderIndex: 9,
+        orderIndex: 4,
+        moduleId: 6
     } as Video, "videos/Excel/video8.mp4");
 
     await insertVideoAsync({
         courseId: 4,
-        title: "Gyakorló feladatok 1.",
+        title: "Gyakorló feladatok 3.",
         subtitle: "",
         description: "Az Excellel számolhatunk, és nem csak táblázatot vihetünk fel rá, hanem a számításokkal a táblázat értékeit módosíthatjuk, illetve aktuálisan tarthatjuk.",
-        orderIndex: 8,
+        orderIndex: 6,
+        moduleId: 6
     } as Video, "videos/Excel/video9.mp4");
 }
 

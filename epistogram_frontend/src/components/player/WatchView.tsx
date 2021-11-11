@@ -2,36 +2,36 @@ import { Box, Flex } from "@chakra-ui/react";
 import { Divider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../frontendHelpers";
-import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { ModuleDTO } from "../../models/shared_models/ModuleDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { StillWatchingDialogMarker } from "../../models/types";
-import { NavigateToCourseItemActionType } from "../universal/CourseItemList";
+import { EpistoHeader } from "../EpistoHeader";
 import { Copyright } from "../universal/Copyright";
+import { NavigateToCourseItemActionType } from "../universal/CourseItemList";
+import { EpistoButton } from "../universal/EpistoButton";
 import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
+import { TimeoutFrame, useTimeoutFrameLogic } from "../universal/TimeoutFrame";
 import { VideoQuestionnaire } from "../universal/VideoQuestionnaire";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
 import { CourseItemSelector } from "./CourseItemSelector";
+import Comments from "./description/Comments";
 import PlayerDescription from "./description/PlayerDescription";
+import { VideoContent } from "./description/VideoContent";
 import { OverlayDialog } from "./OverlayDialog";
 import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
 import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
-import { EpistoButton } from "../universal/EpistoButton";
-import { TimeoutFrame, useTimeoutFrameLogic } from "../universal/TimeoutFrame";
-import { useNavigation } from "../../services/navigatior";
-import { VideoContent } from "./description/VideoContent";
-import Comments from "./description/Comments";
-import { EpistoHeader } from "../EpistoHeader";
 
 export const WatchView = (props: {
     video: VideoDTO,
     answerSessionId: number,
-    courseItems: CourseItemDTO[],
+    modules: ModuleDTO[],
     courseMode: CourseModeType,
     courseId: number,
+    continueCourse: () => void,
     refetchCourseItemList: () => void,
     navigateToCourseItem: NavigateToCourseItemActionType,
     refetchPlayerData: () => Promise<void>,
@@ -39,20 +39,14 @@ export const WatchView = (props: {
 
     const {
         video,
-        courseItems,
+        modules,
         answerSessionId,
         courseMode,
         courseId,
+        continueCourse,
         refetchCourseItemList,
         refetchPlayerData
     } = props;
-
-    const currentCourseItemIndex = courseItems
-        .findIndex(x => x.state === "current");
-
-    const nextCourseItem = courseItems[currentCourseItemIndex + 1];
-    const { navigateToPlayer } = useNavigation();
-    const navigateToNextItem = () => navigateToPlayer(nextCourseItem.descriptorCode);
 
     const { questions } = video;
     const isDesktopView = useIsDesktopView();
@@ -60,7 +54,7 @@ export const WatchView = (props: {
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
-    const timeoutLogic = useTimeoutFrameLogic(3, navigateToNextItem);
+    const timeoutLogic = useTimeoutFrameLogic(3, continueCourse);
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
@@ -211,7 +205,7 @@ export const WatchView = (props: {
                             margin: "100px",
                             padding: "0"
                         }}
-                        onClick={navigateToNextItem}
+                        onClick={continueCourse}
                         variant="colored">
                         <TimeoutFrame logic={timeoutLogic}>
                             <Typography style={{
@@ -266,7 +260,7 @@ export const WatchView = (props: {
                 courseId={courseId}
                 mode={courseMode}
                 refetchPlayerData={refetchPlayerData}
-                courseItems={courseItems} />}
+                modules={modules} />}
 
             <Flex
                 id="titleAndSegmentedButtonFlex"

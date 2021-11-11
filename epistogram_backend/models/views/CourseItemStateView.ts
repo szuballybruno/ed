@@ -1,5 +1,5 @@
 import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from "typeorm";
-import { CourseItemStateType } from "../shared_models/types/sharedTypes";
+import { CourseItemStateType, CourseModeType } from "../shared_models/types/sharedTypes";
 import { Exam } from "../entity/Exam";
 import { Video } from "../entity/Video";
 
@@ -10,36 +10,50 @@ import { Video } from "../entity/Video";
 export class CourseItemStateView {
 
     @ViewColumn()
-    userId: number;
+    courseId: number;
 
     @ViewColumn()
-    courseId: number;
+    userId: number;
 
     @ViewColumn()
     videoId: number;
 
     @ViewColumn()
-    orderIndex: number;
-
-    @ViewColumn()
-    isVideoCompleted: boolean;
-
-    @ViewColumn()
     examId: number;
 
     @ViewColumn()
-    isExamCompleted: boolean;
+    itemIsVideo: boolean;
+
+    @ViewColumn()
+    itemId: number;
+
+    @ViewColumn()
+    moduleId: number;
+
+    @ViewColumn()
+    moduleName: string;
+
+    @ViewColumn()
+    moduleOrderIndex: number;
+
+    @ViewColumn()
+    itemOrderIndex: number;
+
+    @ViewColumn()
+    itemTitle: string;
+
+    @ViewColumn()
+    itemSubtitle: string;
+
+    @ViewColumn()
+    itemCode: string;
+
+    @ViewColumn()
+    isCompleted: boolean;
+
+    @ViewColumn()
+    courseMode: CourseModeType;
 
     @ViewColumn()
     state: CourseItemStateType;
-
-    // exam 
-    @ManyToOne(_ => Exam)
-    @JoinColumn({ name: "examId" })
-    exam: Exam;
-
-    // exam 
-    @ManyToOne(_ => Video)
-    @JoinColumn({ name: "videoId" })
-    video: Video;
 }

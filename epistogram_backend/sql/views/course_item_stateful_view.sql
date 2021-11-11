@@ -1,16 +1,20 @@
 SELECT 
-	"sq".*,
+	*,
 	-- state
 	CASE WHEN 
 		"sq"."isCompleted" = true
 		THEN 'completed'
 		ELSE CASE WHEN 
 			"sq"."courseMode" = 'advanced'
-				OR ("sq"."itemOrderIndex" = 0 AND "sq"."moduleOrderIndex" = 0) 
+				OR "sq"."orderIndex" = 0
 			THEN 'available'
 			ELSE CASE WHEN 
 				LAG("sq"."isCompleted", 1) OVER (
 					PARTITION BY "sq"."courseId"
+					ORDER BY 
+						"sq"."userId",
+						"sq"."courseId",
+						"sq"."orderIndex"
 				) IS NOT DISTINCT FROM true 
 				THEN 'available'
 				ELSE 'locked'
@@ -40,16 +44,9 @@ FROM
 	LEFT JOIN public."user_course_bridge" AS "ucb"
 	ON "ucb"."userId" = "u"."id"
 		AND "ucb"."courseId" = "civ"."courseId"
-	
-	ORDER BY
+
+	ORDER BY 
 		"userId",
-		"courseId",
-		"moduleOrderIndex",
-		"itemOrderIndex"
+		"courseId", 
+		"orderIndex"
 ) AS "sq"
-	
-ORDER BY
-	"userId",
-	"courseId",
-	"moduleOrderIndex",
-	"itemOrderIndex"

@@ -1,22 +1,47 @@
-SELECT
-	"uvcv"."userId",
-	"uvcv"."courseId",
-	"uvcv"."videoId",
-	CAST (null AS integer) AS "examId",
-	"uvcv"."isCompleted" AS "isCompleted",
-	"uvcv"."orderIndex" AS "orderIndex"
-FROM public.video_completed_view AS "uvcv"
-UNION ALL
 SELECT 
-	"uecv"."userId",
-	"uecv"."courseId",
-	CAST (null AS integer) AS "videoId",
-	"uecv"."examId",
-	"uecv"."hasSuccessfulSession" AS "isCompleted",
-	"uecv"."orderIndex" AS "orderIndex"
-FROM public.exam_completed_view AS "uecv"
+	"sq".*,
+	"m"."name" AS "moduleName",
+	"m"."orderIndex" AS "moduleOrderIndex"
+FROM 
+(
+	-- video
+	SELECT
+		"v"."courseId",
+		"v"."id" AS "videoId",
+		NULL AS "examId",
+		true AS "itemIsVideo",
+		"v"."id" AS "itemId",
+		"v"."moduleId" AS "moduleId",
+		"v"."orderIndex" AS "itemOrderIndex",
+		"v"."title" AS "itemTitle",
+		"v"."subtitle" AS "itemSubtitle",
+		(SELECT encode(("v"."id" || '@video')::bytea, 'base64')) AS "itemCode"
+	FROM public."video" AS "v"
+
+	UNION ALL
+
+	-- exam
+	SELECT 
+		"e"."courseId",
+		NULL AS "videoId",
+		"e"."id" AS "examId",
+		false AS "itemIsVideo",
+		"e"."id" AS "itemId",
+		"e"."moduleId" AS "moduleId",
+		"e"."orderIndex" AS "itemOrderIndex",
+		"e"."title" AS "itemTitle",
+		"e"."subtitle" AS "itemSubtitle",
+		(SELECT encode(("e"."id" || '@exam')::bytea, 'base64')) AS "itemCode"
+	FROM public."exam" AS "e"
+
+	-- signup is excluded
+	WHERE "e"."id" != 1  
+) AS "sq"
+
+LEFT JOIN public."course_module" AS "m"
+ON "m"."id" = "sq"."moduleId"
 
 ORDER BY 
-	"userId",
-	"courseId", 
-	"orderIndex"
+	"sq"."courseId", 
+	"moduleOrderIndex",
+	"itemOrderIndex"

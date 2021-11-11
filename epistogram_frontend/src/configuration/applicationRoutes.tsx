@@ -15,6 +15,11 @@ export const applicationRoutes = {
         route: "/under-maintanence"
     },
 
+    playerRoute: {
+        title: "",
+        route: "/watch/:itemCode"
+    },
+
     registrationRoute: {
         title: translatableTexts.routeTitles.registration,
         route: "/registration"

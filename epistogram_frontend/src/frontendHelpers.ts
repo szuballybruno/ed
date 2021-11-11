@@ -19,6 +19,30 @@ export const dateTimeToString = (date: Date) => {
     return date.toLocaleString();
 }
 
+export const getUrl = (path: string, params?: any, query?: any) => {
+
+    let replacedPath = path;
+
+    if (params) {
+        for (const key in params) {
+            if (Object.prototype.hasOwnProperty.call(params, key)) {
+
+                const element = params[key];
+                const token = ":" + key;
+
+                replacedPath = replacedPath.replace(token, element);
+            }
+        }
+    }
+
+    if (query) {
+
+        replacedPath += stringifyQueryObject(query);
+    }
+
+    return replacedPath;
+}
+
 export const getRoleName = (roleId: number) => {
 
     if (roleId === UserRoleEnum.administratorId)

@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
+import { CourseModule } from "./CourseModule";
 import { Question } from "./Question";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
@@ -77,4 +78,12 @@ export class Video {
     @OneToMany(_ => VideoPlaybackData, x => x.video)
     @JoinColumn()
     videoPlaybackDatas: VideoPlaybackData[];
+
+    // module
+    @Column()
+    moduleId: number;
+
+    @ManyToOne(_ => CourseModule, x => x.videos)
+    @JoinColumn({ name: "moduleId" })
+    module: CourseModule;
 }
