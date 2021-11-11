@@ -32,7 +32,6 @@ export const WatchView = (props: {
     courseMode: CourseModeType,
     courseId: number,
     continueCourse: () => void,
-    refetchCourseItemList: () => void,
     navigateToCourseItem: NavigateToCourseItemActionType,
     refetchPlayerData: () => Promise<void>,
 }) => {
@@ -44,7 +43,6 @@ export const WatchView = (props: {
         courseMode,
         courseId,
         continueCourse,
-        refetchCourseItemList,
         refetchPlayerData
     } = props;
 
@@ -89,7 +87,7 @@ export const WatchView = (props: {
     const handleVideoCompletedStateChanged = () => {
 
         console.log("refetchCourseItemList");
-        refetchCourseItemList();
+        refetchPlayerData();
         // showNotification("Video unlocked!");
     }
 

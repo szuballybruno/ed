@@ -70,8 +70,6 @@ export const usePlaybackWatcher = (
     useEffect(
         () => {
 
-            console.log(videoSamplingResult);
-
             if (videoSamplingResult?.isWatchedStateChanged)
                 onVideoWatchedStateChanged();
 

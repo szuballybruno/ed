@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { matchPath, Route, useLocation } from "react-router-dom";
 import { assetStorageUrl } from "./Environemnt";
@@ -276,9 +276,10 @@ export const useReactQuery = <T>(
     });
 
     const { status, refetch, isFetching, data, ...queryResult2 } = queryResult;
+    const advancedStatus = isFetching ? "loading" : status as LoadingStateType
 
     return {
-        status: isFetching ? "loading" : status as LoadingStateType,
+        status: advancedStatus,
         refetch: async () => {
 
             await refetch();
@@ -286,6 +287,42 @@ export const useReactQuery = <T>(
         data: data ?? null,
         ...queryResult2
     }
+}
+
+export const useReactQuery2 = <T>(
+    url: string,
+    queryFunc: (url: string) => Promise<T>,
+    queryKey?: any[]) => {
+
+    const queryResult = useQuery(
+        [url, ...(queryKey ?? [])],
+        () => queryFunc(url), {
+        retry: false,
+        refetchOnWindowFocus: false,
+        keepPreviousData: true
+    });
+
+    const state = (queryResult.isIdle
+        ? "idle"
+        : queryResult.isFetching
+            ? "loading"
+            : queryResult.isError
+                ? "error"
+                : "success") as LoadingStateType;
+
+    const refetch = async () => {
+
+        await queryResult.refetch();
+    };
+
+    const result = {
+        state,
+        refetch,
+        data: queryResult.data ?? null,
+        error: queryResult.error
+    };
+
+    return result;
 }
 
 export const getAssetUrl = (path: string) => assetStorageUrl + ("/" + path).replace("//", "/");

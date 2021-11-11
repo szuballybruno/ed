@@ -124,7 +124,8 @@ export const getCourseItemsAsync = async (userId: number, courseId: number) => {
                 orderIndex: viewAsModule.moduleOrderIndex,
                 items: x
                     .items
-                    .map(x => toCourseItemDTO(x))
+                    .map(x => toCourseItemDTO(x)),
+                state: x.items[0]?.state === "locked" ? "locked" : "available"
             } as ModuleDTO;
         });
 

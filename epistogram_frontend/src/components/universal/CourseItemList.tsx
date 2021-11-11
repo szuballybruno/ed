@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DoneIcon from '@mui/icons-material/Done';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -7,7 +7,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import TreeItem from '@mui/lab/TreeItem';
 import TreeView from '@mui/lab/TreeView';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { ModuleDTO } from "../../models/shared_models/ModuleDTO";
 import { useNavigation } from "../../services/navigatior";
@@ -59,27 +59,66 @@ export const CourseItemList = (props: {
             .items
             .some(item => item.state === "current"))[0]?.id;
 
-    console.log(currentModuleId);
+    const [expandedNodeIds, setExpandedNodeIds] = useState<string[]>([]);
+
+    const handleToggle = (nodeIds: string[]) => {
+
+        setExpandedNodeIds(nodeIds);
+    };
+
+    useEffect(() => {
+
+        if (currentModuleId && expandedNodeIds.length === 0)
+            setExpandedNodeIds([currentModuleId + ""]);
+    }, [!!currentModuleId]);
+
+    const lockedModuleIds = modules
+        .filter(x => x.state === "locked")
+        .map(x => x.id)
+        .join(", ");
+
+    useEffect(() => {
+
+        const lockedModules = modules
+            .filter(x => x.state === "locked");
+
+        setExpandedNodeIds(expandedNodeIds
+            .filter(x => !lockedModules
+                .some(y => y.id + "" === x)));
+    }, [lockedModuleIds]);
 
     return (
         <TreeView
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
             disableSelection
-            defaultExpanded={[currentModuleId + ""]}
+            expanded={expandedNodeIds}
+            onNodeToggle={(_, y) => handleToggle(y)}
             sx={{ background: "transparent" }}>
 
             {modules
                 .map(module => {
 
-                    return <TreeItem className="forceTransparentBgOnChildren" nodeId={module.id + ""} label={module.name}>
-                        <FlexList id="courseItemListContainer" p="10px">
+                    const isLocked = module.state === "locked";
+
+                    return <TreeItem
+                        style={{
+                            pointerEvents: isLocked ? "none" : "all",
+                            color: isLocked ? "gray" : undefined
+                        }}
+                        className="forceTransparentBgOnChildren"
+                        nodeId={module.id + ""}
+                        label={module.name}>
+
+                        {!isLocked && <FlexList id="courseItemListContainer" p="10px">
                             {module
                                 .items
                                 .map((courseItem, index) => <CourseItemView
                                     key={index}
                                     courseItem={courseItem} />)}
-                        </FlexList>
+                        </FlexList>}
+
+                        {isLocked && <Box></Box>}
                     </TreeItem>
                 })}
         </TreeView>

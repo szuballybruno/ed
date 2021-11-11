@@ -34,15 +34,22 @@ export const useUserFetching = (enabled: boolean) => {
         setIsBgFetchingEnabled(isSuccess);
     }, [isSuccess]);
 
-    const authState = (isLoading || isFetching
+    const authState = (isLoading
         ? "loading"
         : currentUser
             ? "authenticated"
             : "forbidden") as AuthenticationStateType;
 
+    // console.log("-----");
+    // console.log(authState);
+    // console.log(isLoading);
+    // console.log(isFetching);
+    // console.log(queryResult);
+    // console.log("-----");
+
     const refetchUserAsync = async () => {
 
-        console.log("Refetching user...");
+        // console.log("Refetching user...");
         await refetch();
     }
 

@@ -27,6 +27,9 @@ export const PlayerPage = () => {
         playerDataError,
         refetchPlayerData
     } = usePlayerData(descriptorCode);
+
+    // console.log("----" + !!playerData);
+
     const video = playerData?.video;
     const exam = playerData?.exam;
     const answerSessionId = playerData?.answerSessionId;
@@ -44,9 +47,9 @@ export const PlayerPage = () => {
         if (playerData.courseItemCode === descriptorCode)
             return;
 
+        console.log("Invalid course item code: " + descriptorCode);
         navigateToPlayer(playerData.courseItemCode);
-
-    }, [playerData?.courseItemCode, descriptorCode, navigateToPlayer]);
+    }, [playerData?.courseItemCode]);
 
     const navigateToCourseItem = (descriptorCode: string) => {
 
@@ -101,7 +104,6 @@ export const PlayerPage = () => {
                             video={video}
                             modules={courseModules}
                             continueCourse={handleContinueCourse}
-                            refetchCourseItemList={refetchPlayerData}
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
