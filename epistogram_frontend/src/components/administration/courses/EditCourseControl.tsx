@@ -273,6 +273,22 @@ export const EditCourseControl = (props: {
 
             <EpistoSearch />
 
+            <Flex padding="20px">
+                <EpistoButton
+                    onClick={() => handleAddCourseItemAsync("video")}
+                    style={{ alignSelf: "center" }}
+                    variant="outlined">
+                    Új videó hozzáadása
+                </EpistoButton>
+
+                <EpistoButton
+                    onClick={() => handleAddCourseItemAsync("exam")}
+                    style={{ alignSelf: "center" }}
+                    variant="outlined">
+                    Új vizsga hozzáadása
+                </EpistoButton>
+            </Flex>
+
             <DragAndDropList
                 list={courseItems}
                 setList={handleSetReorderedCourseItems}
@@ -344,23 +360,6 @@ export const EditCourseControl = (props: {
                         </EpistoButton>
                     </Flex>
                 </Flex>} />
-            <Flex h={100} w={"100%"} justifyContent={"space-evenly"}>
-                <EpistoButton
-                    onClick={() => handleAddCourseItemAsync("video")}
-                    style={{ alignSelf: "center" }}
-                    variant="outlined">
-                    Új videó hozzáadása
-                </EpistoButton>
-
-                <EpistoButton
-                    onClick={() => handleAddCourseItemAsync("exam")}
-                    style={{ alignSelf: "center" }}
-                    variant="outlined">
-                    Új vizsga hozzáadása
-                </EpistoButton>
-            </Flex>
-
-
         </Flex>
 
     </AdminSubpageHeader >

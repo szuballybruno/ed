@@ -98,7 +98,7 @@ export const EditExamSubpage = () => {
     const handleAddNewQuesiton = () => {
 
         const newQuestion = {
-            questionText: "Új kérdés",
+            questionText: "",
             questionId: getVirtualId()
         } as QuestionDTO;
 

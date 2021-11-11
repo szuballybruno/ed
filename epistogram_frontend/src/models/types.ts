@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type LoadingStateType = "idle" | "loading" | "error" | "success";
 
 export type StillWatchingDialogMarker = {
@@ -15,10 +17,11 @@ export type ApplicationRoute = {
 export type DialogOptions = {
     title?: string,
     description?: string,
-    buttons?: DialogButtonType[]
+    buttons?: ButtonType[]
 }
 
-export type DialogButtonType = {
+export type ButtonType = {
     title: string,
+    icon?: ReactNode,
     action: () => void
 }

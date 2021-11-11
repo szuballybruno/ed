@@ -18,7 +18,7 @@ export const useCreateVideo = () => {
 
             return qr.postDataAsync({
                 courseId,
-                title: "Új videó",
+                title: "",
                 description: "",
                 subtitle: ""
             });

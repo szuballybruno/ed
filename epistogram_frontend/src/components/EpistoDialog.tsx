@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/layout";
 import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import React, { ReactNode, useState } from "react";
-import { DialogButtonType, DialogOptions } from "../models/types";
+import { ButtonType, DialogOptions } from "../models/types";
 import { EpistoButton } from "./universal/EpistoButton";
 import { Close } from "@mui/icons-material";
 
@@ -16,7 +16,7 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
         setIsOpen(false);
     }
 
-    const [buttons, setButtons] = useState<DialogButtonType[]>([]);
+    const [buttons, setButtons] = useState<ButtonType[]>([]);
 
     const openDialog = (opt?: DialogOptions) => {
 

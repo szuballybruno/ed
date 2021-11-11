@@ -58,7 +58,7 @@ export const EditQuestionSubpage = () => {
 
         const newAnswer = {
             id: getVirtualId(),
-            text: "Új válasz"
+            text: ""
         } as AnswerEditDTO;
 
         setAnswers([...answers, newAnswer])

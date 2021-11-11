@@ -173,7 +173,7 @@ export const EditVideoSubpage = () => {
 
         const newQuestion = {
             questionId: getVirtualId(),
-            questionText: "Új kérdés",
+            questionText: "",
             showUpTimeSeconds: playedSecondsRound
         } as QuestionDTO;
 

@@ -7,7 +7,7 @@ import React, { ReactNode } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { objToArray, useIsMatchingCurrentRoute } from "../../frontendHelpers";
-import { ApplicationRoute } from "../../models/types";
+import { ApplicationRoute, ButtonType } from "../../models/types";
 import { useCourseBriefData } from "../../services/courseService";
 import { useNavigation } from "../../services/navigatior";
 import { useBriefUserData } from "../../services/userManagementService";
@@ -16,10 +16,11 @@ import { EpistoButton } from "../universal/EpistoButton";
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: ApplicationRoute[],
     children?: ReactNode,
-    onSave?: () => void
+    onSave?: () => void,
+    headerButtons?: ButtonType[]
 } & FlexProps) => {
 
-    const { children, tabMenuItems, onSave, ...css } = props;
+    const { children, headerButtons, tabMenuItems, onSave, ...css } = props;
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string }>();
@@ -96,10 +97,10 @@ export const AdminSubpageHeader = (props: {
             direction={"row"}
             height={60}
             pl={20}
-            justify={"flex-start"}
             align={"center"}
             className="dividerBorderBottom">
 
+            {/* breadcrumbds */}
             <Breadcrumbs>
                 {currentRoute && <BreadcrumbLink
                     isCurrent={!subRoute}
@@ -117,8 +118,8 @@ export const AdminSubpageHeader = (props: {
         {tabMenuItems && <Flex
             mx={20}
             flexDirection="row"
-            justifyContent="space-between"
             alignItems="center"
+            justify={"space-between"}
             h={60}>
 
             <Tabs
@@ -131,6 +132,30 @@ export const AdminSubpageHeader = (props: {
                         return <Tab label={x.title} value={x.route} />
                     })}
             </Tabs>
+
+            {/* header buttons */}
+            <Flex mr="20px">
+
+                {/* header buttons */}
+                {headerButtons && headerButtons
+                    .map(x => <EpistoButton
+                        style={{
+                            marginRight: "10px"
+                        }}
+                        variant="colored"
+                        onClick={x.action}>
+                        {x.icon}
+                        {x.title}
+                    </EpistoButton>)}
+
+                {/* save button */}
+                {onSave && <EpistoButton
+                    variant="colored"
+                    onClick={() => onSave()}>
+
+                    Mentés
+                </EpistoButton>}
+            </Flex>
         </Flex>
         }
 
@@ -138,18 +163,5 @@ export const AdminSubpageHeader = (props: {
         <Flex direction="column" flex="1" overflowY="scroll" px="20px" {...css}>
             {children}
         </Flex>
-
-        {/* save button */}
-        {onSave && <EpistoButton
-            style={{
-                position: "absolute",
-                right: "40px",
-                bottom: "40px"
-            }}
-            variant="colored"
-            onClick={() => onSave()}>
-
-            Mentés
-        </EpistoButton>}
     </Flex>
 }

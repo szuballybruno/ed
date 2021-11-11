@@ -41,7 +41,7 @@ export const useCreateExam = () => {
         createExamAsync: (courseId: number) => qr.postDataAsync({
             courseId,
             subtitle: "",
-            title: "Uj vizsga"
+            title: ""
         }),
         createExamState: qr.state,
     }
