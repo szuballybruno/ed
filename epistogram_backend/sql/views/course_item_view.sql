@@ -1,7 +1,8 @@
 SELECT 
 	"sq".*,
 	"m"."name" AS "moduleName",
-	"m"."orderIndex" AS "moduleOrderIndex"
+	"m"."orderIndex" AS "moduleOrderIndex",
+	(SELECT encode(("m"."id" || '@module')::bytea, 'base64')) AS "moduleCode"
 FROM 
 (
 	-- video

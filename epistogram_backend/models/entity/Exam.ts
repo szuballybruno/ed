@@ -1,11 +1,8 @@
-import Module from "module";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { CourseModule } from "./CourseModule";
 import { Question } from "./Question";
-import { User } from "./User";
-import { UserCourseBridge } from "./UserCourseBridge";
 
 @Entity()
 export class Exam {
@@ -30,11 +27,6 @@ export class Exam {
 
     @Column({ default: false })
     isFinalExam: boolean;
-
-    // users
-    @OneToMany(type => UserCourseBridge, x => x.currentExam)
-    @JoinColumn()
-    userCourseBridges: UserCourseBridge[];
 
     // course
     @Column({ nullable: true })

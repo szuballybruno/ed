@@ -1,13 +1,16 @@
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
+import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
+import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
+import { CourseItemStateType } from "../models/shared_models/types/sharedTypes";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
 import { VideoCompletedView } from "../models/views/VideoCompletedView";
 import { VideoProgressView } from "../models/views/VideoProgressView";
 import { staticProvider } from "../staticProvider";
-import { getCourseItemByCodeAsync, getCourseItemsAsync, getCurrentCourseItemsAsync, getExamDTOAsync, getUserCourseBridgeOrFailAsync, setCurrentCourse } from "./courseService";
-import { getItemCode } from "./encodeService";
+import { getCourseItemByCodeAsync, getCourseModulesAsync, getCurrentCourseItemsAsync, getExamDTOAsync, getUserCourseBridgeOrFailAsync, setCurrentCourse } from "./courseService";
+import { readItemCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
 import { createAnswerSessionAsync } from "./questionAnswerService";
 import { saveUserSessionActivityAsync } from "./userSessionActivity";
@@ -18,26 +21,48 @@ export const getPlayerDataAsync = async (
     userId: number,
     descriptorCode: string) => {
 
-    // get current item
-    const currentCourseItem = await getCourseItemByCodeAsync(descriptorCode);
-    const courseId = currentCourseItem.courseId;
+    const { itemId, itemType } = readItemCode(descriptorCode);
 
-    // get valid course item code
-    const validCurrentCourseItem = await getValidCourseItem(userId, courseId, descriptorCode);
+    // module
+    if (itemType === "module") {
+
+        return await getPlayerDataForModuleGreetingAsync(userId, itemId);
+    }
+
+    // items 
+    else {
+
+        return await getPlayerDataForItemsAsync(userId, descriptorCode);
+    }
+}
+
+const getPlayerDataForModuleGreetingAsync = async (userId: number, moduleId: number) => {
+
+
+}
+
+const getPlayerDataForItemsAsync = async (
+    userId: number,
+    descriptorCode: string) => {
+
+    // get current item
+    const targetItem = await getCourseItemByCodeAsync(descriptorCode);
+    const courseId = targetItem.courseId;
+
+    // get valid course item 
+    const validItemCode = await getValidCourseItemCodeAsync(userId, courseId, descriptorCode);
 
     // set current course 
-    await setCurrentCourse(
-        userId,
-        courseId,
-        validCurrentCourseItem.type === "video" ? validCurrentCourseItem.id : null,
-        validCurrentCourseItem.type === "exam" ? validCurrentCourseItem.id : null);
+    await setCurrentCourse(userId, courseId, validItemCode);
 
     // course items 
     const modules = await getCurrentCourseItemsAsync(userId);
 
     // get course item dto
-    const videoDTO = validCurrentCourseItem.type === "video" ? await getVideoDTOAsync(userId, validCurrentCourseItem.id) : null;
-    const examDTO = validCurrentCourseItem.type === "exam" ? await getExamDTOAsync(userId, validCurrentCourseItem.id) : null;
+    const { itemId, itemType } = readItemCode(validItemCode);
+    const videoDTO = itemType === "video" ? await getVideoDTOAsync(userId, itemId) : null;
+    const examDTO = itemType === "exam" ? await getExamDTOAsync(userId, itemId) : null;
+    const moduleDetailedDTO = itemType === "module" ? await getModuleDetailedDTOAsync(userId, itemId) : null;
 
     // get user course bridge
     const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, courseId);
@@ -46,25 +71,13 @@ export const getPlayerDataAsync = async (
     const answerSessionId = await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
 
     // next 
-    const currentModule = modules
-        .single(x => x.items.any(x => x.state === "current"));
-
-    const nextItem = currentModule
-        .items
-        .filter(x => x.orderIndex === validCurrentCourseItem.orderIndex + 1)[0];
-
-    const nextModule = modules
-        .filter(x => x.orderIndex === currentModule.orderIndex + 1)[0];
-
-    const nextItemCode = nextItem
-        ? nextItem.descriptorCode
-        : nextModule
-            ? getItemCode(nextModule.id, "module")
-            : null;
+    const flat = getCourseItemsFlat(modules);
+    const nextItemCode = flat[flat.findIndex(x => x.code === validItemCode) + 1]?.code ?? null;
 
     return {
         video: videoDTO,
         exam: examDTO,
+        module: moduleDetailedDTO,
         answerSessionId: answerSessionId,
         mode: userCourseBridge.courseMode,
         courseId: courseId!,
@@ -74,29 +87,70 @@ export const getPlayerDataAsync = async (
     } as PlayerDataDTO;
 }
 
-export const getValidCourseItem = async (userId: number, courseId: number, itemCode: string) => {
+/**
+ * Finds the closest valid course item code to the target. 
+ * This is to ensure a user is not recieving an item they should not access.
+ *
+ * @param {number} userId UserId.
+ * @param {number} courseId CourseId.
+ * @param {string} targetItemCode The code of the target item, if it's accessable for the user, it will be returned.
+ * @return {string} the code of the closest valid itme found in course.
+ */
+export const getValidCourseItemCodeAsync = async (userId: number, courseId: number, targetItemCode: string) => {
 
-    const modules = await getCourseItemsAsync(userId, courseId);
-    const courseItems = modules
-        .flatMap(x => x.items);
+    const modules = await getCourseModulesAsync(userId, courseId);
+    const courseItemsFlat = getCourseItemsFlat(modules);
 
-    const targetItem = courseItems
-        .single(x => x.descriptorCode === itemCode);
+    const targetItem = courseItemsFlat
+        .single(x => x.code === targetItemCode);
 
-    // if requested item is locked, return the last available
-    if (targetItem.state === "locked") {
+    if (targetItem.state !== "locked")
+        return targetItem.code;
 
-        const firstLockedIndex = courseItems
-            .findIndex(x => x.state === "locked");
+    // target item is locked, fallback...
+    const firstLockedIndex = courseItemsFlat
+        .findIndex(x => x.state === "locked");
 
-        const prevIndex = firstLockedIndex - 1;
+    const prevIndex = firstLockedIndex - 1;
 
-        return courseItems[prevIndex]
-            ? courseItems[prevIndex]
-            : courseItems[0];
-    }
+    return (courseItemsFlat[prevIndex]
+        ? courseItemsFlat[prevIndex]
+        : courseItemsFlat[0]).code;
+}
 
-    return targetItem;
+/**
+ * Returns a list of objects symbolizing the items present in the specified course. 
+ * The list is ordered, and can be traversed by list item indicies.
+ *
+ * @param {ModuleDTO[]} modules Modules present in course.
+ * @return a flat list of items in course.
+ */
+export const getCourseItemsFlat = (modules: ModuleDTO[]) => {
+
+    const flat = [] as { code: string, index: number, state: CourseItemStateType }[];
+    modules
+        .forEach(module => {
+
+            flat.push({ code: module.code, index: module.orderIndex, state: module.state });
+
+            module.items.forEach(x => flat.push({ code: x.descriptorCode, index: x.orderIndex, state: x.state }));
+        });
+
+    return flat;
+}
+
+/**
+ * Gets a detailed module dto.
+ *
+ * @param {number} userId userId.
+ * @param {number} moduleId moduleId.
+ * @return {ModuleDetailedDTO} holds valuable information about the module.
+ */
+export const getModuleDetailedDTOAsync = async (userId: number, moduleId: number) => {
+
+    return {
+        name: "asd"
+    } as ModuleDetailedDTO;
 }
 
 export const getVideoDTOAsync = async (userId: number, videoId: number) => {
@@ -119,9 +173,12 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
             }
         });
 
-    const videoId = currentBridge.currentVideoId;
-    if (!videoId)
-        throw new Error("Current video id is null or undefined!");
+    if (!currentBridge.currentItemCode)
+        throw new Error("Course has no current item!");
+
+    const { itemId: videoId, itemType } = readItemCode(currentBridge.currentItemCode);
+    if (itemType !== "video")
+        throw new Error("Current item is not of type: video!");
 
     await staticProvider
         .ormConnection

@@ -51,11 +51,6 @@ export class Video {
     @JoinColumn()
     questions: Question[];
 
-    // users 
-    @OneToMany(type => UserCourseBridge, x => x.currentVideo)
-    @JoinColumn()
-    userCourseBridges: UserCourseBridge[];
-
     // course
     @Column()
     courseId: number;

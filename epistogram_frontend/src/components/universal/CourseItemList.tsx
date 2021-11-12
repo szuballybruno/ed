@@ -7,13 +7,16 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import TreeItem from '@mui/lab/TreeItem';
 import TreeView from '@mui/lab/TreeView';
+import { Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { ModuleDTO } from "../../models/shared_models/ModuleDTO";
 import { useNavigation } from "../../services/navigatior";
+import { EpistoButton } from "./EpistoButton";
 import { FlexList } from "./FlexList";
 import { FlexListItem } from "./FlexListItem";
 import { FlexListTitleSubtitle } from "./FlexListTitleSubtitle";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
@@ -53,29 +56,35 @@ export const CourseItemList = (props: {
     modules: ModuleDTO[]
 }) => {
 
+    // data 
     const { modules } = props;
     const currentModuleId = modules
         .filter(module => module
             .items
             .some(item => item.state === "current"))[0]?.id;
 
+    // hooks 
     const [expandedNodeIds, setExpandedNodeIds] = useState<string[]>([]);
+    const { navigateToPlayer } = useNavigation();
 
+    // funcs 
     const handleToggle = (nodeIds: string[]) => {
 
         setExpandedNodeIds(nodeIds);
     };
 
-    useEffect(() => {
-
-        if (currentModuleId && expandedNodeIds.length === 0)
-            setExpandedNodeIds([currentModuleId + ""]);
-    }, [!!currentModuleId]);
-
     const lockedModuleIds = modules
         .filter(x => x.state === "locked")
         .map(x => x.id)
         .join(", ");
+
+    const isCurrentExpanded = !expandedNodeIds
+        .some(x => x === currentModuleId + "");
+
+    const startModule = (code: string) => {
+
+        navigateToPlayer(code);
+    }
 
     useEffect(() => {
 
@@ -87,7 +96,11 @@ export const CourseItemList = (props: {
                 .some(y => y.id + "" === x)));
     }, [lockedModuleIds]);
 
-    console.log(expandedNodeIds);
+    useEffect(() => {
+
+        if (currentModuleId && isCurrentExpanded)
+            setExpandedNodeIds([...expandedNodeIds, currentModuleId + ""]);
+    }, [!!currentModuleId, lockedModuleIds, currentModuleId]);
 
     return (
         <TreeView
@@ -102,15 +115,26 @@ export const CourseItemList = (props: {
                 .map(module => {
 
                     const isLocked = module.state === "locked";
+                    const startable = (module.state === "available" || module.state === "completed");
 
                     return <TreeItem
                         style={{
                             pointerEvents: isLocked ? "none" : "all",
                             color: isLocked ? "gray" : undefined
                         }}
+                        label={<Flex justify="space-between" align="center">
+                            <Typography>
+                                {module.name}
+                            </Typography>
+                            {startable && <EpistoButton
+                                padding="3px"
+                                onClick={() => startModule(module.code)}
+                                variant="outlined">
+                                <PlayArrowIcon style={{ color: "var(--epistoTeal)" }} />
+                            </EpistoButton>}
+                        </Flex>}
                         className="forceTransparentBgOnChildren"
-                        nodeId={module.id + ""}
-                        label={module.name}>
+                        nodeId={module.id + ""}>
 
                         {!isLocked && <FlexList id="courseItemListContainer" p="10px">
                             {module

@@ -7,4 +7,5 @@ export type ModuleDTO = {
     orderIndex: number;
     items: CourseItemDTO[];
     state: CourseItemStateType;
+    code: string;
 }

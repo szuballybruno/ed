@@ -28,8 +28,6 @@ export const PlayerPage = () => {
         refetchPlayerData
     } = usePlayerData(descriptorCode);
 
-    // console.log("----" + !!playerData);
-
     const video = playerData?.video;
     const exam = playerData?.exam;
     const answerSessionId = playerData?.answerSessionId;

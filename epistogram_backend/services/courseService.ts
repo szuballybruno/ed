@@ -1,5 +1,6 @@
 import { Course } from "../models/entity/Course";
 import { CourseCategory } from "../models/entity/CourseCategory";
+import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
@@ -87,22 +88,42 @@ export const getCurrentCourseItemsAsync = async (userId: number) => {
     if (!courseBridge)
         return [];
 
-    const currentItemCode = getCourseItemCode(courseBridge.currentVideoId, courseBridge.currentExamId);
+    if (!courseBridge.currentItemCode)
+        return [];
+
+    const { itemType } = readItemCode(courseBridge.currentItemCode);
 
     // get course items 
-    const modules = await getCourseItemsAsync(userId, courseBridge.courseId);
+    const modules = await getCourseModulesAsync(userId, courseBridge.courseId);
 
-    // set current item's state to 'current'
-    let currentItem = modules
-        .flatMap(x => x.items)
-        .single(item => item.descriptorCode === currentItemCode);
+    if (itemType !== "module") {
 
-    currentItem.state = "current";
+        // set current item's state to 'current'
+        let currentItem = modules
+            .flatMap(x => x.items)
+            .single(item => item.descriptorCode === courseBridge.currentItemCode);
+
+        currentItem.state = "current";
+
+        // set current module 
+        const currentModule = modules
+            .single(x => x.items
+                .any(x => x.id === currentItem.id));
+
+        currentModule.state = "current";
+    }
+    else {
+
+        const module = modules
+            .single(x => x.code === courseBridge.currentItemCode);
+
+        module.state = "current";
+    }
 
     return modules;
 }
 
-export const getCourseItemsAsync = async (userId: number, courseId: number) => {
+export const getCourseModulesAsync = async (userId: number, courseId: number) => {
 
     const views = await staticProvider
         .ormConnection
@@ -117,15 +138,22 @@ export const getCourseItemsAsync = async (userId: number, courseId: number) => {
         .map(x => {
 
             const viewAsModule = x.items.first();
+            const isLockedModule = x.items[0]?.state === "locked";
+            const isCompletedModule = x.items.all(x => x.state === "completed");
 
             return {
                 id: viewAsModule.moduleId,
                 name: viewAsModule.moduleName,
                 orderIndex: viewAsModule.moduleOrderIndex,
+                code: viewAsModule.moduleCode,
                 items: x
                     .items
                     .map(x => toCourseItemDTO(x)),
-                state: x.items[0]?.state === "locked" ? "locked" : "available"
+                state: isLockedModule
+                    ? "locked"
+                    : isCompletedModule
+                        ? "completed"
+                        : "available"
             } as ModuleDTO;
         });
 
@@ -215,33 +243,30 @@ export const getUserCourseBridgeOrFailAsync = async (userId: number, courseId: n
 
 export const startCourseAsync = async (userId: number, courseId: number) => {
 
-    // get irtem
-    const courseItems = await getSimpleCourseItemDTOs(courseId);
-    const firstCourseItem = courseItems[0];
-    const firstItemDescriptor = firstCourseItem?.descriptorCode ?? null;
+    const module = await staticProvider
+        .ormConnection
+        .getRepository(CourseModule)
+        .findOne({
+            where: {
+                courseId,
+                orderIndex: 0
+            }
+        });
 
-    if (!firstItemDescriptor)
-        return {
-            text: null
-        } as TextDTO;
+    const moduleCode = module ? getItemCode(module.id, "module") : null;
 
-    // set current course 
-    await setCurrentCourse(
-        userId,
-        courseId,
-        firstCourseItem.type === "video" ? firstCourseItem.id : null,
-        firstCourseItem.type === "exam" ? firstCourseItem.id : null);
+    if (moduleCode)
+        await setCurrentCourse(userId, courseId, moduleCode);
 
     return {
-        text: firstItemDescriptor
+        text: moduleCode
     } as TextDTO;
 }
 
 export const setCurrentCourse = async (
     userId: number,
     courseId: number,
-    videoId: number | null,
-    examId: number | null) => {
+    itemCode: string) => {
 
     const currentCourseBridge = await getUserCourseBridgeAsync(userId, courseId);
 
@@ -255,8 +280,7 @@ export const setCurrentCourse = async (
                 courseId: courseId,
                 userId: userId,
                 courseMode: "beginner",
-                currentVideoId: videoId,
-                currentExamId: examId
+                currentItemCode: itemCode
             } as UserCourseBridge);
     }
 
@@ -268,8 +292,7 @@ export const setCurrentCourse = async (
             .getRepository(UserCourseBridge)
             .save({
                 id: currentCourseBridge.id,
-                currentVideoId: videoId,
-                currentExamId: examId
+                currentItemCode: itemCode
             } as UserCourseBridge);
     }
 
@@ -371,6 +394,8 @@ export const unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?
         ? toCourseItemDTOExam(item as Exam)
         : toCourseItemDTOVideo(item as Video);
 
+    const currentItemCode = getItemCode(isExam ? examId! : videoId!, isExam ? "exam" : "video");
+
     const courseId = item.courseId;
 
     const courseItemDTOs = await getSimpleCourseItemDTOs(courseId);
@@ -392,22 +417,14 @@ export const unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?
         .ormConnection
         .getRepository(UserCourseBridge)
         .find({
-            where: isExam
-                ? {
-                    currentExamId: examId,
-                    courseId
-                }
-                : {
-                    currentVideoId: videoId,
-                    courseId
-                }
+            where: {
+                currentItemCode: currentItemCode,
+                courseId
+            }
         });
 
     courseBridges
-        .forEach(x => {
-            x.currentExamId = previousCourseItem?.type === "exam" ? previousCourseItem.id : null;
-            x.currentVideoId = previousCourseItem?.type === "video" ? previousCourseItem.id : null;
-        });
+        .forEach(x => x.currentItemCode = previousCourseItem?.descriptorCode ?? null);
 
     await staticProvider
         .ormConnection

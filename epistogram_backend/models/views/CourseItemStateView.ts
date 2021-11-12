@@ -37,6 +37,9 @@ export class CourseItemStateView {
     moduleOrderIndex: number;
 
     @ViewColumn()
+    moduleCode: string;
+
+    @ViewColumn()
     itemOrderIndex: number;
 
     @ViewColumn()
