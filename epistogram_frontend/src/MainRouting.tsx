@@ -18,6 +18,7 @@ import { UserSettingsPage } from "./components/userSettings/UserSettingsPage";
 import { applicationRoutes } from "./configuration/applicationRoutes";
 import { isUnderMaintenance } from "./Environemnt";
 import { ApplicationRoute } from "./models/types";
+import {ShopPage} from "./components/shopPage/ShopPage";
 
 export const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
 
@@ -53,6 +54,10 @@ export const MainRouting = () => {
         <ProtectedRoute
             path={applicationRoutes.homeRoute.route}
             render={() => <HomePage />} />
+
+        <ProtectedRoute
+            path={applicationRoutes.shopRoute.route}
+            render={() => <ShopPage />} />
 
         <ProtectedRoute
             path={applicationRoutes.availableCoursesRoute.route}
