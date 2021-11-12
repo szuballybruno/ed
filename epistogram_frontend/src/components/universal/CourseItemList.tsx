@@ -87,6 +87,8 @@ export const CourseItemList = (props: {
                 .some(y => y.id + "" === x)));
     }, [lockedModuleIds]);
 
+    console.log(expandedNodeIds);
+
     return (
         <TreeView
             defaultCollapseIcon={<ExpandMoreIcon />}
