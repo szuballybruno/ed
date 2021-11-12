@@ -1,4 +1,7 @@
 import { CurrentTasksDTO } from "./models/shared_models/CurrentTasksDTO";
+import {ShopItemShortDTO} from "./models/shared_models/ShopItemShortDTO";
+import {ShopCategoryDTO} from "./models/shared_models/ShopCategoryDTO";
+import {getAssetUrl} from "./frontendHelpers";
 
 export const mockTasks = {
     tasks: [
@@ -49,3 +52,39 @@ export const mockTasks = {
         }
     ]
 } as CurrentTasksDTO;
+
+export const mockShopItems = [
+    {
+        shopItemId: 1,
+        title: "Xiaomi Mi Router 4 Pro Gigabit Dual-Band 1317Mbps 2.4G/5.0GHz Vezeték nélküli router",
+        thumbnailImageURL: getAssetUrl("/images/SHOProuter.png"),
+        categoryName: "Fizikai termékek",
+        priceInEpistoCoin: 3900,
+        priceInHUF: 8000
+    },
+    {
+        shopItemId: 2,
+        title: "Office 365 Pro családi előfizetés csomag 1 évre, maximum 5 felhasználóig",
+        thumbnailImageURL: getAssetUrl("/images/SHOPoffice.png"),
+        categoryName: "Szoftverek, játékok",
+        priceInEpistoCoin: 9900,
+        priceInHUF: 89000
+    },
+    {
+        shopItemId: 3,
+        title: "Google Ads Mesterkurzus Kissné Tóth Erával a Googletől",
+        thumbnailImageURL: getAssetUrl("/images/SHOPads.png"),
+        categoryName: "Prémium kurzusok",
+        priceInEpistoCoin: 13000,
+        priceInHUF: 0
+    }
+] as ShopItemShortDTO[]
+
+export const mockShopCategories = [
+    {id: 1, name: "Prémium kurzusok"},
+    {id: 2, name: "Szoftverek, játékok"},
+    {id: 3, name: "Fizikai termékek"},
+    {id: 4, name: "Digitális művészet - NFT"},
+    {id: 5, name: "Élmény csomagok"},
+    {id: 6, name: "Egyéb kedvezmények"}
+] as ShopCategoryDTO[]

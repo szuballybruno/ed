@@ -30,6 +30,7 @@ export const translatableTexts = {
         registration: "Regisztráció",
         setNewPassword: "Új jelszó beállítása",
         homePage: "Kezdőlap",
+        shopPage: "Bolt",
         availableCourses: "Tanfolyamkereső",
         learning: "Tanulás",
         learningOverview: "Áttekintés",
@@ -123,6 +124,11 @@ export const translatableTexts = {
         },
         startCourse: "Indítás",
         courseDataSheet: "Adatlap"
+    },
+
+    shop: {
+        description: "Leírás",
+        buy: "Megveszem"
     },
 
     learningOverview: {
