@@ -90,7 +90,7 @@ export const getDatabaseConnectionParameters = () => {
 
     const dbConfig = staticProvider.globalConfig.database;
     const isHostedOnGCP = dbConfig.isHostedOnGCP;
-    const gcpCloudSqlConnectionString = `/cloudsql/gifted-country-324010:europe-central2:epistogram/.s.PGSQL.5432.`;
+    const gcpCloudSqlConnectionString = `/cloudsql/gifted-country-324010:europe-central2:epistogram`;
 
     return {
         host: isHostedOnGCP
