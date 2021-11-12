@@ -35,6 +35,11 @@ export const applicationRoutes = {
         route: "/home"
     },
 
+    shopRoute: {
+        title: translatableTexts.routeTitles.shopPage,
+        route: "/shop"
+    },
+
     rootHomeRoute: {
         title: translatableTexts.routeTitles.homePage,
         route: "/",
