@@ -1,3 +1,4 @@
+import { CourseModule } from "../models/entity/CourseModule";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
@@ -9,7 +10,7 @@ import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingRes
 import { VideoCompletedView } from "../models/views/VideoCompletedView";
 import { VideoProgressView } from "../models/views/VideoProgressView";
 import { staticProvider } from "../staticProvider";
-import { getCourseItemByCodeAsync, getCourseModulesAsync, getCurrentCourseItemsAsync, getExamDTOAsync, getUserCourseBridgeOrFailAsync, setCurrentCourse } from "./courseService";
+import { getCourseIdByItemCodeAsync, getCourseModulesAsync, getCurrentCourseItemsAsync, getExamDTOAsync, getUserCourseBridgeOrFailAsync, setCurrentCourse } from "./courseService";
 import { readItemCode } from "./encodeService";
 import { toVideoDTO } from "./mappings";
 import { createAnswerSessionAsync } from "./questionAnswerService";
@@ -21,33 +22,8 @@ export const getPlayerDataAsync = async (
     userId: number,
     descriptorCode: string) => {
 
-    const { itemId, itemType } = readItemCode(descriptorCode);
-
-    // module
-    if (itemType === "module") {
-
-        return await getPlayerDataForModuleGreetingAsync(userId, itemId);
-    }
-
-    // items 
-    else {
-
-        return await getPlayerDataForItemsAsync(userId, descriptorCode);
-    }
-}
-
-const getPlayerDataForModuleGreetingAsync = async (userId: number, moduleId: number) => {
-
-
-}
-
-const getPlayerDataForItemsAsync = async (
-    userId: number,
-    descriptorCode: string) => {
-
     // get current item
-    const targetItem = await getCourseItemByCodeAsync(descriptorCode);
-    const courseId = targetItem.courseId;
+    const courseId = await getCourseIdByItemCodeAsync(descriptorCode);
 
     // get valid course item 
     const validItemCode = await getValidCourseItemCodeAsync(userId, courseId, descriptorCode);
@@ -68,7 +44,9 @@ const getPlayerDataForItemsAsync = async (
     const userCourseBridge = await getUserCourseBridgeOrFailAsync(userId, courseId);
 
     // get new answer session
-    const answerSessionId = await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
+    const answerSessionId = itemType === "module"
+        ? null
+        : await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
 
     // next 
     const flat = getCourseItemsFlat(modules);
@@ -148,8 +126,13 @@ export const getCourseItemsFlat = (modules: ModuleDTO[]) => {
  */
 export const getModuleDetailedDTOAsync = async (userId: number, moduleId: number) => {
 
+    const module = await staticProvider
+        .ormConnection
+        .getRepository(CourseModule)
+        .findOneOrFail(moduleId);
+
     return {
-        name: "asd"
+        name: module.name
     } as ModuleDetailedDTO;
 }
 

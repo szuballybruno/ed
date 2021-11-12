@@ -89,7 +89,7 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
 
 export const respondError = (res: Response, msg: string, type: ErrorType) => {
 
-    logError(`Responding error: ${type}: ${msg}`);
+    logError(`Responding typed error: Type: ${type} Msg: ${msg}`);
 
     const errorDTO = {
         errorType: type,
@@ -114,6 +114,7 @@ export const respondError = (res: Response, msg: string, type: ErrorType) => {
             break;
 
         default:
+            respond(res, 500, errorDTO);
             break;
     }
 }

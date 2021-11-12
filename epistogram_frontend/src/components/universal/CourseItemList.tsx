@@ -116,13 +116,23 @@ export const CourseItemList = (props: {
 
                     const isLocked = module.state === "locked";
                     const startable = (module.state === "available" || module.state === "completed");
+                    const moduleSelected = module.state === "current" && !module.items.some(x => x.state === "current");
+                    const renderContent = !isLocked && !moduleSelected;
+                    const unclickable = moduleSelected;
 
                     return <TreeItem
                         style={{
-                            pointerEvents: isLocked ? "none" : "all",
+                            pointerEvents: isLocked || unclickable ? "none" : "all",
                             color: isLocked ? "gray" : undefined
                         }}
-                        label={<Flex justify="space-between" align="center">
+                        label={<Flex
+                            className="whall"
+                            bg={moduleSelected ? `var(--deepBlue)` : undefined}
+                            color={moduleSelected ? "white" : undefined}
+                            justify="space-between"
+                            align="center"
+                            height="50px"
+                            pl="5px">
                             <Typography>
                                 {module.name}
                             </Typography>
@@ -136,7 +146,7 @@ export const CourseItemList = (props: {
                         className="forceTransparentBgOnChildren"
                         nodeId={module.id + ""}>
 
-                        {!isLocked && <FlexList id="courseItemListContainer" p="10px">
+                        {renderContent && <FlexList id="courseItemListContainer" p="10px">
                             {module
                                 .items
                                 .map((courseItem, index) => <CourseItemView
@@ -144,7 +154,7 @@ export const CourseItemList = (props: {
                                     courseItem={courseItem} />)}
                         </FlexList>}
 
-                        {isLocked && <Box></Box>}
+                        {!renderContent && <Box></Box>}
                     </TreeItem>
                 })}
         </TreeView>

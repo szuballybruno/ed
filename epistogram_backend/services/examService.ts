@@ -8,6 +8,7 @@ import { ExamResultView } from "../models/views/ExamResultView";
 import { ExamSessionSuccessView } from "../models/views/ExamSessionSuccessView";
 import { staticProvider } from "../staticProvider";
 import { unsetUsersCurrentCourseItemAsync } from "./courseService";
+import { readItemCode } from "./encodeService";
 import { toExamResultDTO } from "./mappings";
 import { answerQuestionAsync } from "./questionAnswerService";
 import { deleteQuesitonsAsync } from "./questionService";
@@ -81,9 +82,13 @@ export const getExamResultsAsync = async (userId: number, answerSessionId: numbe
             }
         });
 
-    const currentExamId = bridge.currentExamId;
-    if (!currentExamId)
-        throw new Error("Current exam id is null or undefined!");
+    if (!bridge.currentItemCode)
+        throw new Error("No current item found");
+
+    const { itemId: currentExamId, itemType } = readItemCode(bridge.currentItemCode);
+
+    if (itemType !== "exam")
+        throw new Error("Current item is not an exam!");
 
     const examCompletedViews = await staticProvider
         .ormConnection

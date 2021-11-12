@@ -23,10 +23,7 @@ export class CourseView {
     isStarted: boolean;
 
     @ViewColumn()
-    currentExamId: number;
-
-    @ViewColumn()
-    currentVideoId: number;
+    currentItemCode: string;
 
     @ViewColumn()
     title: string;

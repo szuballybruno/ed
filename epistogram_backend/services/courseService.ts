@@ -160,31 +160,20 @@ export const getCourseModulesAsync = async (userId: number, courseId: number) =>
     return modules;
 }
 
-export const getCourseItemAsync = async (itemId: number, itemType: CourseItemType) => {
-
-    if (itemType === "video") {
-
-        const video = await getVideoByIdAsync(itemId);
-        if (!video)
-            throw new TypedError("Video not found by id: " + itemId, "courseItemNotFound");
-
-        return video;
-    }
-    else {
-
-        const exam = await getExamByIdAsync(itemId);
-        if (!exam)
-            throw new TypedError("Exam not found by id: " + itemId, "courseItemNotFound");
-
-        return exam;
-    }
-}
-
-export const getCourseItemByCodeAsync = async (descriptorCode: string) => {
+export const getCourseIdByItemCodeAsync = async (descriptorCode: string) => {
 
     const { itemId, itemType } = readItemCode(descriptorCode);
 
-    return getCourseItemAsync(itemId, itemType);
+    if (itemType === "video")
+        return (await getVideoByIdAsync(itemId)).courseId;
+
+    if (itemType === "exam")
+        return (await getExamByIdAsync(itemId)).courseId;
+
+    return (await staticProvider
+        .ormConnection
+        .getRepository(CourseModule)
+        .findOneOrFail(itemId)).courseId;
 }
 
 export const getCourseItemCode = (videoId?: number | null, examId?: number | null) => {
@@ -339,7 +328,7 @@ const getExamByIdAsync = (examId: number) => {
     return staticProvider
         .ormConnection
         .getRepository(Exam)
-        .findOne(examId);
+        .findOneOrFail(examId);
 }
 
 export const getCourseEditDataAsync = async (courseId: number) => {

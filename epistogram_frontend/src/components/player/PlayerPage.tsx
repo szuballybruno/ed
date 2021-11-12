@@ -30,6 +30,7 @@ export const PlayerPage = () => {
 
     const video = playerData?.video;
     const exam = playerData?.exam;
+    const module = playerData?.module;
     const answerSessionId = playerData?.answerSessionId;
     const courseMode = playerData?.mode ?? "beginner";
     const courseId = playerData?.courseId;
@@ -109,6 +110,10 @@ export const PlayerPage = () => {
                             answerSessionId={answerSessionId!}
                             setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
                             exam={exam} />}
+
+                        {module && <Box>
+                            {module.name}
+                        </Box>}
                     </Box>
 
                     {/* right sidebar */}

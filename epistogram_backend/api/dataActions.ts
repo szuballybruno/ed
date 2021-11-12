@@ -53,7 +53,7 @@ export const getCurrentCourseItemCodeAction = async (parms: ActionParamsType) =>
     if (!currentBridge)
         return null;
 
-    return getCourseItemCode(currentBridge.currentVideoId, currentBridge.currentExamId);
+    return currentBridge.currentItemCode;
 };
 
 export const saveCourseThumbnailAction = async (params: ActionParamsType) => {
