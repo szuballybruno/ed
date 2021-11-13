@@ -1,13 +1,11 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
 import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
-import { UserDTO } from "../../../models/shared_models/UserDTO";
+import { ModuleEditDTO } from "../../../models/shared_models/ModuleEditDTO";
 import { useCreateExam, useDeleteExam } from "../../../services/examService";
 import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
@@ -20,7 +18,9 @@ import { EpistoSearch } from "../../universal/EpistoSearch";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { CourseEditItemView } from "./CourseEditItemView";
 import { EditSection } from "./EditSection";
+import { TestDnd } from "./TestDnd";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
@@ -38,7 +38,7 @@ export const EditCourseControl = (props: {
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
 
     const [title, setTitle] = useState("")
-    const [courseItems, setCourseItems] = useState<CourseAdminItemShortDTO[]>([])
+    const [modules, setModules] = useState<ModuleEditDTO[]>([])
     const [thumbnailSrc, setThumbnailSrc] = useState("")
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
     const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
@@ -59,26 +59,26 @@ export const EditCourseControl = (props: {
 
     const handleSaveCourseAsync = async () => {
 
-        const dto = {
-            courseId: courseId,
-            title: title,
-            thumbnailURL: thumbnailSrc,
-            courseItems: courseItems,
+        // const dto = {
+        //     courseId: courseId,
+        //     title: title,
+        //     thumbnailURL: thumbnailSrc,
+        //     courseItems: courseItems,
 
-            teacher: {
-                id: 1,
-            } as UserDTO,
+        //     teacher: {
+        //         id: 1,
+        //     } as UserDTO,
 
-            category: {
-                id: category?.id!
-            },
+        //     category: {
+        //         id: category?.id!
+        //     },
 
-            subCategory: {
-                id: subCategory?.id!
-            }
-        } as CourseEditDataDTO;
+        //     subCategory: {
+        //         id: subCategory?.id!
+        //     }
+        // } as CourseEditDataDTO;
 
-        return saveCourseAsync(dto, thumbnailImageFile);
+        // return saveCourseAsync(dto, thumbnailImageFile);
     }
 
     // set default values
@@ -89,7 +89,7 @@ export const EditCourseControl = (props: {
 
         setTitle(courseEditData.title);
         setThumbnailSrc(courseEditData.thumbnailURL);
-        setCourseItems(courseEditData.courseItems);
+        setModules(courseEditData.modules);
 
         // set category
         const currentCategory = categories
@@ -108,13 +108,13 @@ export const EditCourseControl = (props: {
         setThumbnailImageFile(file);
     }
 
-    const handleSetReorderedCourseItems = (courseItems: CourseAdminItemShortDTO[]) => {
+    const handleSetReorderedModules = (modules: ModuleEditDTO[]) => {
 
         // set order indexes according to list item order
-        courseItems
+        modules
             .forEach((x, index) => x.orderIndex = index);
 
-        setCourseItems(courseItems);
+        setModules(modules);
     }
 
     const handleEditCourseItem = (courseItem: CourseAdminItemShortDTO) => {
@@ -151,63 +151,80 @@ export const EditCourseControl = (props: {
         }
     }
 
-    const handleDeleteCourseItemAsync = async (courseItem: CourseAdminItemShortDTO) => {
+    // const handleDeleteCourseItemAsync = async (courseItem: CourseAdminItemShortDTO) => {
 
-        // exam
-        if (courseItem.type === "exam") {
+    //     // exam
+    //     if (courseItem.type === "exam") {
 
-            deleteWarningDialogLogic
-                .openDialog({
-                    title: "Biztosan törlöd a vizsgát?",
-                    description: "A benne lévő összes kérdés el fog veszni.",
-                    buttons: [
-                        {
-                            title: "Vizsga törlése",
-                            action: async () => {
+    //         deleteWarningDialogLogic
+    //             .openDialog({
+    //                 title: "Biztosan törlöd a vizsgát?",
+    //                 description: "A benne lévő összes kérdés el fog veszni.",
+    //                 buttons: [
+    //                     {
+    //                         title: "Vizsga törlése",
+    //                         action: async () => {
 
-                                try {
+    //                             try {
 
-                                    await deleteExamAsync(courseItem.id);
-                                    showNotification("Vizsga sikeresen törölve!");
-                                    setCourseItems(courseItems.filter(x => x.descriptorCode !== courseItem.descriptorCode));
-                                }
-                                catch (e) {
+    //                                 await deleteExamAsync(courseItem.id);
+    //                                 showNotification("Vizsga sikeresen törölve!");
+    //                                 setModules(modules.filter(x => x.descriptorCode !== courseItem.descriptorCode));
+    //                             }
+    //                             catch (e) {
 
-                                    showError(e);
-                                }
-                            }
-                        }
-                    ]
-                });
-        }
+    //                                 showError(e);
+    //                             }
+    //                         }
+    //                     }
+    //                 ]
+    //             });
+    //     }
 
-        // video
-        else {
+    //     // video
+    //     else {
 
-            deleteWarningDialogLogic
-                .openDialog({
-                    title: "Biztosan törlöd a videót?",
-                    description: "A feltöltött fájl, és az összes kérdés el fog veszni.",
-                    buttons: [
-                        {
-                            title: "Videó törlése",
-                            action: async () => {
+    //         deleteWarningDialogLogic
+    //             .openDialog({
+    //                 title: "Biztosan törlöd a videót?",
+    //                 description: "A feltöltött fájl, és az összes kérdés el fog veszni.",
+    //                 buttons: [
+    //                     {
+    //                         title: "Videó törlése",
+    //                         action: async () => {
 
-                                try {
+    //                             try {
 
-                                    await deleteVideoAsync(courseItem.id);
-                                    showNotification("Videó sikeresen törölve!");
-                                    setCourseItems(courseItems.filter(x => x.descriptorCode !== courseItem.descriptorCode));
-                                }
-                                catch (e) {
+    //                                 await deleteVideoAsync(courseItem.id);
+    //                                 showNotification("Videó sikeresen törölve!");
+    //                                 setModules(modules.filter(x => x.descriptorCode !== courseItem.descriptorCode));
+    //                             }
+    //                             catch (e) {
 
-                                    showError(e);
-                                }
-                            }
-                        }
-                    ]
-                });
-        }
+    //                                 showError(e);
+    //                             }
+    //                         }
+    //                     }
+    //                 ]
+    //             });
+    //     }
+    // }
+
+    const ModuleView = (props: { module: ModuleEditDTO }) => {
+
+        const { module } = props;
+        const [items, setItems] = useState(["asd1", "asd2"]);
+
+        return <Flex direction="column">
+            {module.name}
+            <DragAndDropList
+                list={items}
+                setList={setItems}
+                getKey={x => x}
+                renderListItem={(item) => <Box>
+                    {item}
+                </Box>} />
+        </Flex>
     }
 
     return <AdminSubpageHeader
@@ -289,77 +306,12 @@ export const EditCourseControl = (props: {
                 </EpistoButton>
             </Flex>
 
-            <DragAndDropList
-                list={courseItems}
-                setList={handleSetReorderedCourseItems}
-                getKey={x => x.descriptorCode}
-                renderListItem={(item, _, index) => <Flex
-                    flex="1"
-                    borderLeft={`5px solid var(--${item.type === "exam" ? "intenseOrange" : "deepBlue"})`}
-                    p="10px"
-                    justify="space-between"
-                    m="3px">
-
-                    <Flex flexDirection={"column"} alignItems={"flex-start"}>
-                        <Flex>
-
-                            {/* index */}
-                            <Typography style={{ marginRight: "10px" }}>
-                                {index + 1}
-                            </Typography>
-
-                            {/* title */}
-                            <Typography>
-                                {item.title}
-                            </Typography>
-
-                            {/* question count */}
-                            <Typography
-                                style={{
-                                    marginLeft: "10px",
-                                    background: item.questionCount == 0
-                                        ? "var(--mildOrange)"
-                                        : "var(--intenseGreen)",
-                                    textAlign: "center",
-                                    color: "white"
-                                }}
-                                className="circle square20">
-                                {item.questionCount}
-                            </Typography>
-                        </Flex>
-
-                        <Flex>
-                            {/* subtitle */}
-                            <Typography
-                                style={{
-                                    fontSize: "0.8em"
-                                }}>
-                                {item.subTitle}
-                            </Typography>
-
-                            {item.videoLength !== null && <Typography
-                                style={{
-                                    fontSize: "0.8em",
-                                    marginLeft: "5px",
-                                    color: item.videoLength ? "var(--deepGreen)" : "var(--mildRed)"
-                                }}>
-                                {"- "}{!!item.videoLength ? `${Math.round(item.videoLength)}s` : "Nincs feltoltott video"}
-                            </Typography>}
-                        </Flex>
-                    </Flex>
-
-
-                    <Flex>
-                        <EpistoButton
-                            onClick={() => handleEditCourseItem(item)}>
-                            <EditIcon></EditIcon>
-                        </EpistoButton>
-                        <EpistoButton
-                            onClick={() => handleDeleteCourseItemAsync(item)}>
-                            <DeleteIcon></DeleteIcon>
-                        </EpistoButton>
-                    </Flex>
-                </Flex>} />
+            <TestDnd></TestDnd>
+            {/* <DragAndDropList
+                list={modules}
+                setList={handleSetReorderedModules}
+                getKey={module => module.code}
+                renderListItem={(module, _, index) => <ModuleView module={module} />} /> */}
         </Flex>
 
     </AdminSubpageHeader >

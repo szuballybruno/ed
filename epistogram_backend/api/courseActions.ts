@@ -14,7 +14,7 @@ import { deleteExamsAsync } from "../services/examService";
 import { toCourseDetailsDTO } from "../services/mappings";
 import { deleteVideosAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParamsType, getAsyncActionHandler, throwNotImplemented, withValueOrBadRequest } from "../utilities/helpers";
 
 export const startCourseAction = async (params: ActionParamsType) => {
 
@@ -71,29 +71,30 @@ export const saveCourseAction = async (params: ActionParamsType) => {
             subCategoryId: dto.subCategory.id
         });
 
-    // save video orders
-    await staticProvider
-        .ormConnection
-        .getRepository(Video)
-        .save(dto
-            .courseItems
-            .filter(x => x.type === "video")
-            .map(x => ({
-                id: x.id,
-                orderIndex: x.orderIndex
-            } as Video)));
+    throwNotImplemented();
+    // // save video orders
+    // await staticProvider
+    //     .ormConnection
+    //     .getRepository(Video)
+    //     .save(dto
+    //         .courseItems
+    //         .filter(x => x.type === "video")
+    //         .map(x => ({
+    //             id: x.id,
+    //             orderIndex: x.orderIndex
+    //         } as Video)));
 
-    // save exam orders
-    await staticProvider
-        .ormConnection
-        .getRepository(Exam)
-        .save(dto
-            .courseItems
-            .filter(x => x.type === "exam")
-            .map(x => ({
-                id: x.id,
-                orderIndex: x.orderIndex
-            } as Video)));
+    // // save exam orders
+    // await staticProvider
+    //     .ormConnection
+    //     .getRepository(Exam)
+    //     .save(dto
+    //         .courseItems
+    //         .filter(x => x.type === "exam")
+    //         .map(x => ({
+    //             id: x.id,
+    //             orderIndex: x.orderIndex
+    //         } as Video)));
 };
 
 export const deleteCourseAction = async (params: ActionParamsType) => {

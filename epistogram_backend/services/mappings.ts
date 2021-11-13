@@ -26,6 +26,7 @@ import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
+import { ModuleEditDTO } from "../models/shared_models/ModuleEditDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { ResultAnswerDTO } from "../models/shared_models/ResultAnswerDTO";
@@ -90,7 +91,7 @@ addMapperFunction<CourseAdminDetailedView, CourseAdminItemShortDTO>(CourseAdminD
     title: view.itemTitle,
     orderIndex: view.itemOrderIndex,
     descriptorCode: view.itemCode,
-    type: view.isVideo ? "video" : "exam",
+    type: view.videoId ? "video" : "exam",
     questionCount: view.itemQuestionCount,
     videoLength: view.videoLength
 }));
@@ -425,35 +426,50 @@ export const toCourseEditDataDTO = (
     courseViews: CourseAdminDetailedView[],
     categories: CourseCategory[]) => {
 
-    const view = courseViews.first();
+    const viewAsCourse = courseViews.first();
 
-    const thumbnailImageURL = view.coverFilePath
-        ? getAssetUrl(view.coverFilePath)
+    const thumbnailImageURL = viewAsCourse.coverFilePath
+        ? getAssetUrl(viewAsCourse.coverFilePath)
         : getAssetUrl("/images/defaultCourseCover.jpg");
 
-    const courseItemDTOs = courseViews
-        .map(x => useMapperFunction<CourseAdminItemShortDTO>(CourseAdminDetailedView, CourseAdminItemShortDTO, x));
+    const modules = courseViews
+        .groupBy(x => x.moduleId)
+        .map(grouping => {
+
+            const viewAsModule = grouping.items.first();
+
+            const items = grouping
+                .items
+                .map(viewAsItem => useMapperFunction<CourseAdminItemShortDTO>(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
+
+            return {
+                id: viewAsModule.id,
+                name: viewAsModule.moduleName,
+                orderIndex: viewAsModule.moduleOrderIndex,
+                code: viewAsModule.moduleCode,
+                items: items
+            } as ModuleEditDTO;
+        });
 
     return {
-        title: view.title,
-        courseId: view.id,
+        title: viewAsCourse.title,
+        courseId: viewAsCourse.id,
         thumbnailURL: thumbnailImageURL,
         category: {
-            id: view.categoryId,
-            name: view.categoryName
+            id: viewAsCourse.categoryId,
+            name: viewAsCourse.categoryName
         },
         subCategory: {
-            id: view.subCategoryId,
-            name: view.subCategoryName
+            id: viewAsCourse.subCategoryId,
+            name: viewAsCourse.subCategoryName
         },
         teacher: {
-            id: view.teacherId,
-            name: toFullName(view.teacherFirstName, view.teacherLastName),
-            firstName: view.teacherFirstName,
-            lastName: view.teacherLastName,
+            id: viewAsCourse.teacherId,
+            name: toFullName(viewAsCourse.teacherFirstName, viewAsCourse.teacherLastName),
+            firstName: viewAsCourse.teacherFirstName,
+            lastName: viewAsCourse.teacherLastName,
         },
-
-        courseItems: courseItemDTOs,
+        modules: modules,
         categories: categories.map(x => toCourseCategoryDTO(x)),
     } as CourseEditDataDTO;
 }

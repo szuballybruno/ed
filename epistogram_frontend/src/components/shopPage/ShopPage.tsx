@@ -1,18 +1,16 @@
-import {Box, Flex, GridItem} from "@chakra-ui/react";
-import Navbar from "../navbar/Navbar";
-import {ContentWrapper, LeftPanel, MainWrapper, RightPanel} from "../HOC/MainPanels";
-import {Select, ToggleButton, ToggleButtonGroup, Typography} from "@mui/material";
-import {translatableTexts} from "../../translatableTexts";
+import { Box, Flex, GridItem } from "@chakra-ui/react";
+import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { distinct } from "../../frontendHelpers";
+import { mockShopCategories, mockShopItems } from "../../mockData";
+import { translatableTexts } from "../../translatableTexts";
 import classes from "../css/courseSearchMain.module.scss";
-import {EpistoSearch} from "../universal/EpistoSearch";
-import {LoadingFrame} from "../HOC/LoadingFrame";
-import {EpistoGrid} from "../universal/EpistoGrid";
-import CourseTile from "../universal/CourseTile";
-import {EpistoButton} from "../universal/EpistoButton";
-import React, {useState} from "react";
-import {mockShopCategories, mockShopItems} from "../../mockData";
-import {distinct} from "../../frontendHelpers";
-import {ShopItem} from "./ShopItem";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
+import Navbar from "../navbar/Navbar";
+import { EpistoButton } from "../universal/EpistoButton";
+import { EpistoGrid } from "../universal/EpistoGrid";
+import { EpistoSearch } from "../universal/EpistoSearch";
+import { ShopItem } from "./ShopItem";
 
 export const ShopPage = () => {
     const [searchCategory, setSearchCategory] = useState("")
@@ -104,14 +102,14 @@ export const ShopPage = () => {
 
                                                 {/* details */}
                                                 <EpistoButton
-                                                    onClick={() => {}}
+                                                    onClick={() => { }}
                                                     style={{ flex: "1" }}>
                                                     {translatableTexts.shop.description}
                                                 </EpistoButton>
 
                                                 {/* start course */}
                                                 <EpistoButton
-                                                    onClick={() => {}}
+                                                    onClick={() => { }}
                                                     variant="colored"
                                                     style={{ flex: "1" }}>
 

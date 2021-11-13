@@ -1,5 +1,6 @@
 import { CourseAdminItemShortDTO } from "./CourseAdminItemShortDTO";
 import { CourseCategoryDTO } from "./CourseCategoryDTO";
+import { ModuleEditDTO } from "./ModuleEditDTO";
 import { UserDTO } from "./UserDTO";
 
 export type CourseEditDataDTO = {
@@ -7,7 +8,7 @@ export type CourseEditDataDTO = {
     title: string,
     thumbnailURL: string,
 
-    courseItems: CourseAdminItemShortDTO[];
+    modules: ModuleEditDTO[];
     category: CourseCategoryDTO,
     subCategory: CourseCategoryDTO,
     teacher: UserDTO;
