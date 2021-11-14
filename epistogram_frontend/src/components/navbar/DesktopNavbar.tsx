@@ -1,19 +1,21 @@
-import { Box, Flex } from "@chakra-ui/react";
+import {Box, Divider, Flex} from "@chakra-ui/react";
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Typography } from "@mui/material";
-import React, { useContext, useRef, useState } from 'react';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { getAssetUrl } from "../../frontendHelpers";
-import { ApplicationRoute } from "../../models/types";
-import { useLogout } from "../../services/dataService";
-import { getCourseItemUrl, useNavigation } from "../../services/navigatior";
-import { useShowErrorDialog } from "../../services/notifications";
-import { EpistoConinInfo } from "../EpistoCoinInfo";
-import { CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
-import { ProfileImage } from "../ProfileImage";
-import { EpistoButton } from "../universal/EpistoButton";
-import { EpistoPopper } from "../universal/EpistoPopper";
+import {Button, Typography} from "@mui/material";
+import React, {useContext, useRef, useState} from 'react';
+import {applicationRoutes} from "../../configuration/applicationRoutes";
+import {getAssetUrl} from "../../frontendHelpers";
+import {ApplicationRoute} from "../../models/types";
+import {useLogout} from "../../services/dataService";
+import {getCourseItemUrl, useNavigation} from "../../services/navigatior";
+import {useShowErrorDialog} from "../../services/notifications";
+import {EpistoConinInfo} from "../EpistoCoinInfo";
+import {CurrentUserContext, RefetchUserAsyncContext} from "../HOC/AuthenticationFrame";
+import {ProfileImage} from "../ProfileImage";
+import {EpistoButton} from "../universal/EpistoButton";
+import {EpistoPopper} from "../universal/EpistoPopper";
 import NavbarButton from "../universal/NavbarButton";
+import {LocalMall, LocalMallOutlined, NotificationsNone, Shop} from "@mui/icons-material";
+import {mockNotifications} from "../../mockData";
 
 const menuItems = [
     applicationRoutes.homeRoute,
@@ -26,7 +28,7 @@ const DesktopNavbar = (props: {
     hideLinks: boolean
 }) => {
 
-    const { navigateToPlayer, navigate } = useNavigation();
+    const {navigateToPlayer, navigate} = useNavigation();
     const currentCourseItemCode = props.currentCourseItemCode;
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
@@ -35,9 +37,10 @@ const DesktopNavbar = (props: {
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     const ref = useRef<HTMLDivElement>(null);
-    const [popperOpen, setPopperOpen] = useState(false);
+    const [notificationsPopperOpen, setNotificationsPopperOpen] = useState(false);
+    const [settingsPopperOpen, setSettingsPopperOpen] = useState(false);
     const hideLinks = props.hideLinks || !user;
-    const { logoutUserAsync } = useLogout();
+    const {logoutUserAsync} = useLogout();
     const showError = useShowErrorDialog();
 
     const handleLogout = async () => {
@@ -46,8 +49,7 @@ const DesktopNavbar = (props: {
 
             await logoutUserAsync();
             await fetchUserAsync();
-        }
-        catch (e) {
+        } catch (e) {
 
             showError(e);
         }
@@ -95,7 +97,7 @@ const DesktopNavbar = (props: {
 
                     if (user.userActivity.canAccessApplication)
                         navigate(homeUrl);
-                }} />
+                }}/>
 
             {/* menu items */}
             {!hideLinks && <>
@@ -105,65 +107,130 @@ const DesktopNavbar = (props: {
                             return <NavbarButton
                                 key={index}
                                 menuName={item.title}
-                                menuPath={item.route} />
+                                menuPath={item.route}/>
                         })}
 
                     {user.userActivity.canAccessAdministration && <NavbarButton
                         menuName={applicationRoutes.administrationRoute.title}
-                        menuPath={applicationRoutes.administrationRoute.usersRoute.route} />}
+                        menuPath={applicationRoutes.administrationRoute.usersRoute.route}/>}
 
                     {/* continue watching  */}
                     {currentCourseItemCode &&
-                        <NavbarButton
-                            menuPath={getCourseItemUrl(currentCourseItemCode)}>
+                    <NavbarButton
+                        menuPath={getCourseItemUrl(currentCourseItemCode)}>
 
-                            <EpistoButton
-                                style={{ flex: "1", color: "var(--epistoTeal)" }}
-                                variant="outlined"
-                                onClick={() => continueCourse()}
-                                icon={
-                                    <img
-                                        alt=""
-                                        src={getAssetUrl("/icons/play2.svg")}
-                                        style={{
-                                            width: "25px",
-                                            height: "25px",
-                                            marginRight: "5px"
-                                        }} />
-                                }>
-                                Aktuális Kurzus
-                            </EpistoButton>
-                        </NavbarButton>}
-                </Flex >
+                        <EpistoButton
+                            style={{flex: "1", color: "var(--epistoTeal)"}}
+                            variant="outlined"
+                            onClick={() => continueCourse()}
+                            icon={
+                                <img
+                                    alt=""
+                                    src={getAssetUrl("/icons/play2.svg")}
+                                    style={{
+                                        width: "25px",
+                                        height: "25px",
+                                        marginRight: "5px"
+                                    }}/>
+                            }>
+                            Aktuális Kurzus
+                        </EpistoButton>
+                    </NavbarButton>}
+                </Flex>
 
                 {/* content */}
                 <Flex pr="10px" align="center" mr="15px">
 
-                    <EpistoConinInfo height="45px" />
+                    <EpistoButton
+                        style={{
+                            height: 35,
+                            fontStyle: "normal",
+                        }}
+                        onClick={() => {
+                            navigate("/shop")
+                        }}
+                        variant={"plain"}
+                    >
+                        <Typography fontSize={"1.0em"} style={{
+                            margin: "0 7px",
+                            textTransform: "uppercase"
+                        }}>Áruház</Typography>
+                        <LocalMallOutlined/>
+                    </EpistoButton>
+
+                    <EpistoButton
+                        style={{
+                            borderRadius: "100%",
+                            width: 35,
+                            height: 35
+                        }}
+                        variant={"plain"}
+                        onClick={() => {
+                            setNotificationsPopperOpen(true)
+                        }}
+                    >
+                        <NotificationsNone/>
+                    </EpistoButton>
 
                     <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>
 
                     {!!user && <ProfileImage
                         url={user?.avatarUrl ?? null}
-                        onClick={() => setPopperOpen(true)}
+                        onClick={() => setSettingsPopperOpen(true)}
                         cursor="pointer"
                         className="square50"
                         ref={ref}></ProfileImage>}
                 </Flex>
             </>}
 
-            {/* user menu */}
+            {/* notifications menu */}
             <EpistoPopper
-                isOpen={popperOpen}
+                isOpen={notificationsPopperOpen}
                 target={ref?.current}
                 placementX="left"
-                handleClose={() => setPopperOpen(false)}>
+                handleClose={() => setNotificationsPopperOpen(false)}>
+                {mockNotifications
+                    .map((x, index) => {
+
+                        return <Flex w={200} flexDirection={"column"} >
+                            <Flex w={200} alignItems={"center"} justifyContent={"center"} my={10}>
+                                <div style={{
+                                    width: 3,
+                                    height: 3,
+                                    backgroundColor: "blue",
+                                    borderRadius: "50%"
+                                }}/>
+
+                                <Typography
+                                    style={{
+                                        marginLeft: "14px",
+                                        textAlign: "left",
+                                        fontSize: "14px"
+                                    }}>
+                                    {x.title}
+                                </Typography>
+                            </Flex>
+                            {index + 1 < mockNotifications.length && <Divider h={1} w={"100%"} bgColor={"grey"} />}
+                        </Flex>
+                    })}
+            </EpistoPopper>
+
+            {/* user menu */}
+            <EpistoPopper
+                isOpen={settingsPopperOpen}
+                target={ref?.current}
+                placementX="left"
+                handleClose={() => setSettingsPopperOpen(false)}>
+                <Flex justifyContent={"center"}>
+                    <EpistoConinInfo height="45px"/>
+                </Flex>
+                <Divider h={1} w={"100%"} bgColor={"black"}/>
                 {userMenuItems
                     .map(x => {
 
                         return <EpistoButton
                             variant={x.color ? "colored" : undefined}
-                            style={{ background: x.color }}
+                            style={{background: x.color}}
                             onClick={x.onClick}>
                             <Flex className="whall" m="5px" align="center">
                                 {x.icon}
@@ -178,8 +245,8 @@ const DesktopNavbar = (props: {
                             </Flex>
                         </EpistoButton>
                     })}
-            </EpistoPopper >
-        </Flex >
+            </EpistoPopper>
+        </Flex>
     );
 };
 
