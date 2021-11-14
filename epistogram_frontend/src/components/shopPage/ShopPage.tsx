@@ -13,6 +13,7 @@ import React, {useState} from "react";
 import {mockShopCategories, mockShopItems} from "../../mockData";
 import {distinct} from "../../frontendHelpers";
 import {ShopItem} from "./ShopItem";
+import {EpistoConinInfo} from "../EpistoCoinInfo";
 
 export const ShopPage = () => {
     const [searchCategory, setSearchCategory] = useState("")
@@ -72,6 +73,7 @@ export const ShopPage = () => {
 
                         {/* search */}
                         <Flex justify="space-between" mt="20px" align="center">
+                            <EpistoConinInfo />
 
                             <Select
                                 native

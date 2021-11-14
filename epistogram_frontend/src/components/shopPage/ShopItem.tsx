@@ -97,7 +97,7 @@ export const ShopItem = (
                     height: 20,
                     margin: 2
                 }} src={getAssetUrl("/images/epistoCoin.png")} alt={""} />
-                {`\xa0 és csak ${shopItemPriceInHUF}Ft`}
+                {shopItemPriceInHUF !== 0 && `\xa0 és csak ${shopItemPriceInHUF}Ft`}
             </Flex>
         </Flex>
         <Flex direction="column" minH="50px">
