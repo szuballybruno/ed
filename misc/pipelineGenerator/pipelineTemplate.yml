@@ -3,8 +3,8 @@ name: ci_cd_pipeline_$BRANCH_NAME$
 on:
   push:
     branches: [ $BRANCH_NAME$ ]
-  pull_request:
-    branches: [ $BRANCH_NAME$ ]
+  # pull_request:
+  #   branches: [ $BRANCH_NAME$ ]
 
 jobs:
 

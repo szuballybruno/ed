@@ -3,8 +3,8 @@ name: ci_cd_pipeline_demo
 on:
   push:
     branches: [ demo ]
-  pull_request:
-    branches: [ demo ]
+  # pull_request:
+  #   branches: [ demo ]
 
 jobs:
 
