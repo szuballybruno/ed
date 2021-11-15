@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/layout';
 import { applicationRoutes } from '../configuration/applicationRoutes';
-import { mockTasks } from '../mockData';
+//import { mockTasks } from '../mockData';
 import { useOverviewPageDTO } from "../services/dataService";
 import { translatableTexts } from '../translatableTexts';
 import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
@@ -8,7 +8,7 @@ import { LoadingFrame } from "./HOC/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./HOC/MainPanels";
 import Navbar from "./navbar/Navbar";
 import { PractiseQuestions } from './PractiseQuestions';
-import { Tasks } from './Tasks';
+//import { Tasks } from './Tasks';
 import { DailyTip } from './DailyTip';
 import { CourseItemList, CourseItemView } from "./universal/CourseItemList";
 import { CourseProgressBar } from './universal/CourseProgressBar';
@@ -103,10 +103,10 @@ const HomePage = () => {
 
                         </Flex>
 
-                        {/* current tasks */}
-                        <DashboardSection title={translatableTexts.homePage.tasks}>
-                            <Tasks currentTasks={mockTasks} className="whall" />
-                        </DashboardSection>
+                        {/*  No tasks till jan. current tasks */}
+                        {/*<DashboardSection title={translatableTexts.homePage.tasks}>
+                             <Tasks currentTasks={mockTasks} className="whall" />
+                        </DashboardSection>*/}
 
                     </Flex>
                 </RightPanel>

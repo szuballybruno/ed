@@ -4,7 +4,7 @@ import { mockTasks } from '../mockData';
 import { translatableTexts } from '../translatableTexts';
 import { Badges } from "./Badges";
 import LearningStatistics from "./learningStatistics/LearningStatistics";
-import { Tasks } from './Tasks';
+//import { Tasks } from './Tasks';
 import { DashboardSection } from './universal/DashboardSection';
 import { PersonalityAssessment } from './universal/PersonalityAssessment';
 
@@ -12,10 +12,10 @@ export const LearningInsightsOverview = () => {
 
     return <Flex direction="column">
 
-        {/* tasks */}
+        {/* tasks
         <DashboardSection title={translatableTexts.learningOverview.tasksTitle}>
             <Tasks currentTasks={mockTasks} />
-        </DashboardSection>
+        </DashboardSection>*/}
 
         {/* personality */}
         <DashboardSection title={translatableTexts.learningOverview.personalLearningAnalysisTitle} minHeight="500px">
