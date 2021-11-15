@@ -1,4 +1,5 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
@@ -7,14 +8,15 @@ import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdm
 import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
 import { ModuleEditDTO } from "../../../models/shared_models/ModuleEditDTO";
+import { UserDTO } from "../../../models/shared_models/UserDTO";
 import { useCreateExam, useDeleteExam } from "../../../services/examService";
+import { useCreateModule, useDeleteModule } from "../../../services/moduleService";
 import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useCreateVideo, useDeleteVideo } from "../../../services/videoService";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { EpistoHeader } from "../../EpistoHeader";
 import { DragAndDropContext, DragItem, DropZone } from "../../universal/DragAndDrop";
-import { DragAndDropList } from "../../universal/DragAndDropList";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
 import { EpistoSearch } from "../../universal/EpistoSearch";
@@ -23,10 +25,10 @@ import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseEditItemView } from "./CourseEditItemView";
 import { EditSection } from "./EditSection";
-import DeleteIcon from '@mui/icons-material/Delete';
-import { ModuleDTO } from "../../../models/shared_models/ModuleDTO";
-import { UserDTO } from "../../../models/shared_models/UserDTO";
-import { useCreateModule } from "../../../services/courseService";
+import VideocamIcon from '@mui/icons-material/Videocam';
+import AddIcon from '@mui/icons-material/Add';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import EditIcon from '@mui/icons-material/Edit';
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
@@ -34,11 +36,12 @@ export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
 
 export const EditCourseControl = (props: {
     saveCourseAsync: (dto: CourseEditDataDTO, thumbnailFile: null | File) => Promise<void>,
+    refetchCourseDataAsync: () => Promise<void>,
     courseEditData: CourseEditDataDTO | null,
     courseId: number
 }) => {
 
-    const { saveCourseAsync, courseId, courseEditData } = props;
+    const { saveCourseAsync, courseId, courseEditData, refetchCourseDataAsync } = props;
     const categories = courseEditData?.categories ?? [];
     const { navigate } = useNavigation();
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
@@ -56,6 +59,7 @@ export const EditCourseControl = (props: {
     const { deleteVideoAsync } = useDeleteVideo();
     const { deleteExamAsync } = useDeleteExam();
     const { createModuleAsync } = useCreateModule();
+    const { deleteModuleAsync } = useDeleteModule();
 
     const showError = useShowErrorDialog();
     const isAllowEditOnPage = false;
@@ -142,19 +146,21 @@ export const EditCourseControl = (props: {
         }
     }
 
-    const handleAddCourseItemAsync = async (type: "video" | "exam") => {
+    const handleAddCourseItemAsync = async (moduleId: number, type: "video" | "exam") => {
+
+        await handleSaveCourseAsync();
 
         try {
 
             if (type === "video") {
 
-                const idResult = await createVideoAsync(courseId)
+                const idResult = await createVideoAsync(moduleId)
                 showNotification("Új videó sikeresen hozzáadva!");
                 navToVideoEdit(idResult.id);
             }
             else {
 
-                const idResult = await createExamAsync(courseId);
+                const idResult = await createExamAsync(moduleId);
                 showNotification("Új vizsga sikeresen hozzáadva!");
                 navToExamEdit(idResult.id);
             }
@@ -234,8 +240,35 @@ export const EditCourseControl = (props: {
     }
 
     const handleDeleteModule = async (module: ModuleEditDTO) => {
+        deleteWarningDialogLogic
+            .openDialog({
+                title: "Biztosan törlöd a modult?",
+                description: "A benne lévő összes videó, és vizsga el fog veszni.",
+                buttons: [
+                    {
+                        title: "Modul törlése",
+                        action: async () => {
 
+                            try {
 
+                                await deleteModuleAsync(module.id);
+                                showNotification("Modul sikeresen törölve!");
+                                setModules(modules.filter(x => x.id !== module.id));
+                            }
+                            catch (e) {
+
+                                showError(e);
+                            }
+                        }
+                    }
+                ]
+            });
+    }
+
+    const handleEditModule = async (module: ModuleEditDTO) => {
+
+        await handleSaveCourseAsync();
+        navigate(applicationRoutes.administrationRoute.coursesRoute.editModuleRoute.route, { courseId, moduleId: module.id });
     }
 
     const handleAddNewModuleAsync = async () => {
@@ -247,6 +280,9 @@ export const EditCourseControl = (props: {
                 name: "Uj modul",
                 orderIndex: modules.length
             });
+
+            showNotification("Modul sikeresen hozzaadva!");
+            await refetchCourseDataAsync();
         }
         catch (e) {
 
@@ -360,19 +396,6 @@ export const EditCourseControl = (props: {
             <EpistoSearch />
 
             <Flex padding="20px">
-                <EpistoButton
-                    onClick={() => handleAddCourseItemAsync("video")}
-                    style={{ alignSelf: "center" }}
-                    variant="outlined">
-                    Új videó hozzáadása
-                </EpistoButton>
-
-                <EpistoButton
-                    onClick={() => handleAddCourseItemAsync("exam")}
-                    style={{ alignSelf: "center" }}
-                    variant="outlined">
-                    Új vizsga hozzáadása
-                </EpistoButton>
 
                 <EpistoButton
                     onClick={handleAddNewModuleAsync}
@@ -396,15 +419,50 @@ export const EditCourseControl = (props: {
                                     groupId="child">
 
                                     <Flex align="center" justify="space-between">
+
                                         <EpistoHeader
                                             text={module.name}
                                             variant="strongSub"
                                             style={{ marginLeft: "10px" }} />
 
-                                        <EpistoButton
-                                            onClick={() => handleDeleteModule(module)}>
-                                            <DeleteIcon></DeleteIcon>
-                                        </EpistoButton>
+                                        <Flex>
+
+                                            {/* new video */}
+                                            <EpistoButton
+                                                onClick={() => handleAddCourseItemAsync(module.id, "video")}
+                                                style={{ alignSelf: "center", margin: "2px" }}
+                                                padding="2px"
+                                                variant="outlined">
+                                                <Flex>
+                                                    <AddIcon />
+                                                    <VideocamIcon />
+                                                </Flex>
+                                            </EpistoButton>
+
+                                            {/* new exam */}
+                                            <EpistoButton
+                                                onClick={() => handleAddCourseItemAsync(module.id, "exam")}
+                                                style={{ alignSelf: "center", margin: "2px" }}
+                                                padding="2px"
+                                                variant="outlined">
+                                                <Flex>
+                                                    <AddIcon />
+                                                    <AssignmentIcon />
+                                                </Flex>
+                                            </EpistoButton>
+
+                                            {/* edit module */}
+                                            <EpistoButton
+                                                onClick={() => handleEditModule(module)}>
+                                                <EditIcon />
+                                            </EpistoButton>
+
+                                            {/* delete module */}
+                                            <EpistoButton
+                                                onClick={() => handleDeleteModule(module)}>
+                                                <DeleteIcon />
+                                            </EpistoButton>
+                                        </Flex>
                                     </Flex>
 
                                     {module

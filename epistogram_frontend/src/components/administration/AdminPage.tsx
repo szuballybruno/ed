@@ -24,6 +24,7 @@ import { EditVideoSubpage } from './courses/EditVideoSubpage';
 import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditExamSubpage } from './courses/EditExamSubpage';
 import { getRoute } from "../../MainRouting";
+import { EditModuleSubpage } from './courses/EditModuleSubpage';
 
 const AdminPage = () => {
 
@@ -84,18 +85,16 @@ const AdminPage = () => {
                     <ProtectedRoute
                         path={administrationRoutes.coursesRoute.route}
                         isAuthorizedToView={x => x.canAccessCourseAdministration}
-                        render={
-                            () => <Switch>
-
-                                {getRoute(administrationRoutes.coursesRoute, <AdminCourseListSubpage />)}
-                                {getRoute(administrationRoutes.coursesRoute.editCourseRoute, <AdminEditCourseSubpage />)}
-                                {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
-                                {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
-                                {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}
-                                {getRoute(administrationRoutes.coursesRoute.editExamRoute, <EditExamSubpage />)}
-                                {getRoute(administrationRoutes.coursesRoute.editExamQuestionRoute, <EditQuestionSubpage />)}
-                            </Switch>
-                        } />
+                        render={() => <Switch>
+                            {getRoute(administrationRoutes.coursesRoute, <AdminCourseListSubpage />)}
+                            {getRoute(administrationRoutes.coursesRoute.editCourseRoute, <AdminEditCourseSubpage />)}
+                            {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
+                            {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
+                            {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}
+                            {getRoute(administrationRoutes.coursesRoute.editExamRoute, <EditExamSubpage />)}
+                            {getRoute(administrationRoutes.coursesRoute.editExamQuestionRoute, <EditQuestionSubpage />)}
+                            {getRoute(administrationRoutes.coursesRoute.editModuleRoute, <EditModuleSubpage />)}
+                        </Switch>} />
 
                     {/* group administartion */}
                     <Route

@@ -1,5 +1,5 @@
 export type CreateVideoDTO = {
-    courseId: number;
+    moduleId: number;
     title: string;
     subtitle: string;
     description: string;

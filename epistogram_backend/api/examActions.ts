@@ -80,13 +80,15 @@ export const createExamAction = async (params: ActionParamsType) => {
         .createQueryBuilder("c")
         .leftJoinAndSelect("c.videos", "v")
         .leftJoinAndSelect("c.exams", "e")
-        .where("c.id = :courseId", { courseId: dto.courseId })
+        .leftJoinAndSelect("c.modules", "m")
+        .where("m.id = :moduleId", { moduleId: dto.moduleId })
         .getOneOrFail();
 
     const courseItemsLength = course.videos.length + course.exams.length;
 
     const newExam = {
-        courseId: dto.courseId,
+        courseId: course.id,
+        moduleId: dto.moduleId,
         title: dto.title,
         subtitle: dto.subtitle,
         orderIndex: courseItemsLength

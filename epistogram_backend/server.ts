@@ -3,7 +3,7 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { addModuleAction, createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseDetailsAction, getCourseEditDataAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseDetailsAction, getCourseEditDataAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
     answerPractiseQuestionAction, getCourseBriefDataAction,
     getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction,
@@ -12,6 +12,7 @@ import {
 import { answerExamQuestionAction, createExamAction, deleteExamAction, getExamEditDataAction, getExamResultsAction, saveExamAction } from './api/examActions';
 import { uploadAvatarFileAction } from './api/fileActions';
 import { getDailyTipAction, getJobTitlesAction, getPractiseQuestionAction, getRegistrationLinkAction, requestChangePasswordAction, saveUserDataAction } from './api/miscActions';
+import { createModuleAction, deleteModuleAction, getModuleEditDataAction, saveModuleAction } from './api/moduleActions';
 import { getCourseItemsAction, getPlayerDataAction, saveVideoPlaybackSampleAction } from './api/playerActions';
 import { answerVideoQuestionAction, getQuestionEditDataAction, saveQuestionAction } from './api/questionActions';
 import { answerSignupQuestionAction, getSignupDataAction, getUserPersonalityDataAction } from './api/signupActions';
@@ -111,7 +112,12 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.course.deleteCourse, deleteCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.createCourse, createCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.getCourseDetails, getCourseDetailsAction);
-    addEndpoint(apiRoutes.course.createModule, addModuleAction, { isPost: true });
+
+    // module 
+    addEndpoint(apiRoutes.module.createModule, createModuleAction, { isPost: true });
+    addEndpoint(apiRoutes.module.deleteModule, deleteModuleAction, { isPost: true });
+    addEndpoint(apiRoutes.module.getModuleEditData, getModuleEditDataAction);
+    addEndpoint(apiRoutes.module.saveModule, saveModuleAction, { isPost: true });
 
     // video 
     addEndpoint(apiRoutes.video.createVideo, createVideoAction, { isPost: true });

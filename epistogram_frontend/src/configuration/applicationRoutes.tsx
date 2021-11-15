@@ -154,6 +154,10 @@ export const applicationRoutes = {
                 title: translatableTexts.routeTitles.administrationEditQuestion,
                 route: "/administration/courses/:courseId/exam/:examId/question/:questionId"
             },
+            editModuleRoute: {
+                title: translatableTexts.routeTitles.administrationEditModule,
+                route: "/administration/courses/:courseId/module/:moduleId"
+            }
         },
         groupsRoute: {
             title: "Csoportok",

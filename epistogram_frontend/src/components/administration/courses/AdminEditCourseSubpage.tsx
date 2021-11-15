@@ -13,7 +13,7 @@ export const AdminEditCourseSubpage = () => {
     const showError = useShowErrorDialog();
 
     // api calls
-    const { courseEditData, courseEditDataError, courseEditDataState } = useAdminEditedCourse(courseId);
+    const { courseEditData, courseEditDataError, courseEditDataState, refetchCourseEditDataAsync } = useAdminEditedCourse(courseId);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseData();
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = useUploadCourseThumbnailAsync();
 
@@ -41,6 +41,7 @@ export const AdminEditCourseSubpage = () => {
 
         <EditCourseControl
             courseEditData={courseEditData}
+            refetchCourseDataAsync={refetchCourseEditDataAsync}
             courseId={courseId}
             saveCourseAsync={handleSaveCourseDataAsync} />
     </LoadingFrame>

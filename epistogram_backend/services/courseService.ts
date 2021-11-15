@@ -15,8 +15,10 @@ import { CourseView } from "../models/views/CourseView";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getItemCode, readItemCode } from "./encodeService";
+import { deleteExamsAsync } from "./examService";
 import { toCourseAdminShortDTO, toCourseEditDataDTO, toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toCourseShortDTO, toExamDTO, toSimpleCourseItemDTOs } from "./mappings";
-import { getVideoByIdAsync } from "./videoService";
+import { deleteModulesAsync } from "./moduleService";
+import { deleteVideosAsync, getVideoByIdAsync } from "./videoService";
 
 export const getCourseProgressDataAsync = async (userId: number) => {
 
@@ -362,6 +364,35 @@ export const getAdminCoursesAsync = async () => {
 
     return courseAdminShortViews
         .map(casv => toCourseAdminShortDTO(casv));
+}
+
+export const deleteCourseAsync = async (courseId: number) => {
+
+    // delete user course bridges
+    await staticProvider
+        .ormConnection
+        .createQueryBuilder()
+        .delete()
+        .from(UserCourseBridge)
+        .where("courseId = :courseId", { courseId })
+        .execute();
+
+    // delete modules 
+    const modules = await staticProvider
+        .ormConnection
+        .getRepository(CourseModule)
+        .createQueryBuilder("m")
+        .where('"m"."courseId" = :courseId', { courseId })
+        .getMany();
+
+    await deleteModulesAsync(modules.map(x => x.id));
+
+    // delete course 
+    await staticProvider
+        .ormConnection
+        .getRepository(Course)
+        .delete(courseId);
+
 }
 
 export const unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?: number) => {

@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { serverUrl } from "../Environemnt";
-import { getErrorTypeByHTTPCode, stringifyQueryObject, TypedError } from "../frontendHelpers";
+import { getErrorTypeByHTTPCode, getUrl, stringifyQueryObject, TypedError } from "../frontendHelpers";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { LoadingStateType } from "../models/types";
 
@@ -35,7 +35,8 @@ const instance = (() => {
 export const httpPostAsync = async (
     urlEnding: string,
     data?: any,
-    configure?: (config: AxiosRequestConfig) => void) => {
+    configure?: (config: AxiosRequestConfig) => void,
+    queryObject?: any) => {
 
     try {
 
@@ -49,7 +50,8 @@ export const httpPostAsync = async (
             configure(config);
         }
 
-        const axiosResponse = await instance.post(urlEnding, data,);
+        const url = getUrl(urlEnding, undefined, queryObject);
+        const axiosResponse = await instance.post(url, data);
         const response = new HTTPResponse(axiosResponse.status, axiosResponse.data);
 
         return response.data;
@@ -63,9 +65,9 @@ export const httpGetAsync = async (urlEnding: string, queryObject?: any) => {
 
     try {
 
-        const queryString = queryObject ? stringifyQueryObject(queryObject) : ""
+        const url = getUrl(urlEnding, undefined, queryObject);
 
-        const axiosResponse = await instance.get(urlEnding + queryString, {
+        const axiosResponse = await instance.get(url, {
             withCredentials: true
         });
 
@@ -90,7 +92,7 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
     const [state, setState] = useState<LoadingStateType>("idle");
     const [result, setResult] = useState<TResult | null>(null);
 
-    const postDataAsync = async (data: TData, file?: File) => {
+    const postDataAsync = async (data?: TData, file?: File, queryObject?: any) => {
 
         try {
 
@@ -99,7 +101,7 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
             const postData = data ? data : undefined;
             const postResult = file
                 ? await postFileAsync(url, file, data) as TResult
-                : await httpPostAsync(url, postData) as TResult;
+                : await httpPostAsync(url, postData, undefined, queryObject) as TResult;
 
             setState("idle");
             setResult(postResult);

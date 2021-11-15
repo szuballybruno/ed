@@ -38,8 +38,8 @@ export const useCreateExam = () => {
     const qr = usePostDataUnsafe<CreateExamDTO, IdResultDTO>(apiRoutes.exam.createExam);
 
     return {
-        createExamAsync: (courseId: number) => qr.postDataAsync({
-            courseId,
+        createExamAsync: (moduleId: number) => qr.postDataAsync({
+            moduleId,
             subtitle: "",
             title: ""
         }),

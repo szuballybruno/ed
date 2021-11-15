@@ -2,7 +2,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { matchPath, Route, useLocation } from "react-router-dom";
+import { matchPath, Route, useLocation, useParams } from "react-router-dom";
 import { assetStorageUrl } from "./Environemnt";
 import { ErrorType, UserRoleEnum } from "./models/shared_models/types/sharedTypes";
 import { ApplicationRoute, LoadingStateType } from "./models/types";
@@ -17,6 +17,13 @@ export const dateTimeToString = (date: Date) => {
         return new Date(date).toLocaleString();
 
     return date.toLocaleString();
+}
+
+export const useIntParam = (name: string) => {
+
+    const params = useParams();
+
+    return parseInt(params[name]);
 }
 
 export const getUrl = (path: string, params?: any, query?: any) => {

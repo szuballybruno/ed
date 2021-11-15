@@ -42,8 +42,14 @@ export const apiRoutes = {
         deleteCourse: "/course/delete-course",
         createCourse: "/course/create-course",
         getCourseDetails: "/course/get-course-details",
-        getAdminCourseList: "/course/get-admin-course-list",
-        createModule: "/course/create-module"
+        getAdminCourseList: "/course/get-admin-course-list"
+    },
+
+    module: {
+        createModule: "/module/create-module",
+        deleteModule: "/module/delete-module",
+        getModuleEditData: "/module/get-edit-data",
+        saveModule: "/module/save-module"
     },
 
     video: {

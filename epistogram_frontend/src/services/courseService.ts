@@ -35,7 +35,8 @@ export const useAdminEditedCourse = (courseId: number) => {
     return {
         courseEditData: qr.data,
         courseEditDataError: qr.error,
-        courseEditDataState: qr.status
+        courseEditDataState: qr.status,
+        refetchCourseEditDataAsync: qr.refetch
     }
 }
 
@@ -46,15 +47,6 @@ export const useCreateCourse = () => {
     return {
         createCourseAsync: qr.postDataAsync,
         createCourseState: qr.state,
-    };
-}
-
-export const useCreateModule = () => {
-
-    const qr = usePostDataUnsafe<ModuleCreateDTO, void>(apiRoutes.course.createModule);
-
-    return {
-        createModuleAsync: qr.postDataAsync,
     };
 }
 

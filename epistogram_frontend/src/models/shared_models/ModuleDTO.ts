@@ -1,7 +1,7 @@
 import { CourseItemDTO } from "./CourseItemDTO";
 import { CourseItemStateType } from "./types/sharedTypes";
 
-export type ModuleDTO = {
+export class ModuleDTO {
     id: number;
     name: string;
     orderIndex: number;

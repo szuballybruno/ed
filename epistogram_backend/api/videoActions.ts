@@ -1,19 +1,17 @@
 import { UploadedFile } from "express-fileupload";
+import fs from "fs";
 import { Course } from "../models/entity/Course";
 import { Video } from "../models/entity/Video";
 import { CreateVideoDTO } from "../models/shared_models/CreateVideoDTO";
 import { IdBodyDTO } from "../models/shared_models/IdBodyDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
-import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
-import { getVideoLengthSecondsAsync } from "../services/misc/videoDurationService";
 import { saveAssociatedQuestionsAsync } from "../services/questionService";
-import { deleteVideosAsync, getVideoByIdAsync, insertVideoAsync, setVideoFileIdAsync, uploadVideoFileAsync } from "../services/videoService";
+import { deleteVideosAsync, insertVideoAsync, uploadVideoFileAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
-import fs from "fs"
 
 export const createVideoAction = async (params: ActionParamsType) => {
 
@@ -25,13 +23,15 @@ export const createVideoAction = async (params: ActionParamsType) => {
         .createQueryBuilder("c")
         .leftJoinAndSelect("c.videos", "v")
         .leftJoinAndSelect("c.exams", "e")
-        .where("c.id = :courseId", { courseId: dto.courseId })
+        .leftJoinAndSelect("c.modules", "m")
+        .where("m.id = :moduleId", { moduleId: dto.moduleId })
         .getOneOrFail();
 
     const courseItemsLength = course.videos.length + course.exams.length;
 
     const newVideo = {
-        courseId: dto.courseId,
+        courseId: course.id,
+        moduleId: dto.moduleId,
         title: dto.title,
         subtitle: dto.subtitle,
         description: dto.description,

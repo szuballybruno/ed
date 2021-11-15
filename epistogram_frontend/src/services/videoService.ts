@@ -14,10 +14,10 @@ export const useCreateVideo = () => {
     const qr = usePostDataUnsafe<CreateVideoDTO, IdResultDTO>(apiRoutes.video.createVideo);
 
     return {
-        createVideoAsync: async (courseId: number) => {
+        createVideoAsync: async (moduleId: number) => {
 
             return qr.postDataAsync({
-                courseId,
+                moduleId,
                 title: "",
                 description: "",
                 subtitle: ""

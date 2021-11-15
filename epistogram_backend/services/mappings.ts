@@ -1,6 +1,7 @@
 import { Answer } from "../models/entity/Answer";
 import { Course } from "../models/entity/Course";
 import { CourseCategory } from "../models/entity/CourseCategory";
+import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { JobTitle } from "../models/entity/JobTitle";
 import { Organization } from "../models/entity/Organization";
@@ -25,6 +26,7 @@ import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
+import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { ModuleEditDTO } from "../models/shared_models/ModuleEditDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
@@ -94,6 +96,11 @@ addMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
     type: view.videoId ? "video" : "exam",
     questionCount: view.itemQuestionCount,
     videoLength: view.videoLength
+}));
+
+addMapperFunction(CourseModule, ModuleDTO, view => ({
+    id: view.id,
+    name: view.name
 }));
 
 export const toUserDTO = (user: User) => {
