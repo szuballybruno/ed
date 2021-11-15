@@ -443,7 +443,7 @@ export const toCourseEditDataDTO = (
                 .map(viewAsItem => useMapperFunction<CourseAdminItemShortDTO>(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
 
             return {
-                id: viewAsModule.id,
+                id: viewAsModule.moduleId,
                 name: viewAsModule.moduleName,
                 orderIndex: viewAsModule.moduleOrderIndex,
                 code: viewAsModule.moduleCode,

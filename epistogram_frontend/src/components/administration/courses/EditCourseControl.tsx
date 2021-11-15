@@ -2,6 +2,7 @@ import { Box, Flex, Image } from "@chakra-ui/react";
 import { TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../frontendHelpers";
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
 import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
@@ -11,6 +12,7 @@ import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useCreateVideo, useDeleteVideo } from "../../../services/videoService";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
+import { DragAndDropContext, DragItem, DropZone } from "../../universal/DragAndDrop";
 import { DragAndDropList } from "../../universal/DragAndDropList";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
@@ -18,9 +20,7 @@ import { EpistoSearch } from "../../universal/EpistoSearch";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { CourseEditItemView } from "./CourseEditItemView";
 import { EditSection } from "./EditSection";
-import { TestDnd } from "./TestDnd";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
@@ -227,6 +227,48 @@ export const EditCourseControl = (props: {
         </Flex>
     }
 
+    const onDragEnd = (srcId: string, destId: string | null, srcIndex: number, destIndex: number | null) => {
+
+        console.log(`${srcId} - ${destId} - Src:${srcIndex} - Dest:${destIndex}`);
+
+        if (isNullOrUndefined(destId) || isNullOrUndefined(destIndex))
+            return;
+
+        const newModules = [...modules];
+
+        if (destId === "zone-root") {
+
+            setModules(swapItems(newModules, srcIndex, destIndex!));
+        }
+        else {
+
+            if (destId === srcId) {
+
+                const module = newModules
+                    .filter(x => x.id + "" === destId)[0];
+
+                module.items = swapItems(module.items, srcIndex, destIndex!);
+
+                setModules(newModules);
+            }
+            else {
+
+                const srcModule = newModules
+                    .filter(x => x.id + "" === srcId)[0];
+
+                const destModule = newModules
+                    .filter(x => x.id + "" === destId)[0];
+
+                insertAtIndex(destModule.items, destIndex!, srcModule.items[srcIndex]);
+
+                srcModule.items = srcModule.items
+                    .filter((x, index) => index !== srcIndex);
+
+                setModules(newModules);
+            }
+        }
+    }
+
     return <AdminSubpageHeader
         tabMenuItems={[
             applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
@@ -306,13 +348,32 @@ export const EditCourseControl = (props: {
                 </EpistoButton>
             </Flex>
 
-            <TestDnd></TestDnd>
-            {/* <DragAndDropList
-                list={modules}
-                setList={handleSetReorderedModules}
-                getKey={module => module.code}
-                renderListItem={(module, _, index) => <ModuleView module={module} />} /> */}
+            <DragAndDropContext onDragEnd={onDragEnd}>
+                <DropZone zoneId="zone-root" groupId="root">
+                    {modules
+                        .map((module, moduleIndex) => {
+
+                            return <DragItem itemId={module.id + ""} index={moduleIndex}>
+                                <DropZone zoneId={module.id + ""} groupId="child">
+                                    {module
+                                        .items
+                                        .map((item, itemIndex) => {
+
+                                            // const index = parseInt(`${moduleIndex + 1}${itemIndex}`);
+
+                                            return <DragItem
+                                                itemId={item.descriptorCode}
+                                                index={itemIndex}>
+
+                                                {item.title}
+                                            </DragItem>
+                                        })}
+                                </DropZone>
+                            </DragItem>
+                        })}
+                </DropZone>
+            </DragAndDropContext>
         </Flex>
 
-    </AdminSubpageHeader >
+    </AdminSubpageHeader>
 };

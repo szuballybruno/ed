@@ -165,6 +165,23 @@ export function distinct<T>(array: T[]) {
     return unique;
 }
 
+export const swapItems = (newList: any[], srcIndex: number, destIndex: number) => {
+
+    newList.splice(destIndex, 0, newList.splice(srcIndex, 1)[0]);
+    return newList;
+}
+
+export const insertAtIndex = <T>(arr: T[], index: number, item: T) => {
+
+    arr.splice(index, 0, item);
+    return arr;
+}
+
+export const isNullOrUndefined = (o: any) => {
+
+    return o === undefined || o === null;
+}
+
 export const usePaging = <T>(
     items: T[],
     onPreviousOverNavigation?: () => void,
