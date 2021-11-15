@@ -12,6 +12,7 @@ import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useCreateVideo, useDeleteVideo } from "../../../services/videoService";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
+import { EpistoHeader } from "../../EpistoHeader";
 import { DragAndDropContext, DragItem, DropZone } from "../../universal/DragAndDrop";
 import { DragAndDropList } from "../../universal/DragAndDropList";
 import { EpistoButton } from "../../universal/EpistoButton";
@@ -20,6 +21,7 @@ import { EpistoSearch } from "../../universal/EpistoSearch";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { CourseEditItemView } from "./CourseEditItemView";
 import { EditSection } from "./EditSection";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
@@ -210,23 +212,6 @@ export const EditCourseControl = (props: {
     //     }
     // }
 
-    const ModuleView = (props: { module: ModuleEditDTO }) => {
-
-        const { module } = props;
-        const [items, setItems] = useState(["asd1", "asd2"]);
-
-        return <Flex direction="column">
-            {module.name}
-            <DragAndDropList
-                list={items}
-                setList={setItems}
-                getKey={x => x}
-                renderListItem={(item) => <Box>
-                    {item}
-                </Box>} />
-        </Flex>
-    }
-
     const onDragEnd = (srcId: string, destId: string | null, srcIndex: number, destIndex: number | null) => {
 
         console.log(`${srcId} - ${destId} - Src:${srcIndex} - Dest:${destIndex}`);
@@ -354,7 +339,15 @@ export const EditCourseControl = (props: {
                         .map((module, moduleIndex) => {
 
                             return <DragItem itemId={module.id + ""} index={moduleIndex}>
-                                <DropZone zoneId={module.id + ""} groupId="child">
+                                <DropZone
+                                    width="100%"
+                                    my="5px"
+                                    mt="10px"
+                                    zoneId={module.id + ""}
+                                    groupId="child">
+
+                                    <EpistoHeader text={module.name} variant="strongSub" style={{ marginLeft: "10px" }} />
+
                                     {module
                                         .items
                                         .map((item, itemIndex) => {
@@ -365,7 +358,12 @@ export const EditCourseControl = (props: {
                                                 itemId={item.descriptorCode}
                                                 index={itemIndex}>
 
-                                                {item.title}
+                                                <CourseEditItemView
+                                                    moduleIndex={moduleIndex}
+                                                    index={itemIndex}
+                                                    item={item}
+                                                    deleteCourseItem={() => { }}
+                                                    editCourseItem={() => { }} />
                                             </DragItem>
                                         })}
                                 </DropZone>

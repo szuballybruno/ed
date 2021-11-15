@@ -7,13 +7,14 @@ import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdm
 import { EpistoButton } from "../../universal/EpistoButton";
 
 export const CourseEditItemView = (props: {
+    moduleIndex: number,
     index: number,
     item: CourseAdminItemShortDTO,
     editCourseItem: (item: CourseAdminItemShortDTO) => void,
     deleteCourseItem: (item: CourseAdminItemShortDTO) => void
 }) => {
 
-    const { index, item, editCourseItem, deleteCourseItem } = props;
+    const { moduleIndex, index, item, editCourseItem, deleteCourseItem } = props;
 
     return <Flex
         flex="1"
@@ -27,7 +28,7 @@ export const CourseEditItemView = (props: {
 
                 {/* index */}
                 <Typography style={{ marginRight: "10px" }}>
-                    {index + 1}
+                    {moduleIndex + 1} / {index + 1}
                 </Typography>
 
                 {/* title */}
@@ -54,7 +55,8 @@ export const CourseEditItemView = (props: {
                 {/* subtitle */}
                 <Typography
                     style={{
-                        fontSize: "0.8em"
+                        fontSize: "0.8em",
+                        color: "gray"
                     }}>
                     {item.subTitle}
                 </Typography>

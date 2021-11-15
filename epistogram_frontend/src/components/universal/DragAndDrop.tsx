@@ -1,17 +1,20 @@
 import { Box, Flex } from "@chakra-ui/layout";
 import { BoxProps } from "@chakra-ui/react";
+import { CSSProperties } from "@emotion/serialize";
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { ReactNode } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-export const DropZone = (params: { zoneId: string, groupId: string } & BoxProps) => {
+export const DropZone = (params: {
+    zoneId: string,
+    groupId: string
+} & BoxProps) => {
 
     const { zoneId, children, groupId, ...css } = params;
 
     return <Droppable droppableId={zoneId} type={groupId}>
         {(provided, _) => (
             <Box
-                border="2px solid green"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 {...css}>
