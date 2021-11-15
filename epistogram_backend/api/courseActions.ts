@@ -1,5 +1,7 @@
 import { Request } from "express";
+import { Module } from "module";
 import { Course } from "../models/entity/Course";
+import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
@@ -71,30 +73,44 @@ export const saveCourseAction = async (params: ActionParamsType) => {
             subCategoryId: dto.subCategory.id
         });
 
-    throwNotImplemented();
-    // // save video orders
-    // await staticProvider
-    //     .ormConnection
-    //     .getRepository(Video)
-    //     .save(dto
-    //         .courseItems
-    //         .filter(x => x.type === "video")
-    //         .map(x => ({
-    //             id: x.id,
-    //             orderIndex: x.orderIndex
-    //         } as Video)));
+    // save module order index 
+    await staticProvider
+        .ormConnection
+        .getRepository(CourseModule)
+        .save(dto
+            .modules
+            .map(x => ({
+                id: x.id,
+                orderIndex: x.orderIndex
+            } as CourseModule)));
 
-    // // save exam orders
-    // await staticProvider
-    //     .ormConnection
-    //     .getRepository(Exam)
-    //     .save(dto
-    //         .courseItems
-    //         .filter(x => x.type === "exam")
-    //         .map(x => ({
-    //             id: x.id,
-    //             orderIndex: x.orderIndex
-    //         } as Video)));
+    // save video orders
+    await staticProvider
+        .ormConnection
+        .getRepository(Video)
+        .save(dto
+            .modules
+            .flatMap(x => x.items)
+            .filter(x => x.type === "video")
+            .map(x => ({
+                id: x.id,
+                orderIndex: x.orderIndex,
+                moduleId: x.moduleId
+            } as Video)));
+
+    // save exam orders
+    await staticProvider
+        .ormConnection
+        .getRepository(Exam)
+        .save(dto
+            .modules
+            .flatMap(x => x.items)
+            .filter(x => x.type === "exam")
+            .map(x => ({
+                id: x.id,
+                orderIndex: x.orderIndex,
+                moduleId: x.moduleId
+            } as Video)));
 };
 
 export const deleteCourseAction = async (params: ActionParamsType) => {

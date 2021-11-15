@@ -18,7 +18,6 @@ import { CourseCategoryDTO } from "../models/shared_models/CourseCategoryDTO";
 import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
 import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
-import { CourseItemShortDTO } from "../models/shared_models/CourseItemShortDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
 import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
@@ -40,6 +39,7 @@ import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
+import { ClassType } from "../models/Types";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
@@ -48,7 +48,7 @@ import { DailyTipView } from "../models/views/DailyTipView";
 import { ExamResultView } from "../models/views/ExamResultView";
 import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { getFullName, navPropNotNull, toFullName } from "../utilities/helpers";
+import { navPropNotNull, toFullName } from "../utilities/helpers";
 import { getItemCode } from "./encodeService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
@@ -58,7 +58,7 @@ const mapperFunctions = [] as {
     func: (from: any) => any;
 }[];
 
-const addMapperFunction = <TFromType, TToType>(fromType: Function, toType: Function, func: (from: TFromType) => TToType) => {
+const addMapperFunction = <TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, func: (from: TFrom) => TTo) => {
 
     const mapping = mapperFunctions
         .filter(x => x.fromTypeName === fromType.name && x.toTypeName === toType.name)[0];
@@ -74,7 +74,7 @@ const addMapperFunction = <TFromType, TToType>(fromType: Function, toType: Funct
         });
 }
 
-export const useMapperFunction = <TToType>(fromType: Function, toType: Function, obj: any): TToType => {
+export const useMapperFunction = <TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, fromObj: TFrom): TTo => {
 
     const mapping = mapperFunctions
         .filter(x => x.fromTypeName === fromType.name && x.toTypeName === toType.name)[0];
@@ -82,10 +82,10 @@ export const useMapperFunction = <TToType>(fromType: Function, toType: Function,
     if (!mapping)
         throw new Error(`Mapping '${fromType.name} -> ${toType.name}' not found!`);
 
-    return mapping.func(obj);
+    return mapping.func(fromObj);
 }
 
-addMapperFunction<CourseAdminDetailedView, CourseAdminItemShortDTO>(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
+addMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
     id: view.itemId,
     subTitle: view.itemSubtitle,
     title: view.itemTitle,
@@ -440,7 +440,7 @@ export const toCourseEditDataDTO = (
 
             const items = grouping
                 .items
-                .map(viewAsItem => useMapperFunction<CourseAdminItemShortDTO>(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
+                .map(viewAsItem => useMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
 
             return {
                 id: viewAsModule.moduleId,

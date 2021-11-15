@@ -23,6 +23,9 @@ import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseEditItemView } from "./CourseEditItemView";
 import { EditSection } from "./EditSection";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { ModuleDTO } from "../../../models/shared_models/ModuleDTO";
+import { UserDTO } from "../../../models/shared_models/UserDTO";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
@@ -59,30 +62,6 @@ export const EditCourseControl = (props: {
     const navToVideoEdit = (videoId: number) => navigate(courseRoutes.editVideoRoute.route, { courseId, videoId });
     const navToExamEdit = (examId: number) => navigate(courseRoutes.editExamRoute.route, { courseId, examId });
 
-    const handleSaveCourseAsync = async () => {
-
-        // const dto = {
-        //     courseId: courseId,
-        //     title: title,
-        //     thumbnailURL: thumbnailSrc,
-        //     courseItems: courseItems,
-
-        //     teacher: {
-        //         id: 1,
-        //     } as UserDTO,
-
-        //     category: {
-        //         id: category?.id!
-        //     },
-
-        //     subCategory: {
-        //         id: subCategory?.id!
-        //     }
-        // } as CourseEditDataDTO;
-
-        // return saveCourseAsync(dto, thumbnailImageFile);
-    }
-
     // set default values
     useEffect(() => {
 
@@ -103,20 +82,50 @@ export const EditCourseControl = (props: {
         setSubCategory(courseEditData.subCategory);
     }, [courseEditData]);
 
+    const handleSaveCourseAsync = async () => {
+
+        const orderedModules = [...modules];
+
+        // set order indices & module ids
+        orderedModules
+            .forEach((m, mIndex) => {
+
+                m.orderIndex = mIndex;
+
+                m.items
+                    .forEach((i, iIndex) => {
+
+                        i.moduleId = m.id;
+                        i.orderIndex = iIndex;
+                    });
+            });
+
+        const dto = {
+            courseId: courseId,
+            title: title,
+            thumbnailURL: thumbnailSrc,
+            modules: orderedModules,
+
+            teacher: {
+                id: 1,
+            } as UserDTO,
+
+            category: {
+                id: category?.id!
+            },
+
+            subCategory: {
+                id: subCategory?.id!
+            }
+        } as CourseEditDataDTO;
+
+        return saveCourseAsync(dto, thumbnailImageFile);
+    }
 
     const setBrowsedImage = (src: string, file: File) => {
 
         setThumbnailSrc(src);
         setThumbnailImageFile(file);
-    }
-
-    const handleSetReorderedModules = (modules: ModuleEditDTO[]) => {
-
-        // set order indexes according to list item order
-        modules
-            .forEach((x, index) => x.orderIndex = index);
-
-        setModules(modules);
     }
 
     const handleEditCourseItem = (courseItem: CourseAdminItemShortDTO) => {
@@ -153,64 +162,79 @@ export const EditCourseControl = (props: {
         }
     }
 
-    // const handleDeleteCourseItemAsync = async (courseItem: CourseAdminItemShortDTO) => {
+    const removeCourseItem = (code: string) => {
 
-    //     // exam
-    //     if (courseItem.type === "exam") {
+        setModules([...modules]
+            .map(x => {
+                x.items = x.items
+                    .filter(y => y.descriptorCode !== code)
+                return x;
+            }));
+    }
 
-    //         deleteWarningDialogLogic
-    //             .openDialog({
-    //                 title: "Biztosan törlöd a vizsgát?",
-    //                 description: "A benne lévő összes kérdés el fog veszni.",
-    //                 buttons: [
-    //                     {
-    //                         title: "Vizsga törlése",
-    //                         action: async () => {
+    const handleDeleteCourseItemAsync = async (courseItem: CourseAdminItemShortDTO) => {
 
-    //                             try {
+        // exam
+        if (courseItem.type === "exam") {
 
-    //                                 await deleteExamAsync(courseItem.id);
-    //                                 showNotification("Vizsga sikeresen törölve!");
-    //                                 setModules(modules.filter(x => x.descriptorCode !== courseItem.descriptorCode));
-    //                             }
-    //                             catch (e) {
+            deleteWarningDialogLogic
+                .openDialog({
+                    title: "Biztosan törlöd a vizsgát?",
+                    description: "A benne lévő összes kérdés el fog veszni.",
+                    buttons: [
+                        {
+                            title: "Vizsga törlése",
+                            action: async () => {
 
-    //                                 showError(e);
-    //                             }
-    //                         }
-    //                     }
-    //                 ]
-    //             });
-    //     }
+                                try {
 
-    //     // video
-    //     else {
+                                    await deleteExamAsync(courseItem.id);
+                                    showNotification("Vizsga sikeresen törölve!");
+                                    removeCourseItem(courseItem.descriptorCode);
+                                }
+                                catch (e) {
 
-    //         deleteWarningDialogLogic
-    //             .openDialog({
-    //                 title: "Biztosan törlöd a videót?",
-    //                 description: "A feltöltött fájl, és az összes kérdés el fog veszni.",
-    //                 buttons: [
-    //                     {
-    //                         title: "Videó törlése",
-    //                         action: async () => {
+                                    showError(e);
+                                }
+                            }
+                        }
+                    ]
+                });
+        }
 
-    //                             try {
+        // video
+        else {
 
-    //                                 await deleteVideoAsync(courseItem.id);
-    //                                 showNotification("Videó sikeresen törölve!");
-    //                                 setModules(modules.filter(x => x.descriptorCode !== courseItem.descriptorCode));
-    //                             }
-    //                             catch (e) {
+            deleteWarningDialogLogic
+                .openDialog({
+                    title: "Biztosan törlöd a videót?",
+                    description: "A feltöltött fájl, és az összes kérdés el fog veszni.",
+                    buttons: [
+                        {
+                            title: "Videó törlése",
+                            action: async () => {
 
-    //                                 showError(e);
-    //                             }
-    //                         }
-    //                     }
-    //                 ]
-    //             });
-    //     }
-    // }
+                                try {
+
+                                    await deleteVideoAsync(courseItem.id);
+                                    showNotification("Videó sikeresen törölve!");
+                                    removeCourseItem(courseItem.descriptorCode);
+                                }
+                                catch (e) {
+
+                                    showError(e);
+                                }
+                            }
+                        }
+                    ]
+                });
+        }
+    }
+
+    const handleDeleteModule = async (module: ModuleEditDTO) => {
+
+
+    }
 
     const onDragEnd = (srcId: string, destId: string | null, srcIndex: number, destIndex: number | null) => {
 
@@ -346,7 +370,17 @@ export const EditCourseControl = (props: {
                                     zoneId={module.id + ""}
                                     groupId="child">
 
-                                    <EpistoHeader text={module.name} variant="strongSub" style={{ marginLeft: "10px" }} />
+                                    <Flex align="center" justify="space-between">
+                                        <EpistoHeader
+                                            text={module.name}
+                                            variant="strongSub"
+                                            style={{ marginLeft: "10px" }} />
+
+                                        <EpistoButton
+                                            onClick={() => handleDeleteModule(module)}>
+                                            <DeleteIcon></DeleteIcon>
+                                        </EpistoButton>
+                                    </Flex>
 
                                     {module
                                         .items
@@ -362,8 +396,8 @@ export const EditCourseControl = (props: {
                                                     moduleIndex={moduleIndex}
                                                     index={itemIndex}
                                                     item={item}
-                                                    deleteCourseItem={() => { }}
-                                                    editCourseItem={() => { }} />
+                                                    deleteCourseItem={handleDeleteCourseItemAsync}
+                                                    editCourseItem={handleEditCourseItem} />
                                             </DragItem>
                                         })}
                                 </DropZone>
