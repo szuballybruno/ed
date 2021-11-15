@@ -3,7 +3,7 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
-import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseDetailsAction, getCourseEditDataAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
+import { addModuleAction, createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseDetailsAction, getCourseEditDataAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
     answerPractiseQuestionAction, getCourseBriefDataAction,
     getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction,
@@ -111,6 +111,7 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.course.deleteCourse, deleteCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.createCourse, createCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.getCourseDetails, getCourseDetailsAction);
+    addEndpoint(apiRoutes.course.createModule, addModuleAction, { isPost: true });
 
     // video 
     addEndpoint(apiRoutes.video.createVideo, createVideoAction, { isPost: true });

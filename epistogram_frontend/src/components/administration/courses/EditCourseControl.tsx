@@ -26,6 +26,7 @@ import { EditSection } from "./EditSection";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ModuleDTO } from "../../../models/shared_models/ModuleDTO";
 import { UserDTO } from "../../../models/shared_models/UserDTO";
+import { useCreateModule } from "../../../services/courseService";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
@@ -54,6 +55,7 @@ export const EditCourseControl = (props: {
     const { createExamAsync } = useCreateExam();
     const { deleteVideoAsync } = useDeleteVideo();
     const { deleteExamAsync } = useDeleteExam();
+    const { createModuleAsync } = useCreateModule();
 
     const showError = useShowErrorDialog();
     const isAllowEditOnPage = false;
@@ -236,6 +238,22 @@ export const EditCourseControl = (props: {
 
     }
 
+    const handleAddNewModuleAsync = async () => {
+
+        try {
+
+            await createModuleAsync({
+                courseId: courseId,
+                name: "Uj modul",
+                orderIndex: modules.length
+            });
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
+
     const onDragEnd = (srcId: string, destId: string | null, srcIndex: number, destIndex: number | null) => {
 
         console.log(`${srcId} - ${destId} - Src:${srcIndex} - Dest:${destIndex}`);
@@ -354,6 +372,13 @@ export const EditCourseControl = (props: {
                     style={{ alignSelf: "center" }}
                     variant="outlined">
                     Új vizsga hozzáadása
+                </EpistoButton>
+
+                <EpistoButton
+                    onClick={handleAddNewModuleAsync}
+                    style={{ alignSelf: "center" }}
+                    variant="outlined">
+                    Új modul hozzáadása
                 </EpistoButton>
             </Flex>
 

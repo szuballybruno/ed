@@ -1,13 +1,23 @@
 SELECT 
-	"sq".*,
+	"m"."courseId" AS "courseId",
 	"m"."name" AS "moduleName",
 	"m"."orderIndex" AS "moduleOrderIndex",
-	(SELECT encode(("m"."id" || '@module')::bytea, 'base64')) AS "moduleCode"
-FROM 
+	"m"."id" AS "moduleId",
+	(SELECT encode(("m"."id" || '@module')::bytea, 'base64')) AS "moduleCode",
+	"sq"."videoId",
+	"sq"."examId",
+	"sq"."itemIsVideo",
+	"sq"."itemId",
+	"sq"."itemOrderIndex",
+	"sq"."itemTitle",
+	"sq"."itemSubtitle",
+	"sq"."itemCode"
+FROM public."course_module" AS "m"
+
+LEFT JOIN 
 (
 	-- video
 	SELECT
-		"v"."courseId",
 		"v"."id" AS "videoId",
 		NULL AS "examId",
 		true AS "itemIsVideo",
@@ -23,7 +33,6 @@ FROM
 
 	-- exam
 	SELECT 
-		"e"."courseId",
 		NULL AS "videoId",
 		"e"."id" AS "examId",
 		false AS "itemIsVideo",
@@ -34,15 +43,12 @@ FROM
 		"e"."subtitle" AS "itemSubtitle",
 		(SELECT encode(("e"."id" || '@exam')::bytea, 'base64')) AS "itemCode"
 	FROM public."exam" AS "e"
-
-	-- signup is excluded
-	WHERE "e"."id" != 1  
 ) AS "sq"
+ON "sq"."moduleId" = "m"."id"
 
-LEFT JOIN public."course_module" AS "m"
-ON "m"."id" = "sq"."moduleId"
+WHERE "m"."courseId" IS NOT NULL
 
 ORDER BY 
-	"sq"."courseId", 
-	"moduleOrderIndex",
+	"m"."courseId", 
+	"m"."orderIndex",
 	"itemOrderIndex"

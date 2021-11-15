@@ -1,22 +1,20 @@
-import { Request } from "express";
-import { Module } from "module";
 import { Course } from "../models/entity/Course";
 import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
-import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
 import { CourseEditDataDTO as CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
+import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
+import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
-import { getUserIdFromRequest } from "../services/authenticationService";
-import { getAdminCoursesAsync, getAvailableCoursesAsync, getCourseEditDataAsync, getCourseProgressDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService"
+import { getAdminCoursesAsync, getAvailableCoursesAsync, getCourseEditDataAsync, getCourseProgressDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService";
 import { deleteExamsAsync } from "../services/examService";
 import { toCourseDetailsDTO } from "../services/mappings";
 import { deleteVideosAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, getAsyncActionHandler, throwNotImplemented, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
 
 export const startCourseAction = async (params: ActionParamsType) => {
 
@@ -56,6 +54,20 @@ export const getCourseDetailsAction = async (params: ActionParamsType) => {
         .getOneOrFail();
 
     return toCourseDetailsDTO(course);
+}
+
+export const addModuleAction = async (params: ActionParamsType) => {
+
+    const dto = withValueOrBadRequest<ModuleCreateDTO>(params.req?.body);
+
+    await staticProvider
+        .ormConnection
+        .getRepository(CourseModule)
+        .insert({
+            courseId: dto.courseId,
+            name: dto.name,
+            orderIndex: dto.orderIndex
+        });
 }
 
 export const saveCourseAction = async (params: ActionParamsType) => {

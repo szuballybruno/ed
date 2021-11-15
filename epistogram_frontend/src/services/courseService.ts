@@ -10,6 +10,7 @@ import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
+import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 
 export const useAdminCourseList = (searchText: string) => {
 
@@ -45,6 +46,15 @@ export const useCreateCourse = () => {
     return {
         createCourseAsync: qr.postDataAsync,
         createCourseState: qr.state,
+    };
+}
+
+export const useCreateModule = () => {
+
+    const qr = usePostDataUnsafe<ModuleCreateDTO, void>(apiRoutes.course.createModule);
+
+    return {
+        createModuleAsync: qr.postDataAsync,
     };
 }
 

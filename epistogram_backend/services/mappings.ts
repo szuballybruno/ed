@@ -440,6 +440,7 @@ export const toCourseEditDataDTO = (
 
             const items = grouping
                 .items
+                .filter(x => !!x.itemId)
                 .map(viewAsItem => useMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
 
             return {
