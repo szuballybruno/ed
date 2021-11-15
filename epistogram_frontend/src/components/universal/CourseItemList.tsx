@@ -17,6 +17,8 @@ import { FlexList } from "./FlexList";
 import { FlexListItem } from "./FlexListItem";
 import { FlexListTitleSubtitle } from "./FlexListTitleSubtitle";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { CollapseItem } from "./CollapseItem";
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
@@ -56,107 +58,139 @@ export const CourseItemList = (props: {
     modules: ModuleDTO[]
 }) => {
 
-    // data 
-    const { modules } = props;
-    const currentModuleId = modules
-        .filter(module => module
-            .items
-            .some(item => item.state === "current"))[0]?.id;
-
     // hooks 
-    const [expandedNodeIds, setExpandedNodeIds] = useState<string[]>([]);
+    const [expandedNodeIds, setExpandedNodeIds] = useState<number[]>([]);
     const { navigateToPlayer } = useNavigation();
 
+    // data 
+    const { modules } = props;
+
+    const currentModule = modules
+        .filter(module => module
+            .items
+            .some(item => item.state === "current"))[0] as ModuleDTO | null;
+
+    const currentItem = modules
+        .flatMap(x => x.items)
+        .filter(x => x.state === "current")[0] as CourseItemDTO | null;
+
+    const isCurrentExpanded = expandedNodeIds
+        .some(x => x === currentModule?.id);
+
+    const isModuleSelected = !!modules
+        .filter(x => x.state === "current" && !x
+            .items
+            .some(x => x.state === "current"))[0];
+
     // funcs 
-    const handleToggle = (nodeIds: string[]) => {
+    const handleToggle = (moduleId: number) => {
 
-        setExpandedNodeIds(nodeIds);
+        console.log(moduleId);
+        if (expandedNodeIds.some(x => x === moduleId)) {
+
+            setExpandedNodeIds(expandedNodeIds.filter(x => x !== moduleId));
+        }
+        else {
+
+            setExpandedNodeIds([...expandedNodeIds, moduleId]);
+        }
     };
-
-    const lockedModuleIds = modules
-        .filter(x => x.state === "locked")
-        .map(x => x.id)
-        .join(", ");
-
-    const isCurrentExpanded = !expandedNodeIds
-        .some(x => x === currentModuleId + "");
 
     const startModule = (code: string) => {
 
         navigateToPlayer(code);
     }
 
+    // effects 
     useEffect(() => {
 
-        const lockedModules = modules
-            .filter(x => x.state === "locked");
+        if (isModuleSelected)
+            return;
 
+        if (isCurrentExpanded)
+            return;
+
+        console.log("Opening modules...");
+        setExpandedNodeIds([...expandedNodeIds, currentModule?.id!]);
+    }, [isModuleSelected, currentItem]);
+
+    useEffect(() => {
+
+        if (!isModuleSelected)
+            return;
+
+        if (!isCurrentExpanded)
+            return;
+
+        console.log("Closing modules...");
         setExpandedNodeIds(expandedNodeIds
-            .filter(x => !lockedModules
-                .some(y => y.id + "" === x)));
-    }, [lockedModuleIds]);
-
-    useEffect(() => {
-
-        if (currentModuleId && isCurrentExpanded)
-            setExpandedNodeIds([...expandedNodeIds, currentModuleId + ""]);
-    }, [!!currentModuleId, lockedModuleIds, currentModuleId]);
+            .filter(x => x !== currentModule?.id));
+    }, [isModuleSelected]);
 
     return (
-        <TreeView
-            defaultCollapseIcon={<ExpandMoreIcon />}
-            defaultExpandIcon={<ChevronRightIcon />}
-            disableSelection
-            expanded={expandedNodeIds}
-            onNodeToggle={(_, y) => handleToggle(y)}
-            sx={{ background: "transparent" }}>
-
+        <Flex direction="column">
             {modules
                 .map(module => {
 
                     const isLocked = module.state === "locked";
-                    const startable = (module.state === "available" || module.state === "completed");
-                    const moduleSelected = module.state === "current" && !module.items.some(x => x.state === "current");
-                    const renderContent = !isLocked && !moduleSelected;
-                    const unclickable = moduleSelected;
+                    const isStartable = (module.state === "available" || module.state === "completed");
+                    const hasCurrentItem = module.items.some(x => x.state === "current");
+                    const isSelected = module.state === "current" && !hasCurrentItem;
+                    const unclickable = isSelected;
+                    const isOpen = !isSelected && !isLocked && expandedNodeIds.some(x => x === module.id);
+                    const headercolor = isSelected ? "white" : undefined;
 
-                    return <TreeItem
+                    return <CollapseItem
+                        isOpen={isOpen}
                         style={{
                             pointerEvents: isLocked || unclickable ? "none" : "all",
                             color: isLocked ? "gray" : undefined
                         }}
-                        label={<Flex
-                            className="whall"
-                            bg={moduleSelected ? `var(--deepBlue)` : undefined}
-                            color={moduleSelected ? "white" : undefined}
+                        header={<Flex
+                            bg={isSelected ? `var(--deepBlue)` : undefined}
+                            color={headercolor}
                             justify="space-between"
                             align="center"
                             height="50px"
                             pl="5px">
-                            <Typography>
-                                {module.name}
-                            </Typography>
-                            {startable && <EpistoButton
-                                padding="3px"
-                                onClick={() => startModule(module.code)}
-                                variant="outlined">
-                                <PlayArrowIcon style={{ color: "var(--epistoTeal)" }} />
-                            </EpistoButton>}
-                        </Flex>}
-                        className="forceTransparentBgOnChildren"
-                        nodeId={module.id + ""}>
 
-                        {renderContent && <FlexList id="courseItemListContainer" p="10px">
+                            {/* open/close */}
+                            <Flex align="center">
+                                <EpistoButton onClick={() => handleToggle(module.id)}>
+
+                                    {isSelected
+                                        ? <FiberManualRecordIcon style={{ color: headercolor }} />
+                                        : isOpen
+                                            ? <ExpandMoreIcon style={{ color: headercolor }} />
+                                            : <ChevronRightIcon style={{ color: headercolor }} />}
+                                </EpistoButton>
+
+                                {/* title */}
+                                <Typography>
+                                    {module.name}
+                                </Typography>
+                            </Flex>
+
+                            {/* play */}
+                            <Box width="50px">
+                                {isStartable && <EpistoButton
+                                    padding="3px"
+                                    onClick={() => startModule(module.code)}
+                                    variant="outlined">
+                                    <PlayArrowIcon style={{ color: "var(--epistoTeal)" }} />
+                                </EpistoButton>}
+                            </Box>
+                        </Flex>}>
+
+                        <FlexList id="courseItemListContainer" p="10px">
                             {module
                                 .items
                                 .map((courseItem, index) => <CourseItemView
                                     key={index}
                                     courseItem={courseItem} />)}
-                        </FlexList>}
-
-                        {!renderContent && <Box></Box>}
-                    </TreeItem>
+                        </FlexList>
+                    </CollapseItem>
                 })}
-        </TreeView>
+        </Flex>
     );
 }
