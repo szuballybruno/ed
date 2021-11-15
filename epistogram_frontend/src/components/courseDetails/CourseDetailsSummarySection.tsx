@@ -5,6 +5,7 @@ import {EpistoHeader} from "../EpistoHeader";
 import {EpistoButton} from "../universal/EpistoButton";
 import {Radar} from "react-chartjs-2";
 import React from "react";
+import {translatableTexts} from "../../translatableTexts";
 
 export const CourseDetailsSummarySection = (props: {
     overviewSectionShortDescription: string
@@ -26,16 +27,21 @@ export const CourseDetailsSummarySection = (props: {
     </Flex>
 
     return <Flex mt={10} w={"100%"} h={500} direction={"column"} alignItems={"flex-start"}>
-        <EpistoHeader text={"A kurzus rövid leírása"} my={10} />
+
+        <EpistoHeader text={translatableTexts.courseDetails.summarySection.courseShortDescription} my={10} />
+
         <Typography>
             {props.overviewSectionShortDescription}
         </Typography>
+
         <EpistoButton style={{
             marginTop: 20
         }}>
-            Bővebben
+            {translatableTexts.courseDetails.summarySection.moreButton}
         </EpistoButton>
-        <EpistoHeader text={"Mit tanulhatsz ezen a kurzuson?"} my={10} mt={40} />
+
+        <EpistoHeader text={translatableTexts.courseDetails.summarySection.whatCanYouLearnFromCourse} my={10} mt={40} />
+
         <Flex w={"100%"}>
             <Flex direction={"column"} minW={"50%"}>
                 {props.whatCanYouLearnFromCourseList.map((title, index) => {
@@ -48,7 +54,9 @@ export const CourseDetailsSummarySection = (props: {
                 })}
             </Flex>
         </Flex>
-        <EpistoHeader text={"Milyen készségeket fejleszt a tanfolyam?"} my={10} mt={40} />
+
+        <EpistoHeader text={translatableTexts.courseDetails.summarySection.whatSkillsTheCourseImproving} my={10} mt={40} />
+
         <Flex w={"100%"} mb={100}>
             <Flex direction={"column"} minW={"50%"} >
                 {props.whatSkillsTheCourseImprovingDescription}
@@ -61,7 +69,7 @@ export const CourseDetailsSummarySection = (props: {
                         plugins: {
                             title: {
                                 display: false,
-                                text: 'Felhasználók átlagos tanulási stílusa'
+                                text: translatableTexts.courseDetails.summarySection.averageLearningStyle
                             },
                             legend: {
                                 display: false
@@ -69,18 +77,7 @@ export const CourseDetailsSummarySection = (props: {
                         },
                     }}
                     data={{
-                        labels: [
-                            'Egyedüli',
-                            'Hangos kimondás',
-                            'Elméleti',
-                            'Vizuális alapú',
-                            'Analitikus',
-                            'Szociális',
-                            'Térbeli elhelyezés',
-                            'Gyakorlati',
-                            'Audió alapú',
-                            'Kreatív'
-                        ],
+                        labels: translatableTexts.courseDetails.summarySection.averageLearningStyleChartLabels,
                         datasets: [
                             {
                                 data: [5, 4, 5, 5, 3, 5, 5, 5, 4, 5],

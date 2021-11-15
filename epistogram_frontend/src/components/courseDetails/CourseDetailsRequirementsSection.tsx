@@ -3,16 +3,16 @@ import {EpistoHeader} from "../EpistoHeader";
 import {Typography} from "@mui/material";
 import {Radar} from "react-chartjs-2";
 import React from "react";
+import {translatableTexts} from "../../translatableTexts";
+import {mockCourseDetails} from "../../mockData";
 
 export const CourseDetailsRequirementsSection = () => <Flex mt={10} w={"100%"} h={500} direction={"column"} alignItems={"flex-start"}>
-    <EpistoHeader text={"Mikor való neked a kurzus?"} my={10} />
+    <EpistoHeader text={translatableTexts.courseDetails.requirementsSection.whenTheCourseGoodForYou} my={10} />
     <Typography>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique suscipit tempor. Pellentesque dictum, augue a egestas faucibus, augue ipsum vehicula dui, faucibus eleifend risus orci quis ante. Curabitur porttitor fringilla blandit. Suspendisse placerat tempus vehicula. In dignissim tellus magna. Donec non tincidunt risus. Morbi sit amet turpis dolor. Proin vulputate leo eu leo bibendum, in condimentum ex efficitur.
-
-        Maecenas risus sem, pharetra eu magna vel, gravida luctus urna. Sed diam urna, blandit id justo a, consectetur lacinia risus. Donec porttitor, sem vitae posuere lacinia, mauris libero sagittis dui, non viverra purus lectus ut urna. Pellentesque semper, eros ac maximus vehicula, orci odio tempor magna, vel rutrum nisi nisl id mauris. Cras ullamcorper lacus elementum venenatis feugiat. Donec magna dui, vulputate ac massa ut, placerat imperdiet mauris. Fusce pellentesque ipsum nunc, eu lobortis libero porttitor id. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc tempor euismod erat, finibus commodo felis mollis a. Ut rhoncus convallis sem, in varius tortor dapibus et. Donec ultricies accumsan neque, eget bibendum ante fringilla sed.
+        {mockCourseDetails.lorem}
     </Typography>
 
-    <EpistoHeader text={"Mennyire illik hozzád ez a kurzus"} my={10} mt={40} />
+    <EpistoHeader text={translatableTexts.courseDetails.requirementsSection.howMuchDoesTheCourseFitsYou} my={10} mt={40} />
     <Flex w={"100%"} mb={100}>
         <Flex direction={"column"} minW={"50%"} >
             Dinamikus szöveg*
@@ -25,7 +25,7 @@ export const CourseDetailsRequirementsSection = () => <Flex mt={10} w={"100%"} h
                     plugins: {
                         title: {
                             display: false,
-                            text: 'Felhasználók átlagos tanulási stílusa'
+                            text: translatableTexts.courseDetails.requirementsSection.averageLearningStyle
                         },
                         legend: {
                             display: false
@@ -33,18 +33,7 @@ export const CourseDetailsRequirementsSection = () => <Flex mt={10} w={"100%"} h
                     },
                 }}
                 data={{
-                    labels: [
-                        'Egyedüli',
-                        'Hangos kimondás',
-                        'Elméleti',
-                        'Vizuális alapú',
-                        'Analitikus',
-                        'Szociális',
-                        'Térbeli elhelyezés',
-                        'Gyakorlati',
-                        'Audió alapú',
-                        'Kreatív'
-                    ],
+                    labels: translatableTexts.courseDetails.requirementsSection.averageLearningStyleChartLabels,
                     datasets: [
                         {
                             data: [5, 4, 5, 5, 3, 5, 5, 5, 4, 5],
@@ -55,37 +44,37 @@ export const CourseDetailsRequirementsSection = () => <Flex mt={10} w={"100%"} h
         </Flex>
     </Flex>
 
-    <EpistoHeader text={"Milyen technikai követelményei vannak a kurzusnak?"} my={10} mt={40} />
+    <EpistoHeader text={translatableTexts.courseDetails.requirementsSection.technicalRequirementsForCourse} my={10} mt={40} />
     <Flex w={"100%"}>
         <Flex direction={"column"} minW={"50%"}>
             <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} ></Flex>
+                <Flex w={30} h={30} p={5} />
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
+                    <Typography>{mockCourseDetails.shortLorem}</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} ></Flex>
+                <Flex w={30} h={30} p={5} />
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
+                    <Typography>{mockCourseDetails.shortLorem}</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} ></Flex>
+                <Flex w={30} h={30} p={5} />
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
+                    <Typography>{mockCourseDetails.shortLorem}</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} ></Flex>
+                <Flex w={30} h={30} p={5} />
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
+                    <Typography>{mockCourseDetails.shortLorem}</Typography>
                 </Flex>
             </Flex>
             <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} ></Flex>
+                <Flex w={30} h={30} p={5} />
                 <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>Lorem ipsum dolor sit amet</Typography>
+                    <Typography>{mockCourseDetails.shortLorem}</Typography>
                 </Flex>
             </Flex>
         </Flex>
