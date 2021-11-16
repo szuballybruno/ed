@@ -21,7 +21,9 @@ export const translatableTexts = {
         currentCourseTitle: "Jelenlegi kurzus",
         practiseTitle: "Gyakorolj, hogy a legjobb lehess!",
         tipOfTheDay: "Hozd ki  magadból a legtöbbet - Napi tipped",
-        tasks: "Feladatok"
+        tasks: "Feladatok",
+        stats: "Legfontosabb statisztikáid",
+        noStatsYet: "Tanulási és felejtési görbéd kalkulálásához legalább 30 nap és minimum 20 órányi belépés szükséges"
     },
 
     routeTitles: {
@@ -125,6 +127,66 @@ export const translatableTexts = {
         },
         startCourse: "Indítás",
         courseDataSheet: "Adatlap"
+    },
+
+    courseDetails: {
+        cannotStartCourseNotification: "A kurzus jelenleg nem indítható, ez annak lehet a jele, hogy folyamatban van a feltöltése, kérjük próbáld meg később!",
+        startCourse: "Elkezdem a kurzust",
+        recommendedCoursesTitle: "Ezek a kurzusok is érdekelhetnek",
+
+        briefingInfoItems: {
+            category: "Kategória",
+            teacher: "Tanár",
+            difficulty: "Nehézség",
+            learningExperience: "Tanulási élmény"
+        },
+
+        tabLabels: {
+            overview: "Áttekintés",
+            requirements: "Követelmények",
+            content: "Tartalom",
+            teacher: "Az oktatóról",
+            ratings: "Értékelések"
+        },
+
+        summarySection: {
+            moreButton: "Bővebben",
+            courseShortDescription: "A kurzus rövid leírása",
+            whatCanYouLearnFromCourse: "Mit tanulhatsz ezen a kurzuson?",
+            whatSkillsTheCourseImproving: "Milyen készségeket fejleszt a tanfolyam?",
+            averageLearningStyle: "Felhasználók átlagos tanulási stílusa",
+            averageLearningStyleChartLabels: [
+                'Egyedüli',
+                'Hangos kimondás',
+                'Elméleti',
+                'Vizuális alapú',
+                'Analitikus',
+                'Szociális',
+                'Térbeli elhelyezés',
+                'Gyakorlati',
+                'Audió alapú',
+                'Kreatív'
+            ]
+        },
+
+        requirementsSection: {
+            whenTheCourseGoodForYou: "Mikor való neked a kurzus?",
+            howMuchDoesTheCourseFitsYou: "Mennyire illik hozzád ez a kurzus",
+            averageLearningStyle: "Felhasználók átlagos tanulási stílusa",
+            averageLearningStyleChartLabels: [
+                'Egyedüli',
+                'Hangos kimondás',
+                'Elméleti',
+                'Vizuális alapú',
+                'Analitikus',
+                'Szociális',
+                'Térbeli elhelyezés',
+                'Gyakorlati',
+                'Audió alapú',
+                'Kreatív'
+            ],
+            technicalRequirementsForCourse: "Milyen technikai követelményei vannak a kurzusnak?"
+        }
     },
 
     shop: {
