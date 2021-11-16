@@ -2,6 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import { Divider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../frontendHelpers";
+import { useReactTimer } from "../../helpers/reactTimer";
 import { ModuleDTO } from "../../models/shared_models/ModuleDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
@@ -13,7 +14,7 @@ import { NavigateToCourseItemActionType } from "../universal/CourseItemList";
 import { EpistoButton } from "../universal/EpistoButton";
 import { SegmentedButton } from "../universal/SegmentedButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
-import { TimeoutFrame, useTimeoutFrameLogic } from "../universal/TimeoutFrame";
+import { TimeoutFrame } from "../universal/TimeoutFrame";
 import { VideoQuestionnaire } from "../universal/VideoQuestionnaire";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
 import { CourseItemSelector } from "./CourseItemSelector";
@@ -52,7 +53,7 @@ export const WatchView = (props: {
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
-    const timeoutLogic = useTimeoutFrameLogic(3, continueCourse);
+    const reactTimer = useReactTimer(continueCourse, 3 * 1000);
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
@@ -96,11 +97,11 @@ export const WatchView = (props: {
 
         if (isVideoEnded) {
 
-            timeoutLogic.restart();
+            reactTimer.restart();
         }
         else {
 
-            timeoutLogic.stop();
+            reactTimer.pause();
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -205,7 +206,7 @@ export const WatchView = (props: {
                         }}
                         onClick={continueCourse}
                         variant="colored">
-                        <TimeoutFrame logic={timeoutLogic}>
+                        <TimeoutFrame reactTimer={reactTimer}>
                             <Typography style={{
                                 margin: "10px"
                             }}>

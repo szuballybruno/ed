@@ -1,8 +1,8 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
-import { matchPath, Route, useLocation, useParams } from "react-router-dom";
+import { matchPath, useLocation, useParams } from "react-router-dom";
 import { assetStorageUrl } from "./Environemnt";
 import { ErrorType, UserRoleEnum } from "./models/shared_models/types/sharedTypes";
 import { ApplicationRoute, LoadingStateType } from "./models/types";
@@ -472,90 +472,7 @@ export const getErrorTypeByHTTPCode = (code: number): ErrorType => {
     return "http error";
 }
 
-export const useTimer = (callback: () => void, delayMiliseconds: number) => {
-
-    const [isRunning, setIsRunning] = useState(false);
-    const [timer,] = useState<Timer>(createTimer(callback, setIsRunning, delayMiliseconds));
-
-    return {
-        ...timer!,
-        isRunning
-    }
+export const useForceUpdate = () => {
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update the state to force render
 }
-
-export const createTimer = (callback: () => void, onIsRunningChanged: (isRunning: boolean) => void, delayMiliseconds: number) => {
-
-    let remainingMiliseconds = delayMiliseconds;
-    let isEnded = false;
-    let timeoutRef = null as null | NodeJS.Timeout;
-    let startTime = null as Date | null;
-    let isRunning = false;
-
-    const getCurrentElapsedMiliseconds = () => {
-
-        if (!startTime)
-            return 0;
-
-        return Math.abs(new Date().getTime() - startTime.getTime());
-    }
-
-    const handleIsRunningChanged = (isRunninga: boolean) => {
-
-        isRunning = isRunninga;
-        onIsRunningChanged(isRunninga);
-    }
-
-    const stop = () => {
-
-        if (!timeoutRef || isEnded)
-            return;
-
-        const remainingMilisecs = remainingMiliseconds - getCurrentElapsedMiliseconds();
-
-        console.log("Stopping timer... remaining secs: " + remainingMilisecs);
-
-        handleIsRunningChanged(false);
-        clearTimeout(timeoutRef);
-        remainingMiliseconds = remainingMilisecs;
-    }
-
-    const start = () => {
-
-        if (isRunning || isEnded)
-            return;
-
-        console.log("Starting timer... remaining secs: " + remainingMiliseconds);
-
-        const timeout = setTimeout(() => {
-
-            stop();
-            isEnded = true;
-            callback();
-        }, remainingMiliseconds);
-
-        handleIsRunningChanged(true);
-        startTime = new Date();
-        timeoutRef = timeout;
-    }
-
-    const restart = () => {
-
-        if (isRunning)
-            return;
-
-        isEnded = false;
-        remainingMiliseconds = delayMiliseconds;
-
-        console.log("Restarting timer... " + remainingMiliseconds);
-
-        start();
-    }
-
-    return {
-        restart,
-        start,
-        stop
-    }
-}
-
-export type Timer = ReturnType<typeof createTimer>;

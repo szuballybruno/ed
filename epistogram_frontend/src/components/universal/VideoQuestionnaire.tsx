@@ -1,11 +1,12 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { useEffect } from 'react';
+import { useReactTimer } from "../../helpers/reactTimer";
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from '../../services/questionnaireService';
 import { QuesitionView } from "../QuestionView";
 import { EpistoButton } from "./EpistoButton";
-import { TimeoutFrame, useTimeoutFrameLogic } from "./TimeoutFrame";
+import { TimeoutFrame } from "./TimeoutFrame";
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -30,16 +31,15 @@ export const VideoQuestionnaire = (props: {
         onClosed();
     }
 
-    const timeoutFrameLogic = useTimeoutFrameLogic(autoCloseSecs, handleCloseDialog);
+    const reactTimer = useReactTimer(handleCloseDialog, autoCloseSecs * 1000);
 
     useEffect(() => {
 
         if (!isAnswered)
             return;
 
-        timeoutFrameLogic.start();
-
-    }, [isAnswered, timeoutFrameLogic]);
+        reactTimer.start();
+    }, [isAnswered]);
 
     return <Flex direction="column">
 
@@ -57,7 +57,7 @@ export const VideoQuestionnaire = (props: {
                 style={{ padding: "0" }}
                 onClick={() => handleCloseDialog()}>
 
-                <TimeoutFrame logic={timeoutFrameLogic}>
+                <TimeoutFrame reactTimer={reactTimer}>
                     <Typography style={{ position: "relative", margin: "10px" }}>
                         Bezárás
                     </Typography>

@@ -1,40 +1,22 @@
-import { Box, FlexProps } from "@chakra-ui/layout";
-import { useTimer } from "../../frontendHelpers";
+import { Box, Flex, FlexProps } from "@chakra-ui/layout";
+import { useEffect } from "react";
+import { ReactTimerType } from "../../helpers/reactTimer";
 
-export const useTimeoutFrameLogic = (
-    timeoutSeconds: number,
-    onTimeoutEnd: () => void) => {
+export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) => {
 
-    const timer = useTimer(onTimeoutEnd, timeoutSeconds * 1000);
-
-    return {
-        timer,
-        timeoutSeconds,
-        isRunning: timer.isRunning,
-        start: timer.start,
-        stop: timer.stop,
-        restart: timer.restart,
-    }
-}
-
-export type TimeoutFrameLogicType = ReturnType<typeof useTimeoutFrameLogic>;
-
-export const TimeoutFrame = (props: { logic: TimeoutFrameLogicType } & FlexProps) => {
-
-    const { logic, children, ...css } = props;
-    const { timeoutSeconds, isRunning } = logic;
+    const { reactTimer, children, ...css } = props;
 
     const pauseTimeout = () => {
 
-        logic.timer.stop();
+        reactTimer.pause();
     }
 
     const resumeTimeout = () => {
 
-        logic.timer.start();
+        reactTimer.start();
     }
 
-    return <Box
+    return <Flex
         position="relative"
         onMouseEnter={() => pauseTimeout()}
         onMouseLeave={() => resumeTimeout()}
@@ -46,14 +28,14 @@ export const TimeoutFrame = (props: { logic: TimeoutFrameLogicType } & FlexProps
             className="whall pauseAnimation"
             bg="var(--mildGrey)"
             style={{
-                animationName: "rightSlideAnimation",
-                animationDuration: `${timeoutSeconds}s`,
+                animationName: reactTimer.isIdle ? "" : "rightSlideAnimation",
+                animationDuration: `${reactTimer.maxMiliseconds / 1000}s`,
                 animationTimingFunction: "linear",
-                animationPlayState: isRunning ? "running" : "paused"
+                animationPlayState: reactTimer.isRunning ? "running" : "paused"
             }} />
 
         <Box position="relative">
             {children}
         </Box>
-    </Box>
+    </Flex>
 }
