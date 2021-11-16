@@ -6,19 +6,17 @@ import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
 import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { TextDTO } from "../models/shared_models/TextDTO";
-import { CourseItemType, CourseModeType } from "../models/shared_models/types/sharedTypes";
+import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { staticProvider } from "../staticProvider";
-import { TypedError } from "../utilities/helpers";
 import { getItemCode, readItemCode } from "./encodeService";
-import { deleteExamsAsync } from "./examService";
 import { toCourseAdminShortDTO, toCourseEditDataDTO, toCourseItemDTO, toCourseItemDTOExam, toCourseItemDTOVideo, toCourseShortDTO, toExamDTO, toSimpleCourseItemDTOs } from "./mappings";
 import { deleteModulesAsync } from "./moduleService";
-import { deleteVideosAsync, getVideoByIdAsync } from "./videoService";
+import { getVideoByIdAsync } from "./videoService";
 
 export const getCourseProgressDataAsync = async (userId: number) => {
 
@@ -110,7 +108,7 @@ export const getCurrentCourseItemsAsync = async (userId: number) => {
         // set current module 
         const currentModule = modules
             .single(x => x.items
-                .any(x => x.id === currentItem.id));
+                .any(x => x.descriptorCode === currentItem.descriptorCode));
 
         currentModule.state = "current";
     }

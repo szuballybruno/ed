@@ -21,6 +21,8 @@ export const PlayerPage = () => {
     const { descriptorCode } = useParams<{ descriptorCode: string }>();
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
+    console.log("descriptorCode: " + descriptorCode)
+
     // get player page data
     const {
         playerData,
@@ -37,6 +39,8 @@ export const PlayerPage = () => {
     const courseId = playerData?.courseId;
     const courseModules = playerData?.modules ?? [];
     const nextItemCode = playerData?.nextItemCode;
+
+    console.log("nextItemCode: " + nextItemCode)
 
     // redirect if current item should be locked 
     useEffect(() => {
@@ -72,6 +76,8 @@ export const PlayerPage = () => {
 
     const handleContinueCourse = () => {
 
+        console.log("Continue course, next item code: " + nextItemCode);
+
         if (nextItemCode)
             navigateToPlayer(nextItemCode);
     }
@@ -104,6 +110,7 @@ export const PlayerPage = () => {
                             video={video}
                             modules={courseModules}
                             continueCourse={handleContinueCourse}
+
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer

@@ -51,7 +51,11 @@ export const getPlayerDataAsync = async (
 
     // next 
     const flat = getCourseItemsFlat(modules);
-    const nextItemCode = flat[flat.findIndex(x => x.code === validItemCode) + 1]?.code ?? null;
+
+    const currentItemIndexInFlatList = flat
+        .findIndex(x => x.code === validItemCode);
+
+    const nextItemCode = flat[currentItemIndexInFlatList + 1]?.code ?? null;
 
     return {
         video: videoDTO,

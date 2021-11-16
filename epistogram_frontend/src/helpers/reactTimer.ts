@@ -1,11 +1,13 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useForceUpdate } from "../frontendHelpers";
 import { AdvancedTimer } from "./advancedTimer";
 
 export const useReactTimer = (endCallback: () => void, delayMiliseconds: number, updateIntervalMiliseconds?: number) => {
 
     const forceUpdate = useForceUpdate();
-    const timer = useMemo(() => new AdvancedTimer(delayMiliseconds, endCallback), []);
+    const callbackRef = useRef(endCallback);
+    callbackRef.current = endCallback;
+    const timer = useMemo(() => new AdvancedTimer(delayMiliseconds, () => callbackRef.current()), []);
 
     // const updateTimer = useMemo(() => {
 
