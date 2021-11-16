@@ -64,6 +64,8 @@ export class AdvancedTimer {
         this.isIdle = false;
         this._startTime = new Date();
         this._timeoutRef = timeout;
+
+        return this;
     }
 
     reset = () => {
