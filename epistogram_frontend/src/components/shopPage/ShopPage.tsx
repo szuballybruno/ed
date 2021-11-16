@@ -1,10 +1,11 @@
 import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { distinct } from "../../frontendHelpers";
 import { mockShopCategories, mockShopItems } from "../../mockData";
 import { translatableTexts } from "../../translatableTexts";
 import classes from "../css/courseSearchMain.module.scss";
+import { EpistoConinInfo } from "../EpistoCoinInfo";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { EpistoButton } from "../universal/EpistoButton";
@@ -70,6 +71,7 @@ export const ShopPage = () => {
 
                         {/* search */}
                         <Flex justify="space-between" mt="20px" align="center">
+                            <EpistoConinInfo />
 
                             <Select
                                 native

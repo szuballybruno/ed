@@ -1,9 +1,11 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Divider, Flex } from "@chakra-ui/react";
+import { LocalMallOutlined, NotificationsNone } from "@mui/icons-material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getAssetUrl, getUrl } from "../../frontendHelpers";
+import { mockNotifications } from "../../mockData";
 import { ApplicationRoute } from "../../models/types";
 import { useLogout } from "../../services/dataService";
 import { useNavigation } from "../../services/navigatior";
@@ -35,7 +37,8 @@ const DesktopNavbar = (props: {
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     const ref = useRef<HTMLDivElement>(null);
-    const [popperOpen, setPopperOpen] = useState(false);
+    const [notificationsPopperOpen, setNotificationsPopperOpen] = useState(false);
+    const [settingsPopperOpen, setSettingsPopperOpen] = useState(false);
     const hideLinks = props.hideLinks || !user;
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();
@@ -46,8 +49,7 @@ const DesktopNavbar = (props: {
 
             await logoutUserAsync();
             await fetchUserAsync();
-        }
-        catch (e) {
+        } catch (e) {
 
             showError(e);
         }
@@ -134,30 +136,95 @@ const DesktopNavbar = (props: {
                                 Aktuális Kurzus
                             </EpistoButton>
                         </NavbarButton>}
-                </Flex >
+                </Flex>
 
                 {/* content */}
                 <Flex pr="10px" align="center" mr="15px">
 
-                    <EpistoConinInfo height="45px" />
+                    <EpistoButton
+                        style={{
+                            height: 35,
+                            fontStyle: "normal",
+                        }}
+                        onClick={() => {
+                            navigate("/shop")
+                        }}
+                        variant={"plain"}
+                    >
+                        <Typography fontSize={"1.0em"} style={{
+                            margin: "0 7px",
+                            textTransform: "uppercase"
+                        }}>Áruház</Typography>
+                        <LocalMallOutlined />
+                    </EpistoButton>
+
+                    <EpistoButton
+                        style={{
+                            borderRadius: "100%",
+                            width: 35,
+                            height: 35
+                        }}
+                        variant={"plain"}
+                        onClick={() => {
+                            setNotificationsPopperOpen(true)
+                        }}
+                    >
+                        <NotificationsNone />
+                    </EpistoButton>
 
                     <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>
 
                     {!!user && <ProfileImage
                         url={user?.avatarUrl ?? null}
-                        onClick={() => setPopperOpen(true)}
+                        onClick={() => setSettingsPopperOpen(true)}
                         cursor="pointer"
                         className="square50"
                         ref={ref}></ProfileImage>}
                 </Flex>
             </>}
 
-            {/* user menu */}
+            {/* notifications menu */}
             <EpistoPopper
-                isOpen={popperOpen}
+                isOpen={notificationsPopperOpen}
                 target={ref?.current}
                 placementX="left"
-                handleClose={() => setPopperOpen(false)}>
+                handleClose={() => setNotificationsPopperOpen(false)}>
+                {mockNotifications
+                    .map((x, index) => {
+
+                        return <Flex w={200} flexDirection={"column"} >
+                            <Flex w={200} alignItems={"center"} justifyContent={"center"} my={10}>
+                                <div style={{
+                                    width: 3,
+                                    height: 3,
+                                    backgroundColor: "blue",
+                                    borderRadius: "50%"
+                                }} />
+
+                                <Typography
+                                    style={{
+                                        marginLeft: "14px",
+                                        textAlign: "left",
+                                        fontSize: "14px"
+                                    }}>
+                                    {x.title}
+                                </Typography>
+                            </Flex>
+                            {index + 1 < mockNotifications.length && <Divider h={1} w={"100%"} bgColor={"grey"} />}
+                        </Flex>
+                    })}
+            </EpistoPopper>
+
+            {/* user menu */}
+            <EpistoPopper
+                isOpen={settingsPopperOpen}
+                target={ref?.current}
+                placementX="left"
+                handleClose={() => setSettingsPopperOpen(false)}>
+                <Flex justifyContent={"center"}>
+                    <EpistoConinInfo height="45px" />
+                </Flex>
+                <Divider h={1} w={"100%"} bgColor={"black"} />
                 {userMenuItems
                     .map(x => {
 
@@ -178,8 +245,8 @@ const DesktopNavbar = (props: {
                             </Flex>
                         </EpistoButton>
                     })}
-            </EpistoPopper >
-        </Flex >
+            </EpistoPopper>
+        </Flex>
     );
 };
 

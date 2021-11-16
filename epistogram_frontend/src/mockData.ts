@@ -62,6 +62,25 @@ export const mockShopItems = [
         priceInEpistoCoin: 3900,
         priceInHUF: 8000
     },
+
+    {
+        shopItemId: 5,
+        title: "Fractal design prémium gépház",
+        thumbnailImageURL: getAssetUrl("/images/SHOPgephaz.png"),
+        categoryName: "Fizikai termékek",
+        priceInEpistoCoin: 29000,
+        priceInHUF: 0
+    },
+
+    {
+        shopItemId: 3,
+        title: "Google Ads Mesterkurzus Kissné Tóth Erával a Googletől",
+        thumbnailImageURL: getAssetUrl("/images/SHOPads.png"),
+        categoryName: "Prémium kurzusok",
+        priceInEpistoCoin: 13000,
+        priceInHUF: 0
+    },
+
     {
         shopItemId: 2,
         title: "Office 365 Pro családi előfizetés csomag 1 évre, maximum 5 felhasználóig",
@@ -70,13 +89,23 @@ export const mockShopItems = [
         priceInEpistoCoin: 9900,
         priceInHUF: 89000
     },
+
     {
-        shopItemId: 3,
-        title: "Google Ads Mesterkurzus Kissné Tóth Erával a Googletől",
-        thumbnailImageURL: getAssetUrl("/images/SHOPads.png"),
+        shopItemId: 4,
+        title: "iPad Pro 2021 128 GB WIFI, Silver",
+        thumbnailImageURL: getAssetUrl("/images/SHOPipad.png"),
+        categoryName: "Fizikai termékek",
+        priceInEpistoCoin: 49000,
+        priceInHUF: 100000
+    },
+
+    {
+        shopItemId: 6,
+        title: "Lenovo YOGA vezeték nélküli egér",
+        thumbnailImageURL: getAssetUrl("/images/SHOPeger.png"),
         categoryName: "Prémium kurzusok",
-        priceInEpistoCoin: 13000,
-        priceInHUF: 0
+        priceInEpistoCoin: 8000,
+        priceInHUF: 3000
     }
 ] as ShopItemShortDTO[]
 
@@ -87,4 +116,17 @@ export const mockShopCategories = [
     {id: 4, name: "Digitális művészet - NFT"},
     {id: 5, name: "Élmény csomagok"},
     {id: 6, name: "Egyéb kedvezmények"}
+
 ] as ShopCategoryDTO[]
+
+export const mockNotifications = [
+    {
+        id: 1,
+        title: "Megjelent egy új kurzus",
+        timestamp: Date.now()
+    }, {
+        id: 2,
+        title: "Megjelent egy új kurzus",
+        timestamp: Date.now()
+    }
+]
