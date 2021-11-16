@@ -65,10 +65,12 @@ export const CourseItemList = (props: {
     // data 
     const { modules } = props;
 
+    const isBeginnerMode = modules
+        .flatMap(x => x.items)
+        .some(x => x.state === "locked");
+
     const currentModule = modules
-        .filter(module => module
-            .items
-            .some(item => item.state === "current"))[0] as ModuleDTO | null;
+        .filter(module => module.state === "current")[0] as ModuleDTO | null;
 
     const currentItem = modules
         .flatMap(x => x.items)
@@ -101,28 +103,21 @@ export const CourseItemList = (props: {
     }
 
     // effects 
+
+    // selection changed 
     useEffect(() => {
 
-        if (isModuleSelected)
+        if (!currentModule)
             return;
 
-        if (isCurrentExpanded)
-            return;
+        const expandedIds = isModuleSelected
+            ? isBeginnerMode
+                ? []
+                : [currentModule.id]
+            : [currentModule.id];
 
-        setExpandedNodeIds([...expandedNodeIds, currentModule?.id!]);
-    }, [isModuleSelected, currentItem]);
-
-    useEffect(() => {
-
-        if (!isModuleSelected)
-            return;
-
-        if (!isCurrentExpanded)
-            return;
-
-        setExpandedNodeIds(expandedNodeIds
-            .filter(x => x !== currentModule?.id));
-    }, [isModuleSelected]);
+        setExpandedNodeIds(expandedIds);
+    }, [isModuleSelected, currentItem, currentModule]);
 
     return (
         <Flex id="courseItemListRoot" direction="column" flex="1" overflowY="scroll">
@@ -133,8 +128,8 @@ export const CourseItemList = (props: {
                     const isStartable = (module.state === "available" || module.state === "completed");
                     const hasCurrentItem = module.items.some(x => x.state === "current");
                     const isSelected = module.state === "current" && !hasCurrentItem;
-                    const unclickable = isSelected;
-                    const isOpen = !isSelected && !isLocked && expandedNodeIds.some(x => x === module.id);
+                    const unclickable = isSelected && isBeginnerMode;
+                    const isOpen = expandedNodeIds.some(x => x === module.id);
                     const headercolor = isSelected ? "white" : undefined;
 
                     return <CollapseItem
@@ -156,7 +151,7 @@ export const CourseItemList = (props: {
                             <Flex align="center">
                                 <EpistoButton onClick={() => handleToggle(module.id)}>
 
-                                    {isSelected
+                                    {unclickable
                                         ? <FiberManualRecordIcon style={{ color: headercolor }} />
                                         : isOpen
                                             ? <ExpandMoreIcon style={{ color: headercolor }} />
