@@ -26,9 +26,14 @@ export const DropZone = (params: {
     </Droppable>
 }
 
-export const DragItem = (params: { itemId: string, index: number, children: ReactNode }) => {
+export const DragItem = (params: {
+    itemId: string,
+    index: number,
+    children: ReactNode,
+    alignHandle?: "top" | "center" | "bottom"
+}) => {
 
-    const { index, itemId, children } = params;
+    const { index, itemId, children, alignHandle } = params;
 
     return <Draggable
         key={itemId}
@@ -36,10 +41,17 @@ export const DragItem = (params: { itemId: string, index: number, children: Reac
         index={index}>
         {(provided, snapshot) => {
 
-            return <Flex ref={provided.innerRef} {...provided.draggableProps} align="center">
+            return <Flex
+                ref={provided.innerRef}
+                {...provided.draggableProps}>
 
                 {/* drag handle */}
-                <Box {...provided.dragHandleProps} >
+                <Box {...provided.dragHandleProps}
+                    alignSelf={alignHandle === "top"
+                        ? "flex-start"
+                        : alignHandle === "bottom"
+                            ? "flex-end"
+                            : "center"}>
 
                     <DragHandleIcon
                         className="square40"

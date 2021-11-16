@@ -20,6 +20,7 @@ import { showNotification, useShowErrorDialog } from "../../../services/notifica
 import { useCreateVideo, useDeleteVideo } from "../../../services/videoService";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { EpistoHeader } from "../../EpistoHeader";
+import { CollapseItem } from "../../universal/CollapseItem";
 import { DragAndDropContext, DragItem, DropZone } from "../../universal/DragAndDrop";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
@@ -52,6 +53,7 @@ export const EditCourseControl = (props: {
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
     const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
     const [subCategory, setSubCategory] = useState<CourseCategoryDTO | null>(null);
+    const [openModuleIds, setOpenModuleIds] = useState<number[]>([]);
 
     // http
     const { createVideoAsync } = useCreateVideo();
@@ -87,6 +89,18 @@ export const EditCourseControl = (props: {
         // set sub category
         setSubCategory(courseEditData.subCategory);
     }, [courseEditData]);
+
+    const setModuleOpenState = (isOpen: boolean, moduleId: number) => {
+
+        if (isOpen) {
+
+            setOpenModuleIds([...openModuleIds, moduleId]);
+        }
+        else {
+
+            setOpenModuleIds(openModuleIds.filter(x => x !== moduleId));
+        }
+    }
 
     const handleSaveCourseAsync = async () => {
 
@@ -410,85 +424,102 @@ export const EditCourseControl = (props: {
                     {modules
                         .map((module, moduleIndex) => {
 
-                            return <DragItem itemId={module.id + ""} index={moduleIndex}>
-                                <DropZone
-                                    width="100%"
-                                    my="5px"
-                                    mt="10px"
-                                    zoneId={module.id + ""}
-                                    groupId="child">
+                            return <DragItem
+                                alignHandle="top"
+                                itemId={module.id + ""}
+                                index={moduleIndex}>
 
-                                    <Flex align="center" justify="space-between">
+                                <CollapseItem
+                                    handleToggle={(targetIsOpen) => setModuleOpenState(targetIsOpen, module.id)}
+                                    isOpen={openModuleIds.some(x => x === module.id)}
+                                    style={{ width: "100%" }}
+                                    header={(ecButton) => <Flex
+                                        p="2px">
 
-                                        <EpistoHeader
-                                            text={module.name}
-                                            variant="strongSub"
-                                            style={{ marginLeft: "10px" }} />
+                                        {ecButton}
 
-                                        <Flex>
+                                        <Flex
+                                            width="100%"
+                                            align="center"
+                                            justify="space-between">
 
-                                            {/* new video */}
-                                            <EpistoButton
-                                                onClick={() => handleAddCourseItemAsync(module.id, "video")}
-                                                style={{ alignSelf: "center", margin: "2px" }}
-                                                padding="2px"
-                                                variant="outlined">
-                                                <Flex>
-                                                    <AddIcon />
-                                                    <VideocamIcon />
-                                                </Flex>
-                                            </EpistoButton>
+                                            <EpistoHeader
+                                                text={module.name}
+                                                variant="strongSub"
+                                                style={{ marginLeft: "10px" }} />
 
-                                            {/* new exam */}
-                                            <EpistoButton
-                                                onClick={() => handleAddCourseItemAsync(module.id, "exam")}
-                                                style={{ alignSelf: "center", margin: "2px" }}
-                                                padding="2px"
-                                                variant="outlined">
-                                                <Flex>
-                                                    <AddIcon />
-                                                    <AssignmentIcon />
-                                                </Flex>
-                                            </EpistoButton>
+                                            <Flex>
 
-                                            {/* edit module */}
-                                            <EpistoButton
-                                                onClick={() => handleEditModule(module)}>
-                                                <EditIcon />
-                                            </EpistoButton>
+                                                {/* new video */}
+                                                <EpistoButton
+                                                    onClick={() => handleAddCourseItemAsync(module.id, "video")}
+                                                    style={{ alignSelf: "center", margin: "2px" }}
+                                                    padding="2px"
+                                                    variant="outlined">
+                                                    <Flex>
+                                                        <AddIcon />
+                                                        <VideocamIcon />
+                                                    </Flex>
+                                                </EpistoButton>
 
-                                            {/* delete module */}
-                                            <EpistoButton
-                                                onClick={() => handleDeleteModule(module)}>
-                                                <DeleteIcon />
-                                            </EpistoButton>
+                                                {/* new exam */}
+                                                <EpistoButton
+                                                    onClick={() => handleAddCourseItemAsync(module.id, "exam")}
+                                                    style={{ alignSelf: "center", margin: "2px" }}
+                                                    padding="2px"
+                                                    variant="outlined">
+                                                    <Flex>
+                                                        <AddIcon />
+                                                        <AssignmentIcon />
+                                                    </Flex>
+                                                </EpistoButton>
+
+                                                {/* edit module */}
+                                                <EpistoButton
+                                                    onClick={() => handleEditModule(module)}>
+                                                    <EditIcon />
+                                                </EpistoButton>
+
+                                                {/* delete module */}
+                                                <EpistoButton
+                                                    onClick={() => handleDeleteModule(module)}>
+                                                    <DeleteIcon />
+                                                </EpistoButton>
+                                            </Flex>
                                         </Flex>
-                                    </Flex>
+                                    </Flex>}>
+                                    <DropZone
+                                        width="100%"
+                                        my="5px"
+                                        mt="10px"
+                                        zoneId={module.id + ""}
+                                        groupId="child">
 
-                                    {module
-                                        .items
-                                        .map((item, itemIndex) => {
+                                        {module
+                                            .items
+                                            .map((item, itemIndex) => {
 
-                                            // const index = parseInt(`${moduleIndex + 1}${itemIndex}`);
+                                                // const index = parseInt(`${moduleIndex + 1}${itemIndex}`);
 
-                                            return <DragItem
-                                                itemId={item.descriptorCode}
-                                                index={itemIndex}>
+                                                return <DragItem
+                                                    itemId={item.descriptorCode}
+                                                    index={itemIndex}>
 
-                                                <CourseEditItemView
-                                                    moduleIndex={moduleIndex}
-                                                    index={itemIndex}
-                                                    item={item}
-                                                    deleteCourseItem={handleDeleteCourseItemAsync}
-                                                    editCourseItem={handleEditCourseItem} />
-                                            </DragItem>
-                                        })}
-                                </DropZone>
+                                                    <CourseEditItemView
+                                                        moduleIndex={moduleIndex}
+                                                        index={itemIndex}
+                                                        item={item}
+                                                        deleteCourseItem={handleDeleteCourseItemAsync}
+                                                        editCourseItem={handleEditCourseItem} />
+                                                </DragItem>
+                                            })}
+                                    </DropZone>
+                                </CollapseItem>
                             </DragItem>
                         })}
                 </DropZone>
             </DragAndDropContext>
-        </Flex>
+        </Flex >
 
-    </AdminSubpageHeader>
+    </AdminSubpageHeader >
 };

@@ -125,7 +125,7 @@ export const CourseItemList = (props: {
     }, [isModuleSelected]);
 
     return (
-        <Flex direction="column">
+        <Flex id="courseItemListRoot" direction="column" flex="1" overflowY="scroll">
             {modules
                 .map(module => {
 
@@ -143,7 +143,7 @@ export const CourseItemList = (props: {
                             pointerEvents: isLocked || unclickable ? "none" : "all",
                             color: isLocked ? "gray" : undefined
                         }}
-                        header={<Flex
+                        header={() => <Flex
                             bg={isSelected ? `var(--deepBlue)` : undefined}
                             color={headercolor}
                             justify="space-between"

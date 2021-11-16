@@ -45,7 +45,8 @@ export const createModuleAsync = async (dto: ModuleCreateDTO) => {
         .insert({
             courseId: dto.courseId,
             name: dto.name,
-            orderIndex: dto.orderIndex
+            orderIndex: dto.orderIndex,
+            description: ""
         });
 }
 
