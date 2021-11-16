@@ -7,6 +7,7 @@ import LearningStatistics from "./learningStatistics/LearningStatistics";
 //import { Tasks } from './Tasks';
 import { DashboardSection } from './universal/DashboardSection';
 import { PersonalityAssessment } from './universal/PersonalityAssessment';
+import {LearningCurves} from "./LearningCurves";
 
 export const LearningInsightsOverview = () => {
 
@@ -20,6 +21,11 @@ export const LearningInsightsOverview = () => {
         {/* personality */}
         <DashboardSection title={translatableTexts.learningOverview.personalLearningAnalysisTitle} minHeight="500px">
             <PersonalityAssessment className="whall" />
+        </DashboardSection>
+
+        {/* learning curve */}
+        <DashboardSection title={translatableTexts.learningOverview.learningCurveTitle} minHeight="500px">
+            <LearningCurves />
         </DashboardSection>
 
         {/* stats */}
