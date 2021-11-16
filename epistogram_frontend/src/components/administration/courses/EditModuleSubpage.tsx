@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
 import { useIntParam } from "../../../frontendHelpers"
+import { ModuleAdminEditDTO } from "../../../models/shared_models/ModuleAdminEditDTO"
 import { ModuleDTO } from "../../../models/shared_models/ModuleDTO"
 import { useModuleEditData, useSaveModule } from "../../../services/moduleService"
 import { showNotification, useShowErrorDialog } from "../../../services/notifications"
@@ -12,6 +13,7 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader"
 export const EditModuleSubpage = () => {
 
     const [moduleName, setModuleName] = useState("");
+    const [moduleDescription, setModuleDescription] = useState("");
 
     const moduleId = useIntParam("moduleId");
     const { moduleEditData } = useModuleEditData(moduleId);
@@ -24,8 +26,9 @@ export const EditModuleSubpage = () => {
 
             await saveModuleAsync({
                 id: moduleId,
-                name: moduleName
-            } as ModuleDTO);
+                name: moduleName,
+                description: moduleDescription
+            } as ModuleAdminEditDTO);
             showNotification("Modul sikeresen mentve.");
         }
         catch (e) {
@@ -40,6 +43,7 @@ export const EditModuleSubpage = () => {
             return;
 
         setModuleName(moduleEditData.name);
+        setModuleDescription(moduleEditData.description)
     }, [moduleEditData]);
 
     return <LoadingFrame
@@ -59,6 +63,12 @@ export const EditModuleSubpage = () => {
                 label="Modul neve"
                 value={moduleName}
                 setValue={setModuleName} />
+
+            <EpistoEntry
+                label="Modul leirasa"
+                value={moduleDescription}
+                setValue={setModuleDescription}
+                isMultiline />
 
         </AdminSubpageHeader>
     </LoadingFrame>

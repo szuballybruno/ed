@@ -1,5 +1,9 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
+import AddIcon from '@mui/icons-material/Add';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import VideocamIcon from '@mui/icons-material/Videocam';
 import { TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
@@ -7,7 +11,7 @@ import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../frontendHe
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
 import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
-import { ModuleEditDTO } from "../../../models/shared_models/ModuleEditDTO";
+import { ModuleAdminShortDTO } from "../../../models/shared_models/ModuleAdminShortDTO";
 import { UserDTO } from "../../../models/shared_models/UserDTO";
 import { useCreateExam, useDeleteExam } from "../../../services/examService";
 import { useCreateModule, useDeleteModule } from "../../../services/moduleService";
@@ -25,10 +29,6 @@ import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseEditItemView } from "./CourseEditItemView";
 import { EditSection } from "./EditSection";
-import VideocamIcon from '@mui/icons-material/Videocam';
-import AddIcon from '@mui/icons-material/Add';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import EditIcon from '@mui/icons-material/Edit';
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
@@ -47,7 +47,7 @@ export const EditCourseControl = (props: {
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
 
     const [title, setTitle] = useState("")
-    const [modules, setModules] = useState<ModuleEditDTO[]>([])
+    const [modules, setModules] = useState<ModuleAdminShortDTO[]>([])
     const [thumbnailSrc, setThumbnailSrc] = useState("")
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
     const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
@@ -239,7 +239,7 @@ export const EditCourseControl = (props: {
         }
     }
 
-    const handleDeleteModule = async (module: ModuleEditDTO) => {
+    const handleDeleteModule = async (module: ModuleAdminShortDTO) => {
         deleteWarningDialogLogic
             .openDialog({
                 title: "Biztosan törlöd a modult?",
@@ -265,7 +265,7 @@ export const EditCourseControl = (props: {
             });
     }
 
-    const handleEditModule = async (module: ModuleEditDTO) => {
+    const handleEditModule = async (module: ModuleAdminShortDTO) => {
 
         await handleSaveCourseAsync();
         navigate(applicationRoutes.administrationRoute.coursesRoute.editModuleRoute.route, { courseId, moduleId: module.id });

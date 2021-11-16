@@ -26,8 +26,10 @@ import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
+import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
+import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { ModuleDTO } from "../models/shared_models/ModuleDTO";
-import { ModuleEditDTO } from "../models/shared_models/ModuleEditDTO";
+import { ModuleAdminShortDTO } from "../models/shared_models/ModuleAdminShortDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { ResultAnswerDTO } from "../models/shared_models/ResultAnswerDTO";
@@ -98,9 +100,16 @@ addMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
     videoLength: view.videoLength
 }));
 
-addMapperFunction(CourseModule, ModuleDTO, view => ({
+addMapperFunction(CourseModule, ModuleDetailedDTO, view => ({
     id: view.id,
-    name: view.name
+    name: view.name,
+    description: view.description
+}));
+
+addMapperFunction(CourseModule, ModuleAdminEditDTO, view => ({
+    id: view.id,
+    name: view.name,
+    description: view.description
 }));
 
 export const toUserDTO = (user: User) => {
@@ -456,7 +465,7 @@ export const toCourseEditDataDTO = (
                 orderIndex: viewAsModule.moduleOrderIndex,
                 code: viewAsModule.moduleCode,
                 items: items
-            } as ModuleEditDTO;
+            } as ModuleAdminShortDTO;
         });
 
     return {

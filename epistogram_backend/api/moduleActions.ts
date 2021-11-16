@@ -1,5 +1,5 @@
 import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
-import { ModuleDTO } from "../models/shared_models/ModuleDTO";
+import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { createModuleAsync, deleteModulesAsync, getModuleEditDataAsync, saveModuleAsync } from "../services/moduleService";
 import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -26,7 +26,7 @@ export const getModuleEditDataAction = async (params: ActionParamsType) => {
 
 export const saveModuleAction = async (params: ActionParamsType) => {
 
-    const dto = withValueOrBadRequest<ModuleDTO>(params.req.body);
+    const dto = withValueOrBadRequest<ModuleAdminEditDTO>(params.req.body);
 
     return saveModuleAsync(dto);
 }

@@ -131,7 +131,8 @@ const seedSignupExam = async (connection: TypeORMConnection) => {
         .getRepository(CourseModule)
         .insert({
             name: "Signup module exam",
-            orderIndex: 0
+            orderIndex: 0,
+            description: "signup exam module"
         });
 
     await staticProvider
@@ -263,27 +264,32 @@ const seedCourses = async (connection: TypeORMConnection) => {
             {
                 courseId: 1,
                 name: "Első modul",
-                orderIndex: 0
+                orderIndex: 0,
+                description: "desc"
             },
             {
                 courseId: 2,
                 name: "Module",
-                orderIndex: 0
+                orderIndex: 0,
+                description: "desc"
             },
             {
                 courseId: 3,
                 name: "Module",
-                orderIndex: 0
+                orderIndex: 0,
+                description: "desc"
             },
             {
                 courseId: 4,
                 name: "Első modul",
-                orderIndex: 0
+                orderIndex: 0,
+                description: "desc"
             },
             {
                 courseId: 4,
                 name: "Masodik modul",
-                orderIndex: 1
+                orderIndex: 1,
+                description: "desc"
             },
         ]);
 

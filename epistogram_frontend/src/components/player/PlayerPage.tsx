@@ -11,6 +11,7 @@ import Navbar from "../navbar/Navbar";
 import { FlexFloat } from "../universal/FlexFloat";
 import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
+import { ModuleView } from "./ModuleView";
 import { WatchView } from "./WatchView";
 
 export const PlayerPage = () => {
@@ -111,9 +112,7 @@ export const PlayerPage = () => {
                             setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
                             exam={exam} />}
 
-                        {module && <Box>
-                            {module.name}
-                        </Box>}
+                        {module && <ModuleView module={module} startModule={handleContinueCourse} />}
                     </Box>
 
                     {/* right sidebar */}

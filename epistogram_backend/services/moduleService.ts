@@ -2,7 +2,7 @@ import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { Video } from "../models/entity/Video";
 import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
-import { ModuleDTO } from "../models/shared_models/ModuleDTO";
+import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { staticProvider } from "../staticProvider";
 import { deleteExamsAsync } from "./examService";
 import { useMapperFunction } from "./mappings";
@@ -56,16 +56,17 @@ export const getModuleEditDataAsync = async (moduleId: number) => {
         .getRepository(CourseModule)
         .findOneOrFail(moduleId);
 
-    return useMapperFunction(CourseModule, ModuleDTO, module);
+    return useMapperFunction(CourseModule, ModuleAdminEditDTO, module);
 }
 
-export const saveModuleAsync = async (dto: ModuleDTO) => {
+export const saveModuleAsync = async (dto: ModuleAdminEditDTO) => {
 
     await staticProvider
         .ormConnection
         .getRepository(CourseModule)
         .save({
             id: dto.id,
-            name: dto.name
+            name: dto.name,
+            description: dto.description
         });
 }

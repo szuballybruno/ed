@@ -2,6 +2,7 @@ import { CourseModule } from "../models/entity/CourseModule";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
+import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
 import { CourseItemStateType } from "../models/shared_models/types/sharedTypes";
@@ -12,7 +13,7 @@ import { VideoProgressView } from "../models/views/VideoProgressView";
 import { staticProvider } from "../staticProvider";
 import { getCourseIdByItemCodeAsync, getCourseModulesAsync, getCurrentCourseItemsAsync, getExamDTOAsync, getUserCourseBridgeOrFailAsync, setCurrentCourse } from "./courseService";
 import { readItemCode } from "./encodeService";
-import { toVideoDTO } from "./mappings";
+import { toVideoDTO, useMapperFunction } from "./mappings";
 import { createAnswerSessionAsync } from "./questionAnswerService";
 import { saveUserSessionActivityAsync } from "./userSessionActivity";
 import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
@@ -131,9 +132,7 @@ export const getModuleDetailedDTOAsync = async (userId: number, moduleId: number
         .getRepository(CourseModule)
         .findOneOrFail(moduleId);
 
-    return {
-        name: module.name
-    } as ModuleDetailedDTO;
+    return useMapperFunction(CourseModule, ModuleDetailedDTO, module);
 }
 
 export const getVideoDTOAsync = async (userId: number, videoId: number) => {

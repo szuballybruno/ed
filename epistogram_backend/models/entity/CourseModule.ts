@@ -1,8 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
-import { DailyTipOccurrence } from "./DailyTipOccurrence";
 import { Exam } from "./Exam";
-import { StorageFile } from "./StorageFile";
 import { Video } from "./Video";
 
 @Entity()
@@ -13,6 +11,9 @@ export class CourseModule {
 
     @Column()
     name: string;
+
+    @Column()
+    description: string;
 
     @Column()
     orderIndex: number;

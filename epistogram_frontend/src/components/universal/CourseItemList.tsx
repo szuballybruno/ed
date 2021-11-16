@@ -85,7 +85,6 @@ export const CourseItemList = (props: {
     // funcs 
     const handleToggle = (moduleId: number) => {
 
-        console.log(moduleId);
         if (expandedNodeIds.some(x => x === moduleId)) {
 
             setExpandedNodeIds(expandedNodeIds.filter(x => x !== moduleId));
@@ -110,7 +109,6 @@ export const CourseItemList = (props: {
         if (isCurrentExpanded)
             return;
 
-        console.log("Opening modules...");
         setExpandedNodeIds([...expandedNodeIds, currentModule?.id!]);
     }, [isModuleSelected, currentItem]);
 
@@ -122,7 +120,6 @@ export const CourseItemList = (props: {
         if (!isCurrentExpanded)
             return;
 
-        console.log("Closing modules...");
         setExpandedNodeIds(expandedNodeIds
             .filter(x => x !== currentModule?.id));
     }, [isModuleSelected]);
@@ -150,6 +147,7 @@ export const CourseItemList = (props: {
                             bg={isSelected ? `var(--deepBlue)` : undefined}
                             color={headercolor}
                             justify="space-between"
+                            borderBottom="1px solid var(--mildGrey)"
                             align="center"
                             height="50px"
                             pl="5px">

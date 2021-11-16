@@ -1,4 +1,5 @@
 import { useReactQuery } from "../frontendHelpers";
+import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
@@ -24,7 +25,7 @@ export const useDeleteModule = () => {
 
 export const useSaveModule = () => {
 
-    const qr = usePostDataUnsafe<ModuleDTO, void>(apiRoutes.module.saveModule);
+    const qr = usePostDataUnsafe<ModuleAdminEditDTO, void>(apiRoutes.module.saveModule);
 
     return {
         saveModuleAsync: qr.postDataAsync
@@ -33,7 +34,7 @@ export const useSaveModule = () => {
 
 export const useModuleEditData = (moduleId: number) => {
 
-    const qr = useReactQuery<ModuleDTO>(
+    const qr = useReactQuery<ModuleAdminEditDTO>(
         ["getModuleEditData", moduleId],
         () => httpGetAsync(apiRoutes.module.getModuleEditData, { moduleId }))
 
