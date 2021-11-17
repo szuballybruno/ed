@@ -51,7 +51,7 @@ export const AdminCourseDetailsControl = (props: {
 
         // set sub category
         setSubCategory(courseEditData.subCategory);
-    }, [])
+    }, [courseEditData])
 
     const handleSaveCourseAsync = () => {
         if (!courseEditData)
