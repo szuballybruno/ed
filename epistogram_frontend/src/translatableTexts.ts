@@ -197,6 +197,7 @@ export const translatableTexts = {
     learningOverview: {
         tasksTitle: "Feladataim",
         personalLearningAnalysisTitle: "Személyes tanulási analízis",
+        learningCurveTitle: "Tanulási és felejtési görbéid",
         myStatisticsTitle: "Statisztikám",
         myBadgesTitle: "Megszerzett jelvényeim"
     },
