@@ -96,7 +96,7 @@ export const StatsSummary = () => {
         {/* correct answer rate  */}
         <StatisticsCard
             title="Helyes válaszok aránya"
-            value={userStats ? userStats.totalCorrectAnswerRate + "" : "0"}
+            value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + "" : "0"}
             suffix="%"
             iconPath={getAssetUrl("statistics_icons/correct_answer_rate.svg")}
             isOpenByDefault={false} />
