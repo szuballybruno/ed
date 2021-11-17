@@ -115,14 +115,14 @@ export const LearningStatistics = () => {
             title: "Időbeosztás",
             items: [
                 {
-                    value: userStats ? roundNumber(userStats.totalSessionLengthSeconds, 1) / 60 : 0,
+                    value: userStats ? roundNumber(userStats.totalSessionLengthSeconds / 60) : 0,
                     title: "Aktívan töltött idő",
                     suffix: "perc",
                     isOpenByDefault: false,
                     iconPath: getAssetUrl("statistics_icons/average_session_length.svg")
                 },
                 {
-                    value: userStats ? roundNumber(userStats.averageSessionLengthSeconds, 1) / 60 : 0,
+                    value: userStats ? roundNumber(userStats.averageSessionLengthSeconds / 60) : 0,
                     suffix: "perc",
                     title: "Belépés átlagos hossza",
                     isOpenByDefault: false,
@@ -174,7 +174,7 @@ export const LearningStatistics = () => {
                         data={howActiveIAm} />
                 },
                 {
-                    value: userStats ? Math.ceil(userStats.totalVideoPlaybackSeconds / 60 / 60) : 0,
+                    value: userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) : 0,
                     suffix: "óra",
                     title: "Videónézéssel eltöltött idő a hónapban",
                     isOpenByDefault: false,
