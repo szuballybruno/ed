@@ -223,8 +223,8 @@ export const mockCourseDetails = {
             detailValue: "4139"
         },{
             icon: getAssetUrl("/course_page_icons/right_panel_updated.svg"),
-            detailName: "Legutolsó frissítés dátuma",
-            detailValue: "2021. 11. 14."
+            detailName: "Frissítve",
+            detailValue: "2021. 11. 17."
         }
     ],
     recommendedCourses: [{
