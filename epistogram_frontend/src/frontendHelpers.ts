@@ -64,9 +64,9 @@ export const getRoleName = (roleId: number) => {
 export const roundNumber = (num: number, decimalPlaces?: number) => {
 
     if (!decimalPlaces)
-        decimalPlaces = 1;
+        decimalPlaces = 0.1;
 
-    const multiplier = decimalPlaces * 10;
+    const multiplier = (decimalPlaces * 10);
 
     return Math.round(num * multiplier) / multiplier;
 }
