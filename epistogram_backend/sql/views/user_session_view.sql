@@ -8,6 +8,7 @@ FROM
 		"groups_2"."groupStartDate" AS "sessionStartDate",
 		MAX("usav"."creationDate") AS "sessionEndDate",
 		MAX("usav"."creationDate") - "groups_2"."groupStartDate" AS "sessionLength",
+		EXTRACT(EPOCH FROM (MAX("usav"."creationDate") - "groups_2"."groupStartDate")) AS "sessionLengthSeconds",
 		"u"."email" AS "userEmail"
 	FROM 
 	(

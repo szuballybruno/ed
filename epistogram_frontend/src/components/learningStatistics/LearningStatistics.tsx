@@ -1,7 +1,9 @@
 import { Flex } from '@chakra-ui/layout';
+import { RoundedCornerOutlined } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
 import { Bar } from "react-chartjs-2";
-import { getAssetUrl } from '../../frontendHelpers';
+import { getAssetUrl, roundNumber } from '../../frontendHelpers';
+import { useUserStats } from '../../services/userStatsService';
 import StatisticsCard from "../statisticsCard/StatisticsCard";
 import classes from './learningStatistics.module.scss';
 import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
@@ -102,23 +104,36 @@ type StatisticsItemType = {
     chart?: ReactNode;
 }
 
-const LearningStatistics = () => {
+export const LearningStatistics = () => {
+
+    const { userStats } = useUserStats();
+
+    console.log(userStats);
 
     const statistics = [
         {
             title: "Időbeosztás",
             items: [
                 {
-                    value: "32",
+                    value: userStats ? roundNumber(userStats.totalSessionLengthSeconds, 1) / 60 : 0,
+                    title: "Aktívan töltött idő",
                     suffix: "perc",
-                    title: "Session átlagos hossza",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/average_session_length.svg")
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/average_session_length.svg")
+                },
+                {
+                    value: userStats ? roundNumber(userStats.averageSessionLengthSeconds, 1) / 60 : 0,
+                    suffix: "perc",
+                    title: "Belépés átlagos hossza",
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/average_session_length.svg")
                 },
                 {
                     value: "12-15",
                     suffix: "óra",
                     title: "Mely az általam leginkább preferált idősáv?",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/most_preferred_time_range.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/most_preferred_time_range.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
                         options={chartDefaultOptions}
@@ -128,13 +143,15 @@ const LearningStatistics = () => {
                     value: "9-12",
                     suffix: "óra",
                     title: "Mely a leghatékonyabb idősáv?",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/most_productive_time_range.svg")
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/most_productive_time_range.svg")
                 },
                 {
                     value: "Szerda",
                     suffix: "",
                     title: "Mely nap(ok)on vagyok a legaktívabb?",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/most_productive_days.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/most_productive_days.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
                         options={chartDefaultOptions}
@@ -146,20 +163,22 @@ const LearningStatistics = () => {
             title: "Videók",
             items: [
                 {
-                    value: "13",
+                    value: userStats?.completedVideoCount ?? 0,
                     suffix: "db",
                     title: "Megtekintett videók a hónapban",
-                    isOpenByDefault: true, iconPath: getAssetUrl("statistics_icons/watched_videos.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/watched_videos.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
                         options={chartDefaultOptions}
                         data={howActiveIAm} />
                 },
                 {
-                    value: "18.5",
+                    value: userStats ? Math.ceil(userStats.totalVideoPlaybackSeconds / 60 / 60) : 0,
                     suffix: "óra",
                     title: "Videónézéssel eltöltött idő a hónapban",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/total_watching_time.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/total_watching_time.svg"),
                 }
             ]
         },
@@ -170,25 +189,29 @@ const LearningStatistics = () => {
                     value: "8",
                     suffix: "db",
                     title: "Elkezdett kurzusok száma",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/started_courses.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/started_courses.svg"),
                 },
                 {
                     value: "1",
                     suffix: "db",
                     title: "Több mint két hete inaktív kurzusok száma",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/inactive_courses.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/inactive_courses.svg"),
                 },
                 {
                     value: "4",
                     suffix: "db",
                     title: "Kurzusok száma, amelyek legalább 50%-ban készen vannak",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/half_done_courses.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/half_done_courses.svg"),
                 },
                 {
                     value: "3",
                     suffix: "db",
                     title: "Befejezett kurzusok száma",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/completed_courses.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/completed_courses.svg"),
                 }
             ]
         },
@@ -196,16 +219,18 @@ const LearningStatistics = () => {
             title: "Vizsgák",
             items: [
                 {
-                    value: "2",
+                    value: userStats ? userStats.completedExamCount : 0,
                     suffix: "db",
                     title: "Elvégzett vizsgák száma",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/completed_exams.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/completed_exams.svg"),
                 },
                 {
-                    value: "75",
+                    value: userStats ? userStats.totalAnswerSessionSuccessRate : 0,
                     suffix: "%",
                     title: "Átlagos teljesítmény a vizsgákon",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/average_performance_on_exams.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/average_performance_on_exams.svg"),
                 }
             ]
         },
@@ -213,16 +238,18 @@ const LearningStatistics = () => {
             title: "Hatékonyság",
             items: [
                 {
-                    value: "17",
+                    value: userStats?.totalGivenAnswerCount ?? 0,
                     suffix: "db",
                     title: "Megválaszolt tudást vizsgáló kérdések száma",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/answered_questions.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/answered_questions.svg"),
                 },
                 {
-                    value: "62",
+                    value: userStats?.totalCorrectAnswerRate ?? 0,
                     suffix: "%",
                     title: "Helyes válaszok aránya",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/correct_answer_rate.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/correct_answer_rate.svg"),
                 }
             ]
         },
@@ -233,7 +260,8 @@ const LearningStatistics = () => {
                     value: "45",
                     suffix: "%",
                     title: "Fókuszálás a videómegtekintések során",
-                    isOpenByDefault: true, iconPath: getAssetUrl("statistics_icons/focus_during_videos.svg"),
+                    isOpenByDefault: true,
+                    iconPath: getAssetUrl("statistics_icons/focus_during_videos.svg"),
                     large: true,
                     chart: <Bar
                         className={classes.progressLineChart}
@@ -244,13 +272,15 @@ const LearningStatistics = () => {
                     value: "3.2",
                     suffix: "mp",
                     title: "Reakcióidő fókuszálást vizsgáló kérdésekre",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/reaction_time_still_watching.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/reaction_time_still_watching.svg"),
                 },
                 {
                     value: "9.5",
                     suffix: "mp",
                     title: "Reakcióidő tudást vizsgáló kérdésekre",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/reaction_time_question.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/reaction_time_question.svg"),
                 }
             ]
         },
@@ -261,19 +291,22 @@ const LearningStatistics = () => {
                     value: "8",
                     suffix: "db",
                     title: "Elvégzett feladatok",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/completed_tasks.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/completed_tasks.svg"),
                 },
                 {
                     value: "12",
                     suffix: "db",
                     title: "Fogadott feladatok",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/assigned_tasks.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/assigned_tasks.svg"),
                 },
                 {
                     value: "0",
                     suffix: "db",
                     title: "Megszakított feladatok",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/left_unfinished_tasks.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/left_unfinished_tasks.svg"),
                 }
             ]
         },
@@ -284,7 +317,8 @@ const LearningStatistics = () => {
                     value: "13.82",
                     suffix: "db",
                     title: "Mennyi EpistoCoint szereztem az elmúlt hónapban",
-                    isOpenByDefault: true, iconPath: getAssetUrl("statistics_icons/acquired_episto_coin.svg"),
+                    isOpenByDefault: true,
+                    iconPath: getAssetUrl("statistics_icons/acquired_episto_coin.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
                         options={chartDefaultOptions}
@@ -299,7 +333,8 @@ const LearningStatistics = () => {
                     value: "78",
                     suffix: "%",
                     title: "Határidők betartása",
-                    isOpenByDefault: false, iconPath: getAssetUrl("statistics_icons/keeping_up_with_deadlines.svg"),
+                    isOpenByDefault: false,
+                    iconPath: getAssetUrl("statistics_icons/keeping_up_with_deadlines.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
                         options={chartDefaultOptions}
@@ -332,5 +367,3 @@ const LearningStatistics = () => {
             })}
     </Flex>
 };
-
-export default LearningStatistics;

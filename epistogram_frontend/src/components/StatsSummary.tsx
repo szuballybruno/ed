@@ -1,27 +1,34 @@
-import {Flex} from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import StatisticsCard from "./statisticsCard/StatisticsCard";
 import React from "react";
 import classes from "./learningStatistics/learningStatistics.module.scss";
-import {Bar} from "react-chartjs-2";
-import {chartDefaultOptions, daysWithActivityInTime} from "./learningStatistics/LearningStatistics";
-import {getAssetUrl} from "../frontendHelpers";
-import {FlexFloat} from "./universal/FlexFloat";
-import {Lock} from "@mui/icons-material";
-import {Typography} from "@mui/material";
-import {translatableTexts} from "../translatableTexts";
+import { Bar } from "react-chartjs-2";
+import { chartDefaultOptions, daysWithActivityInTime } from "./learningStatistics/LearningStatistics";
+import { getAssetUrl, roundNumber } from "../frontendHelpers";
+import { FlexFloat } from "./universal/FlexFloat";
+import { Lock } from "@mui/icons-material";
+import { Typography } from "@mui/material";
+import { translatableTexts } from "../translatableTexts";
+import { useUserStats } from "../services/userStatsService";
 
 export const StatsSummary = () => {
-    return <div style={{
-        width: "100%",
-        maxWidth: "100%",
-        display: "grid",
-        padding: "10px",
-        boxSizing: "border-box",
-        gap: "10px",
-        gridAutoFlow: "row dense",
-        gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-        gridAutoRows: "200px"
-    }}>
+
+    const { userStats } = useUserStats();
+
+    return <div
+        style={{
+            width: "100%",
+            maxWidth: "100%",
+            display: "grid",
+            padding: "10px",
+            boxSizing: "border-box",
+            gap: "10px",
+            gridAutoFlow: "row dense",
+            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+            gridAutoRows: "200px"
+        }}>
+
+        {/* chart item  */}
         <FlexFloat
             direction="column"
             p="0px"
@@ -32,62 +39,66 @@ export const StatsSummary = () => {
             }}
             position="relative"
             m="10px" >
+
+            {/* locked overlay */}
             <Flex
-                flexDir={"column"}
-                boxSizing={"border-box"}
+                flexDir="column"
+                boxSizing="border-box"
                 p={20}
-                alignItems={"center"}
-                justifyContent={"center"}
-                pos={"absolute"}
-                w={"100%"}
-                h={"100%"}
-                bgColor={"#333333CC"}
-                color={"white"}
+                alignItems="center"
+                justifyContent="center"
+                pos="absolute"
+                w="100%"
+                h="100%"
+                bgColor="#333333CC"
+                color="white"
                 borderRadius={5} >
                 <Lock style={{
                     width: "50%",
                     height: "50%"
-                }}/>
-                <Typography align={"center"}>
+                }} />
+                <Typography align="center">
                     {translatableTexts.homePage.noStatsYet}
                 </Typography>
             </Flex>
+
+            {/* bar chart */}
             <Bar
                 className={classes.progressLineChart}
                 options={chartDefaultOptions}
                 data={daysWithActivityInTime} />
         </FlexFloat>
-        <StatisticsCard
-            title={"Session átlagos hossza"}
-            value={"32"}
-            suffix={"perc"}
-            iconPath={getAssetUrl("statistics_icons/average_session_length.svg")}
-            isOpenByDefault={false}>
 
-        </StatisticsCard>
+        {/* total completed video count */}
         <StatisticsCard
-            title={"Session átlagos hossza"}
-            value={"32"}
-            suffix={"perc"}
-            iconPath={getAssetUrl("statistics_icons/average_session_length.svg")}
-            isOpenByDefault={false}>
+            title="Megtekintett videók a hónapban"
+            value={userStats ? userStats.completedVideoCount + "" : "0"}
+            suffix="db"
+            iconPath={getAssetUrl("statistics_icons/watched_videos.svg")}
+            isOpenByDefault={false} />
 
-        </StatisticsCard>
+        {/* total playback time */}
         <StatisticsCard
-            title={"Session átlagos hossza"}
-            value={"32"}
-            suffix={"perc"}
-            iconPath={getAssetUrl("statistics_icons/average_session_length.svg")}
-            isOpenByDefault={false}>
+            title="Videónézéssel eltöltött idő a hónapban"
+            value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + "" : "0"}
+            suffix="óra"
+            iconPath={getAssetUrl("statistics_icons/total_watching_time.svg")}
+            isOpenByDefault={false} />
 
-        </StatisticsCard>
+        {/* total given answer count  */}
         <StatisticsCard
-            title={"Session átlagos hossza"}
-            value={"32"}
-            suffix={"perc"}
-            iconPath={getAssetUrl("statistics_icons/average_session_length.svg")}
-            isOpenByDefault={false}>
+            title="Megválaszolt tudást vizsgáló kérdések száma"
+            value={userStats ? userStats.totalGivenAnswerCount + "" : "0"}
+            suffix="db"
+            iconPath={getAssetUrl("statistics_icons/answered_questions.svg")}
+            isOpenByDefault={false} />
 
-        </StatisticsCard>
+        {/* correct answer rate  */}
+        <StatisticsCard
+            title="Helyes válaszok aránya"
+            value={userStats ? userStats.totalCorrectAnswerRate + "" : "0"}
+            suffix="%"
+            iconPath={getAssetUrl("statistics_icons/correct_answer_rate.svg")}
+            isOpenByDefault={false} />
     </div>
 }

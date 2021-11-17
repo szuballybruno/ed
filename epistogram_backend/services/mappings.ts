@@ -26,10 +26,9 @@ import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
 import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
-import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
 import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
-import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { ModuleAdminShortDTO } from "../models/shared_models/ModuleAdminShortDTO";
+import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { ResultAnswerDTO } from "../models/shared_models/ResultAnswerDTO";
@@ -42,8 +41,8 @@ import { CourseItemStateType } from "../models/shared_models/types/sharedTypes";
 import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
+import { UserStatsDTO } from "../models/shared_models/UserStatsDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { ClassType } from "../models/Types";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
@@ -52,65 +51,58 @@ import { DailyTipView } from "../models/views/DailyTipView";
 import { ExamResultView } from "../models/views/ExamResultView";
 import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
+import { UserStatsView } from "../models/views/UserStatsView";
+import { staticProvider } from "../staticProvider";
 import { navPropNotNull, toFullName } from "../utilities/helpers";
 import { getItemCode } from "./encodeService";
+import { MapperService } from "./mapperService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
-const mapperFunctions = [] as {
-    fromTypeName: string;
-    toTypeName: string;
-    func: (from: any) => any;
-}[];
+export const initializeMappings = (mapperService: MapperService) => {
 
-const addMapperFunction = <TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, func: (from: TFrom) => TTo) => {
+    mapperService
+        .addMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
+            id: view.itemId,
+            subTitle: view.itemSubtitle,
+            title: view.itemTitle,
+            orderIndex: view.itemOrderIndex,
+            descriptorCode: view.itemCode,
+            type: view.videoId ? "video" : "exam",
+            questionCount: view.itemQuestionCount,
+            videoLength: view.videoLength
+        }));
 
-    const mapping = mapperFunctions
-        .filter(x => x.fromTypeName === fromType.name && x.toTypeName === toType.name)[0];
+    mapperService
+        .addMapperFunction(CourseModule, ModuleDetailedDTO, view => ({
+            id: view.id,
+            name: view.name,
+            description: view.description
+        }));
 
-    if (mapping)
-        throw new Error(`Mapping '${fromType.name}' -> ${toType.name} already exists!`);
+    mapperService
+        .addMapperFunction(CourseModule, ModuleAdminEditDTO, view => ({
+            id: view.id,
+            name: view.name,
+            description: view.description
+        }));
 
-    mapperFunctions
-        .push({
-            fromTypeName: fromType.name,
-            toTypeName: toType.name,
-            func
-        });
+    mapperService
+        .addMapperFunction(UserStatsView, UserStatsDTO, view => ({
+            userId: view.userId,
+            userEmail: view.userEmail,
+            averageSessionLengthSeconds: view.averageSessionLengthSeconds,
+            completedExamCount: view.completedExamCount,
+            completedVideoCount: view.completedVideoCount,
+            successfulExamCount: view.successfulExamCount,
+            totalAnswerSessionSuccessRate: view.totalAnswerSessionSuccessRate,
+            totalCorrectAnswerRate: view.totalCorrectAnswerRate,
+            totalCorrectGivenAnswerCount: view.totalCorrectGivenAnswerCount,
+            totalGivenAnswerCount: view.totalGivenAnswerCount,
+            totalSessionLengthSeconds: view.totalSessionLengthSeconds,
+            totalSuccessfulExamRate: view.totalSuccessfulExamRate,
+            totalVideoPlaybackSeconds: view.totalVideoPlaybackSeconds
+        }));
 }
-
-export const useMapperFunction = <TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, fromObj: TFrom): TTo => {
-
-    const mapping = mapperFunctions
-        .filter(x => x.fromTypeName === fromType.name && x.toTypeName === toType.name)[0];
-
-    if (!mapping)
-        throw new Error(`Mapping '${fromType.name} -> ${toType.name}' not found!`);
-
-    return mapping.func(fromObj);
-}
-
-addMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
-    id: view.itemId,
-    subTitle: view.itemSubtitle,
-    title: view.itemTitle,
-    orderIndex: view.itemOrderIndex,
-    descriptorCode: view.itemCode,
-    type: view.videoId ? "video" : "exam",
-    questionCount: view.itemQuestionCount,
-    videoLength: view.videoLength
-}));
-
-addMapperFunction(CourseModule, ModuleDetailedDTO, view => ({
-    id: view.id,
-    name: view.name,
-    description: view.description
-}));
-
-addMapperFunction(CourseModule, ModuleAdminEditDTO, view => ({
-    id: view.id,
-    name: view.name,
-    description: view.description
-}));
 
 export const toUserDTO = (user: User) => {
 
@@ -457,7 +449,9 @@ export const toCourseEditDataDTO = (
             const items = grouping
                 .items
                 .filter(x => !!x.itemId)
-                .map(viewAsItem => useMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
+                .map(viewAsItem => staticProvider
+                    .mapperService
+                    .useMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
 
             return {
                 id: viewAsModule.moduleId,

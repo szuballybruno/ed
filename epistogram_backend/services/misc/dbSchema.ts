@@ -45,6 +45,7 @@ import { SignupQuestionView } from "../../models/views/SignupQuestionView";
 import { CourseAdminShortView } from "../../models/views/CourseAdminShortView";
 import { CourseAdminDetailedView } from "../../models/views/CourseAdminDetailedView";
 import { CourseModule } from "../../models/entity/CourseModule";
+import { UserStatsView } from "../../models/views/UserStatsView";
 
 export const dbSchema = {
 
@@ -96,7 +97,8 @@ export const dbSchema = {
         ExamResultView,
         SignupQuestionView,
         CourseAdminShortView,
-        CourseAdminDetailedView
+        CourseAdminDetailedView,
+        UserStatsView
     ],
 
     entities: [
