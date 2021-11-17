@@ -1,11 +1,12 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { Fullscreen, FullscreenExit } from "@mui/icons-material";
+import {Fullscreen, FullscreenExit, Lock} from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { EpistoHeader } from '../EpistoHeader';
 import { EpistoButton } from '../universal/EpistoButton';
 import { FlexFloat } from '../universal/FlexFloat';
 import classes from "./learningStatisticsItem.module.scss";
+import {translatableTexts} from "../../translatableTexts";
 
 const StatisticsCard = (props: {
     iconPath?: string
@@ -13,6 +14,7 @@ const StatisticsCard = (props: {
     title: string
     value: string
     isOpenByDefault?: boolean
+    isDummy?: boolean
     children?: React.ReactNode
     chartSize?: string
 }) => {
@@ -32,6 +34,26 @@ const StatisticsCard = (props: {
         //height={isOpen ? undefined : "150px"}
         position="relative"
         m="10px">
+
+        {props.isDummy && <Flex
+            flexDir={"column"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            color={"white"}
+            pos={"absolute"}
+            w={"100%"}
+            h={"100%"}
+            borderRadius={5}
+            bgColor={"#333333CC"}
+        >
+            <Lock style={{
+                width: "50%",
+                height: "50%"
+            }} />
+            <Typography align="center">
+                Ez a statisztika még nem elérhető
+            </Typography>
+        </Flex>}
 
         {isOpen
             ? <Flex w={"100%"} mt="50px" p="0 20px 20px 20px" direction="column">

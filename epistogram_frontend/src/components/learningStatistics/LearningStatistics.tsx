@@ -100,6 +100,7 @@ type StatisticsItemType = {
     suffix: string;
     title: string;
     isOpenByDefault: boolean;
+    isDummy?: boolean;
     large?: boolean;
     chart?: ReactNode;
 }
@@ -133,6 +134,7 @@ export const LearningStatistics = () => {
                     suffix: "óra",
                     title: "Mely az általam leginkább preferált idősáv?",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/most_preferred_time_range.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
@@ -144,6 +146,7 @@ export const LearningStatistics = () => {
                     suffix: "óra",
                     title: "Mely a leghatékonyabb idősáv?",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/most_productive_time_range.svg")
                 },
                 {
@@ -151,6 +154,7 @@ export const LearningStatistics = () => {
                     suffix: "",
                     title: "Mely nap(ok)on vagyok a legaktívabb?",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/most_productive_days.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
@@ -190,6 +194,7 @@ export const LearningStatistics = () => {
                     suffix: "db",
                     title: "Elkezdett kurzusok száma",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/started_courses.svg"),
                 },
                 {
@@ -197,6 +202,7 @@ export const LearningStatistics = () => {
                     suffix: "db",
                     title: "Több mint két hete inaktív kurzusok száma",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/inactive_courses.svg"),
                 },
                 {
@@ -204,6 +210,7 @@ export const LearningStatistics = () => {
                     suffix: "db",
                     title: "Kurzusok száma, amelyek legalább 50%-ban készen vannak",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/half_done_courses.svg"),
                 },
                 {
@@ -211,6 +218,7 @@ export const LearningStatistics = () => {
                     suffix: "db",
                     title: "Befejezett kurzusok száma",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/completed_courses.svg"),
                 }
             ]
@@ -261,6 +269,7 @@ export const LearningStatistics = () => {
                     suffix: "%",
                     title: "Fókuszálás a videómegtekintések során",
                     isOpenByDefault: true,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/focus_during_videos.svg"),
                     large: true,
                     chart: <Bar
@@ -273,6 +282,7 @@ export const LearningStatistics = () => {
                     suffix: "mp",
                     title: "Reakcióidő fókuszálást vizsgáló kérdésekre",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/reaction_time_still_watching.svg"),
                 },
                 {
@@ -280,6 +290,7 @@ export const LearningStatistics = () => {
                     suffix: "mp",
                     title: "Reakcióidő tudást vizsgáló kérdésekre",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/reaction_time_question.svg"),
                 }
             ]
@@ -292,6 +303,7 @@ export const LearningStatistics = () => {
                     suffix: "db",
                     title: "Elvégzett feladatok",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/completed_tasks.svg"),
                 },
                 {
@@ -299,6 +311,7 @@ export const LearningStatistics = () => {
                     suffix: "db",
                     title: "Fogadott feladatok",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/assigned_tasks.svg"),
                 },
                 {
@@ -306,6 +319,7 @@ export const LearningStatistics = () => {
                     suffix: "db",
                     title: "Megszakított feladatok",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/left_unfinished_tasks.svg"),
                 }
             ]
@@ -318,6 +332,7 @@ export const LearningStatistics = () => {
                     suffix: "db",
                     title: "Mennyi EpistoCoint szereztem az elmúlt hónapban",
                     isOpenByDefault: true,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/acquired_episto_coin.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
@@ -334,6 +349,7 @@ export const LearningStatistics = () => {
                     suffix: "%",
                     title: "Határidők betartása",
                     isOpenByDefault: false,
+                    isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/keeping_up_with_deadlines.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
@@ -359,6 +375,7 @@ export const LearningStatistics = () => {
                                 suffix={item.suffix}
                                 iconPath={item.iconPath}
                                 isOpenByDefault={item.isOpenByDefault}
+                                isDummy={item.isDummy}
                                 chartSize={item.large ? "large" : undefined}>
                                 {item.chart}
                             </StatisticsCard>

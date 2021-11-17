@@ -348,16 +348,31 @@ export const AdminCourseContentControl = (props: {
             direction={"column"}
             px={10}>
 
-            <EpistoSearch />
 
-            <Flex padding="20px">
 
+            <Flex w={"100%"}>
+                <EpistoSearch flex={1} my={10} />
                 <EpistoButton
                     onClick={handleAddNewModuleAsync}
-                    style={{ alignSelf: "center" }}
+                    style={{ alignSelf: "center", marginLeft: 20 }}
                     variant="outlined">
                     Új modul hozzáadása
                 </EpistoButton>
+                {openModuleIds.some(x => modules.map(x => x.id).includes(x)) ? <EpistoButton
+                    onClick={() => {
+                        setOpenModuleIds([])
+                    }}
+                    style={{ alignSelf: "center", marginLeft: 20 }}
+                    variant="outlined">
+                    Összes becsukása
+                </EpistoButton> : <EpistoButton
+                    onClick={() => {
+                        setOpenModuleIds(modules.map(x => x.id))
+                    }}
+                    style={{ alignSelf: "center", marginLeft: 20 }}
+                    variant="outlined">
+                    Összes kinyitása
+                </EpistoButton> }
             </Flex>
 
             <DragAndDropContext onDragEnd={onDragEnd}>
