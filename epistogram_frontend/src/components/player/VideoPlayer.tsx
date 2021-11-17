@@ -5,12 +5,13 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { Slider, Typography } from "@mui/material";
-import React, { CSSProperties, useRef, useState } from "react";
+import React, { CSSProperties, useMemo, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { TrackProps } from "react-player/file";
 import useEventListener from 'react-use-event-listener';
 import screenfull from "screenfull";
 import { secondsToTime } from "../../frontendHelpers";
+import { AdvancedTimer } from "../../helpers/advancedTimer";
 import { SubtitleDTO } from "../../models/shared_models/SubtitleDTO";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
@@ -28,7 +29,7 @@ export const useVideoPlayerState = (
     const { subtitles } = { subtitles: [] as SubtitleDTO[] };
     const playerContainerRef = useRef(null);
     const playerRef = useRef<ReactPlayer>(null);
-    const [shouldBePlaying, setShouldBePlaying] = React.useState(false);
+    const [shouldBePlaying, setShouldBePlaying] = React.useState(true);
     const [playedSeconds, setPlayedSeconds] = React.useState(0);
     const [videoLength, setVideoLength] = React.useState(0);
     const [showControls, setShowControls] = useState(true);
@@ -41,6 +42,10 @@ export const useVideoPlayerState = (
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
     const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking;
+
+    console.log(isPlaying);
+
+    // useMemo(() => new AdvancedTimer(100, () => setShouldBePlaying(true)).start(), []);
 
     const subtileTracks = subtitles
         .map(x => ({
