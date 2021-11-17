@@ -6,7 +6,6 @@ import { EpistoHeader } from '../EpistoHeader';
 import { EpistoButton } from '../universal/EpistoButton';
 import { FlexFloat } from '../universal/FlexFloat';
 import classes from "./learningStatisticsItem.module.scss";
-import {translatableTexts} from "../../translatableTexts";
 
 const StatisticsCard = (props: {
     iconPath?: string
@@ -37,22 +36,20 @@ const StatisticsCard = (props: {
 
         {props.isDummy && <Flex
             flexDir={"column"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            color={"white"}
+            alignItems={"flex-end"}
+            justifyContent={"flex-start"}
+            color={"black"}
             pos={"absolute"}
             w={"100%"}
             h={"100%"}
             borderRadius={5}
-            bgColor={"#333333CC"}
+            bgColor={"#33333317"}
         >
             <Lock style={{
-                width: "50%",
-                height: "50%"
+                width: "20px",
+                height: "20px",
+                margin: 10
             }} />
-            <Typography align="center">
-                Ez a statisztika még nem elérhető
-            </Typography>
         </Flex>}
 
         {isOpen

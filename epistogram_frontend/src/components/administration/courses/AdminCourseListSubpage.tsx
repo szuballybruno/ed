@@ -1,6 +1,6 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Edit, Equalizer, WorkTwoTone } from "@mui/icons-material";
+import {ApartmentTwoTone, Edit, Equalizer, ShortText, ViewList, WorkTwoTone} from "@mui/icons-material";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { ReactNode, useState } from "react";
@@ -224,7 +224,7 @@ export const AdminCourseListSubpage = () => {
                                         navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: course.courseId })
                                     }}
                                     style={{ width: 20 }}>
-                                    <Edit style={{ width: "20px", height: "20px" }} />
+                                    <ShortText style={{ width: "20px", height: "20px" }} />
                                 </EpistoButton>
 
                                 <EpistoButton
@@ -232,8 +232,8 @@ export const AdminCourseListSubpage = () => {
                                     onClick={() => {
                                         navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: course.courseId })
                                     }}
-                                    style={{ width: 20 }}>
-                                    <Edit style={{ width: "20px", height: "20px" }} />
+                                    style={{ width: 20, marginLeft: 5 }}>
+                                    <ViewList style={{ width: "20px", height: "20px" }} />
                                 </EpistoButton>
 
                                 <EpistoButton
