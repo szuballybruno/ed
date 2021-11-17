@@ -253,7 +253,7 @@ export const LearningStatistics = () => {
                     iconPath: getAssetUrl("statistics_icons/answered_questions.svg"),
                 },
                 {
-                    value: userStats?.totalCorrectAnswerRate ?? 0,
+                    value: userStats ? roundNumber(userStats?.totalCorrectAnswerRate) : 0,
                     suffix: "%",
                     title: "Helyes válaszok aránya",
                     isOpenByDefault: false,
@@ -296,35 +296,6 @@ export const LearningStatistics = () => {
             ]
         },
         {
-            title: "Feladatok",
-            items: [
-                {
-                    value: "8",
-                    suffix: "db",
-                    title: "Elvégzett feladatok",
-                    isOpenByDefault: false,
-                    isDummy: true,
-                    iconPath: getAssetUrl("statistics_icons/completed_tasks.svg"),
-                },
-                {
-                    value: "12",
-                    suffix: "db",
-                    title: "Fogadott feladatok",
-                    isOpenByDefault: false,
-                    isDummy: true,
-                    iconPath: getAssetUrl("statistics_icons/assigned_tasks.svg"),
-                },
-                {
-                    value: "0",
-                    suffix: "db",
-                    title: "Megszakított feladatok",
-                    isOpenByDefault: false,
-                    isDummy: true,
-                    iconPath: getAssetUrl("statistics_icons/left_unfinished_tasks.svg"),
-                }
-            ]
-        },
-        {
             title: "EpistoGram",
             items: [
                 {
@@ -334,23 +305,6 @@ export const LearningStatistics = () => {
                     isOpenByDefault: true,
                     isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/acquired_episto_coin.svg"),
-                    chart: <Bar
-                        className={classes.progressLineChart}
-                        options={chartDefaultOptions}
-                        data={howActiveIAm} />
-                }
-            ]
-        },
-        {
-            title: "Szorgalom",
-            items: [
-                {
-                    value: "78",
-                    suffix: "%",
-                    title: "Határidők betartása",
-                    isOpenByDefault: false,
-                    isDummy: true,
-                    iconPath: getAssetUrl("statistics_icons/keeping_up_with_deadlines.svg"),
                     chart: <Bar
                         className={classes.progressLineChart}
                         options={chartDefaultOptions}

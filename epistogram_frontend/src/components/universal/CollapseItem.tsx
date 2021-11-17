@@ -24,17 +24,16 @@ export const CollapseItem = (props: {
         </EpistoButton>
         : null;
 
-    return <Flex id="collapseItemRoot" direction="column" style={style}>
+    return <Flex id="collapseItemRoot" direction="column" justifyContent={"flex-start"} style={style}>
 
         {header(defaultExpandCollapseButton)}
 
         <Box
             transition="0.3s"
-            overflow="hidden"
-            maxHeight={isOpen ? "999px" : "0px"}
-            pl="20px">
+            pl="20px"
+        >
 
-            {children}
+            {isOpen ? children : null}
         </Box>
     </Flex>
 }

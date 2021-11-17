@@ -58,11 +58,11 @@ export const CourseItemList = (props: {
     modules: ModuleDTO[]
 }) => {
 
-    // hooks 
+    // hooks
     const [expandedNodeIds, setExpandedNodeIds] = useState<number[]>([]);
     const { navigateToPlayer } = useNavigation();
 
-    // data 
+    // data
     const { modules } = props;
 
     const isBeginnerMode = modules
@@ -84,7 +84,7 @@ export const CourseItemList = (props: {
             .items
             .some(x => x.state === "current"))[0];
 
-    // funcs 
+    // funcs
     const handleToggle = (moduleId: number) => {
 
         if (expandedNodeIds.some(x => x === moduleId)) {
@@ -102,9 +102,9 @@ export const CourseItemList = (props: {
         navigateToPlayer(code);
     }
 
-    // effects 
+    // effects
 
-    // selection changed 
+    // selection changed
     useEffect(() => {
 
         if (!currentModule)
@@ -120,7 +120,7 @@ export const CourseItemList = (props: {
     }, [isModuleSelected, currentItem, currentModule]);
 
     return (
-        <Flex id="courseItemListRoot" direction="column" flex="1" overflowY="scroll">
+        <Flex id="courseItemListRoot" direction="column" justifyContent={"flex-start"} overflowY="scroll">
             {modules
                 .map(module => {
 
@@ -145,6 +145,7 @@ export const CourseItemList = (props: {
                             borderBottom="1px solid var(--mildGrey)"
                             align="center"
                             height="50px"
+                            minH={"50px"}
                             pl="5px">
 
                             {/* open/close */}
@@ -175,7 +176,7 @@ export const CourseItemList = (props: {
                             </Box>
                         </Flex>}>
 
-                        <FlexList id="courseItemListContainer" p="10px">
+                        <FlexList id="courseItemListContainer" p="10px" h={"100%"}>
                             {module
                                 .items
                                 .map((courseItem, index) => <CourseItemView

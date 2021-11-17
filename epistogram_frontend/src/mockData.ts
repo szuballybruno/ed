@@ -72,7 +72,7 @@ export const mockShopItems = [
     },
 
     {
-        shopItemId: 5,
+        shopItemId: 2,
         title: "Fractal design prémium gépház",
         thumbnailImageURL: getAssetUrl("/images/SHOPgephaz.png"),
         categoryName: "Fizikai termékek",
@@ -90,7 +90,7 @@ export const mockShopItems = [
     },
 
     {
-        shopItemId: 2,
+        shopItemId: 4,
         title: "Office 365 Pro családi előfizetés csomag 1 évre, maximum 5 felhasználóig",
         thumbnailImageURL: getAssetUrl("/images/SHOPoffice.png"),
         categoryName: "Szoftverek, játékok",
@@ -99,16 +99,32 @@ export const mockShopItems = [
     },
 
     {
-        shopItemId: 4,
+        shopItemId: 5,
         title: "iPad Pro 2021 128 GB WIFI, Silver",
         thumbnailImageURL: getAssetUrl("/images/SHOPipad.png"),
         categoryName: "Fizikai termékek",
         priceInEpistoCoin: 49000,
         priceInHUF: 100000
     },
-
     {
         shopItemId: 6,
+        title: "12 hónapos PCWorld előfizetés",
+        thumbnailImageURL: getAssetUrl("/images/SHOPpcworld.png"),
+        categoryName: "Fizikai termékek",
+        priceInEpistoCoin: 10000,
+        priceInHUF: 9800
+    },
+    {
+        shopItemId: 7,
+        title: "Exkluzív borkóstolás Egerben, 2 főre",
+        thumbnailImageURL: getAssetUrl("/images/SHOPkostolas.png"),
+        categoryName: "Élmény csomagok",
+        priceInEpistoCoin: 8000,
+        priceInHUF: 12000
+    },
+
+    {
+        shopItemId: 8,
         title: "Lenovo YOGA vezeték nélküli egér",
         thumbnailImageURL: getAssetUrl("/images/SHOPeger.png"),
         categoryName: "Prémium kurzusok",
