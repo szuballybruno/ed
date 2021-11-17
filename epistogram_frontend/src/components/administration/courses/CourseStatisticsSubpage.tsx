@@ -11,7 +11,8 @@ const CourseStatisticsSubpage = () => {
             {/* admin header */}
             <AdminSubpageHeader
                 tabMenuItems={[
-                    applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
                     applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
                 ]} />
 

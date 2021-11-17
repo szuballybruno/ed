@@ -1,4 +1,4 @@
-import { Box, Flex, Image } from "@chakra-ui/react";
+import {Box, Divider, Flex, Image} from "@chakra-ui/react";
 import AddIcon from '@mui/icons-material/Add';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -35,7 +35,7 @@ export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
 }
 
-export const EditCourseControl = (props: {
+export const AdminCourseContentControl = (props: {
     saveCourseAsync: (dto: CourseEditDataDTO, thumbnailFile: null | File) => Promise<void>,
     refetchCourseDataAsync: () => Promise<void>,
     courseEditData: CourseEditDataDTO | null,
@@ -43,16 +43,14 @@ export const EditCourseControl = (props: {
 }) => {
 
     const { saveCourseAsync, courseId, courseEditData, refetchCourseDataAsync } = props;
-    const categories = courseEditData?.categories ?? [];
+
     const { navigate } = useNavigation();
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
 
-    const [title, setTitle] = useState("")
     const [modules, setModules] = useState<ModuleAdminShortDTO[]>([])
-    const [thumbnailSrc, setThumbnailSrc] = useState("")
+
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
-    const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
-    const [subCategory, setSubCategory] = useState<CourseCategoryDTO | null>(null);
+
     const [openModuleIds, setOpenModuleIds] = useState<number[]>([]);
 
     // http
@@ -76,18 +74,8 @@ export const EditCourseControl = (props: {
         if (!courseEditData)
             return;
 
-        setTitle(courseEditData.title);
-        setThumbnailSrc(courseEditData.thumbnailURL);
         setModules(courseEditData.modules);
 
-        // set category
-        const currentCategory = categories
-            .filter(x => x.id === courseEditData.category.id)[0];
-
-        setCategory(currentCategory);
-
-        // set sub category
-        setSubCategory(courseEditData.subCategory);
     }, [courseEditData]);
 
     const setModuleOpenState = (isOpen: boolean, moduleId: number) => {
@@ -103,6 +91,9 @@ export const EditCourseControl = (props: {
     }
 
     const handleSaveCourseAsync = async () => {
+
+        if (!courseEditData)
+            return;
 
         const orderedModules = [...modules];
 
@@ -122,31 +113,22 @@ export const EditCourseControl = (props: {
 
         const dto = {
             courseId: courseId,
-            title: title,
-            thumbnailURL: thumbnailSrc,
+            title: courseEditData.title,
+            thumbnailURL: courseEditData.thumbnailURL,
             modules: orderedModules,
 
             teacher: {
                 id: 1,
             } as UserDTO,
 
-            category: {
-                id: category?.id!
-            },
-
-            subCategory: {
-                id: subCategory?.id!
-            }
+            category: courseEditData.category,
+            subCategory: courseEditData.subCategory
         } as CourseEditDataDTO;
+
 
         return saveCourseAsync(dto, thumbnailImageFile);
     }
 
-    const setBrowsedImage = (src: string, file: File) => {
-
-        setThumbnailSrc(src);
-        setThumbnailImageFile(file);
-    }
 
     const handleEditCourseItem = (courseItem: CourseAdminItemShortDTO) => {
 
@@ -348,58 +330,17 @@ export const EditCourseControl = (props: {
 
     return <AdminSubpageHeader
         tabMenuItems={[
-            applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
+            applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
+            applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
             applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
         ]}
         onSave={handleSaveCourseAsync}
-        direction="row">
+        direction="column"
+    >
 
         <EpistoDialog logic={deleteWarningDialogLogic} />
 
-        {/* settings */}
-        <Box px="20px" flex="1" className="dividerBorderRight">
 
-            {/* thumbnaul image */}
-            <EditSection title="Borítókép">
-                <SelectImage
-                    width="300px"
-                    height="200px"
-                    onImageSelected={setBrowsedImage}>
-                    <Image className="whall" objectFit="cover" src={thumbnailSrc}></Image>
-                </SelectImage>
-            </EditSection>
-
-            {/* basic info edit */}
-            <EditSection title="Alapadatok">
-
-                <EpistoEntry
-                    value={title}
-                    label="Név"
-                    setValue={setTitle} />
-
-                {/* category */}
-                <Typography style={{ color: "gray", marginTop: "10px" }}>
-                    Főkategória
-                </Typography>
-                <EpistoSelect
-                    getCompareKey={x => x?.id + ""}
-                    getDisplayValue={x => x?.name + ""}
-                    items={categories}
-                    selectedValue={category}
-                    onSelected={setCategory} />
-
-                {/* subcategory */}
-                <Typography style={{ color: "gray", marginTop: "10px" }}>
-                    Alkategória
-                </Typography>
-                <EpistoSelect
-                    getCompareKey={x => x?.id + ""}
-                    getDisplayValue={x => x?.name + ""}
-                    items={category?.childCategories ?? []}
-                    selectedValue={subCategory}
-                    onSelected={setSubCategory} />
-            </EditSection>
-        </Box>
 
         {/* course items */}
         <Flex
@@ -407,16 +348,31 @@ export const EditCourseControl = (props: {
             direction={"column"}
             px={10}>
 
-            <EpistoSearch />
 
-            <Flex padding="20px">
 
+            <Flex w={"100%"}>
+                <EpistoSearch flex={1} my={10} />
                 <EpistoButton
                     onClick={handleAddNewModuleAsync}
-                    style={{ alignSelf: "center" }}
+                    style={{ alignSelf: "center", marginLeft: 20 }}
                     variant="outlined">
                     Új modul hozzáadása
                 </EpistoButton>
+                {openModuleIds.some(x => modules.map(x => x.id).includes(x)) ? <EpistoButton
+                    onClick={() => {
+                        setOpenModuleIds([])
+                    }}
+                    style={{ alignSelf: "center", marginLeft: 20 }}
+                    variant="outlined">
+                    Összes becsukása
+                </EpistoButton> : <EpistoButton
+                    onClick={() => {
+                        setOpenModuleIds(modules.map(x => x.id))
+                    }}
+                    style={{ alignSelf: "center", marginLeft: 20 }}
+                    variant="outlined">
+                    Összes kinyitása
+                </EpistoButton> }
             </Flex>
 
             <DragAndDropContext onDragEnd={onDragEnd}>
@@ -510,8 +466,11 @@ export const EditCourseControl = (props: {
                                                         index={itemIndex}
                                                         item={item}
                                                         deleteCourseItem={handleDeleteCourseItemAsync}
-                                                        editCourseItem={handleEditCourseItem} />
+                                                        editCourseItem={handleEditCourseItem}
+                                                        isShowDivider={itemIndex + 1 < module.items.length}
+                                                    />
                                                 </DragItem>
+
                                             })}
                                     </DropZone>
                                 </CollapseItem>

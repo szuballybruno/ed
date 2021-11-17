@@ -1,6 +1,6 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Edit, Equalizer, WorkTwoTone } from "@mui/icons-material";
+import {ApartmentTwoTone, Edit, Equalizer, ShortText, ViewList, WorkTwoTone} from "@mui/icons-material";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { ReactNode, useState } from "react";
@@ -119,8 +119,13 @@ export const AdminCourseListSubpage = () => {
     const bulkEditButtons = [
         {
             name: "editButton",
-            text: "Szerkesztés",
-            onClick: () => navigate(administrationRoutes.coursesRoute.editCourseRoute.route, { courseId: singleSelectedCourse.courseId })
+            text: "Adatok",
+            onClick: () => navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: singleSelectedCourse.courseId })
+        },
+        {
+            name: "editButton",
+            text: "Tartalom",
+            onClick: () => navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: singleSelectedCourse.courseId })
         },
         {
             name: "deleteButton",
@@ -216,10 +221,19 @@ export const AdminCourseListSubpage = () => {
                                 <EpistoButton
                                     variant={"colored"}
                                     onClick={() => {
-                                        navigate(administrationRoutes.coursesRoute.editCourseRoute.route, { courseId: course.courseId })
+                                        navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: course.courseId })
                                     }}
                                     style={{ width: 20 }}>
-                                    <Edit style={{ width: "20px", height: "20px" }} />
+                                    <ShortText style={{ width: "20px", height: "20px" }} />
+                                </EpistoButton>
+
+                                <EpistoButton
+                                    variant={"colored"}
+                                    onClick={() => {
+                                        navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: course.courseId })
+                                    }}
+                                    style={{ width: 20, marginLeft: 5 }}>
+                                    <ViewList style={{ width: "20px", height: "20px" }} />
                                 </EpistoButton>
 
                                 <EpistoButton

@@ -1,13 +1,13 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { CourseEditDataDTO } from '../../../models/shared_models/CourseEditDataDTO';
-import { useAdminEditedCourse, useSaveCourseData, useUploadCourseThumbnailAsync } from '../../../services/courseService';
-import { showNotification, useShowErrorDialog } from '../../../services/notifications';
-import { LoadingFrame } from '../../HOC/LoadingFrame';
-import { EditCourseControl } from "./EditCourseControl";
 
-export const AdminEditCourseSubpage = () => {
+import React from "react";
+import {CourseEditDataDTO} from "../../../models/shared_models/CourseEditDataDTO";
+import {useParams} from "react-router-dom";
+import {showNotification, useShowErrorDialog} from "../../../services/notifications";
+import {useAdminEditedCourse, useSaveCourseData, useUploadCourseThumbnailAsync} from "../../../services/courseService";
+import {LoadingFrame} from "../../HOC/LoadingFrame";
+import {AdminCourseDetailsControl} from "./AdminCourseDetailsControl";
 
+export const AdminCourseDetailsSubpage = () => {
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
     const showError = useShowErrorDialog();
@@ -39,10 +39,9 @@ export const AdminEditCourseSubpage = () => {
         error={courseEditDataError}
         className="whall">
 
-        <EditCourseControl
+        <AdminCourseDetailsControl
             courseEditData={courseEditData}
-            refetchCourseDataAsync={refetchCourseEditDataAsync}
             courseId={courseId}
             saveCourseAsync={handleSaveCourseDataAsync} />
     </LoadingFrame>
-};
+}

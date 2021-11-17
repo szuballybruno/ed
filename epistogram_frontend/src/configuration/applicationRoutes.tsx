@@ -124,9 +124,13 @@ export const applicationRoutes = {
                 title: translatableTexts.routeTitles.administrationAddCourse,
                 route: "/administration/courses/add"
             },
-            editCourseRoute: {
-                title: translatableTexts.routeTitles.administrationEditCourse,
-                route: "/administration/courses/:courseId/edit"
+            courseDetailsRoute: {
+                title: translatableTexts.routeTitles.administrationCourseDetails,
+                route: "/administration/courses/:courseId/details"
+            },
+            courseContentRoute: {
+                title: translatableTexts.routeTitles.administrationCourseContent,
+                route: "/administration/courses/:courseId/content"
             },
             statisticsCourseRoute: {
                 title: translatableTexts.routeTitles.administrationCourseStatistics,

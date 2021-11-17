@@ -213,7 +213,8 @@ export const EditVideoSubpage = () => {
         <AdminSubpageHeader
             onSave={handleSaveAsync}
             tabMenuItems={[
-                applicationRoutes.administrationRoute.coursesRoute.editCourseRoute,
+                applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
+                applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
                 applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
                 applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
             ]}>

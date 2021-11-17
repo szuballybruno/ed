@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { Fullscreen, FullscreenExit } from "@mui/icons-material";
+import {Fullscreen, FullscreenExit, Lock} from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { EpistoHeader } from '../EpistoHeader';
@@ -13,6 +13,7 @@ const StatisticsCard = (props: {
     title: string
     value: string
     isOpenByDefault?: boolean
+    isDummy?: boolean
     children?: React.ReactNode
     chartSize?: string
 }) => {
@@ -32,6 +33,24 @@ const StatisticsCard = (props: {
         //height={isOpen ? undefined : "150px"}
         position="relative"
         m="10px">
+
+        {props.isDummy && <Flex
+            flexDir={"column"}
+            alignItems={"flex-end"}
+            justifyContent={"flex-start"}
+            color={"black"}
+            pos={"absolute"}
+            w={"100%"}
+            h={"100%"}
+            borderRadius={5}
+            bgColor={"#33333317"}
+        >
+            <Lock style={{
+                width: "20px",
+                height: "20px",
+                margin: 10
+            }} />
+        </Flex>}
 
         {isOpen
             ? <Flex w={"100%"} mt="50px" p="0 20px 20px 20px" direction="column">
