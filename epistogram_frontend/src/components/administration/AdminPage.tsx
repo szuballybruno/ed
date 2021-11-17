@@ -8,7 +8,7 @@ import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../navbar/Navbar";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AdminCourseListSubpage } from "./courses/AdminCourseListSubpage";
-import { AdminEditCourseSubpage } from "./courses/AdminEditCourseSubpage";
+import { AdminCourseContentSubpage } from "./courses/AdminCourseContentSubpage";
 import AdminStatistics from "./users/AdminStatisticsSubpage";
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
 import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
@@ -25,6 +25,7 @@ import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditExamSubpage } from './courses/EditExamSubpage';
 import { getRoute } from "../../MainRouting";
 import { EditModuleSubpage } from './courses/EditModuleSubpage';
+import {AdminCourseDetailsSubpage} from "./courses/AdminCourseDetailsSubpage";
 
 const AdminPage = () => {
 
@@ -87,7 +88,8 @@ const AdminPage = () => {
                         isAuthorizedToView={x => x.canAccessCourseAdministration}
                         render={() => <Switch>
                             {getRoute(administrationRoutes.coursesRoute, <AdminCourseListSubpage />)}
-                            {getRoute(administrationRoutes.coursesRoute.editCourseRoute, <AdminEditCourseSubpage />)}
+                            {getRoute(administrationRoutes.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
+                            {getRoute(administrationRoutes.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
                             {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
                             {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
                             {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}

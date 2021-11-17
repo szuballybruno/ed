@@ -1,8 +1,6 @@
 import {Flex} from "@chakra-ui/react";
-import {PersonalityChart} from "./universal/PersonalityChart";
-import {EpistoButton} from "./universal/EpistoButton";
-import {Accordion, AccordionDetails, AccordionSummary, Tab, Tabs, Typography} from "@mui/material";
-import {ExpandMore, Lock} from "@mui/icons-material";
+import { Tab, Tabs, Typography} from "@mui/material";
+import {Lock} from "@mui/icons-material";
 import React, {useState} from "react";
 import {translatableTexts} from "../translatableTexts";
 import {Bar} from "react-chartjs-2";
@@ -10,9 +8,6 @@ import classes from "./learningStatistics/learningStatistics.module.scss";
 import {chartDefaultOptions, daysWithActivityInTime} from "./learningStatistics/LearningStatistics";
 import {FlexFloat} from "./universal/FlexFloat";
 import {TabPanel} from "./courseDetails/TabPanel";
-import {CourseDetailsSummarySection} from "./courseDetails/CourseDetailsSummarySection";
-import {mockCourseDetails} from "../mockData";
-import {CourseDetailsRequirementsSection} from "./courseDetails/CourseDetailsRequirementsSection";
 
 export const LearningCurves = () => {
 

@@ -49,7 +49,8 @@ export const translatableTexts = {
 
         administrationCourseAdmin: "Kurzusok",
         administrationAddCourse: "Kurzus hozzáadása",
-        administrationEditCourse: "Szerkesztés",
+        administrationCourseDetails: "Adatok",
+        administrationCourseContent: "Tartalom",
         administrationCourseStatistics: "Statisztika",
         administrationAddVideo: "Videó hozzáadása",
         administrationEditVideo: "Videó szerkesztése",

@@ -119,8 +119,13 @@ export const AdminCourseListSubpage = () => {
     const bulkEditButtons = [
         {
             name: "editButton",
-            text: "Szerkesztés",
-            onClick: () => navigate(administrationRoutes.coursesRoute.editCourseRoute.route, { courseId: singleSelectedCourse.courseId })
+            text: "Adatok",
+            onClick: () => navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: singleSelectedCourse.courseId })
+        },
+        {
+            name: "editButton",
+            text: "Tartalom",
+            onClick: () => navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: singleSelectedCourse.courseId })
         },
         {
             name: "deleteButton",
@@ -216,7 +221,16 @@ export const AdminCourseListSubpage = () => {
                                 <EpistoButton
                                     variant={"colored"}
                                     onClick={() => {
-                                        navigate(administrationRoutes.coursesRoute.editCourseRoute.route, { courseId: course.courseId })
+                                        navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: course.courseId })
+                                    }}
+                                    style={{ width: 20 }}>
+                                    <Edit style={{ width: "20px", height: "20px" }} />
+                                </EpistoButton>
+
+                                <EpistoButton
+                                    variant={"colored"}
+                                    onClick={() => {
+                                        navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: course.courseId })
                                     }}
                                     style={{ width: 20 }}>
                                     <Edit style={{ width: "20px", height: "20px" }} />
