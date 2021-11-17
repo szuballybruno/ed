@@ -14,7 +14,7 @@ import { CourseItemList, CourseItemView } from "./universal/CourseItemList";
 import { CourseProgressBar } from './universal/CourseProgressBar';
 import { DashboardSection } from './universal/DashboardSection';
 import ListItem from './universal/listItem/ListItem';
-import {StatsSummary} from "./StatsSummary";
+import { StatsSummary } from "./StatsSummary";
 
 const HomePage = () => {
 
@@ -109,12 +109,6 @@ const HomePage = () => {
                         <DashboardSection title={translatableTexts.homePage.stats}>
                             <StatsSummary />
                         </DashboardSection>
-
-                        {/*  No tasks till jan. current tasks */}
-                        {/*<DashboardSection title={translatableTexts.homePage.tasks}>
-                             <Tasks currentTasks={mockTasks} className="whall" />
-                        </DashboardSection>*/}
-
                     </Flex>
                 </RightPanel>
             </LoadingFrame>

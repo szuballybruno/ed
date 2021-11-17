@@ -1,11 +1,10 @@
 import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { Video } from "../models/entity/Video";
-import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
+import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 import { staticProvider } from "../staticProvider";
 import { deleteExamsAsync } from "./examService";
-import { useMapperFunction } from "./mappings";
 import { deleteVideosAsync } from "./videoService";
 
 export const deleteModulesAsync = async (moduleIds: number[]) => {
@@ -57,7 +56,7 @@ export const getModuleEditDataAsync = async (moduleId: number) => {
         .getRepository(CourseModule)
         .findOneOrFail(moduleId);
 
-    return useMapperFunction(CourseModule, ModuleAdminEditDTO, module);
+    return staticProvider.mapperService.useMapperFunction(CourseModule, ModuleAdminEditDTO, module);
 }
 
 export const saveModuleAsync = async (dto: ModuleAdminEditDTO) => {

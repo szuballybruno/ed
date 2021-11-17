@@ -13,6 +13,10 @@ export const apiRoutes = {
         getDailyTip: "/misc/get-get-daily-tip"
     },
 
+    userStats: {
+        getUserStats: "/userstats/get-user-stats"
+    },
+
     userManagement: {
         getEditUserData: "/users/get-edit-user-data",
         inviteUser: "/users/invite-user",

@@ -5,8 +5,8 @@ SELECT
 FROM 
 (
 	SELECT 
-		"u"."id",
-		"u"."email",
+		"u"."id" AS "userId",
+		"u"."email" AS "userEmail",
 
 		-- completed video count 
 		(
@@ -32,7 +32,7 @@ FROM
 
 		-- total watch time
 		(
-			SELECT SUM ("vpsv"."totalPlaybackDuration") 
+			SELECT SUM ("vpsv"."totalPlaybackDuration")::double precision
 			FROM public."video_playback_sample_view" AS "vpsv"
 			WHERE "vpsv"."userId" = "u"."id" 
 		) AS "totalVideoPlaybackSeconds",
@@ -69,19 +69,19 @@ FROM
 	
 		-- total session length 
 		(
-			SELECT SUM("usav"."sessionLength")
+			SELECT SUM("usav"."sessionLengthSeconds")::int
 			FROM public."user_session_view" AS "usav"
 			
 			WHERE "usav"."userId" = "u"."id"
-		) AS "totalSessionLength",
+		) AS "totalSessionLengthSeconds",
 	
 		-- avg session length
 		(
-			SELECT AVG("usav"."sessionLength")
+			SELECT AVG("usav"."sessionLengthSeconds")::int
 			FROM public."user_session_view" AS "usav"
 			
 			WHERE "usav"."userId" = "u"."id"
-		) AS "averageSessionLength",
+		) AS "averageSessionLengthSeconds",
 	
 		-- avg session success rate
 		(

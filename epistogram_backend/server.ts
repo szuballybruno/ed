@@ -17,12 +17,18 @@ import { getCourseItemsAction, getPlayerDataAction, saveVideoPlaybackSampleActio
 import { answerVideoQuestionAction, getQuestionEditDataAction, saveQuestionAction } from './api/questionActions';
 import { answerSignupQuestionAction, getSignupDataAction, getUserPersonalityDataAction } from './api/signupActions';
 import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userActions';
+import { UserStatsController } from './api/userStatsController';
 import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileChunksAction } from './api/videoActions';
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
+import { UserStatsView } from './models/views/UserStatsView';
+import { DatabaseConnectionService } from './services/databaseConnectionService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
+import { MapperService } from './services/mapperService';
+import { initializeMappings } from './services/mappings';
 import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/middlewareService';
 import { log, logError } from "./services/misc/logger";
+import { UserStatsService } from './services/userStatsService';
 import { staticProvider } from './staticProvider';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
 import './utilities/jsExtensions';
@@ -45,6 +51,19 @@ const initializeAsync = async () => {
     // init express
     log("Initializing express...");
     const expressServer = express();
+
+    // services 
+    const mapperService = new MapperService();
+    staticProvider.mapperService = mapperService;
+    const databaseConnectionService = new DatabaseConnectionService();
+    const userStatsService = new UserStatsService(databaseConnectionService, mapperService);
+
+    // controllers 
+    const userStatsController = new UserStatsController(userStatsService);
+
+    // initialize services 
+    initializeMappings(mapperService);
+    databaseConnectionService.initialize(staticProvider.ormConnection);
 
     const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) => addAPIEndpoint(expressServer, path, action, opt);
 
@@ -74,6 +93,9 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.misc.getJobTitles, getJobTitlesAction);
     addEndpoint(apiRoutes.misc.getDailyTip, getDailyTipAction);
     addEndpoint("/organizations/get-organizations", getOrganizationsAction);
+
+    // user stats 
+    addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
 
     // user management
     addEndpoint(apiRoutes.userManagement.getEditUserData, getEditUserDataAction);
