@@ -4,8 +4,12 @@ SELECT
 	"e"."courseId" AS "courseId",
 	"e"."isFinalExam" AS "isFinalExam",
 	"e"."orderIndex" AS "orderIndex",
+	SUM ("essv"."isCompletedSession"::int) AS "completedSessionCount",
+	SUM ("essv"."isCompletedSession"::int) > 0 AS "hasCompletedSession",
+	
 	SUM ("essv"."isSuccessfulSession"::int) AS "successfulSessionCount",
 	SUM ("essv"."isSuccessfulSession"::int) > 0 AS "hasSuccessfulSession",
+	
 	SUM ("essv"."isSuccessfulSession"::int) = 1 AS "singleSuccessfulSession"
 FROM public."exam" AS "e"
 

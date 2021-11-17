@@ -69,7 +69,9 @@ export const dbSchema = {
         "user_session_activity_view",
         "user_session_view",
         "course_admin_short_view",
-        "course_admin_detailed_view"
+        "course_admin_detailed_view",
+        "video_playback_sample_view",
+        "user_stats_view"
     ],
 
     functionScripts: [
