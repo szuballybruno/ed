@@ -3,11 +3,9 @@ import { Tab, Tabs, Typography} from "@mui/material";
 import {Lock} from "@mui/icons-material";
 import React, {useState} from "react";
 import {translatableTexts} from "../translatableTexts";
-import {Bar} from "react-chartjs-2";
-import classes from "./learningStatistics/learningStatistics.module.scss";
-import {chartDefaultOptions, daysWithActivityInTime} from "./learningStatistics/LearningStatistics";
 import {FlexFloat} from "./universal/FlexFloat";
 import {TabPanel} from "./courseDetails/TabPanel";
+import {getAssetUrl} from "../frontendHelpers";
 
 export const LearningCurves = () => {
 
@@ -44,17 +42,57 @@ export const LearningCurves = () => {
 
             <Flex my={10}>
                 <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label={"Tanulási görbéd"} {...a11yProps(0)} />
-                    <Tab label={"Felejtési görbéd"} {...a11yProps(1)} />
+                    <Tab
+                        label={"Tanulási görbéd"}
+                        icon={
+                            <img
+                                src={getAssetUrl("/icons/learningcurve.svg")}
+                                alt={""}
+                                style={{
+                                    width: 25,
+                                    margin: "0 10px 0 0"
+                                }} />
+                        }
+                        style={{
+                            flexDirection: "row",
+                        }}
+                        {...a11yProps(0)} />
+                    <Tab
+                        label={"Felejtési görbéd"}
+                        icon={
+                            <img
+                                src={getAssetUrl("/icons/forgettingcurve.svg")}
+                                alt={""}
+                                style={{
+                                    width: 25,
+                                    margin: "0 10px 0 0"
+                                }} />
+                        }
+                        style={{
+                            flexDirection: "row",
+                        }}
+                        {...a11yProps(1)} />
                 </Tabs>
             </Flex>
 
 
             <TabPanel value={currentTab} index={0}>
-                Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+                A tanulási görbe azon a megfigyelésen alapul, hogy minél gyakrabban végzünk egy tevékenységet, annál
+                begyakorlottabban és gyorsabban tudjuk azt végrehajtani.
+                Gondolhatnánk, hogy ez egy teljesen lineáris folyamat,
+                a gyakorlatban ennél azonban komplikáltabb rendszerről beszélhetünk, mely
+                mindenkinél mást jelent.A jobb oldalon láthatod, hogyan épül fel a te tanulási
+                görbéd, ennek megfelelően pedig további tippeket adunk majd, hogyan tudod fejleszteni azt.
             </TabPanel>
             <TabPanel value={currentTab} index={1}>
-                Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 46 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+                A felejtési görbe az emlékezetek fakulásának folyamatát ábrázolja az idő függvényében.
+                Egy kapcsolódó fogalom az emlék erőssége, amely azt fejezik ki, hogy egy emlék milyen tartósan marad meg az agyban.
+                Minél erősebb egy emlék, annál hosszabb ideig képes valaki előhívni.
+                A felejtés sebessége sok tényezőtől függ, mint például a megtanult anyag nehézsége, az ismeretanyag ábrázolása,
+                valamint fiziológiai tényezők mint a pillanatnyi stressz vagy kipihentség.
+                Az alap felejtési sebességben nincs lényeges egyéni különbség.
+                A látható teljesítményben mutatkozó különbségeket (pl. iskolai jegyek)
+                eltérő mnemotechnikai képességekkel lehet megmagyarázni, melyekkel kapcsolatban hamarosan új ismeretekre tehetsz majd szert!
             </TabPanel>
 
         </Flex>
@@ -71,6 +109,7 @@ export const LearningCurves = () => {
 
             <FlexFloat
                 direction="column"
+                justifyContent={"center"}
                 p="0px"
                 minW={250}
                 style={{
@@ -99,10 +138,14 @@ export const LearningCurves = () => {
                         {translatableTexts.homePage.noStatsYet}
                     </Typography>
                 </Flex>
-                <Bar
-                    className={classes.progressLineChart}
-                    options={chartDefaultOptions}
-                    data={daysWithActivityInTime} />
+                <img
+                    src={getAssetUrl("/images/learningcurve.png")}
+                    alt={""}
+                    style={{
+                        maxHeight: 400,
+                        objectFit: "contain",
+                        margin: "auto 10px auto 0",
+                    }} />
             </FlexFloat>
 
         </Flex>

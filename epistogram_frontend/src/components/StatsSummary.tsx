@@ -1,9 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import StatisticsCard from "./statisticsCard/StatisticsCard";
 import React from "react";
-import classes from "./learningStatistics/learningStatistics.module.scss";
-import { Bar } from "react-chartjs-2";
-import { chartDefaultOptions, daysWithActivityInTime } from "./learningStatistics/LearningStatistics";
 import { getAssetUrl, roundNumber } from "../frontendHelpers";
 import { FlexFloat } from "./universal/FlexFloat";
 import { Lock } from "@mui/icons-material";
@@ -31,6 +28,7 @@ export const StatsSummary = () => {
         {/* chart item  */}
         <FlexFloat
             direction="column"
+            justifyContent={"center"}
             p="0px"
             minW={250}
             style={{
@@ -63,10 +61,14 @@ export const StatsSummary = () => {
             </Flex>
 
             {/* bar chart */}
-            <Bar
-                className={classes.progressLineChart}
-                options={chartDefaultOptions}
-                data={daysWithActivityInTime} />
+            <img
+                src={getAssetUrl("/images/learningcurve.png")}
+                alt={""}
+                style={{
+                    maxHeight: 400,
+                    objectFit: "contain",
+                    margin: "0 10px 0 0",
+                }} />
         </FlexFloat>
 
         {/* total completed video count */}
