@@ -22,4 +22,4 @@
         ug[m[j]] = ug.c(m[j]);
     }
     console.log("UserGuiding initialized.");
-})(window, document, 'script', 'userGuiding', 'userGuidingLayer', '992090320ID');
+})(window, document, 'script', 'userGuiding', 'userGuidingLayer', '192093940ID');
