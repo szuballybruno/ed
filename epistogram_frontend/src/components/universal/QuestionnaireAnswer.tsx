@@ -17,8 +17,11 @@ export const QuestionnaierAnswer = (props: {
         if (isIncorrect)
             return { bg: "#fa6767", fg: "black" };
 
-        if (isCorrect)
+        if (isCorrect && isSelected)
             return { bg: "#7cf25e", fg: "black" };
+
+        if (isCorrect)
+            return { bg: "transparent", fg: "black", border: "#7cf25e" };
 
         if (isSelected)
             return { bg: "var(--deepBlue)", fg: "white" };
@@ -34,8 +37,7 @@ export const QuestionnaierAnswer = (props: {
             style={{
                 background: colors.bg,
                 color: colors.fg,
-                borderRadius: "0",
-                borderWidth: "2px"
+                border: colors.border ? `2px solid ${colors.border}` : undefined
             }}>
             {children}
         </EpistoButton>

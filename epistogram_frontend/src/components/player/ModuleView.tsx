@@ -9,25 +9,43 @@ import { useEffect } from "react";
 import { useReactTimer } from "../../helpers/reactTimer";
 
 export const ModuleView = (params: {
-    module: ModuleDetailedDTO,
-    startModule: () => void
+    module?: ModuleDetailedDTO,
+    startModule: () => void,
 }) => {
 
     const { module, startModule } = params;
-    const reactTimer = useReactTimer(startModule, 15 * 1000);
+    const isVisible = !!module;
+    const reactTimer = useReactTimer(() => {
+
+        console.log("Starting module by timer....");
+        startModule();
+    }, 15 * 1000);
 
     useEffect(() => {
 
-        reactTimer.restart();
-    }, [module.id]);
+        if (!isVisible)
+            return;
 
-    return <Flex direction="column" className="whall">
+        console.log("restarting timer");
+        reactTimer.restart();
+    }, [module?.id, isVisible]);
+
+    useEffect(() => {
+
+        if (isVisible)
+            return;
+
+        console.log("reseting timer");
+        reactTimer.reset();
+    }, [isVisible]);
+
+    return <Flex display={isVisible ? undefined : "none"} direction="column" className="whall">
         <Flex flex="1" align="center" justify="center">
 
             <Flex direction="column">
-                <EpistoHeader text={module.name} variant="giant"></EpistoHeader>
+                <EpistoHeader text={module?.name ?? ""} variant="giant"></EpistoHeader>
                 <Typography>
-                    {module.description}
+                    {module?.description}
                 </Typography>
             </Flex>
         </Flex>

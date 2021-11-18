@@ -68,7 +68,7 @@ export const QuestionnaireLayout = (props: {
                 {answerAction && <EpistoButton
                     variant="outlined"
                     onClick={answerAction}>
-                    Kuldes
+                    Küldés
                 </EpistoButton>}
             </Flex>
         </Flex>

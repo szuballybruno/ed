@@ -64,12 +64,10 @@ export const PlayerPage = () => {
                 buttons: [
                     {
                         title: "Igen",
-                        action: () => { }
+                        action: () => navigateToPlayer(descriptorCode)
                     }
                 ],
             });
-
-        navigateToPlayer(descriptorCode);
     }
 
     const isDesktopView = useIsDesktopView();
@@ -110,7 +108,6 @@ export const PlayerPage = () => {
                             video={video}
                             modules={courseModules}
                             continueCourse={handleContinueCourse}
-
                             navigateToCourseItem={navigateToCourseItem} />}
 
                         {exam && <ExamPlayer
@@ -119,7 +116,7 @@ export const PlayerPage = () => {
                             setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
                             exam={exam} />}
 
-                        {module && <ModuleView module={module} startModule={handleContinueCourse} />}
+                        <ModuleView module={module} startModule={handleContinueCourse} />
                     </Box>
 
                     {/* right sidebar */}

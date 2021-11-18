@@ -9,7 +9,7 @@ import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
-import { getAdminCoursesAsync, getAvailableCoursesAsync, getCourseEditDataAsync, getCourseProgressDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService";
+import { deleteCourseAsync, getAdminCoursesAsync, getAvailableCoursesAsync, getCourseEditDataAsync, getCourseProgressDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService";
 import { deleteExamsAsync } from "../services/examService";
 import { toCourseDetailsDTO } from "../services/mappings";
 import { deleteVideosAsync } from "../services/videoService";
@@ -115,6 +115,7 @@ export const deleteCourseAction = async (params: ActionParamsType) => {
 
     const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
+    await deleteCourseAsync(courseId);
 }
 
 export const createCourseAction = async (params: ActionParamsType) => {
