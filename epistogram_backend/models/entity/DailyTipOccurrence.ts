@@ -7,7 +7,7 @@ export class DailyTipOccurrence {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ default: () => "timezone('utc'::text, now())" })
     creationDate: Date;
 
     // daily tip

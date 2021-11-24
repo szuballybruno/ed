@@ -1,46 +1,85 @@
-import { staticProvider } from "../../staticProvider";
+import { DbConnectionService } from "../databaseConnectionService";
 
-export const execSQLFunctionAsync = async <T>(fnName: string, args: any[]) => {
+export class SQLFunctionsService {
+    private _connectionService: DbConnectionService;
 
-    // create args indicies
-    const argsIndicies = [] as string[];
+    constructor(conn: DbConnectionService) {
 
-    args
-        .forEach((x, index) => argsIndicies.push(`$${index + 1}`));
+        this._connectionService = conn;
+    }
 
-    // create statement 
-    const statement = `SELECT ${fnName}(${argsIndicies.join(",")})`;
+    execSQLFunctionAsync = async <T>(fnName: string, args: any[]) => {
 
-    // get results
-    const result = await staticProvider
-        .sqlConnection
-        .executeSQL(statement, args);
+        // create args indicies
+        const argsIndicies = [] as string[];
 
-    const firstRow = result.rows[0];
-    const fnReturnValue = firstRow[fnName];
+        args
+            .forEach((x, index) => argsIndicies.push(`$${index + 1}`));
 
-    return fnReturnValue as T;
-}
+        // create statement 
+        const statement = `SELECT ${fnName}(${argsIndicies.join(",")})`;
 
-export const answerSignupQuestionFn = (userId: number, questionId: number, answerId: number) => {
+        // get results
+        const result = await this._connectionService
+            .getSQLConnection()
+            .executeSQL(statement, args);
 
-    return execSQLFunctionAsync(
-        "answer_signup_question_fn",
-        [
-            userId,
-            questionId,
-            answerId
-        ]);
-}
+        const firstRow = result.rows[0];
+        const fnReturnValue = firstRow[fnName];
 
-export const answerQuestionFn = (answerSessionId: number, questionId: number, answerIds: number[], isPractiseAnswer: boolean) => {
+        return fnReturnValue as T;
+    }
 
-    return execSQLFunctionAsync<number[]>(
-        "answer_question_fn",
-        [
-            answerSessionId,
-            questionId,
-            answerIds,
-            isPractiseAnswer
-        ]);
+    answerSignupQuestionFn = (userId: number, questionId: number, answerId: number) => {
+
+        return this.execSQLFunctionAsync(
+            "answer_signup_question_fn",
+            [
+                userId,
+                questionId,
+                answerId
+            ]);
+    }
+
+    answerQuestionFn = (answerSessionId: number, questionId: number, answerIds: number[], isPractiseAnswer: boolean) => {
+
+        return this.execSQLFunctionAsync<number[]>(
+            "answer_question_fn",
+            [
+                answerSessionId,
+                questionId,
+                answerIds,
+                isPractiseAnswer
+            ]);
+    }
+
+    insertCoinAcquiredFn = (
+        amount: number,
+        sessionActivityId: number | null,
+        videoId: number | null,
+        givenAnswerStreakId: number | null) => {
+
+        return this.execSQLFunctionAsync<number>(
+            "insert_coin_acquire",
+            [
+                amount,
+                sessionActivityId,
+                videoId,
+                givenAnswerStreakId
+            ]
+        )
+    }
+
+    getUserSessionFirstActivityId = (
+        userId: number,
+        sessionActivityId: number) => {
+
+        return this.execSQLFunctionAsync<number>(
+            "get_user_session_first_activity_id",
+            [
+                userId,
+                sessionActivityId
+            ]
+        )
+    }
 }

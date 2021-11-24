@@ -3,23 +3,23 @@ import { Exam } from "../models/entity/Exam";
 import { Question } from "../models/entity/Question";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
-import { ExamCompletedView } from "../models/views/ExamCompletedView";
 import { ExamResultView } from "../models/views/ExamResultView";
-import { ExamSessionSuccessView } from "../models/views/ExamSessionSuccessView";
 import { staticProvider } from "../staticProvider";
 import { unsetUsersCurrentCourseItemAsync } from "./courseService";
 import { readItemCode } from "./encodeService";
 import { toExamResultDTO } from "./mappings";
 import { answerQuestionAsync } from "./questionAnswerService";
 import { deleteQuesitonsAsync } from "./questionService";
-import { saveUserSessionActivityAsync } from "./userSessionActivity";
 
 export const answerExamQuestionAsync = async (userId: number, dto: AnswerQuestionDTO) => {
 
     // validation comes here 
 
     // save user activity
-    await saveUserSessionActivityAsync(userId, "exam");
+    await staticProvider
+        .services
+        .userSessionActivityService
+        .saveUserSessionActivityAsync(userId, "exam");
 
     return answerQuestionAsync(
         dto.answerSessionId,

@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import { Request, Response } from "express";
 import { User } from "../models/entity/User";
-import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
 import { getCookie, TypedError } from "../utilities/helpers";
 import { sendResetPasswordMailAsync } from "./emailService";
@@ -10,8 +9,7 @@ import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
 import { createAccessToken, createRefreshToken, createResetPasswordToken, verifyAccessToken, verifyPasswordResetToken, verifyRefreshToken } from "./tokenService";
 import { getUserActiveTokenById as getActiveTokenByUserId, getUserByEmail, getUserById, getUserDTOById, removeRefreshToken, setUserActiveRefreshToken } from "./userService";
-import { saveUserSessionActivityAsync } from "./userSessionActivity";
-// PUBLICS
+
 export const getRequestAccessTokenPayload = (req: Request) => {
 
     const accessToken = getCookie(req, staticProvider.globalConfig.misc.accessTokenCookieName)?.value;
@@ -148,14 +146,20 @@ export const logInUser = async (email: string, password: string) => {
     log("User logged in: ");
     log(userDTO);
 
-    await saveUserSessionActivityAsync(userDTO.id, "login");
+    await staticProvider
+        .services
+        .userSessionActivityService
+        .saveUserSessionActivityAsync(userDTO.id, "login");
 
     return await getUserLoginTokens(userDTO.id);
 }
 
 export const logOutUserAsync = async (userId: number) => {
 
-    await saveUserSessionActivityAsync(userId, "logout");
+    await staticProvider
+        .services
+        .userSessionActivityService
+        .saveUserSessionActivityAsync(userId, "logout");
 
     // remove refresh token, basically makes it invalid from now on
     await removeRefreshToken(userId);

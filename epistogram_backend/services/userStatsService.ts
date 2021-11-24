@@ -1,14 +1,14 @@
 import { UserStatsDTO } from "../models/shared_models/UserStatsDTO";
 import { UserStatsView } from "../models/views/UserStatsView";
-import { DatabaseConnectionService } from "./databaseConnectionService";
+import { DbConnectionService } from "./databaseConnectionService";
 import { MapperService } from "./mapperService";
 
 export class UserStatsService {
 
-    private _connection: DatabaseConnectionService;
+    private _connection: DbConnectionService;
     private _mapperService: MapperService;
 
-    constructor(connection: DatabaseConnectionService, mapperSvc: MapperService) {
+    constructor(connection: DbConnectionService, mapperSvc: MapperService) {
 
         this._connection = connection;
         this._mapperService = mapperSvc;

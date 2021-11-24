@@ -1,7 +1,6 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
 import { staticProvider } from "../staticProvider";
-import { answerQuestionFn } from "./sqlServices/sqlFunctionsService";
 
 export const createAnswerSessionAsync = async (
     userId: number,
@@ -28,7 +27,10 @@ export const answerQuestionAsync = async (
     answerIds: number[],
     isPractiseAnswer?: boolean) => {
 
-    const correctAnswerIds = await answerQuestionFn(answerSessionId, questionId, answerIds, !!isPractiseAnswer);
+    const correctAnswerIds = await staticProvider
+        .services
+        .sqlFunctionService
+        .answerQuestionFn(answerSessionId, questionId, answerIds, !!isPractiseAnswer);
     const isCorrect = correctAnswerIds.sort().join(',') === answerIds.sort().join(',');
 
     return {

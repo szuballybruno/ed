@@ -46,6 +46,11 @@ import { CourseAdminShortView } from "../../models/views/CourseAdminShortView";
 import { CourseAdminDetailedView } from "../../models/views/CourseAdminDetailedView";
 import { CourseModule } from "../../models/entity/CourseModule";
 import { UserStatsView } from "../../models/views/UserStatsView";
+import { CoinAcquire } from "../../models/entity/CoinAcquire";
+import { GivenAnswerStreak } from "../../models/entity/GivenAnswerStreak";
+import { GivenAnswerStreakGivenAnswerBridge } from "../../models/entity/GivenAnswerStreakGivenAnswerBridge";
+import { UserSessionDailyView } from "../../models/views/UserActivityDailyView";
+import { UserSessionView } from "../../models/views/UserSessionView";
 
 export const dbSchema = {
 
@@ -72,13 +77,16 @@ export const dbSchema = {
         "course_admin_short_view",
         "course_admin_detailed_view",
         "video_playback_sample_view",
-        "user_stats_view"
+        "user_stats_view",
+        "user_session_daily_view"
     ],
 
     functionScripts: [
         "answer_signup_question_fn",
         "answer_question_fn",
-        "create_daily_tip_fn"
+        "create_daily_tip_fn",
+        "insert_coin_acquire",
+        "get_user_session_first_activity_id"
     ],
 
     viewEntities: [
@@ -98,7 +106,9 @@ export const dbSchema = {
         SignupQuestionView,
         CourseAdminShortView,
         CourseAdminDetailedView,
-        UserStatsView
+        UserStatsView,
+        UserSessionDailyView,
+        UserSessionView
     ],
 
     entities: [
@@ -132,6 +142,9 @@ export const dbSchema = {
         DailyTipOccurrence,
         QuestionType,
         UserSessionActivity,
-        CourseModule
+        CourseModule,
+        CoinAcquire,
+        GivenAnswerStreak,
+        GivenAnswerStreakGivenAnswerBridge
     ]
 }

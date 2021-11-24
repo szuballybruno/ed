@@ -11,7 +11,6 @@ import { sendInvitaitionMailAsync } from "./emailService";
 import { toSignupDataDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
-import { answerSignupQuestionFn } from "./sqlServices/sqlFunctionsService";
 import { createInvitationToken } from "./tokenService";
 import { getUserByEmail, getUserById } from "./userService";
 
@@ -139,7 +138,10 @@ export const createUserAsync = async (
 
 export const answerSignupQuestionAsync = async (userId: number, questionAnswer: AnswerSignupQuestionDTO) => {
 
-    await answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
+    await staticProvider
+        .services
+        .sqlFunctionService
+        .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
 }
 
 export const getSignupDataAsync = async (userId: number) => {

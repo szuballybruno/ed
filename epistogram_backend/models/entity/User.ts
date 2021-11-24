@@ -1,6 +1,7 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserActivityFlatView } from "../views/UserActivityFlatView";
 import { AnswerSession } from "./AnswerSession";
+import { CoinAcquire } from "./CoinAcquire";
 import { Course } from "./Course";
 import { Exam } from "./Exam";
 import { JobTitle } from "./JobTitle";
@@ -139,4 +140,9 @@ export class User {
     @OneToMany(_ => UserSessionActivity, x => x.user)
     @JoinColumn()
     sessionActivity: UserSessionActivity;
+
+    // coin acquires 
+    @JoinColumn()
+    @OneToMany(_ => CoinAcquire, x => x.sessionActivity)
+    coinAcquires: CoinAcquire[];
 }

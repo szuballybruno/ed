@@ -4,7 +4,7 @@ FROM
 (
 	SELECT
 		"usa"."userId",
-		date_trunc('second', "usa"."creationDate") AS "creationDate"
+		"usa"."creationDate" AS "creationDate"
 	FROM public."user_session_activity" AS "usa"
 ) AS "sq"
 

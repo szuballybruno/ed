@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerSession } from "./AnswerSession";
+import { CoinAcquire } from "./CoinAcquire";
 import { Course } from "./Course";
 import { CourseModule } from "./CourseModule";
 import { Question } from "./Question";
@@ -81,4 +82,9 @@ export class Video {
     @ManyToOne(_ => CourseModule, x => x.videos)
     @JoinColumn({ name: "moduleId" })
     module: CourseModule;
+
+    // coin acquires 
+    @JoinColumn()
+    @OneToMany(_ => CoinAcquire, x => x.sessionActivity)
+    coinAcquires: CoinAcquire[];
 }

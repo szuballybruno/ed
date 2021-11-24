@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import { Answer } from "./Answer";
 import { AnswerGivenAnswerBridge } from "./AnswerGivenAnswerBridge";
 import { AnswerSession } from "./AnswerSession";
+import { GivenAnswerStreakGivenAnswerBridge } from "./GivenAnswerStreakGivenAnswerBridge";
 import { Question } from "./Question";
 
 @Entity()
@@ -10,7 +11,7 @@ export class GivenAnswer {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ default: () => "timezone('utc'::text, now())" })
     creationDate: Date;
 
     @Column()
@@ -39,4 +40,9 @@ export class GivenAnswer {
     @OneToMany(_ => AnswerGivenAnswerBridge, x => x.givenAnswer)
     @JoinColumn()
     answerBridges: AnswerGivenAnswerBridge[];
+
+    // givenAnswerStreakBridges
+    @JoinColumn()
+    @OneToMany(_ => GivenAnswerStreakGivenAnswerBridge, x => x.givenAnswer)
+    givenAnswerStreakBridges: GivenAnswerStreakGivenAnswerBridge[];
 }

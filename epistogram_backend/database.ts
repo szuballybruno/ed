@@ -25,8 +25,8 @@ export const initializeDBAsync = async () => {
     log("Connection properties: ")
     logObject(JSON.stringify(getDatabaseConnectionParameters()));
 
-    const { executeSQL, terminateConnectionAsync } = await connectToDBAsync();
-    staticProvider.sqlConnection = { executeSQL, terminateConnectionAsync };
+    const sqlConnection = await connectToDBAsync();
+    staticProvider.sqlConnection = sqlConnection;
 
     log("Connection successful!", "strong");
 
@@ -100,6 +100,8 @@ export const initializeDBAsync = async () => {
 
         log("Seeding DB done!", "strong");
     }
+
+    return { sqlConnection, ormConnection: staticProvider.ormConnection };
 }
 
 const purgeDBAsync = async () => {

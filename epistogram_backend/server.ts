@@ -22,12 +22,14 @@ import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideo
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { UserStatsView } from './models/views/UserStatsView';
-import { DatabaseConnectionService } from './services/databaseConnectionService';
+import { DbConnectionService } from './services/databaseConnectionService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { MapperService } from './services/mapperService';
 import { initializeMappings } from './services/mappings';
 import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/middlewareService';
 import { log, logError } from "./services/misc/logger";
+import { SQLFunctionsService } from './services/sqlServices/sqlFunctionsService';
+import { UserSessionActivityService } from './services/userSessionActivityService';
 import { UserStatsService } from './services/userStatsService';
 import { staticProvider } from './staticProvider';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
@@ -45,7 +47,7 @@ const initializeAsync = async () => {
 
     // init DB
     log("Initializing DB...");
-    await initializeDBAsync();
+    const { sqlConnection, ormConnection } = await initializeDBAsync();
     log("DB initialized.");
 
     // init express
@@ -54,16 +56,27 @@ const initializeAsync = async () => {
 
     // services 
     const mapperService = new MapperService();
-    staticProvider.mapperService = mapperService;
-    const databaseConnectionService = new DatabaseConnectionService();
+    const databaseConnectionService = new DbConnectionService();
     const userStatsService = new UserStatsService(databaseConnectionService, mapperService);
+    const sqlFunctionService = new SQLFunctionsService(databaseConnectionService);
+    const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, databaseConnectionService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
 
     // initialize services 
     initializeMappings(mapperService);
-    databaseConnectionService.initialize(staticProvider.ormConnection);
+    databaseConnectionService.initialize(ormConnection, sqlConnection);
+
+    // set services as static provided objects 
+    staticProvider.mapperService = mapperService;
+    staticProvider.services = {
+        mapperService,
+        databaseConnectionService,
+        userStatsService,
+        sqlFunctionService,
+        userSessionActivityService
+    };
 
     const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) => addAPIEndpoint(expressServer, path, action, opt);
 

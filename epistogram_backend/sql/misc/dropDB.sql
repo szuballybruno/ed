@@ -29,3 +29,6 @@ DROP TABLE IF EXISTS public.daily_tip_occurrence CASCADE;
 DROP TABLE IF EXISTS public.question_type CASCADE;
 DROP TABLE IF EXISTS public.user_session_activity CASCADE;
 DROP TABLE IF EXISTS public.course_module CASCADE;
+DROP TABLE IF EXISTS public.coin_acquire CASCADE;
+DROP TABLE IF EXISTS public.given_answer_streak CASCADE;
+DROP TABLE IF EXISTS public.given_answer_streak_given_answer_bridge CASCADE;

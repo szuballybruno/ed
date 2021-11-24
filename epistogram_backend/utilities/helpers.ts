@@ -40,6 +40,36 @@ export const getAsyncActionHandler = (wrappedAction: (req: Request, res: Respons
     return wrapperFunction;
 }
 
+export const toSqlDate = (date: Date) => {
+
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`;
+}
+
+export const trimTimeFromDate = (date: Date) => {
+
+    date.setHours(0, 0, 0, 0);
+    return date;
+}
+
+/** 
+ * This will shift the Date with the UTC offset, 
+ * so JS will think it's a UTC date, and won't convert it again. 
+ * @param date 
+ * @returns 
+ **/
+export const fakeUtcShiftDate = (date: Date) => {
+
+    var now_utc = Date.UTC(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds());
+
+    return new Date(now_utc);
+}
+
 export const navPropNotNull = (prop: any) => {
 
     withValue(prop, () => { throw new Error("Navigation property was null, or undefined. This could be caused by an improper or missing join.") });

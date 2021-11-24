@@ -66,4 +66,4 @@ FROM
 		"groups_2"."groupStartDate"
 ) AS "group3"
 
-WHERE "group3"."sessionLength" > INTERVAL '0 sec'
+-- WHERE "group3"."sessionLength" > INTERVAL '0 sec'
