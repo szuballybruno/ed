@@ -37,7 +37,7 @@ export const deleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem
         .ormConnection
         .getRepository(Question)
         .createQueryBuilder()
-        .where('"examId" IN (:...examIds)', { examIds })
+        .where('"exam_id" IN (:...examIds)', { examIds })
         .getMany();
 
     await deleteQuesitonsAsync(questions.map(x => x.id));
@@ -48,7 +48,7 @@ export const deleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem
         .createQueryBuilder()
         .delete()
         .from(AnswerSession)
-        .where('"examId" IN (:...examIds)', { examIds })
+        .where('"exam_id" IN (:...examIds)', { examIds })
         .execute();
 
     // set current course item on users

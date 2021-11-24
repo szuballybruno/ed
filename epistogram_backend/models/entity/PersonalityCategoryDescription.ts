@@ -18,6 +18,6 @@ export class PersonalityCategoryDescription {
     questionCategoryId: number;
 
     @OneToOne(_ => QuestionCategory, x => x.personalityCategoryDescription)
-    @JoinColumn({ name: "questionCategoryId" })
+    @JoinColumn({ name: "questionCategory_id" })
     questionCategory: QuestionCategory;
 }

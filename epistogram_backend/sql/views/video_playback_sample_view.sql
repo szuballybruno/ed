@@ -1,8 +1,8 @@
 SELECT 
 	"vps"."id",
-	"vps"."videoId",
-	"vps"."userId",
-	"vps"."fromSeconds",
-	"vps"."toSeconds",
-	ROUND (("vps"."toSeconds" - "vps"."fromSeconds")::numeric, 3) AS "totalPlaybackDuration"
+	"vps"."video_id",
+	"vps"."user_id",
+	"vps"."from_seconds",
+	"vps"."to_seconds",
+	ROUND (("vps"."to_seconds" - "vps"."from_seconds")::numeric, 3) AS "total_playback_duration"
 FROM public."video_playback_sample" AS "vps"

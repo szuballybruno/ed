@@ -1,7 +1,7 @@
 START TRANSACTION;
 
 -- Question categories
-INSERT INTO "question_category" ("minLabel", "maxLabel")
+INSERT INTO "question_category" ("min_label", "max_label")
 VALUES
     ('Egyedül tanulok szívesebben', 'Közösségben tanulok szívesebben'),
     ('Hangosan kimondom, amit meg akarok jegyezni', 'Térben vizualizálom, amit meg akarok jegyezni'),
@@ -13,12 +13,12 @@ RETURNING "id";
 -- Questions
 INSERT INTO "question"
 (
-    "questionText",
-    "imageUrl",
-    "showUpTimeSeconds",
-    "categoryId",
-    "videoId",
-    "examId"
+    "question_text",
+    "image_url",
+    "show_up_time_seconds",
+    "category_id",
+    "video_id",
+    "exam_id"
 )
 VALUES
 -- SECTION 1
@@ -351,8 +351,8 @@ RETURNING "id";
 INSERT INTO "answer"
 (
     "text",
-    "isCorrect",
-    "questionId"
+    "is_correct",
+    "question_id"
 )
 VALUES
 

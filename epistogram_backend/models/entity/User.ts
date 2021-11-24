@@ -79,7 +79,7 @@ export class User {
     roleId: number;
 
     @ManyToOne(_ => Role, x => x.users)
-    @JoinColumn({ name: "roleId" })
+    @JoinColumn({ name: "role_id" })
     role: Role;
 
     // Avatar file
@@ -87,7 +87,7 @@ export class User {
     avatarFileId: number;
 
     @ManyToOne(() => StorageFile, sf => sf.users)
-    @JoinColumn({ name: 'avatarFileId' })
+    @JoinColumn({ name: "avatar_file_id" })
     avatarFile: StorageFile | null
 
     // Organization 
@@ -95,7 +95,7 @@ export class User {
     organizationId: number | null;
 
     @ManyToOne(() => Organization, organization => organization.users)
-    @JoinColumn({ name: 'organizationId' })
+    @JoinColumn({ name: "organization_id" })
     organization: Organization;
 
     // job title 
@@ -103,7 +103,7 @@ export class User {
     jobTitleId: number | null;
 
     @ManyToOne(_ => JobTitle, x => x.users)
-    @JoinColumn({ name: "jobTitleId" })
+    @JoinColumn({ name: "job_title_id" })
     jobTitle: JobTitle | null;
 
     // Tasks

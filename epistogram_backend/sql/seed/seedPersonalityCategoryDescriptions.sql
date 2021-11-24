@@ -2,9 +2,9 @@ START TRANSACTION;
 
 INSERT INTO "personality_category_description"
     (
-        "maxDescription",
-        "minDescription",
-        "questionCategoryId"
+        "max_description",
+        "min_description",
+        "question_category_id"
     )
 VALUES
     (

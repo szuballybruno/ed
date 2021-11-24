@@ -28,7 +28,7 @@ export class Course {
     categoryId: number;
 
     @ManyToOne(() => CourseCategory, x => x.categoryCourses)
-    @JoinColumn({ name: "categoryId" })
+    @JoinColumn({ name: "category_id" })
     category: CourseCategory;
 
     // course sub category
@@ -36,7 +36,7 @@ export class Course {
     subCategoryId: number;
 
     @ManyToOne(() => CourseCategory, x => x.subCategoryCourses)
-    @JoinColumn({ name: "subCategoryId" })
+    @JoinColumn({ name: "subCategory_id" })
     subCategory: CourseCategory;
 
     // videos 
@@ -54,7 +54,7 @@ export class Course {
     teacherId: number
 
     @ManyToOne(() => User, teacher => teacher.teachedCourses)
-    @JoinColumn({ name: "teacherId" })
+    @JoinColumn({ name: "teacher_id" })
     teacher: User;
 
     // coverFile
@@ -62,7 +62,7 @@ export class Course {
     coverFileId: number | null;
 
     @ManyToOne(_ => StorageFile, x => x.courses, { cascade: true })
-    @JoinColumn({ name: "coverFileId" })
+    @JoinColumn({ name: "cover_file_id" })
     coverFile: StorageFile;
 
     // user course bridges 

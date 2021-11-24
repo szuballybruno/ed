@@ -3,9 +3,9 @@
 
 CREATE OR REPLACE FUNCTION "answer_signup_question_fn"
 (
-	"p_userId" integer,
-	"p_questionId" integer,
-	"p_answerId" integer
+	"p_user_id" integer,
+	"p_question_id" integer,
+	"p_answer_id" integer
 )
 RETURNS void 
 AS $$ 
@@ -20,13 +20,13 @@ BEGIN
 		"as"."id"
 	INTO "var_signup_answer_session_id"
 	FROM public."answer_session" AS "as"
-	WHERE "as"."examId" = 1 
-		AND "as"."userId" = "p_userId";
+	WHERE "as"."exam_id" = 1 
+		AND "as"."user_id" = "p_user_id";
 
 	PERFORM answer_question_fn(
 		var_signup_answer_session_id,
-		"p_questionId",
-		ARRAY["p_answerId"],
+		"p_question_id",
+		ARRAY["p_answer_id"],
 		false
 	);
 	

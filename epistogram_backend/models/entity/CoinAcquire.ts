@@ -18,7 +18,7 @@ export class CoinAcquire {
     userId: number;
 
     @ManyToOne(_ => User, x => x.coinAcquires)
-    @JoinColumn({ name: "userId" })
+    @JoinColumn({ name: "user_id" })
     user: User;
 
     // user session activity

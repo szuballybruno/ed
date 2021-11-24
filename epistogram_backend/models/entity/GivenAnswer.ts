@@ -25,7 +25,7 @@ export class GivenAnswer {
     questionId: number;
 
     @ManyToOne(_ => Question, x => x.givenAnswers)
-    @JoinColumn({ name: "questionId" })
+    @JoinColumn({ name: "question_id" })
     question: Question;
 
     // answer session
@@ -33,7 +33,7 @@ export class GivenAnswer {
     answerSessionId: number;
 
     @ManyToOne(_ => AnswerSession, x => x.givenAnswers)
-    @JoinColumn({ name: "answerSessionId" })
+    @JoinColumn({ name: "answerSession_id" })
     answerSession: AnswerSession;
 
     // answer bridges

@@ -14,7 +14,7 @@ export const deleteModulesAsync = async (moduleIds: number[]) => {
         .ormConnection
         .getRepository(Video)
         .createQueryBuilder("v")
-        .where('"v"."moduleId" IN (:...moduleIds)', { moduleIds })
+        .where('"v"."module_id" IN (:...moduleIds)', { moduleIds })
         .getMany();
 
     await deleteVideosAsync(videos.map(x => x.id), false);
@@ -24,7 +24,7 @@ export const deleteModulesAsync = async (moduleIds: number[]) => {
         .ormConnection
         .getRepository(Exam)
         .createQueryBuilder("e")
-        .where('"e"."moduleId" IN (:...moduleIds)', { moduleIds })
+        .where('"e"."module_id" IN (:...moduleIds)', { moduleIds })
         .getMany();
 
     await deleteExamsAsync(exams.map(x => x.id), false);

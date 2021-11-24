@@ -2,9 +2,9 @@ CREATE OR REPLACE FUNCTION "insert_coin_acquire"
 (
 	"p_user_id" int,
 	"p_amount" int,
-	"p_sessionActivityId" int,
-	"p_videoId" int,
-	"p_givenAnswerStreakId" int
+	"p_session_activity_id" int,
+	"p_video_id" int,
+	"p_given_answer_streak_id" int
 )
 RETURNS integer 
 AS $$ 
@@ -16,19 +16,19 @@ BEGIN
 
 	INSERT INTO public."coin_acquire" 
 	(
-		"userId",
+		"user_id",
 		"amount",
-		"sessionActivityId",
-		"videoId",
-		"givenAnswerStreakId"
+		"session_activity_id",
+		"video_id",
+		"given_answer_streak_id"
 	)
 	VALUES 
 	(
 		"p_user_id",
 		"p_amount",
-		"p_sessionActivityId",
-		"p_videoId",
-		"p_givenAnswerStreakId"
+		"p_session_activity_id",
+		"p_video_id",
+		"p_given_answer_streak_id"
 	)
 	RETURNING "id" 
 	INTO "v_coin_acquire_id";

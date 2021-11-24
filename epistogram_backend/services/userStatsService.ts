@@ -19,7 +19,7 @@ export class UserStatsService {
         const stats = await this._connection
             .getRepository(UserStatsView)
             .createQueryBuilder("usv")
-            .where('"usv"."userId" = :userId', { userId })
+            .where('"usv"."user_id" = :userId', { userId })
             .getOneOrFail();
 
         return this._mapperService

@@ -380,7 +380,7 @@ export const deleteCourseAsync = async (courseId: number) => {
         .ormConnection
         .getRepository(CourseModule)
         .createQueryBuilder("m")
-        .where('"m"."courseId" = :courseId', { courseId })
+        .where('"m"."course_id" = :courseId', { courseId })
         .getMany();
 
     await deleteModulesAsync(modules.map(x => x.id));

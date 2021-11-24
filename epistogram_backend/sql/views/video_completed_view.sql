@@ -1,15 +1,15 @@
 SELECT 
-	"user"."id" AS "userId",
-	"video"."id" AS "videoId",
-	"video"."courseId" AS "courseId",
-	"video"."orderIndex" AS "orderIndex",
-	"vpd"."watchedPercent",
-	"vpd"."isWatched" IS NOT DISTINCT FROM true AS "isCompleted"
+	"user"."id" AS "user_id",
+	"video"."id" AS "video_id",
+	"video"."course_id" AS "course_id",
+	"video"."order_index" AS "order_index",
+	"vpd"."watched_percent",
+	"vpd"."is_watched" IS NOT DISTINCT FROM true AS "is_completed"
 FROM public."video" AS "video"
 
 LEFT JOIN public."user" AS "user"
 ON 1 = 1
 
 LEFT JOIN public."video_playback_data" AS "vpd"
-ON "vpd"."userId" = "user"."id" 
-	AND "vpd"."videoId" = "video"."id" 
+ON "vpd"."user_id" = "user"."id" 
+	AND "vpd"."video_id" = "video"."id" 

@@ -30,7 +30,7 @@ export class Question {
     categoryId: number;
 
     @ManyToOne(_ => QuestionCategory, x => x.questions)
-    @JoinColumn({ name: "categoryId" })
+    @JoinColumn({ name: "category_id" })
     category: QuestionCategory | null;
 
     // type 
@@ -38,7 +38,7 @@ export class Question {
     typeId: number;
 
     @ManyToOne(_ => QuestionType, x => x.questions)
-    @JoinColumn({ name: "typeId" })
+    @JoinColumn({ name: "type_id" })
     type: QuestionType;
 
     // answers
@@ -56,7 +56,7 @@ export class Question {
     videoId: number;
 
     @ManyToOne(() => Video, v => v.questions)
-    @JoinColumn({ name: "videoId" })
+    @JoinColumn({ name: "video_id" })
     video: Video;
 
     // exam 
@@ -64,6 +64,6 @@ export class Question {
     examId: number | null;
 
     @ManyToOne(_ => Exam, e => e.questions)
-    @JoinColumn({ name: "examId" })
+    @JoinColumn({ name: "exam_id" })
     exam: Exam | null;
 }

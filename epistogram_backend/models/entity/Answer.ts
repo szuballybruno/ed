@@ -20,7 +20,7 @@ export class Answer {
     questionId: number;
 
     @ManyToOne(() => Question, question => question.answers)
-    @JoinColumn({ name: "questionId" })
+    @JoinColumn({ name: "question_id" })
     question: Question;
 
     // given answer bridges

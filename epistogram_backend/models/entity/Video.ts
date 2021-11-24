@@ -36,7 +36,7 @@ export class Video {
     videoFileId: number;
 
     @ManyToOne(type => StorageFile, s => s.videos, { cascade: true })
-    @JoinColumn({ name: "videoFileId" })
+    @JoinColumn({ name: "videoFile_id" })
     videoFile: StorageFile;
 
     // thumbnail file
@@ -44,7 +44,7 @@ export class Video {
     thumbnailFileId: number;
 
     @OneToOne(type => StorageFile, { cascade: true })
-    @JoinColumn({ name: "thumbnailFileId" })
+    @JoinColumn({ name: "thumbnailFile_id" })
     thumbnailFile: StorageFile
 
     // questions
@@ -57,7 +57,7 @@ export class Video {
     courseId: number;
 
     @ManyToOne(type => Course, course => course.videos)
-    @JoinColumn({ name: "courseId" })
+    @JoinColumn({ name: "course_id" })
     course: Course
 
     // answer sessions
@@ -80,7 +80,7 @@ export class Video {
     moduleId: number;
 
     @ManyToOne(_ => CourseModule, x => x.videos)
-    @JoinColumn({ name: "moduleId" })
+    @JoinColumn({ name: "module_id" })
     module: CourseModule;
 
     // coin acquires 

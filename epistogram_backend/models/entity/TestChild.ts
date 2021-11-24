@@ -15,7 +15,7 @@ export class TestChild {
     parentId: number;
 
     @ManyToOne(() => TestParent, c => c.children)
-    @JoinColumn({ name: "parentId" })
+    @JoinColumn({ name: "parent_id" })
     parent: TestParent;
 
     @OneToMany(() => TestSubChild, c => c.testChild, { cascade: true })

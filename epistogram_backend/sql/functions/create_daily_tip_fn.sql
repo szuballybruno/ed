@@ -1,42 +1,42 @@
 CREATE OR REPLACE FUNCTION "create_daily_tip_fn"
 (
 	"p_descriotion" text,
-	"p_videoPath" text
+	"p_video_path" text
 )
 RETURNS integer 
 AS $$ 
 
 DECLARE
-	"v_newDailyTipId" integer; 
-	"v_newStorageFileId" integer; 
+	"v_new_daily_tip_id" integer; 
+	"v_new_storage_file_id" integer; 
 
 BEGIN
 
 	-- insert video storage file
 	INSERT INTO public."storage_file" 
 	(
-		"filePath"
+		"file_path"
 	)
 	VALUES 
 	(
-		"p_videoPath"
+		"p_video_path"
 	)
-	RETURNING "id" INTO "v_newStorageFileId";
+	RETURNING "id" INTO "v_new_storage_file_id";
 	
 	-- 	insert new daily tip
 	INSERT INTO public."daily_tip" 
 	(
 		"description",
-		"videoFileId"
+		"video_file_id"
 	)
 	VALUES 
 	(
 		"p_descriotion",
-		"v_newStorageFileId"
+		"v_new_storage_file_id"
 	)
-	RETURNING "id" INTO "v_newDailyTipId";
+	RETURNING "id" INTO "v_new_daily_tip_id";
 	
-	RETURN "v_newDailyTipId";
+	RETURN "v_new_daily_tip_id";
 	
 END 
 $$ LANGUAGE 'plpgsql';

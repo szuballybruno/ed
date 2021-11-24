@@ -21,6 +21,6 @@ export class CourseStateView {
 
     // course 
     @OneToOne(_ => Course, x => x.courseState)
-    @JoinColumn({ name: "courseId" })
+    @JoinColumn({ name: "course_id" })
     course: Course;
 }

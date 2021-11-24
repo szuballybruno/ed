@@ -21,6 +21,6 @@ export class Task {
     userId: number;
 
     @ManyToOne(type => User, user => user.tasks)
-    @JoinColumn({ name: "userId" })
+    @JoinColumn({ name: "user_id" })
     user: User;
 }

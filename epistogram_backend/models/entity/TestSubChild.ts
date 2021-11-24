@@ -15,6 +15,6 @@ export class TestSubChild {
     testChildId: number;
 
     @ManyToOne(() => TestChild, c => c.testSubChildren)
-    @JoinColumn({ name: "testChildId" })
+    @JoinColumn({ name: "testChild_id" })
     testChild: TestChild;
 }

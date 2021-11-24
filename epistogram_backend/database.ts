@@ -9,6 +9,7 @@ import { connectToDBAsync } from "./services/sqlServices/sqlConnection";
 import { recreateFunctionsAsync } from "./services/sqlServices/sqlFunctionCreatorService";
 import { recreateViewsAsync } from "./services/sqlServices/sqlViewCreatorService";
 import { staticProvider } from "./staticProvider";
+import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
 export type TypeORMConnection = Connection;
 
@@ -171,6 +172,7 @@ const getPorstgresOptions = () => {
         database: dbConnOpts.databaseName,
         synchronize: isSyncEnabled,
         logging: isLoggingEnabled,
+        namingStrategy: new SnakeNamingStrategy(),
         extra: {
             socketPath: dbConnOpts.socketPath
         },

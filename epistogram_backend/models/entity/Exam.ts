@@ -33,7 +33,7 @@ export class Exam {
     courseId: number;
 
     @ManyToOne(type => Course, course => course.exams)
-    @JoinColumn({ name: "courseId" })
+    @JoinColumn({ name: "course_id" })
     course: Course | null
 
     // questions 
@@ -51,6 +51,6 @@ export class Exam {
     moduleId: number;
 
     @ManyToOne(_ => CourseModule, x => x.exams)
-    @JoinColumn({ name: "moduleId" })
+    @JoinColumn({ name: "module_id" })
     module: CourseModule;
 }

@@ -26,7 +26,7 @@ export class AnswerSession {
     examId: number | null;
 
     @ManyToOne(_ => Exam, e => e.answerSessions)
-    @JoinColumn({ name: "examId" })
+    @JoinColumn({ name: "exam_id" })
     exam: Exam | null;
 
     // video 
@@ -34,7 +34,7 @@ export class AnswerSession {
     videoId: number | null;
 
     @ManyToOne(_ => Video, e => e.answerSessions)
-    @JoinColumn({ name: "videoId" })
+    @JoinColumn({ name: "video_id" })
     video: Video | null;
 
     // user 
@@ -42,6 +42,6 @@ export class AnswerSession {
     userId: number | null;
 
     @ManyToOne(_ => User, e => e.answerSessions)
-    @JoinColumn({ name: "userId" })
+    @JoinColumn({ name: "user_id" })
     user: User | null;
 }

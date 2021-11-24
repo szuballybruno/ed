@@ -13,7 +13,7 @@ export class RoleActivityBridge {
     roleId: number;
 
     @ManyToOne(_ => Role, x => x.roleActivityBridges)
-    @JoinColumn({ name: "roleId" })
+    @JoinColumn({ name: "role_id" })
     role: Role;
 
     // activity
@@ -21,6 +21,6 @@ export class RoleActivityBridge {
     activityId: number;
 
     @ManyToOne(_ => Activity, x => x.roleActivityBridges)
-    @JoinColumn({ name: "activityId" })
+    @JoinColumn({ name: "activity_id" })
     activity: Activity;
 }

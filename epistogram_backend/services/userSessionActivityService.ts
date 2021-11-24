@@ -34,22 +34,22 @@ export class UserSessionActivityService {
 
     handleCoinsAsync = async (userId: number, currentActivityId: number) => {
 
-        const today = trimTimeFromDate(new Date());
+        // const today = trimTimeFromDate(new Date());
 
-        const todaysInfo = await this._connService
-            .getRepository(UserSessionDailyView)
-            .createQueryBuilder("us")
-            .where('us.userId = :userId', { userId })
-            .andWhere("us.date = :today", { today })
-            .getOneOrFail();
+        // const todaysInfo = await this._connService
+        //     .getRepository(UserSessionDailyView)
+        //     .createQueryBuilder("us")
+        //     .where('us.userId = :userId', { userId })
+        //     .andWhere("us.date = :today", { today })
+        //     .getOneOrFail();
 
-        // if (todaysInfo.sessionCount > 3)
-        //     return;
+        // // if (todaysInfo.sessionCount > 3)
+        // //     return;
 
-        const sessionFirstActivityId = await this._funcService
-            .getUserSessionFirstActivityId(userId, currentActivityId);
+        // const sessionFirstActivityId = await this._funcService
+        //     .getUserSessionFirstActivityId(userId, currentActivityId);
 
-        await this._funcService
-            .insertCoinAcquiredFn(10, sessionFirstActivityId, null, null);
+        // await this._funcService
+        //     .insertCoinAcquiredFn(10, sessionFirstActivityId, null, null);
     }
 }

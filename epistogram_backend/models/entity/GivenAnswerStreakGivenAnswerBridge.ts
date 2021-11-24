@@ -12,7 +12,7 @@ export class GivenAnswerStreakGivenAnswerBridge {
     @Column()
     givenAnswerId: number;
 
-    @JoinColumn({ name: "givenAnswerId" })
+    @JoinColumn({ name: "givenAnswer_id" })
     @ManyToOne(_ => GivenAnswer, x => x.givenAnswerStreakBridges)
     givenAnswer: GivenAnswer;
 
@@ -20,7 +20,7 @@ export class GivenAnswerStreakGivenAnswerBridge {
     @Column()
     givenAnswerStreakId: number;
 
-    @JoinColumn({ name: "givenAnswerStreakId" })
+    @JoinColumn({ name: "givenAnswerStreak_id" })
     @ManyToOne(_ => GivenAnswerStreak, x => x.givenAnswerBridges)
     givenAnswerStreak: GivenAnswerStreak;
 }

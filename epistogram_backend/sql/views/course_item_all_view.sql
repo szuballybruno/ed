@@ -1,25 +1,25 @@
 SELECT 
-	"course"."id" AS "courseId",
-	"civ"."videoId",
-	"civ"."examId",
-	"civ"."orderIndex"
+	"course"."id" AS "course_id",
+	"civ"."video_id",
+	"civ"."exam_id",
+	"civ"."order_index"
 FROM public."course" 
 
 LEFT JOIN (
 	SELECT
-		"video"."courseId",
-		"video"."id"  AS "videoId",
-		CAST (null AS integer) AS "examId",
-		"video"."orderIndex" AS "orderIndex"
+		"video"."course_id",
+		"video"."id"  AS "video_id",
+		CAST (null AS integer) AS "exam_id",
+		"video"."order_index" AS "order_index"
 	FROM public."video"
 	UNION ALL
 	SELECT 
-		"exam"."courseId",
-		CAST (null AS integer) AS "videoId",
-		"exam"."id" AS "examId", 
-		"exam"."orderIndex" AS "orderIndex"
+		"exam"."course_id",
+		CAST (null AS integer) AS "video_id",
+		"exam"."id" AS "exam_id", 
+		"exam"."order_index" AS "order_index"
 	FROM public."exam"
 ) AS "civ"
-ON "civ"."courseId" = "course"."id"
+ON "civ"."course_id" = "course"."id"
 
-ORDER BY "courseId", "orderIndex"
+ORDER BY "course_id", "order_index"

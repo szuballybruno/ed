@@ -23,7 +23,7 @@ export class UserCourseBridge {
     userId: number;
 
     @ManyToOne(_ => User, x => x.userCourseBridges)
-    @JoinColumn({ name: "userId" })
+    @JoinColumn({ name: "user_id" })
     user: User;
 
     // course
@@ -31,6 +31,6 @@ export class UserCourseBridge {
     courseId: number;
 
     @ManyToOne(_ => Course, x => x.userCourseBridges)
-    @JoinColumn({ name: "courseId" })
+    @JoinColumn({ name: "course_id" })
     course: Course;
 }

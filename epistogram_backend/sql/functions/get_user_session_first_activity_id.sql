@@ -14,7 +14,7 @@ DECLARE
 BEGIN
 
 	-- get current activity
-	SELECT "creationDate"
+	SELECT "creation_date"
 	FROM "user_session_activity" 
 	WHERE "id" = param_session_activity_id
 	INTO var_current_activity_date;
@@ -22,11 +22,11 @@ BEGIN
 	RAISE NOTICE '%', var_current_activity_date;
 	
 	-- get current session start date 
-	SELECT "us"."sessionStartDate"
+	SELECT "us"."session_start_date"
 	FROM "user_session_view" AS "us" 
-	WHERE "us"."userId" = param_user_id
-		AND "us"."sessionStartDate" <= var_current_activity_date
-		AND "us"."sessionEndDate" >= var_current_activity_date
+	WHERE "us"."user_id" = param_user_id
+		AND "us"."session_start_date" <= var_current_activity_date
+		AND "us"."session_end_date" >= var_current_activity_date
 	INTO var_current_session_start_date;
 	
 	RAISE NOTICE '%', var_current_session_start_date;
@@ -35,7 +35,7 @@ BEGIN
 	SELECT 
 		"id"
 	FROM "user_session_activity"
-	WHERE "creationDate" = var_current_session_start_date
+	WHERE "creation_date" = var_current_session_start_date
 	INTO var_session_first_activity_id;
 	
 	RETURN var_session_first_activity_id;

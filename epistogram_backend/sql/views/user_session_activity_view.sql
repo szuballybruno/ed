@@ -3,15 +3,15 @@ SELECT
 FROM 
 (
 	SELECT
-		"usa"."userId",
-		"usa"."creationDate" AS "creationDate"
+		"usa"."user_id",
+		"usa"."creation_date" AS "creation_date"
 	FROM public."user_session_activity" AS "usa"
 ) AS "sq"
 
 GROUP BY
-	"sq"."userId",
-	"sq"."creationDate"
+	"sq"."user_id",
+	"sq"."creation_date"
 
 ORDER BY
-	"sq"."userId",
-	"sq"."creationDate"
+	"sq"."user_id",
+	"sq"."creation_date"

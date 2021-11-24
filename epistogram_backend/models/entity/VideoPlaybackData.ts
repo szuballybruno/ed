@@ -19,7 +19,7 @@ export class VideoPlaybackData {
     videoId: number;
 
     @ManyToOne(_ => Video, x => x.videoPlaybackDatas)
-    @JoinColumn({ name: "videoId" })
+    @JoinColumn({ name: "video_id" })
     video: Video;
 
     // user
@@ -27,6 +27,6 @@ export class VideoPlaybackData {
     userId: number;
 
     @ManyToOne(_ => User, x => x.videoPlaybackDatas)
-    @JoinColumn({ name: "userId" })
+    @JoinColumn({ name: "user_id" })
     user: User;
 }

@@ -24,6 +24,6 @@ export class UserActivityFlatView {
 
     // user
     @OneToOne(_ => User, x => x.userActivity)
-    @JoinColumn({ name: "userId" })
+    @JoinColumn({ name: "user_id" })
     user: User;
 }

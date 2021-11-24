@@ -94,7 +94,7 @@ export const deleteVideosAsync = async (videoIds: number[], unsetCurrentCourseIt
         .ormConnection
         .getRepository(Question)
         .createQueryBuilder("q")
-        .where('"videoId" IN (:...videoIds)', { videoIds })
+        .where('"video_id" IN (:...videoIds)', { videoIds })
         .getMany();
 
     await deleteQuesitonsAsync(questions.map(x => x.id));
@@ -105,7 +105,7 @@ export const deleteVideosAsync = async (videoIds: number[], unsetCurrentCourseIt
         .createQueryBuilder()
         .delete()
         .from(AnswerSession)
-        .where('"videoId" IN (:...videoIds)', { videoIds })
+        .where('"video_id" IN (:...videoIds)', { videoIds })
         .execute();
 
     // set current course item on users
@@ -123,7 +123,7 @@ export const deleteVideosAsync = async (videoIds: number[], unsetCurrentCourseIt
         .createQueryBuilder()
         .delete()
         .from(VideoPlaybackSample)
-        .where('"videoId" IN (:...videoIds)', { videoIds })
+        .where('"video_id" IN (:...videoIds)', { videoIds })
         .execute();
 
     // delete playback samples 
@@ -132,7 +132,7 @@ export const deleteVideosAsync = async (videoIds: number[], unsetCurrentCourseIt
         .createQueryBuilder()
         .delete()
         .from(VideoPlaybackData)
-        .where('"videoId" IN (:...videoIds)', { videoIds })
+        .where('"video_id" IN (:...videoIds)', { videoIds })
         .execute();
 
     // delete video

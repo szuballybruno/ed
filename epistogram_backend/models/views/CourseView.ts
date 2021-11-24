@@ -39,6 +39,6 @@ export class CourseView {
 
     // user
     @ManyToOne(_ => User)
-    @JoinColumn({ name: "teacherId" })
+    @JoinColumn({ name: "teacher_id" })
     teacher: User;
 }
