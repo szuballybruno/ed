@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { SessionActivityType } from "../shared_models/types/sharedTypes";
+import { ActivitySession } from "./ActivitySession";
 import { CoinAcquire } from "./CoinAcquire";
 import { User } from "./User";
 
@@ -17,11 +18,11 @@ export class UserSessionActivity {
 
     // user
     @Column()
-    userId: number;
+    activitySessionId: number;
 
-    @ManyToOne(_ => User, x => x.sessionActivity)
-    @JoinColumn({ name: "user_id" })
-    user: User;
+    @ManyToOne(_ => ActivitySession, x => x.activities)
+    @JoinColumn({ name: "activity_session_id" })
+    activitySession: ActivitySession;
 
     // coin acquires 
     @JoinColumn()

@@ -19,17 +19,17 @@ export class UserSessionActivityService {
 
     saveUserSessionActivityAsync = async (userId: number, type: SessionActivityType) => {
 
-        const currentActivity = {
-            type,
-            userId
-        } as UserSessionActivity;
+        // const currentActivity = {
+        //     type,
+        //     userId
+        // } as UserSessionActivity;
 
-        await staticProvider
-            .ormConnection
-            .getRepository(UserSessionActivity)
-            .insert(currentActivity);
+        // await staticProvider
+        //     .ormConnection
+        //     .getRepository(UserSessionActivity)
+        //     .insert(currentActivity);
 
-        await this.handleCoinsAsync(userId, currentActivity.id);
+        // await this.handleCoinsAsync(userId, currentActivity.id);
     }
 
     handleCoinsAsync = async (userId: number, currentActivityId: number) => {

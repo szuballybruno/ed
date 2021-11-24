@@ -1,9 +1,9 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserActivityFlatView } from "../views/UserActivityFlatView";
+import { ActivitySession } from "./ActivitySession";
 import { AnswerSession } from "./AnswerSession";
 import { CoinAcquire } from "./CoinAcquire";
 import { Course } from "./Course";
-import { Exam } from "./Exam";
 import { JobTitle } from "./JobTitle";
 import { Organization } from "./Organization";
 import { Role } from "./Role";
@@ -11,7 +11,6 @@ import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
 import { UserCourseBridge } from "./UserCourseBridge";
 import { UserSessionActivity } from "./UserSessionActivity";
-import { Video } from "./Video";
 import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
 
@@ -136,13 +135,13 @@ export class User {
     @JoinColumn()
     userCourseBridges: UserCourseBridge[];
 
-    // session activity 
-    @OneToMany(_ => UserSessionActivity, x => x.user)
-    @JoinColumn()
-    sessionActivity: UserSessionActivity;
-
     // coin acquires 
     @JoinColumn()
     @OneToMany(_ => CoinAcquire, x => x.sessionActivity)
     coinAcquires: CoinAcquire[];
+
+    // sessions
+    @JoinColumn()
+    @OneToMany(_ => ActivitySession, x => x.user)
+    activitySessions: ActivitySession[];
 }

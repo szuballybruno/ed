@@ -51,6 +51,7 @@ import { GivenAnswerStreak } from "../../models/entity/GivenAnswerStreak";
 import { GivenAnswerStreakGivenAnswerBridge } from "../../models/entity/GivenAnswerStreakGivenAnswerBridge";
 import { UserSessionDailyView } from "../../models/views/UserActivityDailyView";
 import { UserSessionView } from "../../models/views/UserSessionView";
+import { ActivitySession } from "../../models/entity/ActivitySession";
 
 export const dbSchema = {
 
@@ -72,13 +73,13 @@ export const dbSchema = {
         "exam_result_view",
         "practise_question_view",
         "daily_tip_view",
-        "user_session_activity_view",
-        "user_session_view",
         "course_admin_short_view",
         "course_admin_detailed_view",
         "video_playback_sample_view",
-        "user_stats_view",
-        "user_session_daily_view"
+        // "user_session_activity_view",
+        // "user_session_view",
+        // "user_stats_view",
+        // "user_session_daily_view"
     ],
 
     functionScripts: [
@@ -145,6 +146,7 @@ export const dbSchema = {
         CourseModule,
         CoinAcquire,
         GivenAnswerStreak,
-        GivenAnswerStreakGivenAnswerBridge
+        GivenAnswerStreakGivenAnswerBridge,
+        ActivitySession
     ]
 }
