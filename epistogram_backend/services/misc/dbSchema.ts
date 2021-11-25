@@ -75,7 +75,7 @@ export const dbSchema = {
         "daily_tip_view",
         "course_admin_short_view",
         "course_admin_detailed_view",
-        "video_playback_sample_view",
+        "video_playback_sample_view"
         // "user_session_activity_view",
         // "user_session_view",
         // "user_stats_view",
@@ -87,7 +87,8 @@ export const dbSchema = {
         "answer_question_fn",
         "create_daily_tip_fn",
         "insert_coin_acquire",
-        "get_user_session_first_activity_id"
+        "get_user_session_first_activity_id",
+        "save_user_session_activity"
     ],
 
     viewEntities: [

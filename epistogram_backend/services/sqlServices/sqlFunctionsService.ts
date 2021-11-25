@@ -1,3 +1,4 @@
+import { SessionActivityType } from "../../models/shared_models/types/sharedTypes";
 import { DbConnectionService } from "../databaseConnectionService";
 
 export class SQLFunctionsService {
@@ -79,6 +80,19 @@ export class SQLFunctionsService {
             [
                 userId,
                 sessionActivityId
+            ]
+        )
+    }
+
+    saveUserSessionActivity = (
+        userId: number,
+        param_activity_type: SessionActivityType) => {
+
+        return this.execSQLFunctionAsync<void>(
+            "save_user_session_activity",
+            [
+                userId,
+                param_activity_type
             ]
         )
     }
