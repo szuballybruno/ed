@@ -77,7 +77,7 @@ FROM
 	
 		-- total session length 
 		(
-			SELECT SUM("usav"."session_length_seconds")::int
+			SELECT SUM("usav"."length_seconds")::int
 			FROM public."user_session_view" AS "usav"
 			
 			WHERE "usav"."user_id" = "u"."id"
@@ -85,7 +85,7 @@ FROM
 	
 		-- avg session length
 		(
-			SELECT AVG("usav"."session_length_seconds")::int
+			SELECT AVG("usav"."length_seconds")::int
 			FROM public."user_session_view" AS "usav"
 			
 			WHERE "usav"."user_id" = "u"."id"

@@ -11,7 +11,7 @@ export class GivenAnswer {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn({ default: () => "timezone('utc'::text, now())" })
+    @CreateDateColumn({ default: () => "now()", type: "timestamptz" })
     creationDate: Date;
 
     @Column()

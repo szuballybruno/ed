@@ -21,6 +21,6 @@ export class GivenAnswerStreak {
 
     // coin acquires 
     @JoinColumn()
-    @OneToMany(_ => CoinAcquire, x => x.sessionActivity)
+    @OneToMany(_ => CoinAcquire, x => x.activitySession)
     coinAcquires: CoinAcquire[];
 }

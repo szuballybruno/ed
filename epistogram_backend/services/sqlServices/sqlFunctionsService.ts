@@ -55,16 +55,18 @@ export class SQLFunctionsService {
     }
 
     insertCoinAcquiredFn = (
+        userId: number,
         amount: number,
-        sessionActivityId: number | null,
+        activitySessionId: number | null,
         videoId: number | null,
         givenAnswerStreakId: number | null) => {
 
         return this.execSQLFunctionAsync<number>(
             "insert_coin_acquire",
             [
+                userId,
                 amount,
-                sessionActivityId,
+                activitySessionId,
                 videoId,
                 givenAnswerStreakId
             ]
@@ -88,7 +90,7 @@ export class SQLFunctionsService {
         userId: number,
         param_activity_type: SessionActivityType) => {
 
-        return this.execSQLFunctionAsync<void>(
+        return this.execSQLFunctionAsync<number>(
             "save_user_session_activity",
             [
                 userId,

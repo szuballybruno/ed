@@ -1,4 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { ActivitySession } from "./ActivitySession";
+import { ActivityStreak } from "./ActivityStreak";
 import { GivenAnswerStreak } from "./GivenAnswerStreak";
 import { User } from "./User";
 import { UserSessionActivity } from "./UserSessionActivity";
@@ -9,6 +11,9 @@ export class CoinAcquire {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @CreateDateColumn({ default: () => "now()", type: "timestamptz" })
+    creationDate: Date;
 
     @Column()
     amount: number;
@@ -23,17 +28,17 @@ export class CoinAcquire {
 
     // user session activity
     @Column({ nullable: true, type: "integer" })
-    sessionActivityId: number;
+    activitySessionId: number;
 
-    @JoinColumn()
-    @ManyToOne(_ => UserSessionActivity, x => x.coinAcquires)
-    sessionActivity: UserSessionActivity | null;
+    @JoinColumn({ name: "activity_session_id" })
+    @ManyToOne(_ => ActivitySession, x => x.coinAcquires)
+    activitySession: ActivitySession | null;
 
     // video
     @Column({ nullable: true, type: "integer" })
     videoId: number;
 
-    @JoinColumn()
+    @JoinColumn({ name: "video_id" })
     @ManyToOne(_ => Video, x => x.coinAcquires)
     video: Video | null;
 
@@ -41,7 +46,15 @@ export class CoinAcquire {
     @Column({ nullable: true, type: "integer" })
     givenAnswerStreakId: number;
 
-    @JoinColumn()
+    @JoinColumn({ name: "given_answer_streak_id" })
     @ManyToOne(_ => GivenAnswerStreak, x => x.coinAcquires)
     givenAnswerStreak: GivenAnswerStreak | null;
+
+    // activity streak
+    @Column({ nullable: true, type: "integer" })
+    activityStreakId: number;
+
+    @JoinColumn({ name: "activity_streak_id" })
+    @ManyToOne(_ => ActivityStreak, x => x.coinAcquires)
+    activityStreak: ActivityStreak | null;
 }

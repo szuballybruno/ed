@@ -1,4 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ActivityStreak } from "./ActivityStreak";
+import { CoinAcquire } from "./CoinAcquire";
 import { User } from "./User";
 import { UserSessionActivity } from "./UserSessionActivity";
 
@@ -17,6 +19,10 @@ export class ActivitySession {
     @Column()
     isFinalized: boolean;
 
+    //
+    // many to one
+    //
+
     // user 
     userId: number;
 
@@ -24,8 +30,25 @@ export class ActivitySession {
     @JoinColumn({ name: "user_id" })
     user: User;
 
+    // activity streak
+    @Column({ nullable: true, type: "integer" })
+    activityStreakId: number;
+
+    @JoinColumn({ name: "activity_streak_id" })
+    @ManyToOne(_ => ActivityStreak, x => x.activitySessions)
+    activityStreak: ActivityStreak | null;
+
+    // 
+    // one to many
+    //
+
     // activities 
     @OneToMany(_ => UserSessionActivity, x => x.activitySession)
     @JoinColumn()
     activities: UserSessionActivity[];
+
+    // coin acquires 
+    @JoinColumn()
+    @OneToMany(_ => CoinAcquire, x => x.activitySession)
+    coinAcquires: CoinAcquire[];
 }

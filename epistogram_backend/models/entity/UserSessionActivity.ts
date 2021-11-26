@@ -23,9 +23,4 @@ export class UserSessionActivity {
     @ManyToOne(_ => ActivitySession, x => x.activities)
     @JoinColumn({ name: "activity_session_id" })
     activitySession: ActivitySession;
-
-    // coin acquires 
-    @JoinColumn()
-    @OneToMany(_ => CoinAcquire, x => x.sessionActivity)
-    coinAcquires: CoinAcquire[];
 }
