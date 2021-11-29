@@ -11,7 +11,7 @@ import { useEditExamData, useSaveExam } from "../../../services/examService";
 import { getVirtualId } from "../../../services/idService";
 import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { LoadingFrame } from "../../system/LoadingFrame";
 import { DragAndDropList } from "../../universal/DragAndDropList";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";

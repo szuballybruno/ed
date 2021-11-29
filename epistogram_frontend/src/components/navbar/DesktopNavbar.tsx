@@ -11,7 +11,7 @@ import { useLogout } from "../../services/dataService";
 import { useNavigation } from "../../services/navigatior";
 import { useShowErrorDialog } from "../../services/notifications";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
-import { CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
+import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { ProfileImage } from "../ProfileImage";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoPopper } from "../universal/EpistoPopper";

@@ -2,7 +2,7 @@ import { Image } from "@chakra-ui/image";
 import { Flex, FlexProps } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
 import { forwardRef, useContext } from "react";
-import { CurrentUserContext } from "./HOC/AuthenticationFrame";
+import { CurrentUserContext } from "./system/AuthenticationFrame";
 
 type ProfileImageProps = {
     url: string | null,

@@ -2,7 +2,7 @@ import { FlexProps } from "@chakra-ui/react";
 import React, { useEffect, useState } from 'react';
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../models/shared_models/types/sharedTypes";
-import { LoadingFramePropsType } from "./HOC/LoadingFrame";
+import { LoadingFramePropsType } from "./system/LoadingFrame";
 import { EpistoButton } from "./universal/EpistoButton";
 import { EpistoText } from "./universal/EpistoText";
 import { QuestionnaierAnswer } from "./universal/QuestionnaireAnswer";

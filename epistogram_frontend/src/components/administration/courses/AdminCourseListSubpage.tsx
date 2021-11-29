@@ -1,6 +1,6 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
-import {ApartmentTwoTone, Edit, Equalizer, ShortText, ViewList, WorkTwoTone} from "@mui/icons-material";
+import { ApartmentTwoTone, Edit, Equalizer, ShortText, ViewList, WorkTwoTone } from "@mui/icons-material";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { ReactNode, useState } from "react";
@@ -10,7 +10,7 @@ import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { FloatAddButton } from "../../FloatAddButton";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { LoadingFrame } from "../../system/LoadingFrame";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";

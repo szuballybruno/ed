@@ -7,8 +7,8 @@ import { getAssetUrl, getQueryParam } from "../frontendHelpers";
 import { useNavigation } from "../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/notifications";
 import { useRegisterInvitedUser, useRegisterUser } from "../services/openEndpointService";
-import { RefetchUserAsyncContext } from "./HOC/AuthenticationFrame";
-import { LoadingFrame } from "./HOC/LoadingFrame";
+import { RefetchUserAsyncContext } from "./system/AuthenticationFrame";
+import { LoadingFrame } from "./system/LoadingFrame";
 import { EpistoButton } from "./universal/EpistoButton";
 
 export const RegistrationPage = () => {

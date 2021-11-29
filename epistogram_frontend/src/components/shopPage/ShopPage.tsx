@@ -6,7 +6,7 @@ import { mockShopCategories, mockShopItems } from "../../mockData";
 import { translatableTexts } from "../../translatableTexts";
 import classes from "../css/courseSearchMain.module.scss";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../system/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoGrid } from "../universal/EpistoGrid";

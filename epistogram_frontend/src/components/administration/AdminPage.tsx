@@ -2,8 +2,8 @@ import React, { ReactNode, useContext } from 'react';
 import { Route, Switch, withRouter } from "react-router-dom";
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from "../../models/types";
-import { CurrentUserContext } from "../HOC/AuthenticationFrame";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../HOC/MainPanels";
+import { CurrentUserContext } from "../system/AuthenticationFrame";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../system/MainPanels";
 import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../navbar/Navbar";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
@@ -25,7 +25,7 @@ import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditExamSubpage } from './courses/EditExamSubpage';
 import { getRoute } from "../../MainRouting";
 import { EditModuleSubpage } from './courses/EditModuleSubpage';
-import {AdminCourseDetailsSubpage} from "./courses/AdminCourseDetailsSubpage";
+import { AdminCourseDetailsSubpage } from "./courses/AdminCourseDetailsSubpage";
 
 const AdminPage = () => {
 

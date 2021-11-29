@@ -9,6 +9,7 @@ import {
     getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction,
     registerInvitedUserAction, registerUserAction, saveCourseThumbnailAction
 } from './api/dataActions';
+import { EventController } from './api/EventController';
 import { answerExamQuestionAction, createExamAction, deleteExamAction, getExamEditDataAction, getExamResultsAction, saveExamAction } from './api/examActions';
 import { uploadAvatarFileAction } from './api/fileActions';
 import { getDailyTipAction, getJobTitlesAction, getPractiseQuestionAction, getRegistrationLinkAction, requestChangePasswordAction, saveUserDataAction } from './api/miscActions';
@@ -21,9 +22,10 @@ import { UserStatsController } from './api/userStatsController';
 import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileChunksAction } from './api/videoActions';
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
-import { UserStatsView } from './models/views/UserStatsView';
+import { CoinAcquireService } from './services/coinAcquireService';
 import { DbConnectionService } from './services/databaseConnectionService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
+import { EventService } from './services/eventService';
 import { MapperService } from './services/mapperService';
 import { initializeMappings } from './services/mappings';
 import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/middlewareService';
@@ -56,23 +58,26 @@ const initializeAsync = async () => {
 
     // services 
     const mapperService = new MapperService();
-    const databaseConnectionService = new DbConnectionService();
-    const userStatsService = new UserStatsService(databaseConnectionService, mapperService);
-    const sqlFunctionService = new SQLFunctionsService(databaseConnectionService);
-    const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, databaseConnectionService);
+    const dbConnectionService = new DbConnectionService();
+    const userStatsService = new UserStatsService(dbConnectionService, mapperService);
+    const sqlFunctionService = new SQLFunctionsService(dbConnectionService);
+    const eventService = new EventService(dbConnectionService);
+    const coinAcquireService = new CoinAcquireService(sqlFunctionService, dbConnectionService, eventService);
+    const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
+    const eventController = new EventController(eventService);
 
     // initialize services 
     initializeMappings(mapperService);
-    databaseConnectionService.initialize(ormConnection, sqlConnection);
+    dbConnectionService.initialize(ormConnection, sqlConnection);
 
     // set services as static provided objects 
     staticProvider.mapperService = mapperService;
     staticProvider.services = {
         mapperService,
-        databaseConnectionService,
+        databaseConnectionService: dbConnectionService,
         userStatsService,
         sqlFunctionService,
         userSessionActivityService
@@ -106,6 +111,7 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.misc.getJobTitles, getJobTitlesAction);
     addEndpoint(apiRoutes.misc.getDailyTip, getDailyTipAction);
     addEndpoint("/organizations/get-organizations", getOrganizationsAction);
+    addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventService.getUnfulfilledEventAsync);
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);

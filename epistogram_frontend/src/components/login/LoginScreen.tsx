@@ -6,7 +6,7 @@ import { useNavigation } from "../../services/navigatior";
 import { useShowErrorDialog } from "../../services/notifications";
 import { useLogInUser } from "../../services/openEndpointService";
 import SingleInput from "../singleInput/SingleInput";
-import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../HOC/AuthenticationFrame";
+import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from './loginScreen.module.scss';
 import { getAssetUrl } from "../../frontendHelpers";

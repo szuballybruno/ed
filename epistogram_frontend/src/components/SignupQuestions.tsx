@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { AnswerSignupQuestionDTO } from "../models/shared_models/AnswerSignupQuestionDTO";
 import { useAnswerSignupQuestion, useSignupData } from "../services/openEndpointService";
 import { SingupQuestionSlides, useSignupQuestionsState } from "./exam/SingupQuestionSlides";
-import { LoadingFrame } from "./HOC/LoadingFrame";
+import { LoadingFrame } from "./system/LoadingFrame";
 
 export const SignupQuestions = (props: {
     onPrevoiusOverNavigation: () => void,

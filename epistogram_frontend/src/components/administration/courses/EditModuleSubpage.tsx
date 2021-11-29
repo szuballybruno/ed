@@ -4,7 +4,7 @@ import { useIntParam } from "../../../frontendHelpers"
 import { ModuleAdminEditDTO } from "../../../models/shared_models/ModuleAdminEditDTO"
 import { useModuleEditData, useSaveModule } from "../../../services/moduleService"
 import { showNotification, useShowErrorDialog } from "../../../services/notifications"
-import { LoadingFrame } from "../../HOC/LoadingFrame"
+import { LoadingFrame } from "../../system/LoadingFrame"
 import { EpistoEntry } from "../../universal/EpistoEntry"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
 

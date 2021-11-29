@@ -1,14 +1,14 @@
 import { Flex, FlexProps } from "@chakra-ui/layout";
 import { Divider } from "@chakra-ui/react";
-import {ExpandMore, InfoOutlined} from "@mui/icons-material";
-import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
+import { ExpandMore, InfoOutlined } from "@mui/icons-material";
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
 import { usePersonalityData } from "../../services/dataService";
-import { LoadingFrame } from "../HOC/LoadingFrame";
+import { LoadingFrame } from "../system/LoadingFrame";
 import { PersonalityChart } from "./PersonalityChart";
-import React, {useRef, useState} from "react";
-import {EpistoPopper} from "./EpistoPopper";
-import {EpistoButton} from "./EpistoButton";
-import {getAssetUrl} from "../../frontendHelpers";
+import React, { useRef, useState } from "react";
+import { EpistoPopper } from "./EpistoPopper";
+import { EpistoButton } from "./EpistoButton";
+import { getAssetUrl } from "../../frontendHelpers";
 
 export const PersonalityAssessment = (props: FlexProps) => {
 
@@ -30,16 +30,16 @@ export const PersonalityAssessment = (props: FlexProps) => {
         {
             title: "Egyedül, vagy csoportosan tanulsz szívesebben?",
             description: descriptions?.category1
-        },{
+        }, {
             title: "Térben vizualizálsz, vagy inkább hangosan kimondod az információt?",
             description: descriptions?.category2
-        },{
+        }, {
             title: "Gyakorlati vagy elméleti oldalról érdekel inkább egy-egy adott probléma?",
             description: descriptions?.category3
-        },{
+        }, {
             title: "Hallás, vagy látás után jegyzel meg könnyebben valamit?",
             description: descriptions?.category4
-        },{
+        }, {
             title: "Kreatív, vagy analitikus gondolkodst részesítesz előnyben?",
             description: descriptions?.category5
         }
@@ -67,7 +67,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
         >
 
             <EpistoButton
-                onClick={() => {setIsShowHelperPopper(true)}}
+                onClick={() => { setIsShowHelperPopper(true) }}
                 ref={ref}
                 style={{
                     position: "absolute",
@@ -75,10 +75,10 @@ export const PersonalityAssessment = (props: FlexProps) => {
                     left: 0
                 }}
                 icon={<InfoOutlined />}>
-                <Typography style={{marginLeft: 5, fontSize: "0.9em"}}>Mit jelent ez a grafikon?</Typography>
+                <Typography style={{ marginLeft: 5, fontSize: "0.9em" }}>Mit jelent ez a grafikon?</Typography>
             </EpistoButton>
 
-            <EpistoPopper placementX={"left"} isOpen={isShowHelperPopper} handleClose={() => {setIsShowHelperPopper(false)}} target={ref?.current}>
+            <EpistoPopper placementX={"left"} isOpen={isShowHelperPopper} handleClose={() => { setIsShowHelperPopper(false) }} target={ref?.current}>
                 <Typography style={{ maxWidth: "300px", fontSize: "0.9em" }}>
                     A fenti grafikonon 5-5 tulajdonság párt láthatsz, melyek 0-7
                     között vehetnek fel értéket, attól függően, hogy az adott tulajdonság mennyire jellemző rád.

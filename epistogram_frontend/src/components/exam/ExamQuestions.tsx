@@ -9,7 +9,7 @@ import { QuestionTypeEnum } from "../../models/shared_models/types/sharedTypes";
 import { useSaveExamAnswer } from "../../services/examService";
 import { useShowErrorDialog } from "../../services/notifications";
 import { translatableTexts } from "../../translatableTexts";
-import { LoadingFrame } from "../HOC/LoadingFrame";
+import { LoadingFrame } from "../system/LoadingFrame";
 import { ExamLayout } from "./ExamLayout";
 import { QuestionAnswer } from "./QuestionAnswer";
 

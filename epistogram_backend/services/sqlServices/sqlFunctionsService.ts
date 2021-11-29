@@ -59,7 +59,8 @@ export class SQLFunctionsService {
         amount: number,
         activitySessionId: number | null,
         videoId: number | null,
-        givenAnswerStreakId: number | null) => {
+        givenAnswerStreakId: number | null,
+        activityStreakId: number | null) => {
 
         return this.execSQLFunctionAsync<number>(
             "insert_coin_acquire",
@@ -68,7 +69,8 @@ export class SQLFunctionsService {
                 amount,
                 activitySessionId,
                 videoId,
-                givenAnswerStreakId
+                givenAnswerStreakId,
+                activityStreakId
             ]
         )
     }

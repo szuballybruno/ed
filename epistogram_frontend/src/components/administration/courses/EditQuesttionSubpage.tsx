@@ -9,7 +9,7 @@ import { AnswerEditDTO } from "../../../models/shared_models/AnswerEditDTO";
 import { getVirtualId } from "../../../services/idService";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useEditQuestionData, useSaveQuestion } from "../../../services/questionsService";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { LoadingFrame } from "../../system/LoadingFrame";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
 import { FlexList } from "../../universal/FlexList";

@@ -7,8 +7,8 @@ import { useSetNewPassword } from "../services/dataService";
 import { useNavigation } from "../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/notifications";
 import { EpistoHeader } from "./EpistoHeader";
-import { LoadingFrame } from "./HOC/LoadingFrame";
-import { ContentWrapper, MainWrapper } from "./HOC/MainPanels";
+import { LoadingFrame } from "./system/LoadingFrame";
+import { ContentWrapper, MainWrapper } from "./system/MainPanels";
 import Navbar from "./navbar/Navbar";
 import { EpistoButton } from "./universal/EpistoButton";
 

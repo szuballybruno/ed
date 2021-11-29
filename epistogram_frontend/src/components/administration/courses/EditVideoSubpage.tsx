@@ -15,7 +15,7 @@ import { getVirtualId } from "../../../services/idService";
 import { useNavigation } from "../../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/notifications";
 import { useSaveVideo, useUploadVideoFileAsync, useVideoEditData } from "../../../services/videoService";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { LoadingFrame } from "../../system/LoadingFrame";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
 import { FlexList } from "../../universal/FlexList";

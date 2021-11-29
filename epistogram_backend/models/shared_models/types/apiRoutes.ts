@@ -13,6 +13,10 @@ export const apiRoutes = {
         getDailyTip: "/misc/get-get-daily-tip"
     },
 
+    event: {
+        getUnfulfilledEvent: "/event/get-unfulfilled-event"
+    },
+
     userStats: {
         getUserStats: "/userstats/get-user-stats"
     },

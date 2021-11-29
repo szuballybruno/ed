@@ -1,25 +1,25 @@
 import { Box, Container, Flex } from "@chakra-ui/react";
-import {  Tab, Tabs, Typography } from "@mui/material";
+import { Tab, Tabs, Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { useParams } from "react-router-dom";
 import { getAssetUrl, getQueryParam } from "../../frontendHelpers";
 import { useCourseDetails, useStartCourse } from "../../services/courseService";
 import { useNavigation } from "../../services/navigatior";
 import { showNotification, useShowErrorDialog } from "../../services/notifications";
-import { MainWrapper } from "../HOC/MainPanels";
+import { MainWrapper } from "../system/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { EpistoButton } from "../universal/EpistoButton";
 import { TabPanel } from "./TabPanel";
-import {FlexListItem} from "../universal/FlexListItem";
-import {FlexListTitleSubtitle} from "../universal/FlexListTitleSubtitle";
+import { FlexListItem } from "../universal/FlexListItem";
+import { FlexListTitleSubtitle } from "../universal/FlexListTitleSubtitle";
 import { CourseDetailsRequirementsSection } from "./CourseDetailsRequirementsSection";
-import {CourseDetailsSummarySection} from "./CourseDetailsSummarySection";
-import {CourseDetailsContentSection} from "./CourseDetailsContentSection";
-import {CourseDetailsTeacherSection} from "./CourseDetailsTeacherSection";
-import {CourseDetailsRatingSection} from "./CourseDetailsRatingSection";
-import {CourseDetailsBriefingInfoItem} from "./CourseDetailsBriefingInfoItem";
-import {translatableTexts} from "../../translatableTexts";
-import {mockCourseDetails} from "../../mockData";
+import { CourseDetailsSummarySection } from "./CourseDetailsSummarySection";
+import { CourseDetailsContentSection } from "./CourseDetailsContentSection";
+import { CourseDetailsTeacherSection } from "./CourseDetailsTeacherSection";
+import { CourseDetailsRatingSection } from "./CourseDetailsRatingSection";
+import { CourseDetailsBriefingInfoItem } from "./CourseDetailsBriefingInfoItem";
+import { translatableTexts } from "../../translatableTexts";
+import { mockCourseDetails } from "../../mockData";
 
 const CourseDetailsPage = () => {
 
@@ -85,10 +85,10 @@ const CourseDetailsPage = () => {
             color="white"
             alignItems={"center"}
             justifyContent={"center"}>
-        <Typography>
-            {mockCourseDetails.teacherNameShort}
-        </Typography>
-    </Flex>
+            <Typography>
+                {mockCourseDetails.teacherNameShort}
+            </Typography>
+        </Flex>
 
     return <MainWrapper>
 
@@ -168,7 +168,7 @@ const CourseDetailsPage = () => {
                             </Tabs>
                         </Box>
 
-                        { /* Sections */ }
+                        { /* Sections */}
 
                         <TabPanel value={currentTab} index={0}>
                             <CourseDetailsSummarySection

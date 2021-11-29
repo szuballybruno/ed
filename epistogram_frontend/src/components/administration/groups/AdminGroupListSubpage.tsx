@@ -7,7 +7,7 @@ import React, { ReactNode, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useNavigation } from "../../../services/navigatior";
 import { FloatAddButton } from "../../FloatAddButton";
-import { LoadingFrame } from "../../HOC/LoadingFrame";
+import { LoadingFrame } from "../../system/LoadingFrame";
 import IntersectionObserverWrap from "../../IntersectionObserverWrapper";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoSearch } from "../../universal/EpistoSearch";

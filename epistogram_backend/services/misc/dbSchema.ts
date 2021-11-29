@@ -53,6 +53,7 @@ import { UserSessionDailyView } from "../../models/views/UserActivityDailyView";
 import { UserSessionView } from "../../models/views/UserSessionView";
 import { ActivitySession } from "../../models/entity/ActivitySession";
 import { ActivityStreak } from "../../models/entity/ActivityStreak";
+import { ActivityStreakView } from "../../models/views/ActivityStreakView";
 
 export const dbSchema = {
 
@@ -79,7 +80,8 @@ export const dbSchema = {
         "video_playback_sample_view",
         "user_session_view",
         "user_stats_view",
-        "user_session_daily_view"
+        "user_session_daily_view",
+        "activity_streak_view"
     ],
 
     functionScripts: [
@@ -110,7 +112,8 @@ export const dbSchema = {
         CourseAdminDetailedView,
         UserStatsView,
         UserSessionDailyView,
-        UserSessionView
+        UserSessionView,
+        ActivityStreakView
     ],
 
     entities: [

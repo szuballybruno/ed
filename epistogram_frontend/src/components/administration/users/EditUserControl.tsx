@@ -11,7 +11,7 @@ import { useJobTitles } from "../../../services/dataService";
 import { useOrganizations } from "../../../services/organizationsService";
 import { translatableTexts } from "../../../translatableTexts";
 import { AddFrame } from "../../add_frame/AddFrame";
-import { CurrentUserContext } from "../../HOC/AuthenticationFrame";
+import { CurrentUserContext } from "../../system/AuthenticationFrame";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 
 export const roles = [
