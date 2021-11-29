@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { AuthenticationFrame } from "./components/system/AuthenticationFrame";
 import { ErrorDialogFrame } from "./components/system/DialogFrame";
+import { EventListener } from "./components/system/EventListener";
 import { NotificationsFrame } from "./components/system/NotificationsFrame";
 import { UnderMaintanence } from "./components/UnderMaintanence";
 import { applicationRoutes } from "./configuration/applicationRoutes";
@@ -64,7 +65,9 @@ ReactDOM.render(
                                 <AuthenticationFrame>
                                     <ErrorDialogFrame>
                                         <NotificationsFrame>
-                                            <MainRouting />
+                                            <EventListener>
+                                                <MainRouting />
+                                            </EventListener>
                                         </NotificationsFrame>
                                     </ErrorDialogFrame>
                                 </AuthenticationFrame>

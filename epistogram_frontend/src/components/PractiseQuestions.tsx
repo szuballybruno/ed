@@ -38,7 +38,7 @@ const NoQuestionsAvailable = () => {
             <Player
                 autoplay
                 loop
-                src={getAssetUrl("test_your_knowledge_lotties/writing_exam.json")}
+                src={getAssetUrl("lottie_json/writing_exam.json")}
                 style={{ height: '300px', width: '300px' }}
             />
         </Flex>
@@ -83,7 +83,7 @@ const InitialGreetings = () => {
             <Player
                 autoplay
                 loop
-                src={getAssetUrl("test_your_knowledge_lotties/initial_greetings.json")}
+                src={getAssetUrl("lottie_json/initial_greetings.json")}
                 style={{ height: '300px', width: '300px' }}
             />
         </Flex>

@@ -1,5 +1,6 @@
 import { useQuery } from "react-query"
 import { eventPoolingIntervalInMs } from "../Environemnt";
+import { EventDTO } from "../models/shared_models/EventDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { httpGetAsync } from "./httpClient";
 
@@ -10,12 +11,15 @@ export const useEventListener = () => {
         () => httpGetAsync(apiRoutes.event.getUnfulfilledEvent), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: eventPoolingIntervalInMs,
+        refetchInterval: 3000,//eventPoolingIntervalInMs,
         refetchIntervalInBackground: true,
         notifyOnChangeProps: ["data"]
     });
 
+    console.log("el update: ");
     console.log(data);
 
-    return { data };
+    return {
+        event: data as null | EventDTO
+    };
 }

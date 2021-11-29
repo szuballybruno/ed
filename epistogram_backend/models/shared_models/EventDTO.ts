@@ -1,5 +1,6 @@
-import { EventCoinAcquireNotificationDTO } from "./EventCoinAcquireNotificationDTO";
+import { EventType } from "./types/sharedTypes";
 
-export type EventDTO = {
-    coinAcquireNotification: EventCoinAcquireNotificationDTO | null
+export class EventDTO {
+    type: EventType;
+    data: any;
 }

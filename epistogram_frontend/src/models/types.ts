@@ -15,9 +15,10 @@ export type ApplicationRoute = {
 }
 
 export type DialogOptions = {
-    title?: string,
-    description?: string,
-    buttons?: ButtonType[]
+    title?: string;
+    description?: string;
+    buttons?: ButtonType[];
+    hideDefaultCloseButton?: boolean;
 }
 
 export type ButtonType = {

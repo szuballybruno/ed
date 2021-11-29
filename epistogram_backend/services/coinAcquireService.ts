@@ -152,10 +152,8 @@ export class CoinAcquireService {
         // add acquire event 
         this._eventService
             .addEvent("coin_acquire", {
-                coinAcquireNotification: {
-                    amount,
-                    reason
-                }
+                amount,
+                reason
             });
     }
 }

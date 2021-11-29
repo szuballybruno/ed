@@ -16,7 +16,14 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
         setIsOpen(false);
     }
 
-    const [buttons, setButtons] = useState<ButtonType[]>([]);
+    const [buttons, setButtons] = useState<ButtonType[]>(dialogOptions?.hideDefaultCloseButton
+        ? []
+        : [
+            {
+                title: "Bezaras",
+                action: closeDialog
+            }
+        ]);
 
     const openDialog = (opt?: DialogOptions) => {
 
@@ -28,17 +35,8 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
             if (opt.description)
                 setDescription(opt.description);
 
-            let defaultButtons = [
-                {
-                    title: "Bezaras",
-                    action: closeDialog
-                }
-            ];
-
             if (opt.buttons)
-                defaultButtons = defaultButtons.concat(opt.buttons);
-
-            setButtons(defaultButtons);
+                setButtons(buttons.concat(opt.buttons ?? []));
         }
 
         setIsOpen(true);
@@ -89,9 +87,9 @@ export const EpistoDialog = (props: {
         <Flex id="dialogTitle" direction="column" minWidth="500px" height={fullScreenY ? "90vh" : undefined}>
 
             <Flex justify="space-between">
-                <DialogTitle id="alert-dialog-title">
+                {title && <DialogTitle id="alert-dialog-title">
                     {title}
-                </DialogTitle>
+                </DialogTitle>}
 
                 {showCloseButton && <Close
                     onClick={closeDialog}
@@ -107,7 +105,7 @@ export const EpistoDialog = (props: {
 
         </Flex>
 
-        <DialogActions>
+        <Flex>
             {buttons
                 .map(x => <EpistoButton
                     variant="outlined"
@@ -119,6 +117,6 @@ export const EpistoDialog = (props: {
                     {x.title}
                 </EpistoButton>)}
             {buttonComponents}
-        </DialogActions>
+        </Flex>
     </Dialog>
 }

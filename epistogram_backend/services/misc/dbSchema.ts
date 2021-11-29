@@ -54,6 +54,7 @@ import { UserSessionView } from "../../models/views/UserSessionView";
 import { ActivitySession } from "../../models/entity/ActivitySession";
 import { ActivityStreak } from "../../models/entity/ActivityStreak";
 import { ActivityStreakView } from "../../models/views/ActivityStreakView";
+import { Event } from "../../models/entity/Event";
 
 export const dbSchema = {
 
@@ -152,6 +153,7 @@ export const dbSchema = {
         GivenAnswerStreak,
         GivenAnswerStreakGivenAnswerBridge,
         ActivitySession,
-        ActivityStreak
+        ActivityStreak,
+        Event
     ]
 }

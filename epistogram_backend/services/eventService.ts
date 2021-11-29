@@ -2,24 +2,27 @@ import { Event } from "../models/entity/Event";
 import { EventDTO } from "../models/shared_models/EventDTO";
 import { EventType } from "../models/shared_models/types/sharedTypes";
 import { DbConnectionService } from "./databaseConnectionService";
+import { MapperService } from "./mapperService";
 
 export class EventService {
 
     private _dbConnection: DbConnectionService;
+    private _mapperService: MapperService;
 
-    constructor(conn: DbConnectionService) {
+    constructor(mapperService: MapperService, conn: DbConnectionService) {
 
         this._dbConnection = conn;
+        this._mapperService = mapperService;
     }
 
-    async addEvent(eventType: EventType, eventDTO: EventDTO) {
+    async addEvent(eventType: EventType, eventDataDTO: any) {
 
         await this._dbConnection
             .getRepository(Event)
             .insert({
                 type: eventType,
                 isFulfilled: false,
-                data: JSON.stringify(eventDTO)
+                data: JSON.stringify(eventDataDTO)
             });
     }
 
@@ -32,6 +35,12 @@ export class EventService {
             .orderBy("e.creationDate")
             .getMany();
 
-        return events.length > 0 ? events[0] : null;
+        if (events.length === 0)
+            return null;
+
+        const event = events[0];
+
+        return this._mapperService
+            .useMapperFunction(Event, EventDTO, event);
     }
 }

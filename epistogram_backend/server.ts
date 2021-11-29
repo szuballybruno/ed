@@ -61,7 +61,7 @@ const initializeAsync = async () => {
     const dbConnectionService = new DbConnectionService();
     const userStatsService = new UserStatsService(dbConnectionService, mapperService);
     const sqlFunctionService = new SQLFunctionsService(dbConnectionService);
-    const eventService = new EventService(dbConnectionService);
+    const eventService = new EventService(mapperService, dbConnectionService);
     const coinAcquireService = new CoinAcquireService(sqlFunctionService, dbConnectionService, eventService);
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
 
@@ -111,7 +111,7 @@ const initializeAsync = async () => {
     addEndpoint(apiRoutes.misc.getJobTitles, getJobTitlesAction);
     addEndpoint(apiRoutes.misc.getDailyTip, getDailyTipAction);
     addEndpoint("/organizations/get-organizations", getOrganizationsAction);
-    addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventService.getUnfulfilledEventAsync);
+    addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);

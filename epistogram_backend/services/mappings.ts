@@ -2,6 +2,7 @@ import { Answer } from "../models/entity/Answer";
 import { Course } from "../models/entity/Course";
 import { CourseCategory } from "../models/entity/CourseCategory";
 import { CourseModule } from "../models/entity/CourseModule";
+import { Event } from "../models/entity/Event";
 import { Exam } from "../models/entity/Exam";
 import { JobTitle } from "../models/entity/JobTitle";
 import { Organization } from "../models/entity/Organization";
@@ -22,6 +23,7 @@ import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
 import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
+import { EventDTO } from "../models/shared_models/EventDTO";
 import { ExamDTO } from "../models/shared_models/ExamDTO";
 import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
@@ -101,6 +103,12 @@ export const initializeMappings = (mapperService: MapperService) => {
             totalSessionLengthSeconds: view.totalSessionLengthSeconds,
             totalSuccessfulExamRate: view.totalSuccessfulExamRate,
             totalVideoPlaybackSeconds: view.totalVideoPlaybackSeconds
+        }));
+
+    mapperService
+        .addMapperFunction(Event, EventDTO, event => ({
+            data: JSON.parse(event.data),
+            type: event.type
         }));
 }
 
