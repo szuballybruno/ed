@@ -11,7 +11,7 @@ export const useEventListener = () => {
         () => httpGetAsync(apiRoutes.event.getUnfulfilledEvent), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: 3000,//eventPoolingIntervalInMs,
+        refetchInterval: 30 * 1000, // every 30s //eventPoolingIntervalInMs,
         refetchIntervalInBackground: true,
         notifyOnChangeProps: ["data"]
     });

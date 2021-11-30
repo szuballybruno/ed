@@ -4,6 +4,7 @@ import { ActivitySession } from "./ActivitySession";
 import { AnswerSession } from "./AnswerSession";
 import { CoinAcquire } from "./CoinAcquire";
 import { Course } from "./Course";
+import { Event } from "./Event";
 import { JobTitle } from "./JobTitle";
 import { Organization } from "./Organization";
 import { Role } from "./Role";
@@ -144,4 +145,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => ActivitySession, x => x.user)
     activitySessions: ActivitySession[];
+
+    // events 
+    @JoinColumn()
+    @OneToMany(_ => Event, x => x.user)
+    events: Event[];
 }

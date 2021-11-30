@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import { Answer } from "./Answer";
 import { AnswerGivenAnswerBridge } from "./AnswerGivenAnswerBridge";
 import { AnswerSession } from "./AnswerSession";
+import { CoinAcquire } from "./CoinAcquire";
 import { GivenAnswerStreakGivenAnswerBridge } from "./GivenAnswerStreakGivenAnswerBridge";
 import { Question } from "./Question";
 
@@ -45,4 +46,9 @@ export class GivenAnswer {
     @JoinColumn()
     @OneToMany(_ => GivenAnswerStreakGivenAnswerBridge, x => x.givenAnswer)
     givenAnswerStreakBridges: GivenAnswerStreakGivenAnswerBridge[];
+
+    // coin acquires 
+    @JoinColumn()
+    @OneToMany(_ => CoinAcquire, x => x.givenAnswer)
+    coinAcquires: CoinAcquire[];
 }

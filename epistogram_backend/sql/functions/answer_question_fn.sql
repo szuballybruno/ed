@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION "answer_question_fn"
 	"p_answer_ids" integer[],
 	"p_is_practise_answer" boolean
 )
-RETURNS integer[]
+RETURNS TABLE (correct_answer_ids integer[], given_answer_id integer) 
 AS $$ 
 
 DECLARE
@@ -56,13 +56,8 @@ BEGIN
 	FROM UNNEST ("p_answer_ids") AS "answer_ids";
 	
 	-- return correct answer ids
-	RETURN "var_correct_answer_ids";
+	RETURN QUERY SELECT
+		var_correct_answer_ids,
+		var_given_answer_id;
 END 
 $$ LANGUAGE 'plpgsql';
-
--- SELECT public.answer_question_fn(
--- 	17, 
--- 	40, 
--- 	ARRAY[85,87], 
--- 	false
--- )

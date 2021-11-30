@@ -22,9 +22,11 @@ export const answerExamQuestionAsync = async (userId: number, dto: AnswerQuestio
         .saveUserSessionActivityAsync(userId, "exam");
 
     return answerQuestionAsync(
+        userId,
         dto.answerSessionId,
         dto.questionId,
-        dto.answerIds);
+        dto.answerIds,
+        true);
 }
 
 export const deleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem: boolean) => {

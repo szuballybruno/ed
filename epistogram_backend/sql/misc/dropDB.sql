@@ -33,3 +33,5 @@ DROP TABLE IF EXISTS public.coin_acquire CASCADE;
 DROP TABLE IF EXISTS public.given_answer_streak CASCADE;
 DROP TABLE IF EXISTS public.given_answer_streak_given_answer_bridge CASCADE;
 DROP TABLE IF EXISTS public.activity_session CASCADE;
+DROP TABLE IF EXISTS public.activity_streak CASCADE;
+DROP TABLE IF EXISTS public.event CASCADE;

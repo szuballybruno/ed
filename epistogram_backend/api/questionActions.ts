@@ -1,13 +1,11 @@
-import { Request } from "express";
-import { Answer } from "../models/entity/Answer";
 import { Question } from "../models/entity/Question";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO";
-import { toAnswerDTO, toAnswerEditDTO } from "../services/mappings";
+import { toAnswerEditDTO } from "../services/mappings";
 import { saveQuestionAsync } from "../services/questionService";
 import { answerVideoQuestionAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, getAsyncActionHandler, throwNotImplemented, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
 
 export const answerVideoQuestionAction = async (params: ActionParamsType) => {
 
@@ -16,7 +14,7 @@ export const answerVideoQuestionAction = async (params: ActionParamsType) => {
     const questionId = withValueOrBadRequest<number>(dto.questionId, "number");
     const answerSessionId = withValueOrBadRequest<number>(dto.answerSessionId, "number");
 
-    return answerVideoQuestionAsync(answerSessionId, questionId, answerIds);
+    return answerVideoQuestionAsync(params.userId, answerSessionId, questionId, answerIds);
 };
 
 export const getQuestionEditDataAction = async (params: ActionParamsType) => {

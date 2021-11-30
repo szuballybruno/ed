@@ -179,6 +179,7 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
 
     // calucate and save watched percent
     const watchedPercent = await getVideoWatchedPercentAsync(userId, videoId, chunks);
+
     // 5% is a very low number only for development
     const newIsWatchedState = watchedPercent > 5;
 
@@ -194,6 +195,16 @@ export const saveVideoPlaybackSample = async (userId: number, dto: VideoPlayback
     const isWatchedStateChanged = isCompletedBefore?.isCompleted !== isCompletedAfter?.isCompleted;
 
     const maxWathcedSeconds = await getMaxWatchedSeconds(userId, videoId);
+
+    // if is watched state changed 
+    // reward user with episto coins
+    if (isWatchedStateChanged) {
+
+        await staticProvider
+            .services
+            .coinAcquireService
+            .acquireVideoWatchedCoinsAsync(userId, videoId);
+    }
 
     // save user activity
     await staticProvider

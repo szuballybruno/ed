@@ -42,7 +42,7 @@ export const answerPractiseQuestionAsync = async (userId: number, qu: AnswerQues
 
     const practiseAnswerSession = await getUserPractiseAnswerSession(userId);
 
-    return await answerQuestionAsync(practiseAnswerSession.id, qu.questionId, qu.answerIds, true);
+    return await answerQuestionAsync(userId, practiseAnswerSession.id, qu.questionId, qu.answerIds, false, true);
 }
 
 export const getUserPractiseAnswerSession = async (userId: number) => {

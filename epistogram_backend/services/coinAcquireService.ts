@@ -1,6 +1,6 @@
 import { CoinAcquire } from "../models/entity/CoinAcquire";
+import { GivenAnswer } from "../models/entity/GivenAnswer";
 import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
-import { CoinAcquireReasonType } from "../models/shared_models/types/sharedTypes";
 import { ActivityStreakView } from "../models/views/ActivityStreakView";
 import { UserSessionDailyView } from "../models/views/UserActivityDailyView";
 import { trimTimeFromDate } from "../utilities/helpers";
@@ -34,6 +34,49 @@ export class CoinAcquireService {
     }
 
     /**
+     * Reward user after a video is watched fo the first time 
+     * 
+     * @param userId 
+     * @param videoId 
+     */
+    acquireVideoWatchedCoinsAsync = async (userId: number, videoId: number) => {
+
+        await this._funcService
+            .insertCoinAcquiredFn({ userId, amount: 1, videoId });
+    }
+
+    /**
+     * Reward user after a question is answered correctly for the first time 
+     * 
+     * @param userId 
+     * @param givenAnswerId 
+     */
+    acquireQuestionAnswerCoinsAsync = async (userId: number, givenAnswerId: number) => {
+
+        // do not reward user if the question is already answered 
+        // correctly and a coin is previously acquired for that 
+        const newGivenAnswer = await this._connService
+            .getRepository(GivenAnswer)
+            .findOneOrFail(givenAnswerId);
+
+        const alreadyAcquiredCoinsForCurrentQuestionId = await this._connService
+            .getRepository(CoinAcquire)
+            .createQueryBuilder("ca")
+            .leftJoinAndSelect("ca.givenAnswer", "ga")
+            .where("ca.userId = :userId", { userId })
+            .andWhere("ga.question_id = :questionId", { questionId: newGivenAnswer.questionId })
+            .andWhere("ca.given_answer_id IS NOT NULL")
+            .getMany();
+
+        if (alreadyAcquiredCoinsForCurrentQuestionId.length > 0)
+            return;
+
+        // insert coin
+        await this._funcService
+            .insertCoinAcquiredFn({ userId, amount: 1, givenAnswerId });
+    }
+
+    /**
      * Generic activity coins are given at the start of each new activity session,
      * only 3 can be given in one day's period (by date, not 24h)  
      * 
@@ -41,7 +84,7 @@ export class CoinAcquireService {
      * @param activitySessionId 
      * @returns 
      */
-    acquireGenericActivityCoin = async (userId: number, activitySessionId: number) => {
+    private acquireGenericActivityCoin = async (userId: number, activitySessionId: number) => {
 
         // check if it's not more than 3 sessions today
         const today = trimTimeFromDate(new Date());
@@ -70,7 +113,7 @@ export class CoinAcquireService {
 
         // add acquire 
         await this._funcService
-            .insertCoinAcquiredFn(userId, 10, activitySessionId, null, null, null);
+            .insertCoinAcquiredFn({ userId, amount: 10, activitySessionId });
     }
 
     /**
@@ -80,7 +123,7 @@ export class CoinAcquireService {
      * @param userId 
      * @returns 
      */
-    acquireActivityStreakCoin = async (userId: number) => {
+    private acquireActivityStreakCoin = async (userId: number) => {
 
         const currentActivityStreak = await this._connService
             .getRepository(ActivityStreakView)
@@ -147,7 +190,7 @@ export class CoinAcquireService {
 
         // actually insert the new coin acquire
         await this._funcService
-            .insertCoinAcquiredFn(userId, amount, null, null, null, currentActivityStreakId);
+            .insertCoinAcquiredFn({ userId, amount, activityStreakId: currentActivityStreakId });
 
         // add acquire event 
         this._eventService

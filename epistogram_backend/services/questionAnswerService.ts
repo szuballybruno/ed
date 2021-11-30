@@ -22,16 +22,32 @@ export const createAnswerSessionAsync = async (
 }
 
 export const answerQuestionAsync = async (
+    userId: number,
     answerSessionId: number,
     questionId: number,
     answerIds: number[],
+    isExamQuestion: boolean,
     isPractiseAnswer?: boolean) => {
 
-    const correctAnswerIds = await staticProvider
+    const { correctAnswerIds, givenAnswerId } = await staticProvider
         .services
         .sqlFunctionService
         .answerQuestionFn(answerSessionId, questionId, answerIds, !!isPractiseAnswer);
-    const isCorrect = correctAnswerIds.sort().join(',') === answerIds.sort().join(',');
+
+    const isCorrect = correctAnswerIds
+        .sort()
+        .join(',') === answerIds
+            .sort()
+            .join(',');
+
+    // if answer is correct give coin rewards 
+    if (isCorrect && !isExamQuestion) {
+
+        await staticProvider
+            .services
+            .coinAcquireService
+            .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
+    }
 
     return {
         correctAnswerIds: correctAnswerIds,

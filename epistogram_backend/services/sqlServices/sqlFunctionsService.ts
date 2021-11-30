@@ -9,26 +9,35 @@ export class SQLFunctionsService {
         this._connectionService = conn;
     }
 
-    execSQLFunctionAsync = async <T>(fnName: string, args: any[]) => {
+    execSQLFunctionAsync = async <T>(fnName: string, args: any[], isMultiResult?: boolean) => {
 
         // create args indicies
         const argsIndicies = [] as string[];
 
         args
-            .forEach((x, index) => argsIndicies.push(`$${index + 1}`));
+            .forEach((x, index) => argsIndicies
+                .push(`$${index + 1}`));
 
         // create statement 
-        const statement = `SELECT ${fnName}(${argsIndicies.join(",")})`;
+        const statement = `SELECT ${isMultiResult ? "* FROM" : ""} ${fnName}(${argsIndicies.join(",")})`;
 
         // get results
         const result = await this._connectionService
             .getSQLConnection()
-            .executeSQL(statement, args);
+            .executeSQL(statement, args.map(x => x === undefined ? null : x));
 
         const firstRow = result.rows[0];
-        const fnReturnValue = firstRow[fnName];
 
-        return fnReturnValue as T;
+        if (isMultiResult) {
+
+            const returnObject = firstRow as T;
+            return returnObject;
+        }
+        else {
+
+            const fnReturnValue = firstRow[fnName];
+            return fnReturnValue as T;
+        }
     }
 
     answerSignupQuestionFn = (userId: number, questionId: number, answerId: number) => {
@@ -42,35 +51,44 @@ export class SQLFunctionsService {
             ]);
     }
 
-    answerQuestionFn = (answerSessionId: number, questionId: number, answerIds: number[], isPractiseAnswer: boolean) => {
+    answerQuestionFn = async (answerSessionId: number, questionId: number, answerIds: number[], isPractiseAnswer: boolean) => {
 
-        return this.execSQLFunctionAsync<number[]>(
+        const result = await this.execSQLFunctionAsync<{ correct_answer_ids: number[], given_answer_id: number }>(
             "answer_question_fn",
             [
                 answerSessionId,
                 questionId,
                 answerIds,
                 isPractiseAnswer
-            ]);
+            ],
+            true);
+
+        return {
+            correctAnswerIds: result.correct_answer_ids,
+            givenAnswerId: result.given_answer_id
+        }
     }
 
-    insertCoinAcquiredFn = (
+    insertCoinAcquiredFn = (params: {
         userId: number,
         amount: number,
-        activitySessionId: number | null,
-        videoId: number | null,
-        givenAnswerStreakId: number | null,
-        activityStreakId: number | null) => {
+        activitySessionId?: number,
+        videoId?: number,
+        givenAnswerId?: number,
+        givenAnswerStreakId?: number,
+        activityStreakId?: number
+    }) => {
 
         return this.execSQLFunctionAsync<number>(
             "insert_coin_acquire",
             [
-                userId,
-                amount,
-                activitySessionId,
-                videoId,
-                givenAnswerStreakId,
-                activityStreakId
+                params.userId,
+                params.amount,
+                params.activitySessionId,
+                params.videoId,
+                params.givenAnswerId,
+                params.givenAnswerStreakId,
+                params.activityStreakId
             ]
         )
     }

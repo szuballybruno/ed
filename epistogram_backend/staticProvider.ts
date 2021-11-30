@@ -1,4 +1,5 @@
 import { TypeORMConnection } from "./database";
+import { CoinAcquireService } from "./services/coinAcquireService";
 import { DbConnectionService } from "./services/databaseConnectionService";
 import { GlobalConfiguration } from "./services/environment";
 import { MapperService } from "./services/mapperService";
@@ -18,7 +19,8 @@ export const staticProvider = {
         databaseConnectionService: DbConnectionService,
         userStatsService: UserStatsService,
         sqlFunctionService: SQLFunctionsService,
-        userSessionActivityService: UserSessionActivityService
+        userSessionActivityService: UserSessionActivityService,
+        coinAcquireService: CoinAcquireService
     },
     rootDirectory: __dirname,
 }

@@ -80,7 +80,8 @@ const initializeAsync = async () => {
         databaseConnectionService: dbConnectionService,
         userStatsService,
         sqlFunctionService,
-        userSessionActivityService
+        userSessionActivityService,
+        coinAcquireService
     };
 
     const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) => addAPIEndpoint(expressServer, path, action, opt);
