@@ -4,9 +4,9 @@ import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultD
 import { ActivityStreakView } from "../models/views/ActivityStreakView";
 import { UserSessionDailyView } from "../models/views/UserActivityDailyView";
 import { trimTimeFromDate } from "../utilities/helpers";
-import { DbConnectionService } from "./databaseConnectionService";
+import { DbConnectionService } from "./sqlServices/DatabaseConnectionService";
 import { EventService } from "./eventService";
-import { SQLFunctionsService } from "./sqlServices/sqlFunctionsService";
+import { SQLFunctionsService } from "./sqlServices/SQLFunctionsService";
 
 export class CoinAcquireService {
     private _funcService: SQLFunctionsService;

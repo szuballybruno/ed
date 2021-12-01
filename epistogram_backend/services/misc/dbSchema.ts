@@ -114,7 +114,7 @@ export const dbSchema = {
         UserSessionDailyView,
         UserSessionView,
         ActivityStreakView
-    ],
+    ] as any[],
 
     entities: [
         Course,
@@ -153,5 +153,5 @@ export const dbSchema = {
         ActivitySession,
         ActivityStreak,
         Event
-    ]
+    ] as any[]
 }

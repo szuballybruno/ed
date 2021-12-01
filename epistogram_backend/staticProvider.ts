@@ -1,12 +1,11 @@
-import { TypeORMConnection } from "./database";
 import { CoinAcquireService } from "./services/coinAcquireService";
-import { DbConnectionService } from "./services/databaseConnectionService";
+import { DbConnectionService } from "./services/sqlServices/DatabaseConnectionService";
 import { GlobalConfiguration } from "./services/environment";
 import { MapperService } from "./services/mapperService";
-import { SQLConnectionType } from "./services/sqlServices/sqlConnection";
-import { SQLFunctionsService } from "./services/sqlServices/sqlFunctionsService";
+import { SQLFunctionsService } from "./services/sqlServices/SQLFunctionsService";
 import { UserSessionActivityService } from "./services/userSessionActivityService";
 import { UserStatsService } from "./services/userStatsService";
+import { SQLBootstrapperService } from "./services/sqlServices/SQLBootstrapper";
 
 export const staticProvider = {
 
@@ -20,7 +19,8 @@ export const staticProvider = {
         userStatsService: UserStatsService,
         sqlFunctionService: SQLFunctionsService,
         userSessionActivityService: UserSessionActivityService,
-        coinAcquireService: CoinAcquireService
+        coinAcquireService: CoinAcquireService,
+        sqlBootstrapperService: SQLBootstrapperService
     },
     rootDirectory: __dirname,
 }

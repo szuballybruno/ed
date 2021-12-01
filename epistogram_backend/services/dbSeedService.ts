@@ -13,12 +13,12 @@ import { staticProvider } from "../staticProvider";
 import { registerInvitedUserAsync } from "./dataService";
 import { log } from "./misc/logger";
 import { createInvitedUserWithOrgAsync } from "./signupService";
-import { executeSeedScriptAsync } from "./sqlServices/sqlSeedScriptService";
 import { insertVideoAsync } from "./videoService";
 
 export const seedDB = async () => {
 
     const connection = staticProvider.ormConnection;
+    const executeSeedScriptAsync = (script: string) => staticProvider.services.sqlBootstrapperService;
 
     log("seedOrganizations");
     const orgIds = await seedOrganizations(connection);

@@ -1,6 +1,6 @@
 import { SessionActivityType } from "../models/shared_models/types/sharedTypes";
 import { CoinAcquireService } from "./coinAcquireService";
-import { SQLFunctionsService } from "./sqlServices/sqlFunctionsService";
+import { SQLFunctionsService } from "./sqlServices/SQLFunctionsService";
 
 export class UserSessionActivityService {
     private _funcService: SQLFunctionsService;

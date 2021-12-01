@@ -23,14 +23,14 @@ import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideo
 import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { CoinAcquireService } from './services/coinAcquireService';
-import { DbConnectionService } from './services/databaseConnectionService';
+import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { EventService } from './services/eventService';
 import { MapperService } from './services/mapperService';
 import { initializeMappings } from './services/mappings';
 import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/middlewareService';
 import { log, logError } from "./services/misc/logger";
-import { SQLFunctionsService } from './services/sqlServices/sqlFunctionsService';
+import { SQLFunctionsService } from './services/sqlServices/SQLFunctionsService';
 import { UserSessionActivityService } from './services/userSessionActivityService';
 import { UserStatsService } from './services/userStatsService';
 import { staticProvider } from './staticProvider';

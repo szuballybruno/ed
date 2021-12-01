@@ -1,5 +1,5 @@
 import { SessionActivityType } from "../../models/shared_models/types/sharedTypes";
-import { DbConnectionService } from "../databaseConnectionService";
+import { DbConnectionService } from "./DatabaseConnectionService";
 import { log, logObject } from "../misc/logger";
 
 export class SQLFunctionsService {

@@ -1,7 +1,7 @@
 import { Event } from "../models/entity/Event";
 import { EventDTO } from "../models/shared_models/EventDTO";
 import { EventType } from "../models/shared_models/types/sharedTypes";
-import { DbConnectionService } from "./databaseConnectionService";
+import { DbConnectionService } from "./sqlServices/DatabaseConnectionService";
 import { MapperService } from "./mapperService";
 
 export class EventService {
