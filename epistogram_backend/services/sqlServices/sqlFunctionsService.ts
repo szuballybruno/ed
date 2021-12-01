@@ -1,5 +1,6 @@
 import { SessionActivityType } from "../../models/shared_models/types/sharedTypes";
 import { DbConnectionService } from "../databaseConnectionService";
+import { log, logObject } from "../misc/logger";
 
 export class SQLFunctionsService {
     private _connectionService: DbConnectionService;
@@ -10,6 +11,10 @@ export class SQLFunctionsService {
     }
 
     execSQLFunctionAsync = async <T>(fnName: string, args: any[], isMultiResult?: boolean) => {
+
+        logObject("");
+        logObject(`Executing SQL funciton (${fnName})... Args: `);
+        logObject(args);
 
         // create args indicies
         const argsIndicies = [] as string[];
@@ -31,11 +36,19 @@ export class SQLFunctionsService {
         if (isMultiResult) {
 
             const returnObject = firstRow as T;
+
+            logObject("Return value: ");
+            logObject(returnObject);
+
             return returnObject;
         }
         else {
 
             const fnReturnValue = firstRow[fnName];
+
+            logObject("Return value: ");
+            logObject(fnReturnValue);
+
             return fnReturnValue as T;
         }
     }
@@ -51,11 +64,25 @@ export class SQLFunctionsService {
             ]);
     }
 
-    answerQuestionFn = async (answerSessionId: number, questionId: number, answerIds: number[], isPractiseAnswer: boolean) => {
+    answerQuestionFn = async (
+        userId: number,
+        answerSessionId: number,
+        questionId: number,
+        answerIds: number[],
+        isPractiseAnswer: boolean) => {
 
-        const result = await this.execSQLFunctionAsync<{ correct_answer_ids: number[], given_answer_id: number }>(
+        type ReType = {
+            correct_answer_ids: number[],
+            given_answer_id: number,
+            streak_id: number,
+            streak_length: number,
+            is_correct: boolean,
+        };
+
+        const result = await this.execSQLFunctionAsync<ReType>(
             "answer_question_fn",
             [
+                userId,
                 answerSessionId,
                 questionId,
                 answerIds,
@@ -65,7 +92,10 @@ export class SQLFunctionsService {
 
         return {
             correctAnswerIds: result.correct_answer_ids,
-            givenAnswerId: result.given_answer_id
+            givenAnswerId: result.given_answer_id,
+            streakId: result.streak_id,
+            streakLength: result.streak_length,
+            isCorrect: result.is_correct
         }
     }
 

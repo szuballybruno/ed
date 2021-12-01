@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CoinAcquire } from "./CoinAcquire";
-import { GivenAnswerStreakGivenAnswerBridge } from "./GivenAnswerStreakGivenAnswerBridge";
+import { GivenAnswer } from "./GivenAnswer";
+import { User } from "./User";
 
 @Entity()
 export class GivenAnswerStreak {
@@ -9,15 +10,19 @@ export class GivenAnswerStreak {
     id: number;
 
     @Column()
+    isFinalized: boolean;
+
+    // user 
     userId: number;
 
-    @Column()
-    isFinished: boolean;
+    @ManyToOne(_ => User, x => x.activitySessions)
+    @JoinColumn({ name: "user_id" })
+    user: User;
 
-    // given answer bridges
+    // given answers
     @JoinColumn()
-    @OneToMany(_ => GivenAnswerStreakGivenAnswerBridge, x => x.givenAnswerStreak)
-    givenAnswerBridges: GivenAnswerStreakGivenAnswerBridge[];
+    @OneToMany(_ => GivenAnswer, x => x.givenAnswerStreak)
+    givenAnswers: GivenAnswer[];
 
     // coin acquires 
     @JoinColumn()

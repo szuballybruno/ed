@@ -29,16 +29,10 @@ export const answerQuestionAsync = async (
     isExamQuestion: boolean,
     isPractiseAnswer?: boolean) => {
 
-    const { correctAnswerIds, givenAnswerId } = await staticProvider
+    const { correctAnswerIds, givenAnswerId, isCorrect, streakLength, streakId } = await staticProvider
         .services
         .sqlFunctionService
-        .answerQuestionFn(answerSessionId, questionId, answerIds, !!isPractiseAnswer);
-
-    const isCorrect = correctAnswerIds
-        .sort()
-        .join(',') === answerIds
-            .sort()
-            .join(',');
+        .answerQuestionFn(userId, answerSessionId, questionId, answerIds, !!isPractiseAnswer);
 
     // if answer is correct give coin rewards 
     if (isCorrect && !isExamQuestion) {
@@ -47,7 +41,13 @@ export const answerQuestionAsync = async (
             .services
             .coinAcquireService
             .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
+
+        await staticProvider
+            .services
+            .coinAcquireService
+            .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
     }
+
 
     return {
         correctAnswerIds: correctAnswerIds,

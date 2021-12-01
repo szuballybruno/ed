@@ -1,9 +1,8 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Answer } from "./Answer";
 import { AnswerGivenAnswerBridge } from "./AnswerGivenAnswerBridge";
 import { AnswerSession } from "./AnswerSession";
 import { CoinAcquire } from "./CoinAcquire";
-import { GivenAnswerStreakGivenAnswerBridge } from "./GivenAnswerStreakGivenAnswerBridge";
+import { GivenAnswerStreak } from "./GivenAnswerStreak";
 import { Question } from "./Question";
 
 @Entity()
@@ -34,7 +33,7 @@ export class GivenAnswer {
     answerSessionId: number;
 
     @ManyToOne(_ => AnswerSession, x => x.givenAnswers)
-    @JoinColumn({ name: "answerSession_id" })
+    @JoinColumn({ name: "answer_session_id" })
     answerSession: AnswerSession;
 
     // answer bridges
@@ -43,9 +42,12 @@ export class GivenAnswer {
     answerBridges: AnswerGivenAnswerBridge[];
 
     // givenAnswerStreakBridges
-    @JoinColumn()
-    @OneToMany(_ => GivenAnswerStreakGivenAnswerBridge, x => x.givenAnswer)
-    givenAnswerStreakBridges: GivenAnswerStreakGivenAnswerBridge[];
+    @Column({ nullable: true, type: "integer" })
+    givenAnswerStreakId: number | null;
+
+    @JoinColumn({ name: "given_answer_streak_id" })
+    @ManyToOne(_ => GivenAnswerStreak, x => x.givenAnswers)
+    givenAnswerStreak: GivenAnswerStreak;
 
     // coin acquires 
     @JoinColumn()

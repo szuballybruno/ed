@@ -77,6 +77,32 @@ export class CoinAcquireService {
     }
 
     /**
+     * Reward user with coins based on the given answer streak length  
+     * 
+     */
+    handleGivenAnswerStreakCoinsAsync = async (userId: number, streakId: number, streakLength: number) => {
+
+        const prevCoinsGivenForStreak = await this._connService
+            .getRepository(CoinAcquire)
+            .createQueryBuilder("ca")
+            .where("ca.userId = :userId", { userId })
+            .andWhere("ca.given_answer_streak_id = :gasid", { gasid: streakId })
+            .getMany();
+
+        if (streakLength === 5 && prevCoinsGivenForStreak.length === 0) {
+
+            await this._funcService
+                .insertCoinAcquiredFn({ userId, amount: 5, givenAnswerStreakId: streakId });
+        }
+
+        if (streakLength === 10 && prevCoinsGivenForStreak.length === 0) {
+
+            await this._funcService
+                .insertCoinAcquiredFn({ userId, amount: 15, givenAnswerStreakId: streakId });
+        }
+    }
+
+    /**
      * Generic activity coins are given at the start of each new activity session,
      * only 3 can be given in one day's period (by date, not 24h)  
      * 
@@ -89,6 +115,7 @@ export class CoinAcquireService {
         // check if it's not more than 3 sessions today
         const today = trimTimeFromDate(new Date());
 
+        // TODO
         const todaysInfo = await this._connService
             .getRepository(UserSessionDailyView)
             .createQueryBuilder("us")

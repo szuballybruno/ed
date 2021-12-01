@@ -48,7 +48,6 @@ import { CourseModule } from "../../models/entity/CourseModule";
 import { UserStatsView } from "../../models/views/UserStatsView";
 import { CoinAcquire } from "../../models/entity/CoinAcquire";
 import { GivenAnswerStreak } from "../../models/entity/GivenAnswerStreak";
-import { GivenAnswerStreakGivenAnswerBridge } from "../../models/entity/GivenAnswerStreakGivenAnswerBridge";
 import { UserSessionDailyView } from "../../models/views/UserActivityDailyView";
 import { UserSessionView } from "../../models/views/UserSessionView";
 import { ActivitySession } from "../../models/entity/ActivitySession";
@@ -151,7 +150,6 @@ export const dbSchema = {
         CourseModule,
         CoinAcquire,
         GivenAnswerStreak,
-        GivenAnswerStreakGivenAnswerBridge,
         ActivitySession,
         ActivityStreak,
         Event
