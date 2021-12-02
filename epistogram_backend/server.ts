@@ -20,7 +20,6 @@ import { answerSignupQuestionAction, getSignupDataAction, getUserPersonalityData
 import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUserAdministrationUserListAction, inviteUserAction, updateUserAction } from './api/userActions';
 import { UserStatsController } from './api/userStatsController';
 import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileChunksAction } from './api/videoActions';
-import { initializeDBAsync } from './database';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { CoinAcquireService } from './services/coinAcquireService';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
@@ -36,33 +35,32 @@ import { UserStatsService } from './services/userStatsService';
 import { staticProvider } from './staticProvider';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
 import './utilities/jsExtensions';
+import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
+import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
+import { dbSchema } from './services/misc/dbSchema';
+import { ORMConnectionService } from './services/sqlServices/ORMConnectionService';
 
-// initialize env
-// require is mandatory here, for some unknown reason
-initailizeDotEnvEnvironmentConfig();
+(async () => {
 
-log("");
-log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${staticProvider.globalConfig.misc.environmentName} ----------------`);
-log("");
+    initailizeDotEnvEnvironmentConfig();
 
-const initializeAsync = async () => {
+    log("");
+    log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${staticProvider.globalConfig.misc.environmentName} ----------------`);
+    log("");
 
-    // init DB
-    log("Initializing DB...");
-    const { sqlConnection, ormConnection } = await initializeDBAsync();
-    log("DB initialized.");
-
-    // init express
-    log("Initializing express...");
     const expressServer = express();
 
     // services 
+    const globalConfig = staticProvider.globalConfig;
     const mapperService = new MapperService();
-    const dbConnectionService = new DbConnectionService();
-    const userStatsService = new UserStatsService(dbConnectionService, mapperService);
-    const sqlFunctionService = new SQLFunctionsService(dbConnectionService);
-    const eventService = new EventService(mapperService, dbConnectionService);
-    const coinAcquireService = new CoinAcquireService(sqlFunctionService, dbConnectionService, eventService);
+    const sqlConnectionService = new SQLConnectionService();
+    const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
+    const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlBootstrapperService);
+    const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService);
+    const userStatsService = new UserStatsService(ormConnectionService, mapperService);
+    const sqlFunctionService = new SQLFunctionsService(sqlConnectionService);
+    const eventService = new EventService(mapperService, ormConnectionService);
+    const coinAcquireService = new CoinAcquireService(sqlFunctionService, ormConnectionService, eventService);
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
 
     // controllers 
@@ -71,7 +69,7 @@ const initializeAsync = async () => {
 
     // initialize services 
     initializeMappings(mapperService);
-    dbConnectionService.initialize(ormConnection, sqlConnection);
+    await dbConnectionService.initializeAsync();
 
     // set services as static provided objects 
     staticProvider.mapperService = mapperService;
@@ -81,7 +79,8 @@ const initializeAsync = async () => {
         userStatsService,
         sqlFunctionService,
         userSessionActivityService,
-        coinAcquireService
+        coinAcquireService,
+        sqlBootstrapperService
     };
 
     const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) => addAPIEndpoint(expressServer, path, action, opt);
@@ -197,7 +196,5 @@ const initializeAsync = async () => {
     // listen
     expressServer.listen(staticProvider.globalConfig.misc.hostPort, () =>
         log(`Listening on port '${staticProvider.globalConfig.misc.hostPort}'!`));
-};
-
-initializeAsync();
+})();
 

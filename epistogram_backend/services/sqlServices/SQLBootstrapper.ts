@@ -6,6 +6,7 @@ import { log } from "../misc/logger";
 import { ExecSQLFunctionType, SQLConnectionService } from "./SQLConnectionService";
 
 export type SchemaDefinitionType = {
+    entities: Function[],
     viewScripts: string[],
     functionScripts: string[],
 }
@@ -23,17 +24,53 @@ export class SQLBootstrapperService {
         this._configuration = configuration;
     }
 
-    async bootstrapDatabase() {
+    bootstrapDatabase = async () => {
 
         await this.recreateViewsAsync(this._dbSchema.viewScripts);
         await this.recreateFunctionsAsync(this._dbSchema.functionScripts);
+    }
+
+    executeSeedScriptAsync = async (seedScriptName: string) => {
+
+        const { executeSQL, terminateConnectionAsync: terminateConnection } = await this._sqlConnectionService.connectToDBAsync();
+        const sql = readFileSync(`./sql/seed/${seedScriptName}.sql`, 'utf8');
+
+        const replacedSQl = this.replaceSymbols(sql);
+
+        await executeSQL(replacedSQl);
+
+        await terminateConnection();
+    }
+
+    purgeDBAsync = async () => {
+
+        log("Purging DB...", "strong");
+
+        const dropDBScript = this._dbSchema
+            .entities
+            .map(x => `DROP TABLE IF EXISTS public.${this.toSQLName(x.name)} CASCADE;`)
+            .join("\n");
+
+        // const dropDBScriptPath = `./sql/misc/dropDB.sql`;
+        // writeFileSync(dropDBScriptPath, dropDBScript, { encoding: "utf-8" });
+
+        const { executeSQL, terminateConnectionAsync } = await this._sqlConnectionService.connectToDBAsync();
+
+        const results = await executeSQL(dropDBScript);
+
+        await terminateConnectionAsync();
+    }
+
+    private toSQLName = (name: string) => {
+
+        return name.split(/(?=[A-Z])/).join('_').toLowerCase();
     }
 
     private recreateFunctionsAsync = async (functionNames: string[]) => {
 
         log("Recreating functions...");
 
-        const { executeSQL, terminateConnectionAsync: terminateConnection } = await connectToDBAsync();
+        const { executeSQL, terminateConnectionAsync: terminateConnection } = await this._sqlConnectionService.connectToDBAsync();
 
         // drop functions 
         const drops = functionNames
@@ -63,18 +100,6 @@ export class SQLBootstrapperService {
 
         await this.dropViews(viewNames, executeSQL);
         await this.createViews(viewNames, executeSQL);
-
-        await terminateConnection();
-    }
-
-    private executeSeedScriptAsync = async (seedScriptName: string) => {
-
-        const { executeSQL, terminateConnectionAsync: terminateConnection } = await this._sqlConnectionService.connectToDBAsync();
-        const sql = readFileSync(`./sql/seed/${seedScriptName}.sql`, 'utf8');
-
-        const replacedSQl = this.replaceSymbols(sql);
-
-        await executeSQL(replacedSQl);
 
         await terminateConnection();
     }

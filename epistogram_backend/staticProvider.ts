@@ -1,16 +1,17 @@
 import { CoinAcquireService } from "./services/coinAcquireService";
-import { DbConnectionService } from "./services/sqlServices/DatabaseConnectionService";
 import { GlobalConfiguration } from "./services/environment";
 import { MapperService } from "./services/mapperService";
+import { DbConnectionService, SQLConnectionType } from "./services/sqlServices/DatabaseConnectionService";
+import { ORMConnection } from "./services/sqlServices/ORMConnectionService";
+import { SQLBootstrapperService } from "./services/sqlServices/SQLBootstrapper";
 import { SQLFunctionsService } from "./services/sqlServices/SQLFunctionsService";
 import { UserSessionActivityService } from "./services/userSessionActivityService";
 import { UserStatsService } from "./services/userStatsService";
-import { SQLBootstrapperService } from "./services/sqlServices/SQLBootstrapper";
 
 export const staticProvider = {
 
     globalConfig: {} as GlobalConfiguration,
-    ormConnection: {} as TypeORMConnection,
+    ormConnection: {} as ORMConnection,
     sqlConnection: {} as SQLConnectionType,
     mapperService: {} as MapperService,
     services: {} as {

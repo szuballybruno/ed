@@ -1,11 +1,12 @@
 import { SessionActivityType } from "../../models/shared_models/types/sharedTypes";
-import { DbConnectionService } from "./DatabaseConnectionService";
-import { log, logObject } from "../misc/logger";
+import { logObject } from "../misc/logger";
+import { SQLConnectionService } from "./SQLConnectionService";
 
 export class SQLFunctionsService {
-    private _connectionService: DbConnectionService;
 
-    constructor(conn: DbConnectionService) {
+    private _connectionService: SQLConnectionService;
+
+    constructor(conn: SQLConnectionService) {
 
         this._connectionService = conn;
     }
@@ -26,30 +27,36 @@ export class SQLFunctionsService {
         // create statement 
         const statement = `SELECT ${isMultiResult ? "* FROM" : ""} ${fnName}(${argsIndicies.join(",")})`;
 
-        // get results
-        const result = await this._connectionService
-            .getSQLConnection()
-            .executeSQL(statement, args.map(x => x === undefined ? null : x));
+        const { executeSQL, terminateConnectionAsync } = await this._connectionService.connectToDBAsync();
 
-        const firstRow = result.rows[0];
+        try {
 
-        if (isMultiResult) {
+            const result = await executeSQL(statement, args.map(x => x === undefined ? null : x));
 
-            const returnObject = firstRow as T;
+            const firstRow = result.rows[0];
 
-            logObject("Return value: ");
-            logObject(returnObject);
+            if (isMultiResult) {
 
-            return returnObject;
+                const returnObject = firstRow as T;
+
+                logObject("Return value: ");
+                logObject(returnObject);
+
+                return returnObject;
+            }
+            else {
+
+                const fnReturnValue = firstRow[fnName];
+
+                logObject("Return value: ");
+                logObject(fnReturnValue);
+
+                return fnReturnValue as T;
+            }
         }
-        else {
+        finally {
 
-            const fnReturnValue = firstRow[fnName];
-
-            logObject("Return value: ");
-            logObject(fnReturnValue);
-
-            return fnReturnValue as T;
+            await terminateConnectionAsync();
         }
     }
 

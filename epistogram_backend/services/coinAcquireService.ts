@@ -4,19 +4,19 @@ import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultD
 import { ActivityStreakView } from "../models/views/ActivityStreakView";
 import { UserSessionDailyView } from "../models/views/UserActivityDailyView";
 import { trimTimeFromDate } from "../utilities/helpers";
-import { DbConnectionService } from "./sqlServices/DatabaseConnectionService";
 import { EventService } from "./eventService";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { SQLFunctionsService } from "./sqlServices/SQLFunctionsService";
 
 export class CoinAcquireService {
     private _funcService: SQLFunctionsService;
-    private _connService: DbConnectionService;
+    private _ormService: ORMConnectionService;
     private _eventService: EventService;
 
-    constructor(funcService: SQLFunctionsService, connService: DbConnectionService, es: EventService) {
+    constructor(funcService: SQLFunctionsService, ormService: ORMConnectionService, es: EventService) {
 
         this._funcService = funcService;
-        this._connService = connService;
+        this._ormService = ormService;
         this._eventService = es;
     }
 
@@ -55,11 +55,11 @@ export class CoinAcquireService {
 
         // do not reward user if the question is already answered 
         // correctly and a coin is previously acquired for that 
-        const newGivenAnswer = await this._connService
+        const newGivenAnswer = await this._ormService
             .getRepository(GivenAnswer)
             .findOneOrFail(givenAnswerId);
 
-        const alreadyAcquiredCoinsForCurrentQuestionId = await this._connService
+        const alreadyAcquiredCoinsForCurrentQuestionId = await this._ormService
             .getRepository(CoinAcquire)
             .createQueryBuilder("ca")
             .leftJoinAndSelect("ca.givenAnswer", "ga")
@@ -82,7 +82,7 @@ export class CoinAcquireService {
      */
     handleGivenAnswerStreakCoinsAsync = async (userId: number, streakId: number, streakLength: number) => {
 
-        const prevCoinsGivenForStreak = await this._connService
+        const prevCoinsGivenForStreak = await this._ormService
             .getRepository(CoinAcquire)
             .createQueryBuilder("ca")
             .where("ca.userId = :userId", { userId })
@@ -116,7 +116,7 @@ export class CoinAcquireService {
         const today = trimTimeFromDate(new Date());
 
         // TODO
-        const todaysInfo = await this._connService
+        const todaysInfo = await this._ormService
             .getRepository(UserSessionDailyView)
             .createQueryBuilder("us")
             .where('us.userId = :userId', { userId })
@@ -127,7 +127,7 @@ export class CoinAcquireService {
         //     return;
 
         // check if current session has a coin acquire 
-        const acquireForCurrentSession = await this._connService
+        const acquireForCurrentSession = await this._ormService
             .getRepository(CoinAcquire)
             .findOne({
                 where: {
@@ -152,7 +152,7 @@ export class CoinAcquireService {
      */
     private acquireActivityStreakCoin = async (userId: number) => {
 
-        const currentActivityStreak = await this._connService
+        const currentActivityStreak = await this._ormService
             .getRepository(ActivityStreakView)
             .findOneOrFail({
                 where: {
@@ -160,7 +160,7 @@ export class CoinAcquireService {
                 }
             });
 
-        const coinsForActivityStreak = await this._connService
+        const coinsForActivityStreak = await this._ormService
             .getRepository(CoinAcquire)
             .find({
                 where: {

@@ -1,23 +1,23 @@
 import { Event } from "../models/entity/Event";
 import { EventDTO } from "../models/shared_models/EventDTO";
 import { EventType } from "../models/shared_models/types/sharedTypes";
-import { DbConnectionService } from "./sqlServices/DatabaseConnectionService";
 import { MapperService } from "./mapperService";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class EventService {
 
-    private _dbConnection: DbConnectionService;
+    private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
 
-    constructor(mapperService: MapperService, conn: DbConnectionService) {
+    constructor(mapperService: MapperService, conn: ORMConnectionService) {
 
-        this._dbConnection = conn;
+        this._ormService = conn;
         this._mapperService = mapperService;
     }
 
     async addEvent(eventType: EventType, eventDataDTO: any) {
 
-        await this._dbConnection
+        await this._ormService
             .getRepository(Event)
             .insert({
                 type: eventType,
@@ -28,7 +28,7 @@ export class EventService {
 
     async getUnfulfilledEventAsync() {
 
-        const events = await this._dbConnection
+        const events = await this._ormService
             .getRepository(Event)
             .createQueryBuilder("e")
             .where("e.is_fulfilled = false")
