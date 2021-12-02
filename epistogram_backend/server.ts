@@ -82,7 +82,8 @@ import { SeedService } from './services/sqlServices/SeedService';
         sqlFunctionService,
         userSessionActivityService,
         coinAcquireService,
-        sqlBootstrapperService
+        sqlBootstrapperService,
+        sqlConnectionService
     };
 
     await dbConnectionService.seedDBAsync();

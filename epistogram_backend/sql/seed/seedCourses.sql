@@ -32,11 +32,11 @@ ON CONFLICT (id) DO UPDATE SET
 INSERT INTO public.course_module 
     (id, course_id, name, order_index, description)
 VALUES
-    (1, 1, 'Első modul', 0, 'desc'),
-    (2, 2, 'Első modul', 0, 'desc'),
-    (3, 3, 'Első modul', 0, 'desc'),
-    (4, 4, 'Első modul', 0, 'desc'),
-    (5, 4, 'Masodik modul', 1, 'desc')
+    (2, 1, 'Első modul', 0, 'desc'),
+    (3, 2, 'Első modul', 0, 'desc'),
+    (4, 3, 'Első modul', 0, 'desc'),
+    (5, 4, 'Első modul', 0, 'desc'),
+    (6, 4, 'Masodik modul', 1, 'desc')
 
 ON CONFLICT ("id") DO UPDATE SET 
     course_id = EXCLUDED.course_id, 

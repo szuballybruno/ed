@@ -44,14 +44,13 @@ export class SQLBootstrapperService {
 
     executeSeedScriptAsync = async (seedScriptName: string) => {
 
-        const { executeSQL, terminateConnectionAsync: terminateConnection } = await this._sqlConnectionService.connectToDBAsync();
+        log(`Seeding ${seedScriptName}...`);
+
         const sql = readFileSync(`./sql/seed/${seedScriptName}.sql`, 'utf8');
 
         const replacedSQl = this.replaceSymbols(sql);
 
-        await executeSQL(replacedSQl);
-
-        await terminateConnection();
+        await this._sqlConnectionService.executeSQLAsync(replacedSQl);
     }
 
     purgeDBAsync = async () => {
@@ -66,43 +65,25 @@ export class SQLBootstrapperService {
         // const dropDBScriptPath = `./sql/misc/dropDB.sql`;
         // writeFileSync(dropDBScriptPath, dropDBScript, { encoding: "utf-8" });
 
-        const { executeSQL, terminateConnectionAsync } = await this._sqlConnectionService.connectToDBAsync();
-
-        try {
-
-            const results = await executeSQL(dropDBScript);
-        }
-        finally {
-
-            await terminateConnectionAsync();
-        }
+        const results = await this._sqlConnectionService.executeSQLAsync(dropDBScript);
     }
 
     private recreateConstraintsAsync = async (constraints: SQLConstraintType[]) => {
 
-        const { executeSQL, terminateConnectionAsync } = await this._sqlConnectionService.connectToDBAsync();
+        // drop constraints
+        const drops = constraints
+            .map(constraint => `ALTER TABLE ${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.name};`);
 
-        try {
+        await this._sqlConnectionService.executeSQLAsync(drops.join("\n"));
 
-            // drop constraints
-            const drops = constraints
-                .map(constraint => `ALTER TABLE ${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.name};`);
+        // create constraints 
+        for (let index = 0; index < constraints.length; index++) {
 
-            await executeSQL(drops.join("\n"));
+            const constraint = constraints[index];
+            const script = readFileSync(`./sql/constraints/${constraint.name}.sql`, 'utf8');
 
-            // create constraints 
-            for (let index = 0; index < constraints.length; index++) {
-
-                const constraint = constraints[index];
-                const script = readFileSync(`./sql/constraints/${constraint.name}.sql`, 'utf8');
-
-                log(`-- Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
-                await executeSQL(script);
-            }
-        }
-        finally {
-
-            await terminateConnectionAsync();
+            log(`-- Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
+            await this._sqlConnectionService.executeSQLAsync(script);
         }
     }
 
@@ -113,47 +94,27 @@ export class SQLBootstrapperService {
 
     private recreateFunctionsAsync = async (functionNames: string[]) => {
 
-        const { executeSQL, terminateConnectionAsync } = await this._sqlConnectionService.connectToDBAsync();
+        // drop functions 
+        const drops = functionNames
+            .map(functionName => `DROP FUNCTION IF EXISTS ${functionName};`);
 
-        try {
+        await this._sqlConnectionService.executeSQLAsync(drops.join("\n"));
 
-            // drop functions 
-            const drops = functionNames
-                .map(functionName => `DROP FUNCTION IF EXISTS ${functionName};`);
+        // create functions
+        for (let index = 0; index < functionNames.length; index++) {
 
-            await executeSQL(drops.join("\n"));
+            const functionName = functionNames[index];
+            const script = readFileSync(`./sql/functions/${functionName}.sql`, 'utf8');
 
-            // create functions
-            for (let index = 0; index < functionNames.length; index++) {
-
-                const functionName = functionNames[index];
-                const script = readFileSync(`./sql/functions/${functionName}.sql`, 'utf8');
-
-                log(`-- Creating function: [${functionName}]...`);
-                await executeSQL(script);
-            }
+            log(`-- Creating function: [${functionName}]...`);
+            await this._sqlConnectionService.executeSQLAsync(script);
         }
-        finally {
-
-            // terminate SQL connection
-            await terminateConnectionAsync();
-        }
-
     }
 
     private recreateViewsAsync = async (viewNames: string[]) => {
 
-        const { executeSQL, terminateConnectionAsync: terminateConnection } = await this._sqlConnectionService.connectToDBAsync();
-
-        try {
-
-            await this.dropViews(viewNames, executeSQL);
-            await this.createViews(viewNames, executeSQL);
-        }
-        finally {
-
-            await terminateConnection();
-        }
+        await this.dropViews(viewNames);
+        await this.createViews(viewNames);
     }
 
     private replaceSymbols = (sql: string) => {
@@ -162,7 +123,7 @@ export class SQLBootstrapperService {
         return replaceAll(sql, "{CDN_BUCKET_URL}", url);
     }
 
-    private createViews = async (viewNames: string[], execSql: ExecSQLFunctionType) => {
+    private createViews = async (viewNames: string[]) => {
 
         for (let index = 0; index < viewNames.length; index++) {
 
@@ -170,16 +131,16 @@ export class SQLBootstrapperService {
             const script = this.getViewCreationScript(viewName);
 
             log(`-- Creating view: [${viewName}]...`);
-            await execSql(script);
+            await this._sqlConnectionService.executeSQLAsync(script);
         }
     }
 
-    private dropViews = async (viewNames: string[], execSql: ExecSQLFunctionType) => {
+    private dropViews = async (viewNames: string[]) => {
 
         const drops = viewNames
             .map(viewName => `DROP VIEW IF EXISTS ${viewName} CASCADE;`);
 
-        await execSql(drops.join("\n"));
+        await this._sqlConnectionService.executeSQLAsync(drops.join("\n"));
     }
 
     private getViewCreationScript = (viewName: string) => {

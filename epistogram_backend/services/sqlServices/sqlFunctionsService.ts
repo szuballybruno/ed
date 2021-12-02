@@ -27,36 +27,27 @@ export class SQLFunctionsService {
         // create statement 
         const statement = `SELECT ${isMultiResult ? "* FROM" : ""} ${fnName}(${argsIndicies.join(",")})`;
 
-        const { executeSQL, terminateConnectionAsync } = await this._connectionService.connectToDBAsync();
+        const result = await this._connectionService.executeSQLAsync(statement, args.map(x => x === undefined ? null : x));
 
-        try {
+        const firstRow = result.rows[0];
 
-            const result = await executeSQL(statement, args.map(x => x === undefined ? null : x));
+        if (isMultiResult) {
 
-            const firstRow = result.rows[0];
+            const returnObject = firstRow as T;
 
-            if (isMultiResult) {
+            logObject("Return value: ");
+            logObject(returnObject);
 
-                const returnObject = firstRow as T;
-
-                logObject("Return value: ");
-                logObject(returnObject);
-
-                return returnObject;
-            }
-            else {
-
-                const fnReturnValue = firstRow[fnName];
-
-                logObject("Return value: ");
-                logObject(fnReturnValue);
-
-                return fnReturnValue as T;
-            }
+            return returnObject;
         }
-        finally {
+        else {
 
-            await terminateConnectionAsync();
+            const fnReturnValue = firstRow[fnName];
+
+            logObject("Return value: ");
+            logObject(fnReturnValue);
+
+            return fnReturnValue as T;
         }
     }
 

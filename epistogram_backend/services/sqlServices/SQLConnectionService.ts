@@ -6,7 +6,13 @@ export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<Query
 
 export class SQLConnectionService {
 
-    connectToDBAsync = async () => {
+    private _pool: Pool;
+
+    constructor() {
+
+    }
+
+    async establishConnectionAsync() {
 
         log("Connecting to SQL...");
 
@@ -18,25 +24,27 @@ export class SQLConnectionService {
             user: dbConfig.username,
             database: dbConfig.databaseName,
             password: dbConfig.password,
-        })
+        });
 
-        const executeSQLAsync = async (sql: string, values?: any[]) => {
-
-            const results = await pool.query(sql, values);
-
-            return results;
-        }
+        // listen to errors 
+        pool.on("error", x => console.error(x));
 
         // test connection
-        await executeSQLAsync("CREATE TABLE IF NOT EXISTS public.\"connection_test_table\" (\"columnA\" integer);")
+        await pool.query("CREATE TABLE IF NOT EXISTS public.\"connection_test_table\" (\"columnA\" integer);");
 
-        return {
-            executeSQL: executeSQLAsync as ExecSQLFunctionType,
-            terminateConnectionAsync: async () => {
+        this._pool = pool;
+    }
 
-                log("Disconnecting SQL...");
-                await pool.end();
-            }
+    executeSQLAsync = async (sql: string, values?: any[]) => {
+
+        try {
+
+            return await this._pool.query(sql, values);
+        }
+        catch (e) {
+
+            const err = e as any;
+            throw new Error(`Message: ${err.message} Detail: ${err.detail}`);
         }
     }
 }

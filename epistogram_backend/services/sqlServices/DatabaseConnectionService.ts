@@ -38,8 +38,11 @@ export class DbConnectionService {
         const allowPurge = this._config.database.allowPurge;
         const forcePurge = this._config.database.forcePurge;
 
+        // connect sql
+        await this._sqlConnectionService.establishConnectionAsync();
+
         // test DB
-        await this.testDbConnection();
+        // await this.testDbConnection();
 
         // purge DB
         if (allowPurge && forcePurge)
@@ -70,17 +73,6 @@ export class DbConnectionService {
 
         // bootstrap database 
         await this._sqlBootstrapperSvc.bootstrapDatabase();
-    }
-
-    private async testDbConnection() {
-
-        log("Making first database connection...", "strong");
-        log("Connection properties: ")
-        logObject(JSON.stringify(getDatabaseConnectionParameters()));
-
-        const sqlConnection = await this._sqlConnectionService.connectToDBAsync();
-
-        log("Connection successful!", "strong");
     }
 
     private isEmptyDatabase = async () => {

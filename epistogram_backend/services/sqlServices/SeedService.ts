@@ -30,46 +30,45 @@ export class SeedService {
 
     seedDBAsync = async () => {
 
+        console.log("------- before");
+        await staticProvider.services.sqlConnectionService
+            .executeSQLAsync(`
+            BEGIN;
+                INSERT INTO public.organization (id, name) 
+                VALUES (1, 'org1')
+                ON CONFLICT (id) DO UPDATE SET 
+                    name = EXCLUDED.name;
+
+                SELECT setval('organization_id_seq', (SELECT MAX(id) from organization));
+
+                INSERT INTO public.organization (name) VALUES ('org2');
+                END;
+            `);
+        console.log("------- after");
+
+        console.log(await this._ormConnectionService.getRepository(Organization).find());
+        await this._ormConnectionService.getRepository(Organization).insert({ name: "org2" });
+
+        return;
+
         const executeSeedScriptAsync = this._sqlBootstrapperService.executeSeedScriptAsync;
 
-        log("seedOrganizations");
         await executeSeedScriptAsync("seedOrganizations");
-
-        log("seedQuestionTypes");
         await executeSeedScriptAsync("seedQuestionTypes");
-
-        log("seedActivities");
         await executeSeedScriptAsync("seedActivities");
-
-        log("seedUserRoles");
         await executeSeedScriptAsync("seedRoles");
-
-        log("seedSignupExam");
         await executeSeedScriptAsync("seedSignupExam");
-
-        log("seedJobRoles")
         await executeSeedScriptAsync("seedJobRoles");
 
         log("seedUsers")
         await this.seedUsersAsync();
 
-        log("seedSignupQuestions")
         await executeSeedScriptAsync("seedSignupQuestions");
-
-        log("seedPersonalityCategoryDescriptions")
         await executeSeedScriptAsync("seedPersonalityCategoryDescriptions");
-
-        log("seedDailyTips")
         await executeSeedScriptAsync("seedDailyTips");
-
-        log("seedCourseCategories")
         await executeSeedScriptAsync("seedCourseCategories");
-
-        log("seedCourses")
         await executeSeedScriptAsync("seedCourses");
-
-        log("seedCourses")
-        await this.seedExams();
+        await executeSeedScriptAsync("seedExams");
 
         log("seedVideos")
         await this.seedVideos();
@@ -79,58 +78,6 @@ export class SeedService {
 
         log("seedExamQuestions")
         await this.seedExamQuestions();
-    }
-
-    private seedExams = async () => {
-
-        // exams 
-        await staticProvider
-            .ormConnection
-            .getRepository(Exam)
-            .save([
-
-                // course  2
-                {
-                    courseId: 1,
-                    title: "New Exam 1",
-                    subtitle: "Fantastic exam 1",
-                    thumbnailUrl: "",
-                    description: "",
-                    orderIndex: 1,
-                    moduleId: 2
-                },
-                {
-                    courseId: 1,
-                    title: "New Exam 2",
-                    subtitle: "Fantastic exam 2",
-                    thumbnailUrl: "",
-                    description: "",
-                    orderIndex: 3,
-                    moduleId: 2
-                },
-                {
-                    courseId: 1,
-                    title: "New Exam 3",
-                    subtitle: "Fantastic exam 3",
-                    thumbnailUrl: "",
-                    description: "",
-                    orderIndex: 4,
-                    isFinalExam: true,
-                    moduleId: 2
-                },
-
-                // course 5
-                {
-                    courseId: 4,
-                    title: "Excel Final Exam",
-                    subtitle: "Excel Final Exam",
-                    thumbnailUrl: "",
-                    description: "",
-                    orderIndex: 5,
-                    isFinalExam: true,
-                    moduleId: 6
-                }
-            ]);
     }
 
     private seedVideos = async () => {
