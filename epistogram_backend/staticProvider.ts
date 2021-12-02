@@ -12,8 +12,6 @@ export const staticProvider = {
 
     globalConfig: {} as GlobalConfiguration,
     ormConnection: {} as ORMConnection,
-    sqlConnection: {} as SQLConnectionType,
-    mapperService: {} as MapperService,
     services: {} as {
         mapperService: MapperService,
         databaseConnectionService: DbConnectionService,

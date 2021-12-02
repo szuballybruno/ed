@@ -39,6 +39,7 @@ import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import { dbSchema } from './services/misc/dbSchema';
 import { ORMConnectionService } from './services/sqlServices/ORMConnectionService';
+import { SeedService } from './services/sqlServices/SeedService';
 
 (async () => {
 
@@ -56,7 +57,8 @@ import { ORMConnectionService } from './services/sqlServices/ORMConnectionServic
     const sqlConnectionService = new SQLConnectionService();
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlBootstrapperService);
-    const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService);
+    const seedService = new SeedService(sqlBootstrapperService, ormConnectionService);
+    const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const userStatsService = new UserStatsService(ormConnectionService, mapperService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService);
     const eventService = new EventService(mapperService, ormConnectionService);
@@ -72,7 +74,7 @@ import { ORMConnectionService } from './services/sqlServices/ORMConnectionServic
     await dbConnectionService.initializeAsync();
 
     // set services as static provided objects 
-    staticProvider.mapperService = mapperService;
+    staticProvider.ormConnection = ormConnectionService.getOrmConnection();
     staticProvider.services = {
         mapperService,
         databaseConnectionService: dbConnectionService,
@@ -82,6 +84,8 @@ import { ORMConnectionService } from './services/sqlServices/ORMConnectionServic
         coinAcquireService,
         sqlBootstrapperService
     };
+
+    await dbConnectionService.seedDBAsync();
 
     const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) => addAPIEndpoint(expressServer, path, action, opt);
 

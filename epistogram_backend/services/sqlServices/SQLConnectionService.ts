@@ -32,7 +32,11 @@ export class SQLConnectionService {
 
         return {
             executeSQL: executeSQLAsync as ExecSQLFunctionType,
-            terminateConnectionAsync: () => pool.end()
+            terminateConnectionAsync: async () => {
+
+                log("Disconnecting SQL...");
+                await pool.end();
+            }
         }
     }
 }

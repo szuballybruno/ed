@@ -56,7 +56,10 @@ export const getModuleEditDataAsync = async (moduleId: number) => {
         .getRepository(CourseModule)
         .findOneOrFail(moduleId);
 
-    return staticProvider.mapperService.useMapperFunction(CourseModule, ModuleAdminEditDTO, module);
+    return staticProvider
+        .services
+        .mapperService
+        .useMapperFunction(CourseModule, ModuleAdminEditDTO, module);
 }
 
 export const saveModuleAsync = async (dto: ModuleAdminEditDTO) => {

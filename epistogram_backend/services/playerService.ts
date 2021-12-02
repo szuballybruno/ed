@@ -134,7 +134,10 @@ export const getModuleDetailedDTOAsync = async (userId: number, moduleId: number
         .getRepository(CourseModule)
         .findOneOrFail(moduleId);
 
-    return staticProvider.mapperService.useMapperFunction(CourseModule, ModuleDetailedDTO, module);
+    return staticProvider
+        .services
+        .mapperService
+        .useMapperFunction(CourseModule, ModuleDetailedDTO, module);
 }
 
 export const getVideoDTOAsync = async (userId: number, videoId: number) => {

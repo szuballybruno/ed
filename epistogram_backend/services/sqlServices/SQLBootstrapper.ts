@@ -6,9 +6,15 @@ import { log } from "../misc/logger";
 import { ExecSQLFunctionType, SQLConnectionService } from "./SQLConnectionService";
 
 export type SchemaDefinitionType = {
-    entities: Function[],
-    viewScripts: string[],
-    functionScripts: string[],
+    entities: Function[];
+    viewScripts: string[];
+    functionScripts: string[];
+    constraints: SQLConstraintType[];
+}
+
+export type SQLConstraintType = {
+    name: string;
+    tableName: string;
 }
 
 export class SQLBootstrapperService {
@@ -26,8 +32,14 @@ export class SQLBootstrapperService {
 
     bootstrapDatabase = async () => {
 
+        log("Recreating views...");
         await this.recreateViewsAsync(this._dbSchema.viewScripts);
+
+        log("Recreating functions...");
         await this.recreateFunctionsAsync(this._dbSchema.functionScripts);
+
+        log("Recreating constraints...");
+        await this.recreateConstraintsAsync(this._dbSchema.constraints);
     }
 
     executeSeedScriptAsync = async (seedScriptName: string) => {
@@ -56,9 +68,42 @@ export class SQLBootstrapperService {
 
         const { executeSQL, terminateConnectionAsync } = await this._sqlConnectionService.connectToDBAsync();
 
-        const results = await executeSQL(dropDBScript);
+        try {
 
-        await terminateConnectionAsync();
+            const results = await executeSQL(dropDBScript);
+        }
+        finally {
+
+            await terminateConnectionAsync();
+        }
+    }
+
+    private recreateConstraintsAsync = async (constraints: SQLConstraintType[]) => {
+
+        const { executeSQL, terminateConnectionAsync } = await this._sqlConnectionService.connectToDBAsync();
+
+        try {
+
+            // drop constraints
+            const drops = constraints
+                .map(constraint => `ALTER TABLE ${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.name};`);
+
+            await executeSQL(drops.join("\n"));
+
+            // create constraints 
+            for (let index = 0; index < constraints.length; index++) {
+
+                const constraint = constraints[index];
+                const script = readFileSync(`./sql/constraints/${constraint.name}.sql`, 'utf8');
+
+                log(`-- Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
+                await executeSQL(script);
+            }
+        }
+        finally {
+
+            await terminateConnectionAsync();
+        }
     }
 
     private toSQLName = (name: string) => {
@@ -68,40 +113,47 @@ export class SQLBootstrapperService {
 
     private recreateFunctionsAsync = async (functionNames: string[]) => {
 
-        log("Recreating functions...");
+        const { executeSQL, terminateConnectionAsync } = await this._sqlConnectionService.connectToDBAsync();
 
-        const { executeSQL, terminateConnectionAsync: terminateConnection } = await this._sqlConnectionService.connectToDBAsync();
+        try {
 
-        // drop functions 
-        const drops = functionNames
-            .map(functionName => `DROP FUNCTION IF EXISTS ${functionName};`);
+            // drop functions 
+            const drops = functionNames
+                .map(functionName => `DROP FUNCTION IF EXISTS ${functionName};`);
 
-        await executeSQL(drops.join("\n"));
+            await executeSQL(drops.join("\n"));
 
-        // create functions
-        for (let index = 0; index < functionNames.length; index++) {
+            // create functions
+            for (let index = 0; index < functionNames.length; index++) {
 
-            const functionName = functionNames[index];
-            const script = readFileSync(`./sql/functions/${functionName}.sql`, 'utf8');
+                const functionName = functionNames[index];
+                const script = readFileSync(`./sql/functions/${functionName}.sql`, 'utf8');
 
-            log(`Creating function: [${functionName}]...`);
-            await executeSQL(script);
+                log(`-- Creating function: [${functionName}]...`);
+                await executeSQL(script);
+            }
+        }
+        finally {
+
+            // terminate SQL connection
+            await terminateConnectionAsync();
         }
 
-        // terminate SQL connection
-        await terminateConnection();
     }
 
     private recreateViewsAsync = async (viewNames: string[]) => {
 
-        log("Recreating views...");
-
         const { executeSQL, terminateConnectionAsync: terminateConnection } = await this._sqlConnectionService.connectToDBAsync();
 
-        await this.dropViews(viewNames, executeSQL);
-        await this.createViews(viewNames, executeSQL);
+        try {
 
-        await terminateConnection();
+            await this.dropViews(viewNames, executeSQL);
+            await this.createViews(viewNames, executeSQL);
+        }
+        finally {
+
+            await terminateConnection();
+        }
     }
 
     private replaceSymbols = (sql: string) => {
@@ -117,7 +169,7 @@ export class SQLBootstrapperService {
             const viewName = viewNames[index];
             const script = this.getViewCreationScript(viewName);
 
-            log(`Creating view: [${viewName}]...`);
+            log(`-- Creating view: [${viewName}]...`);
             await execSql(script);
         }
     }

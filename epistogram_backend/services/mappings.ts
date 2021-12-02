@@ -458,6 +458,7 @@ export const toCourseEditDataDTO = (
                 .items
                 .filter(x => !!x.itemId)
                 .map(viewAsItem => staticProvider
+                    .services
                     .mapperService
                     .useMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
 

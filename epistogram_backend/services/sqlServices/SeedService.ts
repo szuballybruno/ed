@@ -33,25 +33,25 @@ export class SeedService {
         const executeSeedScriptAsync = this._sqlBootstrapperService.executeSeedScriptAsync;
 
         log("seedOrganizations");
-        const orgIds = await this.seedOrganizations();
+        await executeSeedScriptAsync("seedOrganizations");
 
         log("seedQuestionTypes");
         await executeSeedScriptAsync("seedQuestionTypes");
 
         log("seedActivities");
-        await this.seedActivities();
+        await executeSeedScriptAsync("seedActivities");
 
         log("seedUserRoles");
-        await this.seedRoles();
+        await executeSeedScriptAsync("seedRoles");
 
         log("seedSignupExam");
-        await this.seedSignupExam();
+        await executeSeedScriptAsync("seedSignupExam");
 
         log("seedJobRoles")
         await executeSeedScriptAsync("seedJobRoles");
 
         log("seedUsers")
-        await this.seedUsersAsync(orgIds);
+        await this.seedUsersAsync();
 
         log("seedSignupQuestions")
         await executeSeedScriptAsync("seedSignupQuestions");
@@ -63,10 +63,13 @@ export class SeedService {
         await executeSeedScriptAsync("seedDailyTips");
 
         log("seedCourseCategories")
-        await this.seedCourseCategories();
+        await executeSeedScriptAsync("seedCourseCategories");
 
         log("seedCourses")
-        await this.seedCourses();
+        await executeSeedScriptAsync("seedCourses");
+
+        log("seedCourses")
+        await this.seedExams();
 
         log("seedVideos")
         await this.seedVideos();
@@ -78,236 +81,13 @@ export class SeedService {
         await this.seedExamQuestions();
     }
 
-    seedOrganizations = async () => {
-
-        return (await this._ormConnectionService
-            .getRepository(Organization)
-            .insert([
-                {
-                    name: "P029"
-                },
-                {
-                    name: "EpistoGram"
-                }
-            ]))
-            .identifiers
-            .map(x => x.id as number);
-    }
-
-    seedActivities = async () => {
-
-        await this._ormConnectionService
-            .getRepository(Activity)
-            .save([
-                {
-                    name: "canSetInvitedUserOrganization"
-                },
-                {
-                    name: "canAccessCourseAdministration"
-                },
-                {
-                    name: "canAccessAdministration"
-                },
-                {
-                    name: "canAccessApplication"
-                }
-            ]);
-    }
-
-    seedRoles = async () => {
-
-        await this._ormConnectionService
-            .getRepository(Role)
-            .save([
-                {
-                    name: "Administrator"
-                },
-                {
-                    name: "Supervisor",
-                    roleActivityBridges: [
-                        {
-                            activityId: 3
-                        }
-                    ]
-                },
-                {
-                    name: "User"
-                }
-            ] as Role[]);
-    }
-
-    seedSignupExam = async () => {
-
-        await this._ormConnectionService
-            .getRepository(CourseModule)
-            .insert({
-                name: "Signup module exam",
-                orderIndex: 0,
-                description: "signup exam module"
-            });
-
-        await this._ormConnectionService
-            .getRepository(Exam)
-            .insert({
-                title: "Signup exam",
-                moduleId: 1
-            });
-    }
-
-    seedCourseCategories = async () => {
-
-        await this._ormConnectionService
-            .getRepository(CourseCategory)
-            .save([
-
-                // id:1
-                {
-                    name: "IT",
-                    childCategories: [
-
-                        // id:2
-                        {
-                            name: "Hálózatok"
-                        },
-
-                        // id:3
-                        {
-                            name: "Szoftverfejlesztés"
-                        },
-
-                        // id:4
-                        {
-                            name: "E-Commerce"
-                        },
-
-                        // id:5
-                        {
-                            name: "Irodai alkalmazások"
-                        },
-
-                        // id:6
-                        {
-                            name: "Általános IT"
-                        },
-
-                        // id:7
-                        {
-                            name: "Biztonság"
-                        },
-
-                        // id:8
-                        {
-                            name: "Önfejlesztés"
-                        },
-
-                        // id:9
-                        {
-                            name: "Média"
-                        },
-
-                        // id:10
-                        {
-                            name: "Marketing"
-                        }
-                    ]
-                }
-            ])
-    }
-
-    seedCourses = async () => {
-
-        // courses 
-        await this._ormConnectionService
-            .getRepository(Course)
-            .save([
-
-                // course: 1
-                {
-                    title: "Webfejlesztés kezdőknek (HTML, CSS, BOOTSTRAP)",
-                    categoryId: 1,
-                    subCategoryId: 2,
-                    teacherId: 1,
-                    coverFile: {
-                        filePath: "/courseCoverImages/1.png"
-                    }
-                } as Course,
-
-                // course: 2
-                {
-                    title: "Java programozás mesterkurzus",
-                    categoryId: 1,
-                    subCategoryId: 3,
-                    teacherId: 1,
-                    coverFile: {
-                        filePath: "/courseCoverImages/2.png"
-                    }
-                },
-
-                // course: 3
-                {
-                    title: "Angular - Minden amire szükséged lehet",
-                    categoryId: 1,
-                    subCategoryId: 4,
-                    teacherId: 1,
-                    coverFile: {
-                        filePath: "/courseCoverImages/3.png"
-                    }
-                },
-
-                // course: 4
-                {
-                    title: "Microsoft Excel Mesterkurzus",
-                    categoryId: 1,
-                    subCategoryId: 5,
-                    teacherId: 1,
-                    coverFile: {
-                        filePath: "/courseCoverImages/4.png"
-                    }
-                }
-            ] as Course[]);
-
-        // modules 
-        await staticProvider
-            .ormConnection
-            .getRepository(CourseModule)
-            .insert([
-                {
-                    courseId: 1,
-                    name: "Első modul",
-                    orderIndex: 0,
-                    description: "desc"
-                },
-                {
-                    courseId: 2,
-                    name: "Module",
-                    orderIndex: 0,
-                    description: "desc"
-                },
-                {
-                    courseId: 3,
-                    name: "Module",
-                    orderIndex: 0,
-                    description: "desc"
-                },
-                {
-                    courseId: 4,
-                    name: "Első modul",
-                    orderIndex: 0,
-                    description: "desc"
-                },
-                {
-                    courseId: 4,
-                    name: "Masodik modul",
-                    orderIndex: 1,
-                    description: "desc"
-                },
-            ]);
+    private seedExams = async () => {
 
         // exams 
         await staticProvider
             .ormConnection
             .getRepository(Exam)
-            .insert([
+            .save([
 
                 // course  2
                 {
@@ -353,7 +133,7 @@ export class SeedService {
             ]);
     }
 
-    seedVideos = async () => {
+    private seedVideos = async () => {
 
         // course 1 videos
         await insertVideoAsync({
@@ -466,7 +246,7 @@ export class SeedService {
         } as Video, "videos/Excel/video9.mp4");
     }
 
-    seedUsersAsync = async (orgIds: number[]) => {
+    private seedUsersAsync = async () => {
 
         log("seeding User 1...")
         const { invitationToken, user } = await createInvitedUserWithOrgAsync(
@@ -501,7 +281,7 @@ export class SeedService {
         log("User 2 token: " + it2);
     }
 
-    seedVideoQuestions = async () => {
+    private seedVideoQuestions = async () => {
 
         await this._ormConnectionService
             .getRepository(Question)
@@ -587,7 +367,7 @@ export class SeedService {
             ]);
     }
 
-    seedExamQuestions = async () => {
+    private seedExamQuestions = async () => {
 
         await this._ormConnectionService
             .getRepository(Question)

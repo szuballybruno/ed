@@ -78,6 +78,11 @@ export class ORMConnectionService {
         return this._ormConnection.getRepository(classType);
     }
 
+    getOrmConnection() {
+
+        return this._ormConnection;
+    }
+
     private createTypeORMConnection = async (opt: ConnectionOptions) => {
 
         try {

@@ -93,6 +93,13 @@ export const dbSchema = {
         "save_user_session_activity"
     ],
 
+    constraints: [
+        {
+            tableName: "coin_acquire",
+            name: "coin_acquire_valid_relation_enforce_constraint"
+        }
+    ],
+
     viewEntities: [
         VideoCompletedView,
         ExamCompletedView,
