@@ -13,7 +13,7 @@ export class AnswerGivenAnswerBridge {
     givenAnswerId: number;
 
     @ManyToOne(_ => GivenAnswer, x => x.answerBridges)
-    @JoinColumn({ name: "givenAnswer_id" })
+    @JoinColumn({ name: "given_answer_id" })
     givenAnswer: GivenAnswer;
 
     // answer

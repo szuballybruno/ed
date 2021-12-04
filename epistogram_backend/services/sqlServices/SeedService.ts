@@ -1,50 +1,43 @@
 
-import { Question } from "../../models/entity/Question";
-import { Video } from "../../models/entity/Video";
-import { QuestionTypeEnum, UserRoleEnum } from "../../models/shared_models/types/sharedTypes";
+import { UserRoleEnum } from "../../models/shared_models/types/sharedTypes";
 import { registerInvitedUserAsync } from "../dataService";
 import { log } from "./../misc/logger";
 import { createInvitedUserWithOrgAsync } from "./../signupService";
-import { insertVideoAsync } from "./../videoService";
-import { ORMConnectionService } from "./ORMConnectionService";
 import { SQLBootstrapperService } from "./SQLBootstrapper";
 
 export class SeedService {
 
     private _sqlBootstrapperService: SQLBootstrapperService;
-    private _ormConnectionService: ORMConnectionService;
 
-    constructor(sqlBootstrapperService: SQLBootstrapperService, ormConnectionService: ORMConnectionService) {
+    constructor(sqlBootstrapperService: SQLBootstrapperService) {
 
         this._sqlBootstrapperService = sqlBootstrapperService;
-        this._ormConnectionService = ormConnectionService;
     }
 
     seedDBAsync = async () => {
 
-        const executeSeedScriptAsync = this._sqlBootstrapperService.executeSeedScriptAsync;
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedOrganizations");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionTypes");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedActivities");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedRoles");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedSignupExam");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedJobRoles");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedUsers");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedSignupQuestions");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedPersonalityCategoryDescriptions");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedCourseCategories");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedCourses");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedExams");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedVideos");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestions");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionsExam");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedDailyTips");
 
-        await executeSeedScriptAsync("seedOrganizations");
-        await executeSeedScriptAsync("seedQuestionTypes");
-        await executeSeedScriptAsync("seedActivities");
-        await executeSeedScriptAsync("seedRoles");
-        await executeSeedScriptAsync("seedSignupExam");
-        await executeSeedScriptAsync("seedJobRoles");
-
-        log("seedUsers")
-        await this.seedUsersAsync();
-
-        await executeSeedScriptAsync("seedSignupQuestions");
-        await executeSeedScriptAsync("seedPersonalityCategoryDescriptions");
-        await executeSeedScriptAsync("seedDailyTips");
-        await executeSeedScriptAsync("seedCourseCategories");
-        await executeSeedScriptAsync("seedCourses");
-        await executeSeedScriptAsync("seedExams");
-        await executeSeedScriptAsync("seedVideos");
-        await executeSeedScriptAsync("seedQuestions");
-        await executeSeedScriptAsync("seedQuestionsExam");
-
+        // recalc seqs
         await this._sqlBootstrapperService.recalcSequencesAsync();
+
+        // seed users 
+        await this.seedUsersAsync();
     }
 
     private seedUsersAsync = async () => {

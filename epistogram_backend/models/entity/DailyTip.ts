@@ -16,7 +16,7 @@ export class DailyTip {
     videoFileId: number;
 
     @OneToOne(_ => StorageFile)
-    @JoinColumn({ name: "videoFile_id" })
+    @JoinColumn({ name: "video_file_id" })
     videoFile: StorageFile;
 
     // occurrances

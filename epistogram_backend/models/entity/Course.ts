@@ -36,7 +36,7 @@ export class Course {
     subCategoryId: number;
 
     @ManyToOne(() => CourseCategory, x => x.subCategoryCourses)
-    @JoinColumn({ name: "subCategory_id" })
+    @JoinColumn({ name: "sub_category_id" })
     subCategory: CourseCategory;
 
     // videos 

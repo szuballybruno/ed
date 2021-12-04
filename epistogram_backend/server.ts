@@ -57,7 +57,7 @@ import { SeedService } from './services/sqlServices/SeedService';
     const sqlConnectionService = new SQLConnectionService();
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlBootstrapperService);
-    const seedService = new SeedService(sqlBootstrapperService, ormConnectionService);
+    const seedService = new SeedService(sqlBootstrapperService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const userStatsService = new UserStatsService(ormConnectionService, mapperService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService);

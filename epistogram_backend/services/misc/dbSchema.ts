@@ -18,9 +18,6 @@ import { Role } from "../../models/entity/Role";
 import { RoleActivityBridge } from "../../models/entity/RoleActivityBridge";
 import { StorageFile } from "../../models/entity/StorageFile";
 import { Task } from "../../models/entity/Task";
-import { TestChild } from "../../models/entity/TestChild";
-import { TestParent } from "../../models/entity/TestParent";
-import { TestSubChild } from "../../models/entity/TestSubChild";
 import { User } from "../../models/entity/User";
 import { UserCourseBridge } from "../../models/entity/UserCourseBridge";
 import { UserSessionActivity } from "../../models/entity/UserSessionActivity";
@@ -135,9 +132,6 @@ export const dbSchema = {
         AnswerGivenAnswerBridge,
         Question,
         Answer,
-        TestChild,
-        TestParent,
-        TestSubChild,
         StorageFile,
         AnswerSession,
         VideoPlaybackSample,

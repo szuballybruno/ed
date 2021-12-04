@@ -15,6 +15,6 @@ export class DailyTipOccurrence {
     dailyTipId: number;
 
     @ManyToOne(_ => DailyTip, x => x.occurrences)
-    @JoinColumn({ name: "dailyTip_id" })
+    @JoinColumn({ name: "daily_tip_id" })
     dailyTip: DailyTip;
 }

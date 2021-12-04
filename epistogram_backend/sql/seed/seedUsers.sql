@@ -1,0 +1,30 @@
+INSERT INTO public.user 
+(
+    id, 
+    is_pending_invitation,
+    is_trusted,
+    email,
+    username,
+    first_name,
+    last_name,
+    is_teacher,
+    password,
+    role_id,
+    organization_id,
+    job_title_id
+)
+VALUES 
+(
+    1,
+    true,
+    true,
+    'teacher@epi.com',
+    'teacherusername',
+    'Teacherfirst',
+    'Teacherlast',
+    true,
+    '',
+    1,
+    1,
+    1
+)

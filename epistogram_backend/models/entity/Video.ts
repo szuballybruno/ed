@@ -5,8 +5,6 @@ import { Course } from "./Course";
 import { CourseModule } from "./CourseModule";
 import { Question } from "./Question";
 import { StorageFile } from "./StorageFile";
-import { User } from "./User";
-import { UserCourseBridge } from "./UserCourseBridge";
 import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
 
@@ -36,7 +34,7 @@ export class Video {
     videoFileId: number;
 
     @ManyToOne(type => StorageFile, s => s.videos, { cascade: true })
-    @JoinColumn({ name: "videoFile_id" })
+    @JoinColumn({ name: "video_file_id" })
     videoFile: StorageFile;
 
     // thumbnail file
@@ -44,7 +42,7 @@ export class Video {
     thumbnailFileId: number;
 
     @OneToOne(type => StorageFile, { cascade: true })
-    @JoinColumn({ name: "thumbnailFile_id" })
+    @JoinColumn({ name: "thumbnail_file_id" })
     thumbnailFile: StorageFile
 
     // questions
