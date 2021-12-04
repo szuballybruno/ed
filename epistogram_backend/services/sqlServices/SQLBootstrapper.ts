@@ -42,6 +42,37 @@ export class SQLBootstrapperService {
         await this.recreateConstraintsAsync(this._dbSchema.constraints);
     }
 
+    recalcSequencesAsync = async () => {
+
+        log("Recalculating sequance max values...");
+
+        const dbName = this._configuration.database.name;
+
+        const script = `
+            DO $$
+                DECLARE
+                i TEXT;
+                BEGIN
+                FOR i IN (SELECT tbls.table_name 
+                    FROM information_schema.tables AS tbls 
+                    INNER JOIN information_schema.columns AS cols 
+                    ON tbls.table_name = cols.table_name 
+                    WHERE tbls.table_catalog='${dbName}' 
+                        AND tbls.table_schema='public' 
+                        AND cols.column_name='id'
+                        AND tbls.table_type = 'BASE TABLE') 
+                    LOOP
+                    
+                    EXECUTE 'SELECT setval(''"' || i || '_id_seq"'', (SELECT MAX(id) FROM ' || quote_ident(i) || '));';
+                END LOOP;
+            END $$;
+        `;
+
+        await this._sqlConnectionService.executeSQLAsync(script);
+
+        log("-- Recalculating sequance max values done.");
+    }
+
     executeSeedScriptAsync = async (seedScriptName: string) => {
 
         log(`Seeding ${seedScriptName}...`);
