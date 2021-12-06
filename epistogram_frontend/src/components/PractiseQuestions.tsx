@@ -189,7 +189,9 @@ export const PractiseQuestions = () => {
                     correctAnswerIds={answerResults?.correctAnswerIds ?? []}
                     loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
                     question={practiseQuestion}
-                    onlyShowAnswers={isAnswered} />
+                    onlyShowAnswers={isAnswered}
+                    coinsAcquired={null}
+                    bonusCoinsAcquired={answerResults?.coinAcquires.bonus ?? null} />
 
                 <Flex
                     justifyContent="center"

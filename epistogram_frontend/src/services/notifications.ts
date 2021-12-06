@@ -1,23 +1,26 @@
-import { useContext } from "react";
-import { toast } from 'react-toastify';
+import { ReactNode, useContext } from "react";
+import { toast, ToastOptions, ToastPosition } from 'react-toastify';
 import { ErrorDialogContext } from "../components/system/DialogFrame";
 
 export type NotificationType = "error" | "info" | "warning";
 
-export const showNotification = (text: string, type?: NotificationType) => {
+const defaultNotiProps = {
+    position: "bottom-right" as ToastPosition,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+}
 
-    toast.info(
-        text,
-        {
-            position: "bottom-right",
-            autoClose: type === undefined ? 2000 : 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            type: type === "warning" ? "warning" : "info"
-        });
+export const showNotification = (text: string, type?: NotificationType, options?: ToastOptions) => {
+
+    toast(text, {
+        ...defaultNotiProps,
+        autoClose: type === undefined ? 2000 : 3000,
+        type: type === "warning" ? "warning" : "info",
+        ...(options ?? {})
+    });
 }
 
 export const useShowErrorDialog = (title?: string) => {

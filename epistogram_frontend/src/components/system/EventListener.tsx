@@ -19,7 +19,7 @@ export const EventListener = (props: { children: ReactNode }) => {
         if (!event)
             return;
 
-        if (event.type === "coin_acquire") {
+        if (event.type === "coin_acquire_session_streak") {
 
             const coinAcEvent = event.data as EventCoinAcquireNotificationDTO;
 

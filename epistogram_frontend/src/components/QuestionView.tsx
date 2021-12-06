@@ -1,9 +1,12 @@
-import { FlexProps } from "@chakra-ui/react";
+import { Flex, FlexProps } from "@chakra-ui/react";
+import { Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
+import { getAssetUrl } from "../frontendHelpers";
+import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../models/shared_models/types/sharedTypes";
+import { showNotification } from "../services/notifications";
 import { LoadingFramePropsType } from "./system/LoadingFrame";
-import { EpistoButton } from "./universal/EpistoButton";
 import { EpistoText } from "./universal/EpistoText";
 import { QuestionnaierAnswer } from "./universal/QuestionnaireAnswer";
 import { QuestionnaireLayout } from "./universal/QuestionnaireLayout";
@@ -14,6 +17,8 @@ export const QuesitionView = (props: {
     question: QuestionDTO,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
+    coinsAcquired: number | null,
+    bonusCoinsAcquired: CoinAcquireResultDTO | null
 } & FlexProps) => {
 
     const {
@@ -22,8 +27,12 @@ export const QuesitionView = (props: {
         question,
         loadingProps,
         onlyShowAnswers,
+        coinsAcquired,
+        bonusCoinsAcquired,
         ...css
     } = props;
+
+    const isAnswered = correctAnswerIds.length > 0;
 
     const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([]);
 
@@ -47,15 +56,29 @@ export const QuesitionView = (props: {
         }
     }
 
-    const isAnswered = correctAnswerIds.length > 0;
+    useEffect(() => {
 
-    console.log(question.questionId);
+        setSelectedAnswerIds([]);
+    }, [question.questionId]);
 
     useEffect(() => {
 
-        console.log("clear")
-        setSelectedAnswerIds([]);
-    }, [question.questionId]);
+        if (!bonusCoinsAcquired)
+            return;
+
+        const streakLength = bonusCoinsAcquired.reason === "answer_streak_5" ? 5 : 10;
+
+        showNotification(
+            `Sikeresen megszereztél ${bonusCoinsAcquired.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
+            "warning",
+            {
+                style: {
+                    border: "solid 2px gold",
+                },
+                icon: () => <img
+                    src={getAssetUrl("images/epistoCoin.png")} />
+            });
+    }, [bonusCoinsAcquired]);
 
     return <QuestionnaireLayout
         contentClickable={!isAnswered}
@@ -89,5 +112,22 @@ export const QuesitionView = (props: {
                         }} />
                 </QuestionnaierAnswer>;
             })}
+
+        {!!coinsAcquired && <Flex
+            mt="10px"
+            borderRadius="5px"
+            border="solid 2px gold"
+            p="7px"
+            align="center">
+
+            <Typography>
+                +1 EpistoCoin megszerezve!
+            </Typography>
+
+            <img
+                src={getAssetUrl("images/epistoCoin.png")}
+                className="square25"
+                style={{ margin: "0px 0px 4px 4px" }} />
+        </Flex>}
     </QuestionnaireLayout>
 }

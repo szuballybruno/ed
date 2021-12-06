@@ -1,5 +1,6 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
+import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
 import { staticProvider } from "../staticProvider";
 
 export const createAnswerSessionAsync = async (
@@ -34,24 +35,34 @@ export const answerQuestionAsync = async (
         .sqlFunctionService
         .answerQuestionFn(userId, answerSessionId, questionId, answerIds, !!isPractiseAnswer);
 
+    let coinAcquires = null as null | {
+        normal: CoinAcquireResultDTO | null,
+        bonus: CoinAcquireResultDTO | null
+    }
+
     // if answer is correct give coin rewards 
     if (isCorrect && !isExamQuestion) {
 
-        await staticProvider
+        const acquire = await staticProvider
             .services
             .coinAcquireService
             .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
 
-        await staticProvider
+        const streakAcquire = await staticProvider
             .services
             .coinAcquireService
             .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
-    }
 
+        coinAcquires = {
+            normal: acquire,
+            bonus: streakAcquire
+        }
+    }
 
     return {
         correctAnswerIds: correctAnswerIds,
         givenAnswerIds: answerIds,
-        isCorrect: isCorrect
+        isCorrect: isCorrect,
+        coinAcquires
     } as AnswerResultDTO;
 }

@@ -141,10 +141,10 @@ import { SeedService } from './services/sqlServices/SeedService';
     addEndpoint("/questions/answer-practise-question", answerPractiseQuestionAction, { isPost: true });
 
     // player
-    addEndpoint('/player/get-player-data', getPlayerDataAction);
-    addEndpoint('/player/save-video-playback-sample', saveVideoPlaybackSampleAction, { isPost: true });
-    addEndpoint('/player/get-course-items', getCourseItemsAction);
-    addEndpoint("/questions/answer-video-question", answerVideoQuestionAction, { isPost: true });
+    addEndpoint(apiRoutes.player.getPlayerData, getPlayerDataAction);
+    addEndpoint(apiRoutes.player.saveVideoPlaybackSample, saveVideoPlaybackSampleAction, { isPost: true });
+    addEndpoint(apiRoutes.player.getCourseItems, getCourseItemsAction);
+    addEndpoint(apiRoutes.player.answerVideoQuestion, answerVideoQuestionAction, { isPost: true });
 
     // course
     addEndpoint("/course/set-course-mode", setCourseTypeAction, { isPost: true });

@@ -40,6 +40,13 @@ export const apiRoutes = {
         getCourseProgressData: "/learning/get-course-progress-data"
     },
 
+    player: {
+        getPlayerData: '/player/get-player-data',
+        saveVideoPlaybackSample: '/player/save-video-playback-sample',
+        getCourseItems: '/player/get-course-items',
+        answerVideoQuestion: "/questions/answer-video-question"
+    },
+
     course: {
         getCourseEditData: '/course/get-course-edit-data',
         getCourseBriefData: '/course/get-course-brief-data',

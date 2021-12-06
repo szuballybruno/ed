@@ -43,8 +43,6 @@ export const useVideoPlayerState = (
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
     const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking;
 
-    console.log(isPlaying);
-
     // useMemo(() => new AdvancedTimer(100, () => setShouldBePlaying(true)).start(), []);
 
     const subtileTracks = subtitles

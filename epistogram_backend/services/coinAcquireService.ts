@@ -69,11 +69,16 @@ export class CoinAcquireService {
             .getMany();
 
         if (alreadyAcquiredCoinsForCurrentQuestionId.length > 0)
-            return;
+            return null;
 
         // insert coin
         await this._funcService
             .insertCoinAcquiredFn({ userId, amount: 1, givenAnswerId });
+
+        return {
+            reason: "correct_answer",
+            amount: 1
+        } as CoinAcquireResultDTO;
     }
 
     /**
@@ -93,13 +98,25 @@ export class CoinAcquireService {
 
             await this._funcService
                 .insertCoinAcquiredFn({ userId, amount: 5, givenAnswerStreakId: streakId });
+
+            return {
+                amount: 5,
+                reason: "answer_streak_5"
+            } as CoinAcquireResultDTO;
         }
 
-        if (streakLength === 10 && prevCoinsGivenForStreak.length === 0) {
+        if (streakLength === 10 && prevCoinsGivenForStreak.length === 1) {
 
             await this._funcService
                 .insertCoinAcquiredFn({ userId, amount: 15, givenAnswerStreakId: streakId });
+
+            return {
+                amount: 15,
+                reason: "answer_streak_10"
+            } as CoinAcquireResultDTO;
         }
+
+        return null;
     }
 
     /**
@@ -221,9 +238,6 @@ export class CoinAcquireService {
 
         // add acquire event 
         this._eventService
-            .addEvent("coin_acquire", {
-                amount,
-                reason
-            });
+            .addSessionStreakEventAsync(userId, { amount, reason });
     }
 }

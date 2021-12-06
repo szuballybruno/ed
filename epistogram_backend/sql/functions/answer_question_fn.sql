@@ -24,6 +24,7 @@ DECLARE
 	
 	var_streak_length integer;
 	var_is_correct boolean;
+	var_is_correctly_answered_before boolean;
 	
 	var_previous_streak_id integer;
 	var_previous_streak_end_date timestamptz;
@@ -39,6 +40,16 @@ BEGIN
 			AND a.is_correct = true
 	)		
 	INTO var_correct_answer_ids;
+	
+	-- IS CORRECTLY ANSWERED BEFORE
+	SELECT COUNT(ga.id) > 0 
+	FROM public.given_answer ga
+	LEFT JOIN public.answer_session ase
+	ON ase.id = ga.answer_session_id
+	WHERE ga.is_correct 
+		AND ga.question_id = param_question_id
+		AND ase.user_id = param_user_id
+	INTO var_is_correctly_answered_before;
 	
 	-- IS CORRECT 
 	var_is_correct := var_correct_answer_ids = param_answer_ids;
@@ -72,7 +83,8 @@ BEGIN
   	END IF;
 	
 	-- set streak id to null if incorrect answer 
-	IF NOT var_is_correct THEN 
+	-- OR is answered corretly before, that does not add to the streak
+	IF NOT var_is_correct OR var_is_correctly_answered_before THEN 
 		
 		var_previous_streak_id := NULL;
 	END IF;

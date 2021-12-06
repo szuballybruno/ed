@@ -8,8 +8,13 @@ INSERT INTO public.question
 VALUES 
     (36, 'Hogy lehet e legyegyszerűbben a munkalapon a X789654-es cellához jutni?', 101, 4), 
     (37, 'Hogy érem el, hogy az Excel a Pí szám 15 számjegyű értékével számoljon?', 110, 8),
-    (38, 'What are some random fun facts about you?', 250, 1),
-    (39, 'Whats Something You Want to Learn or Wish You Were Better At?', 400, 1);
+
+    -- video 1
+    (38, 'Question 1', 100, 1),
+    (39, 'Question 2', 150, 1),
+    (40, 'Question 3', 200, 1),
+    (41, 'Question 4', 250, 1),
+    (42, 'Question 5', 300, 1);
 
 INSERT INTO public.answer
     (text, is_correct, question_id) 
@@ -25,9 +30,21 @@ VALUES
     ('3,141592653589', false, 37),
 
     ('Video answer 1', false, 38), 
-    ('Video answer 2', true, 38), 
+    ('Video answer 2 - c', true, 38), 
     ('Video answer 3', false, 38),
 
     ('Video answer 1', false, 39), 
     ('Video answer 2', false, 39), 
-    ('Video answer 3', true, 39);
+    ('Video answer 3 - c', true, 39),
+
+    ('Video answer 1', false, 40), 
+    ('Video answer 2', false, 40), 
+    ('Video answer 3 - c', true, 40),
+
+    ('Video answer 1', false, 41), 
+    ('Video answer 2', false, 41), 
+    ('Video answer 3 - c', true, 41),
+
+    ('Video answer 1', false, 42), 
+    ('Video answer 2', false, 42), 
+    ('Video answer 3 - c', true, 42);
