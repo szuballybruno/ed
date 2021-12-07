@@ -7,7 +7,7 @@ import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { SignupCompletedView } from "../models/views/SignupCompletedView";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
-import { sendInvitaitionMailAsync } from "./emailService";
+import { sendInvitaitionMailAsync } from "./EmailService";
 import { toSignupDataDTO } from "./mappings";
 import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
@@ -71,69 +71,6 @@ export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, o
     }
 
     return { invitationToken, user };
-}
-
-export const createUserAsync = async (
-    email: string,
-    firstName: string,
-    lastName: string,
-    organizationId: number | null,
-    phoneNumber: string | null,
-    roleId: number | null,
-    jobTitleId: number | null,
-    isInvited: boolean,
-    password: string) => {
-
-    // does user already exist?
-    const existingUser = await getUserByEmail(email);
-    if (existingUser)
-        throw new TypedError("User already exists. Email: " + email, "bad request");
-
-    // hash user password 
-    const hashedPassword = await hashPasswordAsync(password);
-
-    // set default user fileds
-    const user = {
-        email,
-        roleId: roleId ?? UserRoleEnum.userId,
-        firstName,
-        lastName,
-        jobTitleId,
-        phoneNumber,
-        organizationId,
-        password: hashedPassword,
-        isPendingInvitation: isInvited,
-        isTrusted: isInvited
-    } as User;
-
-    // insert user
-    await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .insert(user);
-
-    const userId = (user as User).id;
-
-    // insert signup answer session
-    await staticProvider
-        .ormConnection
-        .getRepository(AnswerSession)
-        .insert({
-            examId: SIGNUP_EXAM_ID,
-            isSignupAnswerSession: true,
-            userId: userId
-        });
-
-    // insert practise answer session
-    await staticProvider
-        .ormConnection
-        .getRepository(AnswerSession)
-        .insert({
-            userId: userId,
-            isPractiseAnswerSession: true
-        });
-
-    return user;
 }
 
 export const answerSignupQuestionAsync = async (userId: number, questionAnswer: AnswerSignupQuestionDTO) => {

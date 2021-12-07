@@ -129,7 +129,7 @@ export const toUserDTO = (user: User) => {
         email: user.email,
         phoneNumber: user.phoneNumber,
         isTrusted: user.isTrusted,
-        isPendingInvitation: user.isPendingInvitation,
+        isPendingInvitation: user.isInvitationAccepted,
         name: `${user.lastName} ${user.firstName}`,
 
         jobTitle: user.jobTitle

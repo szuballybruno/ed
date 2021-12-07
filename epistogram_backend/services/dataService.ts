@@ -2,22 +2,11 @@
 import { Organization } from "../models/entity/Organization";
 import { User } from "../models/entity/User";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
-import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
-import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
-import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
-import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
-import { getUserLoginTokens } from "./authenticationService";
 import { getCurrentCourseItemsAsync } from "./courseService";
-import { sendSuccessfulRegistrationEmailAsync } from "./emailService";
 import { toOrganizationDTO } from "./mappings";
-import { hashPasswordAsync } from "./misc/crypt";
-import { generateEpistoPassword } from "./passGenService";
-import { createUserAsync } from "./signupService";
-import { verifyInvitaionToken, verifyRegistrationToken } from "./tokenService";
-import { getUserById } from "./userService";
 
 export const getOrganizationsAsync = async (userId: number) => {
 
@@ -28,55 +17,6 @@ export const getOrganizationsAsync = async (userId: number) => {
 
     return orgs
         .map(org => toOrganizationDTO(org));
-}
-
-export const registerUserAsync = async (dto: RegisterUserDTO) => {
-
-    const token = dto.registrationToken;
-    verifyRegistrationToken(token);
-
-    const generatedPassword = generateEpistoPassword();
-
-    const user = await createUserAsync(
-        dto.emailAddress,
-        dto.firstName,
-        dto.lastName,
-        null,
-        null,
-        null,
-        null,
-        false,
-        generatedPassword);
-
-    await sendSuccessfulRegistrationEmailAsync(user, generatedPassword, staticProvider.globalConfig.misc.frontendUrl);
-
-    return await getUserLoginTokens(user.id);
-}
-
-export const registerInvitedUserAsync = async (dto: RegisterInvitedUserDTO) => {
-
-    const token = dto.invitationToken;
-    const payload = verifyInvitaionToken(token);
-
-    withValueOrBadRequest<string>(dto.password);
-
-    const user = await getUserById(payload.userId);
-    if (!user)
-        throw new TypedError("No such user!", "bad request");
-
-    if (dto.password !== dto.passwordCompare)
-        throw new TypedError("Passwords don't match!", "bad request");
-
-    await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .save({
-            id: user.id,
-            isPendingInvitation: false,
-            password: await hashPasswordAsync(dto.password)
-        });
-
-    return await getUserLoginTokens(user.id);
 }
 
 export const saveUserDataAsync = async (userId: number, dto: UserDTO) => {
@@ -96,13 +36,11 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
 
     const modules = await getCurrentCourseItemsAsync(userId);
     const recommendedCourseDTOs = [] as CourseShortDTO[];
-    const currntTasks = getCurrentTasks();
     const developmentChartData = getDevelopmentChart();
 
     const overviewPageDTO = {
         tipOfTheDay: tipOfTheDay,
         recommendedCourses: recommendedCourseDTOs,
-        currentTasks: currntTasks,
         developmentChartData: developmentChartData,
         modules: modules
     } as OverviewPageDTO;
@@ -111,28 +49,6 @@ export const getOverviewPageDTOAsync = async (userId: number) => {
 }
 
 const tipOfTheDay = "Előzetes kérdőívünk alapján Interperszonális (társasági) típusba tartozol, ez pedig azt jelenti, hogy tanulócsoportokkal, esetleg tanulótárssal tudsz a leghatékonyabban tanulni. Ha átbeszélitek a problémás részeket, ismétlő jelleggel végigmentek akár teljes anyagrészeken, illetve közösen töltitek ki az időközi teszteket, mind-mind segíti az ismeretanyag mélyebb beszívódását. Tudjuk, ez céges környezetben más, mint a közép vagy felsőoktatásban volt, ugyanakkor érdemes lehet akár közös Facebook csoportot létrehozni (de valószínűleg a munkahelyi kollaborációs platform is tökéletes erre a feladatra). Ha szeretnéd, össze is köthetünk a hozzád hasonló munkatársaiddal, de akár cégen kívüli tanulótársakra is szert tehetesz!"
-
-const getCurrentTasks = () => {
-    return {
-        tasks: [
-            // {
-            //     name: "Office kurzus gyakorlása",
-            //     dueDate: new Date(Date.now()),
-            //     objective: "practise"
-            // } as TaskDTO,
-            // {
-            //     name: "PHP videók megtekintése",
-            //     dueDate: new Date(Date.now()),
-            //     objective: "continueVideo"
-            // } as TaskDTO,
-            // {
-            //     name: "Word kurzus végi vizsga",
-            //     dueDate: new Date(Date.now()),
-            //     objective: "exam"
-            // } as TaskDTO
-        ]
-    } as CurrentTasksDTO;
-}
 
 const getDevelopmentChart = () => {
     return {

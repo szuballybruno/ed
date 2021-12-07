@@ -1,10 +1,11 @@
 export const apiRoutes = {
 
-    open: {
-        renewUserSession: "/open/renew-user-session",
-        loginUser: "/open/login-user",
-        registerUser: "/open/register-user",
-        registerInvitedUser: "/open/register-invited-user"
+    public: {
+        renewUserSession: "/public/renew-user-session",
+        loginUser: "/public/login-user",
+        registerUserViaPublicToken: "/public/register-user-via-public-token",
+        registerUserViaInvitationToken: "/public/register-user-via-invitation-token",
+        registerUserViaActivationCode: "/public/register-user-via-activation-code"
     },
 
     misc: {
@@ -97,10 +98,10 @@ export const apiRoutes = {
 
 export const isOpenRoute = (routePath: string) => {
 
-    const openRoutes = apiRoutes.open;
+    const openRoutes = apiRoutes.public;
 
     for (const key in openRoutes) {
-        if (Object.prototype.hasOwnProperty.call(apiRoutes.open, key)) {
+        if (Object.prototype.hasOwnProperty.call(apiRoutes.public, key)) {
 
             const routeName = (openRoutes as any)[key] as string;
 

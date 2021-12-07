@@ -1,4 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { RegistrationType } from "../Types";
 import { UserActivityFlatView } from "../views/UserActivityFlatView";
 import { ActivitySession } from "./ActivitySession";
 import { AnswerSession } from "./AnswerSession";
@@ -11,7 +12,6 @@ import { Role } from "./Role";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
 import { UserCourseBridge } from "./UserCourseBridge";
-import { UserSessionActivity } from "./UserSessionActivity";
 import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
 
@@ -24,7 +24,10 @@ export class User {
     deletionDate: Date;
 
     @Column()
-    isPendingInvitation: boolean;
+    isInvitationAccepted: boolean;
+
+    @Column({ type: "text" })
+    registrationType: RegistrationType;
 
     // a trusted user has been invited to use the application,
     // users can join without invitation but they will be considered untrusted, 

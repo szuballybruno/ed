@@ -1,9 +1,8 @@
-import dayjs from "dayjs";
 import { Request, Response } from "express";
 import { User } from "../models/entity/User";
 import { staticProvider } from "../staticProvider";
+import { setAuthCookies } from "../utilities/cookieHelpers";
 import { getCookie, TypedError } from "../utilities/helpers";
-import { sendResetPasswordMailAsync } from "./emailService";
 import { toUserDTO } from "./mappings";
 import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
@@ -146,12 +145,20 @@ export const logInUser = async (email: string, password: string) => {
     log("User logged in: ");
     log(userDTO);
 
+    const userId = userDTO.id;
+
     await staticProvider
         .services
         .userSessionActivityService
-        .saveUserSessionActivityAsync(userDTO.id, "login");
+        .saveUserSessionActivityAsync(userId, "login");
 
-    return await getUserLoginTokens(userDTO.id);
+    // get auth tokens 
+    const tokens = await getUserLoginTokens(userId);
+
+    // set user current refresh token 
+    await setUserActiveRefreshToken(userId, tokens.refreshToken);
+
+    return tokens;
 }
 
 export const logOutUserAsync = async (userId: number) => {
@@ -171,48 +178,8 @@ export const getUserLoginTokens = async (userId: number) => {
     const accessToken = createAccessToken(userId);
     const refreshToken = createRefreshToken(userId);
 
-    // save refresh token to DB
-    log(`Setting refresh token of user '${userId}' to '${refreshToken}'`);
-    await setUserActiveRefreshToken(userId, refreshToken);
-
     return {
         accessToken,
         refreshToken
     }
-}
-
-export const setAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
-
-    setAccessTokenCookie(res, accessToken);
-    setRefreshTokenCookie(res, refreshToken);
-}
-
-// PRIVATES
-
-const setAccessTokenCookie = (res: Response, accessToken: string) => {
-
-    const frontendUrl = staticProvider.globalConfig.misc.frontendUrl;
-    const isLocalhost = staticProvider.globalConfig.misc.isLocalhost;
-
-    res.cookie(staticProvider.globalConfig.misc.accessTokenCookieName, accessToken, {
-        secure: true,
-        httpOnly: true,
-        expires: dayjs().add(staticProvider.globalConfig.security.accessTokenLifespanInS, "seconds").toDate(),
-        sameSite: "none"
-        // domain: isLocalhost ? undefined : frontendUrl
-    });
-}
-
-const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
-
-    const frontendUrl = staticProvider.globalConfig.misc.frontendUrl;
-    const isLocalhost = staticProvider.globalConfig.misc.isLocalhost;
-
-    res.cookie(staticProvider.globalConfig.misc.refreshTokenCookieName, refreshToken, {
-        secure: true,
-        httpOnly: true,
-        expires: dayjs().add(staticProvider.globalConfig.security.refreshTokenLifespanInS, "seconds").toDate(),
-        sameSite: "none"
-        // domain: isLocalhost ? undefined : frontendUrl
-    });
 }

@@ -3,33 +3,11 @@ import { Course } from "../models/entity/Course";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
-import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
-import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
-import { setAuthCookies } from "../services/authenticationService";
-import { getCourseItemCode } from "../services/courseService";
-import { getOrganizationsAsync, getOverviewPageDTOAsync, registerInvitedUserAsync, registerUserAsync } from "../services/dataService";
+import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/dataService";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { answerPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { staticProvider } from "../staticProvider";
 import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
-
-export const registerUserAction = async (params: ActionParamsType) => {
-
-    const dto = withValueOrBadRequest<RegisterUserDTO>(params.req.body);
-
-    const { accessToken, refreshToken } = await registerUserAsync(dto);
-
-    setAuthCookies(params.res, accessToken, refreshToken);
-};
-
-export const registerInvitedUserAction = async (params: ActionParamsType) => {
-
-    const dto = withValueOrBadRequest<RegisterInvitedUserDTO>(params.req.body);
-
-    const { accessToken, refreshToken } = await registerInvitedUserAsync(dto);
-
-    setAuthCookies(params.res, accessToken, refreshToken);
-};
 
 export const answerPractiseQuestionAction = async (params: ActionParamsType) => {
 

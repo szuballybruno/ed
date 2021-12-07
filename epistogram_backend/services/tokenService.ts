@@ -17,7 +17,7 @@ export const verifyRefreshToken = (token: string) => {
     return verifyJWTToken<AccessTokenPayload>(token, staticProvider.globalConfig.security.jwtSignSecret);
 }
 
-export const verifyRegistrationToken = (token: string) => {
+export const verifyPublicRegistrationToken = (token: string) => {
 
     return verifyJWTToken(token, staticProvider.globalConfig.security.createPasswordTokenSecret);
 }

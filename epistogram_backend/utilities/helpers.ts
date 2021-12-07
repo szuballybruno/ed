@@ -31,9 +31,6 @@ export const forN = <T>(iterations: number, action: (index: number) => T) => {
 }
 
 // TODO REMOVE THIS FROM HERE 
-export type ActionParamsType = { req: Request, res: Response, next: NextFunction, userId: number };
-
-// TODO REMOVE THIS FROM HERE 
 export const getAsyncActionHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
 
     const wrapperFunction = (req: Request, res: Response, next: NextFunction) => {

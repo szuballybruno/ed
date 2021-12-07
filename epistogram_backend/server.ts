@@ -7,8 +7,7 @@ import { CoinTransactionsController } from './api/CoinTransactionsController';
 import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseDetailsAction, getCourseEditDataAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
     answerPractiseQuestionAction, getCourseBriefDataAction,
-    getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction,
-    registerInvitedUserAction, registerUserAction, saveCourseThumbnailAction
+    getCurrentCourseItemCodeAction, getOrganizationsAction, getOverviewPageDTOAction, saveCourseThumbnailAction
 } from './api/dataActions';
 import { EventController } from './api/EventController';
 import { answerExamQuestionAction, createExamAction, deleteExamAction, getExamEditDataAction, getExamResultsAction, saveExamAction } from './api/examActions';
@@ -43,6 +42,8 @@ import { UserStatsService } from './services/userStatsService';
 import { staticProvider } from './staticProvider';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
 import './utilities/jsExtensions';
+import { RegistrationService } from './services/RegistrationService';
+import { RegistrationController } from './api/RegistrationController';
 
 (async () => {
 
@@ -69,11 +70,13 @@ import './utilities/jsExtensions';
     const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
     const activationCodeService = new ActivationCodeService(ormConnectionService);
+    const registrationService = new RegistrationService(activationCodeService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
+    const registrationController = new RegistrationController(registrationService);
 
     // initialize services 
     initializeMappings(mapperService);
@@ -105,10 +108,11 @@ import './utilities/jsExtensions';
     expressServer.use(getAuthMiddleware());
 
     // open routes
-    addEndpoint(apiRoutes.open.renewUserSession, renewUserSessionAction, { isPublic: true });
-    addEndpoint(apiRoutes.open.loginUser, logInUserAction, { isPost: true, isPublic: true });
-    addEndpoint(apiRoutes.open.registerUser, registerUserAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.open.registerInvitedUser, registerInvitedUserAction, { isPublic: true, isPost: true });
+    addEndpoint(apiRoutes.public.renewUserSession, renewUserSessionAction, { isPublic: true });
+    addEndpoint(apiRoutes.public.loginUser, logInUserAction, { isPost: true, isPublic: true });
+    addEndpoint(apiRoutes.public.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
+    addEndpoint(apiRoutes.public.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
+    addEndpoint(apiRoutes.public.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
 
     // misc
     addEndpoint('/get-current-user', getCurrentUserAction);

@@ -3,7 +3,8 @@ import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { log, logError } from "../services/misc/logger";
-import { ActionParamsType } from "./helpers";
+
+export type ActionParamsType = { req: Request, res: Response, next: NextFunction, userId: number };
 
 export const addAPIEndpoint = (
     expressServer: Application,
