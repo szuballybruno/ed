@@ -16,7 +16,6 @@ COPY /models ./models
 COPY /services ./services
 COPY /utilities ./utilities
 
-COPY database.ts .
 COPY server.ts .
 COPY staticProvider.ts .
 

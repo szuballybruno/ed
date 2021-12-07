@@ -12,6 +12,20 @@ export class ActivationCodeService {
         this._ormService = ormService;
     }
 
+    async isValidCode(code: string) {
+
+        const actCode = await this._ormService
+            .getRepository(ActivationCode)
+            .findOne({
+                where: {
+                    isUsed: false,
+                    code
+                }
+            });
+
+        return !!actCode;
+    }
+
     async generateActivationCodesAsync(amount: number) {
 
         const codes = forN(amount, x => this.genCode());
