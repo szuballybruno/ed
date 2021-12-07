@@ -4,7 +4,7 @@ import { CoinBalanceView } from "../models/views/CoinBalanceView";
 import { CoinTransactionView } from "../models/views/CoinTransactionView";
 import { MapperService } from "./mapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { InsertCoinFnParamsType, SQLFunctionsService } from "./sqlServices/SQLFunctionsService";
+import { InsertCoinFnParamsType, SQLFunctionsService } from "./sqlServices/FunctionsService";
 
 export class CoinTransactionService {
 

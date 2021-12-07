@@ -37,7 +37,7 @@ import { ORMConnectionService } from './services/sqlServices/ORMConnectionServic
 import { SeedService } from './services/sqlServices/SeedService';
 import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
-import { SQLFunctionsService } from './services/sqlServices/SQLFunctionsService';
+import { SQLFunctionsService } from './services/sqlServices/FunctionsService';
 import { UserSessionActivityService } from './services/userSessionActivityService';
 import { UserStatsService } from './services/userStatsService';
 import { staticProvider } from './staticProvider';
