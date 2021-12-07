@@ -72,7 +72,7 @@ export class SignupService {
         return { invitationToken, user };
     }
 
-    async answerSignupQuestionAsync = (userId: number, questionAnswer: AnswerSignupQuestionDTO)  {
+    async answerSignupQuestionAsync(userId: number, questionAnswer: AnswerSignupQuestionDTO) {
 
         await staticProvider
             .services
@@ -80,7 +80,7 @@ export class SignupService {
             .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
     }
 
-    async getSignupDataAsync = (userId: number)  {
+    async getSignupDataAsync(userId: number) {
 
         const userSignupCompltedView = await staticProvider
             .ormConnection
