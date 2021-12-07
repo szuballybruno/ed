@@ -11,6 +11,7 @@
 /epistogram_backend/.vscode/
 
 /epistogram_backend/temp/
+/epistogram_backend/build/
 
 /.idea/
 /.idea/*
