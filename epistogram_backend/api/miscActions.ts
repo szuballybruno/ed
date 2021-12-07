@@ -8,9 +8,9 @@ import { toDailyTipDTO } from "../services/mappings";
 import { getPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { createRegistrationToken } from "../services/tokenService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
-export const getJobTitlesAction = async (params: ActionParamsType) => {
+export const getJobTitlesAction = async (params: ActionParams) => {
 
     return await staticProvider
         .ormConnection
@@ -18,12 +18,12 @@ export const getJobTitlesAction = async (params: ActionParamsType) => {
         .find();
 };
 
-export const getRegistrationLinkAction = async (params: ActionParamsType) => {
+export const getRegistrationLinkAction = async (params: ActionParams) => {
 
     return Promise.resolve(`${staticProvider.globalConfig.misc.frontendUrl}/registration?token=${createRegistrationToken()}`);
 };
 
-export const requestChangePasswordAction = async (params: ActionParamsType) => {
+export const requestChangePasswordAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<any>(params.req.body);
     const oldPassword = withValueOrBadRequest<string>(dto.oldPassword);
@@ -31,19 +31,19 @@ export const requestChangePasswordAction = async (params: ActionParamsType) => {
     return await requestChangePasswordAsync(params.userId, oldPassword);
 };
 
-export const saveUserDataAction = async (params: ActionParamsType) => {
+export const saveUserDataAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<UserDTO>(params.req.body);
 
     return saveUserDataAsync(params.userId, dto);
 };
 
-export const getPractiseQuestionAction = async (params: ActionParamsType) => {
+export const getPractiseQuestionAction = async (params: ActionParams) => {
 
     return await getPractiseQuestionAsync(params.userId);
 };
 
-export const getDailyTipAction = async (params: ActionParamsType) => {
+export const getDailyTipAction = async (params: ActionParams) => {
 
     const dailyTipViews = await staticProvider
         .ormConnection

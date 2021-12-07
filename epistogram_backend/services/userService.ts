@@ -195,6 +195,17 @@ export const setUserActiveRefreshToken = (userId: number, refreshToken: string) 
         });
 }
 
+export const setUserInvitationTokenasync = async (userId: number, invitationToken: string) => {
+
+    await staticProvider
+        .ormConnection
+        .getRepository(User)
+        .save({
+            id: userId,
+            invitationToken
+        });
+}
+
 export const removeRefreshToken = (userId: number) => {
 
     return staticProvider

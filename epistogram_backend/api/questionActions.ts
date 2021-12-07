@@ -5,9 +5,9 @@ import { toAnswerEditDTO } from "../services/mappings";
 import { saveQuestionAsync } from "../services/questionService";
 import { answerVideoQuestionAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
-export const answerVideoQuestionAction = async (params: ActionParamsType) => {
+export const answerVideoQuestionAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
     const answerIds = withValueOrBadRequest<number[]>(dto.answerIds);
@@ -17,7 +17,7 @@ export const answerVideoQuestionAction = async (params: ActionParamsType) => {
     return answerVideoQuestionAsync(params.userId, answerSessionId, questionId, answerIds);
 };
 
-export const getQuestionEditDataAction = async (params: ActionParamsType) => {
+export const getQuestionEditDataAction = async (params: ActionParams) => {
 
     const questionId = withValueOrBadRequest<number>(params.req.query.questionId, "number");
 
@@ -37,7 +37,7 @@ export const getQuestionEditDataAction = async (params: ActionParamsType) => {
     } as QuestionEditDataDTO;
 }
 
-export const saveQuestionAction = async (params: ActionParamsType) => {
+export const saveQuestionAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<QuestionEditDataDTO>(params.req.body);
     const questionId = dto.questionId;

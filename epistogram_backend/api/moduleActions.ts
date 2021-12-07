@@ -1,30 +1,30 @@
 import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { createModuleAsync, deleteModulesAsync, getModuleEditDataAsync, saveModuleAsync } from "../services/moduleService";
-import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
-export const createModuleAction = async (params: ActionParamsType) => {
+export const createModuleAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<ModuleCreateDTO>(params.req?.body);
 
     await createModuleAsync(dto);
 }
 
-export const deleteModuleAction = async (params: ActionParamsType) => {
+export const deleteModuleAction = async (params: ActionParams) => {
 
     const moduleId = withValueOrBadRequest<number>(params.req.query.moduleId, "number");
 
     await deleteModulesAsync([moduleId]);
 }
 
-export const getModuleEditDataAction = async (params: ActionParamsType) => {
+export const getModuleEditDataAction = async (params: ActionParams) => {
 
     const moduleId = withValueOrBadRequest<number>(params.req.query.moduleId, "number");
 
     return getModuleEditDataAsync(moduleId);
 }
 
-export const saveModuleAction = async (params: ActionParamsType) => {
+export const saveModuleAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<ModuleAdminEditDTO>(params.req.body);
 

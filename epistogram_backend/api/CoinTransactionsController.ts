@@ -1,5 +1,5 @@
 import { CoinTransactionService } from "../services/coinTransactionService";
-import { ActionParamsType } from "../utilities/helpers";
+import { ActionParams } from "../utilities/helpers";
 
 export class CoinTransactionsController {
 
@@ -10,13 +10,13 @@ export class CoinTransactionsController {
         this._coinTransactionService = cts;
     }
 
-    getCoinTransactionsAction = async (params: ActionParamsType) => {
+    getCoinTransactionsAction = async (params: ActionParams) => {
 
         return this._coinTransactionService
             .getCoinTransactionsAsync(params.userId);
     }
 
-    getCoinBalanceAction = async (params: ActionParamsType) => {
+    getCoinBalanceAction = async (params: ActionParams) => {
 
         return this._coinTransactionService.getCoinBalance(params.userId);
     }

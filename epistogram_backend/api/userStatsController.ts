@@ -1,5 +1,5 @@
 import { UserStatsService } from "../services/userStatsService";
-import { ActionParamsType } from "../utilities/helpers";
+import { ActionParams } from "../utilities/helpers";
 
 export class UserStatsController {
 
@@ -10,7 +10,7 @@ export class UserStatsController {
         this._userStatsService = userStatsService;
     }
 
-    getUserStatsAction = async (params: ActionParamsType) => {
+    getUserStatsAction = async (params: ActionParams) => {
 
         return await this._userStatsService.getUserStatsAsync(params.userId);
     }

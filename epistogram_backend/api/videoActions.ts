@@ -11,9 +11,9 @@ import { getAssetUrl } from "../services/misc/urlProvider";
 import { saveAssociatedQuestionsAsync } from "../services/questionService";
 import { deleteVideosAsync, insertVideoAsync, uploadVideoFileAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
-export const createVideoAction = async (params: ActionParamsType) => {
+export const createVideoAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<CreateVideoDTO>(params.req.body);
 
@@ -45,14 +45,14 @@ export const createVideoAction = async (params: ActionParamsType) => {
     } as IdResultDTO;
 }
 
-export const deleteVideoAction = async (params: ActionParamsType) => {
+export const deleteVideoAction = async (params: ActionParams) => {
 
     const videoId = withValueOrBadRequest<IdBodyDTO>(params.req.body).id;
 
     await deleteVideosAsync([videoId], true);
 }
 
-export const saveVideoAction = async (params: ActionParamsType) => {
+export const saveVideoAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<VideoEditDTO>(params.req.body);
     const videoId = dto.id;
@@ -71,7 +71,7 @@ export const saveVideoAction = async (params: ActionParamsType) => {
     await saveAssociatedQuestionsAsync(dto.questions, videoId);
 }
 
-export const getVideoEditDataAction = async (params: ActionParamsType) => {
+export const getVideoEditDataAction = async (params: ActionParams) => {
 
     const videoId = withValueOrBadRequest<number>(params.req.query.videoId, "number");
 
@@ -102,7 +102,7 @@ export const getVideoEditDataAction = async (params: ActionParamsType) => {
     } as VideoEditDTO;
 }
 
-export const uploadVideoFileChunksAction = async (params: ActionParamsType) => {
+export const uploadVideoFileChunksAction = async (params: ActionParams) => {
 
     const videoId = withValueOrBadRequest<number>(params.req.body.videoId, "number");
     const tempFolder = staticProvider.rootDirectory + "\\uploads_temp";

@@ -14,33 +14,33 @@ import { deleteExamsAsync } from "../services/examService";
 import { toCourseDetailsDTO } from "../services/mappings";
 import { deleteVideosAsync } from "../services/videoService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
-export const startCourseAction = async (params: ActionParamsType) => {
+export const startCourseAction = async (params: ActionParams) => {
 
     const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
     return startCourseAsync(params.userId, courseId);
 };
 
-export const getAvailableCoursesAction = async (params: ActionParamsType) => {
+export const getAvailableCoursesAction = async (params: ActionParams) => {
 
     return getAvailableCoursesAsync(params.userId);
 };
 
-export const getCourseEditDataAction = async (params: ActionParamsType) => {
+export const getCourseEditDataAction = async (params: ActionParams) => {
 
     const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
 
     return await getCourseEditDataAsync(courseId);
 };
 
-export const getAdminCourseListAction = (params: ActionParamsType) => {
+export const getAdminCourseListAction = (params: ActionParams) => {
 
     return getAdminCoursesAsync();
 }
 
-export const getCourseDetailsAction = async (params: ActionParamsType) => {
+export const getCourseDetailsAction = async (params: ActionParams) => {
 
     const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
 
@@ -56,7 +56,7 @@ export const getCourseDetailsAction = async (params: ActionParamsType) => {
     return toCourseDetailsDTO(course);
 }
 
-export const saveCourseAction = async (params: ActionParamsType) => {
+export const saveCourseAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<CourseEditDataDTO>(params.req?.body);
 
@@ -111,14 +111,14 @@ export const saveCourseAction = async (params: ActionParamsType) => {
             } as Video)));
 };
 
-export const deleteCourseAction = async (params: ActionParamsType) => {
+export const deleteCourseAction = async (params: ActionParams) => {
 
     const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
     await deleteCourseAsync(courseId);
 }
 
-export const createCourseAction = async (params: ActionParamsType) => {
+export const createCourseAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<CreateCourseDTO>(params.req.body);
 
@@ -133,7 +133,7 @@ export const createCourseAction = async (params: ActionParamsType) => {
         });
 }
 
-export const setCourseTypeAction = async (params: ActionParamsType) => {
+export const setCourseTypeAction = async (params: ActionParams) => {
 
     const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
     const modeType = withValueOrBadRequest<CourseModeType>(params.req.query.mode);
@@ -141,7 +141,7 @@ export const setCourseTypeAction = async (params: ActionParamsType) => {
     return setCourseTypeAsync(params.userId, courseId, modeType);
 };
 
-export const getCourseProgressDataAction = async (params: ActionParamsType) => {
+export const getCourseProgressDataAction = async (params: ActionParams) => {
 
     return getCourseProgressDataAsync(params.userId);
 };

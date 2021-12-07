@@ -10,9 +10,9 @@ import { answerExamQuestionAsync, deleteExamsAsync, getExamResultsAsync } from "
 import { toQuestionDTO } from "../services/mappings";
 import { saveAssociatedQuestionsAsync } from "../services/questionService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, getAsyncActionHandler, withValueOrBadRequest } from "../utilities/helpers";
 
-export const answerExamQuestionAction = async (params: ActionParamsType) => {
+export const answerExamQuestionAction = async (params: ActionParams) => {
 
     const userId = getUserIdFromRequest(params.req);
     const questionAnswerDTO = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
@@ -20,14 +20,14 @@ export const answerExamQuestionAction = async (params: ActionParamsType) => {
     return answerExamQuestionAsync(userId, questionAnswerDTO);
 };
 
-export const getExamResultsAction = async (params: ActionParamsType) => {
+export const getExamResultsAction = async (params: ActionParams) => {
 
     const answerSessionId = withValueOrBadRequest<number>(params.req.query.answerSessionId, "number");
 
     return getExamResultsAsync(params.userId, answerSessionId);
 };
 
-export const getExamEditDataAction = async (params: ActionParamsType) => {
+export const getExamEditDataAction = async (params: ActionParams) => {
 
     const examId = withValueOrBadRequest<number>(params.req.query.examId, "number");
 
@@ -51,7 +51,7 @@ export const getExamEditDataAction = async (params: ActionParamsType) => {
     } as ExamEditDataDTO;
 }
 
-export const saveExamAction = async (params: ActionParamsType) => {
+export const saveExamAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<ExamEditDataDTO>(params.req.body);
     const examId = dto.id;
@@ -70,7 +70,7 @@ export const saveExamAction = async (params: ActionParamsType) => {
     await saveAssociatedQuestionsAsync(dto.questions, undefined, examId);
 }
 
-export const createExamAction = async (params: ActionParamsType) => {
+export const createExamAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<CreateExamDTO>(params.req.body);
 
@@ -104,7 +104,7 @@ export const createExamAction = async (params: ActionParamsType) => {
     } as IdResultDTO;
 }
 
-export const deleteExamAction = async (params: ActionParamsType) => {
+export const deleteExamAction = async (params: ActionParams) => {
 
     const examId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 

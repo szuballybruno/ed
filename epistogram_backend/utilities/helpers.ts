@@ -31,6 +31,47 @@ export const forN = <T>(iterations: number, action: (index: number) => T) => {
 }
 
 // TODO REMOVE THIS FROM HERE 
+export class ActionParams {
+    req: Request;
+    res: Response;
+    next: NextFunction;
+    userId: number;
+
+    constructor(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+        userId: number) {
+
+        this.req = req;
+        this.res = res;
+        this.next = next;
+        this.userId = userId;
+    }
+
+    getBody<T>() {
+
+        const body = withValueOrBadRequest<T>(this.req.body);
+        return new ActionParamsBody<T>(body);
+    }
+};
+
+export class ActionParamsBody<T> {
+
+    bodyData: T;
+
+    constructor(bodyData: T) {
+
+        this.bodyData = bodyData;
+    }
+
+    getBodyValue<TValue>(getter: (body: T) => TValue) {
+
+        return withValueOrBadRequest<TValue>(getter(this.bodyData));
+    }
+}
+
+// TODO REMOVE THIS FROM HERE 
 export const getAsyncActionHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
 
     const wrapperFunction = (req: Request, res: Response, next: NextFunction) => {

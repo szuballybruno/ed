@@ -2,7 +2,7 @@
 import { UserRoleEnum } from "../../models/shared_models/types/sharedTypes";
 import { registerInvitedUserAsync } from "../dataService";
 import { log } from "./../misc/logger";
-import { createInvitedUserWithOrgAsync } from "./../signupService";
+import { createInvitedUserWithOrgAsync } from "../SignupService";
 import { SQLBootstrapperService } from "./SQLBootstrapper";
 
 export class SeedService {

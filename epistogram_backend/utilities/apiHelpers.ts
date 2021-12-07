@@ -3,8 +3,7 @@ import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
 import { getUserIdFromRequest } from "../services/authenticationService";
 import { log, logError } from "../services/misc/logger";
-
-export type ActionParamsType = { req: Request, res: Response, next: NextFunction, userId: number };
+import { ActionParams } from "./helpers";
 
 export const addAPIEndpoint = (
     expressServer: Application,
@@ -43,17 +42,17 @@ export const respond = (res: Response, code: number, data?: any) => {
     }
 }
 
-export type ApiActionType = (params: ActionParamsType) => Promise<any>;
+export type ApiActionType = (params: ActionParams) => Promise<any>;
 export type EndpointOptionsType = { isPublic?: boolean, isPost?: boolean };
 
-export const getAsyncActionHandlerNew = (wrappedAction: (params: ActionParamsType) => Promise<any>, options: EndpointOptionsType) => {
+export const getAsyncActionHandlerNew = (wrappedAction: (params: ActionParams) => Promise<any>, options: EndpointOptionsType) => {
 
     const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
 
         const asyncActionWrapper = async () => {
 
             const userId = options.isPublic ? -1 : await getUserIdFromRequest(req);
-            return await wrappedAction({ req, res, next, userId })
+            return await wrappedAction(new ActionParams(req, res, next, userId));
         }
 
         asyncActionWrapper()

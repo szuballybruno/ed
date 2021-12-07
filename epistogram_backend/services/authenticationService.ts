@@ -90,7 +90,7 @@ export const requestChangePasswordAsync = async (userId: number, oldPassword: st
 
     const resetPawsswordUrl = staticProvider.globalConfig.misc.frontendUrl + `/set-new-password?token=${resetPawsswordToken}`;
 
-    await sendResetPasswordMailAsync(user, resetPawsswordUrl);
+    await staticProvider.services.emailService.sendResetPasswordMailAsync(user, resetPawsswordUrl);
 }
 
 export const changePasswordAsync = async (

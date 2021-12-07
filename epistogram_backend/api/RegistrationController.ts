@@ -1,8 +1,9 @@
-import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedUser";
-import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
+import { RegisterUserViaActivationCodeDTO } from "../models/shared_models/RegisterUserViaActivationCodeDTO";
+import { RegisterUserViaInvitationTokenDTO } from "../models/shared_models/RegisterUserViaInvitationTokenDTO";
+import { RegisterUserViaPublicTokenDTO } from "../models/shared_models/RegisterUserViaPublicTokenDTO";
 import { RegistrationService } from "../services/RegistrationService";
 import { setAuthCookies } from "../utilities/cookieHelpers";
-import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams } from "../utilities/helpers";
 
 export class RegistrationController {
 
@@ -13,30 +14,43 @@ export class RegistrationController {
         this._res = res;
     }
 
-    registerUserViaPublicTokenAction = async (params: ActionParamsType) => {
+    registerUserViaPublicTokenAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<RegisterUserDTO>(params.req.body);
+        const body = params.getBody<RegisterUserViaPublicTokenDTO>()
 
         const { accessToken, refreshToken } = await this._res
-            .registerUserViaPublicTokenAsync(dto);
+            .registerUserViaPublicTokenAsync(
+                body.getBodyValue<string>(x => x.emailAddress),
+                body.getBodyValue<string>(x => x.firstName),
+                body.getBodyValue<string>(x => x.lastName),
+                body.getBodyValue<string>(x => x.registrationToken));
 
         setAuthCookies(params.res, accessToken, refreshToken);
     };
 
-    registerUserViaInvitationTokenAction = async (params: ActionParamsType) => {
+    registerUserViaInvitationTokenAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<RegisterInvitedUserDTO>(params.req.body);
+        const body = params.getBody<RegisterUserViaInvitationTokenDTO>();
 
-        const { accessToken, refreshToken } = await this._res.registerInvitedUserAsync(dto);
+        const { accessToken, refreshToken } = await this._res
+            .registerInvitedUserAsync(
+                body.getBodyValue<string>(x => x.invitationToken),
+                body.getBodyValue<string>(x => x.password),
+                body.getBodyValue<string>(x => x.passwordCompare));
 
         setAuthCookies(params.res, accessToken, refreshToken);
     };
 
-    registerUserViaActivationCodeAction = async (params: ActionParamsType) => {
+    registerUserViaActivationCodeAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<RegisterInvitedUserDTO>(params.req.body);
+        const body = params.getBody<RegisterUserViaActivationCodeDTO>();
 
-        const { accessToken, refreshToken } = await this._res.registerInvitedUserAsync(dto);
+        const { accessToken, refreshToken } = await this._res
+            .registerUserViaActivationCodeAsync(
+                body.getBodyValue<string>(x => x.activationCode),
+                body.getBodyValue<string>(x => x.emailAddress),
+                body.getBodyValue<string>(x => x.firstName),
+                body.getBodyValue<string>(x => x.lastName));
 
         setAuthCookies(params.res, accessToken, refreshToken);
     };

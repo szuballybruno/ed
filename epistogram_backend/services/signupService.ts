@@ -1,103 +1,103 @@
-import { AnswerSession } from "../models/entity/AnswerSession";
-import { User } from "../models/entity/User";
 import { AnswerSignupQuestionDTO } from "../models/shared_models/AnswerSignupQuestionDTO";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
-import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { SignupCompletedView } from "../models/views/SignupCompletedView";
+import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
-import { sendInvitaitionMailAsync } from "./EmailService";
+import { EmailService } from "./EmailService";
 import { toSignupDataDTO } from "./mappings";
-import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
 import { createInvitationToken } from "./tokenService";
-import { getUserByEmail, getUserById } from "./userService";
+import { createUserAsync, getUserById, setUserInvitationTokenasync } from "./userService";
 
-const SIGNUP_EXAM_ID = 1;
+export class SignupService {
 
-export const createInvitedUserAsync = async (dto: CreateInvitedUserDTO, currentUserId: number) => {
+    private _emailService: EmailService;
 
-    const currentUser = await getUserById(currentUserId);
+    constructor(emailService: EmailService) {
 
-    // if user is admin require organizationId to be provided
-    // otherwise use the current user's organization
-    const organizationId = currentUser.roleId === UserRoleEnum.administratorId
-        ? withValueOrBadRequest<number>(dto.organizationId, "number")
-        : currentUser.organizationId;
-
-    if (!organizationId)
-        throw new TypedError("Current user is not an administrator, but has rights to add users, but has no organization, in which he/she could add users.", "bad request")
-
-    return createInvitedUserWithOrgAsync(dto, organizationId, true);
-}
-
-export const createInvitedUserWithOrgAsync = async (dto: CreateInvitedUserDTO, organizationId: number, sendEmail: boolean) => {
-
-    // get and check sent data 
-    const email = withValueOrBadRequest<string>(dto.email);
-    const roleId = withValueOrBadRequest<number>(dto.roleId, "number");
-    const firstName = withValueOrBadRequest<string>(dto.firstName);
-    const lastName = withValueOrBadRequest<string>(dto.lastName);
-    const jobTitleId = withValueOrBadRequest<number>(dto.jobTitleId, "number");
-    const userFullName = `${lastName} ${firstName}`;
-
-    const user = await createUserAsync(
-        email,
-        firstName,
-        lastName,
-        organizationId,
-        null,
-        roleId,
-        jobTitleId,
-        true,
-        "guest");
-
-    const userId = user.id;
-    const invitationToken = createInvitationToken(userId);
-
-    await staticProvider
-        .ormConnection
-        .getRepository(User)
-        .save({
-            id: userId,
-            invitationToken: invitationToken
-        });
-
-    if (sendEmail) {
-
-        log("Sending mail... to: " + email);
-        await sendInvitaitionMailAsync(invitationToken, email, userFullName);
+        this._emailService = emailService;
     }
 
-    return { invitationToken, user };
-}
+    async createInvitedUserAsync(dto: CreateInvitedUserDTO, currentUserId: number) {
 
-export const answerSignupQuestionAsync = async (userId: number, questionAnswer: AnswerSignupQuestionDTO) => {
+        const currentUser = await getUserById(currentUserId);
 
-    await staticProvider
-        .services
-        .sqlFunctionService
-        .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
-}
+        // if user is admin require organizationId to be provided
+        // otherwise use the current user's organization
+        const organizationId = currentUser.roleId === UserRoleEnum.administratorId
+            ? withValueOrBadRequest<number>(dto.organizationId, "number")
+            : currentUser.organizationId;
 
-export const getSignupDataAsync = async (userId: number) => {
+        if (!organizationId)
+            throw new TypedError("Current user is not an administrator, but has rights to add users, but has no organization, in which he/she could add users.", "bad request")
 
-    const userSignupCompltedView = await staticProvider
-        .ormConnection
-        .getRepository(SignupCompletedView)
-        .findOneOrFail({
-            where: {
-                userId
-            }
+        return this.createInvitedUserWithOrgAsync(dto, organizationId, true);
+    }
+
+    async createInvitedUserWithOrgAsync(dto: CreateInvitedUserDTO, organizationId: number, sendEmail: boolean) {
+
+        // get and check sent data 
+        const email = withValueOrBadRequest<string>(dto.email);
+        const roleId = withValueOrBadRequest<number>(dto.roleId, "number");
+        const firstName = withValueOrBadRequest<string>(dto.firstName);
+        const lastName = withValueOrBadRequest<string>(dto.lastName);
+        const jobTitleId = withValueOrBadRequest<number>(dto.jobTitleId, "number");
+        const userFullName = `${lastName} ${firstName}`;
+
+        const user = await createUserAsync({
+            email,
+            firstName,
+            lastName,
+            organizationId,
+            roleId,
+            jobTitleId,
+            isInvited: true,
+            password: "guest"
         });
 
-    const questions = await staticProvider
-        .ormConnection
-        .getRepository(SignupQuestionView)
-        .createQueryBuilder("sqv")
-        .where("sqv.userId = :userId", { userId })
-        .getMany();
+        const userId = user.id;
+        const invitationToken = createInvitationToken(userId);
 
-    return toSignupDataDTO(questions, userSignupCompltedView.isSignupComplete);
+        // set user invitation token
+        await setUserInvitationTokenasync(userId, invitationToken);
+
+        if (sendEmail) {
+
+            log("Sending mail... to: " + email);
+            await this._emailService.sendInvitaitionMailAsync(invitationToken, email, userFullName);
+        }
+
+        return { invitationToken, user };
+    }
+
+    async answerSignupQuestionAsync = (userId: number, questionAnswer: AnswerSignupQuestionDTO)  {
+
+        await staticProvider
+            .services
+            .sqlFunctionService
+            .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
+    }
+
+    async getSignupDataAsync = (userId: number)  {
+
+        const userSignupCompltedView = await staticProvider
+            .ormConnection
+            .getRepository(SignupCompletedView)
+            .findOneOrFail({
+                where: {
+                    userId
+                }
+            });
+
+        const questions = await staticProvider
+            .ormConnection
+            .getRepository(SignupQuestionView)
+            .createQueryBuilder("sqv")
+            .where("sqv.userId = :userId", { userId })
+            .getMany();
+
+        return toSignupDataDTO(questions, userSignupCompltedView.isSignupComplete);
+    }
 }

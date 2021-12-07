@@ -44,6 +44,7 @@ import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/
 import './utilities/jsExtensions';
 import { RegistrationService } from './services/RegistrationService';
 import { RegistrationController } from './api/RegistrationController';
+import { EmailService } from './services/EmailService';
 
 (async () => {
 
@@ -70,7 +71,8 @@ import { RegistrationController } from './api/RegistrationController';
     const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
     const activationCodeService = new ActivationCodeService(ormConnectionService);
-    const registrationService = new RegistrationService(activationCodeService);
+    const emailService = new EmailService();
+    const registrationService = new RegistrationService(activationCodeService, emailService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -92,7 +94,8 @@ import { RegistrationController } from './api/RegistrationController';
         userSessionActivityService,
         coinAcquireService,
         sqlBootstrapperService,
-        sqlConnectionService
+        sqlConnectionService,
+        emailService
     };
 
     await dbConnectionService.seedDBAsync();

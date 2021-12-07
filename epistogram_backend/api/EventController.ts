@@ -1,5 +1,5 @@
 import { EventService } from "../services/eventService";
-import { ActionParamsType } from "../utilities/helpers";
+import { ActionParams } from "../utilities/helpers";
 
 export class EventController {
 
@@ -10,7 +10,7 @@ export class EventController {
         this._eventService = es;
     }
 
-    getUnfulfilledEventAction = async (params: ActionParamsType) => {
+    getUnfulfilledEventAction = async (params: ActionParams) => {
 
         return await this._eventService.getUnfulfilledEventAsync();
     }

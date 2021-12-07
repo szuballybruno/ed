@@ -1,8 +1,8 @@
 import { UploadedFile } from "express-fileupload";
 import { uploadAvatarFileAsync } from "../services/fileService";
-import { ActionParamsType, TypedError, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, TypedError, withValueOrBadRequest } from "../utilities/helpers";
 
-export const uploadAvatarFileAction = (params: ActionParamsType) => {
+export const uploadAvatarFileAction = (params: ActionParams) => {
 
     const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
 

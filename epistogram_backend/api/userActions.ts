@@ -4,12 +4,12 @@ import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserD
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { getAdminPageUsersList } from "../services/adminService";
 import { toUserEditDTO } from "../services/mappings";
-import { createInvitedUserAsync } from "../services/signupService";
+import { createInvitedUserAsync } from "../services/SignupService";
 import { deleteUserAsync } from "../services/userService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, getFullName, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, getFullName, withValueOrBadRequest } from "../utilities/helpers";
 
-export const deleteUserAction = async (params: ActionParamsType) => {
+export const deleteUserAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<any>(params.req.body);
     const deleteUserId = withValueOrBadRequest<number>(dto.userId, "number");
@@ -17,7 +17,7 @@ export const deleteUserAction = async (params: ActionParamsType) => {
     return deleteUserAsync(params.userId, deleteUserId);
 };
 
-export const getEditUserDataAction = async (params: ActionParamsType) => {
+export const getEditUserDataAction = async (params: ActionParams) => {
 
     const editedUserId = withValueOrBadRequest<number>(params.req.query?.editedUserId, "number");
 
@@ -34,7 +34,7 @@ export const getEditUserDataAction = async (params: ActionParamsType) => {
     return toUserEditDTO(user);
 }
 
-export const updateUserAction = async (params: ActionParamsType) => {
+export const updateUserAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<UserEditDTO>(params.req.body);
 
@@ -57,7 +57,7 @@ export const getUserAdministrationUserListAction = async () => {
     return await getAdminPageUsersList();
 };
 
-export const getBriefUserDataAction = async (params: ActionParamsType) => {
+export const getBriefUserDataAction = async (params: ActionParams) => {
 
     const userId = withValueOrBadRequest(params.req?.query?.userId);
 
@@ -78,7 +78,7 @@ export const getBriefUserDataAction = async (params: ActionParamsType) => {
     } as BriefUserDataDTO;
 }
 
-export const inviteUserAction = async (params: ActionParamsType) => {
+export const inviteUserAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<CreateInvitedUserDTO>(params.req.body);
 

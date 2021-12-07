@@ -7,16 +7,16 @@ import { getOrganizationsAsync, getOverviewPageDTOAsync } from "../services/data
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { answerPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
-export const answerPractiseQuestionAction = async (params: ActionParamsType) => {
+export const answerPractiseQuestionAction = async (params: ActionParams) => {
 
     const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
 
     return answerPractiseQuestionAsync(params.userId, dto);
 };
 
-export const getCurrentCourseItemCodeAction = async (parms: ActionParamsType) => {
+export const getCurrentCourseItemCodeAction = async (parms: ActionParams) => {
 
     const currentBridge = await staticProvider
         .ormConnection
@@ -34,7 +34,7 @@ export const getCurrentCourseItemCodeAction = async (parms: ActionParamsType) =>
     return currentBridge.currentItemCode;
 };
 
-export const saveCourseThumbnailAction = async (params: ActionParamsType) => {
+export const saveCourseThumbnailAction = async (params: ActionParams) => {
 
     const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
     const courseId = withValueOrBadRequest<number>(params.req.body.courseId, "number");
@@ -60,7 +60,7 @@ export const saveCourseThumbnailAction = async (params: ActionParamsType) => {
         file.data);
 }
 
-export const getCourseBriefDataAction = async (params: ActionParamsType) => {
+export const getCourseBriefDataAction = async (params: ActionParams) => {
 
     const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
 
@@ -75,12 +75,12 @@ export const getCourseBriefDataAction = async (params: ActionParamsType) => {
     } as CourseBriefData;
 };
 
-export const getOverviewPageDTOAction = async (params: ActionParamsType) => {
+export const getOverviewPageDTOAction = async (params: ActionParams) => {
 
     return getOverviewPageDTOAsync(params.userId);
 }
 
-export const getOrganizationsAction = (params: ActionParamsType) => {
+export const getOrganizationsAction = (params: ActionParams) => {
 
     return getOrganizationsAsync(params.userId);
 }

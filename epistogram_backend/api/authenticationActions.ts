@@ -1,16 +1,17 @@
 
 import { ChangePasswordDTO } from "../models/shared_models/SetNewPasswordDTO";
-import { changePasswordAsync, getUserIdFromRequest, logInUser, logOutUserAsync, renewUserSessionAsync, setAuthCookies } from "../services/authenticationService";
+import { changePasswordAsync, getUserIdFromRequest, logInUser, logOutUserAsync, renewUserSessionAsync } from "../services/authenticationService";
 import { getCurrentUser } from "../services/userService";
 import { staticProvider } from "../staticProvider";
-import { ActionParamsType, TypedError, withValueOrBadRequest } from "../utilities/helpers";
+import { setAuthCookies } from "../utilities/cookieHelpers";
+import { ActionParams, TypedError, withValueOrBadRequest } from "../utilities/helpers";
 
-export const renewUserSessionAction = async (params: ActionParamsType) => {
+export const renewUserSessionAction = async (params: ActionParams) => {
 
     return renewUserSessionAsync(params.req, params.res);
 };
 
-export const logInUserAction = async (params: ActionParamsType) => {
+export const logInUserAction = async (params: ActionParams) => {
 
     // check request 
     if (!params.req.body)
@@ -24,7 +25,7 @@ export const logInUserAction = async (params: ActionParamsType) => {
     setAuthCookies(params.res, accessToken, refreshToken);
 }
 
-export const changePasswordAction = async (params: ActionParamsType) => {
+export const changePasswordAction = async (params: ActionParams) => {
 
     const userId = getUserIdFromRequest(params.req);
     const dto = withValueOrBadRequest<ChangePasswordDTO>(params.req.body);
@@ -35,7 +36,7 @@ export const changePasswordAction = async (params: ActionParamsType) => {
     return changePasswordAsync(userId, password, passwordCompare, passwordResetToken);
 };
 
-export const getCurrentUserAction = async (params: ActionParamsType) => {
+export const getCurrentUserAction = async (params: ActionParams) => {
 
     const currentUser = await getCurrentUser(params.req);
 
@@ -47,7 +48,7 @@ export const getCurrentUserAction = async (params: ActionParamsType) => {
     return currentUser;
 };
 
-export const logOutUserAction = async (params: ActionParamsType) => {
+export const logOutUserAction = async (params: ActionParams) => {
 
     const userId = getUserIdFromRequest(params.req);
 

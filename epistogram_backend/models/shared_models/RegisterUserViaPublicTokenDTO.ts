@@ -1,4 +1,4 @@
-export type RegisterUserDTO = {
+export type RegisterUserViaPublicTokenDTO = {
     registrationToken: string;
     lastName: string;
     firstName: string;
