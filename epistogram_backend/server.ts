@@ -79,8 +79,6 @@ import './utilities/jsExtensions';
     initializeMappings(mapperService);
     await dbConnectionService.initializeAsync();
 
-    await activationCodeService.generateActivationCodesAsync(500);
-
     // set services as static provided objects 
     staticProvider.ormConnection = ormConnectionService.getOrmConnection();
     staticProvider.services = {
