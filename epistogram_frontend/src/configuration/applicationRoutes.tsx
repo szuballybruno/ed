@@ -2,6 +2,7 @@ import { Assignment, Business, People, Person, School, Settings, Subscriptions }
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { translatableTexts } from "../translatableTexts";
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 export const applicationRoutes = {
 
@@ -210,6 +211,12 @@ export const applicationRoutes = {
             title: translatableTexts.routeTitles.featurePreview,
             route: "/settings/feature-preview",
             icon: <AutoAwesomeIcon />
+        },
+
+        coinTransactionsRoute: {
+            title: translatableTexts.routeTitles.coinTransactions,
+            route: "/settings/coin-transactions",
+            icon: <AttachMoneyIcon />
         }
     }
 };

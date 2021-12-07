@@ -14,6 +14,7 @@ import { Video } from "../models/entity/Video";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { AnswerDTO } from "../models/shared_models/AnswerDTO";
 import { AnswerEditDTO } from "../models/shared_models/AnswerEditDTO";
+import { CoinTransactionDTO } from "../models/shared_models/CoinTransactionDTO";
 import { CourseAdminItemShortDTO } from "../models/shared_models/CourseAdminItemShortDTO";
 import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
 import { CourseCategoryDTO } from "../models/shared_models/CourseCategoryDTO";
@@ -45,6 +46,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { UserStatsDTO } from "../models/shared_models/UserStatsDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
+import { CoinTransactionView } from "../models/views/CoinTransactionView";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
@@ -109,6 +111,11 @@ export const initializeMappings = (mapperService: MapperService) => {
         .addMapperFunction(Event, EventDTO, event => ({
             data: JSON.parse(event.data),
             type: event.type
+        }));
+
+    mapperService
+        .addMapperFunction(CoinTransactionView, CoinTransactionDTO, view => ({
+            ...view
         }));
 }
 

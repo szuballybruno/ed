@@ -65,6 +65,7 @@ export const translatableTexts = {
         settings: "Beállítások",
         settingsOverview: "Beállítások",
         featurePreview: "Várható funkciók",
+        coinTransactions: "EpistoCoin tranzakciók",
         developmentNotes: "Fejlesztési napló"
     },
 

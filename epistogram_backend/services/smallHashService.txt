@@ -1,0 +1,28 @@
+// import generatePassword from "password-generator";
+// import crypto from 'crypto';
+
+// export const generateSmallhash = (index: number, length: number) => {
+
+//     const actLength = length / 2;
+//     const base = md5Hash(index);//generatePassword(actLength, true);
+//     const end = md5Hash(base).substr(0, actLength);
+
+//     return base + end;
+// }
+
+// export const isValidSmallhash = (smallhash: string) => {
+
+//     const length = smallhash.length / 2;
+//     const firstPart = smallhash.substr(0, length);
+//     const secondPart = smallhash.substr(length, length + 1);
+
+//     const validSecondPart = md5Hash(firstPart).substr(0, length);
+
+//     return secondPart === validSecondPart;
+// }
+
+// const md5Hash = (value: string) => {
+
+//     var hash = crypto.createHash('md5').update(value).digest('hex');
+//     return hash;
+// }

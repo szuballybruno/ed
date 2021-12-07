@@ -2,6 +2,16 @@ import { SessionActivityType } from "../../models/shared_models/types/sharedType
 import { logObject } from "../misc/logger";
 import { SQLConnectionService } from "./SQLConnectionService";
 
+export type InsertCoinFnParamsType = {
+    userId: number,
+    amount: number,
+    activitySessionId?: number,
+    videoId?: number,
+    givenAnswerId?: number,
+    givenAnswerStreakId?: number,
+    activityStreakId?: number
+};
+
 export class SQLFunctionsService {
 
     private _connectionService: SQLConnectionService;
@@ -97,15 +107,7 @@ export class SQLFunctionsService {
         }
     }
 
-    insertCoinAcquiredFn = (params: {
-        userId: number,
-        amount: number,
-        activitySessionId?: number,
-        videoId?: number,
-        givenAnswerId?: number,
-        givenAnswerStreakId?: number,
-        activityStreakId?: number
-    }) => {
+    insertCoinAcquiredFn = (params: InsertCoinFnParamsType) => {
 
         return this.execSQLFunctionAsync<number>(
             "insert_coin_acquire",

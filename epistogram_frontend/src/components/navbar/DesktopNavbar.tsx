@@ -77,7 +77,12 @@ const DesktopNavbar = (props: {
             color: "var(--mildRed)",
             onClick: handleLogout
         }
-    ]
+    ];
+
+    const handleNavToCoinTransactions = () => {
+
+        navigate(applicationRoutes.settingsRoute.coinTransactionsRoute.route);
+    }
 
     return (
         <Flex align="center" width="100%" justify="space-between">
@@ -221,10 +226,14 @@ const DesktopNavbar = (props: {
                 target={ref?.current}
                 placementX="left"
                 handleClose={() => setSettingsPopperOpen(false)}>
-                <Flex justifyContent={"center"}>
+
+                {/* episto coins */}
+                <EpistoButton onClick={handleNavToCoinTransactions}>
                     <EpistoConinInfo height="45px" />
-                </Flex>
+                </EpistoButton>
+
                 <Divider h={1} w={"100%"} bgColor={"black"} />
+
                 {userMenuItems
                     .map(x => {
 

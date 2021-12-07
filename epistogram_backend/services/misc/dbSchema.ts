@@ -51,6 +51,9 @@ import { ActivitySession } from "../../models/entity/ActivitySession";
 import { ActivityStreak } from "../../models/entity/ActivityStreak";
 import { ActivityStreakView } from "../../models/views/ActivityStreakView";
 import { Event } from "../../models/entity/Event";
+import { CoinTransactionView } from "../../models/views/CoinTransactionView";
+import { CoinBalanceView } from "../../models/views/CoinBalanceView";
+import { ActivationCode } from "../../models/entity/ActivationCode";
 
 export const dbSchema = {
 
@@ -78,7 +81,9 @@ export const dbSchema = {
         "user_session_view",
         "user_stats_view",
         "user_session_daily_view",
-        "activity_streak_view"
+        "activity_streak_view",
+        "coin_transaction_view",
+        "coin_balance_view"
     ],
 
     functionScripts: [
@@ -94,6 +99,10 @@ export const dbSchema = {
         {
             tableName: "coin_acquire",
             name: "coin_acquire_valid_relation_enforce_constraint"
+        },
+        {
+            tableName: "activation_code",
+            name: "activation_code_uniqe_constraint"
         }
     ],
 
@@ -117,7 +126,10 @@ export const dbSchema = {
         UserStatsView,
         UserSessionDailyView,
         UserSessionView,
-        ActivityStreakView
+        ActivityStreakView,
+        CoinTransactionView,
+        CoinBalanceView,
+        ActivationCode
     ] as any[],
 
     entities: [

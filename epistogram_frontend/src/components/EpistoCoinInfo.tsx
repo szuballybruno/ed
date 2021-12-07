@@ -1,13 +1,21 @@
 import { Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
+import { useCoinBalance } from "../services/coinTransactionsService";
 import { EpistoConinImage } from "./universal/EpistoCoinImage"
 
 export const EpistoConinInfo = (props: {} & FlexProps) => {
 
+    const { coinBalance } = useCoinBalance();
+
     return <Flex align="center" {...props}>
 
         {/* coin value  */}
-        <Typography style={{ marginRight: "10px" }} variant={"button"}>23.459</Typography>
+        <Typography
+            style={{ marginRight: "10px" }}
+            variant={"button"}>
+
+            {coinBalance}
+        </Typography>
 
         {/* coin image */}
         <EpistoConinImage />

@@ -1,23 +1,23 @@
-import { CoinAcquire } from "../models/entity/CoinAcquire";
 import { GivenAnswer } from "../models/entity/GivenAnswer";
 import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
 import { ActivityStreakView } from "../models/views/ActivityStreakView";
 import { UserSessionDailyView } from "../models/views/UserActivityDailyView";
 import { trimTimeFromDate } from "../utilities/helpers";
+import { CoinTransactionService } from "./coinTransactionService";
 import { EventService } from "./eventService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { SQLFunctionsService } from "./sqlServices/SQLFunctionsService";
 
 export class CoinAcquireService {
-    private _funcService: SQLFunctionsService;
+
     private _ormService: ORMConnectionService;
     private _eventService: EventService;
+    private _coinTransactionService: CoinTransactionService;
 
-    constructor(funcService: SQLFunctionsService, ormService: ORMConnectionService, es: EventService) {
+    constructor(coinTransactionService: CoinTransactionService, ormService: ORMConnectionService, es: EventService) {
 
-        this._funcService = funcService;
         this._ormService = ormService;
         this._eventService = es;
+        this._coinTransactionService = coinTransactionService;
     }
 
     /**
@@ -41,8 +41,8 @@ export class CoinAcquireService {
      */
     acquireVideoWatchedCoinsAsync = async (userId: number, videoId: number) => {
 
-        await this._funcService
-            .insertCoinAcquiredFn({ userId, amount: 1, videoId });
+        await this._coinTransactionService
+            .addCoins({ userId, amount: 1, videoId });
     }
 
     /**
@@ -59,21 +59,15 @@ export class CoinAcquireService {
             .getRepository(GivenAnswer)
             .findOneOrFail(givenAnswerId);
 
-        const alreadyAcquiredCoinsForCurrentQuestionId = await this._ormService
-            .getRepository(CoinAcquire)
-            .createQueryBuilder("ca")
-            .leftJoinAndSelect("ca.givenAnswer", "ga")
-            .where("ca.userId = :userId", { userId })
-            .andWhere("ga.question_id = :questionId", { questionId: newGivenAnswer.questionId })
-            .andWhere("ca.given_answer_id IS NOT NULL")
-            .getMany();
+        const alreadyAcquiredCoinsForCurrentQuestionId = await this._coinTransactionService
+            .getCoinsForQuestionAsync(userId, newGivenAnswer.questionId);
 
         if (alreadyAcquiredCoinsForCurrentQuestionId.length > 0)
             return null;
 
         // insert coin
-        await this._funcService
-            .insertCoinAcquiredFn({ userId, amount: 1, givenAnswerId });
+        await this._coinTransactionService
+            .addCoins({ userId, amount: 1, givenAnswerId });
 
         return {
             reason: "correct_answer",
@@ -87,17 +81,13 @@ export class CoinAcquireService {
      */
     handleGivenAnswerStreakCoinsAsync = async (userId: number, streakId: number, streakLength: number) => {
 
-        const prevCoinsGivenForStreak = await this._ormService
-            .getRepository(CoinAcquire)
-            .createQueryBuilder("ca")
-            .where("ca.userId = :userId", { userId })
-            .andWhere("ca.given_answer_streak_id = :gasid", { gasid: streakId })
-            .getMany();
+        const prevCoinsGivenForStreak = await this._coinTransactionService
+            .getCoinsForAnswerStreakAsync(userId, streakId);
 
         if (streakLength === 5 && prevCoinsGivenForStreak.length === 0) {
 
-            await this._funcService
-                .insertCoinAcquiredFn({ userId, amount: 5, givenAnswerStreakId: streakId });
+            await this._coinTransactionService
+                .addCoins({ userId, amount: 5, givenAnswerStreakId: streakId });
 
             return {
                 amount: 5,
@@ -107,8 +97,8 @@ export class CoinAcquireService {
 
         if (streakLength === 10 && prevCoinsGivenForStreak.length === 1) {
 
-            await this._funcService
-                .insertCoinAcquiredFn({ userId, amount: 15, givenAnswerStreakId: streakId });
+            await this._coinTransactionService
+                .addCoins({ userId, amount: 15, givenAnswerStreakId: streakId });
 
             return {
                 amount: 15,
@@ -132,7 +122,6 @@ export class CoinAcquireService {
         // check if it's not more than 3 sessions today
         const today = trimTimeFromDate(new Date());
 
-        // TODO
         const todaysInfo = await this._ormService
             .getRepository(UserSessionDailyView)
             .createQueryBuilder("us")
@@ -140,24 +129,19 @@ export class CoinAcquireService {
             .andWhere("us.date = :today", { today })
             .getOneOrFail();
 
-        // if (todaysInfo.sessionCount > 3)
-        //     return;
+        if (todaysInfo.sessionCount > 3)
+            return;
 
         // check if current session has a coin acquire 
-        const acquireForCurrentSession = await this._ormService
-            .getRepository(CoinAcquire)
-            .findOne({
-                where: {
-                    activitySessionId: activitySessionId
-                }
-            });
+        const acquireForCurrentSession = await this._coinTransactionService
+            .getCoinsForActivitySession(userId, activitySessionId);
 
         if (acquireForCurrentSession)
             return;
 
         // add acquire 
-        await this._funcService
-            .insertCoinAcquiredFn({ userId, amount: 10, activitySessionId });
+        await this._coinTransactionService
+            .addCoins({ userId, amount: 10, activitySessionId });
     }
 
     /**
@@ -177,13 +161,8 @@ export class CoinAcquireService {
                 }
             });
 
-        const coinsForActivityStreak = await this._ormService
-            .getRepository(CoinAcquire)
-            .find({
-                where: {
-                    activityStreakId: currentActivityStreak.id
-                }
-            });
+        const coinsForActivityStreak = await this._coinTransactionService
+            .getCoinsForActivityStreakAsync(userId, currentActivityStreak.id);
 
         const alreadyGivenCoinsLegth = coinsForActivityStreak.length;
         const currentActivityStreakLenght = currentActivityStreak.length_days;
@@ -233,8 +212,8 @@ export class CoinAcquireService {
             return;
 
         // actually insert the new coin acquire
-        await this._funcService
-            .insertCoinAcquiredFn({ userId, amount, activityStreakId: currentActivityStreakId });
+        await this._coinTransactionService
+            .addCoins({ userId, amount, activityStreakId: currentActivityStreakId });
 
         // add acquire event 
         this._eventService

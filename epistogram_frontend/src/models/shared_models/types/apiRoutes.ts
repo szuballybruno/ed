@@ -21,6 +21,11 @@ export const apiRoutes = {
         getUserStats: "/userstats/get-user-stats"
     },
 
+    coinTransactions: {
+        getCoinTransactions: "/cointransactions/get-coin-transactions",
+        getCoinBalance: "/cointransactions/get-coin-balance"
+    },
+
     userManagement: {
         getEditUserData: "/users/get-edit-user-data",
         inviteUser: "/users/invite-user",

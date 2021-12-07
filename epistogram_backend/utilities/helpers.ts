@@ -19,6 +19,17 @@ export const throwNotImplemented = () => {
     throw new Error("Not implemented!");
 }
 
+export const forN = <T>(iterations: number, action: (index: number) => T) => {
+
+    let returnValues = [] as T[];
+    for (let index = 0; index < iterations; index++) {
+
+        returnValues.push(action(index));
+    }
+
+    return returnValues;
+}
+
 // TODO REMOVE THIS FROM HERE 
 export type ActionParamsType = { req: Request, res: Response, next: NextFunction, userId: number };
 

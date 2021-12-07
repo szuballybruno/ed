@@ -3,6 +3,7 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
 import { changePasswordAction, getCurrentUserAction, logInUserAction, logOutUserAction, renewUserSessionAction } from './api/authenticationActions';
+import { CoinTransactionsController } from './api/CoinTransactionsController';
 import { createCourseAction, deleteCourseAction, getAdminCourseListAction, getAvailableCoursesAction, getCourseDetailsAction, getCourseEditDataAction, getCourseProgressDataAction, saveCourseAction, setCourseTypeAction, startCourseAction } from './api/courseActions';
 import {
     answerPractiseQuestionAction, getCourseBriefDataAction,
@@ -21,25 +22,27 @@ import { deleteUserAction, getBriefUserDataAction, getEditUserDataAction, getUse
 import { UserStatsController } from './api/userStatsController';
 import { createVideoAction, deleteVideoAction, getVideoEditDataAction, saveVideoAction, uploadVideoFileChunksAction } from './api/videoActions';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
+import { ActivationCodeService } from './services/ActivationCodeService';
 import { CoinAcquireService } from './services/coinAcquireService';
-import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
+import { CoinTransactionService } from './services/coinTransactionService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { EventService } from './services/eventService';
 import { MapperService } from './services/mapperService';
 import { initializeMappings } from './services/mappings';
 import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/middlewareService';
+import { dbSchema } from './services/misc/dbSchema';
 import { log, logError } from "./services/misc/logger";
+import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
+import { ORMConnectionService } from './services/sqlServices/ORMConnectionService';
+import { SeedService } from './services/sqlServices/SeedService';
+import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
+import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import { SQLFunctionsService } from './services/sqlServices/SQLFunctionsService';
 import { UserSessionActivityService } from './services/userSessionActivityService';
 import { UserStatsService } from './services/userStatsService';
 import { staticProvider } from './staticProvider';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
 import './utilities/jsExtensions';
-import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
-import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
-import { dbSchema } from './services/misc/dbSchema';
-import { ORMConnectionService } from './services/sqlServices/ORMConnectionService';
-import { SeedService } from './services/sqlServices/SeedService';
 
 (async () => {
 
@@ -62,16 +65,21 @@ import { SeedService } from './services/sqlServices/SeedService';
     const userStatsService = new UserStatsService(ormConnectionService, mapperService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService);
     const eventService = new EventService(mapperService, ormConnectionService);
-    const coinAcquireService = new CoinAcquireService(sqlFunctionService, ormConnectionService, eventService);
+    const coinTransactionService = new CoinTransactionService(sqlFunctionService, ormConnectionService, mapperService);
+    const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
+    const activationCodeService = new ActivationCodeService(ormConnectionService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
     const eventController = new EventController(eventService);
+    const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
 
     // initialize services 
     initializeMappings(mapperService);
     await dbConnectionService.initializeAsync();
+
+    await activationCodeService.generateActivationCodesAsync(500);
 
     // set services as static provided objects 
     staticProvider.ormConnection = ormConnectionService.getOrmConnection();
@@ -117,6 +125,10 @@ import { SeedService } from './services/sqlServices/SeedService';
     addEndpoint(apiRoutes.misc.getDailyTip, getDailyTipAction);
     addEndpoint("/organizations/get-organizations", getOrganizationsAction);
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
+
+    // coin transactions 
+    addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);
+    addEndpoint(apiRoutes.coinTransactions.getCoinBalance, coinTransactionsController.getCoinBalanceAction);
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
