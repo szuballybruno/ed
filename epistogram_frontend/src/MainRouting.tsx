@@ -19,6 +19,7 @@ import { applicationRoutes } from "./configuration/applicationRoutes";
 import { isUnderMaintenance } from "./Environemnt";
 import { ApplicationRoute } from "./models/types";
 import {ShopPage} from "./components/shopPage/ShopPage";
+import {RedeemCodePage} from "./components/RedeemCodePage";
 
 export const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
 
@@ -35,6 +36,7 @@ export const MainRouting = () => {
         <Route path={applicationRoutes.loginRoute.route} component={LoginScreen} />
         <Route path={applicationRoutes.setNewPasswordRoute.route} component={SetNewPasswordPage} />
         <Route path={applicationRoutes.registrationRoute.route} component={RegistrationPage} />
+        <Route path={applicationRoutes.redeemCodeRoute.route} component={RedeemCodePage} />
 
         {/* protected paths */}
         <ProtectedRoute
