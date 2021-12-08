@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/layout"
-import { useCoinTransactions } from "../../services/coinTransactionsService";
+import { useCoinTransactions } from "../../services/api/coinTransactionsApiService";
 
 export const CoinTransactions = () => {
 

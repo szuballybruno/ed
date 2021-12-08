@@ -7,12 +7,11 @@ import { OrganizationDTO } from "../../../models/shared_models/OrganizationDTO";
 import { RoleDTO } from "../../../models/shared_models/RoleDTO";
 import { UserDTO } from "../../../models/shared_models/UserDTO";
 import { UserEditDTO } from "../../../models/shared_models/UserEditDTO";
-import { useJobTitles } from "../../../services/dataService";
-import { useOrganizations } from "../../../services/organizationsService";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { AddFrame } from "../../add_frame/AddFrame";
 import { CurrentUserContext } from "../../system/AuthenticationFrame";
 import { EpistoSelect } from "../../universal/EpistoSelect";
+import { useOrganizations, useJobTitles } from "../../../services/api/miscApiService";
 
 export const roles = [
     {

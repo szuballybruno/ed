@@ -6,7 +6,7 @@ import { FlexFloat } from "./universal/FlexFloat";
 import { Lock } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { translatableTexts } from "../static/translatableTexts";
-import { useUserStats } from "../services/userStatsService";
+import { useUserStats } from "../services/api/userStatsApiService";
 
 export const StatsSummary = () => {
 

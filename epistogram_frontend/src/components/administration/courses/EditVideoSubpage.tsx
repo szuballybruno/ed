@@ -14,7 +14,6 @@ import { VideoEditDTO } from "../../../models/shared_models/VideoEditDTO";
 import { getVirtualId } from "../../../services/core/idService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { useSaveVideo, useUploadVideoFileAsync, useVideoEditData } from "../../../services/videoService";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
@@ -23,6 +22,7 @@ import { FlexListItem } from "../../universal/FlexListItem";
 import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "./EditSection";
+import { useSaveVideo, useVideoEditData, useUploadVideoFileAsync } from "../../../services/api/videoApiService";
 
 const QuestionItem = (props: {
     currentSeconds: number,

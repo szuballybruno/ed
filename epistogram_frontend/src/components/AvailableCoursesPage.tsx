@@ -3,7 +3,6 @@ import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/materi
 import React from "react";
 import { useHistory } from "react-router";
 import { distinct } from "../static/frontendHelpers";
-import { useStartCourse, useUserCourses } from "../services/courseService";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { translatableTexts } from "../static/translatableTexts";
@@ -16,6 +15,7 @@ import { EpistoGrid } from "./universal/EpistoGrid";
 import { EpistoSearch } from "./universal/EpistoSearch";
 import classes from "./css/courseSearchMain.module.scss";
 import { applicationRoutes } from "../configuration/applicationRoutes";
+import { useUserCourses, useStartCourse } from "../services/api/courseApiService";
 
 const AvailableCoursesPage = () => {
 
@@ -26,7 +26,7 @@ const AvailableCoursesPage = () => {
     const [isFeatured, setIsFeatured] = React.useState(false);
     const [isRecommended, setIsRecommended] = React.useState(false);
 
-    const { courses, status, error } = useUserCourses();
+    const { courses, coursesState, coursesError } = useUserCourses();
     const { startCourseAsync, startCourseState } = useStartCourse();
 
     const { navigate, navigateToPlayer } = useNavigation();
@@ -182,7 +182,7 @@ const AvailableCoursesPage = () => {
                     </Box>
 
                     {/* courses */}
-                    <LoadingFrame overflow="hidden" loadingState={[status, startCourseState]} error={[error]}>
+                    <LoadingFrame overflow="hidden" loadingState={[coursesState, startCourseState]} error={[coursesError]}>
                         <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
                             <EpistoGrid auto="fit" gap="15" minColumnWidth="300px">
                                 {courses

@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Image } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import AddIcon from '@mui/icons-material/Add';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,29 +7,24 @@ import VideocamIcon from '@mui/icons-material/Videocam';
 import { TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../static/frontendHelpers";
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
-import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
 import { ModuleAdminShortDTO } from "../../../models/shared_models/ModuleAdminShortDTO";
 import { UserDTO } from "../../../models/shared_models/UserDTO";
-import { useCreateExam, useDeleteExam } from "../../../services/examService";
-import { useCreateModule, useDeleteModule } from "../../../services/moduleService";
+import { useCreateExam, useDeleteExam } from "../../../services/api/examApiService";
+import { useCreateModule, useDeleteModule } from "../../../services/api/moduleApiService";
+import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { useCreateVideo, useDeleteVideo } from "../../../services/videoService";
+import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../static/frontendHelpers";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { EpistoHeader } from "../../EpistoHeader";
 import { CollapseItem } from "../../universal/CollapseItem";
 import { DragAndDropContext, DragItem, DropZone } from "../../universal/DragAndDrop";
 import { EpistoButton } from "../../universal/EpistoButton";
-import { EpistoEntry } from "../../universal/EpistoEntry";
 import { EpistoSearch } from "../../universal/EpistoSearch";
-import { EpistoSelect } from "../../universal/EpistoSelect";
-import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseEditItemView } from "./CourseEditItemView";
-import { EditSection } from "./EditSection";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>

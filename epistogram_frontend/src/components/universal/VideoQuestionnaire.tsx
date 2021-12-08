@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import React, { useEffect } from 'react';
 import { useReactTimer } from "../../helpers/reactTimer";
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
-import { useAnswerQuestion } from '../../services/questionnaireService';
+import { useAnswerQuestion } from "../../services/api/playerApiService";
 import { QuesitionView } from "../QuestionView";
 import { EpistoButton } from "./EpistoButton";
 import { TimeoutFrame } from "./TimeoutFrame";

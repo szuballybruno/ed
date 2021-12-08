@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React from 'react';
-import { useUserCourseData } from "../../services/courseService";
+import { useUserCourseData } from "../../services/api/courseApiService";
 import { LoadingFrame } from "../system/LoadingFrame";
 import CourseTile from "../universal/CourseTile";
 import { DashboardSection } from "../universal/DashboardSection";

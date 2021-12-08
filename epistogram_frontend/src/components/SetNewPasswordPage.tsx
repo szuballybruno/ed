@@ -3,7 +3,6 @@ import { TextField } from "@mui/material";
 import { useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { getAssetUrl, getQueryParam } from "../static/frontendHelpers";
-import { useSetNewPassword } from "../services/dataService";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { EpistoHeader } from "./EpistoHeader";
@@ -11,6 +10,7 @@ import { LoadingFrame } from "./system/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "./system/MainPanels";
 import Navbar from "./navbar/Navbar";
 import { EpistoButton } from "./universal/EpistoButton";
+import { useSetNewPassword } from "../services/api/authenticationApiService";
 
 export const SetNewPasswordPage = () => {
 

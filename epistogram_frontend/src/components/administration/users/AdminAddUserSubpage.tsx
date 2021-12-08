@@ -2,9 +2,9 @@ import React from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { CreateInvitedUserDTO } from "../../../models/shared_models/CreateInvitedUserDTO";
 import { UserEditDTO } from '../../../models/shared_models/UserEditDTO';
+import { inviteUserAsync } from '../../../services/api/userApiService';
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { inviteUserAsync } from "../../../services/userManagementService";
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditUserControl } from "./EditUserControl";
 

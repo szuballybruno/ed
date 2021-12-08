@@ -7,7 +7,6 @@ import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getAssetUrl, getUrl } from "../../static/frontendHelpers";
 import { mockNotifications } from "../../static/mockData";
 import { ApplicationRoute } from "../../models/types";
-import { useLogout } from "../../services/dataService";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
@@ -16,6 +15,7 @@ import { ProfileImage } from "../ProfileImage";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoPopper } from "../universal/EpistoPopper";
 import NavbarButton from "../universal/NavbarButton";
+import { useLogout } from "../../services/api/authenticationApiService";
 
 const menuItems = [
     applicationRoutes.homeRoute,

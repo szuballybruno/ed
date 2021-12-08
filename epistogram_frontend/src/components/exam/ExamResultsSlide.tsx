@@ -3,12 +3,12 @@ import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
 import React from 'react';
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
-import { useExamResults } from "../../services/examService";
 import { translatableTexts } from "../../static/translatableTexts";
 import StatisticsCard from "../statisticsCard/StatisticsCard";
 import { ExamLayout } from './ExamLayout';
 import { QuestionAnswer } from "./QuestionAnswer";
 import { getAssetUrl } from "../../static/frontendHelpers";
+import { useExamResults } from "../../services/api/examApiService";
 
 export const ExamResultsSlide = (props: {
     exam: ExamDTO,

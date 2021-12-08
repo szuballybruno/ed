@@ -1,20 +1,18 @@
 import { Box, Flex } from '@chakra-ui/layout';
 import { applicationRoutes } from '../configuration/applicationRoutes';
-//import { mockTasks } from '../mockData';
-import { useOverviewPageDTO } from "../services/dataService";
+import { useOverviewPageDTO } from '../services/api/miscApiService';
 import { translatableTexts } from '../static/translatableTexts';
+import { DailyTip } from './DailyTip';
 import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
-import { LoadingFrame } from "./system/LoadingFrame";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./system/MainPanels";
 import Navbar from "./navbar/Navbar";
 import { PractiseQuestions } from './PractiseQuestions';
-//import { Tasks } from './Tasks';
-import { DailyTip } from './DailyTip';
+import { StatsSummary } from "./StatsSummary";
+import { LoadingFrame } from "./system/LoadingFrame";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./system/MainPanels";
 import { CourseItemList, CourseItemView } from "./universal/CourseItemList";
 import { CourseProgressBar } from './universal/CourseProgressBar';
 import { DashboardSection } from './universal/DashboardSection';
 import ListItem from './universal/listItem/ListItem';
-import { StatsSummary } from "./StatsSummary";
 
 const HomePage = () => {
 

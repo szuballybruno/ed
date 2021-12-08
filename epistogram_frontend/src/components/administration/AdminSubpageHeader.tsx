@@ -8,10 +8,10 @@ import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
 import { ApplicationRoute, ButtonType } from "../../models/types";
-import { useCourseBriefData } from "../../services/courseService";
 import { useNavigation } from "../../services/core/navigatior";
-import { useBriefUserData } from "../../services/userManagementService";
 import { EpistoButton } from "../universal/EpistoButton";
+import { useCourseBriefData } from "../../services/api/courseApiService";
+import { useBriefUserData } from "../../services/api/userApiService";
 
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: ApplicationRoute[],

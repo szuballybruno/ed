@@ -1,6 +1,6 @@
 import { Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
-import { useCoinBalance } from "../services/coinTransactionsService";
+import { useCoinBalance } from "../services/api/coinTransactionsApiService";
 import { EpistoConinImage } from "./universal/EpistoCoinImage"
 
 export const EpistoConinInfo = (props: {} & FlexProps) => {

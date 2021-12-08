@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { EventCoinAcquireNotificationDTO } from "../../models/shared_models/EventCoinAcquireNotificationDTO";
-import { useEventListener } from "../../services/eventService";
+import { useEventListener } from "../../services/api/eventApiService";
 import { CoinRewardDialog } from "../CoinRewardDialog";
 import { useEpistoDialogLogic } from "../EpistoDialog";
 

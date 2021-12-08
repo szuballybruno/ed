@@ -1,14 +1,12 @@
 import { Flex, FlexProps } from "@chakra-ui/layout";
-import { Divider } from "@chakra-ui/react";
 import { ExpandMore, InfoOutlined } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
-import { usePersonalityData } from "../../services/dataService";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { PersonalityChart } from "./PersonalityChart";
 import React, { useRef, useState } from "react";
-import { EpistoPopper } from "./EpistoPopper";
+import { usePersonalityData } from "../../services/api/signupApiService";
+import { LoadingFrame } from "../system/LoadingFrame";
 import { EpistoButton } from "./EpistoButton";
-import { getAssetUrl } from "../../static/frontendHelpers";
+import { EpistoPopper } from "./EpistoPopper";
+import { PersonalityChart } from "./PersonalityChart";
 
 export const PersonalityAssessment = (props: FlexProps) => {
 

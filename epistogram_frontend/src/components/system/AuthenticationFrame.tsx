@@ -2,11 +2,10 @@ import { createContext, useEffect } from "react";
 import { hotjar } from "react-hotjar";
 import { isLocalhost, oneSignalAppId, verboseLogging } from "../../static/Environemnt";
 import { UserDTO } from "../../models/shared_models/UserDTO";
-import { AuthenticationStateType, useUserFetching } from "../../services/authenticationService";
-import { useRenewUserSessionPooling } from "../../services/openEndpointService";
 import setTheme from "../../services/core/setTheme";
 import OneSignal from 'react-onesignal';
 import { useLocation } from "react-router-dom";
+import { AuthenticationStateType, useRenewUserSessionPooling, useUserFetching } from "../../services/api/authenticationApiService";
 
 export const CurrentUserContext = createContext<UserDTO | null>(null);
 export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());

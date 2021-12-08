@@ -3,14 +3,15 @@ import { Flex } from '@chakra-ui/layout';
 import { TextField, Typography } from '@mui/material';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { reloadPage } from '../../static/frontendHelpers';
-import { useRequestChangePassword, useSaveUserData } from '../../services/dataService';
-import { useUploadAvatarFile } from '../../services/fileService';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
 import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { LoadingFrame } from '../system/LoadingFrame';
 import { EpistoButton } from '../universal/EpistoButton';
 import { SelectImage } from '../universal/SelectImage';
+import { useRequestChangePassword } from '../../services/api/authenticationApiService';
+import { useUploadAvatarFile } from '../../services/api/fileApiService';
+import { useSaveUserData } from '../../services/api/userApiService';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 

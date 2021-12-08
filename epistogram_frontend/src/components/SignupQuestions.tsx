@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { AnswerSignupQuestionDTO } from "../models/shared_models/AnswerSignupQuestionDTO";
-import { useAnswerSignupQuestion, useSignupData } from "../services/openEndpointService";
+import { useSignupData, useAnswerSignupQuestion } from "../services/api/signupApiService";
 import { SingupQuestionSlides, useSignupQuestionsState } from "./exam/SingupQuestionSlides";
 import { LoadingFrame } from "./system/LoadingFrame";
 

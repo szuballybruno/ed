@@ -6,12 +6,12 @@ import { getAssetUrl, PagingType, usePaging } from "../../static/frontendHelpers
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../../models/shared_models/types/sharedTypes";
-import { useSaveExamAnswer } from "../../services/examService";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { translatableTexts } from "../../static/translatableTexts";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { ExamLayout } from "./ExamLayout";
 import { QuestionAnswer } from "./QuestionAnswer";
+import { useSaveExamAnswer } from "../../services/api/examApiService";
 
 export const ExamQuestions = (props: {
     exam: ExamDTO,

@@ -4,12 +4,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
-import { useLogInUser } from "../../services/openEndpointService";
 import SingleInput from "../singleInput/SingleInput";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from './loginScreen.module.scss';
 import { getAssetUrl } from "../../static/frontendHelpers";
+import { useLogInUser } from "../../services/api/authenticationApiService";
 
 const LoginScreen = (): JSX.Element => {
 

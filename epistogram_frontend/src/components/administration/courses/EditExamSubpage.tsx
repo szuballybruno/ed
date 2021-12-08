@@ -7,7 +7,7 @@ import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { ExamEditDataDTO } from "../../../models/shared_models/ExamEditDataDTO";
 import { QuestionDTO } from "../../../models/shared_models/QuestionDTO";
-import { useEditExamData, useSaveExam } from "../../../services/examService";
+import { useEditExamData, useSaveExam } from "../../../services/api/examApiService";
 import { getVirtualId } from "../../../services/core/idService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";

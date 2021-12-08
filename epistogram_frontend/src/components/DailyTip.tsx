@@ -1,11 +1,10 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
 import ReactPlayer from "react-player"
+import { useDailyTip } from "../services/api/miscApiService"
 import { getAssetUrl, usePaging } from "../static/frontendHelpers"
-import { useDailyTip } from "../services/miscService"
 import { translatableTexts } from "../static/translatableTexts"
 import { EpistoDialog, useEpistoDialogLogic } from "./EpistoDialog"
-import { EpistoButton } from "./universal/EpistoButton"
 import { SlidesDisplay } from "./universal/SlidesDisplay"
 
 const ModalPlayer = (props: {

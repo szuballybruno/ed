@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { usePostVideoPlaybackSample } from "../../services/api/playerApiService";
 import { verboseLogging } from "../../static/Environemnt";
 import { isBetweenThreshold } from "../../static/frontendHelpers";
-import { usePostVideoPlaybackSample } from "../../services/playerService";
 
 export const usePlaybackWatcher = (
     playedSeconds: number,

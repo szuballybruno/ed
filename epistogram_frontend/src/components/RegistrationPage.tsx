@@ -6,10 +6,10 @@ import { applicationRoutes } from "../configuration/applicationRoutes";
 import { getAssetUrl, getQueryParam } from "../static/frontendHelpers";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
-import { useRegisterInvitedUser, useRegisterUser } from "../services/openEndpointService";
 import { RefetchUserAsyncContext } from "./system/AuthenticationFrame";
 import { LoadingFrame } from "./system/LoadingFrame";
 import { EpistoButton } from "./universal/EpistoButton";
+import { useRegisterInvitedUser, useRegisterUser } from "../services/api/registrationApiService";
 
 export const RegistrationPage = () => {
 

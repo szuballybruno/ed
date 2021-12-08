@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router";
 import { useIsDesktopView } from "../../static/frontendHelpers";
 import { useNavigation } from "../../services/core/navigatior";
-import { usePlayerData } from "../../services/playerService";
 import { EpistoDialog, useEpistoDialogLogic } from "../EpistoDialog";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "../system/MainPanels";
@@ -13,6 +12,7 @@ import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
 import { ModuleView } from "./ModuleView";
 import { WatchView } from "./WatchView";
+import { usePlayerData } from "../../services/api/playerApiService";
 
 export const PlayerPage = () => {
 

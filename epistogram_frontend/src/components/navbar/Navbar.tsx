@@ -1,8 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { useCurrentCourseItemCode } from "../../services/api/miscApiService";
 import { getAssetUrl, useIsDesktopView } from "../../static/frontendHelpers";
-import { useCurrentCourseItemCode } from "../../services/dataService";
 import { FlexFloat } from "../universal/FlexFloat";
 import DesktopNavbar from "./DesktopNavbar";
 import classes from "./navbar.module.scss";
@@ -14,7 +14,7 @@ const Navbar = (props: { hideLinks?: boolean }) => {
 
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar
-        currentCourseItemCode={currentCourseItemCode}
+        currentCourseItemCode={currentCourseItemCode?.currentCourseItemCode}
         hideLinks={!!props.hideLinks} />;
 
     // render mobile

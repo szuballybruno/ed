@@ -3,7 +3,6 @@ import { Tab, Tabs, Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { useParams } from "react-router-dom";
 import { getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
-import { useCourseDetails, useStartCourse } from "../../services/courseService";
 import { useNavigation } from "../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
 import { MainWrapper } from "../system/MainPanels";
@@ -20,6 +19,7 @@ import { CourseDetailsRatingSection } from "./CourseDetailsRatingSection";
 import { CourseDetailsBriefingInfoItem } from "./CourseDetailsBriefingInfoItem";
 import { translatableTexts } from "../../static/translatableTexts";
 import { mockCourseDetails } from "../../static/mockData";
+import { useStartCourse, useCourseDetails } from "../../services/api/courseApiService";
 
 const CourseDetailsPage = () => {
 

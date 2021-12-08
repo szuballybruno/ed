@@ -3,8 +3,8 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { UserEditDTO } from '../../../models/shared_models/UserEditDTO';
+import { useEditUserData, useUpdateUser } from '../../../services/api/userApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { useEditUserData, useUpdateUser } from '../../../services/userManagementService';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditUserControl } from './EditUserControl';
 
