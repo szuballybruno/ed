@@ -316,10 +316,10 @@ export const useReactQuery = <T>(
 
 export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean) => {
 
-    var queryValues = Object.values(queryParams);
+    var queryValues = queryParams ? Object.values(queryParams) : [];
 
     const queryResult = useQuery(
-        [url, ...(queryValues ?? [])],
+        [url, ...queryValues],
         () => httpGetAsync(url, queryParams), {
         retry: false,
         refetchOnWindowFocus: false,

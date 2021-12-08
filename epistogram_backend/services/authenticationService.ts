@@ -22,19 +22,6 @@ export const getRequestAccessTokenPayload = (req: Request) => {
     return tokenPayload;
 }
 
-export const getUserDTOByCredentials = async (email: string, password: string) => {
-
-    const user = await getUserByEmail(email);
-    if (!user)
-        return null;
-
-    const isPasswordCorrect = await comparePasswordAsync(password, user.password);
-    if (!isPasswordCorrect)
-        return null;
-
-    return toUserDTO(user);
-}
-
 export const getUserIdFromRequest = (req: Request) => {
 
     return getRequestAccessTokenPayload(req).userId;
@@ -138,14 +125,15 @@ export const logInUser = async (email: string, password: string) => {
         throw new TypedError("Email or password is null.", "bad request");
 
     // authenticate
-    const userDTO = await getUserDTOByCredentials(email, password)
-    if (!userDTO)
-        throw new TypedError("Invalid credentials.", "forbidden");
+    const user = await getUserByEmail(email);
+    if (!user)
+        throw new TypedError("Invalid email.", "forbidden");
 
-    log("User logged in: ");
-    log(userDTO);
+    const isPasswordCorrect = await comparePasswordAsync(password, user.password);
+    if (!isPasswordCorrect)
+        throw new TypedError("Invalid password.", "forbidden");
 
-    const userId = userDTO.id;
+    const userId = user.id;
 
     await staticProvider
         .services

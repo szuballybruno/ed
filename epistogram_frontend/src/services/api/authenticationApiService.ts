@@ -28,7 +28,7 @@ export const useUserFetching = (enabled: boolean) => {
 
     const queryResult = useQuery(
         'getCurrentUser',
-        () => httpGetAsync("get-current-user"), {
+        () => httpGetAsync(apiRoutes.authentication.getCurrentUser), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: bgFetchingEnabled ? userRefreshIntervalInMs : false,
