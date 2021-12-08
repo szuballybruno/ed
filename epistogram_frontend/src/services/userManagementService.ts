@@ -3,7 +3,7 @@ import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
 import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
-import { httpGetAsync, httpPostAsync, usePostDataUnsafe } from "./httpClient";
+import { httpGetAsync, httpPostAsync, usePostDataUnsafe } from "./core/httpClient";
 
 export const inviteUserAsync = (dto: CreateInvitedUserDTO) => {
 

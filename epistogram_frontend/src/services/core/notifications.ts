@@ -1,6 +1,6 @@
 import { ReactNode, useContext } from "react";
 import { toast, ToastOptions, ToastPosition } from 'react-toastify';
-import { ErrorDialogContext } from "../components/system/DialogFrame";
+import { ErrorDialogContext } from "../../components/system/DialogFrame";
 
 export type NotificationType = "error" | "info" | "warning";
 

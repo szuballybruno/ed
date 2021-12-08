@@ -1,10 +1,21 @@
-import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
-import { userRefreshIntervalInMs, verboseLogging } from '../Environemnt';
-import { UserDTO } from '../models/shared_models/UserDTO';
-import { httpGetAsync } from './httpClient';
+import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { userRefreshIntervalInMs, verboseLogging } from "../../Environemnt";
+import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { UserDTO } from "../../models/shared_models/UserDTO";
+import { httpGetAsync, usePostDataUnsafe } from "../core/httpClient";
 
 export type AuthenticationStateType = "loading" | "authenticated" | "forbidden";
+
+export const useLogout = () => {
+
+    const qr = usePostDataUnsafe<void, void>(apiRoutes.authentication.logoutUser);
+
+    return {
+        logoutUserState: qr.state,
+        logoutUserAsync: qr.postDataAsync
+    }
+}
 
 export const useUserFetching = (enabled: boolean) => {
 
@@ -58,4 +69,40 @@ export const useUserFetching = (enabled: boolean) => {
         authState,
         refetchUserAsync
     };
+}
+
+export const useSetNewPassword = () => {
+
+    const postDataResult = usePostDataUnsafe(apiRoutes.authentication.setNewPassword);
+
+    const setNewPassword = (password: string, passwordCompare: string, passwordResetToken: string) => {
+
+        return postDataResult
+            .postDataAsync({
+                password,
+                passwordCompare,
+                passwordResetToken
+            });
+    }
+
+    return {
+        setNewPasswordState: postDataResult.state,
+        setNewPassword
+    }
+}
+
+export const useRequestChangePassword = () => {
+
+    const postDataResult = usePostDataUnsafe(apiRoutes.authentication.requestPasswordChange);
+
+    const requestChangePasswordAsync = (oldPassword: string) => {
+
+        return postDataResult
+            .postDataAsync({ oldPassword: oldPassword });
+    }
+
+    return {
+        requestChangePasswordState: postDataResult.state,
+        requestChangePasswordAsync
+    }
 }

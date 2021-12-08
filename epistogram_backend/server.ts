@@ -2,12 +2,26 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import "reflect-metadata"; // needs to be imported for TypeORM
+import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
+import { CourseController } from './api/CourseController';
 import { EventController } from './api/EventController';
+import { ExamController } from './api/ExamController';
+import { FileController } from './api/FileController';
+import { MiscController } from './api/MiscController';
+import { ModuleController } from './api/ModuleController';
+import { PlayerController } from './api/PlayerController';
+import { QuestionController } from './api/QuestionController';
+import { RegistrationController } from './api/RegistrationController';
+import { SignupController } from './api/SignupController';
+import { UserController } from './api/UserController';
+import { UserStatsController } from './api/UserStatsController';
+import { VideoController } from './api/VideoController';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { ActivationCodeService } from './services/ActivationCodeService';
 import { CoinAcquireService } from './services/coinAcquireService';
 import { CoinTransactionService } from './services/coinTransactionService';
+import { EmailService } from './services/EmailService';
 import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
 import { EventService } from './services/eventService';
 import { MapperService } from './services/mapperService';
@@ -15,33 +29,19 @@ import { initializeMappings } from './services/mappings';
 import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/middlewareService';
 import { dbSchema } from './services/misc/dbSchema';
 import { log, logError } from "./services/misc/logger";
+import { RegistrationService } from './services/RegistrationService';
+import { SignupService } from './services/SignupService';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
+import { SQLFunctionsService } from './services/sqlServices/FunctionsService';
 import { ORMConnectionService } from './services/sqlServices/ORMConnectionService';
 import { SeedService } from './services/sqlServices/SeedService';
 import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
-import { SQLFunctionsService } from './services/sqlServices/FunctionsService';
 import { UserSessionActivityService } from './services/userSessionActivityService';
 import { UserStatsService } from './services/userStatsService';
 import { staticProvider } from './staticProvider';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
 import './utilities/jsExtensions';
-import { RegistrationService } from './services/RegistrationService';
-import { RegistrationController } from './api/RegistrationController';
-import { EmailService } from './services/EmailService';
-import { UserStatsController } from './api/UserStatsController';
-import { MiscController } from './api/MiscController';
-import { AuthenticationController } from './api/AuthenticationController';
-import { UserController } from './api/UserController';
-import { SignupService } from './services/SignupService';
-import { FileController } from './api/FileController';
-import { SignupController } from './api/SignupController';
-import { PlayerController } from './api/PlayerController';
-import { CourseController } from './api/CourseController';
-import { ModuleController } from './api/ModuleController';
-import { VideoController } from './api/VideoController';
-import { QuestionController } from './api/QuestionController';
-import { ExamController } from './api/ExamController';
 
 (async () => {
 
@@ -59,8 +59,6 @@ import { ExamController } from './api/ExamController';
     const sqlConnectionService = new SQLConnectionService();
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlBootstrapperService);
-    const seedService = new SeedService(sqlBootstrapperService);
-    const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const userStatsService = new UserStatsService(ormConnectionService, mapperService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService);
     const eventService = new EventService(mapperService, ormConnectionService);
@@ -69,8 +67,10 @@ import { ExamController } from './api/ExamController';
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
     const activationCodeService = new ActivationCodeService(ormConnectionService);
     const emailService = new EmailService();
-    const registrationService = new RegistrationService(activationCodeService, emailService);
     const signupService = new SignupService(emailService);
+    const registrationService = new RegistrationService(activationCodeService, emailService);
+    const seedService = new SeedService(sqlBootstrapperService, signupService, registrationService);
+    const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -119,32 +119,28 @@ import { ExamController } from './api/ExamController';
     expressServer.use(getUnderMaintanenceMiddleware());
     expressServer.use(getAuthMiddleware());
 
-    // open routes
-    addEndpoint(apiRoutes.public.renewUserSession, authenticationController.renewUserSessionAction, { isPublic: true });
-    addEndpoint(apiRoutes.public.loginUser, authenticationController.logInUserAction, { isPost: true, isPublic: true });
-    addEndpoint(apiRoutes.public.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.public.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.public.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
+    // registration
+    addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
+    addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
+    addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
 
     // misc
-    addEndpoint('/get-current-course-item-code', miscController.getCurrentCourseItemCodeAction);
-    addEndpoint('/misc/get-practise-question', miscController.getPractiseQuestionAction);
-    addEndpoint('/misc/save-user-data', miscController.saveUserDataAction, { isPost: true });
-    addEndpoint('/misc/request-change-password', miscController.requestChangePasswordAction, { isPost: true });
-    addEndpoint('/misc/get-registration-link', miscController.getRegistrationLinkAction);
+    addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
     addEndpoint(apiRoutes.misc.getJobTitles, miscController.getJobTitlesAction);
     addEndpoint(apiRoutes.misc.getDailyTip, miscController.getDailyTipAction);
-    addEndpoint("/organizations/get-organizations", miscController.getOrganizationsAction);
-    addEndpoint("/data/get-overview-page-dto", miscController.getOverviewPageDTOAction);
-    addEndpoint("/questions/answer-practise-question", miscController.answerPractiseQuestionAction, { isPost: true });
+    addEndpoint(apiRoutes.misc.getOrganizations, miscController.getOrganizationsAction);
+    addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
 
     // authentication 
-    addEndpoint('/get-current-user', authenticationController.getCurrentUserAction);
-    addEndpoint('/misc/set-new-password', authenticationController.changePasswordAction, { isPost: true });
-    addEndpoint(apiRoutes.misc.logoutUser, authenticationController.logOutUserAction, { isPost: true });
+    addEndpoint(apiRoutes.authentication.getCurrentUser, authenticationController.getCurrentUserAction);
+    addEndpoint(apiRoutes.authentication.setNewPassword, authenticationController.changePasswordAction, { isPost: true });
+    addEndpoint(apiRoutes.authentication.logoutUser, authenticationController.logOutUserAction, { isPost: true });
+    addEndpoint(apiRoutes.authentication.renewUserSession, authenticationController.renewUserSessionAction, { isPublic: true });
+    addEndpoint(apiRoutes.authentication.loginUser, authenticationController.logInUserAction, { isPost: true, isPublic: true });
+    addEndpoint(apiRoutes.authentication.requestPasswordChange, miscController.requestChangePasswordAction, { isPost: true });
 
     // coin transactions 
     addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);
@@ -153,16 +149,17 @@ import { ExamController } from './api/ExamController';
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
 
-    // user management
-    addEndpoint(apiRoutes.userManagement.getEditUserData, userController.getEditUserDataAction);
-    addEndpoint(apiRoutes.userManagement.getUserListForAdministration, userController.getUserAdministrationUserListAction);
-    addEndpoint(apiRoutes.userManagement.getBriefUserData, userController.getBriefUserDataAction);
-    addEndpoint(apiRoutes.userManagement.inviteUser, userController.inviteUserAction, { isPost: true });
-    addEndpoint(apiRoutes.userManagement.deleteUser, userController.deleteUserAction, { isPost: true });
-    addEndpoint(apiRoutes.userManagement.upadateUser, userController.updateUserAction, { isPost: true });
+    // user
+    addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction);
+    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction);
+    addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
+    addEndpoint(apiRoutes.user.inviteUser, userController.inviteUserAction, { isPost: true });
+    addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true });
+    addEndpoint(apiRoutes.user.upadateUser, userController.updateUserAction, { isPost: true });
+    // addEndpoint(apiRoutes.misc.updateUserData, miscController.saveUserDataAction, { isPost: true });
 
     // file 
-    addEndpoint('/file/upload-avatar', fileController.uploadAvatarFileAction, { isPost: true });
+    addEndpoint(apiRoutes.file.uploadUserAvatar, fileController.uploadAvatarFileAction, { isPost: true });
 
     // signup
     addEndpoint(apiRoutes.signup.answerSignupQuestion, signupController.answerSignupQuestionAction, { isPost: true });
@@ -176,7 +173,7 @@ import { ExamController } from './api/ExamController';
     addEndpoint(apiRoutes.player.answerVideoQuestion, playerController.answerVideoQuestionAction, { isPost: true });
 
     // course
-    addEndpoint("/course/set-course-mode", courseController.setCourseTypeAction, { isPost: true });
+    addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true });
     addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction);
     addEndpoint(apiRoutes.course.startCourse, courseController.startCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.getCourseEditData, courseController.getCourseEditDataAction);
@@ -187,7 +184,7 @@ import { ExamController } from './api/ExamController';
     addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.getCourseDetails, courseController.getCourseDetailsAction);
-    addEndpoint(apiRoutes.learning.getCourseProgressData, courseController.getCourseProgressDataAction);
+    addEndpoint(apiRoutes.course.getCourseProgressData, courseController.getCourseProgressDataAction);
 
     // module 
     addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true });
@@ -205,9 +202,11 @@ import { ExamController } from './api/ExamController';
     // questions
     addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction);
     addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true });
+    addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
+    addEndpoint(apiRoutes.questions.getPractiseQuestions, miscController.getPractiseQuestionAction);
 
     // exam
-    addEndpoint("/exam/get-exam-results", examController.getExamResultsAction);
+    addEndpoint(apiRoutes.exam.getExamResults, examController.getExamResultsAction);
     addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction);
     addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true });

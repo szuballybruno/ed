@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Checkbox, Typography } from "@mui/material";
 import React, { ReactNode, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useNavigation } from "../../../services/navigatior";
+import { useNavigation } from "../../../services/core/navigatior";
 import { FloatAddButton } from "../../FloatAddButton";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import IntersectionObserverWrap from "../../IntersectionObserverWrapper";

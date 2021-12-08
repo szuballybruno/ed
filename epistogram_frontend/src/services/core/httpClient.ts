@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import { serverUrl } from "../Environemnt";
-import { getErrorTypeByHTTPCode, getUrl, stringifyQueryObject, TypedError } from "../frontendHelpers";
-import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
-import { LoadingStateType } from "../models/types";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { serverUrl } from "../../Environemnt";
+import { getErrorTypeByHTTPCode, getUrl, stringifyQueryObject, TypedError } from "../../frontendHelpers";
+import HttpErrorResponseDTO from "../../models/shared_models/HttpErrorResponseDTO";
+import { LoadingStateType } from "../../models/types";
 
 export class HTTPResponse {
     code: number;

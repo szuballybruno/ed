@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { getAssetUrl, getRandomInteger } from "../frontendHelpers";
 import { useAnswerPractiseQuestion, useCurrentCourseItemCode, usePractiseQuestion } from "../services/dataService";
-import { useNavigation } from "../services/navigatior";
+import { useNavigation } from "../services/core/navigatior";
 import { translatableTexts } from "../translatableTexts";
 import { CurrentUserContext } from "./system/AuthenticationFrame";
 import { LoadingFrame } from "./system/LoadingFrame";

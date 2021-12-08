@@ -1,9 +1,8 @@
-import { useReactQuery } from "../frontendHelpers";
-import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
-import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
-import { ModuleDTO } from "../models/shared_models/ModuleDTO";
-import { apiRoutes } from "../models/shared_models/types/apiRoutes";
-import { httpGetAsync, usePostDataUnsafe } from "./httpClient";
+import { useReactQuery2 } from "../../frontendHelpers";
+import { ModuleAdminEditDTO } from "../../models/shared_models/ModuleAdminEditDTO";
+import { ModuleCreateDTO } from "../../models/shared_models/ModuleCreateDTO";
+import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { usePostDataUnsafe } from "../core/httpClient";
 
 export const useCreateModule = () => {
 
@@ -34,14 +33,12 @@ export const useSaveModule = () => {
 
 export const useModuleEditData = (moduleId: number) => {
 
-    const qr = useReactQuery<ModuleAdminEditDTO>(
-        ["getModuleEditData", moduleId],
-        () => httpGetAsync(apiRoutes.module.getModuleEditData, { moduleId }))
+    const qr = useReactQuery2<ModuleAdminEditDTO>(apiRoutes.module.getModuleEditData, { moduleId });
 
     return {
         moduleEditData: qr.data,
         moduleEditDataError: qr.error,
-        moduleEditDataState: qr.status,
+        moduleEditDataState: qr.state,
         refetchModuleEditDataAsync: qr.refetch
     }
 }

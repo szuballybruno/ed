@@ -1,7 +1,7 @@
 import { useReactQuery } from "../frontendHelpers";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { UserStatsDTO } from "../models/shared_models/UserStatsDTO";
-import { httpGetAsync } from "./httpClient";
+import { httpGetAsync } from "./core/httpClient";
 
 export const useUserStats = () => {
 

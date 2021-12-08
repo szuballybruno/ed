@@ -7,7 +7,7 @@ import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../../models/shared_models/types/sharedTypes";
 import { useSaveExamAnswer } from "../../services/examService";
-import { useShowErrorDialog } from "../../services/notifications";
+import { useShowErrorDialog } from "../../services/core/notifications";
 import { translatableTexts } from "../../translatableTexts";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { ExamLayout } from "./ExamLayout";

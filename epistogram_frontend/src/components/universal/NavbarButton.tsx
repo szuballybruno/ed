@@ -1,6 +1,6 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
 import React from "react";
-import { useNavigation } from "../../services/navigatior";
+import { useNavigation } from "../../services/core/navigatior";
 import { EpistoButton } from "./EpistoButton";
 
 const NavbarButton = (props: {

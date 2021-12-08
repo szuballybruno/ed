@@ -1,6 +1,6 @@
 import { useQuery } from "react-query"
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
-import { httpGetAsync } from "./httpClient";
+import { httpGetAsync } from "./core/httpClient";
 
 export const useOrganizations = () => {
     const url = "organizations/get-organizations";

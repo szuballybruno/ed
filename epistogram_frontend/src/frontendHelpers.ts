@@ -6,6 +6,7 @@ import { matchPath, useLocation, useParams } from "react-router-dom";
 import { assetStorageUrl } from "./Environemnt";
 import { ErrorType, UserRoleEnum } from "./models/shared_models/types/sharedTypes";
 import { ApplicationRoute, LoadingStateType } from "./models/types";
+import { httpGetAsync } from "./services/core/httpClient";
 import { translatableTexts } from "./translatableTexts";
 
 export const dateTimeToString = (date: Date) => {
@@ -313,17 +314,17 @@ export const useReactQuery = <T>(
     }
 }
 
-export const useReactQuery2 = <T>(
-    url: string,
-    queryFunc: (url: string) => Promise<T>,
-    queryKey?: any[]) => {
+export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean) => {
+
+    var queryValues = Object.values(queryParams);
 
     const queryResult = useQuery(
-        [url, ...(queryKey ?? [])],
-        () => queryFunc(url), {
+        [url, ...(queryValues ?? [])],
+        () => httpGetAsync(url, queryParams), {
         retry: false,
         refetchOnWindowFocus: false,
-        keepPreviousData: true
+        keepPreviousData: true,
+        enabled: isEnabled === false ? false : true
     });
 
     const state = (queryResult.isIdle
@@ -339,10 +340,12 @@ export const useReactQuery2 = <T>(
         await queryResult.refetch();
     };
 
+    const dataAsT = queryResult.data as T;
+
     const result = {
         state,
         refetch,
-        data: queryResult.data ?? null,
+        data: dataAsT === undefined ? null : dataAsT,
         error: queryResult.error
     };
 

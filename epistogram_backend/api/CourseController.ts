@@ -174,7 +174,7 @@ export class CourseController {
             });
     }
 
-    setCourseTypeAction = async (params: ActionParams) => {
+    setCourseModeAction = async (params: ActionParams) => {
 
         const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
         const modeType = withValueOrBadRequest<CourseModeType>(params.req.query.mode);

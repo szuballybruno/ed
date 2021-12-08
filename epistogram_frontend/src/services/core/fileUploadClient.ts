@@ -1,4 +1,4 @@
-import { serverUrl } from "../Environemnt";
+import { serverUrl } from "../../Environemnt";
 import { postFileAsync } from "./httpClient";
 
 const mbToByte = 1000000;

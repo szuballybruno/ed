@@ -9,7 +9,7 @@ import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { objToArray, useIsMatchingCurrentRoute } from "../../frontendHelpers";
 import { ApplicationRoute, ButtonType } from "../../models/types";
 import { useCourseBriefData } from "../../services/courseService";
-import { useNavigation } from "../../services/navigatior";
+import { useNavigation } from "../../services/core/navigatior";
 import { useBriefUserData } from "../../services/userManagementService";
 import { EpistoButton } from "../universal/EpistoButton";
 

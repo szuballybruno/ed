@@ -1,16 +1,26 @@
 export const apiRoutes = {
 
-    open: {
-        renewUserSession: "/open/renew-user-session",
-        loginUser: "/open/login-user",
-        registerUser: "/open/register-user",
-        registerInvitedUser: "/open/register-invited-user"
+    public: {
+        renewUserSession: "/public/renew-user-session",
+        loginUser: "/public/login-user",
+        registerUserViaPublicToken: "/public/register-user-via-public-token",
+        registerUserViaInvitationToken: "/public/register-user-via-invitation-token",
+        registerUserViaActivationCode: "/public/register-user-via-activation-code"
     },
 
     misc: {
-        logoutUser: "/misc/logout-user",
-        getJobTitles: "/get-job-titles",
-        getDailyTip: "/misc/get-get-daily-tip"
+        getJobTitles: "/misc/get-job-titles",
+        getDailyTip: "/misc/get-get-daily-tip",
+        getOrganizations: "/misc/get-organizations",
+        getHomePageDTO: "/misc/get-overview-page-dto",
+        getCurrentCourseItemCode: '/misc/get-current-course-item-code'
+    },
+
+    authentication: {
+        getCurrentUser: "/authentication/get-current-user",
+        setNewPassword: "/authentication/set-new-password",
+        logoutUser: "/authentication/logout-user",
+        requestPasswordChange: "/authentication/request-change-password",
     },
 
     event: {
@@ -26,7 +36,7 @@ export const apiRoutes = {
         getCoinBalance: "/cointransactions/get-coin-balance"
     },
 
-    userManagement: {
+    user: {
         getEditUserData: "/users/get-edit-user-data",
         inviteUser: "/users/invite-user",
         deleteUser: "/users/delete-user",
@@ -35,14 +45,14 @@ export const apiRoutes = {
         getUserListForAdministration: "/users/get-user-administartion-user-list"
     },
 
+    file: {
+        uploadUserAvatar: "/file/upload-user-avatar"
+    },
+
     signup: {
         answerSignupQuestion: '/signup/answer-signup-question',
         getSignupData: "/signup/get-signup-data",
         getUserPersonalityData: "/signup/get-user-personality-data"
-    },
-
-    learning: {
-        getCourseProgressData: "/learning/get-course-progress-data"
     },
 
     player: {
@@ -62,7 +72,9 @@ export const apiRoutes = {
         deleteCourse: "/course/delete-course",
         createCourse: "/course/create-course",
         getCourseDetails: "/course/get-course-details",
-        getAdminCourseList: "/course/get-admin-course-list"
+        getAdminCourseList: "/course/get-admin-course-list",
+        setCourseMode: "/course/set-course-mode",
+        getCourseProgressData: "/course/get-course-progress-data"
     },
 
     module: {
@@ -83,7 +95,9 @@ export const apiRoutes = {
 
     questions: {
         getQuestionEditData: "/questions/get-question-edit-data",
-        saveQuestion: "/questions/save-question"
+        saveQuestion: "/questions/save-question",
+        answerPractiseQuestion: "/questions/answer-practise-question",
+        getPractiseQuestions: '/questions/get-practise-question',
     },
 
     exam: {
@@ -91,16 +105,17 @@ export const apiRoutes = {
         saveExam: "/exam/save-exam",
         createExam: "/exam/create-exam",
         deleteExam: "/exam/delete-exam",
-        answerExamQuestion: "/exam/answer-exam-question"
+        answerExamQuestion: "/exam/answer-exam-question",
+        getExamResults: "/exam/get-exam-results"
     }
 }
 
 export const isOpenRoute = (routePath: string) => {
 
-    const openRoutes = apiRoutes.open;
+    const openRoutes = apiRoutes.public;
 
     for (const key in openRoutes) {
-        if (Object.prototype.hasOwnProperty.call(apiRoutes.open, key)) {
+        if (Object.prototype.hasOwnProperty.call(apiRoutes.public, key)) {
 
             const routeName = (openRoutes as any)[key] as string;
 

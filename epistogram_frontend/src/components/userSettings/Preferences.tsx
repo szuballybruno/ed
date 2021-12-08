@@ -5,7 +5,7 @@ import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react
 import { reloadPage } from '../../frontendHelpers';
 import { useRequestChangePassword, useSaveUserData } from '../../services/dataService';
 import { useUploadAvatarFile } from '../../services/fileService';
-import { showNotification, useShowErrorDialog } from '../../services/notifications';
+import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
 import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { LoadingFrame } from '../system/LoadingFrame';

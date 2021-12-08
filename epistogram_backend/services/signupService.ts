@@ -53,7 +53,7 @@ export class SignupService {
             organizationId,
             roleId,
             jobTitleId,
-            isInvited: true,
+            registrationType: "Invitation",
             password: "guest"
         });
 

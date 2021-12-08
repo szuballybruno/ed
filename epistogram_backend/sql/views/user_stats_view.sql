@@ -102,7 +102,7 @@ FROM
 		) AS "total_answer_session_success_rate"
 	FROM public."user" AS "u"
 
-	WHERE "u"."deletion_date" IS NULL AND "u"."is_pending_invitation" = false
+	WHERE "u"."deletion_date" IS NULL AND "u"."is_invitation_accepted" = true
 
 	ORDER BY "u"."id"
 ) AS "sq"

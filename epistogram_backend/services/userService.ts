@@ -3,6 +3,7 @@ import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
 import { User } from "../models/entity/User";
 import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
+import { RegistrationType } from "../models/Types";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
 import { getRequestAccessTokenPayload } from "./authenticationService";
@@ -15,14 +16,14 @@ export const createUserAsync = async (opts: {
     password: string,
     firstName: string,
     lastName: string,
-    isInvited: boolean,
+    registrationType: RegistrationType,
     organizationId?: number,
     phoneNumber?: string,
     roleId?: number,
     jobTitleId?: number
 }) => {
 
-    const isInvited = opts.isInvited;
+    const regType = opts.registrationType;
 
     // does user already exist?
     const existingUser = await getUserByEmail(opts.email);
@@ -42,8 +43,9 @@ export const createUserAsync = async (opts: {
         phoneNumber: opts.phoneNumber,
         organizationId: opts.organizationId,
         password: hashedPassword,
-        isInvitationAccepted: isInvited,
-        isTrusted: isInvited
+        isInvitationAccepted: false,
+        isTrusted: regType === "Invitation",
+        registrationType: regType
     } as User;
 
     // insert user

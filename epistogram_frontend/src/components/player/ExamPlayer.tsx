@@ -3,7 +3,7 @@ import { usePaging } from "../../frontendHelpers";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { CourseNextItemDTO } from "../../models/shared_models/CourseNextItemDTO";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
-import { useNavigation } from "../../services/navigatior";
+import { useNavigation } from "../../services/core/navigatior";
 import { ExamGreetSlide } from "../exam/ExamGreetSlide";
 import { ExamQuestions } from "../exam/ExamQuestions";
 import { ExamResultsSlide } from "../exam/ExamResultsSlide";

@@ -1,6 +1,6 @@
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
-import { usePostData } from "./httpClient";
+import { usePostData } from "./core/httpClient";
 
 export const useAnswerQuestion = () => {
 

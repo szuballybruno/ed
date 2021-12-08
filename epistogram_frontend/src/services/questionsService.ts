@@ -1,7 +1,7 @@
 import { useReactQuery } from "../frontendHelpers"
 import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO"
 import { apiRoutes } from "../models/shared_models/types/apiRoutes"
-import { httpGetAsync, usePostDataUnsafe } from "./httpClient"
+import { httpGetAsync, usePostDataUnsafe } from "./core/httpClient"
 
 export const useEditQuestionData = (questionId: number | null) => {
 

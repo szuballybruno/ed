@@ -1,22 +1,20 @@
 import { useReactQuery, useReactQuery2 } from "../frontendHelpers";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { PlayerDataDTO } from "../models/shared_models/PlayerDataDTO";
+import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
-import { httpGetAsync, httpPostAsync, usePostData } from "./httpClient";
+import { httpPostAsync, usePostData } from "./core/httpClient";
 
 export const usePlayerData = (descriptorCode: string) => {
 
-    const qr = useReactQuery2<PlayerDataDTO>(
-        "player/get-player-data",
-        (url) => httpGetAsync(url, { descriptorCode }),
-        [descriptorCode]);
+    const queryResult = useReactQuery2<PlayerDataDTO>(apiRoutes.player.getPlayerData, { descriptorCode });
 
     return {
-        playerData: qr.data,
-        playerDataStatus: qr.state,
-        playerDataError: qr.error,
-        refetchPlayerData: qr.refetch
+        playerData: queryResult.data,
+        playerDataStatus: queryResult.state,
+        playerDataError: queryResult.error,
+        refetchPlayerData: queryResult.refetch
     }
 }
 

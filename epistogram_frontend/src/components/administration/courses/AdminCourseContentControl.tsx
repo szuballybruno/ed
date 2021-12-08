@@ -1,4 +1,4 @@
-import {Box, Divider, Flex, Image} from "@chakra-ui/react";
+import { Box, Divider, Flex, Image } from "@chakra-ui/react";
 import AddIcon from '@mui/icons-material/Add';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -15,8 +15,8 @@ import { ModuleAdminShortDTO } from "../../../models/shared_models/ModuleAdminSh
 import { UserDTO } from "../../../models/shared_models/UserDTO";
 import { useCreateExam, useDeleteExam } from "../../../services/examService";
 import { useCreateModule, useDeleteModule } from "../../../services/moduleService";
-import { useNavigation } from "../../../services/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/notifications";
+import { useNavigation } from "../../../services/core/navigatior";
+import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { useCreateVideo, useDeleteVideo } from "../../../services/videoService";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { EpistoHeader } from "../../EpistoHeader";
@@ -372,7 +372,7 @@ export const AdminCourseContentControl = (props: {
                     style={{ alignSelf: "center", marginLeft: 20 }}
                     variant="outlined">
                     Összes kinyitása
-                </EpistoButton> }
+                </EpistoButton>}
             </Flex>
 
             <DragAndDropContext onDragEnd={onDragEnd}>

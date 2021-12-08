@@ -50,7 +50,7 @@ export class RegistrationService {
             firstName,
             lastName,
             password: generatedPassword,
-            isInvited: false
+            registrationType: "ActivationCode"
         });
 
         const userId = user.id;
@@ -95,7 +95,7 @@ export class RegistrationService {
             email,
             firstName,
             lastName,
-            isInvited: false,
+            registrationType: "PublicRegistrationToken",
             password: generatedPassword
         });
 

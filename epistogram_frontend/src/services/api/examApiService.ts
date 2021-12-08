@@ -1,24 +1,21 @@
-import { useReactQuery } from "../frontendHelpers";
-import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
-import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
-import { CreateExamDTO } from "../models/shared_models/CreateExamDTO";
-import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
-import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
-import { IdResultDTO } from "../models/shared_models/IdResultDTO";
-import { QuestionAnswerDTO } from "../models/shared_models/QuestionAnswerDTO";
-import { apiRoutes } from "../models/shared_models/types/apiRoutes";
-import { httpGetAsync, usePostDataUnsafe } from "./httpClient";
+import { useReactQuery2 } from "../../frontendHelpers";
+import { AnswerQuestionDTO } from "../../models/shared_models/AnswerQuestionDTO";
+import { AnswerResultDTO } from "../../models/shared_models/AnswerResultDTO";
+import { CreateExamDTO } from "../../models/shared_models/CreateExamDTO";
+import { ExamEditDataDTO } from "../../models/shared_models/ExamEditDataDTO";
+import { ExamResultsDTO } from "../../models/shared_models/ExamResultsDTO";
+import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
+import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { usePostDataUnsafe } from "../core/httpClient";
 
 export const useEditExamData = (examId: number) => {
 
-    const qr = useReactQuery<ExamEditDataDTO>(
-        ["useEditExamData"],
-        () => httpGetAsync(apiRoutes.exam.getExamEditData, { examId }));
+    const qr = useReactQuery2<ExamEditDataDTO>(apiRoutes.exam.getExamEditData, { examId });
 
     return {
         examEditData: qr.data,
         examEditDataError: qr.error,
-        examEditDataState: qr.status,
+        examEditDataState: qr.state,
         refetchEditDataAsync: qr.refetch
     }
 }
@@ -71,13 +68,11 @@ export const useSaveExamAnswer = () => {
 
 export const useExamResults = (answerSessionId: number) => {
 
-    const qr = useReactQuery<ExamResultsDTO>(
-        ["getExamResults"],
-        () => httpGetAsync("/exam/get-exam-results?answerSessionId=" + answerSessionId));
+    const qr = useReactQuery2<ExamResultsDTO>(apiRoutes.exam.getExamResults, { answerSessionId });
 
     return {
         examResults: qr.data,
         examResultsError: qr.error,
-        examResultsState: qr.status
+        examResultsState: qr.state
     }
 }

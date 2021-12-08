@@ -6,8 +6,8 @@ import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
 import { LoadingStateType } from "../models/types";
-import { uploadeFileChunksAsync } from "./fileUploadClient";
-import { httpGetAsync, usePostDataUnsafe } from "./httpClient";
+import { uploadeFileChunksAsync } from "./core/fileUploadClient";
+import { httpGetAsync, usePostDataUnsafe } from "./core/httpClient";
 
 export const useCreateVideo = () => {
 

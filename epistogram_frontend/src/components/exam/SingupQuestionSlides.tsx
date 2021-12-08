@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
 import { usePaging } from "../../frontendHelpers";
 import { SignupQuestionDTO } from "../../models/shared_models/SignupQuestionDTO";
-import { useShowErrorDialog } from "../../services/notifications";
+import { useShowErrorDialog } from "../../services/core/notifications";
 import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
 import { SignupWrapper } from "../signup/SignupWrapper";
 

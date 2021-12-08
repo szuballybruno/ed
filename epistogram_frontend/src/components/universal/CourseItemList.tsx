@@ -11,7 +11,7 @@ import { Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { ModuleDTO } from "../../models/shared_models/ModuleDTO";
-import { useNavigation } from "../../services/navigatior";
+import { useNavigation } from "../../services/core/navigatior";
 import { EpistoButton } from "./EpistoButton";
 import { FlexList } from "./FlexList";
 import { FlexListItem } from "./FlexListItem";

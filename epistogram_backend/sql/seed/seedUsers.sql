@@ -1,8 +1,9 @@
 INSERT INTO public.user 
 (
     id, 
-    is_pending_invitation,
+    is_invitation_accepted,
     is_trusted,
+    registration_type,
     email,
     username,
     first_name,
@@ -15,16 +16,17 @@ INSERT INTO public.user
 )
 VALUES 
 (
-    1,
-    true,
-    true,
-    'teacher@epi.com',
-    'teacherusername',
-    'Teacherfirst',
-    'Teacherlast',
-    true,
-    '',
-    1,
-    1,
-    1
+    1, -- id 
+    false, -- is_invitation_accepted
+    true, -- is_trusted
+    'Invitation', -- registration_type
+    'teacher@epi.com', -- email
+    'teacherusername', -- username
+    'Teacherfirst', -- first_name
+    'Teacherlast', -- last_name
+    true, -- is_teacher
+    '', -- password
+    1, -- role_id
+    1, -- organization_id
+    1 -- job_title_id
 )

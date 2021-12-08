@@ -1,17 +1,21 @@
 
 import { UserRoleEnum } from "../../models/shared_models/types/sharedTypes";
-import { registerInvitedUserAsync } from "../dataService";
+import { RegistrationService } from "../RegistrationService";
+import { SignupService } from "../SignupService";
 import { log } from "./../misc/logger";
-import { createInvitedUserWithOrgAsync } from "../SignupService";
 import { SQLBootstrapperService } from "./SQLBootstrapper";
 
 export class SeedService {
 
     private _sqlBootstrapperService: SQLBootstrapperService;
+    private _signupService: SignupService;
+    private _regService: RegistrationService;
 
-    constructor(sqlBootstrapperService: SQLBootstrapperService) {
+    constructor(sqlBootstrapperService: SQLBootstrapperService, signupService: SignupService, regService: RegistrationService) {
 
         this._sqlBootstrapperService = sqlBootstrapperService;
+        this._signupService = signupService;
+        this._regService = regService;
     }
 
     seedDBAsync = async () => {
@@ -43,34 +47,36 @@ export class SeedService {
     private seedUsersAsync = async () => {
 
         log("seeding User 1...")
-        const { invitationToken, user } = await createInvitedUserWithOrgAsync(
-            {
-                firstName: "Endre",
-                lastName: "Marosi",
-                jobTitleId: 1,
-                roleId: UserRoleEnum.administratorId,
-                email: "marosi.endre@email.com",
-            },
-            1,
-            false);
+        const { invitationToken, user } = await this._signupService
+            .createInvitedUserWithOrgAsync(
+                {
+                    firstName: "Endre",
+                    lastName: "Marosi",
+                    jobTitleId: 1,
+                    roleId: UserRoleEnum.administratorId,
+                    email: "marosi.endre@email.com",
+                },
+                1,
+                false);
 
-        await registerInvitedUserAsync({
-            invitationToken: invitationToken,
-            password: "admin",
-            passwordCompare: "admin"
-        });
+        await this._regService
+            .registerInvitedUserAsync(
+                invitationToken,
+                "admin",
+                "admin");
 
         log("seeding User 2...")
-        const { invitationToken: it2, user: u2 } = await createInvitedUserWithOrgAsync(
-            {
-                firstName: "Elon",
-                lastName: "Musk",
-                jobTitleId: 1,
-                roleId: UserRoleEnum.supervisorId,
-                email: "elon.musk@email.com",
-            },
-            2,
-            false);
+        const { invitationToken: it2, user: u2 } = await this._signupService
+            .createInvitedUserWithOrgAsync(
+                {
+                    firstName: "Elon",
+                    lastName: "Musk",
+                    jobTitleId: 1,
+                    roleId: UserRoleEnum.supervisorId,
+                    email: "elon.musk@email.com",
+                },
+                2,
+                false);
 
         log("User 2 token: " + it2);
     }

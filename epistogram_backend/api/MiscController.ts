@@ -1,17 +1,12 @@
-import { UploadedFile } from "express-fileupload";
-import { Course } from "../models/entity/Course";
 import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
 import { JobTitle } from "../models/entity/JobTitle";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
-import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { requestChangePasswordAsync } from "../services/authenticationService";
 import { getOrganizationsAsync, getOverviewPageDTOAsync, saveUserDataAsync } from "../services/dataService";
-import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { toDailyTipDTO } from "../services/mappings";
-import { answerPractiseQuestionAsync, getPractiseQuestionAsync } from "../services/practiseQuestionsService";
+import { getPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { createRegistrationToken } from "../services/tokenService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
@@ -21,13 +16,6 @@ export class MiscController {
     constructor() {
 
     }
-
-    answerPractiseQuestionAction = async (params: ActionParams) => {
-
-        const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
-
-        return answerPractiseQuestionAsync(params.userId, dto);
-    };
 
     getCurrentCourseItemCodeAction = async (parms: ActionParams) => {
 

@@ -7,7 +7,7 @@ import { RegisterInvitedUserDTO } from "../models/shared_models/RegisterInvitedU
 import { RegisterUserDTO } from "../models/shared_models/RegisterUserDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
-import { httpGetAsync, usePostData, usePostDataUnsafe } from "./httpClient";
+import { httpGetAsync, usePostData, usePostDataUnsafe } from "./core/httpClient";
 
 type LoginUserDTO = {
     email: string;
@@ -89,7 +89,7 @@ export const useRegisterInvitedUser = () => {
 
 export const useLogInUser = () => {
 
-    const { error, postDataAsync, state } = usePostData<LoginUserDTO, void>(apiRoutes.open.loginUser);
+    const { error, postDataAsync, state } = usePostData<LoginUserDTO, void>(apiRoutes.public.loginUser);
 
     return {
         loginUserState: state,

@@ -2,7 +2,7 @@
 import React from "react";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
 import { useParams } from "react-router-dom";
-import { showNotification, useShowErrorDialog } from "../../../services/notifications";
+import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { useAdminEditedCourse, useSaveCourseData, useUploadCourseThumbnailAsync } from "../../../services/courseService";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { AdminCourseDetailsControl } from "./AdminCourseDetailsControl";

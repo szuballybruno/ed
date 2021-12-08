@@ -5,7 +5,7 @@ import { getAssetUrl } from "../frontendHelpers";
 import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../models/shared_models/types/sharedTypes";
-import { showNotification } from "../services/notifications";
+import { showNotification } from "../services/core/notifications";
 import { LoadingFramePropsType } from "./system/LoadingFrame";
 import { EpistoText } from "./universal/EpistoText";
 import { QuestionnaierAnswer } from "./universal/QuestionnaireAnswer";
