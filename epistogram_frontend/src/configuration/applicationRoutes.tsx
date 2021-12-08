@@ -36,6 +36,11 @@ export const applicationRoutes = {
         route: "/set-new-password"
     },
 
+    redeemCodeRoute: {
+        title: translatableTexts.routeTitles.redeemCode,
+        route: "/redeem"
+    },
+
     homeRoute: {
         title: translatableTexts.routeTitles.homePage,
         route: "/home"

@@ -8,16 +8,21 @@ const SingleInput = (props: {
     style?: object,
     type?: string,
     id?: string,
-    changeHandler?: (e: React.ChangeEvent<{ value: string, name: string }>) => void
+    changeHandler?: (e: React.ChangeEvent<{ value: string, name: string }>) => void,
+    placeholder?: string,
+    sx?: object
 }) => {
     return (
         <div className={classes.dataRow} style={props.style}>
             <div>
                 <Typography variant={"overline"}>{props.labelText}</Typography>
             </div>
-            <TextField variant={"outlined"}
+            <TextField
+                variant={"outlined"}
+                placeholder={props.placeholder}
                 type={props.type}
                 id={props.id}
+                sx={props.sx}
                 name={props.name}
                 onChange={props.changeHandler} />
         </div>

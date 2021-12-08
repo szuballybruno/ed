@@ -31,6 +31,7 @@ export const translatableTexts = {
         underMaintanence: "Under maintanence",
         registration: "Regisztráció",
         setNewPassword: "Új jelszó beállítása",
+        redeemCode: "Kód beváltása",
         homePage: "Kezdőlap",
         shopPage: "Bolt",
         availableCourses: "Tanfolyamkereső",
