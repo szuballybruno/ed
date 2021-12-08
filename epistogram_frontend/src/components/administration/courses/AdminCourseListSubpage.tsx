@@ -1,11 +1,14 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Edit, Equalizer, ShortText, ViewList, WorkTwoTone } from "@mui/icons-material";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import { Equalizer, ShortText, ViewList } from "@mui/icons-material";
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import CategoryIcon from '@mui/icons-material/Category';
 import DeleteIcon from "@mui/icons-material/Delete";
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
+import VideocamIcon from '@mui/icons-material/Videocam';
 import React, { ReactNode, useState } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useAdminCourseList, useCreateCourse, useDeleteCourse } from "../../../services/courseService";
+import { useAdminCourseList, useCreateCourse, useDeleteCourse } from "../../../services/api/courseApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
@@ -18,10 +21,6 @@ import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { FloatChip } from "../../universal/FloatChip";
 import { AdminListEditHeader } from "../AdminListEditHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
-import CategoryIcon from '@mui/icons-material/Category';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 
 export const AdminCourseListSubpage = () => {
 
@@ -31,8 +30,6 @@ export const AdminCourseListSubpage = () => {
     const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList(searchText);
     const { createCourseAsync, createCourseState } = useCreateCourse();
     const { deleteCourseAsync, deleteCourseState } = useDeleteCourse();
-
-    console.log(courses);
 
     const administrationRoutes = applicationRoutes.administrationRoute;
 

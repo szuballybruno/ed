@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
-import { PagingType } from "../../frontendHelpers";
+import { PagingType } from "../../static/frontendHelpers";
 
 export const SegmentedButton = (props: { paging: PagingType<string> }) => {
 

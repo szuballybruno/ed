@@ -2,7 +2,7 @@ import { Flex, Text } from "@chakra-ui/react";
 import { ArrowForward } from "@mui/icons-material";
 import { LinearProgress, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
-import { isString } from "../../frontendHelpers";
+import { isString } from "../../static/frontendHelpers";
 import { EpistoButton } from "../universal/EpistoButton";
 
 export const ExamLayout = (props: {

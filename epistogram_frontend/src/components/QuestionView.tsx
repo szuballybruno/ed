@@ -1,7 +1,7 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
-import { getAssetUrl } from "../frontendHelpers";
+import { getAssetUrl } from "../static/frontendHelpers";
 import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../models/shared_models/types/sharedTypes";

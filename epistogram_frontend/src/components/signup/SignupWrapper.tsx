@@ -1,7 +1,7 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
-import { getAssetUrl, hasValue, isString, useIsDesktopView } from "../../frontendHelpers";
+import { getAssetUrl, hasValue, isString, useIsDesktopView } from "../../static/frontendHelpers";
 import { EpistoHeader } from "../EpistoHeader";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from "./signupWrapper.module.scss";

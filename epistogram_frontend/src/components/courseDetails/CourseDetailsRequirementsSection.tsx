@@ -1,10 +1,10 @@
-import {Flex} from "@chakra-ui/react";
-import {EpistoHeader} from "../EpistoHeader";
-import {Typography} from "@mui/material";
-import {Radar} from "react-chartjs-2";
+import { Flex } from "@chakra-ui/react";
+import { EpistoHeader } from "../EpistoHeader";
+import { Typography } from "@mui/material";
+import { Radar } from "react-chartjs-2";
 import React from "react";
-import {translatableTexts} from "../../translatableTexts";
-import {mockCourseDetails} from "../../mockData";
+import { translatableTexts } from "../../static/translatableTexts";
+import { mockCourseDetails } from "../../static/mockData";
 
 export const CourseDetailsRequirementsSection = () => <Flex mt={10} w={"100%"} h={500} direction={"column"} alignItems={"flex-start"}>
     <EpistoHeader text={translatableTexts.courseDetails.requirementsSection.whenTheCourseGoodForYou} my={10} />

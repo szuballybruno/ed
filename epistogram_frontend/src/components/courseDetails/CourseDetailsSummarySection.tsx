@@ -1,11 +1,11 @@
-import {Flex} from "@chakra-ui/react";
-import {getAssetUrl} from "../../frontendHelpers";
-import {Typography} from "@mui/material";
-import {EpistoHeader} from "../EpistoHeader";
-import {EpistoButton} from "../universal/EpistoButton";
-import {Radar} from "react-chartjs-2";
+import { Flex } from "@chakra-ui/react";
+import { getAssetUrl } from "../../static/frontendHelpers";
+import { Typography } from "@mui/material";
+import { EpistoHeader } from "../EpistoHeader";
+import { EpistoButton } from "../universal/EpistoButton";
+import { Radar } from "react-chartjs-2";
 import React from "react";
-import {translatableTexts} from "../../translatableTexts";
+import { translatableTexts } from "../../static/translatableTexts";
 
 export const CourseDetailsSummarySection = (props: {
     overviewSectionShortDescription: string

@@ -1,7 +1,7 @@
 import { useHistory } from "react-router";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { verboseLogging } from "../../Environemnt";
-import { getUrl } from "../../frontendHelpers";
+import { verboseLogging } from "../../static/Environemnt";
+import { getUrl } from "../../static/frontendHelpers";
 
 export const useNavigation = () => {
 

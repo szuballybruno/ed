@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
 import { ReactNode } from "react";
-import { isString } from "../../frontendHelpers";
+import { isString } from "../../static/frontendHelpers";
 
 export const FlexListTitleSubtitle = (props: { title: string, subTitle: string | ReactNode }) => {
 

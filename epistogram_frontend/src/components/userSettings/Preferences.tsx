@@ -2,7 +2,7 @@ import { Input } from '@chakra-ui/input';
 import { Flex } from '@chakra-ui/layout';
 import { TextField, Typography } from '@mui/material';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
-import { reloadPage } from '../../frontendHelpers';
+import { reloadPage } from '../../static/frontendHelpers';
 import { useRequestChangePassword, useSaveUserData } from '../../services/dataService';
 import { useUploadAvatarFile } from '../../services/fileService';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';

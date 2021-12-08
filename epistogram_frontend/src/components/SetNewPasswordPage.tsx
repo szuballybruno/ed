@@ -2,7 +2,7 @@ import { Image } from "@chakra-ui/react";
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
-import { getAssetUrl, getQueryParam } from "../frontendHelpers";
+import { getAssetUrl, getQueryParam } from "../static/frontendHelpers";
 import { useSetNewPassword } from "../services/dataService";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";

@@ -1,5 +1,5 @@
 import { CSSProperties } from "react"
-import { getAssetUrl } from "../../frontendHelpers"
+import { getAssetUrl } from "../../static/frontendHelpers"
 
 export const EpistoConinImage = (props: { style?: CSSProperties }) => {
 

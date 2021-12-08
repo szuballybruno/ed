@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { Typography } from "@mui/material";
-import { getAssetUrl } from "../frontendHelpers";
+import { getAssetUrl } from "../static/frontendHelpers";
 import { EpistoDialog, EpistoDialogLogicType } from "./EpistoDialog";
 import { EpistoButton } from "./universal/EpistoButton";
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { getAssetUrl } from '../../../../frontendHelpers';
+import { getAssetUrl } from '../../../../static/frontendHelpers';
 import classes from "./profileCourseStats.module.scss";
 
 const ProfileCourseStats = (props: { style?: React.CSSProperties }) => {

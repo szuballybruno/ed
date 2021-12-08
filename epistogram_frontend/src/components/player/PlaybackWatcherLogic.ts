@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { verboseLogging } from "../../Environemnt";
-import { isBetweenThreshold } from "../../frontendHelpers";
+import { verboseLogging } from "../../static/Environemnt";
+import { isBetweenThreshold } from "../../static/frontendHelpers";
 import { usePostVideoPlaybackSample } from "../../services/playerService";
 
 export const usePlaybackWatcher = (

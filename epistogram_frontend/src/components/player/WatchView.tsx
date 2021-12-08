@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Divider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../frontendHelpers";
+import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../static/frontendHelpers";
 import { useReactTimer } from "../../helpers/reactTimer";
 import { ModuleDTO } from "../../models/shared_models/ModuleDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";

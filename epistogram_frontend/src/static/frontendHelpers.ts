@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { matchPath, useLocation, useParams } from "react-router-dom";
 import { assetStorageUrl } from "./Environemnt";
-import { ErrorType, UserRoleEnum } from "./models/shared_models/types/sharedTypes";
-import { ApplicationRoute, LoadingStateType } from "./models/types";
-import { httpGetAsync } from "./services/core/httpClient";
+import { ErrorType, UserRoleEnum } from "../models/shared_models/types/sharedTypes";
+import { ApplicationRoute, LoadingStateType } from "../models/types";
+import { httpGetAsync } from "../services/core/httpClient";
 import { translatableTexts } from "./translatableTexts";
 
 export const dateTimeToString = (date: Date) => {

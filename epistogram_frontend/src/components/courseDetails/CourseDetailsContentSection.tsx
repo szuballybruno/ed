@@ -1,7 +1,7 @@
-import {Flex} from "@chakra-ui/react";
-import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
-import {ExpandMore} from "@mui/icons-material";
-import {getAssetUrl} from "../../frontendHelpers";
+import { Flex } from "@chakra-ui/react";
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
+import { ExpandMore } from "@mui/icons-material";
+import { getAssetUrl } from "../../static/frontendHelpers";
 import React from "react";
 
 export const CourseDetailsContentSection = () => {

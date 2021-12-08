@@ -1,6 +1,6 @@
 import { Box, BoxProps } from "@chakra-ui/layout";
 import React from "react";
-import { translatableTexts } from "../../translatableTexts";
+import { translatableTexts } from "../../static/translatableTexts";
 
 const defaultKey = "___default___";
 

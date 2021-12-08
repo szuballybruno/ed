@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { CourseEditDataDTO } from '../../../models/shared_models/CourseEditDataDTO';
-import { useAdminEditedCourse, useSaveCourseData, useUploadCourseThumbnailAsync } from '../../../services/courseService';
+import { useAdminEditedCourse, useSaveCourseData, useUploadCourseThumbnailAsync } from '../../../services/api/courseApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminCourseContentControl } from "./AdminCourseContentControl";

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { userRefreshIntervalInMs, verboseLogging } from "../../Environemnt";
+import { refreshTokenRefreshIntervalInMs, userRefreshIntervalInMs, verboseLogging } from "../../static/Environemnt";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { UserDTO } from "../../models/shared_models/UserDTO";
-import { httpGetAsync, usePostDataUnsafe } from "../core/httpClient";
+import { httpGetAsync, usePostData, usePostDataUnsafe } from "../core/httpClient";
 
 export type AuthenticationStateType = "loading" | "authenticated" | "forbidden";
 
@@ -105,4 +105,38 @@ export const useRequestChangePassword = () => {
         requestChangePasswordState: postDataResult.state,
         requestChangePasswordAsync
     }
+}
+
+export const useLogInUser = () => {
+
+    type LoginUserDTO = {
+        email: string;
+        password: string;
+    }
+
+    const { error, postDataAsync, state } = usePostData<LoginUserDTO, void>(apiRoutes.authentication.loginUser);
+
+    return {
+        loginUserState: state,
+        loginUserError: error,
+        loginUserAsync: (email: string, password: string) => postDataAsync({
+            email: email,
+            password: password
+        })
+    }
+}
+
+export const useRenewUserSessionPooling = () => {
+
+    const { isSuccess } = useQuery(
+        ['renewUserSession'],
+        () => httpGetAsync(apiRoutes.authentication.renewUserSession), {
+        retry: false,
+        refetchOnWindowFocus: false,
+        refetchInterval: refreshTokenRefreshIntervalInMs,
+        refetchIntervalInBackground: true,
+        notifyOnChangeProps: ["isSuccess"]
+    });
+
+    return { isSuccess };
 }

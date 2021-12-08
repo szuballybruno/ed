@@ -1,161 +1,93 @@
-import { UploadedFile } from "express-fileupload";
-import fs from "fs";
-import { Course } from "../models/entity/Course";
-import { Video } from "../models/entity/Video";
-import { CreateVideoDTO } from "../models/shared_models/CreateVideoDTO";
-import { IdBodyDTO } from "../models/shared_models/IdBodyDTO";
-import { IdResultDTO } from "../models/shared_models/IdResultDTO";
-import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
-import { toQuestionDTO } from "../services/mappings";
-import { getAssetUrl } from "../services/misc/urlProvider";
-import { saveAssociatedQuestionsAsync } from "../services/questionService";
-import { deleteVideosAsync, insertVideoAsync, uploadVideoFileAsync } from "../services/videoService";
-import { staticProvider } from "../staticProvider";
-import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
+import { useState } from "react";
+import { CreateVideoDTO } from "../../models/shared_models/CreateVideoDTO";
+import { IdBodyDTO } from "../../models/shared_models/IdBodyDTO";
+import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
+import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { VideoEditDTO } from "../../models/shared_models/VideoEditDTO";
+import { LoadingStateType } from "../../models/types";
+import { useReactQuery2 } from "../../static/frontendHelpers";
+import { uploadeFileChunksAsync } from "../core/fileUploadClient";
+import { usePostDataUnsafe } from "../core/httpClient";
 
-export class VideoController {
+export const useCreateVideo = () => {
 
-    createVideoAction = async (params: ActionParams) => {
+    const qr = usePostDataUnsafe<CreateVideoDTO, IdResultDTO>(apiRoutes.video.createVideo);
 
-        const dto = withValueOrBadRequest<CreateVideoDTO>(params.req.body);
+    return {
+        createVideoAsync: async (moduleId: number) => {
 
-        const course = await staticProvider
-            .ormConnection
-            .getRepository(Course)
-            .createQueryBuilder("c")
-            .leftJoinAndSelect("c.videos", "v")
-            .leftJoinAndSelect("c.exams", "e")
-            .leftJoinAndSelect("c.modules", "m")
-            .where("m.id = :moduleId", { moduleId: dto.moduleId })
-            .getOneOrFail();
-
-        const courseItemsLength = course.videos.length + course.exams.length;
-
-        const newVideo = {
-            courseId: course.id,
-            moduleId: dto.moduleId,
-            title: dto.title,
-            subtitle: dto.subtitle,
-            description: dto.description,
-            orderIndex: courseItemsLength
-        } as Video;
-
-        await insertVideoAsync(newVideo);
-
-        return {
-            id: newVideo.id
-        } as IdResultDTO;
-    }
-
-    deleteVideoAction = async (params: ActionParams) => {
-
-        const videoId = withValueOrBadRequest<IdBodyDTO>(params.req.body).id;
-
-        await deleteVideosAsync([videoId], true);
-    }
-
-    saveVideoAction = async (params: ActionParams) => {
-
-        const dto = withValueOrBadRequest<VideoEditDTO>(params.req.body);
-        const videoId = dto.id;
-
-        // update vidoeo data
-        await staticProvider
-            .ormConnection
-            .getRepository(Video)
-            .save({
-                id: videoId,
-                title: dto.title,
-                subtitle: dto.subtitle,
-                description: dto.description
+            return qr.postDataAsync({
+                moduleId,
+                title: "",
+                description: "",
+                subtitle: ""
             });
-
-        await saveAssociatedQuestionsAsync(dto.questions, videoId);
+        },
+        createVideoState: qr.state,
+        createVideoResult: qr.result
     }
+}
 
-    getVideoEditDataAction = async (params: ActionParams) => {
+export const useDeleteVideo = () => {
 
-        const videoId = withValueOrBadRequest<number>(params.req.query.videoId, "number");
+    const qr = usePostDataUnsafe<IdBodyDTO, void>(apiRoutes.video.deleteVideo);
 
-        const video = await staticProvider
-            .ormConnection
-            .getRepository(Video)
-            .createQueryBuilder("v")
-            .leftJoinAndSelect("v.videoFile", "vf")
-            .leftJoinAndSelect("v.questions", "vq")
-            .leftJoinAndSelect("vq.answers", "vqa")
-            .where("v.id = :videoId", { videoId })
-            .getOneOrFail();
+    return {
+        deleteVideoAsync: async (videoId: number) => {
 
-        return {
-            id: video.id,
-            title: video.title,
-            description: video.description,
-            subtitle: video.subtitle,
-            videoLengthSeconds: video.lengthSeconds,
-
-            questions: video
-                .questions
-                .map(x => toQuestionDTO(x)),
-
-            videoFileUrl: video.videoFile
-                ? getAssetUrl(video.videoFile.filePath)
-                : null
-        } as VideoEditDTO;
+            return qr.postDataAsync({
+                id: videoId
+            });
+        },
+        deleteVideoState: qr.state
     }
+}
 
-    uploadVideoFileChunksAction = async (params: ActionParams) => {
+export const useSaveVideo = () => {
 
-        const videoId = withValueOrBadRequest<number>(params.req.body.videoId, "number");
-        const tempFolder = staticProvider.rootDirectory + "\\uploads_temp";
-        const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
+    const qr = usePostDataUnsafe<VideoEditDTO, void>(apiRoutes.video.saveVideo);
+
+    return {
+        saveVideoAsync: qr.postDataAsync,
+        saveVideoState: qr.state
+    }
+}
+
+export const useVideoEditData = (videoId: number) => {
+
+    const qr = useReactQuery2<VideoEditDTO>(apiRoutes.video.getVideoEditData, { videoId });
+
+    return {
+        videoEditData: qr.data,
+        videoEditDataState: qr.state,
+        videoEditDataError: qr.error,
+        refetchVideoEditDataAsync: qr.refetch
+    }
+}
+
+export const useUploadVideoFileAsync = () => {
+
+    const [uploadState, setUploadState] = useState<LoadingStateType>("idle");
+
+    const saveVideoFileAsync = async (videoId: number, file: File) => {
+
+        setUploadState("loading");
 
         try {
 
-            const chunkIndex = withValueOrBadRequest<number>(params.req.body.chunkIndex, "number");
-
-            if (chunkIndex !== 0 && !fs.existsSync(filePath))
-                throw new Error("Trying to append file that does not exist!");
-
-            const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
-            const chunksCount = withValueOrBadRequest<number>(params.req.body.chunksCount, "number");
-
-            console.log("Recieved file chunk: #" + chunkIndex);
-
-            // create temp folder 
-            if (!fs.existsSync(tempFolder)) {
-                fs.mkdirSync(tempFolder);
-            }
-
-            // create & append file
-            if (chunkIndex === 0) {
-
-                fs.writeFileSync(filePath, file.data);
-            }
-            else {
-
-                fs.appendFileSync(filePath, file.data);
-            }
-
-            // upload is done 
-            if (chunkIndex + 1 === chunksCount) {
-
-                console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
-
-                // read tmp file 
-                const fullFile = fs.readFileSync(filePath);
-
-                // delete tmp file 
-                fs.rmSync(filePath);
-
-                // upload to cloud 
-                await uploadVideoFileAsync(videoId, fullFile);
-            }
+            await uploadeFileChunksAsync(apiRoutes.video.uploadVideoFileChunks, file, { videoId });
         }
         catch (e) {
 
-            fs.unlinkSync(filePath);
+            setUploadState("idle");
             throw e;
         }
+
+        setUploadState("success");
+    }
+
+    return {
+        saveVideoFileAsync: saveVideoFileAsync,
+        saveVideoFileState: uploadState
     }
 }

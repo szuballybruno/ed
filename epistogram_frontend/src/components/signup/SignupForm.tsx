@@ -1,5 +1,5 @@
 import React from "react";
-import { getEventValueCallback } from "../../frontendHelpers";
+import { getEventValueCallback } from "../../static/frontendHelpers";
 import SingleInput from "../singleInput/SingleInput";
 import { RegFormStateType } from "./SignupFormLogic";
 

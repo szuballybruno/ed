@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex } from "@chakra-ui/react";
-import { getAssetUrl } from "../frontendHelpers";
+import { getAssetUrl } from "../static/frontendHelpers";
 
 export const Badges = () => {
     const badges = [

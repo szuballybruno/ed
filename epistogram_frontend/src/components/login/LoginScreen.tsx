@@ -9,7 +9,7 @@ import SingleInput from "../singleInput/SingleInput";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from './loginScreen.module.scss';
-import { getAssetUrl } from "../../frontendHelpers";
+import { getAssetUrl } from "../../static/frontendHelpers";
 
 const LoginScreen = (): JSX.Element => {
 

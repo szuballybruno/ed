@@ -1,5 +1,5 @@
 import React from "react";
-import { usePaging } from "../../frontendHelpers";
+import { usePaging } from "../../static/frontendHelpers";
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { CourseNextItemDTO } from "../../models/shared_models/CourseNextItemDTO";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";

@@ -1,8 +1,6 @@
 export const apiRoutes = {
 
-    public: {
-        renewUserSession: "/public/renew-user-session",
-        loginUser: "/public/login-user",
+    registration: {
         registerUserViaPublicToken: "/public/register-user-via-public-token",
         registerUserViaInvitationToken: "/public/register-user-via-invitation-token",
         registerUserViaActivationCode: "/public/register-user-via-activation-code"
@@ -21,6 +19,8 @@ export const apiRoutes = {
         setNewPassword: "/authentication/set-new-password",
         logoutUser: "/authentication/logout-user",
         requestPasswordChange: "/authentication/request-change-password",
+        renewUserSession: "/public/renew-user-session",
+        loginUser: "/public/login-user",
     },
 
     event: {
@@ -108,21 +108,4 @@ export const apiRoutes = {
         answerExamQuestion: "/exam/answer-exam-question",
         getExamResults: "/exam/get-exam-results"
     }
-}
-
-export const isOpenRoute = (routePath: string) => {
-
-    const openRoutes = apiRoutes.public;
-
-    for (const key in openRoutes) {
-        if (Object.prototype.hasOwnProperty.call(apiRoutes.public, key)) {
-
-            const routeName = (openRoutes as any)[key] as string;
-
-            if (routePath === routeName)
-                return true;
-        }
-    }
-
-    return false;
 }

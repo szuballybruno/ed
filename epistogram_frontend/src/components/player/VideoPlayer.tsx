@@ -10,7 +10,7 @@ import ReactPlayer from "react-player";
 import { TrackProps } from "react-player/file";
 import useEventListener from 'react-use-event-listener';
 import screenfull from "screenfull";
-import { secondsToTime } from "../../frontendHelpers";
+import { secondsToTime } from "../../static/frontendHelpers";
 import { AdvancedTimer } from "../../helpers/advancedTimer";
 import { SubtitleDTO } from "../../models/shared_models/SubtitleDTO";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";

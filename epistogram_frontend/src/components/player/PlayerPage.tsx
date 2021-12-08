@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router";
-import { useIsDesktopView } from "../../frontendHelpers";
+import { useIsDesktopView } from "../../static/frontendHelpers";
 import { useNavigation } from "../../services/core/navigatior";
 import { usePlayerData } from "../../services/playerService";
 import { EpistoDialog, useEpistoDialogLogic } from "../EpistoDialog";

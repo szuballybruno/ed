@@ -1,4 +1,4 @@
-import { useReactQuery2 } from "../../frontendHelpers";
+import { useReactQuery2 } from "../../static/frontendHelpers";
 import { CourseAdminListItemDTO } from "../../models/shared_models/CourseAdminListItemDTO";
 import { CourseBriefData } from "../../models/shared_models/CourseBriefData";
 import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";

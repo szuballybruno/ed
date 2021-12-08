@@ -1,6 +1,6 @@
 import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from "@mui/icons-material";
 import { useState } from "react";
-import { hasValue } from "../../frontendHelpers";
+import { hasValue } from "../../static/frontendHelpers";
 import { QuestionnaierAnswerMinimal } from "../universal/QuestionnaireAnswerMinimal";
 import { QuestionnaireLayout } from "../universal/QuestionnaireLayout";
 import classes from "./stillWatching.module.scss"

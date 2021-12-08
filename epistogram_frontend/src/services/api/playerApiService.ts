@@ -1,42 +1,74 @@
-import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
-import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
-import { getCurrentCourseItemsAsync } from "../services/courseService";
-import { getPlayerDataAsync, saveVideoPlaybackSample } from "../services/playerService";
-import { answerVideoQuestionAsync } from "../services/videoService";
-import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
+import { useReactQuery2 } from "../../static/frontendHelpers";
+import { AnswerQuestionDTO } from "../../models/shared_models/AnswerQuestionDTO";
+import { AnswerResultDTO } from "../../models/shared_models/AnswerResultDTO";
+import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { PlayerDataDTO } from "../../models/shared_models/PlayerDataDTO";
+import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { VideoPlaybackSampleDTO } from "../../models/shared_models/VideoPlaybackSampleDTO";
+import { VideoSamplingResultDTO } from "../../models/shared_models/VideoSamplingResultDTO";
+import { usePostData } from "../core/httpClient";
 
-export class PlayerController {
+export const usePlayerData = (descriptorCode: string) => {
 
-    constructor() {
+    const queryResult = useReactQuery2<PlayerDataDTO>(apiRoutes.player.getPlayerData, { descriptorCode });
 
+    return {
+        playerData: queryResult.data,
+        playerDataStatus: queryResult.state,
+        playerDataError: queryResult.error,
+        refetchPlayerData: queryResult.refetch
+    }
+}
+
+export const useCourseItemList = (descriptorCode: string, isEnabled: boolean) => {
+
+    const qr = useReactQuery2<CourseItemDTO[]>(apiRoutes.player.getCourseItems, { descriptorCode }, isEnabled);
+
+    return {
+        courseItemList: qr.data as CourseItemDTO[] ?? [],
+        courseItemListStatus: qr.state,
+        courseItemListError: qr.error,
+        refetchCourseItemList: qr.refetch
+    }
+}
+
+export const usePostVideoPlaybackSample = () => {
+
+    const qr = usePostData<VideoPlaybackSampleDTO, VideoSamplingResultDTO>(apiRoutes.player.saveVideoPlaybackSample);
+
+    const postVideoPlaybackSampleAsync = (fromPlayedSeconds: number, toPlayedSeconds: number) => {
+
+        return qr.postDataAsync({
+            fromSeconds: fromPlayedSeconds,
+            toSeconds: toPlayedSeconds
+        });
     }
 
-    answerVideoQuestionAction = async (params: ActionParams) => {
+    return {
+        postVideoPlaybackSampleAsync,
+        videoSamplingResult: qr.result
+    }
+}
 
-        const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
-        const answerIds = withValueOrBadRequest<number[]>(dto.answerIds);
-        const questionId = withValueOrBadRequest<number>(dto.questionId, "number");
-        const answerSessionId = withValueOrBadRequest<number>(dto.answerSessionId, "number");
+export const useAnswerQuestion = () => {
 
-        return answerVideoQuestionAsync(params.userId, answerSessionId, questionId, answerIds);
-    };
+    const queryRes = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.player.answerVideoQuestion);
 
-    saveVideoPlaybackSampleAction = (params: ActionParams) => {
+    const answerQuestionAsync = (answerSessionId: number, answerIds: number[], questionId: number) => {
 
-        const dto = withValueOrBadRequest<VideoPlaybackSampleDTO>(params.req.body);
+        const dto = {
+            answerIds,
+            questionId,
+            answerSessionId
+        } as AnswerQuestionDTO;
 
-        return saveVideoPlaybackSample(params.userId, dto);
-    };
+        return queryRes.postDataAsync(dto);
+    }
 
-    getPlayerDataAction = (params: ActionParams) => {
-
-        const descriptorCode = withValueOrBadRequest<string>(params.req.query.descriptorCode);
-
-        return getPlayerDataAsync(params.userId, descriptorCode);
-    };
-
-    getCourseItemsAction = async (params: ActionParams) => {
-
-        return getCurrentCourseItemsAsync(params.userId);
-    };
+    return {
+        answerResult: queryRes.result,
+        answerQuestionError: queryRes.error,
+        answerQuestionState: queryRes.state,
+        answerQuestionAsync
+    }
 }

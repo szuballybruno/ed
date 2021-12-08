@@ -1,4 +1,4 @@
-import { useReactQuery2 } from "../../frontendHelpers";
+import { useReactQuery2 } from "../../static/frontendHelpers";
 import { ModuleAdminEditDTO } from "../../models/shared_models/ModuleAdminEditDTO";
 import { ModuleCreateDTO } from "../../models/shared_models/ModuleCreateDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";

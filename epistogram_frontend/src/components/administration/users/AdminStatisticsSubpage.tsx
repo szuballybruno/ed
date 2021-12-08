@@ -2,7 +2,7 @@ import React from 'react';
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { Bar, Doughnut, Line, Pie, Radar } from "react-chartjs-2";
 import { LearningStatisticsSeciton } from '../../learningStatistics/LearningStatisticsSeciton';
-import { getAssetUrl } from "../../../frontendHelpers";
+import { getAssetUrl } from "../../../static/frontendHelpers";
 import { Flex } from "@chakra-ui/react";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 

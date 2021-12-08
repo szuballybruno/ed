@@ -1,57 +1,52 @@
-import { RegisterUserViaActivationCodeDTO } from "../models/shared_models/RegisterUserViaActivationCodeDTO";
-import { RegisterUserViaInvitationTokenDTO } from "../models/shared_models/RegisterUserViaInvitationTokenDTO";
-import { RegisterUserViaPublicTokenDTO } from "../models/shared_models/RegisterUserViaPublicTokenDTO";
-import { RegistrationService } from "../services/RegistrationService";
-import { setAuthCookies } from "../utilities/cookieHelpers";
-import { ActionParams } from "../utilities/helpers";
+import { RegisterInvitedUserDTO } from "../../models/shared_models/RegisterInvitedUser";
+import { RegisterUserDTO } from "../../models/shared_models/RegisterUserDTO";
+import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { usePostDataUnsafe } from "../core/httpClient";
 
-export class RegistrationController {
+export const useRegisterUser = () => {
 
-    private _res: RegistrationService;
+    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerUserViaPublicToken);
 
-    constructor(res: RegistrationService) {
+    const registerUserAsync = (
+        regToken: string,
+        emailAddress: string,
+        firstName: string,
+        lastName: string) => {
 
-        this._res = res;
+        return postDataResult
+            .postDataAsync({
+                registrationToken: regToken,
+                firstName,
+                lastName,
+                emailAddress
+            } as RegisterUserDTO);
     }
 
-    registerUserViaPublicTokenAction = async (params: ActionParams) => {
+    return {
+        registerUserState: postDataResult.state,
+        registerUserAsync
+    }
+}
 
-        const body = params.getBody<RegisterUserViaPublicTokenDTO>()
+export const useRegisterInvitedUser = () => {
 
-        const { accessToken, refreshToken } = await this._res
-            .registerUserViaPublicTokenAsync(
-                body.getBodyValue<string>(x => x.emailAddress),
-                body.getBodyValue<string>(x => x.firstName),
-                body.getBodyValue<string>(x => x.lastName),
-                body.getBodyValue<string>(x => x.registrationToken));
+    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerUserViaInvitationToken);
 
-        setAuthCookies(params.res, accessToken, refreshToken);
-    };
+    const registerInvitedUserAsync = (
+        invitationToken: string,
+        password: string,
+        passwordCompare: string) => {
 
-    registerUserViaInvitationTokenAction = async (params: ActionParams) => {
+        return postDataResult
+            .postDataAsync({
+                invitationToken: invitationToken,
+                password,
+                passwordCompare
+            } as RegisterInvitedUserDTO);
+    }
 
-        const body = params.getBody<RegisterUserViaInvitationTokenDTO>();
-
-        const { accessToken, refreshToken } = await this._res
-            .registerInvitedUserAsync(
-                body.getBodyValue<string>(x => x.invitationToken),
-                body.getBodyValue<string>(x => x.password),
-                body.getBodyValue<string>(x => x.passwordCompare));
-
-        setAuthCookies(params.res, accessToken, refreshToken);
-    };
-
-    registerUserViaActivationCodeAction = async (params: ActionParams) => {
-
-        const body = params.getBody<RegisterUserViaActivationCodeDTO>();
-
-        const { accessToken, refreshToken } = await this._res
-            .registerUserViaActivationCodeAsync(
-                body.getBodyValue<string>(x => x.activationCode),
-                body.getBodyValue<string>(x => x.emailAddress),
-                body.getBodyValue<string>(x => x.firstName),
-                body.getBodyValue<string>(x => x.lastName));
-
-        setAuthCookies(params.res, accessToken, refreshToken);
-    };
+    return {
+        registerInvitedUserState: postDataResult.state,
+        registerInvitedUserAsync
+    }
 }

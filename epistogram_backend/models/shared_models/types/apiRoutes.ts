@@ -109,20 +109,3 @@ export const apiRoutes = {
         getExamResults: "/exam/get-exam-results"
     }
 }
-
-export const isOpenRoute = (routePath: string) => {
-
-    const openRoutes = apiRoutes.public;
-
-    for (const key in openRoutes) {
-        if (Object.prototype.hasOwnProperty.call(apiRoutes.public, key)) {
-
-            const routeName = (openRoutes as any)[key] as string;
-
-            if (routePath === routeName)
-                return true;
-        }
-    }
-
-    return false;
-}

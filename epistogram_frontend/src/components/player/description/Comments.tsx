@@ -2,7 +2,7 @@ import { Input } from "@chakra-ui/input";
 import { Flex } from "@chakra-ui/react";
 import { Avatar, Divider, Grid, Paper } from "@mui/material";
 import React from 'react';
-import { getAssetUrl } from "../../../frontendHelpers";
+import { getAssetUrl } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../universal/EpistoButton";
 
 const Comments = () => {

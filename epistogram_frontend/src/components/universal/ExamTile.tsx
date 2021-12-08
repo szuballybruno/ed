@@ -1,7 +1,7 @@
 import { Box, css, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { LinearProgress } from "@mui/material";
 import React from "react";
-import { getAssetUrl } from "../../frontendHelpers";
+import { getAssetUrl } from "../../static/frontendHelpers";
 import { EpistoButton } from "./EpistoButton";
 
 export const ExamTile = (props: {

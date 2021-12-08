@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import { Route, Switch } from "react-router-dom";
 import AdminPage from "./components/administration/AdminPage";
@@ -11,14 +10,12 @@ import NotFound from "./components/notFound/NotFound";
 import { PlayerPage } from "./components/player/PlayerPage";
 import { RegistrationPage } from "./components/RegistrationPage";
 import { SetNewPasswordPage } from "./components/SetNewPasswordPage";
+import { ShopPage } from "./components/shopPage/ShopPage";
 import { SignupPage } from "./components/signup/SignupPage";
-import { UnderMaintanence } from "./components/UnderMaintanence";
 import { ProtectedRoute } from "./components/universal/ProtectedRoute";
 import { UserSettingsPage } from "./components/userSettings/UserSettingsPage";
 import { applicationRoutes } from "./configuration/applicationRoutes";
-import { isUnderMaintenance } from "./Environemnt";
 import { ApplicationRoute } from "./models/types";
-import {ShopPage} from "./components/shopPage/ShopPage";
 
 export const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
 

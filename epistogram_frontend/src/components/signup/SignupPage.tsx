@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { getAssetUrl, usePaging } from "../../frontendHelpers";
+import { getAssetUrl, usePaging } from "../../static/frontendHelpers";
 import { useNavigation } from '../../services/core/navigatior';
-import { translatableTexts } from '../../translatableTexts';
+import { translatableTexts } from '../../static/translatableTexts';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { ContentWrapper, MainWrapper } from "../system/MainPanels";
 import { SignupQuestions } from '../SignupQuestions';

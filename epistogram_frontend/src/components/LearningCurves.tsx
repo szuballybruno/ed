@@ -1,11 +1,11 @@
-import {Flex} from "@chakra-ui/react";
-import { Tab, Tabs, Typography} from "@mui/material";
-import {Lock} from "@mui/icons-material";
-import React, {useState} from "react";
-import {translatableTexts} from "../translatableTexts";
-import {FlexFloat} from "./universal/FlexFloat";
-import {TabPanel} from "./courseDetails/TabPanel";
-import {getAssetUrl} from "../frontendHelpers";
+import { Flex } from "@chakra-ui/react";
+import { Tab, Tabs, Typography } from "@mui/material";
+import { Lock } from "@mui/icons-material";
+import React, { useState } from "react";
+import { translatableTexts } from "../static/translatableTexts";
+import { FlexFloat } from "./universal/FlexFloat";
+import { TabPanel } from "./courseDetails/TabPanel";
+import { getAssetUrl } from "../static/frontendHelpers";
 
 export const LearningCurves = () => {
 
@@ -25,14 +25,14 @@ export const LearningCurves = () => {
 
 
     return <Flex
-            direction={"row"}
-            flexWrap={"wrap"}
-            justifyContent={"center"}
-            alignItems={"flex-start"}
-            w={"100%"}
-            h={"100%"}
+        direction={"row"}
+        flexWrap={"wrap"}
+        justifyContent={"center"}
+        alignItems={"flex-start"}
+        w={"100%"}
+        h={"100%"}
 
-        >
+    >
         <Flex
             flex={1}
             minW={300}
@@ -133,7 +133,7 @@ export const LearningCurves = () => {
                     <Lock style={{
                         width: "50%",
                         height: "50%"
-                    }}/>
+                    }} />
                     <Typography align={"center"}>
                         {translatableTexts.homePage.noStatsYet}
                     </Typography>

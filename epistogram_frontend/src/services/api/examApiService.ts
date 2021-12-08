@@ -1,4 +1,4 @@
-import { useReactQuery2 } from "../../frontendHelpers";
+import { useReactQuery2 } from "../../static/frontendHelpers";
 import { AnswerQuestionDTO } from "../../models/shared_models/AnswerQuestionDTO";
 import { AnswerResultDTO } from "../../models/shared_models/AnswerResultDTO";
 import { CreateExamDTO } from "../../models/shared_models/CreateExamDTO";

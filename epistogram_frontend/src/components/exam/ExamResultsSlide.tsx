@@ -4,11 +4,11 @@ import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/
 import React from 'react';
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { useExamResults } from "../../services/examService";
-import { translatableTexts } from "../../translatableTexts";
+import { translatableTexts } from "../../static/translatableTexts";
 import StatisticsCard from "../statisticsCard/StatisticsCard";
 import { ExamLayout } from './ExamLayout';
 import { QuestionAnswer } from "./QuestionAnswer";
-import { getAssetUrl } from "../../frontendHelpers";
+import { getAssetUrl } from "../../static/frontendHelpers";
 
 export const ExamResultsSlide = (props: {
     exam: ExamDTO,

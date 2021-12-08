@@ -1,7 +1,7 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { LinearProgress, Rating } from "@mui/material";
 import React, { ReactNode } from 'react';
-import { getAssetUrl } from "../../frontendHelpers";
+import { getAssetUrl } from "../../static/frontendHelpers";
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { FlexFloat } from "./FlexFloat";
 

@@ -1,4 +1,4 @@
-import { useReactQuery2 } from "../../frontendHelpers";
+import { useReactQuery2 } from "../../static/frontendHelpers";
 import { CoinTransactionDTO } from "../../models/shared_models/CoinTransactionDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 

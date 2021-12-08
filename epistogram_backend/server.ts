@@ -117,7 +117,13 @@ import './utilities/jsExtensions';
     expressServer.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
     expressServer.use(fileUpload());
     expressServer.use(getUnderMaintanenceMiddleware());
-    expressServer.use(getAuthMiddleware());
+    expressServer.use(getAuthMiddleware([
+        apiRoutes.registration.registerUserViaActivationCode,
+        apiRoutes.registration.registerUserViaInvitationToken,
+        apiRoutes.registration.registerUserViaPublicToken,
+        apiRoutes.authentication.renewUserSession,
+        apiRoutes.authentication.loginUser,
+    ]));
 
     // registration
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });

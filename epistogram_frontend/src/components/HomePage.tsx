@@ -2,7 +2,7 @@ import { Box, Flex } from '@chakra-ui/layout';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 //import { mockTasks } from '../mockData';
 import { useOverviewPageDTO } from "../services/dataService";
-import { translatableTexts } from '../translatableTexts';
+import { translatableTexts } from '../static/translatableTexts';
 import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
 import { LoadingFrame } from "./system/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./system/MainPanels";

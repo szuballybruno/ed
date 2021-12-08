@@ -1,9 +1,9 @@
 import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useState } from "react";
-import { distinct } from "../../frontendHelpers";
-import { mockShopCategories, mockShopItems } from "../../mockData";
-import { translatableTexts } from "../../translatableTexts";
+import { distinct } from "../../static/frontendHelpers";
+import { mockShopCategories, mockShopItems } from "../../static/mockData";
+import { translatableTexts } from "../../static/translatableTexts";
 import classes from "../css/courseSearchMain.module.scss";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../system/MainPanels";

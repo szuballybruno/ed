@@ -7,7 +7,7 @@ import VideocamIcon from '@mui/icons-material/Videocam';
 import { TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../frontendHelpers";
+import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../static/frontendHelpers";
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
 import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";

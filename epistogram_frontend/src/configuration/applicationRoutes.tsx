@@ -1,6 +1,6 @@
 import { Assignment, Business, People, Person, School, Settings, Subscriptions } from "@mui/icons-material";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import { translatableTexts } from "../translatableTexts";
+import { translatableTexts } from "../static/translatableTexts";
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 

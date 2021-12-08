@@ -3,7 +3,7 @@ import { Flex } from "@chakra-ui/layout";
 import { Checkbox, TextField, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
-import { getAssetUrl, getQueryParam } from "../frontendHelpers";
+import { getAssetUrl, getQueryParam } from "../static/frontendHelpers";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { useRegisterInvitedUser, useRegisterUser } from "../services/openEndpointService";

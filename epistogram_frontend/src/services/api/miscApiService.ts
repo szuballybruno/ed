@@ -1,6 +1,7 @@
-import { useReactQuery2 } from "../../frontendHelpers";
+import { useReactQuery2 } from "../../static/frontendHelpers";
 import { DailyTipDTO } from "../../models/shared_models/DailyTipDTO";
 import { JobTitleDTO } from "../../models/shared_models/JobTitleDTO";
+import { OrganizationDTO } from "../../models/shared_models/OrganizationDTO";
 import { OverviewPageDTO } from "../../models/shared_models/OverviewPageDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 
@@ -43,5 +44,15 @@ export const useDailyTip = () => {
         dailyTipData: qr.data,
         dailyTipError: qr.error,
         dailyTipState: qr.state
+    }
+}
+
+export const useOrganizations = () => {
+
+    const qr = useReactQuery2<OrganizationDTO[]>(apiRoutes.misc.getOrganizations);
+
+    return {
+        organizations: qr.data ?? [],
+        organizationsState: qr.state
     }
 }

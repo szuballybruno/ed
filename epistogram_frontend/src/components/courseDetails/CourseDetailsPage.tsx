@@ -2,7 +2,7 @@ import { Box, Container, Flex } from "@chakra-ui/react";
 import { Tab, Tabs, Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { useParams } from "react-router-dom";
-import { getAssetUrl, getQueryParam } from "../../frontendHelpers";
+import { getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
 import { useCourseDetails, useStartCourse } from "../../services/courseService";
 import { useNavigation } from "../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
@@ -18,8 +18,8 @@ import { CourseDetailsContentSection } from "./CourseDetailsContentSection";
 import { CourseDetailsTeacherSection } from "./CourseDetailsTeacherSection";
 import { CourseDetailsRatingSection } from "./CourseDetailsRatingSection";
 import { CourseDetailsBriefingInfoItem } from "./CourseDetailsBriefingInfoItem";
-import { translatableTexts } from "../../translatableTexts";
-import { mockCourseDetails } from "../../mockData";
+import { translatableTexts } from "../../static/translatableTexts";
+import { mockCourseDetails } from "../../static/mockData";
 
 const CourseDetailsPage = () => {
 

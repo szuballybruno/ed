@@ -1,9 +1,9 @@
-import {Box, Flex, FlexProps, Text} from "@chakra-ui/react";
-import {FlexFloat} from "../universal/FlexFloat";
-import React, {ReactNode} from "react";
-import {ShopItemShortDTO} from "../../models/shared_models/ShopItemShortDTO";
-import {getAssetUrl} from "../../frontendHelpers";
-import {LocalOffer} from "@mui/icons-material";
+import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
+import { FlexFloat } from "../universal/FlexFloat";
+import React, { ReactNode } from "react";
+import { ShopItemShortDTO } from "../../models/shared_models/ShopItemShortDTO";
+import { getAssetUrl } from "../../static/frontendHelpers";
+import { LocalOffer } from "@mui/icons-material";
 
 export const ShopItem = (
     props: {
@@ -35,8 +35,8 @@ export const ShopItem = (
         <Flex direction={"column"}>
             <Box flex="1" position="relative" minH={200} maxH={200}>
                 <Box position="relative"
-                     className="whall"
-                     minHeight="150px">
+                    className="whall"
+                    minHeight="150px">
                     <Box
                         position="absolute"
                         top="0"

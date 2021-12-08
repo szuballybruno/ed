@@ -1,17 +1,14 @@
-import { UserStatsService } from "../services/userStatsService";
-import { ActionParams } from "../utilities/helpers";
+import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { UserStatsDTO } from "../../models/shared_models/UserStatsDTO";
+import { useReactQuery2 } from "../../static/frontendHelpers";
 
-export class UserStatsController {
+export const useUserStats = () => {
 
-    private _userStatsService: UserStatsService;
+    const queryRes = useReactQuery2<UserStatsDTO>(apiRoutes.userStats.getUserStats);
 
-    constructor(userStatsService: UserStatsService) {
-
-        this._userStatsService = userStatsService;
-    }
-
-    getUserStatsAction = async (params: ActionParams) => {
-
-        return await this._userStatsService.getUserStatsAsync(params.userId);
+    return {
+        userStats: queryRes.data,
+        userStatsStatus: queryRes.state,
+        userStatsError: queryRes.error
     }
 }

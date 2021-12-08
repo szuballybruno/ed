@@ -1,25 +1,25 @@
-import {Flex} from "@chakra-ui/react";
-import {EpistoHeader} from "../EpistoHeader";
+import { Flex } from "@chakra-ui/react";
+import { EpistoHeader } from "../EpistoHeader";
 import React from "react";
-import {Typography} from "@mui/material";
-import {getAssetUrl} from "../../frontendHelpers";
-import {EpistoButton} from "../universal/EpistoButton";
+import { Typography } from "@mui/material";
+import { getAssetUrl } from "../../static/frontendHelpers";
+import { EpistoButton } from "../universal/EpistoButton";
 
 export const CourseDetailsTeacherSection = () => {
 
     const mockTeacherDetails = [{
         icon: getAssetUrl("/course_page_icons/teacher_courses.svg"),
         title: "4 kurzus"
-    },{
+    }, {
         icon: getAssetUrl("/course_page_icons/teacher_videos.svg"),
         title: "359 videó"
-    },{
+    }, {
         icon: getAssetUrl("/course_page_icons/teacher_enrolled.svg"),
         title: "12187 hallgató"
-    },{
+    }, {
         icon: getAssetUrl("/course_page_icons/teacher_review.svg"),
         title: "4.87 értékelés"
-    },{
+    }, {
         icon: getAssetUrl("/course_page_icons/teacher_award.svg"),
         title: "mester tanár"
     }]
@@ -44,14 +44,14 @@ export const CourseDetailsTeacherSection = () => {
             h={140}
             alignItems={"center"}>
             <Flex w={120}
-                  h={120}
-                  mx={10}
-                  className={"circle"}
-                  border="2px solid var(--epistoTeal)"
-                  bg="var(--deepBlue)"
-                  color="white"
-                  alignItems={"center"}
-                  justifyContent={"center"}>
+                h={120}
+                mx={10}
+                className={"circle"}
+                border="2px solid var(--epistoTeal)"
+                bg="var(--deepBlue)"
+                color="white"
+                alignItems={"center"}
+                justifyContent={"center"}>
                 <Typography>
                     OM
                 </Typography>

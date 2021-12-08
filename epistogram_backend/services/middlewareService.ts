@@ -1,6 +1,6 @@
 import cors from 'cors';
 import { Request } from 'express';
-import { apiRoutes, isOpenRoute } from '../models/shared_models/types/apiRoutes';
+import { apiRoutes } from '../models/shared_models/types/apiRoutes';
 import { staticProvider } from '../staticProvider';
 import { getAsyncMiddlewareHandler } from '../utilities/apiHelpers';
 import { TypedError } from '../utilities/helpers';
@@ -8,14 +8,14 @@ import { getRequestAccessTokenPayload } from './authenticationService';
 import { log } from './misc/logger';
 import { getUserById } from './userService';
 
-export const getAuthMiddleware = () => getAsyncMiddlewareHandler(async (req: Request) => {
+export const getAuthMiddleware = (openRoutes: string[]) => getAsyncMiddlewareHandler(async (req: Request) => {
 
     const currentRoutePath = req.path;
 
     log(`Authorizing request: ${currentRoutePath}`);
 
     // do not authenticate on open routes
-    if (isOpenRoute(currentRoutePath)) {
+    if (openRoutes.some(x => x === currentRoutePath)) {
 
         log(`Route [${currentRoutePath}] is an open route, skipping authentication!`);
         return;
@@ -32,8 +32,8 @@ export const getAuthMiddleware = () => getAsyncMiddlewareHandler(async (req: Req
     if (!user.userActivity.canAccessApplication) {
 
         const unprotectedRoutes = [
-            "/get-current-user",
-            "/renew-user-session",
+            apiRoutes.authentication.getCurrentUser,
+            apiRoutes.authentication.renewUserSession,
             apiRoutes.signup.getSignupData,
             apiRoutes.signup.answerSignupQuestion,
             apiRoutes.signup.getUserPersonalityData

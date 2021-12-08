@@ -1,7 +1,7 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
 import { Typography } from '@mui/material';
 import React, { CSSProperties, ReactNode } from 'react';
-import { currentVersion } from '../../Environemnt';
+import { currentVersion } from '../../static/Environemnt';
 import { FlexFloat } from '../universal/FlexFloat';
 
 export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode }) => {

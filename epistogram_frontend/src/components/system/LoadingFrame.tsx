@@ -3,7 +3,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from 'react';
-import { isArray } from "../../frontendHelpers";
+import { isArray } from "../../static/frontendHelpers";
 import { LoadingStateType } from "../../models/types";
 
 export type LoadingFramePropsType = {

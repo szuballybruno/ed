@@ -1,11 +1,11 @@
 import { Flex } from "@chakra-ui/react";
 import StatisticsCard from "./statisticsCard/StatisticsCard";
 import React from "react";
-import { getAssetUrl, roundNumber } from "../frontendHelpers";
+import { getAssetUrl, roundNumber } from "../static/frontendHelpers";
 import { FlexFloat } from "./universal/FlexFloat";
 import { Lock } from "@mui/icons-material";
 import { Typography } from "@mui/material";
-import { translatableTexts } from "../translatableTexts";
+import { translatableTexts } from "../static/translatableTexts";
 import { useUserStats } from "../services/userStatsService";
 
 export const StatsSummary = () => {

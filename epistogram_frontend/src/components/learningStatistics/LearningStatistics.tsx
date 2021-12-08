@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/layout';
 import { RoundedCornerOutlined } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
 import { Bar } from "react-chartjs-2";
-import { getAssetUrl, roundNumber } from '../../frontendHelpers';
+import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
 import { useUserStats } from '../../services/userStatsService';
 import StatisticsCard from "../statisticsCard/StatisticsCard";
 import classes from './learningStatistics.module.scss';

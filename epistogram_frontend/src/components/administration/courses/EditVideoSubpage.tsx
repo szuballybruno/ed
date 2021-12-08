@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from "react-player";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { roundNumber } from "../../../frontendHelpers";
+import { roundNumber } from "../../../static/frontendHelpers";
 import { QuestionDTO } from "../../../models/shared_models/QuestionDTO";
 import { VideoEditDTO } from "../../../models/shared_models/VideoEditDTO";
 import { getVirtualId } from "../../../services/core/idService";

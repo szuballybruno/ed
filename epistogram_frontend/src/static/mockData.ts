@@ -1,7 +1,7 @@
-import { CurrentTasksDTO } from "./models/shared_models/CurrentTasksDTO";
-import {ShopItemShortDTO} from "./models/shared_models/ShopItemShortDTO";
-import {ShopCategoryDTO} from "./models/shared_models/ShopCategoryDTO";
-import {getAssetUrl} from "./frontendHelpers";
+import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
+import { ShopItemShortDTO } from "../models/shared_models/ShopItemShortDTO";
+import { ShopCategoryDTO } from "../models/shared_models/ShopCategoryDTO";
+import { getAssetUrl } from "./frontendHelpers";
 
 /**
  * Tasks
@@ -134,12 +134,12 @@ export const mockShopItems = [
 ] as ShopItemShortDTO[]
 
 export const mockShopCategories = [
-    {id: 1, name: "Prémium kurzusok"},
-    {id: 2, name: "Szoftverek, játékok"},
-    {id: 3, name: "Fizikai termékek"},
-    {id: 4, name: "Digitális művészet - NFT"},
-    {id: 5, name: "Élmény csomagok"},
-    {id: 6, name: "Egyéb kedvezmények"}
+    { id: 1, name: "Prémium kurzusok" },
+    { id: 2, name: "Szoftverek, játékok" },
+    { id: 3, name: "Fizikai termékek" },
+    { id: 4, name: "Digitális művészet - NFT" },
+    { id: 5, name: "Élmény csomagok" },
+    { id: 6, name: "Egyéb kedvezmények" }
 
 ] as ShopCategoryDTO[]
 
@@ -201,27 +201,27 @@ export const mockCourseDetails = {
             icon: getAssetUrl("/course_page_icons/right_panel_course_lenght.svg"),
             detailName: "Kurzus hossza",
             detailValue: "4h 12m"
-        },{
+        }, {
             icon: getAssetUrl("/course_page_icons/right_panel_sections.svg"),
             detailName: "Témakörök száma",
             detailValue: "12"
-        },{
+        }, {
             icon: getAssetUrl("/course_page_icons/right_panel_videos.svg"),
             detailName: "Videók száma",
             detailValue: "119"
-        },{
+        }, {
             icon: getAssetUrl("/course_page_icons/right_panel_questions.svg"),
             detailName: "Tudást felmérő kérdések",
             detailValue: "187"
-        },{
+        }, {
             icon: getAssetUrl("/course_page_icons/right_panel_language.svg"),
             detailName: "Nyelv",
             detailValue: "magyar"
-        },{
+        }, {
             icon: getAssetUrl("/course_page_icons/right_panel_enrolled.svg"),
             detailName: "Hányan végezték el eddig",
             detailValue: "4139"
-        },{
+        }, {
             icon: getAssetUrl("/course_page_icons/right_panel_updated.svg"),
             detailName: "Frissítve",
             detailValue: "2021. 11. 17."
@@ -230,19 +230,19 @@ export const mockCourseDetails = {
     recommendedCourses: [{
         title: "Kurzus 1",
         subTitle: "Kurzus 2"
-    },{
+    }, {
         title: "Kurzus 1",
         subTitle: "Kurzus 2"
-    },{
+    }, {
         title: "Kurzus 1",
         subTitle: "Kurzus 2"
-    },{
+    }, {
         title: "Kurzus 1",
         subTitle: "Kurzus 2"
-    },{
+    }, {
         title: "Kurzus 1",
         subTitle: "Kurzus 2"
-    },{
+    }, {
         title: "Kurzus 1",
         subTitle: "Kurzus 2"
     }]

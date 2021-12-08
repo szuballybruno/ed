@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { useIntParam } from "../../../frontendHelpers"
+import { useIntParam } from "../../../static/frontendHelpers"
 import { ModuleAdminEditDTO } from "../../../models/shared_models/ModuleAdminEditDTO"
 import { useModuleEditData, useSaveModule } from "../../../services/moduleService"
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications"

@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { getAssetUrl, useIsDesktopView } from "../../frontendHelpers";
+import { getAssetUrl, useIsDesktopView } from "../../static/frontendHelpers";
 import { useCurrentCourseItemCode } from "../../services/dataService";
 import { FlexFloat } from "../universal/FlexFloat";
 import DesktopNavbar from "./DesktopNavbar";

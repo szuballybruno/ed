@@ -8,7 +8,7 @@ import { PersonalityChart } from "./PersonalityChart";
 import React, { useRef, useState } from "react";
 import { EpistoPopper } from "./EpistoPopper";
 import { EpistoButton } from "./EpistoButton";
-import { getAssetUrl } from "../../frontendHelpers";
+import { getAssetUrl } from "../../static/frontendHelpers";
 
 export const PersonalityAssessment = (props: FlexProps) => {
 

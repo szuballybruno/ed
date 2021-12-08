@@ -7,7 +7,6 @@ import React, { ReactNode, useContext, useState } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { AdminPageUserDTO } from "../../../models/shared_models/AdminPageUserDTO";
 import { apiRoutes } from "../../../models/shared_models/types/apiRoutes";
-import { useUserListQuery } from "../../../services/adminPageUsersService";
 import { httpPostAsync } from "../../../services/core/httpClient";
 import { useNavigation } from "../../../services/core/navigatior";
 import { useShowErrorDialog } from "../../../services/core/notifications";
@@ -24,7 +23,8 @@ import { FloatChip } from "../../universal/FloatChip";
 import { AdminListEditHeader } from "../AdminListEditHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
-import { getRoleName } from "../../../frontendHelpers";
+import { getRoleName } from "../../../static/frontendHelpers";
+import { deleteUserAsync, useUserListQuery } from "../../../services/api/userApiService";
 
 export const AdminUserListSubpage = () => {
 
@@ -55,7 +55,7 @@ export const AdminUserListSubpage = () => {
 
                             try {
 
-                                await httpPostAsync(apiRoutes.userManagement.deleteUser, { userId: user.id });
+                                await deleteUserAsync(user.id);
                                 await refetchUsers();
                             }
                             catch (e) {

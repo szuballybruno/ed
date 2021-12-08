@@ -7,7 +7,7 @@ import {
 } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React from 'react';
-import { getAssetUrl } from "../../../frontendHelpers";
+import { getAssetUrl } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FloatChip } from "../../universal/FloatChip";

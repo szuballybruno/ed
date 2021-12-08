@@ -11,9 +11,9 @@ import { EventListener } from "./components/system/EventListener";
 import { NotificationsFrame } from "./components/system/NotificationsFrame";
 import { UnderMaintanence } from "./components/UnderMaintanence";
 import { applicationRoutes } from "./configuration/applicationRoutes";
-import { isUnderMaintenance } from "./Environemnt";
+import { isUnderMaintenance } from "./static/Environemnt";
 import './index.css';
-import './jsExtensions.ts'; // extensions, important
+import './static/jsExtensions.ts'; // extensions, important
 import { MainRouting } from "./MainRouting";
 
 // react query 

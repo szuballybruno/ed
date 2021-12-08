@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import React, { ReactNode } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { objToArray, useIsMatchingCurrentRoute } from "../../frontendHelpers";
+import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
 import { ApplicationRoute, ButtonType } from "../../models/types";
 import { useCourseBriefData } from "../../services/courseService";
 import { useNavigation } from "../../services/core/navigatior";
