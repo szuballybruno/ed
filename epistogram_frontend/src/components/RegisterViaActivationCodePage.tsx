@@ -1,13 +1,13 @@
-import {Flex, useMediaQuery} from "@chakra-ui/react";
-import {TextField, Typography} from "@mui/material";
-import SingleInput from "./singleInput/SingleInput";
+import { Text } from "@chakra-ui/layout";
+import { Flex, useMediaQuery } from "@chakra-ui/react";
+import { Typography } from "@mui/material";
 import React from "react";
-import {EpistoButton} from "./universal/EpistoButton";
-import {getAssetUrl} from "../frontendHelpers";
-import {Text} from "@chakra-ui/layout";
-import {MainWrapper} from "./system/MainPanels";
+import { getAssetUrl } from "../static/frontendHelpers";
+import SingleInput from "./singleInput/SingleInput";
+import { MainWrapper } from "./system/MainPanels";
+import { EpistoButton } from "./universal/EpistoButton";
 
-export const RedeemCodePage = () => {
+export const RegisterViaActivationCodePage = () => {
     const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
     const inputStyle = {
@@ -90,7 +90,7 @@ export const RedeemCodePage = () => {
                             labelText={"E-mail"}
                             placeholder={"E-mail címed"}
                             name={"currentEmail"}
-                            changeHandler={(e) => {}}
+                            changeHandler={(e) => { }}
                             sx={inputStyle}
                             style={{ justifySelf: "center" }} />
                         <SingleInput
@@ -98,7 +98,7 @@ export const RedeemCodePage = () => {
                             labelText={"Vezetéknév"}
                             placeholder={"Vezetéknév"}
                             name={"currentEmail"}
-                            changeHandler={(e) => {}}
+                            changeHandler={(e) => { }}
                             sx={inputStyle}
                             style={{ justifySelf: "center" }} />
                         <SingleInput
@@ -106,7 +106,7 @@ export const RedeemCodePage = () => {
                             labelText={"Keresztnév"}
                             placeholder={"Keresztnév"}
                             name={"currentEmail"}
-                            changeHandler={(e) => {}}
+                            changeHandler={(e) => { }}
                             sx={inputStyle}
                             style={{ justifySelf: "center" }} />
                         <SingleInput
@@ -114,7 +114,7 @@ export const RedeemCodePage = () => {
                             labelText={"Egyedi kódod"}
                             placeholder={"Kód"}
                             name={"currentEmail"}
-                            changeHandler={(e) => {}}
+                            changeHandler={(e) => { }}
                             sx={inputStyle}
                             style={{ justifySelf: "center" }} />
                     </Flex>
