@@ -2,7 +2,7 @@ import generatePassword from "password-generator";
 import { TypedError } from "../utilities/helpers";
 import { ActivationCodeService } from "./ActivationCodeService";
 import { getUserLoginTokens } from "./authenticationService";
-import { EmailService } from "./EmailService2";
+import { EmailService } from "./EmailService";
 import { verifyInvitaionToken, verifyPublicRegistrationToken } from "./tokenService";
 import { createUserAsync, getUserById, setUserActiveRefreshToken, setUserInivitationDataAsync } from "./userService";
 

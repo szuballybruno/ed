@@ -5,7 +5,7 @@ import { SignupCompletedView } from "../models/views/SignupCompletedView";
 import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { staticProvider } from "../staticProvider";
 import { TypedError, withValueOrBadRequest } from "../utilities/helpers";
-import { EmailService } from "./EmailService2";
+import { EmailService } from "./EmailService";
 import { toSignupDataDTO } from "./mappings";
 import { log } from "./misc/logger";
 import { createInvitationToken } from "./tokenService";

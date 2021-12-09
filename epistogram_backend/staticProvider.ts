@@ -8,7 +8,7 @@ import { SQLConnectionService } from "./services/sqlServices/SQLConnectionServic
 import { SQLFunctionsService } from "./services/sqlServices/FunctionsService";
 import { UserSessionActivityService } from "./services/userSessionActivityService";
 import { UserStatsService } from "./services/userStatsService";
-import { EmailService } from "./services/EmailService2";
+import { EmailService } from "./services/EmailService";
 
 export const staticProvider = {
 
