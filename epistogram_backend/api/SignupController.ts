@@ -1,6 +1,6 @@
 import { AnswerSignupQuestionDTO } from "../models/shared_models/AnswerSignupQuestionDTO";
 import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
-import { SignupService } from "../services/SignupService2";
+import { SignupService } from "../services/SignupService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class SignupController {
