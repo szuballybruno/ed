@@ -4,12 +4,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
-import SingleInput from "../singleInput/SingleInput";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from './loginScreen.module.scss';
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { useLogInUser } from "../../services/api/authenticationApiService";
+import { EpistoEntry } from "../universal/EpistoEntry";
 
 const LoginScreen = (): JSX.Element => {
 
@@ -138,20 +138,24 @@ const LoginScreen = (): JSX.Element => {
                     </Flex>
 
                     <Box w={"100%"}>
-                        <SingleInput
-                            id="email"
-                            labelText={"E-mail"}
-                            name={"currentEmail"}
-                            changeHandler={(e) => setEmail(e.target.value)}
-                            style={{ justifySelf: "center" }} />
 
-                        <SingleInput
-                            id="password"
-                            labelText={"Jelszó"}
-                            name={"currentPassword"}
-                            type={"password"}
-                            changeHandler={(x) => setPassword(x.target.value)}
-                            style={{ justifySelf: "center" }} />
+                        <EpistoEntry
+                            value={email}
+                            labelVariant="top"
+                            label="E-mail"
+                            placeholder="E-mail"
+                            name="email"
+                            setValue={setEmail}
+                            height="50px" />
+
+                        <EpistoEntry
+                            value={password}
+                            labelVariant="top"
+                            label="Jelszó"
+                            placeholder="Jelszó"
+                            name="lastName"
+                            setValue={setPassword}
+                            height="50px" />
 
                         <p className={classes.forgotPassword}>
                             Elfelejtettem a jelszavam

@@ -30,7 +30,7 @@ import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } f
 import { dbSchema } from './services/misc/dbSchema';
 import { log, logError } from "./services/misc/logger";
 import { RegistrationService } from './services/RegistrationService';
-import { SignupService } from './services/SignupService';
+import { SignupService } from './services/SignupService2';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
 import { SQLFunctionsService } from './services/sqlServices/FunctionsService';
 import { ORMConnectionService } from './services/sqlServices/ORMConnectionService';

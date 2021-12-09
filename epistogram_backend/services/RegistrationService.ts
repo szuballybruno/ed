@@ -35,8 +35,8 @@ export class RegistrationService {
         lastName: string) {
 
         // check code 
-        const isValidCode = this._activationCodeService
-            .isValidCode(activationCode);
+        const { isValidCode, codeId } = await this._activationCodeService
+            .isValidCodeAsync(activationCode);
 
         if (!isValidCode)
             throw new Error("Code is not valid");
@@ -54,6 +54,9 @@ export class RegistrationService {
         });
 
         const userId = user.id;
+
+        // invalidate activation code 
+        await this._activationCodeService.invalidateCodeAsync(codeId!);
 
         // send email 
         await this._emailService

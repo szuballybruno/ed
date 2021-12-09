@@ -1,6 +1,5 @@
 import React from "react";
-import { getEventValueCallback } from "../../static/frontendHelpers";
-import SingleInput from "../singleInput/SingleInput";
+import { EpistoEntry } from "../universal/EpistoEntry";
 import { RegFormStateType } from "./SignupFormLogic";
 
 export const SignupForm = (props: { regFormState: RegFormStateType }) => {
@@ -8,23 +7,32 @@ export const SignupForm = (props: { regFormState: RegFormStateType }) => {
     return (
         <form >
             <div>
-                <SingleInput style={{ height: 65 }}
-                    labelText={"Telefonszám"}
-                    name={"phone"}
-                    id="phone"
-                    changeHandler={getEventValueCallback(props.regFormState.setPhoneNumber)} />
+                <EpistoEntry
+                    value={props.regFormState.phoneNumber}
+                    labelVariant="top"
+                    label="Telefonszám"
+                    placeholder="Telefonszám"
+                    name="phoneNumber"
+                    setValue={props.regFormState.setPhoneNumber}
+                    height="50px" />
 
-                <SingleInput style={{ height: 65 }}
-                    labelText={"Jelszó"}
-                    type={"password"}
-                    name={"password"}
-                    changeHandler={getEventValueCallback(props.regFormState.setPassword)} />
+                <EpistoEntry
+                    value={props.regFormState.password}
+                    labelVariant="top"
+                    label="Jelszó"
+                    placeholder="Jelszó"
+                    name="password"
+                    setValue={props.regFormState.setPassword}
+                    height="50px" />
 
-                <SingleInput style={{ height: 65, marginBottom: 20 }}
-                    type={"password"}
-                    labelText={"Jelszó mégegyszer"}
-                    name={"password"}
-                    changeHandler={getEventValueCallback(props.regFormState.setPasswordControl)} />
+                <EpistoEntry
+                    value={props.regFormState.passwordControl}
+                    labelVariant="top"
+                    label="Jelszó mégegyszer"
+                    placeholder="Jelszó mégegyszer"
+                    name="password"
+                    setValue={props.regFormState.setPasswordControl}
+                    height="50px" />
             </div>
         </form>
     );

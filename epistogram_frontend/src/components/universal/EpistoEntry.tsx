@@ -1,4 +1,5 @@
-import { InputAdornment, TextField } from "@mui/material";
+import { Flex } from "@chakra-ui/layout";
+import { InputAdornment, TextField, Typography } from "@mui/material";
 
 export const EpistoEntry = (props: {
     value: string,
@@ -8,10 +9,29 @@ export const EpistoEntry = (props: {
     disabled?: boolean,
     isMultiline?: boolean,
     postfix?: string,
-    isNumeric?: boolean
+    isNumeric?: boolean,
+    placeholder?: string,
+    labelVariant?: "top" | "normal",
+    height?: string,
+    name?: string,
+    marginTop?: string
 }) => {
 
-    const { label, disabled, value, setValue, isMultiline, onFocusLost, postfix, isNumeric } = props;
+    const {
+        label,
+        height,
+        labelVariant,
+        placeholder,
+        disabled,
+        value,
+        setValue,
+        isMultiline,
+        onFocusLost,
+        name,
+        postfix,
+        isNumeric,
+        marginTop
+    } = props;
 
     const onChanged = (value: string) => {
 
@@ -21,29 +41,45 @@ export const EpistoEntry = (props: {
         setValue(value);
     }
 
-    return <TextField
-        disabled={disabled}
-        size="small"
-        label={label}
-        value={value}
-        multiline={isMultiline}
-        type={isNumeric ? "number" : undefined}
-        InputProps={postfix
-            ? {
-                endAdornment: <InputAdornment position="end">{postfix}</InputAdornment>
-            }
-            : undefined}
-        onBlur={x => {
+    return <Flex direction="column" mt={marginTop ?? "10px"}>
 
-            if (onFocusLost)
-                onFocusLost(x.currentTarget.value);
-        }}
-        onChange={x => {
+        {labelVariant === "top" && <Typography
+            variant={"overline"}>
 
-            onChanged(x.currentTarget.value);
-        }}
-        style={{
-            margin: "10px 0px 10px 0px",
-            padding: "2px"
-        }} />
+            {label}
+        </Typography>}
+
+        <TextField
+            disabled={disabled}
+            size="small"
+            label={labelVariant !== "top" ? label : undefined}
+            placeholder={placeholder}
+            name={name}
+            value={value}
+            multiline={isMultiline}
+            type={isNumeric ? "number" : undefined}
+            sx={{
+                '& .MuiOutlinedInput-root': {
+                    height: height
+                }
+            }}
+            InputProps={postfix
+                ? {
+                    endAdornment: <InputAdornment position="end">{postfix}</InputAdornment>
+                }
+                : undefined}
+            onBlur={x => {
+
+                if (onFocusLost)
+                    onFocusLost(x.currentTarget.value);
+            }}
+            onChange={x => {
+
+                onChanged(x.currentTarget.value);
+            }}
+            style={{
+                // margin: "10px 0px 10px 0px",
+                // padding: "2px"
+            }} />
+    </Flex>
 }

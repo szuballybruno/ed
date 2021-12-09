@@ -1,7 +1,7 @@
 
 import { UserRoleEnum } from "../../models/shared_models/types/sharedTypes";
 import { RegistrationService } from "../RegistrationService";
-import { SignupService } from "../SignupService";
+import { SignupService } from "../SignupService2";
 import { log } from "./../misc/logger";
 import { SQLBootstrapperService } from "./SQLBootstrapper";
 

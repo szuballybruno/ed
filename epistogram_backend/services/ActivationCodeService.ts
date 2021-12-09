@@ -12,7 +12,7 @@ export class ActivationCodeService {
         this._ormService = ormService;
     }
 
-    async isValidCode(code: string) {
+    async isValidCodeAsync(code: string) {
 
         const actCode = await this._ormService
             .getRepository(ActivationCode)
@@ -23,7 +23,17 @@ export class ActivationCodeService {
                 }
             });
 
-        return !!actCode;
+        return { isValidCode: !!actCode, codeId: actCode?.id };
+    }
+
+    async invalidateCodeAsync(codeId: number) {
+
+        await this._ormService
+            .getRepository(ActivationCode)
+            .save({
+                id: codeId,
+                isUsed: true
+            });
     }
 
     async generateActivationCodesAsync(amount: number) {
