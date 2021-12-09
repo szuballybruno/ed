@@ -1,9 +1,12 @@
+import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import { RegisterUserViaActivationCodeDTO } from "../models/shared_models/RegisterUserViaActivationCodeDTO";
 import { RegisterUserViaInvitationTokenDTO } from "../models/shared_models/RegisterUserViaInvitationTokenDTO";
 import { RegisterUserViaPublicTokenDTO } from "../models/shared_models/RegisterUserViaPublicTokenDTO";
+import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { RegistrationService } from "../services/RegistrationService";
+import { getUserById } from "../services/userService";
 import { setAuthCookies } from "../utilities/cookieHelpers";
-import { ActionParams } from "../utilities/helpers";
+import { ActionParams, TypedError } from "../utilities/helpers";
 
 export class RegistrationController {
 
@@ -45,13 +48,42 @@ export class RegistrationController {
 
         const body = params.getBody<RegisterUserViaActivationCodeDTO>();
 
-        const { accessToken, refreshToken } = await this._res
+        await this._res
             .registerUserViaActivationCodeAsync(
                 body.getBodyValue<string>(x => x.activationCode),
                 body.getBodyValue<string>(x => x.emailAddress),
                 body.getBodyValue<string>(x => x.firstName),
                 body.getBodyValue<string>(x => x.lastName));
+    };
 
-        setAuthCookies(params.res, accessToken, refreshToken);
+    inviteUserAction = async (params: ActionParams) => {
+
+        const dto = params.getBody<CreateInvitedUserDTO>();
+
+        // handle organizationId
+        const currentUser = await getUserById(params.userId);
+
+        // if user is admin require organizationId to be provided
+        // otherwise use the current user's organization
+        const organizationId = currentUser.roleId === RoleIdEnum.administrator
+            ? dto.bodyData.organizationId
+            : currentUser.organizationId;
+
+        if (!organizationId)
+            throw new TypedError(
+                `Current user is not an administrator, 
+                but has rights to add users, but has no organization, 
+                in which he/she could add users.`, "bad request");
+
+        // create user
+        await this._res
+            .createInvitedUserAsync({
+                email: dto.getBodyValue<string>(x => x.email),
+                jobTitleId: dto.getBodyValue<number>(x => x.jobTitleId),
+                firstName: dto.getBodyValue<string>(x => x.firstName),
+                lastName: dto.getBodyValue<string>(x => x.lastName),
+                roleId: dto.getBodyValue<number>(x => x.roleId),
+                organizationId,
+            });
     };
 }

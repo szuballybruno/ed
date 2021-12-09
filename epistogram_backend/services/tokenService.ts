@@ -36,12 +36,12 @@ export const verifyPasswordResetToken = (token: string) => {
 // CREATE
 //
 
-export const createInvitationToken = (userId: number) => {
+export const createInvitationToken = (userEmail: string) => {
 
     return getJWTToken<InvitationTokenPayload>(
-        { userId: userId },
+        { userEmail },
         staticProvider.globalConfig.mail.tokenMailSecret,
-        "9924h")
+        "127h")
 }
 
 export const createAccessToken = (userId: number) => {

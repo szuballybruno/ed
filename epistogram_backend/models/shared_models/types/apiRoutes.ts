@@ -1,9 +1,10 @@
 export const apiRoutes = {
 
     registration: {
-        registerUserViaPublicToken: "/public/register-user-via-public-token",
-        registerUserViaInvitationToken: "/public/register-user-via-invitation-token",
-        registerUserViaActivationCode: "/public/register-user-via-activation-code"
+        registerUserViaPublicToken: "/registration/register-user-via-public-token",
+        registerUserViaInvitationToken: "/registration/register-user-via-invitation-token",
+        registerUserViaActivationCode: "/registration/register-user-via-activation-code",
+        inviteUser: "/registration/invite-user",
     },
 
     misc: {
@@ -19,8 +20,8 @@ export const apiRoutes = {
         setNewPassword: "/authentication/set-new-password",
         logoutUser: "/authentication/logout-user",
         requestPasswordChange: "/authentication/request-change-password",
-        renewUserSession: "/public/renew-user-session",
-        loginUser: "/public/login-user",
+        renewUserSession: "/authentication/renew-user-session",
+        loginUser: "/authentication/login-user",
     },
 
     event: {
@@ -38,7 +39,6 @@ export const apiRoutes = {
 
     user: {
         getEditUserData: "/users/get-edit-user-data",
-        inviteUser: "/users/invite-user",
         deleteUser: "/users/delete-user",
         upadateUser: "/users/update-user",
         getBriefUserData: "/users/get-brief-user-data",

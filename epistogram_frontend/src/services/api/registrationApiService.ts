@@ -1,8 +1,9 @@
+import { CreateInvitedUserDTO } from "../../models/shared_models/CreateInvitedUserDTO";
 import { RegisterInvitedUserDTO } from "../../models/shared_models/RegisterInvitedUser";
 import { RegisterUserDTO } from "../../models/shared_models/RegisterUserDTO";
 import { RegisterUserViaActivationCodeDTO } from "../../models/shared_models/RegisterUserViaActivationCodeDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { httpPostAsync, usePostDataUnsafe } from "../core/httpClient";
 
 export const useRegisterUser = () => {
 
@@ -75,4 +76,9 @@ export const useRegisterUserViaActivationCode = () => {
         registerUserViaActivationCodeState: postDataResult.state,
         registerUserViaActivationCodeAsync
     }
+}
+
+export const inviteUserAsync = (dto: CreateInvitedUserDTO) => {
+
+    return httpPostAsync(apiRoutes.registration.inviteUser, dto);
 }

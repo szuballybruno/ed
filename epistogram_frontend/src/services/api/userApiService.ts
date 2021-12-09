@@ -38,11 +38,6 @@ export const useSaveUserData = () => {
     }
 }
 
-export const inviteUserAsync = (dto: CreateInvitedUserDTO) => {
-
-    return httpPostAsync(apiRoutes.user.inviteUser, dto);
-}
-
 export const useEditUserData = (editedUserId: number) => {
 
     const queryRes = useReactQuery2<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId });

@@ -1,6 +1,6 @@
 import { type } from "os";
 
-export type InvitationTokenPayload = { userId: number };
+export type InvitationTokenPayload = { userEmail: string };
 
 export type HTTPErrorType = "forbidden" | "internal server error" | "bad request" | "http error" | "under maintenance";
 
@@ -33,10 +33,15 @@ export type CoinAcquireReasonType =
 
 export type EventType = "coin_acquire_answer_streak" | "coin_acquire_session_streak";
 
-export const UserRoleEnum = {
-    administratorId: 1,
-    supervisorId: 2,
-    userId: 3
+export const RoleIdEnum = {
+    administrator: 1,
+    supervisor: 2,
+    user: 3
+}
+
+export const JobTitleIdEnum = {
+    genericUser: 1,
+    tester: 2
 }
 
 export const QuestionTypeEnum = {

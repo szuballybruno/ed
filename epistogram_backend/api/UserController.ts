@@ -1,21 +1,16 @@
 import { User } from "../models/entity/User";
 import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
-import { CreateInvitedUserDTO } from "../models/shared_models/CreateInvitedUserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { getAdminPageUsersList } from "../services/adminService";
 import { toUserEditDTO } from "../services/mappings";
-import { SignupService } from "../services/SignupService";
 import { deleteUserAsync } from "../services/userService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, getFullName, withValueOrBadRequest } from "../utilities/helpers";
 
 export class UserController {
 
-    private _signupService: SignupService;
+    constructor() {
 
-    constructor(signupService: SignupService) {
-
-        this._signupService = signupService;
     }
 
     deleteUserAction = async (params: ActionParams) => {
@@ -86,12 +81,4 @@ export class UserController {
             fullName: getFullName(user)
         } as BriefUserDataDTO;
     }
-
-    inviteUserAction = async (params: ActionParams) => {
-
-        const dto = withValueOrBadRequest<CreateInvitedUserDTO>(params.req.body);
-
-        await this._signupService
-            .createInvitedUserAsync(dto, params.userId);
-    };
 }

@@ -1,5 +1,5 @@
 
-import { UserRoleEnum } from "../../models/shared_models/types/sharedTypes";
+import { RoleIdEnum } from "../../models/shared_models/types/sharedTypes";
 import { RegistrationService } from "../RegistrationService";
 import { SignupService } from "../SignupService";
 import { log } from "./../misc/logger";
@@ -8,13 +8,11 @@ import { SQLBootstrapperService } from "./SQLBootstrapper";
 export class SeedService {
 
     private _sqlBootstrapperService: SQLBootstrapperService;
-    private _signupService: SignupService;
     private _regService: RegistrationService;
 
     constructor(sqlBootstrapperService: SQLBootstrapperService, signupService: SignupService, regService: RegistrationService) {
 
         this._sqlBootstrapperService = sqlBootstrapperService;
-        this._signupService = signupService;
         this._regService = regService;
     }
 
@@ -25,7 +23,7 @@ export class SeedService {
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedActivities");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedRoles");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedSignupExam");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedJobRoles");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedJobTitles");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedUsers");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedSignupQuestions");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedPersonalityCategoryDescriptions");
@@ -48,17 +46,17 @@ export class SeedService {
     private seedUsersAsync = async () => {
 
         log("seeding User 1...")
-        const { invitationToken, user } = await this._signupService
-            .createInvitedUserWithOrgAsync(
+        const { invitationToken, createdUser } = await this._regService
+            .createInvitedUserAsync(
                 {
                     firstName: "Endre",
                     lastName: "Marosi",
                     jobTitleId: 1,
-                    roleId: UserRoleEnum.administratorId,
+                    roleId: RoleIdEnum.administrator,
                     email: "marosi.endre@email.com",
+                    organizationId: 1
                 },
-                1,
-                false);
+                true);
 
         await this._regService
             .registerInvitedUserAsync(
@@ -67,17 +65,17 @@ export class SeedService {
                 "admin");
 
         log("seeding User 2...")
-        const { invitationToken: it2, user: u2 } = await this._signupService
-            .createInvitedUserWithOrgAsync(
+        const { invitationToken: it2, createdUser: u2 } = await this._regService
+            .createInvitedUserAsync(
                 {
                     firstName: "Elon",
                     lastName: "Musk",
                     jobTitleId: 1,
-                    roleId: UserRoleEnum.supervisorId,
+                    roleId: RoleIdEnum.supervisor,
                     email: "elon.musk@email.com",
+                    organizationId: 1
                 },
-                2,
-                false);
+                true);
 
         log("User 2 token: " + it2);
     }

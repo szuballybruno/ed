@@ -23,7 +23,7 @@ export class ActivationCodeService {
                 }
             });
 
-        return { isValidCode: !!actCode, codeId: actCode?.id };
+        return actCode;
     }
 
     async invalidateCodeAsync(codeId: number) {

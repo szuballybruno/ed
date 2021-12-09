@@ -1,11 +1,12 @@
 import generatePassword from "password-generator";
-import { TypedError } from "../utilities/helpers";
+import { JobTitleIdEnum, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
+import { getFullName, TypedError } from "../utilities/helpers";
 import { ActivationCodeService } from "./ActivationCodeService";
 import { getUserLoginTokens } from "./authenticationService";
 import { EmailService } from "./EmailService";
-import { verifyInvitaionToken, verifyPublicRegistrationToken } from "./tokenService";
-import { createUserAsync, getUserById, setUserActiveRefreshToken, setUserInivitationDataAsync } from "./userService";
-
+import { log } from "./misc/logger";
+import { createInvitationToken, verifyInvitaionToken, verifyPublicRegistrationToken } from "./tokenService";
+import { createUserAsync, getUserByEmail, getUserById, setUserActiveRefreshToken, setUserInivitationDataAsync } from "./userService";
 
 export class RegistrationService {
 
@@ -35,40 +36,25 @@ export class RegistrationService {
         lastName: string) {
 
         // check code 
-        const { isValidCode, codeId } = await this._activationCodeService
+        const activationCodeEntity = await this._activationCodeService
             .isValidCodeAsync(activationCode);
 
-        if (!isValidCode)
+        if (!activationCodeEntity)
             throw new Error("Code is not valid");
 
-        // get new password
-        const generatedPassword = this.getDefaultPassword();
+        // invalidate activation code 
+        await this._activationCodeService
+            .invalidateCodeAsync(activationCodeEntity.id);
 
         // create user 
-        const user = await createUserAsync({
+        await this.createInvitedUserAsync({
             email,
             firstName,
             lastName,
-            password: generatedPassword,
-            registrationType: "ActivationCode"
+            organizationId: activationCodeEntity.organizationId,
+            roleId: RoleIdEnum.user,
+            jobTitleId: JobTitleIdEnum.genericUser
         });
-
-        const userId = user.id;
-
-        // invalidate activation code 
-        await this._activationCodeService.invalidateCodeAsync(codeId!);
-
-        // send email 
-        await this._emailService
-            .sendSuccessfulRegistrationEmailAsync(user, generatedPassword);
-
-        // get auth tokens 
-        const tokens = await getUserLoginTokens(userId);
-
-        // set user current refresh token 
-        await setUserActiveRefreshToken(userId, tokens.refreshToken);
-
-        return tokens;
     }
 
     /**
@@ -128,12 +114,14 @@ export class RegistrationService {
         passwordControl: string) => {
 
         // verify token 
-        const { userId } = verifyInvitaionToken(invitationToken);
+        const { userEmail } = verifyInvitaionToken(invitationToken);
 
         // check if user exists  
-        const user = await getUserById(userId);
+        const user = await getUserByEmail(userEmail);
         if (!user)
             throw new TypedError("No such user!", "bad request");
+
+        const userId = user.id;
 
         // check passwords 
         if (password !== passwordControl)
@@ -149,6 +137,57 @@ export class RegistrationService {
         await setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         return tokens;
+    }
+
+    /**
+     * This function creates a new invited user, 
+     * generates an invitation token, 
+     * and sends it as a mail to the given email address. 
+     * 
+     * @param userId 
+     * @param options 
+     * @param sendEmail 
+     * @returns 
+     */
+    async createInvitedUserAsync(
+        options: {
+            email: string;
+            firstName: string;
+            lastName: string;
+            organizationId: number;
+            roleId: number;
+            jobTitleId: number;
+        },
+        noEmailNotification?: boolean) {
+
+        const email = options.email;
+
+        // create invitation token
+        const invitationToken = createInvitationToken(email);
+
+        // create user 
+        const createdUser = await createUserAsync({
+            email,
+            firstName: options.firstName,
+            lastName: options.lastName,
+            organizationId: options.organizationId,
+            roleId: options.roleId,
+            jobTitleId: options.jobTitleId,
+            registrationType: "Invitation",
+            password: "guest",
+            invitationToken
+        });
+
+        // send email
+        if (!noEmailNotification) {
+
+            log("Sending mail... to: " + email);
+
+            await this._emailService
+                .sendInvitaitionMailAsync(invitationToken, email, getFullName(createdUser));
+        }
+
+        return { invitationToken, createdUser };
     }
 
     /**

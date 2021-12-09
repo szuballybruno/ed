@@ -2,7 +2,7 @@ import { Request } from "express";
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
 import { User } from "../models/entity/User";
-import { UserRoleEnum } from "../models/shared_models/types/sharedTypes";
+import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { RegistrationType } from "../models/Types";
 import { staticProvider } from "../staticProvider";
 import { TypedError } from "../utilities/helpers";
@@ -20,7 +20,8 @@ export const createUserAsync = async (opts: {
     organizationId?: number,
     phoneNumber?: string,
     roleId?: number,
-    jobTitleId?: number
+    jobTitleId?: number,
+    invitationToken?: string
 }) => {
 
     const regType = opts.registrationType;
@@ -36,7 +37,7 @@ export const createUserAsync = async (opts: {
     // set default user fileds
     const user = {
         email: opts.email,
-        roleId: opts.roleId ?? UserRoleEnum.userId,
+        roleId: opts.roleId ?? RoleIdEnum.user,
         firstName: opts.firstName,
         lastName: opts.lastName,
         jobTitleId: opts.jobTitleId,
@@ -45,7 +46,8 @@ export const createUserAsync = async (opts: {
         password: hashedPassword,
         isInvitationAccepted: false,
         isTrusted: regType === "Invitation",
-        registrationType: regType
+        registrationType: regType,
+        invitationToken: opts.invitationToken
     } as User;
 
     // insert user
@@ -85,7 +87,7 @@ export const setUserInivitationDataAsync = async (userId: number, rawPassword: s
         .getRepository(User)
         .save({
             id: userId,
-            isPendingInvitation: false,
+            isInvitationAccepted: true,
             password: await hashPasswordAsync(rawPassword)
         });
 }

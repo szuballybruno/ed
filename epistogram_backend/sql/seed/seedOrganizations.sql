@@ -8,7 +8,7 @@ INSERT INTO public."organization"
 VALUES
     (
         1,
-        'P029'
+        'PCWorld'
     ),
     (
         2,

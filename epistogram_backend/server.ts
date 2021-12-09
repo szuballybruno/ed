@@ -79,7 +79,7 @@ import './utilities/jsExtensions';
     const registrationController = new RegistrationController(registrationService);
     const miscController = new MiscController();
     const authenticationController = new AuthenticationController();
-    const userController = new UserController(signupService);
+    const userController = new UserController();
     const fileController = new FileController();
     const signupController = new SignupController(signupService);
     const playerController = new PlayerController();
@@ -129,6 +129,7 @@ import './utilities/jsExtensions';
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
+    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true });
 
     // misc
     addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
@@ -159,7 +160,6 @@ import './utilities/jsExtensions';
     addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction);
     addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction);
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
-    addEndpoint(apiRoutes.user.inviteUser, userController.inviteUserAction, { isPost: true });
     addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true });
     addEndpoint(apiRoutes.user.upadateUser, userController.updateUserAction, { isPost: true });
     // addEndpoint(apiRoutes.misc.updateUserData, miscController.saveUserDataAction, { isPost: true });
