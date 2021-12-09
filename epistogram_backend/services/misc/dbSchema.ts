@@ -165,6 +165,7 @@ export const dbSchema = {
         GivenAnswerStreak,
         ActivitySession,
         ActivityStreak,
-        Event
+        Event,
+        ActivationCode
     ] as any[]
 }

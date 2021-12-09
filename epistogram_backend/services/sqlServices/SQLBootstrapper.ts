@@ -2,7 +2,7 @@
 import { readFileSync } from "fs";
 import { replaceAll } from "../../utilities/helpers";
 import { GlobalConfiguration } from "../environment";
-import { log } from "../misc/logger";
+import { log, logObject } from "../misc/logger";
 import { ExecSQLFunctionType, SQLConnectionService } from "./SQLConnectionService";
 
 export type SchemaDefinitionType = {
@@ -95,6 +95,8 @@ export class SQLBootstrapperService {
 
         // const dropDBScriptPath = `./sql/misc/dropDB.sql`;
         // writeFileSync(dropDBScriptPath, dropDBScript, { encoding: "utf-8" });
+
+        logObject(dropDBScript);
 
         const results = await this._sqlConnectionService.executeSQLAsync(dropDBScript);
     }
