@@ -5,7 +5,7 @@ import { CreateExamDTO } from "../models/shared_models/CreateExamDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { getUserIdFromRequest } from "../services/authenticationService";
-import { answerExamQuestionAsync, deleteExamsAsync, getExamResultsAsync } from "../services/examService";
+import { ExamService } from "../services/ExamService2";
 import { toQuestionDTO } from "../services/mappings";
 import { saveAssociatedQuestionsAsync } from "../services/questionService";
 import { staticProvider } from "../staticProvider";
@@ -13,19 +13,28 @@ import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class ExamController {
 
+    private _examService: ExamService;
+
+    constructor(examService: ExamService) {
+
+        this._examService = examService;
+    }
+
     answerExamQuestionAction = async (params: ActionParams) => {
 
         const userId = getUserIdFromRequest(params.req);
         const questionAnswerDTO = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
 
-        return answerExamQuestionAsync(userId, questionAnswerDTO);
+        return this._examService
+            .answerExamQuestionAsync(userId, questionAnswerDTO);
     };
 
     getExamResultsAction = async (params: ActionParams) => {
 
         const answerSessionId = withValueOrBadRequest<number>(params.req.query.answerSessionId, "number");
 
-        return getExamResultsAsync(params.userId, answerSessionId);
+        return this._examService
+            .getExamResultsAsync(params.userId, answerSessionId);
     };
 
     getExamEditDataAction = async (params: ActionParams) => {
@@ -109,6 +118,7 @@ export class ExamController {
 
         const examId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
-        await deleteExamsAsync([examId], true);
+        await this._examService
+            .deleteExamsAsync([examId], true);
     }
 }

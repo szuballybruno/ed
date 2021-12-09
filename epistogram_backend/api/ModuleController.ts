@@ -1,33 +1,44 @@
 import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
-import { createModuleAsync, deleteModulesAsync, getModuleEditDataAsync, saveModuleAsync } from "../services/moduleService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
+import { ModuleService } from "../services/ModuleService2";
 
 export class ModuleController {
 
+    private _moduleService: ModuleService;
+
+    constructor(moduleService: ModuleService) {
+
+        this._moduleService = moduleService;
+    }
+
     createModuleAction = async (params: ActionParams) => {
 
-        await createModuleAsync(params.getBody<ModuleCreateDTO>().bodyData);
+        await this._moduleService
+            .createModuleAsync(params.getBody<ModuleCreateDTO>().bodyData);
     }
 
     deleteModuleAction = async (params: ActionParams) => {
 
         const moduleId = withValueOrBadRequest<number>(params.req.query.moduleId, "number");
 
-        await deleteModulesAsync([moduleId]);
+        await this._moduleService
+            .deleteModulesAsync([moduleId]);
     }
 
     getModuleEditDataAction = async (params: ActionParams) => {
 
         const moduleId = withValueOrBadRequest<number>(params.req.query.moduleId, "number");
 
-        return getModuleEditDataAsync(moduleId);
+        return this._moduleService
+            .getModuleEditDataAsync(moduleId);
     }
 
     saveModuleAction = async (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<ModuleAdminEditDTO>(params.req.body);
 
-        return saveModuleAsync(dto);
+        return this._moduleService
+            .saveModuleAsync(dto);
     }
 }

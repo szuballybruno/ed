@@ -4,8 +4,8 @@ import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { requestChangePasswordAsync } from "../services/authenticationService";
-import { getOrganizationsAsync, getOverviewPageDTOAsync, saveUserDataAsync } from "../services/dataService";
 import { toDailyTipDTO } from "../services/mappings";
+import { MiscService } from "../services/MiscService";
 import { getPractiseQuestionAsync } from "../services/practiseQuestionsService";
 import { createRegistrationToken } from "../services/tokenService";
 import { staticProvider } from "../staticProvider";
@@ -13,8 +13,11 @@ import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class MiscController {
 
-    constructor() {
+    private _miscService: MiscService;
 
+    constructor(miscService: MiscService) {
+
+        this._miscService = miscService;
     }
 
     getCurrentCourseItemCodeAction = async (parms: ActionParams) => {
@@ -37,12 +40,12 @@ export class MiscController {
 
     getOverviewPageDTOAction = async (params: ActionParams) => {
 
-        return getOverviewPageDTOAsync(params.userId);
+        return this._miscService.getOverviewPageDTOAsync(params.userId);
     }
 
     getOrganizationsAction = (params: ActionParams) => {
 
-        return getOrganizationsAsync(params.userId);
+        return this._miscService.getOrganizationsAsync(params.userId);
     }
 
     getJobTitlesAction = async (params: ActionParams) => {
@@ -70,7 +73,7 @@ export class MiscController {
 
         const dto = withValueOrBadRequest<UserDTO>(params.req.body);
 
-        return saveUserDataAsync(params.userId, dto);
+        return this._miscService.saveUserDataAsync(params.userId, dto);
     };
 
     getPractiseQuestionAction = async (params: ActionParams) => {

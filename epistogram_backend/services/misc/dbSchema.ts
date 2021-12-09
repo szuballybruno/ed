@@ -54,6 +54,7 @@ import { Event } from "../../models/entity/Event";
 import { CoinTransactionView } from "../../models/views/CoinTransactionView";
 import { CoinBalanceView } from "../../models/views/CoinBalanceView";
 import { ActivationCode } from "../../models/entity/ActivationCode";
+import { UserCourseAccessBridge } from "../../models/entity/UserCourseAccessBridge";
 
 export const dbSchema = {
 
@@ -166,6 +167,7 @@ export const dbSchema = {
         ActivitySession,
         ActivityStreak,
         Event,
-        ActivationCode
+        ActivationCode,
+        UserCourseAccessBridge
     ] as any[]
 }

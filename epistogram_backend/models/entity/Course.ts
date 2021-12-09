@@ -1,11 +1,13 @@
 import Module from "module";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CourseVisibilityType } from "../shared_models/types/sharedTypes";
 import { CourseStateView } from "../views/CourseStateView";
 import { CourseCategory } from "./CourseCategory";
 import { CourseModule } from "./CourseModule";
 import { Exam } from "./Exam";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
+import { UserCourseAccessBridge } from "./UserCourseAccessBridge";
 import { UserCourseBridge } from "./UserCourseBridge";
 import { Video } from "./Video";
 
@@ -17,6 +19,9 @@ export class Course {
 
     @Column()
     title: string;
+
+    @Column({ default: "public", type: "text" })
+    visibility: CourseVisibilityType;
 
     // course state view
     @OneToOne(_ => CourseStateView, x => x.course)
@@ -74,4 +79,9 @@ export class Course {
     @OneToMany(_ => CourseModule, x => x.course)
     @JoinColumn()
     modules: Module[];
+
+    // courseAccessBridges
+    @JoinColumn()
+    @OneToMany(_ => UserCourseAccessBridge, x => x.course)
+    userAccessBridges: UserCourseAccessBridge[];
 }

@@ -9,11 +9,18 @@ import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
 import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
 import { saveAssociatedQuestionsAsync } from "../services/questionService";
-import { deleteVideosAsync, insertVideoAsync, uploadVideoFileAsync } from "../services/videoService";
+import { VideoService } from "../services/VideoService2";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class VideoController {
+
+    private _videoService: VideoService;
+
+    constructor(videoService: VideoService) {
+
+        this._videoService = videoService;
+    }
 
     createVideoAction = async (params: ActionParams) => {
 
@@ -40,7 +47,7 @@ export class VideoController {
             orderIndex: courseItemsLength
         } as Video;
 
-        await insertVideoAsync(newVideo);
+        await this._videoService.insertVideoAsync(newVideo);
 
         return {
             id: newVideo.id
@@ -51,7 +58,7 @@ export class VideoController {
 
         const videoId = withValueOrBadRequest<IdBodyDTO>(params.req.body).id;
 
-        await deleteVideosAsync([videoId], true);
+        await this._videoService.deleteVideosAsync([videoId], true);
     }
 
     saveVideoAction = async (params: ActionParams) => {
@@ -149,7 +156,7 @@ export class VideoController {
                 fs.rmSync(filePath);
 
                 // upload to cloud 
-                await uploadVideoFileAsync(videoId, fullFile);
+                await this._videoService.uploadVideoFileAsync(videoId, fullFile);
             }
         }
         catch (e) {

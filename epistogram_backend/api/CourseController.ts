@@ -8,7 +8,7 @@ import { CourseEditDataDTO as CourseEditDataDTO } from "../models/shared_models/
 import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
-import { deleteCourseAsync, getAdminCoursesAsync, getAvailableCoursesAsync, getCourseEditDataAsync, getCourseProgressDataAsync, setCourseTypeAsync, startCourseAsync } from "../services/courseService";
+import { CourseService } from "../services/CourseService2";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { toCourseDetailsDTO } from "../services/mappings";
 import { staticProvider } from "../staticProvider";
@@ -16,28 +16,35 @@ import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class CourseController {
 
+    private _courseService: CourseService;
+
+    constructor(courseService: CourseService) {
+
+        this._courseService = courseService;
+    }
+
     startCourseAction = async (params: ActionParams) => {
 
         const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
-        return startCourseAsync(params.userId, courseId);
+        return this._courseService.startCourseAsync(params.userId, courseId);
     };
 
     getAvailableCoursesAction = async (params: ActionParams) => {
 
-        return getAvailableCoursesAsync(params.userId);
+        return this._courseService.getAvailableCoursesAsync(params.userId);
     };
 
     getCourseEditDataAction = async (params: ActionParams) => {
 
         const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
 
-        return await getCourseEditDataAsync(courseId);
+        return await this._courseService.getCourseEditDataAsync(courseId);
     };
 
     getAdminCourseListAction = (params: ActionParams) => {
 
-        return getAdminCoursesAsync();
+        return this._courseService.getAdminCoursesAsync();
     }
 
     getCourseBriefDataAction = async (params: ActionParams) => {
@@ -156,7 +163,7 @@ export class CourseController {
 
         const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
-        await deleteCourseAsync(courseId);
+        await this._courseService.deleteCourseAsync(courseId);
     }
 
     createCourseAction = async (params: ActionParams) => {
@@ -179,11 +186,11 @@ export class CourseController {
         const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
         const modeType = withValueOrBadRequest<CourseModeType>(params.req.query.mode);
 
-        return setCourseTypeAsync(params.userId, courseId, modeType);
+        return this._courseService.setCourseTypeAsync(params.userId, courseId, modeType);
     };
 
     getCourseProgressDataAction = async (params: ActionParams) => {
 
-        return getCourseProgressDataAsync(params.userId);
+        return this._courseService.getCourseProgressDataAsync(params.userId);
     };
 }

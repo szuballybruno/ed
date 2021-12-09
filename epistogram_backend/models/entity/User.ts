@@ -11,6 +11,7 @@ import { Organization } from "./Organization";
 import { Role } from "./Role";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
+import { UserCourseAccessBridge } from "./UserCourseAccessBridge";
 import { UserCourseBridge } from "./UserCourseBridge";
 import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
@@ -153,4 +154,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => Event, x => x.user)
     events: Event[];
+
+    // courseAccessBridges
+    @JoinColumn()
+    @OneToMany(_ => UserCourseAccessBridge, x => x.user)
+    courseAccessBridges: UserCourseAccessBridge[];
 }

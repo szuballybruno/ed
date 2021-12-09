@@ -1,14 +1,21 @@
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
-import { getCurrentCourseItemsAsync } from "../services/courseService";
-import { getPlayerDataAsync, saveVideoPlaybackSample } from "../services/playerService";
-import { answerVideoQuestionAsync } from "../services/videoService";
+import { CourseService } from "../services/CourseService2";
+import { PlayerService } from "../services/playerService";
+import { VideoService } from "../services/VideoService2";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class PlayerController {
 
-    constructor() {
+    private _courseService: CourseService;
+    private _playerService: PlayerService;
+    private _videoService: VideoService;
 
+    constructor(courseService: CourseService, playerService: PlayerService, videoService: VideoService) {
+
+        this._courseService = courseService;
+        this._playerService = playerService;
+        this._videoService = videoService;
     }
 
     answerVideoQuestionAction = async (params: ActionParams) => {
@@ -18,25 +25,26 @@ export class PlayerController {
         const questionId = withValueOrBadRequest<number>(dto.questionId, "number");
         const answerSessionId = withValueOrBadRequest<number>(dto.answerSessionId, "number");
 
-        return answerVideoQuestionAsync(params.userId, answerSessionId, questionId, answerIds);
+        return this._videoService
+            .answerVideoQuestionAsync(params.userId, answerSessionId, questionId, answerIds);
     };
 
     saveVideoPlaybackSampleAction = (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<VideoPlaybackSampleDTO>(params.req.body);
 
-        return saveVideoPlaybackSample(params.userId, dto);
+        return this._playerService.saveVideoPlaybackSample(params.userId, dto);
     };
 
     getPlayerDataAction = (params: ActionParams) => {
 
         const descriptorCode = withValueOrBadRequest<string>(params.req.query.descriptorCode);
 
-        return getPlayerDataAsync(params.userId, descriptorCode);
+        return this._playerService.getPlayerDataAsync(params.userId, descriptorCode);
     };
 
     getCourseItemsAction = async (params: ActionParams) => {
 
-        return getCurrentCourseItemsAsync(params.userId);
+        return this._courseService.getCurrentCourseItemsAsync(params.userId);
     };
 }
