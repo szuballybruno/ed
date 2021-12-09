@@ -1,0 +1,25 @@
+
+INSERT INTO public.activation_code (id, code, is_used) VALUES (1, 'PCW-HAFIKUXU', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (2, 'PCW-FICOFIXO', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (3, 'PCW-FEMECODU', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (4, 'PCW-SAVEREXE', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (5, 'PCW-SICAMAKI', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (6, 'PCW-PAHIHAMO', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (7, 'PCW-TOMEQOPE', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (8, 'PCW-DAZEJAVU', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (9, 'PCW-LUFANOFU', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (10, 'PCW-FATOHIWE', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (11, 'PCW-TAJACIPO', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (12, 'PCW-SOYEJUMI', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (13, 'PCW-PUTOJEDA', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (14, 'PCW-NOQAZUWE', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (15, 'PCW-PUDEFACO', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (16, 'PCW-WIKAGIXE', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (17, 'PCW-JOJEMEGI', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (18, 'PCW-XASUZOPU', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (19, 'PCW-YUTIKUVA', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (20, 'PCW-NOBUBIKO', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (21, 'PCW-GIWACISO', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (22, 'PCW-ZIGAGURI', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (23, 'PCW-ZONOKAXI', false);
+INSERT INTO public.activation_code (id, code, is_used) VALUES (24, 'PCW-MIJOPICE', false);
