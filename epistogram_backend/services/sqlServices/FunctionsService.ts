@@ -37,7 +37,8 @@ export class SQLFunctionsService {
         // create statement 
         const statement = `SELECT ${isMultiResult ? "* FROM" : ""} ${fnName}(${argsIndicies.join(",")})`;
 
-        const result = await this._connectionService.executeSQLAsync(statement, args.map(x => x === undefined ? null : x));
+        const result = await this._connectionService
+            .executeSQLAsync(statement, args.map(x => x === undefined ? null : x));
 
         const firstRow = result.rows[0];
 
