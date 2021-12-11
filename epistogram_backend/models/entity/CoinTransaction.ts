@@ -3,12 +3,12 @@ import { ActivitySession } from "./ActivitySession";
 import { ActivityStreak } from "./ActivityStreak";
 import { GivenAnswer } from "./GivenAnswer";
 import { GivenAnswerStreak } from "./GivenAnswerStreak";
+import { ShopItem } from "./ShopItem";
 import { User } from "./User";
-import { UserSessionActivity } from "./UserSessionActivity";
 import { Video } from "./Video";
 
 @Entity()
-export class CoinAcquire {
+export class CoinTransaction {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -78,4 +78,14 @@ export class CoinAcquire {
     @JoinColumn({ name: "activity_streak_id" })
     @ManyToOne(_ => ActivityStreak, x => x.coinAcquires)
     activityStreak: ActivityStreak | null;
+
+    // 
+    // shop item 
+    //
+    @Column({ nullable: true, type: "integer" })
+    shopItemId: number;
+
+    @JoinColumn({ name: "shop_item_id" })
+    @ManyToOne(_ => ShopItem, x => x.coinAcquires)
+    shopItem: ShopItem | null;
 }

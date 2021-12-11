@@ -1,4 +1,4 @@
-import { CoinAcquire } from "../models/entity/CoinAcquire";
+import { CoinTransaction } from "../models/entity/CoinTransaction";
 import { CoinTransactionDTO } from "../models/shared_models/CoinTransactionDTO";
 import { CoinBalanceView } from "../models/views/CoinBalanceView";
 import { CoinTransactionView } from "../models/views/CoinTransactionView";
@@ -19,7 +19,7 @@ export class CoinTransactionService {
         this._ormConnectionService = ormConnService;
     }
 
-    async addCoins(insertCoinFnParamsType: InsertCoinFnParamsType) {
+    async makeCoinTransactionAsync(insertCoinFnParamsType: InsertCoinFnParamsType) {
 
         await this._funcService.insertCoinAcquiredFn(insertCoinFnParamsType)
     }
@@ -55,7 +55,7 @@ export class CoinTransactionService {
     async getCoinsForQuestionAsync(userId: number, questionId: number) {
 
         return await this._ormConnectionService
-            .getRepository(CoinAcquire)
+            .getRepository(CoinTransaction)
             .createQueryBuilder("ca")
             .leftJoinAndSelect("ca.givenAnswer", "ga")
             .where("ca.userId = :userId", { userId })
@@ -67,7 +67,7 @@ export class CoinTransactionService {
     async getCoinsForActivitySession(userId: number, activitySessionId: number) {
 
         return await this._ormConnectionService
-            .getRepository(CoinAcquire)
+            .getRepository(CoinTransaction)
             .findOne({
                 where: {
                     userId,
@@ -79,7 +79,7 @@ export class CoinTransactionService {
     async getCoinsForActivityStreakAsync(userId: number, activityStreakId: number) {
 
         return await this._ormConnectionService
-            .getRepository(CoinAcquire)
+            .getRepository(CoinTransaction)
             .find({
                 where: {
                     userId: userId,
@@ -91,7 +91,7 @@ export class CoinTransactionService {
     async getCoinsForAnswerStreakAsync(userId: number, answerStreakId: number) {
 
         return await this._ormConnectionService
-            .getRepository(CoinAcquire)
+            .getRepository(CoinTransaction)
             .createQueryBuilder("ca")
             .where("ca.userId = :userId", { userId })
             .andWhere("ca.given_answer_streak_id = :gasid", { gasid: answerStreakId })

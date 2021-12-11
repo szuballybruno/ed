@@ -29,6 +29,7 @@ export const DailyTip = (props: {} & FlexProps) => {
 
     const dialogLogic = useEpistoDialogLogic({
         title: translatableTexts.homePage.tipOfTheDay,
+        defaultCloseButtonType: "top"
     });
 
     const { dailyTipData } = useDailyTip();
@@ -56,7 +57,7 @@ export const DailyTip = (props: {} & FlexProps) => {
     return <Flex direction="column" justify="center" {...css}>
 
         {/* dialog */}
-        <EpistoDialog logic={dialogLogic} fullScreenX={true} showCloseButton={true}>
+        <EpistoDialog logic={dialogLogic} fullScreenX={true}>
             <Flex direction="column" align="center">
                 <Flex
                     id="customContentRoot"

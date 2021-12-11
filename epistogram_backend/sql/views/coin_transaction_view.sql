@@ -21,7 +21,7 @@ SELECT
 			END 
 		END 
 	END AS reason
-FROM public.coin_acquire ca
+FROM public.coin_transaction ca
 
 LEFT JOIN public.video v ON v.id = ca.video_id
 

@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ActivitySession } from "./ActivitySession";
-import { CoinAcquire } from "./CoinAcquire";
+import { CoinTransaction } from "./CoinTransaction";
 import { User } from "./User";
 
 @Entity()
@@ -32,6 +32,6 @@ export class ActivityStreak {
 
     // coin acquires 
     @JoinColumn()
-    @OneToMany(_ => CoinAcquire, x => x.activityStreak)
-    coinAcquires: CoinAcquire[];
+    @OneToMany(_ => CoinTransaction, x => x.activityStreak)
+    coinAcquires: CoinTransaction[];
 }

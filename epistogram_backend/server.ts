@@ -20,8 +20,8 @@ import { UserStatsController } from './api/UserStatsController';
 import { VideoController } from './api/VideoController';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { ActivationCodeService } from './services/ActivationCodeService';
-import { CoinAcquireService } from './services/coinAcquireService';
-import { CoinTransactionService } from './services/coinTransactionService';
+import { CoinAcquireService } from './services/CoinAcquireService2';
+import { CoinTransactionService } from './services/CoinTransactionService2';
 import { CourseItemsService } from './services/CourseItemsService';
 import { CourseService } from './services/CourseService2';
 import { EmailService } from './services/EmailService';
@@ -89,7 +89,7 @@ import './utilities/jsExtensions';
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService);
     const miscService = new MiscService(courseService);
     const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService);
-    const shopService = new ShopService(ormConnectionService, mapperService);
+    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);

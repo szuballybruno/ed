@@ -3,7 +3,7 @@ import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultD
 import { ActivityStreakView } from "../models/views/ActivityStreakView";
 import { UserSessionDailyView } from "../models/views/UserActivityDailyView";
 import { trimTimeFromDate } from "../utilities/helpers";
-import { CoinTransactionService } from "./coinTransactionService";
+import { CoinTransactionService } from "./CoinTransactionService2";
 import { EventService } from "./eventService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
@@ -42,7 +42,7 @@ export class CoinAcquireService {
     acquireVideoWatchedCoinsAsync = async (userId: number, videoId: number) => {
 
         await this._coinTransactionService
-            .addCoins({ userId, amount: 1, videoId });
+            .makeCoinTransactionAsync({ userId, amount: 1, videoId });
     }
 
     /**
@@ -67,7 +67,7 @@ export class CoinAcquireService {
 
         // insert coin
         await this._coinTransactionService
-            .addCoins({ userId, amount: 1, givenAnswerId });
+            .makeCoinTransactionAsync({ userId, amount: 1, givenAnswerId });
 
         return {
             reason: "correct_answer",
@@ -87,7 +87,7 @@ export class CoinAcquireService {
         if (streakLength === 5 && prevCoinsGivenForStreak.length === 0) {
 
             await this._coinTransactionService
-                .addCoins({ userId, amount: 5, givenAnswerStreakId: streakId });
+                .makeCoinTransactionAsync({ userId, amount: 5, givenAnswerStreakId: streakId });
 
             return {
                 amount: 5,
@@ -98,7 +98,7 @@ export class CoinAcquireService {
         if (streakLength === 10 && prevCoinsGivenForStreak.length === 1) {
 
             await this._coinTransactionService
-                .addCoins({ userId, amount: 15, givenAnswerStreakId: streakId });
+                .makeCoinTransactionAsync({ userId, amount: 15, givenAnswerStreakId: streakId });
 
             return {
                 amount: 15,
@@ -141,7 +141,7 @@ export class CoinAcquireService {
 
         // add acquire 
         await this._coinTransactionService
-            .addCoins({ userId, amount: 10, activitySessionId });
+            .makeCoinTransactionAsync({ userId, amount: 10, activitySessionId });
     }
 
     /**
@@ -213,7 +213,7 @@ export class CoinAcquireService {
 
         // actually insert the new coin acquire
         await this._coinTransactionService
-            .addCoins({ userId, amount, activityStreakId: currentActivityStreakId });
+            .makeCoinTransactionAsync({ userId, amount, activityStreakId: currentActivityStreakId });
 
         // add acquire event 
         this._eventService

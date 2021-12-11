@@ -18,7 +18,7 @@ export type DialogOptions = {
     title?: string;
     description?: string;
     buttons?: ButtonType[];
-    hideDefaultCloseButton?: boolean;
+    defaultCloseButtonType?: "none" | "bottom" | "top";
 }
 
 export type ButtonType = {

@@ -125,6 +125,7 @@ export const initializeMappings = (mapperService: MapperService) => {
     mapperService
         .addMap(ShopItemView, ShopItemDTO, x => ({
             id: x.id,
+            courseId: x.courseId,
             name: x.name,
             coinPrice: x.coinPrice,
             currencyPrice: x.currencyPrice,

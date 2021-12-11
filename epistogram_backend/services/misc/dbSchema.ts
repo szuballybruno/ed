@@ -43,7 +43,7 @@ import { CourseAdminShortView } from "../../models/views/CourseAdminShortView";
 import { CourseAdminDetailedView } from "../../models/views/CourseAdminDetailedView";
 import { CourseModule } from "../../models/entity/CourseModule";
 import { UserStatsView } from "../../models/views/UserStatsView";
-import { CoinAcquire } from "../../models/entity/CoinAcquire";
+import { CoinTransaction } from "../../models/entity/CoinTransaction";
 import { GivenAnswerStreak } from "../../models/entity/GivenAnswerStreak";
 import { UserSessionDailyView } from "../../models/views/UserActivityDailyView";
 import { UserSessionView } from "../../models/views/UserSessionView";
@@ -95,15 +95,15 @@ export const dbSchema = {
         "answer_signup_question_fn",
         "answer_question_fn",
         "create_daily_tip_fn",
-        "insert_coin_acquire",
+        "insert_coin_transaction",
         "get_user_session_first_activity_id",
         "save_user_session_activity"
     ],
 
     constraints: [
         {
-            tableName: "coin_acquire",
-            name: "coin_acquire_valid_relation_enforce_constraint"
+            tableName: "coin_transaction",
+            name: "coin_transaction_valid_relation_enforce_constraint"
         },
         {
             tableName: "activation_code",
@@ -167,7 +167,7 @@ export const dbSchema = {
         QuestionType,
         UserSessionActivity,
         CourseModule,
-        CoinAcquire,
+        CoinTransaction,
         GivenAnswerStreak,
         ActivitySession,
         ActivityStreak,

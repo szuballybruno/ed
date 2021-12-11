@@ -3,7 +3,7 @@ import { RegistrationType } from "../Types";
 import { UserActivityFlatView } from "../views/UserActivityFlatView";
 import { ActivitySession } from "./ActivitySession";
 import { AnswerSession } from "./AnswerSession";
-import { CoinAcquire } from "./CoinAcquire";
+import { CoinTransaction } from "./CoinTransaction";
 import { Course } from "./Course";
 import { Event } from "./Event";
 import { JobTitle } from "./JobTitle";
@@ -142,8 +142,8 @@ export class User {
 
     // coin acquires 
     @JoinColumn()
-    @OneToMany(_ => CoinAcquire, x => x.activitySession)
-    coinAcquires: CoinAcquire[];
+    @OneToMany(_ => CoinTransaction, x => x.activitySession)
+    coinAcquires: CoinTransaction[];
 
     // sessions
     @JoinColumn()

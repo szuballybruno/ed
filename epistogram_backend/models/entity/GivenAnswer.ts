@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerGivenAnswerBridge } from "./AnswerGivenAnswerBridge";
 import { AnswerSession } from "./AnswerSession";
-import { CoinAcquire } from "./CoinAcquire";
+import { CoinTransaction } from "./CoinTransaction";
 import { GivenAnswerStreak } from "./GivenAnswerStreak";
 import { Question } from "./Question";
 
@@ -51,6 +51,6 @@ export class GivenAnswer {
 
     // coin acquires 
     @JoinColumn()
-    @OneToMany(_ => CoinAcquire, x => x.givenAnswer)
-    coinAcquires: CoinAcquire[];
+    @OneToMany(_ => CoinTransaction, x => x.givenAnswer)
+    coinAcquires: CoinTransaction[];
 }

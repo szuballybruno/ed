@@ -10,6 +10,9 @@ export class ShopItemView {
     id: number;
 
     @ViewColumn()
+    courseId: number;
+
+    @ViewColumn()
     name: string;
 
     @ViewColumn()

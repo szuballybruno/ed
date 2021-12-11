@@ -1,11 +1,13 @@
 import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useContext, useState } from "react";
+import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { useCoinBalance } from "../../services/api/coinTransactionsApiService";
 import { useShopItemCategories, useShopItems } from "../../services/api/shopService";
 import { translatableTexts } from "../../static/translatableTexts";
 import classes from "../css/courseSearchMain.module.scss";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
+import { useEpistoDialogLogic } from "../EpistoDialog";
 import Navbar from "../navbar/Navbar";
 import { ProfileImage } from "../ProfileImage";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
@@ -14,6 +16,7 @@ import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoGrid } from "../universal/EpistoGrid";
 import { EpistoSearch } from "../universal/EpistoSearch";
 import { ShopItem } from "./ShopItem";
+import { ShopPurchaseConfirmationDialog } from "./ShopPurchaseConfirmationDialog";
 
 export const ShopPage = () => {
 
@@ -25,12 +28,26 @@ export const ShopPage = () => {
     const user = useContext(CurrentUserContext)!;
 
     const [categoryFilterId, setCategoryFilterId] = useState(-1);
+    const [currentShopItem, setCurrentShopItem] = useState<null | ShopItemDTO>(null);
+
+    const confirmationDilaogLogic = useEpistoDialogLogic({ defaultCloseButtonType: "top" });
+
+    const handlePurchaseItem = (item: ShopItemDTO) => {
+
+        setCurrentShopItem(item);
+        confirmationDilaogLogic.openDialog();
+    }
 
     return <MainWrapper>
 
         <Navbar />
 
         <ContentWrapper>
+
+            {/* confirmation dialog */}
+            <ShopPurchaseConfirmationDialog
+                dialogLogic={confirmationDilaogLogic}
+                shopItem={currentShopItem} />
 
             {/* category filters left pane */}
             <LeftPanel direction="column" align="stretch">
@@ -129,20 +146,20 @@ export const ShopPage = () => {
 
                                             <Flex mt="10px">
 
-                                                {/* details */}
+                                                {/* item details */}
                                                 <EpistoButton
                                                     onClick={() => { }}
                                                     style={{ flex: "1" }}>
                                                     {translatableTexts.shop.description}
                                                 </EpistoButton>
 
-                                                {/* start course */}
+                                                {/* purcahase item */}
                                                 <EpistoButton
-                                                    onClick={() => { }}
+                                                    onClick={() => handlePurchaseItem(shopItem)}
                                                     variant="colored"
                                                     style={{ flex: "1" }}>
 
-                                                    {translatableTexts.shop.buy}
+                                                    {shopItem.courseId ? "Feloldom" : translatableTexts.shop.buy}
                                                 </EpistoButton>
                                             </Flex>
                                         </ShopItem>

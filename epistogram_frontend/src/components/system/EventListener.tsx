@@ -9,7 +9,7 @@ export const EventListener = (props: { children: ReactNode }) => {
     const { children } = props;
 
     const { event } = useEventListener();
-    const dialogLogic = useEpistoDialogLogic({ hideDefaultCloseButton: true });
+    const dialogLogic = useEpistoDialogLogic({ defaultCloseButtonType: "none" });
     const [coinRewardAmount, setCoinRewardAmount] = useState(0);
     const [coinRewardLottie, setCoinRewardLottie] = useState("");
     const [coinRewardText, setCoinRewardText] = useState("");

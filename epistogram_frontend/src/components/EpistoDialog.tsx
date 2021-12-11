@@ -10,20 +10,21 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState(dialogOptions?.title ?? "");
     const [description, setDescription] = useState(dialogOptions?.description ?? "");
+    const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? "bottom";
 
     const closeDialog = () => {
 
         setIsOpen(false);
     }
 
-    const [buttons, setButtons] = useState<ButtonType[]>(dialogOptions?.hideDefaultCloseButton
-        ? []
-        : [
+    const [buttons, setButtons] = useState<ButtonType[]>(defaultCloseButtonType === "bottom"
+        ? [
             {
                 title: "Bezaras",
                 action: closeDialog
             }
-        ]);
+        ]
+        : []);
 
     const openDialog = (opt?: DialogOptions) => {
 
@@ -59,7 +60,6 @@ export const EpistoDialog = (props: {
     logic: EpistoDialogLogicType,
     fullScreenX?: boolean,
     fullScreenY?: boolean,
-    showCloseButton?: boolean,
     buttonComponents?: ReactNode,
     children?: ReactNode
 }) => {
@@ -72,7 +72,7 @@ export const EpistoDialog = (props: {
         closeDialog,
     } = props.logic;
 
-    const { children, showCloseButton, buttonComponents, fullScreenX, fullScreenY } = props;
+    const { children, logic, buttonComponents, fullScreenX, fullScreenY } = props;
 
     return <Dialog
         open={isOpen}
@@ -84,28 +84,38 @@ export const EpistoDialog = (props: {
             zIndex: 10000
         }}>
 
-        <Flex id="dialogTitle" direction="column" minWidth="500px" height={fullScreenY ? "90vh" : undefined}>
+        {/* title and content */}
+        <Flex
+            id="dialogTitle"
+            direction="column"
+            minWidth="500px"
+            height={fullScreenY ? "90vh" : undefined}
+            position="relative">
 
-            <Flex justify="space-between">
-                {title && <DialogTitle id="alert-dialog-title">
-                    {title}
-                </DialogTitle>}
+            {title && <DialogTitle id="alert-dialog-title">
+                {title}
+            </DialogTitle>}
 
-                {showCloseButton && <Close
-                    onClick={closeDialog}
-                    style={{ margin: "20px", cursor: "pointer" }}>
-                    Bezaras
-                </Close>}
-            </Flex>
+            {logic.dialogOptions?.defaultCloseButtonType === "top" && <Close
+                onClick={closeDialog}
+                style={{
+                    margin: "15px",
+                    cursor: "pointer",
+                    position: "absolute",
+                    right: 0,
+                    top: 0
+                }}>
+                Bezaras
+            </Close>}
 
-            <DialogContent style={{ padding: "0px" }}>
+            <DialogContent style={{ padding: "10px 0px 10px 0px" }}>
                 {description && description}
                 {children}
             </DialogContent>
-
         </Flex>
 
-        <Flex>
+        {/* buttons */}
+        {buttons.length > 0 && <Flex p="10px" flexDirection="row-reverse">
             {buttons
                 .map(x => <EpistoButton
                     variant="outlined"
@@ -117,6 +127,6 @@ export const EpistoDialog = (props: {
                     {x.title}
                 </EpistoButton>)}
             {buttonComponents}
-        </Flex>
+        </Flex>}
     </Dialog>
 }

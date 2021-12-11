@@ -1,5 +1,6 @@
 SELECT
 	si.id,
+	si.course_id,
 	CASE WHEN co.id IS NULL 
 		THEN si.name 
 		ELSE co.title

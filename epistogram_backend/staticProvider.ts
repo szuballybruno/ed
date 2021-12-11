@@ -1,4 +1,4 @@
-import { CoinAcquireService } from "./services/coinAcquireService";
+import { CoinAcquireService } from "./services/CoinAcquireService2";
 import { GlobalConfiguration } from "./services/environment";
 import { MapperService } from "./services/mapperService";
 import { DbConnectionService } from "./services/sqlServices/DatabaseConnectionService";

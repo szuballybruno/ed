@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CoinAcquire } from "./CoinAcquire";
+import { CoinTransaction } from "./CoinTransaction";
 import { GivenAnswer } from "./GivenAnswer";
 import { User } from "./User";
 
@@ -26,6 +26,6 @@ export class GivenAnswerStreak {
 
     // coin acquires 
     @JoinColumn()
-    @OneToMany(_ => CoinAcquire, x => x.activitySession)
-    coinAcquires: CoinAcquire[];
+    @OneToMany(_ => CoinTransaction, x => x.activitySession)
+    coinAcquires: CoinTransaction[];
 }

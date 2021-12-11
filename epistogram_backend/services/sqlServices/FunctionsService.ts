@@ -9,7 +9,8 @@ export type InsertCoinFnParamsType = {
     videoId?: number,
     givenAnswerId?: number,
     givenAnswerStreakId?: number,
-    activityStreakId?: number
+    activityStreakId?: number,
+    shopItemId?: number
 };
 
 export class SQLFunctionsService {
@@ -119,7 +120,8 @@ export class SQLFunctionsService {
                 params.videoId,
                 params.givenAnswerId,
                 params.givenAnswerStreakId,
-                params.activityStreakId
+                params.activityStreakId,
+                params.shopItemId
             ]
         )
     }
