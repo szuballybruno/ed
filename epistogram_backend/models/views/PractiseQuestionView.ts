@@ -1,6 +1,4 @@
-import { JoinColumn, OneToMany, OneToOne, ViewColumn, ViewEntity } from "typeorm";
-import { Answer } from "../entity/Answer";
-import { Question } from "../entity/Question";
+import { ViewColumn, ViewEntity } from "typeorm";
 
 @ViewEntity({
     synchronize: false,

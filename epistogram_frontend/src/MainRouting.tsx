@@ -11,7 +11,7 @@ import { PlayerPage } from "./components/player/PlayerPage";
 import { RegisterViaActivationCodePage } from "./components/RegisterViaActivationCodePage";
 import { RegistrationPage } from "./components/RegistrationPage";
 import { SetNewPasswordPage } from "./components/SetNewPasswordPage";
-import { ShopPage } from "./components/shopPage/ShopPage";
+import { ShopPage } from "./components/epistoShop/ShopPage";
 import { SignupPage } from "./components/signup/SignupPage";
 import { ProtectedRoute } from "./components/universal/ProtectedRoute";
 import { UserSettingsPage } from "./components/userSettings/UserSettingsPage";

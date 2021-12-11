@@ -69,7 +69,7 @@ VALUES
         3,
         1, -- courses 
         NULL,
-        'Google Ads Mesterkurzus Kissné Tóth Erával a Googletől',
+        '',
         13000,
         0,
         3

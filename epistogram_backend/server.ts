@@ -13,6 +13,7 @@ import { ModuleController } from './api/ModuleController';
 import { PlayerController } from './api/PlayerController';
 import { QuestionController } from './api/QuestionController';
 import { RegistrationController } from './api/RegistrationController';
+import { ShopController } from './api/ShopController';
 import { SignupController } from './api/SignupController';
 import { UserController } from './api/UserController';
 import { UserStatsController } from './api/UserStatsController';
@@ -36,6 +37,7 @@ import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService2';
 import { PlayerService } from './services/playerService';
 import { RegistrationService } from './services/RegistrationService';
+import { ShopService } from './services/ShopService';
 import { SignupService } from './services/SignupService';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
 import { SQLFunctionsService } from './services/sqlServices/FunctionsService';
@@ -87,6 +89,7 @@ import './utilities/jsExtensions';
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService);
     const miscService = new MiscService(courseService);
     const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService);
+    const shopService = new ShopService(ormConnectionService, mapperService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -104,6 +107,7 @@ import './utilities/jsExtensions';
     const videoController = new VideoController(videoService);
     const questionController = new QuestionController();
     const examController = new ExamController(examService);
+    const shopController = new ShopController(shopService);
 
     // initialize services 
     initializeMappings(mapperService);
@@ -153,6 +157,9 @@ import './utilities/jsExtensions';
     addEndpoint(apiRoutes.misc.getDailyTip, miscController.getDailyTipAction);
     addEndpoint(apiRoutes.misc.getOrganizations, miscController.getOrganizationsAction);
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
+
+    // shop 
+    addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);

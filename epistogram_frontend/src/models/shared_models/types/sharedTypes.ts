@@ -33,6 +33,8 @@ export type CoinAcquireReasonType =
 
 export type EventType = "coin_acquire_answer_streak" | "coin_acquire_session_streak";
 
+export type CourseVisibilityType = "public" | "private";
+
 export const RoleIdEnum = {
     administrator: 1,
     supervisor: 2,

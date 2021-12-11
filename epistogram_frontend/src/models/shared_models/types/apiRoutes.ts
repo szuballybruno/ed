@@ -24,6 +24,10 @@ export const apiRoutes = {
         loginUser: "/authentication/login-user",
     },
 
+    shop: {
+        getShopItems: "/shop/get-shop-items"
+    },
+
     event: {
         getUnfulfilledEvent: "/event/get-unfulfilled-event"
     },

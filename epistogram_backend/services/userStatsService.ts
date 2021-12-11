@@ -23,6 +23,6 @@ export class UserStatsService {
             .getOneOrFail();
 
         return this._mapperService
-            .useMapperFunction(UserStatsView, UserStatsDTO, stats);
+            .map(UserStatsView, UserStatsDTO, stats);
     }
 }

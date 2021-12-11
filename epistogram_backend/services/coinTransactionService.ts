@@ -49,7 +49,7 @@ export class CoinTransactionService {
 
         return coinTransactions
             .map(x => this._mapperService
-                .useMapperFunction(CoinTransactionView, CoinTransactionDTO, x));
+                .map(CoinTransactionView, CoinTransactionDTO, x));
     }
 
     async getCoinsForQuestionAsync(userId: number, questionId: number) {

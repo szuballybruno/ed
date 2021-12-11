@@ -36,6 +36,7 @@ import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { ResultAnswerDTO } from "../models/shared_models/ResultAnswerDTO";
 import { RoleDTO } from "../models/shared_models/RoleDTO";
+import { ShopItemDTO } from "../models/shared_models/ShopItemDTO";
 import { SignupAnswerDTO } from "../models/shared_models/SignupAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
 import { SignupQuestionDTO } from "../models/shared_models/SignupQuestionDTO";
@@ -53,6 +54,7 @@ import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { ExamResultView } from "../models/views/ExamResultView";
+import { ShopItemView } from "../models/views/ShopItemView";
 import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { UserStatsView } from "../models/views/UserStatsView";
@@ -65,7 +67,7 @@ import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 export const initializeMappings = (mapperService: MapperService) => {
 
     mapperService
-        .addMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
+        .addMap(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
             id: view.itemId,
             subTitle: view.itemSubtitle,
             title: view.itemTitle,
@@ -77,21 +79,21 @@ export const initializeMappings = (mapperService: MapperService) => {
         }));
 
     mapperService
-        .addMapperFunction(CourseModule, ModuleDetailedDTO, view => ({
+        .addMap(CourseModule, ModuleDetailedDTO, view => ({
             id: view.id,
             name: view.name,
             description: view.description
         }));
 
     mapperService
-        .addMapperFunction(CourseModule, ModuleAdminEditDTO, view => ({
+        .addMap(CourseModule, ModuleAdminEditDTO, view => ({
             id: view.id,
             name: view.name,
             description: view.description
         }));
 
     mapperService
-        .addMapperFunction(UserStatsView, UserStatsDTO, view => ({
+        .addMap(UserStatsView, UserStatsDTO, view => ({
             userId: view.userId,
             userEmail: view.userEmail,
             averageSessionLengthSeconds: view.averageSessionLengthSeconds,
@@ -108,14 +110,25 @@ export const initializeMappings = (mapperService: MapperService) => {
         }));
 
     mapperService
-        .addMapperFunction(Event, EventDTO, event => ({
+        .addMap(Event, EventDTO, event => ({
             data: JSON.parse(event.data),
             type: event.type
         }));
 
     mapperService
-        .addMapperFunction(CoinTransactionView, CoinTransactionDTO, view => ({
+        .addMap(CoinTransactionView, CoinTransactionDTO, view => ({
             ...view
+        }));
+
+    mapperService
+        .addMap(ShopItemView, ShopItemDTO, x => ({
+            id: x.id,
+            name: x.name,
+            coinPrice: x.coinPrice,
+            currencyPrice: x.currencyPrice,
+            shopItemCategoryId: x.shopItemCategoryId,
+            shopItemCategoryName: x.shopItemCategoryName,
+            coverFilePath: getAssetUrl(x.coverFilePath)
         }));
 }
 
@@ -467,7 +480,7 @@ export const toCourseEditDataDTO = (
                 .map(viewAsItem => staticProvider
                     .services
                     .mapperService
-                    .useMapperFunction(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
+                    .map(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
 
             return {
                 id: viewAsModule.moduleId,

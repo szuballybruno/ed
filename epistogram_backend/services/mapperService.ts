@@ -8,7 +8,7 @@ const mapperFunctions = [] as {
 
 export class MapperService {
 
-    addMapperFunction<TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, func: (from: TFrom) => TTo) {
+    addMap<TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, func: (from: TFrom) => TTo) {
 
         const mapping = mapperFunctions
             .filter(x => x.fromTypeName === fromType.name && x.toTypeName === toType.name)[0];
@@ -24,7 +24,7 @@ export class MapperService {
             });
     }
 
-    useMapperFunction<TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, fromObj: TFrom): TTo {
+    map<TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, fromObj: TFrom): TTo {
 
         const mapping = mapperFunctions
             .filter(x => x.fromTypeName === fromType.name && x.toTypeName === toType.name)[0];
@@ -33,5 +33,11 @@ export class MapperService {
             throw new Error(`Mapping '${fromType.name} -> ${toType.name}' not found!`);
 
         return mapping.func(fromObj);
+    }
+
+    mapMany<TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, fromObjects: TFrom[]): TTo[] {
+
+        return fromObjects
+            .map(x => this.map(fromType, toType, x));
     }
 }

@@ -36,7 +36,7 @@ export class ModuleService {
         return staticProvider
             .services
             .mapperService
-            .useMapperFunction(CourseModule, ModuleDetailedDTO, module);
+            .map(CourseModule, ModuleDetailedDTO, module);
     }
 
     deleteModulesAsync = async (moduleIds: number[]) => {
@@ -92,7 +92,7 @@ export class ModuleService {
         return staticProvider
             .services
             .mapperService
-            .useMapperFunction(CourseModule, ModuleAdminEditDTO, module);
+            .map(CourseModule, ModuleAdminEditDTO, module);
     }
 
     saveModuleAsync = async (dto: ModuleAdminEditDTO) => {

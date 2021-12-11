@@ -60,6 +60,6 @@ export class EventService {
             });
 
         return this._mapperService
-            .useMapperFunction(Event, EventDTO, event);
+            .map(Event, EventDTO, event);
     }
 }

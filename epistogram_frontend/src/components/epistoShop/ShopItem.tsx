@@ -1,24 +1,18 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import { FlexFloat } from "../universal/FlexFloat";
-import React, { ReactNode } from "react";
-import { ShopItemShortDTO } from "../../models/shared_models/ShopItemShortDTO";
-import { getAssetUrl } from "../../static/frontendHelpers";
 import { LocalOffer } from "@mui/icons-material";
+import { Typography } from "@mui/material";
+import React from "react";
+import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
+import { getAssetUrl } from "../../static/frontendHelpers";
+import { FlexFloat } from "../universal/FlexFloat";
 
-export const ShopItem = (
-    props: {
-        shopItem: ShopItemShortDTO,
-        className?: string,
-        children?: ReactNode,
-        tempIsStartedSwitch?: boolean,
-    } & FlexProps) => {
+export const ShopItem = (props: {
+    shopItem: ShopItemDTO,
+    tempIsStartedSwitch?: boolean,
+} & FlexProps) => {
+
     const { shopItem, children, ...css } = props;
-
-    const shopItemTitle = shopItem.title
-    const shopItemCategory = shopItem.categoryName
-    const thumbnailImageUrl = shopItem.thumbnailImageURL
-    const shopItemPriceInEpistoCoin = shopItem.priceInEpistoCoin
-    const shopItemPriceInHUF = shopItem.priceInHUF
+    const { name, coinPrice, coverFilePath, currencyPrice, shopItemCategoryId, shopItemCategoryName } = shopItem;
 
     return <FlexFloat
         className="whall"
@@ -49,7 +43,7 @@ export const ShopItem = (
                             height: "100%",
                             objectFit: "cover",
                             borderRadius: 10
-                        }} src={thumbnailImageUrl} alt="" />
+                        }} src={coverFilePath} alt="" />
 
                         <Flex
                             h="calc(100% - 8px)"
@@ -73,12 +67,12 @@ export const ShopItem = (
 
                     {/* category  */}
                     <Text as="text" color="grey">
-                        {shopItemCategory}
+                        {shopItemCategoryName}
                     </Text>
 
                     {/* title */}
                     <Flex direction="column">
-                        <Text as="h6" fontWeight={"bold"} fontSize="large">{shopItemTitle}</Text>
+                        <Text as="h6" fontWeight={"bold"} fontSize="large">{name}</Text>
                     </Flex>
 
                 </Flex>
@@ -91,13 +85,21 @@ export const ShopItem = (
                     height: 17,
                     transform: "scaleX(-1)"
                 }} />
-                {`Ár: ${shopItemPriceInEpistoCoin}`}
-                <img style={{
-                    width: 20,
-                    height: 20,
-                    margin: 2
-                }} src={getAssetUrl("/images/epistoCoin.png")} alt={""} />
-                {shopItemPriceInHUF !== 0 && `\xa0 és csak ${shopItemPriceInHUF}Ft`}
+
+                {/* episto coin price */}
+                <Typography>
+                    {`Ár: ${coinPrice}`}
+                </Typography>
+                <img
+                    style={{
+                        width: 20,
+                        height: 20,
+                        margin: 2
+                    }}
+                    src={getAssetUrl("/images/epistoCoin.png")} alt={""} />
+
+                {/* currency price */}
+                {currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}
             </Flex>
         </Flex>
         <Flex direction="column" minH="50px">
