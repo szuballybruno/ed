@@ -1,7 +1,6 @@
 
 import { RoleIdEnum } from "../../models/shared_models/types/sharedTypes";
 import { RegistrationService } from "../RegistrationService";
-import { SignupService } from "../SignupService";
 import { log } from "./../misc/logger";
 import { SQLBootstrapperService } from "./SQLBootstrapper";
 
@@ -10,7 +9,7 @@ export class SeedService {
     private _sqlBootstrapperService: SQLBootstrapperService;
     private _regService: RegistrationService;
 
-    constructor(sqlBootstrapperService: SQLBootstrapperService, signupService: SignupService, regService: RegistrationService) {
+    constructor(sqlBootstrapperService: SQLBootstrapperService, regService: RegistrationService) {
 
         this._sqlBootstrapperService = sqlBootstrapperService;
         this._regService = regService;
@@ -35,6 +34,8 @@ export class SeedService {
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionsExam");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedDailyTips");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedActivationCodes");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedShopItemCategories");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedShopItems");
 
         // recalc seqs
         await this._sqlBootstrapperService.recalcSequencesAsync();

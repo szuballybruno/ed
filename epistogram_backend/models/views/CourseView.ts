@@ -14,6 +14,9 @@ export class CourseView {
     userId: number;
 
     @ViewColumn()
+    canView: boolean;
+
+    @ViewColumn()
     teacherId: number;
 
     @ViewColumn()

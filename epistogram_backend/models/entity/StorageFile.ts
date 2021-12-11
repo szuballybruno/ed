@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
+import { ShopItem } from "./ShopItem";
 import { User } from "./User";
 import { Video } from "./Video";
 
@@ -26,4 +27,9 @@ export class StorageFile {
     @OneToMany(_ => Course, c => c.coverFile)
     @JoinColumn()
     courses: Course[];
+
+    // shop items
+    @ManyToOne(_ => ShopItem, x => x.coverFile)
+    @JoinColumn()
+    shopItems: ShopItem[];
 }

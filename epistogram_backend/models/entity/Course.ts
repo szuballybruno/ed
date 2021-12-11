@@ -5,6 +5,7 @@ import { CourseStateView } from "../views/CourseStateView";
 import { CourseCategory } from "./CourseCategory";
 import { CourseModule } from "./CourseModule";
 import { Exam } from "./Exam";
+import { ShopItem } from "./ShopItem";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
 import { UserCourseAccessBridge } from "./UserCourseAccessBridge";
@@ -84,4 +85,9 @@ export class Course {
     @JoinColumn()
     @OneToMany(_ => UserCourseAccessBridge, x => x.course)
     userAccessBridges: UserCourseAccessBridge[];
+
+    // shop items
+    @ManyToOne(_ => ShopItem, x => x.coverFile)
+    @JoinColumn()
+    shopItems: ShopItem[];
 }

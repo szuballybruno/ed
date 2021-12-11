@@ -1,15 +1,15 @@
-import {Box, Divider, Flex, Image} from "@chakra-ui/react";
-import {AdminSubpageHeader} from "../AdminSubpageHeader";
-import {applicationRoutes} from "../../../configuration/applicationRoutes";
-import {EditSection} from "./EditSection";
-import {SelectImage} from "../../universal/SelectImage";
-import {EpistoEntry} from "../../universal/EpistoEntry";
-import {Typography} from "@mui/material";
-import {EpistoSelect} from "../../universal/EpistoSelect";
-import React, {useEffect, useState} from "react";
-import {CourseEditDataDTO} from "../../../models/shared_models/CourseEditDataDTO";
-import {CourseCategoryDTO} from "../../../models/shared_models/CourseCategoryDTO";
-import {UserDTO} from "../../../models/shared_models/UserDTO";
+import { Box, Divider, Flex, Image } from "@chakra-ui/react";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { EditSection } from "./EditSection";
+import { SelectImage } from "../../universal/SelectImage";
+import { EpistoEntry } from "../../universal/EpistoEntry";
+import { Typography } from "@mui/material";
+import { EpistoSelect } from "../../universal/EpistoSelect";
+import React, { useEffect, useState } from "react";
+import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
+import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
+import { UserDTO } from "../../../models/shared_models/UserDTO";
 
 export const AdminCourseDetailsControl = (props: {
     saveCourseAsync: (dto: CourseEditDataDTO, thumbnailFile: null | File) => Promise<void>,
@@ -31,10 +31,7 @@ export const AdminCourseDetailsControl = (props: {
 
         setThumbnailSrc(src);
         setThumbnailImageFile(file);
-
-
     }
-
 
     useEffect(() => {
         if (!courseEditData)
@@ -116,6 +113,7 @@ export const AdminCourseDetailsControl = (props: {
                     <Typography style={{ color: "gray", marginTop: "10px" }}>
                         Főkategória
                     </Typography>
+
                     <EpistoSelect
                         getCompareKey={x => x?.id + ""}
                         getDisplayValue={x => x?.name + ""}
@@ -127,12 +125,18 @@ export const AdminCourseDetailsControl = (props: {
                     <Typography style={{ color: "gray", marginTop: "10px" }}>
                         Alkategória
                     </Typography>
+
                     <EpistoSelect
                         getCompareKey={x => x?.id + ""}
                         getDisplayValue={x => x?.name + ""}
                         items={category?.childCategories ?? []}
                         selectedValue={subCategory}
                         onSelected={setSubCategory} />
+
+                    {/* is private
+                    <Typography style={{ color: "gray", marginTop: "10px" }}>
+                        Privát kurzus
+                    </Typography> */}
                 </EditSection>
             </Box>
         </AdminSubpageHeader>

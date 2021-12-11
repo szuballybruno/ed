@@ -377,6 +377,7 @@ export class CourseService {
             .getRepository(CourseView)
             .createQueryBuilder("cv")
             .where("cv.userId = :userId", { userId })
+            .andWhere("cv.canView = true")
             .leftJoinAndSelect("cv.teacher", "t")
             .getMany();
 

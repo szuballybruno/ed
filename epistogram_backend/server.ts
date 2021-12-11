@@ -77,7 +77,7 @@ import './utilities/jsExtensions';
     const emailService = new EmailService();
     const signupService = new SignupService(emailService);
     const registrationService = new RegistrationService(activationCodeService, emailService);
-    const seedService = new SeedService(sqlBootstrapperService, signupService, registrationService);
+    const seedService = new SeedService(sqlBootstrapperService, registrationService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService);
     const userCourseBridgeService = new UserCourseBridgeService(courseItemsService);
