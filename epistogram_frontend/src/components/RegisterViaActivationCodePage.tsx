@@ -114,7 +114,7 @@ export const RegisterViaActivationCodePage = () => {
                     {/* registration */}
                     <Flex direction="column">
 
-                        <Flex h={100} w={300}>
+                        <Flex h={60} w={"100%"}>
                             <Text
                                 textAlign="center"
                                 fontSize="1.3em">
@@ -229,39 +229,49 @@ export const RegisterViaActivationCodePage = () => {
                     src={getAssetUrl("/images/jobb.png")} alt="" />
             </Flex>}
 
-            {/* cow patches */}
+            {/* Magic powder */}
             <img
                 style={{
                     position: "absolute",
-                    left: -100,
-                    top: 20,
+                    left: 100,
+                    top: -180,
                     width: 300,
+                    transform: "rotate(115deg)",
                     objectFit: "contain",
                     zIndex: 0,
                 }}
-                src={getAssetUrl("/images/LoginShape1.png")} alt="" />
+                src={getAssetUrl("/images/bg-art-2.png")} alt="" />
 
             <img
                 style={{
                     position: "absolute",
-                    right: 200,
+                    left: 50,
                     bottom: -60,
-                    transform: "rotate(45deg)",
+                    transform: "rotate(-90deg)",
                     zIndex: 0,
                 }}
-                src={getAssetUrl("/images/LoginShape2.png")} alt="" />
-
+                src={getAssetUrl("/images/bg-art-5.png")} alt="" />
             <img
                 style={{
                     position: "absolute",
                     right: 50,
                     top: -100,
+                    transform: "rotate(270deg)",
+                    zIndex: 0,
+                }}
+                src={getAssetUrl("/images/bg-art-6.png")} alt="" />
+
+            <img
+                style={{
+                    position: "absolute",
+                    right: -50,
+                    bottom: -100,
                     width: 300,
-                    transform: "scaleX(-1)",
+                    transform: "scaleX(-1) rotate(65deg)",
                     objectFit: "contain",
                     zIndex: 0,
                 }}
-                src={getAssetUrl("/images/Shape1SVG.png")} alt="" />
+                src={getAssetUrl("/images/bg-art-home4.png")} alt="" />
         </Flex>
     </MainWrapper>
 
