@@ -8,10 +8,11 @@ import { FlexFloat } from "../universal/FlexFloat";
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
+    isSufficientFundsAvailable: boolean,
     tempIsStartedSwitch?: boolean,
 } & FlexProps) => {
 
-    const { shopItem, children, ...css } = props;
+    const { shopItem, children, isSufficientFundsAvailable, ...css } = props;
     const { name, coinPrice, coverFilePath, currencyPrice, shopItemCategoryId, shopItemCategoryName } = shopItem;
 
     return <FlexFloat
@@ -38,12 +39,15 @@ export const ShopItem = (props: {
                         width="100%"
                         p="4px">
 
-                        <img style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            borderRadius: 10
-                        }} src={coverFilePath} alt="" />
+                        <img
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                borderRadius: 10
+                            }}
+                            src={coverFilePath}
+                            alt="" />
 
                         <Flex
                             h="calc(100% - 8px)"
@@ -74,9 +78,7 @@ export const ShopItem = (props: {
                     <Flex direction="column">
                         <Text as="h6" fontWeight={"bold"} fontSize="large">{name}</Text>
                     </Flex>
-
                 </Flex>
-
             </Box>
         </Flex>
         <Flex alignItems={"center"} justifyContent={"center"}>
@@ -87,7 +89,7 @@ export const ShopItem = (props: {
                 }} />
 
                 {/* episto coin price */}
-                <Typography>
+                <Typography style={{ color: isSufficientFundsAvailable ? "var(--deepGreen)" : "var(--mildRed)" }}>
                     {`Ár: ${coinPrice}`}
                 </Typography>
                 <img

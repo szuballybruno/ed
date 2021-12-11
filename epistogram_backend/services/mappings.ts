@@ -8,6 +8,7 @@ import { JobTitle } from "../models/entity/JobTitle";
 import { Organization } from "../models/entity/Organization";
 import { Question } from "../models/entity/Question";
 import { Role } from "../models/entity/Role";
+import { ShopItemCategory } from "../models/entity/ShopItemCategory";
 import { Task } from "../models/entity/Task";
 import { User } from "../models/entity/User";
 import { Video } from "../models/entity/Video";
@@ -36,6 +37,7 @@ import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { ResultAnswerDTO } from "../models/shared_models/ResultAnswerDTO";
 import { RoleDTO } from "../models/shared_models/RoleDTO";
+import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
 import { ShopItemDTO } from "../models/shared_models/ShopItemDTO";
 import { SignupAnswerDTO } from "../models/shared_models/SignupAnswerDTO";
 import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
@@ -129,6 +131,12 @@ export const initializeMappings = (mapperService: MapperService) => {
             shopItemCategoryId: x.shopItemCategoryId,
             shopItemCategoryName: x.shopItemCategoryName,
             coverFilePath: getAssetUrl(x.coverFilePath)
+        }));
+
+    mapperService
+        .addMap(ShopItemCategory, ShopItemCategoryDTO, x => ({
+            id: x.id,
+            name: x.name
         }));
 }
 

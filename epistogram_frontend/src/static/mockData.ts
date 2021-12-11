@@ -56,16 +56,6 @@ export const mockTasks = {
     ]
 } as CurrentTasksDTO;
 
-export const mockShopCategories = [
-    { id: 1, name: "Prémium kurzusok" },
-    { id: 2, name: "Szoftverek, játékok" },
-    { id: 3, name: "Fizikai termékek" },
-    { id: 4, name: "Digitális művészet - NFT" },
-    { id: 5, name: "Élmény csomagok" },
-    { id: 6, name: "Egyéb kedvezmények" }
-
-] as ShopCategoryDTO[]
-
 /**
  * Notifications
  */

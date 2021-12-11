@@ -1,29 +1,30 @@
 import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
-import { useState } from "react";
-import { distinct } from "../../static/frontendHelpers";
-import { mockShopCategories } from "../../static/mockData";
+import { useContext, useState } from "react";
+import { useCoinBalance } from "../../services/api/coinTransactionsApiService";
+import { useShopItemCategories, useShopItems } from "../../services/api/shopService";
 import { translatableTexts } from "../../static/translatableTexts";
 import classes from "../css/courseSearchMain.module.scss";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../system/MainPanels";
 import Navbar from "../navbar/Navbar";
+import { ProfileImage } from "../ProfileImage";
+import { CurrentUserContext } from "../system/AuthenticationFrame";
+import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../system/MainPanels";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoGrid } from "../universal/EpistoGrid";
 import { EpistoSearch } from "../universal/EpistoSearch";
 import { ShopItem } from "./ShopItem";
-import { useShopItems } from "../../services/api/shopService";
 
 export const ShopPage = () => {
 
     // http
     const { shopItems } = useShopItems();
+    const { shopItemCategories } = useShopItemCategories();
+    const { coinBalance } = useCoinBalance();
 
-    const [searchCategory, setSearchCategory] = useState("")
+    const user = useContext(CurrentUserContext)!;
 
-    const categoryOptions = distinct(mockShopCategories
-        .map((shopCategory, index) => shopCategory.name)
-    )
+    const [categoryFilterId, setCategoryFilterId] = useState(-1);
 
     return <MainWrapper>
 
@@ -31,40 +32,39 @@ export const ShopPage = () => {
 
         <ContentWrapper>
 
-            {/* filters */}
+            {/* category filters left pane */}
             <LeftPanel direction="column" align="stretch">
 
-                {/* categories  */}
-                <Flex direction="column">
+                {/* categories title */}
+                <Typography
+                    style={{ margin: "40px 20px", textAlign: "center" }}
+                    variant={"h4"}>
 
-                    {/* categories title */}
-                    <Typography
-                        style={{ margin: "40px 20px", textAlign: "center" }}
-                        variant={"h4"}>
+                    {translatableTexts.availableCourses.categoriesTitle}
+                </Typography>
 
-                        {translatableTexts.availableCourses.categoriesTitle}
-                    </Typography>
+                {/* categories list */}
+                <ToggleButtonGroup className={classes.categoriesList} orientation={"vertical"}>
+                    {[{ id: -1, name: "Mutasd mindet" }]
+                        .concat(shopItemCategories)
+                        .map((category, index) => {
+                            return <ToggleButton
+                                className={classes.categoriesListItem}
+                                selected={categoryFilterId === category.id}
+                                value={category}
+                                style={{
+                                    alignItems: "flex-start",
+                                    paddingLeft: "30px",
+                                }}
+                                onClick={() => setCategoryFilterId(category.id)}
+                                key={index}>
 
-                    {/* categories list */}
-                    <ToggleButtonGroup className={classes.categoriesList} orientation={"vertical"}>
-                        {categoryOptions
-                            .map((categoryOption, index) => {
-                                return <ToggleButton
-                                    className={searchCategory === categoryOption ? `${classes.categoriesListItem} ${classes.categoriesListItemSelected}` : `${classes.categoriesListItem}`}
-                                    value={categoryOption}
-                                    style={{
-                                        alignItems: "flex-start",
-                                        paddingLeft: "30px",
-                                    }}
-                                    onClick={() => {
-                                        setSearchCategory(categoryOption)
-                                    }}
-                                    key={index}>
-                                    {categoryOption}
-                                </ToggleButton>
-                            })}
-                    </ToggleButtonGroup>
-                </Flex>
+                                <Typography>
+                                    {category.name}
+                                </Typography>
+                            </ToggleButton>
+                        })}
+                </ToggleButtonGroup>
             </LeftPanel>
 
             {/* content */}
@@ -74,11 +74,27 @@ export const ShopPage = () => {
                     {/* search */}
                     <Box id="courseSearchRoot" p="20px" direction="column">
 
+                        {/* upper part */}
                         <EpistoSearch width="100%" />
 
+                        {/* lower part */}
                         <Flex justify="space-between" mt="20px" align="center">
-                            <EpistoConinInfo />
 
+                            {/* user coin balance */}
+                            <Flex align="center">
+                                <ProfileImage
+                                    url={user.avatarUrl}
+                                    cursor="pointer"
+                                    className="square40" />
+
+                                <Typography style={{ margin: "0 10px 0 10px" }}>
+                                    Aktuális EpistoCoin egyenleged:
+                                </Typography>
+
+                                <EpistoConinInfo />
+                            </Flex>
+
+                            {/* order settings  */}
                             <Select
                                 native
                                 onChange={() => { }}
@@ -102,10 +118,15 @@ export const ShopPage = () => {
                     <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
                         <EpistoGrid auto="fit" gap="15" minColumnWidth="300px">
                             {shopItems
+                                .filter(x => x.shopItemCategoryId === categoryFilterId || categoryFilterId === -1)
                                 .map((shopItem, index) => {
 
                                     return <GridItem>
-                                        <ShopItem shopItem={shopItem} key={index} >
+                                        <ShopItem
+                                            shopItem={shopItem}
+                                            isSufficientFundsAvailable={coinBalance >= shopItem.coinPrice}
+                                            key={index} >
+
                                             <Flex mt="10px">
 
                                                 {/* details */}

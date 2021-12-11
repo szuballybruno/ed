@@ -1,3 +1,5 @@
+import { ShopItemCategory } from "../models/entity/ShopItemCategory";
+import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
 import { ShopItemDTO } from "../models/shared_models/ShopItemDTO";
 import { ShopItemView } from "../models/views/ShopItemView";
 import { MapperService } from "./mapperService";
@@ -23,5 +25,16 @@ export class ShopService {
 
         return this._mapperService
             .mapMany(ShopItemView, ShopItemDTO, shopItemViews);
+    }
+
+    async getShopItemCategoriesAsync() {
+
+        const shopItemCategories = await this._ormService
+            .getRepository(ShopItemCategory)
+            .createQueryBuilder("sic")
+            .getMany();
+
+        return this._mapperService
+            .mapMany(ShopItemCategory, ShopItemCategoryDTO, shopItemCategories);
     }
 }

@@ -25,7 +25,8 @@ export const apiRoutes = {
     },
 
     shop: {
-        getShopItems: "/shop/get-shop-items"
+        getShopItems: "/shop/get-shop-items",
+        getShopItemCategories: "/shop/get-shop-items-categories"
     },
 
     event: {

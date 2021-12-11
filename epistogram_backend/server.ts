@@ -160,6 +160,7 @@ import './utilities/jsExtensions';
 
     // shop 
     addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
+    addEndpoint(apiRoutes.shop.getShopItemCategories, shopController.getShopItemCategoriesAction);
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
