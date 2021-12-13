@@ -9,7 +9,7 @@ import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
 import { toQuestionDTO } from "../services/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
 import { saveAssociatedQuestionsAsync } from "../services/questionService";
-import { VideoService } from "../services/VideoService2";
+import { VideoService } from "../services/VideoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 

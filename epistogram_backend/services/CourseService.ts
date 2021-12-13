@@ -14,9 +14,9 @@ import { CourseView } from "../models/views/CourseView";
 import { staticProvider } from "../staticProvider";
 import { getItemCode, readItemCode } from "./encodeService";
 import { toCourseAdminShortDTO, toCourseEditDataDTO, toCourseItemDTO, toCourseShortDTO } from "./mappings";
-import { ModuleService } from "./ModuleService2";
+import { ModuleService } from "./ModuleService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
-import { VideoService } from "./VideoService2";
+import { VideoService } from "./VideoService";
 
 export class CourseService {
 

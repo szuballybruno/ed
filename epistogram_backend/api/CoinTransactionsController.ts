@@ -1,4 +1,4 @@
-import { CoinTransactionService } from "../services/CoinTransactionService2";
+import { CoinTransactionService } from "../services/CoinTransactionService";
 import { ActionParams } from "../utilities/helpers";
 
 export class CoinTransactionsController {

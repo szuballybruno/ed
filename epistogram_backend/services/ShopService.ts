@@ -4,7 +4,7 @@ import { ShopItemCategory } from "../models/entity/ShopItemCategory";
 import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
 import { ShopItemDTO } from "../models/shared_models/ShopItemDTO";
 import { ShopItemView } from "../models/views/ShopItemView";
-import { CoinTransactionService } from "./CoinTransactionService2";
+import { CoinTransactionService } from "./CoinTransactionService";
 import { MapperService } from "./mapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 

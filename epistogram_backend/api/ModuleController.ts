@@ -1,7 +1,7 @@
 import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
-import { ModuleService } from "../services/ModuleService2";
+import { ModuleService } from "../services/ModuleService";
 
 export class ModuleController {
 
