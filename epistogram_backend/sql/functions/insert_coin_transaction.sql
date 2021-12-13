@@ -13,11 +13,11 @@ RETURNS integer
 AS $$ 
 
 DECLARE
-	v_coin_acquire_id integer;
+	v_coin_transaction_id integer;
 
 BEGIN
 
-	INSERT INTO public.coin_acquire 
+	INSERT INTO public.coin_transaction 
 	(
 		user_id,
 		amount,
@@ -40,9 +40,9 @@ BEGIN
 		p_shop_item_id
 	)
 	RETURNING id 
-	INTO v_coin_acquire_id;
+	INTO v_coin_transaction_id;
 	
-	RETURN v_coin_acquire_id;
+	RETURN v_coin_transaction_id;
 	
 END 
 $$ LANGUAGE 'plpgsql';

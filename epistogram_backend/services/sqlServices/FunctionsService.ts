@@ -112,7 +112,7 @@ export class SQLFunctionsService {
     insertCoinAcquiredFn = (params: InsertCoinFnParamsType) => {
 
         return this.execSQLFunctionAsync<number>(
-            "insert_coin_acquire",
+            "insert_coin_transaction",
             [
                 params.userId,
                 params.amount,
