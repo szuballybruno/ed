@@ -13,7 +13,7 @@ export class ShopController {
     getShopItemsAction = async (params: ActionParams) => {
 
         return this._shopService
-            .getShopItemsAsync();
+            .getShopItemsAsync(params.userId);
     }
 
     getShopItemCategoriesAction = async (params: ActionParams) => {

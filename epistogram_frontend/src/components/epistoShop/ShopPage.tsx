@@ -20,9 +20,9 @@ import { ShopPurchaseConfirmationDialog } from "./ShopPurchaseConfirmationDialog
 export const ShopPage = () => {
 
     // http
-    const { shopItems } = useShopItems();
+    const { shopItems, refetchShopItems } = useShopItems();
     const { shopItemCategories } = useShopItemCategories();
-    const { coinBalance } = useCoinBalance();
+    const { coinBalance, refetchCoinBalance } = useCoinBalance();
 
     const user = useContext(CurrentUserContext)!;
 
@@ -46,7 +46,11 @@ export const ShopPage = () => {
             {/* confirmation dialog */}
             <ShopPurchaseConfirmationDialog
                 dialogLogic={confirmationDilaogLogic}
-                shopItem={currentShopItem} />
+                shopItem={currentShopItem}
+                onSuccessfulPurchase={() => {
+                    refetchShopItems();
+                    refetchCoinBalance();
+                }} />
 
             {/* category filters left pane */}
             <LeftPanel direction="column" align="stretch">

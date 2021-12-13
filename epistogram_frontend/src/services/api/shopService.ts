@@ -11,7 +11,8 @@ export const useShopItems = () => {
     return {
         shopItems: qr.data ?? [],
         shopItemsState: qr.state,
-        shopItemsError: qr.error
+        shopItemsError: qr.error,
+        refetchShopItems: qr.refetch
     };
 }
 

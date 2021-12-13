@@ -21,11 +21,12 @@ export class ShopService {
         this._coinTransactionService = coinTransactionService;
     }
 
-    async getShopItemsAsync() {
+    async getShopItemsAsync(userId: number) {
 
         const shopItemViews = await this._ormService
             .getRepository(ShopItemView)
             .createQueryBuilder("siv")
+            .where("siv.userId = :userId", { userId })
             .getMany();
 
         return this._mapperService

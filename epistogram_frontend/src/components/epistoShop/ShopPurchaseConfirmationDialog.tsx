@@ -10,10 +10,11 @@ import { SlidesDisplay } from "../universal/SlidesDisplay";
 
 export const ShopPurchaseConfirmationDialog = (props: {
     dialogLogic: EpistoDialogLogicType,
-    shopItem: ShopItemDTO | null
+    shopItem: ShopItemDTO | null,
+    onSuccessfulPurchase: () => void
 }) => {
 
-    const { dialogLogic, shopItem } = props;
+    const { dialogLogic, shopItem, onSuccessfulPurchase } = props;
     const paging = usePaging([1, 2]);
     const isCourse = !!shopItem?.courseId;
 
@@ -30,6 +31,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
             await purchaseShopItemAsync({ shopItemId: shopItem.id });
             paging.next();
+            onSuccessfulPurchase();
         }
         catch (e) {
 
@@ -92,11 +94,11 @@ export const ShopPurchaseConfirmationDialog = (props: {
             </Typography>
 
             {/* details */}
-            {isCourse && <Typography>
+            {!isCourse && <Typography>
                 A kodod emailben is elkuldtuk Neked, hogy kesobb konnyen megtalalhasd!
             </Typography>}
 
-            {!isCourse && <EpistoButton
+            {isCourse && <EpistoButton
                 variant="colored">
 
                 Irany a tanfolyam!

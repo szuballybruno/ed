@@ -1,5 +1,7 @@
 SELECT
 	si.id,
+	u.id AS user_id,
+	ct.id IS NOT NULL AS is_purchased,
 	si.course_id,
 	CASE WHEN co.id IS NULL 
 		THEN si.name 
@@ -15,6 +17,12 @@ SELECT
 	END AS cover_file_path
 FROM shop_item si
 
+LEFT JOIN public.user u
+ON 1 = 1
+
+LEFT JOIN public.coin_transaction ct
+ON ct.shop_item_id = si.id AND ct.user_id = u.id
+
 LEFT JOIN public.course co
 ON co.id = si.course_id
 
@@ -26,3 +34,5 @@ ON sisf.id = si.cover_file_id
 
 LEFT JOIN public.storage_file cosf
 ON cosf.id = co.cover_file_id
+
+ORDER BY user_id, id
