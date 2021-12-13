@@ -1,10 +1,10 @@
-import {Box, Divider, Flex, Image, Textarea} from "@chakra-ui/react";
+import {Box, Flex, Image} from "@chakra-ui/react";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { EditSection } from "./EditSection";
 import { SelectImage } from "../../universal/SelectImage";
 import { EpistoEntry } from "../../universal/EpistoEntry";
-import {Slider, TextareaAutosize, Typography} from "@mui/material";
+import {Slider, Typography} from "@mui/material";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import React, {useEffect, useRef, useState} from "react";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
