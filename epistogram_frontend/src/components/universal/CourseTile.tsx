@@ -102,6 +102,7 @@ const CourseTile = (props: {
         borderRadius="10px"
         position="relative"
         overflow="hidden"
+        shadow={"0 0 10px 1px #CCC"}
         bg="white"
         justifyContent="space-between"
         border="5px solid white"

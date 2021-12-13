@@ -25,6 +25,7 @@ export const ShopItem = (props: {
         borderRadius="15px"
         position="relative"
         overflow="hidden"
+        shadow={"0 0 10px 1px #CCC"}
         bg="white"
         justifyContent="space-between"
         border={`5px solid ${isPurchased ? "gold" : "white"}`}
