@@ -20,11 +20,11 @@ VALUES
 ),
 (
     23,
-    '/images/SHOPipad.png'
+    '/images/SHOPlego.png'
 ),
 (
     24,
-    '/images/SHOPpcworld.png'
+    '/images/SHOPwindows.png'
 ),
 (
     25,
@@ -51,9 +51,9 @@ VALUES
         1,
         3, -- items
         20,
-        'Xiaomi Mi Router 4 Pro Gigabit Dual-Band 1317Mbps 2.4G/5.0GHz Vezeték nélküli router',
-        3900,
-        8000,
+        'Xiaomi Mi Router 4 Pro Vezeték nélküli router - 50% kedvezmény',
+        5000,
+        0,
         NULL
     ),
     (
@@ -70,7 +70,7 @@ VALUES
         1, -- courses 
         NULL,
         '',
-        13000,
+        3000,
         0,
         3
     ),
@@ -78,36 +78,36 @@ VALUES
         4,
         2, -- software,
         22,
-        'Office 365 Pro családi előfizetés csomag 1 évre, maximum 5 felhasználóig',
-        9900,
-        89000,
+        'Microsoft Office 2019 Professional Plus - 50% kedvezmény',
+        100,
+        0,
         NULL
     ),
     (
         5,
         3, -- items
         23,
-        'iPad Pro 2021 128 GB WIFI, Silver',
-        49000,
-        100000,
+        'LEGO Ford Mustang GT 1967 - 20% kedvezmény',
+        5000,
+        0,
         NULL
     ),
     (
         6,
-        3, -- items
+        2, -- items
         24,
-        '12 hónapos PCWorld előfizetés',
-        10000,
-        9800,
+        'Microsoft Windows 11 Pro - 50% kedvezmény',
+        300,
+        0,
         NULL
     ),
     (
         7,
         5, -- activities
         25,
-        'Exkluzív borkóstolás Egerben, 2 főre',
+        'Exkluzív borkóstolás Egerben, 2 főre - 50% kedvezmény',
         8000,
-        12000,
+        0,
         NULL
     ),
     (
@@ -115,7 +115,7 @@ VALUES
         3, -- items
         26,
         'Lenovo YOGA vezeték nélküli egér',
-        8000,
-        3000,
+        10000,
+        0,
         NULL
     )

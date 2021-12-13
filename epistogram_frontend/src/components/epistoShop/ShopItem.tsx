@@ -110,8 +110,8 @@ export const ShopItem = (props: {
                     }}
                     src={getAssetUrl("/images/epistoCoin.png")} alt={""} />
 
-                {/* currency price */}
-                {!!currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}
+                {/* currency price
+                {currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}*/}
             </Flex>
         </Flex>}
 
