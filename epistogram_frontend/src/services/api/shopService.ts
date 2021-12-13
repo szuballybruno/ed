@@ -2,6 +2,7 @@ import { ShopItemCategoryDTO } from "../../models/shared_models/ShopItemCategory
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { useReactQuery2 } from "../../static/frontendHelpers";
+import { usePostDataUnsafe } from "../core/httpClient";
 
 export const useShopItems = () => {
 
@@ -22,5 +23,15 @@ export const useShopItemCategories = () => {
         shopItemCategories: qr.data ?? [],
         shopItemCategoriesState: qr.state,
         shopItemCategoriesError: qr.error
+    };
+}
+
+export const usePurchaseShopItem = () => {
+
+    const qr = usePostDataUnsafe<{ shopItemId: number }, void>(apiRoutes.shop.purchaseShopItem);
+
+    return {
+        purchaseShopItemAsync: qr.postDataAsync,
+        purchaseShopItemState: qr.state
     };
 }

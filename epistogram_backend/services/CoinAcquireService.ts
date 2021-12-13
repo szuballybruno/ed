@@ -13,6 +13,17 @@ export class CoinAcquireService {
     private _eventService: EventService;
     private _coinTransactionService: CoinTransactionService;
 
+    private _coinRewardAmounts = {
+        questionCorrectAnswer: 1,
+        videoWatched: 1,
+        answerStreak5: 5,
+        answerStreak10: 15,
+        genericActivity: 10000,
+        activityStreak3Days: 10,
+        activityStreak5Days: 20,
+        activityStreak10Days: 50,
+    };
+
     constructor(coinTransactionService: CoinTransactionService, ormService: ORMConnectionService, es: EventService) {
 
         this._ormService = ormService;
@@ -42,7 +53,7 @@ export class CoinAcquireService {
     acquireVideoWatchedCoinsAsync = async (userId: number, videoId: number) => {
 
         await this._coinTransactionService
-            .makeCoinTransactionAsync({ userId, amount: 1, videoId });
+            .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.videoWatched, videoId });
     }
 
     /**
@@ -67,11 +78,11 @@ export class CoinAcquireService {
 
         // insert coin
         await this._coinTransactionService
-            .makeCoinTransactionAsync({ userId, amount: 1, givenAnswerId });
+            .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.questionCorrectAnswer, givenAnswerId });
 
         return {
             reason: "correct_answer",
-            amount: 1
+            amount: this._coinRewardAmounts.questionCorrectAnswer
         } as CoinAcquireResultDTO;
     }
 
@@ -87,10 +98,10 @@ export class CoinAcquireService {
         if (streakLength === 5 && prevCoinsGivenForStreak.length === 0) {
 
             await this._coinTransactionService
-                .makeCoinTransactionAsync({ userId, amount: 5, givenAnswerStreakId: streakId });
+                .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.answerStreak5, givenAnswerStreakId: streakId });
 
             return {
-                amount: 5,
+                amount: this._coinRewardAmounts.answerStreak5,
                 reason: "answer_streak_5"
             } as CoinAcquireResultDTO;
         }
@@ -98,10 +109,10 @@ export class CoinAcquireService {
         if (streakLength === 10 && prevCoinsGivenForStreak.length === 1) {
 
             await this._coinTransactionService
-                .makeCoinTransactionAsync({ userId, amount: 15, givenAnswerStreakId: streakId });
+                .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.answerStreak10, givenAnswerStreakId: streakId });
 
             return {
-                amount: 15,
+                amount: this._coinRewardAmounts.answerStreak10,
                 reason: "answer_streak_10"
             } as CoinAcquireResultDTO;
         }
@@ -141,7 +152,7 @@ export class CoinAcquireService {
 
         // add acquire 
         await this._coinTransactionService
-            .makeCoinTransactionAsync({ userId, amount: 10, activitySessionId });
+            .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.genericActivity, activitySessionId });
     }
 
     /**
@@ -180,7 +191,7 @@ export class CoinAcquireService {
             if (alreadyGivenCoinsLegth === 0 && currentActivityStreakLenght === 3) {
 
                 return {
-                    amount: 10,
+                    amount: this._coinRewardAmounts.activityStreak3Days,
                     reason: "activity_streak_3_days"
                 } as CoinAcquireResultDTO;
             }
@@ -188,7 +199,7 @@ export class CoinAcquireService {
             if (alreadyGivenCoinsLegth === 1 && currentActivityStreakLenght === 5) {
 
                 return {
-                    amount: 20,
+                    amount: this._coinRewardAmounts.activityStreak5Days,
                     reason: "activity_streak_5_days"
                 } as CoinAcquireResultDTO;
             }
@@ -196,7 +207,7 @@ export class CoinAcquireService {
             if (alreadyGivenCoinsLegth === 2 && currentActivityStreakLenght === 10) {
 
                 return {
-                    amount: 50,
+                    amount: this._coinRewardAmounts.activityStreak10Days,
                     reason: "activity_streak_10_days"
                 } as CoinAcquireResultDTO;
             }

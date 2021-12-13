@@ -161,6 +161,7 @@ import './utilities/jsExtensions';
     // shop 
     addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
     addEndpoint(apiRoutes.shop.getShopItemCategories, shopController.getShopItemCategoriesAction);
+    addEndpoint(apiRoutes.shop.purchaseShopItem, shopController.purchaseShopItemAction, { isPost: true });
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);

@@ -106,7 +106,7 @@ export const ShopItem = (props: {
         </Flex>
 
         {/* buttons */}
-        <Flex height="45px" mt="10px">
+        <Flex height="45px" margin="5px 5px 5px 5px">
 
             {/* item details */}
             <EpistoButton
