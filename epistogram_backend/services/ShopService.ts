@@ -1,11 +1,13 @@
 import { DiscountCode } from "../models/entity/DiscountCode";
 import { ShopItem } from "../models/entity/ShopItem";
 import { ShopItemCategory } from "../models/entity/ShopItemCategory";
+import { User } from "../models/entity/User";
 import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
 import { ShopItemDTO } from "../models/shared_models/ShopItemDTO";
 import { ShopItemView } from "../models/views/ShopItemView";
 import { CoinTransactionService } from "./CoinTransactionService";
 import { CourseService } from "./CourseService";
+import { EmailService } from "./EmailService";
 import { MapperService } from "./mapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
@@ -15,17 +17,20 @@ export class ShopService {
     private _mapperService: MapperService;
     private _coinTransactionService: CoinTransactionService;
     private _courseService: CourseService;
+    private _emailService: EmailService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
         coinTransactionService: CoinTransactionService,
-        courseService: CourseService) {
+        courseService: CourseService,
+        emailService: EmailService) {
 
         this._courseService = courseService;
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._coinTransactionService = coinTransactionService;
+        this._emailService = emailService;
     }
 
     async getShopItemsAsync(userId: number) {
@@ -88,6 +93,13 @@ export class ShopService {
                     id: discountCode.id,
                     userId: userId
                 });
+
+            const user = await this._ormService
+                .getRepository(User)
+                .findOneOrFail(userId);
+
+            await this._emailService
+                .sendDiscountCodePurchasedMailAsync(user, discountCode.code);
 
             return {
                 discountCode: discountCode.code

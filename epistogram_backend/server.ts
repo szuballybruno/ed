@@ -89,7 +89,7 @@ import './utilities/jsExtensions';
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService);
     const miscService = new MiscService(courseService);
     const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService);
-    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService);
+    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
