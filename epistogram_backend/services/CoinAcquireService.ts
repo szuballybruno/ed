@@ -18,7 +18,7 @@ export class CoinAcquireService {
         videoWatched: 1,
         answerStreak5: 5,
         answerStreak10: 15,
-        genericActivity: 10000,
+        genericActivity: 15000,
         activityStreak3Days: 10,
         activityStreak5Days: 20,
         activityStreak10Days: 50,

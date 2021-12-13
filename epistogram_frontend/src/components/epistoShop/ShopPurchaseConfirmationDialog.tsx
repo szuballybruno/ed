@@ -20,7 +20,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
     const showError = useShowErrorDialog();
 
-    const { purchaseShopItemAsync, purchaseShopItemState } = usePurchaseShopItem();
+    const { purchaseShopItemAsync, purchaseShopItemState, purchaseShopItemResult } = usePurchaseShopItem();
 
     const onConfirmPurchaseAsync = async () => {
 
@@ -90,7 +90,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
             <Typography>
                 {isCourse
                     ? "Mostantól megtalálhatod a Tanfolyamkeresőben is!"
-                    : `Kodod amit bevalthatsz a partner cegunknel: ${12312124}`}
+                    : `Kodod amit bevalthatsz a partner cegunknel: ${purchaseShopItemResult?.discountCode}`}
             </Typography>
 
             {/* details */}

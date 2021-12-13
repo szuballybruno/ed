@@ -5,6 +5,7 @@ import { ActivitySession } from "./ActivitySession";
 import { AnswerSession } from "./AnswerSession";
 import { CoinTransaction } from "./CoinTransaction";
 import { Course } from "./Course";
+import { DiscountCode } from "./DiscountCode";
 import { Event } from "./Event";
 import { JobTitle } from "./JobTitle";
 import { Organization } from "./Organization";
@@ -159,4 +160,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => UserCourseAccessBridge, x => x.user)
     courseAccessBridges: UserCourseAccessBridge[];
+
+    // discountCodes
+    @JoinColumn()
+    @OneToMany(_ => DiscountCode, x => x.user)
+    discountCodes: DiscountCode[];
 }

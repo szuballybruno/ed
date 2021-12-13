@@ -58,6 +58,7 @@ import { UserCourseAccessBridge } from "../../models/entity/UserCourseAccessBrid
 import { ShopItem } from "../../models/entity/ShopItem";
 import { ShopItemCategory } from "../../models/entity/ShopItemCategory";
 import { ShopItemView } from "../../models/views/ShopItemView";
+import { DiscountCode } from "../../models/entity/DiscountCode";
 
 export const dbSchema = {
 
@@ -175,6 +176,7 @@ export const dbSchema = {
         ActivationCode,
         UserCourseAccessBridge,
         ShopItem,
-        ShopItemCategory
+        ShopItemCategory,
+        DiscountCode
     ] as any[]
 }

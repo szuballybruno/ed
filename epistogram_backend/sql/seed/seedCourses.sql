@@ -17,8 +17,8 @@ INSERT INTO public.course
     (id, title, visibility, category_id, sub_category_id, teacher_id, cover_file_id)
 VALUES
     (1, 'Webfejlesztés kezdőknek (HTML, CSS, BOOTSTRAP)', DEFAULT, 1, 2, 1, 1),
-    (2, 'Java programozás mesterkurzus', 'private', 1, 3, 1, 2),
-    (3, 'Angular - Minden amire szükséged lehet', DEFAULT, 1, 4, 1, 3),
+    (2, 'Java programozás mesterkurzus', DEFAULT, 1, 3, 1, 2),
+    (3, 'Angular - Minden amire szükséged lehet', 'private', 1, 4, 1, 3),
     (4, 'Microsoft Excel Mesterkurzus', DEFAULT, 1, 5, 1, 4)
 
 ON CONFLICT (id) DO UPDATE SET 
