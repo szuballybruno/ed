@@ -86,9 +86,9 @@ export const dbSchema = {
         "user_stats_view",
         "user_session_daily_view",
         "activity_streak_view",
+        "shop_item_view",
         "coin_transaction_view",
-        "coin_balance_view",
-        "shop_item_view"
+        "coin_balance_view"
     ],
 
     functionScripts: [

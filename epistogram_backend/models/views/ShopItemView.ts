@@ -13,7 +13,13 @@ export class ShopItemView {
     courseId: number;
 
     @ViewColumn()
+    userId: number;
+
+    @ViewColumn()
     name: string;
+
+    @ViewColumn()
+    isPurchased: boolean;
 
     @ViewColumn()
     coinPrice: number;

@@ -3,7 +3,7 @@ import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/materi
 import { useContext, useState } from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { useCoinBalance } from "../../services/api/coinTransactionsApiService";
-import { useShopItemCategories, useShopItems } from "../../services/api/shopService";
+import { usePurchaseShopItem, useShopItemCategories, useShopItems } from "../../services/api/shopService";
 import { translatableTexts } from "../../static/translatableTexts";
 import classes from "../css/courseSearchMain.module.scss";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
@@ -12,7 +12,6 @@ import Navbar from "../navbar/Navbar";
 import { ProfileImage } from "../ProfileImage";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../system/MainPanels";
-import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoGrid } from "../universal/EpistoGrid";
 import { EpistoSearch } from "../universal/EpistoSearch";
 import { ShopItem } from "./ShopItem";
@@ -21,9 +20,9 @@ import { ShopPurchaseConfirmationDialog } from "./ShopPurchaseConfirmationDialog
 export const ShopPage = () => {
 
     // http
-    const { shopItems } = useShopItems();
+    const { shopItems, refetchShopItems } = useShopItems();
     const { shopItemCategories } = useShopItemCategories();
-    const { coinBalance } = useCoinBalance();
+    const { coinBalance, refetchCoinBalance } = useCoinBalance();
 
     const user = useContext(CurrentUserContext)!;
 
@@ -47,7 +46,11 @@ export const ShopPage = () => {
             {/* confirmation dialog */}
             <ShopPurchaseConfirmationDialog
                 dialogLogic={confirmationDilaogLogic}
-                shopItem={currentShopItem} />
+                shopItem={currentShopItem}
+                onSuccessfulPurchase={() => {
+                    refetchShopItems();
+                    refetchCoinBalance();
+                }} />
 
             {/* category filters left pane */}
             <LeftPanel direction="column" align="stretch">
@@ -151,5 +154,5 @@ export const ShopPage = () => {
                 </Flex>
             </RightPanel>
         </ContentWrapper>
-    </MainWrapper >
+    </MainWrapper>
 }

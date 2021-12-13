@@ -5,8 +5,8 @@ import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
 import { staticProvider } from "../staticProvider";
-import { ExamService } from "./ExamService2";
-import { VideoService } from "./VideoService2";
+import { ExamService } from "./ExamService";
+import { VideoService } from "./VideoService";
 
 export class ModuleService {
 

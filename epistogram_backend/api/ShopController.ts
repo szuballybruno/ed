@@ -13,12 +13,21 @@ export class ShopController {
     getShopItemsAction = async (params: ActionParams) => {
 
         return this._shopService
-            .getShopItemsAsync();
+            .getShopItemsAsync(params.userId);
     }
 
     getShopItemCategoriesAction = async (params: ActionParams) => {
 
         return this._shopService
             .getShopItemCategoriesAsync();
+    }
+
+    purchaseShopItemAction = async (params: ActionParams) => {
+
+        const body = params.getBody<{ shopItemId: number }>();
+        const shopItemId = body.getBodyValue(x => x.shopItemId);
+
+        return await this._shopService
+            .purchaseShopItemAsync(params.userId, shopItemId);
     }
 }

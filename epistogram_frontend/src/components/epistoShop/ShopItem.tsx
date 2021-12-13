@@ -7,6 +7,7 @@ import { getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../universal/EpistoButton";
 import { FlexFloat } from "../universal/FlexFloat";
+import StarsIcon from '@mui/icons-material/Stars';
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
@@ -16,71 +17,80 @@ export const ShopItem = (props: {
 } & FlexProps) => {
 
     const { shopItem, children, isSufficientFundsAvailable, handlePurchaseItem, ...css } = props;
-    const { name, coinPrice, coverFilePath, currencyPrice, shopItemCategoryName } = shopItem;
+    const { name, coinPrice, isPurchased, coverFilePath, currencyPrice, shopItemCategoryName } = shopItem;
 
     return <FlexFloat
         className="whall"
         direction="column"
-        borderRadius="10px"
+        borderRadius="15px"
         position="relative"
         overflow="hidden"
         bg="white"
         justifyContent="space-between"
-        border="5px solid white"
+        border={`5px solid ${isPurchased ? "gold" : "white"}`}
         {...css}>
 
-        {/* image  */}
-        <Flex direction={"column"}>
-            <Box flex="1" position="relative" minH={200} maxH={200}>
-                <Box position="relative"
-                    className="whall"
-                    minHeight="150px">
-                    <Box
-                        position="absolute"
-                        top="0"
-                        height="100%"
-                        width="100%"
-                        p="4px">
+        {/* cover image box */}
+        <Box flex="1" position="relative" minH={200} maxH={200}>
 
-                        <img
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                borderRadius: 10
-                            }}
-                            src={coverFilePath}
-                            alt="" />
+            {/* cover image */}
+            <img
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    position: 'absolute',
+                    borderRadius: 10
+                }}
+                src={coverFilePath}
+                alt="" />
 
-                        <Flex
-                            h="calc(100% - 8px)"
-                            width="calc(100% - 8px)"
-                            top="4"
-                            left="4"
-                            position="absolute">
+            {/* purchase overlay  */}
+            {isPurchased && <Flex
+                className="whall"
+                position="absolute"
+                align="flex-start"
+                justify="flex-end">
 
-                        </Flex>
-                    </Box>
-                </Box>
-            </Box>
+                <Flex
+                    background="gold"
+                    p="5px 5px 5px 10px"
+                    borderRadius="0 0 0 10px"
+                    boxShadow="0 0 20px 0px #00000035">
 
-            {/* title */}
-            <Box flexBasis="80px" zIndex={1}>
+                    <Typography
+                        className="fontLight"
+                        style={{
+                            marginRight: "5px",
+                        }}>
 
-                <Flex direction="column" p="10px" >
+                        Megvéve!
+                    </Typography>
 
-                    {/* category  */}
-                    <Text as="text" color="grey">
-                        {shopItemCategoryName}
-                    </Text>
-
-                    {/* title */}
-                    <Flex direction="column">
-                        <Text as="h6" fontWeight={"bold"} fontSize="large">{name}</Text>
-                    </Flex>
+                    <StarsIcon style={{ color: "white" }}></StarsIcon>
                 </Flex>
-            </Box>
-        </Flex>
+
+            </Flex>}
+        </Box>
+
+        {/* title */}
+        <Box flexBasis="80px" zIndex={1}>
+
+            <Flex direction="column" p="10px" >
+
+                {/* category  */}
+                <Text as="text" color="grey">
+                    {shopItemCategoryName}
+                </Text>
+
+                {/* title */}
+                <Flex direction="column">
+                    <Text as="h6" fontWeight={"bold"} fontSize="large">{name}</Text>
+                </Flex>
+            </Flex>
+        </Box>
+
+        {/* prices */}
         <Flex alignItems={"center"} justifyContent={"center"}>
             <Flex alignItems={"center"}>
                 <LocalOffer style={{
@@ -106,7 +116,7 @@ export const ShopItem = (props: {
         </Flex>
 
         {/* buttons */}
-        <Flex height="45px" mt="10px">
+        <Flex height="45px" margin="5px 5px 5px 5px">
 
             {/* item details */}
             <EpistoButton
@@ -116,14 +126,14 @@ export const ShopItem = (props: {
             </EpistoButton>
 
             {/* purcahase item */}
-            <EpistoButton
+            {!isPurchased && <EpistoButton
                 onClick={() => handlePurchaseItem(shopItem)}
                 variant="colored"
                 isDisabled={!isSufficientFundsAvailable}
                 style={{ flex: "1" }}>
 
                 {shopItem.courseId ? "Feloldom" : translatableTexts.shop.buy}
-            </EpistoButton>
+            </EpistoButton>}
         </Flex>
     </FlexFloat>
 }

@@ -1,6 +1,8 @@
 import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
+import { usePurchaseShopItem } from "../../services/api/shopService";
+import { useShowErrorDialog } from "../../services/core/notifications";
 import { usePaging } from "../../static/frontendHelpers";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
 import { EpistoButton } from "../universal/EpistoButton";
@@ -8,16 +10,33 @@ import { SlidesDisplay } from "../universal/SlidesDisplay";
 
 export const ShopPurchaseConfirmationDialog = (props: {
     dialogLogic: EpistoDialogLogicType,
-    shopItem: ShopItemDTO | null
+    shopItem: ShopItemDTO | null,
+    onSuccessfulPurchase: () => void
 }) => {
 
-    const { dialogLogic, shopItem } = props;
+    const { dialogLogic, shopItem, onSuccessfulPurchase } = props;
     const paging = usePaging([1, 2]);
     const isCourse = !!shopItem?.courseId;
 
-    const onConfirmPurchase = () => {
+    const showError = useShowErrorDialog();
 
-        paging.next();
+    const { purchaseShopItemAsync, purchaseShopItemState } = usePurchaseShopItem();
+
+    const onConfirmPurchaseAsync = async () => {
+
+        if (!shopItem)
+            return;
+
+        try {
+
+            await purchaseShopItemAsync({ shopItemId: shopItem.id });
+            paging.next();
+            onSuccessfulPurchase();
+        }
+        catch (e) {
+
+            showError(e);
+        }
     }
 
     const confirmationSlide = () => (
@@ -50,7 +69,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
             <EpistoButton
                 variant="colored"
-                onClick={onConfirmPurchase}>
+                onClick={onConfirmPurchaseAsync}>
 
                 Fizetés
             </EpistoButton>
@@ -75,11 +94,11 @@ export const ShopPurchaseConfirmationDialog = (props: {
             </Typography>
 
             {/* details */}
-            {isCourse && <Typography>
+            {!isCourse && <Typography>
                 A kodod emailben is elkuldtuk Neked, hogy kesobb konnyen megtalalhasd!
             </Typography>}
 
-            {!isCourse && <EpistoButton
+            {isCourse && <EpistoButton
                 variant="colored">
 
                 Irany a tanfolyam!

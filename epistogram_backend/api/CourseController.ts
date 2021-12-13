@@ -8,7 +8,7 @@ import { CourseEditDataDTO as CourseEditDataDTO } from "../models/shared_models/
 import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
-import { CourseService } from "../services/CourseService2";
+import { CourseService } from "../services/CourseService";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { toCourseDetailsDTO } from "../services/mappings";
 import { staticProvider } from "../staticProvider";

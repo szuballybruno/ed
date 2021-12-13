@@ -8,15 +8,15 @@ import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingRes
 import { VideoCompletedView } from "../models/views/VideoCompletedView";
 import { VideoProgressView } from "../models/views/VideoProgressView";
 import { staticProvider } from "../staticProvider";
-import { CourseService } from "./CourseService2";
+import { CourseService } from "./CourseService";
 import { readItemCode } from "./encodeService";
-import { ExamService } from "./ExamService2";
+import { ExamService } from "./ExamService";
 import { toVideoDTO } from "./mappings";
-import { ModuleService } from "./ModuleService2";
+import { ModuleService } from "./ModuleService";
 import { createAnswerSessionAsync } from "./questionAnswerService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
-import { VideoService } from "./VideoService2";
+import { VideoService } from "./VideoService";
 
 export class PlayerService {
 

@@ -5,7 +5,7 @@ import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { staticProvider } from "../staticProvider";
-import { CourseService } from "./CourseService2";
+import { CourseService } from "./CourseService";
 import { toOrganizationDTO } from "./mappings";
 
 export class MiscService {

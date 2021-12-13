@@ -20,6 +20,7 @@ export const useCoinBalance = () => {
     return {
         coinBalance: qr.data ?? 0,
         coinBalanceError: qr.error,
-        coinBalanceStatus: qr.state
+        coinBalanceStatus: qr.state,
+        refetchCoinBalance: qr.refetch
     }
 }

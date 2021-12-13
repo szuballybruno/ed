@@ -5,7 +5,7 @@ import { CreateExamDTO } from "../models/shared_models/CreateExamDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { getUserIdFromRequest } from "../services/authenticationService";
-import { ExamService } from "../services/ExamService2";
+import { ExamService } from "../services/ExamService";
 import { toQuestionDTO } from "../services/mappings";
 import { saveAssociatedQuestionsAsync } from "../services/questionService";
 import { staticProvider } from "../staticProvider";

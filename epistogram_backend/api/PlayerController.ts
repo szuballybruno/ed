@@ -1,8 +1,8 @@
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
-import { CourseService } from "../services/CourseService2";
+import { CourseService } from "../services/CourseService";
 import { PlayerService } from "../services/playerService";
-import { VideoService } from "../services/VideoService2";
+import { VideoService } from "../services/VideoService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class PlayerController {

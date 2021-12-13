@@ -65,8 +65,12 @@
 
 /* font colors */
 
-.fontColorSecondary {
+.fontDark {
   color: #646464 !important;
+}
+
+.fontLight {
+  color: #ffffff !important;
 }
 
 /* sqares  */
