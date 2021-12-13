@@ -29,10 +29,11 @@ export const useShopItemCategories = () => {
 
 export const usePurchaseShopItem = () => {
 
-    const qr = usePostDataUnsafe<{ shopItemId: number }, void>(apiRoutes.shop.purchaseShopItem);
+    const qr = usePostDataUnsafe<{ shopItemId: number }, { discountCode: number }>(apiRoutes.shop.purchaseShopItem);
 
     return {
         purchaseShopItemAsync: qr.postDataAsync,
-        purchaseShopItemState: qr.state
+        purchaseShopItemState: qr.state,
+        purchaseShopItemResult: qr.result
     };
 }

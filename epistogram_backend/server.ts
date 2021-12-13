@@ -86,10 +86,10 @@ import './utilities/jsExtensions';
     const examService = new ExamService(userCourseBridgeService);
     const videoService = new VideoService(ormConnectionService, userCourseBridgeService);
     const moduleService = new ModuleService(examService, videoService);
-    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService);
+    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService);
     const miscService = new MiscService(courseService);
     const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService);
-    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService);
+    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);

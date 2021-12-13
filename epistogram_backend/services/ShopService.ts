@@ -1,10 +1,11 @@
-import { CoinTransaction } from "../models/entity/CoinTransaction";
+import { DiscountCode } from "../models/entity/DiscountCode";
 import { ShopItem } from "../models/entity/ShopItem";
 import { ShopItemCategory } from "../models/entity/ShopItemCategory";
 import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
 import { ShopItemDTO } from "../models/shared_models/ShopItemDTO";
 import { ShopItemView } from "../models/views/ShopItemView";
 import { CoinTransactionService } from "./CoinTransactionService";
+import { CourseService } from "./CourseService";
 import { MapperService } from "./mapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
@@ -13,9 +14,15 @@ export class ShopService {
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
     private _coinTransactionService: CoinTransactionService;
+    private _courseService: CourseService;
 
-    constructor(ormService: ORMConnectionService, mapperService: MapperService, coinTransactionService: CoinTransactionService) {
+    constructor(
+        ormService: ORMConnectionService,
+        mapperService: MapperService,
+        coinTransactionService: CoinTransactionService,
+        courseService: CourseService) {
 
+        this._courseService = courseService;
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._coinTransactionService = coinTransactionService;
@@ -56,5 +63,35 @@ export class ShopService {
                 userId,
                 shopItemId: shopItem.id
             });
+
+        // unlock course 
+        if (shopItem.courseId) {
+
+            await this._courseService
+                .createCourseAccessBridge(userId, shopItem.courseId);
+        }
+
+        // get item discount code
+        else {
+
+            const discountCode = await this._ormService
+                .getRepository(DiscountCode)
+                .createQueryBuilder("dc")
+                .where("dc.userId IS NULL")
+                .andWhere("dc.shopItemId = :shopItemId", { shopItemId })
+                .limit(1)
+                .getOneOrFail();
+
+            await this._ormService
+                .getRepository(DiscountCode)
+                .save({
+                    id: discountCode.id,
+                    userId: userId
+                });
+
+            return {
+                discountCode: discountCode.code
+            };
+        }
     }
 }

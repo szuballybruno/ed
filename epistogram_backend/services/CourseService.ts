@@ -2,6 +2,7 @@ import { Course } from "../models/entity/Course";
 import { CourseCategory } from "../models/entity/CourseCategory";
 import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
+import { UserCourseAccessBridge } from "../models/entity/UserCourseAccessBridge";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { TextDTO } from "../models/shared_models/TextDTO";
@@ -11,10 +12,10 @@ import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseView } from "../models/views/CourseView";
-import { staticProvider } from "../staticProvider";
 import { getItemCode, readItemCode } from "./encodeService";
 import { toCourseAdminShortDTO, toCourseEditDataDTO, toCourseItemDTO, toCourseShortDTO } from "./mappings";
 import { ModuleService } from "./ModuleService";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { VideoService } from "./VideoService";
 
@@ -23,21 +24,23 @@ export class CourseService {
     private _moduleService: ModuleService;
     private _userCourseBridgeService: UserCourseBridgeService;
     private _videoService: VideoService;
+    private _ormService: ORMConnectionService;
 
     constructor(
         moduleService: ModuleService,
         userCourseBridgeService: UserCourseBridgeService,
-        videoService: VideoService) {
+        videoService: VideoService,
+        ormService: ORMConnectionService) {
 
         this._moduleService = moduleService;
         this._userCourseBridgeService = userCourseBridgeService;
         this._videoService = videoService;
+        this._ormService = ormService;
     }
 
     getCourseProgressDataAsync = async (userId: number) => {
 
-        const courses = await staticProvider
-            .ormConnection
+        const courses = await this._ormService
             .getRepository(CourseView)
             .createQueryBuilder("cv")
             .leftJoinAndSelect("cv.teacher", "t")
@@ -69,8 +72,7 @@ export class CourseService {
 
     getCourseItemsDescriptorCodesAsync = async (userId: number, courseId: number) => {
 
-        const course = await staticProvider
-            .ormConnection
+        const course = await this._ormService
             .getRepository(Course)
             .createQueryBuilder("c")
             .where("c.id = :courseId", { courseId })
@@ -91,8 +93,7 @@ export class CourseService {
     getCurrentCourseItemsAsync = async (userId: number) => {
 
         // get current item 
-        const courseBridge = await staticProvider
-            .ormConnection
+        const courseBridge = await this._ormService
             .getRepository(UserCourseBridge)
             .findOne({
                 where: {
@@ -141,8 +142,7 @@ export class CourseService {
 
     getCourseModulesAsync = async (userId: number, courseId: number) => {
 
-        const views = await staticProvider
-            .ormConnection
+        const views = await this._ormService
             .getRepository(CourseItemStateView)
             .createQueryBuilder("cisv")
             .where("cisv.courseId = :courseId", { courseId })
@@ -186,8 +186,7 @@ export class CourseService {
         if (itemType === "exam")
             return (await this.getExamByIdAsync(itemId)).courseId;
 
-        return (await staticProvider
-            .ormConnection
+        return (await this._ormService
             .getRepository(CourseModule)
             .findOneOrFail(itemId)).courseId;
     }
@@ -205,8 +204,7 @@ export class CourseService {
 
     startCourseAsync = async (userId: number, courseId: number) => {
 
-        const module = await staticProvider
-            .ormConnection
+        const module = await this._ormService
             .getRepository(CourseModule)
             .findOne({
                 where: {
@@ -236,8 +234,7 @@ export class CourseService {
         // insert new bridge
         if (!currentCourseBridge) {
 
-            await staticProvider
-                .ormConnection
+            await this._ormService
                 .getRepository(UserCourseBridge)
                 .insert({
                     courseId: courseId,
@@ -250,8 +247,7 @@ export class CourseService {
         // update current video/exam id 
         else {
 
-            await staticProvider
-                .ormConnection
+            await this._ormService
                 .getRepository(UserCourseBridge)
                 .save({
                     id: currentCourseBridge.id,
@@ -260,8 +256,7 @@ export class CourseService {
         }
 
         // get all bridges for user 
-        const bridges = await staticProvider
-            .ormConnection
+        const bridges = await this._ormService
             .getRepository(UserCourseBridge)
             .find({
                 where: {
@@ -270,8 +265,7 @@ export class CourseService {
             });
 
         // update current bridge 
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(UserCourseBridge)
             .save(bridges
                 .map(bridge => ({
@@ -288,8 +282,7 @@ export class CourseService {
         if (!userCourseBridge)
             throw new Error("User course bridge not found!");
 
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(UserCourseBridge)
             .save({
                 courseId: courseId,
@@ -301,8 +294,7 @@ export class CourseService {
 
     getExamByIdAsync = (examId: number) => {
 
-        return staticProvider
-            .ormConnection
+        return this._ormService
             .getRepository(Exam)
             .findOneOrFail(examId);
     }
@@ -310,15 +302,13 @@ export class CourseService {
     getCourseEditDataAsync = async (courseId: number) => {
 
         // get course 
-        const views = await staticProvider
-            .ormConnection
+        const views = await this._ormService
             .getRepository(CourseAdminDetailedView)
             .createQueryBuilder("course")
             .where("course.id = :courseId", { courseId: courseId })
             .getMany();
 
-        const categories = await staticProvider
-            .ormConnection
+        const categories = await this._ormService
             .getRepository(CourseCategory)
             .createQueryBuilder("cc")
             .leftJoinAndSelect("cc.childCategories", "ccc")
@@ -330,8 +320,7 @@ export class CourseService {
 
     getAdminCoursesAsync = async () => {
 
-        const courseAdminShortViews = await staticProvider
-            .ormConnection
+        const courseAdminShortViews = await this._ormService
             .getRepository(CourseAdminShortView)
             .createQueryBuilder()
             .getMany();
@@ -343,8 +332,8 @@ export class CourseService {
     deleteCourseAsync = async (courseId: number) => {
 
         // delete user course bridges
-        await staticProvider
-            .ormConnection
+        await this._ormService
+            .getOrmConnection()
             .createQueryBuilder()
             .delete()
             .from(UserCourseBridge)
@@ -352,8 +341,7 @@ export class CourseService {
             .execute();
 
         // delete modules 
-        const modules = await staticProvider
-            .ormConnection
+        const modules = await this._ormService
             .getRepository(CourseModule)
             .createQueryBuilder("m")
             .where('"m"."course_id" = :courseId', { courseId })
@@ -363,8 +351,7 @@ export class CourseService {
             .deleteModulesAsync(modules.map(x => x.id));
 
         // delete course 
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(Course)
             .delete(courseId);
 
@@ -372,8 +359,7 @@ export class CourseService {
 
     getAvailableCoursesAsync = async (userId: number) => {
 
-        const courses = await staticProvider
-            .ormConnection
+        const courses = await this._ormService
             .getRepository(CourseView)
             .createQueryBuilder("cv")
             .where("cv.userId = :userId", { userId })
@@ -383,5 +369,15 @@ export class CourseService {
 
         return courses
             .map(course => toCourseShortDTO(course));
+    }
+
+    async createCourseAccessBridge(userId: number, courseId: number) {
+
+        await this._ormService
+            .getRepository(UserCourseAccessBridge)
+            .insert({
+                courseId,
+                userId
+            });
     }
 }

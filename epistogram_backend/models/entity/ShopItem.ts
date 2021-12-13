@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CoinTransaction } from "./CoinTransaction";
 import { Course } from "./Course";
+import { DiscountCode } from "./DiscountCode";
 import { ShopItemCategory } from "./ShopItemCategory";
 import { StorageFile } from "./StorageFile";
 
@@ -47,4 +48,9 @@ export class ShopItem {
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.shopItem)
     coinAcquires: CoinTransaction[];
+
+    // discount codes
+    @JoinColumn()
+    @ManyToOne(_ => DiscountCode, x => x.shopItem)
+    discountCodes: DiscountCode[];
 }

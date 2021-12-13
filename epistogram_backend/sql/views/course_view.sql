@@ -35,10 +35,10 @@ LEFT JOIN public.course_category AS csc
 ON csc.id = course.sub_category_id
 	
 LEFT JOIN public.user_course_access_bridge ucab
-ON ucab.user_id = u.id
+ON ucab.user_id = u.id AND ucab.course_id = course.id
 	
 ORDER BY 
-	course.title DESC,
-	u.id
+	u.id,
+	course.title DESC
 
 

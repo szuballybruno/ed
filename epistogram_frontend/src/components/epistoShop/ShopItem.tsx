@@ -91,7 +91,7 @@ export const ShopItem = (props: {
         </Box>
 
         {/* prices */}
-        <Flex alignItems={"center"} justifyContent={"center"}>
+        {!isPurchased && <Flex alignItems={"center"} justifyContent={"center"}>
             <Flex alignItems={"center"}>
                 <LocalOffer style={{
                     height: 17,
@@ -111,9 +111,9 @@ export const ShopItem = (props: {
                     src={getAssetUrl("/images/epistoCoin.png")} alt={""} />
 
                 {/* currency price */}
-                {currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}
+                {!!currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}
             </Flex>
-        </Flex>
+        </Flex>}
 
         {/* buttons */}
         <Flex height="45px" margin="5px 5px 5px 5px">
