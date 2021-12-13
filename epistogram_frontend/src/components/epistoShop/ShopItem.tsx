@@ -4,16 +4,19 @@ import { Typography } from "@mui/material";
 import React from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { getAssetUrl } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoButton } from "../universal/EpistoButton";
 import { FlexFloat } from "../universal/FlexFloat";
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
     isSufficientFundsAvailable: boolean,
     tempIsStartedSwitch?: boolean,
+    handlePurchaseItem: (shopItem: ShopItemDTO) => void
 } & FlexProps) => {
 
-    const { shopItem, children, isSufficientFundsAvailable, ...css } = props;
-    const { name, coinPrice, coverFilePath, currencyPrice, shopItemCategoryId, shopItemCategoryName } = shopItem;
+    const { shopItem, children, isSufficientFundsAvailable, handlePurchaseItem, ...css } = props;
+    const { name, coinPrice, coverFilePath, currencyPrice, shopItemCategoryName } = shopItem;
 
     return <FlexFloat
         className="whall"
@@ -59,9 +62,6 @@ export const ShopItem = (props: {
                         </Flex>
                     </Box>
                 </Box>
-
-                {/* done overlay */}
-
             </Box>
 
             {/* title */}
@@ -104,8 +104,26 @@ export const ShopItem = (props: {
                 {currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}
             </Flex>
         </Flex>
-        <Flex direction="column" minH="50px">
-            {children}
+
+        {/* buttons */}
+        <Flex height="45px" mt="10px">
+
+            {/* item details */}
+            <EpistoButton
+                onClick={() => { }}
+                style={{ flex: "1" }}>
+                {translatableTexts.shop.description}
+            </EpistoButton>
+
+            {/* purcahase item */}
+            <EpistoButton
+                onClick={() => handlePurchaseItem(shopItem)}
+                variant="colored"
+                isDisabled={!isSufficientFundsAvailable}
+                style={{ flex: "1" }}>
+
+                {shopItem.courseId ? "Feloldom" : translatableTexts.shop.buy}
+            </EpistoButton>
         </Flex>
     </FlexFloat>
 }

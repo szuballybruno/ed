@@ -36,7 +36,6 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
 
     const { variant: _, ...buttonProps } = props.buttonProps ?? { variant: null };
 
-
     return <Button
         onClick={onClick}
         name={name}
@@ -54,11 +53,11 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             whiteSpace: "nowrap",
             minWidth: "0px",
             color: isDisabled
-                ? "var(--whiteGray)"
+                ? "white"
                 : variant === "colored"
                     ? "white"
                     : "black",
-            background: isDisabled && variant === "colored" ? "var(--mildGrey)" : undefined,
+            // background: isDisabled && variant === "colored" ? "var(--mildGrey)" : undefined,
             margin: "0px",
             borderRadius: isRound ? "50%" : "7px",
             width: size,

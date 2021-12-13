@@ -142,27 +142,8 @@ export const ShopPage = () => {
                                         <ShopItem
                                             shopItem={shopItem}
                                             isSufficientFundsAvailable={coinBalance >= shopItem.coinPrice}
-                                            key={index} >
-
-                                            <Flex mt="10px">
-
-                                                {/* item details */}
-                                                <EpistoButton
-                                                    onClick={() => { }}
-                                                    style={{ flex: "1" }}>
-                                                    {translatableTexts.shop.description}
-                                                </EpistoButton>
-
-                                                {/* purcahase item */}
-                                                <EpistoButton
-                                                    onClick={() => handlePurchaseItem(shopItem)}
-                                                    variant="colored"
-                                                    style={{ flex: "1" }}>
-
-                                                    {shopItem.courseId ? "Feloldom" : translatableTexts.shop.buy}
-                                                </EpistoButton>
-                                            </Flex>
-                                        </ShopItem>
+                                            handlePurchaseItem={handlePurchaseItem}
+                                            key={index} />
                                     </GridItem>
                                 })}
                         </EpistoGrid>
