@@ -13,5 +13,15 @@ VALUES
 (
     2,
     'EPISTOXROUTER2',
-    2
+    1
+),
+(
+    3,
+    'EPISTOXROUTER3',
+    1
+),
+(
+    4,
+    'EPISTOXROUTER4',
+    1
 );

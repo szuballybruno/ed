@@ -17,7 +17,8 @@ export const ShopItem = (props: {
 } & FlexProps) => {
 
     const { shopItem, children, isSufficientFundsAvailable, handlePurchaseItem, ...css } = props;
-    const { name, coinPrice, isPurchased, coverFilePath, currencyPrice, shopItemCategoryName } = shopItem;
+    const { name, coinPrice, canPurchase, purchaseCount, coverFilePath, currencyPrice, shopItemCategoryName } = shopItem;
+    const isPurchased = purchaseCount > 0;
 
     return <FlexFloat
         className="whall"
@@ -127,13 +128,17 @@ export const ShopItem = (props: {
             </EpistoButton>
 
             {/* purcahase item */}
-            {!isPurchased && <EpistoButton
+            {canPurchase && <EpistoButton
                 onClick={() => handlePurchaseItem(shopItem)}
                 variant="colored"
                 isDisabled={!isSufficientFundsAvailable}
-                style={{ flex: "1" }}>
+                style={{ flex: "1", overflowWrap: "break-word" }}>
 
-                {shopItem.courseId ? "Feloldom" : translatableTexts.shop.buy}
+                {shopItem.courseId
+                    ? "Feloldom"
+                    : isPurchased
+                        ? translatableTexts.shop.buyAgain
+                        : translatableTexts.shop.buy}
             </EpistoButton>}
         </Flex>
     </FlexFloat>

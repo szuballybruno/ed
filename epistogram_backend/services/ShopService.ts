@@ -79,13 +79,16 @@ export class ShopService {
         // get item discount code
         else {
 
-            const discountCode = await this._ormService
+            const discountCodes = await this._ormService
                 .getRepository(DiscountCode)
                 .createQueryBuilder("dc")
                 .where("dc.userId IS NULL")
                 .andWhere("dc.shopItemId = :shopItemId", { shopItemId })
-                .limit(1)
-                .getOneOrFail();
+                .getMany();
+
+            const discountCode = discountCodes[0];
+            if (!discountCode)
+                throw new Error("No more unused discount codes for the selected item!");
 
             await this._ormService
                 .getRepository(DiscountCode)

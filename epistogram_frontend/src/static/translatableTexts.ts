@@ -194,7 +194,8 @@ export const translatableTexts = {
 
     shop: {
         description: "Leírás",
-        buy: "Megveszem"
+        buy: "Megveszem",
+        buyAgain: "Megveszem mégegyszer"
     },
 
     learningOverview: {
