@@ -1,7 +1,7 @@
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSampleDTO";
 import { CourseService } from "../services/CourseService";
-import { PlayerService } from "../services/playerService";
+import { PlayerService } from "../services/PlayerService2";
 import { VideoService } from "../services/VideoService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -20,13 +20,14 @@ export class PlayerController {
 
     answerVideoQuestionAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
-        const answerIds = withValueOrBadRequest<number[]>(dto.answerIds);
-        const questionId = withValueOrBadRequest<number>(dto.questionId, "number");
-        const answerSessionId = withValueOrBadRequest<number>(dto.answerSessionId, "number");
+        const dto = params.getBody<AnswerQuestionDTO>();
+        const answerIds = dto.getValue(x => x.answerIds);
+        const questionId = dto.getValue(x => x.questionId, "int");
+        const answerSessionId = dto.getValue(x => x.answerSessionId, "int");
+        const elapsedSeconds = dto.getValue(x => x.elapsedSeconds, "float");
 
         return this._videoService
-            .answerVideoQuestionAsync(params.userId, answerSessionId, questionId, answerIds);
+            .answerVideoQuestionAsync(params.userId, answerSessionId, questionId, answerIds, elapsedSeconds);
     };
 
     saveVideoPlaybackSampleAction = (params: ActionParams) => {

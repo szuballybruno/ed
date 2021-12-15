@@ -4,26 +4,36 @@ import { Question } from "../models/entity/Question";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { ExamResultView } from "../models/views/ExamResultView";
-import { staticProvider } from "../staticProvider";
 import { readItemCode } from "./encodeService";
 import { toExamDTO, toExamResultDTO } from "./mappings";
-import { answerQuestionAsync } from "./questionAnswerService";
+import { QuestionAnswerService } from "./questionAnswerService";
 import { deleteQuesitonsAsync } from "./questionService";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
+import { UserSessionActivityService } from "./userSessionActivityService";
 
 export class ExamService {
 
     private _userCourseBridgeService: UserCourseBridgeService;
+    private _ormService: ORMConnectionService;
+    private _userSessionActivityService: UserSessionActivityService;
+    private _quesitonAnswerService: QuestionAnswerService;
 
-    constructor(userCourseBridgeService: UserCourseBridgeService) {
+    constructor(
+        userCourseBridgeService: UserCourseBridgeService,
+        ormService: ORMConnectionService,
+        userSessionActivityService: UserSessionActivityService,
+        quesitonAnswerService: QuestionAnswerService) {
 
         this._userCourseBridgeService = userCourseBridgeService;
+        this._ormService = ormService;
+        this._userSessionActivityService = userSessionActivityService;
+        this._quesitonAnswerService = quesitonAnswerService;
     }
 
     getExamDTOAsync = async (examId: number) => {
 
-        const exam = await staticProvider
-            .ormConnection
+        const exam = await this._ormService
             .getRepository(Exam)
             .createQueryBuilder("e")
             .where("e.id = :examId", { examId })
@@ -39,22 +49,52 @@ export class ExamService {
         return toExamDTO(exam);
     }
 
+    async startExamAsync(answerSessionId: number) {
+
+        await this._ormService
+            .getRepository(AnswerSession)
+            .save({
+                id: answerSessionId,
+                startDate: new Date()
+            });
+    }
+
     answerExamQuestionAsync = async (userId: number, dto: AnswerQuestionDTO) => {
 
         // validation comes here 
 
         // save user activity
-        await staticProvider
-            .services
-            .userSessionActivityService
+        await this._userSessionActivityService
             .saveUserSessionActivityAsync(userId, "exam");
 
-        return answerQuestionAsync(
-            userId,
-            dto.answerSessionId,
-            dto.questionId,
-            dto.answerIds,
-            true);
+        // inspect questions
+        const questions = await this._ormService
+            .getRepository(Question)
+            .createQueryBuilder("q")
+            .leftJoinAndSelect("q.exam", "e")
+            .leftJoinAndSelect("e.answerSessions", "as")
+            .where("as.id = :asid", { asid: dto.answerSessionId })
+            .orderBy("q.orderIndex")
+            .getMany();
+
+        const isLast = questions[questions.length - 1].id === dto.questionId;
+
+        // if last, set answer session end date 
+        if (isLast)
+            await this._ormService
+                .getRepository(AnswerSession)
+                .save({
+                    id: dto.answerSessionId,
+                    endDate: new Date()
+                });
+
+        return this._quesitonAnswerService
+            .answerQuestionAsync(
+                userId,
+                dto.answerSessionId,
+                dto.questionId,
+                dto.answerIds,
+                true);
     }
 
     deleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem: boolean) => {
@@ -63,8 +103,7 @@ export class ExamService {
             return;
 
         // delete exam quesitons 
-        const questions = await staticProvider
-            .ormConnection
+        const questions = await this._ormService
             .getRepository(Question)
             .createQueryBuilder()
             .where('"exam_id" IN (:...examIds)', { examIds })
@@ -73,8 +112,8 @@ export class ExamService {
         await deleteQuesitonsAsync(questions.map(x => x.id));
 
         // delete answer sessions
-        await staticProvider
-            .ormConnection
+        await this._ormService
+            .getOrmConnection()
             .createQueryBuilder()
             .delete()
             .from(AnswerSession)
@@ -92,8 +131,8 @@ export class ExamService {
         }
 
         // delete exam
-        await staticProvider
-            .ormConnection
+        await this._ormService
+            .getOrmConnection()
             .createQueryBuilder()
             .delete()
             .from(Exam)
@@ -103,8 +142,7 @@ export class ExamService {
 
     getExamResultsAsync = async (userId: number, answerSessionId: number) => {
 
-        const bridge = await staticProvider
-            .ormConnection
+        const bridge = await this._ormService
             .getRepository(UserCourseBridge)
             .findOneOrFail({
                 where: {
@@ -121,8 +159,7 @@ export class ExamService {
         if (itemType !== "exam")
             throw new Error("Current item is not an exam!");
 
-        const examCompletedViews = await staticProvider
-            .ormConnection
+        const examCompletedViews = await this._ormService
             .getRepository(ExamResultView)
             .find({
                 where: {

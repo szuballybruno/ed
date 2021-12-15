@@ -5,6 +5,7 @@ CREATE OR REPLACE FUNCTION answer_question_fn
 	param_answer_session_id integer,
 	param_question_id integer,
 	param_answer_ids integer[],
+	param_elapsed_seconds double precision,
 	param_is_practise_answer boolean
 )
 RETURNS TABLE 
@@ -97,7 +98,8 @@ BEGIN
 		question_id,
 		answer_session_id,
 		is_correct,
-		given_answer_streak_id
+		given_answer_streak_id,
+		elapsed_seconds
 	)
 	VALUES
 	(
@@ -106,7 +108,8 @@ BEGIN
 		param_question_id,
 		param_answer_session_id,
 		var_is_correct,
-		var_previous_streak_id
+		var_previous_streak_id,
+		param_elapsed_seconds
 	)
 	RETURNING id
 	INTO var_given_answer_id;

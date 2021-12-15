@@ -190,6 +190,11 @@ export const isNullOrUndefined = (o: any) => {
     return o === undefined || o === null;
 }
 
+export const epochDates = (dateA: Date, dateB: Date) => {
+
+    return Math.abs((dateA.getTime() - dateB.getTime()) / 1000);
+}
+
 export const usePaging = <T>(
     items: T[],
     onPreviousOverNavigation?: () => void,

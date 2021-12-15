@@ -112,6 +112,7 @@ export const apiRoutes = {
         createExam: "/exam/create-exam",
         deleteExam: "/exam/delete-exam",
         answerExamQuestion: "/exam/answer-exam-question",
-        getExamResults: "/exam/get-exam-results"
+        getExamResults: "/exam/get-exam-results",
+        startExam: "/exam/start-exam"
     }
 }

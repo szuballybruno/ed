@@ -6,7 +6,7 @@ import { DailyTipView } from "../models/views/DailyTipView";
 import { requestChangePasswordAsync } from "../services/authenticationService";
 import { toDailyTipDTO } from "../services/mappings";
 import { MiscService } from "../services/MiscService";
-import { getPractiseQuestionAsync } from "../services/practiseQuestionsService";
+import { PractiseQuestionService } from "../services/PractiseQuestionService";
 import { createRegistrationToken } from "../services/tokenService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
@@ -14,10 +14,12 @@ import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 export class MiscController {
 
     private _miscService: MiscService;
+    private _practiseQuestionService: PractiseQuestionService;
 
-    constructor(miscService: MiscService) {
+    constructor(miscService: MiscService, practiseQuestionService: PractiseQuestionService) {
 
         this._miscService = miscService;
+        this._practiseQuestionService = practiseQuestionService;
     }
 
     getCurrentCourseItemCodeAction = async (parms: ActionParams) => {
@@ -78,7 +80,8 @@ export class MiscController {
 
     getPractiseQuestionAction = async (params: ActionParams) => {
 
-        return await getPractiseQuestionAsync(params.userId);
+        return await this._practiseQuestionService
+            .getPractiseQuestionAsync(params.userId);
     };
 
     getDailyTipAction = async (params: ActionParams) => {
