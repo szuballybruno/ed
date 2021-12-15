@@ -1,10 +1,10 @@
 import React from 'react';
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { Bar, Doughnut, Line, Pie, Radar } from "react-chartjs-2";
-import { LearningStatisticsSeciton } from '../../learningStatistics/LearningStatisticsSeciton';
 import { getAssetUrl } from "../../../static/frontendHelpers";
 import { Flex } from "@chakra-ui/react";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { LearningStatisticsSeciton } from '../../learningInsights/LearningStatisticsSeciton';
 
 
 const AdminStatistics = () => {
@@ -44,63 +44,6 @@ const AdminStatistics = () => {
             }
         ]
     };
-
-
-    // const data2 = {
-    //     labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
-    //     datasets: [
-    //         {
-    //             label: 'Unfilled',
-    //             fill: false,
-    //             backgroundColor: "#067daf",
-    //             borderColor: "#067daf",
-    //             data: [57, 26, 31, -42, 34],
-    //         },
-    //         {
-    //             label: 'Dashed',
-    //             fill: false,
-    //             backgroundColor: "#d9617d",
-    //             borderColor: "#D9617DFF",
-    //             borderDash: [5, 5],
-    //             data: [5, -59, 72, 32, -19, 23],
-    //             type: 'line'
-    //         }
-    //     ]
-    // };
-
-
-    const data3 = [];
-    const data4 = [];
-    let prev = 100;
-    let prev2 = 80;
-    for (let i = 0; i < 1000; i++) {
-        prev += 5 - Math.random() * 10;
-        // @ts-ignore
-        data3.push({ x: i, y: prev });
-        prev2 += 5 - Math.random() * 10;
-        // @ts-ignore
-        data4.push({ x: i, y: prev2 });
-    }
-
-    // const data5 = {
-    //     labels: ["Január", "Február", "Március", "Április", "Május", "Június"],
-    //     datasets: [
-    //         {
-    //             label: 'Unfilled',
-    //             backgroundColor: "#067daf",
-    //             borderColor: "#067daf",
-    //             data: data3,
-    //             radius: 0
-    //         }, {
-    //             label: 'Dashed',
-    //             backgroundColor: "#d9617d",
-    //             borderColor: "#D9617DFF",
-    //             borderDash: [5, 5],
-    //             radius: 0,
-    //             data: data4,
-    //         }
-    //     ]
-    // };
 
     return (
         <Flex>

@@ -89,7 +89,7 @@ import './utilities/jsExtensions';
     const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService);
     const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService);
     const moduleService = new ModuleService(examService, videoService);
-    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService);
+    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService);
     const miscService = new MiscService(courseService);
     const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);

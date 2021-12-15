@@ -4,6 +4,7 @@ import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { UserCourseAccessBridge } from "../models/entity/UserCourseAccessBridge";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { CourseLearningDTO } from "../models/shared_models/CourseLearningDTO";
 import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { TextDTO } from "../models/shared_models/TextDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
@@ -11,8 +12,10 @@ import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
+import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView";
 import { CourseView } from "../models/views/CourseView";
 import { getItemCode, readItemCode } from "./encodeService";
+import { MapperService } from "./mapperService";
 import { toCourseAdminShortDTO, toCourseEditDataDTO, toCourseItemDTO, toCourseShortDTO } from "./mappings";
 import { ModuleService } from "./ModuleService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -25,47 +28,48 @@ export class CourseService {
     private _userCourseBridgeService: UserCourseBridgeService;
     private _videoService: VideoService;
     private _ormService: ORMConnectionService;
+    private _mapperService: MapperService;
 
     constructor(
         moduleService: ModuleService,
         userCourseBridgeService: UserCourseBridgeService,
         videoService: VideoService,
-        ormService: ORMConnectionService) {
+        ormService: ORMConnectionService,
+        mapperService: MapperService) {
 
         this._moduleService = moduleService;
         this._userCourseBridgeService = userCourseBridgeService;
         this._videoService = videoService;
         this._ormService = ormService;
+        this._mapperService = mapperService;
     }
 
     getCourseProgressDataAsync = async (userId: number) => {
 
         const courses = await this._ormService
-            .getRepository(CourseView)
-            .createQueryBuilder("cv")
-            .leftJoinAndSelect("cv.teacher", "t")
-            .where("cv.userId = :userId", { userId })
+            .getRepository(CourseLearningStatsView)
+            .createQueryBuilder("clsv")
+            .where("clsv.userId = :userId", { userId })
             .getMany();
 
+        // in progress courses 
         const inProgressCourses = courses
             .filter(x => x.isStarted && !x.isCompleted);
 
+        const inProgressCoursesAsCourseShortDTOs = this._mapperService
+            .mapMany(CourseLearningStatsView, CourseLearningDTO, inProgressCourses);
+
+        // completed corurses
         const completedCourses = courses
             .filter(x => x.isCompleted);
 
-        const inProgressCoursesAsCourseShortDTOs = inProgressCourses
-            .map(x => toCourseShortDTO(x));
-
-        const completedCoursesAsCourseShortDTOs = completedCourses
-            .map(x => toCourseShortDTO(x));
-
+        const completedCoursesAsCourseShortDTOs = this._mapperService
+            .mapMany(CourseLearningStatsView, CourseLearningDTO, inProgressCourses);
 
         return {
             isAnyCoursesComplete: completedCourses.any(x => true),
             isAnyCoursesInProgress: inProgressCourses.any(x => true),
-
             completedCourses: completedCoursesAsCourseShortDTOs,
-
             inProgressCourses: inProgressCoursesAsCourseShortDTOs
         } as UserCoursesDataDTO;
     }
@@ -364,7 +368,6 @@ export class CourseService {
             .createQueryBuilder("cv")
             .where("cv.userId = :userId", { userId })
             .andWhere("cv.canView = true")
-            .leftJoinAndSelect("cv.teacher", "t")
             .getMany();
 
         return courses

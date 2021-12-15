@@ -2,10 +2,10 @@ import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { translatableTexts } from '../static/translatableTexts';
 import { Badges } from "./Badges";
-import { LearningStatistics } from "./learningStatistics/LearningStatistics";
 import { DashboardSection } from './universal/DashboardSection';
 import { PersonalityAssessment } from './universal/PersonalityAssessment';
 import { LearningCurves } from "./LearningCurves";
+import { LearningStatistics } from './learningInsights/LearningStatistics';
 
 export const LearningInsightsOverview = () => {
 
