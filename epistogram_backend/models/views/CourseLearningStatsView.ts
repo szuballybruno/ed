@@ -66,4 +66,10 @@ export class CourseLearningStatsView {
 
     @ViewColumn()
     answeredVideoQuestionCount: number;
+
+    @ViewColumn()
+    examSuccessRateAverage: number;
+
+    @ViewColumn()
+    questionSuccessRate: number;
 }

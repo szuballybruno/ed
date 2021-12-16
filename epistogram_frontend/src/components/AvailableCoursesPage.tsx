@@ -189,8 +189,8 @@ const AvailableCoursesPage = () => {
                                     .map((course, index) => {
 
                                         return <GridItem>
-                                            <CourseTile course={course} key={index} >
-                                                <Flex mt="10px">
+                                            <CourseTile course={course} key={index}>
+                                                <Flex my="10px">
 
                                                     {/* details */}
                                                     <EpistoButton

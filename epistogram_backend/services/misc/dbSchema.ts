@@ -91,6 +91,9 @@ export const dbSchema = {
         "shop_item_view",
         "coin_transaction_view",
         "coin_balance_view",
+        "answer_session_view",
+        "course_questions_success_view",
+        "exam_latest_success_rate_view",
         "course_spent_time_view",
         "course_learning_stats_view"
     ],
