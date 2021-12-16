@@ -15,7 +15,8 @@ const AdminUserTasksSubpage = () => {
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.usersRoute.editRoute,
                     applicationRoutes.administrationRoute.usersRoute.statsRoute,
-                    applicationRoutes.administrationRoute.usersRoute.tasksRoute
+                    applicationRoutes.administrationRoute.usersRoute.tasksRoute,
+                    applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute
                 ]}>
 
                 {/*<Tasks currentTasks={mockTasks} />*/}

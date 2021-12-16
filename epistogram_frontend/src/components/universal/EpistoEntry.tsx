@@ -1,5 +1,6 @@
 import { Flex } from "@chakra-ui/layout";
 import { InputAdornment, TextField, Typography } from "@mui/material";
+import {CSSProperties} from "react";
 
 export const EpistoEntry = (props: {
     value: string,
@@ -14,7 +15,8 @@ export const EpistoEntry = (props: {
     labelVariant?: "top" | "normal",
     height?: string,
     name?: string,
-    marginTop?: string
+    marginTop?: string,
+    style?: CSSProperties
 }) => {
 
     const {
@@ -30,7 +32,8 @@ export const EpistoEntry = (props: {
         name,
         postfix,
         isNumeric,
-        marginTop
+        marginTop,
+        style
     } = props;
 
     const onChanged = (value: string) => {
@@ -41,7 +44,7 @@ export const EpistoEntry = (props: {
         setValue(value);
     }
 
-    return <Flex direction="column" mt={marginTop ?? "10px"}>
+    return <Flex direction="column" mt={marginTop ?? "10px"} style={style}>
 
         {labelVariant === "top" && <Typography
             variant={"overline"}>
