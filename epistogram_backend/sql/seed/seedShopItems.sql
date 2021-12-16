@@ -44,7 +44,8 @@ INSERT INTO public.shop_item
         name,
         coin_price,
         currency_price,
-        course_id
+        course_id,
+        purchase_limit
     )
 VALUES
     (
@@ -54,7 +55,8 @@ VALUES
         'Xiaomi Mi Router 4 Pro Vezeték nélküli router - 50% kedvezmény',
         5000,
         0,
-        NULL
+        NULL,
+        3
     ),
     (
         2,
@@ -63,7 +65,8 @@ VALUES
         'Fractal design prémium gépház',
         29000,
         0,
-        NULL
+        NULL,
+        3
     ),
     (
         3,
@@ -72,7 +75,8 @@ VALUES
         '',
         3000,
         0,
-        3
+        3,
+        1
     ),
     (
         4,
@@ -81,7 +85,8 @@ VALUES
         'Microsoft Office 2019 Professional Plus - 50% kedvezmény',
         100,
         0,
-        NULL
+        NULL,
+        3
     ),
     (
         5,
@@ -90,7 +95,8 @@ VALUES
         'LEGO Ford Mustang GT 1967 - 20% kedvezmény',
         5000,
         0,
-        NULL
+        NULL,
+        3
     ),
     (
         6,
@@ -99,7 +105,8 @@ VALUES
         'Microsoft Windows 11 Pro - 50% kedvezmény',
         300,
         0,
-        NULL
+        NULL,
+        3
     ),
     (
         7,
@@ -108,7 +115,8 @@ VALUES
         'Exkluzív borkóstolás Egerben, 2 főre - 50% kedvezmény',
         8000,
         0,
-        NULL
+        NULL,
+        3
     ),
     (
         8,
@@ -117,5 +125,6 @@ VALUES
         'Lenovo YOGA vezeték nélküli egér',
         10000,
         0,
-        NULL
+        NULL,
+        3
     )

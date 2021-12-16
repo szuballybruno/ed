@@ -8,7 +8,7 @@ import { getFilePath, uploadAssigendFileAsync } from "./fileService";
 import { log } from "./misc/logger";
 import { getAssetUrl } from "./misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
-import { answerQuestionAsync } from "./questionAnswerService";
+import { QuestionAnswerService } from "./questionAnswerService";
 import { deleteQuesitonsAsync } from "./questionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
@@ -17,18 +17,29 @@ export class VideoService {
 
     private _userCourseBridgeService: UserCourseBridgeService;
     private _ormConnection: ORMConnectionService;
+    private _questionAnswerService: QuestionAnswerService;
 
-    constructor(ormConnection: ORMConnectionService, userCourseBridgeService: UserCourseBridgeService) {
+    constructor(
+        ormConnection: ORMConnectionService,
+        userCourseBridgeService: UserCourseBridgeService,
+        questionAnswerService: QuestionAnswerService) {
 
         this._ormConnection = ormConnection;
+        this._questionAnswerService = questionAnswerService;
         this._userCourseBridgeService = userCourseBridgeService;
     }
 
-    answerVideoQuestionAsync = async (userId: number, answerSessionId: number, questionId: number, answerIds: number[]) => {
+    answerVideoQuestionAsync = async (
+        userId: number,
+        answerSessionId: number,
+        questionId: number,
+        answerIds: number[],
+        elapsedSeconds?: number) => {
 
         // validation comes here
 
-        return answerQuestionAsync(userId, answerSessionId, questionId, answerIds, false);
+        return this._questionAnswerService
+            .answerQuestionAsync(userId, answerSessionId, questionId, answerIds, false, elapsedSeconds);
     }
 
     insertVideoAsync = async (video: Video, filePath?: string) => {

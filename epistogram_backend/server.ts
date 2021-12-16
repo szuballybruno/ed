@@ -35,7 +35,9 @@ import { dbSchema } from './services/misc/dbSchema';
 import { log, logError } from "./services/misc/logger";
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
-import { PlayerService } from './services/playerService';
+import { PlayerService } from './services/PlayerService2';
+import { PractiseQuestionService } from './services/PractiseQuestionService';
+import { QuestionAnswerService } from './services/questionAnswerService';
 import { RegistrationService } from './services/RegistrationService';
 import { ShopService } from './services/ShopService';
 import { SignupService } from './services/SignupService';
@@ -77,18 +79,20 @@ import './utilities/jsExtensions';
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
     const activationCodeService = new ActivationCodeService(ormConnectionService);
     const emailService = new EmailService();
+    const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
     const signupService = new SignupService(emailService);
     const registrationService = new RegistrationService(activationCodeService, emailService);
     const seedService = new SeedService(sqlBootstrapperService, registrationService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService);
     const userCourseBridgeService = new UserCourseBridgeService(courseItemsService);
-    const examService = new ExamService(userCourseBridgeService);
-    const videoService = new VideoService(ormConnectionService, userCourseBridgeService);
+    const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService);
+    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService);
     const moduleService = new ModuleService(examService, videoService);
-    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService);
+    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService);
     const miscService = new MiscService(courseService);
-    const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService);
+    const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService);
+    const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService);
 
     // controllers 
@@ -96,7 +100,7 @@ import './utilities/jsExtensions';
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
     const registrationController = new RegistrationController(registrationService);
-    const miscController = new MiscController(miscService);
+    const miscController = new MiscController(miscService, practiseQuestionService);
     const authenticationController = new AuthenticationController();
     const userController = new UserController();
     const fileController = new FileController();
@@ -105,7 +109,7 @@ import './utilities/jsExtensions';
     const courseController = new CourseController(courseService);
     const moduleController = new ModuleController(moduleService);
     const videoController = new VideoController(videoService);
-    const questionController = new QuestionController();
+    const questionController = new QuestionController(practiseQuestionService);
     const examController = new ExamController(examService);
     const shopController = new ShopController(shopService);
 
@@ -243,6 +247,7 @@ import './utilities/jsExtensions';
     addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.answerExamQuestion, examController.answerExamQuestionAction, { isPost: true });
+    addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
 
     // 404 - no match
     expressServer.use((req, res) => {

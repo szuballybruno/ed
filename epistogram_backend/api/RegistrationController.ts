@@ -23,10 +23,10 @@ export class RegistrationController {
 
         const { accessToken, refreshToken } = await this._res
             .registerUserViaPublicTokenAsync(
-                body.getBodyValue<string>(x => x.emailAddress),
-                body.getBodyValue<string>(x => x.firstName),
-                body.getBodyValue<string>(x => x.lastName),
-                body.getBodyValue<string>(x => x.registrationToken));
+                body.getValue<string>(x => x.emailAddress),
+                body.getValue<string>(x => x.firstName),
+                body.getValue<string>(x => x.lastName),
+                body.getValue<string>(x => x.registrationToken));
 
         setAuthCookies(params.res, accessToken, refreshToken);
     };
@@ -37,9 +37,9 @@ export class RegistrationController {
 
         const { accessToken, refreshToken } = await this._res
             .registerInvitedUserAsync(
-                body.getBodyValue<string>(x => x.invitationToken),
-                body.getBodyValue<string>(x => x.password),
-                body.getBodyValue<string>(x => x.passwordCompare));
+                body.getValue<string>(x => x.invitationToken),
+                body.getValue<string>(x => x.password),
+                body.getValue<string>(x => x.passwordCompare));
 
         setAuthCookies(params.res, accessToken, refreshToken);
     };
@@ -50,10 +50,10 @@ export class RegistrationController {
 
         await this._res
             .registerUserViaActivationCodeAsync(
-                body.getBodyValue<string>(x => x.activationCode),
-                body.getBodyValue<string>(x => x.emailAddress),
-                body.getBodyValue<string>(x => x.firstName),
-                body.getBodyValue<string>(x => x.lastName));
+                body.getValue<string>(x => x.activationCode),
+                body.getValue<string>(x => x.emailAddress),
+                body.getValue<string>(x => x.firstName),
+                body.getValue<string>(x => x.lastName));
     };
 
     inviteUserAction = async (params: ActionParams) => {
@@ -66,7 +66,7 @@ export class RegistrationController {
         // if user is admin require organizationId to be provided
         // otherwise use the current user's organization
         const organizationId = currentUser.roleId === RoleIdEnum.administrator
-            ? dto.bodyData.organizationId
+            ? dto.data.organizationId
             : currentUser.organizationId;
 
         if (!organizationId)
@@ -78,11 +78,11 @@ export class RegistrationController {
         // create user
         await this._res
             .createInvitedUserAsync({
-                email: dto.getBodyValue<string>(x => x.email),
-                jobTitleId: dto.getBodyValue<number>(x => x.jobTitleId),
-                firstName: dto.getBodyValue<string>(x => x.firstName),
-                lastName: dto.getBodyValue<string>(x => x.lastName),
-                roleId: dto.getBodyValue<number>(x => x.roleId),
+                email: dto.getValue<string>(x => x.email),
+                jobTitleId: dto.getValue<number>(x => x.jobTitleId),
+                firstName: dto.getValue<string>(x => x.firstName),
+                lastName: dto.getValue<string>(x => x.lastName),
+                roleId: dto.getValue<number>(x => x.roleId),
                 organizationId,
             });
     };

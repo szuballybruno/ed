@@ -2,23 +2,26 @@ import { Question } from "../models/entity/Question";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO";
 import { toAnswerEditDTO } from "../services/mappings";
-import { answerPractiseQuestionAsync } from "../services/practiseQuestionsService";
+import { PractiseQuestionService } from "../services/PractiseQuestionService";
 import { saveQuestionAsync } from "../services/questionService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class QuestionController {
 
-    constructor() {
+    private _practiseQuestionService: PractiseQuestionService;
 
+    constructor(practiseQuestionService: PractiseQuestionService) {
 
+        this._practiseQuestionService = practiseQuestionService;
     }
 
     answerPractiseQuestionAction = async (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
 
-        return answerPractiseQuestionAsync(params.userId, dto);
+        return this._practiseQuestionService
+            .answerPractiseQuestionAsync(params.userId, dto);
     };
 
     getQuestionEditDataAction = async (params: ActionParams) => {

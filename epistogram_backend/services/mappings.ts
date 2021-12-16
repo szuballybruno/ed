@@ -22,6 +22,7 @@ import { CourseCategoryDTO } from "../models/shared_models/CourseCategoryDTO";
 import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
 import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
+import { CourseLearningDTO } from "../models/shared_models/CourseLearningDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
 import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
@@ -53,6 +54,7 @@ import { CoinTransactionView } from "../models/views/CoinTransactionView";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
+import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView";
 import { CourseView } from "../models/views/CourseView";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { ExamResultView } from "../models/views/ExamResultView";
@@ -61,7 +63,7 @@ import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { UserStatsView } from "../models/views/UserStatsView";
 import { staticProvider } from "../staticProvider";
-import { navPropNotNull, toFullName } from "../utilities/helpers";
+import { getFullName, navPropNotNull, toFullName } from "../utilities/helpers";
 import { getItemCode } from "./encodeService";
 import { MapperService } from "./mapperService";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
@@ -128,7 +130,9 @@ export const initializeMappings = (mapperService: MapperService) => {
             courseId: x.courseId,
             userId: x.userId,
             name: x.name,
-            isPurchased: x.isPurchased,
+            canPurchase: x.canPurchase,
+            purchaseCount: x.purchaseCount,
+            purchaseLimit: x.purchaseLimit,
             coinPrice: x.coinPrice,
             currencyPrice: x.currencyPrice,
             shopItemCategoryId: x.shopItemCategoryId,
@@ -141,6 +145,31 @@ export const initializeMappings = (mapperService: MapperService) => {
             id: x.id,
             name: x.name
         }));
+
+    mapperService
+        .addMap(CourseLearningStatsView, CourseLearningDTO, x => {
+
+            const thumbnailImageURL = x.filePath
+                ? getAssetUrl(x.filePath)
+                : getAssetUrl("/images/defaultCourseCover.jpg");
+
+            return {
+                courseId: x.id,
+                title: x.title,
+                categoryName: x.categoryName,
+                subCategoryName: x.subCategoryName,
+                teacherName: toFullName(x.teacherFirstName, x.teacherLastName),
+                thumbnailImageURL: thumbnailImageURL,
+                isComplete: x.isCompleted,
+                totalSpentTime: x.totalSpentTime,
+                totalCourseItemCount: x.totalCourseItemCount,
+                completedCourseItemCount: x.completedCourseItemCount,
+                totalVideoCount: x.totalVideoCount,
+                completedVideoCount: x.completedVideoCount,
+                totalVideoQuestionCount: x.totalVideoQuestionCount,
+                answeredVideoQuestionCount: x.answeredVideoQuestionCount
+            };
+        })
 }
 
 export const toUserDTO = (user: User) => {
@@ -400,15 +429,13 @@ export const toCourseShortDTO = (course: CourseView) => {
         ? course.currentItemCode
         : null;
 
-    const teacher = course.teacher;
-
     return {
         courseId: course.id,
         title: course.title,
         categoryName: course.categoryName,
         subCategoryName: course.subCategoryName,
         firstItemCode: firstItemCode,
-        teacherName: teacher.lastName + " " + teacher.firstName,
+        teacherName: toFullName(course.teacherFirstName, course.teacherLastName),
         thumbnailImageURL: thumbnailImageURL,
         isComplete: course.isCompleted
     } as CourseShortDTO;

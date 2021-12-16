@@ -1,5 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
+import { useEffect } from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { usePurchaseShopItem } from "../../services/api/shopService";
 import { useShowErrorDialog } from "../../services/core/notifications";
@@ -38,6 +39,13 @@ export const ShopPurchaseConfirmationDialog = (props: {
             showError(e);
         }
     }
+
+    // reset paging when dialog is closed 
+    useEffect(() => {
+
+        if (!dialogLogic.isOpen)
+            paging.setItem(0);
+    }, [dialogLogic.isOpen])
 
     const confirmationSlide = () => (
         <Flex direction="column" align="center">

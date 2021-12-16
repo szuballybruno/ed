@@ -15,7 +15,7 @@ export class ModuleController {
     createModuleAction = async (params: ActionParams) => {
 
         await this._moduleService
-            .createModuleAsync(params.getBody<ModuleCreateDTO>().bodyData);
+            .createModuleAsync(params.getBody<ModuleCreateDTO>().data);
     }
 
     deleteModuleAction = async (params: ActionParams) => {

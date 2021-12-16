@@ -1,9 +1,8 @@
 import React from "react";
-import { usePaging } from "../../static/frontendHelpers";
-import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
-import { CourseNextItemDTO } from "../../models/shared_models/CourseNextItemDTO";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
-import { useNavigation } from "../../services/core/navigatior";
+import { useStartExam } from "../../services/api/examApiService";
+import { useShowErrorDialog } from "../../services/core/notifications";
+import { usePaging } from "../../static/frontendHelpers";
 import { ExamGreetSlide } from "../exam/ExamGreetSlide";
 import { ExamQuestions } from "../exam/ExamQuestions";
 import { ExamResultsSlide } from "../exam/ExamResultsSlide";
@@ -23,12 +22,22 @@ export const ExamPlayer = (props: {
         continueCourse
     } = props;
 
+    const { startExamAsync, startExamState } = useStartExam();
+    const showError = useShowErrorDialog();
+
     const slidesState = usePaging([1, 2, 3]);
 
-    const handleStartExam = () => {
+    const handleStartExamAsync = async () => {
 
-        setIsExamInProgress(true);
-        slidesState.next();
+        try {
+            await startExamAsync({ answerSessionId });
+            setIsExamInProgress(true);
+            slidesState.next();
+        }
+        catch (e) {
+
+            showError(e);
+        }
     }
 
     const handleExamFinished = () => {
@@ -45,7 +54,7 @@ export const ExamPlayer = (props: {
     const slides = [
         () => <ExamGreetSlide
             exam={exam}
-            startExam={handleStartExam} />,
+            startExam={handleStartExamAsync} />,
 
         () => <ExamQuestions
             exam={exam}

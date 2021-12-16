@@ -1,9 +1,10 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useReactTimer } from "../../helpers/reactTimer";
 import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from "../../services/api/playerApiService";
+import { epochDates } from "../../static/frontendHelpers";
 import { QuesitionView } from "../QuestionView";
 import { EpistoButton } from "./EpistoButton";
 import { TimeoutFrame } from "./TimeoutFrame";
@@ -11,18 +12,21 @@ import { TimeoutFrame } from "./TimeoutFrame";
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
     answerSessionId: number,
+    isShowing: boolean,
     onAnswered: () => void,
     onClosed: () => void
 } & FlexProps) => {
 
-    const { question, onAnswered, answerSessionId, onClosed, ...css } = props;
+    const { question, isShowing, onAnswered, answerSessionId, onClosed, ...css } = props;
     const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = useAnswerQuestion();
     const isAnswered = !!answerResult;
     const autoCloseSecs = 2;
+    const [showUpTime, setShowUpTime] = useState<Date>(new Date());
 
     const handleAnswerQuestionAsync = async (answerId) => {
 
-        await answerQuestionAsync(answerSessionId, answerId, question.questionId);
+        const timeElapsed = epochDates(new Date(), showUpTime);
+        await answerQuestionAsync(answerSessionId, answerId, question.questionId, timeElapsed);
         onAnswered();
     }
 
@@ -40,6 +44,14 @@ export const VideoQuestionnaire = (props: {
 
         reactTimer.start();
     }, [isAnswered]);
+
+    useEffect(() => {
+
+        if (!isShowing)
+            return;
+
+        setShowUpTime(new Date());
+    }, [isShowing]);
 
     return <Flex direction="column">
 

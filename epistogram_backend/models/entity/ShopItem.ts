@@ -15,6 +15,9 @@ export class ShopItem {
     name: string;
 
     @Column()
+    purchaseLimit: number;
+
+    @Column()
     coinPrice: number;
 
     @Column()

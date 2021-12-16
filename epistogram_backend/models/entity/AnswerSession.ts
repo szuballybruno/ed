@@ -10,6 +10,12 @@ export class AnswerSession {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ nullable: true, type: "timestamptz" })
+    startDate: Date | null;
+
+    @Column({ nullable: true, type: "timestamptz" })
+    endDate: Date | null;
+
     @Column({ default: false })
     isPractiseAnswerSession: boolean;
 

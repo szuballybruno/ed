@@ -4,7 +4,9 @@ export class ShopItemDTO {
     courseId: number;
     userId: number;
     name: string;
-    isPurchased: boolean;
+    purchaseCount: number;
+    canPurchase: boolean;
+    purchaseLimit: number;
     coinPrice: number;
     currencyPrice: number;
     shopItemCategoryId: number;

@@ -25,7 +25,7 @@ export class ShopController {
     purchaseShopItemAction = async (params: ActionParams) => {
 
         const body = params.getBody<{ shopItemId: number }>();
-        const shopItemId = body.getBodyValue(x => x.shopItemId);
+        const shopItemId = body.getValue(x => x.shopItemId);
 
         return await this._shopService
             .purchaseShopItemAsync(params.userId, shopItemId);

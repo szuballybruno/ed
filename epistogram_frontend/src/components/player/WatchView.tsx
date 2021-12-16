@@ -223,6 +223,7 @@ export const WatchView = (props: {
                         <VideoQuestionnaire
                             answerSessionId={answerSessionId}
                             question={currentQuestion!}
+                            isShowing={isQuestionVisible}
                             onAnswered={() => setAnsweredQuestionIds([
                                 ...answeredQuestionIds,
                                 currentQuestion?.questionId!

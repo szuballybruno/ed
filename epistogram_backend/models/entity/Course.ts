@@ -87,7 +87,7 @@ export class Course {
     userAccessBridges: UserCourseAccessBridge[];
 
     // shop items
-    @ManyToOne(_ => ShopItem, x => x.coverFile)
+    @ManyToOne(_ => ShopItem, x => x.course)
     @JoinColumn()
     shopItems: ShopItem[];
 }

@@ -22,12 +22,20 @@ export class ExamController {
 
     answerExamQuestionAction = async (params: ActionParams) => {
 
-        const userId = getUserIdFromRequest(params.req);
         const questionAnswerDTO = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
 
         return this._examService
-            .answerExamQuestionAsync(userId, questionAnswerDTO);
+            .answerExamQuestionAsync(params.userId, questionAnswerDTO);
     };
+
+    startExamAction = async (params: ActionParams) => {
+
+        const body = params.getBody<{ answerSessionId: number }>();
+        const answerSessionId = body.getValue(x => x.answerSessionId);
+
+        await this._examService
+            .startExamAsync(answerSessionId);
+    }
 
     getExamResultsAction = async (params: ActionParams) => {
 

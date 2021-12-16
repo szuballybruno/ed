@@ -5,7 +5,7 @@ import { User } from "../entity/User";
     synchronize: false,
     expression: ``
 })
-export class CourseView {
+export class CourseLearningStatsView {
 
     @ViewColumn()
     id: number;
@@ -45,4 +45,25 @@ export class CourseView {
 
     @ViewColumn()
     teacherLastName: string;
+
+    @ViewColumn()
+    totalSpentTime: number;
+
+    @ViewColumn()
+    totalCourseItemCount: number;
+
+    @ViewColumn()
+    completedCourseItemCount: number;
+
+    @ViewColumn()
+    totalVideoCount: number;
+
+    @ViewColumn()
+    completedVideoCount: number;
+
+    @ViewColumn()
+    totalVideoQuestionCount: number;
+
+    @ViewColumn()
+    answeredVideoQuestionCount: number;
 }

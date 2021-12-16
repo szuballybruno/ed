@@ -3,12 +3,12 @@ import { Typography } from "@mui/material";
 import React from 'react';
 import { useUserCourseData } from "../../services/api/courseApiService";
 import { LoadingFrame } from "../system/LoadingFrame";
-import CourseTile from "../universal/CourseTile";
 import { DashboardSection } from "../universal/DashboardSection";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoGrid } from "../universal/EpistoGrid";
+import { LearningCourseStatsTile } from "./LearningCourseStatsTile";
 
-const MyCourses = () => {
+export const LearningCourseStats = () => {
 
     const { coursesData, coursesDataError, coursesDataStatus } = useUserCourseData();
     const isAnyCoursesComplete = coursesData?.isAnyCoursesComplete;
@@ -32,7 +32,7 @@ const MyCourses = () => {
                     p="20px">
 
                     {completedCourses
-                        .map((course, index) => <CourseTile course={course} />)}
+                        .map((course, index) => <LearningCourseStatsTile course={course} />)}
 
                 </EpistoGrid>
 
@@ -50,25 +50,7 @@ const MyCourses = () => {
                     p="20px">
                     {inProgressCourses
                         .map((course, index) => {
-                            return <CourseTile tempIsStartedSwitch={true} course={course}>
-                                <Flex mt="10px">
-
-                                    {/* details */}
-
-                                    <EpistoButton
-                                        style={{ flex: "1" }}>
-                                        {"Statisztika"}
-                                    </EpistoButton>
-
-                                    {/* start course */}
-                                    <EpistoButton
-                                        variant="colored"
-                                        style={{ flex: "1" }}>
-
-                                        {"Folytatom"}
-                                    </EpistoButton>
-                                </Flex>
-                            </CourseTile>
+                            return <LearningCourseStatsTile course={course} />
                         })
                     }
                 </EpistoGrid>
@@ -78,5 +60,3 @@ const MyCourses = () => {
         </DashboardSection>
     </LoadingFrame>
 };
-
-export default MyCourses;

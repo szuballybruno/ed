@@ -19,7 +19,13 @@ export class ShopItemView {
     name: string;
 
     @ViewColumn()
-    isPurchased: boolean;
+    purchaseCount: number;
+
+    @ViewColumn()
+    canPurchase: boolean;
+
+    @ViewColumn()
+    purchaseLimit: number;
 
     @ViewColumn()
     coinPrice: number;

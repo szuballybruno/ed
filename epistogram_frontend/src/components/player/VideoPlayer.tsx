@@ -145,19 +145,22 @@ export const useVideoPlayerState = (
 
     useEventListener('keydown', (e) => {
 
-        e.preventDefault();
+        if (e.key === " " || e.key === "ArrowLeft" || e.key === "ArrowRight") {
 
-        if (isShowingOverlay)
-            return;
+            e.preventDefault();
 
-        if (e.key === " ")
-            toggleShouldBePlaying();
+            if (isShowingOverlay)
+                return;
 
-        if (e.key === "ArrowLeft")
-            jump();
+            if (e.key === " ")
+                toggleShouldBePlaying();
 
-        if (e.key === "ArrowRight")
-            jump(true);
+            if (e.key === "ArrowLeft")
+                jump();
+
+            if (e.key === "ArrowRight")
+                jump(true);
+        }
     });
 
     // TODO start at specific time

@@ -4,7 +4,7 @@ import AdminPage from "./components/administration/AdminPage";
 import AvailableCoursesPage from "./components/AvailableCoursesPage";
 import CourseDetailsPage from "./components/courseDetails/CourseDetailsPage";
 import HomePage from "./components/HomePage";
-import LearningInsightsPage from "./components/LearningInsightsPage";
+import LearningInsightsPage from "./components/learningInsights/LearningInsightsPage";
 import LoginScreen from "./components/login/LoginScreen";
 import NotFound from "./components/notFound/NotFound";
 import { PlayerPage } from "./components/player/PlayerPage";

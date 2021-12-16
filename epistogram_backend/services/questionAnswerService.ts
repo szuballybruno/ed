@@ -1,68 +1,87 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
 import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
-import { staticProvider } from "../staticProvider";
+import { CoinAcquireService } from "./CoinAcquireService";
+import { SQLFunctionsService } from "./sqlServices/FunctionsService";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
-export const createAnswerSessionAsync = async (
-    userId: number,
-    examId?: number | null,
-    videoId?: number | null) => {
+export class QuestionAnswerService {
 
-    const session = {
-        examId: examId,
-        videoId: videoId,
-        userId: userId
-    } as AnswerSession;
+    private _ormService: ORMConnectionService;
+    private _sqlFunctionsService: SQLFunctionsService;
+    private _coinAcquireService: CoinAcquireService;
 
-    await staticProvider
-        .ormConnection
-        .getRepository(AnswerSession)
-        .insert(session);
+    constructor(
+        ormService: ORMConnectionService,
+        sqlFunctionsService: SQLFunctionsService,
+        coinAcquireService: CoinAcquireService) {
 
-    return session.id;
-}
-
-export const answerQuestionAsync = async (
-    userId: number,
-    answerSessionId: number,
-    questionId: number,
-    answerIds: number[],
-    isExamQuestion: boolean,
-    isPractiseAnswer?: boolean) => {
-
-    const { correctAnswerIds, givenAnswerId, isCorrect, streakLength, streakId } = await staticProvider
-        .services
-        .sqlFunctionService
-        .answerQuestionFn(userId, answerSessionId, questionId, answerIds, !!isPractiseAnswer);
-
-    let coinAcquires = null as null | {
-        normal: CoinAcquireResultDTO | null,
-        bonus: CoinAcquireResultDTO | null
+        this._coinAcquireService = coinAcquireService;
+        this._ormService = ormService;
+        this._sqlFunctionsService = sqlFunctionsService;
     }
 
-    // if answer is correct give coin rewards 
-    if (isCorrect && !isExamQuestion) {
+    createAnswerSessionAsync = async (
+        userId: number,
+        examId?: number | null,
+        videoId?: number | null) => {
 
-        const acquire = await staticProvider
-            .services
-            .coinAcquireService
-            .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
+        const session = {
+            examId: examId,
+            videoId: videoId,
+            userId: userId
+        } as AnswerSession;
 
-        const streakAcquire = await staticProvider
-            .services
-            .coinAcquireService
-            .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
+        await this._ormService
+            .getRepository(AnswerSession)
+            .insert(session);
 
-        coinAcquires = {
-            normal: acquire,
-            bonus: streakAcquire
+        return session.id;
+    }
+
+    answerQuestionAsync = async (
+        userId: number,
+        answerSessionId: number,
+        questionId: number,
+        answerIds: number[],
+        isExamQuestion: boolean,
+        elapsedSeconds?: number,
+        isPractiseAnswer?: boolean) => {
+
+        const {
+            correctAnswerIds,
+            givenAnswerId,
+            isCorrect,
+            streakLength,
+            streakId
+        } = await this._sqlFunctionsService
+            .answerQuestionFn(userId, answerSessionId, questionId, answerIds, elapsedSeconds ?? null, !!isPractiseAnswer);
+
+        let coinAcquires = null as null | {
+            normal: CoinAcquireResultDTO | null,
+            bonus: CoinAcquireResultDTO | null
         }
-    }
 
-    return {
-        correctAnswerIds: correctAnswerIds,
-        givenAnswerIds: answerIds,
-        isCorrect: isCorrect,
-        coinAcquires
-    } as AnswerResultDTO;
+        // if answer is correct give coin rewards 
+        if (isCorrect && !isExamQuestion) {
+
+            const acquire = await this._coinAcquireService
+                .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
+
+            const streakAcquire = await this._coinAcquireService
+                .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
+
+            coinAcquires = {
+                normal: acquire,
+                bonus: streakAcquire
+            }
+        }
+
+        return {
+            correctAnswerIds: correctAnswerIds,
+            givenAnswerIds: answerIds,
+            isCorrect: isCorrect,
+            coinAcquires
+        } as AnswerResultDTO;
+    }
 }

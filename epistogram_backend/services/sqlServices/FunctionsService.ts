@@ -79,6 +79,7 @@ export class SQLFunctionsService {
         answerSessionId: number,
         questionId: number,
         answerIds: number[],
+        elapsedSeconds: number | null,
         isPractiseAnswer: boolean) => {
 
         type ReType = {
@@ -89,16 +90,18 @@ export class SQLFunctionsService {
             is_correct: boolean,
         };
 
-        const result = await this.execSQLFunctionAsync<ReType>(
-            "answer_question_fn",
-            [
-                userId,
-                answerSessionId,
-                questionId,
-                answerIds,
-                isPractiseAnswer
-            ],
-            true);
+        const result = await this
+            .execSQLFunctionAsync<ReType>(
+                "answer_question_fn",
+                [
+                    userId,
+                    answerSessionId,
+                    questionId,
+                    answerIds,
+                    elapsedSeconds,
+                    isPractiseAnswer
+                ],
+                true);
 
         return {
             correctAnswerIds: result.correct_answer_ids,

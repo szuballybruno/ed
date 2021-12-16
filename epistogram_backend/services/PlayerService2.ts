@@ -13,7 +13,7 @@ import { readItemCode } from "./encodeService";
 import { ExamService } from "./ExamService";
 import { toVideoDTO } from "./mappings";
 import { ModuleService } from "./ModuleService";
-import { createAnswerSessionAsync } from "./questionAnswerService";
+import { QuestionAnswerService } from "./questionAnswerService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
 import { VideoService } from "./VideoService";
@@ -25,19 +25,22 @@ export class PlayerService {
     private _moduleService: ModuleService;
     private _userCourseBridgeService: UserCourseBridgeService;
     private _videoService: VideoService;
+    private _questionAnswerService: QuestionAnswerService;
 
     constructor(
         courseService: CourseService,
         examService: ExamService,
         moduleService: ModuleService,
         userCourseBridge: UserCourseBridgeService,
-        videoService: VideoService) {
+        videoService: VideoService,
+        questionAnswerService: QuestionAnswerService) {
 
         this._courseService = courseService;
         this._examService = examService;
         this._moduleService = moduleService;
         this._userCourseBridgeService = userCourseBridge;
         this._videoService = videoService;
+        this._questionAnswerService = questionAnswerService;
     }
 
     getPlayerDataAsync = async (
@@ -70,7 +73,8 @@ export class PlayerService {
         // get new answer session
         const answerSessionId = itemType === "module"
             ? null
-            : await createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
+            : await this._questionAnswerService
+                .createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
 
         // next 
         const flat = this.getCourseItemsFlat(modules);

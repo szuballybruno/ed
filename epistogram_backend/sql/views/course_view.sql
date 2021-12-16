@@ -7,6 +7,8 @@ SELECT
 	cc.name AS category_name,
 	csc.name AS sub_category_name,
 	ucb.current_item_code AS current_item_code,
+	teacher.first_name teacher_first_name,
+	teacher.last_name teacher_last_name,
 	course.*
 FROM public.course
 
@@ -36,6 +38,9 @@ ON csc.id = course.sub_category_id
 	
 LEFT JOIN public.user_course_access_bridge ucab
 ON ucab.user_id = u.id AND ucab.course_id = course.id
+	
+LEFT JOIN public.user teacher
+ON teacher.id = course.teacher_id
 	
 ORDER BY 
 	u.id,

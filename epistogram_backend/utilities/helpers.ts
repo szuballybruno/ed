@@ -52,22 +52,36 @@ export class ActionParams {
     getBody<T>() {
 
         const body = withValueOrBadRequest<T>(this.req.body);
-        return new ActionParamsBody<T>(body);
+        return new SafeObjectWrapper<T>(body);
+    }
+
+    getQuery<T>() {
+
+        const query = withValueOrBadRequest<T>(this.req.query);
+        return new SafeObjectWrapper<T>(query);
     }
 };
 
-export class ActionParamsBody<T> {
+export class SafeObjectWrapper<T> {
 
-    bodyData: T;
+    data: T;
 
-    constructor(bodyData: T) {
+    constructor(data: T) {
 
-        this.bodyData = bodyData;
+        this.data = data;
     }
 
-    getBodyValue<TValue>(getter: (body: T) => TValue) {
+    getValue<TValue>(getter: (data: T) => TValue, castType?: "int" | "float") {
 
-        return withValueOrBadRequest<TValue>(getter(this.bodyData));
+        const value = withValueOrBadRequest<TValue>(getter(this.data));
+
+        if (castType === "int")
+            return parseInt(value as any as string) as any as TValue;
+
+        if (castType === "float")
+            return parseFloat(value as any as string) as any as TValue;
+
+        return value;
     }
 }
 
