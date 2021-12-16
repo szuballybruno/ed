@@ -49,7 +49,10 @@ export const LearningCourseStatsTile = (props: {
         answeredVideoQuestionCount,
         totalSpentTime,
         completedCourseItemCount,
-        totalCourseItemCount
+        totalCourseItemCount,
+        examSuccessRateAverage,
+        questionSuccessRate,
+        finalExamSuccessRate
     } = course;
 
     const spentHours = roundNumber(totalSpentTime / 60 / 60);
@@ -158,9 +161,9 @@ export const LearningCourseStatsTile = (props: {
                     text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
 
                 {/* final exam  */}
-                {/* <SmallStat
+                <SmallStat
                     iconUrl={getAssetUrl("course_exam_tile_icons/tile_test.svg")}
-                    text={"105/119"} /> */}
+                    text={finalExamSuccessRate ? finalExamSuccessRate + "%" : "Nincs kitöltve"} />
             </Flex>
 
             {/* course progress bar chart */}
@@ -190,7 +193,11 @@ export const LearningCourseStatsTile = (props: {
 
                 <SmallStat
                     iconUrl={getAssetUrl("course_exam_tile_icons/tile_achivement.svg")}
-                    text={"65%-ban helyes válaszok"} />
+                    text={`Video kerdes atlag ${questionSuccessRate}%`} />
+
+                <SmallStat
+                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_achivement.svg")}
+                    text={`Vizsga atlag ${examSuccessRateAverage}%`} />
             </Flex>
         </Flex>
 

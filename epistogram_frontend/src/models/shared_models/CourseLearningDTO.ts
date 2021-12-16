@@ -14,4 +14,7 @@ export class CourseLearningDTO {
     completedVideoCount: number;
     totalVideoQuestionCount: number;
     answeredVideoQuestionCount: number;
+    examSuccessRateAverage: number;
+    questionSuccessRate: number;
+    finalExamSuccessRate: number;
 }

@@ -4,7 +4,6 @@ import React from 'react';
 import { useUserCourseData } from "../../services/api/courseApiService";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { DashboardSection } from "../universal/DashboardSection";
-import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoGrid } from "../universal/EpistoGrid";
 import { LearningCourseStatsTile } from "./LearningCourseStatsTile";
 

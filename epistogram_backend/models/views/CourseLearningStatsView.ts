@@ -72,4 +72,7 @@ export class CourseLearningStatsView {
 
     @ViewColumn()
     questionSuccessRate: number;
+
+    @ViewColumn()
+    finalExamSuccessRate: number;
 }

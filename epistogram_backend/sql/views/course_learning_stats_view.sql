@@ -68,7 +68,16 @@ SELECT
 		SELECT (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int
 		FROM public.course_questions_success_view cqsv
 		WHERE cqsv.course_id = cv.id AND cqsv.user_id = cv.user_id 
-	) question_success_rate
+	) question_success_rate,
+	(
+		SELECT elsv.success_rate::int
+		FROM public.exam ex
+		
+		LEFT JOIN public.exam_latest_success_rate_view elsv
+		ON elsv.user_id = cv.user_id AND elsv.exam_id = ex.id
+		
+		WHERE ex.course_id = cv.id AND ex.is_final_exam = true
+	) final_exam_success_rate
 FROM public.course_view cv
 
 LEFT JOIN public.course_spent_time_view cstv

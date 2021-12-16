@@ -167,7 +167,10 @@ export const initializeMappings = (mapperService: MapperService) => {
                 totalVideoCount: x.totalVideoCount,
                 completedVideoCount: x.completedVideoCount,
                 totalVideoQuestionCount: x.totalVideoQuestionCount,
-                answeredVideoQuestionCount: x.answeredVideoQuestionCount
+                answeredVideoQuestionCount: x.answeredVideoQuestionCount,
+                examSuccessRateAverage: x.examSuccessRateAverage,
+                questionSuccessRate: x.questionSuccessRate,
+                finalExamSuccessRate: x.finalExamSuccessRate
             };
         })
 }
