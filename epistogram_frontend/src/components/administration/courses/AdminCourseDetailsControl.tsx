@@ -5,27 +5,20 @@ import { EditSection } from "./EditSection";
 import { SelectImage } from "../../universal/SelectImage";
 import { EpistoEntry } from "../../universal/EpistoEntry";
 import {
-    Avatar,
-    Checkbox,
     IconButton,
     List,
     ListItem,
-    ListItemAvatar,
     ListItemText,
-    Radio,
     Slider,
     Typography
 } from "@mui/material";
 import { EpistoSelect } from "../../universal/EpistoSelect";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import { CourseEditDataDTO } from "../../../models/shared_models/CourseEditDataDTO";
 import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { UserDTO } from "../../../models/shared_models/UserDTO";
-import {ProfileImage} from "../../ProfileImage";
 import {Radar} from "react-chartjs-2";
-import {getAssetUrl} from "../../../static/frontendHelpers";
 import {Add, Delete} from "@mui/icons-material";
-import {TimelineDot} from "@mui/lab";
 import {EpistoButton} from "../../universal/EpistoButton";
 
 export const AdminCourseDetailsControl = (props: {
@@ -46,7 +39,6 @@ export const AdminCourseDetailsControl = (props: {
 
 
     const [courseShortDescription, setCourseShortDescription] = useState("")
-    const [difficulty, setDifficulty] = useState(0)
 
 
     // What will it develop, when we recommend it?
@@ -66,9 +58,6 @@ export const AdminCourseDetailsControl = (props: {
         return setRadarTexts(newRadarTextState)
     }
 
-
-
-
     useEffect(() => {
         setRadarLevels(Array(10).fill(0))
         setRadarTexts(Array(10).fill(""))
@@ -79,8 +68,6 @@ export const AdminCourseDetailsControl = (props: {
         setThumbnailSrc(src);
         setThumbnailImageFile(file);
     }
-
-
 
     useEffect(() => {
         if (!courseEditData)
@@ -146,7 +133,7 @@ export const AdminCourseDetailsControl = (props: {
                         width="300px"
                         height="200px"
                         onImageSelected={setBrowsedImage}>
-                        <Image className="whall" objectFit="cover" src={thumbnailSrc}></Image>
+                        <Image className="whall" objectFit="cover" src={thumbnailSrc} />
                     </SelectImage>
                 </EditSection>
 
@@ -388,7 +375,7 @@ export const AdminCourseDetailsControl = (props: {
 
                 </EditSection>
 
-                {/* Követelmények */}
+                {/* Technical requirements */}
                 <EditSection title="Követelmények" style={{marginBottom: 50}}>
 
                     <Typography variant={"overline"} style={{marginTop: "10px" }}>
@@ -434,8 +421,6 @@ export const AdminCourseDetailsControl = (props: {
                     </EpistoButton>
 
                 </EditSection>
-
-
             </Box>
         </AdminSubpageHeader>
     </Flex>

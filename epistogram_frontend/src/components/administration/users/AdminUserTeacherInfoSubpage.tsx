@@ -9,7 +9,7 @@ import {Checkbox, Slider, Typography} from "@mui/material";
 
 export const AdminUserTeacherInfoSubpage = () => {
     const [teacherName, setTeacherName] = useState("")
-    const teacherBadges = [
+    const mockTeacherBadges = [
         {
             id: 0,
             name: "Not cow patch badge",
@@ -103,7 +103,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                         </Typography>
 
                         <Flex flexWrap={"wrap"}>
-                            {teacherBadges.map((badge, index) => {
+                            {mockTeacherBadges.map((badge, index) => {
                                 return <Flex
                                     flexDir={"column"}
                                     justifyContent={"space-between"}
