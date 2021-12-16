@@ -63,7 +63,12 @@ SELECT
 		SELECT AVG(elsrv.success_rate)::int
 		FROM public.exam_latest_success_rate_view elsrv
 		WHERE elsrv.user_id = cv.user_id AND elsrv.course_id = cv.id 
-	) exam_success_rate_average
+	) exam_success_rate_average,
+	(
+		SELECT (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int
+		FROM public.course_questions_success_view cqsv
+		WHERE cqsv.course_id = cv.id AND cqsv.user_id = cv.user_id 
+	) question_success_rate
 FROM public.course_view cv
 
 LEFT JOIN public.course_spent_time_view cstv
