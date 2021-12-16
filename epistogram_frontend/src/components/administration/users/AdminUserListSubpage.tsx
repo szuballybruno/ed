@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Edit, Email, Equalizer, Task, WorkTwoTone } from "@mui/icons-material";
+import {ApartmentTwoTone, Edit, Email, Equalizer, School, Task, WorkTwoTone} from "@mui/icons-material";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
@@ -111,6 +111,11 @@ export const AdminUserListSubpage = () => {
             name: "viewUserTasks",
             text: "Feladatok megtekintése",
             onClick: () => navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: user.id })
+        },
+        {
+            name: "editTeacherInfo",
+            text: "Oktatói adatok szerkesztése",
+            onClick: () => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: user.id })
         }
     ]
 
@@ -126,6 +131,10 @@ export const AdminUserListSubpage = () => {
         {
             icon: <Task style={{ width: "20px", height: "20px" }} />,
             onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.tasksRoute.route, { userId: user.id })
+        },
+        {
+            icon: <School style={{ width: "20px", height: "20px" }} />,
+            onClick: (user: AdminPageUserDTO) => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: user.id })
         },
         {
             icon: <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>,

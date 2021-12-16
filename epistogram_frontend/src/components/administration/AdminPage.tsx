@@ -26,6 +26,7 @@ import { EditExamSubpage } from './courses/EditExamSubpage';
 import { getRoute } from "../../MainRouting";
 import { EditModuleSubpage } from './courses/EditModuleSubpage';
 import { AdminCourseDetailsSubpage } from "./courses/AdminCourseDetailsSubpage";
+import {AdminUserTeacherInfoSubpage} from "./users/AdminUserTeacherInfoSubpage";
 
 const AdminPage = () => {
 
@@ -78,6 +79,10 @@ const AdminPage = () => {
 
                             <Route exact path={administrationRoutes.usersRoute.tasksRoute.route}>
                                 <AdminUserTasksSubpage />
+                            </Route>
+
+                            <Route exact path={applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route}>
+                                <AdminUserTeacherInfoSubpage />
                             </Route>
                         </Switch>
                     </Route>

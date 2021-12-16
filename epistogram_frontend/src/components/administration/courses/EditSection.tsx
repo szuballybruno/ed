@@ -1,6 +1,7 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import { ReactNode } from "react";
+import {EpistoHeader} from "../../EpistoHeader";
 
 
 export const EditSection = (props: {
@@ -10,11 +11,13 @@ export const EditSection = (props: {
 
     const { children, title, ...css } = props;
 
-    return <Flex direction="column" mt="20px" {...css}>
+    return <Flex direction="column" mt="40px" {...css}>
 
-        <Typography variant={"overline"}>
+        <EpistoHeader text={title} showDivider variant="strongSub" m="5px 10px 20px 0" />
+
+        {/*<Typography variant={"overline"}>
             {title}
-        </Typography>
+        </Typography>*/}
 
         {children}
 

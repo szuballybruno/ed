@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import {Box, Flex} from "@chakra-ui/react";
 import { Button, TextField, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from 'react';
 import { getEventValueCallback } from "../../../static/frontendHelpers";
@@ -12,6 +12,8 @@ import { AddFrame } from "../../add_frame/AddFrame";
 import { CurrentUserContext } from "../../system/AuthenticationFrame";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import { useOrganizations, useJobTitles } from "../../../services/api/miscApiService";
+import {EditSection} from "../courses/EditSection";
+import {EpistoEntry} from "../../universal/EpistoEntry";
 
 export const roles = [
     {
@@ -81,44 +83,46 @@ export const EditUserControl = (props: {
         await saveUserAsync(editedUserDTO);
     }
 
-    return <Flex direction="column">
+    return  <Box px="20px" flex="1" alignItems={"flex-start"} maxW={500}>
 
-        <AddFrame
+        <EditSection
             title={"Új felhasználó hozzáadása"}>
 
-            <Flex direction="column" padding="20px">
+            <Flex direction="column">
 
                 {/* first & last name */}
                 <Flex>
-                    <TextField
-                        style={{ flex: "1", margin: "10px" }}
+                    <EpistoEntry
+                        style={{ flex: "1", margin: "0 10px 0 0" }}
                         value={firstName}
                         name="fname"
-                        onChange={x => setFirstName(x.currentTarget.value)}
-                        variant="standard"
+                        setValue={setFirstName}
+                        labelVariant={"top"}
                         label="Keresztnév" />
 
-                    <TextField
-                        style={{ flex: "1", margin: "10px" }}
+                    <EpistoEntry
+                        style={{ flex: "1", margin: "0" }}
                         name="lname"
                         value={lastName}
-                        onChange={x => setLastName(x.currentTarget.value)}
-                        variant="standard"
+                        setValue={setLastName}
+                        labelVariant={"top"}
                         label="Vezetéknév" />
                 </Flex>
 
                 {/* email */}
-                <TextField
-                    style={{ flex: "1", margin: "10px" }}
+                <EpistoEntry
+                    style={{ flex: "1", margin: "10px 0 0 0" }}
                     name="email"
                     value={email}
-                    onChange={getEventValueCallback(setEmail)}
-                    variant="standard"
+                    setValue={setEmail}
+                    labelVariant={"top"}
                     label="Email" />
 
                 {/* organization */}
                 {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
-                    <Typography>Cég</Typography>
+                    <Typography variant={"overline"} style={{marginTop: "10px" }}>
+                        Cég
+                    </Typography>
                     <EpistoSelect
                         items={organizations}
                         selectedValue={selectedOrganization}
@@ -129,7 +133,9 @@ export const EditUserControl = (props: {
 
                 {/* job title */}
                 {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
-                    <Typography>Beosztás</Typography>
+                    <Typography variant={"overline"} style={{marginTop: "10px" }}>
+                        Beosztás
+                    </Typography>
                     <EpistoSelect
                         items={jobTitles}
                         selectedValue={selectedJobTitle}
@@ -140,7 +146,9 @@ export const EditUserControl = (props: {
 
                 {/* role */}
                 <Flex direction="column" align="stretch" width="100%">
-                    <Typography>Jogosultsági kör</Typography>
+                    <Typography variant={"overline"} style={{marginTop: "10px" }}>
+                        Jogosultsági kör
+                    </Typography>
                     <EpistoSelect
                         selectedValue={selectedRole}
                         items={roles}
@@ -160,6 +168,6 @@ export const EditUserControl = (props: {
                 </Button>
 
             </Flex>
-        </AddFrame>
-    </Flex>
+        </EditSection>
+    </Box>
 };
