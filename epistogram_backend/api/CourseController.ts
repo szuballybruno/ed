@@ -189,6 +189,11 @@ export class CourseController {
         return this._courseService.setCourseTypeAsync(params.userId, courseId, modeType);
     };
 
+    getCourseProgressShortAction = async (params: ActionParams) => {
+
+        return this._courseService.getCourseProgressShortAsync(params.userId);
+    }
+
     getCourseProgressDataAction = async (params: ActionParams) => {
 
         return this._courseService.getCourseProgressDataAsync(params.userId);

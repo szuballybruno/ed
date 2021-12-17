@@ -23,6 +23,7 @@ import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
 import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseLearningDTO } from "../models/shared_models/CourseLearningDTO";
+import { CourseProgressShortDTO } from "../models/shared_models/CourseProgressShortDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
 import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
@@ -55,6 +56,7 @@ import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView";
+import { CourseProgressView } from "../models/views/CourseProgressView";
 import { CourseView } from "../models/views/CourseView";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { ExamResultView } from "../models/views/ExamResultView";
@@ -172,7 +174,12 @@ export const initializeMappings = (mapperService: MapperService) => {
                 questionSuccessRate: x.questionSuccessRate,
                 finalExamSuccessRate: x.finalExamSuccessRate
             };
-        })
+        });
+
+    mapperService
+        .addMap(CourseProgressView, CourseProgressShortDTO, x => ({
+            ...x
+        }));
 }
 
 export const toUserDTO = (user: User) => {

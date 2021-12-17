@@ -220,6 +220,7 @@ import './utilities/jsExtensions';
     addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.getCourseDetails, courseController.getCourseDetailsAction);
     addEndpoint(apiRoutes.course.getCourseProgressData, courseController.getCourseProgressDataAction);
+    addEndpoint(apiRoutes.course.getCourseProgressShort, courseController.getCourseProgressShortAction);
 
     // module 
     addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true });

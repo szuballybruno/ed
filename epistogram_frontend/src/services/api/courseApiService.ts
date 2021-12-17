@@ -10,6 +10,7 @@ import { TextDTO } from "../../models/shared_models/TextDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { UserCoursesDataDTO } from "../../models/shared_models/UserCoursesDataDTO";
 import { usePostDataUnsafe } from "../core/httpClient";
+import { CourseProgressShortDTO } from "../../models/shared_models/CourseProgressShortDTO";
 
 export const useAdminCourseList = (searchText: string) => {
 
@@ -124,5 +125,16 @@ export const useUserCourseData = () => {
         coursesData: qr.data,
         coursesDataError: qr.error,
         coursesDataStatus: qr.state
+    }
+}
+
+export const useCourseProgressShortDtos = () => {
+
+    const qr = useReactQuery2<CourseProgressShortDTO[]>(apiRoutes.course.getCourseProgressShort);
+
+    return {
+        courseProgressShortDtos: qr.data ?? [],
+        courseProgressShortError: qr.error,
+        courseProgressShortState: qr.state
     }
 }

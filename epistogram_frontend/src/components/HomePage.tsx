@@ -1,5 +1,6 @@
 import { Box, Flex } from '@chakra-ui/layout';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { useCourseProgressShortDtos } from '../services/api/courseApiService';
 import { useOverviewPageDTO } from '../services/api/miscApiService';
 import { translatableTexts } from '../static/translatableTexts';
 import { DailyTip } from './DailyTip';
@@ -28,6 +29,8 @@ const HomePage = () => {
 
     const hasCurrentCourse = hasCurrentItem;
 
+    const { courseProgressShortDtos } = useCourseProgressShortDtos();
+
     return <MainWrapper>
 
         <Navbar />
@@ -40,8 +43,11 @@ const HomePage = () => {
                     {/* courses progress */}
                     <DashoardLeftItemGroup title={translatableTexts.homePage.courseProgress}>
                         <Flex direction="column" p="10px">
-                            <CourseProgressBar value={12} label={translatableTexts.homePage.excelCourseTitle} mb="5px" />
-                            <CourseProgressBar value={45} label={translatableTexts.homePage.javaCourseTitle} mb="5px" />
+                            {courseProgressShortDtos
+                                .map(x => <CourseProgressBar
+                                    value={x.progressPercentage}
+                                    label={x.courseTitle}
+                                    mb="5px" />)}
                         </Flex>
                     </DashoardLeftItemGroup>
 

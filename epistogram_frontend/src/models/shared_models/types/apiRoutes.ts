@@ -80,7 +80,8 @@ export const apiRoutes = {
         getCourseDetails: "/course/get-course-details",
         getAdminCourseList: "/course/get-admin-course-list",
         setCourseMode: "/course/set-course-mode",
-        getCourseProgressData: "/course/get-course-progress-data"
+        getCourseProgressData: "/course/get-course-progress-data",
+        getCourseProgressShort: "/course/get-course-progress-short"
     },
 
     module: {
