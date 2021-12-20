@@ -1,5 +1,7 @@
 import { CourseCategoryDTO } from "./CourseCategoryDTO";
-import { UserDTO } from "./UserDTO";
+import { HumanSkillBenefitDTO } from "./HumanSkillBenefitDTO";
+import { TeacherDTO } from "./TeacherDTO";
+import { CourseVisibilityType } from "./types/sharedTypes";
 
 export class CourseDetailsEditDataDTO {
     courseId: number;
@@ -10,14 +12,17 @@ export class CourseDetailsEditDataDTO {
     difficulty: number;
     benchmark: number;
     language: string;
+    visibility: CourseVisibilityType;
+    teacherId: number;
+    humanSkillBenefitsDescription: string;
 
     technicalRequirements: string[];
     skillBenefits: string[];
+    humanSkillBenefits: HumanSkillBenefitDTO[];
 
     category: CourseCategoryDTO;
     subCategory: CourseCategoryDTO;
-    teacher: UserDTO;
 
-    teachers: UserDTO[];
+    teachers: TeacherDTO[];
     categories: CourseCategoryDTO[];
 }

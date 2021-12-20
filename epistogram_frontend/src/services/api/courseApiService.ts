@@ -71,7 +71,7 @@ export const useDeleteCourse = () => {
 
 export const useSaveCourseDetailsData = () => {
 
-    const qr = usePostDataUnsafe<CourseDetailsEditDataDTO, void>(apiRoutes.course.saveCourseContent);
+    const qr = usePostDataUnsafe<CourseDetailsEditDataDTO, void>(apiRoutes.course.saveCourseDetails);
 
     return {
         saveCourseDataAsync: qr.postDataAsync,

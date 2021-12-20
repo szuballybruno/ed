@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from "typeorm";
+import { CourseVisibilityType } from "../shared_models/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,
@@ -25,6 +26,12 @@ export class CourseAdminDetailedView {
     benchmark: number;
 
     @ViewColumn()
+    humanSkillBenefitsDescription: string;
+
+    @ViewColumn()
+    visibility: CourseVisibilityType;
+
+    @ViewColumn()
     languageName: string;
 
     @ViewColumn()
@@ -32,6 +39,9 @@ export class CourseAdminDetailedView {
 
     @ViewColumn()
     skillBenefits: string;
+
+    @ViewColumn()
+    humanSkillBenefits: string;
 
     @ViewColumn()
     categoryId: number;

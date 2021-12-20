@@ -1,13 +1,15 @@
 import { Radar } from "react-chartjs-2"
-import { CourseImprovementStatDTO } from "../../../models/shared_models/CourseImprovementStatDTO"
+import { HumanSkillBenefitDTO } from "../../../models/shared_models/HumanSkillBenefitDTO";
 
-export const CourseImprovementStatsRadar = (props: { stats: CourseImprovementStatDTO[] }) => {
+export const CourseImprovementStatsRadar = (props: { stats: HumanSkillBenefitDTO[] }) => {
 
     const { stats } = props;
 
     return <Radar
+        width={300}
+        height={300}
         options={{
-            responsive: true,
+            responsive: false,
             maintainAspectRatio: false,
             scales: {
                 r: {

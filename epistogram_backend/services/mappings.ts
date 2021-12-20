@@ -174,7 +174,7 @@ export const initializeMappings = (mapperService: MapperService) => {
     mapperService
         .addMap(CourseAdminDetailedView, CourseDetailsEditDataDTO, (view, params) => {
 
-            const categories = params as CourseCategory[];
+            const { categories, teachers } = params as { categories: CourseCategory[], teachers: User[] };
 
             const courseCategoryDTOs = categories
                 .map(x => toCourseCategoryDTO(x));
@@ -192,9 +192,26 @@ export const initializeMappings = (mapperService: MapperService) => {
                 difficulty: view.difficulty,
                 description: view.description,
                 benchmark: view.benchmark,
+                visibility: view.visibility,
+                teacherId: view.teacherId,
+                humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
 
                 skillBenefits: view.skillBenefits.split(",").map(x => x.trim()),
                 technicalRequirements: view.technicalRequirements.split(',').map(x => x.trim()),
+
+                humanSkillBenefits: view
+                    .humanSkillBenefits
+                    .split(',')
+                    .map(x => {
+
+                        const trimmed = x.trim();
+                        const split = trimmed.split(":");
+
+                        return {
+                            text: split[0].trim(),
+                            value: parseInt(split[1].trim())
+                        }
+                    }),
 
                 category: {
                     id: view.categoryId,
@@ -204,12 +221,11 @@ export const initializeMappings = (mapperService: MapperService) => {
                     id: view.subCategoryId,
                     name: view.subCategoryName
                 },
-                teacher: {
-                    id: view.teacherId,
-                    name: toFullName(view.teacherFirstName, view.teacherLastName),
-                    firstName: view.teacherFirstName,
-                    lastName: view.teacherLastName,
-                },
+                teachers: teachers
+                    .map(x => ({
+                        fullName: toFullName(x.firstName, x.lastName),
+                        id: x.id
+                    })),
                 categories: courseCategoryDTOs
             } as CourseDetailsEditDataDTO;
         });

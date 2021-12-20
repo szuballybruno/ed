@@ -2,8 +2,10 @@ import { Course } from "../models/entity/Course";
 import { CourseCategory } from "../models/entity/CourseCategory";
 import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
+import { User } from "../models/entity/User";
 import { UserCourseAccessBridge } from "../models/entity/UserCourseAccessBridge";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { Video } from "../models/entity/Video";
 import { CourseContentEditDataDTO } from "../models/shared_models/CourseContentEditDataDTO";
 import { CourseDetailsEditDataDTO } from "../models/shared_models/CourseDetailsEditDataDTO";
 import { CourseLearningDTO } from "../models/shared_models/CourseLearningDTO";
@@ -320,6 +322,11 @@ export class CourseService {
             .findOneOrFail(examId);
     }
 
+    /**
+     * Gets the course details edit DTO.
+     * @param courseId 
+     * @returns 
+     */
     getCourseDetailsEditDataAsync = async (courseId: number) => {
 
         // get course 
@@ -336,10 +343,52 @@ export class CourseService {
             .where("cc.parentCategoryId IS NULL")
             .getMany();
 
+        const teachers = await this._ormService
+            .getRepository(User)
+            .createQueryBuilder("u")
+            .where("u.isTeacher = true")
+            .getMany();
+
         return this._mapperService
-            .map(CourseAdminDetailedView, CourseDetailsEditDataDTO, view, categories);
+            .map(CourseAdminDetailedView, CourseDetailsEditDataDTO, view, { categories, teachers });
     }
 
+    /**
+     * Saves the course details.
+     */
+    async saveCourseDetailsAsync(dto: CourseDetailsEditDataDTO) {
+
+        // save basic info
+        await this._ormService
+            .getRepository(Course)
+            .save({
+                id: dto.courseId,
+                title: dto.title,
+                categoryId: dto.category.id,
+                subCategoryId: dto.subCategory.id,
+                benchmark: dto.benchmark,
+                description: dto.description,
+                difficulty: dto.difficulty,
+                language: dto.language,
+                shortDescription: dto.shortDescription,
+                humanSkillBenefitsDescription: dto.humanSkillBenefitsDescription,
+                skillBenefits: dto.skillBenefits?.join(", "),
+                technicalRequirements: dto.technicalRequirements?.join(", "),
+                humanSkillBenefits: dto
+                    .humanSkillBenefits
+                    .map(x => `${x.text}: ${x.value}`)
+                    .join(", "),
+
+                // teacherId: dto.teacherId,
+                visibility: dto.visibility
+            });
+    }
+
+    /**
+     * Gets the course content edit DTO.
+     * @param courseId 
+     * @returns 
+     */
     getCourseContentEditDataAsync = async (courseId: number) => {
 
         // get course 
@@ -351,6 +400,48 @@ export class CourseService {
 
         return this._mapperService
             .map(CourseAdminContentView, CourseContentEditDataDTO, views.first(), views);
+    }
+
+    /**
+     * Saves the course content 
+     */
+    async saveCourseContentAsync(dto: CourseContentEditDataDTO) {
+
+        // save module order index 
+        await this._ormService
+            .getRepository(CourseModule)
+            .save(dto
+                .modules
+                .map(x => ({
+                    id: x.id,
+                    orderIndex: x.orderIndex
+                } as CourseModule)));
+
+        // save video orders
+        await this._ormService
+            .getRepository(Video)
+            .save(dto
+                .modules
+                .flatMap(x => x.items)
+                .filter(x => x.type === "video")
+                .map(x => ({
+                    id: x.id,
+                    orderIndex: x.orderIndex,
+                    moduleId: x.moduleId
+                } as Video)));
+
+        // save exam orders
+        await this._ormService
+            .getRepository(Exam)
+            .save(dto
+                .modules
+                .flatMap(x => x.items)
+                .filter(x => x.type === "exam")
+                .map(x => ({
+                    id: x.id,
+                    orderIndex: x.orderIndex,
+                    moduleId: x.moduleId
+                } as Video)));
     }
 
     getAdminCoursesAsync = async () => {

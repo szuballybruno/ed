@@ -5,8 +5,9 @@ import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { CourseDetailsEditDataDTO } from "../../../models/shared_models/CourseDetailsEditDataDTO";
-import { CourseImprovementStatDTO } from "../../../models/shared_models/CourseImprovementStatDTO";
-import { UserDTO } from "../../../models/shared_models/UserDTO";
+import { HumanSkillBenefitDTO } from "../../../models/shared_models/HumanSkillBenefitDTO";
+import { TeacherDTO } from "../../../models/shared_models/TeacherDTO";
+import { CourseVisibilityType } from "../../../models/shared_models/types/sharedTypes";
 import { useCourseDetailsEditData, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { iterate } from "../../../static/frontendHelpers";
@@ -46,6 +47,7 @@ export const AdminCourseDetailsSubpage = () => {
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = useUploadCourseThumbnailAsync();
 
     const categories = courseDetailsEditData?.categories ?? [];
+    const teachers = courseDetailsEditData?.teachers ?? [];
 
     const [title, setTitle] = useState("")
     const [thumbnailSrc, setThumbnailSrc] = useState("")
@@ -57,33 +59,21 @@ export const AdminCourseDetailsSubpage = () => {
     const [difficulty, setDifficulty] = useState(0);
     const [benchmark, setBenchmark] = useState(0);
     const [language, setLanguage] = useState("");
-    const [skillImprovementDescription, setSkillImprovementDescription] = useState("");
-    const [technicalBenefits, setTechnicalBenefits] = useState<string[]>([
+    const [visibility, setVisibility] = useState<CourseVisibilityType>("public");
+    const [teacherId, setTeacherId] = useState(0);
+    const [skillBenefits, setSkillBenefits] = useState<string[]>([
         "Alapvető műveletek elvégzése",
         "Grafikai elemek használata",
         "Grafikonok és diagramok létrehozása"
     ]);
     const [technicalRequirements, setTechnicalRequirements] = useState<string[]>([]);
-
-    // functions 
-    const [courseImprovementStats, setCourseImprovementStats] = useState<CourseImprovementStatDTO[]>(iterate(10, () => ({
+    const [humanSkillBenefitsDescription, setHumanSkillBenefitsDescription] = useState("");
+    const [humanSkillBenefits, setHumanSkillBenefits] = useState<HumanSkillBenefitDTO[]>(iterate(10, () => ({
         text: "",
         value: 0
     })));
 
-    const setCourseImprovementStatValue = (index: number, text?: string, value?: number) => {
-
-        const newStats = [...courseImprovementStats];
-
-        if (text !== undefined)
-            newStats[index].text = text;
-
-        if (value !== undefined)
-            newStats[index].value = value;
-
-        setCourseImprovementStats(newStats);
-    }
-
+    // functions 
     const setBrowsedImage = (src: string, file: File) => {
 
         setThumbnailSrc(src);
@@ -99,10 +89,17 @@ export const AdminCourseDetailsSubpage = () => {
             courseId: courseId,
             title: title,
             thumbnailURL: thumbnailSrc,
-
-            teacher: {
-                id: 1,
-            } as UserDTO,
+            benchmark: benchmark,
+            description: description,
+            difficulty: difficulty,
+            language: language,
+            shortDescription: shortDescription,
+            skillBenefits: skillBenefits,
+            technicalRequirements: technicalRequirements,
+            humanSkillBenefitsDescription: humanSkillBenefitsDescription,
+            humanSkillBenefits: humanSkillBenefits,
+            visibility: visibility,
+            teacherId: teacherId,
 
             category: {
                 id: category?.id!
@@ -146,9 +143,12 @@ export const AdminCourseDetailsSubpage = () => {
         setDifficulty(courseDetailsEditData.difficulty);
         setBenchmark(courseDetailsEditData.benchmark);
         setLanguage(courseDetailsEditData.language);
-        setSkillImprovementDescription("");
-        setTechnicalBenefits([]);
-        setTechnicalRequirements([]);
+        setVisibility(courseDetailsEditData.visibility);
+        setTeacherId(courseDetailsEditData.teacherId);
+        setHumanSkillBenefitsDescription(courseDetailsEditData.humanSkillBenefitsDescription);
+        setSkillBenefits(courseDetailsEditData.skillBenefits);
+        setTechnicalRequirements(courseDetailsEditData.technicalRequirements);
+        setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits);
 
     }, [courseDetailsEditData]);
 
@@ -229,6 +229,26 @@ export const AdminCourseDetailsSubpage = () => {
                                     onSelected={setSubCategory} />
                             </EpistoLabel>
 
+                            {/* Subcategory */}
+                            <EpistoLabel text="Tanar">
+                                <EpistoSelect
+                                    getCompareKey={x => x?.id + ""}
+                                    getDisplayValue={x => x?.fullName + ""}
+                                    items={teachers}
+                                    selectedValue={teachers.filter(x => x.id === teacherId)[0]}
+                                    onSelected={x => setTeacherId(x.id)} />
+                            </EpistoLabel>
+
+                            {/* Subcategory */}
+                            <EpistoLabel text="Elerhetosegi szint">
+                                <EpistoSelect
+                                    getCompareKey={x => x}
+                                    getDisplayValue={x => x === "public" ? "Publikus" : "Privat"}
+                                    items={["public", "private"] as CourseVisibilityType[]}
+                                    selectedValue={visibility}
+                                    onSelected={setVisibility} />
+                            </EpistoLabel>
+
                             {/* Difficulty */}
                             <EpistoLabel text="Nehézség">
                                 <Slider
@@ -272,6 +292,7 @@ export const AdminCourseDetailsSubpage = () => {
                             <SimpleEditList
                                 mt="10px"
                                 items={technicalRequirements}
+                                initialValue=""
                                 setItems={setTechnicalRequirements} />
                         </EditSection>
                     </Flex>
@@ -284,8 +305,9 @@ export const AdminCourseDetailsSubpage = () => {
 
                             <SimpleEditList
                                 mt="10px"
-                                items={technicalBenefits}
-                                setItems={setTechnicalBenefits} />
+                                items={skillBenefits}
+                                initialValue=""
+                                setItems={setSkillBenefits} />
                         </EditSection>
 
                         {/* skill improvements section */}
@@ -295,47 +317,52 @@ export const AdminCourseDetailsSubpage = () => {
                             <EpistoEntry
                                 labelVariant={"top"}
                                 isMultiline={true}
-                                value={skillImprovementDescription}
+                                value={humanSkillBenefitsDescription}
                                 label="Elsajátítható készségek"
-                                setValue={setSkillImprovementDescription} />
+                                setValue={setHumanSkillBenefitsDescription} />
 
                             {/* improvement stats */}
                             <EpistoLabel text="Mit fejleszt a tanfolyam?">
+
+                                <SimpleEditList
+                                    mt="10px"
+                                    items={humanSkillBenefits}
+                                    initialValue={{ text: "", value: 0 }}
+                                    setItems={x => setHumanSkillBenefits(x)}
+                                    renderChild={(item, onItemChanged) => (
+                                        <Flex
+                                            flexDir={"row"}
+                                            alignItems={"center"}
+                                            my={3}
+                                            flex="1">
+
+                                            <EpistoEntry
+                                                marginTop={"0"}
+                                                labelVariant={"top"}
+                                                isMultiline={false}
+                                                value={item.text}
+                                                setValue={(value) => onItemChanged({ ...item, text: value })} />
+
+                                            <Slider
+                                                defaultValue={0}
+                                                valueLabelDisplay="auto"
+                                                value={item.value}
+                                                onChange={(_, targetValue) => onItemChanged({ ...item, value: targetValue as number })}
+                                                style={{
+                                                    margin: "5px 10px 5px 20px"
+                                                }}
+                                                step={1}
+                                                marks
+                                                min={0}
+                                                max={10} />
+                                        </Flex>
+                                    )} />
+
                                 <Flex direction={"column"}>
 
-                                    {/* stats */}
-                                    {courseImprovementStats
-                                        .map((improvementStat, index) =>
-                                            <Flex
-                                                flexDir={"row"}
-                                                alignItems={"center"}
-                                                minW={300}
-                                                my={3}>
-
-                                                <EpistoEntry
-                                                    marginTop={"0"}
-                                                    labelVariant={"top"}
-                                                    isMultiline={false}
-                                                    value={improvementStat.text}
-                                                    setValue={(value) => setCourseImprovementStatValue(index, value)} />
-
-                                                <Slider
-                                                    defaultValue={0}
-                                                    valueLabelDisplay="auto"
-                                                    value={improvementStat.value}
-                                                    onChange={(_, targetValue) => setCourseImprovementStatValue(index, undefined, targetValue as number)}
-                                                    style={{
-                                                        margin: "5px 10px 5px 20px"
-                                                    }}
-                                                    step={1}
-                                                    marks
-                                                    min={0}
-                                                    max={10} />
-                                            </Flex>)}
-
                                     {/* radar chart */}
-                                    <Flex h={300} mt={10}>
-                                        <CourseImprovementStatsRadar stats={courseImprovementStats} />
+                                    <Flex mt="10px" align="center" justify="center">
+                                        <CourseImprovementStatsRadar stats={humanSkillBenefits} />
                                     </Flex>
                                 </Flex>
                             </EpistoLabel>

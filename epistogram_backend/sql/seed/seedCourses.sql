@@ -28,7 +28,9 @@ INSERT INTO public.course
         benchmark,
         language,
         technical_requirements,
-        skill_benefits
+        skill_benefits,
+        human_skill_benefits,
+        human_skill_benefits_description
     )
 VALUES
     (
@@ -45,7 +47,9 @@ VALUES
         3.5,
         'magyar',
         'Windows vagy Mac operacios rendszer, Alma, Barack',
-        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt'
+        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt',
+        'reflex: 1, figyelem: 2',
+        ''
     ),
     (
         2, 
@@ -61,7 +65,9 @@ VALUES
         3.5,
         'magyar',
         'Windows vagy Mac operacios rendszer, Alma, Barack',
-        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt'
+        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt',
+        'reflex: 1, figyelem: 2',
+        ''
     ),
     (
         3, 
@@ -77,7 +83,9 @@ VALUES
         3.5,
         'magyar',
         'Windows vagy Mac operacios rendszer, Alma, Barack',
-        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt'
+        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt',
+        'reflex: 1, figyelem: 2',
+        ''
     ),
     (
         4, 
@@ -93,7 +101,9 @@ VALUES
         3.5,
         'magyar',
         'Windows vagy Mac operacios rendszer, Alma, Barack',
-        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt'
+        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt',
+        'reflex: 1, figyelem: 2',
+        ''
     )
 
 ON CONFLICT (id) DO UPDATE SET 

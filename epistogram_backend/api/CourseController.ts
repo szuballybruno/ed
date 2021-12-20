@@ -90,60 +90,15 @@ export class CourseController {
 
         const dto = withValueOrBadRequest<CourseDetailsEditDataDTO>(params.req?.body);
 
-        // save basic info
-        await staticProvider
-            .ormConnection
-            .getRepository(Course)
-            .save({
-                id: dto.courseId,
-                title: dto.title,
-                categoryId: dto.category.id,
-                subCategoryId: dto.subCategory.id
-            });
+        await this._courseService.saveCourseDetailsAsync(dto);
     };
 
     saveCourseContentAction = async (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<CourseContentEditDataDTO>(params.req?.body);
 
-        // save module order index 
-        await staticProvider
-            .ormConnection
-            .getRepository(CourseModule)
-            .save(dto
-                .modules
-                .map(x => ({
-                    id: x.id,
-                    orderIndex: x.orderIndex
-                } as CourseModule)));
-
-        // save video orders
-        await staticProvider
-            .ormConnection
-            .getRepository(Video)
-            .save(dto
-                .modules
-                .flatMap(x => x.items)
-                .filter(x => x.type === "video")
-                .map(x => ({
-                    id: x.id,
-                    orderIndex: x.orderIndex,
-                    moduleId: x.moduleId
-                } as Video)));
-
-        // save exam orders
-        await staticProvider
-            .ormConnection
-            .getRepository(Exam)
-            .save(dto
-                .modules
-                .flatMap(x => x.items)
-                .filter(x => x.type === "exam")
-                .map(x => ({
-                    id: x.id,
-                    orderIndex: x.orderIndex,
-                    moduleId: x.moduleId
-                } as Video)));
+        await this._courseService
+            .saveCourseContentAsync(dto);
     };
 
     saveCourseThumbnailAction = async (params: ActionParams) => {

@@ -42,6 +42,12 @@ export class Course {
     @Column()
     skillBenefits: string;
 
+    @Column()
+    humanSkillBenefits: string;
+
+    @Column()
+    humanSkillBenefitsDescription: string;
+
     @Column({ default: "public", type: "text" })
     visibility: CourseVisibilityType;
 

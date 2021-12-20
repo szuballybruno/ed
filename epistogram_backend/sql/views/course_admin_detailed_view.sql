@@ -8,6 +8,9 @@ SELECT
     co.language language_name,
     co.technical_requirements technical_requirements,
 	co.skill_benefits skill_benefits,
+	co.visibility visibility,
+	co.human_skill_benefits human_skill_benefits,
+	co.human_skill_benefits_description human_skill_benefits_description,
 	
 	-- cat 
 	cc.id category_id,
