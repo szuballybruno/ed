@@ -69,9 +69,11 @@ export const apiRoutes = {
     },
 
     course: {
-        getCourseEditData: '/course/get-course-edit-data',
+        getCourseContentEditData: '/course/get-course-content-edit-data',
+        getCourseDetailsEditData: '/course/get-course-details-edit-data',
         getCourseBriefData: '/course/get-course-brief-data',
-        saveCourseData: '/course/save-course-data',
+        saveCourseDetails: '/course/save-course-details-data',
+        saveCourseContent: '/course/save-course-content-data',
         saveCourseThumbnail: '/course/save-course-thumbnail',
         startCourse: "/course/start-course",
         getAvailableCourses: "/course/get-available-courses",

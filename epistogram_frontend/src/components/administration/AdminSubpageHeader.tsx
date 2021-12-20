@@ -97,6 +97,7 @@ export const AdminSubpageHeader = (props: {
             direction={"row"}
             height={60}
             pl={20}
+            bg="white"
             align={"center"}
             className="dividerBorderBottom">
 
@@ -116,11 +117,13 @@ export const AdminSubpageHeader = (props: {
 
         {/* tabs */}
         {tabMenuItems && <Flex
-            mx={20}
+            bg="white"
+            px="20px"
+            className="dividerBorderBottom"
             flexDirection="row"
             alignItems="center"
             justify={"space-between"}
-            h={60}>
+            h={65}>
 
             <Tabs
                 value={currentMatchingRoute?.route}
@@ -160,7 +163,12 @@ export const AdminSubpageHeader = (props: {
         }
 
         {/* children  */}
-        <Flex direction="column" flex="1" overflowY="scroll" px="20px" {...css}>
+        <Flex
+            direction="column"
+            flex="1"
+            overflowY="scroll"
+            {...css}>
+
             {children}
         </Flex>
     </Flex>

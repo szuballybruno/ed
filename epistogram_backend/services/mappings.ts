@@ -19,8 +19,9 @@ import { CoinTransactionDTO } from "../models/shared_models/CoinTransactionDTO";
 import { CourseAdminItemShortDTO } from "../models/shared_models/CourseAdminItemShortDTO";
 import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
 import { CourseCategoryDTO } from "../models/shared_models/CourseCategoryDTO";
+import { CourseContentEditDataDTO } from "../models/shared_models/CourseContentEditDataDTO";
 import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
-import { CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
+import { CourseDetailsEditDataDTO } from "../models/shared_models/CourseDetailsEditDataDTO";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseLearningDTO } from "../models/shared_models/CourseLearningDTO";
 import { CourseProgressShortDTO } from "../models/shared_models/CourseProgressShortDTO";
@@ -52,6 +53,7 @@ import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { UserStatsDTO } from "../models/shared_models/UserStatsDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
 import { CoinTransactionView } from "../models/views/CoinTransactionView";
+import { CourseAdminContentView } from "../models/views/CourseAdminContentView";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
@@ -67,22 +69,10 @@ import { UserStatsView } from "../models/views/UserStatsView";
 import { staticProvider } from "../staticProvider";
 import { getFullName, navPropNotNull, toFullName } from "../utilities/helpers";
 import { getItemCode } from "./encodeService";
-import { MapperService } from "./mapperService";
+import { MapperService } from "./MapperService2";
 import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
 
 export const initializeMappings = (mapperService: MapperService) => {
-
-    mapperService
-        .addMap(CourseAdminDetailedView, CourseAdminItemShortDTO, view => ({
-            id: view.itemId,
-            subTitle: view.itemSubtitle,
-            title: view.itemTitle,
-            orderIndex: view.itemOrderIndex,
-            descriptorCode: view.itemCode,
-            type: view.videoId ? "video" : "exam",
-            questionCount: view.itemQuestionCount,
-            videoLength: view.videoLength
-        }));
 
     mapperService
         .addMap(CourseModule, ModuleDetailedDTO, view => ({
@@ -179,6 +169,95 @@ export const initializeMappings = (mapperService: MapperService) => {
     mapperService
         .addMap(CourseProgressView, CourseProgressShortDTO, x => ({
             ...x
+        }));
+
+    mapperService
+        .addMap(CourseAdminDetailedView, CourseDetailsEditDataDTO, (view, params) => {
+
+            const categories = params as CourseCategory[];
+
+            const courseCategoryDTOs = categories
+                .map(x => toCourseCategoryDTO(x));
+
+            const thumbnailImageURL = view.coverFilePath
+                ? getAssetUrl(view.coverFilePath)
+                : getAssetUrl("/images/defaultCourseCover.jpg");
+
+            return {
+                title: view.title,
+                courseId: view.courseId,
+                thumbnailURL: thumbnailImageURL,
+                shortDescription: view.shortDescription,
+                language: view.languageName,
+                difficulty: view.difficulty,
+                description: view.description,
+                benchmark: view.benchmark,
+
+                skillBenefits: view.skillBenefits.split(",").map(x => x.trim()),
+                technicalRequirements: view.technicalRequirements.split(',').map(x => x.trim()),
+
+                category: {
+                    id: view.categoryId,
+                    name: view.categoryName
+                },
+                subCategory: {
+                    id: view.subCategoryId,
+                    name: view.subCategoryName
+                },
+                teacher: {
+                    id: view.teacherId,
+                    name: toFullName(view.teacherFirstName, view.teacherLastName),
+                    firstName: view.teacherFirstName,
+                    lastName: view.teacherLastName,
+                },
+                categories: courseCategoryDTOs
+            } as CourseDetailsEditDataDTO;
+        });
+
+    mapperService
+        .addMap(CourseAdminContentView, CourseContentEditDataDTO, (view, params) => {
+
+            const modules = params as CourseAdminContentView[];
+
+            const moduleDTOs = modules
+                .groupBy(x => x.moduleId)
+                .map(grouping => {
+
+                    const viewAsModule = grouping.items.first();
+
+                    const items = grouping
+                        .items
+                        .filter(x => !!x.itemId)
+                        .map(viewAsItem => staticProvider
+                            .services
+                            .mapperService
+                            .map(CourseAdminContentView, CourseAdminItemShortDTO, viewAsItem));
+
+                    return {
+                        id: viewAsModule.moduleId,
+                        name: viewAsModule.moduleName,
+                        orderIndex: viewAsModule.moduleOrderIndex,
+                        code: viewAsModule.moduleCode,
+                        items: items
+                    } as ModuleAdminShortDTO;
+                });
+
+            return {
+                courseId: view.courseId,
+                modules: moduleDTOs
+            } as CourseContentEditDataDTO;
+        });
+
+    mapperService
+        .addMap(CourseAdminContentView, CourseAdminItemShortDTO, view => ({
+            id: view.itemId,
+            subTitle: view.itemSubtitle,
+            title: view.itemTitle,
+            orderIndex: view.itemOrderIndex,
+            descriptorCode: view.itemCode,
+            type: view.videoId ? "video" : "exam",
+            questionCount: view.itemQuestionCount,
+            videoLength: view.videoLength
         }));
 }
 
@@ -504,62 +583,6 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
             }),
         isCompleted: isCompletedSignup
     } as SignupDataDTO;
-}
-
-export const toCourseEditDataDTO = (
-    courseViews: CourseAdminDetailedView[],
-    categories: CourseCategory[]) => {
-
-    const viewAsCourse = courseViews.first();
-
-    const thumbnailImageURL = viewAsCourse.coverFilePath
-        ? getAssetUrl(viewAsCourse.coverFilePath)
-        : getAssetUrl("/images/defaultCourseCover.jpg");
-
-    const modules = courseViews
-        .groupBy(x => x.moduleId)
-        .map(grouping => {
-
-            const viewAsModule = grouping.items.first();
-
-            const items = grouping
-                .items
-                .filter(x => !!x.itemId)
-                .map(viewAsItem => staticProvider
-                    .services
-                    .mapperService
-                    .map(CourseAdminDetailedView, CourseAdminItemShortDTO, viewAsItem));
-
-            return {
-                id: viewAsModule.moduleId,
-                name: viewAsModule.moduleName,
-                orderIndex: viewAsModule.moduleOrderIndex,
-                code: viewAsModule.moduleCode,
-                items: items
-            } as ModuleAdminShortDTO;
-        });
-
-    return {
-        title: viewAsCourse.title,
-        courseId: viewAsCourse.id,
-        thumbnailURL: thumbnailImageURL,
-        category: {
-            id: viewAsCourse.categoryId,
-            name: viewAsCourse.categoryName
-        },
-        subCategory: {
-            id: viewAsCourse.subCategoryId,
-            name: viewAsCourse.subCategoryName
-        },
-        teacher: {
-            id: viewAsCourse.teacherId,
-            name: toFullName(viewAsCourse.teacherFirstName, viewAsCourse.teacherLastName),
-            firstName: viewAsCourse.teacherFirstName,
-            lastName: viewAsCourse.teacherLastName,
-        },
-        modules: modules,
-        categories: categories.map(x => toCourseCategoryDTO(x)),
-    } as CourseEditDataDTO;
 }
 
 export const toAnswerDTO = (a: Answer) => {

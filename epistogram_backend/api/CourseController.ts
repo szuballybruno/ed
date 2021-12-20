@@ -4,7 +4,8 @@ import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { Video } from "../models/entity/Video";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
-import { CourseEditDataDTO as CourseEditDataDTO } from "../models/shared_models/CourseEditDataDTO";
+import { CourseContentEditDataDTO } from "../models/shared_models/CourseContentEditDataDTO";
+import { CourseDetailsEditDataDTO as CourseDetailsEditDataDTO } from "../models/shared_models/CourseDetailsEditDataDTO";
 import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
@@ -35,11 +36,18 @@ export class CourseController {
         return this._courseService.getAvailableCoursesAsync(params.userId);
     };
 
-    getCourseEditDataAction = async (params: ActionParams) => {
+    getCourseDetailsEditDataAction = async (params: ActionParams) => {
 
         const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
 
-        return await this._courseService.getCourseEditDataAsync(courseId);
+        return await this._courseService.getCourseDetailsEditDataAsync(courseId);
+    };
+
+    getCourseContentEditDataAction = async (params: ActionParams) => {
+
+        const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
+
+        return await this._courseService.getCourseContentEditDataAsync(courseId);
     };
 
     getAdminCourseListAction = (params: ActionParams) => {
@@ -78,9 +86,9 @@ export class CourseController {
         return toCourseDetailsDTO(course);
     }
 
-    saveCourseAction = async (params: ActionParams) => {
+    saveCourseDetailsAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<CourseEditDataDTO>(params.req?.body);
+        const dto = withValueOrBadRequest<CourseDetailsEditDataDTO>(params.req?.body);
 
         // save basic info
         await staticProvider
@@ -92,6 +100,11 @@ export class CourseController {
                 categoryId: dto.category.id,
                 subCategoryId: dto.subCategory.id
             });
+    };
+
+    saveCourseContentAction = async (params: ActionParams) => {
+
+        const dto = withValueOrBadRequest<CourseContentEditDataDTO>(params.req?.body);
 
         // save module order index 
         await staticProvider

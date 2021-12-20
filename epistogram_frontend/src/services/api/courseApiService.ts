@@ -1,16 +1,17 @@
-import { useReactQuery2 } from "../../static/frontendHelpers";
 import { CourseAdminListItemDTO } from "../../models/shared_models/CourseAdminListItemDTO";
 import { CourseBriefData } from "../../models/shared_models/CourseBriefData";
+import { CourseContentEditDataDTO } from "../../models/shared_models/CourseContentEditDataDTO";
 import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
-import { CourseEditDataDTO } from "../../models/shared_models/CourseEditDataDTO";
+import { CourseDetailsEditDataDTO } from "../../models/shared_models/CourseDetailsEditDataDTO";
+import { CourseProgressShortDTO } from "../../models/shared_models/CourseProgressShortDTO";
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { CreateCourseDTO } from "../../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
 import { TextDTO } from "../../models/shared_models/TextDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { UserCoursesDataDTO } from "../../models/shared_models/UserCoursesDataDTO";
+import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe } from "../core/httpClient";
-import { CourseProgressShortDTO } from "../../models/shared_models/CourseProgressShortDTO";
 
 export const useAdminCourseList = (searchText: string) => {
 
@@ -24,15 +25,27 @@ export const useAdminCourseList = (searchText: string) => {
     }
 }
 
-export const useAdminEditedCourse = (courseId: number) => {
+export const useCourseDetailsEditData = (courseId: number) => {
 
-    const qr = useReactQuery2<CourseEditDataDTO>(apiRoutes.course.getCourseEditData, { courseId });
+    const qr = useReactQuery2<CourseDetailsEditDataDTO>(apiRoutes.course.getCourseDetailsEditData, { courseId });
 
     return {
-        courseEditData: qr.data,
-        courseEditDataError: qr.error,
-        courseEditDataState: qr.state,
-        refetchCourseEditDataAsync: qr.refetch
+        courseDetailsEditData: qr.data,
+        courseDetailsEditDataError: qr.error,
+        courseDetailsEditDataState: qr.state,
+        refetchCourseDetailsEditData: qr.refetch
+    }
+}
+
+export const useCourseContentEditData = (courseId: number) => {
+
+    const qr = useReactQuery2<CourseContentEditDataDTO>(apiRoutes.course.getCourseContentEditData, { courseId });
+
+    return {
+        courseContentEditData: qr.data,
+        courseContentEditDataError: qr.error,
+        courseContentEditDataState: qr.state,
+        refetchCourseContentEditData: qr.refetch
     }
 }
 
@@ -56,9 +69,19 @@ export const useDeleteCourse = () => {
     };
 }
 
-export const useSaveCourseData = () => {
+export const useSaveCourseDetailsData = () => {
 
-    const qr = usePostDataUnsafe<CourseEditDataDTO, void>(apiRoutes.course.saveCourseData);
+    const qr = usePostDataUnsafe<CourseDetailsEditDataDTO, void>(apiRoutes.course.saveCourseContent);
+
+    return {
+        saveCourseDataAsync: qr.postDataAsync,
+        saveCourseDataState: qr.state,
+    };
+}
+
+export const useSaveCourseContentData = () => {
+
+    const qr = usePostDataUnsafe<CourseContentEditDataDTO, void>(apiRoutes.course.saveCourseContent);
 
     return {
         saveCourseDataAsync: qr.postDataAsync,

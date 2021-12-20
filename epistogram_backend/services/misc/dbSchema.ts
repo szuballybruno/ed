@@ -61,6 +61,7 @@ import { ShopItemView } from "../../models/views/ShopItemView";
 import { DiscountCode } from "../../models/entity/DiscountCode";
 import { CourseLearningStatsView } from "../../models/views/CourseLearningStatsView";
 import { CourseProgressView } from "../../models/views/CourseProgressView";
+import { CourseAdminContentView } from "../../models/views/CourseAdminContentView";
 
 export const dbSchema = {
 
@@ -84,6 +85,7 @@ export const dbSchema = {
         "daily_tip_view",
         "course_admin_short_view",
         "course_admin_detailed_view",
+        "course_admin_content_view",
         "video_playback_sample_view",
         "user_session_view",
         "user_stats_view",
@@ -137,6 +139,7 @@ export const dbSchema = {
         SignupQuestionView,
         CourseAdminShortView,
         CourseAdminDetailedView,
+        CourseAdminContentView,
         UserStatsView,
         UserSessionDailyView,
         UserSessionView,

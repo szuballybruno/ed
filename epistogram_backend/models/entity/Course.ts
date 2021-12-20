@@ -21,6 +21,27 @@ export class Course {
     @Column()
     title: string;
 
+    @Column()
+    shortDescription: string;
+
+    @Column()
+    description: string;
+
+    @Column({ type: "double precision" })
+    difficulty: number;
+
+    @Column({ type: "double precision" })
+    benchmark: number;
+
+    @Column()
+    language: string;
+
+    @Column()
+    technicalRequirements: string;
+
+    @Column()
+    skillBenefits: string;
+
     @Column({ default: "public", type: "text" })
     visibility: CourseVisibilityType;
 

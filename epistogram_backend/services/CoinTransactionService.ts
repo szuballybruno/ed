@@ -2,7 +2,7 @@ import { CoinTransaction } from "../models/entity/CoinTransaction";
 import { CoinTransactionDTO } from "../models/shared_models/CoinTransactionDTO";
 import { CoinBalanceView } from "../models/views/CoinBalanceView";
 import { CoinTransactionView } from "../models/views/CoinTransactionView";
-import { MapperService } from "./mapperService";
+import { MapperService } from "./MapperService2";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { InsertCoinFnParamsType, SQLFunctionsService } from "./sqlServices/FunctionsService";
 

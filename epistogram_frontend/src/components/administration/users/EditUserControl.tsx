@@ -1,4 +1,4 @@
-import {Box, Flex} from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { Button, TextField, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from 'react';
 import { getEventValueCallback } from "../../../static/frontendHelpers";
@@ -12,8 +12,8 @@ import { AddFrame } from "../../add_frame/AddFrame";
 import { CurrentUserContext } from "../../system/AuthenticationFrame";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import { useOrganizations, useJobTitles } from "../../../services/api/miscApiService";
-import {EditSection} from "../courses/EditSection";
-import {EpistoEntry} from "../../universal/EpistoEntry";
+import { EditSection } from "../courses/EditSection";
+import { EpistoEntry } from "../../universal/EpistoEntry";
 
 export const roles = [
     {
@@ -83,7 +83,7 @@ export const EditUserControl = (props: {
         await saveUserAsync(editedUserDTO);
     }
 
-    return  <Box px="20px" flex="1" alignItems={"flex-start"} maxW={500}>
+    return <Box px="20px" flex="1" alignItems={"flex-start"} maxW={500}>
 
         <EditSection
             title={"Új felhasználó hozzáadása"}>
@@ -93,7 +93,6 @@ export const EditUserControl = (props: {
                 {/* first & last name */}
                 <Flex>
                     <EpistoEntry
-                        style={{ flex: "1", margin: "0 10px 0 0" }}
                         value={firstName}
                         name="fname"
                         setValue={setFirstName}
@@ -101,7 +100,6 @@ export const EditUserControl = (props: {
                         label="Keresztnév" />
 
                     <EpistoEntry
-                        style={{ flex: "1", margin: "0" }}
                         name="lname"
                         value={lastName}
                         setValue={setLastName}
@@ -111,7 +109,6 @@ export const EditUserControl = (props: {
 
                 {/* email */}
                 <EpistoEntry
-                    style={{ flex: "1", margin: "10px 0 0 0" }}
                     name="email"
                     value={email}
                     setValue={setEmail}
@@ -120,7 +117,7 @@ export const EditUserControl = (props: {
 
                 {/* organization */}
                 {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
-                    <Typography variant={"overline"} style={{marginTop: "10px" }}>
+                    <Typography variant={"overline"} style={{ marginTop: "10px" }}>
                         Cég
                     </Typography>
                     <EpistoSelect
@@ -133,7 +130,7 @@ export const EditUserControl = (props: {
 
                 {/* job title */}
                 {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
-                    <Typography variant={"overline"} style={{marginTop: "10px" }}>
+                    <Typography variant={"overline"} style={{ marginTop: "10px" }}>
                         Beosztás
                     </Typography>
                     <EpistoSelect
@@ -146,7 +143,7 @@ export const EditUserControl = (props: {
 
                 {/* role */}
                 <Flex direction="column" align="stretch" width="100%">
-                    <Typography variant={"overline"} style={{marginTop: "10px" }}>
+                    <Typography variant={"overline"} style={{ marginTop: "10px" }}>
                         Jogosultsági kör
                     </Typography>
                     <EpistoSelect

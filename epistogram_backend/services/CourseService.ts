@@ -4,12 +4,15 @@ import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { UserCourseAccessBridge } from "../models/entity/UserCourseAccessBridge";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { CourseContentEditDataDTO } from "../models/shared_models/CourseContentEditDataDTO";
+import { CourseDetailsEditDataDTO } from "../models/shared_models/CourseDetailsEditDataDTO";
 import { CourseLearningDTO } from "../models/shared_models/CourseLearningDTO";
 import { CourseProgressShortDTO } from "../models/shared_models/CourseProgressShortDTO";
 import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { TextDTO } from "../models/shared_models/TextDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
+import { CourseAdminContentView } from "../models/views/CourseAdminContentView";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
@@ -17,8 +20,8 @@ import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView
 import { CourseProgressView } from "../models/views/CourseProgressView";
 import { CourseView } from "../models/views/CourseView";
 import { getItemCode, readItemCode } from "./encodeService";
-import { MapperService } from "./mapperService";
-import { toCourseAdminShortDTO, toCourseEditDataDTO, toCourseItemDTO, toCourseShortDTO } from "./mappings";
+import { MapperService } from "./MapperService2";
+import { toCourseAdminShortDTO, toCourseItemDTO, toCourseShortDTO } from "./mappings";
 import { ModuleService } from "./ModuleService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
@@ -317,14 +320,14 @@ export class CourseService {
             .findOneOrFail(examId);
     }
 
-    getCourseEditDataAsync = async (courseId: number) => {
+    getCourseDetailsEditDataAsync = async (courseId: number) => {
 
         // get course 
-        const views = await this._ormService
+        const view = await this._ormService
             .getRepository(CourseAdminDetailedView)
-            .createQueryBuilder("course")
-            .where("course.id = :courseId", { courseId: courseId })
-            .getMany();
+            .createQueryBuilder("c")
+            .where("c.courseId = :courseId", { courseId: courseId })
+            .getOneOrFail();
 
         const categories = await this._ormService
             .getRepository(CourseCategory)
@@ -333,7 +336,21 @@ export class CourseService {
             .where("cc.parentCategoryId IS NULL")
             .getMany();
 
-        return toCourseEditDataDTO(views, categories);
+        return this._mapperService
+            .map(CourseAdminDetailedView, CourseDetailsEditDataDTO, view, categories);
+    }
+
+    getCourseContentEditDataAsync = async (courseId: number) => {
+
+        // get course 
+        const views = await this._ormService
+            .getRepository(CourseAdminContentView)
+            .createQueryBuilder("c")
+            .where("c.courseId = :courseId", { courseId: courseId })
+            .getMany();
+
+        return this._mapperService
+            .map(CourseAdminContentView, CourseContentEditDataDTO, views.first(), views);
     }
 
     getAdminCoursesAsync = async () => {

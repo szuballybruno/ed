@@ -14,12 +14,87 @@ ON CONFLICT (id) DO UPDATE SET
 
 -- SEED COURSES
 INSERT INTO public.course 
-    (id, title, visibility, category_id, sub_category_id, teacher_id, cover_file_id)
+    (
+        id, 
+        title, 
+        visibility, 
+        category_id, 
+        sub_category_id, 
+        teacher_id, 
+        cover_file_id,
+        short_description,
+        description,
+        difficulty,
+        benchmark,
+        language,
+        technical_requirements,
+        skill_benefits
+    )
 VALUES
-    (1, 'Webfejlesztés kezdőknek (HTML, CSS, BOOTSTRAP)', DEFAULT, 1, 2, 1, 1),
-    (2, 'Java programozás mesterkurzus', DEFAULT, 1, 3, 1, 2),
-    (3, 'Angular - Minden amire szükséged lehet', 'private', 1, 4, 1, 3),
-    (4, 'Microsoft Excel Mesterkurzus', DEFAULT, 1, 5, 1, 4)
+    (
+        1, 
+        'Webfejlesztés kezdőknek (HTML, CSS, BOOTSTRAP)', 
+        DEFAULT, 
+        1, 
+        2, 
+        1, 
+        1, -- cover_file_id
+        'short desc',
+        'long desc',
+        1.5,
+        3.5,
+        'magyar',
+        'Windows vagy Mac operacios rendszer, Alma, Barack',
+        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt'
+    ),
+    (
+        2, 
+        'Java programozás mesterkurzus', 
+        DEFAULT, 
+        1, 
+        3, 
+        1, 
+        2, -- cover_file_id
+        'short desc',
+        'long desc',
+        1.5,
+        3.5,
+        'magyar',
+        'Windows vagy Mac operacios rendszer, Alma, Barack',
+        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt'
+    ),
+    (
+        3, 
+        'Angular - Minden amire szükséged lehet', 
+        'private', 
+        1, 
+        4, 
+        1, 
+        3, -- cover_file_id
+        'short desc',
+        'long desc',
+        1.5,
+        3.5,
+        'magyar',
+        'Windows vagy Mac operacios rendszer, Alma, Barack',
+        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt'
+    ),
+    (
+        4, 
+        'Microsoft Excel Mesterkurzus', 
+        DEFAULT, 
+        1, 
+        5, 
+        1, 
+        4, -- cover_file_id
+        'short desc',
+        'long desc',
+        1.5,
+        3.5,
+        'magyar',
+        'Windows vagy Mac operacios rendszer, Alma, Barack',
+        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt'
+    )
 
 ON CONFLICT (id) DO UPDATE SET 
     title = EXCLUDED.title,

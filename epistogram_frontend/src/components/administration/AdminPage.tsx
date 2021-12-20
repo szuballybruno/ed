@@ -8,7 +8,6 @@ import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../navbar/Navbar";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AdminCourseListSubpage } from "./courses/AdminCourseListSubpage";
-import { AdminCourseContentSubpage } from "./courses/AdminCourseContentSubpage";
 import AdminStatistics from "./users/AdminStatisticsSubpage";
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
 import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
@@ -26,7 +25,8 @@ import { EditExamSubpage } from './courses/EditExamSubpage';
 import { getRoute } from "../../MainRouting";
 import { EditModuleSubpage } from './courses/EditModuleSubpage';
 import { AdminCourseDetailsSubpage } from "./courses/AdminCourseDetailsSubpage";
-import {AdminUserTeacherInfoSubpage} from "./users/AdminUserTeacherInfoSubpage";
+import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage";
+import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
 
 const AdminPage = () => {
 

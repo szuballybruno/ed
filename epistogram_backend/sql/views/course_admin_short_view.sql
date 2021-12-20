@@ -9,13 +9,13 @@ SELECT
 	"t"."first_name" AS "teacher_first_name",
 	"t"."last_name" AS "teacher_last_name",
 	"sf"."file_path" AS "cover_file_path",
-	(SELECT COUNT("sq".*) 
+	(SELECT COUNT("sq".*)::int
 		FROM (SELECT 
 			  DISTINCT "video"."id" 
 			  FROM public."video" 
 			  WHERE "video"."course_id" = "c"."id") AS "sq") 
 		AS "video_count",
-	(SELECT COUNT("sq".*) 
+	(SELECT COUNT("sq".*)::int
 		FROM (SELECT 
 			  DISTINCT "exam"."id" 
 			  FROM public."exam" 

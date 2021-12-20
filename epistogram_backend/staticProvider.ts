@@ -1,6 +1,6 @@
 import { CoinAcquireService } from "./services/CoinAcquireService";
 import { GlobalConfiguration } from "./services/environment";
-import { MapperService } from "./services/mapperService";
+import { MapperService } from "./services/MapperService2";
 import { DbConnectionService } from "./services/sqlServices/DatabaseConnectionService";
 import { ORMConnection } from "./services/sqlServices/ORMConnectionService";
 import { SQLBootstrapperService } from "./services/sqlServices/SQLBootstrapper";

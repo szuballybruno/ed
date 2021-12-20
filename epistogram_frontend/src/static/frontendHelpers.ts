@@ -9,6 +9,18 @@ import { ApplicationRoute, LoadingStateType } from "../models/types";
 import { httpGetAsync } from "../services/core/httpClient";
 import { translatableTexts } from "./translatableTexts";
 
+export const iterate = <T>(n: number, fn: (index) => T) => {
+
+    let results = [] as T[];
+
+    for (let index = 0; index < n; index++) {
+
+        results.push(fn(index));
+    }
+
+    return results;
+}
+
 export const dateTimeToString = (date: Date) => {
 
     if (!date)

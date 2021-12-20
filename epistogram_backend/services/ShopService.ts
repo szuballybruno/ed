@@ -8,7 +8,7 @@ import { ShopItemView } from "../models/views/ShopItemView";
 import { CoinTransactionService } from "./CoinTransactionService";
 import { CourseService } from "./CourseService";
 import { EmailService } from "./EmailService";
-import { MapperService } from "./mapperService";
+import { MapperService } from "./MapperService2";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class ShopService {
