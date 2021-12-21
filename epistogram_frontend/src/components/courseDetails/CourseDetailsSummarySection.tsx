@@ -8,25 +8,13 @@ import React from "react";
 import { translatableTexts } from "../../static/translatableTexts";
 import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
 import { CourseImprovementStatsRadar } from "../universal/CourseImprovementStatsRadar";
+import DoneIcon from '@mui/icons-material/Done';
 
 export const CourseDetailsSummarySection = (props: {
     courseDetails: CourseDetailsDTO
 }) => {
 
     const { courseDetails } = props;
-
-    const WhatCanYouLearnInCourseListItem = (props: { title: string }) => <Flex w={"100%"} h={30} px={15} mt={10}>
-        <Flex w={30} h={30} p={5} >
-            <img src={getAssetUrl("/course_page_icons/description_checkmark.svg")} style={{
-                borderRadius: 5,
-                objectFit: "cover"
-            }} alt={""} />
-
-        </Flex>
-        <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-            <Typography>{props.title}</Typography>
-        </Flex>
-    </Flex>
 
     return <Flex
         mt={10}
@@ -37,6 +25,7 @@ export const CourseDetailsSummarySection = (props: {
 
         {/* description title */}
         <EpistoHeader
+            type="strong"
             text={translatableTexts.courseDetails.summarySection.courseShortDescription}
             my={10} />
 
@@ -55,20 +44,35 @@ export const CourseDetailsSummarySection = (props: {
 
         {/* skill benefits title */}
         <EpistoHeader
+            type="strong"
             text={translatableTexts.courseDetails.summarySection.whatCanYouLearnFromCourse}
             my={10}
             mt={40} />
 
         {/* skill benefits */}
-        <Grid templateColumns="50% 50%" width="100%">
+        <Grid templateColumns="50% 50%" gap="10px" width="100%">
             {courseDetails
                 .skillBenefits
-                .map((skillBenefit) => <WhatCanYouLearnInCourseListItem
-                    title={skillBenefit} />)}
+                .map((skillBenefit) => <Flex align="center">
+
+                    {/* icon */}
+                    <DoneIcon
+                        className="square30"
+                        style={{
+                            marginRight: "10px",
+                            color: "var(--deepBlue)"
+                        }} />
+
+                    {/* text */}
+                    <Typography>
+                        {skillBenefit}
+                    </Typography>
+                </Flex>)}
         </Grid>
 
         {/* humam skill benefits title */}
         <EpistoHeader
+            type="strong"
             text={translatableTexts.courseDetails.summarySection.whatSkillsTheCourseImproving}
             my={10}
             mt={40} />

@@ -69,11 +69,11 @@ const CourseDetailsPage = () => {
         },
         {
             title: translatableTexts.courseDetails.tabLabels.requirements,
-            component: <CourseDetailsRequirementsSection />
+            component: <CourseDetailsRequirementsSection courseDetails={courseDetails!} />
         },
         {
             title: translatableTexts.courseDetails.tabLabels.content,
-            component: <CourseDetailsContentSection />
+            component: <CourseDetailsContentSection courseDetails={courseDetails!} />
         },
         {
             title: translatableTexts.courseDetails.tabLabels.teacher,

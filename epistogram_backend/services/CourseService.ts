@@ -21,6 +21,7 @@ import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseDetailsView } from "../models/views/CourseDetailsView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView";
+import { CourseModuleOverviewView } from "../models/views/CourseModuleOverviewView";
 import { CourseProgressView } from "../models/views/CourseProgressView";
 import { CourseView } from "../models/views/CourseView";
 import { getItemCode, readItemCode } from "./encodeService";
@@ -73,8 +74,14 @@ export class CourseService {
             .where("cdv.courseId = :courseId", { courseId })
             .getOneOrFail();
 
+        const moduleViews = await this._ormService
+            .getRepository(CourseModuleOverviewView)
+            .createQueryBuilder("v")
+            .where("v.courseId = :courseId", { courseId })
+            .getMany();
+
         return this._mapperService
-            .map(CourseDetailsView, CourseDetailsDTO, view);
+            .map(CourseDetailsView, CourseDetailsDTO, view, moduleViews);
     }
 
     getCourseProgressDataAsync = async (userId: number) => {

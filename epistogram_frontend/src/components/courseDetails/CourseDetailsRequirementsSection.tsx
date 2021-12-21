@@ -5,79 +5,50 @@ import { Radar } from "react-chartjs-2";
 import React from "react";
 import { translatableTexts } from "../../static/translatableTexts";
 import { mockCourseDetails } from "../../static/mockData";
+import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 
-export const CourseDetailsRequirementsSection = () => <Flex mt={10} w={"100%"} h={500} direction={"column"} alignItems={"flex-start"}>
-    <EpistoHeader text={translatableTexts.courseDetails.requirementsSection.whenTheCourseGoodForYou} my={10} />
-    <Typography>
-        {mockCourseDetails.lorem}
-    </Typography>
+export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseDetailsDTO }) => {
 
-    <EpistoHeader text={translatableTexts.courseDetails.requirementsSection.howMuchDoesTheCourseFitsYou} my={10} mt={40} />
-    <Flex w={"100%"} mb={100}>
-        <Flex direction={"column"} minW={"50%"} >
-            Dinamikus szöveg*
-        </Flex>
-        <Flex direction={"column"} minW={"50%"}>
-            <Radar
-                options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: false,
-                            text: translatableTexts.courseDetails.requirementsSection.averageLearningStyle
-                        },
-                        legend: {
-                            display: false
-                        }
-                    },
-                }}
-                data={{
-                    labels: translatableTexts.courseDetails.requirementsSection.averageLearningStyleChartLabels,
-                    datasets: [
-                        {
-                            data: [5, 4, 5, 5, 3, 5, 5, 5, 4, 5],
-                            backgroundColor: ["rgba(125,232,178,0.46)", "rgba(125,232,178,0.46)", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"]
-                        }
-                    ]
-                }} />
-        </Flex>
-    </Flex>
+    const { courseDetails } = props;
 
-    <EpistoHeader text={translatableTexts.courseDetails.requirementsSection.technicalRequirementsForCourse} my={10} mt={40} />
-    <Flex w={"100%"}>
-        <Flex direction={"column"} minW={"50%"}>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} />
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>{mockCourseDetails.shortLorem}</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} />
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>{mockCourseDetails.shortLorem}</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} />
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>{mockCourseDetails.shortLorem}</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} />
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>{mockCourseDetails.shortLorem}</Typography>
-                </Flex>
-            </Flex>
-            <Flex w={"100%"} h={30} px={15} mt={10}>
-                <Flex w={30} h={30} p={5} />
-                <Flex direction={"row"} flex={1} ml={10} justifyContent={"flex-start"} alignItems={"center"}>
-                    <Typography>{mockCourseDetails.shortLorem}</Typography>
-                </Flex>
-            </Flex>
+    return <Flex
+        mt={10}
+        width="100%"
+        height={500}
+        direction="column"
+        align="flex-start">
+
+        {/* course requirements description title */}
+        <EpistoHeader
+            type="strong"
+            text={translatableTexts.courseDetails.requirementsSection.whenTheCourseGoodForYou}
+            my={10} />
+
+        {/* course requirements description */}
+        <Typography>
+            {mockCourseDetails.lorem}
+        </Typography>
+
+        {/* technical requirements title */}
+        <EpistoHeader
+            text={translatableTexts.courseDetails.requirementsSection.technicalRequirementsForCourse}
+            type="strong"
+            my={10}
+            mt={40} />
+
+        {/* technical requirements */}
+        <Flex direction="column">
+            {courseDetails
+                .technicalRequirements
+                .map(x => (
+                    <Flex align="center">
+                        <SettingsSuggestIcon style={{ color: "var(--deepBlue)", marginRight: "10px" }} className="square35" />
+                        <Typography>
+                            {x}
+                        </Typography>
+                    </Flex>
+                ))}
         </Flex>
     </Flex>
-
-</Flex>
+}

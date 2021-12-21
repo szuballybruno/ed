@@ -1,4 +1,5 @@
 import { HumanSkillBenefitDTO } from "./HumanSkillBenefitDTO";
+import { ModuleShortDTO } from "./ModuleShortDTO";
 import { CourseVisibilityType } from "./types/sharedTypes";
 
 export class CourseDetailsDTO {
@@ -19,4 +20,6 @@ export class CourseDetailsDTO {
     technicalRequirements: string[];
     skillBenefits: string[];
     humanSkillBenefits: HumanSkillBenefitDTO[];
+
+    modules: ModuleShortDTO[];
 }

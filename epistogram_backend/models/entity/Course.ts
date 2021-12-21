@@ -40,6 +40,9 @@ export class Course {
     technicalRequirements: string;
 
     @Column()
+    requirementsDescription: string;
+
+    @Column()
     skillBenefits: string;
 
     @Column()

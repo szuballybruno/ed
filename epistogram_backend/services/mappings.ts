@@ -36,6 +36,7 @@ import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
 import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { ModuleAdminShortDTO } from "../models/shared_models/ModuleAdminShortDTO";
 import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
+import { ModuleShortDTO } from "../models/shared_models/ModuleShortDTO";
 import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { ResultAnswerDTO } from "../models/shared_models/ResultAnswerDTO";
@@ -52,6 +53,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { UserStatsDTO } from "../models/shared_models/UserStatsDTO";
 import { VideoDTO } from "../models/shared_models/VideoDTO";
+import { VideoShortDTO } from "../models/shared_models/VideoShortDTO";
 import { CoinTransactionView } from "../models/views/CoinTransactionView";
 import { CourseAdminContentView } from "../models/views/CourseAdminContentView";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
@@ -59,6 +61,7 @@ import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
 import { CourseDetailsView } from "../models/views/CourseDetailsView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView";
+import { CourseModuleOverviewView } from "../models/views/CourseModuleOverviewView";
 import { CourseProgressView } from "../models/views/CourseProgressView";
 import { CourseView } from "../models/views/CourseView";
 import { DailyTipView } from "../models/views/DailyTipView";
@@ -265,11 +268,28 @@ export const initializeMappings = (mapperService: MapperService) => {
         }));
 
     mapperService
-        .addMap(CourseDetailsView, CourseDetailsDTO, view => {
+        .addMap(CourseDetailsView, CourseDetailsDTO, (view, params) => {
+
+            const moduleViews = params as CourseModuleOverviewView[];
 
             const thumbnailImageURL = view.coverFilePath
                 ? getAssetUrl(view.coverFilePath)
                 : getAssetUrl("/images/defaultCourseCover.jpg");
+
+            const modules = moduleViews
+                .groupBy(x => x.moduleId)
+                .map(group => ({
+                    name: group
+                        .items
+                        .first()
+                        .moduleName,
+                    videos: group
+                        .items
+                        .map(x => ({
+                            title: x.videoTitle,
+                            length: x.videoLengthSeconds
+                        }))
+                }) as ModuleShortDTO);
 
             return {
                 title: view.title,
@@ -288,7 +308,9 @@ export const initializeMappings = (mapperService: MapperService) => {
 
                 skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
                 technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
-                humanSkillBenefits: parseSkillBenefits(view.humanSkillBenefits)
+                humanSkillBenefits: parseSkillBenefits(view.humanSkillBenefits),
+
+                modules: modules
             } as CourseDetailsDTO;
         });
 }

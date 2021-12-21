@@ -63,6 +63,7 @@ import { CourseLearningStatsView } from "../../models/views/CourseLearningStatsV
 import { CourseProgressView } from "../../models/views/CourseProgressView";
 import { CourseAdminContentView } from "../../models/views/CourseAdminContentView";
 import { CourseDetailsView } from "../../models/views/CourseDetailsView";
+import { CourseModuleOverviewView } from "../../models/views/CourseModuleOverviewView";
 
 export const dbSchema = {
 
@@ -101,6 +102,7 @@ export const dbSchema = {
         "course_spent_time_view",
         "course_learning_stats_view",
         "course_progress_view",
+        "course_module_overview_view",
         "course_details_view"
     ],
 
@@ -152,7 +154,8 @@ export const dbSchema = {
         ShopItemView,
         CourseLearningStatsView,
         CourseProgressView,
-        CourseDetailsView
+        CourseDetailsView,
+        CourseModuleOverviewView
     ] as any[],
 
     entities: [

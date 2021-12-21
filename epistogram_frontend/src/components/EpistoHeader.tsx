@@ -3,11 +3,12 @@ import { Divider, Typography } from "@mui/material"
 
 export const EpistoHeader = (props: {
     text: string,
-    variant?: "main" | "sub" | "strongSub" | "giant" | "xxl"
+    variant?: "main" | "sub" | "strongSub" | "giant" | "xxl",
+    type?: "strong" | "normal",
     showDivider?: boolean
 } & FlexProps) => {
 
-    const { text, showDivider, variant, ...css } = props;
+    const { text, showDivider, type, variant, ...css } = props;
 
     const h = (() => {
 
@@ -30,7 +31,7 @@ export const EpistoHeader = (props: {
                     ? "fontXXL"
                     : "fontLarge"}
             style={{
-                fontWeight: "normal",
+                fontWeight: type === "strong" ? "bold" : "normal",
                 color: variant === "sub" ? "var(--intenseGray)" : undefined
             }}>
             {text}
