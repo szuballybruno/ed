@@ -7,6 +7,7 @@ import { UserCourseAccessBridge } from "../models/entity/UserCourseAccessBridge"
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
 import { CourseContentEditDataDTO } from "../models/shared_models/CourseContentEditDataDTO";
+import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
 import { CourseDetailsEditDataDTO } from "../models/shared_models/CourseDetailsEditDataDTO";
 import { CourseLearningDTO } from "../models/shared_models/CourseLearningDTO";
 import { CourseProgressShortDTO } from "../models/shared_models/CourseProgressShortDTO";
@@ -17,6 +18,7 @@ import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { CourseAdminContentView } from "../models/views/CourseAdminContentView";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
+import { CourseDetailsView } from "../models/views/CourseDetailsView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView";
 import { CourseProgressView } from "../models/views/CourseProgressView";
@@ -61,6 +63,18 @@ export class CourseService {
 
         return this._mapperService
             .mapMany(CourseProgressView, CourseProgressShortDTO, views);
+    }
+
+    async getCourseDetailsAsync(courseId: number) {
+
+        const view = await this._ormService
+            .getRepository(CourseDetailsView)
+            .createQueryBuilder("cdv")
+            .where("cdv.courseId = :courseId", { courseId })
+            .getOneOrFail();
+
+        return this._mapperService
+            .map(CourseDetailsView, CourseDetailsDTO, view);
     }
 
     getCourseProgressDataAsync = async (userId: number) => {

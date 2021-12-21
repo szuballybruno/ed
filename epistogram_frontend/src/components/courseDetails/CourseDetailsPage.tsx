@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
 import { useNavigation } from "../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
-import { MainWrapper } from "../system/MainPanels";
+import { ContentWrapper, MainWrapper } from "../system/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { EpistoButton } from "../universal/EpistoButton";
 import { TabPanel } from "./TabPanel";
@@ -20,6 +20,7 @@ import { CourseDetailsBriefingInfoItem } from "./CourseDetailsBriefingInfoItem";
 import { translatableTexts } from "../../static/translatableTexts";
 import { mockCourseDetails } from "../../static/mockData";
 import { useStartCourse, useCourseDetails } from "../../services/api/courseApiService";
+import { EpistoHeader } from "../EpistoHeader";
 
 const CourseDetailsPage = () => {
 
@@ -32,9 +33,6 @@ const CourseDetailsPage = () => {
     const currentItemDescriptior = getQueryParam("code");
 
     const { courseDetails } = useCourseDetails(courseId);
-    const thumbnailURL = courseDetails?.thumbnailURL;
-    const title = courseDetails?.title;
-    const subCategory = courseDetails?.subCategoryName;
 
     const playCourseAsync = async () => {
 
@@ -64,16 +62,28 @@ const CourseDetailsPage = () => {
         }
     }
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setCurrentTab(newValue);
-    };
-
-    const a11yProps = (index: number) => {
-        return {
-            id: `simple-tab-${index}`,
-            'aria-controls': `simple-tabpanel-${index}`,
-        };
-    }
+    const tabs = [
+        {
+            title: translatableTexts.courseDetails.tabLabels.overview,
+            component: <CourseDetailsSummarySection courseDetails={courseDetails!} />
+        },
+        {
+            title: translatableTexts.courseDetails.tabLabels.requirements,
+            component: <CourseDetailsRequirementsSection />
+        },
+        {
+            title: translatableTexts.courseDetails.tabLabels.content,
+            component: <CourseDetailsContentSection />
+        },
+        {
+            title: translatableTexts.courseDetails.tabLabels.teacher,
+            component: <CourseDetailsTeacherSection />
+        },
+        {
+            title: translatableTexts.courseDetails.tabLabels.ratings,
+            component: <CourseDetailsRatingSection />
+        }
+    ];
 
     const MockTeacherAvatar = () =>
         <Flex
@@ -94,108 +104,82 @@ const CourseDetailsPage = () => {
 
         <Navbar />
 
-        <Flex
-            position={"relative"}
-            id="rightPanel"
-            p={0}
-            flex="1"
-            overflowX="hidden"
+        <ContentWrapper
+            direction="column"
             overflowY="scroll"
-            direction="column">
+            px="100px">
 
             {/* Title */}
+            <EpistoHeader
+                alignSelf="center"
+                margin="80px 40px 40px 40px"
+                variant="xxl"
+                text={courseDetails?.title ?? ""} />
 
-            <Flex
-                w={"100%"}
-                pl={110}
-                pb={10}
-                direction={"row"}
-                justifyContent={"flex-start"}
-                alignItems={"flex-end"}
-                minH={140}
-                h={140}>
-                <Typography variant={"h4"}>{title}</Typography>
-            </Flex>
+            {/* content */}
+            <Flex>
 
-            <Flex direction={"row"} px={100} w={"100%"} minH={1200} h={"100%"} mb={100}>
+                {/* left pane */}
                 <Flex flex={"1 1 0"} direction={"column"} mr={30}>
 
-                    {/* Overview */}
-
-                    <Container pr={20} pt={20}>
-                        {mockCourseDetails.upperOverviewBelowTitle}
+                    {/* short description */}
+                    <Container pr="20px">
+                        {courseDetails?.shortDescription}
                     </Container>
 
-                    {/* Briefing info items */}
-
-                    <Flex direction={"row"} mt={20} w={"100%"} justifyContent={"space-evenly"}>
+                    {/* briefing info items */}
+                    <Flex mt="20px" justify="space-evenly">
 
                         <CourseDetailsBriefingInfoItem
                             icon={getAssetUrl("/course_page_icons/about_category.svg")}
                             title={translatableTexts.courseDetails.briefingInfoItems.category}
-                            subTitle={subCategory} />
+                            subTitle={courseDetails?.subCategoryName} />
 
                         <CourseDetailsBriefingInfoItem
-                            iconComponent={<MockTeacherAvatar />}
+                            icon={<MockTeacherAvatar />}
                             title={translatableTexts.courseDetails.briefingInfoItems.teacher}
-                            subTitle={mockCourseDetails.briefingInfoItemValues.teacherName} />
+                            subTitle={courseDetails?.teacherFullName} />
 
                         <CourseDetailsBriefingInfoItem
                             icon={getAssetUrl("/course_page_icons/about_difficulty.svg")}
                             title={translatableTexts.courseDetails.briefingInfoItems.difficulty}
-                            subTitle={mockCourseDetails.briefingInfoItemValues.difficulty} />
+                            subTitle={courseDetails?.difficulty + " / 10 pont"} />
 
                         <CourseDetailsBriefingInfoItem
                             icon={getAssetUrl("/course_page_icons/about_learning_experience.svg")}
                             title={translatableTexts.courseDetails.briefingInfoItems.learningExperience}
-                            subTitle={mockCourseDetails.briefingInfoItemValues.learningExperience} />
-
+                            subTitle={courseDetails?.benchmark + " / 5 pont"} />
                     </Flex>
 
-                    {/* Tabs and sections */}
-
+                    {/* tabs */}
                     <Box w={"100%"} mt={30} mb={50}>
 
-                        {/* Tabs */}
-
+                        {/* tab button headers */}
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
-                                <Tab label={translatableTexts.courseDetails.tabLabels.overview} {...a11yProps(0)} />
-                                <Tab label={translatableTexts.courseDetails.tabLabels.requirements} {...a11yProps(1)} />
-                                <Tab label={translatableTexts.courseDetails.tabLabels.content} {...a11yProps(2)} />
-                                <Tab label={translatableTexts.courseDetails.tabLabels.teacher} {...a11yProps(3)} />
-                                <Tab label={translatableTexts.courseDetails.tabLabels.ratings} {...a11yProps(3)} />
+                            <Tabs
+                                value={currentTab}
+                                onChange={(_, y) => setCurrentTab(y as number)}>
+
+                                {tabs
+                                    .map((x, index) => <Tab
+                                        label={x.title}
+                                        key={index}
+                                        id={`simple-tab-${index}`} />)}
                             </Tabs>
                         </Box>
 
-                        { /* Sections */}
+                        { /* tab contents */}
+                        {tabs
+                            .map((x, index) => <TabPanel
+                                value={currentTab}
+                                index={index}>
 
-                        <TabPanel value={currentTab} index={0}>
-                            <CourseDetailsSummarySection
-                                whatCanYouLearnFromCourseList={mockCourseDetails.whatCanYouLearnFromCourseList}
-                                overviewSectionShortDescription={mockCourseDetails.overviewSectionShortDescription}
-                                whatSkillsTheCourseImprovingDescription={mockCourseDetails.whatSkillsTheCourseImprovingDescription}
-                            />
-                        </TabPanel>
-                        <TabPanel value={currentTab} index={1}>
-                            <CourseDetailsRequirementsSection />
-                        </TabPanel>
-                        <TabPanel value={currentTab} index={2}>
-                            <CourseDetailsContentSection />
-                        </TabPanel>
-                        <TabPanel value={currentTab} index={3}>
-                            <CourseDetailsTeacherSection />
-                        </TabPanel>
-                        <TabPanel value={currentTab} index={4}>
-                            <CourseDetailsRatingSection />
-                        </TabPanel>
+                                {courseDetails && x.component}
+                            </TabPanel>)}
                     </Box>
-
-
                 </Flex>
 
-                {/* Right section */}
-
+                {/* Right pane */}
                 <Flex direction={"column"} w={400}>
                     <Flex
                         direction={"column"}
@@ -208,10 +192,13 @@ const CourseDetailsPage = () => {
                         borderRadius={10}
                         shadow={"#00000024 0px 0px 5px 0px"}>
                         <Flex w={"100%"} height={230} justifyContent={"center"} p={10}>
-                            <img src={thumbnailURL} style={{
-                                borderRadius: 5,
-                                objectFit: "cover"
-                            }} alt={""} />
+                            <img
+                                src={courseDetails?.thumbnailURL}
+                                style={{
+                                    borderRadius: 5,
+                                    objectFit: "cover"
+                                }}
+                                alt={""} />
                         </Flex>
 
                         {/* Course details list */}
@@ -283,7 +270,6 @@ const CourseDetailsPage = () => {
                 </Flex>
             </Flex>
 
-
             {/* Background shapes */}
             <Flex
                 _before={{
@@ -305,9 +291,8 @@ const CourseDetailsPage = () => {
                 zIndex={-1}
                 backgroundClip={"padding-box"} />
 
-        </Flex>
-
-    </MainWrapper>
+        </ContentWrapper>
+    </MainWrapper >
 };
 
 export default CourseDetailsPage;

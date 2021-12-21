@@ -56,6 +56,7 @@ import { CoinTransactionView } from "../models/views/CoinTransactionView";
 import { CourseAdminContentView } from "../models/views/CourseAdminContentView";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
+import { CourseDetailsView } from "../models/views/CourseDetailsView";
 import { CourseItemStateView } from "../models/views/CourseItemStateView";
 import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView";
 import { CourseProgressView } from "../models/views/CourseProgressView";
@@ -196,22 +197,9 @@ export const initializeMappings = (mapperService: MapperService) => {
                 teacherId: view.teacherId,
                 humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
 
-                skillBenefits: view.skillBenefits.split(",").map(x => x.trim()),
-                technicalRequirements: view.technicalRequirements.split(',').map(x => x.trim()),
-
-                humanSkillBenefits: view
-                    .humanSkillBenefits
-                    .split(',')
-                    .map(x => {
-
-                        const trimmed = x.trim();
-                        const split = trimmed.split(":");
-
-                        return {
-                            text: split[0].trim(),
-                            value: parseInt(split[1].trim())
-                        }
-                    }),
+                skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
+                technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
+                humanSkillBenefits: parseSkillBenefits(view.humanSkillBenefits),
 
                 category: {
                     id: view.categoryId,
@@ -275,6 +263,55 @@ export const initializeMappings = (mapperService: MapperService) => {
             questionCount: view.itemQuestionCount,
             videoLength: view.videoLength
         }));
+
+    mapperService
+        .addMap(CourseDetailsView, CourseDetailsDTO, view => {
+
+            const thumbnailImageURL = view.coverFilePath
+                ? getAssetUrl(view.coverFilePath)
+                : getAssetUrl("/images/defaultCourseCover.jpg");
+
+            return {
+                title: view.title,
+                description: view.description,
+                categoryName: view.categoryName,
+                subCategoryName: view.subCategoryName,
+                thumbnailURL: thumbnailImageURL,
+                courseId: view.courseId,
+                shortDescription: view.shortDescription,
+                language: view.languageName,
+                difficulty: view.difficulty,
+                benchmark: view.benchmark,
+                visibility: view.visibility,
+                teacherFullName: toFullName(view.teacherFirstName, view.teacherLastName),
+                humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
+
+                skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
+                technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
+                humanSkillBenefits: parseSkillBenefits(view.humanSkillBenefits)
+            } as CourseDetailsDTO;
+        });
+}
+
+const parseCommaSeparatedStringList = (str: string) => {
+
+    return str.split(",").map(x => x.trim());
+}
+
+const parseSkillBenefits = (str: string) => {
+
+    return str
+        .split(',')
+        .map(x => {
+
+            const trimmed = x.trim();
+            const split = trimmed.split(":");
+
+            return {
+                text: split[0].trim(),
+                value: parseInt(split[1].trim())
+            }
+        })
 }
 
 export const toUserDTO = (user: User) => {
@@ -645,21 +682,6 @@ export const toCourseAdminShortDTO = (view: CourseAdminShortView) => {
             lastName: view.teacherLastName,
         }
     } as CourseAdminListItemDTO;
-}
-
-export const toCourseDetailsDTO = (course: Course) => {
-
-    const thumbnailImageURL = course.coverFile
-        ? getAssetUrl(course.coverFile.filePath)
-        : getAssetUrl("/images/defaultCourseCover.jpg");
-
-    return {
-        title: course.title,
-        description: "",
-        categoryName: course.category.name,
-        subCategoryName: course.subCategory.name,
-        thumbnailURL: thumbnailImageURL
-    } as CourseDetailsDTO;
 }
 
 export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {

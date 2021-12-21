@@ -62,6 +62,7 @@ import { DiscountCode } from "../../models/entity/DiscountCode";
 import { CourseLearningStatsView } from "../../models/views/CourseLearningStatsView";
 import { CourseProgressView } from "../../models/views/CourseProgressView";
 import { CourseAdminContentView } from "../../models/views/CourseAdminContentView";
+import { CourseDetailsView } from "../../models/views/CourseDetailsView";
 
 export const dbSchema = {
 
@@ -99,7 +100,8 @@ export const dbSchema = {
         "exam_latest_success_rate_view",
         "course_spent_time_view",
         "course_learning_stats_view",
-        "course_progress_view"
+        "course_progress_view",
+        "course_details_view"
     ],
 
     functionScripts: [
@@ -149,7 +151,8 @@ export const dbSchema = {
         ActivationCode,
         ShopItemView,
         CourseLearningStatsView,
-        CourseProgressView
+        CourseProgressView,
+        CourseDetailsView
     ] as any[],
 
     entities: [

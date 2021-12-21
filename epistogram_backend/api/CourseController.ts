@@ -1,8 +1,5 @@
 import { UploadedFile } from "express-fileupload";
 import { Course } from "../models/entity/Course";
-import { CourseModule } from "../models/entity/CourseModule";
-import { Exam } from "../models/entity/Exam";
-import { Video } from "../models/entity/Video";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { CourseContentEditDataDTO } from "../models/shared_models/CourseContentEditDataDTO";
 import { CourseDetailsEditDataDTO as CourseDetailsEditDataDTO } from "../models/shared_models/CourseDetailsEditDataDTO";
@@ -11,7 +8,6 @@ import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { CourseService } from "../services/CourseService";
 import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
-import { toCourseDetailsDTO } from "../services/mappings";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -74,16 +70,7 @@ export class CourseController {
 
         const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
 
-        const course = await staticProvider
-            .ormConnection
-            .getRepository(Course)
-            .createQueryBuilder("c")
-            .leftJoinAndSelect("c.category", "cat")
-            .leftJoinAndSelect("c.subCategory", "scat")
-            .where("c.id = :courseId", { courseId })
-            .getOneOrFail();
-
-        return toCourseDetailsDTO(course);
+        return await this._courseService.getCourseDetailsAsync(courseId);
     }
 
     saveCourseDetailsAction = async (params: ActionParams) => {

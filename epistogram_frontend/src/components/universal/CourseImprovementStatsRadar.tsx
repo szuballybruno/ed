@@ -1,15 +1,13 @@
 import { Radar } from "react-chartjs-2"
-import { HumanSkillBenefitDTO } from "../../../models/shared_models/HumanSkillBenefitDTO";
+import { HumanSkillBenefitDTO } from "../../models/shared_models/HumanSkillBenefitDTO";
 
 export const CourseImprovementStatsRadar = (props: { stats: HumanSkillBenefitDTO[] }) => {
 
     const { stats } = props;
 
     return <Radar
-        width={300}
-        height={300}
         options={{
-            responsive: false,
+            responsive: true,
             maintainAspectRatio: false,
             scales: {
                 r: {
@@ -21,10 +19,6 @@ export const CourseImprovementStatsRadar = (props: { stats: HumanSkillBenefitDTO
                 },
             },
             plugins: {
-                title: {
-                    display: true,
-                    text: "Mit fejleszt a tanfolyam?"
-                },
                 legend: {
                     display: false
                 }

@@ -16,7 +16,7 @@ import { EpistoEntry } from "../../universal/EpistoEntry";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { CourseImprovementStatsRadar } from "./CourseImprovementStatsRadar";
+import { CourseImprovementStatsRadar } from "../../universal/CourseImprovementStatsRadar";
 import { EditSection } from "./EditSection";
 import { SimpleEditList } from "./SimpleEditList";
 
