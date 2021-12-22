@@ -13,7 +13,6 @@ import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
 import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
 import { AdminUserStatisticsSubpage } from "./users/AdminUserStatisticsSubpage";
 import CourseStatisticsSubpage from "./courses/CourseStatisticsSubpage";
-import AdminUserTasksSubpage from './users/AdminUserTasksSubpage';
 import AdminEditUserSubpage from './users/AdminEditUserSubpage';
 import { AdminGroupListSubpage } from "./groups/AdminGroupListSubpage";
 import { AdminAddGroupSubpage } from "./groups/AdminAddGroupSubpage";
@@ -75,10 +74,6 @@ const AdminPage = () => {
 
                             <Route exact path={administrationRoutes.usersRoute.statsRoute.route}>
                                 <AdminUserStatisticsSubpage />
-                            </Route>
-
-                            <Route exact path={administrationRoutes.usersRoute.tasksRoute.route}>
-                                <AdminUserTasksSubpage />
                             </Route>
 
                             <Route exact path={applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route}>

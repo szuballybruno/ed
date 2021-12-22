@@ -3,14 +3,15 @@ import { Exam } from "../models/entity/Exam";
 import { Question } from "../models/entity/Question";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
+import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { ExamResultView } from "../models/views/ExamResultView";
-import { readItemCode } from "./encodeService";
-import { toExamDTO, toExamResultDTO } from "./mappings";
-import { QuestionAnswerService } from "./questionAnswerService";
-import { deleteQuesitonsAsync } from "./questionService";
+import { readItemCode } from "./misc/encodeService";
+import { toExamDTO, toExamResultDTO } from "./misc/mappings";
+import { QuestionAnswerService } from "./QuestionAnswerService2";
+import { QuestionService } from "./QuestionService2";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
-import { UserSessionActivityService } from "./userSessionActivityService";
+import { UserSessionActivityService } from "./UserSessionActivityService2";
 
 export class ExamService {
 
@@ -18,17 +19,20 @@ export class ExamService {
     private _ormService: ORMConnectionService;
     private _userSessionActivityService: UserSessionActivityService;
     private _quesitonAnswerService: QuestionAnswerService;
+    private _questionsService: QuestionService;
 
     constructor(
         userCourseBridgeService: UserCourseBridgeService,
         ormService: ORMConnectionService,
         userSessionActivityService: UserSessionActivityService,
-        quesitonAnswerService: QuestionAnswerService) {
+        quesitonAnswerService: QuestionAnswerService,
+        questionsService: QuestionService) {
 
         this._userCourseBridgeService = userCourseBridgeService;
         this._ormService = ormService;
         this._userSessionActivityService = userSessionActivityService;
         this._quesitonAnswerService = quesitonAnswerService;
+        this._questionsService = questionsService;
     }
 
     getExamDTOAsync = async (examId: number) => {
@@ -47,6 +51,21 @@ export class ExamService {
             throw new Error("Exam has no questions assigend.");
 
         return toExamDTO(exam);
+    }
+
+    async saveExamAsync(dto: ExamEditDataDTO, examId: number) {
+
+        await this._ormService
+            .getRepository(Exam)
+            .save({
+                id: examId,
+                title: dto.title,
+                subtitle: dto.subTitle,
+                courseId: dto.courseId,
+            });
+
+        await this._questionsService
+            .saveAssociatedQuestionsAsync(dto.questions, undefined, examId);
     }
 
     async startExamAsync(answerSessionId: number) {
@@ -109,7 +128,8 @@ export class ExamService {
             .where('"exam_id" IN (:...examIds)', { examIds })
             .getMany();
 
-        await deleteQuesitonsAsync(questions.map(x => x.id));
+        await this._questionsService
+            .deleteQuesitonsAsync(questions.map(x => x.id));
 
         // delete answer sessions
         await this._ormService

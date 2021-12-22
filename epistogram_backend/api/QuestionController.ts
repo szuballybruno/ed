@@ -1,19 +1,21 @@
 import { Question } from "../models/entity/Question";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO";
-import { toAnswerEditDTO } from "../services/mappings";
+import { toAnswerEditDTO } from "../services/misc/mappings";
 import { PractiseQuestionService } from "../services/PractiseQuestionService";
-import { saveQuestionAsync } from "../services/questionService";
+import { QuestionService } from "../services/QuestionService2";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class QuestionController {
 
     private _practiseQuestionService: PractiseQuestionService;
+    private _questionService: QuestionService;
 
-    constructor(practiseQuestionService: PractiseQuestionService) {
+    constructor(practiseQuestionService: PractiseQuestionService, questionService: QuestionService) {
 
         this._practiseQuestionService = practiseQuestionService;
+        this._questionService = questionService;
     }
 
     answerPractiseQuestionAction = async (params: ActionParams) => {
@@ -49,6 +51,7 @@ export class QuestionController {
         const dto = withValueOrBadRequest<QuestionEditDataDTO>(params.req.body);
         const questionId = dto.questionId;
 
-        await saveQuestionAsync(questionId, dto);
+        await this._questionService
+            .saveQuestionAsync(questionId, dto);
     }
 }

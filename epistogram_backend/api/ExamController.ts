@@ -4,10 +4,8 @@ import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { CreateExamDTO } from "../models/shared_models/CreateExamDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
-import { getUserIdFromRequest } from "../services/authenticationService";
 import { ExamService } from "../services/ExamService";
-import { toQuestionDTO } from "../services/mappings";
-import { saveAssociatedQuestionsAsync } from "../services/questionService";
+import { toQuestionDTO } from "../services/misc/mappings";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -74,18 +72,7 @@ export class ExamController {
         const dto = withValueOrBadRequest<ExamEditDataDTO>(params.req.body);
         const examId = dto.id;
 
-        // save exam 
-        await staticProvider
-            .ormConnection
-            .getRepository(Exam)
-            .save({
-                id: examId,
-                title: dto.title,
-                subtitle: dto.subTitle,
-                courseId: dto.courseId,
-            });
-
-        await saveAssociatedQuestionsAsync(dto.questions, undefined, examId);
+        this._examService.saveExamAsync(dto, examId);
     }
 
     createExamAction = async (params: ActionParams) => {

@@ -1,19 +1,16 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, Checkbox, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from 'react';
-import { getEventValueCallback } from "../../../static/frontendHelpers";
 import { JobTitleDTO } from "../../../models/shared_models/JobTitleDTO";
 import { OrganizationDTO } from "../../../models/shared_models/OrganizationDTO";
 import { RoleDTO } from "../../../models/shared_models/RoleDTO";
 import { UserDTO } from "../../../models/shared_models/UserDTO";
 import { UserEditDTO } from "../../../models/shared_models/UserEditDTO";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { AddFrame } from "../../add_frame/AddFrame";
+import { useJobTitles, useOrganizations } from "../../../services/api/miscApiService";
 import { CurrentUserContext } from "../../system/AuthenticationFrame";
-import { EpistoSelect } from "../../universal/EpistoSelect";
-import { useOrganizations, useJobTitles } from "../../../services/api/miscApiService";
-import { EditSection } from "../courses/EditSection";
 import { EpistoEntry } from "../../universal/EpistoEntry";
+import { EpistoLabel } from "../../universal/EpistoLabel";
+import { EpistoSelect } from "../../universal/EpistoSelect";
 
 export const roles = [
     {
@@ -66,6 +63,7 @@ export const EditUserControl = (props: {
         setSelectedRole(editDTO.role);
         setSelectedJobTitle(editDTO.jobTitle);
         setSelectedOrganization(editDTO.organization);
+        setIsTeacher(editDTO.isTeacher);
     }, [editDTO]);
 
     const handleSaveUserAsync = async () => {
@@ -85,86 +83,96 @@ export const EditUserControl = (props: {
 
     return <Box px="20px" flex="1" alignItems={"flex-start"} maxW={500}>
 
-        <EditSection
-            title={"Új felhasználó hozzáadása"}>
+        <Flex direction="column">
 
-            <Flex direction="column">
-
-                {/* first & last name */}
-                <Flex>
-                    <EpistoEntry
-                        value={firstName}
-                        name="fname"
-                        setValue={setFirstName}
-                        labelVariant={"top"}
-                        label="Keresztnév" />
-
-                    <EpistoEntry
-                        name="lname"
-                        value={lastName}
-                        setValue={setLastName}
-                        labelVariant={"top"}
-                        label="Vezetéknév" />
-                </Flex>
-
-                {/* email */}
+            {/* first & last name */}
+            <Flex>
                 <EpistoEntry
-                    name="email"
-                    value={email}
-                    setValue={setEmail}
+                    value={firstName}
+                    name="fname"
+                    setValue={setFirstName}
                     labelVariant={"top"}
-                    label="Email" />
+                    label="Keresztnév" />
 
-                {/* organization */}
-                {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
-                    <Typography variant={"overline"} style={{ marginTop: "10px" }}>
-                        Cég
-                    </Typography>
-                    <EpistoSelect
-                        items={organizations}
-                        selectedValue={selectedOrganization}
-                        onSelected={setSelectedOrganization}
-                        getDisplayValue={x => "" + x?.name}
-                        getCompareKey={organization => "" + organization?.id} />
-                </Flex>}
-
-                {/* job title */}
-                {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
-                    <Typography variant={"overline"} style={{ marginTop: "10px" }}>
-                        Beosztás
-                    </Typography>
-                    <EpistoSelect
-                        items={jobTitles}
-                        selectedValue={selectedJobTitle}
-                        onSelected={setSelectedJobTitle}
-                        getDisplayValue={jt => "" + jt?.name}
-                        getCompareKey={jt => "" + jt?.id} />
-                </Flex>}
-
-                {/* role */}
-                <Flex direction="column" align="stretch" width="100%">
-                    <Typography variant={"overline"} style={{ marginTop: "10px" }}>
-                        Jogosultsági kör
-                    </Typography>
-                    <EpistoSelect
-                        selectedValue={selectedRole}
-                        items={roles}
-                        onSelected={setSelectedRole}
-                        getDisplayValue={x => "" + (x as any)?.optionText}
-                        getCompareKey={x => "" + x?.id} />
-                </Flex>
-
-                {/* submit button */}
-                <Button
-                    variant={"outlined"}
-                    color={"secondary"}
-                    onClick={() => handleSaveUserAsync()}
-                    style={{ marginTop: "20px" }}>
-
-                    {translatableTexts.editUserControl.saveUser}
-                </Button>
-
+                <EpistoEntry
+                    name="lname"
+                    value={lastName}
+                    setValue={setLastName}
+                    labelVariant={"top"}
+                    label="Vezetéknév" />
             </Flex>
-        </EditSection>
+
+            {/* email */}
+            <EpistoEntry
+                name="email"
+                value={email}
+                setValue={setEmail}
+                labelVariant={"top"}
+                label="Email" />
+
+            {/* organization */}
+            {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
+                <Typography variant={"overline"} style={{ marginTop: "10px" }}>
+                    Cég
+                </Typography>
+                <EpistoSelect
+                    items={organizations}
+                    selectedValue={selectedOrganization}
+                    onSelected={setSelectedOrganization}
+                    getDisplayValue={x => "" + x?.name}
+                    getCompareKey={organization => "" + organization?.id} />
+            </Flex>}
+
+            {/* job title */}
+            {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
+                <Typography variant={"overline"} style={{ marginTop: "10px" }}>
+                    Beosztás
+                </Typography>
+                <EpistoSelect
+                    items={jobTitles}
+                    selectedValue={selectedJobTitle}
+                    onSelected={setSelectedJobTitle}
+                    getDisplayValue={jt => "" + jt?.name}
+                    getCompareKey={jt => "" + jt?.id} />
+            </Flex>}
+
+            {/* role */}
+            <Flex direction="column" align="stretch" width="100%">
+                <Typography variant={"overline"} style={{ marginTop: "10px" }}>
+                    Jogosultsági kör
+                </Typography>
+                <EpistoSelect
+                    selectedValue={selectedRole}
+                    items={roles}
+                    onSelected={setSelectedRole}
+                    getDisplayValue={x => "" + (x as any)?.optionText}
+                    getCompareKey={x => "" + x?.id} />
+            </Flex>
+
+            {/* is teacher */}
+            <EpistoLabel text="Tanar-e?">
+                <Flex align="center">
+                    <Checkbox
+                        checked={isTeacher}
+                        onChange={(_, x) => setIsTeacher(x)} />
+
+                    <Typography
+                        style={{ flex: "1" }}>
+
+                        Megjelolom a felhasznalot tanarkent.
+                    </Typography>
+                </Flex>
+            </EpistoLabel>
+
+            {/* submit button */}
+            <Button
+                variant={"outlined"}
+                color={"secondary"}
+                onClick={() => handleSaveUserAsync()}
+                style={{ marginTop: "20px" }}>
+
+                Mentes
+            </Button>
+        </Flex>
     </Box>
 };

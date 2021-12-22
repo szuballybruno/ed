@@ -20,24 +20,28 @@ import { UserStatsController } from './api/UserStatsController';
 import { VideoController } from './api/VideoController';
 import { apiRoutes } from './models/shared_models/types/apiRoutes';
 import { ActivationCodeService } from './services/ActivationCodeService';
+import { AuthenticationService } from './services/AuthenticationService2';
 import { CoinAcquireService } from './services/CoinAcquireService';
 import { CoinTransactionService } from './services/CoinTransactionService';
 import { CourseItemsService } from './services/CourseItemsService';
 import { CourseService } from './services/CourseService';
 import { EmailService } from './services/EmailService';
-import { initailizeDotEnvEnvironmentConfig } from "./services/environment";
-import { EventService } from './services/eventService';
+import { EventService } from './services/EventService2';
 import { ExamService } from './services/ExamService';
+import { FileService } from './services/FileService2';
 import { MapperService } from './services/MapperService2';
-import { initializeMappings } from './services/mappings';
-import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/middlewareService';
 import { dbSchema } from './services/misc/dbSchema';
+import { initailizeDotEnvEnvironmentConfig } from "./services/misc/environment";
 import { log, logError } from "./services/misc/logger";
+import { initializeMappings } from './services/misc/mappings';
+import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
+import { PersonalityAssessmentService } from './services/PersonalityAssessmentService2';
 import { PlayerService } from './services/PlayerService2';
 import { PractiseQuestionService } from './services/PractiseQuestionService';
-import { QuestionAnswerService } from './services/questionAnswerService';
+import { QuestionAnswerService } from './services/QuestionAnswerService2';
+import { QuestionService } from './services/QuestionService2';
 import { RegistrationService } from './services/RegistrationService';
 import { ShopService } from './services/ShopService';
 import { SignupService } from './services/SignupService';
@@ -47,9 +51,13 @@ import { ORMConnectionService } from './services/sqlServices/ORMConnectionServic
 import { SeedService } from './services/sqlServices/SeedService';
 import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
+import { StorageService } from './services/StorageService2';
+import { TokenService } from './services/TokenService2';
 import { UserCourseBridgeService } from './services/UserCourseBridgeService';
-import { UserSessionActivityService } from './services/userSessionActivityService';
-import { UserStatsService } from './services/userStatsService';
+import { UserService } from './services/UserService2';
+import { UserSessionActivityService } from './services/UserSessionActivityService2';
+import { UserStatsService } from './services/UserStatsService2';
+import { VideoPlaybackSampleService } from './services/VideoPlaybackSampleService2';
 import { VideoService } from './services/VideoService';
 import { staticProvider } from './staticProvider';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
@@ -81,35 +89,43 @@ import './utilities/jsExtensions';
     const emailService = new EmailService();
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
     const signupService = new SignupService(emailService);
-    const registrationService = new RegistrationService(activationCodeService, emailService);
+    const userService = new UserService(ormConnectionService, mapperService);
+    const tokenService = new TokenService(globalConfig);
+    const authenticationService = new AuthenticationService(userService, tokenService);
+    const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService);
     const seedService = new SeedService(sqlBootstrapperService, registrationService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService);
     const userCourseBridgeService = new UserCourseBridgeService(courseItemsService);
-    const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService);
-    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService);
+    const questionService = new QuestionService(ormConnectionService);
+    const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService);
+    const storageService = new StorageService(globalConfig);
+    const fileService = new FileService(userService, storageService);
+    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService);
     const moduleService = new ModuleService(examService, videoService);
-    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService);
+    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService);
     const miscService = new MiscService(courseService);
-    const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService);
+    const vpss = new VideoPlaybackSampleService(ormConnectionService);
+    const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, vpss);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService);
+    const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
-    const registrationController = new RegistrationController(registrationService);
-    const miscController = new MiscController(miscService, practiseQuestionService);
-    const authenticationController = new AuthenticationController();
-    const userController = new UserController();
-    const fileController = new FileController();
-    const signupController = new SignupController(signupService);
+    const registrationController = new RegistrationController(registrationService, userService);
+    const miscController = new MiscController(miscService, practiseQuestionService, authenticationService, tokenService);
+    const authenticationController = new AuthenticationController(authenticationService, userService);
+    const userController = new UserController(userService);
+    const fileController = new FileController(fileService);
+    const signupController = new SignupController(signupService, personalityAssessmentService);
     const playerController = new PlayerController(courseService, playerService, videoService);
     const courseController = new CourseController(courseService);
     const moduleController = new ModuleController(moduleService);
-    const videoController = new VideoController(videoService);
-    const questionController = new QuestionController(practiseQuestionService);
+    const videoController = new VideoController(videoService, questionService);
+    const questionController = new QuestionController(practiseQuestionService, questionService);
     const examController = new ExamController(examService);
     const shopController = new ShopController(shopService);
 
@@ -133,7 +149,8 @@ import './utilities/jsExtensions';
 
     await dbConnectionService.seedDBAsync();
 
-    const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) => addAPIEndpoint(expressServer, path, action, opt);
+    const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) =>
+        addAPIEndpoint(authenticationService.getUserIdFromRequest, expressServer, path, action, opt);
 
     // add middlewares
     expressServer.use(getCORSMiddleware());
@@ -141,13 +158,16 @@ import './utilities/jsExtensions';
     expressServer.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
     expressServer.use(fileUpload());
     expressServer.use(getUnderMaintanenceMiddleware());
-    expressServer.use(getAuthMiddleware([
-        apiRoutes.registration.registerUserViaActivationCode,
-        apiRoutes.registration.registerUserViaInvitationToken,
-        apiRoutes.registration.registerUserViaPublicToken,
-        apiRoutes.authentication.renewUserSession,
-        apiRoutes.authentication.loginUser,
-    ]));
+    expressServer.use(getAuthMiddleware(
+        authenticationService.getRequestAccessTokenPayload,
+        userService.getUserById,
+        [
+            apiRoutes.registration.registerUserViaActivationCode,
+            apiRoutes.registration.registerUserViaInvitationToken,
+            apiRoutes.registration.registerUserViaPublicToken,
+            apiRoutes.authentication.renewUserSession,
+            apiRoutes.authentication.loginUser,
+        ]));
 
     // registration
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
@@ -190,7 +210,7 @@ import './utilities/jsExtensions';
     addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction);
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
     addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true });
-    addEndpoint(apiRoutes.user.upadateUser, userController.updateUserAction, { isPost: true });
+    addEndpoint(apiRoutes.user.upadateUser, userController.saveUserAction, { isPost: true });
     // addEndpoint(apiRoutes.misc.updateUserData, miscController.saveUserDataAction, { isPost: true });
 
     // file 

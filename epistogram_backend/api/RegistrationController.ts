@@ -4,17 +4,19 @@ import { RegisterUserViaInvitationTokenDTO } from "../models/shared_models/Regis
 import { RegisterUserViaPublicTokenDTO } from "../models/shared_models/RegisterUserViaPublicTokenDTO";
 import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { RegistrationService } from "../services/RegistrationService";
-import { getUserById } from "../services/userService";
+import { UserService } from "../services/UserService2";
 import { setAuthCookies } from "../utilities/cookieHelpers";
 import { ActionParams, TypedError } from "../utilities/helpers";
 
 export class RegistrationController {
 
     private _res: RegistrationService;
+    private _userService: UserService;
 
-    constructor(res: RegistrationService) {
+    constructor(res: RegistrationService, userService: UserService) {
 
         this._res = res;
+        this._userService = userService;
     }
 
     registerUserViaPublicTokenAction = async (params: ActionParams) => {
@@ -61,7 +63,8 @@ export class RegistrationController {
         const dto = params.getBody<CreateInvitedUserDTO>();
 
         // handle organizationId
-        const currentUser = await getUserById(params.userId);
+        const currentUser = await this._userService
+            .getUserById(params.userId);
 
         // if user is admin require organizationId to be provided
         // otherwise use the current user's organization

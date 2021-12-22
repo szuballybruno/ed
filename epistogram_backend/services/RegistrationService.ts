@@ -2,21 +2,32 @@ import generatePassword from "password-generator";
 import { JobTitleIdEnum, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { getFullName, TypedError } from "../utilities/helpers";
 import { ActivationCodeService } from "./ActivationCodeService";
-import { getUserLoginTokens } from "./authenticationService";
+import { AuthenticationService } from "./AuthenticationService2";
 import { EmailService } from "./EmailService";
 import { log } from "./misc/logger";
-import { createInvitationToken, verifyInvitaionToken, verifyPublicRegistrationToken } from "./tokenService";
-import { createUserAsync, getUserByEmail, getUserById, setUserActiveRefreshToken, setUserInivitationDataAsync } from "./userService";
+import { TokenService } from "./TokenService2";
+import { UserService } from "./UserService2";
 
 export class RegistrationService {
 
     private _activationCodeService: ActivationCodeService;
     private _emailService: EmailService;
+    private _userService: UserService;
+    private _authenticationService: AuthenticationService;
+    private _tokenService: TokenService;
 
-    constructor(acs: ActivationCodeService, emailService: EmailService) {
+    constructor(
+        acs: ActivationCodeService,
+        emailService: EmailService,
+        userService: UserService,
+        authenticationService: AuthenticationService,
+        tokenService: TokenService) {
 
+        this._userService = userService;
+        this._authenticationService = authenticationService;
         this._activationCodeService = acs;
         this._emailService = emailService;
+        this._tokenService = tokenService;
     }
 
     /**
@@ -74,19 +85,20 @@ export class RegistrationService {
         lastName: string) => {
 
         // verify public reg token
-        verifyPublicRegistrationToken(publicRegToken);
+        this._tokenService.verifyPublicRegistrationToken(publicRegToken);
 
         // get new password 
         const generatedPassword = this.getDefaultPassword();
 
         // create user 
-        const user = await createUserAsync({
-            email,
-            firstName,
-            lastName,
-            registrationType: "PublicRegistrationToken",
-            password: generatedPassword
-        });
+        const user = await this._userService
+            .createUserAsync({
+                email,
+                firstName,
+                lastName,
+                registrationType: "PublicRegistrationToken",
+                password: generatedPassword
+            });
 
         const userId = user.id;
 
@@ -95,10 +107,12 @@ export class RegistrationService {
             .sendSuccessfulRegistrationEmailAsync(user, generatedPassword);
 
         // get auth tokens 
-        const tokens = await getUserLoginTokens(userId);
+        const tokens = await this._authenticationService
+            .getUserLoginTokens(userId);
 
         // set user current refresh token 
-        await setUserActiveRefreshToken(userId, tokens.refreshToken);
+        await this._userService
+            .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         return tokens;
     }
@@ -114,10 +128,12 @@ export class RegistrationService {
         passwordControl: string) => {
 
         // verify token 
-        const { userEmail } = verifyInvitaionToken(invitationToken);
+        const { userEmail } = this._tokenService.verifyInvitaionToken(invitationToken);
 
         // check if user exists  
-        const user = await getUserByEmail(userEmail);
+        const user = await this._userService
+            .getUserByEmail(userEmail);
+
         if (!user)
             throw new TypedError("No such user!", "bad request");
 
@@ -128,13 +144,16 @@ export class RegistrationService {
             throw new TypedError("Passwords don't match!", "bad request");
 
         // update user 
-        await setUserInivitationDataAsync(userId, password);
+        await this._userService
+            .setUserInivitationDataAsync(userId, password);
 
         // get auth tokens 
-        const tokens = await getUserLoginTokens(userId);
+        const tokens = await this._authenticationService
+            .getUserLoginTokens(userId);
 
         // set user current refresh token 
-        await setUserActiveRefreshToken(userId, tokens.refreshToken);
+        await this._userService
+            .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         return tokens;
     }
@@ -163,20 +182,21 @@ export class RegistrationService {
         const email = options.email;
 
         // create invitation token
-        const invitationToken = createInvitationToken(email);
+        const invitationToken = this._tokenService.createInvitationToken(email);
 
         // create user 
-        const createdUser = await createUserAsync({
-            email,
-            firstName: options.firstName,
-            lastName: options.lastName,
-            organizationId: options.organizationId,
-            roleId: options.roleId,
-            jobTitleId: options.jobTitleId,
-            registrationType: "Invitation",
-            password: "guest",
-            invitationToken
-        });
+        const createdUser = await this._userService
+            .createUserAsync({
+                email,
+                firstName: options.firstName,
+                lastName: options.lastName,
+                organizationId: options.organizationId,
+                roleId: options.roleId,
+                jobTitleId: options.jobTitleId,
+                registrationType: "Invitation",
+                password: "guest",
+                invitationToken
+            });
 
         // send email
         if (!noEmailNotification) {

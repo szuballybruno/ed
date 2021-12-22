@@ -1,5 +1,5 @@
 import { User } from "../../models/entity/User";
-import { getDatabaseConnectionParameters, GlobalConfiguration } from "../environment";
+import { getDatabaseConnectionParameters, GlobalConfiguration } from "../misc/environment";
 import { log, logObject } from "../misc/logger";
 import { ORMConnectionService } from "./ORMConnectionService";
 import { SeedService } from "./SeedService";

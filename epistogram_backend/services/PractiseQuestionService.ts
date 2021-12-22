@@ -3,7 +3,7 @@ import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { PractiseQuestionDTO } from "../models/shared_models/PractiseQuestionDTO";
 import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
 import { PlayerService } from "./PlayerService2";
-import { QuestionAnswerService } from "./questionAnswerService";
+import { QuestionAnswerService } from "./QuestionAnswerService2";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class PractiseQuestionService {

@@ -6,9 +6,9 @@ import { CreateVideoDTO } from "../models/shared_models/CreateVideoDTO";
 import { IdBodyDTO } from "../models/shared_models/IdBodyDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
-import { toQuestionDTO } from "../services/mappings";
+import { toQuestionDTO } from "../services/misc/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
-import { saveAssociatedQuestionsAsync } from "../services/questionService";
+import { QuestionService } from "../services/QuestionService2";
 import { VideoService } from "../services/VideoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
@@ -16,10 +16,12 @@ import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 export class VideoController {
 
     private _videoService: VideoService;
+    private _questionService: QuestionService;
 
-    constructor(videoService: VideoService) {
+    constructor(videoService: VideoService, questionService: QuestionService) {
 
         this._videoService = videoService;
+        this._questionService = questionService;
     }
 
     createVideoAction = async (params: ActionParams) => {
@@ -77,7 +79,8 @@ export class VideoController {
                 description: dto.description
             });
 
-        await saveAssociatedQuestionsAsync(dto.questions, videoId);
+        await this._questionService
+            .saveAssociatedQuestionsAsync(dto.questions, videoId);
     }
 
     getVideoEditDataAction = async (params: ActionParams) => {

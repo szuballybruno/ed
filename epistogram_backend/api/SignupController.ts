@@ -1,15 +1,17 @@
 import { AnswerSignupQuestionDTO } from "../models/shared_models/AnswerSignupQuestionDTO";
-import { getUserPersonalityAssessmentDTOAsync } from "../services/personalityAssessmentService";
+import { PersonalityAssessmentService } from "../services/PersonalityAssessmentService2";
 import { SignupService } from "../services/SignupService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class SignupController {
 
     private _signupService: SignupService;
+    private _personalityAssessmentService: PersonalityAssessmentService;
 
-    constructor(signupService: SignupService) {
+    constructor(signupService: SignupService, personalityAssessmentService: PersonalityAssessmentService) {
 
         this._signupService = signupService;
+        this._personalityAssessmentService = personalityAssessmentService;
     }
 
     answerSignupQuestionAction = async (params: ActionParams) => {
@@ -28,6 +30,7 @@ export class SignupController {
 
     getUserPersonalityDataAction = async (params: ActionParams) => {
 
-        return getUserPersonalityAssessmentDTOAsync(params.userId);
+        return this._personalityAssessmentService
+            .getUserPersonalityAssessmentDTOAsync(params.userId);
     };
 }

@@ -7,7 +7,6 @@ import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { CourseService } from "../services/CourseService";
-import { getFilePath, uploadAssigendFileAsync } from "../services/fileService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -93,25 +92,8 @@ export class CourseController {
         const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
         const courseId = withValueOrBadRequest<number>(params.req.body.courseId, "number");
 
-        const getCourseAsync = () => staticProvider
-            .ormConnection
-            .getRepository(Course)
-            .findOneOrFail(courseId);
-
-        const setCourseThumbnailIdAsync = (thumbnailFileId: number) => staticProvider
-            .ormConnection
-            .getRepository(Course)
-            .save({
-                id: courseId,
-                coverFileId: thumbnailFileId
-            });
-
-        return uploadAssigendFileAsync<Course>(
-            getFilePath("courseCoverImages", "courseCoverImage", courseId, ".jpg"),
-            getCourseAsync,
-            setCourseThumbnailIdAsync,
-            course => course.coverFileId,
-            file.data);
+        await this._courseService
+            .saveCourseThumbnailAsync(file, courseId);
     }
 
     deleteCourseAction = async (params: ActionParams) => {

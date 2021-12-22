@@ -3,6 +3,7 @@ import { CoinAcquireService } from "./CoinAcquireService";
 import { SQLFunctionsService } from "./sqlServices/FunctionsService";
 
 export class UserSessionActivityService {
+
     private _funcService: SQLFunctionsService;
     private _coinAcquireService: CoinAcquireService;
 

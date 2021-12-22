@@ -4,7 +4,7 @@ import { ActivityStreakView } from "../models/views/ActivityStreakView";
 import { UserSessionDailyView } from "../models/views/UserActivityDailyView";
 import { trimTimeFromDate } from "../utilities/helpers";
 import { CoinTransactionService } from "./CoinTransactionService";
-import { EventService } from "./eventService";
+import { EventService } from "./EventService2";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class CoinAcquireService {

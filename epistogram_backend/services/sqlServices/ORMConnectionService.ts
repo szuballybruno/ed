@@ -1,7 +1,7 @@
 import { Connection, ConnectionOptions, createConnection } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { ClassType } from "../../models/Types";
-import { getDatabaseConnectionParameters, GlobalConfiguration } from "../environment";
+import { getDatabaseConnectionParameters, GlobalConfiguration } from "../misc/environment";
 import { log } from "../misc/logger";
 import { SQLBootstrapperService } from "./SQLBootstrapper";
 

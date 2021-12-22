@@ -1,4 +1,4 @@
-import { UserStatsService } from "../services/userStatsService";
+import { UserStatsService } from "../services/UserStatsService2";
 import { ActionParams } from "../utilities/helpers";
 
 export class UserStatsController {

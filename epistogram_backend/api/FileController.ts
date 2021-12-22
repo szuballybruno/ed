@@ -1,8 +1,15 @@
 import { UploadedFile } from "express-fileupload";
-import { uploadAvatarFileAsync } from "../services/fileService";
+import { FileService } from "../services/FileService2";
 import { ActionParams, TypedError, withValueOrBadRequest } from "../utilities/helpers";
 
 export class FileController {
+
+    private _fileService: FileService;
+
+    constructor(fileService: FileService) {
+
+        this._fileService = fileService;
+    }
 
     uploadAvatarFileAction = (params: ActionParams) => {
 
@@ -12,6 +19,7 @@ export class FileController {
         if (!["image/png", "image/jpeg"].includes(file.mimetype))
             throw new TypedError("File upload failed: Only jpeg or png", "bad request")
 
-        return uploadAvatarFileAsync(params.userId, file);
+        return this._fileService
+            .uploadAvatarFileAsync(params.userId, file);
     };
 }

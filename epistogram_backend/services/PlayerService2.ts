@@ -9,14 +9,14 @@ import { VideoCompletedView } from "../models/views/VideoCompletedView";
 import { VideoProgressView } from "../models/views/VideoProgressView";
 import { staticProvider } from "../staticProvider";
 import { CourseService } from "./CourseService";
-import { readItemCode } from "./encodeService";
+import { readItemCode } from "./misc/encodeService";
 import { ExamService } from "./ExamService";
-import { toVideoDTO } from "./mappings";
+import { toVideoDTO } from "./misc/mappings";
 import { ModuleService } from "./ModuleService";
-import { QuestionAnswerService } from "./questionAnswerService";
+import { QuestionAnswerService } from "./QuestionAnswerService2";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
-import { getSampleChunksAsync, getVideoWatchedPercentAsync, squishSamplesAsync } from "./videoPlaybackSampleService";
 import { VideoService } from "./VideoService";
+import { VideoPlaybackSampleService } from "./VideoPlaybackSampleService2";
 
 export class PlayerService {
 
@@ -26,6 +26,7 @@ export class PlayerService {
     private _userCourseBridgeService: UserCourseBridgeService;
     private _videoService: VideoService;
     private _questionAnswerService: QuestionAnswerService;
+    private _vpss: VideoPlaybackSampleService;
 
     constructor(
         courseService: CourseService,
@@ -33,7 +34,8 @@ export class PlayerService {
         moduleService: ModuleService,
         userCourseBridge: UserCourseBridgeService,
         videoService: VideoService,
-        questionAnswerService: QuestionAnswerService) {
+        questionAnswerService: QuestionAnswerService,
+        vpss: VideoPlaybackSampleService) {
 
         this._courseService = courseService;
         this._examService = examService;
@@ -41,6 +43,7 @@ export class PlayerService {
         this._userCourseBridgeService = userCourseBridge;
         this._videoService = videoService;
         this._questionAnswerService = questionAnswerService;
+        this._vpss = vpss;
     }
 
     getPlayerDataAsync = async (
@@ -187,10 +190,10 @@ export class PlayerService {
             });
 
         // get sample chunks
-        const chunks = await getSampleChunksAsync(userId, videoId);
+        const chunks = await this._vpss.getSampleChunksAsync(userId, videoId);
 
         // calucate and save watched percent
-        const watchedPercent = await getVideoWatchedPercentAsync(userId, videoId, chunks);
+        const watchedPercent = await this._vpss.getVideoWatchedPercentAsync(userId, videoId, chunks);
 
         // 5% is a very low number only for development
         const newIsWatchedState = watchedPercent > 5;
@@ -199,7 +202,7 @@ export class PlayerService {
         const isCompletedBefore = await this.getVideoIsCompletedState(userId, videoId);
 
         // squish chunks to store less data 
-        await squishSamplesAsync(userId, videoId, chunks);
+        await this._vpss.squishSamplesAsync(userId, videoId, chunks);
         await this._videoService.saveVideoPlaybackDataAsync(userId, videoId, watchedPercent, newIsWatchedState);
 
         // calculate is watched state changed

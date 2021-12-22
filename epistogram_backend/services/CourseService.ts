@@ -1,3 +1,4 @@
+import { UploadedFile } from "express-fileupload";
 import { Course } from "../models/entity/Course";
 import { CourseCategory } from "../models/entity/CourseCategory";
 import { CourseModule } from "../models/entity/CourseModule";
@@ -24,9 +25,10 @@ import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView
 import { CourseModuleOverviewView } from "../models/views/CourseModuleOverviewView";
 import { CourseProgressView } from "../models/views/CourseProgressView";
 import { CourseView } from "../models/views/CourseView";
-import { getItemCode, readItemCode } from "./encodeService";
+import { getItemCode, readItemCode } from "./misc/encodeService";
+import { FileService } from "./FileService2";
 import { MapperService } from "./MapperService2";
-import { toCourseAdminShortDTO, toCourseItemDTO, toCourseShortDTO } from "./mappings";
+import { toCourseAdminShortDTO, toCourseItemDTO, toCourseShortDTO } from "./misc/mappings";
 import { ModuleService } from "./ModuleService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
@@ -39,19 +41,22 @@ export class CourseService {
     private _videoService: VideoService;
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
+    private _fileService: FileService;
 
     constructor(
         moduleService: ModuleService,
         userCourseBridgeService: UserCourseBridgeService,
         videoService: VideoService,
         ormService: ORMConnectionService,
-        mapperService: MapperService) {
+        mapperService: MapperService,
+        fileService: FileService) {
 
         this._moduleService = moduleService;
         this._userCourseBridgeService = userCourseBridgeService;
         this._videoService = videoService;
         this._ormService = ormService;
         this._mapperService = mapperService;
+        this._fileService = fileService;
     }
 
     async getCourseProgressShortAsync(userId: number) {
@@ -112,6 +117,28 @@ export class CourseService {
             completedCourses: completedCoursesAsCourseShortDTOs,
             inProgressCourses: inProgressCoursesAsCourseShortDTOs
         } as UserCoursesDataDTO;
+    }
+
+    async saveCourseThumbnailAsync(file: UploadedFile, courseId: number) {
+
+        const getCourseAsync = () => this._ormService
+            .getRepository(Course)
+            .findOneOrFail(courseId);
+
+        const setCourseThumbnailIdAsync = (thumbnailFileId: number) => this._ormService
+            .getRepository(Course)
+            .save({
+                id: courseId,
+                coverFileId: thumbnailFileId
+            });
+
+        return this._fileService
+            .uploadAssigendFileAsync<Course>(
+                this._fileService.getFilePath("courseCoverImages", "courseCoverImage", courseId, ".jpg"),
+                getCourseAsync,
+                setCourseThumbnailIdAsync,
+                course => course.coverFileId,
+                file.data);
     }
 
     getCourseItemsDescriptorCodesAsync = async (userId: number, courseId: number) => {

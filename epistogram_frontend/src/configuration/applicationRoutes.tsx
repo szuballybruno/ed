@@ -115,11 +115,6 @@ export const applicationRoutes = {
                 route: "/administration/users/:userId/statistics"
             },
 
-            tasksRoute: {
-                title: translatableTexts.routeTitles.administrationUserTasks,
-                route: "/administration/users/:userId/tasks"
-            },
-
             teacherInfoRoute: {
                 title: translatableTexts.routeTitles.administrationEditTeacherInfo,
                 route: "/administration/users/:userId/teacherinfo"

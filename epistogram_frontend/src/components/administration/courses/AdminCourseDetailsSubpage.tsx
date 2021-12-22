@@ -19,21 +19,7 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseImprovementStatsRadar } from "../../universal/CourseImprovementStatsRadar";
 import { EditSection } from "./EditSection";
 import { SimpleEditList } from "./SimpleEditList";
-
-const EpistoLabel = (props: { text: string } & FlexProps) => {
-
-    const { text, ...css } = props;
-
-    return <Flex mt="10px" direction="column" {...css}>
-        <Typography
-            variant={"overline"}>
-
-            {text}
-        </Typography>
-
-        {props.children}
-    </Flex>
-}
+import { EpistoLabel } from "../../universal/EpistoLabel";
 
 export const AdminCourseDetailsSubpage = () => {
 

@@ -1,5 +1,5 @@
 import { Course } from "../models/entity/Course";
-import { toSimpleCourseItemDTOs } from "./mappings";
+import { toSimpleCourseItemDTOs } from "./misc/mappings";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class CourseItemsService {

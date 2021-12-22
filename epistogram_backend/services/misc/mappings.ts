@@ -1,80 +1,80 @@
-import { Answer } from "../models/entity/Answer";
-import { Course } from "../models/entity/Course";
-import { CourseCategory } from "../models/entity/CourseCategory";
-import { CourseModule } from "../models/entity/CourseModule";
-import { Event } from "../models/entity/Event";
-import { Exam } from "../models/entity/Exam";
-import { JobTitle } from "../models/entity/JobTitle";
-import { Organization } from "../models/entity/Organization";
-import { Question } from "../models/entity/Question";
-import { Role } from "../models/entity/Role";
-import { ShopItemCategory } from "../models/entity/ShopItemCategory";
-import { Task } from "../models/entity/Task";
-import { User } from "../models/entity/User";
-import { Video } from "../models/entity/Video";
-import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
-import { AnswerDTO } from "../models/shared_models/AnswerDTO";
-import { AnswerEditDTO } from "../models/shared_models/AnswerEditDTO";
-import { CoinTransactionDTO } from "../models/shared_models/CoinTransactionDTO";
-import { CourseAdminItemShortDTO } from "../models/shared_models/CourseAdminItemShortDTO";
-import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
-import { CourseCategoryDTO } from "../models/shared_models/CourseCategoryDTO";
-import { CourseContentEditDataDTO } from "../models/shared_models/CourseContentEditDataDTO";
-import { CourseDetailsDTO } from "../models/shared_models/CourseDetailsDTO";
-import { CourseDetailsEditDataDTO } from "../models/shared_models/CourseDetailsEditDataDTO";
-import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
-import { CourseLearningDTO } from "../models/shared_models/CourseLearningDTO";
-import { CourseProgressShortDTO } from "../models/shared_models/CourseProgressShortDTO";
-import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
-import { CourseStatDTO } from "../models/shared_models/CourseStatDTO";
-import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
-import { EventDTO } from "../models/shared_models/EventDTO";
-import { ExamDTO } from "../models/shared_models/ExamDTO";
-import { ExamResultQuestionDTO } from "../models/shared_models/ExamResultQuestionDTO";
-import { ExamResultsDTO } from "../models/shared_models/ExamResultsDTO";
-import { JobTitleDTO } from "../models/shared_models/JobTitleDTO";
-import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
-import { ModuleAdminShortDTO } from "../models/shared_models/ModuleAdminShortDTO";
-import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
-import { ModuleShortDTO } from "../models/shared_models/ModuleShortDTO";
-import { OrganizationDTO } from "../models/shared_models/OrganizationDTO";
-import { QuestionDTO } from "../models/shared_models/QuestionDTO";
-import { ResultAnswerDTO } from "../models/shared_models/ResultAnswerDTO";
-import { RoleDTO } from "../models/shared_models/RoleDTO";
-import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
-import { ShopItemDTO } from "../models/shared_models/ShopItemDTO";
-import { SignupAnswerDTO } from "../models/shared_models/SignupAnswerDTO";
-import { SignupDataDTO } from "../models/shared_models/SignupDataDTO";
-import { SignupQuestionDTO } from "../models/shared_models/SignupQuestionDTO";
-import { TaskDTO } from "../models/shared_models/TaskDTO";
-import { CourseItemStateType } from "../models/shared_models/types/sharedTypes";
-import { UserActivityDTO } from "../models/shared_models/UserActivityDTO";
-import { UserDTO } from "../models/shared_models/UserDTO";
-import { UserEditDTO } from "../models/shared_models/UserEditDTO";
-import { UserStatsDTO } from "../models/shared_models/UserStatsDTO";
-import { VideoDTO } from "../models/shared_models/VideoDTO";
-import { VideoShortDTO } from "../models/shared_models/VideoShortDTO";
-import { CoinTransactionView } from "../models/views/CoinTransactionView";
-import { CourseAdminContentView } from "../models/views/CourseAdminContentView";
-import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
-import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
-import { CourseDetailsView } from "../models/views/CourseDetailsView";
-import { CourseItemStateView } from "../models/views/CourseItemStateView";
-import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView";
-import { CourseModuleOverviewView } from "../models/views/CourseModuleOverviewView";
-import { CourseProgressView } from "../models/views/CourseProgressView";
-import { CourseView } from "../models/views/CourseView";
-import { DailyTipView } from "../models/views/DailyTipView";
-import { ExamResultView } from "../models/views/ExamResultView";
-import { ShopItemView } from "../models/views/ShopItemView";
-import { SignupQuestionView } from "../models/views/SignupQuestionView";
-import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { UserStatsView } from "../models/views/UserStatsView";
-import { staticProvider } from "../staticProvider";
-import { getFullName, navPropNotNull, toFullName } from "../utilities/helpers";
+import { Answer } from "../../models/entity/Answer";
+import { Course } from "../../models/entity/Course";
+import { CourseCategory } from "../../models/entity/CourseCategory";
+import { CourseModule } from "../../models/entity/CourseModule";
+import { Event } from "../../models/entity/Event";
+import { Exam } from "../../models/entity/Exam";
+import { JobTitle } from "../../models/entity/JobTitle";
+import { Organization } from "../../models/entity/Organization";
+import { Question } from "../../models/entity/Question";
+import { Role } from "../../models/entity/Role";
+import { ShopItemCategory } from "../../models/entity/ShopItemCategory";
+import { Task } from "../../models/entity/Task";
+import { User } from "../../models/entity/User";
+import { Video } from "../../models/entity/Video";
+import { AdminPageUserDTO } from "../../models/shared_models/AdminPageUserDTO";
+import { AnswerDTO } from "../../models/shared_models/AnswerDTO";
+import { AnswerEditDTO } from "../../models/shared_models/AnswerEditDTO";
+import { CoinTransactionDTO } from "../../models/shared_models/CoinTransactionDTO";
+import { CourseAdminItemShortDTO } from "../../models/shared_models/CourseAdminItemShortDTO";
+import { CourseAdminListItemDTO } from "../../models/shared_models/CourseAdminListItemDTO";
+import { CourseCategoryDTO } from "../../models/shared_models/CourseCategoryDTO";
+import { CourseContentEditDataDTO } from "../../models/shared_models/CourseContentEditDataDTO";
+import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
+import { CourseDetailsEditDataDTO } from "../../models/shared_models/CourseDetailsEditDataDTO";
+import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
+import { CourseLearningDTO } from "../../models/shared_models/CourseLearningDTO";
+import { CourseProgressShortDTO } from "../../models/shared_models/CourseProgressShortDTO";
+import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
+import { CourseStatDTO } from "../../models/shared_models/CourseStatDTO";
+import { DailyTipDTO } from "../../models/shared_models/DailyTipDTO";
+import { EventDTO } from "../../models/shared_models/EventDTO";
+import { ExamDTO } from "../../models/shared_models/ExamDTO";
+import { ExamResultQuestionDTO } from "../../models/shared_models/ExamResultQuestionDTO";
+import { ExamResultsDTO } from "../../models/shared_models/ExamResultsDTO";
+import { JobTitleDTO } from "../../models/shared_models/JobTitleDTO";
+import { ModuleAdminEditDTO } from "../../models/shared_models/ModuleAdminEditDTO";
+import { ModuleAdminShortDTO } from "../../models/shared_models/ModuleAdminShortDTO";
+import { ModuleDetailedDTO } from "../../models/shared_models/ModuleDetailedDTO";
+import { ModuleShortDTO } from "../../models/shared_models/ModuleShortDTO";
+import { OrganizationDTO } from "../../models/shared_models/OrganizationDTO";
+import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
+import { ResultAnswerDTO } from "../../models/shared_models/ResultAnswerDTO";
+import { RoleDTO } from "../../models/shared_models/RoleDTO";
+import { ShopItemCategoryDTO } from "../../models/shared_models/ShopItemCategoryDTO";
+import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
+import { SignupAnswerDTO } from "../../models/shared_models/SignupAnswerDTO";
+import { SignupDataDTO } from "../../models/shared_models/SignupDataDTO";
+import { SignupQuestionDTO } from "../../models/shared_models/SignupQuestionDTO";
+import { TaskDTO } from "../../models/shared_models/TaskDTO";
+import { CourseItemStateType } from "../../models/shared_models/types/sharedTypes";
+import { UserActivityDTO } from "../../models/shared_models/UserActivityDTO";
+import { UserDTO } from "../../models/shared_models/UserDTO";
+import { UserEditDTO } from "../../models/shared_models/UserEditDTO";
+import { UserStatsDTO } from "../../models/shared_models/UserStatsDTO";
+import { VideoDTO } from "../../models/shared_models/VideoDTO";
+import { VideoShortDTO } from "../../models/shared_models/VideoShortDTO";
+import { CoinTransactionView } from "../../models/views/CoinTransactionView";
+import { CourseAdminContentView } from "../../models/views/CourseAdminContentView";
+import { CourseAdminDetailedView } from "../../models/views/CourseAdminDetailedView";
+import { CourseAdminShortView } from "../../models/views/CourseAdminShortView";
+import { CourseDetailsView } from "../../models/views/CourseDetailsView";
+import { CourseItemStateView } from "../../models/views/CourseItemStateView";
+import { CourseLearningStatsView } from "../../models/views/CourseLearningStatsView";
+import { CourseModuleOverviewView } from "../../models/views/CourseModuleOverviewView";
+import { CourseProgressView } from "../../models/views/CourseProgressView";
+import { CourseView } from "../../models/views/CourseView";
+import { DailyTipView } from "../../models/views/DailyTipView";
+import { ExamResultView } from "../../models/views/ExamResultView";
+import { ShopItemView } from "../../models/views/ShopItemView";
+import { SignupQuestionView } from "../../models/views/SignupQuestionView";
+import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
+import { UserStatsView } from "../../models/views/UserStatsView";
+import { staticProvider } from "../../staticProvider";
+import { getFullName, navPropNotNull, toFullName } from "../../utilities/helpers";
 import { getItemCode } from "./encodeService";
-import { MapperService } from "./MapperService2";
-import { getAssetUrl, getExamCoverImageUrl } from "./misc/urlProvider";
+import { MapperService } from "../MapperService2";
+import { getAssetUrl, getExamCoverImageUrl } from "./urlProvider";
 
 export const initializeMappings = (mapperService: MapperService) => {
 
@@ -313,6 +313,28 @@ export const initializeMappings = (mapperService: MapperService) => {
                 modules: modules
             } as CourseDetailsDTO;
         });
+
+    mapperService
+        .addMap(User, UserEditDTO, user => {
+            return {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+
+                jobTitle: user.jobTitle
+                    ? toJobTitleDTO(user.jobTitle)
+                    : null,
+
+                organization: user.organization
+                    ? toOrganizationDTO(user.organization)
+                    : null,
+
+                role: user.role
+                    ? toRoleDTO(user.role)
+                    : null
+            } as UserEditDTO;
+        });
 }
 
 const parseCommaSeparatedStringList = (str: string) => {
@@ -361,28 +383,6 @@ export const toUserDTO = (user: User) => {
             ? toUserActivityDTO(user.userActivity)
             : null
     } as UserDTO;
-}
-
-export const toUserEditDTO = (user: User) => {
-
-    return {
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-
-        jobTitle: user.jobTitle
-            ? toJobTitleDTO(user.jobTitle)
-            : null,
-
-        organization: user.organization
-            ? toOrganizationDTO(user.organization)
-            : null,
-
-        role: user.role
-            ? toRoleDTO(user.role)
-            : null
-    } as UserEditDTO;
 }
 
 export const toRoleDTO = (role: Role) => {

@@ -3,8 +3,8 @@ import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
 import { staticProvider } from "../staticProvider";
 import { CourseItemsService } from "./CourseItemsService";
-import { getItemCode } from "./encodeService";
-import { toCourseItemDTOExam, toCourseItemDTOVideo } from "./mappings";
+import { getItemCode } from "./misc/encodeService";
+import { toCourseItemDTOExam, toCourseItemDTOVideo } from "./misc/mappings";
 
 export class UserCourseBridgeService {
 

@@ -3,11 +3,11 @@ import { JobTitle } from "../models/entity/JobTitle";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
-import { requestChangePasswordAsync } from "../services/authenticationService";
-import { toDailyTipDTO } from "../services/mappings";
+import { AuthenticationService } from "../services/AuthenticationService2";
+import { toDailyTipDTO } from "../services/misc/mappings";
 import { MiscService } from "../services/MiscService";
 import { PractiseQuestionService } from "../services/PractiseQuestionService";
-import { createRegistrationToken } from "../services/tokenService";
+import { TokenService } from "../services/TokenService2";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -15,11 +15,19 @@ export class MiscController {
 
     private _miscService: MiscService;
     private _practiseQuestionService: PractiseQuestionService;
+    private _authService: AuthenticationService;
+    private _tokenService: TokenService;
 
-    constructor(miscService: MiscService, practiseQuestionService: PractiseQuestionService) {
+    constructor(
+        miscService: MiscService,
+        practiseQuestionService: PractiseQuestionService,
+        authService: AuthenticationService,
+        tokenService: TokenService) {
 
         this._miscService = miscService;
         this._practiseQuestionService = practiseQuestionService;
+        this._authService = authService;
+        this._tokenService = tokenService;
     }
 
     getCurrentCourseItemCodeAction = async (parms: ActionParams) => {
@@ -60,7 +68,7 @@ export class MiscController {
 
     getRegistrationLinkAction = async (params: ActionParams) => {
 
-        return Promise.resolve(`${staticProvider.globalConfig.misc.frontendUrl}/registration?token=${createRegistrationToken()}`);
+        return Promise.resolve(`${staticProvider.globalConfig.misc.frontendUrl}/registration?token=${this._tokenService.createRegistrationToken()}`);
     };
 
     requestChangePasswordAction = async (params: ActionParams) => {
@@ -68,7 +76,8 @@ export class MiscController {
         const dto = withValueOrBadRequest<any>(params.req.body);
         const oldPassword = withValueOrBadRequest<string>(dto.oldPassword);
 
-        return await requestChangePasswordAsync(params.userId, oldPassword);
+        return await this._authService
+            .requestChangePasswordAsync(params.userId, oldPassword);
     };
 
     saveUserDataAction = async (params: ActionParams) => {

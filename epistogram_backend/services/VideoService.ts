@@ -4,12 +4,12 @@ import { StorageFile } from "../models/entity/StorageFile";
 import { Video } from "../models/entity/Video";
 import { VideoPlaybackData } from "../models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { getFilePath, uploadAssigendFileAsync } from "./fileService";
+import { FileService } from "./FileService2";
 import { log } from "./misc/logger";
 import { getAssetUrl } from "./misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
-import { QuestionAnswerService } from "./questionAnswerService";
-import { deleteQuesitonsAsync } from "./questionService";
+import { QuestionAnswerService } from "./QuestionAnswerService2";
+import { QuestionService } from "./QuestionService2";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 
@@ -18,15 +18,21 @@ export class VideoService {
     private _userCourseBridgeService: UserCourseBridgeService;
     private _ormConnection: ORMConnectionService;
     private _questionAnswerService: QuestionAnswerService;
+    private _fileService: FileService;
+    private _questionsService: QuestionService;
 
     constructor(
         ormConnection: ORMConnectionService,
         userCourseBridgeService: UserCourseBridgeService,
-        questionAnswerService: QuestionAnswerService) {
+        questionAnswerService: QuestionAnswerService,
+        fileService: FileService,
+        questionsService: QuestionService) {
 
         this._ormConnection = ormConnection;
         this._questionAnswerService = questionAnswerService;
         this._userCourseBridgeService = userCourseBridgeService;
+        this._fileService = fileService;
+        this._questionsService = questionsService;
     }
 
     answerVideoQuestionAsync = async (
@@ -115,7 +121,8 @@ export class VideoService {
             .where('"video_id" IN (:...videoIds)', { videoIds })
             .getMany();
 
-        await deleteQuesitonsAsync(questions.map(x => x.id));
+        await this._questionsService
+            .deleteQuesitonsAsync(questions.map(x => x.id));
 
         // delete answer sessions
         await this._ormConnection
@@ -167,14 +174,16 @@ export class VideoService {
     uploadVideoFileAsync = async (videoId: number, videoFileBuffer: Buffer) => {
 
         // upload file
-        const filePath = getFilePath("videos", "video", videoId, "mp4");
+        const filePath = this._fileService
+            .getFilePath("videos", "video", videoId, "mp4");
 
-        await uploadAssigendFileAsync<Video>(
-            filePath,
-            () => this.getVideoByIdAsync(videoId),
-            (fileId) => this.setVideoFileIdAsync(videoId, fileId),
-            (entity) => entity.videoFileId,
-            videoFileBuffer);
+        await this._fileService
+            .uploadAssigendFileAsync<Video>(
+                filePath,
+                () => this.getVideoByIdAsync(videoId),
+                (fileId) => this.setVideoFileIdAsync(videoId, fileId),
+                (entity) => entity.videoFileId,
+                videoFileBuffer);
 
         // set video length
         const videoFileUrl = getAssetUrl(filePath);

@@ -1,16 +1,14 @@
-import { User } from "../models/entity/User";
-import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
-import { getAdminPageUsersList } from "../services/adminService";
-import { toUserEditDTO } from "../services/mappings";
-import { deleteUserAsync } from "../services/userService";
-import { staticProvider } from "../staticProvider";
-import { ActionParams, getFullName, withValueOrBadRequest } from "../utilities/helpers";
+import { UserService } from "../services/UserService2";
+import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class UserController {
 
-    constructor() {
+    private _userService: UserService;
 
+    constructor(userService: UserService) {
+
+        this._userService = userService;
     }
 
     deleteUserAction = async (params: ActionParams) => {
@@ -18,67 +16,37 @@ export class UserController {
         const dto = withValueOrBadRequest<any>(params.req.body);
         const deleteUserId = withValueOrBadRequest<number>(dto.userId, "number");
 
-        return deleteUserAsync(params.userId, deleteUserId);
+        return this._userService
+            .deleteUserAsync(params.userId, deleteUserId);
     };
 
     getEditUserDataAction = async (params: ActionParams) => {
 
         const editedUserId = withValueOrBadRequest<number>(params.req.query?.editedUserId, "number");
 
-        const user = await staticProvider
-            .ormConnection
-            .getRepository(User)
-            .createQueryBuilder("u")
-            .leftJoinAndSelect("u.organization", "o")
-            .leftJoinAndSelect("u.role", "r")
-            .leftJoinAndSelect("u.jobTitle", "jt")
-            .where("u.id = :userId", { userId: editedUserId })
-            .getOneOrFail();
-
-        return toUserEditDTO(user);
+        return await this._userService
+            .getEditUserDataAsync(editedUserId);
     }
 
-    updateUserAction = async (params: ActionParams) => {
+    saveUserAction = async (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<UserEditDTO>(params.req.body);
 
-        await staticProvider
-            .ormConnection
-            .getRepository(User)
-            .save({
-                id: dto.id,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                email: dto.email,
-                organizationId: dto.organization?.id,
-                roleId: dto.role?.id,
-                jobTitleId: dto.jobTitle?.id
-            })
+        await this._userService
+            .saveUserAsync(dto);
     }
 
     getUserAdministrationUserListAction = async () => {
 
-        return await getAdminPageUsersList();
+        return await this._userService
+            .getAdminPageUsersListAsync();
     };
 
     getBriefUserDataAction = async (params: ActionParams) => {
 
         const userId = withValueOrBadRequest(params.req?.query?.userId);
 
-        const user = await staticProvider
-            .ormConnection
-            .getRepository(User)
-            .findOneOrFail({
-                where: {
-                    id: userId
-                }
-            });
-
-        return {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            fullName: getFullName(user)
-        } as BriefUserDataDTO;
+        await this._userService
+            .getBriefUserDataAsync(userId);
     }
 }

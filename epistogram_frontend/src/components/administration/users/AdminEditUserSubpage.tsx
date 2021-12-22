@@ -33,7 +33,6 @@ const AdminEditUserSubpage = () => {
         tabMenuItems={[
             applicationRoutes.administrationRoute.usersRoute.editRoute,
             applicationRoutes.administrationRoute.usersRoute.statsRoute,
-            applicationRoutes.administrationRoute.usersRoute.tasksRoute,
             applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute
         ]}>
         <EditUserControl

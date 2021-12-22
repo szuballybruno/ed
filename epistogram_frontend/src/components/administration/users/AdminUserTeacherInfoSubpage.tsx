@@ -1,11 +1,10 @@
-import {Box, Flex} from "@chakra-ui/react";
-import {AdminSubpageHeader} from "../AdminSubpageHeader";
-import {applicationRoutes} from "../../../configuration/applicationRoutes";
-import React, {useState} from "react";
-import {getAssetUrl} from "../../../static/frontendHelpers";
-import {EditSection} from "../courses/EditSection";
-import {EpistoEntry} from "../../universal/EpistoEntry";
-import {Checkbox, Slider, Typography} from "@mui/material";
+import { Box, Flex } from "@chakra-ui/react";
+import { Checkbox, Slider, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { getAssetUrl } from "../../../static/frontendHelpers";
+import { EpistoEntry } from "../../universal/EpistoEntry";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const AdminUserTeacherInfoSubpage = () => {
     const [teacherName, setTeacherName] = useState("")
@@ -14,19 +13,19 @@ export const AdminUserTeacherInfoSubpage = () => {
             id: 0,
             name: "Not cow patch badge",
             src: getAssetUrl("images/logo.png")
-        },{
+        }, {
             id: 1,
             name: "Best history teachern't",
             src: getAssetUrl("images/logo.png")
-        },{
+        }, {
             id: 2,
             name: "Best history teachern't",
             src: getAssetUrl("images/logo.png")
-        },{
+        }, {
             id: 3,
             name: "Best history teachern't",
             src: getAssetUrl("images/logo.png")
-        },{
+        }, {
             id: 4,
             name: "Best history teachern't",
             src: getAssetUrl("images/logo.png")
@@ -41,69 +40,67 @@ export const AdminUserTeacherInfoSubpage = () => {
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.usersRoute.editRoute,
                     applicationRoutes.administrationRoute.usersRoute.statsRoute,
-                    applicationRoutes.administrationRoute.usersRoute.tasksRoute,
                     applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute
                 ]}>
-                <Box px="20px" flex="1" alignItems={"flex-start"} maxW={500}>
-                    <EditSection title="Jellemzés">
 
-                        {/* Teacher skills */}
+                <Box
+                    px="20px"
+                    flex="1"
+                    alignSelf="center"
+                    align={"flex-start"}
+                    maxW={900}>
 
-                        <EpistoEntry
-                            labelVariant={"top"}
-                            value={teacherName}
-                            label="Szakterület"
-                            setValue={setTeacherName} />
+                    {/* Teacher skills */}
+                    <EpistoEntry
+                        labelVariant={"top"}
+                        value={teacherName}
+                        label="Szakterület"
+                        setValue={setTeacherName} />
 
-                        {/* Teacher courses count */}
+                    {/* Teacher courses count */}
+                    <EpistoEntry
+                        labelVariant={"top"}
+                        isNumeric={true}
+                        value={teacherName}
+                        label="Kurzusok száma"
+                        setValue={setTeacherName} />
 
-                        <EpistoEntry
-                            labelVariant={"top"}
-                            isNumeric={true}
-                            value={teacherName}
-                            label="Kurzusok száma"
-                            setValue={setTeacherName} />
+                    {/* Teacher videos count */}
+                    <EpistoEntry
+                        labelVariant={"top"}
+                        isNumeric={true}
+                        value={teacherName}
+                        label="Videók száma"
+                        setValue={setTeacherName} />
 
-                        {/* Teacher videos count */}
+                    {/* Teacher students count */}
+                    <EpistoEntry
+                        labelVariant={"top"}
+                        isNumeric={true}
+                        value={teacherName}
+                        label="Hallgatók száma"
+                        setValue={setTeacherName} />
 
-                        <EpistoEntry
-                            labelVariant={"top"}
-                            isNumeric={true}
-                            value={teacherName}
-                            label="Videók száma"
-                            setValue={setTeacherName} />
+                    {/* Teacher rating */}
+                    <Typography variant={"overline"} style={{ marginTop: "10px" }}>
+                        Értékelés
+                    </Typography>
+                    <Slider
+                        defaultValue={0}
+                        valueLabelDisplay="auto"
+                        step={0.5}
+                        marks
+                        min={0}
+                        max={5} />
 
-                        {/* Teacher students count */}
+                    {/* Teacher badges */}
+                    <Typography variant={"overline"} style={{ marginTop: "10px" }}>
+                        Tanár jelvényei
+                    </Typography>
 
-                        <EpistoEntry
-                            labelVariant={"top"}
-                            isNumeric={true}
-                            value={teacherName}
-                            label="Hallgatók száma"
-                            setValue={setTeacherName} />
-
-                        {/* Teacher rating */}
-
-                        <Typography variant={"overline"} style={{marginTop: "10px" }}>
-                            Értékelés
-                        </Typography>
-                        <Slider
-                            defaultValue={0}
-                            valueLabelDisplay="auto"
-                            step={0.5}
-                            marks
-                            min={0}
-                            max={5}
-                        />
-
-                        {/* Teacher badges */}
-
-                        <Typography variant={"overline"} style={{marginTop: "10px" }}>
-                            Tanár jelvényei
-                        </Typography>
-
-                        <Flex flexWrap={"wrap"}>
-                            {mockTeacherBadges.map((badge, index) => {
+                    <Flex flexWrap={"wrap"}>
+                        {mockTeacherBadges
+                            .map((badge, index) => {
                                 return <Flex
                                     flexDir={"column"}
                                     justifyContent={"space-between"}
@@ -113,20 +110,19 @@ export const AdminUserTeacherInfoSubpage = () => {
                                     borderRadius={7}
                                     h={180}
                                     boxSizing={"border-box"}
-                                    m={5}
-                                >
+                                    m={5}>
+
                                     <Flex>
                                         <img src={badge.src} alt={""} />
                                     </Flex>
+
                                     <Flex>
                                         <Checkbox />
                                         <Typography fontSize={"0.8em"}>{badge.name}</Typography>
                                     </Flex>
                                 </Flex>
                             })}
-                        </Flex>
-
-                    </EditSection>
+                    </Flex>
                 </Box>
             </AdminSubpageHeader>
         </Flex>

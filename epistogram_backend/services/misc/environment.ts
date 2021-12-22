@@ -1,5 +1,5 @@
-import { staticProvider } from "../staticProvider";
-import { log, logError } from "./misc/logger";
+import { staticProvider } from "../../staticProvider";
+import { log, logError } from "./logger";
 
 // 
 // Env Init 

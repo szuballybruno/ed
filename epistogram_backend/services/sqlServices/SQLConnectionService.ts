@@ -1,5 +1,5 @@
 import { Pool, QueryResult } from 'pg';
-import { getDatabaseConnectionParameters } from '../environment';
+import { getDatabaseConnectionParameters } from '../misc/environment';
 import { log } from '../misc/logger';
 
 export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<QueryResult<any>>;
