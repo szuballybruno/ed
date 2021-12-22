@@ -13,10 +13,10 @@ import { readItemCode } from "./misc/encodeService";
 import { ExamService } from "./ExamService";
 import { toVideoDTO } from "./misc/mappings";
 import { ModuleService } from "./ModuleService";
-import { QuestionAnswerService } from "./QuestionAnswerService2";
+import { QuestionAnswerService } from "./QuestionAnswerService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { VideoService } from "./VideoService";
-import { VideoPlaybackSampleService } from "./VideoPlaybackSampleService2";
+import { VideoPlaybackSampleService } from "./VideoPlaybackSampleService";
 
 export class PlayerService {
 

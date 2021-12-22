@@ -3,7 +3,7 @@ import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO";
 import { toAnswerEditDTO } from "../services/misc/mappings";
 import { PractiseQuestionService } from "../services/PractiseQuestionService";
-import { QuestionService } from "../services/QuestionService2";
+import { QuestionService } from "../services/QuestionService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 

@@ -4,7 +4,7 @@ import { RegisterUserViaInvitationTokenDTO } from "../models/shared_models/Regis
 import { RegisterUserViaPublicTokenDTO } from "../models/shared_models/RegisterUserViaPublicTokenDTO";
 import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { RegistrationService } from "../services/RegistrationService";
-import { UserService } from "../services/UserService2";
+import { UserService } from "../services/UserService";
 import { setAuthCookies } from "../utilities/cookieHelpers";
 import { ActionParams, TypedError } from "../utilities/helpers";
 

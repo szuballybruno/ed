@@ -1,7 +1,7 @@
 
 import { ChangePasswordDTO } from "../models/shared_models/SetNewPasswordDTO";
-import { AuthenticationService } from "../services/AuthenticationService2";
-import { UserService } from "../services/UserService2";
+import { AuthenticationService } from "../services/AuthenticationService";
+import { UserService } from "../services/UserService";
 import { staticProvider } from "../staticProvider";
 import { setAuthCookies } from "../utilities/cookieHelpers";
 import { ActionParams, TypedError } from "../utilities/helpers";

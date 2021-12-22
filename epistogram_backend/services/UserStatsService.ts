@@ -1,6 +1,6 @@
 import { UserStatsDTO } from "../models/shared_models/UserStatsDTO";
 import { UserStatsView } from "../models/views/UserStatsView";
-import { MapperService } from "./MapperService2";
+import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class UserStatsService {

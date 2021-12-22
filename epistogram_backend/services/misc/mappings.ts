@@ -73,7 +73,7 @@ import { UserStatsView } from "../../models/views/UserStatsView";
 import { staticProvider } from "../../staticProvider";
 import { getFullName, navPropNotNull, toFullName } from "../../utilities/helpers";
 import { getItemCode } from "./encodeService";
-import { MapperService } from "../MapperService2";
+import { MapperService } from "../MapperService";
 import { getAssetUrl, getExamCoverImageUrl } from "./urlProvider";
 
 export const initializeMappings = (mapperService: MapperService) => {

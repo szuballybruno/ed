@@ -8,7 +8,7 @@ import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
 import { toQuestionDTO } from "../services/misc/mappings";
 import { getAssetUrl } from "../services/misc/urlProvider";
-import { QuestionService } from "../services/QuestionService2";
+import { QuestionService } from "../services/QuestionService";
 import { VideoService } from "../services/VideoService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";

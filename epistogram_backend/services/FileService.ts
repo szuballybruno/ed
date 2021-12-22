@@ -2,8 +2,8 @@ import { UploadedFile } from "express-fileupload";
 import { StorageFile } from "../models/entity/StorageFile";
 import { User } from "../models/entity/User";
 import { staticProvider } from "../staticProvider";
-import { StorageService } from "./StorageService2";
-import { UserService } from "./UserService2";
+import { StorageService } from "./StorageService";
+import { UserService } from "./UserService";
 
 export class FileService {
 

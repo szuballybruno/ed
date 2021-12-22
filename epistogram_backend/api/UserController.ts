@@ -1,5 +1,5 @@
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
-import { UserService } from "../services/UserService2";
+import { UserService } from "../services/UserService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class UserController {

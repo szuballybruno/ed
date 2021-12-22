@@ -6,7 +6,7 @@ import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { RegistrationType } from "../models/Types";
 import { getFullName, TypedError } from "../utilities/helpers";
-import { MapperService } from "./MapperService2";
+import { MapperService } from "./MapperService";
 import { toAdminPageUserDTO, toUserDTO } from "./misc/mappings";
 import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";

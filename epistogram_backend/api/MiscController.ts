@@ -3,11 +3,11 @@ import { JobTitle } from "../models/entity/JobTitle";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
-import { AuthenticationService } from "../services/AuthenticationService2";
+import { AuthenticationService } from "../services/AuthenticationService";
 import { toDailyTipDTO } from "../services/misc/mappings";
 import { MiscService } from "../services/MiscService";
 import { PractiseQuestionService } from "../services/PractiseQuestionService";
-import { TokenService } from "../services/TokenService2";
+import { TokenService } from "../services/TokenService";
 import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 

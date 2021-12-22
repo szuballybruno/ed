@@ -26,8 +26,8 @@ import { CourseModuleOverviewView } from "../models/views/CourseModuleOverviewVi
 import { CourseProgressView } from "../models/views/CourseProgressView";
 import { CourseView } from "../models/views/CourseView";
 import { getItemCode, readItemCode } from "./misc/encodeService";
-import { FileService } from "./FileService2";
-import { MapperService } from "./MapperService2";
+import { FileService } from "./FileService";
+import { MapperService } from "./MapperService";
 import { toCourseAdminShortDTO, toCourseItemDTO, toCourseShortDTO } from "./misc/mappings";
 import { ModuleService } from "./ModuleService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";

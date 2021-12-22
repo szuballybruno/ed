@@ -4,12 +4,12 @@ import { StorageFile } from "../models/entity/StorageFile";
 import { Video } from "../models/entity/Video";
 import { VideoPlaybackData } from "../models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { FileService } from "./FileService2";
+import { FileService } from "./FileService";
 import { log } from "./misc/logger";
 import { getAssetUrl } from "./misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
-import { QuestionAnswerService } from "./QuestionAnswerService2";
-import { QuestionService } from "./QuestionService2";
+import { QuestionAnswerService } from "./QuestionAnswerService";
+import { QuestionService } from "./QuestionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 

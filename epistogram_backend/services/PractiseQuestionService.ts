@@ -2,8 +2,8 @@ import { AnswerSession } from "../models/entity/AnswerSession";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { PractiseQuestionDTO } from "../models/shared_models/PractiseQuestionDTO";
 import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
-import { PlayerService } from "./PlayerService2";
-import { QuestionAnswerService } from "./QuestionAnswerService2";
+import { PlayerService } from "./PlayerService";
+import { QuestionAnswerService } from "./QuestionAnswerService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class PractiseQuestionService {

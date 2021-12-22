@@ -2,11 +2,11 @@ import generatePassword from "password-generator";
 import { JobTitleIdEnum, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { getFullName, TypedError } from "../utilities/helpers";
 import { ActivationCodeService } from "./ActivationCodeService";
-import { AuthenticationService } from "./AuthenticationService2";
+import { AuthenticationService } from "./AuthenticationService";
 import { EmailService } from "./EmailService";
 import { log } from "./misc/logger";
-import { TokenService } from "./TokenService2";
-import { UserService } from "./UserService2";
+import { TokenService } from "./TokenService";
+import { UserService } from "./UserService";
 
 export class RegistrationService {
 

@@ -5,8 +5,8 @@ import { setAuthCookies } from "../utilities/cookieHelpers";
 import { getCookie, TypedError } from "../utilities/helpers";
 import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
-import { TokenService } from "./TokenService2";
-import { UserService } from "./UserService2";
+import { TokenService } from "./TokenService";
+import { UserService } from "./UserService";
 
 export class AuthenticationService {
 

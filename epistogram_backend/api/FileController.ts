@@ -1,5 +1,5 @@
 import { UploadedFile } from "express-fileupload";
-import { FileService } from "../services/FileService2";
+import { FileService } from "../services/FileService";
 import { ActionParams, TypedError, withValueOrBadRequest } from "../utilities/helpers";
 
 export class FileController {

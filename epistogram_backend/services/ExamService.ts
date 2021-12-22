@@ -7,11 +7,11 @@ import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { ExamResultView } from "../models/views/ExamResultView";
 import { readItemCode } from "./misc/encodeService";
 import { toExamDTO, toExamResultDTO } from "./misc/mappings";
-import { QuestionAnswerService } from "./QuestionAnswerService2";
-import { QuestionService } from "./QuestionService2";
+import { QuestionAnswerService } from "./QuestionAnswerService";
+import { QuestionService } from "./QuestionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
-import { UserSessionActivityService } from "./UserSessionActivityService2";
+import { UserSessionActivityService } from "./UserSessionActivityService";
 
 export class ExamService {
 
