@@ -1,5 +1,6 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
+import { TeacherInfo } from "../models/entity/TeacherInfo";
 import { User } from "../models/entity/User";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
@@ -56,6 +57,50 @@ export class UserService {
 
     async saveUserAsync(dto: UserEditDTO) {
 
+        const user = await this._ormService
+            .getRepository(User)
+            .createQueryBuilder("u")
+            .leftJoinAndSelect("u.teacherInfo", "ti")
+            .where("u.id = :userId", { userId: dto.id })
+            .getOneOrFail();
+
+        const teacherInfo = user.teacherInfo;
+
+        let teacherInfoId = null as null | number;
+
+        if (teacherInfo) {
+
+            if (dto.isTeacher) {
+
+                teacherInfoId = teacherInfo.id;
+            }
+            else {
+                await this._ormService
+                    .getRepository(User)
+                    .save({
+                        id: dto.id,
+                        teacherInfoId: null
+                    });
+
+                await this._ormService
+                    .getRepository(TeacherInfo)
+                    .delete(teacherInfo.id);
+            }
+        }
+        else {
+
+            if (dto.isTeacher) {
+
+                const newTeacherInfo = {} as TeacherInfo;
+
+                await this._ormService
+                    .getRepository(TeacherInfo)
+                    .insert(newTeacherInfo);
+
+                teacherInfoId = newTeacherInfo.id;
+            }
+        }
+
         await this._ormService
             .getRepository(User)
             .save({
@@ -67,6 +112,7 @@ export class UserService {
                 organizationId: dto.organization?.id,
                 roleId: dto.role?.id,
                 jobTitleId: dto.jobTitle?.id,
+                teacherInfoId: teacherInfoId
             });
     }
 

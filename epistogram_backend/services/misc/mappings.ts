@@ -318,6 +318,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                isTeacher: user.isTeacher,
 
                 jobTitle: user.jobTitle
                     ? toJobTitleDTO(user.jobTitle)

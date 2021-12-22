@@ -75,7 +75,8 @@ export const EditUserControl = (props: {
             email,
             jobTitle: selectedJobTitle,
             organization: selectedOrganization,
-            role: selectedRole
+            role: selectedRole,
+            isTeacher
         } as UserEditDTO;
 
         await saveUserAsync(editedUserDTO);

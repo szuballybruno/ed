@@ -64,6 +64,7 @@ import { CourseProgressView } from "../../models/views/CourseProgressView";
 import { CourseAdminContentView } from "../../models/views/CourseAdminContentView";
 import { CourseDetailsView } from "../../models/views/CourseDetailsView";
 import { CourseModuleOverviewView } from "../../models/views/CourseModuleOverviewView";
+import { TeacherInfo } from "../../models/entity/TeacherInfo";
 
 export const dbSchema = {
 
@@ -173,6 +174,7 @@ export const dbSchema = {
         StorageFile,
         AnswerSession,
         VideoPlaybackSample,
+        TeacherInfo,
         VideoPlaybackData,
         UserCourseBridge,
         QuestionCategory,

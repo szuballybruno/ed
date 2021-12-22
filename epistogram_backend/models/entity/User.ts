@@ -12,6 +12,7 @@ import { Organization } from "./Organization";
 import { Role } from "./Role";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
+import { TeacherInfo } from "./TeacherInfo";
 import { UserCourseAccessBridge } from "./UserCourseAccessBridge";
 import { UserCourseBridge } from "./UserCourseBridge";
 import { VideoPlaybackData } from "./VideoPlaybackData";
@@ -110,6 +111,14 @@ export class User {
     @ManyToOne(_ => JobTitle, x => x.users)
     @JoinColumn({ name: "job_title_id" })
     jobTitle: JobTitle | null;
+
+    // teacher info
+    @Column({ nullable: true, type: "number" })
+    teacherInfoId: number | null;
+
+    @OneToOne(_ => TeacherInfo, x => x.user)
+    @JoinColumn({ name: "teacher_info_id" })
+    teacherInfo: TeacherInfo | null;
 
     // Tasks
     @OneToMany(() => Task, task => task.user)
