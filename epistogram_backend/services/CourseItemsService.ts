@@ -1,17 +1,20 @@
 import { Course } from "../models/entity/Course";
-import { toSimpleCourseItemDTOs } from "./misc/mappings";
+import { CourseItemListDTO } from "../models/shared_models/CourseItemListDTO";
+import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class CourseItemsService {
 
     private _ormService: ORMConnectionService;
+    private _mapperService: MapperService;
 
-    constructor(ormService: ORMConnectionService) {
+    constructor(ormService: ORMConnectionService, mapperService: MapperService) {
 
         this._ormService = ormService;
+        this._mapperService = mapperService;
     }
 
-    getSimpleCourseItemDTOs = async (courseId: number) => {
+    getCourseItemDTOs = async (courseId: number) => {
 
         const course = await this._ormService
             .getRepository(Course)
@@ -21,8 +24,7 @@ export class CourseItemsService {
             .where("c.id = :courseId", { courseId })
             .getOneOrFail();
 
-        const courseItemDTOs = toSimpleCourseItemDTOs(course);
-
-        return courseItemDTOs;
+        return this._mapperService
+            .map(Course, CourseItemListDTO, course);
     }
 }

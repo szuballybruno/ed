@@ -4,23 +4,26 @@ import { User } from "../models/entity/User";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
-import { staticProvider } from "../staticProvider";
 import { CourseService } from "./CourseService";
 import { toOrganizationDTO } from "./misc/mappings";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class MiscService {
 
     private _courseService: CourseService;
+    private _ormService: ORMConnectionService;
 
-    constructor(courseService: CourseService) {
+    constructor(
+        courseService: CourseService,
+        ormService: ORMConnectionService) {
 
         this._courseService = courseService;
+        this._ormService = ormService;
     }
 
     getOrganizationsAsync = async (userId: number) => {
 
-        const orgs = await staticProvider
-            .ormConnection
+        const orgs = await this._ormService
             .getRepository(Organization)
             .find();
 
@@ -30,8 +33,7 @@ export class MiscService {
 
     saveUserDataAsync = async (userId: number, dto: UserDTO) => {
 
-        return staticProvider
-            .ormConnection
+        return this._ormService
             .getRepository(User)
             .save({
                 id: userId,

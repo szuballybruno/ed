@@ -3,6 +3,7 @@ import { RegisterUserViaActivationCodeDTO } from "../models/shared_models/Regist
 import { RegisterUserViaInvitationTokenDTO } from "../models/shared_models/RegisterUserViaInvitationTokenDTO";
 import { RegisterUserViaPublicTokenDTO } from "../models/shared_models/RegisterUserViaPublicTokenDTO";
 import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
+import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { RegistrationService } from "../services/RegistrationService";
 import { UserService } from "../services/UserService";
 import { setAuthCookies } from "../utilities/cookieHelpers";
@@ -12,11 +13,16 @@ export class RegistrationController {
 
     private _res: RegistrationService;
     private _userService: UserService;
+    private _config: GlobalConfiguration;
 
-    constructor(res: RegistrationService, userService: UserService) {
+    constructor(
+        res: RegistrationService,
+        userService: UserService,
+        config: GlobalConfiguration) {
 
         this._res = res;
         this._userService = userService;
+        this._config = config;
     }
 
     registerUserViaPublicTokenAction = async (params: ActionParams) => {
@@ -30,7 +36,7 @@ export class RegistrationController {
                 body.getValue<string>(x => x.lastName),
                 body.getValue<string>(x => x.registrationToken));
 
-        setAuthCookies(params.res, accessToken, refreshToken);
+        setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
 
     registerUserViaInvitationTokenAction = async (params: ActionParams) => {
@@ -43,7 +49,7 @@ export class RegistrationController {
                 body.getValue<string>(x => x.password),
                 body.getValue<string>(x => x.passwordCompare));
 
-        setAuthCookies(params.res, accessToken, refreshToken);
+        setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
 
     registerUserViaActivationCodeAction = async (params: ActionParams) => {

@@ -17,8 +17,6 @@ COPY /services ./services
 COPY /utilities ./utilities
 
 COPY server.ts .
-COPY staticProvider.ts .
-
 COPY tsconfig.json .
 
 # compile TypeScript to /build folder

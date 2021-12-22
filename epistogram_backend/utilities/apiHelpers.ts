@@ -1,11 +1,14 @@
 import { NextFunction, Request, Response, Application } from "express";
+import { AccessTokenPayload } from "../models/DTOs/AccessTokenPayload";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
+import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { log, logError } from "../services/misc/logger";
-import { ActionParams } from "./helpers";
+import { ActionParams, getAuthTokenFromRequest } from "./helpers";
 
 export const addAPIEndpoint = (
-    getUserIdFromRequestAsync: (req: Request) => number,
+    config: GlobalConfiguration,
+    getRequestAccessTokenPayload: (accessToken: string) => AccessTokenPayload,
     expressServer: Application,
     path: string,
     action: ApiActionType,
@@ -18,14 +21,37 @@ export const addAPIEndpoint = (
             isPublic: false
         } as EndpointOptionsType;
 
-    const wrappedSyncAction = getAsyncActionHandlerNew(getUserIdFromRequestAsync, action, opts);
+    const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
+
+        const asyncActionWrapper = async () => {
+
+            const accessToken = getAuthTokenFromRequest(req, config);
+
+            const userId = opts.isPublic
+                ? -1
+                : getRequestAccessTokenPayload(accessToken).userId;
+
+            return await action(new ActionParams(req, res, next, userId));
+        }
+
+        asyncActionWrapper()
+            .then((returnValue: any) => {
+
+                respond(res, 200, returnValue)
+            })
+            .catch((error: any) => {
+
+                logError(error);
+                respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
+            });
+    }
 
     if (opts.isPost) {
 
-        expressServer.post(path, wrappedSyncAction);
+        expressServer.post(path, syncActionWrapper);
     } else {
 
-        expressServer.get(path, wrappedSyncAction);
+        expressServer.get(path, syncActionWrapper);
     }
 }
 
@@ -44,34 +70,6 @@ export const respond = (res: Response, code: number, data?: any) => {
 
 export type ApiActionType = (params: ActionParams) => Promise<any>;
 export type EndpointOptionsType = { isPublic?: boolean, isPost?: boolean };
-
-export const getAsyncActionHandlerNew = (
-    getUserIdFromRequest: (req: Request) => number,
-    wrappedAction: (params: ActionParams) => Promise<any>,
-    options: EndpointOptionsType) => {
-
-    const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
-
-        const asyncActionWrapper = async () => {
-
-            const userId = options.isPublic ? -1 : getUserIdFromRequest(req);
-            return await wrappedAction(new ActionParams(req, res, next, userId));
-        }
-
-        asyncActionWrapper()
-            .then((returnValue: any) => {
-
-                respond(res, 200, returnValue)
-            })
-            .catch((error: any) => {
-
-                logError(error);
-                respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
-            });
-    }
-
-    return syncActionWrapper;
-}
 
 export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
 

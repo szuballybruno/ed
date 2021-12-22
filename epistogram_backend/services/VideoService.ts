@@ -6,7 +6,7 @@ import { VideoPlaybackData } from "../models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { FileService } from "./FileService";
 import { log } from "./misc/logger";
-import { getAssetUrl } from "./misc/urlProvider";
+import { AssetUrlService } from "./misc/urlProvider";
 import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
 import { QuestionAnswerService } from "./QuestionAnswerService";
 import { QuestionService } from "./QuestionService";
@@ -20,19 +20,22 @@ export class VideoService {
     private _questionAnswerService: QuestionAnswerService;
     private _fileService: FileService;
     private _questionsService: QuestionService;
+    private _assetUrlService: AssetUrlService;
 
     constructor(
         ormConnection: ORMConnectionService,
         userCourseBridgeService: UserCourseBridgeService,
         questionAnswerService: QuestionAnswerService,
         fileService: FileService,
-        questionsService: QuestionService) {
+        questionsService: QuestionService,
+        assetUrlService: AssetUrlService) {
 
         this._ormConnection = ormConnection;
         this._questionAnswerService = questionAnswerService;
         this._userCourseBridgeService = userCourseBridgeService;
         this._fileService = fileService;
         this._questionsService = questionsService;
+        this._assetUrlService = assetUrlService;
     }
 
     answerVideoQuestionAsync = async (
@@ -54,7 +57,8 @@ export class VideoService {
             throw new Error("Cannot insert with id!");
 
         if (filePath) {
-            const videoFileUrl = getAssetUrl(filePath)!;
+            const videoFileUrl = this._assetUrlService
+                .getAssetUrl(filePath)!;
 
             video.videoFile = {
                 filePath: filePath
@@ -186,7 +190,9 @@ export class VideoService {
                 videoFileBuffer);
 
         // set video length
-        const videoFileUrl = getAssetUrl(filePath);
+        const videoFileUrl = this._assetUrlService
+            .getAssetUrl(filePath);
+
         const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
 
         await this._ormConnection

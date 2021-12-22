@@ -1,9 +1,17 @@
-import { staticProvider } from "../../staticProvider";
+import { GlobalConfiguration } from "./GlobalConfiguration";
 
-export const getAssetUrl = (assetPath: string) => {
+export class AssetUrlService {
 
-    assetPath = ("/" + assetPath).replace("//", "/");
-    return staticProvider.globalConfig.fileStorage.assetStoreUrl + assetPath;
+    private _config: GlobalConfiguration;
+
+    constructor(globalConfig: GlobalConfiguration) {
+
+        this._config = globalConfig;
+    }
+
+    getAssetUrl = (assetPath: string) => {
+
+        assetPath = ("/" + assetPath).replace("//", "/");
+        return this._config.fileStorage.assetStoreUrl + assetPath;
+    }
 }
-
-export const getExamCoverImageUrl = () => getAssetUrl("/images/examCover.jpg");

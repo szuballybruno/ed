@@ -1,6 +1,6 @@
 import { AccessTokenPayload } from "../models/DTOs/AccessTokenPayload";
 import { InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
-import { GlobalConfiguration } from "./misc/environment";
+import { GlobalConfiguration } from "./misc/GlobalConfiguration";
 import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
 
 export class TokenService {

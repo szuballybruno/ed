@@ -1,14 +1,16 @@
 import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
 import { JobTitle } from "../models/entity/JobTitle";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { AuthenticationService } from "../services/AuthenticationService";
-import { toDailyTipDTO } from "../services/misc/mappings";
+import { MapperService } from "../services/MapperService";
+import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { MiscService } from "../services/MiscService";
 import { PractiseQuestionService } from "../services/PractiseQuestionService";
+import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
 import { TokenService } from "../services/TokenService";
-import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class MiscController {
@@ -17,23 +19,31 @@ export class MiscController {
     private _practiseQuestionService: PractiseQuestionService;
     private _authService: AuthenticationService;
     private _tokenService: TokenService;
+    private _ormService: ORMConnectionService;
+    private _config: GlobalConfiguration;
+    private _mapperService: MapperService;
 
     constructor(
         miscService: MiscService,
         practiseQuestionService: PractiseQuestionService,
         authService: AuthenticationService,
-        tokenService: TokenService) {
+        tokenService: TokenService,
+        ormService: ORMConnectionService,
+        config: GlobalConfiguration,
+        mapperService: MapperService) {
 
         this._miscService = miscService;
         this._practiseQuestionService = practiseQuestionService;
         this._authService = authService;
         this._tokenService = tokenService;
+        this._ormService = ormService;
+        this._config = config;
+        this._mapperService = mapperService;
     }
 
     getCurrentCourseItemCodeAction = async (parms: ActionParams) => {
 
-        const currentBridge = await staticProvider
-            .ormConnection
+        const currentBridge = await this._ormService
             .getRepository(UserCourseBridge)
             .findOne({
                 where: {
@@ -60,15 +70,14 @@ export class MiscController {
 
     getJobTitlesAction = async (params: ActionParams) => {
 
-        return await staticProvider
-            .ormConnection
+        return await this._ormService
             .getRepository(JobTitle)
             .find();
     };
 
     getRegistrationLinkAction = async (params: ActionParams) => {
 
-        return Promise.resolve(`${staticProvider.globalConfig.misc.frontendUrl}/registration?token=${this._tokenService.createRegistrationToken()}`);
+        return Promise.resolve(`${this._config.misc.frontendUrl}/registration?token=${this._tokenService.createRegistrationToken()}`);
     };
 
     requestChangePasswordAction = async (params: ActionParams) => {
@@ -95,8 +104,7 @@ export class MiscController {
 
     getDailyTipAction = async (params: ActionParams) => {
 
-        const dailyTipViews = await staticProvider
-            .ormConnection
+        const dailyTipViews = await this._ormService
             .getRepository(DailyTipView)
             .find();
 
@@ -104,19 +112,20 @@ export class MiscController {
         // if it's found, there is no need to do anything else, just return it
         const todaysTip = dailyTipViews.firstOrNull(x => x.isCurrentTip);
         if (todaysTip)
-            return toDailyTipDTO(todaysTip);
+            return this._mapperService
+                .map(DailyTipView, DailyTipDTO, todaysTip);
 
         // first is used here since the tips are in order of relevance
         const newCurrentTip = dailyTipViews.first(x => true);
 
         // insert new occurrence, this sets it as current in the DB as well
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(DailyTipOccurrence)
             .insert({
                 dailyTipId: newCurrentTip.dailyTipId
             });
 
-        return toDailyTipDTO(newCurrentTip);
+        return this._mapperService
+            .map(DailyTipView, DailyTipDTO, newCurrentTip);
     };
 }

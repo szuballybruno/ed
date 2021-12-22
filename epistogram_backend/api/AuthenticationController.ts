@@ -1,26 +1,29 @@
 
 import { ChangePasswordDTO } from "../models/shared_models/SetNewPasswordDTO";
 import { AuthenticationService } from "../services/AuthenticationService";
-import { UserService } from "../services/UserService";
-import { staticProvider } from "../staticProvider";
+import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { setAuthCookies } from "../utilities/cookieHelpers";
-import { ActionParams, TypedError } from "../utilities/helpers";
+import { ActionParams, getCookie, TypedError } from "../utilities/helpers";
 
 export class AuthenticationController {
 
-    private _userService: UserService;
     private _authenticationService: AuthenticationService;
+    private _config: GlobalConfiguration;
 
-    constructor(authenticationService: AuthenticationService, userService: UserService) {
+    constructor(authenticationService: AuthenticationService, globalConfig: GlobalConfiguration) {
 
-        this._userService = userService;
         this._authenticationService = authenticationService;
+        this._config = globalConfig;
     }
 
     renewUserSessionAction = async (params: ActionParams) => {
 
-        return this._authenticationService
-            .renewUserSessionAsync(params.req, params.res);
+        const refreshToken = getCookie(params.req, "refreshToken")?.value;
+
+        const { newAccessToken, newRefreshToken } = await this._authenticationService
+            .renewUserSessionAsync(refreshToken);
+
+        setAuthCookies(this._config, params.res, newAccessToken, newRefreshToken);
     };
 
     logInUserAction = async (params: ActionParams) => {
@@ -35,7 +38,7 @@ export class AuthenticationController {
         const { accessToken, refreshToken } = await this._authenticationService
             .logInUser(email, password);
 
-        setAuthCookies(params.res, accessToken, refreshToken);
+        setAuthCookies(this._config, params.res, accessToken, refreshToken);
     }
 
     changePasswordAction = async (params: ActionParams) => {
@@ -51,18 +54,8 @@ export class AuthenticationController {
 
     getCurrentUserAction = async (params: ActionParams) => {
 
-        const currentUser = await this._userService
-            .getUserDTOById(params.userId);
-
-        if (!currentUser)
-            throw new Error("User not found by id.");
-
-        await staticProvider
-            .services
-            .userSessionActivityService
-            .saveUserSessionActivityAsync(currentUser.id, "generic");
-
-        return currentUser;
+        return this._authenticationService
+            .getCurrentUserAsync(params.userId);
     };
 
     logOutUserAction = async (params: ActionParams) => {
@@ -71,7 +64,7 @@ export class AuthenticationController {
             .logOutUserAsync(params.userId);
 
         // remove browser cookies
-        params.res.clearCookie(staticProvider.globalConfig.misc.accessTokenCookieName);
-        params.res.clearCookie(staticProvider.globalConfig.misc.refreshTokenCookieName);
+        params.res.clearCookie(this._config.misc.accessTokenCookieName);
+        params.res.clearCookie(this._config.misc.refreshTokenCookieName);
     };
 }

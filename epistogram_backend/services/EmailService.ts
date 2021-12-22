@@ -2,18 +2,27 @@ import { readFileSync } from 'fs';
 import { createTransport } from 'nodemailer';
 import { User } from '../models/entity/User';
 import { EpistoEmail } from '../models/EpistoEmail';
-import { staticProvider } from '../staticProvider';
 import { replaceAll } from '../utilities/helpers';
-import { getAssetUrl } from './misc/urlProvider';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
+import { AssetUrlService } from './misc/urlProvider';
 
 export class EmailService {
+
+    private _config: GlobalConfiguration;
+    private _assetUrlService: AssetUrlService;
+
+    constructor(config: GlobalConfiguration, assetUrlService: AssetUrlService) {
+
+        this._config = config;
+        this._assetUrlService = assetUrlService;
+    }
 
     sendInvitaitionMailAsync = async (
         invitationToken: string,
         userEmail: string,
         userFullName: string) => {
 
-        const url = `${staticProvider.globalConfig.misc.frontendUrl}/registration?token=${invitationToken}&isInvited=true`;
+        const url = `${this._config.misc.frontendUrl}/registration?token=${invitationToken}&isInvited=true`;
 
         const epistoEmail = {
             to: userEmail,
@@ -21,7 +30,7 @@ export class EmailService {
             template: {
                 name: "invitationEmailTemplate",
                 params: {
-                    epistogramLogoUrl: getAssetUrl("images/logo.png"),
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
                     userFullName: userFullName,
                     registrationUrl: url
                 }
@@ -35,7 +44,7 @@ export class EmailService {
         user: User,
         generatedPassword: string) => {
 
-        const epistogramAppUrl = staticProvider.globalConfig.misc.frontendUrl;
+        const epistogramAppUrl = this._config.misc.frontendUrl;
         const { email, firstName, lastName } = user;
 
         const epistoEmail = {
@@ -44,7 +53,7 @@ export class EmailService {
             template: {
                 name: "successfulRegistrationEmailTemplate",
                 params: {
-                    epistogramLogoUrl: getAssetUrl("images/logo.png"),
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
                     generatedPassword: generatedPassword,
                     epistogramAppUrl: epistogramAppUrl
                 }
@@ -64,7 +73,7 @@ export class EmailService {
             template: {
                 name: "resetPasswordEmailTemplate",
                 params: {
-                    epistogramLogoUrl: getAssetUrl("images/logo.png"),
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
                     passwordResetUrl: resetPasswordUrl
                 }
             }
@@ -83,7 +92,7 @@ export class EmailService {
             template: {
                 name: "discountCodePurchasedMailTemplate",
                 params: {
-                    epistogramLogoUrl: getAssetUrl("images/logo.png"),
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
                     discountCode
                 }
             }
@@ -95,20 +104,19 @@ export class EmailService {
     private sendMailNewAsync = async (email: EpistoEmail) => {
 
         const transporter = createTransport({
-            host: staticProvider.globalConfig.mail.mailHost,
+            host: this._config.mail.mailHost,
             port: 465,
             secure: true,
             auth: {
-                user: staticProvider.globalConfig.mail.senderEmail,
-                pass: staticProvider.globalConfig.mail.senderPassword
+                user: this._config.mail.senderEmail,
+                pass: this._config.mail.senderPassword
             },
             tls: {
                 rejectUnauthorized: false
             }
         });
 
-        const to = staticProvider
-            .globalConfig
+        const to = this._config
             .misc
             .isLocalhost
             ? "manyoki.bence@epistogram.com"

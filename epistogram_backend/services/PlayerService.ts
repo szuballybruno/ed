@@ -7,16 +7,20 @@ import { VideoPlaybackSampleDTO } from "../models/shared_models/VideoPlaybackSam
 import { VideoSamplingResultDTO } from "../models/shared_models/VideoSamplingResultDTO";
 import { VideoCompletedView } from "../models/views/VideoCompletedView";
 import { VideoProgressView } from "../models/views/VideoProgressView";
-import { staticProvider } from "../staticProvider";
 import { CourseService } from "./CourseService";
 import { readItemCode } from "./misc/encodeService";
 import { ExamService } from "./ExamService";
-import { toVideoDTO } from "./misc/mappings";
 import { ModuleService } from "./ModuleService";
 import { QuestionAnswerService } from "./QuestionAnswerService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { VideoService } from "./VideoService";
 import { VideoPlaybackSampleService } from "./VideoPlaybackSampleService";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { CoinAcquireService } from "./CoinAcquireService";
+import { UserSessionActivityService } from "./UserSessionActivityService";
+import { MapperService } from "./MapperService";
+import { Video } from "../models/entity/Video";
+import { VideoDTO } from "../models/shared_models/VideoDTO";
 
 export class PlayerService {
 
@@ -27,16 +31,25 @@ export class PlayerService {
     private _videoService: VideoService;
     private _questionAnswerService: QuestionAnswerService;
     private _vpss: VideoPlaybackSampleService;
+    private _ormService: ORMConnectionService;
+    private _coinAcquireService: CoinAcquireService;
+    private _userSessionActivityService: UserSessionActivityService;
+    private _mappserService: MapperService;
 
     constructor(
+        ormService: ORMConnectionService,
         courseService: CourseService,
         examService: ExamService,
         moduleService: ModuleService,
         userCourseBridge: UserCourseBridgeService,
         videoService: VideoService,
         questionAnswerService: QuestionAnswerService,
-        vpss: VideoPlaybackSampleService) {
+        vpss: VideoPlaybackSampleService,
+        coinAcquireService: CoinAcquireService,
+        userSessionActivityService: UserSessionActivityService,
+        mappserService: MapperService) {
 
+        this._ormService = ormService;
         this._courseService = courseService;
         this._examService = examService;
         this._moduleService = moduleService;
@@ -44,6 +57,9 @@ export class PlayerService {
         this._videoService = videoService;
         this._questionAnswerService = questionAnswerService;
         this._vpss = vpss;
+        this._coinAcquireService = coinAcquireService;
+        this._userSessionActivityService = userSessionActivityService;
+        this._mappserService = mappserService;
     }
 
     getPlayerDataAsync = async (
@@ -157,13 +173,13 @@ export class PlayerService {
         const maxWathcedSeconds = await this.getMaxWatchedSeconds(userId, videoId);
         const video = await this._videoService.getVideoByIdAsync(videoId);
 
-        return toVideoDTO(video, maxWathcedSeconds);
+        return this._mappserService
+            .map(Video, VideoDTO, video, maxWathcedSeconds);
     }
 
     saveVideoPlaybackSample = async (userId: number, dto: VideoPlaybackSampleDTO) => {
 
-        const currentBridge = await staticProvider
-            .ormConnection
+        const currentBridge = await this._ormService
             .getRepository(UserCourseBridge)
             .findOneOrFail({
                 where: {
@@ -179,8 +195,7 @@ export class PlayerService {
         if (itemType !== "video")
             throw new Error("Current item is not of type: video!");
 
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(VideoPlaybackSample)
             .insert({
                 videoId: videoId,
@@ -215,16 +230,12 @@ export class PlayerService {
         // reward user with episto coins
         if (isWatchedStateChanged) {
 
-            await staticProvider
-                .services
-                .coinAcquireService
+            await this._coinAcquireService
                 .acquireVideoWatchedCoinsAsync(userId, videoId);
         }
 
         // save user activity
-        await staticProvider
-            .services
-            .userSessionActivityService
+        await this._userSessionActivityService
             .saveUserSessionActivityAsync(userId, "video");
 
         return {
@@ -235,8 +246,7 @@ export class PlayerService {
 
     getMaxWatchedSeconds = async (userId: number, videoId: number) => {
 
-        const ads = await staticProvider
-            .ormConnection
+        const ads = await this._ormService
             .getRepository(VideoProgressView)
             .findOneOrFail({
                 where: {
@@ -250,8 +260,7 @@ export class PlayerService {
 
     getVideoIsCompletedState = async (userId: number, videoId: number) => {
 
-        return await staticProvider
-            .ormConnection
+        return await this._ormService
             .getRepository(VideoCompletedView)
             .findOne({
                 where: {

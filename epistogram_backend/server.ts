@@ -31,10 +31,11 @@ import { ExamService } from './services/ExamService';
 import { FileService } from './services/FileService';
 import { MapperService } from './services/MapperService';
 import { dbSchema } from './services/misc/dbSchema';
-import { initailizeDotEnvEnvironmentConfig } from "./services/misc/environment";
+import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log, logError } from "./services/misc/logger";
 import { initializeMappings } from './services/misc/mappings';
 import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
+import { AssetUrlService } from './services/misc/urlProvider';
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
 import { PersonalityAssessmentService } from './services/PersonalityAssessmentService';
@@ -59,24 +60,22 @@ import { UserSessionActivityService } from './services/UserSessionActivityServic
 import { UserStatsService } from './services/UserStatsService';
 import { VideoPlaybackSampleService } from './services/VideoPlaybackSampleService';
 import { VideoService } from './services/VideoService';
-import { staticProvider } from './staticProvider';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
 import './utilities/jsExtensions';
 
 (async () => {
 
-    initailizeDotEnvEnvironmentConfig();
+    const globalConfig = GlobalConfiguration.initGlobalConfig(__dirname);
 
     log("");
-    log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${staticProvider.globalConfig.misc.environmentName} ----------------`);
+    log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${globalConfig.misc.environmentName} ----------------`);
     log("");
 
     const expressServer = express();
 
     // services 
-    const globalConfig = staticProvider.globalConfig;
     const mapperService = new MapperService();
-    const sqlConnectionService = new SQLConnectionService();
+    const sqlConnectionService = new SQLConnectionService(globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlBootstrapperService);
     const userStatsService = new UserStatsService(ormConnectionService, mapperService);
@@ -86,27 +85,28 @@ import './utilities/jsExtensions';
     const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
     const activationCodeService = new ActivationCodeService(ormConnectionService);
-    const emailService = new EmailService();
+    const assetUrlService = new AssetUrlService(globalConfig);
+    const emailService = new EmailService(globalConfig, assetUrlService);
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
-    const signupService = new SignupService(emailService);
+    const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService);
     const userService = new UserService(ormConnectionService, mapperService);
     const tokenService = new TokenService(globalConfig);
-    const authenticationService = new AuthenticationService(userService, tokenService);
+    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, ormConnectionService, emailService, globalConfig);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService);
     const seedService = new SeedService(sqlBootstrapperService, registrationService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
-    const courseItemsService = new CourseItemsService(ormConnectionService);
-    const userCourseBridgeService = new UserCourseBridgeService(courseItemsService);
+    const courseItemsService = new CourseItemsService(ormConnectionService, mapperService);
+    const userCourseBridgeService = new UserCourseBridgeService(courseItemsService, ormConnectionService, mapperService);
     const questionService = new QuestionService(ormConnectionService);
     const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService);
     const storageService = new StorageService(globalConfig);
-    const fileService = new FileService(userService, storageService);
-    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService);
-    const moduleService = new ModuleService(examService, videoService);
+    const fileService = new FileService(userService, storageService, ormConnectionService);
+    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, assetUrlService);
+    const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService);
-    const miscService = new MiscService(courseService);
+    const miscService = new MiscService(courseService, ormConnectionService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
-    const playerService = new PlayerService(courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, vpss);
+    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, vpss, coinAcquireService, userSessionActivityService, mapperService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService);
@@ -115,50 +115,36 @@ import './utilities/jsExtensions';
     const userStatsController = new UserStatsController(userStatsService);
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
-    const registrationController = new RegistrationController(registrationService, userService);
-    const miscController = new MiscController(miscService, practiseQuestionService, authenticationService, tokenService);
-    const authenticationController = new AuthenticationController(authenticationService, userService);
+    const registrationController = new RegistrationController(registrationService, userService, globalConfig);
+    const miscController = new MiscController(miscService, practiseQuestionService, authenticationService, tokenService, ormConnectionService, globalConfig, mapperService);
+    const authenticationController = new AuthenticationController(authenticationService, globalConfig);
     const userController = new UserController(userService);
     const fileController = new FileController(fileService);
     const signupController = new SignupController(signupService, personalityAssessmentService);
     const playerController = new PlayerController(courseService, playerService, videoService);
     const courseController = new CourseController(courseService);
     const moduleController = new ModuleController(moduleService);
-    const videoController = new VideoController(videoService, questionService);
-    const questionController = new QuestionController(practiseQuestionService, questionService);
-    const examController = new ExamController(examService);
+    const videoController = new VideoController(videoService, questionService, ormConnectionService, globalConfig, mapperService);
+    const questionController = new QuestionController(practiseQuestionService, questionService, ormConnectionService);
+    const examController = new ExamController(examService, ormConnectionService);
     const shopController = new ShopController(shopService);
 
     // initialize services 
-    initializeMappings(mapperService);
+    initializeMappings(assetUrlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
-
-    // set services as static provided objects 
-    staticProvider.ormConnection = ormConnectionService.getOrmConnection();
-    staticProvider.services = {
-        mapperService,
-        databaseConnectionService: dbConnectionService,
-        userStatsService,
-        sqlFunctionService,
-        userSessionActivityService,
-        coinAcquireService,
-        sqlBootstrapperService,
-        sqlConnectionService,
-        emailService
-    };
-
     await dbConnectionService.seedDBAsync();
 
     const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) =>
-        addAPIEndpoint(authenticationService.getUserIdFromRequest, expressServer, path, action, opt);
+        addAPIEndpoint(globalConfig, authenticationService.getRequestAccessTokenPayload, expressServer, path, action, opt);
 
     // add middlewares
-    expressServer.use(getCORSMiddleware());
+    expressServer.use(getCORSMiddleware(globalConfig));
     expressServer.use(bodyParser.json({ limit: '32mb' }));
     expressServer.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
     expressServer.use(fileUpload());
-    expressServer.use(getUnderMaintanenceMiddleware());
+    expressServer.use(getUnderMaintanenceMiddleware(globalConfig));
     expressServer.use(getAuthMiddleware(
+        globalConfig,
         authenticationService.getRequestAccessTokenPayload,
         userService.getUserById,
         [
@@ -287,7 +273,7 @@ import './utilities/jsExtensions';
     });
 
     // listen
-    expressServer.listen(staticProvider.globalConfig.misc.hostPort, () =>
-        log(`Listening on port '${staticProvider.globalConfig.misc.hostPort}'!`));
+    expressServer.listen(globalConfig.misc.hostPort, () =>
+        log(`Listening on port '${globalConfig.misc.hostPort}'!`));
 })();
 

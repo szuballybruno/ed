@@ -1,27 +1,42 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import { User } from "../models/entity/User";
-import { staticProvider } from "../staticProvider";
-import { setAuthCookies } from "../utilities/cookieHelpers";
 import { getCookie, TypedError } from "../utilities/helpers";
+import { EmailService } from "./EmailService";
 import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
+import { GlobalConfiguration } from "./misc/GlobalConfiguration";
 import { log } from "./misc/logger";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { TokenService } from "./TokenService";
 import { UserService } from "./UserService";
+import { UserSessionActivityService } from "./UserSessionActivityService";
 
 export class AuthenticationService {
 
     private _userService: UserService;
     private _tokenService: TokenService;
+    private _userSessionActivityService: UserSessionActivityService;
+    private _ormService: ORMConnectionService;
+    private _emailService: EmailService;
+    private _config: GlobalConfiguration;
 
-    constructor(userService: UserService, tokenService: TokenService) {
+    constructor(
+        userService: UserService,
+        tokenService: TokenService,
+        userSessionActivityService: UserSessionActivityService,
+        ormService: ORMConnectionService,
+        emailService: EmailService,
+        config: GlobalConfiguration) {
 
         this._userService = userService;
         this._tokenService = tokenService;
+        this._userSessionActivityService = userSessionActivityService;
+        this._ormService = ormService;
+        this._emailService = emailService;
+        this._config = config;
     }
 
-    getRequestAccessTokenPayload = (req: Request) => {
+    getRequestAccessTokenPayload = (accessToken: string) => {
 
-        const accessToken = getCookie(req, staticProvider.globalConfig.misc.accessTokenCookieName)?.value;
         if (!accessToken)
             throw new TypedError("Token not sent.", "bad request");
 
@@ -32,17 +47,25 @@ export class AuthenticationService {
         return tokenPayload;
     }
 
-    getUserIdFromRequest = (req: Request) => {
+    async getCurrentUserAsync(userId: number) {
 
-        return this.getRequestAccessTokenPayload(req).userId;
+        const currentUser = await this._userService
+            .getUserDTOById(userId);
+
+        if (!currentUser)
+            throw new Error("User not found by id.");
+
+        await this._userSessionActivityService
+            .saveUserSessionActivityAsync(currentUser.id, "generic");
+
+        return currentUser;
     }
 
-    renewUserSessionAsync = async (req: Request, res: Response) => {
+    renewUserSessionAsync = async (refreshToken: string) => {
 
         log("Renewing user session...");
 
         // check if there is a refresh token sent in the request 
-        const refreshToken = getCookie(req, "refreshToken")?.value;
         if (!refreshToken)
             throw new TypedError("Refresh token not sent.", "bad request");
 
@@ -71,7 +94,10 @@ export class AuthenticationService {
         await this._userService
             .setUserActiveRefreshToken(user.id, refreshToken);
 
-        await setAuthCookies(res, newAccessToken, newRefreshToken);
+        return {
+            newAccessToken,
+            newRefreshToken
+        }
     }
 
     requestChangePasswordAsync = async (userId: number, oldPassword: string) => {
@@ -83,17 +109,17 @@ export class AuthenticationService {
         if (!await comparePasswordAsync(oldPassword, user.password))
             throw new TypedError("Wrong password!", "bad request");
 
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(User)
             .save({
                 id: user.id,
                 resetPasswordToken: resetPawsswordToken
             });
 
-        const resetPawsswordUrl = staticProvider.globalConfig.misc.frontendUrl + `/set-new-password?token=${resetPawsswordToken}`;
+        const resetPawsswordUrl = this._config.misc.frontendUrl + `/set-new-password?token=${resetPawsswordToken}`;
 
-        await staticProvider.services.emailService.sendResetPasswordMailAsync(user, resetPawsswordUrl);
+        await this._emailService
+            .sendResetPasswordMailAsync(user, resetPawsswordUrl);
     }
 
     changePasswordAsync = async (
@@ -123,8 +149,7 @@ export class AuthenticationService {
         // hash new password
         const hashedPassword = await hashPasswordAsync(password);
 
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(User)
             .save({
                 id: user.id,
@@ -154,9 +179,7 @@ export class AuthenticationService {
 
         const userId = user.id;
 
-        await staticProvider
-            .services
-            .userSessionActivityService
+        await this._userSessionActivityService
             .saveUserSessionActivityAsync(userId, "login");
 
         // get auth tokens 
@@ -171,9 +194,7 @@ export class AuthenticationService {
 
     logOutUserAsync = async (userId: number) => {
 
-        await staticProvider
-            .services
-            .userSessionActivityService
+        await this._userSessionActivityService
             .saveUserSessionActivityAsync(userId, "logout");
 
         // remove refresh token, basically makes it invalid from now on

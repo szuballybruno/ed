@@ -1,7 +1,7 @@
 import { Connection, ConnectionOptions, createConnection } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { ClassType } from "../../models/Types";
-import { getDatabaseConnectionParameters, GlobalConfiguration } from "../misc/environment";
+import { GlobalConfiguration } from "../misc/GlobalConfiguration";
 import { log } from "../misc/logger";
 import { SQLBootstrapperService } from "./SQLBootstrapper";
 
@@ -33,7 +33,7 @@ export class ORMConnectionService {
         const allowPurge = this._config.database.allowPurge;
         const forcePurge = this._config.database.forcePurge;
         const canPurgeOnRetry = allowPurge && !forcePurge;
-        const dbConnOpts = getDatabaseConnectionParameters();
+        const dbConnOpts = this._config.getDatabaseConnectionParameters();
 
         const options = {
             type: "postgres",

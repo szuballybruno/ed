@@ -1,7 +1,7 @@
 import { Storage } from "@google-cloud/storage";
 import { UploadedFile } from "express-fileupload";
 import path from "path";
-import { GlobalConfiguration } from "./misc/environment";
+import { GlobalConfiguration } from "./misc/GlobalConfiguration";
 import { logError } from "./misc/logger";
 
 export class StorageService {

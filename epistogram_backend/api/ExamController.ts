@@ -6,16 +6,18 @@ import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { ExamService } from "../services/ExamService";
 import { toQuestionDTO } from "../services/misc/mappings";
-import { staticProvider } from "../staticProvider";
+import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class ExamController {
 
     private _examService: ExamService;
+    private _ormService: ORMConnectionService;
 
-    constructor(examService: ExamService) {
+    constructor(examService: ExamService, ormService: ORMConnectionService) {
 
         this._examService = examService;
+        this._ormService = ormService;
     }
 
     answerExamQuestionAction = async (params: ActionParams) => {
@@ -47,8 +49,7 @@ export class ExamController {
 
         const examId = withValueOrBadRequest<number>(params.req.query.examId, "number");
 
-        const exam = await staticProvider
-            .ormConnection
+        const exam = await this._ormService
             .getRepository(Exam)
             .createQueryBuilder("e")
             .leftJoinAndSelect("e.questions", "eq")
@@ -79,8 +80,7 @@ export class ExamController {
 
         const dto = withValueOrBadRequest<CreateExamDTO>(params.req.body);
 
-        const course = await staticProvider
-            .ormConnection
+        const course = await this._ormService
             .getRepository(Course)
             .createQueryBuilder("c")
             .leftJoinAndSelect("c.videos", "v")
@@ -99,8 +99,7 @@ export class ExamController {
             orderIndex: courseItemsLength
         } as Exam;
 
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(Exam)
             .insert(newExam);
 

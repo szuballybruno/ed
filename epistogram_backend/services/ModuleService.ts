@@ -4,19 +4,28 @@ import { Video } from "../models/entity/Video";
 import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
 import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
 import { ModuleDetailedDTO } from "../models/shared_models/ModuleDetailedDTO";
-import { staticProvider } from "../staticProvider";
 import { ExamService } from "./ExamService";
+import { MapperService } from "./MapperService";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { VideoService } from "./VideoService";
 
 export class ModuleService {
 
     private _examService: ExamService;
     private _videoService: VideoService;
+    private _ormSerice: ORMConnectionService;
+    private _mapperService: MapperService;
 
-    constructor(examService: ExamService, videoService: VideoService) {
+    constructor(
+        examService: ExamService,
+        videoService: VideoService,
+        ormService: ORMConnectionService,
+        mapperService: MapperService) {
 
         this._examService = examService;
         this._videoService = videoService;
+        this._ormSerice = ormService;
+        this._mapperService = mapperService;
     }
 
     /**
@@ -28,22 +37,18 @@ export class ModuleService {
      */
     getModuleDetailedDTOAsync = async (moduleId: number) => {
 
-        const module = await staticProvider
-            .ormConnection
+        const module = await this._ormSerice
             .getRepository(CourseModule)
             .findOneOrFail(moduleId);
 
-        return staticProvider
-            .services
-            .mapperService
+        return this._mapperService
             .map(CourseModule, ModuleDetailedDTO, module);
     }
 
     deleteModulesAsync = async (moduleIds: number[]) => {
 
         // delete videos 
-        const videos = await staticProvider
-            .ormConnection
+        const videos = await this._ormSerice
             .getRepository(Video)
             .createQueryBuilder("v")
             .where('"v"."module_id" IN (:...moduleIds)', { moduleIds })
@@ -52,8 +57,7 @@ export class ModuleService {
         await this._videoService.deleteVideosAsync(videos.map(x => x.id), false);
 
         // delete exams 
-        const exams = await staticProvider
-            .ormConnection
+        const exams = await this._ormSerice
             .getRepository(Exam)
             .createQueryBuilder("e")
             .where('"e"."module_id" IN (:...moduleIds)', { moduleIds })
@@ -63,16 +67,14 @@ export class ModuleService {
             .deleteExamsAsync(exams.map(x => x.id), false);
 
         // delete modules
-        await staticProvider
-            .ormConnection
+        await this._ormSerice
             .getRepository(CourseModule)
             .delete(moduleIds);
     }
 
     createModuleAsync = async (dto: ModuleCreateDTO) => {
 
-        await staticProvider
-            .ormConnection
+        await this._ormSerice
             .getRepository(CourseModule)
             .insert({
                 courseId: dto.courseId,
@@ -84,21 +86,17 @@ export class ModuleService {
 
     getModuleEditDataAsync = async (moduleId: number) => {
 
-        const module = await staticProvider
-            .ormConnection
+        const module = await this._ormSerice
             .getRepository(CourseModule)
             .findOneOrFail(moduleId);
 
-        return staticProvider
-            .services
-            .mapperService
+        return this._mapperService
             .map(CourseModule, ModuleAdminEditDTO, module);
     }
 
     saveModuleAsync = async (dto: ModuleAdminEditDTO) => {
 
-        await staticProvider
-            .ormConnection
+        await this._ormSerice
             .getRepository(CourseModule)
             .save({
                 id: dto.id,

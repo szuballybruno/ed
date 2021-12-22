@@ -1,13 +1,14 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
 import { User } from "../models/entity/User";
+import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
 import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
+import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { RegistrationType } from "../models/Types";
 import { getFullName, TypedError } from "../utilities/helpers";
 import { MapperService } from "./MapperService";
-import { toAdminPageUserDTO, toUserDTO } from "./misc/mappings";
 import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -49,8 +50,8 @@ export class UserService {
             .leftJoinAndSelect("user.userActivity", "ua")
             .getMany();
 
-        return users
-            .map(x => toAdminPageUserDTO(x));
+        return this._mapperService
+            .mapMany(User, AdminPageUserDTO, users);
     }
 
     async saveUserAsync(dto: UserEditDTO) {
@@ -204,7 +205,8 @@ export class UserService {
         if (!foundUser)
             return null;
 
-        return toUserDTO(foundUser);
+        return this._mapperService
+            .map(User, UserDTO, foundUser);
     }
 
     getUserActiveTokenById = async (userId: number) => {
@@ -274,13 +276,16 @@ export class UserService {
             });
     }
 
-    getTeacherDTOAsync = async () => {
+    getTeachersAsync = async () => {
 
         const teachers = await this._ormService
             .getRepository(User)
-            .find();
+            .find({
+                where: {
+                    isTeacher: true
+                }
+            });
 
-        return teachers
-            .map(x => toUserDTO(x));
+        return teachers;
     }
 }

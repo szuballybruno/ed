@@ -3,6 +3,7 @@ import { UploadedFile } from "express-fileupload";
 import { User } from "../models/entity/User";
 import { ErrorType } from "../models/shared_models/types/sharedTypes";
 import { ParsableValueType } from "../models/Types";
+import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { logError } from "../services/misc/logger";
 import { respond, respondError } from "./apiHelpers";
 
@@ -220,6 +221,8 @@ export const getCookies = (req: Request) => {
 }
 
 export const getCookie = (req: Request, key: string) => getCookies(req).filter(x => x.key === key)[0];
+
+export const getAuthTokenFromRequest = (req: Request, config: GlobalConfiguration) => getCookie(req, config.misc.accessTokenCookieName)?.value;
 
 export class TypedError extends Error {
 

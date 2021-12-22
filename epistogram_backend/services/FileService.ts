@@ -1,7 +1,7 @@
 import { UploadedFile } from "express-fileupload";
 import { StorageFile } from "../models/entity/StorageFile";
 import { User } from "../models/entity/User";
-import { staticProvider } from "../staticProvider";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { StorageService } from "./StorageService";
 import { UserService } from "./UserService";
 
@@ -9,11 +9,16 @@ export class FileService {
 
     private _userService: UserService;
     private _storageService: StorageService;
+    private _ormService: ORMConnectionService;
 
-    constructor(userService: UserService, storageService: StorageService) {
+    constructor(
+        userService: UserService,
+        storageService: StorageService,
+        ormService: ORMConnectionService) {
 
         this._userService = userService;
         this._storageService = storageService;
+        this._ormService = ormService;
     }
 
     uploadAvatarFileAsync = async (userId: number, file: UploadedFile) => {
@@ -65,8 +70,7 @@ export class FileService {
 
     deleteFileEntityAsync = async (id: number) => {
 
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(StorageFile)
             .delete(id);
     }
@@ -77,8 +81,7 @@ export class FileService {
             filePath: path
         } as StorageFile;
 
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(StorageFile)
             .insert(file);
 
@@ -87,8 +90,7 @@ export class FileService {
 
     getFileEntityAsync = (id: number) => {
 
-        return staticProvider
-            .ormConnection
+        return this._ormService
             .getRepository(StorageFile)
             .findOneOrFail(id);
     }

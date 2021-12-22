@@ -2,13 +2,14 @@ import cors from 'cors';
 import { Request } from 'express';
 import { User } from '../../models/entity/User';
 import { apiRoutes } from '../../models/shared_models/types/apiRoutes';
-import { staticProvider } from '../../staticProvider';
 import { getAsyncMiddlewareHandler } from '../../utilities/apiHelpers';
-import { TypedError } from '../../utilities/helpers';
+import { getAuthTokenFromRequest, getCookie, TypedError } from '../../utilities/helpers';
+import { GlobalConfiguration } from './GlobalConfiguration';
 import { log } from './logger';
 
 export const getAuthMiddleware = (
-    getRequestAccessTokenPayload: (req: Request) => any,
+    config: GlobalConfiguration,
+    getRequestAccessTokenPayload: (accessToken: string) => any,
     getUserById: (userId: number) => Promise<User>,
     openRoutes: string[]) => getAsyncMiddlewareHandler(async (req: Request) => {
 
@@ -23,7 +24,8 @@ export const getAuthMiddleware = (
             return;
         }
 
-        const payload = getRequestAccessTokenPayload(req);
+        const accessToken = getAuthTokenFromRequest(req, config);
+        const payload = getRequestAccessTokenPayload(accessToken);
 
         const user = await getUserById(payload.userId);
         if (!user)
@@ -48,16 +50,16 @@ export const getAuthMiddleware = (
         log(`Request [${currentRoutePath}] is permitted. UserId: ${user.id}`);
     });
 
-export const getUnderMaintanenceMiddleware = () => getAsyncMiddlewareHandler(async (req, res, next) => {
+export const getUnderMaintanenceMiddleware = (config: GlobalConfiguration) => getAsyncMiddlewareHandler(async (req, res, next) => {
 
-    if (!staticProvider.globalConfig.misc.isUnderMaintanence)
+    if (!config.misc.isUnderMaintanence)
         return;
 
     throw new TypedError("Server is under maintanence!", "under maintenance")
 });
 
-export const getCORSMiddleware = () => cors({
-    origin: staticProvider.globalConfig.misc.frontendUrl,
+export const getCORSMiddleware = (config: GlobalConfiguration) => cors({
+    origin: config.misc.frontendUrl,
     credentials: true,
     allowedHeaders: [
         "Origin",

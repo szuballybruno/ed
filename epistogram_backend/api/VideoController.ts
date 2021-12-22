@@ -6,30 +6,40 @@ import { CreateVideoDTO } from "../models/shared_models/CreateVideoDTO";
 import { IdBodyDTO } from "../models/shared_models/IdBodyDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { VideoEditDTO } from "../models/shared_models/VideoEditDTO";
-import { toQuestionDTO } from "../services/misc/mappings";
-import { getAssetUrl } from "../services/misc/urlProvider";
+import { MapperService } from "../services/MapperService";
+import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { QuestionService } from "../services/QuestionService";
+import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
 import { VideoService } from "../services/VideoService";
-import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class VideoController {
 
     private _videoService: VideoService;
     private _questionService: QuestionService;
+    private _ormService: ORMConnectionService;
+    private _config: GlobalConfiguration;
+    private _mapperService: MapperService;
 
-    constructor(videoService: VideoService, questionService: QuestionService) {
+    constructor(
+        videoService: VideoService,
+        questionService: QuestionService,
+        ormService: ORMConnectionService,
+        config: GlobalConfiguration,
+        mapperService: MapperService) {
 
         this._videoService = videoService;
         this._questionService = questionService;
+        this._ormService = ormService;
+        this._config = config;
+        this._mapperService = mapperService;
     }
 
     createVideoAction = async (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<CreateVideoDTO>(params.req.body);
 
-        const course = await staticProvider
-            .ormConnection
+        const course = await this._ormService
             .getRepository(Course)
             .createQueryBuilder("c")
             .leftJoinAndSelect("c.videos", "v")
@@ -69,8 +79,7 @@ export class VideoController {
         const videoId = dto.id;
 
         // update vidoeo data
-        await staticProvider
-            .ormConnection
+        await this._ormService
             .getRepository(Video)
             .save({
                 id: videoId,
@@ -87,8 +96,7 @@ export class VideoController {
 
         const videoId = withValueOrBadRequest<number>(params.req.query.videoId, "number");
 
-        const video = await staticProvider
-            .ormConnection
+        const video = await this._ormService
             .getRepository(Video)
             .createQueryBuilder("v")
             .leftJoinAndSelect("v.videoFile", "vf")
@@ -97,27 +105,14 @@ export class VideoController {
             .where("v.id = :videoId", { videoId })
             .getOneOrFail();
 
-        return {
-            id: video.id,
-            title: video.title,
-            description: video.description,
-            subtitle: video.subtitle,
-            videoLengthSeconds: video.lengthSeconds,
-
-            questions: video
-                .questions
-                .map(x => toQuestionDTO(x)),
-
-            videoFileUrl: video.videoFile
-                ? getAssetUrl(video.videoFile.filePath)
-                : null
-        } as VideoEditDTO;
+        return this._mapperService
+            .map(Video, VideoEditDTO, video);
     }
 
     uploadVideoFileChunksAction = async (params: ActionParams) => {
 
         const videoId = withValueOrBadRequest<number>(params.req.body.videoId, "number");
-        const tempFolder = staticProvider.rootDirectory + "\\uploads_temp";
+        const tempFolder = this._config.rootDirectory + "\\uploads_temp";
         const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
 
         try {

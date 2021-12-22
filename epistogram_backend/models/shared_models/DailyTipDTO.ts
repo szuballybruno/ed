@@ -1,4 +1,4 @@
-export type DailyTipDTO = {
+export class DailyTipDTO {
     description: string;
     videoUrl: string;
 }

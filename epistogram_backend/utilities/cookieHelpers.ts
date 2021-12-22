@@ -1,31 +1,31 @@
 import dayjs from "dayjs";
 import { Response } from "express";
-import { staticProvider } from "../staticProvider";
+import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 
-export const setAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
+export const setAuthCookies = (config: GlobalConfiguration, res: Response, accessToken: string, refreshToken: string) => {
+
+    const setAccessTokenCookie = (res: Response, accessToken: string) => {
+
+        res.cookie(config.misc.accessTokenCookieName, accessToken, {
+            secure: true,
+            httpOnly: true,
+            expires: dayjs().add(config.security.accessTokenLifespanInS, "seconds").toDate(),
+            sameSite: "none"
+            // domain: isLocalhost ? undefined : frontendUrl
+        });
+    }
+
+    const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
+
+        res.cookie(config.misc.refreshTokenCookieName, refreshToken, {
+            secure: true,
+            httpOnly: true,
+            expires: dayjs().add(config.security.refreshTokenLifespanInS, "seconds").toDate(),
+            sameSite: "none"
+            // domain: isLocalhost ? undefined : frontendUrl
+        });
+    }
 
     setAccessTokenCookie(res, accessToken);
     setRefreshTokenCookie(res, refreshToken);
-}
-
-const setAccessTokenCookie = (res: Response, accessToken: string) => {
-
-    res.cookie(staticProvider.globalConfig.misc.accessTokenCookieName, accessToken, {
-        secure: true,
-        httpOnly: true,
-        expires: dayjs().add(staticProvider.globalConfig.security.accessTokenLifespanInS, "seconds").toDate(),
-        sameSite: "none"
-        // domain: isLocalhost ? undefined : frontendUrl
-    });
-}
-
-const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
-
-    res.cookie(staticProvider.globalConfig.misc.refreshTokenCookieName, refreshToken, {
-        secure: true,
-        httpOnly: true,
-        expires: dayjs().add(staticProvider.globalConfig.security.refreshTokenLifespanInS, "seconds").toDate(),
-        sameSite: "none"
-        // domain: isLocalhost ? undefined : frontendUrl
-    });
 }

@@ -1,13 +1,10 @@
 import { UploadedFile } from "express-fileupload";
-import { Course } from "../models/entity/Course";
-import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { CourseContentEditDataDTO } from "../models/shared_models/CourseContentEditDataDTO";
 import { CourseDetailsEditDataDTO as CourseDetailsEditDataDTO } from "../models/shared_models/CourseDetailsEditDataDTO";
 import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { CourseModeType } from "../models/shared_models/types/sharedTypes";
 import { CourseService } from "../services/CourseService";
-import { staticProvider } from "../staticProvider";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class CourseController {
@@ -54,15 +51,8 @@ export class CourseController {
 
         const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
 
-        const course = await staticProvider
-            .ormConnection
-            .getRepository(Course)
-            .findOneOrFail(courseId);
-
-        return {
-            id: course.id,
-            title: course.title
-        } as CourseBriefData;
+        return await this._courseService
+            .getCourseBriefDataAsync(courseId);
     };
 
     getCourseDetailsAction = async (params: ActionParams) => {
@@ -107,15 +97,8 @@ export class CourseController {
 
         const dto = withValueOrBadRequest<CreateCourseDTO>(params.req.body);
 
-        await staticProvider
-            .ormConnection
-            .getRepository(Course)
-            .insert({
-                title: dto.title,
-                teacherId: 1,
-                categoryId: 1,
-                subCategoryId: 1,
-            });
+        await this._courseService
+            .createCourseAsync(dto);
     }
 
     setCourseModeAction = async (params: ActionParams) => {

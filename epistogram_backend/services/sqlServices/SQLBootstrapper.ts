@@ -1,7 +1,7 @@
 
 import { readFileSync } from "fs";
 import { replaceAll } from "../../utilities/helpers";
-import { GlobalConfiguration } from "../misc/environment";
+import { GlobalConfiguration } from "../misc/GlobalConfiguration";
 import { log, logObject } from "../misc/logger";
 import { ExecSQLFunctionType, SQLConnectionService } from "./SQLConnectionService";
 

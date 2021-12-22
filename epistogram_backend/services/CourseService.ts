@@ -28,11 +28,15 @@ import { CourseView } from "../models/views/CourseView";
 import { getItemCode, readItemCode } from "./misc/encodeService";
 import { FileService } from "./FileService";
 import { MapperService } from "./MapperService";
-import { toCourseAdminShortDTO, toCourseItemDTO, toCourseShortDTO } from "./misc/mappings";
 import { ModuleService } from "./ModuleService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { VideoService } from "./VideoService";
+import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
+import { CourseBriefData } from "../models/shared_models/CourseBriefData";
+import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
+import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
+import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 
 export class CourseService {
 
@@ -71,6 +75,18 @@ export class CourseService {
             .mapMany(CourseProgressView, CourseProgressShortDTO, views);
     }
 
+    async getCourseBriefDataAsync(courseId: number) {
+
+        const course = await this._ormService
+            .getRepository(Course)
+            .findOneOrFail(courseId);
+
+        return {
+            id: course.id,
+            title: course.title
+        } as CourseBriefData;
+    }
+
     async getCourseDetailsAsync(courseId: number) {
 
         const view = await this._ormService
@@ -87,6 +103,18 @@ export class CourseService {
 
         return this._mapperService
             .map(CourseDetailsView, CourseDetailsDTO, view, moduleViews);
+    }
+
+    async createCourseAsync(dto: CreateCourseDTO) {
+
+        await this._ormService
+            .getRepository(Course)
+            .insert({
+                title: dto.title,
+                teacherId: 1,
+                categoryId: 1,
+                subCategoryId: 1,
+            });
     }
 
     getCourseProgressDataAsync = async (userId: number) => {
@@ -227,15 +255,15 @@ export class CourseService {
                 const viewAsModule = x.items.first();
                 const isLockedModule = x.items[0]?.state === "locked";
                 const isCompletedModule = x.items.all(x => x.state === "completed");
+                const items = this._mapperService
+                    .mapMany(CourseItemStateView, CourseItemDTO, x.items);
 
                 return {
                     id: viewAsModule.moduleId,
                     name: viewAsModule.moduleName,
                     orderIndex: viewAsModule.moduleOrderIndex,
                     code: viewAsModule.moduleCode,
-                    items: x
-                        .items
-                        .map(x => toCourseItemDTO(x)),
+                    items: items,
                     state: isLockedModule
                         ? "locked"
                         : isCompletedModule
@@ -499,8 +527,8 @@ export class CourseService {
             .createQueryBuilder()
             .getMany();
 
-        return courseAdminShortViews
-            .map(casv => toCourseAdminShortDTO(casv));
+        return this._mapperService
+            .mapMany(CourseAdminShortView, CourseAdminListItemDTO, courseAdminShortViews);
     }
 
     deleteCourseAsync = async (courseId: number) => {
@@ -540,8 +568,8 @@ export class CourseService {
             .andWhere("cv.canView = true")
             .getMany();
 
-        return courses
-            .map(course => toCourseShortDTO(course));
+        return this._mapperService
+            .mapMany(CourseView, CourseShortDTO, courses);
     }
 
     async createCourseAccessBridge(userId: number, courseId: number) {

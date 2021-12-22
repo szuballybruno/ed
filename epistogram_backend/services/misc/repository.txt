@@ -1,9 +1,8 @@
 import { EntityTarget } from "typeorm";
-import { staticProvider } from "../../staticProvider";
 
 export const getORMRepository = <TEntity>(entityType: EntityTarget<TEntity>) => {
 
-    const connection = staticProvider.ormConnection;
+    const connection = staticPraovider.ormConnection;
 
     const expression = connection
         .createQueryBuilder();

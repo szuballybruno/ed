@@ -1,5 +1,5 @@
 import { Pool, QueryResult } from 'pg';
-import { getDatabaseConnectionParameters } from '../misc/environment';
+import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
 
 export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<QueryResult<any>>;
@@ -7,16 +7,19 @@ export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<Query
 export class SQLConnectionService {
 
     private _pool: Pool;
+    private _config: GlobalConfiguration;
 
-    constructor() {
+    constructor(config: GlobalConfiguration) {
 
+        this._config = config;
     }
 
     async establishConnectionAsync() {
 
         log("Connecting to SQL...");
 
-        const dbConfig = getDatabaseConnectionParameters();
+        const dbConfig = this._config
+            .getDatabaseConnectionParameters();
 
         const pool = new Pool({
             port: dbConfig.port,

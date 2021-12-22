@@ -4,18 +4,23 @@ import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO
 import { toAnswerEditDTO } from "../services/misc/mappings";
 import { PractiseQuestionService } from "../services/PractiseQuestionService";
 import { QuestionService } from "../services/QuestionService";
-import { staticProvider } from "../staticProvider";
+import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class QuestionController {
 
     private _practiseQuestionService: PractiseQuestionService;
     private _questionService: QuestionService;
+    private _ormService: ORMConnectionService;
 
-    constructor(practiseQuestionService: PractiseQuestionService, questionService: QuestionService) {
+    constructor(
+        practiseQuestionService: PractiseQuestionService,
+        questionService: QuestionService,
+        ormService: ORMConnectionService) {
 
         this._practiseQuestionService = practiseQuestionService;
         this._questionService = questionService;
+        this._ormService = ormService;
     }
 
     answerPractiseQuestionAction = async (params: ActionParams) => {
@@ -30,8 +35,7 @@ export class QuestionController {
 
         const questionId = withValueOrBadRequest<number>(params.req.query.questionId, "number");
 
-        const question = await staticProvider
-            .ormConnection
+        const question = await this._ormService
             .getRepository(Question)
             .createQueryBuilder("q")
             .leftJoinAndSelect("q.answers", "qa")
