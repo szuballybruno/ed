@@ -1,6 +1,6 @@
 import { QuestionDTO } from "./QuestionDTO";
 
-export type VideoEditDTO = {
+export class VideoEditDTO {
     id: number;
     title: string;
     subtitle: string;

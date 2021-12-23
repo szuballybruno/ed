@@ -270,7 +270,7 @@ const CourseDetailsPage = () => {
                 </Flex>
             </Flex>
 
-            {/* Background shapes */}
+            {/* side tit */}
             <Flex
                 _before={{
                     position: "absolute",

@@ -1,6 +1,6 @@
 import { QuestionDTO } from "./QuestionDTO";
 
-export type VideoDTO = {
+export class VideoDTO {
     id: number;
     courseId: number;
     subTitle: string;

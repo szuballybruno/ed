@@ -1,10 +1,16 @@
 import { Flex } from "@chakra-ui/react";
 import React from 'react';
+import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { useEditUserData } from "../../../services/api/userApiService";
 import { LearningStatistics } from "../../learningInsights/LearningStatistics";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const AdminUserStatisticsSubpage = () => {
+
+    const params = useParams<{ userId: string }>();
+    const editedUserId = parseInt(params.userId);
+    const { userEditData } = useEditUserData(editedUserId);
 
     return (
         <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
@@ -12,9 +18,8 @@ export const AdminUserStatisticsSubpage = () => {
             {/* admin header */}
             <AdminSubpageHeader tabMenuItems={[
                 applicationRoutes.administrationRoute.usersRoute.editRoute,
-                applicationRoutes.administrationRoute.usersRoute.statsRoute,
-                applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute
-            ]}>
+                applicationRoutes.administrationRoute.usersRoute.statsRoute
+            ].concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
 
                 <LearningStatistics />
 

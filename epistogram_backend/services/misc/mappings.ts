@@ -10,6 +10,7 @@ import { Question } from "../../models/entity/Question";
 import { Role } from "../../models/entity/Role";
 import { ShopItemCategory } from "../../models/entity/ShopItemCategory";
 import { Task } from "../../models/entity/Task";
+import { TeacherInfo } from "../../models/entity/TeacherInfo";
 import { User } from "../../models/entity/User";
 import { Video } from "../../models/entity/Video";
 import { AdminPageUserDTO } from "../../models/shared_models/AdminPageUserDTO";
@@ -48,6 +49,7 @@ import { SignupAnswerDTO } from "../../models/shared_models/SignupAnswerDTO";
 import { SignupDataDTO } from "../../models/shared_models/SignupDataDTO";
 import { SignupQuestionDTO } from "../../models/shared_models/SignupQuestionDTO";
 import { TaskDTO } from "../../models/shared_models/TaskDTO";
+import { TeacherInfoEditDTO } from "../../models/shared_models/TeacherInfoEditDTO";
 import { CourseItemStateType } from "../../models/shared_models/types/sharedTypes";
 import { UserActivityDTO } from "../../models/shared_models/UserActivityDTO";
 import { UserDTO } from "../../models/shared_models/UserDTO";
@@ -538,6 +540,17 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     : null
             } as VideoEditDTO;
         });
+
+    mapperService
+        .addMap(TeacherInfo, TeacherInfoEditDTO, x => ({
+            id: x.id,
+            courseCount: x.courseCount,
+            rating: x.rating,
+            studentCount: x.studentCount,
+            videoCount: x.videoCount,
+            skills: x.skills,
+            badges: parseCommaSeparatedStringList(x.badges)
+        }));
 }
 
 const parseCommaSeparatedStringList = (str: string) => {

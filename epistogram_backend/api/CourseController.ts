@@ -20,12 +20,12 @@ export class CourseController {
 
         const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
-        return this._courseService.startCourseAsync(params.userId, courseId);
+        return this._courseService.startCourseAsync(params.currentUserId, courseId);
     };
 
     getAvailableCoursesAction = async (params: ActionParams) => {
 
-        return this._courseService.getAvailableCoursesAsync(params.userId);
+        return this._courseService.getAvailableCoursesAsync(params.currentUserId);
     };
 
     getCourseDetailsEditDataAction = async (params: ActionParams) => {
@@ -106,16 +106,16 @@ export class CourseController {
         const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
         const modeType = withValueOrBadRequest<CourseModeType>(params.req.query.mode);
 
-        return this._courseService.setCourseTypeAsync(params.userId, courseId, modeType);
+        return this._courseService.setCourseTypeAsync(params.currentUserId, courseId, modeType);
     };
 
     getCourseProgressShortAction = async (params: ActionParams) => {
 
-        return this._courseService.getCourseProgressShortAsync(params.userId);
+        return this._courseService.getCourseProgressShortAsync(params.currentUserId);
     }
 
     getCourseProgressDataAction = async (params: ActionParams) => {
 
-        return this._courseService.getCourseProgressDataAsync(params.userId);
+        return this._courseService.getCourseProgressDataAsync(params.currentUserId);
     };
 }

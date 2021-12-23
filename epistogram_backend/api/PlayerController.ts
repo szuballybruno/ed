@@ -27,25 +27,25 @@ export class PlayerController {
         const elapsedSeconds = dto.getValue(x => x.elapsedSeconds, "float");
 
         return this._videoService
-            .answerVideoQuestionAsync(params.userId, answerSessionId, questionId, answerIds, elapsedSeconds);
+            .answerVideoQuestionAsync(params.currentUserId, answerSessionId, questionId, answerIds, elapsedSeconds);
     };
 
     saveVideoPlaybackSampleAction = (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<VideoPlaybackSampleDTO>(params.req.body);
 
-        return this._playerService.saveVideoPlaybackSample(params.userId, dto);
+        return this._playerService.saveVideoPlaybackSample(params.currentUserId, dto);
     };
 
     getPlayerDataAction = (params: ActionParams) => {
 
         const descriptorCode = withValueOrBadRequest<string>(params.req.query.descriptorCode);
 
-        return this._playerService.getPlayerDataAsync(params.userId, descriptorCode);
+        return this._playerService.getPlayerDataAsync(params.currentUserId, descriptorCode);
     };
 
     getCourseItemsAction = async (params: ActionParams) => {
 
-        return this._courseService.getCurrentCourseItemsAsync(params.userId);
+        return this._courseService.getCurrentCourseItemsAsync(params.currentUserId);
     };
 }

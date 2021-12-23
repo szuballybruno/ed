@@ -13,11 +13,11 @@ export class CoinTransactionsController {
     getCoinTransactionsAction = async (params: ActionParams) => {
 
         return this._coinTransactionService
-            .getCoinTransactionsAsync(params.userId);
+            .getCoinTransactionsAsync(params.currentUserId);
     }
 
     getCoinBalanceAction = async (params: ActionParams) => {
 
-        return this._coinTransactionService.getCoinBalance(params.userId);
+        return this._coinTransactionService.getCoinBalance(params.currentUserId);
     }
 }

@@ -12,6 +12,6 @@ export class UserStatsController {
 
     getUserStatsAction = async (params: ActionParams) => {
 
-        return await this._userStatsService.getUserStatsAsync(params.userId);
+        return await this._userStatsService.getUserStatsAsync(params.currentUserId);
     }
 }

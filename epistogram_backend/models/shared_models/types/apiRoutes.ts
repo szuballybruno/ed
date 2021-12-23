@@ -15,6 +15,11 @@ export const apiRoutes = {
         getCurrentCourseItemCode: '/misc/get-current-course-item-code'
     },
 
+    teacherInfo: {
+        getTeacherInfo: "/teacherinfo/get-teacher-info",
+        saveTeacherInfo: "/teacherinfo/save-teacher-info"
+    },
+
     authentication: {
         getCurrentUser: "/authentication/get-current-user",
         setNewPassword: "/authentication/set-new-password",

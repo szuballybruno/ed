@@ -70,7 +70,7 @@ export class RegistrationController {
 
         // handle organizationId
         const currentUser = await this._userService
-            .getUserById(params.userId);
+            .getUserById(params.currentUserId);
 
         // if user is admin require organizationId to be provided
         // otherwise use the current user's organization

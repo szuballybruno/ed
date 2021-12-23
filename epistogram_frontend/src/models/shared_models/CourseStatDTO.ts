@@ -1,3 +1,3 @@
-export type CourseStatDTO = {
+export class CourseStatDTO {
     title: string;
 }

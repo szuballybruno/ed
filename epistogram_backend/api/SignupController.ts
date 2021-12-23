@@ -19,18 +19,18 @@ export class SignupController {
         const dto = withValueOrBadRequest<AnswerSignupQuestionDTO>(params.req.body);
 
         await this._signupService
-            .answerSignupQuestionAsync(params.userId, dto);
+            .answerSignupQuestionAsync(params.currentUserId, dto);
     };
 
     getSignupDataAction = (params: ActionParams) => {
 
         return this._signupService
-            .getSignupDataAsync(params.userId);
+            .getSignupDataAsync(params.currentUserId);
     };
 
     getUserPersonalityDataAction = async (params: ActionParams) => {
 
         return this._personalityAssessmentService
-            .getUserPersonalityAssessmentDTOAsync(params.userId);
+            .getUserPersonalityAssessmentDTOAsync(params.currentUserId);
     };
 }

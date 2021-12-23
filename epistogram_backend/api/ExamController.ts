@@ -25,7 +25,7 @@ export class ExamController {
         const questionAnswerDTO = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
 
         return this._examService
-            .answerExamQuestionAsync(params.userId, questionAnswerDTO);
+            .answerExamQuestionAsync(params.currentUserId, questionAnswerDTO);
     };
 
     startExamAction = async (params: ActionParams) => {
@@ -42,7 +42,7 @@ export class ExamController {
         const answerSessionId = withValueOrBadRequest<number>(params.req.query.answerSessionId, "number");
 
         return this._examService
-            .getExamResultsAsync(params.userId, answerSessionId);
+            .getExamResultsAsync(params.currentUserId, answerSessionId);
     };
 
     getExamEditDataAction = async (params: ActionParams) => {

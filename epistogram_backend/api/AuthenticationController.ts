@@ -49,19 +49,19 @@ export class AuthenticationController {
         const passwordResetToken = dto.getValue<string>(x => x.passwordResetToken);
 
         return this._authenticationService
-            .changePasswordAsync(params.userId, password, passwordCompare, passwordResetToken);
+            .changePasswordAsync(params.currentUserId, password, passwordCompare, passwordResetToken);
     };
 
     getCurrentUserAction = async (params: ActionParams) => {
 
         return this._authenticationService
-            .getCurrentUserAsync(params.userId);
+            .getCurrentUserAsync(params.currentUserId);
     };
 
     logOutUserAction = async (params: ActionParams) => {
 
         await this._authenticationService
-            .logOutUserAsync(params.userId);
+            .logOutUserAsync(params.currentUserId);
 
         // remove browser cookies
         params.res.clearCookie(this._config.misc.accessTokenCookieName);

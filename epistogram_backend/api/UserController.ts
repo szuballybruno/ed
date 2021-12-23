@@ -17,7 +17,7 @@ export class UserController {
         const deleteUserId = withValueOrBadRequest<number>(dto.userId, "number");
 
         return this._userService
-            .deleteUserAsync(params.userId, deleteUserId);
+            .deleteUserAsync(params.currentUserId, deleteUserId);
     };
 
     getEditUserDataAction = async (params: ActionParams) => {

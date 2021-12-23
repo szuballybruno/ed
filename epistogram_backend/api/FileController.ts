@@ -20,6 +20,6 @@ export class FileController {
             throw new TypedError("File upload failed: Only jpeg or png", "bad request")
 
         return this._fileService
-            .uploadAvatarFileAsync(params.userId, file);
+            .uploadAvatarFileAsync(params.currentUserId, file);
     };
 }

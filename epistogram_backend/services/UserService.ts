@@ -13,16 +13,22 @@ import { MapperService } from "./MapperService";
 import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { TeacherInfoService } from "./TeacherInfoService";
 
 export class UserService {
 
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
+    private _teacherInfoService: TeacherInfoService;
 
-    constructor(ormService: ORMConnectionService, mapperService: MapperService) {
+    constructor(
+        ormService: ORMConnectionService,
+        mapperService: MapperService,
+        teacherInfoService: TeacherInfoService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
+        this._teacherInfoService = teacherInfoService;
     }
 
     async getEditUserDataAsync(editedUserId: number) {
@@ -57,14 +63,8 @@ export class UserService {
 
     async saveUserAsync(dto: UserEditDTO) {
 
-        const user = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder("u")
-            .leftJoinAndSelect("u.teacherInfo", "ti")
-            .where("u.id = :userId", { userId: dto.id })
-            .getOneOrFail();
-
-        const teacherInfo = user.teacherInfo;
+        const teacherInfo = await this._teacherInfoService
+            .getTeacherInfoAsync(dto.id);
 
         let teacherInfoId = null as null | number;
 
@@ -82,20 +82,16 @@ export class UserService {
                         teacherInfoId: null
                     });
 
-                await this._ormService
-                    .getRepository(TeacherInfo)
-                    .delete(teacherInfo.id);
+                this._teacherInfoService
+                    .deleteTeacherInfoAsync(teacherInfo.id);
             }
         }
         else {
 
             if (dto.isTeacher) {
 
-                const newTeacherInfo = {} as TeacherInfo;
-
-                await this._ormService
-                    .getRepository(TeacherInfo)
-                    .insert(newTeacherInfo);
+                const newTeacherInfo = await this._teacherInfoService
+                    .createTeacherInfoAsync();
 
                 teacherInfoId = newTeacherInfo.id;
             }

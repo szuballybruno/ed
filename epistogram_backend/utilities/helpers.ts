@@ -36,7 +36,7 @@ export class ActionParams {
     req: Request;
     res: Response;
     next: NextFunction;
-    userId: number;
+    currentUserId: number;
 
     constructor(
         req: Request,
@@ -47,7 +47,7 @@ export class ActionParams {
         this.req = req;
         this.res = res;
         this.next = next;
-        this.userId = userId;
+        this.currentUserId = userId;
     }
 
     getBody<T>() {

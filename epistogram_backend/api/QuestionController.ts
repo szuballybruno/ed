@@ -28,7 +28,7 @@ export class QuestionController {
         const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
 
         return this._practiseQuestionService
-            .answerPractiseQuestionAsync(params.userId, dto);
+            .answerPractiseQuestionAsync(params.currentUserId, dto);
     };
 
     getQuestionEditDataAction = async (params: ActionParams) => {

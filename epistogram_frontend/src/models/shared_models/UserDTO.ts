@@ -1,7 +1,7 @@
 import { JobTitleDTO } from "./JobTitleDTO";
 import { UserActivityDTO } from "./UserActivityDTO";
 
-export type UserDTO = {
+export class UserDTO {
     id: number;
     firstName: string;
     lastName: string;

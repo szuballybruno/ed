@@ -12,7 +12,7 @@ const AdminEditUserSubpage = () => {
 
     const params = useParams<{ userId: string }>();
     const editedUserId = parseInt(params.userId);
-    const { userEditData } = useEditUserData(editedUserId);
+    const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { updateUserAsync } = useUpdateUser();
     const showError = useShowErrorDialog();
 
@@ -22,6 +22,7 @@ const AdminEditUserSubpage = () => {
 
             await updateUserAsync(dto);
             showNotification("A változtatások sikeresen mentésre kerültek.");
+            refetchEditUserData();
         }
         catch (e) {
 
@@ -30,11 +31,12 @@ const AdminEditUserSubpage = () => {
     }
 
     return <AdminSubpageHeader
-        tabMenuItems={[
-            applicationRoutes.administrationRoute.usersRoute.editRoute,
-            applicationRoutes.administrationRoute.usersRoute.statsRoute,
-            applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute
-        ]}>
+        tabMenuItems={
+            [
+                applicationRoutes.administrationRoute.usersRoute.editRoute,
+                applicationRoutes.administrationRoute.usersRoute.statsRoute
+            ]
+                .concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
         <EditUserControl
             editDTO={userEditData}
             saveUserAsync={handleSaveUserAsync} />

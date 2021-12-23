@@ -15,6 +15,7 @@ import { QuestionController } from './api/QuestionController';
 import { RegistrationController } from './api/RegistrationController';
 import { ShopController } from './api/ShopController';
 import { SignupController } from './api/SignupController';
+import { TeacherInfoController } from './api/TeacherInfoController';
 import { UserController } from './api/UserController';
 import { UserStatsController } from './api/UserStatsController';
 import { VideoController } from './api/VideoController';
@@ -53,6 +54,7 @@ import { SeedService } from './services/sqlServices/SeedService';
 import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import { StorageService } from './services/StorageService';
+import { TeacherInfoService } from './services/TeacherInfoService';
 import { TokenService } from './services/TokenService';
 import { UserCourseBridgeService } from './services/UserCourseBridgeService';
 import { UserService } from './services/UserService';
@@ -89,7 +91,8 @@ import './utilities/jsExtensions';
     const emailService = new EmailService(globalConfig, assetUrlService);
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
     const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService);
-    const userService = new UserService(ormConnectionService, mapperService);
+    const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService);
+    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService);
     const tokenService = new TokenService(globalConfig);
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, ormConnectionService, emailService, globalConfig);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService);
@@ -128,6 +131,7 @@ import './utilities/jsExtensions';
     const questionController = new QuestionController(practiseQuestionService, questionService, ormConnectionService);
     const examController = new ExamController(examService, ormConnectionService);
     const shopController = new ShopController(shopService);
+    const teacherInfoController = new TeacherInfoController(teacherInfoService);
 
     // initialize services 
     initializeMappings(assetUrlService.getAssetUrl, mapperService);
@@ -168,6 +172,10 @@ import './utilities/jsExtensions';
     addEndpoint(apiRoutes.misc.getOrganizations, miscController.getOrganizationsAction);
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
 
+    // teacher info
+    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction);
+    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true });
+
     // shop 
     addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
     addEndpoint(apiRoutes.shop.getShopItemCategories, shopController.getShopItemCategoriesAction);
@@ -197,7 +205,6 @@ import './utilities/jsExtensions';
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
     addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true });
     addEndpoint(apiRoutes.user.upadateUser, userController.saveUserAction, { isPost: true });
-    // addEndpoint(apiRoutes.misc.updateUserData, miscController.saveUserDataAction, { isPost: true });
 
     // file 
     addEndpoint(apiRoutes.file.uploadUserAvatar, fileController.uploadAvatarFileAction, { isPost: true });

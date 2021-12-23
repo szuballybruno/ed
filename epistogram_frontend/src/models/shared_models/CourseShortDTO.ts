@@ -1,5 +1,5 @@
 
-export type CourseShortDTO = {
+export class CourseShortDTO {
     courseId: number;
     firstItemCode: string;
     thumbnailImageURL: string;

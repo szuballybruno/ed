@@ -45,7 +45,8 @@ export const useEditUserData = (editedUserId: number) => {
     return {
         userEditData: queryRes.data,
         userEditDataStatus: queryRes.state,
-        userEditDataError: queryRes.error
+        userEditDataError: queryRes.error,
+        refetchEditUserData: queryRes.refetch
     }
 }
 

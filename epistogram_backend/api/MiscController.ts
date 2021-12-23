@@ -48,7 +48,7 @@ export class MiscController {
             .findOne({
                 where: {
                     isCurrent: true,
-                    userId: parms.userId
+                    userId: parms.currentUserId
                 }
             });
 
@@ -60,12 +60,12 @@ export class MiscController {
 
     getOverviewPageDTOAction = async (params: ActionParams) => {
 
-        return this._miscService.getOverviewPageDTOAsync(params.userId);
+        return this._miscService.getOverviewPageDTOAsync(params.currentUserId);
     }
 
     getOrganizationsAction = (params: ActionParams) => {
 
-        return this._miscService.getOrganizationsAsync(params.userId);
+        return this._miscService.getOrganizationsAsync(params.currentUserId);
     }
 
     getJobTitlesAction = async (params: ActionParams) => {
@@ -86,20 +86,20 @@ export class MiscController {
         const oldPassword = withValueOrBadRequest<string>(dto.oldPassword);
 
         return await this._authService
-            .requestChangePasswordAsync(params.userId, oldPassword);
+            .requestChangePasswordAsync(params.currentUserId, oldPassword);
     };
 
     saveUserDataAction = async (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<UserDTO>(params.req.body);
 
-        return this._miscService.saveUserDataAsync(params.userId, dto);
+        return this._miscService.saveUserDataAsync(params.currentUserId, dto);
     };
 
     getPractiseQuestionAction = async (params: ActionParams) => {
 
         return await this._practiseQuestionService
-            .getPractiseQuestionAsync(params.userId);
+            .getPractiseQuestionAsync(params.currentUserId);
     };
 
     getDailyTipAction = async (params: ActionParams) => {
