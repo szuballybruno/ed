@@ -31,6 +31,11 @@ export class UserService {
         this._teacherInfoService = teacherInfoService;
     }
 
+    /**
+     * Get user edit data 
+     * @param editedUserId 
+     * @returns 
+     */
     async getEditUserDataAsync(editedUserId: number) {
 
         const user = await this._ormService
@@ -39,6 +44,7 @@ export class UserService {
             .leftJoinAndSelect("u.organization", "o")
             .leftJoinAndSelect("u.role", "r")
             .leftJoinAndSelect("u.jobTitle", "jt")
+            .leftJoinAndSelect("u.teacherInfo", "ti")
             .where("u.id = :userId", { userId: editedUserId })
             .getOneOrFail();
 
@@ -63,53 +69,45 @@ export class UserService {
 
     async saveUserAsync(dto: UserEditDTO) {
 
-        const teacherInfo = await this._teacherInfoService
-            .getTeacherInfoAsync(dto.id);
+        const userId = dto.id;
 
-        let teacherInfoId = null as null | number;
-
-        if (teacherInfo) {
-
-            if (dto.isTeacher) {
-
-                teacherInfoId = teacherInfo.id;
-            }
-            else {
-                await this._ormService
-                    .getRepository(User)
-                    .save({
-                        id: dto.id,
-                        teacherInfoId: null
-                    });
-
-                this._teacherInfoService
-                    .deleteTeacherInfoAsync(teacherInfo.id);
-            }
-        }
-        else {
-
-            if (dto.isTeacher) {
-
-                const newTeacherInfo = await this._teacherInfoService
-                    .createTeacherInfoAsync();
-
-                teacherInfoId = newTeacherInfo.id;
-            }
-        }
-
+        // save user 
         await this._ormService
             .getRepository(User)
             .save({
-                id: dto.id,
+                id: userId,
                 lastName: dto.lastName,
                 firstName: dto.firstName,
                 email: dto.email,
                 isTeacher: dto.isTeacher,
                 organizationId: dto.organization?.id,
                 roleId: dto.role?.id,
-                jobTitleId: dto.jobTitle?.id,
-                teacherInfoId: teacherInfoId
+                jobTitleId: dto.jobTitle?.id
             });
+
+        // save teacher info
+        const teacherInfo = await this._teacherInfoService
+            .getTeacherInfoAsync(dto.id);
+
+        // teacher info exists
+        if (teacherInfo) {
+
+            if (!dto.isTeacher) {
+
+                await this._teacherInfoService
+                    .deleteTeacherInfoAsync(teacherInfo.id);
+            }
+        }
+
+        // teacher info doesn't exist
+        else {
+
+            if (!teacherInfo && dto.isTeacher) {
+
+                await this._teacherInfoService
+                    .createTeacherInfoAsync(userId);
+            }
+        }
     }
 
     async getBriefUserDataAsync(userId: unknown) {

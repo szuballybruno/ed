@@ -83,7 +83,7 @@ export class TeacherInfoService {
      * persists it in the DB, and returns it. 
      * @returns 
      */
-    async createTeacherInfoAsync() {
+    async createTeacherInfoAsync(userId: number) {
 
         const newTeacherInfo = {
             badges: '',
@@ -91,7 +91,8 @@ export class TeacherInfoService {
             videoCount: 0,
             courseCount: 0,
             rating: 0,
-            studentCount: 0
+            studentCount: 0,
+            userId
         } as TeacherInfo;
 
         await this._ormService

@@ -25,7 +25,11 @@ export class TeacherInfo {
     @Column()
     badges: string;
 
-    @JoinColumn()
+    // user 
+    @Column()
+    userId: number;
+
     @OneToOne(_ => User, x => x.teacherInfo)
+    @JoinColumn({ name: "user_id" })
     user: User;
 }

@@ -8,7 +8,6 @@ INSERT INTO public.user
     username,
     first_name,
     last_name,
-    is_teacher,
     password,
     role_id,
     organization_id,
@@ -24,9 +23,31 @@ VALUES
     'teacherusername', -- username
     'Teacherfirst', -- first_name
     'Teacherlast', -- last_name
-    true, -- is_teacher
     '', -- password
     1, -- role_id
     1, -- organization_id
     1 -- job_title_id
+);
+
+INSERT INTO public.teacher_info 
+(
+    id,
+    skills,
+    course_count,
+    video_count,
+    student_count,
+    rating,
+    badges,
+    user_id
+)
+VALUES 
+(
+    1,
+    'Teaching, mostly',
+    5,
+    23,
+    14,
+    4,
+    'badge1',
+    1
 )

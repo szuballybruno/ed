@@ -59,9 +59,6 @@ export class User {
     @Column({ nullable: true })
     linkedInUrl: string;
 
-    @Column({ default: false })
-    isTeacher: boolean;
-
     @Column({ nullable: true })
     password: string;
 
@@ -113,12 +110,8 @@ export class User {
     jobTitle: JobTitle | null;
 
     // teacher info
-    @Column({ nullable: true, type: "number" })
-    teacherInfoId: number | null;
-
     @OneToOne(_ => TeacherInfo, x => x.user)
-    @JoinColumn({ name: "teacher_info_id" })
-    teacherInfo: TeacherInfo | null;
+    teacherInfo: TeacherInfo;
 
     // Tasks
     @OneToMany(() => Task, task => task.user)
