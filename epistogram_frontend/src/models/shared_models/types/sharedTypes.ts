@@ -50,3 +50,5 @@ export const QuestionTypeEnum = {
     singleAnswer: 1,
     multipleAnswers: 2
 }
+
+export type TeacherBadgeNameType = "badge1" | "badge2" | "badge3";

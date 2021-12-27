@@ -3,6 +3,7 @@ import { Checkbox, Slider, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { TeacherBadgeNameType } from "../../../models/shared_models/types/sharedTypes";
 import { useSaveTeacherInfoData, useTeacherInfoEditData } from "../../../services/api/teacherInfoApiService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { EpistoButton } from "../../universal/EpistoButton";
@@ -22,20 +23,22 @@ export const AdminUserTeacherInfoSubpage = () => {
     const [courseCount, setCoursesCount] = useState("");
     const [videoCount, setVideoCount] = useState("");
     const [studentCount, setStudentCount] = useState("");
+    const [description, setDescription] = useState("");
     const [rating, setRating] = useState(0);
-    const [badges, setBadges] = useState(["badge1"]);
+    const [selectedBadges, setSelectedBadges] = useState<TeacherBadgeNameType[]>([]);
 
     useEffect(() => {
 
         if (!teacherInfoEditData)
             return;
 
-        setBadges(teacherInfoEditData.badges);
+        setSelectedBadges(teacherInfoEditData.badges);
         setSkills(teacherInfoEditData.skills);
         setVideoCount(teacherInfoEditData.videoCount + "");
         setStudentCount(teacherInfoEditData.studentCount + "");
         setCoursesCount(teacherInfoEditData.courseCount + "");
         setRating(teacherInfoEditData.rating);
+        setDescription(teacherInfoEditData.description);
     }, [teacherInfoEditData]);
 
     const allBadges = [
@@ -46,21 +49,29 @@ export const AdminUserTeacherInfoSubpage = () => {
         {
             name: "badge2",
             icon: ""
+        },
+        {
+            name: "badge3",
+            icon: ""
         }
-    ]
+    ] as ({
+        name: TeacherBadgeNameType,
+        icon: any
+    })[];
 
     const handleSaveAsync = async () => {
 
         try {
 
             await saveTeacherInfoAsync({
-                badges,
+                badges: selectedBadges,
                 rating,
                 courseCount: parseInt(courseCount),
                 id: teacherInfoEditData?.id!,
                 skills: skills,
                 studentCount: parseInt(studentCount),
-                videoCount: parseInt(videoCount)
+                videoCount: parseInt(videoCount),
+                description
             });
 
             showNotification("Tanar informaciok sikeresen mentve!");
@@ -96,6 +107,14 @@ export const AdminUserTeacherInfoSubpage = () => {
                         label="Szakterület"
                         setValue={setSkills} />
 
+                    {/* description */}
+                    <EpistoEntry
+                        labelVariant={"top"}
+                        value={description}
+                        label="Leiras"
+                        isMultiline
+                        setValue={setDescription} />
+
                     {/* Teacher courses count */}
                     <EpistoEntry
                         labelVariant={"top"}
@@ -121,7 +140,6 @@ export const AdminUserTeacherInfoSubpage = () => {
                         setValue={setStudentCount} />
 
                     {/* Teacher rating */}
-
                     <EpistoLabel text="Értékelés">
                         <Slider
                             defaultValue={0}
@@ -138,7 +156,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                     <EpistoLabel text="Tanár jelvényei">
                         <Flex flexWrap={"wrap"}>
                             {allBadges
-                                .map((badgeSlug, index) => {
+                                .map((badge, index) => {
                                     return <Flex
                                         flexDir={"column"}
                                         justifyContent={"space-between"}
@@ -151,12 +169,27 @@ export const AdminUserTeacherInfoSubpage = () => {
                                         m={5}>
 
                                         <Flex>
-                                            <img src={badgeSlug.icon} alt={""} />
+                                            <img src={badge.icon} alt={""} />
                                         </Flex>
 
                                         <Flex>
-                                            <Checkbox />
-                                            <Typography fontSize={"0.8em"}>{badgeSlug.name}</Typography>
+                                            <Checkbox
+                                                checked={selectedBadges.some(x => x === badge.name)}
+                                                onChange={(_, y) => {
+
+                                                    if (y) {
+
+                                                        setSelectedBadges([...selectedBadges, badge.name]);
+                                                    }
+                                                    else {
+
+                                                        setSelectedBadges(selectedBadges.filter(x => x !== badge.name));
+                                                    }
+                                                }} />
+
+                                            <Typography fontSize={"0.8em"}>
+                                                {badge.name}
+                                            </Typography>
                                         </Flex>
                                     </Flex>
                                 })}

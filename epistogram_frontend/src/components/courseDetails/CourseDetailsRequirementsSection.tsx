@@ -1,12 +1,11 @@
 import { Flex } from "@chakra-ui/react";
-import { EpistoHeader } from "../EpistoHeader";
-import { Typography } from "@mui/material";
-import { Radar } from "react-chartjs-2";
-import React from "react";
-import { translatableTexts } from "../../static/translatableTexts";
-import { mockCourseDetails } from "../../static/mockData";
-import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import { Typography } from "@mui/material";
+import React from "react";
+import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
+import { mockCourseDetails } from "../../static/mockData";
+import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoHeader } from "../EpistoHeader";
 
 export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseDetailsDTO }) => {
 

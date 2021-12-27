@@ -55,6 +55,8 @@ export class CourseDetailsView {
     @ViewColumn()
     subCategoryName: string;
 
+    // teacher 
+
     @ViewColumn()
     teacherId: number;
 
@@ -63,6 +65,33 @@ export class CourseDetailsView {
 
     @ViewColumn()
     teacherLastName: string;
+
+    @ViewColumn()
+    teacherSkills: string;
+
+    @ViewColumn()
+    teacherCourseCount: number;
+
+    @ViewColumn()
+    teacherStudentCount: number;
+
+    @ViewColumn()
+    teacherVideoCount: number;
+
+    @ViewColumn()
+    teacherRating: number;
+
+    @ViewColumn()
+    teacherDescription: string;
+
+    @ViewColumn()
+    teacherBadges: string;
+
+    // teacher avatar 
+
+    teacherAvatarFilePath: string;
+
+    // cover 
 
     @ViewColumn()
     coverFilePath: string;

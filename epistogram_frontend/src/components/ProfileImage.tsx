@@ -33,10 +33,12 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
             border="none"
             className="whall"
             objectFit="cover"
-            src={url!}
+            src={url ?? ""}
             display={showImage ? undefined : "none"} />
 
-        <Typography display={showSingature ? undefined : "none"}>
+        <Typography
+            display={showSingature ? undefined : "none"}>
+
             {signature.toUpperCase()}
         </Typography>
     </Flex>

@@ -302,14 +302,29 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 difficulty: view.difficulty,
                 benchmark: view.benchmark,
                 visibility: view.visibility,
-                teacherFullName: toFullName(view.teacherFirstName, view.teacherLastName),
                 humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
 
                 skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
                 technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
                 humanSkillBenefits: parseSkillBenefits(view.humanSkillBenefits),
 
-                modules: modules
+                modules: modules,
+
+                teacherData: {
+                    teacherFullName: toFullName(view.teacherFirstName, view.teacherLastName),
+                    teacherFirstName: view.teacherFirstName,
+                    teacherLastName: view.teacherLastName,
+                    teacherBadges: parseCommaSeparatedStringList(view.teacherBadges),
+                    teacherCourseCount: view.teacherCourseCount,
+                    teacherDescription: view.teacherDescription,
+                    teacherRating: view.teacherRating,
+                    teacherSkills: view.teacherSkills,
+                    teacherStudentCount: view.teacherStudentCount,
+                    teacherVideoCount: view.teacherVideoCount,
+                    teacherAvatarFilePath: view.teacherAvatarFilePath
+                        ? getAssetUrl(view.teacherAvatarFilePath)
+                        : null
+                }
             } as CourseDetailsDTO;
         });
 
@@ -549,7 +564,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             studentCount: x.studentCount,
             videoCount: x.videoCount,
             skills: x.skills,
-            badges: parseCommaSeparatedStringList(x.badges)
+            badges: parseCommaSeparatedStringList(x.badges),
+            description: x.description
         }));
 }
 

@@ -21,17 +21,37 @@ SELECT
 	scc.name sub_category_name,
 	
 	-- teacher 
-	tea.id teacher_id,
-	tea.first_name teacher_first_name,
-	tea.last_name teacher_last_name,
+	tuser.id teacher_id,
+	tuser.first_name teacher_first_name,
+	tuser.last_name teacher_last_name,
+	
+	-- teacher info
+	tinfo.skills teacher_skills,
+	tinfo.course_count teacher_course_count,
+	tinfo.student_count teacher_student_count,
+	tinfo.video_count teacher_video_count,
+	tinfo.rating teacher_rating,
+	tinfo.description teacher_description,
+	tinfo.badges teacher_badges,
+	
+	-- teacher avatar 
+	tavatarsf.file_path teacher_avatar_file_path,
+	
+	-- cover
 	sf.file_path cover_file_path
 FROM public.course co
 
 LEFT JOIN public.storage_file sf
 ON sf.id = co.cover_file_id
 
-LEFT JOIN public.user tea
-ON tea.id = co.teacher_id
+LEFT JOIN public.user tuser
+ON tuser.id = co.teacher_id
+
+LEFT JOIN public.storage_file tavatarsf
+ON tavatarsf.id = tuser.avatar_file_id
+
+LEFT JOIN public.teacher_info tinfo
+ON tinfo.user_id = tuser.id
 
 LEFT JOIN public.course_category cc
 ON cc.id = co.category_id

@@ -1,6 +1,6 @@
 import { HumanSkillBenefitDTO } from "./HumanSkillBenefitDTO";
 import { ModuleShortDTO } from "./ModuleShortDTO";
-import { CourseVisibilityType } from "./types/sharedTypes";
+import { CourseVisibilityType, TeacherBadgeNameType } from "./types/sharedTypes";
 
 export class CourseDetailsDTO {
     title: string;
@@ -14,9 +14,20 @@ export class CourseDetailsDTO {
     benchmark: number;
     language: string;
     visibility: CourseVisibilityType;
-    teacherFullName: string;
     humanSkillBenefitsDescription: string;
-
+    teacherData: {
+        teacherFirstName: string;
+        teacherLastName: string;
+        teacherFullName: string;
+        teacherSkills: string;
+        teacherCourseCount: number;
+        teacherStudentCount: number;
+        teacherVideoCount: number;
+        teacherRating: number;
+        teacherDescription: string;
+        teacherBadges: TeacherBadgeNameType[];
+        teacherAvatarFilePath: string | null;
+    };
     technicalRequirements: string[];
     skillBenefits: string[];
     humanSkillBenefits: HumanSkillBenefitDTO[];

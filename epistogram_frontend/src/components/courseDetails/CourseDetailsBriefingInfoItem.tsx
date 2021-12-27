@@ -32,10 +32,7 @@ export const CourseDetailsBriefingInfoItem = (props: {
             {isString(icon) && <img
                 src={icon as any}
                 alt={""}
-                style={{
-                    width: 50,
-                    height: 50
-                }} />}
+                className="square50" />}
         </Flex>
 
         <Flex

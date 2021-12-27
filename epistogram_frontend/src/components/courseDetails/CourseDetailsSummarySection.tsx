@@ -1,14 +1,12 @@
 import { Flex, Grid } from "@chakra-ui/react";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { Typography } from "@mui/material";
-import { EpistoHeader } from "../EpistoHeader";
-import { EpistoButton } from "../universal/EpistoButton";
-import { Radar } from "react-chartjs-2";
-import React from "react";
-import { translatableTexts } from "../../static/translatableTexts";
-import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
-import { CourseImprovementStatsRadar } from "../universal/CourseImprovementStatsRadar";
 import DoneIcon from '@mui/icons-material/Done';
+import { Typography } from "@mui/material";
+import React from "react";
+import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
+import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoHeader } from "../EpistoHeader";
+import { CourseImprovementStatsRadar } from "../universal/CourseImprovementStatsRadar";
+import { EpistoButton } from "../universal/EpistoButton";
 
 export const CourseDetailsSummarySection = (props: {
     courseDetails: CourseDetailsDTO

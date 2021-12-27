@@ -21,6 +21,7 @@ import { translatableTexts } from "../../static/translatableTexts";
 import { mockCourseDetails } from "../../static/mockData";
 import { useStartCourse, useCourseDetails } from "../../services/api/courseApiService";
 import { EpistoHeader } from "../EpistoHeader";
+import { ProfileImage } from "../ProfileImage";
 
 const CourseDetailsPage = () => {
 
@@ -77,7 +78,7 @@ const CourseDetailsPage = () => {
         },
         {
             title: translatableTexts.courseDetails.tabLabels.teacher,
-            component: <CourseDetailsTeacherSection />
+            component: <CourseDetailsTeacherSection courseDetails={courseDetails!} />
         },
         {
             title: translatableTexts.courseDetails.tabLabels.ratings,
@@ -135,10 +136,14 @@ const CourseDetailsPage = () => {
                             title={translatableTexts.courseDetails.briefingInfoItems.category}
                             subTitle={courseDetails?.subCategoryName} />
 
-                        <CourseDetailsBriefingInfoItem
-                            icon={<MockTeacherAvatar />}
-                            title={translatableTexts.courseDetails.briefingInfoItems.teacher}
-                            subTitle={courseDetails?.teacherFullName} />
+                        {courseDetails && <CourseDetailsBriefingInfoItem
+                            icon={<ProfileImage
+                                className="square50"
+                                url={courseDetails!.teacherData.teacherAvatarFilePath}
+                                firstName={courseDetails!.teacherData.teacherFirstName}
+                                lastName={courseDetails!.teacherData.teacherLastName} />}
+                            title={translatableTexts!.courseDetails.briefingInfoItems.teacher}
+                            subTitle={courseDetails!.teacherData.teacherFullName} />}
 
                         <CourseDetailsBriefingInfoItem
                             icon={getAssetUrl("/course_page_icons/about_difficulty.svg")}

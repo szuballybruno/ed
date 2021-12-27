@@ -74,7 +74,8 @@ export class TeacherInfoService {
                 rating: teacherInfoEditDTO.rating,
                 studentCount: teacherInfoEditDTO.studentCount,
                 skills: teacherInfoEditDTO.skills,
-                badges: teacherInfoEditDTO.badges.join(", ")
+                badges: teacherInfoEditDTO.badges.join(", "),
+                description: teacherInfoEditDTO.description
             });
     }
 

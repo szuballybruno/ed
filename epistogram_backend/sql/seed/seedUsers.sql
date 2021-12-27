@@ -38,7 +38,8 @@ INSERT INTO public.teacher_info
     student_count,
     rating,
     badges,
-    user_id
+    user_id,
+    description
 )
 VALUES 
 (
@@ -49,5 +50,6 @@ VALUES
     14,
     4,
     'badge1',
-    1
+    1,
+    'desc'
 )

@@ -19,8 +19,11 @@ export class TeacherInfo {
     @Column()
     studentCount: number;
 
-    @Column()
+    @Column({ type: "double precision" })
     rating: number;
+
+    @Column()
+    description: string;
 
     @Column()
     badges: string;
