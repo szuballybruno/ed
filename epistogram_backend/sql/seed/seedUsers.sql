@@ -23,7 +23,7 @@ VALUES
     'teacherusername', -- username
     'Teacherfirst', -- first_name
     'Teacherlast', -- last_name
-    '', -- password
+    '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     1, -- role_id
     1, -- organization_id
     1 -- job_title_id

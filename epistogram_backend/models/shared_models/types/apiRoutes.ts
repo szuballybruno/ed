@@ -51,7 +51,8 @@ export const apiRoutes = {
     user: {
         getEditUserData: "/users/get-edit-user-data",
         deleteUser: "/users/delete-user",
-        upadateUser: "/users/update-user",
+        saveUser: "/users/save-user",
+        saveUserSimple: "/users/save-user-simple",
         getBriefUserData: "/users/get-brief-user-data",
         getUserListForAdministration: "/users/get-user-administartion-user-list"
     },

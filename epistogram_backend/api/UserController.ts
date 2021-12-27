@@ -1,4 +1,5 @@
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
+import { UserEditSimpleDTO } from "../models/shared_models/UserEditSimpleDTO";
 import { UserService } from "../services/UserService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
@@ -26,6 +27,14 @@ export class UserController {
 
         return await this._userService
             .getEditUserDataAsync(editedUserId);
+    }
+
+    saveUserSimpleAction = async (params: ActionParams) => {
+
+        const dto = withValueOrBadRequest<UserEditSimpleDTO>(params.req.body);
+
+        await this._userService
+            .saveUserSimpleAsync(params.currentUserId, dto);
     }
 
     saveUserAction = async (params: ActionParams) => {

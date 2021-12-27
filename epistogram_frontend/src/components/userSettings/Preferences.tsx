@@ -11,7 +11,7 @@ import { EpistoButton } from '../universal/EpistoButton';
 import { SelectImage } from '../universal/SelectImage';
 import { useRequestChangePassword } from '../../services/api/authenticationApiService';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
-import { useSaveUserData } from '../../services/api/userApiService';
+import { useSaveUserSimple } from '../../services/api/userApiService';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -43,7 +43,7 @@ export const Preferences = () => {
 
     const showErrorDialog = useShowErrorDialog();
 
-    const { saveUserData, saveUserDataState } = useSaveUserData();
+    const { saveUserSimpleAsync, saveUserSimpleState } = useSaveUserSimple();
     const { postAvatarFileAsync, postAvatarFileState } = useUploadAvatarFile();
     const { requestChangePasswordAsync, requestChangePasswordState } = useRequestChangePassword();
 
@@ -66,7 +66,11 @@ export const Preferences = () => {
             if (avatarFile)
                 await postAvatarFileAsync(avatarFile);
 
-            await saveUserData(firstName, lastName, phoneNumber);
+            await saveUserSimpleAsync({
+                firstName,
+                lastName,
+                phoneNumber
+            });
 
             // notification
             showNotification("A változtatások sikeresen mentésre kerültek.");
@@ -125,7 +129,7 @@ export const Preferences = () => {
         <LoadingFrame
             direction="column"
             justify="flex-start"
-            loadingState={[saveUserDataState, postAvatarFileState, requestChangePasswordState]}
+            loadingState={[saveUserSimpleState, postAvatarFileState, requestChangePasswordState]}
             align="center">
 
             <SelectImage

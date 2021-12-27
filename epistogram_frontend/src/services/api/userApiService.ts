@@ -6,6 +6,7 @@ import { httpPostAsync, usePostDataUnsafe } from "../core/httpClient";
 import { CreateInvitedUserDTO } from "../../models/shared_models/CreateInvitedUserDTO";
 import { UserEditDTO } from "../../models/shared_models/UserEditDTO";
 import { BriefUserDataDTO } from "../../models/shared_models/BriefUserDataDTO";
+import { UserEditSimpleDTO } from "../../models/shared_models/UserEditSimpleDTO";
 
 export const useUserListQuery = () => {
 
@@ -19,22 +20,23 @@ export const useUserListQuery = () => {
     };
 }
 
-export const useSaveUserData = () => {
+export const useSaveUserSimple = () => {
 
-    const postDataResult = usePostDataUnsafe<UserDTO, void>(apiRoutes.user.upadateUser);
-
-    const saveUserData = (firstName: string, lastName: string, phoneNumber: string) => {
-
-        return postDataResult.postDataAsync({
-            firstName: firstName,
-            lastName,
-            phoneNumber
-        } as UserDTO);
-    }
+    const postDataResult = usePostDataUnsafe<UserEditSimpleDTO, void>(apiRoutes.user.saveUserSimple);
 
     return {
-        saveUserDataState: postDataResult.state,
-        saveUserData
+        saveUserSimpleState: postDataResult.state,
+        saveUserSimpleAsync: postDataResult.postDataAsync
+    }
+}
+
+export const useSaveUser = () => {
+
+    const queryRes = usePostDataUnsafe<UserEditDTO, void>(apiRoutes.user.saveUser);
+
+    return {
+        saveUserStatus: queryRes.state,
+        saveUserAsync: queryRes.postDataAsync
     }
 }
 
@@ -58,16 +60,6 @@ export const useBriefUserData = (userId: number | null) => {
         briefUserData: queryRes.data,
         briefUserDataStatus: queryRes.state,
         briefUserDataError: queryRes.error
-    }
-}
-
-export const useUpdateUser = () => {
-
-    const queryRes = usePostDataUnsafe<UserEditDTO, void>(apiRoutes.user.upadateUser);
-
-    return {
-        updateUserStatus: queryRes.state,
-        updateUserAsync: queryRes.postDataAsync
     }
 }
 

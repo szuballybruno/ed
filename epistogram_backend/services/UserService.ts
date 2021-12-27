@@ -7,6 +7,7 @@ import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
 import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
+import { UserEditSimpleDTO } from "../models/shared_models/UserEditSimpleDTO";
 import { RegistrationType } from "../models/Types";
 import { getFullName, TypedError } from "../utilities/helpers";
 import { MapperService } from "./MapperService";
@@ -65,6 +66,19 @@ export class UserService {
 
         return this._mapperService
             .mapMany(User, AdminPageUserDTO, users);
+    }
+
+    async saveUserSimpleAsync(userId: number, dto: UserEditSimpleDTO) {
+
+        // save user 
+        await this._ormService
+            .getRepository(User)
+            .save({
+                id: userId,
+                lastName: dto.lastName,
+                firstName: dto.firstName,
+                phoneNumber: dto.phoneNumber
+            });
     }
 
     async saveUserAsync(dto: UserEditDTO) {

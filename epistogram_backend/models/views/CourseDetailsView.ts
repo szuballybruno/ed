@@ -89,6 +89,7 @@ export class CourseDetailsView {
 
     // teacher avatar 
 
+    @ViewColumn()
     teacherAvatarFilePath: string;
 
     // cover 

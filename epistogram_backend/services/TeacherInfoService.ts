@@ -93,7 +93,8 @@ export class TeacherInfoService {
             courseCount: 0,
             rating: 0,
             studentCount: 0,
-            userId
+            userId,
+            description: ""
         } as TeacherInfo;
 
         await this._ormService

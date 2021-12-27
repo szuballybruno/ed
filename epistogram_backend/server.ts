@@ -204,7 +204,8 @@ import './utilities/jsExtensions';
     addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction);
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
     addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true });
-    addEndpoint(apiRoutes.user.upadateUser, userController.saveUserAction, { isPost: true });
+    addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true });
+    addEndpoint(apiRoutes.user.saveUserSimple, userController.saveUserSimpleAction, { isPost: true });
 
     // file 
     addEndpoint(apiRoutes.file.uploadUserAvatar, fileController.uploadAvatarFileAction, { isPost: true });
