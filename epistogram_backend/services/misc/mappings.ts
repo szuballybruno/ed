@@ -573,6 +573,20 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             badges: parseCommaSeparatedStringList(x.badges),
             description: x.description
         }));
+
+    mapperService
+        .addMap(CourseItemStateView, CourseItemDTO, courseItemView => {
+
+            return {
+                id: courseItemView.itemId,
+                subTitle: courseItemView.itemSubtitle,
+                title: courseItemView.itemTitle,
+                orderIndex: courseItemView.itemOrderIndex,
+                state: courseItemView.state,
+                descriptorCode: courseItemView.itemCode,
+                type: courseItemView.itemIsVideo ? "video" : "exam"
+            } as CourseItemDTO;
+        });
 }
 
 const parseCommaSeparatedStringList = (str: string) => {
@@ -683,19 +697,6 @@ export const toResultAnswerDTO = (view: ExamResultView) => {
         isCorrect: view.isAnswerCorrect,
         isGiven: view.isGivenAnswer
     } as ResultAnswerDTO;
-}
-
-export const toCourseItemDTO = (courseItemView: CourseItemStateView) => {
-
-    return {
-        id: courseItemView.itemId,
-        subTitle: courseItemView.itemSubtitle,
-        title: courseItemView.itemTitle,
-        orderIndex: courseItemView.itemOrderIndex,
-        state: courseItemView.state,
-        descriptorCode: courseItemView.itemCode,
-        type: courseItemView.itemIsVideo ? "video" : "exam"
-    } as CourseItemDTO;
 }
 
 export const toOrganizationDTO = (org: Organization) => {

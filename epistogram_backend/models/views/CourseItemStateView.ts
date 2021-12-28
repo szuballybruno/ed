@@ -1,7 +1,5 @@
-import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from "typeorm";
+import { ViewColumn, ViewEntity } from "typeorm";
 import { CourseItemStateType, CourseModeType } from "../shared_models/types/sharedTypes";
-import { Exam } from "../entity/Exam";
-import { Video } from "../entity/Video";
 
 @ViewEntity({
     synchronize: false,
