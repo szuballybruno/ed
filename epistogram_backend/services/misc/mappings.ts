@@ -672,7 +672,10 @@ export const toExamDTO = (exam: Exam) => {
         subTitle: exam.subtitle,
         title: exam.title,
         thumbnailUrl: exam.thumbnailUrl,
-        questions: exam.questions.map(x => toQuestionDTO(x))
+        isFinalExam: exam.isFinalExam,
+        questions: exam
+            .questions
+            .map(x => toQuestionDTO(x))
     } as ExamDTO;
 }
 

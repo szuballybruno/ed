@@ -7,5 +7,6 @@ export type ExamDTO = {
     title: string;
     type: "exam";
     thumbnailUrl: string;
+    isFinalExam: boolean;
     questions: QuestionDTO[];
 }

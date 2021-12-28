@@ -2,6 +2,7 @@ import { Flex } from '@chakra-ui/layout';
 import { RoundedCornerOutlined } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
 import { Bar } from "react-chartjs-2";
+import { useParams } from 'react-router-dom';
 import { useUserStats } from '../../services/api/userStatsApiService';
 import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
 import StatisticsCard from "../statisticsCard/StatisticsCard";
@@ -107,9 +108,11 @@ type StatisticsItemType = {
 
 export const LearningStatistics = () => {
 
-    const { userStats } = useUserStats();
+    const params = useParams<{ userId: string }>();
+    const userId = parseInt(params.userId);
 
-    console.log(userStats);
+    // http
+    const { userStats } = useUserStats(userId);
 
     const statistics = [
         {

@@ -12,6 +12,11 @@ export class UserStatsController {
 
     getUserStatsAction = async (params: ActionParams) => {
 
-        return await this._userStatsService.getUserStatsAsync(params.currentUserId);
+        const userId = params
+            .getQuery<{ userId: number }>()
+            .getValue(x => x.userId, "int");
+
+        return await this._userStatsService
+            .getUserStatsAsync(userId);
     }
 }

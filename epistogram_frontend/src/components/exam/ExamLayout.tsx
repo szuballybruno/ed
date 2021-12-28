@@ -6,7 +6,7 @@ import { isString } from "../../static/frontendHelpers";
 import { EpistoButton } from "../universal/EpistoButton";
 
 export const ExamLayout = (props: {
-    content: ReactNode,
+    children: ReactNode,
     handleNext: () => void,
     nextButtonTitle: string,
     showNextButton: boolean,
@@ -14,9 +14,21 @@ export const ExamLayout = (props: {
     headerCenterText?: string,
     headerLeftItem?: string | ReactNode,
     progressValue?: number,
+    footerButtons?: ({ text: string, action: () => void })[]
 }) => {
 
-    const { exitExamAction, headerCenterText, showNextButton, headerLeftItem, content, progressValue, handleNext, nextButtonTitle } = props;
+    const { exitExamAction, footerButtons, headerCenterText, showNextButton, headerLeftItem, children, progressValue, handleNext, nextButtonTitle } = props;
+
+    const footerButton = (title: string, action: () => void, icon?: any) => <EpistoButton
+        variant={"colored"}
+        onClick={action}
+        style={{
+            height: "40px",
+            marginLeft: "10px"
+        }}>
+        {title}
+        {icon}
+    </EpistoButton>
 
     return <Flex
         className="whall"
@@ -75,7 +87,7 @@ export const ExamLayout = (props: {
             justify="center"
             direction="column">
 
-            {content}
+            {children}
         </Flex>
 
         {/* footer */}
@@ -107,17 +119,12 @@ export const ExamLayout = (props: {
                 </>}
             </Flex>
 
+            {/* other buttons */}
+            {footerButtons && footerButtons
+                .map(x => footerButton(x.text, x.action))}
+
             {/* continue button */}
-            {showNextButton && <EpistoButton
-                variant={"colored"}
-                onClick={handleNext}
-                style={{
-                    width: 200,
-                    height: 46
-                }}>
-                {nextButtonTitle}
-                <ArrowForward />
-            </EpistoButton>}
+            {showNextButton && footerButton(nextButtonTitle, handleNext, <ArrowForward />)}
         </Flex>
     </Flex>
 }

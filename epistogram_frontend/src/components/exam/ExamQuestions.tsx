@@ -75,62 +75,6 @@ export const ExamQuestions = (props: {
         }
     }
 
-    const examContent = <Flex
-        direction={"column"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        w={"80%"}
-        flex={1}>
-
-        <Flex p="20px" align="center">
-            <img
-                style={{
-                    borderRadius: "50%",
-                    padding: "8px",
-                    width: "50px",
-                    height: "50px",
-                    marginRight: "30px"
-                }}
-                alt=""
-                src="https://static.thenounproject.com/png/92068-200.png"
-                className="tinyShadow" />
-
-            <Text
-                as="text"
-                fontSize={"1.3rem"}>
-                {currentQuestion.questionText}
-            </Text>
-        </Flex>
-
-        {/* answers */}
-        <Flex
-            direction={"row"}
-            justifyContent={"center"}
-            pt={10}
-            w={"100%"}
-            mx={200}>
-            <Grid
-                templateColumns={"repeat(2, 1fr)"}
-                gridAutoRows={"minmax(0,1fr)"}
-                direction={"column"}
-                gridGap={10}
-                flex={1}>
-                {currentQuestion
-                    .answers
-                    .map((answer, index) => {
-
-                        const isAnswerSelected = selectedAnswerIds
-                            .some(x => x === answer.answerId);
-
-                        return <QuestionAnswer
-                            onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
-                            answerText={answer.answerText}
-                            isSelected={isAnswerSelected} />
-                    })}
-            </Grid>
-        </Flex>
-    </Flex>
-
     return <LoadingFrame
         className="whall"
         loadingState={saveExamAnswerState}
@@ -155,7 +99,62 @@ export const ExamQuestions = (props: {
             handleNext={handleNextAsync}
             showNextButton={hasSelectedAnswer}
             nextButtonTitle={translatableTexts.exam.nextQuestion}
-            content={examContent}
-            progressValue={progressPercentage} />
+            progressValue={progressPercentage}>
+            <Flex
+                direction={"column"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                w={"80%"}
+                flex={1}>
+
+                <Flex p="20px" align="center">
+                    <img
+                        style={{
+                            borderRadius: "50%",
+                            padding: "8px",
+                            width: "50px",
+                            height: "50px",
+                            marginRight: "30px"
+                        }}
+                        alt=""
+                        src="https://static.thenounproject.com/png/92068-200.png"
+                        className="tinyShadow" />
+
+                    <Text
+                        as="text"
+                        fontSize={"1.3rem"}>
+                        {currentQuestion.questionText}
+                    </Text>
+                </Flex>
+
+                {/* answers */}
+                <Flex
+                    direction={"row"}
+                    justifyContent={"center"}
+                    pt={10}
+                    w={"100%"}
+                    mx={200}>
+                    <Grid
+                        templateColumns={"repeat(2, 1fr)"}
+                        gridAutoRows={"minmax(0,1fr)"}
+                        direction={"column"}
+                        gridGap={10}
+                        flex={1}>
+                        {currentQuestion
+                            .answers
+                            .map((answer, index) => {
+
+                                const isAnswerSelected = selectedAnswerIds
+                                    .some(x => x === answer.answerId);
+
+                                return <QuestionAnswer
+                                    onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
+                                    answerText={answer.answerText}
+                                    isSelected={isAnswerSelected} />
+                            })}
+                    </Grid>
+                </Flex>
+            </Flex>
+        </ExamLayout>
     </LoadingFrame>
 }

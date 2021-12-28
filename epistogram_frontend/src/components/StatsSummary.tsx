@@ -1,16 +1,18 @@
 import { Flex } from "@chakra-ui/react";
 import StatisticsCard from "./statisticsCard/StatisticsCard";
-import React from "react";
+import React, { useContext } from "react";
 import { getAssetUrl, roundNumber } from "../static/frontendHelpers";
 import { FlexFloat } from "./universal/FlexFloat";
 import { Lock } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { translatableTexts } from "../static/translatableTexts";
 import { useUserStats } from "../services/api/userStatsApiService";
+import { CurrentUserContext } from "./system/AuthenticationFrame";
 
 export const StatsSummary = () => {
 
-    const { userStats } = useUserStats();
+    const currentUser = useContext(CurrentUserContext);
+    const { userStats } = useUserStats(currentUser!.id);
 
     return <div
         style={{
