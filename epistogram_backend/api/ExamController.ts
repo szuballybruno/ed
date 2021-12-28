@@ -47,33 +47,21 @@ export class ExamController {
 
     getExamEditDataAction = async (params: ActionParams) => {
 
-        const examId = withValueOrBadRequest<number>(params.req.query.examId, "number");
+        const examId = params
+            .getQuery<{ examId: number }>()
+            .getValue(x => x.examId, "int");
 
-        const exam = await this._ormService
-            .getRepository(Exam)
-            .createQueryBuilder("e")
-            .leftJoinAndSelect("e.questions", "eq")
-            .leftJoinAndSelect("eq.answers", "eqa")
-            .where("e.id = :examId", { examId })
-            .getOneOrFail();
-
-        return {
-            id: exam.id,
-            title: exam.title,
-            courseId: exam.courseId,
-            subTitle: exam.subtitle,
-            questions: exam
-                .questions
-                .map(x => toQuestionDTO(x))
-        } as ExamEditDataDTO;
+        return await this._examService
+            .getExamEditDataAsync(examId);
     }
 
     saveExamAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<ExamEditDataDTO>(params.req.body);
-        const examId = dto.id;
+        const dto = params
+            .getBody<ExamEditDataDTO>();
 
-        this._examService.saveExamAsync(dto, examId);
+        await this._examService
+            .saveExamAsync(dto.data);
     }
 
     createExamAction = async (params: ActionParams) => {

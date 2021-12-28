@@ -422,7 +422,8 @@ export class CourseService {
         const teachers = await this._ormService
             .getRepository(User)
             .createQueryBuilder("u")
-            .where("u.isTeacher = true")
+            .leftJoinAndSelect("u.teacherInfo", "te")
+            .where("te IS NOT NULL")
             .getMany();
 
         return this._mapperService

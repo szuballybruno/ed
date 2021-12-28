@@ -23,6 +23,8 @@ export const addAPIEndpoint = (
 
     const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
 
+        const requestPath = req.path;
+
         const asyncActionWrapper = async () => {
 
             const accessToken = getAuthTokenFromRequest(req, config);
@@ -37,10 +39,12 @@ export const addAPIEndpoint = (
         asyncActionWrapper()
             .then((returnValue: any) => {
 
+                log(`${requestPath}: Succeeded...`);
                 respond(res, 200, returnValue)
             })
             .catch((error: any) => {
 
+                log(`${requestPath}: Failed...`);
                 logError(error);
                 respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
             });
@@ -59,11 +63,11 @@ export const respond = (res: Response, code: number, data?: any) => {
 
     if (data === undefined) {
 
-        log("Responding, code: " + code);
+        log("-- Responding, code: " + code);
         res.sendStatus(code);
     } else {
 
-        log("Responding with data, code: " + code);
+        log("-- Responding with data, code: " + code);
         res.status(code).send(data);
     }
 }

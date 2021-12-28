@@ -15,12 +15,12 @@ export const getAuthMiddleware = (
 
         const currentRoutePath = req.path;
 
-        log(`Authorizing request: ${currentRoutePath}`);
+        log(`${currentRoutePath}: Authorizing request...`);
 
         // do not authenticate on open routes
         if (openRoutes.some(x => x === currentRoutePath)) {
 
-            log(`Route [${currentRoutePath}] is an open route, skipping authentication!`);
+            log(`${currentRoutePath}: Route is open, skipping authentication...`);
             return;
         }
 
@@ -47,7 +47,7 @@ export const getAuthMiddleware = (
                 throw new TypedError("User has not proper rights to access the requested resource.", "forbidden");
         }
 
-        log(`Request [${currentRoutePath}] is permitted. UserId: ${user.id}`);
+        log(`${currentRoutePath}: Request permitted. UserId: ${user.id} Proceeding...`);
     });
 
 export const getUnderMaintanenceMiddleware = (config: GlobalConfiguration) => getAsyncMiddlewareHandler(async (req, res, next) => {

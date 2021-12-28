@@ -1,9 +1,10 @@
-import {Divider, Flex} from "@chakra-ui/react";
+import { Divider, Flex } from "@chakra-ui/react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {Chip, Typography} from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import React from 'react';
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
+import { formatTime } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../universal/EpistoButton";
 
 export const CourseEditItemView = (props: {
@@ -16,22 +17,26 @@ export const CourseEditItemView = (props: {
 }) => {
 
     const { moduleIndex, index, item, editCourseItem, deleteCourseItem } = props;
+    const isVideo = item.type === "video";
 
-    const formatTime = (seconds) =>
-        new Date(seconds * 1000).toLocaleTimeString('en-GB', {
-            timeZone:'Etc/UTC',
-            hour12: false,
-            minute: '2-digit',
-            second: '2-digit'
-        });
+    const chip = (color: any, label: string) => <Chip
+        size={"small"}
+        style={{
+            margin: "0 5px",
+            color: color,
+            borderRadius: 5,
+            fontWeight: "bold"
+        }}
+        label={label}
+        variant={"outlined"} />
 
     return <Flex
         flexDir={"column"}
-        flex={1}
-    >
+        flex={1}>
+
         <Flex
             flex="1"
-            borderLeft={`5px solid var(--${item.type === "exam" ? "intenseOrange" : "deepBlue"})`}
+            borderLeft={`5px solid var(--${isVideo ? "deepBlue" : "intenseOrange"})`}
             pl="10px"
             justify="space-between"
             m="3px">
@@ -40,7 +45,7 @@ export const CourseEditItemView = (props: {
 
                 {/* index */}
                 <Flex alignItems={"center"} h={"100%"}>
-                    <Typography style={{ marginRight: "10px"}}>
+                    <Typography style={{ marginRight: "10px" }}>
                         {index + 1}.
                     </Typography>
                 </Flex>
@@ -77,24 +82,19 @@ export const CourseEditItemView = (props: {
             <Flex>
                 <Flex alignItems={"center"}>
 
+                    {item.isFinalExam && chip("var(--deepBlue)", "Zarovizsga")}
+
+                    {/* video lenght / uploaded video */}
+                    {isVideo && chip(
+                        item.videoLength > 0 ? "var(--deepGreen)" : "var(--deepRed)",
+                        item.videoLength
+                            ? `Videó hossza: ${formatTime(Math.round(item.videoLength))}`
+                            : "Nincs feltöltött videó")}
+
                     {/* question count */}
-                    <Chip size={"small"} style={{
-                        margin: "0 5px",
-                        borderRadius: 5,
-                        color: item.questionCount === 0 ? "#d27f7a" : "#7FB280FF",
-                        fontWeight: "bold"
-                    }}  label={"Kérdések: " + item.questionCount} variant={"outlined"} />
-
-
-                    {item.videoLength !== null && <Chip size={"small"} style={{
-                        margin: "0 5px",
-                        color: (item.videoLength > 300 || !item.videoLength) ? "#d27f7a" : "#7FB280FF",
-                        borderRadius: 5,
-                        fontWeight: "bold"
-                    }}  label={!!item.videoLength ? `Videó hossza: ${formatTime(Math.round(item.videoLength))}` : "Nincs feltöltött videó"} variant={"outlined"} />}
-
-
+                    {chip(item.questionCount > 0 ? "var(--deepGreen)" : "var(--deepRed)", `Kérdések: ${item.questionCount}`)}
                 </Flex>
+
                 <Flex>
                     <EpistoButton
                         onClick={() => editCourseItem(item)}>

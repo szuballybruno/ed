@@ -32,6 +32,7 @@ import { CourseStatDTO } from "../../models/shared_models/CourseStatDTO";
 import { DailyTipDTO } from "../../models/shared_models/DailyTipDTO";
 import { EventDTO } from "../../models/shared_models/EventDTO";
 import { ExamDTO } from "../../models/shared_models/ExamDTO";
+import { ExamEditDataDTO } from "../../models/shared_models/ExamEditDataDTO";
 import { ExamResultQuestionDTO } from "../../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../../models/shared_models/ExamResultsDTO";
 import { JobTitleDTO } from "../../models/shared_models/JobTitleDTO";
@@ -263,7 +264,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             descriptorCode: view.itemCode,
             type: view.videoId ? "video" : "exam",
             questionCount: view.itemQuestionCount,
-            videoLength: view.videoLength
+            videoLength: view.videoLength,
+            isFinalExam: view.itemIsFinalExam
         }));
 
     mapperService
@@ -586,6 +588,21 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 descriptorCode: courseItemView.itemCode,
                 type: courseItemView.itemIsVideo ? "video" : "exam"
             } as CourseItemDTO;
+        });
+
+    mapperService
+        .addMap(Exam, ExamEditDataDTO, exam => {
+
+            return {
+                id: exam.id,
+                title: exam.title,
+                courseId: exam.courseId,
+                subTitle: exam.subtitle,
+                isFinalExam: exam.isFinalExam,
+                questions: exam
+                    .questions
+                    .map(x => toQuestionDTO(x))
+            } as ExamEditDataDTO;
         });
 }
 

@@ -10,4 +10,5 @@ export class CourseAdminItemShortDTO {
     type: CourseItemType;
     questionCount: number;
     videoLength: number;
+    isFinalExam: boolean;
 }

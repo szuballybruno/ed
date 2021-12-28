@@ -40,6 +40,9 @@ export class CourseAdminContentView {
     itemSubtitle: string;
 
     @ViewColumn()
+    itemIsFinalExam: boolean;
+
+    @ViewColumn()
     itemCode: string;
 
     @ViewColumn()

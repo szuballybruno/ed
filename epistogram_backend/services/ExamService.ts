@@ -5,6 +5,7 @@ import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
 import { ExamResultView } from "../models/views/ExamResultView";
+import { MapperService } from "./MapperService";
 import { readItemCode } from "./misc/encodeService";
 import { toExamDTO, toExamResultDTO } from "./misc/mappings";
 import { QuestionAnswerService } from "./QuestionAnswerService";
@@ -20,19 +21,22 @@ export class ExamService {
     private _userSessionActivityService: UserSessionActivityService;
     private _quesitonAnswerService: QuestionAnswerService;
     private _questionsService: QuestionService;
+    private _mapperService: MapperService;
 
     constructor(
         userCourseBridgeService: UserCourseBridgeService,
         ormService: ORMConnectionService,
         userSessionActivityService: UserSessionActivityService,
         quesitonAnswerService: QuestionAnswerService,
-        questionsService: QuestionService) {
+        questionsService: QuestionService,
+        mapperService: MapperService) {
 
         this._userCourseBridgeService = userCourseBridgeService;
         this._ormService = ormService;
         this._userSessionActivityService = userSessionActivityService;
         this._quesitonAnswerService = quesitonAnswerService;
         this._questionsService = questionsService;
+        this._mapperService = mapperService;
     }
 
     getExamDTOAsync = async (examId: number) => {
@@ -53,7 +57,23 @@ export class ExamService {
         return toExamDTO(exam);
     }
 
-    async saveExamAsync(dto: ExamEditDataDTO, examId: number) {
+    async getExamEditDataAsync(examId: number) {
+
+        const exam = await this._ormService
+            .getRepository(Exam)
+            .createQueryBuilder("e")
+            .leftJoinAndSelect("e.questions", "eq")
+            .leftJoinAndSelect("eq.answers", "eqa")
+            .where("e.id = :examId", { examId })
+            .getOneOrFail();
+
+        return this._mapperService
+            .map(Exam, ExamEditDataDTO, exam);
+    }
+
+    async saveExamAsync(dto: ExamEditDataDTO) {
+
+        const examId = dto.id;
 
         await this._ormService
             .getRepository(Exam)
@@ -62,6 +82,7 @@ export class ExamService {
                 title: dto.title,
                 subtitle: dto.subTitle,
                 courseId: dto.courseId,
+                isFinalExam: dto.isFinalExam
             });
 
         await this._questionsService

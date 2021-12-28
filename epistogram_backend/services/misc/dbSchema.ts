@@ -127,6 +127,13 @@ export const dbSchema = {
         }
     ],
 
+    indices: [
+        {
+            tableName: "exam",
+            name: "exam_is_final_index"
+        }
+    ],
+
     viewEntities: [
         VideoCompletedView,
         ExamCompletedView,

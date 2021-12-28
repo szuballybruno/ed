@@ -2,6 +2,7 @@ import { Flex } from "@chakra-ui/layout";
 import { Delete } from "@mui/icons-material";
 import EditIcon from '@mui/icons-material/Edit';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import { Checkbox } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
@@ -15,6 +16,7 @@ import { LoadingFrame } from "../../system/LoadingFrame";
 import { DragAndDropList } from "../../universal/DragAndDropList";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
+import { EpistoLabel } from "../../universal/EpistoLabel";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
@@ -32,6 +34,7 @@ export const EditExamSubpage = () => {
     const [questions, setQuestions] = useState<QuestionDTO[]>([]);
     const [title, setTitle] = useState("");
     const [subtitle, setSubtitle] = useState("");
+    const [isFinalExam, setIsFinalExam] = useState(false);
 
     useEffect(() => {
 
@@ -41,6 +44,7 @@ export const EditExamSubpage = () => {
         setTitle(examEditData.title);
         setSubtitle(examEditData.subTitle);
         setQuestions(examEditData.questions.orderBy(x => x.orderIndex + ""));
+        setIsFinalExam(examEditData.isFinalExam);
     }, [examEditData]);
 
     const handleSaveAsync = async () => {
@@ -54,7 +58,8 @@ export const EditExamSubpage = () => {
             title,
             subTitle: subtitle,
             id: examEditData?.id!,
-            questions: questions
+            questions: questions,
+            isFinalExam: isFinalExam
         } as ExamEditDataDTO;
 
         try {
@@ -117,6 +122,7 @@ export const EditExamSubpage = () => {
                 applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
                 applicationRoutes.administrationRoute.coursesRoute.editExamRoute,
             ]}
+            px="10px"
             onSave={handleSaveAsync}>
 
             <EpistoEntry
@@ -128,6 +134,15 @@ export const EditExamSubpage = () => {
                 label="Alcím"
                 value={subtitle}
                 setValue={setSubtitle} />
+
+            <EpistoLabel text="Zarovizsga?">
+                <Checkbox
+                    checked={isFinalExam}
+                    style={{
+                        alignSelf: "flex-start"
+                    }}
+                    onChange={(_, value) => setIsFinalExam(value)} />
+            </EpistoLabel>
 
             <EpistoButton
                 variant="outlined"

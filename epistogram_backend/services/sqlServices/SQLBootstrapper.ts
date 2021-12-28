@@ -3,16 +3,22 @@ import { readFileSync } from "fs";
 import { replaceAll } from "../../utilities/helpers";
 import { GlobalConfiguration } from "../misc/GlobalConfiguration";
 import { log, logObject } from "../misc/logger";
-import { ExecSQLFunctionType, SQLConnectionService } from "./SQLConnectionService";
+import { SQLConnectionService } from "./SQLConnectionService";
 
 export type SchemaDefinitionType = {
     entities: Function[];
     viewScripts: string[];
     functionScripts: string[];
     constraints: SQLConstraintType[];
+    indices: SQLIndexType[];
 }
 
 export type SQLConstraintType = {
+    name: string;
+    tableName: string;
+}
+
+export type SQLIndexType = {
     name: string;
     tableName: string;
 }
@@ -40,6 +46,9 @@ export class SQLBootstrapperService {
 
         log("Recreating constraints...");
         await this.recreateConstraintsAsync(this._dbSchema.constraints);
+
+        log("Recreating indices...");
+        await this.recreateIndicesAsync(this._dbSchema.indices);
     }
 
     recalcSequencesAsync = async () => {
@@ -117,6 +126,27 @@ export class SQLBootstrapperService {
 
             log(`-- Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
+        }
+    }
+
+    private recreateIndicesAsync = async (indices: SQLIndexType[]) => {
+
+        // drop all indices
+        const drops = indices
+            .map(index => `DROP INDEX IF EXISTS ${index.name};`);
+
+        await this._sqlConnectionService
+            .executeSQLAsync(drops.join("\n"));
+
+        // create indices 
+        for (let index = 0; index < indices.length; index++) {
+
+            const sqlIndex = indices[index];
+            const script = readFileSync(`./sql/indices/${sqlIndex.name}.sql`, 'utf8');
+
+            log(`-- Creating index: [${sqlIndex.tableName} <- ${sqlIndex.name}]...`);
+            await this._sqlConnectionService
+                .executeSQLAsync(script);
         }
     }
 

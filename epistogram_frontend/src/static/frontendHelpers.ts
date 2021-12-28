@@ -30,6 +30,17 @@ export const formatTimespan = (seconds: number) => {
     return formattedSpentTime;
 }
 
+export const formatTime = (seconds: number) => {
+
+    return new Date(seconds * 1000)
+        .toLocaleTimeString('en-GB', {
+            timeZone: 'Etc/UTC',
+            hour12: false,
+            minute: '2-digit',
+            second: '2-digit'
+        });
+}
+
 export const dateTimeToString = (date: Date) => {
 
     if (!date)

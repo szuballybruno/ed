@@ -331,8 +331,7 @@ export const AdminCourseContentSubpage = () => {
                 applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
             ]}
             onSave={handleSaveCourseAsync}
-            direction="column"
-        >
+            direction="column">
 
             <EpistoDialog logic={deleteWarningDialogLogic} />
 
@@ -451,8 +450,6 @@ export const AdminCourseContentSubpage = () => {
                                                 .items
                                                 .map((item, itemIndex) => {
 
-                                                    // const index = parseInt(`${moduleIndex + 1}${itemIndex}`);
-
                                                     return <DragItem
                                                         itemId={item.descriptorCode}
                                                         index={itemIndex}>
@@ -463,10 +460,8 @@ export const AdminCourseContentSubpage = () => {
                                                             item={item}
                                                             deleteCourseItem={handleDeleteCourseItemAsync}
                                                             editCourseItem={handleEditCourseItem}
-                                                            isShowDivider={itemIndex + 1 < module.items.length}
-                                                        />
+                                                            isShowDivider={itemIndex + 1 < module.items.length} />
                                                     </DragItem>
-
                                                 })}
                                         </DropZone>
                                     </CollapseItem>
