@@ -6,6 +6,7 @@
     "build": "tsc",
     "start": "react-scripts start",
     "nodemon": "npx nodemon server.ts",
+    "tsdev": "tsnd --respawn server.ts",
     "nodestart": "npx node server.ts",
     "migrate": "typeorm migrations:generate -n mig_1",
     "syncDTOsToFrontend": "xcopy /s ..\\epistogram_backend\\models\\shared_models ..\\epistogram_frontend\\src\\models\\shared_models /Y /D",
@@ -28,7 +29,6 @@
     "express": "~4.17.1",
     "express-fileupload": "^1.2.1",
     "get-video-duration": "^4.0.0",
-    "handlebars": "^4.7.7",
     "password-generator": "^2.3.2",
     "pg": "^8.7.1",
     "react-scripts": "^4.0.3",
@@ -46,6 +46,7 @@
     "nodemon": "^2.0.12",
     "ts-loader": "^8.0.17",
     "ts-node": "^10.2.1",
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.2.2",
     "webpack": "^5.24.2"
   }

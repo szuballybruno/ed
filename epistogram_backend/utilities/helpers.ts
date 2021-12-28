@@ -224,6 +224,24 @@ export const getCookie = (req: Request, key: string) => getCookies(req).filter(x
 
 export const getAuthTokenFromRequest = (req: Request, config: GlobalConfiguration) => getCookie(req, config.misc.accessTokenCookieName)?.value;
 
+/**
+ * Make all properties in T optional
+ */
+export declare type OptionalEntity<TObject> = {
+    [TProperty in keyof TObject]?: TObject[TProperty] | (() => string);
+};
+
+/**
+ * Make all properties in T optional. Deep version.
+ */
+export declare type DeepOptionalEntity<TObject> = {
+    [TProperty in keyof TObject]?: (TObject[TProperty] extends Array<infer U>
+        ? Array<DeepOptionalEntity<U>>
+        : TObject[TProperty] extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepOptionalEntity<U>>
+        : DeepOptionalEntity<TObject[TProperty]>) | (() => string);
+};
+
 export class TypedError extends Error {
 
     type: ErrorType;

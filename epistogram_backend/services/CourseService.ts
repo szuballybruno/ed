@@ -120,10 +120,10 @@ export class CourseService {
     getCourseProgressDataAsync = async (userId: number) => {
 
         const courses = await this._ormService
-            .getRepository(CourseLearningStatsView)
+            .getRepository2(CourseLearningStatsView)
             .createQueryBuilder("clsv")
             .where("clsv.userId = :userId", { userId })
-            .getMany();
+            .getManyAsync();
 
         // in progress courses 
         const inProgressCourses = courses

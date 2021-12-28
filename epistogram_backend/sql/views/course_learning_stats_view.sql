@@ -60,12 +60,15 @@ SELECT
 		) sq
 	) answered_video_question_count,
 	(
-		SELECT AVG(elsrv.success_rate)::int
+		SELECT COALESCE(AVG(elsrv.success_rate), 0)::int
 		FROM public.exam_latest_success_rate_view elsrv
 		WHERE elsrv.user_id = cv.user_id AND elsrv.course_id = cv.id 
 	) exam_success_rate_average,
 	(
-		SELECT (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int
+		SELECT CASE WHEN cqsv.total_answer_count > 0
+			THEN (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int
+			ELSE 0
+		END
 		FROM public.course_questions_success_view cqsv
 		WHERE cqsv.course_id = cv.id AND cqsv.user_id = cv.user_id 
 	) question_success_rate,
