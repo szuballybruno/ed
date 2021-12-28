@@ -75,6 +75,36 @@ export class ExamService {
 
         const examId = dto.id;
 
+        const examBeforeSave = await this._ormService
+            .getRepository(Exam)
+            .createQueryBuilder("e")
+            .leftJoinAndSelect("e.module", "mo")
+            .where("e.id = :examId", { examId })
+            .getOneOrFail();
+
+        // if this exam was not a final exam previously, 
+        // but now it is, set every other exam in the course as non final exam
+        if (dto.isFinalExam && !examBeforeSave.isFinalExam) {
+
+            // get all exams in course 
+            const allExamsInCourse = await this._ormService
+                .getRepository(Exam)
+                .createQueryBuilder("e")
+                .leftJoinAndSelect("e.module", "mo")
+                .leftJoinAndSelect("mo.course", "co")
+                .where("co.id = :courseId", { courseId: examBeforeSave.module.courseId })
+                .getMany();
+
+            // set all exams to non final 
+            await this._ormService
+                .getRepository(Exam)
+                .save(allExamsInCourse
+                    .map(x => ({
+                        id: x.id,
+                        isFinalExam: false
+                    } as Exam)));
+        }
+
         await this._ormService
             .getRepository(Exam)
             .save({
