@@ -2,28 +2,41 @@ import { Box, Flex } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { useLogInUser } from "../../services/api/authenticationApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
+import { getAssetUrl, useIsScreenWiderThan } from "../../static/frontendHelpers";
+import { useEpistoDialogLogic } from "../EpistoDialog";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { EpistoButton } from "../universal/EpistoButton";
-import classes from './loginScreen.module.scss';
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { useLogInUser } from "../../services/api/authenticationApiService";
 import { EpistoEntry } from "../universal/EpistoEntry";
+import { LoginPasswordResetDialog } from "./LoginPasswordResetDialog";
 
-const LoginScreen = (): JSX.Element => {
+const LoginScreen = () => {
 
-    console.warn("[LoginScreen] Started...")
-    const { loginUserAsync, loginUserError } = useLogInUser();
-    const [errorMessage, setErrorMessage] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    // util
     const { navigate } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
     const refetchUser = useContext(RefetchUserAsyncContext);
     const user = useContext(CurrentUserContext);
 
+    // state
+    const [errorMessage, setErrorMessage] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const passwordResetDialogLogic = useEpistoDialogLogic({
+        defaultCloseButtonType: "top",
+        title: "Jelszo visszaallitasa"
+    });
+
+    const isDesktopView = useIsScreenWiderThan(1200);
+
+    // http 
+    const { loginUserAsync, loginUserError } = useLogInUser();
+
+    // func
     const handleLoginUserAsync = async () => {
 
         await loginUserAsync(email, password);
@@ -74,41 +87,53 @@ const LoginScreen = (): JSX.Element => {
     return (
         <Flex h={"100vh"} justifyContent={"center"} alignItems={"flex-start"}>
 
+            {/* pw reset dialog */}
+            <LoginPasswordResetDialog
+                passwordResetDialogLogic={passwordResetDialogLogic} />
+
+            {/* side image pane */}
             <Flex
                 direction={"column"}
                 w={"60%"}
                 h={"100vh"}
-                hidden={window.innerWidth < 1000 && true}
+                display={isDesktopView ? undefined : "none"}
                 backgroundSize={"100%"}
                 backgroundRepeat={"space"}
                 alignItems={"center"}
                 justifyContent={"center"}
                 position={"relative"}>
+
+                {/* bg image */}
                 <img
                     src={getAssetUrl("/loginScreen/loginbackground.png")}
                     style={{
-                        width: "100%",
-                        height: "100%",
                         position: "absolute",
-                        objectFit: "cover"
+                        objectFit: "cover",
+                        filter: "contrast(0.7)"
                     }}
-                    alt={""}
-                />
-                <img style={{
-                    zIndex: 1,
-                    width: 200
-                }} src={getAssetUrl("/loginScreen/logofeher.svg")} alt={""} />
-                <Typography zIndex={1} color={"white"} fontSize={"3.5rem"}>Rethink knowledge</Typography>
+                    className="whall"
+                    alt={""} />
 
-                <Flex bg={"#AAAAAA40"} position={"absolute"} top={0} w={"100%"} zIndex={0} h={"100%"}></Flex>
+                {/* logo overlay */}
+                <img
+                    style={{
+                        zIndex: 1,
+                        width: 200
+                    }}
+                    src={getAssetUrl("/loginScreen/logofeher.svg")}
+                    alt={""} />
 
+                {/* motto */}
+                <Typography zIndex={1} color={"white"} fontSize={"3.5rem"}>
+                    Rethink knowledge
+                </Typography>
             </Flex>
 
+            {/* content pane */}
             <Flex
                 direction={"column"}
                 minH={"100%"}
                 w={"40%"}
-                minW={window.innerWidth > 600 ? 500 : "90%"}
                 maxW={"90%"}
                 justifyContent={"center"}
                 alignItems={"center"}
@@ -157,10 +182,22 @@ const LoginScreen = (): JSX.Element => {
                             setValue={setPassword}
                             height="50px" />
 
-                        <p className={classes.forgotPassword}>
-                            Elfelejtettem a jelszavam
-                        </p>
+                        {/* forgot password */}
+                        <EpistoButton
+                            onClick={() => passwordResetDialogLogic.openDialog()}>
 
+                            <Typography
+                                className="fontSmall fontGrey"
+                                style={{
+                                    textTransform: "none",
+                                    marginTop: "5px"
+                                }}>
+
+                                Elfelejtettem a jelszavam
+                            </Typography>
+                        </EpistoButton>
+
+                        {/* error msg */}
                         <Typography style={{ color: "var(--mildRed)" }}>
                             {errorMessage}
                         </Typography>

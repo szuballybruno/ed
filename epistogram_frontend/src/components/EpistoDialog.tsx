@@ -4,6 +4,7 @@ import React, { ReactNode, useState } from "react";
 import { ButtonType, DialogOptions } from "../models/types";
 import { EpistoButton } from "./universal/EpistoButton";
 import { Close } from "@mui/icons-material";
+import { EpistoHeader } from "./EpistoHeader";
 
 export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
 
@@ -92,9 +93,9 @@ export const EpistoDialog = (props: {
             height={fullScreenY ? "90vh" : undefined}
             position="relative">
 
-            {title && <DialogTitle id="alert-dialog-title">
-                {title}
-            </DialogTitle>}
+            {title && <EpistoHeader
+                margin="15px"
+                text={title} />}
 
             {logic.dialogOptions?.defaultCloseButtonType === "top" && <Close
                 onClick={closeDialog}
@@ -108,10 +109,14 @@ export const EpistoDialog = (props: {
                 Bezaras
             </Close>}
 
-            <DialogContent style={{ padding: "10px 0px 10px 0px" }}>
+            <Flex
+                id="dialogContentFlex"
+                style={{
+                    padding: "10px 0px 10px 0px"
+                }}>
                 {description && description}
                 {children}
-            </DialogContent>
+            </Flex>
         </Flex>
 
         {/* buttons */}

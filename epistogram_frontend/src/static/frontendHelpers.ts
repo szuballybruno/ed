@@ -315,11 +315,18 @@ export const getQueryParam = (name: string) => {
     return params[name] as string;
 };
 
-
 export const useIsDesktopView = () => {
 
     const [isDesktopView] = useMediaQuery("(min-width: 980px)")
     return isDesktopView;
+}
+
+export const useIsScreenWiderThan = (minimumPixels: number) => {
+
+    const queryRes = useMediaQuery(`(min-width: ${minimumPixels}px)`);
+    const isTrue = queryRes[0];
+
+    return isTrue;
 }
 
 export const useReactQuery = <T>(

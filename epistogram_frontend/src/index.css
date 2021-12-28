@@ -78,6 +78,10 @@
   color: #ffffff !important;
 }
 
+.fontGrey {
+  color: var(--intenseGray) !important;
+}
+
 /* sqares  */
 
 .square15 {

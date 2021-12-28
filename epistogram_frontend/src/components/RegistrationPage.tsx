@@ -1,7 +1,7 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
 import { Checkbox, TextField, Typography } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { getAssetUrl, getQueryParam } from "../static/frontendHelpers";
 import { useNavigation } from "../services/core/navigatior";
@@ -27,6 +27,7 @@ export const RegistrationPage = () => {
     const [password, setPassword] = useState("");
     const [passwordCompare, setPasswordCompare] = useState("");
     const [passwordError, setPasswordError] = useState<string | null>(null);
+    const [passwordCompareError, setPasswordCompareError] = useState<string | null>(null);
 
     const showErrorDialog = useShowErrorDialog("Hiba!");
     const { navigate } = useNavigation();
@@ -36,6 +37,13 @@ export const RegistrationPage = () => {
     const refetchUser = useContext(RefetchUserAsyncContext);
 
     const handleRegistration = async () => {
+
+        if (password != passwordCompare) {
+
+            setPasswordError("A jelszavak nem egyeznek!");
+            setPasswordCompareError("A jelszavak nem egyeznek!");
+            return;
+        }
 
         try {
 
@@ -57,21 +65,29 @@ export const RegistrationPage = () => {
         }
     }
 
-    const validatePassowrd = () => {
+    useEffect(() => {
 
-        if (password !== passwordCompare) {
-
-            setPasswordError("A jelszavak nem egyeznek!");
-        }
-        else if (password.length < 3) {
-
-            setPasswordError("A jelszó túl rövid!");
-        }
-        else {
+        // check if there's even a password typed in
+        if (password === "") {
 
             setPasswordError(null);
+            return;
         }
-    }
+
+        // check length 
+        if (password.length < 3) {
+
+            setPasswordError("A jelszó túl rövid!");
+            return;
+        }
+
+        setPasswordError(null);
+    }, [password]);
+
+    useEffect(() => {
+
+        setPasswordCompareError(null);
+    }, [passwordCompare, password]);
 
     return <Flex height="100vh" direction="column" align="center" justify="center" position="relative">
 
@@ -137,8 +153,9 @@ export const RegistrationPage = () => {
                     value={password}
                     error={!!passwordError}
                     helperText={passwordError}
-                    onBlur={validatePassowrd}
-                    onChange={x => setPassword(x.currentTarget.value)}
+                    onChange={x => {
+                        setPassword(x.currentTarget.value);
+                    }}
                     style={{ margin: "10px" }}></TextField>
 
                 <TextField
@@ -146,10 +163,11 @@ export const RegistrationPage = () => {
                     type="password"
                     label="Jelszó mégegyszer"
                     value={passwordCompare}
-                    error={!!passwordError}
-                    helperText={passwordError}
-                    onBlur={validatePassowrd}
-                    onChange={x => setPasswordCompare(x.currentTarget.value)}
+                    error={!!passwordCompareError}
+                    helperText={passwordCompareError}
+                    onChange={x => {
+                        setPasswordCompare(x.currentTarget.value);
+                    }}
                     style={{ margin: "10px" }}>
 
                 </TextField>
