@@ -5,6 +5,7 @@ import { CourseVisibilityType, TeacherBadgeNameType } from "./types/sharedTypes"
 export class CourseDetailsDTO {
     title: string;
     description: string;
+    modificationDate: string;
     thumbnailURL: string;
     categoryName: string;
     subCategoryName: string;
@@ -31,6 +32,11 @@ export class CourseDetailsDTO {
     technicalRequirements: string[];
     skillBenefits: string[];
     humanSkillBenefits: HumanSkillBenefitDTO[];
+
+    totalVideoCount: number;
+    totalVideoSumLengthSeconds: number;
+    totalModuleCount: number;
+    totalVideoQuestionCount: number;
 
     modules: ModuleShortDTO[];
 }

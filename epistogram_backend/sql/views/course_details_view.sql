@@ -11,6 +11,7 @@ SELECT
 	co.visibility visibility,
 	co.human_skill_benefits human_skill_benefits,
 	co.human_skill_benefits_description human_skill_benefits_description,
+	co.modification_date modification_date,
 	
 	-- cat 
 	cc.id category_id,
@@ -38,7 +39,38 @@ SELECT
 	tavatarsf.file_path teacher_avatar_file_path,
 	
 	-- cover
-	sf.file_path cover_file_path
+	sf.file_path cover_file_path,
+	
+	-- calculated
+	(
+		SELECT COALESCE(COUNT(v.id), 0)::int
+		FROM public.video v 
+		LEFT JOIN public.course_module cm
+		ON cm.course_id = co.id AND cm.id = v.module_id
+		WHERE cm.course_id = co.id
+	) total_video_count,
+	(
+		SELECT COALESCE(SUM(v.length_seconds), 0)::int
+		FROM public.video v 
+		LEFT JOIN public.course_module cm
+		ON cm.course_id = co.id AND cm.id = v.module_id
+		WHERE cm.course_id = co.id
+	) total_video_sum_length_seconds,
+	(
+		SELECT COALESCE(COUNT(cm.id), 0)::int
+		FROM public.course_module cm
+		WHERE cm.course_id = co.id
+	) total_module_count,
+	(
+		SELECT COALESCE(COUNT(q.id), 0)::int
+		FROM public.video v 
+		LEFT JOIN public.course_module cm
+		ON cm.course_id = co.id AND cm.id = v.module_id
+		LEFT JOIN public.question q
+		ON q.video_id = v.id
+		WHERE cm.course_id = co.id
+	) total_video_question_count
+	
 FROM public.course co
 
 LEFT JOIN public.storage_file sf

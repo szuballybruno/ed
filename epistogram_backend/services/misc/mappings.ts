@@ -292,6 +292,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             return {
                 title: view.title,
+                modificationDate: view.modificationDate.toString(),
                 description: view.description,
                 categoryName: view.categoryName,
                 subCategoryName: view.subCategoryName,
@@ -324,7 +325,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     teacherAvatarFilePath: view.teacherAvatarFilePath
                         ? getAssetUrl(view.teacherAvatarFilePath)
                         : null
-                }
+                },
+
+                totalModuleCount: view.totalModuleCount,
+                totalVideoCount: view.totalVideoCount,
+                totalVideoQuestionCount: view.totalVideoQuestionCount,
+                totalVideoSumLengthSeconds: view.totalVideoSumLengthSeconds
             } as CourseDetailsDTO;
         });
 

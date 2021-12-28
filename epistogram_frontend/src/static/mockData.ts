@@ -109,37 +109,6 @@ export const mockCourseDetails = {
         learningExperience: "4.5/5.0 pont"
     },
 
-    shortCourseDetails: [
-        {
-            icon: getAssetUrl("/course_page_icons/right_panel_course_lenght.svg"),
-            detailName: "Kurzus hossza",
-            detailValue: "4h 12m"
-        }, {
-            icon: getAssetUrl("/course_page_icons/right_panel_sections.svg"),
-            detailName: "Témakörök száma",
-            detailValue: "12"
-        }, {
-            icon: getAssetUrl("/course_page_icons/right_panel_videos.svg"),
-            detailName: "Videók száma",
-            detailValue: "119"
-        }, {
-            icon: getAssetUrl("/course_page_icons/right_panel_questions.svg"),
-            detailName: "Tudást felmérő kérdések",
-            detailValue: "187"
-        }, {
-            icon: getAssetUrl("/course_page_icons/right_panel_language.svg"),
-            detailName: "Nyelv",
-            detailValue: "magyar"
-        }, {
-            icon: getAssetUrl("/course_page_icons/right_panel_enrolled.svg"),
-            detailName: "Hányan végezték el eddig",
-            detailValue: "4139"
-        }, {
-            icon: getAssetUrl("/course_page_icons/right_panel_updated.svg"),
-            detailName: "Frissítve",
-            detailValue: "2021. 11. 17."
-        }
-    ],
     recommendedCourses: [{
         title: "Kurzus 1",
         subTitle: "Kurzus 2"

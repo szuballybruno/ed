@@ -21,6 +21,15 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     return results;
 }
 
+export const formatTimespan = (seconds: number) => {
+
+    const spentHours = roundNumber(seconds / 60 / 60);
+    const spentMinutes = roundNumber((seconds - (spentHours * 60 * 60)) / 60);
+    const formattedSpentTime = `${spentHours > 0 ? spentHours + "h " : ""}${spentMinutes}m`;
+
+    return formattedSpentTime;
+}
+
 export const dateTimeToString = (date: Date) => {
 
     if (!date)

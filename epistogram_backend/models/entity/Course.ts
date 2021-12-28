@@ -1,5 +1,5 @@
 import Module from "module";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CourseVisibilityType } from "../shared_models/types/sharedTypes";
 import { CourseStateView } from "../views/CourseStateView";
 import { CourseCategory } from "./CourseCategory";
@@ -17,6 +17,9 @@ export class Course {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @UpdateDateColumn({ default: () => "now()", type: "timestamptz" })
+    modificationDate: Date;
 
     @Column()
     title: string;

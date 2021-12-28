@@ -2,7 +2,7 @@ import { Box, Container, Flex } from "@chakra-ui/react";
 import { Tab, Tabs, Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { useParams } from "react-router-dom";
-import { getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
+import { formatTimespan, getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
 import { useNavigation } from "../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
 import { ContentWrapper, MainWrapper } from "../system/MainPanels";
@@ -86,20 +86,45 @@ const CourseDetailsPage = () => {
         }
     ];
 
-    const MockTeacherAvatar = () =>
-        <Flex
-            w={50}
-            h={50}
-            className={"circle"}
-            border="2px solid var(--epistoTeal)"
-            bg="var(--deepBlue)"
-            color="white"
-            alignItems={"center"}
-            justifyContent={"center"}>
-            <Typography>
-                {mockCourseDetails.teacherNameShort}
-            </Typography>
-        </Flex>
+    const sidebarInfos = courseDetails
+        ? [
+            {
+                icon: getAssetUrl("/course_page_icons/right_panel_course_lenght.svg"),
+                name: "Kurzus hossza",
+                value: formatTimespan(courseDetails!.totalVideoSumLengthSeconds)
+            },
+            {
+                icon: getAssetUrl("/course_page_icons/right_panel_sections.svg"),
+                name: "Témakörök száma",
+                value: courseDetails!.totalModuleCount
+            },
+            {
+                icon: getAssetUrl("/course_page_icons/right_panel_videos.svg"),
+                name: "Videók száma",
+                value: courseDetails!.totalVideoCount
+            },
+            {
+                icon: getAssetUrl("/course_page_icons/right_panel_questions.svg"),
+                name: "Tudást felmérő kérdések",
+                value: courseDetails!.totalVideoQuestionCount
+            },
+            {
+                icon: getAssetUrl("/course_page_icons/right_panel_language.svg"),
+                name: "Nyelv",
+                value: courseDetails!.language
+            },
+            {
+                icon: getAssetUrl("/course_page_icons/right_panel_enrolled.svg"),
+                name: "Hányan végezték el eddig",
+                value: "4139"
+            },
+            {
+                icon: getAssetUrl("/course_page_icons/right_panel_updated.svg"),
+                name: "Frissítve",
+                value: new Date(courseDetails!.modificationDate).toLocaleDateString()
+            }
+        ]
+        : [];
 
     return <MainWrapper>
 
@@ -121,7 +146,7 @@ const CourseDetailsPage = () => {
             <Flex>
 
                 {/* left pane */}
-                <Flex flex={"1 1 0"} direction={"column"} mr={30}>
+                <Flex flex="1" direction={"column"} mr={30}>
 
                     {/* short description */}
                     <Container pr="20px">
@@ -129,7 +154,7 @@ const CourseDetailsPage = () => {
                     </Container>
 
                     {/* briefing info items */}
-                    <Flex mt="20px" justify="space-evenly">
+                    <Flex mt="20px" flexWrap="wrap" justify="space-evenly">
 
                         <CourseDetailsBriefingInfoItem
                             icon={getAssetUrl("/course_page_icons/about_category.svg")}
@@ -157,7 +182,7 @@ const CourseDetailsPage = () => {
                     </Flex>
 
                     {/* tabs */}
-                    <Box w={"100%"} mt={30} mb={50}>
+                    <Box width={"100%"} mt={30} mb={50}>
 
                         {/* tab button headers */}
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -185,7 +210,7 @@ const CourseDetailsPage = () => {
                 </Flex>
 
                 {/* Right pane */}
-                <Flex direction={"column"} w={400}>
+                <Flex direction={"column"} minWidth="400px" flexBasis="400px">
                     <Flex
                         direction={"column"}
                         alignItems={"center"}
@@ -196,7 +221,7 @@ const CourseDetailsPage = () => {
                         borderWidth={1}
                         borderRadius={10}
                         shadow={"#00000024 0px 0px 5px 0px"}>
-                        <Flex w={"100%"} height={230} justifyContent={"center"} p={10}>
+                        <Flex width={"100%"} height={230} justifyContent={"center"} p={10}>
                             <img
                                 src={courseDetails?.thumbnailURL}
                                 style={{
@@ -206,24 +231,43 @@ const CourseDetailsPage = () => {
                                 alt={""} />
                         </Flex>
 
-                        {/* Course details list */}
+                        {/* sidebar infos list */}
+                        {sidebarInfos
+                            .map(sidebarInfo => (
+                                <FlexListItem
+                                    width={"100%"}
+                                    px={15}
+                                    h={40}
+                                    thumbnailContent={(
+                                        <img
+                                            src={sidebarInfo.icon}
+                                            style={{
+                                                borderRadius: 5,
+                                                height: 22,
+                                                objectFit: "cover"
+                                            }}
+                                            alt={""} />
+                                    )}
+                                    midContent={(
+                                        <Flex flex={1} p={5}>
+                                            <Typography>
+                                                {sidebarInfo.name}
+                                            </Typography>
+                                        </Flex>
+                                    )}
+                                    endContent={(
+                                        <Flex
+                                            direction={"row"}
+                                            mx={4}
+                                            justifyContent={"space-between"}
+                                            alignItems={"center"}>
 
-                        {mockCourseDetails.shortCourseDetails.map(course => <FlexListItem
-                            w={"100%"}
-                            px={15}
-                            h={40}
-                            thumbnailContent={<img src={course.icon} style={{
-                                borderRadius: 5,
-                                height: 22,
-                                objectFit: "cover"
-                            }} alt={""} />}
-                            midContent={<Flex flex={1} p={5}>
-                                <Typography>{course.detailName}</Typography>
-                            </Flex>}
-                            endContent={<Flex direction={"row"} mx={4} justifyContent={"space-between"} alignItems={"center"}>
-                                <Typography>{course.detailValue}</Typography>
-                            </Flex>}
-                        />)}
+                                            <Typography>
+                                                {sidebarInfo.value}
+                                            </Typography>
+                                        </Flex>
+                                    )} />
+                            ))}
 
                         {/* start coures */}
                         <EpistoButton
@@ -246,7 +290,7 @@ const CourseDetailsPage = () => {
                     </Flex>
 
                     {/* Recommended courses section */}
-                    <Flex direction={"column"} w={400}>
+                    <Flex direction={"column"}>
                         <Flex
                             direction={"column"}
                             alignItems={"center"}
@@ -257,13 +301,13 @@ const CourseDetailsPage = () => {
                             borderWidth={1}
                             borderRadius={10}
                             shadow={"#00000024 0px 0px 5px 0px"}>
-                            <Flex w={"100%"} height={60} justifyContent={"center"} alignItems={"center"} p={10}>
+                            <Flex width={"100%"} height={60} justifyContent={"center"} alignItems={"center"} p={10}>
                                 <Typography>{translatableTexts.courseDetails.recommendedCoursesTitle}</Typography>
                             </Flex>
 
                             {mockCourseDetails.recommendedCourses.map(course => [
                                 <FlexListItem
-                                    w={"100%"}
+                                    width={"100%"}
                                     midContent={
                                         <FlexListTitleSubtitle title={course.title} subTitle={course.subTitle} />
                                     } />
@@ -290,7 +334,7 @@ const CourseDetailsPage = () => {
                 position={"absolute"}
                 top={0}
                 left={0}
-                w={"70%"}
+                width={"70%"}
                 h={300}
                 bg={"#eff9ff"}
                 zIndex={-1}

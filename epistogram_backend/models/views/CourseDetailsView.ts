@@ -11,6 +11,9 @@ export class CourseDetailsView {
     courseId: number;
 
     @ViewColumn()
+    modificationDate: Date;
+
+    @ViewColumn()
     title: string;
 
     @ViewColumn()
@@ -96,4 +99,18 @@ export class CourseDetailsView {
 
     @ViewColumn()
     coverFilePath: string;
+
+    // calculated
+
+    @ViewColumn()
+    totalVideoCount: number;
+
+    @ViewColumn()
+    totalVideoSumLengthSeconds: number;
+
+    @ViewColumn()
+    totalModuleCount: number;
+
+    @ViewColumn()
+    totalVideoQuestionCount: number;
 }

@@ -2,7 +2,7 @@ import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { LinearProgress } from "@mui/material";
 import React from 'react';
 import { CourseLearningDTO } from "../../models/shared_models/CourseLearningDTO";
-import { getAssetUrl, roundNumber } from "../../static/frontendHelpers";
+import { formatTimespan, getAssetUrl, roundNumber } from "../../static/frontendHelpers";
 import { EpistoButton } from "../universal/EpistoButton";
 import { FlexFloat } from "../universal/FlexFloat";
 
@@ -55,10 +55,7 @@ export const LearningCourseStatsTile = (props: {
         finalExamSuccessRate
     } = course;
 
-    const spentHours = roundNumber(totalSpentTime / 60 / 60);
-    const spentMinutes = roundNumber((totalSpentTime - (spentHours * 60 * 60)) / 60);
-    const formattedSpentTime = `${spentHours}h ${spentMinutes}m`;
-
+    const formattedSpentTime = formatTimespan(totalSpentTime);
     const progressPercentage = roundNumber(completedCourseItemCount / totalCourseItemCount * 100);
 
     return <FlexFloat
