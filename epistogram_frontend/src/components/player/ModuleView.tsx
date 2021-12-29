@@ -15,29 +15,6 @@ export const ModuleView = (params: {
 
     const { module, startModule } = params;
     const isVisible = !!module;
-    const reactTimer = useReactTimer(() => {
-
-        console.log("Starting module by timer....");
-        startModule();
-    }, 15 * 1000);
-
-    useEffect(() => {
-
-        if (!isVisible)
-            return;
-
-        console.log("restarting timer");
-        reactTimer.restart();
-    }, [module?.id, isVisible]);
-
-    useEffect(() => {
-
-        if (isVisible)
-            return;
-
-        console.log("reseting timer");
-        reactTimer.reset();
-    }, [isVisible]);
 
     return <Flex display={isVisible ? undefined : "none"} direction="column" className="whall">
         <Flex flex="1" align="center" justify="center">
@@ -52,15 +29,13 @@ export const ModuleView = (params: {
 
         <Flex height="60px" borderTop="1px solid var(--mildGrey)" justify="flex-end" p="10px">
             <EpistoButton variant="colored" onClick={startModule} padding="0">
-                <TimeoutFrame className="whall" reactTimer={reactTimer}>
-                    <Flex className="whall" mx="15px" align="center">
-                        <Typography style={{ marginRight: "5px" }} className="fontSmall">
-                            Kezdhetjük!
-                        </Typography>
+                <Flex className="whall" mx="15px" align="center">
+                    <Typography style={{ marginRight: "5px" }} className="fontSmall">
+                        Kezdhetjük!
+                    </Typography>
 
-                        <ArrowForwardIcon></ArrowForwardIcon>
-                    </Flex>
-                </TimeoutFrame>
+                    <ArrowForwardIcon></ArrowForwardIcon>
+                </Flex>
             </EpistoButton>
         </Flex>
     </Flex>
