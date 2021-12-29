@@ -3,15 +3,17 @@ import { RegisterUserViaActivationCodeDTO } from "../models/shared_models/Regist
 import { RegisterUserViaInvitationTokenDTO } from "../models/shared_models/RegisterUserViaInvitationTokenDTO";
 import { RegisterUserViaPublicTokenDTO } from "../models/shared_models/RegisterUserViaPublicTokenDTO";
 import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
+import { EmailService } from "../services/EmailService";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { RegistrationService } from "../services/RegistrationService";
+import { TokenService } from "../services/TokenService";
 import { UserService } from "../services/UserService";
 import { setAuthCookies } from "../utilities/cookieHelpers";
 import { ActionParams, TypedError } from "../utilities/helpers";
 
 export class RegistrationController {
 
-    private _res: RegistrationService;
+    private _registrationService: RegistrationService;
     private _userService: UserService;
     private _config: GlobalConfiguration;
 
@@ -20,7 +22,7 @@ export class RegistrationController {
         userService: UserService,
         config: GlobalConfiguration) {
 
-        this._res = res;
+        this._registrationService = res;
         this._userService = userService;
         this._config = config;
     }
@@ -29,7 +31,7 @@ export class RegistrationController {
 
         const body = params.getBody<RegisterUserViaPublicTokenDTO>()
 
-        const { accessToken, refreshToken } = await this._res
+        const { accessToken, refreshToken } = await this._registrationService
             .registerUserViaPublicTokenAsync(
                 body.getValue<string>(x => x.emailAddress),
                 body.getValue<string>(x => x.firstName),
@@ -43,7 +45,7 @@ export class RegistrationController {
 
         const body = params.getBody<RegisterUserViaInvitationTokenDTO>();
 
-        const { accessToken, refreshToken } = await this._res
+        const { accessToken, refreshToken } = await this._registrationService
             .registerInvitedUserAsync(
                 body.getValue<string>(x => x.invitationToken),
                 body.getValue<string>(x => x.password),
@@ -56,7 +58,7 @@ export class RegistrationController {
 
         const body = params.getBody<RegisterUserViaActivationCodeDTO>();
 
-        await this._res
+        await this._registrationService
             .registerUserViaActivationCodeAsync(
                 body.getValue<string>(x => x.activationCode),
                 body.getValue<string>(x => x.emailAddress),
@@ -85,7 +87,7 @@ export class RegistrationController {
                 in which he/she could add users.`, "bad request");
 
         // create user
-        await this._res
+        await this._registrationService
             .createInvitedUserAsync({
                 email: dto.getValue<string>(x => x.email),
                 jobTitleId: dto.getValue<number>(x => x.jobTitleId),

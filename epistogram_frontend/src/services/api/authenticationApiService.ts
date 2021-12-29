@@ -71,42 +71,6 @@ export const useUserFetching = (enabled: boolean) => {
     };
 }
 
-export const useSetNewPassword = () => {
-
-    const postDataResult = usePostDataUnsafe(apiRoutes.authentication.setNewPassword);
-
-    const setNewPassword = (password: string, passwordCompare: string, passwordResetToken: string) => {
-
-        return postDataResult
-            .postDataAsync({
-                password,
-                passwordCompare,
-                passwordResetToken
-            });
-    }
-
-    return {
-        setNewPasswordState: postDataResult.state,
-        setNewPassword
-    }
-}
-
-export const useRequestChangePassword = () => {
-
-    const postDataResult = usePostDataUnsafe(apiRoutes.authentication.requestPasswordChange);
-
-    const requestChangePasswordAsync = (oldPassword: string) => {
-
-        return postDataResult
-            .postDataAsync({ oldPassword: oldPassword });
-    }
-
-    return {
-        requestChangePasswordState: postDataResult.state,
-        requestChangePasswordAsync
-    }
-}
-
 export const useLogInUser = () => {
 
     type LoginUserDTO = {

@@ -3,7 +3,7 @@ import { Flex } from "@chakra-ui/layout";
 import { Checkbox, TextField, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
-import { getAssetUrl, getQueryParam } from "../static/frontendHelpers";
+import { getAssetUrl, getQueryParam, usePasswordEntryState } from "../static/frontendHelpers";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { RefetchUserAsyncContext } from "./system/AuthenticationFrame";
@@ -24,10 +24,15 @@ export const RegistrationPage = () => {
     const [emailAddress, setEmailAddress] = useState("");
 
     // invitation
-    const [password, setPassword] = useState("");
-    const [passwordCompare, setPasswordCompare] = useState("");
-    const [passwordError, setPasswordError] = useState<string | null>(null);
-    const [passwordCompareError, setPasswordCompareError] = useState<string | null>(null);
+    const {
+        password,
+        passwordCompare,
+        passwordCompareError,
+        passwordError,
+        setPassword,
+        setPasswordCompare,
+        validate
+    } = usePasswordEntryState();
 
     const showErrorDialog = useShowErrorDialog("Hiba!");
     const { navigate } = useNavigation();
@@ -38,12 +43,8 @@ export const RegistrationPage = () => {
 
     const handleRegistration = async () => {
 
-        if (password != passwordCompare) {
-
-            setPasswordError("A jelszavak nem egyeznek!");
-            setPasswordCompareError("A jelszavak nem egyeznek!");
+        if (!validate())
             return;
-        }
 
         try {
 
@@ -64,30 +65,6 @@ export const RegistrationPage = () => {
             showErrorDialog("Ismeretlen hiba történt, kérjük próbálkozzon újra!");
         }
     }
-
-    useEffect(() => {
-
-        // check if there's even a password typed in
-        if (password === "") {
-
-            setPasswordError(null);
-            return;
-        }
-
-        // check length 
-        if (password.length < 3) {
-
-            setPasswordError("A jelszó túl rövid!");
-            return;
-        }
-
-        setPasswordError(null);
-    }, [password]);
-
-    useEffect(() => {
-
-        setPasswordCompareError(null);
-    }, [passwordCompare, password]);
 
     return <Flex height="100vh" direction="column" align="center" justify="center" position="relative">
 

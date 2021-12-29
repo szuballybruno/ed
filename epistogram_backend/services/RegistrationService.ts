@@ -132,7 +132,7 @@ export class RegistrationService {
 
         // check if user exists  
         const user = await this._userService
-            .getUserByEmail(userEmail);
+            .getUserByEmailAsync(userEmail);
 
         if (!user)
             throw new TypedError("No such user!", "bad request");

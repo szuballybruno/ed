@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { matchPath, useLocation, useParams } from "react-router-dom";
 import { assetStorageUrl } from "./Environemnt";
@@ -327,6 +327,60 @@ export const useIsScreenWiderThan = (minimumPixels: number) => {
     const isTrue = queryRes[0];
 
     return isTrue;
+}
+
+export const usePasswordEntryState = () => {
+
+    const [password, setPassword] = useState("");
+    const [passwordCompare, setPasswordCompare] = useState("");
+    const [passwordError, setPasswordError] = useState<string | null>(null);
+    const [passwordCompareError, setPasswordCompareError] = useState<string | null>(null);
+
+    const validate = () => {
+
+        if (password != passwordCompare) {
+
+            setPasswordError("A jelszavak nem egyeznek!");
+            setPasswordCompareError("A jelszavak nem egyeznek!");
+            return false;
+        }
+
+        return true;
+    }
+
+    useEffect(() => {
+
+        // check if there's even a password typed in
+        if (password === "") {
+
+            setPasswordError(null);
+            return;
+        }
+
+        // check length 
+        if (password.length < 3) {
+
+            setPasswordError("A jelszó túl rövid!");
+            return;
+        }
+
+        setPasswordError(null);
+    }, [password]);
+
+    useEffect(() => {
+
+        setPasswordCompareError(null);
+    }, [passwordCompare, password]);
+
+    return {
+        password,
+        passwordCompare,
+        setPassword,
+        setPasswordCompare,
+        passwordError,
+        passwordCompareError,
+        validate
+    }
 }
 
 export const useReactQuery = <T>(

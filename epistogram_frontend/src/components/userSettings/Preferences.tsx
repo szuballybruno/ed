@@ -9,9 +9,9 @@ import { CurrentUserContext, RefetchUserAsyncContext } from "../system/Authentic
 import { LoadingFrame } from '../system/LoadingFrame';
 import { EpistoButton } from '../universal/EpistoButton';
 import { SelectImage } from '../universal/SelectImage';
-import { useRequestChangePassword } from '../../services/api/authenticationApiService';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useSaveUserSimple } from '../../services/api/userApiService';
+import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -45,7 +45,7 @@ export const Preferences = () => {
 
     const { saveUserSimpleAsync, saveUserSimpleState } = useSaveUserSimple();
     const { postAvatarFileAsync, postAvatarFileState } = useUploadAvatarFile();
-    const { requestChangePasswordAsync, requestChangePasswordState } = useRequestChangePassword();
+    const { requestChangePasswordAsync, requestChangePasswordState } = useRequestPasswordChangeAuthenticated();
 
     const refetchUser = useContext(RefetchUserAsyncContext);
 

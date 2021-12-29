@@ -33,7 +33,7 @@ const DesktopNavbar = (props: {
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
     const homeUrl = applicationRoutes.rootHomeRoute.route;
-    const user = useContext(CurrentUserContext)!;
+    const user = useContext(CurrentUserContext);
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     const ref = useRef<HTMLDivElement>(null);
@@ -85,7 +85,7 @@ const DesktopNavbar = (props: {
     }
 
     return (
-        <Flex align="center" width="100%" justify="space-between">
+        <Flex align="center" width="100%" justify={hideLinks ? "center" : "space-between"}>
 
             {/* logo link */}
             <img
@@ -100,7 +100,7 @@ const DesktopNavbar = (props: {
                 alt=""
                 onClick={() => {
 
-                    if (user.userActivity.canAccessApplication)
+                    if (user?.userActivity?.canAccessApplication)
                         navigate(homeUrl);
                 }} />
 

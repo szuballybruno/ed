@@ -158,7 +158,7 @@ export class UserService {
         const regType = opts.registrationType;
 
         // does user already exist?
-        const existingUser = await this.getUserByEmail(opts.email);
+        const existingUser = await this.getUserByEmailAsync(opts.email);
         if (existingUser)
             throw new TypedError("User already exists. Email: " + opts.email, "bad request");
 
@@ -274,7 +274,7 @@ export class UserService {
         return foundUser.refreshToken;
     }
 
-    getUserByEmail = async (email: string) => {
+    getUserByEmailAsync = async (email: string) => {
 
         const user = await this._ormService
             .getRepository(User)

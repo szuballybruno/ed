@@ -118,7 +118,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                     {/* Teacher courses count */}
                     <EpistoEntry
                         labelVariant={"top"}
-                        isNumeric={true}
+                        type="number"
                         value={courseCount}
                         label="Kurzusok száma"
                         setValue={setCoursesCount} />
@@ -126,7 +126,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                     {/* Teacher videos count */}
                     <EpistoEntry
                         labelVariant={"top"}
-                        isNumeric={true}
+                        type="number"
                         value={videoCount}
                         label="Videók száma"
                         setValue={setVideoCount} />
@@ -134,7 +134,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                     {/* Teacher students count */}
                     <EpistoEntry
                         labelVariant={"top"}
-                        isNumeric={true}
+                        type="number"
                         value={studentCount}
                         label="Hallgatók száma"
                         setValue={setStudentCount} />

@@ -6,7 +6,7 @@ import { VideoPlaybackData } from "../models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { FileService } from "./FileService";
 import { log } from "./misc/logger";
-import { AssetUrlService } from "./misc/urlProvider";
+import { UrlService } from "./UrlService";
 import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
 import { QuestionAnswerService } from "./QuestionAnswerService";
 import { QuestionService } from "./QuestionService";
@@ -20,7 +20,7 @@ export class VideoService {
     private _questionAnswerService: QuestionAnswerService;
     private _fileService: FileService;
     private _questionsService: QuestionService;
-    private _assetUrlService: AssetUrlService;
+    private _assetUrlService: UrlService;
 
     constructor(
         ormConnection: ORMConnectionService,
@@ -28,7 +28,7 @@ export class VideoService {
         questionAnswerService: QuestionAnswerService,
         fileService: FileService,
         questionsService: QuestionService,
-        assetUrlService: AssetUrlService) {
+        assetUrlService: UrlService) {
 
         this._ormConnection = ormConnection;
         this._questionAnswerService = questionAnswerService;

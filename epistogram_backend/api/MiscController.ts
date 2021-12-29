@@ -80,15 +80,6 @@ export class MiscController {
         return Promise.resolve(`${this._config.misc.frontendUrl}/registration?token=${this._tokenService.createRegistrationToken()}`);
     };
 
-    requestChangePasswordAction = async (params: ActionParams) => {
-
-        const dto = withValueOrBadRequest<any>(params.req.body);
-        const oldPassword = withValueOrBadRequest<string>(dto.oldPassword);
-
-        return await this._authService
-            .requestChangePasswordAsync(params.currentUserId, oldPassword);
-    };
-
     saveUserDataAction = async (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<UserDTO>(params.req.body);

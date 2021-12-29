@@ -178,7 +178,8 @@ const LoginScreen = () => {
                             labelVariant="top"
                             label="Jelszó"
                             placeholder="Jelszó"
-                            name="lastName"
+                            name="password"
+                            type="password"
                             setValue={setPassword}
                             height="50px" />
 

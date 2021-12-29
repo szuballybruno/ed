@@ -68,7 +68,7 @@ const QuestionItem = (props: {
                 onFocusLost={() => onChanged(text, parseFloat(showUpSecs))}
                 setValue={setShowUpSecs}
                 postfix="s"
-                isNumeric
+                type="number"
                 value={showUpSecs} />
 
             <EpistoButton

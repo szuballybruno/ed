@@ -1,8 +1,10 @@
-import { Flex } from "@chakra-ui/layout";
+import { Box, Flex } from "@chakra-ui/layout";
 import { Input } from "@chakra-ui/react";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import { Typography } from "@mui/material";
 import React, { useState } from 'react';
+import { useRequestPasswordChange } from "../../services/api/passwordChangeApiService";
+import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
 import { getEventValueCallback } from "../../static/frontendHelpers";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
 import { EpistoHeader } from "../EpistoHeader";
@@ -18,6 +20,26 @@ export const LoginPasswordResetDialog = (params: {
 
     const [email, setEmail] = useState("");
 
+    const showError = useShowErrorDialog();
+
+    // http
+    const { requestPasswordChangeAsync, requestPasswordChangeState } = useRequestPasswordChange();
+
+    const handleResetPw = async () => {
+
+        try {
+
+            await requestPasswordChangeAsync({ email });
+
+            showNotification("Kerelmed fogadtuk, az emailt nemsokara meg fogod kapni a visszaalito linkel!");
+
+            passwordResetDialogLogic.closeDialog();
+        } catch (e) {
+
+            showError(e);
+        }
+    }
+
     return (
         <EpistoDialog logic={passwordResetDialogLogic}>
             <Flex
@@ -30,19 +52,38 @@ export const LoginPasswordResetDialog = (params: {
                 <Flex
                     bg="var(--deepBlue)"
                     p="20px"
-                    alignSelf="stretch">
+                    alignSelf="stretch"
+                    overflow="hidden"
+                    position="relative">
 
                     <EpistoHeader
                         className="fontLight"
                         text="Biztosan visszaalitod a jelszavad?" />
+
+                    <Box
+                        bg="var(--epistoTeal)"
+                        position="absolute"
+                        width="100%"
+                        height="100%"
+                        left="0"
+                        top="85%"
+                        transform="rotate(-2deg)" />
                 </Flex>
 
                 {/* desc */}
                 <Typography
                     style={{
-                        padding: "15px"
+                        padding: "15px 15px 0px 15px"
                     }}>
                     A visszaallitashoz fogsz kapni egy linket, amivel egy uj jelszot tudsz majd beirni magadnak az EpistoGram feluleten.
+                </Typography>
+
+                {/* desc */}
+                <Typography
+                    className="fontSmall fontGrey"
+                    style={{
+                        padding: "15px"
+                    }}>
                     Az emailben kapott visszaalitasi linket egyszer tudod felhasznalni, amit celszeru is minel elobb megtenni, mert uj link csak 3 naponta kuldheto, es egy link 8 oran belul lejar.
                 </Typography>
 
@@ -84,6 +125,7 @@ export const LoginPasswordResetDialog = (params: {
                 {/* buttons */}
                 <EpistoButton
                     style={{ margin: "10px" }}
+                    onClick={handleResetPw}
                     variant="colored">
 
                     Mehet

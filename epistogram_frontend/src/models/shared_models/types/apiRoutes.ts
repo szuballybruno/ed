@@ -4,7 +4,7 @@ export const apiRoutes = {
         registerUserViaPublicToken: "/registration/register-user-via-public-token",
         registerUserViaInvitationToken: "/registration/register-user-via-invitation-token",
         registerUserViaActivationCode: "/registration/register-user-via-activation-code",
-        inviteUser: "/registration/invite-user",
+        inviteUser: "/registration/invite-user"
     },
 
     misc: {
@@ -20,12 +20,16 @@ export const apiRoutes = {
         saveTeacherInfo: "/teacherinfo/save-teacher-info"
     },
 
+    passwordChange: {
+        setNewPassword: "/pwchange/set-new-password",
+        requestPasswordChangeAuthenticated: "/pwchange/request-password-change-authenticated",
+        requestPasswordChange: "/pwchange/request-password-change"
+    },
+
     authentication: {
         getCurrentUser: "/authentication/get-current-user",
-        setNewPassword: "/authentication/set-new-password",
-        logoutUser: "/authentication/logout-user",
-        requestPasswordChange: "/authentication/request-change-password",
         renewUserSession: "/authentication/renew-user-session",
+        logoutUser: "/authentication/logout-user",
         loginUser: "/authentication/login-user",
     },
 

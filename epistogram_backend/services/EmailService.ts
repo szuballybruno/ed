@@ -4,14 +4,14 @@ import { User } from '../models/entity/User';
 import { EpistoEmail } from '../models/EpistoEmail';
 import { replaceAll } from '../utilities/helpers';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
-import { AssetUrlService } from './misc/urlProvider';
+import { UrlService } from './UrlService';
 
 export class EmailService {
 
     private _config: GlobalConfiguration;
-    private _assetUrlService: AssetUrlService;
+    private _assetUrlService: UrlService;
 
-    constructor(config: GlobalConfiguration, assetUrlService: AssetUrlService) {
+    constructor(config: GlobalConfiguration, assetUrlService: UrlService) {
 
         this._config = config;
         this._assetUrlService = assetUrlService;
@@ -37,7 +37,7 @@ export class EmailService {
             }
         } as EpistoEmail;
 
-        await this.sendMailNewAsync(epistoEmail);
+        await this.sendMailAsync(epistoEmail);
     }
 
     sendSuccessfulRegistrationEmailAsync = async (
@@ -60,7 +60,7 @@ export class EmailService {
             }
         } as EpistoEmail;
 
-        await this.sendMailNewAsync(epistoEmail);
+        await this.sendMailAsync(epistoEmail);
     }
 
     sendResetPasswordMailAsync = async (user: User, resetPasswordUrl: string) => {
@@ -79,7 +79,7 @@ export class EmailService {
             }
         } as EpistoEmail;
 
-        await this.sendMailNewAsync(epistoEmail);
+        await this.sendMailAsync(epistoEmail);
     }
 
     sendDiscountCodePurchasedMailAsync = async (user: User, discountCode: string) => {
@@ -98,10 +98,33 @@ export class EmailService {
             }
         } as EpistoEmail;
 
-        await this.sendMailNewAsync(epistoEmail);
+        await this.sendMailAsync(epistoEmail);
     }
 
-    private sendMailNewAsync = async (email: EpistoEmail) => {
+    sendSelfPasswordResetMailAsync = async (user: User, resetPwUrl: string) => {
+
+        const { email, firstName, lastName } = user;
+
+        const epistoEmail = {
+            to: email,
+            subject: "Jelszo visszaallitas",
+            template: {
+                name: "selfResetPasswordEmailTemplate",
+                params: {
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
+                    passwordResetUrl: resetPwUrl
+                }
+            }
+        } as EpistoEmail;
+
+        await this.sendMailAsync(epistoEmail);
+    }
+
+    /**
+     * Sends the mail.
+     * @param email 
+     */
+    private sendMailAsync = async (email: EpistoEmail) => {
 
         const transporter = createTransport({
             host: this._config.mail.mailHost,

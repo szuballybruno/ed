@@ -100,64 +100,6 @@ export class AuthenticationService {
         }
     }
 
-    requestChangePasswordAsync = async (userId: number, oldPassword: string) => {
-
-        const resetPawsswordToken = this._tokenService.createResetPasswordToken(userId);
-        const user = await this._userService
-            .getUserById(userId);
-
-        if (!await comparePasswordAsync(oldPassword, user.password))
-            throw new TypedError("Wrong password!", "bad request");
-
-        await this._ormService
-            .getRepository(User)
-            .save({
-                id: user.id,
-                resetPasswordToken: resetPawsswordToken
-            });
-
-        const resetPawsswordUrl = this._config.misc.frontendUrl + `/set-new-password?token=${resetPawsswordToken}`;
-
-        await this._emailService
-            .sendResetPasswordMailAsync(user, resetPawsswordUrl);
-    }
-
-    changePasswordAsync = async (
-        userId: number,
-        password: string,
-        passwordCompare: string,
-        passwordResetToken: string) => {
-
-        const user = await this._userService
-            .getUserById(userId);
-
-        // verify new password with compare password 
-        if (password !== passwordCompare)
-            throw new TypedError("Passwords don't match.", "bad request");
-
-        // verify token
-        const tokenPayload = this._tokenService.verifyPasswordResetToken(passwordResetToken);
-
-        // verify token user id 
-        if (tokenPayload.userId !== user.id)
-            throw new TypedError("Wrong token.", "bad request");
-
-        // verify user reset password token
-        if (user.resetPasswordToken !== passwordResetToken)
-            throw new TypedError("Wrong token.", "bad request");
-
-        // hash new password
-        const hashedPassword = await hashPasswordAsync(password);
-
-        await this._ormService
-            .getRepository(User)
-            .save({
-                id: user.id,
-                resetPasswordToken: null,
-                password: hashedPassword
-            } as User);
-    }
-
     logInUser = async (email: string, password: string) => {
 
         log(`Logging in user... ${email} - ${password}`);
@@ -168,7 +110,7 @@ export class AuthenticationService {
 
         // authenticate
         const user = await this._userService
-            .getUserByEmail(email);
+            .getUserByEmailAsync(email);
 
         if (!user)
             throw new TypedError("Invalid email.", "forbidden");

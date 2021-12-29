@@ -1,23 +1,30 @@
 import { Image } from "@chakra-ui/react";
 import { TextField } from "@mui/material";
-import { useState } from "react";
 import { applicationRoutes } from "../configuration/applicationRoutes";
-import { getAssetUrl, getQueryParam } from "../static/frontendHelpers";
+import { useSetNewPassword } from "../services/api/passwordChangeApiService";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
+import { getAssetUrl, getQueryParam, usePasswordEntryState } from "../static/frontendHelpers";
 import { EpistoHeader } from "./EpistoHeader";
+import Navbar from "./navbar/Navbar";
 import { LoadingFrame } from "./system/LoadingFrame";
 import { ContentWrapper, MainWrapper } from "./system/MainPanels";
-import Navbar from "./navbar/Navbar";
 import { EpistoButton } from "./universal/EpistoButton";
-import { useSetNewPassword } from "../services/api/authenticationApiService";
 
 export const SetNewPasswordPage = () => {
 
     const { setNewPassword, setNewPasswordState } = useSetNewPassword();
 
-    const [password, setPassword] = useState("");
-    const [passwordCompare, setPasswordCompare] = useState("");
+    const {
+        password,
+        passwordCompare,
+        passwordCompareError,
+        passwordError,
+        setPassword,
+        setPasswordCompare,
+        validate
+    } = usePasswordEntryState();
+
     const token = getQueryParam("token");
 
     const showErrorDialog = useShowErrorDialog();
@@ -25,6 +32,15 @@ export const SetNewPasswordPage = () => {
     const { navigate } = useNavigation();
 
     const handleSetNewPassword = async () => {
+
+        if (!validate())
+            return;
+
+        if (!token) {
+
+            showErrorDialog("Helytelen url cim. Nincs token megadva. Probald ujra egy masik linkel.");
+            return;
+        }
 
         try {
 
@@ -51,7 +67,7 @@ export const SetNewPasswordPage = () => {
                 top="0"
                 objectFit="cover"
                 className="whall"
-                src={getAssetUrl("images/abstract_background_1.jpg")} />
+                src={getAssetUrl("loginScreen/surveybg.png")} />
 
             <LoadingFrame
                 direction="column"
@@ -71,6 +87,8 @@ export const SetNewPasswordPage = () => {
                     style={{ margin: "20px" }}
                     variant="standard"
                     type="password"
+                    error={!!passwordError}
+                    helperText={passwordError}
                     onChange={x => setPassword(x.currentTarget.value)}
                     label="Jelszó"></TextField>
 
@@ -78,6 +96,8 @@ export const SetNewPasswordPage = () => {
                     style={{ margin: "0 20px 20px 20px" }}
                     variant="standard"
                     type="password"
+                    error={!!passwordCompareError}
+                    helperText={passwordCompareError}
                     onChange={x => setPasswordCompare(x.currentTarget.value)}
                     label="Jelszó mégegyszer"></TextField>
 

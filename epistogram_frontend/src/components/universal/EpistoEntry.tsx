@@ -10,13 +10,13 @@ export const EpistoEntry = (props: {
     disabled?: boolean,
     isMultiline?: boolean,
     postfix?: string,
-    isNumeric?: boolean,
     placeholder?: string,
     labelVariant?: "top" | "normal",
     height?: string,
     name?: string,
     marginTop?: string,
-    flex?: string
+    flex?: string,
+    type?: "password" | "number" | "text"
 }) => {
 
     const {
@@ -31,7 +31,7 @@ export const EpistoEntry = (props: {
         onFocusLost,
         name,
         postfix,
-        isNumeric,
+        type,
         marginTop,
         flex
     } = props;
@@ -60,7 +60,7 @@ export const EpistoEntry = (props: {
             name={name}
             value={value}
             multiline={isMultiline}
-            type={isNumeric ? "number" : undefined}
+            type={type}
             sx={{
                 '& .MuiOutlinedInput-root': {
                     height: height

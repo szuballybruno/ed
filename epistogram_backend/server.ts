@@ -36,7 +36,7 @@ import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log, logError } from "./services/misc/logger";
 import { initializeMappings } from './services/misc/mappings';
 import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
-import { AssetUrlService } from './services/misc/urlProvider';
+import { UrlService } from './services/UrlService';
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
 import { PersonalityAssessmentService } from './services/PersonalityAssessmentService';
@@ -64,6 +64,8 @@ import { VideoPlaybackSampleService } from './services/VideoPlaybackSampleServic
 import { VideoService } from './services/VideoService';
 import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
 import './utilities/jsExtensions';
+import { PasswordChangeService } from './services/PasswordChangeService';
+import { PasswordChangeController } from './api/PasswordChangeController';
 
 (async () => {
 
@@ -87,8 +89,8 @@ import './utilities/jsExtensions';
     const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
     const activationCodeService = new ActivationCodeService(ormConnectionService);
-    const assetUrlService = new AssetUrlService(globalConfig);
-    const emailService = new EmailService(globalConfig, assetUrlService);
+    const urlService = new UrlService(globalConfig);
+    const emailService = new EmailService(globalConfig, urlService);
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
     const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService);
     const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService);
@@ -96,6 +98,7 @@ import './utilities/jsExtensions';
     const tokenService = new TokenService(globalConfig);
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, ormConnectionService, emailService, globalConfig);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService);
+    const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig);
     const seedService = new SeedService(sqlBootstrapperService, registrationService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService, mapperService);
@@ -104,7 +107,7 @@ import './utilities/jsExtensions';
     const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService, mapperService);
     const storageService = new StorageService(globalConfig);
     const fileService = new FileService(userService, storageService, ormConnectionService);
-    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, assetUrlService);
+    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService);
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService);
     const miscService = new MiscService(courseService, ormConnectionService);
@@ -132,9 +135,10 @@ import './utilities/jsExtensions';
     const examController = new ExamController(examService, ormConnectionService);
     const shopController = new ShopController(shopService);
     const teacherInfoController = new TeacherInfoController(teacherInfoService);
+    const passwordChangeController = new PasswordChangeController(passwordChangeService);
 
     // initialize services 
-    initializeMappings(assetUrlService.getAssetUrl, mapperService);
+    initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
 
@@ -155,6 +159,8 @@ import './utilities/jsExtensions';
             apiRoutes.registration.registerUserViaActivationCode,
             apiRoutes.registration.registerUserViaInvitationToken,
             apiRoutes.registration.registerUserViaPublicToken,
+            apiRoutes.passwordChange.requestPasswordChange,
+            apiRoutes.passwordChange.setNewPassword,
             apiRoutes.authentication.renewUserSession,
             apiRoutes.authentication.loginUser,
         ]));
@@ -184,13 +190,16 @@ import './utilities/jsExtensions';
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
 
+    // password change 
+    addEndpoint(apiRoutes.passwordChange.setNewPassword, passwordChangeController.setNewPasswordAction, { isPost: true, isPublic: true });
+    addEndpoint(apiRoutes.passwordChange.requestPasswordChangeAuthenticated, passwordChangeController.requestPasswordChangeAuthenticatedAction, { isPost: true });
+    addEndpoint(apiRoutes.passwordChange.requestPasswordChange, passwordChangeController.requestPasswordChangeAction, { isPublic: true, isPost: true });
+
     // authentication 
     addEndpoint(apiRoutes.authentication.getCurrentUser, authenticationController.getCurrentUserAction);
-    addEndpoint(apiRoutes.authentication.setNewPassword, authenticationController.changePasswordAction, { isPost: true });
     addEndpoint(apiRoutes.authentication.logoutUser, authenticationController.logOutUserAction, { isPost: true });
     addEndpoint(apiRoutes.authentication.renewUserSession, authenticationController.renewUserSessionAction, { isPublic: true });
     addEndpoint(apiRoutes.authentication.loginUser, authenticationController.logInUserAction, { isPost: true, isPublic: true });
-    addEndpoint(apiRoutes.authentication.requestPasswordChange, miscController.requestChangePasswordAction, { isPost: true });
 
     // coin transactions 
     addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);

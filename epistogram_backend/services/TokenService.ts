@@ -36,7 +36,7 @@ export class TokenService {
         return verifyJWTToken<InvitationTokenPayload>(token, this._config.mail.tokenMailSecret);
     }
 
-    verifyPasswordResetToken = (token: string) => {
+    verifySetNewPasswordToken = (token: string) => {
 
         return verifyJWTToken<{ userId: number }>(token, this._config.mail.tokenMailSecret);
     }
@@ -69,12 +69,12 @@ export class TokenService {
             `${this._config.security.refreshTokenLifespanInS}s`);
     }
 
-    createResetPasswordToken = (userId: number) => {
+    createSetNewPasswordToken = (userId: number) => {
 
         return getJWTToken(
             { userId },
             this._config.mail.tokenMailSecret,
-            "24h");
+            "8h");
     }
 
     createRegistrationToken = () => {

@@ -1,5 +1,4 @@
 
-import { ChangePasswordDTO } from "../models/shared_models/SetNewPasswordDTO";
 import { AuthenticationService } from "../services/AuthenticationService";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { setAuthCookies } from "../utilities/cookieHelpers";
@@ -40,17 +39,6 @@ export class AuthenticationController {
 
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
     }
-
-    changePasswordAction = async (params: ActionParams) => {
-
-        const dto = params.getBody<ChangePasswordDTO>();
-        const password = dto.getValue<string>(x => x.password);
-        const passwordCompare = dto.getValue<string>(x => x.passwordCompare);
-        const passwordResetToken = dto.getValue<string>(x => x.passwordResetToken);
-
-        return this._authenticationService
-            .changePasswordAsync(params.currentUserId, password, passwordCompare, passwordResetToken);
-    };
 
     getCurrentUserAction = async (params: ActionParams) => {
 
