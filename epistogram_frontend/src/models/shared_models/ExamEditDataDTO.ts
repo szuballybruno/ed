@@ -6,5 +6,6 @@ export class ExamEditDataDTO {
     subTitle: string;
     title: string;
     isFinalExam: boolean;
+    reatakeLimit: number | null;
     questions: QuestionDTO[];
 }

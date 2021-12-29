@@ -33,7 +33,6 @@ import { ExamCompletedView } from "../../models/views/ExamCompletedView";
 import { PractiseQuestionView } from "../../models/views/PractiseQuestionView";
 import { SignupAnswersView } from "../../models/views/SignupAnswersView";
 import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
-import { ExamSessionSuccessView } from "../../models/views/ExamSessionSuccessView";
 import { SignupCompletedView } from "../../models/views/SignupCompletedView";
 import { VideoCompletedView } from "../../models/views/VideoCompletedView";
 import { VideoProgressView } from "../../models/views/VideoProgressView";
@@ -65,12 +64,13 @@ import { CourseAdminContentView } from "../../models/views/CourseAdminContentVie
 import { CourseDetailsView } from "../../models/views/CourseDetailsView";
 import { CourseModuleOverviewView } from "../../models/views/CourseModuleOverviewView";
 import { TeacherInfo } from "../../models/entity/TeacherInfo";
+import { ExamView } from "../../models/views/ExamView";
 
 export const dbSchema = {
 
     viewScripts: [
         "video_completed_view",
-        "exam_session_success_view",
+        "answer_session_view",
         "exam_completed_view",
         "video_progress_view",
         "course_item_view",
@@ -97,14 +97,14 @@ export const dbSchema = {
         "shop_item_view",
         "coin_transaction_view",
         "coin_balance_view",
-        "answer_session_view",
         "course_questions_success_view",
         "exam_latest_success_rate_view",
         "course_spent_time_view",
         "course_learning_stats_view",
         "course_progress_view",
         "course_module_overview_view",
-        "course_details_view"
+        "course_details_view",
+        "exam_view"
     ],
 
     functionScripts: [
@@ -137,7 +137,6 @@ export const dbSchema = {
     viewEntities: [
         VideoCompletedView,
         ExamCompletedView,
-        ExamSessionSuccessView,
         VideoProgressView,
         CourseItemStateView,
         CourseStateView,
@@ -163,7 +162,8 @@ export const dbSchema = {
         CourseLearningStatsView,
         CourseProgressView,
         CourseDetailsView,
-        CourseModuleOverviewView
+        CourseModuleOverviewView,
+        ExamView
     ] as any[],
 
     entities: [

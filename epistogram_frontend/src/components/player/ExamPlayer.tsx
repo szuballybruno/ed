@@ -1,5 +1,5 @@
 import React from "react";
-import { ExamDTO } from "../../models/shared_models/ExamDTO";
+import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
 import { useStartExam } from "../../services/api/examApiService";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { usePaging } from "../../static/frontendHelpers";
@@ -9,7 +9,7 @@ import { ExamResultsSlide } from "../exam/ExamResultsSlide";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 
 export const ExamPlayer = (props: {
-    exam: ExamDTO,
+    exam: ExamPlayerDataDTO,
     answerSessionId: number,
     continueCourse: () => void,
     setIsExamInProgress: (isExamStarted: boolean) => void

@@ -28,6 +28,9 @@ export class Exam {
     @Column({ default: false })
     isFinalExam: boolean;
 
+    @Column({ type: "integer", nullable: true })
+    retakeLimit: number | null;
+
     // course
     @Column({ nullable: true })
     courseId: number;

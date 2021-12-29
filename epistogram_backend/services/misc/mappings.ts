@@ -31,7 +31,7 @@ import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { CourseStatDTO } from "../../models/shared_models/CourseStatDTO";
 import { DailyTipDTO } from "../../models/shared_models/DailyTipDTO";
 import { EventDTO } from "../../models/shared_models/EventDTO";
-import { ExamDTO } from "../../models/shared_models/ExamDTO";
+import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
 import { ExamEditDataDTO } from "../../models/shared_models/ExamEditDataDTO";
 import { ExamResultQuestionDTO } from "../../models/shared_models/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../../models/shared_models/ExamResultsDTO";
@@ -77,6 +77,7 @@ import { UserStatsView } from "../../models/views/UserStatsView";
 import { navPropNotNull, toFullName } from "../../utilities/helpers";
 import { MapperService } from "../MapperService";
 import { getItemCode } from "./encodeService";
+import { ExamView } from "../../models/views/ExamView";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -599,10 +600,27 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 courseId: exam.courseId,
                 subTitle: exam.subtitle,
                 isFinalExam: exam.isFinalExam,
+                reatakeLimit: exam.retakeLimit,
                 questions: exam
                     .questions
                     .map(x => toQuestionDTO(x))
             } as ExamEditDataDTO;
+        });
+
+    mapperService
+        .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: Question[]) => {
+
+            return {
+                id: exam.examId,
+                courseId: exam.courseId,
+                subTitle: exam.subtitle,
+                title: exam.title,
+                thumbnailUrl: exam.thumbnailUrl,
+                isFinalExam: exam.isFinalExam,
+                canTakeAgain: exam.canRetake,
+                questions: questions
+                    .map(x => toQuestionDTO(x))
+            } as ExamPlayerDataDTO;
         });
 }
 
@@ -660,23 +678,6 @@ export const toTaskDTO = (task: Task) => {
         dueDate: task.dueData,
         objective: task.objective
     } as TaskDTO;
-}
-
-export const toExamDTO = (exam: Exam) => {
-
-    navPropNotNull(exam.questions);
-
-    return {
-        id: exam.id,
-        courseId: exam.courseId,
-        subTitle: exam.subtitle,
-        title: exam.title,
-        thumbnailUrl: exam.thumbnailUrl,
-        isFinalExam: exam.isFinalExam,
-        questions: exam
-            .questions
-            .map(x => toQuestionDTO(x))
-    } as ExamDTO;
 }
 
 export const toExamResultDTO = (views: ExamResultView[]) => {

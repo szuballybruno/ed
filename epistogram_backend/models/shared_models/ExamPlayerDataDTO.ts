@@ -1,6 +1,6 @@
 import { QuestionDTO } from "./QuestionDTO";
 
-export type ExamDTO = {
+export class ExamPlayerDataDTO {
     id: number;
     courseId: number;
     subTitle: string;
@@ -8,5 +8,6 @@ export type ExamDTO = {
     type: "exam";
     thumbnailUrl: string;
     isFinalExam: boolean;
+    canTakeAgain: boolean;
     questions: QuestionDTO[];
 }

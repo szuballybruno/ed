@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/layout";
 import { Delete } from "@mui/icons-material";
 import EditIcon from '@mui/icons-material/Edit';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
-import { Checkbox } from "@mui/material";
+import { Checkbox, Slider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
@@ -35,6 +35,8 @@ export const EditExamSubpage = () => {
     const [title, setTitle] = useState("");
     const [subtitle, setSubtitle] = useState("");
     const [isFinalExam, setIsFinalExam] = useState(false);
+    const [isRetakeLimited, setIsRetakeLimited] = useState(false);
+    const [reateLimit, setRetakeLimit] = useState("0");
 
     useEffect(() => {
 
@@ -45,6 +47,8 @@ export const EditExamSubpage = () => {
         setSubtitle(examEditData.subTitle);
         setQuestions(examEditData.questions.orderBy(x => x.orderIndex + ""));
         setIsFinalExam(examEditData.isFinalExam);
+        setRetakeLimit(examEditData.reatakeLimit + "" ?? "0");
+        setIsRetakeLimited(!!examEditData.reatakeLimit);
     }, [examEditData]);
 
     const handleSaveAsync = async () => {
@@ -54,15 +58,16 @@ export const EditExamSubpage = () => {
         orderedQuestions
             .forEach((x, index) => x.orderIndex = index);
 
-        const dto = {
-            title,
-            subTitle: subtitle,
-            id: examEditData?.id!,
-            questions: questions,
-            isFinalExam: isFinalExam
-        } as ExamEditDataDTO;
-
         try {
+
+            const dto = {
+                title,
+                subTitle: subtitle,
+                id: examEditData?.id!,
+                questions: questions,
+                isFinalExam: isFinalExam,
+                reatakeLimit: isRetakeLimited ? parseInt(reateLimit) : null
+            } as ExamEditDataDTO;
 
             await saveExamAsync(dto);
 
@@ -134,6 +139,26 @@ export const EditExamSubpage = () => {
                 label="Alcím"
                 value={subtitle}
                 setValue={setSubtitle} />
+
+            <EpistoLabel
+                text="Ujrakezdesi limit">
+
+                <Flex align="center">
+                    <Checkbox
+                        checked={isRetakeLimited}
+                        style={{
+                            alignSelf: "flex-start"
+                        }}
+                        onChange={(_, value) => setIsRetakeLimited(value)} />
+
+                    <EpistoEntry
+                        marginTop="0"
+                        value={reateLimit}
+                        disabled={!isRetakeLimited}
+                        type="number"
+                        setValue={setRetakeLimit} />
+                </Flex>
+            </EpistoLabel>
 
             <EpistoLabel text="Zarovizsga?">
                 <Checkbox

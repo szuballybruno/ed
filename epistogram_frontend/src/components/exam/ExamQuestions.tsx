@@ -3,7 +3,6 @@ import { Flex, Text } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { useState } from "react";
 import { getAssetUrl, PagingType, usePaging } from "../../static/frontendHelpers";
-import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../../models/shared_models/types/sharedTypes";
 import { useShowErrorDialog } from "../../services/core/notifications";
@@ -12,9 +11,10 @@ import { LoadingFrame } from "../system/LoadingFrame";
 import { ExamLayout } from "./ExamLayout";
 import { QuestionAnswer } from "./QuestionAnswer";
 import { useSaveExamAnswer } from "../../services/api/examApiService";
+import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
 
 export const ExamQuestions = (props: {
-    exam: ExamDTO,
+    exam: ExamPlayerDataDTO,
     slidesState: PagingType<number>
     questions: QuestionDTO[],
     answerSessionId: number,

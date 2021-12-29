@@ -4,10 +4,12 @@ import { Question } from "../models/entity/Question";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { AnswerQuestionDTO } from "../models/shared_models/AnswerQuestionDTO";
 import { ExamEditDataDTO } from "../models/shared_models/ExamEditDataDTO";
+import { ExamPlayerDataDTO } from "../models/shared_models/ExamPlayerDataDTO";
 import { ExamResultView } from "../models/views/ExamResultView";
+import { ExamView } from "../models/views/ExamView";
 import { MapperService } from "./MapperService";
 import { readItemCode } from "./misc/encodeService";
-import { toExamDTO, toExamResultDTO } from "./misc/mappings";
+import { toExamResultDTO } from "./misc/mappings";
 import { QuestionAnswerService } from "./QuestionAnswerService";
 import { QuestionService } from "./QuestionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -39,7 +41,41 @@ export class ExamService {
         this._mapperService = mapperService;
     }
 
-    getExamDTOAsync = async (examId: number) => {
+    /**
+     * Returns an exam player dto that contains 
+     * all the data necessary to play an exam.
+     * 
+     * @param examId 
+     * @returns 
+     */
+    getExamPlayerDTOAsync = async (userId: number, examId: number) => {
+
+        const examView = await this._ormService
+            .getRepository(ExamView)
+            .findOneOrFail({
+                where: {
+                    examId: examId,
+                    userId: userId
+                }
+            });
+
+        const questions = await this
+            .getExamQuestionsAsync(examId);
+
+        if (questions.length === 0)
+            throw new Error("Exam has no questions assigend.");
+
+        return this._mapperService
+            .map(ExamView, ExamPlayerDataDTO, examView, questions);
+    }
+
+    /**
+     * Get questions for a particular exam.
+     * 
+     * @param examId 
+     * @returns 
+     */
+    async getExamQuestionsAsync(examId: number) {
 
         const exam = await this._ormService
             .getRepository(Exam)
@@ -49,14 +85,15 @@ export class ExamService {
             .leftJoinAndSelect("q.answers", "a")
             .getOneOrFail();
 
-        const questionIds = exam.questions.map(x => x.id);
-
-        if (questionIds.length === 0)
-            throw new Error("Exam has no questions assigend.");
-
-        return toExamDTO(exam);
+        return exam.questions;
     }
 
+    /**
+     * Get edit data for the exam.
+     * 
+     * @param examId 
+     * @returns 
+     */
     async getExamEditDataAsync(examId: number) {
 
         const exam = await this._ormService
@@ -71,6 +108,11 @@ export class ExamService {
             .map(Exam, ExamEditDataDTO, exam);
     }
 
+    /**
+     * Save the exam.
+     * 
+     * @param dto 
+     */
     async saveExamAsync(dto: ExamEditDataDTO) {
 
         const examId = dto.id;
@@ -112,13 +154,19 @@ export class ExamService {
                 title: dto.title,
                 subtitle: dto.subTitle,
                 courseId: dto.courseId,
-                isFinalExam: dto.isFinalExam
+                isFinalExam: dto.isFinalExam,
+                retakeLimit: dto.reatakeLimit
             });
 
         await this._questionsService
             .saveAssociatedQuestionsAsync(dto.questions, undefined, examId);
     }
 
+    /**
+     * Sets the start date of the answer session, so it can be tracked once finished.
+     * 
+     * @param answerSessionId 
+     */
     async startExamAsync(answerSessionId: number) {
 
         await this._ormService
@@ -129,6 +177,13 @@ export class ExamService {
             });
     }
 
+    /**
+     * Answer a question in the exam. 
+     * 
+     * @param userId 
+     * @param dto 
+     * @returns 
+     */
     answerExamQuestionAsync = async (userId: number, dto: AnswerQuestionDTO) => {
 
         // validation comes here 
@@ -167,6 +222,13 @@ export class ExamService {
                 true);
     }
 
+    /**
+     * Delete multiple exams by their ids.
+     * 
+     * @param examIds 
+     * @param unsetCurrentCourseItem 
+     * @returns 
+     */
     deleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem: boolean) => {
 
         if (examIds.length === 0)
@@ -211,6 +273,13 @@ export class ExamService {
             .execute();
     }
 
+    /**
+     * Get the results of the particular exam.
+     * 
+     * @param userId 
+     * @param answerSessionId 
+     * @returns 
+     */
     getExamResultsAsync = async (userId: number, answerSessionId: number) => {
 
         const bridge = await this._ormService
@@ -230,7 +299,7 @@ export class ExamService {
         if (itemType !== "exam")
             throw new Error("Current item is not an exam!");
 
-        const examCompletedViews = await this._ormService
+        const examResultViews = await this._ormService
             .getRepository(ExamResultView)
             .find({
                 where: {
@@ -240,6 +309,6 @@ export class ExamService {
                 }
             });
 
-        return toExamResultDTO(examCompletedViews);
+        return toExamResultDTO(examResultViews);
     }
 }

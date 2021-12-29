@@ -2,16 +2,16 @@ import { Flex, Text } from "@chakra-ui/react";
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
 import React from 'react';
-import { ExamDTO } from "../../models/shared_models/ExamDTO";
 import { translatableTexts } from "../../static/translatableTexts";
 import StatisticsCard from "../statisticsCard/StatisticsCard";
 import { ExamLayout } from './ExamLayout';
 import { QuestionAnswer } from "./QuestionAnswer";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { useExamResults } from "../../services/api/examApiService";
+import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
 
 export const ExamResultsSlide = (props: {
-    exam: ExamDTO,
+    exam: ExamPlayerDataDTO,
     continueCourse: () => void,
     answerSessionId: number,
 }) => {

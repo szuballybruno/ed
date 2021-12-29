@@ -1,4 +1,4 @@
-import { ExamDTO } from "./ExamDTO";
+import { ExamPlayerDataDTO } from "./ExamPlayerDataDTO";
 import { ModuleDetailedDTO } from "./ModuleDetailedDTO";
 import { ModuleDTO } from "./ModuleDTO";
 import { CourseModeType } from "./types/sharedTypes";
@@ -6,7 +6,7 @@ import { VideoDTO } from "./VideoDTO";
 
 export type PlayerDataDTO = {
     video: VideoDTO | null;
-    exam: ExamDTO | null;
+    exam: ExamPlayerDataDTO | null;
     module: ModuleDetailedDTO;
     answerSessionId: number | null;
     mode: CourseModeType;

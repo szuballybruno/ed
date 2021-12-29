@@ -82,7 +82,7 @@ export class PlayerService {
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
         const videoDTO = itemType === "video" ? await this.getVideoDTOAsync(userId, itemId) : null;
-        const examDTO = itemType === "exam" ? await this._examService.getExamDTOAsync(itemId) : null;
+        const examDTO = itemType === "exam" ? await this._examService.getExamPlayerDTOAsync(userId, itemId) : null;
         const moduleDetailedDTO = itemType === "module" ? await this._moduleService.getModuleDetailedDTOAsync(itemId) : null;
 
         // get user course bridge
