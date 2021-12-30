@@ -332,7 +332,7 @@ export const LearningStatistics = () => {
                                 suffix={item.suffix}
                                 iconPath={item.iconPath}
                                 isOpenByDefault={item.isOpenByDefault}
-                                isDummy={item.isDummy}
+                                isComingSoon={item.isDummy}
                                 chartSize={item.large ? "large" : undefined}>
                                 {item.chart}
                             </StatisticsCard>

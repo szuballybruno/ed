@@ -5,6 +5,7 @@ import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO"
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import { ExamLayout } from "./ExamLayout";
+import { ExamResultStats } from "./ExamResultStats";
 
 export const ExamGreetSlide = (props: {
     exam: ExamPlayerDataDTO,
@@ -45,6 +46,23 @@ export const ExamGreetSlide = (props: {
 
                 {translatableTexts.exam.greetText}
             </Typography>
+
+            {/* stats label */}
+            <Typography
+                style={{
+                }}>
+
+                {translatableTexts.exam.statsLabelText}
+            </Typography>
+
+            {/* stats */}
+            {exam.isCompletedPreviously && <Flex align="center" justify="center">
+
+                <ExamResultStats
+                    correctAnswerRate={exam!.correctAnswerRate}
+                    totalQuestionCount={exam!.totalQuestionCount}
+                    correctAnswerCount={exam!.correctAnswerCount} />
+            </Flex>}
         </Flex>
     </ExamLayout>
 }

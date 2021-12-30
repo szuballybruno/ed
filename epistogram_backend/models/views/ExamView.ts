@@ -32,4 +32,16 @@ export class ExamView {
     successfulCompletionCount: number;
     @ViewColumn()
     canRetake: boolean;
+
+    @ViewColumn()
+    correctAnswerCount: number;
+
+    @ViewColumn()
+    totalQuestionCount: number;
+
+    @ViewColumn()
+    correctAnswerRate: number;
+
+    @ViewColumn()
+    isCompletedPreviously: boolean;
 }

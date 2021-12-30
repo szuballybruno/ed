@@ -618,8 +618,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 thumbnailUrl: exam.thumbnailUrl,
                 isFinalExam: exam.isFinalExam,
                 canTakeAgain: exam.canRetake,
+                correctAnswerCount: exam.correctAnswerCount,
+                correctAnswerRate: exam.correctAnswerRate,
+                isCompletedPreviously: exam.isCompletedPreviously,
+                totalQuestionCount: exam.totalQuestionCount,
                 questions: questions
-                    .map(x => toQuestionDTO(x))
+                    .map(x => toQuestionDTO(x)),
             } as ExamPlayerDataDTO;
         });
 }

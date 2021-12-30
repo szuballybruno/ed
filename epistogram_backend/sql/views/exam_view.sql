@@ -1,8 +1,7 @@
 WITH 
 successful_answer_sessions AS (
 	SELECT * FROM public.answer_session_view asev
-	WHERE asev.total_question_count = asev.correct_answer_count
-		AND asev.is_completed
+	WHERE asev.is_successful
 )
 SELECT 
 	u.id user_id,
@@ -25,25 +24,31 @@ SELECT
 		SELECT COUNT(1) < e.retake_limit OR e.retake_limit IS NULL
 		FROM successful_answer_sessions sav
 		WHERE sav.exam_id = e.id AND sav.user_id = u.id
-	) can_retake
-	-- (
-	-- 	SELECT 
-	-- 		erv.* 
-	-- 	FROM
-	-- 	(
-	-- 		SELECT MAX(sav.answer_session_id)
-	-- 		FROM successful_answer_sessions sav
-	-- 		WHERE sav.exam_id = e.id AND sav.user_id = u.id
-	-- 	) sq
-		
-	-- 	LEFT JOIN public.exam_result_view erv
-	-- 	ON erv.exam_id = e.id AND erv.user_id = u.id
-		
-	-- 	GROUP BY 
-	-- ) asd
+	) can_retake,
+	lasv.correct_answer_count,
+	lasv.total_question_count,
+	lasv.correct_answer_rate,
+	lasv.total_question_count IS NOT NULL is_completed_previously
 FROM public.exam e
 
 CROSS JOIN public.user u
+
+LEFT JOIN
+(
+	SELECT asv.*
+	FROM
+	(
+		SELECT sav.user_id, sav.exam_id, MAX(sav.answer_session_id) asid
+		FROM public.answer_session_view sav
+		WHERE sav.is_successful
+		GROUP BY sav.exam_id, sav.user_id
+		ORDER BY sav.user_id, sav.exam_id
+	) sq
+
+	LEFT JOIN public.answer_session_view asv
+	ON asv.answer_session_id = sq.asid
+) lasv
+ON lasv.user_id = u.id AND lasv.exam_id = e.id
 
 ORDER BY 
 	u.id,

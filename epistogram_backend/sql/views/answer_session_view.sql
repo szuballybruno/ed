@@ -7,7 +7,7 @@ SELECT
 	COUNT(q.id)::int total_question_count,
 	COUNT(ga.id)::int answered_question_count,
 	SUM((ga.is_correct IS NOT DISTINCT FROM true)::int)::int correct_answer_count,
-	COUNT(q.id) = SUM((ga.is_correct IS NOT DISTINCT FROM true)::int) is_successful,
+	COUNT(q.id) = SUM((ga.is_correct IS NOT DISTINCT FROM true)::int) AND COUNT(q.id) > 0 is_successful,
 	CASE WHEN COUNT(q.id) > 0 THEN (SUM((ga.is_correct IS NOT DISTINCT FROM true)::int) / COUNT(q.id) * 100)::int ELSE 0 END correct_answer_rate
 FROM public.exam e
 
@@ -30,3 +30,7 @@ GROUP BY
 	e.id,
 	e.course_id,
 	ase.id
+	
+ORDER BY
+	u.id,
+	e.id

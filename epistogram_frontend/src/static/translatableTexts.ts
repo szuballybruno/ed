@@ -213,6 +213,7 @@ export const translatableTexts = {
 
     exam: {
         greetText: "Készülj fel, ha a kezdés gombra kattintasz a vizsga elindul!",
+        statsLabelText: "Utolsó kitöltésed eredményei:",
         hello: "üdv!",
         nextQuestion: "Következő",
         resultsTitle: "Egy újabb tesztet oldottál meg, íme az eredményed:",

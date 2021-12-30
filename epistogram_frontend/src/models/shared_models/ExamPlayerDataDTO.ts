@@ -10,4 +10,8 @@ export class ExamPlayerDataDTO {
     isFinalExam: boolean;
     canTakeAgain: boolean;
     questions: QuestionDTO[];
+    correctAnswerCount: number;
+    totalQuestionCount: number;
+    correctAnswerRate: number;
+    isCompletedPreviously: boolean;
 }
