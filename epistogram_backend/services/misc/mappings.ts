@@ -630,12 +630,15 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
 const parseCommaSeparatedStringList = (str: string) => {
 
-    return str.split(",").map(x => x.trim());
+    return (str ?? "").split(",").map(x => x.trim());
 }
 
 const parseSkillBenefits = (str: string) => {
 
-    return str
+    if (!str)
+        return [];
+
+    return (str ?? "")
         .split(',')
         .map(x => {
 
