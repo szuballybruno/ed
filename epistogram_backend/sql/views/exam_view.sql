@@ -21,7 +21,7 @@ SELECT
 		WHERE sav.exam_id = e.id AND sav.user_id = u.id
 	) successful_completion_count,
 	(
-		SELECT COUNT(1) < e.retake_limit OR e.retake_limit IS NULL
+		SELECT COUNT(1) <= e.retake_limit OR e.retake_limit IS NULL
 		FROM successful_answer_sessions sav
 		WHERE sav.exam_id = e.id AND sav.user_id = u.id
 	) can_retake,
