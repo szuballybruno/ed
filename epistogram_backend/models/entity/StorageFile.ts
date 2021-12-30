@@ -29,7 +29,7 @@ export class StorageFile {
     courses: Course[];
 
     // shop items
-    @ManyToOne(_ => ShopItem, x => x.coverFile)
+    @OneToMany(_ => ShopItem, x => x.coverFile)
     @JoinColumn()
     shopItems: ShopItem[];
 }

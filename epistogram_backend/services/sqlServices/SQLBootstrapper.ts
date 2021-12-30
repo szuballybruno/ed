@@ -1,6 +1,6 @@
 
 import { readFileSync } from "fs";
-import { replaceAll } from "../../utilities/helpers";
+import { replaceAll, toSQLSnakeCasing } from "../../utilities/helpers";
 import { GlobalConfiguration } from "../misc/GlobalConfiguration";
 import { log, logObject } from "../misc/logger";
 import { SQLConnectionService } from "./SQLConnectionService";
@@ -99,7 +99,7 @@ export class SQLBootstrapperService {
 
         const dropDBScript = this._dbSchema
             .entities
-            .map(x => `DROP TABLE IF EXISTS public.${this.toSQLName(x.name)} CASCADE;`)
+            .map(x => `DROP TABLE IF EXISTS public.${toSQLSnakeCasing(x.name)} CASCADE;`)
             .join("\n");
 
         // const dropDBScriptPath = `./sql/misc/dropDB.sql`;
@@ -148,11 +148,6 @@ export class SQLBootstrapperService {
             await this._sqlConnectionService
                 .executeSQLAsync(script);
         }
-    }
-
-    private toSQLName = (name: string) => {
-
-        return name.split(/(?=[A-Z])/).join('_').toLowerCase();
     }
 
     private recreateFunctionsAsync = async (functionNames: string[]) => {

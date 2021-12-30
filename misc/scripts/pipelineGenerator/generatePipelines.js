@@ -34,7 +34,7 @@ const environemnts = [
 const pipelineText = fs.readFileSync(__dirname + "/pipelineTemplate.yml", 'utf8');
 
 // create clean directory for pipelines
-const outputDirectoryPath = __dirname + "/../../.github/workflows";
+const outputDirectoryPath = __dirname + "/../../../.github/workflows";
 
 removeAllFilesInFolder(outputDirectoryPath);
 // fs.rmdirSync(outputDirectoryPath, { recursive: true });

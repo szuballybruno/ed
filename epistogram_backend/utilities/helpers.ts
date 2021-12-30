@@ -20,6 +20,11 @@ export const throwNotImplemented = () => {
     throw new Error("Not implemented!");
 }
 
+export const toSQLSnakeCasing = (name: string) => {
+
+    return name.split(/(?=[A-Z])/).join('_').toLowerCase();
+}
+
 export const forN = <T>(iterations: number, action: (index: number) => T) => {
 
     let returnValues = [] as T[];
