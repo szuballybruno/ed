@@ -1,25 +1,24 @@
-import { Flex, FlexProps, Image } from "@chakra-ui/react";
-import { Slider, Typography } from "@mui/material";
+import { Flex, Image } from "@chakra-ui/react";
+import { Slider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { CourseCategoryDTO } from "../../../models/shared_models/CourseCategoryDTO";
 import { CourseDetailsEditDataDTO } from "../../../models/shared_models/CourseDetailsEditDataDTO";
 import { HumanSkillBenefitDTO } from "../../../models/shared_models/HumanSkillBenefitDTO";
-import { TeacherDTO } from "../../../models/shared_models/TeacherDTO";
 import { CourseVisibilityType } from "../../../models/shared_models/types/sharedTypes";
 import { useCourseDetailsEditData, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { iterate } from "../../../static/frontendHelpers";
 import { LoadingFrame } from "../../system/LoadingFrame";
+import { CourseImprovementStatsRadar } from "../../universal/CourseImprovementStatsRadar";
 import { EpistoEntry } from "../../universal/EpistoEntry";
+import { EpistoLabel } from "../../universal/EpistoLabel";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { CourseImprovementStatsRadar } from "../../universal/CourseImprovementStatsRadar";
 import { EditSection } from "./EditSection";
 import { SimpleEditList } from "./SimpleEditList";
-import { EpistoLabel } from "../../universal/EpistoLabel";
 
 export const AdminCourseDetailsSubpage = () => {
 
@@ -58,13 +57,6 @@ export const AdminCourseDetailsSubpage = () => {
         text: "",
         value: 0
     })));
-
-    // functions 
-    const setBrowsedImage = (src: string, file: File) => {
-
-        setThumbnailSrc(src);
-        setThumbnailImageFile(file);
-    }
 
     const handleSaveCourseAsync = async () => {
 
@@ -166,7 +158,8 @@ export const AdminCourseDetailsSubpage = () => {
                                 <SelectImage
                                     width="300px"
                                     height="200px"
-                                    onImageSelected={setBrowsedImage}>
+                                    setImageFile={setThumbnailImageFile}
+                                    setImageSource={setThumbnailSrc}>
                                     <Image className="whall" objectFit="cover" src={thumbnailSrc} />
                                 </SelectImage>
                             </EpistoLabel>

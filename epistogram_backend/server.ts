@@ -108,7 +108,7 @@ import { PasswordChangeController } from './api/PasswordChangeController';
     const storageService = new StorageService(globalConfig);
     const fileService = new FileService(userService, storageService, ormConnectionService);
     const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService);
-    const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService);
+    const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService);
     const miscService = new MiscService(courseService, ormConnectionService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
@@ -239,7 +239,7 @@ import { PasswordChangeController } from './api/PasswordChangeController';
     addEndpoint(apiRoutes.course.getCourseBriefData, courseController.getCourseBriefDataAction);
     addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true });
     addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true });
-    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true });
+    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true });
     addEndpoint(apiRoutes.course.getAvailableCourses, courseController.getAvailableCoursesAction);
     addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true });
@@ -251,13 +251,13 @@ import { PasswordChangeController } from './api/PasswordChangeController';
     addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true });
     addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true });
     addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction);
-    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true });
+    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true });
 
     // video 
     addEndpoint(apiRoutes.video.createVideo, videoController.createVideoAction, { isPost: true });
     addEndpoint(apiRoutes.video.deleteVideo, videoController.deleteVideoAction, { isPost: true });
     addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true });
-    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true });
+    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true });
     addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction);
 
     // questions

@@ -1,5 +1,5 @@
 import { serverUrl } from "../../static/Environemnt";
-import { postFileAsync } from "./httpClient";
+import { postMultipartAsync } from "./httpClient";
 
 const mbToByte = 1000000;
 const maxChunkSizeBytes = 10 * mbToByte; // 10 mb
@@ -23,7 +23,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
 
         console.log(`Uploading chunk: #${chunkIndex} - ${currentChunkArrayBuffer.byteLength * 0.000001}mb`);
 
-        await postFileAsync(url, new File([currentChunkArrayBuffer], "chunk"), {
+        await postMultipartAsync(url, new File([currentChunkArrayBuffer], "chunk"), {
             chunkIndex,
             chunksCount,
             ...data

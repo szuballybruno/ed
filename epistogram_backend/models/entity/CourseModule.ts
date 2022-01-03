@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
 import { Exam } from "./Exam";
+import { StorageFile } from "./StorageFile";
 import { Video } from "./Video";
 
 @Entity()
@@ -35,4 +36,12 @@ export class CourseModule {
     @OneToMany(_ => Video, x => x.module)
     @JoinColumn()
     videos: Video[];
+
+    // image file 
+    @Column({ nullable: true, type: "integer" })
+    imageFileId: number | null;
+
+    @OneToOne(_ => StorageFile, x => x.courseModule)
+    @JoinColumn({ name: "image_file_id" })
+    imageFile: StorageFile | null;
 }

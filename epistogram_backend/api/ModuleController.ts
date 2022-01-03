@@ -20,7 +20,9 @@ export class ModuleController {
 
     deleteModuleAction = async (params: ActionParams) => {
 
-        const moduleId = withValueOrBadRequest<number>(params.req.query.moduleId, "number");
+        const moduleId = params
+            .getBody<{ moduleId: number }>()
+            .getValue(x => x.moduleId, "int");
 
         await this._moduleService
             .deleteModulesAsync([moduleId]);
@@ -36,9 +38,13 @@ export class ModuleController {
 
     saveModuleAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<ModuleAdminEditDTO>(params.req.body);
+        const dto = params
+            .getBody<ModuleAdminEditDTO>();
+
+        const file = params
+            .getSingleFile();
 
         return this._moduleService
-            .saveModuleAsync(dto);
+            .saveModuleAsync(dto.data, file);
     }
 }

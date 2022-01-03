@@ -1,3 +1,4 @@
+import { log } from "console";
 import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { User } from "../models/entity/User";
@@ -42,13 +43,16 @@ export class ActionParams {
     res: Response;
     next: NextFunction;
     currentUserId: number;
+    isMultipart: boolean;
 
     constructor(
         req: Request,
         res: Response,
         next: NextFunction,
-        userId: number) {
+        userId: number,
+        isMultipart: boolean) {
 
+        this.isMultipart = isMultipart;
         this.req = req;
         this.res = res;
         this.next = next;
@@ -57,14 +61,46 @@ export class ActionParams {
 
     getBody<T>() {
 
-        const body = withValueOrBadRequest<T>(this.req.body);
-        return new SafeObjectWrapper<T>(body);
+        if (this.isMultipart) {
+
+            const bodyJson = withValueOrBadRequest<string>(this.req.body.document);
+            const body = JSON.parse(bodyJson);
+            return new SafeObjectWrapper<T>(body);
+        }
+        else {
+
+            if (this.req.body.document)
+                log("--- WARNING: body has a document property, this might mean it's not a JSON payload, but a multipart form data!");
+
+            const body = withValueOrBadRequest<T>(this.req.body);
+            return new SafeObjectWrapper<T>(body);
+        }
     }
 
     getQuery<T>() {
 
         const query = withValueOrBadRequest<T>(this.req.query);
         return new SafeObjectWrapper<T>(query);
+    }
+
+    getFiles() {
+
+        return this.req.files;
+    }
+
+    getSingleFile() {
+
+        const file = this.req.files?.file;
+        return (file ? file : undefined) as UploadedFile | undefined;
+    }
+
+    getSingleFileOrFail() {
+
+        const file = this.req.files?.file;
+        if (!file)
+            throw new TypedError("File not sent!", "bad request");
+
+        return file as UploadedFile;
     }
 };
 

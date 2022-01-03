@@ -1,12 +1,10 @@
-import { Flex } from "@chakra-ui/layout"
-import { Typography } from "@mui/material";
-import { ModuleDetailedDTO } from "../../models/shared_models/ModuleDetailedDTO"
-import { EpistoHeader } from "../EpistoHeader"
-import { EpistoButton } from "../universal/EpistoButton";
+import { Flex } from "@chakra-ui/layout";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { TimeoutFrame } from "../universal/TimeoutFrame";
-import { useEffect } from "react";
-import { useReactTimer } from "../../helpers/reactTimer";
+import { Typography } from "@mui/material";
+import { ModuleDetailedDTO } from "../../models/shared_models/ModuleDetailedDTO";
+import { EpistoHeader } from "../EpistoHeader";
+import { EpistoButton } from "../universal/EpistoButton";
+import { Image } from "@chakra-ui/react";
 
 export const ModuleView = (params: {
     module?: ModuleDetailedDTO,
@@ -20,7 +18,14 @@ export const ModuleView = (params: {
         <Flex flex="1" align="center" justify="center">
 
             <Flex direction="column">
-                <EpistoHeader text={module?.name ?? ""} variant="giant"></EpistoHeader>
+                <EpistoHeader
+                    text={module?.name ?? ""}
+                    variant="giant" />
+
+                <Image
+                    width="400px"
+                    src={module?.imageFilePath ?? ""} />
+
                 <Typography>
                     {module?.description}
                 </Typography>

@@ -18,7 +18,8 @@ export const addAPIEndpoint = (
         ? options
         : {
             isPost: false,
-            isPublic: false
+            isPublic: false,
+            isMultipart: false
         } as EndpointOptionsType;
 
     const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
@@ -33,7 +34,9 @@ export const addAPIEndpoint = (
                 ? -1
                 : getRequestAccessTokenPayload(accessToken).userId;
 
-            return await action(new ActionParams(req, res, next, userId));
+            const actionParams = new ActionParams(req, res, next, userId, !!opts.isMultipart);
+
+            return await action(actionParams);
         }
 
         asyncActionWrapper()
@@ -73,7 +76,7 @@ export const respond = (res: Response, code: number, data?: any) => {
 }
 
 export type ApiActionType = (params: ActionParams) => Promise<any>;
-export type EndpointOptionsType = { isPublic?: boolean, isPost?: boolean };
+export type EndpointOptionsType = { isPublic?: boolean, isPost?: boolean, isMultipart?: boolean };
 
 export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
 

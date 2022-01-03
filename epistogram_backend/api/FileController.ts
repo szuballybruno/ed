@@ -1,6 +1,5 @@
-import { UploadedFile } from "express-fileupload";
 import { FileService } from "../services/FileService";
-import { ActionParams, TypedError, withValueOrBadRequest } from "../utilities/helpers";
+import { ActionParams, TypedError } from "../utilities/helpers";
 
 export class FileController {
 
@@ -13,7 +12,8 @@ export class FileController {
 
     uploadAvatarFileAction = (params: ActionParams) => {
 
-        const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
+        const file = params
+            .getSingleFileOrFail();
 
         //TODO: Create a validation function
         if (!["image/png", "image/jpeg"].includes(file.mimetype))

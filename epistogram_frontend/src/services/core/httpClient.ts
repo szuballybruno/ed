@@ -87,21 +87,26 @@ export const httpDeleteAsync = async (urlEnding: string) => {
     return new HTTPResponse(axiosResponse.status, axiosResponse.data);
 }
 
+/**
+ * Post a json payload, without implicitly handling errors, 
+ * meaning exceptions will bubble up, and must be handled by the caller funciton.
+ * 
+ * @param url 
+ * @returns 
+ */
 export const usePostDataUnsafe = <TData, TResult>(url: string) => {
 
     const [state, setState] = useState<LoadingStateType>("idle");
     const [result, setResult] = useState<TResult | null>(null);
 
-    const postDataAsync = async (data?: TData, file?: File, queryObject?: any) => {
+    const postDataAsync = async (data?: TData) => {
 
         try {
 
             setState("loading");
 
             const postData = data ? data : undefined;
-            const postResult = file
-                ? await postFileAsync(url, file, data) as TResult
-                : await httpPostAsync(url, postData, undefined, queryObject) as TResult;
+            const postResult = await httpPostAsync(url, postData, undefined, undefined) as TResult
 
             setState("idle");
             setResult(postResult);
@@ -129,6 +134,49 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
     };
 }
 
+/**
+ * Post a multipart payload, containing a file, 
+ * and or a data object as a json document.
+ * This is also unsafe, as in errors are not handled implicitly.
+ * 
+ * @param url 
+ * @returns 
+ */
+export const usePostMultipartDataUnsafe = <TData>(url: string) => {
+
+    const [state, setState] = useState<LoadingStateType>("idle");
+
+    const postMultipartDataAsync = async (data?: TData, file?: File) => {
+
+        try {
+
+            setState("loading");
+
+            await postMultipartAsync(url, file, data);
+
+            setState("idle");
+        }
+        catch (e) {
+
+            setState("idle");
+            throw e;
+        }
+    }
+
+    return {
+        postMultipartDataAsync,
+        state
+    };
+}
+
+/**
+ * Post a json payload, and implicitly handle errors, 
+ * which will be set to the error output const. 
+ * State is set accordingly. 
+ * 
+ * @param url 
+ * @returns 
+ */
 export const usePostData = <TData, TResult>(url: string) => {
 
     const [state, setState] = useState<LoadingStateType>("success");
@@ -167,46 +215,30 @@ export const usePostData = <TData, TResult>(url: string) => {
     };
 }
 
-export const usePostFile = (url: string) => {
-
-    const [state, setState] = useState<LoadingStateType>("idle");
-
-    return {
-        postFileAsync: async (file: File) => {
-
-            try {
-
-                setState("loading");
-
-                await postFileAsync(url, file);
-
-                setState("idle");
-            }
-            catch (e) {
-
-                setState("idle");
-                throw e;
-            }
-        },
-        state
-    };
-}
-
-export const postFileAsync = async (url: string, file: File, data?: any) => {
+/**
+ * Post multipart form data. 
+ * This allows sending files to the server, and also a data object as json.
+ * 
+ * @param url 
+ * @param file 
+ * @param data 
+ * @returns 
+ */
+export const postMultipartAsync = async (url: string, file?: File, data?: any) => {
 
     var formData = new FormData();
 
-    formData.append('file', file);
+    // append file data
+    if (file) {
 
+        formData.append('file', file);
+    }
+
+    // append json data 
     if (data) {
 
-        for (const key in data) {
-            if (Object.prototype.hasOwnProperty.call(data, key)) {
-
-                const value = data[key];
-                formData.append(key, value);
-            }
-        }
+        const jsonData = JSON.stringify(data);
+        formData.append("document", jsonData);
     }
 
     return await httpPostAsync(

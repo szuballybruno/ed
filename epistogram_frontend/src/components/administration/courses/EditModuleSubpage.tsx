@@ -7,11 +7,16 @@ import { LoadingFrame } from "../../system/LoadingFrame"
 import { EpistoEntry } from "../../universal/EpistoEntry"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
 import { useModuleEditData, useSaveModule } from "../../../services/api/moduleApiService"
+import { EpistoLabel } from "../../universal/EpistoLabel"
+import { SelectImage } from "../../universal/SelectImage"
+import { Image } from "@chakra-ui/react";
 
 export const EditModuleSubpage = () => {
 
     const [moduleName, setModuleName] = useState("");
     const [moduleDescription, setModuleDescription] = useState("");
+    const [moduleImageSource, setMoudleImageSource] = useState<string | null>(null);
+    const [moduleImageFile, setMoudleImageFile] = useState<File | null>(null);
 
     const moduleId = useIntParam("moduleId");
     const { moduleEditData } = useModuleEditData(moduleId);
@@ -22,11 +27,14 @@ export const EditModuleSubpage = () => {
 
         try {
 
-            await saveModuleAsync({
-                id: moduleId,
-                name: moduleName,
-                description: moduleDescription
-            } as ModuleAdminEditDTO);
+            await saveModuleAsync(
+                {
+                    id: moduleId,
+                    name: moduleName,
+                    description: moduleDescription
+                } as ModuleAdminEditDTO,
+                moduleImageFile ?? undefined);
+
             showNotification("Modul sikeresen mentve.");
         }
         catch (e) {
@@ -41,7 +49,8 @@ export const EditModuleSubpage = () => {
             return;
 
         setModuleName(moduleEditData.name);
-        setModuleDescription(moduleEditData.description)
+        setModuleDescription(moduleEditData.description);
+        setMoudleImageSource(moduleEditData.imageFilePath);
     }, [moduleEditData]);
 
     return <LoadingFrame
@@ -57,6 +66,19 @@ export const EditModuleSubpage = () => {
             ]}
             px="20px"
             onSave={handleSaveModuleAsync}>
+
+            <EpistoLabel text="Udvozlo kep">
+                <SelectImage
+                    width="300px"
+                    height="200px"
+                    setImageSource={setMoudleImageSource}
+                    setImageFile={setMoudleImageFile}>
+                    <Image
+                        className="whall"
+                        objectFit="cover"
+                        src={moduleImageSource ?? ""} />
+                </SelectImage>
+            </EpistoLabel>
 
             <EpistoEntry
                 label="Modul neve"

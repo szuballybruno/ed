@@ -5,11 +5,12 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { HiddenFileUploadInput } from "./HiddenFileUploadInput";
 
 export const SelectImage = (props: {
-    onImageSelected: (src: string, file: File) => void,
+    setImageSource: (src: string) => void,
+    setImageFile: (file: File) => void,
 } & BoxProps) => {
 
     const [isHovered, setIsHovered] = useState(false);
-    const { children, onImageSelected, ...css } = props;
+    const { children, setImageFile, setImageSource, ...css } = props;
     const fileBrowseInputRef = useRef<HTMLInputElement>(null);
 
     return <Box
@@ -25,7 +26,10 @@ export const SelectImage = (props: {
         <HiddenFileUploadInput
             ref={fileBrowseInputRef}
             type="image"
-            onFileSelected={(file, src) => onImageSelected(src, file)} />
+            onFileSelected={(file, src) => {
+                setImageSource(src);
+                setImageFile(file);
+            }} />
 
         {children}
 

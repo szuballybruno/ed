@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
+import { CourseModule } from "./CourseModule";
 import { ShopItem } from "./ShopItem";
 import { User } from "./User";
 import { Video } from "./Video";
@@ -32,4 +33,8 @@ export class StorageFile {
     @OneToMany(_ => ShopItem, x => x.coverFile)
     @JoinColumn()
     shopItems: ShopItem[];
+
+    // course module 
+    @OneToOne(_ => CourseModule, x => x.imageFile)
+    courseModule: CourseModule;
 }

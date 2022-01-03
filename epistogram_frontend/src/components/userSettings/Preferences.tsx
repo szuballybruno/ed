@@ -115,15 +115,6 @@ export const Preferences = () => {
         setCurrentPassword("");
     }, [isPasswordChangeOpen]);
 
-    const setBrowsedImage = (src: string, file: File) => {
-
-        if (!imageRef.current)
-            return;
-
-        setAvatarSrc(src);
-        setAvatarFile(file);
-    }
-
     return <>
 
         <LoadingFrame
@@ -136,7 +127,8 @@ export const Preferences = () => {
                 width="200px"
                 height="200px"
                 className="circle"
-                onImageSelected={setBrowsedImage}>
+                setImageSource={setAvatarSrc}
+                setImageFile={setAvatarFile}>
                 <ProfileImage
                     url={avatarSrc ?? null}
                     ref={imageRef}

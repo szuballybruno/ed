@@ -79,8 +79,12 @@ export class CourseController {
 
     saveCourseThumbnailAction = async (params: ActionParams) => {
 
-        const file = withValueOrBadRequest<UploadedFile>(params.req.files?.file);
-        const courseId = withValueOrBadRequest<number>(params.req.body.courseId, "number");
+        const file = params
+            .getSingleFileOrFail();
+
+        const courseId = params
+            .getBody<{ courseId: number }>()
+            .getValue(x => x.courseId, "int");
 
         await this._courseService
             .saveCourseThumbnailAsync(file, courseId);

@@ -82,17 +82,23 @@ import { ExamView } from "../../models/views/ExamView";
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
     mapperService
-        .addMap(CourseModule, ModuleDetailedDTO, view => ({
-            id: view.id,
-            name: view.name,
-            description: view.description
+        .addMap(CourseModule, ModuleDetailedDTO, courseModule => ({
+            id: courseModule.id,
+            name: courseModule.name,
+            description: courseModule.description,
+            imageFilePath: courseModule.imageFile
+                ? getAssetUrl(courseModule.imageFile.filePath)
+                : null
         }));
 
     mapperService
-        .addMap(CourseModule, ModuleAdminEditDTO, view => ({
-            id: view.id,
-            name: view.name,
-            description: view.description
+        .addMap(CourseModule, ModuleAdminEditDTO, courseModule => ({
+            id: courseModule.id,
+            name: courseModule.name,
+            description: courseModule.description,
+            imageFilePath: courseModule.imageFile
+                ? getAssetUrl(courseModule.imageFile.filePath)
+                : null
         }));
 
     mapperService

@@ -2,7 +2,7 @@ import { useReactQuery2 } from "../../static/frontendHelpers";
 import { ModuleAdminEditDTO } from "../../models/shared_models/ModuleAdminEditDTO";
 import { ModuleCreateDTO } from "../../models/shared_models/ModuleCreateDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
 
 export const useCreateModule = () => {
 
@@ -15,19 +15,19 @@ export const useCreateModule = () => {
 
 export const useDeleteModule = () => {
 
-    const qr = usePostDataUnsafe<void, void>(apiRoutes.module.deleteModule);
+    const qr = usePostDataUnsafe<{ moduleId: number }, void>(apiRoutes.module.deleteModule);
 
     return {
-        deleteModuleAsync: (moduleId: number) => qr.postDataAsync(undefined, undefined, { moduleId }),
+        deleteModuleAsync: (moduleId: number) => qr.postDataAsync({ moduleId }),
     };
 }
 
 export const useSaveModule = () => {
 
-    const qr = usePostDataUnsafe<ModuleAdminEditDTO, void>(apiRoutes.module.saveModule);
+    const qr = usePostMultipartDataUnsafe<ModuleAdminEditDTO>(apiRoutes.module.saveModule);
 
     return {
-        saveModuleAsync: qr.postDataAsync
+        saveModuleAsync: qr.postMultipartDataAsync
     };
 }
 

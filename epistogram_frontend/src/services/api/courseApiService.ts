@@ -11,7 +11,7 @@ import { TextDTO } from "../../models/shared_models/TextDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { UserCoursesDataDTO } from "../../models/shared_models/UserCoursesDataDTO";
 import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
 
 export const useAdminCourseList = (searchText: string) => {
 
@@ -101,10 +101,10 @@ export const useStartCourse = () => {
 
 export const useUploadCourseThumbnailAsync = () => {
 
-    const qr = usePostDataUnsafe<{ courseId: number }, void>(apiRoutes.course.saveCourseThumbnail);
+    const qr = usePostMultipartDataUnsafe<{ courseId: number }>(apiRoutes.course.saveCourseThumbnail);
 
     return {
-        saveCourseThumbnailAsync: (courseId: number, file: File) => qr.postDataAsync({ courseId }, file),
+        saveCourseThumbnailAsync: (courseId: number, file: File) => qr.postMultipartDataAsync({ courseId }, file),
         saveCourseThumbnailState: qr.state,
     }
 }
