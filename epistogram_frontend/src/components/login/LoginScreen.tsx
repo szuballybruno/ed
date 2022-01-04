@@ -182,9 +182,10 @@ const LoginScreen = () => {
                             type="password"
                             setValue={setPassword}
                             height="50px" />
-
+                      
                         {/* forgot password */}
                         <EpistoButton
+                            type="reset"
                             onClick={() => passwordResetDialogLogic.openDialog()}>
 
                             <Typography
@@ -204,12 +205,16 @@ const LoginScreen = () => {
                         </Typography>
                     </Box>
 
-                    <EpistoButton variant="colored" padding="15px" style={{
-                        marginTop: 15,
-                        marginBottom: 15,
-                        width: "100%",
-                        backgroundColor: "#AE1E2E"//"#6437AB"
-                    }} onClick={handleLoginUserAsync}>
+                    <EpistoButton 
+                        variant="colored" 
+                        padding="15px"
+                        type="submit"
+                        style={{
+                            marginTop: 15,
+                            marginBottom: 15,
+                            width: "100%",
+                            backgroundColor: "#AE1E2E"//"#6437AB"
+                        }} onClick={handleLoginUserAsync}>
                         Bejelentkezés
                     </EpistoButton>
 

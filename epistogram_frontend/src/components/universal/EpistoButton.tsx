@@ -15,6 +15,7 @@ export type EpistoButtonPropsType = {
     isDisabled?: boolean,
     buttonProps?: ButtonProps,
     name?: string
+    type?: "button" | "submit" | "reset" | undefined
 };
 
 export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>((props: EpistoButtonPropsType, ref) => {
@@ -31,7 +32,8 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         className,
         icon,
         isDisabled,
-        name
+        name,
+        type
     } = props;
 
     const { variant: _, ...buttonProps } = props.buttonProps ?? { variant: null };
@@ -48,6 +50,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         ref={ref}
         disabled={isDisabled}
         className={`${className} fontMid`}
+        type={type}
         style={{
             overflow: "hidden",
             whiteSpace: "nowrap",
