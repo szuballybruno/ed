@@ -1,4 +1,3 @@
-import { type } from "os";
 
 export type InvitationTokenPayload = { userEmail: string };
 
@@ -35,10 +34,40 @@ export type EventType = "coin_acquire_answer_streak" | "coin_acquire_session_str
 
 export type CourseVisibilityType = "public" | "private";
 
-export const RoleIdEnum = {
-    administrator: 1,
-    supervisor: 2,
-    user: 3
+export type RoleType = "administrator" | "supervisor" | "user";
+
+export class RoleIdEnum {
+    static administrator: 1;
+    static supervisor: 2;
+    static user: 3;
+
+    static toRoleType(roleId: number): RoleType {
+
+        if (roleId === RoleIdEnum.administrator)
+            return "administrator";
+
+        if (roleId === RoleIdEnum.supervisor)
+            return "supervisor";
+
+        if (roleId === RoleIdEnum.user)
+            return "user";
+
+        throw new Error("Invalid role id: " + roleId);
+    }
+
+    static toRoleId(roleType: RoleType) {
+
+        if (roleType === "administrator")
+            return RoleIdEnum.administrator;
+
+        if (roleType === "supervisor")
+            return RoleIdEnum.supervisor;
+
+        if (roleType === "user")
+            return RoleIdEnum.user;
+
+        throw new Error("Invalid role type: " + roleType);
+    }
 }
 
 export const JobTitleIdEnum = {
