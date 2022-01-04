@@ -109,7 +109,7 @@ import { PasswordChangeController } from './api/PasswordChangeController';
     const fileService = new FileService(userService, storageService, ormConnectionService);
     const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService);
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
-    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService);
+    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService);
     const miscService = new MiscService(courseService, ormConnectionService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, vpss, coinAcquireService, userSessionActivityService, mapperService);

@@ -163,6 +163,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 title: x.title,
                 categoryName: x.categoryName,
                 subCategoryName: x.subCategoryName,
+                currentItemCode: x.currentItemCode,
+                firstItemCode: x.firstItemCode,
                 teacherName: toFullName(x.teacherFirstName, x.teacherLastName),
                 thumbnailImageURL: thumbnailImageURL,
                 isComplete: x.isCompleted,

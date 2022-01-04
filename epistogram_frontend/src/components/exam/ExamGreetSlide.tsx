@@ -47,22 +47,26 @@ export const ExamGreetSlide = (props: {
                 {translatableTexts.exam.greetText}
             </Typography>
 
-            {/* stats label */}
-            <Typography
-                style={{
-                }}>
+            {/* if previously completed  */}
+            {exam.isCompletedPreviously && <>
 
-                {translatableTexts.exam.statsLabelText}
-            </Typography>
+                {/* stats label */}
+                <Typography
+                    style={{
+                    }}>
 
-            {/* stats */}
-            {exam.isCompletedPreviously && <Flex align="center" justify="center">
+                    {translatableTexts.exam.statsLabelText}
+                </Typography>
 
-                <ExamResultStats
-                    correctAnswerRate={exam!.correctAnswerRate}
-                    totalQuestionCount={exam!.totalQuestionCount}
-                    correctAnswerCount={exam!.correctAnswerCount} />
-            </Flex>}
+                {/* stats */}
+                <Flex align="center" justify="center">
+
+                    <ExamResultStats
+                        correctAnswerRate={exam!.correctAnswerRate}
+                        totalQuestionCount={exam!.totalQuestionCount}
+                        correctAnswerCount={exam!.correctAnswerCount} />
+                </Flex>
+            </>}
         </Flex>
     </ExamLayout>
 }

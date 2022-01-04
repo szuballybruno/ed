@@ -29,6 +29,9 @@ export class CourseLearningStatsView {
     currentItemCode: string;
 
     @ViewColumn()
+    firstItemCode: string;
+
+    @ViewColumn()
     title: string;
 
     @ViewColumn()

@@ -2,6 +2,7 @@ import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { LinearProgress } from "@mui/material";
 import React from 'react';
 import { CourseLearningDTO } from "../../models/shared_models/CourseLearningDTO";
+import { useNavigation } from "../../services/core/navigatior";
 import { formatTimespan, getAssetUrl, roundNumber } from "../../static/frontendHelpers";
 import { EpistoButton } from "../universal/EpistoButton";
 import { FlexFloat } from "../universal/FlexFloat";
@@ -52,11 +53,27 @@ export const LearningCourseStatsTile = (props: {
         totalCourseItemCount,
         examSuccessRateAverage,
         questionSuccessRate,
-        finalExamSuccessRate
+        finalExamSuccessRate,
+        currentItemCode,
+        firstItemCode
     } = course;
+
+    const { navigateToPlayer } = useNavigation();
 
     const formattedSpentTime = formatTimespan(totalSpentTime);
     const progressPercentage = roundNumber(completedCourseItemCount / totalCourseItemCount * 100);
+
+    const handleStartCourse = () => {
+
+        if (isComplete) {
+
+            navigateToPlayer(firstItemCode);
+        }
+        else {
+
+            navigateToPlayer(currentItemCode);
+        }
+    }
 
     return <FlexFloat
         className="whall"
@@ -211,9 +228,10 @@ export const LearningCourseStatsTile = (props: {
             {/* start course */}
             <EpistoButton
                 variant="colored"
+                onClick={handleStartCourse}
                 style={{ flex: "1" }}>
 
-                Folytatom
+                {isComplete ? "Ujrakezdem" : "Folytatom"}
             </EpistoButton>
         </Flex>
     </FlexFloat>

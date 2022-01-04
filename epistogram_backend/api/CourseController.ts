@@ -110,7 +110,7 @@ export class CourseController {
         const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
         const modeType = withValueOrBadRequest<CourseModeType>(params.req.query.mode);
 
-        return this._courseService.setCourseTypeAsync(params.currentUserId, courseId, modeType);
+        return this._courseService.setCourseModeAsync(params.currentUserId, courseId, modeType);
     };
 
     getCourseProgressShortAction = async (params: ActionParams) => {

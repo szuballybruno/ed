@@ -51,7 +51,7 @@ WHERE
 AND 
 (
 	(
-		-- incorrect video answer 6h ago
+		-- incorrect video answer 
 		"ga"."is_practise_answer" = false 
 		AND  
 		"ga"."is_correct" IS DISTINCT FROM true
@@ -60,7 +60,7 @@ AND
 	)
 	OR
 	(
-		-- correct video answer 24h ago
+		-- correct video answer 
 		"ga"."is_practise_answer" = false 
 		AND  
 		"ga"."is_correct" = true 
@@ -69,7 +69,7 @@ AND
 	)
 	OR
 	(
-		-- incorrect practise answer 48h ago
+		-- incorrect practise answer 
 		"ga"."is_practise_answer" = true 
 		AND  
 		"ga"."is_correct" IS DISTINCT FROM true

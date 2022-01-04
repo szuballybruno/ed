@@ -30,7 +30,7 @@ export class SeedService {
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedCourses");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedExams");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedVideos");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestions");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionsVideo");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionsExam");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedDailyTips");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedActivationCodes");

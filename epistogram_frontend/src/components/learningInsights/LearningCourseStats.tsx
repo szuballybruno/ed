@@ -36,10 +36,13 @@ export const LearningCourseStats = () => {
                 </EpistoGrid>
 
                 : <Flex p="100px">
-                    <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>
+                    <Typography variant={"h6"}>
+                        Még nem végeztél el egyetlen kurzust sem.
+                    </Typography>
                 </Flex>}
         </DashboardSection >
 
+        {/* in progress courses  */}
         <DashboardSection variant="noShadow" title="Folyamatban lévő kurzusaim">
             {isAnyCoursesInProgress
                 ? <EpistoGrid
@@ -54,7 +57,9 @@ export const LearningCourseStats = () => {
                     }
                 </EpistoGrid>
                 : <Flex p="100px">
-                    <Typography variant={"h6"}>Még nem végeztél el egyetlen kurzust sem.</Typography>
+                    <Typography variant={"h6"}>
+                        Még nem kezdtel el egyetlen kurzust sem.
+                    </Typography>
                 </Flex>}
         </DashboardSection>
     </LoadingFrame>

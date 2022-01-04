@@ -37,6 +37,7 @@ import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
+import { ExamService } from "./ExamService";
 
 export class CourseService {
 
@@ -46,6 +47,7 @@ export class CourseService {
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
     private _fileService: FileService;
+    private _examService: ExamService;
 
     constructor(
         moduleService: ModuleService,
@@ -53,7 +55,8 @@ export class CourseService {
         videoService: VideoService,
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        fileService: FileService) {
+        fileService: FileService,
+        examService: ExamService) {
 
         this._moduleService = moduleService;
         this._userCourseBridgeService = userCourseBridgeService;
@@ -61,6 +64,7 @@ export class CourseService {
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._fileService = fileService;
+        this._examService = examService;
     }
 
     async getCourseProgressShortAsync(userId: number) {
@@ -117,6 +121,12 @@ export class CourseService {
             });
     }
 
+    /**
+     * Returns the /learning/courses data.  
+     * 
+     * @param userId 
+     * @returns 
+     */
     getCourseProgressDataAsync = async (userId: number) => {
 
         const courses = await this._ormService
@@ -137,7 +147,7 @@ export class CourseService {
             .filter(x => x.isCompleted);
 
         const completedCoursesAsCourseShortDTOs = this._mapperService
-            .mapMany(CourseLearningStatsView, CourseLearningDTO, inProgressCourses);
+            .mapMany(CourseLearningStatsView, CourseLearningDTO, completedCourses);
 
         return {
             isAnyCoursesComplete: completedCourses.any(x => true),
@@ -147,6 +157,13 @@ export class CourseService {
         } as UserCoursesDataDTO;
     }
 
+    /**
+     * Save course thumbnail.
+     * 
+     * @param file 
+     * @param courseId 
+     * @returns 
+     */
     async saveCourseThumbnailAsync(file: UploadedFile, courseId: number) {
 
         const getCourseAsync = () => this._ormService
@@ -169,27 +186,13 @@ export class CourseService {
                 file.data);
     }
 
-    getCourseItemsDescriptorCodesAsync = async (userId: number, courseId: number) => {
-
-        const course = await this._ormService
-            .getRepository(Course)
-            .createQueryBuilder("c")
-            .where("c.id = :courseId", { courseId })
-            .leftJoinAndSelect("c.videos", "v")
-            .leftJoinAndSelect("c.exams", "e")
-            .getOneOrFail();
-
-        const codes = course
-            .videos
-            .map(x => ({ code: getItemCode(x.id, "video"), order: x.orderIndex }))
-            .concat(course
-                .exams
-                .map(e => ({ code: getItemCode(e.id, "exam"), order: e.orderIndex })));
-
-        return codes.orderBy(x => x.order).map(x => x.code);
-    }
-
-    getCurrentCourseItemsAsync = async (userId: number) => {
+    /**
+     * Get course items list of current course.
+     * 
+     * @param userId 
+     * @returns 
+     */
+    async getCurrentCourseItemsAsync(userId: number) {
 
         // get current item 
         const courseBridge = await this._ormService
@@ -239,7 +242,14 @@ export class CourseService {
         return modules;
     }
 
-    getCourseModulesAsync = async (userId: number, courseId: number) => {
+    /**
+     * Get course modules with items.
+     * 
+     * @param userId 
+     * @param courseId 
+     * @returns 
+     */
+    async getCourseModulesAsync(userId: number, courseId: number) {
 
         const views = await this._ormService
             .getRepository(CourseItemStateView)
@@ -275,7 +285,13 @@ export class CourseService {
         return modules;
     }
 
-    getCourseIdByItemCodeAsync = async (descriptorCode: string) => {
+    /**
+     * Returns the course id from an item code.
+     * 
+     * @param descriptorCode 
+     * @returns 
+     */
+    async getCourseIdByItemCodeAsync(descriptorCode: string) {
 
         const { itemId, itemType } = readItemCode(descriptorCode);
 
@@ -283,25 +299,21 @@ export class CourseService {
             return (await this._videoService.getVideoByIdAsync(itemId)).courseId;
 
         if (itemType === "exam")
-            return (await this.getExamByIdAsync(itemId)).courseId;
+            return (await this._examService.getExamByIdAsync(itemId)).courseId;
 
         return (await this._ormService
             .getRepository(CourseModule)
             .findOneOrFail(itemId)).courseId;
     }
 
-    getCourseItemCode = (videoId?: number | null, examId?: number | null) => {
-
-        if (videoId)
-            return getItemCode(videoId, "video");
-
-        if (examId)
-            return getItemCode(examId, "exam");
-
-        throw new Error("Arguments are null or undefined");
-    }
-
-    startCourseAsync = async (userId: number, courseId: number) => {
+    /**
+     * Starts the first module of a course.
+     * 
+     * @param userId 
+     * @param courseId 
+     * @returns 
+     */
+    async startCourseAsync(userId: number, courseId: number) {
 
         const module = await this._ormService
             .getRepository(CourseModule)
@@ -322,6 +334,13 @@ export class CourseService {
         } as TextDTO;
     }
 
+    /**
+     * Set current course and course current item code.
+     * 
+     * @param userId 
+     * @param courseId 
+     * @param itemCode 
+     */
     setCurrentCourse = async (
         userId: number,
         courseId: number,
@@ -373,7 +392,14 @@ export class CourseService {
                 } as UserCourseBridge)));
     }
 
-    setCourseTypeAsync = async (userId: number, courseId: number, mode: CourseModeType) => {
+    /**
+     * Sets the course mode (beginner / advanced).
+     * 
+     * @param userId 
+     * @param courseId 
+     * @param mode 
+     */
+    setCourseModeAsync = async (userId: number, courseId: number, mode: CourseModeType) => {
 
         const userCourseBridge = await this._userCourseBridgeService
             .getUserCourseBridgeAsync(userId, courseId);
@@ -389,13 +415,6 @@ export class CourseService {
                 id: userCourseBridge.id,
                 courseMode: mode
             } as UserCourseBridge);
-    }
-
-    getExamByIdAsync = (examId: number) => {
-
-        return this._ormService
-            .getRepository(Exam)
-            .findOneOrFail(examId);
     }
 
     /**
@@ -532,6 +551,11 @@ export class CourseService {
             .mapMany(CourseAdminShortView, CourseAdminListItemDTO, courseAdminShortViews);
     }
 
+    /**
+     * Delete course.
+     * 
+     * @param courseId 
+     */
     deleteCourseAsync = async (courseId: number) => {
 
         // delete user course bridges
@@ -560,7 +584,13 @@ export class CourseService {
 
     }
 
-    getAvailableCoursesAsync = async (userId: number) => {
+    /**
+     * Returns the currently available courses. 
+     * 
+     * @param userId 
+     * @returns 
+     */
+    async getAvailableCoursesAsync(userId: number) {
 
         const courses = await this._ormService
             .getRepository(CourseView)
@@ -573,6 +603,15 @@ export class CourseService {
             .mapMany(CourseView, CourseShortDTO, courses);
     }
 
+    /**
+     * Creates a course access bridge, 
+     * which opens access to a course for a specified user.
+     * This can be used to dinamically allow or disallow access to a course, by the user.
+     * Like when purchased from the shop, or got limited access etc... 
+     * 
+     * @param userId 
+     * @param courseId 
+     */
     async createCourseAccessBridge(userId: number, courseId: number) {
 
         await this._ormService

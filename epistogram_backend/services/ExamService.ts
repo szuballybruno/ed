@@ -178,6 +178,19 @@ export class ExamService {
     }
 
     /**
+     * Returns the exam by it's id.
+     * 
+     * @param examId 
+     * @returns 
+     */
+    getExamByIdAsync = (examId: number) => {
+
+        return this._ormService
+            .getRepository(Exam)
+            .findOneOrFail(examId);
+    }
+
+    /**
      * Answer a question in the exam. 
      * 
      * @param userId 
