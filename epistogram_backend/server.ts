@@ -66,6 +66,7 @@ import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/
 import './utilities/jsExtensions';
 import { PasswordChangeService } from './services/PasswordChangeService';
 import { PasswordChangeController } from './api/PasswordChangeController';
+import { AuthMiddleware } from './middleware/AuthMiddleware';
 
 (async () => {
 
@@ -137,13 +138,16 @@ import { PasswordChangeController } from './api/PasswordChangeController';
     const teacherInfoController = new TeacherInfoController(teacherInfoService);
     const passwordChangeController = new PasswordChangeController(passwordChangeService);
 
+    // middleware 
+    const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig);
+
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
 
-    const addEndpoint = (path: string, action: ApiActionType, opt?: EndpointOptionsType) =>
-        addAPIEndpoint(globalConfig, authenticationService.getRequestAccessTokenPayload, expressServer, path, action, opt);
+    const addEndpoint = (path: string, action: ApiActionType, options?: EndpointOptionsType) =>
+        addAPIEndpoint(authMiddleware, expressServer, action, path, options);
 
     // add middlewares
     expressServer.use(getCORSMiddleware(globalConfig));

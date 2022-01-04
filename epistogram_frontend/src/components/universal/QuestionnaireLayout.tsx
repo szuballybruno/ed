@@ -1,7 +1,6 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { LoadingFrame, LoadingFramePropsType } from '../system/LoadingFrame';
-import { EpistoButton } from './EpistoButton';
 import { EpistoText } from './EpistoText';
 
 export const QuestionnaireLayout = (props: {
@@ -62,15 +61,6 @@ export const QuestionnaireLayout = (props: {
                     {children}
                 </Flex>
             </LoadingFrame>
-
-            {/* footer */}
-            <Flex alignSelf="stretch" justifyContent="flex-end">
-                {answerAction && <EpistoButton
-                    variant="outlined"
-                    onClick={answerAction}>
-                    Küldés
-                </EpistoButton>}
-            </Flex>
         </Flex>
     );
 }
