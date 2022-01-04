@@ -8,6 +8,7 @@ import { useShowErrorDialog } from "../../services/core/notifications";
 import { getAssetUrl, useIsScreenWiderThan } from "../../static/frontendHelpers";
 import { useEpistoDialogLogic } from "../EpistoDialog";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
+import { LoadingFrame } from "../system/LoadingFrame";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoEntry } from "../universal/EpistoEntry";
 import { LoginPasswordResetDialog } from "./LoginPasswordResetDialog";
@@ -23,8 +24,10 @@ const LoginScreen = () => {
 
     // state
     const [errorMessage, setErrorMessage] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+
+    // refs
+    const emailRef = React.useRef<HTMLInputElement>(null);
+    const pwRef = React.useRef<HTMLInputElement>(null);
 
     const passwordResetDialogLogic = useEpistoDialogLogic({
         defaultCloseButtonType: "top",
@@ -34,14 +37,25 @@ const LoginScreen = () => {
     const isDesktopView = useIsScreenWiderThan(1200);
 
     // http 
-    const { loginUserAsync, loginUserError } = useLogInUser();
+    const { loginUserAsync, loginUserError, loginUserState } = useLogInUser();
 
     // func
     const handleLoginUserAsync = async () => {
 
-        await loginUserAsync(email, password);
+        if (!emailRef.current?.value)
+            return;
+
+        if (!pwRef.current?.value)
+            return;
+
+        await loginUserAsync(emailRef.current?.value, pwRef.current?.value);
         refetchUser();
     };
+
+    const handleValidation = () => {
+
+        // TODO
+    }
 
     // watch for auth state change
     // and navigate to home page if athenticated
@@ -83,6 +97,25 @@ const LoginScreen = () => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loginUserError]);
+
+    // keydown
+    useEffect(() => {
+
+        const onKeydown = (event) => {
+
+            if (event.code !== "Enter" && event.code !== "NumpadEnter")
+                return;
+
+            event.preventDefault();
+            handleLoginUserAsync();
+        };
+
+        document.addEventListener("keydown", onKeydown);
+
+        return () => {
+            document.removeEventListener("keydown", onKeydown);
+        };
+    }, []);
 
     return (
         <Flex h={"100vh"} justifyContent={"center"} alignItems={"flex-start"}>
@@ -130,7 +163,8 @@ const LoginScreen = () => {
             </Flex>
 
             {/* content pane */}
-            <Flex
+            <LoadingFrame
+                loadingState={loginUserState}
                 direction={"column"}
                 minH={"100%"}
                 w={"40%"}
@@ -145,11 +179,14 @@ const LoginScreen = () => {
                     alignItems={"center"}
                     width={window.innerWidth > 600 ? 450 : "90%"}>
 
-                    <img style={{
-                        zIndex: 1,
-                        width: 320,
-                        marginBottom: 25,
-                    }} src={getAssetUrl("/loginScreen/pcworldloginlogo.png")} alt={""} />
+                    <img
+                        style={{
+                            zIndex: 1,
+                            width: 320,
+                            marginBottom: 25,
+                        }}
+                        src={getAssetUrl("/loginScreen/pcworldloginlogo.png")}
+                        alt={""} />
 
                     <Flex
                         direction="column"
@@ -165,22 +202,22 @@ const LoginScreen = () => {
                     <Box w={"100%"}>
 
                         <EpistoEntry
-                            value={email}
+                            ref={emailRef}
                             labelVariant="top"
                             label="E-mail"
                             placeholder="E-mail"
                             name="email"
-                            setValue={setEmail}
+                            setValue={handleValidation}
                             height="50px" />
 
                         <EpistoEntry
-                            value={password}
+                            ref={pwRef}
                             labelVariant="top"
                             label="Jelszó"
                             placeholder="Jelszó"
                             name="password"
                             type="password"
-                            setValue={setPassword}
+                            setValue={handleValidation}
                             height="50px" />
 
                         {/* forgot password */}
@@ -222,7 +259,7 @@ const LoginScreen = () => {
                 </Flex>
 
 
-            </Flex>
+            </LoadingFrame>
         </Flex>
     )
 };

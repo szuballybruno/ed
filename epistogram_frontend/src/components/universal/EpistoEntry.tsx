@@ -1,9 +1,9 @@
 import { Flex } from "@chakra-ui/layout";
 import { InputAdornment, TextField, Typography } from "@mui/material";
-import { CSSProperties } from "react";
+import { forwardRef } from "react";
 
-export const EpistoEntry = (props: {
-    value: string,
+export type EpistoEntryPropsType = {
+    value?: string,
     label?: string,
     setValue?: (value: string) => void,
     onFocusLost?: (value: string) => void,
@@ -17,7 +17,9 @@ export const EpistoEntry = (props: {
     marginTop?: string,
     flex?: string,
     type?: "password" | "number" | "text"
-}) => {
+}
+
+export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((props: EpistoEntryPropsType, ref) => {
 
     const {
         label,
@@ -53,6 +55,7 @@ export const EpistoEntry = (props: {
         </Typography>}
 
         <TextField
+            inputRef={ref}
             disabled={disabled}
             size="small"
             label={labelVariant !== "top" ? label : undefined}
@@ -85,4 +88,4 @@ export const EpistoEntry = (props: {
                 // padding: "2px"
             }} />
     </Flex>
-}
+});
