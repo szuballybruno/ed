@@ -1,11 +1,10 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
-import { getAssetUrl } from "../static/frontendHelpers";
 import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
-import { QuestionTypeEnum } from "../models/shared_models/types/sharedTypes";
 import { showNotification } from "../services/core/notifications";
+import { getAssetUrl } from "../static/frontendHelpers";
 import { LoadingFramePropsType } from "./system/LoadingFrame";
 import { EpistoText } from "./universal/EpistoText";
 import { QuestionnaierAnswer } from "./universal/QuestionnaireAnswer";
@@ -34,33 +33,21 @@ export const QuesitionView = (props: {
 
     const isAnswered = correctAnswerIds.length > 0;
 
-    const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([]);
+    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
 
-    const toggleSelectedAnswer = (answerId: number) => {
+    const handleSelectedAnswerAsync = async (answerId: number) => {
 
-        if (selectedAnswerIds.some(x => x === answerId)) {
-
-            if (question.typeId === QuestionTypeEnum.multipleAnswers)
-                setSelectedAnswerIds(selectedAnswerIds.filter(x => x !== answerId));
-        }
-        else {
-
-            if (question.typeId === QuestionTypeEnum.multipleAnswers) {
-
-                setSelectedAnswerIds([...selectedAnswerIds, answerId]);
-            }
-            else {
-
-                setSelectedAnswerIds([answerId]);
-            }
-        }
+        setSelectedAnswerId(answerId);
+        await answerQuesitonAsync([answerId]);
     }
 
+    // reset when question id changed 
     useEffect(() => {
 
-        setSelectedAnswerIds([]);
+        setSelectedAnswerId(null);
     }, [question.questionId]);
 
+    // bonus coin 
     useEffect(() => {
 
         if (!bonusCoinsAcquired)
@@ -85,14 +72,13 @@ export const QuesitionView = (props: {
         title={question.questionText}
         loadingProps={loadingProps}
         onlyShowAnswers={onlyShowAnswers}
-        answerAction={isAnswered ? undefined : () => answerQuesitonAsync(selectedAnswerIds)}
         {...css}>
         {question
             .answers
             .map((answer, index) => {
 
                 const answerId = answer.answerId;
-                const isSelected = selectedAnswerIds.some(x => x === answerId);
+                const isSelected = selectedAnswerId === answerId;
                 const isCorrect = isAnswered && correctAnswerIds.some(x => x === answerId);
                 const isIncorrect = isAnswered && isSelected && !isCorrect;
 
@@ -102,7 +88,7 @@ export const QuesitionView = (props: {
                     isIncorrect={isIncorrect}
                     isSelected={isSelected}
                     mb="8px"
-                    onClick={() => toggleSelectedAnswer(answerId)}>
+                    onClick={() => handleSelectedAnswerAsync(answer.answerId)} >
                     <EpistoText
                         isAutoFontSize
                         text={answer.answerText}

@@ -2,7 +2,7 @@ import { Box, BoxProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { EpistoButton } from './EpistoButton';
 
-export const QuestionnaierAnswerMinimal = (props: {
+export const StillWatchingAnswer = (props: {
     children: ReactNode,
     onClick: () => void,
     isIncorrect: boolean,
