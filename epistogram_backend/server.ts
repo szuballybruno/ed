@@ -214,7 +214,7 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
 
     // user
     addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction);
-    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction);
+    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
     addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true });
     addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true });
