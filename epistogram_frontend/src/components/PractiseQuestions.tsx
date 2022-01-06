@@ -192,7 +192,7 @@ export const PractiseQuestions = () => {
                     question={practiseQuestion}
                     onlyShowAnswers={isAnswered}
                     coinsAcquired={null}
-                    bonusCoinsAcquired={answerResults?.coinAcquires.bonus ?? null} />
+                    bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null} />
 
                 <Flex
                     justifyContent="center"

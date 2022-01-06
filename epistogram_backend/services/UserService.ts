@@ -9,7 +9,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { UserEditSimpleDTO } from "../models/shared_models/UserEditSimpleDTO";
 import { RegistrationType } from "../models/Types";
-import { getFullName, TypedError } from "../utilities/helpers";
+import { getFullName, toFullName, TypedError } from "../utilities/helpers";
 import { MapperService } from "./MapperService";
 import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
@@ -53,7 +53,9 @@ export class UserService {
             .map(User, UserEditDTO, user);
     }
 
-    async getAdminPageUsersListAsync() {
+    async getAdminPageUsersListAsync(searchText: string | null) {
+
+        const searchTextLower = searchText?.toLowerCase();
 
         const users = await this._ormService
             .getRepository(User)
@@ -64,8 +66,15 @@ export class UserService {
             .leftJoinAndSelect("user.userActivity", "ua")
             .getMany();
 
+        const filteredUsers = searchTextLower
+            ? users
+                .filter(x => toFullName(x.firstName, x.lastName, "hu")
+                    .toLowerCase()
+                    .includes(searchTextLower))
+            : users;
+
         return this._mapperService
-            .mapMany(User, AdminPageUserDTO, users);
+            .mapMany(User, AdminPageUserDTO, filteredUsers);
     }
 
     async saveUserSimpleAsync(userId: number, dto: UserEditSimpleDTO) {

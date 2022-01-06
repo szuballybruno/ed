@@ -11,10 +11,11 @@ export const AdminListEditHeader = (props: {
     selectAllOrNone: (isAll: boolean) => void,
     selectedIds: number[],
     headerButtons: BulkEditButtonType[],
-    itemLabel: string
+    itemLabel: string,
+    onSearchChanged?: (value: string) => void
 }) => {
 
-    const { isAllSelected, selectedIds, itemLabel, headerButtons, selectAllOrNone } = props;
+    const { isAllSelected, selectedIds, onSearchChanged, itemLabel, headerButtons, selectAllOrNone } = props;
     const isAnySelected = selectedIds.some(x => true);
     const isSingleSelected = selectedIds.length === 1;
     const selectionCount = selectedIds.length;
@@ -85,7 +86,13 @@ export const AdminListEditHeader = (props: {
             alignItems={"center"}
             w={140}
             mx={10}>
-            <EpistoSearch w={140}></EpistoSearch>
+            <EpistoSearch
+                w={140}
+                onChange={(x) => {
+
+                    if (onSearchChanged)
+                        onSearchChanged(x.target.value)
+                }} />
         </Flex>
 
         {/* order by */}

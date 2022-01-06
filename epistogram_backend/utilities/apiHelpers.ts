@@ -1,36 +1,31 @@
-import { Application, NextFunction, Request, Response } from "express";
-import { AuthMiddleware } from "../middleware/AuthMiddleware";
+import { NextFunction, Request, Response } from "express";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
 import { ErrorType, RoleType } from "../models/shared_models/types/sharedTypes";
 import { log, logError } from "../services/misc/logger";
-import { ActionParams } from "./helpers";
+import { IRouteOptions } from "./TurboExpress";
 
-export type ApiActionType = (params: ActionParams) => Promise<any>;
-
-export type EndpointOptionsType = {
-    isPublic?: boolean,
-    isPost?: boolean,
-    isMultipart?: boolean,
-    authorize?: RoleType[]
+export class EndpointOptionsType implements IRouteOptions {
+    isPublic?: boolean;
+    isPost?: boolean;
+    isMultipart?: boolean;
+    authorize?: RoleType[];
 };
 
-export const addAPIEndpoint = (
-    authMiddleware: AuthMiddleware,
-    expressServer: Application,
-    action: ApiActionType,
-    path: string,
-    options?: EndpointOptionsType) => {
+export const onActionError = (error: any, req: Request, res: Response) => {
 
-    const syncActionWrapper = authMiddleware
-        .getSyncActionWrapper(action, options);
+    const requestPath = req.path;
 
-    if (options?.isPost) {
+    log(`${requestPath}: Failed...`);
+    logError(error);
+    respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
+}
 
-        expressServer.post(path, syncActionWrapper);
-    } else {
+export const onActionSuccess = (value: any, req: Request, res: Response) => {
 
-        expressServer.get(path, syncActionWrapper);
-    }
+    const requestPath = req.path;
+
+    log(`${requestPath}: Succeeded...`);
+    respond(res, 200, value);
 }
 
 export const respond = (res: Response, code: number, data?: any) => {

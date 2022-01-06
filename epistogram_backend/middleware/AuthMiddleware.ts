@@ -1,100 +1,107 @@
-import { NextFunction, Request, Response } from "express";
-import { ErrorType, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
+import { Request, Response } from "express";
+import { User } from "../models/entity/User";
+import { apiRoutes } from "../models/shared_models/types/apiRoutes";
+import { RoleIdEnum, RoleType } from "../models/shared_models/types/sharedTypes";
 import { AuthenticationService } from "../services/AuthenticationService";
+import { LoggerService } from "../services/LoggerService";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { log, logError } from "../services/misc/logger";
 import { UserService } from "../services/UserService";
-import { ApiActionType, EndpointOptionsType, respond, respondError } from "../utilities/apiHelpers";
-import { ActionParams, getAuthTokenFromRequest } from "../utilities/helpers";
+import { EndpointOptionsType } from "../utilities/apiHelpers";
+import { ActionParams, getAuthTokenFromRequest, TypedError } from "../utilities/helpers";
+import { ITurboMiddleware } from "../utilities/TurboExpress";
 
-export class AuthMiddleware {
+export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOptionsType> {
 
     private _authenticationService: AuthenticationService;
     private _userService: UserService;
     private _globalConfig: GlobalConfiguration;
+    private _loggerService: LoggerService;
 
     constructor(
         authenticationService: AuthenticationService,
         userService: UserService,
-        globalConfig: GlobalConfiguration) {
+        globalConfig: GlobalConfiguration,
+        loggerService: LoggerService) {
 
         this._authenticationService = authenticationService;
         this._userService = userService;
         this._globalConfig = globalConfig;
+        this._loggerService = loggerService;
     }
 
-    getSyncActionWrapper = (action: ApiActionType, options?: EndpointOptionsType) => {
+    runMiddlewareAsync = async (req: Request, res: Response, options?: EndpointOptionsType, params?: ActionParams) => {
 
-        // authorize user 
-        const authorizeUserAsync = async (userId: number) => {
+        const accessToken = getAuthTokenFromRequest(req, this._globalConfig);
+        const requestPath = req.path;
 
+        this._loggerService.log(`${requestPath}: Authorizing request...`);
+
+        // public route 
+        if (options?.isPublic) {
+
+            this._loggerService.log(`${requestPath}: Route is open, skipping authentication...`);
+            return new ActionParams(req, res, -1, !!options?.isMultipart);
+        }
+
+        // private (authenticated) route
+        else {
+
+            // get userId from access token
+            const userId = this._authenticationService
+                .getRequestAccessTokenPayload(accessToken).userId;
+
+            // retrieve user from DB
             const user = await this._userService
                 .getUserById(userId);
 
-            if (!options?.authorize)
-                return;
+            // authorize user role 
+            await this.authorizeUserAsync(user, options?.authorize);
 
-            const userRoleType = RoleIdEnum
-                .toRoleType(user.roleId);
+            // authorize user access level (limited / full)
+            await this.authrorizeUserAccessLevelAsync(user, requestPath);
 
-            const isAuthorized = options
-                .authorize
-                .some(allowedRoleType => allowedRoleType === userRoleType);
+            // permitted. finalization             
+            this._loggerService
+                .log(`${requestPath}: Request permitted. UserId: ${user.id} Proceeding...`);
 
-            if (!isAuthorized)
-                throw new Error("Unauthorized.");
+            return new ActionParams(req, res, userId, !!options?.isMultipart);
         }
+    };
 
-        // async wrapper
-        const asyncActionWrapper = async (req: Request, res: Response, next: NextFunction) => {
+    private authrorizeUserAccessLevelAsync = async (user: User, currentRoutePath: string) => {
 
-            const accessToken = getAuthTokenFromRequest(req, this._globalConfig);
+        // user is now authorized to access applicaiton
+        // but some routes are still permitted
+        if (user.userActivity.canAccessApplication)
+            return;
 
-            // public route 
-            if (options?.isPublic) {
+        const openAccessRoutes = [
+            apiRoutes.authentication.getCurrentUser,
+            apiRoutes.authentication.renewUserSession,
+            apiRoutes.signup.getSignupData,
+            apiRoutes.signup.answerSignupQuestion,
+            apiRoutes.signup.getUserPersonalityData
+        ];
 
-                const actionParams = new ActionParams(req, res, next, -1, !!options?.isMultipart);
+        const isCurrentRouteAccessable = openAccessRoutes
+            .some(x => x === currentRoutePath);
 
-                return await action(actionParams);
-            }
+        if (!isCurrentRouteAccessable)
+            throw new TypedError("User has not proper rights to access the requested resource.", "forbidden");
+    }
 
-            // private (authenticated) route
-            else {
+    private authorizeUserAsync = async (user: User, authorize: RoleType[] | undefined) => {
 
-                // get userId from access token
-                const userId = this._authenticationService
-                    .getRequestAccessTokenPayload(accessToken).userId;
+        if (!authorize)
+            return;
 
-                // authorize user 
-                await authorizeUserAsync(userId);
+        const userRoleType = RoleIdEnum
+            .toRoleType(user.roleId);
 
-                // create action params 
-                const actionParams = new ActionParams(req, res, next, userId, !!options?.isMultipart);
+        const isAuthorized = authorize
+            .some(allowedRoleType => allowedRoleType === userRoleType);
 
-                // evaluate action
-                return await action(actionParams);
-            }
-        }
-
-        // sync wrapper 
-        const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
-
-            const requestPath = req.path;
-
-            asyncActionWrapper(req, res, next)
-                .then((returnValue: any) => {
-
-                    log(`${requestPath}: Succeeded...`);
-                    respond(res, 200, returnValue)
-                })
-                .catch((error: any) => {
-
-                    log(`${requestPath}: Failed...`);
-                    logError(error);
-                    respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
-                });
-        }
-
-        return syncActionWrapper;
+        if (!isAuthorized)
+            throw new Error("Unauthorized.");
     }
 }

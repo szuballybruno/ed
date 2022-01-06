@@ -35,7 +35,7 @@ import { dbSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log, logError } from "./services/misc/logger";
 import { initializeMappings } from './services/misc/mappings';
-import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
+import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { UrlService } from './services/UrlService';
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
@@ -62,11 +62,14 @@ import { UserSessionActivityService } from './services/UserSessionActivityServic
 import { UserStatsService } from './services/UserStatsService';
 import { VideoPlaybackSampleService } from './services/VideoPlaybackSampleService';
 import { VideoService } from './services/VideoService';
-import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
+import { EndpointOptionsType, onActionError, onActionSuccess } from './utilities/apiHelpers';
 import './utilities/jsExtensions';
 import { PasswordChangeService } from './services/PasswordChangeService';
 import { PasswordChangeController } from './api/PasswordChangeController';
 import { AuthMiddleware } from './middleware/AuthMiddleware';
+import { ActionParams } from './utilities/helpers';
+import { TurboExpress } from './utilities/TurboExpress';
+import { LoggerService } from './services/LoggerService';
 
 (async () => {
 
@@ -76,9 +79,8 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${globalConfig.misc.environmentName} ----------------`);
     log("");
 
-    const expressServer = express();
-
     // services 
+    const loggerService = new LoggerService();
     const mapperService = new MapperService();
     const sqlConnectionService = new SQLConnectionService(globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
@@ -139,15 +141,17 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     const passwordChangeController = new PasswordChangeController(passwordChangeService);
 
     // middleware 
-    const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig);
+    const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
 
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
 
-    const addEndpoint = (path: string, action: ApiActionType, options?: EndpointOptionsType) =>
-        addAPIEndpoint(authMiddleware, expressServer, action, path, options);
+    // initialize express
+    const expressServer = express();
+    const turboExpress = new TurboExpress<ActionParams, EndpointOptionsType>(expressServer, [authMiddleware], onActionError, onActionSuccess);
+    const addEndpoint = turboExpress.addAPIEndpoint;
 
     // add middlewares
     expressServer.use(getCORSMiddleware(globalConfig));
@@ -155,19 +159,6 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     expressServer.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
     expressServer.use(fileUpload());
     expressServer.use(getUnderMaintanenceMiddleware(globalConfig));
-    expressServer.use(getAuthMiddleware(
-        globalConfig,
-        authenticationService.getRequestAccessTokenPayload,
-        userService.getUserById,
-        [
-            apiRoutes.registration.registerUserViaActivationCode,
-            apiRoutes.registration.registerUserViaInvitationToken,
-            apiRoutes.registration.registerUserViaPublicToken,
-            apiRoutes.passwordChange.requestPasswordChange,
-            apiRoutes.passwordChange.setNewPassword,
-            apiRoutes.authentication.renewUserSession,
-            apiRoutes.authentication.loginUser,
-        ]));
 
     // registration
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
