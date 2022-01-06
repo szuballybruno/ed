@@ -49,14 +49,14 @@ export const SignupPage = () => {
         onJumpToResults={slidesState.jumpToLast} />
 
     const SummarySlide = (isCurrent: boolean) => <SignupWrapper
-        title={"Az alábbi grafikonon a saját tanulási stílusod vizualizációja látható"}
+        title={"Hamarosan küldjük a te személyre szabott elemzésedet!"}
+        currentImage={getAssetUrl("/images/analysis3D.png")}
         upperTitle="Összegzés"
+        description={"Az előző kérdőív segítségével azt vizsgáltuk, milyen módszerekkel érzed komfortosnak a tanulást. A platformunk további adatokat gyűjt majd arról, milyen típusú tananyagokban haladsz a legjobban, mely idősávokban vagy a leghatékonyabb, a felméréssel kombinálva pedig hamarosan személyre szabott tippeket is kapsz majd, valamint a tanulás sebessége és a módszereink is a te igényeidhez fognak idomulni. Most pedig nem maradt más dolgod, mint a lenti gombra kattintani, és elkezdeni a tanulást!"}
         onNext={isInvitedUser ? handleGoToHomePage : undefined}
         nextButtonTitle={isInvitedUser ? translatableTexts.signup.goToHomePage : undefined}
         onNavPrevious={() => slidesState.previous()}
         headerRightButton={isInvitedUser ? { name: translatableTexts.signup.goToHomePage, action: handleGoToHomePage } : undefined}>
-
-        {isCurrent && <PersonalityAssessment height="100%" mt="20px"></PersonalityAssessment>}
     </SignupWrapper>
 
     const slides = [
@@ -71,10 +71,22 @@ export const SignupPage = () => {
 
             {/* navbar */}
 
-            <ContentWrapper>
+            <ContentWrapper 
+                alignItems={"center"} 
+                justifyContent={"center"}
+                style={{
+                    background: "radial-gradient(farthest-corner at 300px 100px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
+                }}
+            >
                 <SlidesDisplay
                     alwaysRender={true}
+                    maxW="calc(100% - 300px)"
+                    h="calc(100vh - 100px)"
+                    bgColor="rgba(255,255,255,0.7)"
+                    zIndex="1"
+                    boxShadow={"5px 5px 25px 5px rgba(0,0,0,0.10)"}
                     flex="1"
+                    borderRadius={6}
                     slides={slides}
                     index={slidesState.currentIndex} />
             </ContentWrapper>

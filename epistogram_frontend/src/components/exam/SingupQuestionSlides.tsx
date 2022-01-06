@@ -5,6 +5,7 @@ import { SignupQuestionDTO } from "../../models/shared_models/SignupQuestionDTO"
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
 import { SignupWrapper } from "../signup/SignupWrapper";
+import { borderRadius } from "@mui/system";
 
 export const useSignupQuestionsState = (options: {
     questions: SignupQuestionDTO[],
@@ -84,6 +85,31 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
         }
     }
 
+    {/*const Testasd = () => {
+        return <FlexFloat
+            alignItems={"center"}
+            borderRadius={7}
+            minW={150}
+            cursor={onClick ? "pointer" : undefined}
+            onClick={onClick ? () => onClick(!isSelected) : undefined}
+            style={{
+                backgroundColor: getBgColor(),
+                padding: "10px",
+                border: "1px solid var(--mildGrey)"
+            }}
+            {...css}>
+
+            <Checkbox
+                checked={isSelected}
+                size="small"
+                value="advanced" />
+
+            <Typography style={{ fontSize: "14px" }}>
+                {answerText}
+            </Typography>
+        </FlexFloat>
+    }*/}
+
     const selectedAnswerId = (currentQuestion?.answers ?? [])
         .filter(x => x.isGiven)[0]?.answerId as null | number;
 
@@ -113,7 +139,12 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
                         key={answer.answerId}
                         value={answer.answerId}
                         style={{
-                            margin: "1px 0px 0px 0px",
+                            margin: "5px 0px 0px 0px",
+                            backgroundColor: answer.answerId === selectedAnswerId ? "#7CC0C24F" : "white",
+                            padding: "5px 10px",
+                            border: "1px solid var(--mildGrey)",
+                            borderRadius: "6px"
+                           
                         }}
                         control={<Radio checked={answer.answerId === selectedAnswerId} />}
                         label={answer.answerText} />)}

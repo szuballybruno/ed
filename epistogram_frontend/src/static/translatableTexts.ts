@@ -208,7 +208,7 @@ export const translatableTexts = {
     },
 
     signup: {
-        goToHomePage: "Irány az EpistoGram"
+        goToHomePage: "Irány a platform"
     },
 
     exam: {
