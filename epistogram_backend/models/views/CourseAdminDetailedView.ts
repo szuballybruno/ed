@@ -26,6 +26,9 @@ export class CourseAdminDetailedView {
     benchmark: number;
 
     @ViewColumn()
+    previouslyCompletedCount: number;
+
+    @ViewColumn()
     humanSkillBenefitsDescription: string;
 
     @ViewColumn()

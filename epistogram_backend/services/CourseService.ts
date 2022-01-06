@@ -467,6 +467,7 @@ export class CourseService {
                 difficulty: dto.difficulty,
                 language: dto.language,
                 shortDescription: dto.shortDescription,
+                previouslyCompletedCount: dto.previouslyCompletedCount,
                 humanSkillBenefitsDescription: dto.humanSkillBenefitsDescription,
                 skillBenefits: dto.skillBenefits?.join(", "),
                 technicalRequirements: dto.technicalRequirements?.join(", "),

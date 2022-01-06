@@ -5,6 +5,7 @@ SELECT
     co.description description,
     co.difficulty difficulty,
     co.benchmark benchmark,
+    co.previously_completed_count previously_completed_count,
     co.language language_name,
     co.technical_requirements technical_requirements,
 	co.skill_benefits skill_benefits,

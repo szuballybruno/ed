@@ -13,6 +13,7 @@ export class CourseDetailsDTO {
     shortDescription: string;
     difficulty: number;
     benchmark: number;
+    previouslyCompletedCount: number;
     language: string;
     visibility: CourseVisibilityType;
     humanSkillBenefitsDescription: string;

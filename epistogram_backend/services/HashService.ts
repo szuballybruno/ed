@@ -13,7 +13,7 @@ export class HashService {
     hashPasswordAsync = (password: string) => {
 
         const hash = bcrypt
-            .hash(password, this._config.security.secrets.passwordSalt);
+            .hash(password, 12);
 
         return hash;
     }

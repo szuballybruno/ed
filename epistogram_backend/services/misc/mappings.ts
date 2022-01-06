@@ -207,6 +207,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 difficulty: view.difficulty,
                 description: view.description,
                 benchmark: view.benchmark,
+                previouslyCompletedCount: view.previouslyCompletedCount,
                 visibility: view.visibility,
                 teacherId: view.teacherId,
                 humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
@@ -313,6 +314,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 language: view.languageName,
                 difficulty: view.difficulty,
                 benchmark: view.benchmark,
+                previouslyCompletedCount: view.previouslyCompletedCount,
                 visibility: view.visibility,
                 humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
 

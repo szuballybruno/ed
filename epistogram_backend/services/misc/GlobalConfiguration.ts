@@ -8,7 +8,6 @@ export class GlobalConfiguration {
 
     security = {
         secrets: {
-            passwordSalt: "abcdwafawcawa9w87d09awdanw0i21nd123kjndasdd",
             accessTokenSecret: GlobalConfiguration.getEnvConfigEntry("JWT_SIGN_SECRET"),
             refreshTokenSecret: "dasdmaodwhw8dha7y37iaiyd7sta77aw6eads7yawid",
             regTokenSecret: "dwafwfawiudaw8d79afya09d3asnklswf87aw0dja9wu8d",
