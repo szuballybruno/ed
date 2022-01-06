@@ -36,12 +36,15 @@ export type CourseVisibilityType = "public" | "private";
 
 export type RoleType = "administrator" | "supervisor" | "user";
 
-export class RoleIdEnum {
-    static administrator: 1;
-    static supervisor: 2;
-    static user: 3;
+export const RoleIdEnum = {
+    administrator: 1,
+    supervisor: 2,
+    user: 3,
 
-    static toRoleType(roleId: number): RoleType {
+    toRoleType(roleId: number): RoleType {
+
+        console.log(roleId);
+        console.log(this.administrator);
 
         if (roleId === RoleIdEnum.administrator)
             return "administrator";
@@ -53,9 +56,9 @@ export class RoleIdEnum {
             return "user";
 
         throw new Error("Invalid role id: " + roleId);
-    }
+    },
 
-    static toRoleId(roleType: RoleType) {
+    toRoleId(roleType: RoleType) {
 
         if (roleType === "administrator")
             return RoleIdEnum.administrator;

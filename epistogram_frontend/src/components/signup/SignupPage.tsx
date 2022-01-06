@@ -29,6 +29,9 @@ export const SignupPage = () => {
     const handleGoToHomePage = () => {
 
         navigate(applicationRoutes.homeRoute.route);
+
+        console.log("Showing guide...");
+        (window as any).userGuiding.previewGuide(38873);
     }
 
     const GreetSlide = () => <SignupWrapper

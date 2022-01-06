@@ -78,11 +78,10 @@ export const useLogInUser = () => {
         password: string;
     }
 
-    const { error, postDataAsync, state } = usePostData<LoginUserDTO, void>(apiRoutes.authentication.loginUser);
+    const { postDataAsync, state } = usePostDataUnsafe<LoginUserDTO, void>(apiRoutes.authentication.loginUser);
 
     return {
         loginUserState: state,
-        loginUserError: error,
         loginUserAsync: (email: string, password: string) => postDataAsync({
             email: email,
             password: password

@@ -14,6 +14,7 @@ RUN npm install
 COPY /api ./api
 COPY /models ./models
 COPY /services ./services
+COPY /middleware ./middleware
 COPY /utilities ./utilities
 
 COPY server.ts .

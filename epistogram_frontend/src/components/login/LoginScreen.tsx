@@ -5,7 +5,7 @@ import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { useLogInUser } from "../../services/api/authenticationApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
-import { getAssetUrl, useIsScreenWiderThan } from "../../static/frontendHelpers";
+import { getAssetUrl, TypedError, useIsScreenWiderThan } from "../../static/frontendHelpers";
 import { useEpistoDialogLogic } from "../EpistoDialog";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { LoadingFrame } from "../system/LoadingFrame";
@@ -37,7 +37,7 @@ const LoginScreen = () => {
     const isDesktopView = useIsScreenWiderThan(1200);
 
     // http 
-    const { loginUserAsync, loginUserError, loginUserState } = useLogInUser();
+    const { loginUserAsync, loginUserState } = useLogInUser();
 
     // func
     const handleLoginUserAsync = async () => {
@@ -48,8 +48,29 @@ const LoginScreen = () => {
         if (!pwRef.current?.value)
             return;
 
-        await loginUserAsync(emailRef.current?.value, pwRef.current?.value);
-        refetchUser();
+        try {
+
+            await loginUserAsync(emailRef.current?.value, pwRef.current?.value);
+            refetchUser();
+        }
+        catch (e: any) {
+
+            if (!e)
+                return;
+
+            if (e.errorType === "bad request") {
+
+                setErrorMessage("Hibas adatok!");
+            }
+            else if (e.errorType) {
+
+                showErrorDialog(e.message);
+            }
+            else {
+
+                showErrorDialog("" + e);
+            }
+        }
     };
 
     const handleValidation = () => {
@@ -75,28 +96,6 @@ const LoginScreen = () => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authState]);
-
-    // watch for login call errors
-    useEffect(() => {
-
-        if (!loginUserError)
-            return;
-
-        if (loginUserError.errorType === "bad request") {
-
-            setErrorMessage("Hibas adatok!");
-        }
-        else if (loginUserError.errorType) {
-
-            showErrorDialog(loginUserError.message);
-        }
-        else {
-
-            showErrorDialog("" + loginUserError);
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loginUserError]);
 
     // keydown
     useEffect(() => {
