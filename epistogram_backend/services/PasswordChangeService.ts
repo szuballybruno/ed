@@ -1,7 +1,7 @@
 import { User } from "../models/entity/User";
 import { TypedError } from "../utilities/helpers";
 import { EmailService } from "./EmailService";
-import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
+import { HashService } from "./HashService";
 import { GlobalConfiguration } from "./misc/GlobalConfiguration";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { TokenService } from "./TokenService";
@@ -16,6 +16,7 @@ export class PasswordChangeService {
     private _urlService: UrlService;
     private _ormService: ORMConnectionService;
     private _config: GlobalConfiguration;
+    private _hashService: HashService;
 
     constructor(
         userService: UserService,
@@ -23,8 +24,10 @@ export class PasswordChangeService {
         emailService: EmailService,
         urlService: UrlService,
         ormService: ORMConnectionService,
-        config: GlobalConfiguration) {
+        config: GlobalConfiguration,
+        hashService: HashService) {
 
+        this._hashService = hashService;
         this._ormService = ormService;
         this._config = config;
         this._urlService = urlService;
@@ -83,7 +86,7 @@ export class PasswordChangeService {
         const user = await this._userService
             .getUserById(userId);
 
-        if (!await comparePasswordAsync(oldPassword, user.password))
+        if (!await this._hashService.comparePasswordAsync(oldPassword, user.password))
             throw new TypedError("Wrong password!", "bad request");
 
         await this._ormService
@@ -130,7 +133,8 @@ export class PasswordChangeService {
             throw new TypedError("Wrong token.", "bad request");
 
         // hash new password
-        const hashedPassword = await hashPasswordAsync(password);
+        const hashedPassword = await this._hashService
+            .hashPasswordAsync(password);
 
         // save new values 
         await this._ormService

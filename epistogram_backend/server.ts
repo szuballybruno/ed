@@ -70,6 +70,7 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
 import { ActionParams } from './utilities/helpers';
 import { TurboExpress } from './utilities/TurboExpress';
 import { LoggerService } from './services/LoggerService';
+import { HashService } from './services/HashService';
 
 (async () => {
 
@@ -82,6 +83,7 @@ import { LoggerService } from './services/LoggerService';
     // services 
     const loggerService = new LoggerService();
     const mapperService = new MapperService();
+    const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlBootstrapperService);
@@ -97,11 +99,11 @@ import { LoggerService } from './services/LoggerService';
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
     const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService);
     const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService);
-    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService);
+    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService);
     const tokenService = new TokenService(globalConfig);
-    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, ormConnectionService, emailService, globalConfig);
+    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService);
-    const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig);
+    const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
     const seedService = new SeedService(sqlBootstrapperService, registrationService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService, mapperService);

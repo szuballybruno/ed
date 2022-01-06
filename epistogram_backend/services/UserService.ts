@@ -1,6 +1,5 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
-import { TeacherInfo } from "../models/entity/TeacherInfo";
 import { User } from "../models/entity/User";
 import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
 import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
@@ -10,8 +9,8 @@ import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { UserEditSimpleDTO } from "../models/shared_models/UserEditSimpleDTO";
 import { RegistrationType } from "../models/Types";
 import { getFullName, toFullName, TypedError } from "../utilities/helpers";
+import { HashService } from "./HashService";
 import { MapperService } from "./MapperService";
-import { hashPasswordAsync } from "./misc/crypt";
 import { log } from "./misc/logger";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { TeacherInfoService } from "./TeacherInfoService";
@@ -21,15 +20,18 @@ export class UserService {
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
     private _teacherInfoService: TeacherInfoService;
+    private _hashService: HashService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        teacherInfoService: TeacherInfoService) {
+        teacherInfoService: TeacherInfoService,
+        hashService: HashService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._teacherInfoService = teacherInfoService;
+        this._hashService = hashService;
     }
 
     /**
@@ -172,7 +174,8 @@ export class UserService {
             throw new TypedError("User already exists. Email: " + opts.email, "bad request");
 
         // hash user password 
-        const hashedPassword = await hashPasswordAsync(opts.password);
+        const hashedPassword = await this._hashService
+            .hashPasswordAsync(opts.password);
 
         // set default user fileds
         const user = {
@@ -224,7 +227,8 @@ export class UserService {
             .save({
                 id: userId,
                 isInvitationAccepted: true,
-                password: await hashPasswordAsync(rawPassword)
+                password: await this._hashService
+                    .hashPasswordAsync(rawPassword)
             });
     }
 
