@@ -468,16 +468,31 @@ export const hasValue = (obj: any) => {
 
 export class ArrayBuilder<T> {
 
-    //     return {
+    private _array: T[];
 
-    //     addif: (condition: boolean, item: T) => {
+    constructor() {
 
-    //         if (condition)
-    //             array.push(item);
+        this._array = [];
+    }
 
-    //         return this;
-    //     }
-    // }
+    add(item: T) {
+
+        this._array.push(item);
+        return this;
+    }
+
+    addIf(cond: boolean, item: T) {
+
+        if (cond)
+            this.add(item);
+
+        return this;
+    }
+
+    getArray() {
+
+        return this._array;
+    }
 }
 
 export const reloadPage = () => window.location.reload();

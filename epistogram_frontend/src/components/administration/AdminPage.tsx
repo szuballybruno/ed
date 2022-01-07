@@ -22,7 +22,8 @@ import { EditModuleSubpage } from './courses/EditModuleSubpage';
 import { AdminCourseDetailsSubpage } from "./courses/AdminCourseDetailsSubpage";
 import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage";
 import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
-import { addif } from '../../static/frontendHelpers';
+import { ArrayBuilder } from '../../static/frontendHelpers';
+import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
 
 const AdminPage = () => {
 
@@ -31,17 +32,12 @@ const AdminPage = () => {
     const user = useContext(CurrentUserContext)!;
     const administrationRoutes = applicationRoutes.administrationRoute;
 
-    const menuItems = [
-        administrationRoutes.usersRoute,
-    ] as ApplicationRoute[];
-
-    addif(menuItems)
-        .addif(true, administrationRoutes.coursesRoute);
-
-    if (user.userActivity.canAccessCourseAdministration)
-        menuItems.push(administrationRoutes.coursesRoute);
-
-    menuItems.push(...[administrationRoutes.myCompanyRoute]);
+    const menuItems = new ArrayBuilder<ApplicationRoute>()
+        .add(administrationRoutes.usersRoute)
+        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
+        .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
+        .add(administrationRoutes.myCompanyRoute)
+        .getArray();
 
     return <MainWrapper>
         <Navbar />
@@ -96,6 +92,14 @@ const AdminPage = () => {
                             {getRoute(administrationRoutes.coursesRoute.editExamRoute, <EditExamSubpage />)}
                             {getRoute(administrationRoutes.coursesRoute.editExamQuestionRoute, <EditQuestionSubpage />)}
                             {getRoute(administrationRoutes.coursesRoute.editModuleRoute, <EditModuleSubpage />)}
+                        </Switch>} />
+
+                    {/* shop administartion */}
+                    <ProtectedRoute
+                        path={administrationRoutes.shopRoute.route}
+                        isAuthorizedToView={x => x.canAccessShopAdministration}
+                        render={() => <Switch>
+                            {getRoute(administrationRoutes.shopRoute, <ShopAdminSubpage />)}
                         </Switch>} />
 
                     {/* statistics */}

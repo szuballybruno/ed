@@ -3,4 +3,5 @@ export type UserActivityDTO = {
     canAccessAdministration: boolean;
     canAccessCourseAdministration: boolean;
     canAccessApplication: boolean;
+    canAccessShopAdministration: boolean;
 }

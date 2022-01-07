@@ -30,4 +30,10 @@ export class ShopController {
         return await this._shopService
             .purchaseShopItemAsync(params.currentUserId, shopItemId);
     }
+
+    getAdminShopItemsAction = async (params: ActionParams) => {
+
+        return await this._shopService
+            .getAdminShopItemsAsync();
+    }
 }

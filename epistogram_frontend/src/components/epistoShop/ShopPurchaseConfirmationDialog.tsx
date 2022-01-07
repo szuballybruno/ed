@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import { useEffect } from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
-import { usePurchaseShopItem } from "../../services/api/shopService";
+import { usePurchaseShopItem } from "../../services/api/shopApiService";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { usePaging } from "../../static/frontendHelpers";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";

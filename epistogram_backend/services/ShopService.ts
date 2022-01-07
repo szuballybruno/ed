@@ -2,6 +2,7 @@ import { DiscountCode } from "../models/entity/DiscountCode";
 import { ShopItem } from "../models/entity/ShopItem";
 import { ShopItemCategory } from "../models/entity/ShopItemCategory";
 import { User } from "../models/entity/User";
+import { AdminShopItemDTO } from "../models/shared_models/AdminShopItemDTO";
 import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
 import { ShopItemDTO } from "../models/shared_models/ShopItemDTO";
 import { ShopItemView } from "../models/views/ShopItemView";
@@ -108,5 +109,15 @@ export class ShopService {
                 discountCode: discountCode.code
             };
         }
+    }
+
+    async getAdminShopItemsAsync() {
+
+        const items = await this._ormService
+            .getRepository(ShopItem)
+            .find();
+
+        return this._mapperService
+            .mapMany(ShopItem, AdminShopItemDTO, items);
     }
 }

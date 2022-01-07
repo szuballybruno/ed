@@ -1,3 +1,4 @@
+import { AdminShopItemDTO } from "../../models/shared_models/AdminShopItemDTO";
 import { ShopItemCategoryDTO } from "../../models/shared_models/ShopItemCategoryDTO";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
@@ -24,6 +25,17 @@ export const useShopItemCategories = () => {
         shopItemCategories: qr.data ?? [],
         shopItemCategoriesState: qr.state,
         shopItemCategoriesError: qr.error
+    };
+}
+
+export const useAdminShopItems = () => {
+
+    const qr = useReactQuery2<AdminShopItemDTO[]>(apiRoutes.shop.getAdminShopItems);
+
+    return {
+        adminShopItems: qr.data ?? [],
+        adminShopItemsState: qr.state,
+        adminShopItemsError: qr.error
     };
 }
 

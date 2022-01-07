@@ -3,7 +3,7 @@ import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/materi
 import { useContext, useState } from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { useCoinBalance } from "../../services/api/coinTransactionsApiService";
-import { usePurchaseShopItem, useShopItemCategories, useShopItems } from "../../services/api/shopService";
+import { usePurchaseShopItem, useShopItemCategories, useShopItems } from "../../services/api/shopApiService";
 import { translatableTexts } from "../../static/translatableTexts";
 import classes from "../css/courseSearchMain.module.scss";
 import { EpistoConinInfo } from "../EpistoCoinInfo";

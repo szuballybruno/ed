@@ -78,6 +78,8 @@ import { navPropNotNull, toFullName } from "../../utilities/helpers";
 import { MapperService } from "../MapperService";
 import { getItemCode } from "./encodeService";
 import { ExamView } from "../../models/views/ExamView";
+import { ShopItem } from "../../models/entity/ShopItem";
+import { AdminShopItemDTO } from "../../models/shared_models/AdminShopItemDTO";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -636,6 +638,18 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     .map(x => toQuestionDTO(x)),
             } as ExamPlayerDataDTO;
         });
+
+    mapperService
+        .addMap(ShopItem, AdminShopItemDTO, x => ({
+
+            id: x.id,
+            coverFilePath: x.coverFile?.filePath ? getAssetUrl(x.coverFile.filePath) : null,
+            coinPrice: x.coinPrice,
+            currencyPrice: x.currencyPrice,
+            name: x.name,
+            purchaseLimit: x.purchaseLimit,
+            shopItemCategoryId: x.shopItemCategoryId
+        }));
 }
 
 const parseCommaSeparatedStringList = (str: string) => {
@@ -684,7 +698,8 @@ export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
         canSetInvitedUserOrganization: userRightsView.canSetInvitedUserOrganization,
         canAccessAdministration: userRightsView.canAccessAdministration,
         canAccessCourseAdministration: userRightsView.canAccessCourseAdministration,
-        canAccessApplication: userRightsView.canAccessApplication
+        canAccessApplication: userRightsView.canAccessApplication,
+        canAccessShopAdministration: userRightsView.canAccessShopAdministration
     } as UserActivityDTO;
 }
 
