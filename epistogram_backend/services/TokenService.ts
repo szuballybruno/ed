@@ -72,7 +72,7 @@ export class TokenService {
 
         return this.getJWTToken(
             { userId: user.id },
-            this._config.security.secrets.accessTokenSecret,
+            this._config.security.secrets.refreshTokenSecret,
             `${this._config.security.tokenLifespans.refreshTokenLifespanInS}s`);
     }
 
