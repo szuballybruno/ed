@@ -20,7 +20,19 @@ export class GlobalConfiguration {
             setNewPasswordTokenLifespanInS: 8 * 60 * 60, // 8 hours,
             registrationTokenLifespanInS: 127 * 60 * 60, // 127 hours,
             invitationTokenLifespanInS: 127 * 60 * 60, // 127 hours
-        }
+        },
+        gcpStorageAuthCredentials: JSON.parse(`{
+            "type": "service_account",
+            "project_id": "gifted-country-324010",
+            "private_key_id": "45a2d3ae7029f73a1cb0a9f68db034684baf5548",
+            "private_key": "-----BEGIN PRIVATE KEY-----\\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDcdRB084t/rjca\\ne4nmXK8TR1v1HdWMPKyJVlPa9EjPXjfh/aWCwF2bq2h/KS3F+oOytzr3jftU2bKi\\noYcwB27yJ1CingGdt01S/zgG3+si10JxA+4kr4bj8Gybqdy+9zdA7Cf89uNTL7+l\\n0rJL6+Z2h9nK1FYmkJD2jMZJOenp5FRxscgEVbp5lIcRihik64xli5INRWz95lXL\\nJO33wjehuz13/vXgOfuByc0Am1ZZJA8O7xVbEGBTyIsJ7Bt8vXBztUQ9X1DeshIf\\nk/kARjDzar9l+BcA72lrBd46oUK80GOOAB10pANpadjZVBteISilHR6LGtVN0qET\\ndtBKpPGPAgMBAAECggEANOZqUoX2XWcClfo69uoaoLeo20KTcZlFlZb/fDTOG+Rx\\n6GqjAqMCU05oPss0zqL0YzgQkEKjopKyiM/VzrKZ7sV8VekwXhYUGexgF1Y36B5b\\nNR9KT8dGyP9yMFAsRi6wNYX1eoALwHReun26hvlOTfb/Tepx2cMq5d6V3hBljtfn\\nRogkVDHTyXDGMGkuZEMEGQgaFxGwuyRZpqukvKm6WaO+EyFmlqhiEKAReu9RIzY1\\nFZuLNX23o8OGvNt9B191rEBJmmDcZ4quS6MwKz92H5tWgoxusZSt11WUqssLaNob\\nF/3VqPeiB/gy0UBNoVKEfQq9Ic6zmYl7EmH10ALLMQKBgQD3x6rBV2xpOpsIeTxt\\n82SDOQv+q0NyBsW5werIYt0VB75QKXpcAwUwT69BCSJ/iAaKZbD/WsDMVdBYmlrZ\\njOhyzJeLrLqP2HB58ZfFbrXJtP1/wQqGZBcpSC1CzWBpOBkU8JjRFepxbPHAz//O\\nj07zl6bUTJJB162dzXFRq83BtQKBgQDjxVpLVXWTWYhMRjQYlZH4JTwZJIrrrqtT\\nBoD4F/8qKkgTDytl3mUhQu8MUyQfirQ45xd1mxtetCzVm6WK8wwX/x6q4Ufzxmz/\\nDmmpvtM4u/o4jG3rSQTtzECg4+4mdB6c8l0Ut1NSxBNhbhv2DFHmqUM0Uvt7M8ZT\\nVbKI6LyAswKBgB7tOQ7wzoND4V3pY/WFT6JhWHHtBnoRBlTtM1TXoiih0stGohMh\\n/V/OUl2XukqYu9hCYRk+Rpo6i8rDWVuWDt1lU/UHFjImHcPat8rYyq/me02a1ql3\\njLyGWb/gyovXiKnobeqLBbwqkPI0BAXQNVaKMzSEaiz1sqHjpqU/AGuRAoGAWQqJ\\npfGeqR/THJ5FN2chTTShLeMPO9totmhQeqxG4CDvVCQV/xjVyA72jIbkFECQ+727\\negpMxNUCwe665HrnO2pMftja2/2yFnN38xfaUs+JnhmnztcYyi2TBlKUgwvZ+9jz\\ncmnIdQ6Z1PjKjYF7cwSwdQALt7ohyeoyhTsWlekCgYBmbyjj08Ej2wRiqqWmqnp6\\na8xMJYuPic2UAita5uS5dQbX/8mmfoSVh41h2ywPZOAdzD9RZk1iUJQtmPIfSyAJ\\nkUvn52HdUqhK/+MTKp2TzLH+/4Wr8BrSWVjeLgpv9jCD42Q1gMugYBqyJE2H5Q0r\\nNC8DEguc5E4iaXekP5PErw==\\n-----END PRIVATE KEY-----\\n",
+            "client_email": "epistogram-service-account@gifted-country-324010.iam.gserviceaccount.com",
+            "client_id": "113272476749962373318",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/epistogram-service-account%40gifted-country-324010.iam.gserviceaccount.com"
+        }`)
     }
 
     misc = {
