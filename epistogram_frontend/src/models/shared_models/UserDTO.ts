@@ -10,7 +10,7 @@ export class UserDTO {
     email: string;
     phoneNumber: string;
     name: string;
-    isPendingInvitation: boolean;
+    isInvitationAccepted: boolean;
     avatarUrl: string | null;
     jobTitle: JobTitleDTO | null;
     userActivity: UserActivityDTO;

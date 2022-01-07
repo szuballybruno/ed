@@ -381,7 +381,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 email: user.email,
                 phoneNumber: user.phoneNumber,
                 isTrusted: user.isTrusted,
-                isPendingInvitation: user.isInvitationAccepted,
+                isInvitationAccepted: user.isInvitationAccepted,
                 name: `${user.lastName} ${user.firstName}`,
 
                 jobTitle: user.jobTitle

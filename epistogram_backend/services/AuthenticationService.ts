@@ -1,4 +1,5 @@
 import { User } from "../models/entity/User";
+import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { TypedError } from "../utilities/helpers";
 import { EmailService } from "./EmailService";
 import { HashService } from "./HashService";
@@ -80,7 +81,7 @@ export class AuthenticationService {
             throw new TypedError("User not found by id " + tokenMeta.userId, "internal server error");
 
         // get tokens
-        const newAccessToken = this._tokenService.createAccessToken(user);
+        const newAccessToken = this._tokenService.createAccessToken(user, user.userActivity);
         const newRefreshToken = this._tokenService.createRefreshToken(user);
 
         // save refresh token to DB
@@ -120,7 +121,7 @@ export class AuthenticationService {
             .saveUserSessionActivityAsync(userId, "login");
 
         // get auth tokens 
-        const tokens = await this.getUserLoginTokens(user);
+        const tokens = await this.getUserLoginTokens(user, user.userActivity);
 
         // set user current refresh token 
         await this._userService
@@ -139,10 +140,10 @@ export class AuthenticationService {
             .removeRefreshToken(userId);
     }
 
-    getUserLoginTokens = async (user: User) => {
+    getUserLoginTokens = async (user: User, activity: UserActivityFlatView) => {
 
         // get tokens
-        const accessToken = this._tokenService.createAccessToken(user);
+        const accessToken = this._tokenService.createAccessToken(user, activity);
         const refreshToken = this._tokenService.createRefreshToken(user);
 
         return {

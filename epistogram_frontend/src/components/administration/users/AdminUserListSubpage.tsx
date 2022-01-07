@@ -156,7 +156,7 @@ export const AdminUserListSubpage = () => {
                 icon: <DesktopAccessDisabledIcon />
             });
 
-        if (user.isPendingInvitation)
+        if (!user.isInvitationAccepted)
             chips.push({
                 name: "A meghívás elfogadásra vár",
                 icon: <Email />

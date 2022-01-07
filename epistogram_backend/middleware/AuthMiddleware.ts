@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../models/entity/User";
 import { apiRoutes } from "../models/shared_models/types/apiRoutes";
 import { RoleIdEnum, RoleType } from "../models/shared_models/types/sharedTypes";
+import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { AuthenticationService } from "../services/AuthenticationService";
 import { LoggerService } from "../services/LoggerService";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
@@ -47,32 +48,32 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
         else {
 
             // get userId from access token
-            const userId = this._authenticationService
-                .getRequestAccessTokenPayload(accessToken).userId;
+            const { userId, userActivity, userRole } = this._authenticationService
+                .getRequestAccessTokenPayload(accessToken);
 
             // retrieve user from DB
             const user = await this._userService
                 .getUserById(userId);
 
             // authorize user role 
-            await this.authorizeUserAsync(user, options?.authorize);
+            await this.authorizeUserAsync(userRole, options?.authorize);
 
             // authorize user access level (limited / full)
-            await this.authrorizeUserAccessLevelAsync(user, requestPath);
+            await this.authrorizeUserAccessLevelAsync(user.userActivity, requestPath);
 
             // permitted. finalization             
             this._loggerService
-                .log(`${requestPath}: Request permitted. UserId: ${user.id} Proceeding...`);
+                .log(`${requestPath}: Request permitted. UserId: ${userId} Proceeding...`);
 
             return new ActionParams(req, res, userId, !!options?.isMultipart);
         }
     };
 
-    private authrorizeUserAccessLevelAsync = async (user: User, currentRoutePath: string) => {
+    private authrorizeUserAccessLevelAsync = async (userActivity: UserActivityFlatView, currentRoutePath: string) => {
 
         // user is now authorized to access applicaiton
         // but some routes are still permitted
-        if (user.userActivity.canAccessApplication)
+        if (userActivity.canAccessApplication)
             return;
 
         const openAccessRoutes = [
@@ -90,13 +91,13 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
             throw new TypedError("User has not proper rights to access the requested resource.", "forbidden");
     }
 
-    private authorizeUserAsync = async (user: User, authorize: RoleType[] | undefined) => {
+    private authorizeUserAsync = async (role: RoleType, authorize: RoleType[] | undefined) => {
 
         if (!authorize)
             return;
 
         const userRoleType = RoleIdEnum
-            .toRoleType(user.roleId);
+            .toRoleType(RoleIdEnum.toRoleId(role));
 
         const isAuthorized = authorize
             .some(allowedRoleType => allowedRoleType === userRoleType);

@@ -292,6 +292,7 @@ export class UserService {
         const user = await this._ormService
             .getRepository(User)
             .createQueryBuilder("user")
+            .leftJoinAndSelect("user.userActivity", "ua")
             .where("user.email = :email", { email: email })
             .getOne();
 

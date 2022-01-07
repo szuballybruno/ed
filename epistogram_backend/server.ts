@@ -166,7 +166,7 @@ import { HashService } from './services/HashService';
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true });
+    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true, authorize: ["administrator"] });
 
     // misc
     addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
@@ -176,8 +176,8 @@ import { HashService } from './services/HashService';
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
 
     // teacher info
-    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction);
-    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true });
+    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true, authorize: ["administrator"] });
 
     // shop 
     addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
@@ -206,12 +206,12 @@ import { HashService } from './services/HashService';
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
 
     // user
-    addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction);
-    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
-    addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true });
-    addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true });
     addEndpoint(apiRoutes.user.saveUserSimple, userController.saveUserSimpleAction, { isPost: true });
+    addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true, authorize: ["administrator"] });
 
     // file 
     addEndpoint(apiRoutes.file.uploadUserAvatar, fileController.uploadAvatarFileAction, { isPost: true });
@@ -228,47 +228,47 @@ import { HashService } from './services/HashService';
     addEndpoint(apiRoutes.player.answerVideoQuestion, playerController.answerVideoQuestionAction, { isPost: true });
 
     // course
-    addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction);
-    addEndpoint(apiRoutes.course.startCourse, courseController.startCourseAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction);
-    addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction);
-    addEndpoint(apiRoutes.course.getCourseBriefData, courseController.getCourseBriefDataAction);
-    addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true });
-    addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true });
-    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true });
+    addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.course.getAvailableCourses, courseController.getAvailableCoursesAction);
-    addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true });
-    addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true });
+    addEndpoint(apiRoutes.course.startCourse, courseController.startCourseAction, { isPost: true });
+    addEndpoint(apiRoutes.course.getCourseBriefData, courseController.getCourseBriefDataAction);
     addEndpoint(apiRoutes.course.getCourseDetails, courseController.getCourseDetailsAction);
     addEndpoint(apiRoutes.course.getCourseProgressData, courseController.getCourseProgressDataAction);
     addEndpoint(apiRoutes.course.getCourseProgressShort, courseController.getCourseProgressShortAction);
 
     // module 
-    addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true });
-    addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true });
-    addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction);
-    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true });
+    addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
 
     // video 
-    addEndpoint(apiRoutes.video.createVideo, videoController.createVideoAction, { isPost: true });
-    addEndpoint(apiRoutes.video.deleteVideo, videoController.deleteVideoAction, { isPost: true });
-    addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true });
-    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true });
-    addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction);
+    addEndpoint(apiRoutes.video.createVideo, videoController.createVideoAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.video.deleteVideo, videoController.deleteVideoAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction, { authorize: ["administrator"] });
 
     // questions
-    addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction);
-    addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true });
-    addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
+    addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.questions.getPractiseQuestions, miscController.getPractiseQuestionAction);
+    addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
 
     // exam
+    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.exam.getExamResults, examController.getExamResultsAction);
-    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction);
-    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.answerExamQuestion, examController.answerExamQuestionAction, { isPost: true });
     addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
 
