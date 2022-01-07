@@ -14,10 +14,6 @@ import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
 import { AdminUserStatisticsSubpage } from "./users/AdminUserStatisticsSubpage";
 import CourseStatisticsSubpage from "./courses/CourseStatisticsSubpage";
 import AdminEditUserSubpage from './users/AdminEditUserSubpage';
-import { AdminGroupListSubpage } from "./groups/AdminGroupListSubpage";
-import { AdminAddGroupSubpage } from "./groups/AdminAddGroupSubpage";
-import { AdminEditGroupSubpage } from "./groups/AdminEditGroupSubpage";
-import { AdminGroupStatisticsSubpage } from "./groups/AdminGroupStatisticsSubpage";
 import { EditVideoSubpage } from './courses/EditVideoSubpage';
 import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditExamSubpage } from './courses/EditExamSubpage';
@@ -26,6 +22,7 @@ import { EditModuleSubpage } from './courses/EditModuleSubpage';
 import { AdminCourseDetailsSubpage } from "./courses/AdminCourseDetailsSubpage";
 import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage";
 import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
+import { addif } from '../../static/frontendHelpers';
 
 const AdminPage = () => {
 
@@ -38,10 +35,13 @@ const AdminPage = () => {
         administrationRoutes.usersRoute,
     ] as ApplicationRoute[];
 
+    addif(menuItems)
+        .addif(true, administrationRoutes.coursesRoute);
+
     if (user.userActivity.canAccessCourseAdministration)
         menuItems.push(administrationRoutes.coursesRoute);
 
-    menuItems.push(...[/*administrationRoutes.groupsRoute,*/ administrationRoutes.myCompanyRoute]);
+    menuItems.push(...[administrationRoutes.myCompanyRoute]);
 
     return <MainWrapper>
         <Navbar />
@@ -97,26 +97,6 @@ const AdminPage = () => {
                             {getRoute(administrationRoutes.coursesRoute.editExamQuestionRoute, <EditQuestionSubpage />)}
                             {getRoute(administrationRoutes.coursesRoute.editModuleRoute, <EditModuleSubpage />)}
                         </Switch>} />
-
-                    {/* group administartion */}
-                    <Route
-                        path={administrationRoutes.groupsRoute.route}
-                        render={
-                            () => <Switch>
-                                <Route exact path={administrationRoutes.groupsRoute.route}>
-                                    <AdminGroupListSubpage />
-                                </Route>
-                                <Route path={administrationRoutes.groupsRoute.addRoute.route}>
-                                    <AdminAddGroupSubpage />
-                                </Route>
-                                <Route path={administrationRoutes.groupsRoute.editRoute.route}>
-                                    <AdminEditGroupSubpage />
-                                </Route>
-                                <Route path={administrationRoutes.groupsRoute.statisticsRoute.route}>
-                                    <AdminGroupStatisticsSubpage />
-                                </Route>
-                            </Switch>
-                        } />
 
                     {/* statistics */}
                     <Route exact path={administrationRoutes.myCompanyRoute.route}>
