@@ -19,10 +19,12 @@ const NoQuestionsAvailable = () => {
     const { navigate } = useNavigation()
     return <Flex>
         <Flex direction={"column"}>
-            <Text as={"text"} p={"20px 20px 10px 20px"}>
+
+            <Text as={"text"} p={"20px 20px 10px 10px"}>
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
             </Text>
-            <Text as={"text"} p={"20px 20px 10px 20px"}>
+            
+            <Text as={"text"} p={"20px 20px 10px 10px"}>
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
                 <Text
                     as="text"
@@ -54,23 +56,29 @@ const InitialGreetings = () => {
     return <Flex
         direction="row"
         alignItems="center">
+
         <Flex
             direction="column"
             justifyContent="flex-start"
             h="100%">
-            <Text as={"text"} p="20px 20px 10px 20px">
+
+            <Text as={"text"} p="20px 20px 10px 10px">
                 {translatableTexts.practiseQuestions.initialGreetingsFirst + " " + firstName + ","}
             </Text>
-            <Text as={"text"} p="20px 20px 10px 20px">
+
+            <Text as={"text"} p="20px 20px 10px 10px">
                 {translatableTexts.practiseQuestions.initialGreetingsSecond}
             </Text>
-            <Text as={"text"} p="20px 20px 10px 20px">
+
+            <Text as={"text"} p="20px 20px 10px 10px">
                 {translatableTexts.practiseQuestions.initialGreetingsThird}
             </Text>
+
             <Flex
                 direction="column"
                 width="100%"
                 alignItems="center">
+
                 <EpistoButton
                     variant={"outlined"}
                     onClick={() => {
@@ -80,6 +88,7 @@ const InitialGreetings = () => {
                 </EpistoButton>
             </Flex>
         </Flex>
+
         <Flex>
             <Player
                 autoplay

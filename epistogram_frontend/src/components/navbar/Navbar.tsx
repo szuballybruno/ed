@@ -37,7 +37,11 @@ const Navbar = (props: { hideLinks?: boolean }) => {
         height={isDesktop ? "60px" : "60px"}
         zIndex={3}
         boxShadow="none"
-        className="dividerBorderBottom" >
+        borderRadius={0}
+        bgColor="unset"
+        p="20px"
+        mb="50px"
+    >
 
         {isDesktop
             ? renderDesktopNavbar()

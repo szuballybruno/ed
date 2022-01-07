@@ -48,7 +48,9 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
 
     return <Flex direction="column" mt={marginTop ?? "10px"} flex={flex}>
 
-        {labelVariant === "top" && <Typography
+        {labelVariant === "top" && <Typography style={{
+            color: "#9FA2B4"
+        }}
             variant={"overline"}>
 
             {label}
@@ -66,7 +68,11 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
             type={type}
             sx={{
                 '& .MuiOutlinedInput-root': {
-                    height: height
+                    height: height,
+                    background: "var(--transparentWhite90)"
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                    border: "none"
                 }
             }}
             InputProps={postfix
@@ -84,6 +90,7 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
                 onChanged(x.currentTarget.value);
             }}
             style={{
+                border: "none"
                 // margin: "10px 0px 10px 0px",
                 // padding: "2px"
             }} />

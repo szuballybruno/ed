@@ -32,7 +32,7 @@ const DesktopNavbar = (props: {
     const currentCourseItemCode = props.currentCourseItemCode;
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
-    const homeUrl = applicationRoutes.rootHomeRoute.route;
+    
     const user = useContext(CurrentUserContext);
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
@@ -87,22 +87,7 @@ const DesktopNavbar = (props: {
     return (
         <Flex align="center" width="100%" justify={hideLinks ? "center" : "space-between"}>
 
-            {/* logo link */}
-            <img
-                src={getAssetUrl("/images/logo.svg")}
-                style={{
-                    width: "150px",
-                    height: "80px",
-                    objectFit: "contain",
-                    marginLeft: "15px",
-                    cursor: "pointer",
-                }}
-                alt=""
-                onClick={() => {
-
-                    if (user?.userActivity?.canAccessApplication)
-                        navigate(homeUrl);
-                }} />
+           
 
             {/* menu items */}
             {!hideLinks && <>
@@ -125,7 +110,13 @@ const DesktopNavbar = (props: {
                             menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
 
                             <EpistoButton
-                                style={{ flex: "1", color: "var(--epistoTeal)" }}
+                                className="mildShadow" 
+                                style={{ 
+                                    flex: "1", 
+                                    color: "--epistoTeal", 
+                                    background: "var(--transparentWhite70)",
+                                    border: "none"
+                                }}
                                 variant="outlined"
                                 onClick={() => continueCourse()}
                                 icon={

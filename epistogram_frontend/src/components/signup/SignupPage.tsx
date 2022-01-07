@@ -82,7 +82,7 @@ export const SignupPage = () => {
                     alwaysRender={true}
                     maxW="calc(100% - 300px)"
                     h="calc(100vh - 100px)"
-                    bgColor="rgba(255,255,255,0.7)"
+                    background="var(--transparentWhite70)"
                     zIndex="1"
                     boxShadow={"5px 5px 25px 5px rgba(0,0,0,0.10)"}
                     flex="1"

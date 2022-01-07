@@ -37,6 +37,6 @@ export const EpistoHeader = (props: {
             {text}
         </Typography>
 
-        {!!showDivider && <Divider style={{ marginTop: "10px" }} />}
+        {!!showDivider && <Divider style={{ background: "white", marginTop: "10px" }} />}
     </Flex>
 }

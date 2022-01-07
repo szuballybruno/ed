@@ -19,27 +19,32 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
     const showImage = !!url;
 
     return <Flex
-        className={className + " circle"}
-        border="2px solid var(--epistoTeal)"
-        ref={ref}
-        bg="var(--deepBlue)"
-        color="white"
-        align="center"
-        justify="center"
-        overflow="hidden"
-        {...css} >
+        p="6px"
+        className="circle"
+        boxShadow="inset -7px -2px 20px 4px rgba(124,192,194,0.9)">
 
-        <Image
-            border="none"
-            className="whall"
-            objectFit="cover"
-            src={url ?? ""}
-            display={showImage ? undefined : "none"} />
+        <Flex
+            className={className + " circle"}
+            ref={ref}
+            bg="var(--deepBlue)"
+            color="white"
+            align="center"
+            justify="center"
+            overflow="hidden"
+            {...css} >
 
-        <Typography
-            display={showSingature ? undefined : "none"}>
+            <Image
+                border="none"
+                className="whall"
+                objectFit="cover"
+                src={url ?? ""}
+                display={showImage ? undefined : "none"} />
 
-            {signature.toUpperCase()}
-        </Typography>
+            <Typography
+                display={showSingature ? undefined : "none"}>
+
+                {signature.toUpperCase()}
+            </Typography>
+        </Flex>
     </Flex>
 });

@@ -45,157 +45,169 @@ export const RegisterViaActivationCodePage = () => {
 
     return <MainWrapper>
         <Flex
-            flexDir="row"
-            justifyContent="center"
-            alignItems="center"
-            bgColor="#FAFAFA"
-            w="100%"
-            h="100%">
-
-            {/* left image */}
-            {isLargerThan1280 && <Flex
-                w={400}
-                maxW={550}
-                flex={1}
-                alignItems="center"
-                justifyContent="center"
-                zIndex={3}>
-
-                <img style={{
-                    width: 300,
-                    objectFit: "contain"
-                }} src={getAssetUrl("/images/bal.png")} alt="" />
-
-                <Typography>
-
-                </Typography>
-            </Flex>}
+            justify={"center"}
+            background="radial-gradient(farthest-corner at 300px 300px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
+            py="60px"
+            overflowY={"scroll"}
+            h="100%"
+            w="100%">
 
             {/* content */}
             <Flex
-                flex={1}
-                flexDir="column"
-                justifyContent="flex-start"
-                alignItems="center"
-                zIndex={3}
-                boxSizing="border-box"
-                h="100%"
-                maxW={500}
-                py={20}
-                overflowY="scroll">
+                wrap={"wrap"}
+                background="var(--transparentWhite70)"
+                zIndex="6"
+                w="100%"
+                maxW="1700px"
+                h="fit-content"
+                mx="100px"
+                p="50px 150px"
+                overflow="hidden"
+                position={"relative"}>
 
-                {/* epi logo */}
-                <Flex>
+                <Flex
+                    direction="column"
+                    align="center"
+                    justify="center"
+                    //bgColor="green"
+                    zIndex="7"
+                    minW="300px"
+                    flex="5">
+
+                    {/* epi logo */}
                     <img
                         src={getAssetUrl("/images/logo.svg")}
                         style={{
                             width: "250px",
+                            maxHeight: "100px",
                             objectFit: "contain",
                             marginLeft: "15px",
                             cursor: "pointer",
                         }}
                         alt="" />
+
+                    {/* 3d redeem image */}
+                    <img
+                        src={getAssetUrl("/images/redeem3D.png")}
+                        style={{
+                            width: "100%",
+                            maxHeight: "350px",
+                            objectFit: "contain",
+                            marginLeft: "15px",
+                            cursor: "pointer",
+                        }}
+                        alt="" />
+
                 </Flex>
 
                 {/* form */}
                 <LoadingFrame
                     id="form"
+                    minW="400px"
                     loadingState={registerUserViaActivationCodeState}
-                    backgroundColor="white"
-                    boxShadow="0 0 20px 2px #0000002f"
-                    borderRadius={10}
-                    padding="40px"
                     direction="column"
-                    alignItems="center"
-                    mx={10}
-                    position="relative"
-                    overflow="hidden">
+                    zIndex="7"
+                    flex="5">
 
-                    {/* registration */}
-                    <Flex direction="column">
+                    {/* Redeem title */}
+                    <Flex
+                        minH="80px"
+                        direction="column"
+                        justify="center"
+                        maxW="320px"
+                        align="center">
 
-                        <Flex h={60} w={"100%"}>
-                            <Text
-                                textAlign="center"
-                                fontSize="1.3em">
-                                Váltsd be egyedi kódodat, hogy belekezdhess a tanulásba!
-                            </Text>
-                        </Flex>
+                        <Text
+                            textAlign="left"
+                            fontSize="1.3em">
 
-                        <Flex
-                            flexDir="column"
-                            w="100%">
-
-                            <EpistoEntry
-                                value={email}
-                                setValue={setEmail}
-                                labelVariant="top"
-                                label="E-mail"
-                                placeholder="te@email.com"
-                                name="email"
-                                height="50px" />
-
-                            <EpistoEntry
-                                value={firstName}
-                                setValue={setFirstName}
-                                labelVariant="top"
-                                label="Vezetéknév"
-                                placeholder="Vezetéknév"
-                                name="lastName"
-                                height="50px" />
-
-                            <EpistoEntry
-                                value={lastName}
-                                setValue={setLastName}
-                                labelVariant="top"
-                                label="Keresztnév"
-                                placeholder="Keresztnév"
-                                name="firstName"
-                                height="50px" />
-
-                            <EpistoEntry
-                                value={activationCode}
-                                setValue={setActivationCode}
-                                labelVariant="top"
-                                label="Aktivációs kódod"
-                                placeholder="Kód"
-                                name="activationCode"
-                                height="50px" />
-                        </Flex>
-
-                        {/* registration button */}
-                        <Flex
-                            w="100%"
-                            alignItems="center"
-                            justifyContent="center"
-                            h={80}>
-                            <EpistoButton
-                                style={{
-                                    width: "100%",
-                                    backgroundColor: "#324658"
-                                }}
-                                onClick={handleRegisterAsync}
-                                variant="colored">
-                                Regisztráció
-                            </EpistoButton>
-                        </Flex>
-
-                        <Flex
-                            justifyContent="space-between"
-                            alignItems="center"
-                            h={80}>
-                            <Typography>
-                                Nincs még hozzáférésed?
-                            </Typography>
-                            <Typography
-                                style={{
-                                    maxWidth: "250px",
-                                    textAlign: "right"
-                                }}>
-                                Vásárold meg kedvezményesen erre a linkre kattintva!
-                            </Typography>
-                        </Flex>
+                            Váltsd be egyedi kódodat, hogy belekezdhess a tanulásba!
+                        </Text>
                     </Flex>
+
+                    {/* Redeem info input fields */}
+                    <Flex
+                        direction="column">
+
+                        <EpistoEntry
+                            value={email}
+                            setValue={setEmail}
+                            labelVariant="top"
+                            label="E-mail"
+                            placeholder="te@email.com"
+                            name="email"
+                            height="30px" />
+
+                        <EpistoEntry
+                            value={firstName}
+                            setValue={setFirstName}
+                            labelVariant="top"
+                            label="Vezetéknév"
+                            placeholder="Vezetéknév"
+                            name="lastName"
+                            height="30px" />
+
+                        <EpistoEntry
+                            value={lastName}
+                            setValue={setLastName}
+                            labelVariant="top"
+                            label="Keresztnév"
+                            placeholder="Keresztnév"
+                            name="firstName"
+                            height="30px" />
+
+                        <EpistoEntry
+                            value={activationCode}
+                            setValue={setActivationCode}
+                            labelVariant="top"
+                            label="Aktivációs kódod"
+                            placeholder="Kód"
+                            name="activationCode"
+                            height="30px" />
+                    </Flex>
+
+                    {/* registration button */}
+                    <Flex
+                        align="center"
+                        justify="center"
+                        minH={80}>
+
+                        <EpistoButton
+                            style={{
+                                width: "100%",
+                                backgroundColor: "#324658",
+                                height: 60
+                            }}
+                            onClick={handleRegisterAsync}
+                            variant="colored">
+                            Regisztráció
+                        </EpistoButton>
+                    </Flex>
+
+                    <Flex
+                        justify="space-between"
+                        align="center"
+                        h={80}>
+
+                        <Typography
+                            style={{
+                                color: "#9FA2B4"
+                            }}>
+
+                            Nincs még hozzáférésed?
+                        </Typography>
+
+                        <Typography
+                            style={{
+                                maxWidth: "250px",
+                                textAlign: "right",
+                                color: "var(--epistoTeal)"
+                            }}>
+
+                            Vásárold meg kedvezményesen erre a linkre kattintva!
+                        </Typography>
+                    </Flex>
+
 
                     <Flex
                         position="absolute"
@@ -210,69 +222,46 @@ export const RegisterViaActivationCodePage = () => {
                     </Flex>
 
                 </LoadingFrame>
-            </Flex>
 
-            {/* right image */}
-            {isLargerThan1280 && <Flex
-                w={400}
-                maxW={550}
-                flex={1}
-                alignItems="center"
-                justifyContent="center"
-                zIndex={3}>
+                {/* Magic powder top-left */}
+                <img
+                    style={{
+                        position: "absolute",
+                        left: 50,
+                        top: -80,
+                        width: 300,
+                        transform: "rotate(270deg)",
+                        objectFit: "contain",
+                        zIndex: 0,
+                    }}
+                    src={getAssetUrl("/images/bg-art-2.png")}
+                    alt="" />
+
+                {/* Magic powder bottom-left */}
+                <img
+                    style={{
+                        position: "absolute",
+                        left: -55,
+                        bottom: -150,
+                        transform: "rotate(-90deg) scale(50%)",
+                        zIndex: 0,
+                    }}
+                    src={getAssetUrl("/images/bg-art-5.png")}
+                    alt="" />
+
+                {/* Magic powder top-left */}
 
                 <img
                     style={{
-                        width: 300,
-                        objectFit: "contain"
+                        position: "absolute",
+                        right: -20,
+                        top: -120,
+                        transform: "rotate(270deg) scale(70%)",
+                        zIndex: 0,
                     }}
-                    src={getAssetUrl("/images/jobb.png")} alt="" />
-            </Flex>}
-
-            {/* Magic powder */}
-            <img
-                style={{
-                    position: "absolute",
-                    left: 100,
-                    top: -180,
-                    width: 300,
-                    transform: "rotate(115deg)",
-                    objectFit: "contain",
-                    zIndex: 0,
-                }}
-                src={getAssetUrl("/images/bg-art-2.png")} alt="" />
-
-            <img
-                style={{
-                    position: "absolute",
-                    left: 50,
-                    bottom: -60,
-                    transform: "rotate(-90deg)",
-                    zIndex: 0,
-                }}
-                src={getAssetUrl("/images/bg-art-5.png")} alt="" />
-            <img
-                style={{
-                    position: "absolute",
-                    right: 50,
-                    top: -100,
-                    transform: "rotate(270deg)",
-                    zIndex: 0,
-                }}
-                src={getAssetUrl("/images/bg-art-6.png")} alt="" />
-
-            <img
-                style={{
-                    position: "absolute",
-                    right: -50,
-                    bottom: -100,
-                    width: 300,
-                    transform: "scaleX(-1) rotate(65deg)",
-                    objectFit: "contain",
-                    zIndex: 0,
-                }}
-                src={getAssetUrl("/images/bg-art-home4.png")} alt="" />
+                    src={getAssetUrl("/images/bg-art-6.png")}
+                    alt="" />
+            </Flex>
         </Flex>
     </MainWrapper>
-
 }
