@@ -18,6 +18,10 @@
   --epistoTeal: #97c9cc;
   --whiteGrey: #f7f7f7;
 
+  /* transparent colors */
+  
+  --transparentIntenseBlue: #4561EED8;
+
   --transparentWhite10: rgba(255,255,255,0.1);
   --transparentWhite70: rgba(255,255,255,0.7);
   --transparentWhite90: rgba(255,255,255,0.9);
@@ -140,7 +144,7 @@
 }
 
 .roundBorders{
-  border-radius: 7px;
+  border-radius: 6px;
 }
 
 .controlPadding {

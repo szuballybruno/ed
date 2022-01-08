@@ -1,14 +1,29 @@
 import { Flex, FlexProps } from '@chakra-ui/layout';
+import { PlayArrow } from '@mui/icons-material';
 import { Divider, Typography } from "@mui/material";
 import React from 'react';
+import { EpistoButton } from '../../universal/EpistoButton';
 import classes from "./dashBoardSpacers.module.scss";
 
-export const DashoardLeftItemGroup = (props: FlexProps & { title: string }) => {
+export const DashoardLeftItemGroup = (props: FlexProps & { title: string, onClick?: () => {} }) => {
 
-    const { title, ...boxProps } = props;
+    const { title, onClick, ...boxProps } = props;
 
     return (<Flex id="listItemGroup" direction="column" {...boxProps}>
-        <Typography variant={"overline"}>{props.title}</Typography>
+        <Flex justify="space-between">
+            <Typography variant={"overline"} lineHeight="16px">{props.title}</Typography>
+            <EpistoButton
+                variant="plain"
+                onClick={onClick}
+                style={{
+                    height: 20
+                }}>
+                <PlayArrow
+                    style={{
+                        color: "var(--epistoTeal)"
+                    }} />
+            </EpistoButton>
+        </Flex>
         {props.children}
     </Flex>);
 }

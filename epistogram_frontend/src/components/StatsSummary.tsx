@@ -8,6 +8,7 @@ import { Typography } from "@mui/material";
 import { translatableTexts } from "../static/translatableTexts";
 import { useUserStats } from "../services/api/userStatsApiService";
 import { CurrentUserContext } from "./system/AuthenticationFrame";
+import { EpistoHeader } from "./EpistoHeader";
 
 export const StatsSummary = () => {
 
@@ -21,7 +22,7 @@ export const StatsSummary = () => {
             display: "grid",
             padding: "10px",
             boxSizing: "border-box",
-            gap: "10px",
+            gap: "0px",
             gridAutoFlow: "row dense",
             gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
             gridAutoRows: "200px"
@@ -29,48 +30,33 @@ export const StatsSummary = () => {
 
         {/* chart item  */}
         <FlexFloat
+            background="var(--transparentWhite70)"
             direction="column"
-            justifyContent={"center"}
-            p="0px"
+            p="10px"
             minW={250}
             style={{
                 gridColumn: `auto / span 2`,
                 gridRow: `auto / span 2`
             }}
-            position="relative"
             m="10px" >
 
             {/* locked overlay */}
-            <Flex
-                flexDir="column"
-                boxSizing="border-box"
-                p={20}
-                alignItems="center"
-                justifyContent="center"
-                pos="absolute"
-                w="100%"
-                h="100%"
-                bgColor="#333333CC"
-                color="white"
-                borderRadius={5} >
-                <Lock style={{
-                    width: "50%",
-                    height: "50%"
-                }} />
-                <Typography align="center">
-                    {translatableTexts.homePage.noStatsYet}
-                </Typography>
-            </Flex>
+            
+            <EpistoHeader text={"Legfontosabb statisztikáid"} showDivider variant="strongSub" m="5px 10px 20px 10px" />
 
             {/* bar chart */}
             <img
-                src={getAssetUrl("/images/learningcurve.png")}
+                src={getAssetUrl("/images/learningcurve3D.png")}
                 alt={""}
                 style={{
-                    maxHeight: 400,
+                    maxHeight: 220,
                     objectFit: "contain",
                     margin: "0 10px 0 0",
                 }} />
+
+            <Typography align="center">
+                {translatableTexts.homePage.noStatsYet}
+            </Typography>
         </FlexFloat>
 
         {/* total completed video count */}

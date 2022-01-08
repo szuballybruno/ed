@@ -23,6 +23,7 @@ const StatisticsCard = (props: {
     const [isOpen, setIsOpen] = useState(!!props.isOpenByDefault)
 
     return <FlexFloat
+        background="var(--transparentWhite70)"
         direction="column"
         p="0px"
         minW={250}

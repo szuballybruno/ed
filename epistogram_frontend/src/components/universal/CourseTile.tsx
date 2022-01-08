@@ -43,15 +43,15 @@ const CourseTile = (props: {
     const isComplete = course.isComplete;
 
     return <FlexFloat
-        className="whall"
+        className="whall roundBorders"
         direction="column"
         borderRadius="10px"
         position="relative"
         overflow="hidden"
-        shadow={"0 0 10px 1px #CCC"}
-        bg="white"
+        shadow="0 0 10px 1px #CCC"
+        background="var(--transparentWhite70)"
         justifyContent="space-between"
-        border="5px solid white"
+        p="5px"
         {...css}>
 
         {/* cover image box  */}
@@ -59,13 +59,12 @@ const CourseTile = (props: {
 
             {/* cover image */}
             <img
+                className="whall roundBorders"
                 style={{
                     objectFit: "cover",
-                    borderRadius: 10
                 }}
                 src={thumbnailImageUrl}
-                alt=""
-                className="whall" />
+                alt="" />
 
             {/* is complete overlay */}
             {isComplete && <Flex

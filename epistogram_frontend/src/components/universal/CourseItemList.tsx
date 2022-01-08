@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Divider } from "@chakra-ui/react";
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DoneIcon from '@mui/icons-material/Done';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -19,6 +19,7 @@ import { FlexListTitleSubtitle } from "./FlexListTitleSubtitle";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { CollapseItem } from "./CollapseItem";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { getAssetUrl } from "../../static/frontendHelpers";
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
@@ -43,10 +44,18 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
     return <FlexListItem
         isLocked={isLocked}
         onClick={navigate}
-        borderLeft={`${borderWidth}px solid ${borderColor}`}
-        midContent={<FlexListTitleSubtitle title={title} subTitle={subTitle} />}
+        //borderLeft={`${borderWidth}px solid ${borderColor}`}
+        midContent={<Flex>
+            <Flex 
+                className="roundBorders"
+                boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
+                p="3px"
+                m="7px 10px 7px 0px"
+                bgColor="var(--epistoTeal)" />
+            <FlexListTitleSubtitle title={title} subTitle={subTitle} />
+        </Flex>}
         endContent={<Flex align="center" justify="center" flexBasis="50px">
-            {state === "current" && <VisibilityIcon style={{ color: "var(--epistoTeal)" }} />}
+            {state === "current" && <img src={getAssetUrl("/images/eye3D.png")} style={{ width: "20px", color: "var(--epistoTeal)" }} />}
             {state === "locked" && <LockIcon style={{ color: "grey" }} />}
             {state === "available" && <LockOpenIcon style={{ color: "var(--mildGreen)" }} />}
             {state === "completed" && <DoneIcon style={{ color: "var(--mildGreen)" }} />}

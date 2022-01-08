@@ -28,8 +28,10 @@ export const FlexListItem = (props: FlexProps & {
         cursor={onClick ? "pointer" : undefined}
         align="center"
         pointerEvents={isLocked ? "none" : "all"}
+        //boxShadow="inset -1px -1px 7px 1px rgba(0,0,0,0.05)"
+        color="#3F3F3F"
         onClick={onClick}
-        borderBottom="1px solid #eaeaea"
+        //borderBottom="1px solid #eaeaea"
         {...css}>
 
         {setIsChecked && <Flex

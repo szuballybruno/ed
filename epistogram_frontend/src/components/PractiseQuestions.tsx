@@ -23,7 +23,7 @@ const NoQuestionsAvailable = () => {
             <Text as={"text"} p={"20px 20px 10px 10px"}>
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
             </Text>
-            
+
             <Text as={"text"} p={"20px 20px 10px 10px"}>
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
                 <Text

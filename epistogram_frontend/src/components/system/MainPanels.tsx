@@ -58,10 +58,10 @@ export const LeftPanel = (props: FlexProps) => {
             id="leftPanel"
             bg="white"
             zIndex={2}
-            flexBasis="400px"
+            flexBasis="320px"
             direction="column"
             align="stretch"
-            padding="0 15px 0 15px"
+            padding="25px 15px 0 15px"
             justify="flex-start"
             boxShadow="none"
             className="dividerBorderRight"
@@ -80,7 +80,6 @@ export const RightPanel = (props: FlexProps & { noPadding?: boolean }) => {
     return (
         <Flex
             id="rightPanel"
-            //bg="#fafafa"
             p={props.noPadding ? undefined : "20px"}
             flex="1"
             overflowX="hidden"

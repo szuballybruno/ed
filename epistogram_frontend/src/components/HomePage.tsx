@@ -1,4 +1,5 @@
 import { Box, Flex } from '@chakra-ui/layout';
+import { Typography } from '@mui/material';
 import { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useCourseProgressShortDtos } from '../services/api/courseApiService';
@@ -47,14 +48,14 @@ const HomePage = () => {
             <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
                 <LeftPanel align="stretch" justify="stretch">
                     {/* logo link */}
-                    <Flex w="100%" alignItems={"center"} justifyContent="flex-start" h="100px">
+                    <Flex w="100%" alignItems={"center"} justifyContent="flex-start" mb="20px">
                         <img
                             src={getAssetUrl("/images/logo.svg")}
                             style={{
-                                height: "60px",
+                                height: "50px",
                                 objectFit: "cover",
                                 cursor: "pointer",
-                                margin: "20px 0",
+                                margin: "10px 10px",
                                 padding: 0
                             }}
                             alt=""
@@ -65,48 +66,44 @@ const HomePage = () => {
                             }} />
                     </Flex>
 
-                    {/* courses progress */}
-                    <DashoardLeftItemGroup title={translatableTexts.homePage.courseProgress}>
-                        <Flex direction="column" p="10px">
-                            {courseProgressShortDtos
-                                .map(x => <CourseProgressBar
-                                    value={x.progressPercentage}
-                                    label={x.courseTitle}
-                                    mb="5px" />)}
+                    <Flex
+                        className='roundBorders'
+                        mx="10px"
+                        direction="column">
+                        {courseProgressShortDtos
+                            .map(x =>
+                                <DashoardLeftItemGroup title={x.courseTitle}>
+
+                                    <CourseProgressBar
+                                        value={x.progressPercentage}
+                                        label={x.courseTitle}
+                                        mb="5px" />
+                                </DashoardLeftItemGroup>)}
+
+                        <Flex
+                            direction="column"
+                            mt="5px">
+
+                            {hasCurrentItem
+                                && <Box justify="space-between">
+                                    <CourseItemView courseItem={currentItem!} />
+                                </Box>}
+
+                            {hasCurrentItem
+                                && <Box>
+                                    <CourseItemView courseItem={currentItem!} />
+                                </Box>}
+
+                            {hasCurrentItem
+                                && <Box>
+                                    <CourseItemView courseItem={currentItem!} />
+                                </Box>}
                         </Flex>
-                    </DashoardLeftItemGroup>
-
-                    {/* active item */}
-                    <DashoardLeftItemGroup
-                        title={hasCurrentItem
-                            ? translatableTexts.homePage.activeCourseContinue
-                            : translatableTexts.homePage.activeCourseEmpty}>
-
-                        {hasCurrentItem
-                            ? <Box padding="10px">
-                                <CourseItemView courseItem={currentItem!} />
-                            </Box>
-
-                            : <ListItem
-                                mainTitle={translatableTexts.homePage.availableCoursesLinkTitle}
-                                subTitle={translatableTexts.homePage.availableCoursesText}
-                                thumbnailUrl={currentItemThumbnailUrl}
-                                to={applicationRoutes.availableCoursesRoute.route} />}
-                    </DashoardLeftItemGroup>
-
-                    {/* current course */}
-                    {hasCurrentCourse &&
-                        <DashoardLeftItemGroup
-                            title={translatableTexts.homePage.currentCourseTitle}
-                            flex="1"
-                            overflow="hidden">
-
-                            <CourseItemList modules={modules} />
-                        </DashoardLeftItemGroup>}
+                    </Flex>
 
                 </LeftPanel>
                 <RightPanel
-                    padding="5px"
+                    padding="30px"
                     background="radial-gradient(farthest-corner at 300px 300px, rgba(177,208,242,0.7) 33%, white 100%)">
 
                     <Navbar />
@@ -118,13 +115,12 @@ const HomePage = () => {
                             {/* test your knowledge */}
                             <DashboardSection
                                 title={translatableTexts.homePage.practiseTitle}
-                                background="#4561EED8"
-                                borderRadius="6px"
-                                className="largeSoftShadow"
+                                background="var(--transparentIntenseBlue)"
+                                className="largeSoftShadow roundBorders"
                                 color="white"
                                 minHeight="300px"
                                 minWidth="500px"
-                                flex="2">
+                                flex="3">
 
                                 <PractiseQuestions />
                             </DashboardSection>
@@ -135,18 +131,20 @@ const HomePage = () => {
                                 background="var(--transparentWhite70)"
                                 borderRadius="6px"
                                 className="largeSoftShadow"
-                                minHeight="300px"
+                                minHeight="30px"
                                 minWidth="300px"
-                                flex="1">
+                                flex="2">
 
                                 <DailyTip />
                             </DashboardSection>
 
                         </Flex>
 
-                        <DashboardSection title={translatableTexts.homePage.stats} mx="25px">
+                        <Flex mx="5px">
+
                             <StatsSummary />
-                        </DashboardSection>
+                        </Flex>
+
                     </Flex>
                 </RightPanel>
             </LoadingFrame>
