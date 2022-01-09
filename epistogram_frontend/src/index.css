@@ -20,11 +20,15 @@
 
   /* transparent colors */
   
-  --transparentIntenseBlue: #4561EED8;
+  --transparentIntenseBlue: rgba(69, 97, 238, 0.847);
 
   --transparentWhite10: rgba(255,255,255,0.1);
   --transparentWhite70: rgba(255,255,255,0.7);
   --transparentWhite90: rgba(255,255,255,0.9);
+
+  /* gradients */
+
+  --gradientBlueBackground: radial-gradient(farthest-corner at 300px 300px, rgba(177,208,242,0.7) 33%, white 100%)
 
 }
 

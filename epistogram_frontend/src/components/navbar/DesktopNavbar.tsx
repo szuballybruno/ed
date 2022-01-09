@@ -25,14 +25,16 @@ const menuItems = [
 
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,
-    hideLinks: boolean
+    hideLinks: boolean,
+    showLogo?: boolean
 }) => {
 
     const { navigateToPlayer, navigate } = useNavigation();
-    const currentCourseItemCode = props.currentCourseItemCode;
+    const { currentCourseItemCode, showLogo } = props;
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
-    
+    const homeUrl = applicationRoutes.rootHomeRoute.route;
+
     const user = useContext(CurrentUserContext);
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
@@ -85,167 +87,190 @@ const DesktopNavbar = (props: {
     }
 
     return (
-        <Flex align="center" width="100%" justify={hideLinks ? "center" : "space-between"}>
+        <Flex
+            align="center"
+            width="100%"
+            h="60px"
+            mt="10px"
+            mb="30px"
+            justify={hideLinks ? "center" : "space-between"}>
 
-           
+            {/* logo link */}
 
-            {/* menu items */}
-            {!hideLinks && <>
-                <Flex height="50px">
-                    {menuItems
-                        .map((item, index) => {
-                            return <NavbarButton
-                                key={index}
-                                menuName={item.title}
-                                menuPath={item.route} />
-                        })}
+            {showLogo && <img
+                src={getAssetUrl("/images/logo.svg")}
+                style={{
+                    width: "150px",
+                    height: "50px",
+                    objectFit: "contain",   
+                    cursor: "pointer",
+                }}
+                alt=""
+                onClick={() => {
+                    if (user?.userActivity?.canAccessApplication)
+                    navigate(homeUrl);
+                }} /> }
 
-                    {user.userActivity.canAccessAdministration && <NavbarButton
-                        menuName={applicationRoutes.administrationRoute.title}
-                        menuPath={applicationRoutes.administrationRoute.usersRoute.route} />}
 
-                    {/* continue watching  */}
-                    {currentCourseItemCode &&
-                        <NavbarButton
-                            menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
+                {/* menu items */ }
+                {
+                    !hideLinks && <>
+                        <Flex height="50px">
+                            {menuItems
+                                .map((item, index) => {
+                                    return <NavbarButton
+                                        key={index}
+                                        menuName={item.title}
+                                        menuPath={item.route} />
+                                })}
+
+                            {user.userActivity.canAccessAdministration && <NavbarButton
+                                menuName={applicationRoutes.administrationRoute.title}
+                                menuPath={applicationRoutes.administrationRoute.usersRoute.route} />}
+
+                            {/* continue watching  */}
+                            {currentCourseItemCode &&
+                                <NavbarButton
+                                    menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
+
+                                    <EpistoButton
+                                        className="mildShadow"
+                                        style={{
+                                            flex: "1",
+                                            color: "--epistoTeal",
+                                            background: "var(--transparentWhite70)",
+                                            border: "none"
+                                        }}
+                                        variant="outlined"
+                                        onClick={() => continueCourse()}
+                                        icon={
+                                            <img
+                                                alt=""
+                                                src={getAssetUrl("/icons/play2.svg")}
+                                                style={{
+                                                    width: "25px",
+                                                    height: "25px",
+                                                    marginRight: "5px"
+                                                }} />
+                                        }>
+                                        Aktuális Kurzus
+                                    </EpistoButton>
+                                </NavbarButton>}
+                        </Flex>
+
+                        {/* content */}
+                        <Flex pr="10px" align="center" mr="15px">
 
                             <EpistoButton
-                                className="mildShadow" 
-                                style={{ 
-                                    flex: "1", 
-                                    color: "--epistoTeal", 
-                                    background: "var(--transparentWhite70)",
-                                    border: "none"
+                                style={{
+                                    height: 35,
+                                    fontStyle: "normal",
                                 }}
-                                variant="outlined"
-                                onClick={() => continueCourse()}
-                                icon={
-                                    <img
-                                        alt=""
-                                        src={getAssetUrl("/icons/play2.svg")}
-                                        style={{
-                                            width: "25px",
-                                            height: "25px",
-                                            marginRight: "5px"
-                                        }} />
-                                }>
-                                Aktuális Kurzus
+                                onClick={() => {
+                                    navigate("/shop")
+                                }}
+                                variant={"plain"}
+                            >
+                                <Typography fontSize={"1.0em"} style={{
+                                    margin: "0 7px",
+                                    textTransform: "uppercase"
+                                }}>Áruház</Typography>
+                                <LocalMallOutlined />
                             </EpistoButton>
-                        </NavbarButton>}
-                </Flex>
 
-                {/* content */}
-                <Flex pr="10px" align="center" mr="15px">
+                            <EpistoButton
+                                style={{
+                                    borderRadius: "100%",
+                                    width: 35,
+                                    height: 35
+                                }}
+                                variant={"plain"}
+                                onClick={() => {
+                                    setNotificationsPopperOpen(true)
+                                }}
+                            >
+                                <NotificationsNone />
+                            </EpistoButton>
 
-                    <EpistoButton
-                        style={{
-                            height: 35,
-                            fontStyle: "normal",
-                        }}
-                        onClick={() => {
-                            navigate("/shop")
-                        }}
-                        variant={"plain"}
-                    >
-                        <Typography fontSize={"1.0em"} style={{
-                            margin: "0 7px",
-                            textTransform: "uppercase"
-                        }}>Áruház</Typography>
-                        <LocalMallOutlined />
-                    </EpistoButton>
+                            <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>
 
-                    <EpistoButton
-                        style={{
-                            borderRadius: "100%",
-                            width: 35,
-                            height: 35
-                        }}
-                        variant={"plain"}
-                        onClick={() => {
-                            setNotificationsPopperOpen(true)
-                        }}
-                    >
-                        <NotificationsNone />
-                    </EpistoButton>
-
-                    <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>
-
-                    {!!user && <ProfileImage
-                        url={user?.avatarUrl ?? null}
-                        onClick={() => setSettingsPopperOpen(true)}
-                        cursor="pointer"
-                        className="square50"
-                        ref={ref}></ProfileImage>}
-                </Flex>
-            </>}
-
-            {/* notifications menu */}
-            <EpistoPopper
-                isOpen={notificationsPopperOpen}
-                target={ref?.current}
-                placementX="left"
-                handleClose={() => setNotificationsPopperOpen(false)}>
-                {mockNotifications
-                    .map((x, index) => {
-
-                        return <Flex w={200} flexDirection={"column"} >
-                            <Flex w={200} alignItems={"center"} justifyContent={"center"} my={10}>
-                                <div style={{
-                                    width: 3,
-                                    height: 3,
-                                    backgroundColor: "blue",
-                                    borderRadius: "50%"
-                                }} />
-
-                                <Typography
-                                    style={{
-                                        marginLeft: "14px",
-                                        textAlign: "left",
-                                        fontSize: "14px"
-                                    }}>
-                                    {x.title}
-                                </Typography>
-                            </Flex>
-                            {index + 1 < mockNotifications.length && <Divider h={1} w={"100%"} bgColor={"grey"} />}
+                            {!!user && <ProfileImage
+                                url={user?.avatarUrl ?? null}
+                                onClick={() => setSettingsPopperOpen(true)}
+                                cursor="pointer"
+                                className="square50"
+                                ref={ref}></ProfileImage>}
                         </Flex>
-                    })}
-            </EpistoPopper>
+                    </>
+                }
 
-            {/* user menu */}
-            <EpistoPopper
-                isOpen={settingsPopperOpen}
-                target={ref?.current}
-                placementX="left"
-                handleClose={() => setSettingsPopperOpen(false)}>
+                {/* notifications menu */ }
+                <EpistoPopper
+                    isOpen={notificationsPopperOpen}
+                    target={ref?.current}
+                    placementX="left"
+                    handleClose={() => setNotificationsPopperOpen(false)}>
+                    {mockNotifications
+                        .map((x, index) => {
 
-                {/* episto coins */}
-                <EpistoButton onClick={handleNavToCoinTransactions}>
-                    <EpistoConinInfo height="45px" />
-                </EpistoButton>
+                            return <Flex w={200} flexDirection={"column"} >
+                                <Flex w={200} alignItems={"center"} justifyContent={"center"} my={10}>
+                                    <div style={{
+                                        width: 3,
+                                        height: 3,
+                                        backgroundColor: "blue",
+                                        borderRadius: "50%"
+                                    }} />
 
-                <Divider h={1} w={"100%"} bgColor={"black"} />
-
-                {userMenuItems
-                    .map(x => {
-
-                        return <EpistoButton
-                            variant={x.color ? "colored" : undefined}
-                            style={{ background: x.color }}
-                            onClick={x.onClick}>
-                            <Flex className="whall" m="5px" align="center">
-                                {x.icon}
-                                <Typography
-                                    style={{
-                                        marginLeft: "14px",
-                                        textAlign: "left",
-                                        fontSize: "14px"
-                                    }}>
-                                    {x.name}
-                                </Typography>
+                                    <Typography
+                                        style={{
+                                            marginLeft: "14px",
+                                            textAlign: "left",
+                                            fontSize: "14px"
+                                        }}>
+                                        {x.title}
+                                    </Typography>
+                                </Flex>
+                                {index + 1 < mockNotifications.length && <Divider h={1} w={"100%"} bgColor={"grey"} />}
                             </Flex>
-                        </EpistoButton>
-                    })}
-            </EpistoPopper>
+                        })}
+                </EpistoPopper>
+
+                {/* user menu */ }
+                <EpistoPopper
+                    isOpen={settingsPopperOpen}
+                    target={ref?.current}
+                    placementX="left"
+                    handleClose={() => setSettingsPopperOpen(false)}>
+
+                    {/* episto coins */}
+                    <EpistoButton onClick={handleNavToCoinTransactions}>
+                        <EpistoConinInfo height="45px" />
+                    </EpistoButton>
+
+                    <Divider h={1} w={"100%"} bgColor={"black"} />
+
+                    {userMenuItems
+                        .map(x => {
+
+                            return <EpistoButton
+                                variant={x.color ? "colored" : undefined}
+                                style={{ background: x.color }}
+                                onClick={x.onClick}>
+                                <Flex className="whall" m="5px" align="center">
+                                    {x.icon}
+                                    <Typography
+                                        style={{
+                                            marginLeft: "14px",
+                                            textAlign: "left",
+                                            fontSize: "14px"
+                                        }}>
+                                        {x.name}
+                                    </Typography>
+                                </Flex>
+                            </EpistoButton>
+                        })}
+                </EpistoPopper>
         </Flex>
     );
 };

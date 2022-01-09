@@ -1,6 +1,6 @@
 import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
-import React, { useContext } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import { distinct, getAssetUrl } from "../static/frontendHelpers";
 import { useNavigation } from "../services/core/navigatior";
@@ -8,21 +8,16 @@ import { showNotification, useShowErrorDialog } from "../services/core/notificat
 import { translatableTexts } from "../static/translatableTexts";
 import { LoadingFrame } from "./system/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./system/MainPanels";
-import Navbar from "./navbar/Navbar";
-import CourseTile from "./universal/CourseTile";
 import { EpistoButton } from "./universal/EpistoButton";
 import { EpistoGrid } from "./universal/EpistoGrid";
 import { EpistoSearch } from "./universal/EpistoSearch";
-import classes from "./css/courseSearchMain.module.scss";
 import { applicationRoutes } from "../configuration/applicationRoutes";
 import { useUserCourses, useStartCourse } from "../services/api/courseApiService";
-import { CurrentUserContext } from "./system/AuthenticationFrame";
+import CourseTile from "./universal/CourseTile";
 
 const AvailableCoursesPage = () => {
 
     const history = useHistory()
-
-    const homeUrl = applicationRoutes.rootHomeRoute.route;
 
     const [searchText, setSearchText] = React.useState("");
     const [searchCategory, setSearchCategory] = React.useState("");
@@ -34,8 +29,6 @@ const AvailableCoursesPage = () => {
 
     const { navigate, navigateToPlayer } = useNavigation();
     const showError = useShowErrorDialog();
-
-    const user = useContext(CurrentUserContext);
 
     const clearFilters = () => {
         setSearchCategory("");
@@ -86,28 +79,7 @@ const AvailableCoursesPage = () => {
 
         <ContentWrapper>
 
-            <LeftPanel
-                boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)"
-                direction="column"
-                align="stretch">
-                {/* logo link */}
-                <Flex w="100%" alignItems={"center"} justifyContent="flex-start" mb="20px">
-                    <img
-                        src={getAssetUrl("/images/logo.svg")}
-                        style={{
-                            height: "50px",
-                            objectFit: "cover",
-                            cursor: "pointer",
-                            margin: "10px 10px",
-                            padding: 0
-                        }}
-                        alt=""
-                        onClick={() => {
-
-                            if (user?.userActivity?.canAccessApplication)
-                                navigate(homeUrl);
-                        }} />
-                </Flex>
+            <LeftPanel>
 
                 {/* categories  */}
                 <Flex direction="column">
@@ -157,16 +129,12 @@ const AvailableCoursesPage = () => {
                 </Flex>
             </LeftPanel>
 
-            <RightPanel
-                padding="30px"
-                background="radial-gradient(farthest-corner at 300px 300px, rgba(177,208,242,0.7) 33%, white 100%)">
-
-                <Navbar />
-
-                <Flex id="coursesPanelRoot" direction="column" px="20px">
+            <RightPanel>
+                
+                <Flex id="coursesPanelRoot" direction="column">
 
                     {/* search */}
-                    <Box id="courseSearchRoot" p="20px 10px" direction="column">
+                    <Box id="courseSearchRoot" p="0 0 20px 0" direction="column">
 
                         <EpistoSearch width="100%" />
 
@@ -248,7 +216,7 @@ const AvailableCoursesPage = () => {
 
                     {/* courses */}
                     <LoadingFrame loadingState={[coursesState, startCourseState]} error={[coursesError]}>
-                        <Box id="scrollContainer" className="whall" p="10px">
+                        <Box id="scrollContainer" className="whall">
                             <EpistoGrid auto="fit" gap="15" minColumnWidth="300px">
                                 {courses
                                     .map((course, index) => {

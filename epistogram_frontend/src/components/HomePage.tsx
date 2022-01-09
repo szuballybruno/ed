@@ -46,26 +46,8 @@ const HomePage = () => {
         <ContentWrapper>
 
             <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
-                <LeftPanel align="stretch" justify="stretch">
-                    {/* logo link */}
-                    <Flex w="100%" alignItems={"center"} justifyContent="flex-start" mb="20px">
-                        <img
-                            src={getAssetUrl("/images/logo.svg")}
-                            style={{
-                                height: "50px",
-                                objectFit: "cover",
-                                cursor: "pointer",
-                                margin: "10px 10px",
-                                padding: 0
-                            }}
-                            alt=""
-                            onClick={() => {
-
-                                if (user?.userActivity?.canAccessApplication)
-                                    navigate(homeUrl);
-                            }} />
-                    </Flex>
-
+                <LeftPanel>
+                    
                     <Flex
                         className='roundBorders'
                         mx="10px"
@@ -102,15 +84,11 @@ const HomePage = () => {
                     </Flex>
 
                 </LeftPanel>
-                <RightPanel
-                    padding="30px"
-                    background="radial-gradient(farthest-corner at 300px 300px, rgba(177,208,242,0.7) 33%, white 100%)">
-
-                    <Navbar />
+                <RightPanel>
 
                     <Flex direction="column">
 
-                        <Flex wrap="wrap" px="20px">
+                        <Flex wrap="wrap">
 
                             {/* test your knowledge */}
                             <DashboardSection
@@ -120,6 +98,7 @@ const HomePage = () => {
                                 color="white"
                                 minHeight="300px"
                                 minWidth="500px"
+                                m="0 5px 10px 0"
                                 flex="3">
 
                                 <PractiseQuestions />
@@ -133,6 +112,7 @@ const HomePage = () => {
                                 className="largeSoftShadow"
                                 minHeight="30px"
                                 minWidth="300px"
+                                m="0 0 10px 5px"
                                 flex="2">
 
                                 <DailyTip />
@@ -140,7 +120,7 @@ const HomePage = () => {
 
                         </Flex>
 
-                        <Flex mx="5px">
+                        <Flex>
 
                             <StatsSummary />
                         </Flex>

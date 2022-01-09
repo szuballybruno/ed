@@ -1,17 +1,24 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
 import { Typography } from '@mui/material';
-import React, { CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties, ReactNode, useContext } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useNavigation } from '../../services/core/navigatior';
 import { currentVersion } from '../../static/Environemnt';
+import { getAssetUrl } from '../../static/frontendHelpers';
+import Navbar from '../navbar/Navbar';
 import { FlexFloat } from '../universal/FlexFloat';
+import { CurrentUserContext } from './AuthenticationFrame';
 
 export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode }) => {
 
     return <Flex
+        background="var(--gradientBlueBackground)"
         id="mainWrapper"
         direction="column"
         height="100%"
         width="100%"
-        overflow="hidden"
+        maxW="1920px"
+        margin="0 auto"
         position="relative"
         style={props.style}>
 
@@ -52,6 +59,10 @@ export const ContentWrapper = (props: {
 
 export const LeftPanel = (props: FlexProps) => {
 
+    const homeUrl = applicationRoutes.rootHomeRoute.route;
+    const user = useContext(CurrentUserContext);
+    const { navigate } = useNavigation();
+
     return (
         <FlexFloat
             borderRadius="none"
@@ -62,11 +73,29 @@ export const LeftPanel = (props: FlexProps) => {
             direction="column"
             align="stretch"
             padding="25px 15px 0 15px"
-            justify="flex-start"
-            boxShadow="none"
             className="dividerBorderRight"
             borderLeft="2px solid #e2e2e2"
+            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)"
             {...props}>
+
+            {/* logo link */}
+            <Flex w="100%" alignItems={"center"} justifyContent="flex-start" mb="20px">
+                <img
+                    src={getAssetUrl("/images/logo.svg")}
+                    style={{
+                        height: "50px",
+                        objectFit: "cover",
+                        cursor: "pointer",
+                        margin: "10px 10px",
+                        padding: 0
+                    }}
+                    alt=""
+                    onClick={() => {
+
+                        if (user?.userActivity?.canAccessApplication)
+                            navigate(homeUrl);
+                    }} />
+            </Flex>
 
             {props.children}
         </FlexFloat>
@@ -80,12 +109,16 @@ export const RightPanel = (props: FlexProps & { noPadding?: boolean }) => {
     return (
         <Flex
             id="rightPanel"
-            p={props.noPadding ? undefined : "20px"}
+            p={props.noPadding ? undefined : "0 40px 40px 40px"}
             flex="1"
             overflowX="hidden"
             overflowY="scroll"
             direction="column"
+            background="var(--gradientBlueBackground)"
             {...css}>
+
+            <Navbar />
+
             {props.children}
         </Flex>
     );

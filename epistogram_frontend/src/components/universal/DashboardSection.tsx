@@ -9,7 +9,6 @@ export const DashboardSection = (props: FlexProps & { title: string, variant?: "
     return <FlexFloat
         direction="column"
         borderRadius="none"
-        m="5px"
         p="10px"
         boxShadow={variant === "noShadow" ? "none" : undefined}
         {...css}>

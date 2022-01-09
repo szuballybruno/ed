@@ -20,9 +20,8 @@ export const StatsSummary = () => {
             width: "100%",
             maxWidth: "100%",
             display: "grid",
-            padding: "10px",
             boxSizing: "border-box",
-            gap: "0px",
+            gap: "10px",
             gridAutoFlow: "row dense",
             gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
             gridAutoRows: "200px"
@@ -37,8 +36,7 @@ export const StatsSummary = () => {
             style={{
                 gridColumn: `auto / span 2`,
                 gridRow: `auto / span 2`
-            }}
-            m="10px" >
+            }} >
 
             {/* locked overlay */}
             
