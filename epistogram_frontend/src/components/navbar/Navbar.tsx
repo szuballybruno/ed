@@ -7,7 +7,7 @@ import { FlexFloat } from "../universal/FlexFloat";
 import DesktopNavbar from "./DesktopNavbar";
 import classes from "./navbar.module.scss";
 
-const Navbar = (props: { hideLinks?: boolean }) => {
+const Navbar = (props: { hideLinks?: boolean, showLogo?: boolean }) => {
 
     const isDesktop = useIsDesktopView();
     const currentCourseItemCode = useCurrentCourseItemCode();
@@ -15,7 +15,8 @@ const Navbar = (props: { hideLinks?: boolean }) => {
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar
         currentCourseItemCode={currentCourseItemCode?.currentCourseItemCode}
-        hideLinks={!!props.hideLinks} />;
+        hideLinks={!!props.hideLinks}
+        showLogo={props.showLogo} />;
 
     // render mobile
     const renderMobileNavbar = () => {
@@ -34,13 +35,12 @@ const Navbar = (props: { hideLinks?: boolean }) => {
 
     return <FlexFloat
         id="flexFloat-navbarRoot"
-        height={isDesktop ? "60px" : "60px"}
+        //height={isDesktop ? "60px" : "60px"}
         zIndex={3}
         boxShadow="none"
         borderRadius={0}
         bgColor="unset"
         p="20px"
-        mb="50px"
     >
 
         {isDesktop

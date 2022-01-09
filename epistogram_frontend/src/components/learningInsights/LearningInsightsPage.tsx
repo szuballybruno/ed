@@ -12,11 +12,9 @@ const LearningInsightsPage = () => {
 
     return <MainWrapper>
 
-        <Navbar />
-
         <ContentWrapper>
 
-            <LeftPanel padding="20px" flexBasis="300px">
+            <LeftPanel>
                 <NavigationLinkList
                     items={[
                         applicationRoutes.learningRoute.learningOverviewRoute,
@@ -25,9 +23,7 @@ const LearningInsightsPage = () => {
                     ]} />
             </LeftPanel>
 
-            <RightPanel
-                padding="5px"
-                bg="var(--whiteGrey)">
+            <RightPanel>
 
                 <Switch>
                     <Route path={applicationRoutes.learningRoute.route} exact>

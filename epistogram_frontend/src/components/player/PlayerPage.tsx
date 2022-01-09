@@ -1,7 +1,7 @@
-import { Box, Flex } from "@chakra-ui/react";
-import React, { useEffect, useState } from 'react';
+import { background, Box, Flex } from "@chakra-ui/react";
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from "react-router";
-import { useIsDesktopView } from "../../static/frontendHelpers";
+import { getAssetUrl, useIsDesktopView } from "../../static/frontendHelpers";
 import { useNavigation } from "../../services/core/navigatior";
 import { EpistoDialog, useEpistoDialogLogic } from "../EpistoDialog";
 import { LoadingFrame } from "../system/LoadingFrame";
@@ -13,6 +13,8 @@ import { ExamPlayer } from "./ExamPlayer";
 import { ModuleView } from "./ModuleView";
 import { WatchView } from "./WatchView";
 import { usePlayerData } from "../../services/api/playerApiService";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { CurrentUserContext } from "../system/AuthenticationFrame";
 
 export const PlayerPage = () => {
 
@@ -83,14 +85,17 @@ export const PlayerPage = () => {
     return (
         <MainWrapper
             style={{
-                "--playerWidth": "min(min(100vw, 180vh), 1700px)"
+                "--playerWidth": "min(min(100vw, 180vh), 1700px)",
+                background: "var(--gradientBlueBackground)"
             } as any}>
 
-            <Navbar />
+            <Navbar showLogo />
 
             <EpistoDialog logic={warningDialogLogic} />
 
-            <ContentWrapper width="var(--playerWidth)" margin="auto">
+            <ContentWrapper
+                width="var(--playerWidth)"
+                margin="auto">
 
                 <LoadingFrame
                     loadingState={[]}

@@ -25,10 +25,8 @@ const StatisticsCard = (props: {
     return <FlexFloat
         background="var(--transparentWhite70)"
         direction="column"
-        p="0px"
         minW={250}
-        position="relative"
-        m="10px">
+        position="relative">
 
         {/* locked overlay */}
         {isComingSoon && <Flex
