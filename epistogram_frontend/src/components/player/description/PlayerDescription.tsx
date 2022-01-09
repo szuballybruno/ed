@@ -4,7 +4,7 @@ import React from 'react';
 const PlayerDescription = (props: { description: string }) => {
 
     return (
-        <Flex w={"100%"} minH={600} p={20}>
+        <Flex w={"100%"} minH={600} py={20}>
             {props.description}
         </Flex>
     )

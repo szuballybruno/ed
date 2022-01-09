@@ -189,9 +189,11 @@ export const WatchView = (props: {
     return <>
 
         {/* video player */}
-        <Flex justify="center" mt="20px">
+        <Flex justify="center">
             <VideoPlayer
-                height="calc((var(--playerWidth) - 420px) / 1.7777)"
+                //height="calc((var(--playerWidth) - 420px) / 1.80)"
+                className="largeSoftShadow"
+                zIndex="5"
                 videoItem={video}
                 videoPlayerState={videoPlayerState}>
 
@@ -255,7 +257,13 @@ export const WatchView = (props: {
         </Flex>
 
         {/* under video info */}
-        <Box>
+        <Box
+            className="roundBorders largeSoftShadow"
+            zIndex="10"
+            mt="10px"
+            px="20px"
+            background="var(--transparentWhite70)">
+
             {!isDesktopView && <CourseItemSelector
                 courseId={courseId}
                 mode={courseMode}
@@ -265,7 +273,7 @@ export const WatchView = (props: {
             <Flex
                 id="titleAndSegmentedButtonFlex"
                 justify="space-between"
-                padding="20px"
+                py="20px"
                 flexWrap="wrap"
                 align="center">
 
@@ -280,7 +288,14 @@ export const WatchView = (props: {
                 <SegmentedButton paging={descCommentPaging}></SegmentedButton>
             </Flex>
 
-            <Divider style={{ width: "100%" }} />
+            <Divider
+                style={{
+                    background: "var(--epistoTeal)",
+                    width: "100%",
+                    height: "4px",
+                    borderRadius: "10px",
+                    boxShadow: "inset -1px -2px 1px 1px rgba(0,0,0,0.10)"
+                }} />
 
             <SlidesDisplay
                 index={descCommentPaging.currentIndex}
@@ -289,7 +304,6 @@ export const WatchView = (props: {
                     VideoContents,
                     VideoComments
                 ]}></SlidesDisplay>
-            <Copyright />
         </Box>
     </>
 }

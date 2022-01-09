@@ -1,5 +1,10 @@
 import React from "react";
+import { Flex } from "@chakra-ui/react"
 
-export const Copyright = () => <div>
-    <p>EpistoGram 2021 &#8226; Minden jog fenntartva</p>
-</div>
+export const Copyright = () => <Flex
+    w="100%"
+    justify="center"
+    py="10px">
+
+    <p>EpistoGram 2022 &#8226; Minden jog fenntartva</p>
+</Flex>

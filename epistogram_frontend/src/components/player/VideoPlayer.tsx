@@ -239,7 +239,6 @@ export const VideoPlayer = (props: {
         <Box
             id="fullScreenRoot"
             position="relative"
-            p="6px"
             ref={playerContainerRef}
             {...css}>
 
@@ -268,9 +267,11 @@ export const VideoPlayer = (props: {
                     <ReactPlayer
                         playbackRate={1}
                         ref={playerRef}
-                        style={{
-                        }}
                         url={videoUrl}
+                        style={{
+                            borderRadius: 6,
+                            overflow: "hidden"
+                        }}
                         width="100%"
                         height="100%"
                         controls={false}
@@ -302,6 +303,7 @@ export const VideoPlayer = (props: {
                     onMouseEnter={() => showControlOverlay(true)}
                     onMouseLeave={() => showControlOverlay()}
                     opacity={controlsOpacity}
+                    borderRadius="0 0 6px 6px"
                     transition="0.15s">
 
                     {/* play/pause */}

@@ -1,7 +1,7 @@
-import { background, Box, Flex } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from 'react';
+import { Box, Flex } from "@chakra-ui/react";
+import { useEffect, useState } from 'react';
 import { useParams } from "react-router";
-import { getAssetUrl, useIsDesktopView } from "../../static/frontendHelpers";
+import { useIsDesktopView } from "../../static/frontendHelpers";
 import { useNavigation } from "../../services/core/navigatior";
 import { EpistoDialog, useEpistoDialogLogic } from "../EpistoDialog";
 import { LoadingFrame } from "../system/LoadingFrame";
@@ -13,8 +13,7 @@ import { ExamPlayer } from "./ExamPlayer";
 import { ModuleView } from "./ModuleView";
 import { WatchView } from "./WatchView";
 import { usePlayerData } from "../../services/api/playerApiService";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { CurrentUserContext } from "../system/AuthenticationFrame";
+import { Copyright } from "../universal/Copyright";
 
 export const PlayerPage = () => {
 
@@ -89,8 +88,6 @@ export const PlayerPage = () => {
                 background: "var(--gradientBlueBackground)"
             } as any}>
 
-            <Navbar showLogo />
-
             <EpistoDialog logic={warningDialogLogic} />
 
             <ContentWrapper
@@ -100,52 +97,63 @@ export const PlayerPage = () => {
                 <LoadingFrame
                     loadingState={[]}
                     className="whall"
+                    direction="column"
+                    overflowY="scroll"
                     error={[playerDataError]}>
 
-                    {/* main column */}
-                    <Box id="mainColumn" className="whall" overflowY="scroll" >
+                    <Navbar showLogo />
 
-                        {video && <WatchView
-                            courseId={courseId!}
-                            courseMode={courseMode}
-                            refetchPlayerData={refetchPlayerData}
-                            answerSessionId={answerSessionId!}
-                            video={video}
-                            modules={courseModules}
-                            continueCourse={handleContinueCourse}
-                            navigateToCourseItem={navigateToCourseItem} />}
+                    <Flex px="20px" mb="50px">
 
-                        {exam && <ExamPlayer
-                            continueCourse={handleContinueCourse}
-                            answerSessionId={answerSessionId!}
-                            setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
-                            exam={exam} />}
+                        {/* main column */}
+                        <Box id="mainColumn" className="whall" >
 
-                        <ModuleView module={module} startModule={handleContinueCourse} />
-                    </Box>
-
-                    {/* right sidebar */}
-                    <FlexFloat
-                        id="courseItemListSidebar"
-                        justify="flex-start"
-                        bg="white"
-                        maxWidth={isSidebarHidden ? "0px" : "420px"}
-                        opacity={isSidebarHidden ? 0 : 1}
-                        boxShadow="none"
-                        transition="0.5s">
-
-                        {isDesktopView && <Flex
-                            direction="column"
-                            id="courseItemSelectorRoot"
-                            width="420px"
-                            minWidth="420px">
-                            <CourseItemSelector
+                            {video && <WatchView
                                 courseId={courseId!}
-                                mode={courseMode}
+                                courseMode={courseMode}
+                                refetchPlayerData={refetchPlayerData}
+                                answerSessionId={answerSessionId!}
+                                video={video}
                                 modules={courseModules}
-                                refetchPlayerData={refetchPlayerData} />
-                        </Flex>}
-                    </FlexFloat>
+                                continueCourse={handleContinueCourse}
+                                navigateToCourseItem={navigateToCourseItem} />}
+
+                            {exam && <ExamPlayer
+                                continueCourse={handleContinueCourse}
+                                answerSessionId={answerSessionId!}
+                                setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
+                                exam={exam} />}
+
+                            <ModuleView module={module} startModule={handleContinueCourse} />
+                        </Box>
+
+                        {/* right sidebar */}
+                        <FlexFloat
+                            id="courseItemListSidebar"
+                            justify="flex-start"
+                            zIndex="10"
+                            ml="10px"
+                            bg="var(--transparentWhite70)"
+                            maxWidth={isSidebarHidden ? "0px" : "420px"}
+                            opacity={isSidebarHidden ? 0 : 1}
+                            transition="0.5s">
+
+                            {isDesktopView && <Flex
+                                direction="column"
+                                id="courseItemSelectorRoot"
+                                width="420px"
+                                minWidth="420px">
+                                <CourseItemSelector
+                                    courseId={courseId!}
+                                    mode={courseMode}
+                                    modules={courseModules}
+                                    refetchPlayerData={refetchPlayerData} />
+                            </Flex>}
+                        </FlexFloat>
+                    </Flex>
+
+                    <Copyright />
+                    
                 </LoadingFrame>
             </ContentWrapper>
         </MainWrapper >
