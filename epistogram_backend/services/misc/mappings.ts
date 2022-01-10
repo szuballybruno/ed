@@ -85,6 +85,8 @@ import { CourseBriefData } from "../../models/shared_models/CourseBriefData";
 import { CourseShopItemListDTO } from "../../models/shared_models/CourseShopItemListDTO";
 import { ShopItemStatefulView } from "../../models/views/ShopItemStatefulView";
 import { ShopItemView } from "../../models/views/ShopItemView";
+import { DiscountCode } from "../../models/entity/DiscountCode";
+import { DiscountCodeDTO } from "../../models/shared_models/DiscountCodeDTO";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -657,18 +659,27 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(ShopItem, ShopItemEditDTO, x => ({
-
+        .addMap(DiscountCode, DiscountCodeDTO, x => ({
             id: x.id,
-            coverFilePath: x.coverFile?.filePath
-                ? getAssetUrl(x.coverFile.filePath)
+            code: x.code,
+            isUsed: !!x.userId
+        }));
+
+    mapperService
+        .addMap(ShopItem, ShopItemEditDTO, (shopItem, discountCodes: DiscountCode[]) => ({
+
+            id: shopItem.id,
+            coverFilePath: shopItem.coverFile?.filePath
+                ? getAssetUrl(shopItem.coverFile.filePath)
                 : null,
-            coinPrice: x.coinPrice,
-            currencyPrice: x.currencyPrice,
-            name: x.name,
-            purchaseLimit: x.purchaseLimit,
-            shopItemCategoryId: x.shopItemCategoryId,
-            courseId: x.courseId
+            coinPrice: shopItem.coinPrice,
+            currencyPrice: shopItem.currencyPrice,
+            name: shopItem.name,
+            purchaseLimit: shopItem.purchaseLimit,
+            shopItemCategoryId: shopItem.shopItemCategoryId,
+            courseId: shopItem.courseId,
+            discountCodes: mapperService
+                .mapMany(DiscountCode, DiscountCodeDTO, discountCodes)
         }));
 
     mapperService

@@ -1,3 +1,4 @@
+import { DiscountCodeDTO } from "./DiscountCodeDTO";
 
 export class ShopItemEditDTO {
     id: number;
@@ -8,4 +9,5 @@ export class ShopItemEditDTO {
     shopItemCategoryId: number;
     coverFilePath: string;
     courseId: number | null;
+    discountCodes: DiscountCodeDTO[];
 }

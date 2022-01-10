@@ -173,6 +173,7 @@ export const AdminSubpageHeader = (props: {
         <Flex
             direction="column"
             flex="1"
+            paddingBottom="50px"
             overflowY="scroll"
             {...css}>
 

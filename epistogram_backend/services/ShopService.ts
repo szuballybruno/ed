@@ -6,6 +6,7 @@ import { ShopItemCategory } from "../models/entity/ShopItemCategory";
 import { User } from "../models/entity/User";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { CourseShopItemListDTO } from "../models/shared_models/CourseShopItemListDTO";
+import { DiscountCodeDTO } from "../models/shared_models/DiscountCodeDTO";
 import { ShopItemAdminShortDTO } from "../models/shared_models/ShopItemAdminShortDTO";
 import { ShopItemBriefData } from "../models/shared_models/ShopItemBriefData";
 import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
@@ -156,8 +157,16 @@ export class ShopService {
             .where("si.id = :shopItemId", { shopItemId })
             .getOneOrFail();
 
+        const discountCodes = await this._ormService
+            .getRepository(DiscountCode)
+            .find({
+                where: {
+                    shopItemId
+                }
+            });
+
         return this._mapperService
-            .map(ShopItem, ShopItemEditDTO, shopItem);
+            .map(ShopItem, ShopItemEditDTO, shopItem, discountCodes);
     }
 
     async getPrivateCourseListAsync() {
@@ -188,12 +197,49 @@ export class ShopService {
                 courseId: isCourse ? dto.courseId : null,
                 name: isCourse ? null : dto.name,
                 purchaseLimit: isCourse ? null : dto.purchaseLimit,
-                shopItemCategoryId: isCourse ? courseCategoryId : dto.shopItemCategoryId
+                shopItemCategoryId: isCourse ? courseCategoryId : dto.shopItemCategoryId,
             });
+
+        // save discount codes 
+        this.saveShopItemDiscountCodes(dto.id, dto.discountCodes);
 
         // upload cover file 
         if (coverFile)
             this.saveCoverFile(dto.id, coverFile);
+    }
+
+    private async saveShopItemDiscountCodes(shopItemId: number, discountCodes: DiscountCodeDTO[]) {
+
+        // get existing codes
+        const existingCodes = await this._ormService
+            .getRepository(DiscountCode)
+            .find({
+                where: {
+                    shopItemId
+                }
+            });
+
+        // handle added codes 
+        const addedCodes = discountCodes
+            .filter(x => !existingCodes
+                .some(existingCode => existingCode.id === x.id));
+
+        await this._ormService
+            .getRepository(DiscountCode)
+            .insert(addedCodes
+                .map(addedCode => ({
+                    shopItemId,
+                    code: addedCode.code
+                })));
+
+        // handle deleted codes
+        const deletedCodes = existingCodes
+            .filter(x => !discountCodes
+                .some(code => code.id === x.id));
+
+        await this._ormService
+            .getRepository(DiscountCode)
+            .delete(deletedCodes.map(x => x.id));
     }
 
     private async saveCoverFile(shopItemId: number, file: UploadedFile) {

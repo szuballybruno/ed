@@ -2,19 +2,23 @@ import { Flex, Image } from "@chakra-ui/react";
 import { Checkbox, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CourseBriefData } from "../../../models/shared_models/CourseBriefData";
 import { CourseShopItemListDTO } from "../../../models/shared_models/CourseShopItemListDTO";
+import { DiscountCodeDTO } from "../../../models/shared_models/DiscountCodeDTO";
 import { ShopItemCategoryDTO } from "../../../models/shared_models/ShopItemCategoryDTO";
 import { ShopItemEditDTO } from "../../../models/shared_models/ShopItemEditDTO";
 import { usePrivateCourses, useSaveShopItem, useShopItemCategories, useShopItemEditData } from "../../../services/api/shopApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { LoadingFrame } from "../../system/LoadingFrame";
+import { EpistoButton } from "../../universal/EpistoButton";
 import { EpistoEntry } from "../../universal/EpistoEntry";
 import { EpistoLabel } from "../../universal/EpistoLabel";
 import { EpistoSelect } from "../../universal/EpistoSelect";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import LockIcon from '@mui/icons-material/Lock';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
 export const ShopAdminEditSubpage = () => {
 
@@ -26,7 +30,7 @@ export const ShopAdminEditSubpage = () => {
 
     // http
     const { privateCourses, privateCoursesError, privateCoursesState } = usePrivateCourses();
-    const { shopItemEditData, shopItemEditDataError, shopItemEditDataState } = useShopItemEditData(shopItemId);
+    const { shopItemEditData, shopItemEditDataError, shopItemEditDataState, refetchItemEditData } = useShopItemEditData(shopItemId);
     const { shopItemCategories } = useShopItemCategories();
     const { saveShopItemAsync, saveShopItemState } = useSaveShopItem();
 
@@ -37,13 +41,51 @@ export const ShopAdminEditSubpage = () => {
     const [shopItemCategory, setShopItemCategory] = useState<ShopItemCategoryDTO | null>(null);
     const [course, setCourse] = useState<CourseShopItemListDTO | null>(null);
     const [isPurchaseLimited, setIsPurchaseLimited] = useState(false);
+    const [discountCodes, setDiscountCodes] = useState<DiscountCodeDTO[]>([]);
+    const [addCodesField, setAddCodesField] = useState("");
 
     const [coverFilePath, setCoverFilePath] = useState("");
     const [coverFileImage, setCoverFileImage] = useState<File | null>(null);
 
     const [isCourse, setIsCourse] = useState(false);
 
+    // calc 
+    const addedCodes = (() => {
+
+        if (!addCodesField || addCodesField === "")
+            return [];
+
+        const lines = addCodesField
+            .split("\n");
+
+        const linesProcessed = lines
+            .map(x => x.trim())
+            .filter(x => x !== "");
+
+        return linesProcessed
+            .map(x => ({
+                code: x
+            } as DiscountCodeDTO));
+    })();
+
     // func
+
+    const addCodes = () => {
+
+        const codeAlreadyExists = discountCodes
+            .some(x => addedCodes
+                .some(y => y.code === x.code));
+
+        if (codeAlreadyExists) {
+
+            showError("Code already exits!");
+            return;
+        }
+
+        setDiscountCodes(discountCodes
+            .concat(addedCodes));
+    }
+
     const handleSaveAsync = async () => {
 
         try {
@@ -57,16 +99,30 @@ export const ShopAdminEditSubpage = () => {
                 purchaseLimit: isPurchaseLimited
                     ? parseInt(purchaseLimit)
                     : null,
-                shopItemCategoryId: shopItemCategory?.id ?? null
+                shopItemCategoryId: shopItemCategory?.id ?? null,
+                discountCodes
             } as ShopItemEditDTO;
 
             await saveShopItemAsync(dto, coverFileImage ?? undefined);
             showNotification("Sikeresen mentve!");
+            await refetchItemEditData();
         }
         catch (e) {
 
             showError(e);
         }
+    }
+
+    const handleDeleteAll = () => {
+
+        setDiscountCodes(discountCodes
+            .filter(x => x.isUsed));
+    }
+
+    const handleDelete = (code: DiscountCodeDTO) => {
+
+        setDiscountCodes(discountCodes
+            .filter(x => x !== code));
     }
 
     // set defaults
@@ -82,6 +138,7 @@ export const ShopAdminEditSubpage = () => {
         setCurrencyPrice(shopItemEditData.currencyPrice + "");
         setCoverFilePath(shopItemEditData.coverFilePath);
         setIsCourse(!!shopItemEditData.courseId);
+        setDiscountCodes(shopItemEditData.discountCodes);
 
         setShopItemCategory(shopItemCategories
             .filter(x => x.id === shopItemEditData.shopItemCategoryId)[0]);
@@ -212,6 +269,79 @@ export const ShopAdminEditSubpage = () => {
                     label="Valuta ar"
                     labelVariant="top"
                     postfix="Huf" />
+
+                <EpistoLabel text="Kuponkodok">
+
+                    <Flex>
+
+                        {/* codes */}
+                        <Flex
+                            direction="column"
+                            marginRight="20px"
+                            flex="1">
+
+                            <Flex>
+                                <EpistoButton
+                                    variant="colored"
+                                    onClick={handleDeleteAll}>
+
+                                    <Flex>
+                                        Osszes torlese
+
+                                        <DeleteSweepIcon
+                                            style={{
+                                                marginLeft: "5px"
+                                            }} />
+                                    </Flex>
+                                </EpistoButton>
+                            </Flex>
+
+                            {discountCodes
+                                .map(x => (
+                                    <Flex m="5px" justify="space-between">
+                                        <Typography>
+                                            {x.id ? "id:" + x.id : "Uj"} - {x.code}
+                                        </Typography>
+
+                                        {x.isUsed && <LockIcon
+                                            style={{
+                                                margin: "5px 7px 5px 7px"
+                                            }} />}
+
+                                        {!x.isUsed && <EpistoButton
+                                            onClick={() => handleDelete(x)}>
+
+                                            <DeleteIcon />
+                                        </EpistoButton>}
+                                    </Flex>
+                                ))}
+                        </Flex>
+
+                        {/* add codes */}
+                        <Flex flex="1" direction="column">
+
+                            <Flex align="center" justify="space-between">
+                                <Typography>
+                                    Bejegyzesek szama: {addedCodes.length}
+                                </Typography>
+
+                                <EpistoButton
+                                    variant="colored"
+                                    onClick={addCodes}>
+
+                                    Hozzaadas
+                                </EpistoButton>
+                            </Flex>
+
+                            <EpistoEntry
+                                flex="1"
+                                label="Kod(ok) hozzaadasa"
+                                value={addCodesField}
+                                setValue={setAddCodesField}
+                                isMultiline />
+                        </Flex>
+                    </Flex>
+                </EpistoLabel>
 
             </AdminSubpageHeader>
         </LoadingFrame>
