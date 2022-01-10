@@ -1,4 +1,5 @@
-export class AdminShopItemDTO {
+
+export class ShopItemEditDTO {
     id: number;
     name: string;
     purchaseLimit: number;
@@ -6,4 +7,5 @@ export class AdminShopItemDTO {
     currencyPrice: number;
     shopItemCategoryId: number;
     coverFilePath: string;
+    courseId: number | null;
 }

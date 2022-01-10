@@ -56,6 +56,7 @@ import { ActivationCode } from "../../models/entity/ActivationCode";
 import { UserCourseAccessBridge } from "../../models/entity/UserCourseAccessBridge";
 import { ShopItem } from "../../models/entity/ShopItem";
 import { ShopItemCategory } from "../../models/entity/ShopItemCategory";
+import { ShopItemStatefulView } from "../../models/views/ShopItemStatefulView";
 import { ShopItemView } from "../../models/views/ShopItemView";
 import { DiscountCode } from "../../models/entity/DiscountCode";
 import { CourseLearningStatsView } from "../../models/views/CourseLearningStatsView";
@@ -95,6 +96,7 @@ export const dbSchema = {
         "user_session_daily_view",
         "activity_streak_view",
         "shop_item_view",
+        "shop_item_stateful_view",
         "coin_transaction_view",
         "coin_balance_view",
         "course_questions_success_view",
@@ -159,6 +161,7 @@ export const dbSchema = {
         CoinBalanceView,
         ActivationCode,
         ShopItemView,
+        ShopItemStatefulView,
         CourseLearningStatsView,
         CourseProgressView,
         CourseDetailsView,

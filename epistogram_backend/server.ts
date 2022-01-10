@@ -119,7 +119,7 @@ import { HashService } from './services/HashService';
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, vpss, coinAcquireService, userSessionActivityService, mapperService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
-    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService);
+    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService);
 
     // controllers 
@@ -184,6 +184,10 @@ import { HashService } from './services/HashService';
     addEndpoint(apiRoutes.shop.getShopItemCategories, shopController.getShopItemCategoriesAction);
     addEndpoint(apiRoutes.shop.purchaseShopItem, shopController.purchaseShopItemAction, { isPost: true });
     addEndpoint(apiRoutes.shop.getAdminShopItems, shopController.getAdminShopItemsAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.getShopItemBriefData, shopController.getShopItemBriefDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.getShopItemEditData, shopController.getShopItemEditDTOAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.getPrivateCourseList, shopController.getPrivateCourseListAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.saveShopItem, shopController.saveShopItemAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);

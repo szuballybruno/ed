@@ -6,8 +6,8 @@ export const isUnderMaintenance = process.env.REACT_APP_UNDER_MAINTENANCE === "t
 
 export const isLocalhost = !currentVersion;
 export const currentOrigin = window.location.origin;
-export const refreshTokenRefreshIntervalInMs = 5 * 60 * 1000; // 5 minutes
-export const userRefreshIntervalInMs = 10 * 60 * 1000; // 10 minutes
+export const fetchNewAccessTokenIntervalInMs = 5 * 60 * 1000; // 5 minutes
+export const fetchUserIntervalInMs = 10 * 60 * 1000; // 10 minutes
 export const eventPoolingIntervalInMs = 20 * 1000; // 20 secs
 export const verboseLogging = false;
 

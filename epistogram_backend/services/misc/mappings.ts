@@ -70,7 +70,6 @@ import { CourseProgressView } from "../../models/views/CourseProgressView";
 import { CourseView } from "../../models/views/CourseView";
 import { DailyTipView } from "../../models/views/DailyTipView";
 import { ExamResultView } from "../../models/views/ExamResultView";
-import { ShopItemView } from "../../models/views/ShopItemView";
 import { SignupQuestionView } from "../../models/views/SignupQuestionView";
 import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
 import { UserStatsView } from "../../models/views/UserStatsView";
@@ -79,7 +78,13 @@ import { MapperService } from "../MapperService";
 import { getItemCode } from "./encodeService";
 import { ExamView } from "../../models/views/ExamView";
 import { ShopItem } from "../../models/entity/ShopItem";
-import { AdminShopItemDTO } from "../../models/shared_models/AdminShopItemDTO";
+import { ShopItemAdminShortDTO } from "../../models/shared_models/ShopItemAdminShortDTO";
+import { ShopItemBriefData } from "../../models/shared_models/ShopItemBriefData";
+import { ShopItemEditDTO } from "../../models/shared_models/ShopItemEditDTO";
+import { CourseBriefData } from "../../models/shared_models/CourseBriefData";
+import { CourseShopItemListDTO } from "../../models/shared_models/CourseShopItemListDTO";
+import { ShopItemStatefulView } from "../../models/views/ShopItemStatefulView";
+import { ShopItemView } from "../../models/views/ShopItemView";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -132,7 +137,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(ShopItemView, ShopItemDTO, x => ({
+        .addMap(ShopItemStatefulView, ShopItemDTO, x => ({
             id: x.id,
             courseId: x.courseId,
             userId: x.userId,
@@ -640,7 +645,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(ShopItem, AdminShopItemDTO, x => ({
+        .addMap(ShopItem, ShopItemAdminShortDTO, x => ({
 
             id: x.id,
             coverFilePath: x.coverFile?.filePath ? getAssetUrl(x.coverFile.filePath) : null,
@@ -649,6 +654,52 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             name: x.name,
             purchaseLimit: x.purchaseLimit,
             shopItemCategoryId: x.shopItemCategoryId
+        }));
+
+    mapperService
+        .addMap(ShopItem, ShopItemEditDTO, x => ({
+
+            id: x.id,
+            coverFilePath: x.coverFile?.filePath
+                ? getAssetUrl(x.coverFile.filePath)
+                : null,
+            coinPrice: x.coinPrice,
+            currencyPrice: x.currencyPrice,
+            name: x.name,
+            purchaseLimit: x.purchaseLimit,
+            shopItemCategoryId: x.shopItemCategoryId,
+            courseId: x.courseId
+        }));
+
+    mapperService
+        .addMap(ShopItemView, ShopItemAdminShortDTO, x => ({
+            id: x.id,
+            name: x.name,
+            purchaseLimit: x.purchaseLimit,
+            coinPrice: x.coinPrice,
+            currencyPrice: x.currencyPrice,
+            shopItemCategoryId: x.shopItemCategoryId,
+            coverFilePath: getAssetUrl(x.coverFilePath)
+        }));
+
+    mapperService
+        .addMap(ShopItemView, ShopItemBriefData, x => ({
+            name: x.name
+        }));
+
+    mapperService
+        .addMap(Course, CourseBriefData, course => ({
+            id: course.id,
+            title: course.title
+        }));
+
+    mapperService
+        .addMap(Course, CourseShopItemListDTO, course => ({
+            id: course.id,
+            title: course.title,
+            coverImagePath: course.coverFile
+                ? getAssetUrl(course.coverFile.filePath)
+                : null
         }));
 }
 

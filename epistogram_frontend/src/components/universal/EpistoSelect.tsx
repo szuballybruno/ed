@@ -10,7 +10,8 @@ export const EpistoSelect = <T,>(props: {
     onSelected: (value: T) => void,
     getCompareKey: (item: T) => string,
     getDisplayValue?: (item: T) => string,
-    defaultValue?: string
+    defaultValue?: string,
+    isDisabled?: boolean,
 } & BoxProps) => {
 
     const {
@@ -20,6 +21,7 @@ export const EpistoSelect = <T,>(props: {
         onSelected,
         getDisplayValue,
         defaultValue,
+        isDisabled,
         ...css
     } = props;
 
@@ -32,16 +34,19 @@ export const EpistoSelect = <T,>(props: {
 
     const currentSelectedKey = selectedValue ? getCompareKey(selectedValue) : defaultKey;
 
-    return <Box className="controlPadding simpleBorder roundBorders" {...css} >
+    return <Box
+        className="controlPadding simpleBorder roundBorders" {...css} >
 
         <select
             className="whall"
             onChange={(x) => onSelectedValue(x.target.value)}
             value={currentSelectedKey}
+            disabled={isDisabled}
             style={{
                 width: "fit-content",
                 outline: "none",
-                cursor: "pointer"
+                cursor: "pointer",
+                pointerEvents: isDisabled ? "none" : undefined
             }}>
 
             {!selectedValue && <option value={defaultKey}>

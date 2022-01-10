@@ -173,10 +173,20 @@ export const applicationRoutes = {
         },
 
         shopRoute: {
-            title: "Shop adminisztracio",
+            title: translatableTexts.routeTitles.administrationShopMain,
             route: "/administration/shop",
             icon: <ShoppingCartIcon color={"secondary"} />,
             exact: true,
+
+            addRoute: {
+                title: translatableTexts.routeTitles.administrationShopAdd,
+                route: "/administration/shop/add"
+            },
+
+            editRoute: {
+                title: translatableTexts.routeTitles.administrationShopEdit,
+                route: "/administration/shop/edit/:shopItemId"
+            }
         },
 
         myCompanyRoute: {

@@ -85,10 +85,8 @@ export class CourseService {
             .getRepository(Course)
             .findOneOrFail(courseId);
 
-        return {
-            id: course.id,
-            title: course.title
-        } as CourseBriefData;
+        return this._mapperService
+            .map(Course, CourseBriefData, course);
     }
 
     async getCourseDetailsAsync(courseId: number) {

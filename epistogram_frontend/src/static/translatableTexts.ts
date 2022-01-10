@@ -60,6 +60,10 @@ export const translatableTexts = {
         administrationEditQuestion: "Kerdes szerkesztése",
         administrationEditModule: "Modul szerkesztése",
 
+        administrationShopMain: "Shop adminisztracio",
+        administrationShopAdd: "Shop item hozzaaadasa",
+        administrationShopEdit: "Shop item szerkesztese",
+
         administrationAddGroup: "Csoport hozzáadása",
         administrationEditGroup: "Csoport szerkesztése",
         administrationGroupStatistics: "Statisztika",

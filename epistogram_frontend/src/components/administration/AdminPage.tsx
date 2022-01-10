@@ -19,11 +19,12 @@ import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditExamSubpage } from './courses/EditExamSubpage';
 import { getRoute } from "../../MainRouting";
 import { EditModuleSubpage } from './courses/EditModuleSubpage';
-import { AdminCourseDetailsSubpage } from "./courses/AdminCourseDetailsSubpage";
+import { AdminCourseDetailsSubpage } from "./courses/EditCourseDetailsSubpage";
 import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage";
 import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
+import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
 
 const AdminPage = () => {
 
@@ -100,6 +101,7 @@ const AdminPage = () => {
                         isAuthorizedToView={x => x.canAccessShopAdministration}
                         render={() => <Switch>
                             {getRoute(administrationRoutes.shopRoute, <ShopAdminSubpage />)}
+                            {getRoute(administrationRoutes.shopRoute.editRoute, <ShopAdminEditSubpage />)}
                         </Switch>} />
 
                     {/* statistics */}

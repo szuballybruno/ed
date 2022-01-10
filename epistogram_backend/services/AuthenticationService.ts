@@ -55,16 +55,16 @@ export class AuthenticationService {
         return currentUser;
     }
 
-    renewUserSessionAsync = async (refreshToken: string) => {
+    renewUserSessionAsync = async (prevRefreshToken: string) => {
 
         log("Renewing user session...");
 
         // check if there is a refresh token sent in the request 
-        if (!refreshToken)
+        if (!prevRefreshToken)
             throw new TypedError("Refresh token not sent.", "bad request");
 
         // check sent refresh token if invalid by signature or expired
-        const tokenMeta = this._tokenService.verifyRefreshToken(refreshToken);
+        const tokenMeta = this._tokenService.verifyRefreshToken(prevRefreshToken);
 
         // check if this refresh token is associated to the user
         const refreshTokenFromDb = await this._userService
@@ -81,16 +81,15 @@ export class AuthenticationService {
             throw new TypedError("User not found by id " + tokenMeta.userId, "internal server error");
 
         // get tokens
-        const newAccessToken = this._tokenService.createAccessToken(user, user.userActivity);
-        const newRefreshToken = this._tokenService.createRefreshToken(user);
+        const { accessToken, refreshToken } = await this.getUserLoginTokens(user, user.userActivity);
 
         // save refresh token to DB
         await this._userService
-            .setUserActiveRefreshToken(user.id, refreshToken);
+            .setUserActiveRefreshToken(user.id, prevRefreshToken);
 
         return {
-            newAccessToken,
-            newRefreshToken
+            accessToken,
+            refreshToken
         }
     }
 

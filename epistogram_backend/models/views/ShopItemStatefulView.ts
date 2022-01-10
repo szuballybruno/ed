@@ -4,7 +4,7 @@ import { ViewColumn, ViewEntity } from "typeorm";
     synchronize: false,
     expression: ``
 })
-export class ShopItemView {
+export class ShopItemStatefulView {
 
     @ViewColumn()
     id: number;
@@ -13,7 +13,16 @@ export class ShopItemView {
     courseId: number;
 
     @ViewColumn()
+    userId: number;
+
+    @ViewColumn()
     name: string;
+
+    @ViewColumn()
+    purchaseCount: number;
+
+    @ViewColumn()
+    canPurchase: boolean;
 
     @ViewColumn()
     purchaseLimit: number;
