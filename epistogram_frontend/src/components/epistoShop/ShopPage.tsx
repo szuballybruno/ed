@@ -39,8 +39,6 @@ export const ShopPage = () => {
 
     return <MainWrapper>
 
-        <Navbar />
-
         <ContentWrapper>
 
             {/* confirmation dialog */}

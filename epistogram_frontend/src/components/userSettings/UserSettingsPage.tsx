@@ -27,8 +27,6 @@ export const UserSettingsPage = () => {
 
     return <MainWrapper>
 
-        <Navbar />
-
         <ContentWrapper>
 
             <LeftPanel p="20px" flexBasis="300px" >

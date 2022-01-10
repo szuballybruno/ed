@@ -12,6 +12,7 @@ import { SelectImage } from '../universal/SelectImage';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useSaveUserSimple } from '../../services/api/userApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
+import { EpistoEntry } from '../universal/EpistoEntry';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -120,98 +121,135 @@ export const Preferences = () => {
         <LoadingFrame
             direction="column"
             justify="flex-start"
-            loadingState={[saveUserSimpleState, postAvatarFileState, requestChangePasswordState]}
-            align="center">
+            align="center"
+            loadingState={[saveUserSimpleState, postAvatarFileState, requestChangePasswordState]}>
 
-            <SelectImage
-                width="200px"
-                height="200px"
-                className="circle"
-                setImageSource={setAvatarSrc}
-                setImageFile={setAvatarFile}>
-                <ProfileImage
-                    url={avatarSrc ?? null}
-                    ref={imageRef}
-                    className="whall" />
-            </SelectImage>
+            <Flex justify="center" w="100%" maxW="500px">
 
-            <Flex
-                direction="column"
-                maxWidth="500px"
-                width="100%"
-                mt="50px"
-                align="stretch">
+                <SelectImage
+                    className='circle'
+                    mx="20px"
+                    width="100px"
+                    height="100px"
+                    setImageSource={setAvatarSrc}
+                    setImageFile={setAvatarFile}>
 
-                <EditField label="Vezetéknév">
-                    <Input
-                        outline="none"
+                    <ProfileImage
+                        flex="1"
+                        url={avatarSrc ?? null}
+                        ref={imageRef}
+                        className="whall" />
+                </SelectImage>
+            </Flex>
+
+            <Flex justify="center" w="100%" maxW="500px">
+                <Flex
+                    direction="column"
+                    flex="1"
+                    align="stretch">
+
+                    <EpistoEntry
+                        label="Vezetéknév"
                         value={lastName}
-                        onChange={x => setLastName(x.currentTarget.value)}></Input>
-                </EditField>
+                        labelVariant='top'
+                        setValue={setLastName} />
 
-                <EditField label="Keresztnév">
-                    <Input
-                        outline="none"
+                    <EpistoEntry
+                        label="Keresztnév"
                         value={firstName}
-                        onChange={x => setFirstName(x.currentTarget.value)}></Input>
-                </EditField>
+                        labelVariant='top'
+                        setValue={setFirstName} />
 
-                <EditField label="Telefonszám">
-                    <Input
-                        outline="none"
+                    <EpistoEntry
+                        label="Telefonszám"
                         value={phoneNumber}
-                        onChange={x => setPhoneNumber(x.currentTarget.value)}></Input>
-                </EditField>
+                        labelVariant='top'
+                        setValue={setPhoneNumber} />
 
-                <EditField label="Jelszó">
-                    <Flex direction="column">
+                    {!isPasswordChangeOpen && <Typography
+                        style={{
+                            flex: "1",
+                            marginTop: "10px",
+                            color: "#9FA2B4"
+                        }}
+                        variant={"overline"}>
+
+                        {"Jelszó megváltoztatása"}
+                    </Typography>}
+
+                    <Flex direction="column" align="center" flex="1">
+
                         {!isPasswordChangeOpen && <EpistoButton
+                            style={{
+                                background: "var(--transparentWhite70)",
+                                color: "black",
+                                width: "100%"
+                            }}
                             onClick={() => setIsPasswordChangeOpen(true)}
-                            variant="outlined"
-                            padding="1px 8px 1px 8px">
+                            variant="colored">
 
                             Jelszó megváltoztatása
                         </EpistoButton>}
 
-                        {isPasswordChangeOpen && <>
+                        {isPasswordChangeOpen && <Flex
+                            w="100%"
+                            direction="column"
+                            flex="1">
 
-                            <TextField
-                                variant="standard"
+                            <EpistoEntry
+                                label="Jelenlegi jelszó"
                                 value={currentPassword}
-                                label="Mostani jelszó"
-                                type="password"
-                                onChange={x => setCurrentPassword(x.currentTarget.value)} />
+                                type='password'
+                                labelVariant='top'
+                                setValue={setCurrentPassword} />
 
-                            <Flex mt="20px">
-                                <EpistoButton onClick={() => setIsPasswordChangeOpen(false)}>
+                            <Flex mt="20px" w="100%">
+
+                                <EpistoButton
+                                    variant="colored"
+                                    style={{
+                                        background: "var(--transparentWhite70)",
+                                        color: "black",
+                                        flex: "1"
+                                    }}
+                                    onClick={() => setIsPasswordChangeOpen(false)}>
+
                                     Bezárás
                                 </EpistoButton>
 
                                 <EpistoButton
                                     variant="colored"
                                     onClick={handleRequestChangePasswordAsync}
-                                    style={{ marginLeft: "20px" }}>
+                                    style={{
+                                        marginLeft: "20px",
+                                        background: "var(--transparentWhite70)",
+                                        color: "black",
+                                        flex: "1"
+                                    }}>
 
                                     Kérelem elküldése
                                 </EpistoButton>
                             </Flex>
-                        </>}
+                        </Flex>}
                     </Flex>
-                </EditField>
+
+                    {!isPasswordChangeOpen && <EpistoButton
+                        isDisabled={!isChanged}
+                        variant="colored"
+                        onClick={saveChangesAsync}
+                        style={{
+                            alignSelf: "center",
+                            marginTop: "30px",
+                            marginBottom: "30px",
+                            background: "var(--transparentWhite70)",
+                            color: "black",
+                            flex: "1"
+                        }}>
+
+                        Változtatások mentése
+                    </EpistoButton>}
+                </Flex>
             </Flex>
-
-            <EpistoButton
-                isDisabled={!isChanged}
-                variant="outlined"
-                onClick={saveChangesAsync}
-                style={{
-                    alignSelf: "center",
-                    marginTop: "30px",
-                    marginBottom: "10px"
-                }}>
-
-                Változtatások mentése
-            </EpistoButton>
         </LoadingFrame>
     </>
 }

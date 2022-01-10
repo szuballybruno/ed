@@ -20,18 +20,19 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
 
     return <Flex
         p="6px"
-        className="circle"
-        boxShadow="inset -7px -2px 20px 4px rgba(124,192,194,0.9)">
+        className={className + " circle"}
+        boxShadow="inset -7px -2px 20px 4px rgba(124,192,194,0.9)"
+        {...css}>
 
         <Flex
-            className={className + " circle"}
+            className={"circle"}
+            flex="1"
             ref={ref}
             bg="var(--deepBlue)"
             color="white"
             align="center"
             justify="center"
-            overflow="hidden"
-            {...css} >
+            overflow="hidden">
 
             <Image
                 border="none"

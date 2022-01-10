@@ -3,6 +3,7 @@ import { Typography } from "@mui/material"
 import { useRef, useState } from "react";
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { HiddenFileUploadInput } from "./HiddenFileUploadInput";
+import { Edit } from "@mui/icons-material";
 
 export const SelectImage = (props: {
     setImageSource: (src: string) => void,
@@ -49,11 +50,7 @@ export const SelectImage = (props: {
             transform={isHovered ? "translateY(100%)" : "translateY(125%)"}
             opacity={isHovered ? 1 : 0}>
 
-            <Typography>
-                Új kép feltöltése
-            </Typography>
-
-            <PhotoCameraIcon className="square40"></PhotoCameraIcon>
+            <Edit />
         </Flex>
     </Box>
 }
