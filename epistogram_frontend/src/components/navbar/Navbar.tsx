@@ -35,7 +35,6 @@ const Navbar = (props: { hideLinks?: boolean, showLogo?: boolean }) => {
 
     return <FlexFloat
         id="flexFloat-navbarRoot"
-        //height={isDesktop ? "60px" : "60px"}
         zIndex={3}
         boxShadow="none"
         borderRadius={0}

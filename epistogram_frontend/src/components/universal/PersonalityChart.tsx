@@ -104,5 +104,7 @@ export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => 
             labels: splitKeysByCharCount(keys, 20),
             datasets: sets
         }}
-        style={{ height: 400 }} />
+        style={{
+            height: 400
+        }} />
 }

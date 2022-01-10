@@ -1,14 +1,13 @@
 import { Flex } from "@chakra-ui/react";
 import { Tab, Tabs, Typography } from "@mui/material";
-import { Lock } from "@mui/icons-material";
 import React, { useState } from "react";
 import { translatableTexts } from "../static/translatableTexts";
 import { FlexFloat } from "./universal/FlexFloat";
 import { TabPanel } from "./courseDetails/TabPanel";
 import { getAssetUrl } from "../static/frontendHelpers";
+import { EpistoHeader } from "./EpistoHeader";
 
 export const LearningCurves = () => {
-
 
     const [currentTab, setCurrentTab] = useState(0);
 
@@ -23,31 +22,44 @@ export const LearningCurves = () => {
         };
     }
 
-
     return <Flex
-        direction={"row"}
-        flexWrap={"wrap"}
-        justifyContent={"center"}
-        alignItems={"flex-start"}
-        w={"100%"}
-        h={"100%"}
+        direction="row"
+        flexWrap="wrap"
+        mt="10px"
+        w="100%">
 
-    >
+        {/* left wrapper */}
         <Flex
-            flex={1}
-            minW={300}
+            className="roundBorders"
+            flex="1"
+            minW="300px"
             direction="column"
-            p={10}
+            background="var(--transparentWhite70)"
+            mr="10px"
+            p="10px"
             overflow="scroll">
 
-            <Flex my={10}>
-                <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
+
+            {/* learning curves description */}
+
+            <EpistoHeader
+                text={translatableTexts.learningOverview.learningCurveTitle}
+                showDivider
+                variant="strongSub"
+                m="5px 10px 0 10px" />
+
+            <Flex my="10px">
+
+                <Tabs
+                    value={currentTab}
+                    onChange={handleChange}>
+
                     <Tab
-                        label={"Tanulási görbéd"}
+                        label={translatableTexts.learningOverview.learningCurve}
                         icon={
                             <img
                                 src={getAssetUrl("/icons/learningcurve.svg")}
-                                alt={""}
+                                alt=""
                                 style={{
                                     width: 25,
                                     margin: "0 10px 0 0"
@@ -57,12 +69,13 @@ export const LearningCurves = () => {
                             flexDirection: "row",
                         }}
                         {...a11yProps(0)} />
+
                     <Tab
-                        label={"Felejtési görbéd"}
+                        label={translatableTexts.learningOverview.forgettingCurve}
                         icon={
                             <img
                                 src={getAssetUrl("/icons/forgettingcurve.svg")}
-                                alt={""}
+                                alt=""
                                 style={{
                                     width: 25,
                                     margin: "0 10px 0 0"
@@ -75,80 +88,42 @@ export const LearningCurves = () => {
                 </Tabs>
             </Flex>
 
-
             <TabPanel value={currentTab} index={0}>
-                A tanulási görbe azon a megfigyelésen alapul, hogy minél gyakrabban végzünk egy tevékenységet, annál
-                begyakorlottabban és gyorsabban tudjuk azt végrehajtani.
-                Gondolhatnánk, hogy ez egy teljesen lineáris folyamat,
-                a gyakorlatban ennél azonban komplikáltabb rendszerről beszélhetünk, mely
-                mindenkinél mást jelent.A jobb oldalon láthatod, hogyan épül fel a te tanulási
-                görbéd, ennek megfelelően pedig további tippeket adunk majd, hogyan tudod fejleszteni azt.
+                {translatableTexts.learningOverview.learningCurveDescription}
             </TabPanel>
+
             <TabPanel value={currentTab} index={1}>
-                A felejtési görbe az emlékezetek fakulásának folyamatát ábrázolja az idő függvényében.
-                Egy kapcsolódó fogalom az emlék erőssége, amely azt fejezik ki, hogy egy emlék milyen tartósan marad meg az agyban.
-                Minél erősebb egy emlék, annál hosszabb ideig képes valaki előhívni.
-                A felejtés sebessége sok tényezőtől függ, mint például a megtanult anyag nehézsége, az ismeretanyag ábrázolása,
-                valamint fiziológiai tényezők mint a pillanatnyi stressz vagy kipihentség.
-                Az alap felejtési sebességben nincs lényeges egyéni különbség.
-                A látható teljesítményben mutatkozó különbségeket (pl. iskolai jegyek)
-                eltérő mnemotechnikai képességekkel lehet megmagyarázni, melyekkel kapcsolatban hamarosan új ismeretekre tehetsz majd szert!
+                {translatableTexts.learningOverview.forgettingCurveDescription}
             </TabPanel>
 
         </Flex>
 
-        <Flex
-            justifyContent={"flex-start"}
-            direction={"column"}
-            minWidth={window.innerWidth < 600 ? "100%" : 450}
-            w={"100%"}
-            maxW={window.innerWidth < 600 ? "100%" : "50%"}
-            mt={32}
-            mx={20}
-            mb={10}>
+        {/* right wrapper */}
+        <FlexFloat
+            background="var(--transparentWhite70)"
+            direction="column"
+            justify="center"
+            p="10px"
+            flex="1"
+            minW={250}
+            style={{
+                gridColumn: `auto / span 2`,
+                gridRow: `auto / span 2`
+            }} >
 
-            <FlexFloat
-                direction="column"
-                justifyContent={"center"}
-                p="0px"
-                minW={250}
+            {/* learning curve image */}
+            <img
+                src={getAssetUrl("/images/learningcurve3D.png")}
+                alt=""
                 style={{
-                    gridColumn: `auto / span 2`,
-                    gridRow: `auto / span 2`
-                }}
-                position="relative"
-                m="10px" >
-                <Flex
-                    flexDir={"column"}
-                    boxSizing={"border-box"}
-                    p={20}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                    pos={"absolute"}
-                    w={"100%"}
-                    h={"100%"}
-                    bgColor={"#333333CC"}
-                    color={"white"}
-                    borderRadius={5} >
-                    <Lock style={{
-                        width: "50%",
-                        height: "50%"
-                    }} />
-                    <Typography align={"center"}>
-                        {translatableTexts.homePage.noStatsYet}
-                    </Typography>
-                </Flex>
-                <img
-                    src={getAssetUrl("/images/learningcurve.png")}
-                    alt={""}
-                    style={{
-                        maxHeight: 400,
-                        objectFit: "contain",
-                        margin: "auto 10px auto 0",
-                    }} />
-            </FlexFloat>
+                    maxHeight: 220,
+                    objectFit: "contain",
+                    margin: "0 10px 0 0",
+                }} />
 
-        </Flex>
-
+            <Typography align="center">
+                {translatableTexts.homePage.noStatsYet}
+            </Typography>
+        </FlexFloat>
     </Flex>
 }

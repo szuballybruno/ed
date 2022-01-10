@@ -1,9 +1,7 @@
-import { Flex } from "@chakra-ui/react";
 import StatisticsCard from "./statisticsCard/StatisticsCard";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { getAssetUrl, roundNumber } from "../static/frontendHelpers";
 import { FlexFloat } from "./universal/FlexFloat";
-import { Lock } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { translatableTexts } from "../static/translatableTexts";
 import { useUserStats } from "../services/api/userStatsApiService";
@@ -39,8 +37,10 @@ export const StatsSummary = () => {
             }} >
 
             {/* locked overlay */}
-            
-            <EpistoHeader text={"Legfontosabb statisztikáid"} showDivider variant="strongSub" m="5px 10px 20px 10px" />
+            <EpistoHeader
+                text={"Legfontosabb statisztikáid"}
+                showDivider variant="strongSub"
+                m="5px 10px 20px 10px" />
 
             {/* bar chart */}
             <img

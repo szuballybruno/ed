@@ -1,4 +1,4 @@
-import { Assignment, Business, People, Person, School, Settings, Subscriptions } from "@mui/icons-material";
+import { Assignment, Business, Equalizer, GraphicEq, People, Person, School, Settings, Subscriptions } from "@mui/icons-material";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { translatableTexts } from "../static/translatableTexts";
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -76,6 +76,12 @@ export const applicationRoutes = {
             route: "/learning",
             icon: <School color={"secondary"} />,
             exact: true
+        },
+
+        myStatisticsRoute: {
+            title: translatableTexts.routeTitles.learningStatistics,
+            route: "/learning/myStatistics",
+            icon: <Equalizer color="secondary" />,
         },
 
         myCoursesRoute: {

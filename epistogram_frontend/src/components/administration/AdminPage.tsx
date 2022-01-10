@@ -47,18 +47,19 @@ const AdminPage = () => {
         
         <ContentWrapper>
 
-            <LeftPanel p="20px" flexBasis="300px">
+            <LeftPanel>
                 <NavigationLinkList
                     items={menuItems} />
             </LeftPanel>
 
-            <RightPanel noPadding bg="white">
+            <RightPanel>
 
                 {/* admin subpages */}
                 <Switch>
 
                     {/* user administration */}
                     <Route path={administrationRoutes.usersRoute.route}>
+
                         <Switch>
                             <Route exact path={administrationRoutes.usersRoute.route}>
                                 <AdminUserListSubpage />

@@ -143,6 +143,7 @@ export const PlayerPage = () => {
                                 id="courseItemSelectorRoot"
                                 width="420px"
                                 minWidth="420px">
+                                
                                 <CourseItemSelector
                                     courseId={courseId!}
                                     mode={courseMode}

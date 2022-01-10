@@ -5,8 +5,8 @@ import { LearningCourseStats } from "./LearningCourseStats";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../system/MainPanels";
 import { LearningInsightsOverview } from "../LearningInsightsOverview";
 import { NavigationLinkList } from "../NavigationLinkList";
-import Navbar from "../navbar/Navbar";
 import { MyExams } from "../MyExams";
+import { LearningStatistics } from "./LearningStatistics";
 
 const LearningInsightsPage = () => {
 
@@ -15,9 +15,11 @@ const LearningInsightsPage = () => {
         <ContentWrapper>
 
             <LeftPanel>
+
                 <NavigationLinkList
                     items={[
                         applicationRoutes.learningRoute.learningOverviewRoute,
+                        applicationRoutes.learningRoute.myStatisticsRoute,
                         applicationRoutes.learningRoute.myCoursesRoute,
                         applicationRoutes.learningRoute.myExamsRoute
                     ]} />
@@ -26,8 +28,12 @@ const LearningInsightsPage = () => {
             <RightPanel>
 
                 <Switch>
+
                     <Route path={applicationRoutes.learningRoute.route} exact>
                         <LearningInsightsOverview />
+                    </Route>
+                    <Route path={applicationRoutes.learningRoute.myStatisticsRoute.route}>
+                        <LearningStatistics />
                     </Route>
                     <Route path={applicationRoutes.learningRoute.myCoursesRoute.route}>
                         <LearningCourseStats />

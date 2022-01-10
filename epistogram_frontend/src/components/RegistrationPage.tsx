@@ -66,14 +66,13 @@ export const RegistrationPage = () => {
         }
     }
 
-    return <Flex height="100vh" direction="column" align="center" justify="center" position="relative">
-
-        <Image
-            position="absolute"
-            top="0"
-            objectFit="cover"
-            className="whall"
-            src={getAssetUrl("loginScreen/surveybg.png")} />
+    return <Flex
+        background="var(--gradientBlueBackground)"
+        height="100vh"
+        direction="column"
+        align="center"
+        justify="center"
+        position="relative">
 
         <LoadingFrame
             loadingState={[registerUserState, registerInvitedUserState]}
@@ -89,10 +88,9 @@ export const RegistrationPage = () => {
             boxShadow="#00000024 10px 30px 50px 0px">
 
 
-            <Flex w={"100%"} maxH={100} justifyContent={"center"}>
+            <Flex w={"100%"} maxH={50} my="25px" justifyContent={"center"}>
                 <Image width="50%" src={getAssetUrl("/images/logo.svg")} />
             </Flex>
-
 
             <Typography>Tanulási stílust felmérő kérdőív</Typography>
 
@@ -158,8 +156,11 @@ export const RegistrationPage = () => {
                     onClick={() => setAcceptPrivacyPolicy(p => !p)} />
 
                 <Typography
-                    style={{ userSelect: "none" }}>
-                    Elfogadom az
+                    style={{
+                        userSelect: "none"
+                    }}>
+
+                    {"Elfogadom az "}
                     <a
                         target="_blank"
                         rel="noreferrer"
@@ -167,7 +168,7 @@ export const RegistrationPage = () => {
                         href={"https://epistogram.com/adatkezelesi-tajekoztato"}>
                         Adatkezelési Nyilatkozat
                     </a>
-                    ban foglaltakat
+                    {"ban foglaltakat"}
                 </Typography>
             </Flex>
 

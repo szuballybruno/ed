@@ -7,7 +7,9 @@ export const SegmentedButton = (props: { paging: PagingType<string> }) => {
     const { paging } = props;
 
     return <>
-        <ToggleButtonGroup style={{background: "var(--transparentWhite90)"}}>
+        <ToggleButtonGroup style={{
+            background: "var(--transparentWhite90)"
+        }}>
 
             {paging
                 .items
@@ -25,6 +27,7 @@ export const SegmentedButton = (props: { paging: PagingType<string> }) => {
                             key={index}
                             value={index}
                             onClick={() => paging.setItem(index)}>
+
                             <Typography className="fontMid">
                                 {buttonText}
                             </Typography>

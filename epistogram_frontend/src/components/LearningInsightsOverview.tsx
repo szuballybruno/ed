@@ -12,22 +12,19 @@ export const LearningInsightsOverview = () => {
     return <Flex direction="column">
 
         {/* personality */}
-        <DashboardSection title={translatableTexts.learningOverview.personalLearningAnalysisTitle} minHeight="500px">
-            <PersonalityAssessment className="whall" />
-        </DashboardSection>
+        <PersonalityAssessment />
 
-        {/* learning curve */}
-        <DashboardSection title={translatableTexts.learningOverview.learningCurveTitle} minHeight="500px">
-            <LearningCurves />
-        </DashboardSection>
-
-        {/* stats */}
-        <DashboardSection title={translatableTexts.learningOverview.myStatisticsTitle} minHeight="500px">
-            <LearningStatistics />
-        </DashboardSection>
+        {/* learning curves */}
+        <LearningCurves />
 
         {/* badges */}
-        <DashboardSection title={translatableTexts.learningOverview.myBadgesTitle} minHeight="200px">
+        <DashboardSection
+            className="roundBorders largeSoftShadow"
+            background="var(--transparentWhite70)"
+            mt="10px"
+            title={translatableTexts.learningOverview.myBadgesTitle}
+            minHeight="200px">
+
             <Badges />
         </DashboardSection>
     </Flex>

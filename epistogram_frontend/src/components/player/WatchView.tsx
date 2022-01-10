@@ -191,7 +191,7 @@ export const WatchView = (props: {
         {/* video player */}
         <Flex justify="center">
             <VideoPlayer
-                //height="calc((var(--playerWidth) - 420px) / 1.80)"
+                //height="calc((var(--playerWidth) - 420px) / 1.80)" 
                 className="largeSoftShadow"
                 zIndex="5"
                 videoItem={video}

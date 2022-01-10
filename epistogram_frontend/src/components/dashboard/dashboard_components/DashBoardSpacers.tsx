@@ -5,27 +5,43 @@ import React from 'react';
 import { EpistoButton } from '../../universal/EpistoButton';
 import classes from "./dashBoardSpacers.module.scss";
 
-export const DashoardLeftItemGroup = (props: FlexProps & { title: string, onClick?: () => {} }) => {
+export const DashoardLeftItemGroup = (props:
+    FlexProps & {
+        title: string,
+        onClick?: () => {}
+    }) => {
 
     const { title, onClick, ...boxProps } = props;
 
-    return (<Flex id="listItemGroup" direction="column" {...boxProps}>
+    return <Flex
+        id="listItemGroup"
+        direction="column"
+        {...boxProps}>
+
         <Flex justify="space-between">
-            <Typography variant={"overline"} lineHeight="16px">{props.title}</Typography>
+
+            <Typography
+                variant={"overline"}
+                lineHeight="16px">
+                {props.title}
+            </Typography>
+
             <EpistoButton
                 variant="plain"
                 onClick={onClick}
                 style={{
                     height: 20
                 }}>
+
                 <PlayArrow
                     style={{
                         color: "var(--epistoTeal)"
                     }} />
             </EpistoButton>
         </Flex>
+
         {props.children}
-    </Flex>);
+    </Flex>;
 }
 
 export const DashboardVerticalDivider = () => {
@@ -39,7 +55,11 @@ export const DashboardVerticalDivider = () => {
 export const DashBoardRightSpacer = (props: { title: string }) => {
     return (
         <div className={classes.dashBoardRightSpacerWrapper}>
-            <Typography variant={"h4"}>{props.title}</Typography>
+
+            <Typography variant={"h4"}>
+                {props.title}
+                </Typography>
+
             <div className={classes.dashBoardRightSpacerWrapperDivider}>
                 <Divider />
             </div>

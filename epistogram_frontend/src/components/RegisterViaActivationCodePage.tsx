@@ -44,9 +44,10 @@ export const RegisterViaActivationCodePage = () => {
     }
 
     return <MainWrapper>
+
         <Flex
             justify={"center"}
-            background="radial-gradient(farthest-corner at 300px 300px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
+            background="gradientBlueBackground"
             py="60px"
             overflowY={"scroll"}
             h="100%"
@@ -180,6 +181,7 @@ export const RegisterViaActivationCodePage = () => {
                             }}
                             onClick={handleRegisterAsync}
                             variant="colored">
+
                             Regisztráció
                         </EpistoButton>
                     </Flex>
@@ -250,7 +252,6 @@ export const RegisterViaActivationCodePage = () => {
                     alt="" />
 
                 {/* Magic powder top-left */}
-
                 <img
                     style={{
                         position: "absolute",

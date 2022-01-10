@@ -39,6 +39,7 @@ export const CourseItemSelector = (props: {
 
         {/* learning type selector */}
         <RadioGroup value={mode} style={{ position: "relative" }}>
+
             <Flex height="100px" padding="20px" justify="center">
 
                 <EpistoButton
@@ -49,9 +50,11 @@ export const CourseItemSelector = (props: {
                         padding: "0 0 0 10px",
                         border: mode === "beginner" ? "2px solid var(--epistoTeal)" : undefined
                     }}>
+
                     <Typography style={{ fontSize: "14px" }}>
                         Kezdő Mód
                     </Typography>
+
                     <Radio size="small" value="beginner" />
                 </EpistoButton>
 
@@ -61,11 +64,15 @@ export const CourseItemSelector = (props: {
                     style={{
                         margin: "5px",
                         padding: "0 0 0 10px",
-                        border: mode === "advanced" ? "2px solid var(--epistoTeal)" : undefined
+                        border: mode === "advanced" ?
+                            "2px solid var(--epistoTeal)" :
+                            undefined
                     }}>
+
                     <Typography style={{ fontSize: "14px" }}>
                         Haladó Mód
                     </Typography>
+
                     <Radio size="small" value="advanced" />
                 </EpistoButton>
             </Flex>

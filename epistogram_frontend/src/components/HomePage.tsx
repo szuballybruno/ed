@@ -41,13 +41,13 @@ const HomePage = () => {
 
     return <MainWrapper>
 
-
-
         <ContentWrapper>
 
             <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
+
                 <LeftPanel>
                     
+                    {/* current course items and progress */}
                     <Flex
                         className='roundBorders'
                         mx="10px"
@@ -84,6 +84,7 @@ const HomePage = () => {
                     </Flex>
 
                 </LeftPanel>
+                
                 <RightPanel>
 
                     <Flex direction="column">

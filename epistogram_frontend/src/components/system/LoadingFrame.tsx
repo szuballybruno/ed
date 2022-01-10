@@ -63,7 +63,6 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     return <Flex
         id="loadigFrameRoot"
         position="relative"
-        overflow="hidden"
         {...rootProps}>
 
         {/* content */}

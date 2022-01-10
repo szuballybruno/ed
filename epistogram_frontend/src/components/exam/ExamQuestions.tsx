@@ -86,10 +86,12 @@ export const ExamQuestions = (props: {
 
         <ExamLayout
             headerLeftItem={<Flex align="center">
+
                 <img
                     alt=""
                     src={getAssetUrl("course_page_icons/curriculum_test.svg")}
                     className="square35" />
+                    
                 <Typography style={{ marginLeft: "10px" }}>
                     {questions.length}/{questionPaging.currentIndex + 1}
                 </Typography>
@@ -100,6 +102,7 @@ export const ExamQuestions = (props: {
             showNextButton={hasSelectedAnswer}
             nextButtonTitle={translatableTexts.exam.nextQuestion}
             progressValue={progressPercentage}>
+
             <Flex
                 direction={"column"}
                 alignItems={"center"}
@@ -107,7 +110,10 @@ export const ExamQuestions = (props: {
                 w={"80%"}
                 flex={1}>
 
-                <Flex p="20px" align="center">
+                <Flex
+                    p="20px"
+                    align="center">
+
                     <img
                         style={{
                             borderRadius: "50%",
@@ -134,12 +140,14 @@ export const ExamQuestions = (props: {
                     pt={10}
                     w={"100%"}
                     mx={200}>
+
                     <Grid
-                        templateColumns={"repeat(2, 1fr)"}
-                        gridAutoRows={"minmax(0,1fr)"}
-                        direction={"column"}
-                        gridGap={10}
-                        flex={1}>
+                        templateColumns="repeat(2, 1fr)"
+                        gridAutoRows="minmax(0,1fr)"
+                        direction="column"
+                        gridGap="10px"
+                        flex="1">
+
                         {currentQuestion
                             .answers
                             .map((answer, index) => {

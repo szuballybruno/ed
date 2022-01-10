@@ -42,24 +42,36 @@ export const SignupWrapper = (props: {
 
     const isDesktop = useIsDesktopView();
 
-    return <Flex 
+    return <Flex
         id="signupWrapperRoot"
-        direction="column" 
+        direction="column"
         alignItems="center"
-        width="100%" 
+        width="100%"
         height="100%"
-        zIndex={3}
-        maxH={"100vh"}
+        px="125px"
+        zIndex="3"
+        maxH="100vh"
         position="relative"
-        overflow="hidden"
-    >
+        overflow="hidden">
 
         {/* header */}
-        <Flex id="header" direction="column" w="100%" h="100px" maxH={100}>
+        <Flex
+            id="header"
+            direction="column"
+            w="100%"
+            h="100px"
+            py="25px"
+            maxH="100px">
 
             {/* logo */}
-            <Flex h={60} w={"100%"} hidden={window.innerWidth > 1000} justifyContent={"center"} alignItems={"center"}>
-                <Image maxH={60} src={getAssetUrl("/images/logo.svg")} />
+            <Flex
+                h={50}
+                w={"100%"}
+                hidden={window.innerWidth > 1000}
+                justify={"center"}
+                align={"center"}>
+
+                <Image maxH={50} src={getAssetUrl("/images/logo.svg")} />
             </Flex>
 
             {/* header top */}
@@ -68,8 +80,13 @@ export const SignupWrapper = (props: {
                 height="80px"
                 justify="space-between">
 
+                <Flex
+                    h={80}
+                    w={"100%"}
+                    hidden={window.innerWidth < 1000}
+                    justifyContent={"center"}
+                    alignItems={"center"}>
 
-                <Flex h={80} w={"100%"} hidden={window.innerWidth < 1000} justifyContent={"center"} alignItems={"center"}>
                     <Image maxH={80} src={getAssetUrl("/images/logo.svg")} />
                 </Flex>
 
@@ -102,6 +119,7 @@ export const SignupWrapper = (props: {
                     minH={400}
                     h="400"
                     justifyContent={isDesktop ? "flex-end" : "center"}>
+
                     <Image maxW={450} height="100%" src={currentImage!} />
                 </Flex>}
 
@@ -117,7 +135,7 @@ export const SignupWrapper = (props: {
                         variant="strongSub"
                         m="10px 10px 10px 0px"
                         alignSelf={hasImage ? "flex-start" : "center"}
-                        text={title!} 
+                        text={title!}
                         maxW={400}>
                     </EpistoHeader>}
 
@@ -137,38 +155,39 @@ export const SignupWrapper = (props: {
                         {children}
                     </Flex>
 
-                    
                 </Flex>
             </Flex>
         </Flex>
 
         {/* progress bar */}
-        <Flex 
-            alignItems="center"
+        <Flex
+            align="center"
             h="60px"
-            w={"calc(100% - 250px)"} 
-            borderRadius="7px" 
-            bgColor="white" 
+            w="100%"
+            borderRadius="7px"
+            bgColor="white"
             justifyContent={"space-between"}
             boxShadow={"5px 5px 15px 3px rgba(0,0,0,0.07)"}
-            px="10"
+            px="10px"
             my="20"
         >
-            
+
+            {/* back button */}
             {canNavPrevious && <EpistoButton
-                    onClick={() => onNavPrevious!()}
-                    variant="outlined"
-                    style={{ 
-                        marginTop: "0", 
-                        height: 40, 
-                        width: 40, 
-                        color: "#7CC0C2", 
-                        backgroundColor: "#7CC0C24F", 
-                        border: "none", 
-                        boxShadow: "1px 1px 5px 1px rgba(0,0,0,0.1)"
-                    }}>
-                    <ArrowBack />
-                </EpistoButton>}
+                onClick={() => onNavPrevious!()}
+                variant="outlined"
+                style={{
+                    marginTop: "0",
+                    height: 40,
+                    width: 40,
+                    color: "#7CC0C2",
+                    backgroundColor: "#7CC0C24F",
+                    border: "none",
+                    boxShadow: "1px 1px 5px 1px rgba(0,0,0,0.1)"
+                }}>
+
+                <ArrowBack />
+            </EpistoButton>}
 
             <Box id="footerBox" flex="1" mx="20">
                 {props.bottomComponent}
@@ -176,25 +195,26 @@ export const SignupWrapper = (props: {
 
             {/* next button */}
             {onNext && <EpistoButton
-                        variant={"outlined"}
-                        onClick={() => onNext!()}
-                        style={{
-                            alignSelf: isDesktop
-                                ? hasImage
-                                    ? "center"
-                                    : "center"
-                                : "flex-end",
-                            color: "white",
-                            backgroundColor: "#97C9CC",
-                            border: "none",
-                            boxShadow: "1px 1px 5px 1px rgba(0,0,0,0.2)"
-                        }}>
-                        {nextButtonTitle}
-                    </EpistoButton>}
+                variant={"outlined"}
+                onClick={() => onNext!()}
+                style={{
+                    alignSelf: isDesktop
+                        ? hasImage
+                            ? "center"
+                            : "center"
+                        : "flex-end",
+                    color: "white",
+                    backgroundColor: "#97C9CC",
+                    border: "none",
+                    boxShadow: "1px 1px 5px 1px rgba(0,0,0,0.2)"
+                }}>
+
+                {nextButtonTitle}
+            </EpistoButton>}
 
         </Flex>
-        
 
+        {/* magic powder top left */}
         <img
             style={{
                 position: "absolute",
@@ -205,9 +225,9 @@ export const SignupWrapper = (props: {
                 objectFit: "contain",
                 zIndex: -1,
             }}
-                src={getAssetUrl("/images/bg-art-2.png")} alt="" />
+            src={getAssetUrl("/images/bg-art-2.png")} alt="" />
 
-                
+        {/* magic powder top right */}
         <img
             style={{
                 position: "absolute",
@@ -218,6 +238,6 @@ export const SignupWrapper = (props: {
                 objectFit: "contain",
                 zIndex: -1,
             }}
-                src={getAssetUrl("/images/bg-art-6.png")} alt="" />
+            src={getAssetUrl("/images/bg-art-6.png")} alt="" />
     </Flex>
 };

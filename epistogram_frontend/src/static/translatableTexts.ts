@@ -36,6 +36,7 @@ export const translatableTexts = {
         shopPage: "Bolt",
         availableCourses: "Tanfolyamkereső",
         learning: "Tanulás",
+        learningStatistics: "Statisztikám",
         learningOverview: "Áttekintés",
         learningCourses: "Kurzusaim",
         learningExams: "Vizsgáim",
@@ -200,9 +201,16 @@ export const translatableTexts = {
     },
 
     learningOverview: {
-        tasksTitle: "Feladataim",
         personalLearningAnalysisTitle: "Személyes tanulási analízis",
+        whatIsThisGraphGoodFor: "Mit jelent ez a grafikon?",
+        whatIsThisGraphGoodForDescription: "A fenti grafikonon 5-5 tulajdonság párt láthatsz, melyek 0-7 között vehetnek fel értéket, attól függően, hogy az adott tulajdonság mennyire jellemző rád. Ezek általában ellentétben állnak egymással, így minél több pontod van az egyik oldalon, annál kevesebb lesz a másikon.",
+
         learningCurveTitle: "Tanulási és felejtési görbéid",
+        learningCurve: "Tanulási görbéd",
+        forgettingCurve: "Felejtési görbéd",
+        learningCurveDescription: "A tanulási görbe azon a megfigyelésen alapul, hogy minél gyakrabban végzünk egy tevékenységet, annál begyakorlottabban és gyorsabban tudjuk azt végrehajtani. Gondolhatnánk, hogy ez egy teljesen lineáris folyamat, a gyakorlatban ennél azonban komplikáltabb rendszerről beszélhetünk, mely mindenkinél mást jelent.A jobb oldalon láthatod, hogyan épül fel a te tanulási görbéd, ennek megfelelően pedig további tippeket adunk majd, hogyan tudod fejleszteni azt.",
+        forgettingCurveDescription: "A felejtési görbe az emlékezetek fakulásának folyamatát ábrázolja az idő függvényében. Egy kapcsolódó fogalom az emlék erőssége, amely azt fejezik ki, hogy egy emlék milyen tartósan marad meg az agyban. Minél erősebb egy emlék, annál hosszabb ideig képes valaki előhívni. A felejtés sebessége sok tényezőtől függ, mint például a megtanult anyag nehézsége, az ismeretanyag ábrázolása, valamint fiziológiai tényezők mint a pillanatnyi stressz vagy kipihentség. Az alap felejtési sebességben nincs lényeges egyéni különbség. A látható teljesítményben mutatkozó különbségeket (pl. iskolai jegyek) eltérő mnemotechnikai képességekkel lehet megmagyarázni, melyekkel kapcsolatban hamarosan új ismeretekre tehetsz majd szert!",
+        
         myStatisticsTitle: "Statisztikám",
         myBadgesTitle: "Megszerzett jelvényeim"
     },
