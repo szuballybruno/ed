@@ -5,8 +5,10 @@ import { useParams } from "react-router-dom";
 import { CourseBriefData } from "../../../models/shared_models/CourseBriefData";
 import { CourseShopItemListDTO } from "../../../models/shared_models/CourseShopItemListDTO";
 import { ShopItemCategoryDTO } from "../../../models/shared_models/ShopItemCategoryDTO";
-import { usePrivateCourses, useShopItemCategories, useShopItemEditData } from "../../../services/api/shopApiService";
+import { ShopItemEditDTO } from "../../../models/shared_models/ShopItemEditDTO";
+import { usePrivateCourses, useSaveShopItem, useShopItemCategories, useShopItemEditData } from "../../../services/api/shopApiService";
 import { useNavigation } from "../../../services/core/navigatior";
+import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { EpistoEntry } from "../../universal/EpistoEntry";
 import { EpistoLabel } from "../../universal/EpistoLabel";
@@ -20,11 +22,13 @@ export const ShopAdminEditSubpage = () => {
     const { navigate } = useNavigation();
     const params = useParams<{ shopItemId: string }>();
     const shopItemId = parseInt(params.shopItemId);
+    const showError = useShowErrorDialog();
 
     // http
     const { privateCourses, privateCoursesError, privateCoursesState } = usePrivateCourses();
     const { shopItemEditData, shopItemEditDataError, shopItemEditDataState } = useShopItemEditData(shopItemId);
     const { shopItemCategories } = useShopItemCategories();
+    const { saveShopItemAsync, saveShopItemState } = useSaveShopItem();
 
     const [name, setName] = useState("");
     const [purchaseLimit, setPurchaseLimit] = useState("");
@@ -39,6 +43,32 @@ export const ShopAdminEditSubpage = () => {
 
     const [isCourse, setIsCourse] = useState(false);
 
+    // func
+    const handleSaveAsync = async () => {
+
+        try {
+
+            const dto = {
+                id: shopItemId,
+                courseId: isCourse ? course!.id : null,
+                coinPrice: parseInt(coinPrice),
+                currencyPrice: parseInt(currencyPrice),
+                name: name,
+                purchaseLimit: isPurchaseLimited
+                    ? parseInt(purchaseLimit)
+                    : null,
+                shopItemCategoryId: shopItemCategory?.id ?? null
+            } as ShopItemEditDTO;
+
+            await saveShopItemAsync(dto, coverFileImage ?? undefined);
+            showNotification("Sikeresen mentve!");
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
+
     // set defaults
     useEffect(() => {
 
@@ -47,6 +77,7 @@ export const ShopAdminEditSubpage = () => {
 
         setName(shopItemEditData.name);
         setPurchaseLimit(shopItemEditData.purchaseLimit + "");
+        setIsPurchaseLimited(!!shopItemEditData.purchaseLimit);
         setCoinPrice(shopItemEditData.coinPrice + "");
         setCurrencyPrice(shopItemEditData.currencyPrice + "");
         setCoverFilePath(shopItemEditData.coverFilePath);
@@ -88,11 +119,13 @@ export const ShopAdminEditSubpage = () => {
 
     return (
         <LoadingFrame
-            loadingState={[shopItemEditDataState, privateCoursesState]}
+            loadingState={[shopItemEditDataState, privateCoursesState, saveShopItemState]}
             error={[shopItemEditDataError, privateCoursesError]}
             className="whall">
 
-            <AdminSubpageHeader px="30px">
+            <AdminSubpageHeader
+                px="30px"
+                onSave={handleSaveAsync}>
 
                 <EpistoLabel text="Kuruz/termek">
                     <Flex align="center">

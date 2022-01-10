@@ -119,51 +119,55 @@ export const AdminSubpageHeader = (props: {
         </Flex>
 
         {/* tabs */}
-        {tabMenuItems && <Flex
-            bg="white"
-            px="20px"
-            className="dividerBorderBottom"
-            flexDirection="row"
-            alignItems="center"
-            justify={"space-between"}
-            h={65}>
+        {(tabMenuItems || onSave) && (
+            <Flex
+                bg="white"
+                px="20px"
+                className="dividerBorderBottom"
+                flexDirection="row"
+                alignItems="center"
+                justify={"space-between"}
+                h={65}>
 
-            <Tabs
-                value={currentMatchingRoute?.route}
-                onChange={(x, path) => navigateToTab(path)} >
+                {/* tabs */}
+                <Flex flex="1">
+                    {tabMenuItems && <Tabs
+                        value={currentMatchingRoute?.route}
+                        onChange={(x, path) => navigateToTab(path)} >
 
-                {tabMenuItems
-                    .map(x => {
+                        {tabMenuItems
+                            .map(x => {
 
-                        return <Tab label={x.title} value={x.route} />
-                    })}
-            </Tabs>
-
-            {/* header buttons */}
-            <Flex mr="20px">
+                                return <Tab label={x.title} value={x.route} />
+                            })}
+                    </Tabs>}
+                </Flex>
 
                 {/* header buttons */}
-                {headerButtons && headerButtons
-                    .map(x => <EpistoButton
-                        style={{
-                            marginRight: "10px"
-                        }}
+                <Flex mr="20px">
+
+                    {/* header buttons */}
+                    {headerButtons && headerButtons
+                        .map(x => <EpistoButton
+                            style={{
+                                marginRight: "10px"
+                            }}
+                            variant="colored"
+                            onClick={x.action}>
+                            {x.icon}
+                            {x.title}
+                        </EpistoButton>)}
+
+                    {/* save button */}
+                    {onSave && <EpistoButton
                         variant="colored"
-                        onClick={x.action}>
-                        {x.icon}
-                        {x.title}
-                    </EpistoButton>)}
+                        onClick={() => onSave()}>
 
-                {/* save button */}
-                {onSave && <EpistoButton
-                    variant="colored"
-                    onClick={() => onSave()}>
-
-                    Mentés
-                </EpistoButton>}
+                        Mentés
+                    </EpistoButton>}
+                </Flex>
             </Flex>
-        </Flex>
-        }
+        )}
 
         {/* children  */}
         <Flex

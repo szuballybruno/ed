@@ -7,7 +7,7 @@ import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { ShopItemEditDTO } from "../../models/shared_models/ShopItemEditDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
 
 export const useShopItems = () => {
 
@@ -84,5 +84,15 @@ export const usePurchaseShopItem = () => {
         purchaseShopItemAsync: qr.postDataAsync,
         purchaseShopItemState: qr.state,
         purchaseShopItemResult: qr.result
+    };
+}
+
+export const useSaveShopItem = () => {
+
+    const qr = usePostMultipartDataUnsafe<ShopItemEditDTO>(apiRoutes.shop.saveShopItem);
+
+    return {
+        saveShopItemAsync: qr.postMultipartDataAsync,
+        saveShopItemState: qr.state
     };
 }
