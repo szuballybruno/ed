@@ -3,9 +3,9 @@ SELECT
 	ca.user_id,
 	ca.creation_date,
 	ca.amount,
-	v.title as video_title,
-	q.question_text as question_text,
-	siv.name as shop_item_name,
+	v.title video_title,
+	q.question_text question_text,
+	sisv.name shop_item_name,
 	CASE WHEN ca.activity_session_id IS NOT NULL
 		THEN 'activity'
 		ELSE CASE WHEN ca.video_id IS NOT NULL
@@ -24,7 +24,7 @@ SELECT
 				END 
 			END 
 		END 
-	END AS reason
+	END reason
 FROM public.coin_transaction ca
 
 -- video info
@@ -35,7 +35,7 @@ LEFT JOIN public.given_answer ga ON ga.id = ca.given_answer_id
 LEFT JOIN public.question q ON q.id = ga.question_id
 
 -- shop item info
-LEFT JOIN public.shop_item_view siv ON siv.id = ca.shop_item_id AND siv.user_id = ca.user_id
+LEFT JOIN public.shop_item_stateful_view sisv ON sisv.id = ca.shop_item_id AND sisv.user_id = ca.user_id
 
 ORDER BY 
 	creation_date DESC

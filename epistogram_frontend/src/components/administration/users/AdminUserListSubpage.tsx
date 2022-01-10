@@ -30,17 +30,29 @@ export const AdminUserListSubpage = () => {
 
     const user = useContext(CurrentUserContext)!;
     const currentUserId = user.id;
-    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery();
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
     const showError = useShowErrorDialog();
 
     const administrationRoutes = applicationRoutes.administrationRoute;
 
+    const [searchText, setSearchText] = useState<string | null>(null);
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
+
+    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(searchText);
+
     const isAllUsersSelected = !users.some(user => !selectedUserIds.some(uid => uid === user.id));
 
     const deleteWaningDialogLogic = useEpistoDialogLogic();
+
+    const handleSearch = (value: string) => {
+
+        if (value === "")
+            setSearchText(null);
+
+        if (value.length > 2)
+            setSearchText(value);
+    }
 
     const showDeleteUserDialog = (user: AdminPageUserDTO) => {
 
@@ -144,7 +156,7 @@ export const AdminUserListSubpage = () => {
                 icon: <DesktopAccessDisabledIcon />
             });
 
-        if (user.isPendingInvitation)
+        if (!user.isInvitationAccepted)
             chips.push({
                 name: "A meghívás elfogadásra vár",
                 icon: <Email />
@@ -187,6 +199,7 @@ export const AdminUserListSubpage = () => {
                 isAllSelected={isAllUsersSelected}
                 selectAllOrNone={selectAllOrNone}
                 selectedIds={selectedUserIds}
+                onSearchChanged={handleSearch}
                 itemLabel="felhasználó" />
 
             <EpistoDialog logic={deleteWaningDialogLogic} />

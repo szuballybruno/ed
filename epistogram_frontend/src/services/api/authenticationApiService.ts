@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { refreshTokenRefreshIntervalInMs, userRefreshIntervalInMs, verboseLogging } from "../../static/Environemnt";
+import { fetchNewAccessTokenIntervalInMs, fetchUserIntervalInMs, verboseLogging } from "../../static/Environemnt";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { UserDTO } from "../../models/shared_models/UserDTO";
 import { httpGetAsync, usePostData, usePostDataUnsafe } from "../core/httpClient";
@@ -31,7 +31,7 @@ export const useUserFetching = (enabled: boolean) => {
         () => httpGetAsync(apiRoutes.authentication.getCurrentUser), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: bgFetchingEnabled ? userRefreshIntervalInMs : false,
+        refetchInterval: bgFetchingEnabled ? fetchUserIntervalInMs : false,
         enabled: true,
         notifyOnChangeProps: ['data', 'isSuccess', 'status']
     });
@@ -96,7 +96,7 @@ export const useRenewUserSessionPooling = () => {
         () => httpGetAsync(apiRoutes.authentication.renewUserSession), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: refreshTokenRefreshIntervalInMs,
+        refetchInterval: fetchNewAccessTokenIntervalInMs,
         refetchIntervalInBackground: true,
         notifyOnChangeProps: ["isSuccess"]
     });

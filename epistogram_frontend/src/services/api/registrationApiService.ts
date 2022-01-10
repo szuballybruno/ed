@@ -1,7 +1,7 @@
 import { CreateInvitedUserDTO } from "../../models/shared_models/CreateInvitedUserDTO";
-import { RegisterInvitedUserDTO } from "../../models/shared_models/RegisterInvitedUser";
-import { RegisterUserDTO } from "../../models/shared_models/RegisterUserDTO";
 import { RegisterUserViaActivationCodeDTO } from "../../models/shared_models/RegisterUserViaActivationCodeDTO";
+import { RegisterUserViaInvitationTokenDTO } from "../../models/shared_models/RegisterUserViaInvitationTokenDTO";
+import { RegisterUserViaPublicTokenDTO } from "../../models/shared_models/RegisterUserViaPublicTokenDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { httpPostAsync, usePostDataUnsafe } from "../core/httpClient";
 
@@ -21,7 +21,7 @@ export const useRegisterUser = () => {
                 firstName,
                 lastName,
                 emailAddress
-            } as RegisterUserDTO);
+            } as RegisterUserViaPublicTokenDTO);
     }
 
     return {
@@ -44,7 +44,7 @@ export const useRegisterInvitedUser = () => {
                 invitationToken: invitationToken,
                 password,
                 passwordCompare
-            } as RegisterInvitedUserDTO);
+            } as RegisterUserViaInvitationTokenDTO);
     }
 
     return {

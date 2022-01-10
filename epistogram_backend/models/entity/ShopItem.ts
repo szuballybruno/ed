@@ -11,11 +11,11 @@ export class ShopItem {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    name: string;
+    @Column({ type: "text", nullable: true })
+    name: string | null;
 
-    @Column()
-    purchaseLimit: number;
+    @Column({ type: "int", nullable: true })
+    purchaseLimit: number | null;
 
     @Column()
     coinPrice: number;

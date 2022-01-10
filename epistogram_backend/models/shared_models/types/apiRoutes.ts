@@ -36,7 +36,12 @@ export const apiRoutes = {
     shop: {
         getShopItems: "/shop/get-shop-items",
         getShopItemCategories: "/shop/get-shop-items-categories",
-        purchaseShopItem: "/shop/purchase-shop-item"
+        purchaseShopItem: "/shop/purchase-shop-item",
+        getAdminShopItems: "/shop/get-admin-shop-items",
+        getShopItemBriefData: "/shop/get-shop-item-brief-data",
+        getShopItemEditData: "/shop/get-shop-item-edit-data",
+        getPrivateCourseList: "/shop/get-private-course-list",
+        saveShopItem: "/shop/save-shop-item"
     },
 
     event: {

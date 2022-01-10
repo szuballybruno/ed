@@ -22,6 +22,9 @@ export class UserActivityFlatView {
     @ViewColumn()
     canAccessApplication: boolean;
 
+    @ViewColumn()
+    canAccessShopAdministration: boolean;
+
     // user
     @OneToOne(_ => User, x => x.userActivity)
     @JoinColumn({ name: "user_id" })

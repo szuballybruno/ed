@@ -13,16 +13,7 @@ export class ShopItemView {
     courseId: number;
 
     @ViewColumn()
-    userId: number;
-
-    @ViewColumn()
     name: string;
-
-    @ViewColumn()
-    purchaseCount: number;
-
-    @ViewColumn()
-    canPurchase: boolean;
 
     @ViewColumn()
     purchaseLimit: number;

@@ -10,7 +10,13 @@ import { respond, respondError } from "./apiHelpers";
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
-export const toFullName = (firstName: string, lastName: string) => `${firstName} ${lastName}`;
+export const toFullName = (firstName: string, lastName: string, culture?: "en" | "hu") => {
+
+    if (culture === "hu")
+        return `${lastName} ${firstName}`;
+
+    return `${firstName} ${lastName}`;;
+}
 
 export function replaceAll(str: string, find: string, replace: string) {
     return str.replace(new RegExp(find, 'g'), replace);
@@ -41,21 +47,18 @@ export const forN = <T>(iterations: number, action: (index: number) => T) => {
 export class ActionParams {
     req: Request;
     res: Response;
-    next: NextFunction;
     currentUserId: number;
     isMultipart: boolean;
 
     constructor(
         req: Request,
         res: Response,
-        next: NextFunction,
         userId: number,
         isMultipart: boolean) {
 
         this.isMultipart = isMultipart;
         this.req = req;
         this.res = res;
-        this.next = next;
         this.currentUserId = userId;
     }
 

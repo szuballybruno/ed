@@ -9,7 +9,7 @@ export const setAuthCookies = (config: GlobalConfiguration, res: Response, acces
         res.cookie(config.misc.accessTokenCookieName, accessToken, {
             secure: true,
             httpOnly: true,
-            expires: dayjs().add(config.security.accessTokenLifespanInS, "seconds").toDate(),
+            expires: dayjs().add(config.security.tokenLifespans.accessTokenLifespanInS, "seconds").toDate(),
             sameSite: "none"
             // domain: isLocalhost ? undefined : frontendUrl
         });
@@ -20,7 +20,7 @@ export const setAuthCookies = (config: GlobalConfiguration, res: Response, acces
         res.cookie(config.misc.refreshTokenCookieName, refreshToken, {
             secure: true,
             httpOnly: true,
-            expires: dayjs().add(config.security.refreshTokenLifespanInS, "seconds").toDate(),
+            expires: dayjs().add(config.security.tokenLifespans.refreshTokenLifespanInS, "seconds").toDate(),
             sameSite: "none"
             // domain: isLocalhost ? undefined : frontendUrl
         });

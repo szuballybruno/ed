@@ -85,10 +85,8 @@ export class CourseService {
             .getRepository(Course)
             .findOneOrFail(courseId);
 
-        return {
-            id: course.id,
-            title: course.title
-        } as CourseBriefData;
+        return this._mapperService
+            .map(Course, CourseBriefData, course);
     }
 
     async getCourseDetailsAsync(courseId: number) {
@@ -467,6 +465,7 @@ export class CourseService {
                 difficulty: dto.difficulty,
                 language: dto.language,
                 shortDescription: dto.shortDescription,
+                previouslyCompletedCount: dto.previouslyCompletedCount,
                 humanSkillBenefitsDescription: dto.humanSkillBenefitsDescription,
                 skillBenefits: dto.skillBenefits?.join(", "),
                 technicalRequirements: dto.technicalRequirements?.join(", "),

@@ -1,16 +1,14 @@
-import { useReactQuery2 } from "../../static/frontendHelpers";
 import { AdminPageUserDTO } from "../../models/shared_models/AdminPageUserDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { UserDTO } from "../../models/shared_models/UserDTO";
-import { httpPostAsync, usePostDataUnsafe } from "../core/httpClient";
-import { CreateInvitedUserDTO } from "../../models/shared_models/CreateInvitedUserDTO";
-import { UserEditDTO } from "../../models/shared_models/UserEditDTO";
 import { BriefUserDataDTO } from "../../models/shared_models/BriefUserDataDTO";
+import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { UserEditDTO } from "../../models/shared_models/UserEditDTO";
 import { UserEditSimpleDTO } from "../../models/shared_models/UserEditSimpleDTO";
+import { useReactQuery2 } from "../../static/frontendHelpers";
+import { httpPostAsync, usePostDataUnsafe } from "../core/httpClient";
 
-export const useUserListQuery = () => {
+export const useUserListQuery = (searchText: string | null) => {
 
-    const queryResult = useReactQuery2<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration);
+    const queryResult = useReactQuery2<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText });
 
     return {
         users: queryResult.data ?? [],

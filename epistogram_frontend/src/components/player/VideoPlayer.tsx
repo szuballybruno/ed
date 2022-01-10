@@ -1,21 +1,17 @@
 import { Box, BoxProps } from "@chakra-ui/react";
-import { ClosedCaption, Fullscreen, Pause, PlayArrow } from "@mui/icons-material";
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { Slider, Typography } from "@mui/material";
-import React, { CSSProperties, useMemo, useRef, useState } from "react";
+import React, { CSSProperties, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { TrackProps } from "react-player/file";
 import useEventListener from 'react-use-event-listener';
 import screenfull from "screenfull";
-import { secondsToTime } from "../../static/frontendHelpers";
-import { AdvancedTimer } from "../../helpers/advancedTimer";
 import { SubtitleDTO } from "../../models/shared_models/SubtitleDTO";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
-import classes from "./player.module.scss";
+import { VideoControls } from "./VideoControls";
 
 type VisualOverlayType = "counter" | "pause" | "start" | "seekRight" | "seekLeft";
 
@@ -37,7 +33,9 @@ export const useVideoPlayerState = (
     const [visualOverlayType, setVisualOverlayType] = useState<VisualOverlayType>("start");
     const [isVisualOverlayVisible, setIsVisualOverlayVisible] = useState(false);
     const [isSeeking, setIsSeeking] = useState(false);
-    const controlsOpacity = showControls || !shouldBePlaying || isSeeking ? 1 : 0;
+    const [volume, setVolume] = useState(1);
+    const [isMuted, setIsMuted] = useState(false);
+    const controlsVisible = showControls || !shouldBePlaying || isSeeking;
     // const [isVideoEnded, setIsVideoEnded] = useState(false);
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
@@ -175,7 +173,7 @@ export const useVideoPlayerState = (
         videoUrl,
         shouldBePlaying,
         subtileTracks,
-        controlsOpacity,
+        controlsVisible,
         playedSeconds,
         videoLength,
         isShowingOverlay,
@@ -184,6 +182,8 @@ export const useVideoPlayerState = (
         maxWatchedSeconds,
         limitSeek,
         isVideoEnded,
+        volume,
+        isMuted,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -191,7 +191,9 @@ export const useVideoPlayerState = (
         toggleFullScreen,
         seekToSeconds,
         setIsSeeking,
-        handleOnVideoEnded
+        handleOnVideoEnded,
+        setVolume,
+        setIsMuted
     }
 }
 
@@ -211,12 +213,14 @@ export const VideoPlayer = (props: {
         controlOverlayTimer,
         videoUrl,
         subtileTracks,
-        controlsOpacity,
+        controlsVisible,
         playedSeconds,
         videoLength,
         isShowingOverlay,
         isPlaying,
         maxWatchedSeconds,
+        volume,
+        isMuted,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -224,16 +228,14 @@ export const VideoPlayer = (props: {
         toggleFullScreen,
         seekToSeconds,
         setIsSeeking,
-        handleOnVideoEnded
+        handleOnVideoEnded,
+        setVolume,
+        setIsMuted
     } = videoPlayerState;
 
     const iconStyle = { width: "70px", height: "70px", color: "white" } as CSSProperties;
 
-    const marks = [
-        {
-            value: maxWatchedSeconds,
-        },
-    ];
+    const marks = [maxWatchedSeconds];
 
     return (
         <Box
@@ -274,6 +276,8 @@ export const VideoPlayer = (props: {
                         }}
                         width="100%"
                         height="100%"
+                        volume={volume}
+                        muted={isMuted}
                         controls={false}
                         playing={isPlaying}
                         onProgress={(playedInfo) => {
@@ -298,52 +302,21 @@ export const VideoPlayer = (props: {
                 </Box>
 
                 {/* video controls */}
-                <Box
-                    className={classes.playerControllerWrapper}
-                    onMouseEnter={() => showControlOverlay(true)}
-                    onMouseLeave={() => showControlOverlay()}
-                    opacity={controlsOpacity}
-                    borderRadius="0 0 6px 6px"
-                    transition="0.15s">
-
-                    {/* play/pause */}
-                    <button onClick={toggleShouldBePlaying}>
-                        {isPlaying ? <Pause /> : <PlayArrow />}
-                    </button>
-
-                    {/* timestamp */}
-                    <Typography className={classes.playerTimestamp}>
-                        {`${secondsToTime(playedSeconds)}/${secondsToTime(videoLength)}`}
-                    </Typography>
-
-                    {/* slider */}
-                    <Slider
-                        className={classes.slider}
-                        defaultValue={0}
-                        aria-labelledby="discrete-slider"
-                        value={playedSeconds}
-                        min={0}
-                        max={videoLength}
-                        onMouseDown={() => setIsSeeking(true)}
-                        onChangeCommitted={() => setIsSeeking(false)}
-                        onChange={(event, targetSeconds) => {
-
-                            seekToSeconds(targetSeconds as number);
-                        }}
-                        marks={marks} />
-
-                    {/* wtf */}
-                    <button onClick={(e) => {
-
-                    }}>
-                        <ClosedCaption />
-                    </button>
-
-                    {/* Fullscreen */}
-                    <button onClick={(e) => toggleFullScreen()}>
-                        <Fullscreen />
-                    </button>
-                </Box>
+                <VideoControls
+                    controlsVisible={controlsVisible}
+                    isPlaying={isPlaying}
+                    markSeconds={marks}
+                    playedSeconds={playedSeconds}
+                    videoLength={videoLength}
+                    volume={volume}
+                    isMuted={isMuted}
+                    setIsMuted={setIsMuted}
+                    showControlOverlay={showControlOverlay}
+                    seekToSeconds={seekToSeconds}
+                    setIsSeeking={setIsSeeking}
+                    toggleFullScreen={toggleFullScreen}
+                    toggleShouldBePlaying={toggleShouldBePlaying}
+                    setVolume={setVolume} />
 
             </Box>
 

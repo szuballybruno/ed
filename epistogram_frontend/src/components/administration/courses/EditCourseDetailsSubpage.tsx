@@ -43,6 +43,7 @@ export const AdminCourseDetailsSubpage = () => {
     const [description, setDescription] = useState("");
     const [difficulty, setDifficulty] = useState(0);
     const [benchmark, setBenchmark] = useState(0);
+    const [prevCompletedCount, setPrevCompletedCount] = useState("");
     const [language, setLanguage] = useState("");
     const [visibility, setVisibility] = useState<CourseVisibilityType>("public");
     const [teacherId, setTeacherId] = useState(0);
@@ -78,6 +79,7 @@ export const AdminCourseDetailsSubpage = () => {
             humanSkillBenefits: humanSkillBenefits,
             visibility: visibility,
             teacherId: teacherId,
+            previouslyCompletedCount: parseInt(prevCompletedCount),
 
             category: {
                 id: category?.id!
@@ -127,6 +129,7 @@ export const AdminCourseDetailsSubpage = () => {
         setSkillBenefits(courseDetailsEditData.skillBenefits);
         setTechnicalRequirements(courseDetailsEditData.technicalRequirements);
         setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits);
+        setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + "");
 
     }, [courseDetailsEditData]);
 
@@ -262,6 +265,15 @@ export const AdminCourseDetailsSubpage = () => {
                                 value={language}
                                 label="Nyelv"
                                 setValue={setLanguage} />
+
+                            {/* previously completed count */}
+                            <EpistoEntry
+                                labelVariant={"top"}
+                                isMultiline={true}
+                                type="number"
+                                value={prevCompletedCount}
+                                label="Elvegzesek szama"
+                                setValue={setPrevCompletedCount} />
 
                         </EditSection>
 

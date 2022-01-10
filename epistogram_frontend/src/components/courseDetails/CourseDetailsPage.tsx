@@ -116,7 +116,7 @@ const CourseDetailsPage = () => {
             {
                 icon: getAssetUrl("/course_page_icons/right_panel_enrolled.svg"),
                 name: "Hányan végezték el eddig",
-                value: "4139"
+                value: courseDetails!.previouslyCompletedCount
             },
             {
                 icon: getAssetUrl("/course_page_icons/right_panel_updated.svg"),

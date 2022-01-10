@@ -3,6 +3,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { translatableTexts } from "../static/translatableTexts";
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 export const applicationRoutes = {
 
@@ -126,6 +127,7 @@ export const applicationRoutes = {
                 route: "/administration/users/:userId/teacherinfo"
             }
         },
+
         coursesRoute: {
             title: translatableTexts.routeTitles.administrationCourseAdmin,
             route: "/administration/courses",
@@ -175,24 +177,24 @@ export const applicationRoutes = {
                 route: "/administration/courses/:courseId/module/:moduleId"
             }
         },
-        groupsRoute: {
-            title: "Csoportok",
-            route: "/administration/groups",
-            icon: <People color={"secondary"} />,
+
+        shopRoute: {
+            title: translatableTexts.routeTitles.administrationShopMain,
+            route: "/administration/shop",
+            icon: <ShoppingCartIcon color={"secondary"} />,
+            exact: true,
 
             addRoute: {
-                title: translatableTexts.routeTitles.administrationAddGroup,
-                route: "/administration/groups/add"
+                title: translatableTexts.routeTitles.administrationShopAdd,
+                route: "/administration/shop/add"
             },
+
             editRoute: {
-                title: translatableTexts.routeTitles.administrationEditGroup,
-                route: "/administration/groups/:groupId/edit"
-            },
-            statisticsRoute: {
-                title: translatableTexts.routeTitles.administrationGroupStatistics,
-                route: "/administration/groups/:groupId/statistics"
-            },
+                title: translatableTexts.routeTitles.administrationShopEdit,
+                route: "/administration/shop/edit/:shopItemId"
+            }
         },
+
         myCompanyRoute: {
             title: "Céges statisztika",
             route: "/administration/mycompany",

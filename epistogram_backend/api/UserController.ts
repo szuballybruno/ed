@@ -45,10 +45,15 @@ export class UserController {
             .saveUserAsync(dto);
     }
 
-    getUserAdministrationUserListAction = async () => {
+    getUserAdministrationUserListAction = async (params: ActionParams) => {
+
+        const searchText = params
+            .getQuery<{ searchText?: string }>()
+            .data
+            .searchText ?? null;
 
         return await this._userService
-            .getAdminPageUsersListAsync();
+            .getAdminPageUsersListAsync(searchText);
     };
 
     getBriefUserDataAction = async (params: ActionParams) => {

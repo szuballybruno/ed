@@ -1,7 +1,10 @@
+import { sign, verify } from "jsonwebtoken";
 import { AccessTokenPayload } from "../models/DTOs/AccessTokenPayload";
-import { InvitationTokenPayload } from "../models/shared_models/types/sharedTypes";
+import { User } from "../models/entity/User";
+import { InvitationTokenPayload, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
+import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
+import { TypedError } from "../utilities/helpers";
 import { GlobalConfiguration } from "./misc/GlobalConfiguration";
-import { getJWTToken, verifyJWTToken } from "./misc/jwtGen";
 
 export class TokenService {
 
@@ -18,27 +21,27 @@ export class TokenService {
 
     verifyAccessToken = (token: string) => {
 
-        return verifyJWTToken<AccessTokenPayload>(token, this._config.security.jwtSignSecret);
+        return this.verifyJWTToken<AccessTokenPayload>(token, this._config.security.secrets.accessTokenSecret);
     }
 
     verifyRefreshToken = (token: string) => {
 
-        return verifyJWTToken<AccessTokenPayload>(token, this._config.security.jwtSignSecret);
+        return this.verifyJWTToken<AccessTokenPayload>(token, this._config.security.secrets.refreshTokenSecret);
     }
 
     verifyPublicRegistrationToken = (token: string) => {
 
-        return verifyJWTToken(token, this._config.security.createPasswordTokenSecret);
+        return this.verifyJWTToken(token, this._config.security.secrets.regTokenSecret);
     }
 
     verifyInvitaionToken = (token: string) => {
 
-        return verifyJWTToken<InvitationTokenPayload>(token, this._config.mail.tokenMailSecret);
+        return this.verifyJWTToken<InvitationTokenPayload>(token, this._config.security.secrets.invitationTokenSecret);
     }
 
     verifySetNewPasswordToken = (token: string) => {
 
-        return verifyJWTToken<{ userId: number }>(token, this._config.mail.tokenMailSecret);
+        return this.verifyJWTToken<{ userId: number }>(token, this._config.security.secrets.setNewPasswordTokenSecret);
     }
 
     //
@@ -47,41 +50,64 @@ export class TokenService {
 
     createInvitationToken = (userEmail: string) => {
 
-        return getJWTToken<InvitationTokenPayload>(
+        return this.getJWTToken<InvitationTokenPayload>(
             { userEmail },
-            this._config.mail.tokenMailSecret,
-            "127h")
+            this._config.security.secrets.invitationTokenSecret,
+            `${this._config.security.tokenLifespans.invitationTokenLifespanInS}s`)
     }
 
-    createAccessToken = (userId: number) => {
+    createAccessToken = (user: User, userActivity: UserActivityFlatView) => {
 
-        return getJWTToken(
-            { userId },
-            this._config.security.jwtSignSecret,
-            `${this._config.security.accessTokenLifespanInS}s`);
+        return this.getJWTToken<AccessTokenPayload>(
+            {
+                userId: user.id,
+                userRole: RoleIdEnum.toRoleType(user.roleId),
+                userActivity
+            },
+            this._config.security.secrets.accessTokenSecret,
+            `${this._config.security.tokenLifespans.accessTokenLifespanInS}s`);
     }
 
-    createRefreshToken = (userId: number) => {
+    createRefreshToken = (user: User) => {
 
-        return getJWTToken(
-            { userId },
-            this._config.security.jwtSignSecret,
-            `${this._config.security.refreshTokenLifespanInS}s`);
+        return this.getJWTToken(
+            { userId: user.id },
+            this._config.security.secrets.refreshTokenSecret,
+            `${this._config.security.tokenLifespans.refreshTokenLifespanInS}s`);
     }
 
     createSetNewPasswordToken = (userId: number) => {
 
-        return getJWTToken(
+        return this.getJWTToken(
             { userId },
-            this._config.mail.tokenMailSecret,
-            "8h");
+            this._config.security.secrets.setNewPasswordTokenSecret,
+            `${this._config.security.tokenLifespans.setNewPasswordTokenLifespanInS}s`);
     }
 
     createRegistrationToken = () => {
 
-        return getJWTToken(
+        return this.getJWTToken(
             { tokenNudli: "bekacomb" },
-            this._config.security.createPasswordTokenSecret,
-            "99999h");
+            this._config.security.secrets.regTokenSecret,
+            `${this._config.security.tokenLifespans.registrationTokenLifespanInS}s`);
+    }
+
+
+    private getJWTToken = <TTokenPayload>(
+        tokenData: TTokenPayload,
+        secret: string,
+        expiresIn: string | number): string => {
+
+        return sign(tokenData as any, secret, { expiresIn: expiresIn });
+    }
+
+    private verifyJWTToken = <TTokenPayload>(token: string, secret: string) => {
+
+        const payload = verify(token, secret) as TTokenPayload;
+
+        if (!payload)
+            throw new TypedError("Token verification failed!", "forbidden");
+
+        return payload;
     }
 }

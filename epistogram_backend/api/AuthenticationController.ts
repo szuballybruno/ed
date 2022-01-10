@@ -17,12 +17,12 @@ export class AuthenticationController {
 
     renewUserSessionAction = async (params: ActionParams) => {
 
-        const refreshToken = getCookie(params.req, "refreshToken")?.value;
+        const prevRefreshToken = getCookie(params.req, "refreshToken")?.value;
 
-        const { newAccessToken, newRefreshToken } = await this._authenticationService
-            .renewUserSessionAsync(refreshToken);
+        const { accessToken, refreshToken } = await this._authenticationService
+            .renewUserSessionAsync(prevRefreshToken);
 
-        setAuthCookies(this._config, params.res, newAccessToken, newRefreshToken);
+        setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
 
     logInUserAction = async (params: ActionParams) => {

@@ -11,6 +11,7 @@ export class CourseDetailsEditDataDTO {
     description: string;
     difficulty: number;
     benchmark: number;
+    previouslyCompletedCount: number;
     language: string;
     visibility: CourseVisibilityType;
     teacherId: number;

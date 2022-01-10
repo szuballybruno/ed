@@ -35,7 +35,7 @@ import { dbSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log, logError } from "./services/misc/logger";
 import { initializeMappings } from './services/misc/mappings';
-import { getAuthMiddleware, getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
+import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { UrlService } from './services/UrlService';
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
@@ -62,11 +62,15 @@ import { UserSessionActivityService } from './services/UserSessionActivityServic
 import { UserStatsService } from './services/UserStatsService';
 import { VideoPlaybackSampleService } from './services/VideoPlaybackSampleService';
 import { VideoService } from './services/VideoService';
-import { addAPIEndpoint, ApiActionType, EndpointOptionsType } from './utilities/apiHelpers';
+import { EndpointOptionsType, onActionError, onActionSuccess } from './utilities/apiHelpers';
 import './utilities/jsExtensions';
 import { PasswordChangeService } from './services/PasswordChangeService';
 import { PasswordChangeController } from './api/PasswordChangeController';
 import { AuthMiddleware } from './middleware/AuthMiddleware';
+import { ActionParams } from './utilities/helpers';
+import { TurboExpress } from './utilities/TurboExpress';
+import { LoggerService } from './services/LoggerService';
+import { HashService } from './services/HashService';
 
 (async () => {
 
@@ -76,10 +80,10 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${globalConfig.misc.environmentName} ----------------`);
     log("");
 
-    const expressServer = express();
-
     // services 
+    const loggerService = new LoggerService();
     const mapperService = new MapperService();
+    const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlBootstrapperService);
@@ -95,11 +99,11 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
     const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService);
     const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService);
-    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService);
+    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService);
     const tokenService = new TokenService(globalConfig);
-    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, ormConnectionService, emailService, globalConfig);
+    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService);
-    const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig);
+    const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
     const seedService = new SeedService(sqlBootstrapperService, registrationService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService, mapperService);
@@ -115,7 +119,7 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, vpss, coinAcquireService, userSessionActivityService, mapperService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
-    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService);
+    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService);
 
     // controllers 
@@ -139,15 +143,17 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     const passwordChangeController = new PasswordChangeController(passwordChangeService);
 
     // middleware 
-    const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig);
+    const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
 
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
 
-    const addEndpoint = (path: string, action: ApiActionType, options?: EndpointOptionsType) =>
-        addAPIEndpoint(authMiddleware, expressServer, action, path, options);
+    // initialize express
+    const expressServer = express();
+    const turboExpress = new TurboExpress<ActionParams, EndpointOptionsType>(expressServer, [authMiddleware], onActionError, onActionSuccess);
+    const addEndpoint = turboExpress.addAPIEndpoint;
 
     // add middlewares
     expressServer.use(getCORSMiddleware(globalConfig));
@@ -155,25 +161,12 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     expressServer.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
     expressServer.use(fileUpload());
     expressServer.use(getUnderMaintanenceMiddleware(globalConfig));
-    expressServer.use(getAuthMiddleware(
-        globalConfig,
-        authenticationService.getRequestAccessTokenPayload,
-        userService.getUserById,
-        [
-            apiRoutes.registration.registerUserViaActivationCode,
-            apiRoutes.registration.registerUserViaInvitationToken,
-            apiRoutes.registration.registerUserViaPublicToken,
-            apiRoutes.passwordChange.requestPasswordChange,
-            apiRoutes.passwordChange.setNewPassword,
-            apiRoutes.authentication.renewUserSession,
-            apiRoutes.authentication.loginUser,
-        ]));
 
     // registration
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true });
+    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true, authorize: ["administrator"] });
 
     // misc
     addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
@@ -183,13 +176,18 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
 
     // teacher info
-    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction);
-    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true });
+    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true, authorize: ["administrator"] });
 
     // shop 
     addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
     addEndpoint(apiRoutes.shop.getShopItemCategories, shopController.getShopItemCategoriesAction);
     addEndpoint(apiRoutes.shop.purchaseShopItem, shopController.purchaseShopItemAction, { isPost: true });
+    addEndpoint(apiRoutes.shop.getAdminShopItems, shopController.getAdminShopItemsAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.getShopItemBriefData, shopController.getShopItemBriefDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.getShopItemEditData, shopController.getShopItemEditDTOAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.getPrivateCourseList, shopController.getPrivateCourseListAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.saveShopItem, shopController.saveShopItemAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
@@ -213,12 +211,12 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
 
     // user
-    addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction);
-    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
-    addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true });
-    addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true });
     addEndpoint(apiRoutes.user.saveUserSimple, userController.saveUserSimpleAction, { isPost: true });
+    addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true, authorize: ["administrator"] });
 
     // file 
     addEndpoint(apiRoutes.file.uploadUserAvatar, fileController.uploadAvatarFileAction, { isPost: true });
@@ -235,47 +233,47 @@ import { AuthMiddleware } from './middleware/AuthMiddleware';
     addEndpoint(apiRoutes.player.answerVideoQuestion, playerController.answerVideoQuestionAction, { isPost: true });
 
     // course
-    addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction);
-    addEndpoint(apiRoutes.course.startCourse, courseController.startCourseAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction);
-    addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction);
-    addEndpoint(apiRoutes.course.getCourseBriefData, courseController.getCourseBriefDataAction);
-    addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true });
-    addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true });
-    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true });
+    addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.course.getAvailableCourses, courseController.getAvailableCoursesAction);
-    addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true });
-    addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true });
+    addEndpoint(apiRoutes.course.startCourse, courseController.startCourseAction, { isPost: true });
+    addEndpoint(apiRoutes.course.getCourseBriefData, courseController.getCourseBriefDataAction);
     addEndpoint(apiRoutes.course.getCourseDetails, courseController.getCourseDetailsAction);
     addEndpoint(apiRoutes.course.getCourseProgressData, courseController.getCourseProgressDataAction);
     addEndpoint(apiRoutes.course.getCourseProgressShort, courseController.getCourseProgressShortAction);
 
     // module 
-    addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true });
-    addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true });
-    addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction);
-    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true });
+    addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
 
     // video 
-    addEndpoint(apiRoutes.video.createVideo, videoController.createVideoAction, { isPost: true });
-    addEndpoint(apiRoutes.video.deleteVideo, videoController.deleteVideoAction, { isPost: true });
-    addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true });
-    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true });
-    addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction);
+    addEndpoint(apiRoutes.video.createVideo, videoController.createVideoAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.video.deleteVideo, videoController.deleteVideoAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction, { authorize: ["administrator"] });
 
     // questions
-    addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction);
-    addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true });
-    addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
+    addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.questions.getPractiseQuestions, miscController.getPractiseQuestionAction);
+    addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
 
     // exam
+    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.exam.getExamResults, examController.getExamResultsAction);
-    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction);
-    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.answerExamQuestion, examController.answerExamQuestionAction, { isPost: true });
     addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
 

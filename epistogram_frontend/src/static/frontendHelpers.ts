@@ -466,6 +466,35 @@ export const hasValue = (obj: any) => {
     return true;
 }
 
+export class ArrayBuilder<T> {
+
+    private _array: T[];
+
+    constructor() {
+
+        this._array = [];
+    }
+
+    add(item: T) {
+
+        this._array.push(item);
+        return this;
+    }
+
+    addIf(cond: boolean, item: T) {
+
+        if (cond)
+            this.add(item);
+
+        return this;
+    }
+
+    getArray() {
+
+        return this._array;
+    }
+}
+
 export const reloadPage = () => window.location.reload();
 
 export const isBetweenThreshold = (valueA: number, valueB: number, threshold: number) => {

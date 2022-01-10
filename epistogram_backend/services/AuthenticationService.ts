@@ -1,8 +1,8 @@
-import { Request } from "express";
 import { User } from "../models/entity/User";
-import { getCookie, TypedError } from "../utilities/helpers";
+import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
+import { TypedError } from "../utilities/helpers";
 import { EmailService } from "./EmailService";
-import { comparePasswordAsync, hashPasswordAsync } from "./misc/crypt";
+import { HashService } from "./HashService";
 import { GlobalConfiguration } from "./misc/GlobalConfiguration";
 import { log } from "./misc/logger";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -15,24 +15,18 @@ export class AuthenticationService {
     private _userService: UserService;
     private _tokenService: TokenService;
     private _userSessionActivityService: UserSessionActivityService;
-    private _ormService: ORMConnectionService;
-    private _emailService: EmailService;
-    private _config: GlobalConfiguration;
+    private _hashService: HashService;
 
     constructor(
         userService: UserService,
         tokenService: TokenService,
         userSessionActivityService: UserSessionActivityService,
-        ormService: ORMConnectionService,
-        emailService: EmailService,
-        config: GlobalConfiguration) {
+        hashService: HashService) {
 
         this._userService = userService;
         this._tokenService = tokenService;
         this._userSessionActivityService = userSessionActivityService;
-        this._ormService = ormService;
-        this._emailService = emailService;
-        this._config = config;
+        this._hashService = hashService;
     }
 
     getRequestAccessTokenPayload = (accessToken: string) => {
@@ -61,16 +55,16 @@ export class AuthenticationService {
         return currentUser;
     }
 
-    renewUserSessionAsync = async (refreshToken: string) => {
+    renewUserSessionAsync = async (prevRefreshToken: string) => {
 
         log("Renewing user session...");
 
         // check if there is a refresh token sent in the request 
-        if (!refreshToken)
+        if (!prevRefreshToken)
             throw new TypedError("Refresh token not sent.", "bad request");
 
         // check sent refresh token if invalid by signature or expired
-        const tokenMeta = this._tokenService.verifyRefreshToken(refreshToken);
+        const tokenMeta = this._tokenService.verifyRefreshToken(prevRefreshToken);
 
         // check if this refresh token is associated to the user
         const refreshTokenFromDb = await this._userService
@@ -81,22 +75,21 @@ export class AuthenticationService {
 
         // get user 
         const user = await this._userService
-            .getUserDTOById(tokenMeta.userId);
+            .getUserById(tokenMeta.userId);
 
         if (!user)
             throw new TypedError("User not found by id " + tokenMeta.userId, "internal server error");
 
         // get tokens
-        const newAccessToken = this._tokenService.createAccessToken(user.id);
-        const newRefreshToken = this._tokenService.createRefreshToken(user.id);
+        const { accessToken, refreshToken } = await this.getUserLoginTokens(user, user.userActivity);
 
         // save refresh token to DB
         await this._userService
-            .setUserActiveRefreshToken(user.id, refreshToken);
+            .setUserActiveRefreshToken(user.id, prevRefreshToken);
 
         return {
-            newAccessToken,
-            newRefreshToken
+            accessToken,
+            refreshToken
         }
     }
 
@@ -115,7 +108,9 @@ export class AuthenticationService {
         if (!user)
             throw new TypedError("Invalid email.", "forbidden");
 
-        const isPasswordCorrect = await comparePasswordAsync(password, user.password);
+        const isPasswordCorrect = await this._hashService
+            .comparePasswordAsync(password, user.password);
+
         if (!isPasswordCorrect)
             throw new TypedError("Invalid password.", "forbidden");
 
@@ -125,7 +120,7 @@ export class AuthenticationService {
             .saveUserSessionActivityAsync(userId, "login");
 
         // get auth tokens 
-        const tokens = await this.getUserLoginTokens(userId);
+        const tokens = await this.getUserLoginTokens(user, user.userActivity);
 
         // set user current refresh token 
         await this._userService
@@ -144,11 +139,11 @@ export class AuthenticationService {
             .removeRefreshToken(userId);
     }
 
-    getUserLoginTokens = async (userId: number) => {
+    getUserLoginTokens = async (user: User, activity: UserActivityFlatView) => {
 
         // get tokens
-        const accessToken = this._tokenService.createAccessToken(userId);
-        const refreshToken = this._tokenService.createRefreshToken(userId);
+        const accessToken = this._tokenService.createAccessToken(user, activity);
+        const refreshToken = this._tokenService.createRefreshToken(user);
 
         return {
             accessToken,

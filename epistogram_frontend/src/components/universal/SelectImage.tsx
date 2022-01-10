@@ -7,16 +7,18 @@ import { HiddenFileUploadInput } from "./HiddenFileUploadInput";
 export const SelectImage = (props: {
     setImageSource: (src: string) => void,
     setImageFile: (file: File) => void,
+    isInteractionBlocked?: boolean
 } & BoxProps) => {
 
     const [isHovered, setIsHovered] = useState(false);
-    const { children, setImageFile, setImageSource, ...css } = props;
+    const { children, setImageFile, setImageSource, isInteractionBlocked, ...css } = props;
     const fileBrowseInputRef = useRef<HTMLInputElement>(null);
 
     return <Box
         position="relative"
         overflow="hidden"
         cursor="pointer"
+        pointerEvents={isInteractionBlocked ? "none" : undefined}
         onClick={() => fileBrowseInputRef?.current?.click()}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -35,6 +37,7 @@ export const SelectImage = (props: {
 
         <Flex
             position="absolute"
+            display={isInteractionBlocked ? "none" : undefined}
             className="whall"
             height="55%"
             transition="0.4s"

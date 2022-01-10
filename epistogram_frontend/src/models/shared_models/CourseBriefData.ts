@@ -1,4 +1,4 @@
-export type CourseBriefData = {
+export class CourseBriefData {
     id: number;
     title: string;
 }

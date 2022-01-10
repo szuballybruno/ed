@@ -37,6 +37,9 @@ export class Course {
     benchmark: number;
 
     @Column()
+    previouslyCompletedCount: number;
+
+    @Column()
     language: string;
 
     @Column()

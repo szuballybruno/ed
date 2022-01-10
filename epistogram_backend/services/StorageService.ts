@@ -1,6 +1,5 @@
 import { Storage } from "@google-cloud/storage";
 import { UploadedFile } from "express-fileupload";
-import path from "path";
 import { GlobalConfiguration } from "./misc/GlobalConfiguration";
 import { logError } from "./misc/logger";
 
@@ -57,10 +56,16 @@ export class StorageService {
 
     getBucket = () => {
 
+        const credentials = this._config
+            .security
+            .gcpStorageAuthCredentials;
+
         const storage = new Storage({
-            keyFilename: path.join(__dirname, "../epistogram_service_user_key.json")
+            credentials: credentials,
+            projectId: credentials.project_id
         });
 
-        return storage.bucket(this._config.fileStorage.bucketName);
+        return storage
+            .bucket(this._config.fileStorage.bucketName);
     }
 }

@@ -108,7 +108,7 @@ export class RegistrationService {
 
         // get auth tokens 
         const tokens = await this._authenticationService
-            .getUserLoginTokens(userId);
+            .getUserLoginTokens(user, user.userActivity);
 
         // set user current refresh token 
         await this._userService
@@ -149,7 +149,7 @@ export class RegistrationService {
 
         // get auth tokens 
         const tokens = await this._authenticationService
-            .getUserLoginTokens(userId);
+            .getUserLoginTokens(user, user.userActivity);
 
         // set user current refresh token 
         await this._userService
