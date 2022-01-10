@@ -18,7 +18,7 @@ import { EpistoSelect } from "../../universal/EpistoSelect";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "./EditSection";
-import { SimpleEditList } from "./SimpleEditList";
+import { SimpleEditList } from "../SimpleEditList";
 
 export const AdminCourseDetailsSubpage = () => {
 

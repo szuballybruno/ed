@@ -50,7 +50,8 @@ export const useShopItemEditData = (shopItemId: number) => {
     return {
         shopItemEditData: qr.data,
         shopItemEditDataState: qr.state,
-        shopItemEditDataError: qr.error
+        shopItemEditDataError: qr.error,
+        refetchItemEditData: qr.refetch
     };
 }
 
