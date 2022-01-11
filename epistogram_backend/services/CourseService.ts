@@ -171,7 +171,9 @@ export class CourseService {
                 }
             });
 
-        if (!currentCourseBridge)
+        const currentCourseId = currentCourseBridge?.courseId;
+
+        if (!currentCourseId)
             return null;
 
         // get course progress
@@ -179,18 +181,45 @@ export class CourseService {
             .getRepository(CourseProgressView)
             .findOneOrFail({
                 where: {
-                    courseId: currentCourseBridge.courseId,
+                    courseId: currentCourseId,
                     userId
                 }
             });
+
+        // get next items 
+        const nextItems = await this.getCourseNextItemsAsync(userId, currentCourseId);
 
         return {
             title: courseProgress.courseTitle,
             totalCourseItemCount: courseProgress.totalCourseItemCount,
             completedCourseItemCount: courseProgress.completedCourseItemCount,
             progressPercentage: courseProgress.progressPercentage,
-            continueItemCode: courseProgress.continueItemCode
+            continueItemCode: courseProgress.continueItemCode,
+            nextItems
         } as CourseProgressDTO;
+    }
+
+    async getCourseNextItemsAsync(userId: number, courseId: number) {
+
+        const modules = await this.getCurrentCourseModulesAsync(userId);
+
+        const currentModule = modules
+            .single(x => x.state === "current");
+
+        const nextOrCurrentModules = modules
+            .filter(x => x.orderIndex >= currentModule.orderIndex);
+
+        const currentItemOrderIndex = currentModule
+            .items
+            .filter(x => x.state === "current")[0]?.orderIndex ?? -1;
+
+        const nextItems = nextOrCurrentModules
+            .flatMap(module => module
+                .items
+                .filter(item => item.orderIndex > currentItemOrderIndex))
+            .slice(0, 3);
+
+        return nextItems;
     }
 
     /**
@@ -223,14 +252,14 @@ export class CourseService {
     }
 
     /**
-     * Get course items list of current course.
+     * Get course modules with items.
      * 
      * @param userId 
+     * @param courseId 
      * @returns 
      */
-    async getCurrentCourseItemsAsync(userId: number) {
+    async getCurrentCourseModulesAsync(userId: number) {
 
-        // get current item 
         const courseBridge = await this._ormService
             .getRepository(UserCourseBridge)
             .findOne({
@@ -240,52 +269,11 @@ export class CourseService {
                 }
             });
 
-        if (!courseBridge)
+        if (!courseBridge?.currentItemCode)
             return [];
 
-        if (!courseBridge.currentItemCode)
-            return [];
-
-        const { itemType } = readItemCode(courseBridge.currentItemCode);
-
-        // get course items 
-        const modules = await this.getCourseModulesAsync(userId, courseBridge.courseId);
-
-        if (itemType !== "module") {
-
-            // set current item's state to 'current'
-            let currentItem = modules
-                .flatMap(x => x.items)
-                .single(item => item.descriptorCode === courseBridge.currentItemCode);
-
-            currentItem.state = "current";
-
-            // set current module 
-            const currentModule = modules
-                .single(x => x.items
-                    .any(x => x.descriptorCode === currentItem.descriptorCode));
-
-            currentModule.state = "current";
-        }
-        else {
-
-            const module = modules
-                .single(x => x.code === courseBridge.currentItemCode);
-
-            module.state = "current";
-        }
-
-        return modules;
-    }
-
-    /**
-     * Get course modules with items.
-     * 
-     * @param userId 
-     * @param courseId 
-     * @returns 
-     */
-    async getCourseModulesAsync(userId: number, courseId: number) {
+        const courseId = courseBridge.courseId;
+        const currentItemCode = courseBridge.currentItemCode;
 
         const views = await this._ormService
             .getRepository(CourseItemStateView)
@@ -301,6 +289,7 @@ export class CourseService {
                 const viewAsModule = x.items.first();
                 const isLockedModule = x.items[0]?.state === "locked";
                 const isCompletedModule = x.items.all(x => x.state === "completed");
+                const isCurrentModule = x.items.some(x => x.state === "current") || currentItemCode === viewAsModule.moduleCode;
                 const items = this._mapperService
                     .mapMany(CourseItemStateView, CourseItemDTO, x.items);
 
@@ -310,11 +299,13 @@ export class CourseService {
                     orderIndex: viewAsModule.moduleOrderIndex,
                     code: viewAsModule.moduleCode,
                     items: items,
-                    state: isLockedModule
-                        ? "locked"
-                        : isCompletedModule
-                            ? "completed"
-                            : "available"
+                    state: isCurrentModule
+                        ? "current"
+                        : isLockedModule
+                            ? "locked"
+                            : isCompletedModule
+                                ? "completed"
+                                : "available"
                 } as ModuleDTO;
             });
 

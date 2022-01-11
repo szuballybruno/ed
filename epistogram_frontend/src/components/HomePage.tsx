@@ -6,6 +6,7 @@ import { PractiseQuestions } from './PractiseQuestions';
 import { StatsSummary } from "./StatsSummary";
 import { LoadingFrame } from "./system/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./system/MainPanels";
+import { CourseItemView } from './universal/CourseItemList';
 import { CourseProgressDisplay } from './universal/CourseProgressDisplay';
 import { DashboardSection } from './universal/DashboardSection';
 
@@ -35,25 +36,14 @@ const HomePage = () => {
                             continueItemCode={pageDTO.currentCourseProgress.continueItemCode}
                             mb="5px" />}
 
-                        {/* <Flex
+                        <Flex
                             direction="column"
                             mt="5px">
 
-                            {hasCurrentItem
-                                && <Box justify="space-between">
-                                    <CourseItemView courseItem={currentItem!} />
-                                </Box>}
-
-                            {hasCurrentItem
-                                && <Box>
-                                    <CourseItemView courseItem={currentItem!} />
-                                </Box>}
-
-                            {hasCurrentItem
-                                && <Box>
-                                    <CourseItemView courseItem={currentItem!} />
-                                </Box>}
-                        </Flex> */}
+                            {(pageDTO?.currentCourseProgress.nextItems ?? [])
+                                .map(x => (
+                                    <CourseItemView courseItem={x} />))}
+                        </Flex>
                     </Flex>
                 </LeftPanel>
 
