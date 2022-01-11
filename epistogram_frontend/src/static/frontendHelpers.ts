@@ -338,18 +338,6 @@ export const usePasswordEntryState = () => {
 
     const validate = () => {
 
-        if (password != passwordCompare) {
-
-            setPasswordError("A jelszavak nem egyeznek!");
-            setPasswordCompareError("A jelszavak nem egyeznek!");
-            return false;
-        }
-
-        return true;
-    }
-
-    useEffect(() => {
-
         // check if there's even a password typed in
         if (password === "") {
 
@@ -364,21 +352,33 @@ export const usePasswordEntryState = () => {
             return;
         }
 
+        // check compare 
+        if (password != passwordCompare) {
+
+            setPasswordError("A jelszavak nem egyeznek!");
+            setPasswordCompareError("A jelszavak nem egyeznek!");
+            return false;
+        }
+
         setPasswordError(null);
-    }, [password]);
+        setPasswordCompareError(null);
+
+        return true;
+    }
 
     useEffect(() => {
 
-        setPasswordCompareError(null);
+        validate();
     }, [passwordCompare, password]);
 
     return {
         password,
         passwordCompare,
-        setPassword,
-        setPasswordCompare,
         passwordError,
         passwordCompareError,
+        hasCredentialError: passwordError || passwordCompareError,
+        setPassword,
+        setPasswordCompare,
         validate
     }
 }
