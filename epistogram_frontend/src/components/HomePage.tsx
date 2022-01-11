@@ -1,68 +1,41 @@
-import { Box, Flex } from '@chakra-ui/layout';
-import { Typography } from '@mui/material';
-import { useContext } from 'react';
-import { applicationRoutes } from '../configuration/applicationRoutes';
-import { useCourseProgressShortDtos } from '../services/api/courseApiService';
+import { Flex } from '@chakra-ui/layout';
 import { useOverviewPageDTO } from '../services/api/miscApiService';
-import { useNavigation } from '../services/core/navigatior';
-import { getAssetUrl } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { DailyTip } from './DailyTip';
-import { DashoardLeftItemGroup } from "./dashboard/dashboard_components/DashBoardSpacers";
-import Navbar from "./navbar/Navbar";
 import { PractiseQuestions } from './PractiseQuestions';
 import { StatsSummary } from "./StatsSummary";
-import { CurrentUserContext } from './system/AuthenticationFrame';
 import { LoadingFrame } from "./system/LoadingFrame";
 import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./system/MainPanels";
-import { CourseItemList, CourseItemView } from "./universal/CourseItemList";
-import { CourseProgressBar } from './universal/CourseProgressBar';
+import { CourseProgressDisplay } from './universal/CourseProgressDisplay';
 import { DashboardSection } from './universal/DashboardSection';
-import ListItem from './universal/listItem/ListItem';
 
 const HomePage = () => {
 
-    const { navigate } = useNavigation();
-    const homeUrl = applicationRoutes.rootHomeRoute.route;
     const { pageDTO, status, error } = useOverviewPageDTO();
-    const user = useContext(CurrentUserContext);
-    const modules = pageDTO?.modules ?? [];
 
-    const currentItem = modules
-        .flatMap(x => x.items)
-        .filter(x => x.state === "current")[0];
-
-    const currentItemThumbnailUrl = currentItem?.thumbnailUrl;
-    const hasCurrentItem = !!currentItem;
-
-    const hasCurrentCourse = hasCurrentItem;
-
-    const { courseProgressShortDtos } = useCourseProgressShortDtos();
+    console.log(pageDTO?.currentCourseProgress?.title)
 
     return <MainWrapper>
 
         <ContentWrapper>
 
-            <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
+            <LoadingFrame loadingState={status} error={error}>
 
                 <LeftPanel>
-                    
+
                     {/* current course items and progress */}
                     <Flex
                         className='roundBorders'
                         mx="10px"
                         direction="column">
-                        {courseProgressShortDtos
-                            .map(x =>
-                                <DashoardLeftItemGroup title={x.courseTitle}>
 
-                                    <CourseProgressBar
-                                        value={x.progressPercentage}
-                                        label={x.courseTitle}
-                                        mb="5px" />
-                                </DashoardLeftItemGroup>)}
+                        {pageDTO?.currentCourseProgress && <CourseProgressDisplay
+                            value={pageDTO.currentCourseProgress.progressPercentage}
+                            label={pageDTO.currentCourseProgress.title}
+                            continueItemCode={pageDTO.currentCourseProgress.continueItemCode}
+                            mb="5px" />}
 
-                        <Flex
+                        {/* <Flex
                             direction="column"
                             mt="5px">
 
@@ -80,11 +53,10 @@ const HomePage = () => {
                                 && <Box>
                                     <CourseItemView courseItem={currentItem!} />
                                 </Box>}
-                        </Flex>
+                        </Flex> */}
                     </Flex>
-
                 </LeftPanel>
-                
+
                 <RightPanel>
 
                     <Flex direction="column">
@@ -121,8 +93,8 @@ const HomePage = () => {
 
                         </Flex>
 
+                        {/* stats */}
                         <Flex>
-
                             <StatsSummary />
                         </Flex>
 

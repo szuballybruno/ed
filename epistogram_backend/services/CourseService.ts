@@ -38,6 +38,7 @@ import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
 import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListItemDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { ExamService } from "./ExamService";
+import { CourseProgressDTO } from "../models/shared_models/CourseProgressDTO";
 
 export class CourseService {
 
@@ -153,6 +154,43 @@ export class CourseService {
             completedCourses: completedCoursesAsCourseShortDTOs,
             inProgressCourses: inProgressCoursesAsCourseShortDTOs
         } as UserCoursesDataDTO;
+    }
+
+    /**
+     * Returns the progress of the current active course, or null.
+     * @returns 
+     */
+    async getCurrentCourseProgressAsync(userId: number) {
+
+        // get current course id 
+        const currentCourseBridge = await this._ormService
+            .getRepository(UserCourseBridge)
+            .findOne({
+                where: {
+                    isCurrent: true
+                }
+            });
+
+        if (!currentCourseBridge)
+            return null;
+
+        // get course progress
+        const courseProgress = await this._ormService
+            .getRepository(CourseProgressView)
+            .findOneOrFail({
+                where: {
+                    courseId: currentCourseBridge.courseId,
+                    userId
+                }
+            });
+
+        return {
+            title: courseProgress.courseTitle,
+            totalCourseItemCount: courseProgress.totalCourseItemCount,
+            completedCourseItemCount: courseProgress.completedCourseItemCount,
+            progressPercentage: courseProgress.progressPercentage,
+            continueItemCode: courseProgress.continueItemCode
+        } as CourseProgressDTO;
     }
 
     /**
