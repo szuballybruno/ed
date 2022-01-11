@@ -167,7 +167,8 @@ export class CourseService {
             .getRepository(UserCourseBridge)
             .findOne({
                 where: {
-                    isCurrent: true
+                    isCurrent: true,
+                    userId
                 }
             });
 
@@ -179,12 +180,15 @@ export class CourseService {
         // get course progress
         const courseProgress = await this._ormService
             .getRepository(CourseProgressView)
-            .findOneOrFail({
+            .findOne({
                 where: {
                     courseId: currentCourseId,
                     userId
                 }
             });
+
+        if (!courseProgress)
+            return null;
 
         // get next items 
         const nextItems = await this.getCourseNextItemsAsync(userId, currentCourseId);

@@ -177,7 +177,7 @@ export const RegistrationPage = () => {
             <EpistoButton
                 onClick={handleRegistration}
                 variant="outlined"
-                isDisabled={!acceptPrivacyPolicy || (isInvited && !hasCredentialError)}
+                isDisabled={!acceptPrivacyPolicy || (isInvited && hasCredentialError)}
                 style={{
                     width: "200px",
                     alignSelf: "center",

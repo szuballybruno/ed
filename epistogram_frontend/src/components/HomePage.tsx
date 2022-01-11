@@ -40,7 +40,7 @@ const HomePage = () => {
                             direction="column"
                             mt="5px">
 
-                            {(pageDTO?.currentCourseProgress.nextItems ?? [])
+                            {(pageDTO?.currentCourseProgress?.nextItems ?? [])
                                 .map(x => (
                                     <CourseItemView courseItem={x} />))}
                         </Flex>

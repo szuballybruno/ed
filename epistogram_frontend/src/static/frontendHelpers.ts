@@ -376,7 +376,7 @@ export const usePasswordEntryState = () => {
         passwordCompare,
         passwordError,
         passwordCompareError,
-        hasCredentialError: passwordError || passwordCompareError,
+        hasCredentialError: !!passwordError || !!passwordCompareError,
         setPassword,
         setPasswordCompare,
         validate
