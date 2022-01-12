@@ -60,50 +60,88 @@ export const ExamTile = (props: {
         borderRadius="10px"
         position="relative"
         overflow="hidden"
-        bg="#97CC9B"
+        background="var(--transparentWhite70)"
+        boxShadow={"1px 1px 5px 2px rgba(255,100,30,0.1)"}
+        p="5px"
         justifyContent="space-between"
-        border="5px solid white"
         {...css}>
-
-
 
         {/* image  */}
         <Flex direction={"column"}>
-            <Box flex="1" position="relative" minH={200} maxH={200}>
-                <Box position="relative"
+
+            <Box
+                flex="1"
+                position="relative"
+                minH={200}
+                maxH={200}>
+
+                <Box
+                    position="relative"
                     className="whall"
                     minHeight="150px">
-                    <Box position="absolute" top="0" height="100%" width="100%" p="4px">
-                        <img style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            backgroundColor: "white",
-                            borderRadius: 10
-                        }} src={getAssetUrl("/courseCoverImages/1.png")} alt="" />
+
+                    <Box
+                        position="absolute"
+                        top="0"
+                        height="100%"
+                        width="100%"
+                        p="4px">
+
+                        <img
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                backgroundColor: "white",
+                                borderRadius: 10
+                            }}
+                            src={getAssetUrl("/courseCoverImages/1.png")}
+                            alt="" />
+
                         <Flex position="relative">
+
                             <ExamTileResultLabel />
                             <ExamTileTopPercentLabel />
                         </Flex>
                     </Box>
-
                 </Box>
-
-
-
-
             </Box>
 
             {/* title */}
-            <Box flexBasis="80px" zIndex={1}>
+            <Box
+                flexBasis="80px"
+                zIndex={1}>
 
-                <Flex direction="column" p="10px" >
-                    <Text as="text" color="white">{"Irodai alkalmazások"}</Text>
+                <Flex
+                    direction="column"
+                    p="10px">
+
+                    <Text
+                        as="text"
+                        color="black">
+
+                        {"Irodai alkalmazások"}
+                    </Text>
+
                     <Flex direction="column">
-                        <Text as="h6" fontWeight={"bold"} fontSize="large">{"Menüszalagok használata az Excelben"}</Text>
+
+                        <Text
+                            as="h6"
+                            fontWeight={"bold"}
+                            fontSize="large">
+
+                            {"Menüszalagok használata az Excelben"}
+                        </Text>
                     </Flex>
+
                     <Flex mt={7}>
-                        <Flex direction={"row"} alignItems={"center"} mr={5}>
+
+                        <Flex
+                            direction={"row"}
+                            alignItems={"center"}
+                            mr={5}
+                            flex="1">
+
                             <img
                                 src={getAssetUrl("course_exam_tile_icons/tile_lenght_left.svg")}
                                 alt={""}
@@ -113,9 +151,16 @@ export const ExamTile = (props: {
                                     margin: "0 2px 0 2px"
                                 }}
                             />
+
                             <Text as={"text"} color={"grey"}>{"52 perc"}</Text>
                         </Flex>
-                        <Flex direction={"row"} alignItems={"center"} mr={5}>
+
+                        <Flex
+                            direction={"row"}
+                            alignItems={"center"}
+                            mr={5}
+                            flex="1">
+
                             <img
                                 src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
                                 alt={""}
@@ -127,61 +172,84 @@ export const ExamTile = (props: {
                             />
                             <Text as={"text"} color={"grey"}>{"65%-os eredmény"}</Text>
                         </Flex>
-                        <Flex direction={"row"} alignItems={"center"} mr={5}>
-                            <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_language.svg")}
-                                alt={""}
-                                style={{
-                                    width: 15,
-                                    height: 15,
-                                    margin: "0 2px 0 4px"
-                                }}
-                            />
-                            <Text as={"text"} color={"grey"}>{"top 30%"}</Text>
-                        </Flex>
                     </Flex>
-                    <Flex
-                        direction={"row"}
-                        alignItems={"center"}
-                        mt={7}
-                        w="100%"
-                        h="10px"
-                    >
-                        <LinearProgress variant="determinate" style={{
-                            width: "100%",
-                        }} value={60} />
-                    </Flex>
+
                     <Flex
                         direction={"row"}
                         alignItems={"center"}
                         mt={7}>
-                        <img src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")} alt={""} style={{ width: 20, height: 20, margin: "0 2px" }} />
-                        <Text as="text" color="white">{"8.9/10 nehézség"}</Text>
-                        <img src={getAssetUrl("course_exam_tile_icons/tile_questions.svg")} alt={""} style={{ width: 20, height: 20, margin: "0 2px" }} />
-                        <Text as="text" color="white">{"16/23 helyes válasz"}</Text>
+
+                        <Flex
+                            direction={"row"}
+                            alignItems={"center"}
+                            mr={5}
+                            flex="1">
+
+                            <img
+                                src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
+                                alt={""}
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    margin: "0 2px"
+                                }} />
+
+                            <Text
+                                as="text">
+
+                                {"8.9/10 nehézség"}
+                            </Text>
+                        </Flex>
+
+                        <Flex
+                            direction={"row"}
+                            alignItems={"center"}
+                            mr={5}
+                            flex="1">
+
+                            <img
+                                src={getAssetUrl("course_exam_tile_icons/tile_questions.svg")}
+                                alt={""}
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    margin: "0 2px"
+                                }} />
+
+                            <Text
+                                as="text">
+
+                                {"16/23 helyes válasz"}
+                            </Text>
+                        </Flex>
                     </Flex>
-
-
                 </Flex>
-
             </Box>
         </Flex>
-        <Flex direction="column" minH="50px">
+
+        <Flex
+            direction="column"
+            minH="50px">
+
             <Flex
                 w="100%"
                 justifyContent="space-between"
-                p="5"
-            >
-                <EpistoButton style={{
-                    width: "50%",
-                }}>Részletek</EpistoButton>
-                <EpistoButton variant="colored" style={{
-                    backgroundColor: "white",
-                    width: "50%",
-                    color: "#98A4CC"
-                }}>Újrapróbálom</EpistoButton>
-            </Flex>
+                p="5">
 
+                {/* <EpistoButton style={{
+                    width: "50%",
+                }}>Részletek</EpistoButton> */}
+
+                <EpistoButton
+                    variant="colored"
+                    style={{
+                        backgroundColor: "white",
+                        width: "100%",
+                        color: "#98A4CC"
+                    }}>
+                    Újrapróbálom
+                </EpistoButton>
+            </Flex>
         </Flex>
     </Flex>
 }

@@ -1,4 +1,4 @@
-import { Box, Flex, GridItem } from "@chakra-ui/react";
+import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router";
@@ -29,6 +29,8 @@ const AvailableCoursesPage = () => {
 
     const { navigate, navigateToPlayer } = useNavigation();
     const showError = useShowErrorDialog();
+
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const clearFilters = () => {
         setSearchCategory("");
@@ -74,8 +76,6 @@ const AvailableCoursesPage = () => {
     }
 
     return <MainWrapper>
-
-
 
         <ContentWrapper>
 
@@ -130,94 +130,103 @@ const AvailableCoursesPage = () => {
             </LeftPanel>
 
             <RightPanel>
-                
-                <Flex id="coursesPanelRoot" direction="column">
+
+                <Flex
+                    id="coursesPanelRoot"
+                    direction="column"
+                    align="stretch"
+                    width="100%"
+                    minW={isSmallerThan1400 ? "1060px" : undefined}>
 
                     {/* search */}
-                    <Box id="courseSearchRoot" p="0 0 20px 0" direction="column">
+                    <Flex
+                        id="courseSearchRoot"
+                        direction="row"
+                        align="center"
+                        justify="space-between"
+                        w="100%"
+                        p="20px 0">
 
-                        <EpistoSearch width="100%" />
-
-                        {/* search */}
-                        <Flex justify="space-between" mt="20px" align="center">
-
-                            {/* toggle buttons */}
-                            <ToggleButtonGroup
-                                className="mildShadow"
-                                style={{
-                                    background: "var(--transparentWhite70)",
-                                    height: 40,
+                        {/* toggle buttons */}
+                        <ToggleButtonGroup
+                            className="mildShadow"
+                            style={{
+                                background: "var(--transparentWhite70)",
+                                height: 40,
+                                border: "none",
+                                flex: 2
+                            }}
+                            sx={{
+                                "& .MuiButtonBase-root": {
                                     border: "none"
-                                }}
-                                sx={{
-                                    "& .MuiButtonBase-root": {
-                                        border: "none"
-                                    }
-                                }}
-                                size={"small"}>
+                                }
+                            }}
+                            size={"small"}>
 
-                                {/* recommended */}
-                                <ToggleButton
-                                    onClick={() => setIsRecommended(!isRecommended)}
-                                    selected={isRecommended}
-                                    value="recommended"
-                                    style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                            {/* recommended */}
+                            <ToggleButton
+                                onClick={() => setIsRecommended(!isRecommended)}
+                                selected={isRecommended}
+                                value="recommended"
+                                style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
 
-                                    {translatableTexts.availableCourses.recommendedForYou}
-                                </ToggleButton>
+                                {translatableTexts.availableCourses.recommendedForYou}
+                            </ToggleButton>
 
-                                {/* featured */}
-                                <ToggleButton
-                                    onClick={() => setIsFeatured(!isFeatured)}
-                                    selected={isFeatured}
-                                    value="featured"
-                                    style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                            {/* featured */}
+                            <ToggleButton
+                                onClick={() => setIsFeatured(!isFeatured)}
+                                selected={isFeatured}
+                                value="featured"
+                                style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
 
-                                    {translatableTexts.availableCourses.highlighted}
-                                </ToggleButton>
+                                {translatableTexts.availableCourses.highlighted}
+                            </ToggleButton>
 
-                                {/* show all */}
-                                <ToggleButton
-                                    onClick={() => clearFilters()}
-                                    selected={isRecommended && isFeatured}
-                                    value="showAll"
-                                    style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                            {/* show all */}
+                            <ToggleButton
+                                onClick={() => clearFilters()}
+                                selected={isRecommended && isFeatured}
+                                value="showAll"
+                                style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
 
-                                    {translatableTexts.availableCourses.all}
-                                </ToggleButton>
-                            </ToggleButtonGroup>
+                                {translatableTexts.availableCourses.all}
+                            </ToggleButton>
+                        </ToggleButtonGroup>
 
-                            <Select
-                                native
-                                onChange={() => { }}
-                                className="roundBorders fontSmall mildShadow"
-                                inputProps={{
-                                    name: 'A-Z',
-                                    id: 'outlined-age-native-simple',
-                                }}
-                                sx={{
-                                    "& .MuiOutlinedInput-notchedOutline": {
-                                        border: "none"
-                                    }
-                                }}
-                                style={{
-                                    background: "var(--transparentWhite70)",
-                                    border: "none",
-                                    height: "40px",
-                                    color: "3F3F3F"
-                                }}>
-                                <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
-                                <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
-                                <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
-                                <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
-                            </Select>
-                        </Flex>
-                    </Box>
+                        <EpistoSearch flex="5"h="40px" mx="10px" />
+
+                        <Select
+                            native
+                            onChange={() => { }}
+                            className="roundBorders fontSmall mildShadow"
+                            inputProps={{
+                                name: 'A-Z',
+                                id: 'outlined-age-native-simple',
+                            }}
+                            sx={{
+                                "& .MuiOutlinedInput-notchedOutline": {
+                                    border: "none"
+                                }
+                            }}
+                            style={{
+                                background: "var(--transparentWhite70)",
+                                border: "none",
+                                height: "40px",
+                                color: "3F3F3F",
+                                flex: 1
+                            }}>
+                            <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
+                            <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
+                            <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
+                            <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
+                        </Select>
+                    </Flex>
 
                     {/* courses */}
                     <LoadingFrame loadingState={[coursesState, startCourseState]} error={[coursesError]}>
                         <Box id="scrollContainer" className="whall">
-                            <EpistoGrid auto="fit" gap="15" minColumnWidth="300px">
+                            <EpistoGrid auto="fill" gap="15" minColumnWidth="300px">
                                 {courses
                                     .map((course, index) => {
 

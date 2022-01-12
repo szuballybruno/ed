@@ -7,8 +7,9 @@ export const DashboardSection = (props: FlexProps & { title: string, variant?: "
     const { title, children, variant, ...css } = props;
 
     return <FlexFloat
+        className="roundBorders"
+        background="transparent"
         direction="column"
-        borderRadius="none"
         p="10px"
         boxShadow={variant === "noShadow" ? "none" : undefined}
         {...css}>
@@ -16,7 +17,7 @@ export const DashboardSection = (props: FlexProps & { title: string, variant?: "
         <EpistoHeader text={title} showDivider variant="strongSub" m="5px 10px 20px 10px" />
 
         <Box className="whall">
-        
+
             {children}
         </Box>
     </FlexFloat>

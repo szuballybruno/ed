@@ -1,4 +1,5 @@
 import { Box, Flex } from '@chakra-ui/layout';
+import { useMediaQuery } from '@chakra-ui/react';
 import { Typography } from '@mui/material';
 import { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
@@ -39,6 +40,8 @@ const HomePage = () => {
 
     const { courseProgressShortDtos } = useCourseProgressShortDtos();
 
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+
     return <MainWrapper>
 
         <ContentWrapper>
@@ -46,7 +49,7 @@ const HomePage = () => {
             <LoadingFrame loadingState={status} error={error} onlyRenderIfLoaded={true}>
 
                 <LeftPanel>
-                    
+
                     {/* current course items and progress */}
                     <Flex
                         className='roundBorders'
@@ -84,10 +87,12 @@ const HomePage = () => {
                     </Flex>
 
                 </LeftPanel>
-                
+
                 <RightPanel>
 
-                    <Flex direction="column">
+                    <Flex
+                        direction="column" 
+                        minW={isSmallerThan1400 ? "1060px" : undefined}>
 
                         <Flex wrap="wrap">
 
@@ -98,9 +103,8 @@ const HomePage = () => {
                                 className="largeSoftShadow roundBorders"
                                 color="white"
                                 minHeight="300px"
-                                minWidth="500px"
                                 m="0 5px 10px 0"
-                                flex="3">
+                                flex="3 3 550px">
 
                                 <PractiseQuestions />
                             </DashboardSection>
@@ -112,9 +116,8 @@ const HomePage = () => {
                                 borderRadius="6px"
                                 className="largeSoftShadow"
                                 minHeight="30px"
-                                minWidth="300px"
                                 m="0 0 10px 5px"
-                                flex="2">
+                                flex="2 2 300px">
 
                                 <DailyTip />
                             </DashboardSection>

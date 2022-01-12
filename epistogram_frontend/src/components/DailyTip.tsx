@@ -94,8 +94,13 @@ export const DailyTip = (props: {} & FlexProps) => {
             </Flex>
         </EpistoDialog >
 
-        {/* preview */}
-        <Box position={"relative"} onClick={openDialog} cursor="pointer">
+        {/* text daily tip */}
+        <Flex align="flex-start" flex="1" p="10px">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem voluptates illo placeat id ab provident, possimus fugit vero sunt exercitationem, architecto nemo nesciunt, minus eius iusto adipisci laudantium necessitatibus consequuntur?
+        </Flex>
+
+        {/* preview (disabled temporarily) */}
+        {/* <Box position={"relative"} onClick={openDialog} cursor="pointer">
             <Flex
                 top="0"
                 position="absolute"
@@ -124,6 +129,6 @@ export const DailyTip = (props: {} & FlexProps) => {
                 }}
                 playing={false}
                 url={dailyTipData?.videoUrl} />
-        </Box>
+        </Box> */}
     </Flex >
 }

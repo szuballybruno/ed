@@ -36,6 +36,8 @@ const Navbar = (props: { hideLinks?: boolean, showLogo?: boolean }) => {
     return <FlexFloat
         id="flexFloat-navbarRoot"
         zIndex={3}
+        justify="center"
+        w="100%"
         boxShadow="none"
         borderRadius={0}
         bgColor="unset"

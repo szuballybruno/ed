@@ -4,6 +4,7 @@ import React, { ReactNode } from 'react';
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { FlexFloat } from "./FlexFloat";
+import { Star, StarBorderOutlined, StarOutline } from "@mui/icons-material";
 
 const SmallStat = (props: { iconUrl: string, text: string }) => {
 
@@ -132,27 +133,22 @@ const CourseTile = (props: {
                 alignItems={"center"}
                 mt={7}>
 
-                <Rating
-                    name="read-only"
-                    style={{
-                        color: "var(--epistoTeal)",
-                    }}
-                    value={4}
-                    readOnly />
+                {/* teacher name */}
+                <SmallStat
+                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
+                    text={courseTeacherName} />
+
+                <StarBorderOutlined />
 
                 <Text
                     as={"text"}
                     color={"grey"}
                     ml={5}>
 
-                    4.1 (189 értékelés)
+                    4.1
                 </Text>
             </Flex>
 
-            {/* teacher name */}
-            <SmallStat
-                iconUrl={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
-                text={courseTeacherName} />
         </Flex>
 
         {/* buttons */}

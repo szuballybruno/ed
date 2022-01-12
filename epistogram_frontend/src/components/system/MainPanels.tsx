@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { Flex, FlexProps, useMediaQuery } from '@chakra-ui/react';
 import { Typography } from '@mui/material';
 import React, { CSSProperties, ReactNode, useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
@@ -74,7 +74,7 @@ export const LeftPanel = (props: FlexProps) => {
             align="stretch"
             padding="25px 15px 0 15px"
             className="dividerBorderRight"
-            borderLeft="2px solid #e2e2e2"
+            //borderLeft="2px solid #e2e2e2"
             boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)"
             {...props}>
 
@@ -104,22 +104,31 @@ export const LeftPanel = (props: FlexProps) => {
 
 export const RightPanel = (props: FlexProps & { noPadding?: boolean }) => {
 
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+
     const { noPadding, ...css } = props;
 
     return (
         <Flex
             id="rightPanel"
-            p={props.noPadding ? undefined : "0 40px 40px 40px"}
-            flex="1"
-            overflowX="hidden"
+            p={props.noPadding ? undefined : "0 10px 40px 10px"}
             overflowY="scroll"
-            direction="column"
-            background="var(--gradientBlueBackground)"
+            flex="1"
             {...css}>
 
-            <Navbar />
+            {/* left side dynamic spacer */}
+            {isSmallerThan1400 && <Flex flex="0 1 100px" />}
 
-            {props.children}
+            {/* center wrapper */}
+            <Flex direction="column" align="center" flex="1">
+
+                <Navbar />
+
+                {props.children}
+            </Flex>
+
+            {/* right side dynamic spacer */}
+            {isSmallerThan1400 && <Flex flex="0 1 100px" />}
         </Flex>
     );
 };
