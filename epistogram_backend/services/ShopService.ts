@@ -7,6 +7,7 @@ import { User } from "../models/entity/User";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { CourseShopItemListDTO } from "../models/shared_models/CourseShopItemListDTO";
 import { DiscountCodeDTO } from "../models/shared_models/DiscountCodeDTO";
+import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { ShopItemAdminShortDTO } from "../models/shared_models/ShopItemAdminShortDTO";
 import { ShopItemBriefData } from "../models/shared_models/ShopItemBriefData";
 import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
@@ -215,6 +216,26 @@ export class ShopService {
         // upload cover file 
         if (coverFile)
             this.saveCoverFile(dto.id, coverFile);
+    }
+
+    async createShopItemAsync() {
+
+        const si = {
+            coinPrice: 0,
+            currencyPrice: 0,
+            courseId: null,
+            name: "",
+            purchaseLimit: 0,
+            shopItemCategoryId: 1,
+        } as ShopItem;
+
+        await this._ormService
+            .getRepository(ShopItem)
+            .insert(si);
+
+        return {
+            id: si.id
+        } as IdResultDTO;
     }
 
     private async saveShopItemDiscountCodes(shopItemId: number, discountCodes: DiscountCodeDTO[]) {

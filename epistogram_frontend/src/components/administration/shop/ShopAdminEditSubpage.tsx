@@ -125,6 +125,8 @@ export const ShopAdminEditSubpage = () => {
             .filter(x => x !== code));
     }
 
+    console.log(course);
+
     // set defaults
     useEffect(() => {
 
@@ -140,6 +142,9 @@ export const ShopAdminEditSubpage = () => {
         setIsCourse(!!shopItemEditData.courseId);
         setDiscountCodes(shopItemEditData.discountCodes);
 
+        setCourse(privateCourses
+            .filter(x => x.id === shopItemEditData.courseId)[0]);
+
         setShopItemCategory(shopItemCategories
             .filter(x => x.id === shopItemEditData.shopItemCategoryId)[0]);
     }, [shopItemEditData, privateCourses, shopItemCategories]);
@@ -147,20 +152,26 @@ export const ShopAdminEditSubpage = () => {
     // on is course switch
     useEffect(() => {
 
-        if (!isCourse) {
+        if (!shopItemEditData || shopItemCategories.length === 0 || privateCourses.length === 0)
+            return;
 
+        if (isCourse) {
+
+            console.log("isCourse")
+            setShopItemCategory(shopItemCategories
+                .filter(x => x.id === 1)[0]);
+
+            if (!course)
+                setCourse(privateCourses[0]);
+        }
+        else {
+
+            console.log("!isCourse")
             setShopItemCategory(shopItemCategories
                 .filter(x => x.id === 3)[0]);
 
             setCoverFilePath(shopItemEditData?.coverFilePath ?? "");
             setName(shopItemEditData?.name ?? "");
-        }
-        else {
-
-            setShopItemCategory(shopItemCategories
-                .filter(x => x.id === 1)[0]);
-
-            setCourse(privateCourses[0]);
         }
     }, [isCourse]);
 

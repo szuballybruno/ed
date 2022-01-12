@@ -4,8 +4,9 @@ import Edit from "@mui/icons-material/Edit";
 import { useState } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { ShopItemAdminShortDTO } from "../../../models/shared_models/ShopItemAdminShortDTO";
-import { useAdminShopItems } from "../../../services/api/shopApiService";
+import { useAdminShopItems, useCreateShopItem } from "../../../services/api/shopApiService";
 import { useNavigation } from "../../../services/core/navigatior";
+import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { EpistoButton } from "../../universal/EpistoButton";
 import { FlexListItem } from "../../universal/FlexListItem";
@@ -15,16 +16,19 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const ShopAdminSubpage = () => {
 
+    // http 
     const { adminShopItems, adminShopItemsError, adminShopItemsState } = useAdminShopItems();
+    const { createShopItemAsync, createShopItemState } = useCreateShopItem();
 
     //util
     const { navigate } = useNavigation();
+    const showError = useShowErrorDialog();
 
-
-
+    // state 
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const isAllSelected = !adminShopItems.some(si => !selectedIds.some(id => id === si.id));
 
+    // func
     const selectAllOrNone = (isAll: boolean) => {
 
         if (isAll) {
@@ -38,13 +42,26 @@ export const ShopAdminSubpage = () => {
 
     const handleEdit = (id: number) => {
 
-        console.log(id);
         navigate(applicationRoutes.administrationRoute.shopRoute.editRoute, { shopItemId: id })
     }
 
     const handleDelete = (id: number) => {
 
 
+    }
+
+    const handleAddNewAsync = async () => {
+
+        try {
+
+            const shopItemId = await createShopItemAsync();
+            showNotification("Uj shop item hozzaadva");
+            handleEdit(shopItemId);
+        }
+        catch (e) {
+
+            showError(e);
+        }
     }
 
     const headerButtons = [
@@ -85,7 +102,7 @@ export const ShopAdminSubpage = () => {
 
     return (
         <LoadingFrame
-            loadingState={adminShopItemsState}
+            loadingState={[adminShopItemsState, createShopItemState]}
             error={adminShopItemsError}
             className="whall">
 
@@ -96,7 +113,13 @@ export const ShopAdminSubpage = () => {
                     isAllSelected={isAllSelected}
                     selectAllOrNone={selectAllOrNone}
                     selectedIds={selectedIds}
-                    itemLabel="shop item" />
+                    itemLabel="shop item"
+                    buttons={[
+                        {
+                            title: "Add new",
+                            action: () => handleAddNewAsync()
+                        }
+                    ]} />
 
                 {adminShopItems
                     .map((shopItem, index) => (

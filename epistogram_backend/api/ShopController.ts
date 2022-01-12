@@ -72,4 +72,10 @@ export class ShopController {
         return await this._shopService
             .saveShopItemAsync(dto, coverFile);
     }
+
+    createShopItemAction = async (params: ActionParams) => {
+
+        return await this._shopService
+            .createShopItemAsync();
+    }
 }

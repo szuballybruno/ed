@@ -1,5 +1,6 @@
 import { CourseBriefData } from "../../models/shared_models/CourseBriefData";
 import { CourseShopItemListDTO } from "../../models/shared_models/CourseShopItemListDTO";
+import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
 import { ShopItemAdminShortDTO } from "../../models/shared_models/ShopItemAdminShortDTO";
 import { ShopItemBriefData } from "../../models/shared_models/ShopItemBriefData";
 import { ShopItemCategoryDTO } from "../../models/shared_models/ShopItemCategoryDTO";
@@ -100,5 +101,18 @@ export const useSaveShopItem = () => {
     return {
         saveShopItemAsync: qr.postMultipartDataAsync,
         saveShopItemState: qr.state
+    };
+}
+
+export const useCreateShopItem = () => {
+
+    const qr = usePostDataUnsafe<void, IdResultDTO>(apiRoutes.shop.createShopItem);
+
+    return {
+        createShopItemAsync: async () => {
+            const res = await qr.postDataAsync();
+            return res.id;
+        },
+        createShopItemState: qr.state
     };
 }

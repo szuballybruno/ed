@@ -80,6 +80,16 @@
   font-size: 30px !important;
 }
 
+/* margins */
+
+.margin-left {
+  margin-left: 5px !important;
+}
+
+.margin-right {
+  margin-right: 5px !important;
+}
+
 /* font colors */
 
 .fontDark {
@@ -139,6 +149,22 @@
 .square70 {
  width: 70px !important;
  height: 70px !important; 
+}
+
+/* flex */
+
+.h-flex {
+  display: flex;
+  flex-direction: row;
+}
+
+.v-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-center {
+  align-items: center;
 }
 
 /* misc  */

@@ -188,6 +188,7 @@ import { HashService } from './services/HashService';
     addEndpoint(apiRoutes.shop.getShopItemEditData, shopController.getShopItemEditDTOAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.shop.getPrivateCourseList, shopController.getPrivateCourseListAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.shop.saveShopItem, shopController.saveShopItemAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.createShopItem, shopController.createShopItemAction, { isPost: true, authorize: ["administrator"] });
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
