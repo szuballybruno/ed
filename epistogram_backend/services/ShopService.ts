@@ -87,6 +87,14 @@ export class ShopService {
 
             await this._courseService
                 .createCourseAccessBridge(userId, shopItem.courseId);
+
+            const firstItemCode = await this._courseService
+                .getFirstItemCodeById(userId, shopItem.courseId);
+
+            return {
+                firstItemCode: firstItemCode,
+                discountCode: null
+            };
         }
 
         // get item discount code
@@ -118,6 +126,7 @@ export class ShopService {
                 .sendDiscountCodePurchasedMailAsync(user, discountCode.code);
 
             return {
+                firstItemCode: null,
                 discountCode: discountCode.code
             };
         }

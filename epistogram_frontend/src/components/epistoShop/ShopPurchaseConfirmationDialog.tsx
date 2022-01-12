@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import { useEffect } from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { usePurchaseShopItem } from "../../services/api/shopApiService";
+import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { usePaging } from "../../static/frontendHelpers";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
@@ -18,6 +19,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
     const { dialogLogic, shopItem, onSuccessfulPurchase } = props;
     const paging = usePaging([1, 2]);
     const isCourse = !!shopItem?.courseId;
+    const { navigateToPlayer } = useNavigation();
 
     const showError = useShowErrorDialog();
 
@@ -107,6 +109,14 @@ export const ShopPurchaseConfirmationDialog = (props: {
             </Typography>}
 
             {isCourse && <EpistoButton
+                onClick={() => {
+
+                    const code = purchaseShopItemResult?.firstItemCode;
+                    if (!code)
+                        return;
+
+                    navigateToPlayer(code);
+                }}
                 variant="colored">
 
                 Irany a tanfolyam!

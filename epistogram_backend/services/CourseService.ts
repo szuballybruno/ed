@@ -80,6 +80,20 @@ export class CourseService {
             .mapMany(CourseProgressView, CourseProgressShortDTO, views);
     }
 
+    async getFirstItemCodeById(userId: number, courseId: number) {
+
+        const view = await this._ormService
+            .getRepository(CourseView)
+            .findOneOrFail({
+                where: {
+                    id: courseId,
+                    userId
+                }
+            });
+
+        return view.firstItemCode;
+    }
+
     async getCourseBriefDataAsync(courseId: number) {
 
         const course = await this._ormService
@@ -163,17 +177,7 @@ export class CourseService {
     async getCurrentCourseProgressAsync(userId: number) {
 
         // get current course id 
-        const currentCourseBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    isCurrent: true,
-                    userId
-                }
-            });
-
-        const currentCourseId = currentCourseBridge?.courseId;
-
+        const currentCourseId = await this.getCurrentCourseId(userId);
         if (!currentCourseId)
             return null;
 
@@ -205,7 +209,7 @@ export class CourseService {
 
     async getCourseNextItemsAsync(userId: number, courseId: number) {
 
-        const modules = await this.getCurrentCourseModulesAsync(userId);
+        const modules = await this.getCourseModulesAsync(userId, courseId);
 
         const currentModule = modules
             .single(x => x.state === "current");
@@ -256,28 +260,26 @@ export class CourseService {
     }
 
     /**
-     * Get course modules with items.
+     * Get the current course modules with items.
+     * 
+     */
+    async getCurrentCourseModulesAsync(userId: number) {
+
+        const courseId = await this.getCurrentCourseId(userId);
+        if (!courseId)
+            throw new Error("There's no current course!");
+
+        return await this.getCourseModulesAsync(userId, courseId);
+    }
+
+    /**
+     * Get the course modules with items.
      * 
      * @param userId 
      * @param courseId 
      * @returns 
      */
-    async getCurrentCourseModulesAsync(userId: number) {
-
-        const courseBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    userId,
-                    isCurrent: true
-                }
-            });
-
-        if (!courseBridge?.currentItemCode)
-            return [];
-
-        const courseId = courseBridge.courseId;
-        const currentItemCode = courseBridge.currentItemCode;
+    async getCourseModulesAsync(userId: number, courseId: number) {
 
         const views = await this._ormService
             .getRepository(CourseItemStateView)
@@ -293,7 +295,7 @@ export class CourseService {
                 const viewAsModule = x.items.first();
                 const isLockedModule = x.items[0]?.state === "locked";
                 const isCompletedModule = x.items.all(x => x.state === "completed");
-                const isCurrentModule = x.items.some(x => x.state === "current") || currentItemCode === viewAsModule.moduleCode;
+                const isCurrentModule = x.items.some(x => x.state === "current") || viewAsModule.isModuleCurrent;
                 const items = this._mapperService
                     .mapMany(CourseItemStateView, CourseItemDTO, x.items);
 
@@ -314,6 +316,23 @@ export class CourseService {
             });
 
         return modules;
+    }
+
+    /**
+     * Returns the current course id 
+     */
+    async getCurrentCourseId(userId: number) {
+
+        const courseBridge = await this._ormService
+            .getRepository(UserCourseBridge)
+            .findOne({
+                where: {
+                    userId,
+                    isCurrent: true
+                }
+            });
+
+        return courseBridge?.courseId ?? null;
     }
 
     /**
@@ -388,7 +407,7 @@ export class CourseService {
                 .insert({
                     courseId: courseId,
                     userId: userId,
-                    courseMode: "beginner",
+                    courseMode: "advanced",
                     currentItemCode: itemCode
                 } as UserCourseBridge);
         }

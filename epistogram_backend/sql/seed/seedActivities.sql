@@ -25,6 +25,10 @@ VALUES
     (
         5,
         'canAccessShopAdministration'
+    ),
+    (
+        6,
+        'canChangeCourseMode'
     )
 ON CONFLICT ("id") DO UPDATE SET 
     "name" = EXCLUDED."name";

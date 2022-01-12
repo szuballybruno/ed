@@ -1,7 +1,12 @@
 import { Flex } from '@chakra-ui/layout';
+import { Box } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
+import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../services/api/miscApiService';
+import { useNavigation } from '../services/core/navigatior';
 import { translatableTexts } from '../static/translatableTexts';
 import { DailyTip } from './DailyTip';
+import { EpistoHeader } from './EpistoHeader';
 import { PractiseQuestions } from './PractiseQuestions';
 import { StatsSummary } from "./StatsSummary";
 import { LoadingFrame } from "./system/LoadingFrame";
@@ -9,10 +14,12 @@ import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./system/Mai
 import { CourseItemView } from './universal/CourseItemList';
 import { CourseProgressDisplay } from './universal/CourseProgressDisplay';
 import { DashboardSection } from './universal/DashboardSection';
+import { EpistoButton } from './universal/EpistoButton';
 
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
+    const { navigate } = useNavigation();
 
     console.log(pageDTO?.currentCourseProgress?.title)
 
@@ -25,25 +32,46 @@ const HomePage = () => {
                 <LeftPanel>
 
                     {/* current course items and progress */}
-                    <Flex
+                    {pageDTO?.currentCourseProgress && <Flex
                         className='roundBorders'
                         mx="10px"
                         direction="column">
 
-                        {pageDTO?.currentCourseProgress && <CourseProgressDisplay
+                        <CourseProgressDisplay
                             value={pageDTO.currentCourseProgress.progressPercentage}
                             label={pageDTO.currentCourseProgress.title}
                             continueItemCode={pageDTO.currentCourseProgress.continueItemCode}
-                            mb="5px" />}
+                            mb="5px" />
 
                         <Flex
                             direction="column"
                             mt="5px">
 
-                            {(pageDTO?.currentCourseProgress?.nextItems ?? [])
+                            {(pageDTO.currentCourseProgress.nextItems ?? [])
                                 .map(x => (
                                     <CourseItemView courseItem={x} />))}
                         </Flex>
+                    </Flex>}
+
+                    {/* no current course  */}
+                    <Flex>
+                        <EpistoButton
+                            variant="colored"
+                            onClick={() => navigate(applicationRoutes.availableCoursesRoute.route)}>
+
+                            <Box>
+
+                                <EpistoHeader
+                                    text={translatableTexts.homePage.availableCoursesLinkTitle}
+                                    style={{ textTransform: "none" }} />
+
+                                <Typography
+                                    style={{ textTransform: "none" }}>
+
+                                    {translatableTexts.homePage.availableCoursesText}
+                                </Typography>
+                            </Box>
+                        </EpistoButton>
                     </Flex>
                 </LeftPanel>
 

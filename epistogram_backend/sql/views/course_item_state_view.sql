@@ -21,7 +21,8 @@ FROM
 		u.id user_id,
 		(vcv.is_completed OR ecv.has_successful_session) IS NOT DISTINCT FROM true is_completed,
 		ucb.course_mode course_mode,
-		ucb.current_item_code = civ.item_code IS NOT DISTINCT FROM true is_current
+		ucb.current_item_code = civ.item_code IS NOT DISTINCT FROM true is_current,
+		ucb.current_item_code = civ.module_code IS NOT DISTINCT FROM true is_module_current
 	FROM public.course_item_view civ
 
 	LEFT JOIN public.user u

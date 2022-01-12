@@ -9,7 +9,7 @@ export const ExamLayout = (props: {
     children: ReactNode,
     handleNext: () => void,
     nextButtonTitle: string,
-    showNextButton: boolean,
+    showNextButton?: boolean,
     exitExamAction?: () => void,
     headerCenterText?: string,
     headerLeftItem?: string | ReactNode,

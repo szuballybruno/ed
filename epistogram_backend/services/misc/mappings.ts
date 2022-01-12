@@ -756,12 +756,10 @@ export const toJobTitleDTO = (jobTitle: JobTitle) => {
 
 export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
 
+    const { user, userId, ...activityFlags } = userRightsView;
+
     return {
-        canSetInvitedUserOrganization: userRightsView.canSetInvitedUserOrganization,
-        canAccessAdministration: userRightsView.canAccessAdministration,
-        canAccessCourseAdministration: userRightsView.canAccessCourseAdministration,
-        canAccessApplication: userRightsView.canAccessApplication,
-        canAccessShopAdministration: userRightsView.canAccessShopAdministration
+        ...activityFlags
     } as UserActivityDTO;
 }
 

@@ -79,7 +79,12 @@ export const usePrivateCourses = () => {
 
 export const usePurchaseShopItem = () => {
 
-    const qr = usePostDataUnsafe<{ shopItemId: number }, { discountCode: number }>(apiRoutes.shop.purchaseShopItem);
+    type PurhcaseResultType = {
+        discountCode: number | null,
+        firstItemCode: string | null
+    };
+
+    const qr = usePostDataUnsafe<{ shopItemId: number }, PurhcaseResultType>(apiRoutes.shop.purchaseShopItem);
 
     return {
         purchaseShopItemAsync: qr.postDataAsync,

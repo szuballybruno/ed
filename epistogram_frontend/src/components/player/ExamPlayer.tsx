@@ -65,6 +65,7 @@ export const ExamPlayer = (props: {
 
         () => <ExamResultsSlide
             continueCourse={handleContinueCourse}
+            setIsExamInProgress={setIsExamInProgress}
             exam={exam}
             answerSessionId={answerSessionId} />
     ];

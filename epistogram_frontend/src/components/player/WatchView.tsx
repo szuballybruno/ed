@@ -26,6 +26,8 @@ import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
 import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
 
+const autoplayTimeoutInS = 8;
+
 export const WatchView = (props: {
     video: VideoDTO,
     answerSessionId: number,
@@ -53,7 +55,7 @@ export const WatchView = (props: {
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
-    const reactTimer = useReactTimer(continueCourse, 3 * 1000);
+    const reactTimer = useReactTimer(continueCourse, autoplayTimeoutInS * 1000);
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);

@@ -73,11 +73,17 @@ export class SeedService {
                     firstName: "Elon",
                     lastName: "Musk",
                     jobTitleId: 1,
-                    roleId: RoleIdEnum.supervisor,
+                    roleId: RoleIdEnum.user,
                     email: "elon.musk@email.com",
                     organizationId: 1
                 },
                 true);
+
+        await this._regService
+            .registerInvitedUserAsync(
+                it2,
+                "admin",
+                "admin");
 
         log("User 2 token: " + it2);
     }

@@ -79,7 +79,7 @@ export class PlayerService {
 
         // course items 
         const modules = await this._courseService
-            .getCurrentCourseModulesAsync(userId);
+            .getCourseModulesAsync(userId, courseId);
 
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
@@ -130,7 +130,7 @@ export class PlayerService {
     getValidCourseItemCodeAsync = async (userId: number, courseId: number, targetItemCode: string) => {
 
         const modules = await this._courseService
-            .getCurrentCourseModulesAsync(userId);
+            .getCourseModulesAsync(userId, courseId);
 
         const courseItemsFlat = this.getCourseItemsFlat(modules);
 
