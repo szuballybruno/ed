@@ -62,7 +62,8 @@ export const applicationRoutes = {
     availableCoursesRoute: {
         title: translatableTexts.routeTitles.availableCourses,
         route: "/courses",
-        icon: <Search />,
+        icon: <Search />
+    },
 
     courseDetailsRoute: {
         title: "",
@@ -235,4 +236,4 @@ export const applicationRoutes = {
             icon: <AttachMoneyIcon />
         }
     }
-};
+}
