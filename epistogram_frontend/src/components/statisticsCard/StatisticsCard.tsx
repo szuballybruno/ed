@@ -24,6 +24,8 @@ const StatisticsCard = (props: {
 
     return <FlexFloat
         background="var(--transparentWhite70)"
+        gridColumn={props.chartSize === "large" ? "1 / -1" : (isOpen ? "span 2" : "unset")} // do not remove!!
+        gridRow={props.chartSize === "large" ? "span 2" : (isOpen ? "span 2" : "unset")} // do not remove!!
         direction="column"
         minW={250}
         position="relative">
@@ -50,7 +52,7 @@ const StatisticsCard = (props: {
         {/* open state */}
         {isOpen && <Flex w={"100%"} mt="50px" p="0 20px 20px 20px" direction="column">
             <EpistoHeader variant="strongSub" text={props.title} />
-            <Box height="300px">
+            <Box>
                 {props.children}
             </Box>
         </Flex>}

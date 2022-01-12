@@ -40,7 +40,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
             title: "Hallás, vagy látás után jegyzel meg könnyebben valamit?",
             description: descriptions?.category4
         }, {
-            title: "Kreatív, vagy analitikus gondolkodst részesítesz előnyben?",
+            title: "Kreatív, vagy analitikus gondolkodást részesítesz előnyben?",
             description: descriptions?.category5
         }
     ]
@@ -51,15 +51,15 @@ export const PersonalityAssessment = (props: FlexProps) => {
         loadingState={personalityDataState}
         onlyRenderIfLoaded
         error={personalityDataError}
-        wrap="wrap"
         {...css}>
 
         {/* left wrapper */}
         <Flex
             direction="row"
             flexWrap="wrap"
-            justifyContent="center"
-            alignItems="flex-start"
+            align="center"
+            justify="center"
+            flex="1"
             w="100%">
 
             <Flex
@@ -71,50 +71,10 @@ export const PersonalityAssessment = (props: FlexProps) => {
                 p="10px"
                 minWidth={window.innerWidth < 600 ? "100%" : 450}
                 w={"100%"}
-                h="600px"
+                flex="1"
+                h="100%"
+                maxH="600px"
                 maxW={window.innerWidth < 600 ? "100%" : "50%"}>
-
-                {/* personality chart info button and title */}
-                <EpistoButton
-                    onClick={() => {
-                        setIsShowHelperPopper(true)
-                    }}
-                    ref={ref}
-                    style={{
-                        position: "absolute",
-                        top: 10,
-                        left: 10
-                    }}
-                    icon={<InfoOutlined />}>
-
-                    <Typography
-                        style={{
-                            marginLeft: 5,
-                            fontSize: "0.9em"
-                        }}>
-
-                        {translatableTexts.learningOverview.whatIsThisGraphGoodFor}
-                    </Typography>
-                </EpistoButton>
-
-                {/* personality chart info description */}
-                <EpistoPopper
-                    placementX="left"
-                    isOpen={isShowHelperPopper}
-                    handleClose={() => {
-                        setIsShowHelperPopper(false)
-                    }}
-                    target={ref?.current}>
-
-                    <Typography
-                        style={{
-                            maxWidth: "300px",
-                            fontSize: "0.9em"
-                        }}>
-
-                        {translatableTexts.learningOverview.whatIsThisGraphGoodForDescription}
-                    </Typography>
-                </EpistoPopper>
 
                 {/* personality chart */}
                 <Flex>
@@ -133,15 +93,61 @@ export const PersonalityAssessment = (props: FlexProps) => {
 
                 {/* expand all */}
                 <Flex
-                    justifyContent="flex-end"
+                    justifyContent="space-between"
                     mb="10px">
+
+                    {/* personality chart info button and title */}
+                    <EpistoButton
+                        className="tinyShadow"
+                        variant={"colored"}
+                        style={{
+                            background: "var(--transparentWhite70)",
+                            color: "black",
+                            marginRight: 5,
+                            flex: 1
+                        }}
+                        onClick={() => {
+                            setIsShowHelperPopper(true)
+                        }}
+                        ref={ref}
+                        icon={<InfoOutlined />}>
+
+                        <Typography
+                            style={{
+                                marginLeft: 5,
+                                fontSize: "0.9em"
+                            }}>
+
+                            {translatableTexts.learningOverview.whatIsThisGraphGoodFor}
+                        </Typography>
+                    </EpistoButton>
+
+                    {/* personality chart info description */}
+                    <EpistoPopper
+                        placementX="left"
+                        isOpen={isShowHelperPopper}
+                        handleClose={() => {
+                            setIsShowHelperPopper(false)
+                        }}
+                        target={ref?.current}>
+
+                        <Typography
+                            style={{
+                                maxWidth: "300px",
+                                fontSize: "0.9em"
+                            }}>
+
+                            {translatableTexts.learningOverview.whatIsThisGraphGoodForDescription}
+                        </Typography>
+                    </EpistoPopper>
 
                     <EpistoButton
                         className="tinyShadow"
                         variant={"colored"}
                         style={{
                             background: "var(--transparentWhite70)",
-                            color: "black"
+                            color: "black",
+                            flex: 1
                         }}
                         onClick={() => {
                             descriptionAccordionsState.length <= 1 ?
@@ -154,7 +160,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                 </Flex>
 
 
-                <Accordion defaultIndex={[0, 1, 2, 3, 4]} index={descriptionAccordionsState} >
+                <Accordion defaultIndex={[0, 1, 2, 3, 4]} index={descriptionAccordionsState}>
 
                     {personalityDescriptionAccordions.map((item, index) => {
 
@@ -169,14 +175,14 @@ export const PersonalityAssessment = (props: FlexProps) => {
 
                             <AccordionButton>
 
-                                <Box flex='1' textAlign='left'>
+                                <Box flex='1' fontWeight="600" textAlign='left'>
                                     {item.title}
                                 </Box>
 
                                 <AccordionIcon />
                             </AccordionButton>
 
-                            <AccordionPanel pb={4}>
+                            <AccordionPanel pb={4} mt="10px">
 
                                 {item.description}
                             </AccordionPanel>

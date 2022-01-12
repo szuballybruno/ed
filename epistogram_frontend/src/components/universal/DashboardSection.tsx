@@ -14,7 +14,7 @@ export const DashboardSection = (props: FlexProps & { title: string, variant?: "
         boxShadow={variant === "noShadow" ? "none" : undefined}
         {...css}>
 
-        <EpistoHeader text={title} showDivider variant="strongSub" m="5px 10px 20px 10px" />
+        <EpistoHeader text={title} variant="strongSub" m="5px 10px 20px 10px" />
 
         <Box className="whall">
 

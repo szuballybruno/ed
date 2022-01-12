@@ -9,7 +9,7 @@ import { LearningStatistics } from './learningInsights/LearningStatistics';
 
 export const LearningInsightsOverview = () => {
 
-    return <Flex direction="column">
+    return <Flex direction="column" pb="40px">
 
         {/* personality */}
         <PersonalityAssessment />
