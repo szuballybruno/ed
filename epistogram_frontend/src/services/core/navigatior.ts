@@ -7,6 +7,7 @@ import { getUrl } from "../../static/frontendHelpers";
 export const useNavigation = () => {
 
     const history = useHistory();
+
     const navigate = (path: string | ApplicationRoute, params?: any, query?: any) => {
 
         const pathAsAny = path as any;
@@ -18,9 +19,13 @@ export const useNavigation = () => {
         history.push(replacedPath);
     }
 
+    const openNewTab = (url: string) => (window as any).open(url, '_blank').focus();
+
     return {
+        history,
         navigate,
-        navigateToPlayer: (descriptorCode: string) => navigate(applicationRoutes.playerRoute.route, { itemCode: descriptorCode }),
-        history
+        navigateToPlayer: (descriptorCode: string) => navigate(applicationRoutes.playerRoute, { itemCode: descriptorCode }),
+        navigateToCourseDetails: (courseId: number, itemCode?: string) => navigate(applicationRoutes.courseDetailsRoute, { courseId }, { code: itemCode }),
+        openNewTab,
     };
 }

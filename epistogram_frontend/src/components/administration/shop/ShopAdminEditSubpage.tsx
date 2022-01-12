@@ -35,6 +35,7 @@ export const ShopAdminEditSubpage = () => {
     const { saveShopItemAsync, saveShopItemState } = useSaveShopItem();
 
     const [name, setName] = useState("");
+    const [detailsUrl, setDetailsUrl] = useState("");
     const [purchaseLimit, setPurchaseLimit] = useState("");
     const [coinPrice, setCoinPrice] = useState("");
     const [currencyPrice, setCurrencyPrice] = useState("");
@@ -100,7 +101,8 @@ export const ShopAdminEditSubpage = () => {
                     ? parseInt(purchaseLimit)
                     : null,
                 shopItemCategoryId: shopItemCategory?.id ?? null,
-                discountCodes
+                discountCodes,
+                detailsUrl
             } as ShopItemEditDTO;
 
             await saveShopItemAsync(dto, coverFileImage ?? undefined);
@@ -125,8 +127,6 @@ export const ShopAdminEditSubpage = () => {
             .filter(x => x !== code));
     }
 
-    console.log(course);
-
     // set defaults
     useEffect(() => {
 
@@ -141,6 +141,7 @@ export const ShopAdminEditSubpage = () => {
         setCoverFilePath(shopItemEditData.coverFilePath);
         setIsCourse(!!shopItemEditData.courseId);
         setDiscountCodes(shopItemEditData.discountCodes);
+        setDetailsUrl(shopItemEditData.detailsUrl);
 
         setCourse(privateCourses
             .filter(x => x.id === shopItemEditData.courseId)[0]);
@@ -157,7 +158,6 @@ export const ShopAdminEditSubpage = () => {
 
         if (isCourse) {
 
-            console.log("isCourse")
             setShopItemCategory(shopItemCategories
                 .filter(x => x.id === 1)[0]);
 
@@ -166,7 +166,6 @@ export const ShopAdminEditSubpage = () => {
         }
         else {
 
-            console.log("!isCourse")
             setShopItemCategory(shopItemCategories
                 .filter(x => x.id === 3)[0]);
 
@@ -233,6 +232,13 @@ export const ShopAdminEditSubpage = () => {
                     value={name}
                     setValue={setName}
                     label="Termek neve"
+                    labelVariant="top"
+                    disabled={isCourse} />
+
+                <EpistoEntry
+                    value={detailsUrl}
+                    setValue={setDetailsUrl}
+                    label="Reszletek URL cime"
                     labelVariant="top"
                     disabled={isCourse} />
 

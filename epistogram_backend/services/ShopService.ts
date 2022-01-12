@@ -208,6 +208,7 @@ export class ShopService {
                 name: isCourse ? null : dto.name,
                 purchaseLimit: isCourse ? null : dto.purchaseLimit,
                 shopItemCategoryId: isCourse ? courseCategoryId : dto.shopItemCategoryId,
+                detailsUrl: isCourse ? null : dto.detailsUrl
             });
 
         // save discount codes 
@@ -227,6 +228,7 @@ export class ShopService {
             name: "",
             purchaseLimit: 0,
             shopItemCategoryId: 1,
+            detailsUrl: null
         } as ShopItem;
 
         await this._ormService

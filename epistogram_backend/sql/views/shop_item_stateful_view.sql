@@ -23,6 +23,7 @@ FROM
 		si.currency_price,
 		sic.id AS shop_item_category_id,
 		sic.name AS shop_item_category_name,
+		si.details_url AS details_url,
 		CASE WHEN co.id IS NULL 
 			THEN sisf.file_path
 			ELSE cosf.file_path

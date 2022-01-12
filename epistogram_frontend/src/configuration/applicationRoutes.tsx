@@ -61,11 +61,11 @@ export const applicationRoutes = {
     availableCoursesRoute: {
         title: translatableTexts.routeTitles.availableCourses,
         route: "/courses",
+    },
 
-        courseDetailsRoute: {
-            title: "",
-            route: "/courses/:courseId",
-        },
+    courseDetailsRoute: {
+        title: "",
+        route: "/course-details/:courseId",
     },
 
     learningRoute: {

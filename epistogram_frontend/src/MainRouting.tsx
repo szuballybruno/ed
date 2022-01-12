@@ -60,14 +60,11 @@ export const MainRouting = () => {
 
         <ProtectedRoute
             path={applicationRoutes.availableCoursesRoute.route}
-            render={() => <Switch>
+            render={() => <AvailableCoursesPage />} />
 
-                <Route exact path={"/courses"}>
-                    <AvailableCoursesPage />
-                </Route>
-
-                {getRoute(applicationRoutes.availableCoursesRoute.courseDetailsRoute, <CourseDetailsPage />)}
-            </Switch>} />
+        <ProtectedRoute
+            path={applicationRoutes.courseDetailsRoute.route}
+            render={() => <CourseDetailsPage />} />
 
         <ProtectedRoute
             path={applicationRoutes.settingsRoute.route}
