@@ -2,9 +2,9 @@ import { Box, FlexProps } from "@chakra-ui/react";
 import { EpistoHeader } from "../EpistoHeader";
 import { FlexFloat } from "./FlexFloat";
 
-export const DashboardSection = (props: FlexProps & { title: string, variant?: "noShadow" | "normal" }) => {
+export const DashboardSection = (props: FlexProps & { title: string, variant?: "noShadow" | "normal", showDivider?: boolean }) => {
 
-    const { title, children, variant, ...css } = props;
+    const { title, children, variant, showDivider, ...css } = props;
 
     return <FlexFloat
         className="roundBorders"
@@ -14,7 +14,7 @@ export const DashboardSection = (props: FlexProps & { title: string, variant?: "
         boxShadow={variant === "noShadow" ? "none" : undefined}
         {...css}>
 
-        <EpistoHeader text={title} variant="strongSub" m="5px 10px 20px 10px" />
+        <EpistoHeader text={title} showDivider={showDivider} variant="strongSub" m="5px 10px 0 10px" />
 
         <Box className="whall">
 

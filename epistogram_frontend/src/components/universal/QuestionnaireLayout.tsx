@@ -42,7 +42,7 @@ export const QuestionnaireLayout = (props: {
                     <EpistoText
                         isAutoFontSize
                         text={title}
-                        style={{ width: "100%" }} />
+                        style={{ width: "80%", fontSize: 16 }} />
                 </Flex>
 
                 {/* divider */}

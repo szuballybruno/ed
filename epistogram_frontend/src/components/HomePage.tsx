@@ -15,6 +15,8 @@ import { CourseItemView } from './universal/CourseItemList';
 import { CourseProgressDisplay } from './universal/CourseProgressDisplay';
 import { DashboardSection } from './universal/DashboardSection';
 import { EpistoButton } from './universal/EpistoButton';
+import { FlexListItem } from './universal/FlexListItem';
+import { FlexListTitleSubtitle } from './universal/FlexListTitleSubtitle';
 
 const HomePage = () => {
 
@@ -34,7 +36,7 @@ const HomePage = () => {
                 <LeftPanel>
 
                     {/* current course items and progress */}
-                    {pageDTO?.currentCourseProgress && <Flex
+                    {pageDTO?.currentCourseProgress ? <Flex
                         className='roundBorders'
                         mx="10px"
                         direction="column">
@@ -53,34 +55,36 @@ const HomePage = () => {
                                 .map(x => (
                                     <CourseItemView courseItem={x} />))}
                         </Flex>
-                    </Flex>}
+                    </Flex> : <FlexListItem
+                        mx="10"
+                        isLocked={false}
+                        onClick={() => navigate(applicationRoutes.availableCoursesRoute.route)}
+                        midContent={<Flex>
 
-                    {/* no current course  */}
-                    <Flex>
-                        <EpistoButton
-                            variant="colored"
-                            onClick={() => navigate(applicationRoutes.availableCoursesRoute.route)}>
+                            <Flex
+                                className="roundBorders"
+                                boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
+                                p="3px"
+                                m="7px 10px 7px 0px"
+                                bgColor={"var(--epistoTeal)"} />
 
-                            <Box>
+                            <FlexListTitleSubtitle
+                                title={translatableTexts.homePage.availableCoursesLinkTitle}
+                                subTitle={translatableTexts.homePage.availableCoursesText} />
+                        </Flex>}
+                        endContent={<Flex
+                            align="center"
+                            justify="center"
+                            flexBasis="50px">
+                        </Flex>}>
+                    </FlexListItem>}
 
-                                <EpistoHeader
-                                    text={translatableTexts.homePage.availableCoursesLinkTitle}
-                                    style={{ textTransform: "none" }} />
-
-                                <Typography
-                                    style={{ textTransform: "none" }}>
-
-                                    {translatableTexts.homePage.availableCoursesText}
-                                </Typography>
-                            </Box>
-                        </EpistoButton>
-                    </Flex>
                 </LeftPanel>
 
-                <RightPanel>
+            <RightPanel>
 
                     <Flex
-                        direction="column" 
+                        direction="column"
                         minW={isSmallerThan1400 ? "1060px" : undefined}>
 
                         <Flex wrap="wrap">
@@ -91,7 +95,8 @@ const HomePage = () => {
                                 background="var(--transparentIntenseBlue)"
                                 className="largeSoftShadow roundBorders"
                                 color="white"
-                                minHeight="300px"
+                                showDivider
+                                minHeight="200px"
                                 m="0 5px 10px 0"
                                 flex="3 3 550px">
 
@@ -103,6 +108,7 @@ const HomePage = () => {
                                 title={translatableTexts.homePage.tipOfTheDay}
                                 background="var(--transparentWhite70)"
                                 borderRadius="6px"
+                                showDivider
                                 className="largeSoftShadow"
                                 minHeight="30px"
                                 m="0 0 10px 5px"
@@ -114,7 +120,7 @@ const HomePage = () => {
                         </Flex>
 
                         {/* stats */}
-                        <Flex>
+                        <Flex pb="40px">
                             <StatsSummary />
                         </Flex>
 

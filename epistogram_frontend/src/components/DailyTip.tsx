@@ -95,7 +95,7 @@ export const DailyTip = (props: {} & FlexProps) => {
         </EpistoDialog >
 
         {/* text daily tip */}
-        <Flex align="flex-start" flex="1" p="10px">
+        <Flex align="flex-start" flex="1" p="10px" fontSize="13px">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem voluptates illo placeat id ab provident, possimus fugit vero sunt exercitationem, architecto nemo nesciunt, minus eius iusto adipisci laudantium necessitatibus consequuntur?
         </Flex>
 

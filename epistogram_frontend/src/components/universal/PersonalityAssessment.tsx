@@ -57,7 +57,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
         <Flex
             direction="row"
             flexWrap="wrap"
-            align="center"
+            align="flex-start"
             justify="center"
             flex="1"
             w="100%">

@@ -22,7 +22,7 @@ export const StatsSummary = () => {
             gap: "10px",
             gridAutoFlow: "row dense",
             gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            gridAutoRows: "200px"
+            gridAutoRows: "160px"
         }}>
 
         {/* chart item  */}
@@ -47,12 +47,14 @@ export const StatsSummary = () => {
                 src={getAssetUrl("/images/learningcurve3D.png")}
                 alt={""}
                 style={{
-                    maxHeight: 220,
+                    maxHeight: 180,
                     objectFit: "contain",
                     margin: "0 10px 0 0",
                 }} />
 
-            <Typography align="center">
+            <Typography align="center" fontSize="13px" style={{
+                margin: "0 20px"
+            }}>
                 {translatableTexts.homePage.noStatsYet}
             </Typography>
         </FlexFloat>
@@ -62,7 +64,7 @@ export const StatsSummary = () => {
             title="Megtekintett videók a hónapban"
             value={userStats ? userStats.completedVideoCount + "" : "0"}
             suffix="db"
-            iconPath={getAssetUrl("statistics_icons/watched_videos.svg")}
+            iconPath={getAssetUrl("images/watchedvideos3Dsmaller.png")}
             isOpenByDefault={false} />
 
         {/* total playback time */}
@@ -70,7 +72,7 @@ export const StatsSummary = () => {
             title="Videónézéssel eltöltött idő a hónapban"
             value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + "" : "0"}
             suffix="óra"
-            iconPath={getAssetUrl("statistics_icons/total_watching_time.svg")}
+            iconPath={getAssetUrl("images/watch3D.png")}
             isOpenByDefault={false} />
 
         {/* total given answer count  */}
@@ -78,7 +80,7 @@ export const StatsSummary = () => {
             title="Megválaszolt tudást vizsgáló kérdések száma"
             value={userStats ? userStats.totalGivenAnswerCount + "" : "0"}
             suffix="db"
-            iconPath={getAssetUrl("statistics_icons/answered_questions.svg")}
+            iconPath={getAssetUrl("images/answeredquestions3D.png")}
             isOpenByDefault={false} />
 
         {/* correct answer rate  */}
@@ -86,7 +88,7 @@ export const StatsSummary = () => {
             title="Helyes válaszok aránya"
             value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + "" : "0"}
             suffix="%"
-            iconPath={getAssetUrl("statistics_icons/correct_answer_rate.svg")}
+            iconPath={getAssetUrl("images/rightanswer3D.png")}
             isOpenByDefault={false} />
     </div>
 }

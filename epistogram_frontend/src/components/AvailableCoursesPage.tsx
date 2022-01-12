@@ -226,7 +226,7 @@ const AvailableCoursesPage = () => {
                     {/* courses */}
                     <LoadingFrame loadingState={[coursesState, startCourseState]} error={[coursesError]}>
                         <Box id="scrollContainer" className="whall">
-                            <EpistoGrid auto="fill" gap="15" minColumnWidth="300px">
+                            <EpistoGrid auto="fill" gap="15" minColumnWidth="250px">
                                 {courses
                                     .map((course, index) => {
 

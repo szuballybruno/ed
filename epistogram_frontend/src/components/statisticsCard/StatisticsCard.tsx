@@ -62,8 +62,12 @@ const StatisticsCard = (props: {
 
             {/* image */}
             {iconPath && <img
-                className="square50"
-                style={{ margin: "10px 10px 10px 20px" }}
+                style={{ 
+                    margin: "5px 10px 5px 20px", 
+                    width: 70, 
+                    height: 70, 
+                    objectFit: "contain" 
+                }}
                 alt=""
                 src={iconPath} />}
 
@@ -75,7 +79,10 @@ const StatisticsCard = (props: {
 
                     {/* value */}
                     <Typography
-                        variant={"h5"}>
+                        style={{
+                            lineHeight: 1,
+                            fontSize: "40px"
+                        }}>
 
                         {props.value}
                     </Typography>
@@ -83,6 +90,7 @@ const StatisticsCard = (props: {
                     {/* suffix */}
                     <Typography
                         style={{
+                            fontSize: "20px",
                             marginLeft: "5px"
                         }}>
 
@@ -91,7 +99,7 @@ const StatisticsCard = (props: {
                 </Flex>
 
                 {/* title */}
-                <Typography >
+                <Typography fontSize="13px" >
                     {props.title}
                 </Typography>
             </Flex>

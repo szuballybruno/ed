@@ -6,6 +6,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { currentVersion } from '../../static/Environemnt';
 import { getAssetUrl } from '../../static/frontendHelpers';
 import Navbar from '../navbar/Navbar';
+import { EpistoButton } from '../universal/EpistoButton';
 import { FlexFloat } from '../universal/FlexFloat';
 import { CurrentUserContext } from './AuthenticationFrame';
 
@@ -70,10 +71,12 @@ export const LeftPanel = (props: FlexProps) => {
             bg="white"
             zIndex={2}
             flexBasis="320px"
+            maxW="320px"
             direction="column"
             align="stretch"
             padding="25px 15px 0 15px"
             className="dividerBorderRight"
+            position="relative"
             //borderLeft="2px solid #e2e2e2"
             boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)"
             {...props}>
@@ -97,7 +100,59 @@ export const LeftPanel = (props: FlexProps) => {
                     }} />
             </Flex>
 
+            {/* magic powder top right */}
+            <img
+                style={{
+                    position: "absolute",
+                    right: 23,
+                    top: -30,
+                    width: 120,
+                    transform: "rotate(270deg)",
+                    objectFit: "contain",
+                    zIndex: -1,
+                }}
+                src={getAssetUrl("/images/bg-art-6.png")} alt="" />
+
             {props.children}
+
+            {/* magic powder top right */}
+            <img
+                style={{
+                    position: "absolute",
+                    left: -10,
+                    bottom: 0,
+                    width: 170,
+                    transform: "rotate(0deg) scale(-1,1)",
+                    objectFit: "contain",
+                    zIndex: -1,
+                }}
+                src={getAssetUrl("/images/bela3D.png")} alt="" />
+
+            <Flex
+                direction="column"
+                position="absolute"
+                bottom="160"
+                right="25"
+                w="170px">
+
+                <Typography
+                    fontSize="13px"
+                    mb="5px">
+                    Szia, én Tina vagyok, a te személyes segítőd, ha elakadnál, kérdezz bátran!
+                </Typography>
+            </Flex>
+
+            <Flex
+                direction="column"
+                position="absolute"
+                bottom="100"
+                right="20"
+                w="130px">
+
+                <EpistoButton variant='colored'>
+                    Antal
+                </EpistoButton>
+            </Flex>
         </FlexFloat>
     );
 };

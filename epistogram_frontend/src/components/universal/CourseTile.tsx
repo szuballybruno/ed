@@ -24,6 +24,7 @@ const SmallStat = (props: { iconUrl: string, text: string }) => {
 
         {/* spent time stat */}
         <Text
+            fontSize="13px"
             as={"text"}
             color={"grey"}>
 
@@ -56,7 +57,7 @@ const CourseTile = (props: {
         {...css}>
 
         {/* cover image box  */}
-        <Box flex="1" position="relative" minH={200} maxH={200}>
+        <Box flex="1" position="relative" minH={150} maxH={150}>
 
             {/* cover image */}
             <img
@@ -103,13 +104,13 @@ const CourseTile = (props: {
         <Flex p="10px" direction={"column"}>
 
             {/* category  */}
-            <Text as="text" color="grey">
+            <Text as="text" fontSize="13px" color="grey">
                 {courseSubCategory}
             </Text>
 
             {/* title */}
             <Flex direction="column">
-                <Text as="h6" fontWeight={"bold"} fontSize="large">{courseTitle}</Text>
+                <Text fontWeight={"600"} fontSize="15px">{courseTitle}</Text>
             </Flex>
 
             {/* small stats  */}
@@ -118,10 +119,6 @@ const CourseTile = (props: {
                 <SmallStat
                     iconUrl={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
                     text={"119"} />
-
-                <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_language.svg")}
-                    text={"magyar"} />
 
                 <SmallStat
                     iconUrl={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
