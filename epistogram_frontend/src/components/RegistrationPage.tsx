@@ -29,6 +29,7 @@ export const RegistrationPage = () => {
         passwordCompare,
         passwordCompareError,
         passwordError,
+        hasCredentialError,
         setPassword,
         setPasswordCompare,
         validate
@@ -176,7 +177,7 @@ export const RegistrationPage = () => {
             <EpistoButton
                 onClick={handleRegistration}
                 variant="outlined"
-                isDisabled={!acceptPrivacyPolicy || (isInvited && !!passwordError)}
+                isDisabled={!acceptPrivacyPolicy || (isInvited && hasCredentialError)}
                 style={{
                     width: "200px",
                     alignSelf: "center",

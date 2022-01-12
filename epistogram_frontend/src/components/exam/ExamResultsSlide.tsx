@@ -1,43 +1,58 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
-import React from 'react';
-import { translatableTexts } from "../../static/translatableTexts";
-import StatisticsCard from "../statisticsCard/StatisticsCard";
-import { ExamLayout } from './ExamLayout';
-import { QuestionAnswer } from "./QuestionAnswer";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { useExamResults } from "../../services/api/examApiService";
+import React, { useEffect } from 'react';
+import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
+import { useExamResults } from "../../services/api/examApiService";
+import { useNavigation } from "../../services/core/navigatior";
+import { ArrayBuilder } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
+import { ExamLayout } from './ExamLayout';
 import { ExamResultStats } from "./ExamResultStats";
+import { QuestionAnswer } from "./QuestionAnswer";
 
 export const ExamResultsSlide = (props: {
     exam: ExamPlayerDataDTO,
+    setIsExamInProgress: (isExamInProgress: boolean) => void,
     continueCourse: () => void,
     answerSessionId: number,
 }) => {
 
-    const { answerSessionId, continueCourse, exam } = props;
+    const { answerSessionId, continueCourse, setIsExamInProgress, exam } = props;
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
+    const { navigate } = useNavigation();
 
     const correctPercentage = examResults && examResults
         ? Math.round((examResults.correctAnswerCount / examResults.questionCount) * 100)
         : 0;
 
+    // effects
+    useEffect(() => {
+
+        if (exam.isFinalExam)
+            setIsExamInProgress(false);
+    }, [exam])
+
     return <ExamLayout
         headerCenterText={exam.title}
         handleNext={continueCourse}
         nextButtonTitle={translatableTexts.exam.continueCourse}
-        footerButtons={exam.isFinalExam
-            ? [
-                {
-                    text: "Kurzus osszegzo",
-                    action: () => { }
+        footerButtons={new ArrayBuilder<any>()
+            .addIf(exam.isFinalExam, {
+                text: "Kurzus osszegzo",
+                action: () => { }
+            })
+            .addIf(exam.isFinalExam, {
+                text: "Vissza a tanfolyamkeresobe",
+                action: () => {
+
+                    navigate(applicationRoutes.availableCoursesRoute);
                 }
-            ]
-            : []}
-        showNextButton>
+            })
+            .getArray()}
+        showNextButton={!exam.isFinalExam}>
 
         <Flex direction="column" className="whall" p="20px">
 

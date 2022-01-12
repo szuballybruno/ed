@@ -1,7 +1,9 @@
-import { Checkbox } from "@chakra-ui/checkbox"
 import { Flex } from "@chakra-ui/layout"
 import { Close } from "@mui/icons-material"
-import { Typography } from "@mui/material"
+import { ButtonType } from "../../models/types"
+import { EpistoCheckbox } from "../controls/EpistoCheckbox"
+import { EpistoFont } from "../controls/EpistoFont"
+import { EpistoButton } from "../universal/EpistoButton"
 import { EpistoSearch } from "../universal/EpistoSearch"
 import { EpistoSelect } from "../universal/EpistoSelect"
 import { BulkEditButtons, BulkEditButtonType } from "./BulkEditButtons"
@@ -12,68 +14,65 @@ export const AdminListEditHeader = (props: {
     selectedIds: number[],
     headerButtons: BulkEditButtonType[],
     itemLabel: string,
-    onSearchChanged?: (value: string) => void
+    onSearchChanged?: (value: string) => void,
+    buttons?: ButtonType[]
 }) => {
 
-    const { isAllSelected, selectedIds, onSearchChanged, itemLabel, headerButtons, selectAllOrNone } = props;
+    const { isAllSelected, selectedIds, buttons, onSearchChanged, itemLabel, headerButtons, selectAllOrNone } = props;
     const isAnySelected = selectedIds.some(x => true);
     const isSingleSelected = selectedIds.length === 1;
     const selectionCount = selectedIds.length;
 
-    return <Flex direction="row" justifyContent="space-between" alignItems="center" h={60}>
-        <Flex direction="row" alignItems="center" justifyContent="center" minW={60} h="100%">
-            <Checkbox checked={isAllSelected} onClick={() => selectAllOrNone(!isAllSelected)} />
-        </Flex>
+    return <Flex
+        bg="var(--deepBlue)"
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        height="60px">
 
-        {!isAllSelected && <Flex
-            w={240}
-            minW={165}
-            h={"100%"}
-            direction={"row"}
-            alignItems={"center"}
-            justifyContent={"flex-start"}
-            onClick={() => selectAllOrNone(!isAllSelected)}
-            cursor="pointer">
+        {/* all/none selection */}
+        <Flex>
 
-            <Typography
-                style={{ marginLeft: "20px" }}>
+            {/* select all */}
+            <EpistoButton
+                onClick={() => selectAllOrNone(true)}>
 
-                Összes kijelölése
-            </Typography>
-        </Flex>}
+                <div className="h-flex align-center fontLight">
+                    <EpistoCheckbox
+                        value={isAllSelected} />
 
-        {/* selected users label */}
-        {isAnySelected && <Flex
-            direction={"row"}
-            alignItems={"center"}
-            justifyContent={"space-between"}
-            w={230}
-            minW={230}
-            h={"100%"}>
-            <Flex
-                direction={"row"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                className="roundBorders"
-                bg="var(--epistoTeal)"
-                padding="0 12px 0 12px"
-                color="white"
-                height={30}
-                ml={10}>
-                <Typography>
-                    {selectionCount} {itemLabel} kijelölve
-                </Typography>
-                <Close
-                    onClick={() => selectAllOrNone(false)}
-                    style={{
-                        width: 18,
-                        marginLeft: 5
-                    }} />
-            </Flex>
-        </Flex>}
+                    <EpistoFont
+                        style={{ marginLeft: "20px" }}>
+
+                        Összes kijelölése
+                    </EpistoFont>
+                </div>
+            </EpistoButton>
+
+            {/* deselect all */}
+            <EpistoButton
+                onClick={() => selectAllOrNone(false)}>
+
+                <div className="h-flex align-center fontLight">
+
+                    <EpistoFont
+                        style={{ marginLeft: "20px" }}>
+
+                        {`${selectionCount} ${itemLabel} kijelölve`}
+                    </EpistoFont>
+
+                    <Close
+                        onClick={() => selectAllOrNone(false)}
+                        style={{
+                            width: 18,
+                            marginLeft: 5
+                        }} />
+                </div>
+            </EpistoButton>
+        </Flex >
 
         {/* spacer */}
-        <Flex flex={1}></Flex>
+        <Flex flex={1} />
 
         {/* bulk edit buttons */}
         {isSingleSelected && <BulkEditButtons buttons={headerButtons} />}
@@ -97,9 +96,7 @@ export const AdminListEditHeader = (props: {
 
         {/* order by */}
         <Flex
-            direction={"row"}
-            justifyContent={"flex-start"}
-            alignItems={"center"}
+            className="align-center"
             h={"100%"}
             mx={10}>
             <EpistoSelect
@@ -112,5 +109,20 @@ export const AdminListEditHeader = (props: {
 
             </EpistoSelect>
         </Flex>
-    </Flex>
+
+        {/* buttons */}
+        {(buttons ?? [])
+            .map(x => (
+                <EpistoButton
+                    variant="plain"
+                    className="margin-right"
+                    onClick={x.action}
+                    style={{
+                        background: "white"
+                    }}>
+
+                    {x.title}
+                </EpistoButton>
+            ))}
+    </Flex >
 }

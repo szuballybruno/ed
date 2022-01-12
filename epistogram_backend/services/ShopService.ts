@@ -7,6 +7,7 @@ import { User } from "../models/entity/User";
 import { CourseBriefData } from "../models/shared_models/CourseBriefData";
 import { CourseShopItemListDTO } from "../models/shared_models/CourseShopItemListDTO";
 import { DiscountCodeDTO } from "../models/shared_models/DiscountCodeDTO";
+import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { ShopItemAdminShortDTO } from "../models/shared_models/ShopItemAdminShortDTO";
 import { ShopItemBriefData } from "../models/shared_models/ShopItemBriefData";
 import { ShopItemCategoryDTO } from "../models/shared_models/ShopItemCategoryDTO";
@@ -87,6 +88,14 @@ export class ShopService {
 
             await this._courseService
                 .createCourseAccessBridge(userId, shopItem.courseId);
+
+            const firstItemCode = await this._courseService
+                .getFirstItemCodeById(userId, shopItem.courseId);
+
+            return {
+                firstItemCode: firstItemCode,
+                discountCode: null
+            };
         }
 
         // get item discount code
@@ -118,6 +127,7 @@ export class ShopService {
                 .sendDiscountCodePurchasedMailAsync(user, discountCode.code);
 
             return {
+                firstItemCode: null,
                 discountCode: discountCode.code
             };
         }
@@ -198,6 +208,7 @@ export class ShopService {
                 name: isCourse ? null : dto.name,
                 purchaseLimit: isCourse ? null : dto.purchaseLimit,
                 shopItemCategoryId: isCourse ? courseCategoryId : dto.shopItemCategoryId,
+                detailsUrl: isCourse ? null : dto.detailsUrl
             });
 
         // save discount codes 
@@ -206,6 +217,27 @@ export class ShopService {
         // upload cover file 
         if (coverFile)
             this.saveCoverFile(dto.id, coverFile);
+    }
+
+    async createShopItemAsync() {
+
+        const si = {
+            coinPrice: 0,
+            currencyPrice: 0,
+            courseId: null,
+            name: "",
+            purchaseLimit: 0,
+            shopItemCategoryId: 1,
+            detailsUrl: null
+        } as ShopItem;
+
+        await this._ormService
+            .getRepository(ShopItem)
+            .insert(si);
+
+        return {
+            id: si.id
+        } as IdResultDTO;
     }
 
     private async saveShopItemDiscountCodes(shopItemId: number, discountCodes: DiscountCodeDTO[]) {

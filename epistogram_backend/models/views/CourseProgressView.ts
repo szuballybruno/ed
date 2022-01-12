@@ -23,4 +23,7 @@ export class CourseProgressView {
 
     @ViewColumn()
     courseTitle: string;
+
+    @ViewColumn()
+    continueItemCode: string;
 }

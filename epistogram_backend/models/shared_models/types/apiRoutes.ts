@@ -41,7 +41,8 @@ export const apiRoutes = {
         getShopItemBriefData: "/shop/get-shop-item-brief-data",
         getShopItemEditData: "/shop/get-shop-item-edit-data",
         getPrivateCourseList: "/shop/get-private-course-list",
-        saveShopItem: "/shop/save-shop-item"
+        saveShopItem: "/shop/save-shop-item",
+        createShopItem: "/shop/create-shop-item"
     },
 
     event: {

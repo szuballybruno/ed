@@ -7,7 +7,8 @@ SELECT
 	BOOL_OR(uav.activity_id = 2) can_access_course_administration,
 	BOOL_OR(uav.activity_id = 3) can_access_administration,
 	BOOL_OR(uav.activity_id = 4) can_access_application,
-	BOOL_OR(uav.activity_id = 5) can_access_shop_administration
+	BOOL_OR(uav.activity_id = 5) can_access_shop_administration,
+	BOOL_OR(uav.activity_id = 6) can_change_course_mode
 
 FROM user_activity_view AS uav
 	

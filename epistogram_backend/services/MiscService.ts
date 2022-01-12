@@ -45,15 +45,17 @@ export class MiscService {
 
     getOverviewPageDTOAsync = async (userId: number) => {
 
-        const modules = await this._courseService.getCurrentCourseItemsAsync(userId);
         const recommendedCourseDTOs = [] as CourseShortDTO[];
         const developmentChartData = this.getDevelopmentChart();
+
+        const currentCourseProgress = await this._courseService
+            .getCurrentCourseProgressAsync(userId);
 
         const overviewPageDTO = {
             tipOfTheDay: this.getTipOfTheDay(),
             recommendedCourses: recommendedCourseDTOs,
             developmentChartData: developmentChartData,
-            modules: modules
+            currentCourseProgress
         } as OverviewPageDTO;
 
         return overviewPageDTO;

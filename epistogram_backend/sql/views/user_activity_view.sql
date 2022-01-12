@@ -1,26 +1,26 @@
 SELECT 
-	"user"."id" AS "user_id", 
-	"role"."id" AS "role_id",
-	"role"."name" AS "role_name",
-	"activity"."id" AS "activity_id",
-	"activity"."name" AS "activity_name"
-FROM public."user"
+	u.id user_id, 
+	ro.id role_id,
+	ro.name role_name,
+	activity.id activity_id,
+	activity.name activity_name
+FROM public.user u
 
-LEFT JOIN public."role"
-	ON "role"."id" = "user"."role_id"
+LEFT JOIN public.role ro
+	ON ro.id = u.role_id
 
-LEFT JOIN public."role_activity_bridge" AS "rab"
-	ON "rab"."role_id" = "role"."id"
-		AND  "role"."id" <> 1 -- ignore bridges if roled_id = _administrator 
+LEFT JOIN public.role_activity_bridge rab
+	ON rab.role_id = ro.id
+		AND  ro.id <> 1 -- ignore bridges if rod_id = _administrator 
 
-LEFT JOIN public."signup_completed_view" AS "uscv"
-	ON "uscv"."user_id" = "user"."id"
+LEFT JOIN public.signup_completed_view uscv
+	ON uscv.user_id = u.id
 
-LEFT JOIN public."activity"
-	ON "rab"."activity_id" = "activity"."id"
+LEFT JOIN public.activity
+	ON rab.activity_id = activity.id
 
-	-- join all if roled_id = _administrator
-	OR "role"."id" = 1 
+	-- join all if rod_id = _administrator
+	OR ro.id = 1 
 
 	--if signup is completed	
-	OR ("activity"."id" = 4 AND "uscv"."is_signup_complete" AND "user"."is_trusted")
+	OR (activity.id = 4 AND uscv.is_signup_complete AND u.is_trusted)

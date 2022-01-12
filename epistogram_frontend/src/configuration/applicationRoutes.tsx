@@ -64,10 +64,9 @@ export const applicationRoutes = {
         route: "/courses",
         icon: <Search />,
 
-        courseDetailsRoute: {
-            title: "",
-            route: "/courses/:courseId",
-        },
+    courseDetailsRoute: {
+        title: "",
+        route: "/course-details/:courseId",
     },
 
     learningRoute: {

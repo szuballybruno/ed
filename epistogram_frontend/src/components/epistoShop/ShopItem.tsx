@@ -8,6 +8,7 @@ import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../universal/EpistoButton";
 import { FlexFloat } from "../universal/FlexFloat";
 import StarsIcon from '@mui/icons-material/Stars';
+import { useNavigation } from "../../services/core/navigatior";
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
@@ -17,8 +18,21 @@ export const ShopItem = (props: {
 } & FlexProps) => {
 
     const { shopItem, children, isSufficientFundsAvailable, handlePurchaseItem, ...css } = props;
-    const { name, coinPrice, canPurchase, purchaseCount, coverFilePath, currencyPrice, shopItemCategoryName } = shopItem;
+    const { name, coinPrice, canPurchase, purchaseCount, coverFilePath, detailsUrl, courseId, currencyPrice, shopItemCategoryName } = shopItem;
     const isPurchased = purchaseCount > 0;
+    const { openNewTab, navigateToCourseDetails } = useNavigation();
+
+    const handleOpenDetails = () => {
+
+        if (courseId) {
+
+            navigateToCourseDetails(courseId);
+        }
+        else {
+
+            openNewTab(detailsUrl);
+        }
+    }
 
     return <FlexFloat
         className="whall"
@@ -122,7 +136,7 @@ export const ShopItem = (props: {
 
             {/* item details */}
             <EpistoButton
-                onClick={() => { }}
+                onClick={() => handleOpenDetails()}
                 style={{ flex: "1" }}>
                 {translatableTexts.shop.description}
             </EpistoButton>

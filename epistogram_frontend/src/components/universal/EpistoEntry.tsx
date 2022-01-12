@@ -48,9 +48,7 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
 
     return <Flex direction="column" mt={marginTop ?? "10px"} flex={flex}>
 
-        {labelVariant === "top" && <Typography style={{
-            color: "#9FA2B4"
-        }}
+        {labelVariant === "top" && <Typography
             variant={"overline"}>
 
             {label}

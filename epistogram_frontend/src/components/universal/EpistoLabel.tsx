@@ -1,16 +1,15 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const EpistoLabel = (props: { text: string } & FlexProps) => {
 
     const { text, ...css } = props;
 
     return <Flex mt="10px" direction="column" {...css}>
-        <Typography
-            variant={"overline"}>
+        <EpistoFont>
 
             {text}
-        </Typography>
+        </EpistoFont>
 
         {props.children}
     </Flex>

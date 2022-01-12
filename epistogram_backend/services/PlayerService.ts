@@ -66,7 +66,7 @@ export class PlayerService {
         userId: number,
         descriptorCode: string) => {
 
-        // get current item
+        // get current course id
         const courseId = await this._courseService
             .getCourseIdByItemCodeAsync(descriptorCode);
 
@@ -74,10 +74,12 @@ export class PlayerService {
         const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, descriptorCode);
 
         // set current course 
-        await this._courseService.setCurrentCourse(userId, courseId, validItemCode);
+        await this._courseService
+            .setCurrentCourse(userId, courseId, validItemCode);
 
         // course items 
-        const modules = await this._courseService.getCurrentCourseItemsAsync(userId);
+        const modules = await this._courseService
+            .getCourseModulesAsync(userId, courseId);
 
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
@@ -127,7 +129,9 @@ export class PlayerService {
      */
     getValidCourseItemCodeAsync = async (userId: number, courseId: number, targetItemCode: string) => {
 
-        const modules = await this._courseService.getCourseModulesAsync(userId, courseId);
+        const modules = await this._courseService
+            .getCourseModulesAsync(userId, courseId);
+
         const courseItemsFlat = this.getCourseItemsFlat(modules);
 
         const targetItem = courseItemsFlat
@@ -156,16 +160,35 @@ export class PlayerService {
      */
     getCourseItemsFlat = (modules: ModuleDTO[]) => {
 
-        const flat = [] as { code: string, index: number, state: CourseItemStateType }[];
+        type CourseItemFlatListTyle = {
+            code: string,
+            index: number,
+            state: CourseItemStateType
+        };
+
+        const flatList = [] as CourseItemFlatListTyle[];
+
         modules
             .forEach(module => {
 
-                flat.push({ code: module.code, index: module.orderIndex, state: module.state });
+                flatList
+                    .push({
+                        code: module.code,
+                        index: module.orderIndex,
+                        state: module.state
+                    });
 
-                module.items.forEach(x => flat.push({ code: x.descriptorCode, index: x.orderIndex, state: x.state }));
+                module
+                    .items
+                    .forEach(x => flatList
+                        .push({
+                            code: x.descriptorCode,
+                            index: x.orderIndex,
+                            state: x.state
+                        }));
             });
 
-        return flat;
+        return flatList;
     }
 
     getVideoDTOAsync = async (userId: number, videoId: number) => {

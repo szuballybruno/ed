@@ -32,6 +32,9 @@ export class CourseLearningStatsView {
     firstItemCode: string;
 
     @ViewColumn()
+    continueItemCode: string;
+
+    @ViewColumn()
     title: string;
 
     @ViewColumn()

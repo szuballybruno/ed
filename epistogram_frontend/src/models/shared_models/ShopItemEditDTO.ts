@@ -10,4 +10,5 @@ export class ShopItemEditDTO {
     coverFilePath: string;
     courseId: number | null;
     discountCodes: DiscountCodeDTO[];
+    detailsUrl: string;
 }

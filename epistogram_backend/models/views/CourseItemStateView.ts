@@ -56,5 +56,8 @@ export class CourseItemStateView {
     courseMode: CourseModeType;
 
     @ViewColumn()
+    isModuleCurrent: boolean;
+
+    @ViewColumn()
     state: CourseItemStateType;
 }

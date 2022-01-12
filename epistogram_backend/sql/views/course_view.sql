@@ -8,14 +8,11 @@ SELECT
 	cc.name category_name,
 	csc.name sub_category_name,
 	ucb.current_item_code current_item_code,
-	(
-		SELECT civ.item_code FROM public.course_item_view civ
-		LEFT JOIN public.course_module cm
-		ON cm.id = civ.module_id
-		WHERE civ.course_id = course.id
-			AND civ.item_order_index = 0
-			AND cm.order_index = 0 
-	) first_item_code,
+    first_civ.item_code first_item_code,
+	CASE WHEN ucb.current_item_code IS NULL 
+		THEN first_civ.item_code 
+		ELSE ucb.current_item_code 
+	END continue_item_code,
 	teacher.first_name teacher_first_name,
 	teacher.last_name teacher_last_name,
 	course.*
@@ -23,6 +20,11 @@ FROM public.course
 
 LEFT JOIN public.user u
 ON 1 = 1
+
+LEFT JOIN public.course_item_view first_civ
+ON first_civ.course_id = course.id
+	AND first_civ.item_order_index = 0
+	AND first_civ.module_order_index = 0 
 
 LEFT JOIN public.course_state_view csv
 ON csv.course_id = course.id 

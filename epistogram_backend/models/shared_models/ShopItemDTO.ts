@@ -12,4 +12,5 @@ export class ShopItemDTO {
     shopItemCategoryId: number;
     shopItemCategoryName: string;
     coverFilePath: string;
+    detailsUrl: string;
 }

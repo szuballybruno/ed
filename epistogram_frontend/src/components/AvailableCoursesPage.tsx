@@ -27,7 +27,7 @@ const AvailableCoursesPage = () => {
     const { courses, coursesState, coursesError } = useUserCourses();
     const { startCourseAsync, startCourseState } = useStartCourse();
 
-    const { navigate, navigateToPlayer } = useNavigation();
+    const { navigate, navigateToPlayer, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
@@ -44,7 +44,7 @@ const AvailableCoursesPage = () => {
 
     const navigateToDetailsPage = (courseId: number, currentItemDescriptior: string | null) => {
 
-        navigate(applicationRoutes.availableCoursesRoute.courseDetailsRoute.route, { courseId }, { code: currentItemDescriptior });
+        navigateToCourseDetails(courseId, currentItemDescriptior ?? undefined);
     }
 
     const playCourse = async (courseId: number, currentItemDescriptior: string | null) => {

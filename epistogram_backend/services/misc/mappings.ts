@@ -151,7 +151,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             currencyPrice: x.currencyPrice,
             shopItemCategoryId: x.shopItemCategoryId,
             shopItemCategoryName: x.shopItemCategoryName,
-            coverFilePath: getAssetUrl(x.coverFilePath)
+            coverFilePath: getAssetUrl(x.coverFilePath),
+            detailsUrl: x.detailsUrl
         }));
 
     mapperService
@@ -678,6 +679,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             purchaseLimit: shopItem.purchaseLimit,
             shopItemCategoryId: shopItem.shopItemCategoryId,
             courseId: shopItem.courseId,
+            detailsUrl: shopItem.detailsUrl,
             discountCodes: mapperService
                 .mapMany(DiscountCode, DiscountCodeDTO, discountCodes)
         }));
@@ -756,12 +758,10 @@ export const toJobTitleDTO = (jobTitle: JobTitle) => {
 
 export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
 
+    const { user, userId, ...activityFlags } = userRightsView;
+
     return {
-        canSetInvitedUserOrganization: userRightsView.canSetInvitedUserOrganization,
-        canAccessAdministration: userRightsView.canAccessAdministration,
-        canAccessCourseAdministration: userRightsView.canAccessCourseAdministration,
-        canAccessApplication: userRightsView.canAccessApplication,
-        canAccessShopAdministration: userRightsView.canAccessShopAdministration
+        ...activityFlags
     } as UserActivityDTO;
 }
 

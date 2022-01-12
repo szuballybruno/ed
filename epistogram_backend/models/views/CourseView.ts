@@ -26,7 +26,13 @@ export class CourseView {
     isStarted: boolean;
 
     @ViewColumn()
+    firstItemCode: string;
+
+    @ViewColumn()
     currentItemCode: string;
+
+    @ViewColumn()
+    continueItemCode: string;
 
     @ViewColumn()
     title: string;

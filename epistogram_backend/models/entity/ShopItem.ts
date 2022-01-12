@@ -17,6 +17,9 @@ export class ShopItem {
     @Column({ type: "int", nullable: true })
     purchaseLimit: number | null;
 
+    @Column({ type: "text", nullable: true })
+    detailsUrl: string | null;
+
     @Column()
     coinPrice: number;
 

@@ -19,6 +19,9 @@ export class ShopItemStatefulView {
     name: string;
 
     @ViewColumn()
+    detailsUrl: string;
+
+    @ViewColumn()
     purchaseCount: number;
 
     @ViewColumn()
