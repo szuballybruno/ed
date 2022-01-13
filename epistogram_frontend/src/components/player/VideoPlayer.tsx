@@ -3,13 +3,14 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import React, { CSSProperties, useRef, useState } from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { TrackProps } from "react-player/file";
 import useEventListener from 'react-use-event-listener';
 import screenfull from "screenfull";
 import { SubtitleDTO } from "../../models/shared_models/SubtitleDTO";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
+import { readVolumeSettings, writeVolumeSettings } from "../../services/core/storageService";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
 import { VideoControls } from "./VideoControls";
 
@@ -40,8 +41,6 @@ export const useVideoPlayerState = (
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
     const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking;
-
-    // useMemo(() => new AdvancedTimer(100, () => setShouldBePlaying(true)).start(), []);
 
     const subtileTracks = subtitles
         .map(x => ({
@@ -141,6 +140,10 @@ export const useVideoPlayerState = (
         //     onVideoEnded();
     }
 
+    //
+    // effect
+    //
+
     useEventListener('keydown', (e) => {
 
         if (e.key === " " || e.key === "ArrowLeft" || e.key === "ArrowRight") {
@@ -161,8 +164,20 @@ export const useVideoPlayerState = (
         }
     });
 
-    // TODO start at specific time
-    // useEffect(() => seekToSeconds(maxWatchedSeconds), [])
+    useEffect(() => {
+
+        const volumeSettings = readVolumeSettings();
+        if (!volumeSettings)
+            return;
+
+        setVolume(volumeSettings.volume);
+        setIsMuted(volumeSettings.isMuted);
+    }, []);
+
+    useEffect(() => {
+
+        writeVolumeSettings({ isMuted, volume });
+    }, [isMuted, volume]);
 
     return {
         playerContainerRef,

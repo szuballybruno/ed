@@ -52,7 +52,6 @@ export const SignupQuestions = (props: {
 
     return <LoadingFrame
         className="whall"
-        loadingState={[saveAnswersStatus, signupDataStatus]}
         error={signupDataError} >
 
         <SingupQuestionSlides state={state} />

@@ -26,3 +26,8 @@ export type ButtonType = {
     icon?: ReactNode,
     action: () => void
 }
+
+export type VolumeSettingsType = {
+    volume: number;
+    isMuted: boolean;
+}

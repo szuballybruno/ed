@@ -523,6 +523,7 @@ export class CourseService {
             .save({
                 id: dto.courseId,
                 title: dto.title,
+                teacherId: dto.teacherId,
                 categoryId: dto.category.id,
                 subCategoryId: dto.subCategory.id,
                 benchmark: dto.benchmark,
@@ -538,8 +539,6 @@ export class CourseService {
                     .humanSkillBenefits
                     .map(x => `${x.text}: ${x.value}`)
                     .join(", "),
-
-                // teacherId: dto.teacherId,
                 visibility: dto.visibility
             });
     }
@@ -558,8 +557,14 @@ export class CourseService {
             .where("c.courseId = :courseId", { courseId: courseId })
             .getMany();
 
+        const viewAsAdmin = views
+            .first();
+
+        const courseItems = views
+            .filter(x => !!x.moduleId);
+
         return this._mapperService
-            .map(CourseAdminContentView, CourseContentEditDataDTO, views.first(), views);
+            .map(CourseAdminContentView, CourseContentEditDataDTO, viewAsAdmin, courseItems);
     }
 
     /**
