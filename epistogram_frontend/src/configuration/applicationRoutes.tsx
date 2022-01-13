@@ -1,4 +1,4 @@
-import { Assignment, Business, Equalizer, GraphicEq, People, Person, School, Settings, Subscriptions } from "@mui/icons-material";
+import { AdminPanelSettings, Assignment, Business, Equalizer, GraphicEq, Home, People, Person, School, Search, Settings, Subscriptions } from "@mui/icons-material";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { translatableTexts } from "../static/translatableTexts";
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -44,7 +44,8 @@ export const applicationRoutes = {
 
     homeRoute: {
         title: translatableTexts.routeTitles.homePage,
-        route: "/home"
+        route: "/home",
+        icon: <Home />
     },
 
     shopRoute: {
@@ -61,6 +62,7 @@ export const applicationRoutes = {
     availableCoursesRoute: {
         title: translatableTexts.routeTitles.availableCourses,
         route: "/courses",
+        icon: <Search />
     },
 
     courseDetailsRoute: {
@@ -71,6 +73,7 @@ export const applicationRoutes = {
     learningRoute: {
         title: translatableTexts.routeTitles.learning,
         route: "/learning",
+        icon: <School />,
 
         learningOverviewRoute: {
             title: translatableTexts.routeTitles.learningOverview,
@@ -101,6 +104,7 @@ export const applicationRoutes = {
     administrationRoute: {
         title: translatableTexts.routeTitles.administration,
         route: "/administration",
+        icon: <AdminPanelSettings />,
 
         usersRoute: {
             title: translatableTexts.routeTitles.administrationUserAdmin,
@@ -232,4 +236,4 @@ export const applicationRoutes = {
             icon: <AttachMoneyIcon />
         }
     }
-};
+}

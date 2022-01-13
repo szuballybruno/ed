@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/layout';
-import { Box } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/layout';
+import { useMediaQuery } from '@chakra-ui/react';
 import { Typography } from '@mui/material';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../services/api/miscApiService';
@@ -15,6 +15,8 @@ import { CourseItemView } from './universal/CourseItemList';
 import { CourseProgressDisplay } from './universal/CourseProgressDisplay';
 import { DashboardSection } from './universal/DashboardSection';
 import { EpistoButton } from './universal/EpistoButton';
+import { FlexListItem } from './universal/FlexListItem';
+import { FlexListTitleSubtitle } from './universal/FlexListTitleSubtitle';
 
 const HomePage = () => {
 
@@ -22,6 +24,8 @@ const HomePage = () => {
     const { navigate } = useNavigation();
 
     console.log(pageDTO?.currentCourseProgress?.title)
+
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     return <MainWrapper>
 
@@ -54,8 +58,7 @@ const HomePage = () => {
                     </Flex>}
 
                     {/* no current course  */}
-                    <EpistoButton
-                        style={{ display: pageDTO?.currentCourseProgress ? "none" : undefined }}
+                    {!pageDTO?.currentCourseProgress && <EpistoButton
                         variant="colored"
                         onClick={() => navigate(applicationRoutes.availableCoursesRoute.route)}>
 
@@ -71,12 +74,14 @@ const HomePage = () => {
                                 {translatableTexts.homePage.availableCoursesText}
                             </Typography>
                         </Box>
-                    </EpistoButton>
+                    </EpistoButton>}
                 </LeftPanel>
 
                 <RightPanel>
 
-                    <Flex direction="column">
+                    <Flex
+                        direction="column"
+                        minW={isSmallerThan1400 ? "1060px" : undefined}>
 
                         <Flex wrap="wrap">
 
@@ -86,10 +91,10 @@ const HomePage = () => {
                                 background="var(--transparentIntenseBlue)"
                                 className="largeSoftShadow roundBorders"
                                 color="white"
-                                minHeight="300px"
-                                minWidth="500px"
+                                showDivider
+                                minHeight="200px"
                                 m="0 5px 10px 0"
-                                flex="3">
+                                flex="3 3 550px">
 
                                 <PractiseQuestions />
                             </DashboardSection>
@@ -99,11 +104,11 @@ const HomePage = () => {
                                 title={translatableTexts.homePage.tipOfTheDay}
                                 background="var(--transparentWhite70)"
                                 borderRadius="6px"
+                                showDivider
                                 className="largeSoftShadow"
                                 minHeight="30px"
-                                minWidth="300px"
                                 m="0 0 10px 5px"
-                                flex="2">
+                                flex="2 2 300px">
 
                                 <DailyTip />
                             </DashboardSection>
@@ -111,7 +116,7 @@ const HomePage = () => {
                         </Flex>
 
                         {/* stats */}
-                        <Flex>
+                        <Flex pb="40px">
                             <StatsSummary />
                         </Flex>
 

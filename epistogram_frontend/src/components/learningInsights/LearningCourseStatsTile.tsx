@@ -82,9 +82,9 @@ export const LearningCourseStatsTile = (props: {
         position="relative"
         overflow="hidden"
         shadow={"0 0 10px 1px #CCC"}
-        bg="white"
+        background="var(--transparentWhite70)"
+        p="5"
         justifyContent="space-between"
-        border="5px solid white"
         {...css}>
 
         {/* cover image box */}
@@ -174,10 +174,10 @@ export const LearningCourseStatsTile = (props: {
                     iconUrl={getAssetUrl("course_exam_tile_icons/tile_questions.svg")}
                     text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
 
-                {/* final exam  */}
+                {/* final exam  
                 <SmallStat
                     iconUrl={getAssetUrl("course_exam_tile_icons/tile_test.svg")}
-                    text={finalExamSuccessRate ? finalExamSuccessRate + "%" : "Nincs kitöltve"} />
+                    text={finalExamSuccessRate ? finalExamSuccessRate + "%" : "Nincs kitöltve"} />*/}
             </Flex>
 
             {/* course progress bar chart */}
@@ -195,7 +195,7 @@ export const LearningCourseStatsTile = (props: {
                     value={progressPercentage} />
             </Flex>
 
-            {/* more stats */}
+            {/* more stats 
             <Flex
                 align={"center"}
                 mt={7}
@@ -212,7 +212,7 @@ export const LearningCourseStatsTile = (props: {
                 <SmallStat
                     iconUrl={getAssetUrl("course_exam_tile_icons/tile_achivement.svg")}
                     text={`Vizsga atlag ${examSuccessRateAverage}%`} />
-            </Flex>
+            </Flex>*/}
         </Flex>
 
         {/* buttons */}

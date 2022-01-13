@@ -35,6 +35,7 @@ export const LearningCurves = () => {
             minW="300px"
             direction="column"
             background="var(--transparentWhite70)"
+            minH="400px"
             mr="10px"
             p="10px"
             overflow="scroll">

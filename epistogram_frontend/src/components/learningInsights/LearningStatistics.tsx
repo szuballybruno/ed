@@ -317,7 +317,7 @@ export const LearningStatistics = () => {
         }
     ] as StatisticsGroupType[];
 
-    return <Flex direction="column" flex="1">
+    return <Flex direction="column" w="100%" flex="1">
         {statistics
             .map(statisticSectionData => {
 

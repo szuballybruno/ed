@@ -22,12 +22,26 @@ const queryClient = new QueryClient();
 // chakra theme
 const config: ThemeConfig = {
     initialColorMode: "light",
-    useSystemColorMode: false
+    useSystemColorMode: false,
 }
-const chakraTheme = extendTheme({ config })
+const chakraTheme = extendTheme({
+    config,
+    fonts: {
+        heading: 'Raleway',
+        body: 'Raleway',
+    },
+})
 
 // mui theme
 const muiTheme = createTheme({
+    typography: {
+        // Use the system font instead of the default Roboto font.
+        fontFamily: [
+            'Raleway',
+            'sans-serif'
+        ].join(',')
+    },
+
     palette: {
         mode: "light",
         primary: {

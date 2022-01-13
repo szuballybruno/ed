@@ -1,5 +1,5 @@
 import { Image } from "@chakra-ui/image";
-import { Flex, Text } from "@chakra-ui/layout";
+import { Divider, Flex, Text } from "@chakra-ui/layout";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { Typography } from "@mui/material";
 import { useContext } from "react";
@@ -17,14 +17,15 @@ import { useCurrentCourseItemCode } from "../services/api/miscApiService";
 
 const NoQuestionsAvailable = () => {
     const { navigate } = useNavigation()
-    return <Flex>
+    return <Flex pr="20px">
+
         <Flex direction={"column"}>
 
-            <Text as={"text"} p={"20px 20px 10px 10px"}>
+            <Text as={"text"} p={"20px 20px 10px 10px"} fontSize="13px">
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
             </Text>
 
-            <Text as={"text"} p={"20px 20px 10px 10px"}>
+            <Text as={"text"} p={"10px 20px 10px 10px"} fontSize="13px">
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
                 <Text
                     as="text"
@@ -38,12 +39,12 @@ const NoQuestionsAvailable = () => {
 
         </Flex>
         <Flex>
-            <Player
-                autoplay
-                loop
-                src={getAssetUrl("lottie_json/writing_exam.json")}
-                style={{ height: '300px', width: '300px' }}
-            />
+            <img
+                src={getAssetUrl("/images/welcome3D.png")}
+                alt=""
+                style={{
+                    objectFit: "contain",
+                }} />
         </Flex>
     </Flex>
 }
@@ -165,6 +166,7 @@ export const PractiseQuestions = () => {
                         alignSelf="center"
                         flexBasis="50px"
                         display={isCorrectAnswer ? undefined : "none"}>
+
                         <Typography>
                             {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
                         </Typography>

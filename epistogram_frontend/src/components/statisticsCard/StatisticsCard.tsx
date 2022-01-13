@@ -24,6 +24,8 @@ const StatisticsCard = (props: {
 
     return <FlexFloat
         background="var(--transparentWhite70)"
+        gridColumn={props.chartSize === "large" ? "1 / -1" : (isOpen ? "span 2" : "unset")} // do not remove!!
+        gridRow={props.chartSize === "large" ? "span 2" : (isOpen ? "span 2" : "unset")} // do not remove!!
         direction="column"
         minW={250}
         position="relative">
@@ -50,7 +52,7 @@ const StatisticsCard = (props: {
         {/* open state */}
         {isOpen && <Flex w={"100%"} mt="50px" p="0 20px 20px 20px" direction="column">
             <EpistoHeader variant="strongSub" text={props.title} />
-            <Box height="300px">
+            <Box>
                 {props.children}
             </Box>
         </Flex>}
@@ -60,8 +62,12 @@ const StatisticsCard = (props: {
 
             {/* image */}
             {iconPath && <img
-                className="square50"
-                style={{ margin: "10px 10px 10px 20px" }}
+                style={{ 
+                    margin: "5px 10px 5px 20px", 
+                    width: 70, 
+                    height: 70, 
+                    objectFit: "contain" 
+                }}
                 alt=""
                 src={iconPath} />}
 
@@ -73,7 +79,10 @@ const StatisticsCard = (props: {
 
                     {/* value */}
                     <Typography
-                        variant={"h5"}>
+                        style={{
+                            lineHeight: 1,
+                            fontSize: "40px"
+                        }}>
 
                         {props.value}
                     </Typography>
@@ -81,6 +90,7 @@ const StatisticsCard = (props: {
                     {/* suffix */}
                     <Typography
                         style={{
+                            fontSize: "20px",
                             marginLeft: "5px"
                         }}>
 
@@ -89,7 +99,7 @@ const StatisticsCard = (props: {
                 </Flex>
 
                 {/* title */}
-                <Typography >
+                <Typography fontSize="13px" >
                     {props.title}
                 </Typography>
             </Flex>

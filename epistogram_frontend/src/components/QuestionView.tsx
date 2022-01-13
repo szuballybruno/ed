@@ -92,7 +92,7 @@ export const QuesitionView = (props: {
                     <EpistoText
                         isAutoFontSize
                         text={answer.answerText}
-                        maxFontSize={20}
+                        maxFontSize={16}
                         style={{
                             width: "100%"
                         }} />

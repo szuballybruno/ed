@@ -214,7 +214,7 @@ export const WatchView = (props: {
                             <Typography style={{
                                 margin: "10px"
                             }}>
-                                Következő videó
+                                Tovább
                             </Typography>
                         </TimeoutFrame>
                     </EpistoButton>

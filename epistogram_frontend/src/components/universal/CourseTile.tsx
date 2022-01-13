@@ -4,6 +4,7 @@ import React, { ReactNode } from 'react';
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { FlexFloat } from "./FlexFloat";
+import { Star, StarBorderOutlined, StarOutline } from "@mui/icons-material";
 
 const SmallStat = (props: { iconUrl: string, text: string }) => {
 
@@ -23,6 +24,7 @@ const SmallStat = (props: { iconUrl: string, text: string }) => {
 
         {/* spent time stat */}
         <Text
+            fontSize="13px"
             as={"text"}
             color={"grey"}>
 
@@ -55,7 +57,7 @@ const CourseTile = (props: {
         {...css}>
 
         {/* cover image box  */}
-        <Box flex="1" position="relative" minH={200} maxH={200}>
+        <Box flex="1" position="relative" minH={150} maxH={150}>
 
             {/* cover image */}
             <img
@@ -102,13 +104,13 @@ const CourseTile = (props: {
         <Flex p="10px" direction={"column"}>
 
             {/* category  */}
-            <Text as="text" color="grey">
+            <Text as="text" fontSize="13px" color="grey">
                 {courseSubCategory}
             </Text>
 
             {/* title */}
             <Flex direction="column">
-                <Text as="h6" fontWeight={"bold"} fontSize="large">{courseTitle}</Text>
+                <Text fontWeight={"600"} fontSize="15px">{courseTitle}</Text>
             </Flex>
 
             {/* small stats  */}
@@ -117,10 +119,6 @@ const CourseTile = (props: {
                 <SmallStat
                     iconUrl={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
                     text={"119"} />
-
-                <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_language.svg")}
-                    text={"magyar"} />
 
                 <SmallStat
                     iconUrl={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
@@ -132,27 +130,22 @@ const CourseTile = (props: {
                 alignItems={"center"}
                 mt={7}>
 
-                <Rating
-                    name="read-only"
-                    style={{
-                        color: "var(--epistoTeal)",
-                    }}
-                    value={4}
-                    readOnly />
+                {/* teacher name */}
+                <SmallStat
+                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
+                    text={courseTeacherName} />
+
+                <StarBorderOutlined />
 
                 <Text
                     as={"text"}
                     color={"grey"}
                     ml={5}>
 
-                    4.1 (189 értékelés)
+                    4.1
                 </Text>
             </Flex>
 
-            {/* teacher name */}
-            <SmallStat
-                iconUrl={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
-                text={courseTeacherName} />
         </Flex>
 
         {/* buttons */}

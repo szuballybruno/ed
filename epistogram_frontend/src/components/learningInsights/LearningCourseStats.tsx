@@ -19,16 +19,18 @@ export const LearningCourseStats = () => {
         loadingState={coursesDataStatus}
         error={coursesDataError}
         direction="column"
-        overflowY={"scroll"}>
+        className="Whall"
+        minW="100%"
+        flex="1">
 
         {/* completed courses */}
-        <DashboardSection variant="noShadow" title="Elvégzett kurzusaim" >
+        <DashboardSection w="100%" variant="normal" title="Elvégzett kurzusaim" >
             {isAnyCoursesComplete
                 ? <EpistoGrid
                     minColumnWidth="300px"
                     auto="fill"
-                    gap="15px"
-                    p="20px">
+                    gap="10px"
+                    p="10px">
 
                     {completedCourses
                         .map((course, index) => <LearningCourseStatsTile course={course} />)}
@@ -43,13 +45,13 @@ export const LearningCourseStats = () => {
         </DashboardSection >
 
         {/* in progress courses  */}
-        <DashboardSection variant="noShadow" title="Folyamatban lévő kurzusaim">
+        <DashboardSection w="100%" variant="noShadow" title="Folyamatban lévő kurzusaim">
             {isAnyCoursesInProgress
                 ? <EpistoGrid
-                    minColumnWidth="300px"
+                    minColumnWidth="320px"
                     auto="fill"
-                    gap="15px"
-                    p="20px">
+                    gap="10px"
+                    p="10px">
                     {inProgressCourses
                         .map((course, index) => {
                             return <LearningCourseStatsTile course={course} />

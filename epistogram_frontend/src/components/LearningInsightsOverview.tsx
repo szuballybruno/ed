@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, useMediaQuery } from '@chakra-ui/react';
 import React from 'react';
 import { translatableTexts } from '../static/translatableTexts';
 import { Badges } from "./Badges";
@@ -8,8 +8,13 @@ import { LearningCurves } from "./LearningCurves";
 import { LearningStatistics } from './learningInsights/LearningStatistics';
 
 export const LearningInsightsOverview = () => {
+    
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
-    return <Flex direction="column">
+    return <Flex
+        direction="column"
+        pb="40px"
+        minW={isSmallerThan1400 ? "1060px" : undefined}>
 
         {/* personality */}
         <PersonalityAssessment />
