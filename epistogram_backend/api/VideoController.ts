@@ -118,13 +118,14 @@ export class VideoController {
                 chunksCount: number
             }>();
 
-        const videoId = withValueOrBadRequest<number>(params.req.body.videoId, "number");
+        const videoId = body.getValue(x => x.videoId, "int");
+        const chunksCount = body.getValue(x => x.chunksCount, "int");
+        const chunkIndex = body.getValue(x => x.chunkIndex, "int");
+
         const tempFolder = this._config.rootDirectory + "\\uploads_temp";
         const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
 
         try {
-
-            const chunkIndex = body.getValue(x => x.chunkIndex, "int");
 
             if (chunkIndex !== 0 && !fs.existsSync(filePath))
                 throw new Error("Trying to append file that does not exist!");
@@ -132,8 +133,6 @@ export class VideoController {
             const file = params.getSingleFile();
             if (!file)
                 throw new Error("File chunk data not sent!");
-
-            const chunksCount = body.getValue(x => x.chunksCount, "int");
 
             console.log("Recieved file chunk: #" + chunkIndex);
 
