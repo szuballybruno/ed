@@ -54,25 +54,24 @@ const HomePage = () => {
                     </Flex>}
 
                     {/* no current course  */}
-                    <Flex>
-                        <EpistoButton
-                            variant="colored"
-                            onClick={() => navigate(applicationRoutes.availableCoursesRoute.route)}>
+                    <EpistoButton
+                        style={{ display: pageDTO?.currentCourseProgress ? "none" : undefined }}
+                        variant="colored"
+                        onClick={() => navigate(applicationRoutes.availableCoursesRoute.route)}>
 
-                            <Box>
+                        <Box>
 
-                                <EpistoHeader
-                                    text={translatableTexts.homePage.availableCoursesLinkTitle}
-                                    style={{ textTransform: "none" }} />
+                            <EpistoHeader
+                                text={translatableTexts.homePage.availableCoursesLinkTitle}
+                                style={{ textTransform: "none" }} />
 
-                                <Typography
-                                    style={{ textTransform: "none" }}>
+                            <Typography
+                                style={{ textTransform: "none" }}>
 
-                                    {translatableTexts.homePage.availableCoursesText}
-                                </Typography>
-                            </Box>
-                        </EpistoButton>
-                    </Flex>
+                                {translatableTexts.homePage.availableCoursesText}
+                            </Typography>
+                        </Box>
+                    </EpistoButton>
                 </LeftPanel>
 
                 <RightPanel>

@@ -1,5 +1,6 @@
 SELECT 
 	co.id course_id,
+	u.id user_id,
     co.title title,
     co.short_description short_description,
     co.description description,
@@ -70,9 +71,15 @@ SELECT
 		LEFT JOIN public.question q
 		ON q.video_id = v.id
 		WHERE cm.course_id = co.id
-	) total_video_question_count
-	
+	) total_video_question_count,
+	(
+		SELECT (cv.can_view)
+		FROM public.course_view cv
+		WHERE (cv.user_id = u.id AND cv.course_id = co.id)
+	) can_start_course
 FROM public.course co
+
+CROSS JOIN public.user u
 
 LEFT JOIN public.storage_file sf
 ON sf.id = co.cover_file_id
@@ -93,4 +100,5 @@ LEFT JOIN public.course_category scc
 ON scc.id = co.sub_category_id
 	
 ORDER BY
+	u.id,
 	co.id

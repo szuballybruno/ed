@@ -319,6 +319,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 categoryName: view.categoryName,
                 subCategoryName: view.subCategoryName,
                 thumbnailURL: thumbnailImageURL,
+                canStartCourse: view.canStartCourse,
                 courseId: view.courseId,
                 shortDescription: view.shortDescription,
                 language: view.languageName,

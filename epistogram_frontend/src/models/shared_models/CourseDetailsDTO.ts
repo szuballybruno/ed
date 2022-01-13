@@ -9,6 +9,7 @@ export class CourseDetailsDTO {
     thumbnailURL: string;
     categoryName: string;
     subCategoryName: string;
+    canStartCourse: boolean;
     courseId: number;
     shortDescription: string;
     difficulty: number;

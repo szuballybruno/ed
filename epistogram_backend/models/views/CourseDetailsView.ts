@@ -11,6 +11,12 @@ export class CourseDetailsView {
     courseId: number;
 
     @ViewColumn()
+    userId: number;
+
+    @ViewColumn()
+    canStartCourse: boolean;
+
+    @ViewColumn()
     modificationDate: Date;
 
     @ViewColumn()
