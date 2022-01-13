@@ -54,6 +54,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         style={{
             overflow: "hidden",
             whiteSpace: "nowrap",
+            fontWeight: 500,
             minWidth: "0px",
             color: isDisabled
                 ? "white"

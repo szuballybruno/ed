@@ -1,5 +1,5 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import { LocalOffer } from "@mui/icons-material";
+import { Done, LocalOffer } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
@@ -35,15 +35,14 @@ export const ShopItem = (props: {
     }
 
     return <FlexFloat
-        className="whall"
+        className="whall roundBorders"
         direction="column"
-        borderRadius="15px"
         position="relative"
         overflow="hidden"
         shadow={"0 0 10px 1px #CCC"}
-        bg="white"
+        p="5px"
+        background="var(--transparentWhite70)"
         justifyContent="space-between"
-        border={`5px solid ${isPurchased ? "gold" : "white"}`}
         {...css}>
 
         {/* cover image box */}
@@ -60,6 +59,35 @@ export const ShopItem = (props: {
                 }}
                 src={coverFilePath}
                 alt="" />
+
+            {/* is purchased label */}
+            {isPurchased && <Flex
+                position="absolute"
+                align="center"
+                w="100%"
+                bottom="0"
+                padding="5px 20px"
+                borderRadius="0px 0 6px 6px"
+                background="rgba(0, 220, 122, 0.95)"
+                right="0">
+
+                <Done style={{
+                    color: "white",
+                    padding: 0,
+                    margin: 0,
+                    lineHeight: 1
+
+                }} />
+
+                <Typography
+                    variant="overline"
+                    fontSize="13px"
+                    color="white"
+                    fontWeight={500}>
+
+                    Megvásárolva
+                </Typography>
+            </Flex>}
 
             {/* purchase overlay  */}
             {isPurchased && <Flex

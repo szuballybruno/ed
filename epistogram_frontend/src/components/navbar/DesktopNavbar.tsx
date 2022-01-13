@@ -96,7 +96,7 @@ const DesktopNavbar = (props: {
             flex="1"
             h="60px"
             mt="10px"
-            mb="30px"
+            mb="10px"
             justify={hideLinks ? "center" : "space-between"}>
 
             {/* logo link */}
@@ -119,93 +119,93 @@ const DesktopNavbar = (props: {
             {/* menu items */}
             {
                 !hideLinks && <>
-                    {(isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo) ? 
-                    <Flex height="50px" flex="1 0 600px">
-                        {menuItems
-                            .map((item, index) => {
-                                return <NavbarButton
-                                    key={index}
-                                    menuName={item.title}
-                                    menuPath={item.route} />
-                            })}
+                    {(isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo) ?
+                        <Flex height="50px" flex="1 0 600px">
+                            {menuItems
+                                .map((item, index) => {
+                                    return <NavbarButton
+                                        key={index}
+                                        menuName={item.title}
+                                        menuPath={item.route} />
+                                })}
 
-                        {/* continue watching  */}
-                        {currentCourseItemCode &&
-                            <NavbarButton
-                                menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
+                            {/* continue watching  */}
+                            {currentCourseItemCode &&
+                                <NavbarButton
+                                    menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
 
-                                <EpistoButton
-                                    className="mildShadow"
-                                    style={{
-                                        flex: "1",
-                                        color: "--epistoTeal",
-                                        background: "var(--transparentWhite70)",
-                                        border: "none"
-                                    }}
-                                    variant="outlined"
-                                    onClick={() => continueCourse()}
-                                    icon={
-                                        <img
-                                            alt=""
-                                            src={getAssetUrl("/icons/play2.svg")}
-                                            style={{
-                                                width: "25px",
-                                                height: "25px",
-                                                marginRight: "5px"
-                                            }} />
-                                    }>
-                                    Aktuális Kurzus
-                                </EpistoButton>
-                            </NavbarButton>}
-                    </Flex> : <Flex>
+                                    <EpistoButton
+                                        className="mildShadow"
+                                        style={{
+                                            flex: "1",
+                                            color: "--epistoTeal",
+                                            background: "var(--transparentWhite70)",
+                                            border: "none"
+                                        }}
+                                        variant="outlined"
+                                        onClick={() => continueCourse()}
+                                        icon={
+                                            <img
+                                                alt=""
+                                                src={getAssetUrl("/icons/play2.svg")}
+                                                style={{
+                                                    width: "25px",
+                                                    height: "25px",
+                                                    marginRight: "5px"
+                                                }} />
+                                        }>
+                                        Aktuális Kurzus
+                                    </EpistoButton>
+                                </NavbarButton>}
+                        </Flex> : <Flex>
 
-                        {menuItems
-                            .map((item, index) => {
+                            {menuItems
+                                .map((item, index) => {
 
-                                return <EpistoButton
-                                    variant="plain"
-                                    key={index}
-                                    onClick={() => {
-                                        navigate(item.route)
-                                    }}>
-                                    {item.icon}
-                                </EpistoButton>
-                            })}
+                                    return <EpistoButton
+                                        variant="plain"
+                                        key={index}
+                                        onClick={() => {
+                                            navigate(item.route)
+                                        }}>
+                                        {item.icon}
+                                    </EpistoButton>
+                                })}
 
-                        {/* continue watching  */}
-                        {currentCourseItemCode &&
-                            <NavbarButton
-                                menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
+                            {/* continue watching  */}
+                            {currentCourseItemCode &&
+                                <NavbarButton
+                                    menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
 
-                                <EpistoButton
-                                    className="mildShadow"
-                                    style={{
-                                        color: "--epistoTeal",
-                                        background: "var(--transparentWhite70)",
-                                        border: "none"
-                                    }}
-                                    variant="outlined"
-                                    onClick={() => continueCourse()}
-                                    icon={
-                                        <img
-                                            alt=""
-                                            src={getAssetUrl("/icons/play2.svg")}
-                                            style={{
-                                                width: "25px",
-                                                height: "25px",
-                                            }} />
-                                    }>
-                                </EpistoButton>
-                            </NavbarButton>}
-                    </Flex>}
+                                    <EpistoButton
+                                        className="mildShadow"
+                                        style={{
+                                            color: "--epistoTeal",
+                                            background: "var(--transparentWhite70)",
+                                            border: "none"
+                                        }}
+                                        variant="outlined"
+                                        onClick={() => continueCourse()}
+                                        icon={
+                                            <img
+                                                alt=""
+                                                src={getAssetUrl("/icons/play2.svg")}
+                                                style={{
+                                                    width: "25px",
+                                                    height: "25px",
+                                                }} />
+                                        }>
+                                    </EpistoButton>
+                                </NavbarButton>}
+                        </Flex>}
 
                     {/* content */}
                     <Flex pr="10px" align="center" mr="15px">
 
                         <EpistoButton
                             style={{
-                                height: 35,
-                                fontStyle: "normal",
+                                height: 40,
+                                fontStyle: "normal"
                             }}
                             onClick={() => {
                                 navigate("/shop")
@@ -214,23 +214,33 @@ const DesktopNavbar = (props: {
                         >
                             <Typography fontSize={"1.0em"} style={{
                                 margin: "0 7px",
+                                fontWeight: 500,
                                 textTransform: "uppercase"
                             }}>Áruház</Typography>
-                            <LocalMallOutlined />
+
+                            <img
+                                className="square50"
+                                src={getAssetUrl("/images/shop3D.png")}
+                                alt=""
+                                style={{
+                                    objectFit: "contain"
+                                }} />
                         </EpistoButton>
 
                         <EpistoButton
-                            style={{
-                                borderRadius: "100%",
-                                width: 35,
-                                height: 35
-                            }}
+                            className="roundBorders square50"
                             variant={"plain"}
                             onClick={() => {
                                 setNotificationsPopperOpen(true)
                             }}
                         >
-                            <NotificationsNone />
+                            <img
+                                className="square50"
+                                src={getAssetUrl("/images/bell3D.png")}
+                                alt=""
+                                style={{
+                                    objectFit: "cover"
+                                }} />
                         </EpistoButton>
 
                         <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>

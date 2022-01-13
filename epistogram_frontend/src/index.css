@@ -67,7 +67,7 @@
 }
 
 .fontLarge {
-  font-size: 18px !important;
+  font-size: 15px !important;
 }
 
 .fontHuge {
@@ -182,16 +182,6 @@
 .controlPadding {
   padding: 2px 12px 2px 12px
 }
-
-/*@font-face {
-  font-family: 'Poppins';
-  font-style:  normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("configuration/fonts/Poppins-Light.ttf") format("ttf"),
-  url("configuration/fonts/Poppins-Light.ttf") format("ttf");
-}*/
-
 
 /* raleway-100 - latin-ext_latin */
 @font-face {

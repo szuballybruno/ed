@@ -1,4 +1,4 @@
-import { Box, Flex, GridItem } from "@chakra-ui/react";
+import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
@@ -30,6 +30,8 @@ export const ShopPage = () => {
 
     const confirmationDilaogLogic = useEpistoDialogLogic({ defaultCloseButtonType: "top" });
 
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+
     const handlePurchaseItem = (item: ShopItemDTO) => {
 
         setCurrentShopItem(item);
@@ -54,14 +56,23 @@ export const ShopPage = () => {
 
                 {/* categories title */}
                 <Typography
-                    style={{ margin: "40px 20px", textAlign: "center" }}
-                    variant={"h4"}>
+                    variant="overline"
+                    style={{
+                        textAlign: "left",
+                        margin: 10
+                    }}>
 
                     {translatableTexts.availableCourses.categoriesTitle}
                 </Typography>
 
                 {/* categories list */}
-                <ToggleButtonGroup className={classes.categoriesList} orientation={"vertical"}>
+                <ToggleButtonGroup
+                    style={{
+                        flex: 1,
+                        textAlign: "left"
+                    }}
+                    orientation={"vertical"}>
+
                     {[{ id: -1, name: "Mutasd mindet" }]
                         .concat(shopItemCategories)
                         .map((category, index) => {
@@ -70,70 +81,108 @@ export const ShopPage = () => {
                                 selected={categoryFilterId === category.id}
                                 value={category}
                                 style={{
-                                    alignItems: "flex-start",
-                                    paddingLeft: "30px",
+                                    flexDirection: "row",
+                                    textAlign: "left",
+                                    width: "100%",
+                                    height: 40,
+                                    justifyContent: "flex-start",
+                                    alignItems: "center",
+                                    paddingLeft: "10px",
+                                    border: "none",
+                                    fontWeight: 500,
+                                    fontSize: 13
                                 }}
                                 onClick={() => setCategoryFilterId(category.id)}
                                 key={index}>
+                                <Flex
+                                    className="roundBorders"
+                                    boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
+                                    p="3px"
+                                    h="30px"
+                                    m="2px 10px 2px 0px"
+                                    bgColor="var(--epistoTeal)" />
 
-                                <Typography>
-                                    {category.name}
-                                </Typography>
+                                {category.name}
                             </ToggleButton>
                         })}
                 </ToggleButtonGroup>
             </LeftPanel>
 
             {/* content */}
-            <RightPanel noPadding={true}>
-                <Flex id="coursesPanelRoot" direction="column" overflow="hidden" className="whall">
+            <RightPanel>
+                <Flex
+                    id="coursesPanelRoot"
+                    direction="column"
+                    pb="40px"
+                    w="100%"
+                    minW={isSmallerThan1400 ? "1060px" : undefined}>
 
                     {/* search */}
-                    <Box id="courseSearchRoot" p="20px" direction="column">
+                    <Flex
+                        direction="row"
+                        align="center"
+                        justify="space-between"
+                        w="100%"
+                        p="20px 0">
 
-                        {/* upper part */}
-                        <EpistoSearch width="100%" />
-
-                        {/* lower part */}
-                        <Flex justify="space-between" mt="20px" align="center">
-
-                            {/* user coin balance */}
-                            <Flex align="center">
-                                <ProfileImage
-                                    url={user.avatarUrl}
-                                    cursor="pointer"
-                                    className="square40" />
-
-                                <Typography style={{ margin: "0 10px 0 10px" }}>
-                                    Aktuális EpistoCoin egyenleged:
-                                </Typography>
-
-                                <EpistoConinInfo />
-                            </Flex>
-
-                            {/* order settings  */}
-                            <Select
-                                native
-                                onChange={() => { }}
-                                className={classes.sortFormControl}
-                                inputProps={{
-                                    name: 'A-Z',
-                                    id: 'outlined-age-native-simple',
-                                }}
+                        {/* user coin balance */}
+                        <Flex align="center" flex="3" pr="20px" minW="300px">
+                            <ProfileImage
+                                url={user.avatarUrl}
+                                cursor="pointer"
+                                className="square50"
                                 style={{
-                                    height: "40px"
-                                }}>
-                                <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
-                                <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
-                                <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
-                                <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
-                            </Select>
+                                    minWidth: 50
+                                }} />
+
+                            <Typography style={{ margin: "0 0 0 10px" }} fontSize="13px">
+                                Aktuális EpistoCoin egyenleged:
+                            </Typography>
+
+                            <EpistoConinInfo />
                         </Flex>
-                    </Box>
+
+                        {/* search */}
+                        <EpistoSearch h="40px" mx="10px" flex="5" />
+
+                        {/* order settings  */}
+                        <Select
+                            native
+                            onChange={() => { }}
+                            className="roundBorders fontSmall mildShadow"
+                            inputProps={{
+                                name: 'A-Z',
+                                id: 'outlined-age-native-simple',
+                            }}
+                            sx={{
+                                "& .MuiOutlinedInput-notchedOutline": {
+                                    border: "none"
+                                }
+                            }}
+                            style={{
+                                background: "var(--transparentWhite70)",
+                                border: "none",
+                                height: "40px",
+                                color: "3F3F3F",
+                                flex: 1
+                            }}>
+                            <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
+                            <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
+                            <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
+                            <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
+                        </Select>
+                    </Flex>
 
                     {/* shop items */}
-                    <Box id="scrollContainer" overflowY="scroll" className="whall" p="10px">
-                        <EpistoGrid auto="fit" gap="15" minColumnWidth="300px">
+                    <Box
+                        id="scrollContainer"
+                        className="whall">
+
+                        <EpistoGrid
+                            auto="fill"
+                            gap="10"
+                            minColumnWidth="250px">
+
                             {shopItems
                                 .filter(x => x.shopItemCategoryId === categoryFilterId || categoryFilterId === -1)
                                 .map((shopItem, index) => {

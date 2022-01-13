@@ -47,7 +47,6 @@ const CourseTile = (props: {
     return <FlexFloat
         className="whall roundBorders"
         direction="column"
-        borderRadius="10px"
         position="relative"
         overflow="hidden"
         shadow="0 0 10px 1px #CCC"
