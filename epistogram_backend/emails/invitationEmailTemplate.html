@@ -1,595 +1,93 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en-US">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <meta name="robots" content="noindex,nofollow">
-
-    <link rel="canonical" href="https://lofasz.pagedemo.co">
-
-    <title>Welcome Mail</title>
-
-    <meta property="og:locale" content="en_US">
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="">
-    <meta property="og:description" content="">
-    <meta property="og:site_name" content="">
-    <meta property="og:url" content="https://lofasz.pagedemo.co">
-
-
-    <link rel="preload" as="script" href="//g.fastcdn.co/js/utils.baec6ab095abccec712d.js">
-    </link>
-    <link rel="preload" as="script" href="//g.fastcdn.co/js/Cradle.4dac59f2328b0387640d.js">
-    </link>
-    <link rel="preload" as="script" href="//g.fastcdn.co/js/LazyImage.b311ea858a228d7bc9b2.js">
-    </link>
-    <link rel="preconnect dns-prefetch" href="https://fonts.gstatic.com" crossorigin>
-    </link>
-
-
-
-
-
-    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700" />
-
-
-    <style type="text/css" media="screen">
-        body {
-            -moz-osx-font-smoothing: grayscale;
-            -webkit-font-smoothing: antialiased;
-            margin: 0;
-            width: 100%;
-            font-family: Arial;
-            font-weight: 400;
-            background: url(https://epistogram.com/wp-content/uploads/2022/01/emailhatter.png) repeat rgb(255, 255, 255) top left / cover;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-            cursor: pointer;
-        }
-
-        a:not(.btn):hover {
-            text-decoration: underline;
-        }
-
-        input,
-        select,
-        textarea,
-        p,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            margin: 0;
-            font-size: inherit;
-            font-weight: inherit;
-        }
-
-        main {
-            overflow: hidden;
-        }
-
-        u>span {
-            text-decoration: inherit;
-        }
-
-        ol,
-        ul {
-            padding-left: 2.5rem;
-            margin: .625rem 0;
-        }
-
-        p {
-            word-wrap: break-word;
-        }
-
-        h1>span,
-        h2>span,
-        h3>span,
-        h4>span,
-        h5>span,
-        h6>span {
-            display: block;
-            word-wrap: break-word;
-        }
-
-        iframe {
-            border: 0;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        :root.js-text-scaling {
-            --mobile-font-size: 4vw;
-            --default-font-size: 16px;
-        }
-
-        .item-absolute {
-            position: absolute;
-        }
-
-        .item-relative {
-            position: relative;
-        }
-
-        .item-block {
-            display: block;
-            height: 100%;
-            width: 100%;
-        }
-
-        .item-cover {
-            z-index: 1000030;
-        }
-
-        .item-breakword {
-            word-wrap: break-word;
-        }
-
-        .item-content-box {
-            box-sizing: content-box;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .clearfix {
-            clear: both;
-        }
-
-        sup {
-            margin-left: 0.1rem;
-            line-height: 0;
-        }
-
-        @keyframes slide-down {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-        }
-
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-            }
-        }
-
-        @supports (-webkit-overflow-scrolling:touch) {
-
-            @media (-webkit-min-device-pixel-ratio:2),
-            (min-resolution:192dpi) {
-                .image[src$=".svg"] {
-                    width: calc(100% + 1px);
-                }
-            }
-        }
-
-        .show-for-sr {
-            border: 0 !important;
-            clip: rect(1px, 1px, 1px, 1px) !important;
-            -webkit-clip-path: inset(50%) !important;
-            clip-path: inset(50%) !important;
-            height: 1px !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            padding: 0 !important;
-            position: absolute !important;
-            width: 1px !important;
-            white-space: nowrap !important;
-        }
-
-        .headline {
-            font-family: Montserrat;
-            font-weight: 700;
-        }
-
-        .section-fit {
-            max-width: 60rem;
-        }
-
-        :root {
-            --section-relative-margin: 0 auto;
-        }
-
-        .section-relative {
-            position: relative;
-            margin: 0 auto;
-        }
-
-        .js-text-scaling .section-relative {
-            margin: var(--section-relative-margin);
-        }
-
-        .section-inner {
-            height: 100%;
-        }
-
-        #page_block_header {
-            height: 41.625rem;
-            max-width: 100%;
-        }
-
-        #page_block_header .section-holder-border {
-            border: 0;
-        }
-
-        #page_block_header .section-block {
-            background: none;
-            height: 41.625rem;
-        }
-
-        #page_block_header .section-holder-overlay {
-            display: none;
-        }
-
-        #element-4 {
-            top: 0;
-            left: -8.1875rem;
-            height: 41.625rem;
-            width: 76.3125rem;
-            z-index: 3;
-        }
-
-        .circle {
-            border-radius: 50%;
-        }
-
-        .shape {
-            height: inherit;
-        }
-
-        .line-horizontal {
-            height: .625rem;
-        }
-
-        .line-vertical {
-            height: 100%;
-            margin-right: .625rem;
-        }
-
-        [class*='line-'] {
-            box-sizing: content-box;
-        }
-
-        #element-4 .shape {
-            border: 0;
-            background: rgb(255, 255, 255);
-            opacity: 0.54;
-        }
-
-        #element-5 {
-            top: 6.1875rem;
-            left: 11.875rem;
-            height: 31.9375rem;
-            width: 36.125rem;
-            z-index: 4;
-        }
-
-        #element-5 .shape {
-            border: 0.0625rem solid #FFFFFF;
-            border-radius: 0.625rem 0.625rem 0.625rem 0.625rem;
-            background: rgb(255, 255, 255);
-        }
-
-        #element-6 {
-            top: 7.6875rem;
-            left: 26.375rem;
-            height: 3.75rem;
-            width: 7.125rem;
-            z-index: 5;
-        }
-
-        #element-7 {
-            top: 13rem;
-            left: 13.5625rem;
-            height: 5.25rem;
-            width: 32.75rem;
-            z-index: 6;
-            color: #37465A;
-            font-size: 1.6099rem;
-            line-height: 2.6rem;
-            text-align: center;
-        }
-
-        #element-7 .x_0d91ddff {
-            text-align: center;
-            line-height: 1.8125rem;
-            font-size: 1.3003rem;
-        }
-
-        #element-7 strong {
-            font-weight: 700;
-        }
-
-        #element-8 {
-            top: 16.75rem;
-            left: 16.75rem;
-            height: 16.25rem;
-            width: 23.125rem;
-            z-index: 7;
-            color: #37465A;
-            font-size: 0.9907rem;
-            line-height: 1.6rem;
-            text-align: left;
-        }
-
-        #element-8 .x_ef245e2e {
-            text-align: left;
-            line-height: 1.375rem;
-            font-size: 0.9907rem;
-        }
-
-        #element-9 {
-            top: 34.125rem;
-            left: 23.8125rem;
-            height: 2.5rem;
-            width: 10.875rem;
-            z-index: 8;
-        }
-
-        .btn {
-            cursor: pointer;
-            text-align: center;
-            transition: border .5s;
-            width: 100%;
-            border: 0;
-            white-space: normal;
-            display: table-cell;
-            vertical-align: middle;
-            padding: 0;
-            line-height: 120%;
-        }
-
-        .btn-shadow {
-            box-shadow: 0 1px 3px rgba(1, 1, 1, 0.5);
-        }
-
-        #element-9 .btn.btn-effect3d:active {
-            box-shadow: none;
-        }
-
-        #element-9 .btn:hover {
-            background: #1565C0;
-            color: #FFFFFF;
-        }
-
-        #element-9 .btn {
-            background: #2C608D;
-            color: #FFFFFF;
-            font-size: 0.9907rem;
-            font-family: Montserrat;
-            font-weight: 400;
-            height: 2.5rem;
-            width: 10.875rem;
-            border-radius: 3px;
-        }
-
-        #element-7 .x_1925a137 {
-            text-align: center;
-            line-height: 2.625rem;
-            font-size: 1.6099rem;
-        }
-
-        #element-8 .x_3579aa00 {
-            text-align: left;
-            line-height: 1.625rem;
-            font-size: 0.9907rem;
-        }
-
-        @media screen and (min-width:401px) and (max-width:767px) {
-            :root {
-                font-size: 16px;
-            }
-
-            :root.js-text-scaling {
-                font-size: var(--default-font-size);
-            }
-        }
-
-        @media screen and (max-width:767px) {
-            .hidden-mobile {
-                display: none;
-            }
-        }
-
-        @media screen and (max-width:1200px) {
-            :root {
-                font-size: 1.33vw;
-            }
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <title>Successful Registration Email Template</title>
+    <meta name="description" content="Successful Registration Email Template.">
+    <style type="text/css">
+        a:hover {
+            text-decoration: underline !important;
         }
     </style>
-
-    <script>
-        window.__variantsData = [{ name: 'A', chance: 100 }];
-
-        window.__page_id = 22829165;
-        window.__customer_id = 4348490;
-        window.__default_experience_id = 22829165;
-        window.__version = 2;
-        window.__variant = "A";
-        window.__variant_id = 1;
-        window.__variant_custom_name = "Variation A";
-        window.__preview = false;
-        window.__page_type = 2;
-        window.__variant_hash = "02ae56e3ddec35182d2a2dfa7a01e1bfd140ae9e";
-        window.__page_domain = "lofasz.pagedemo.co";
-        window.__page_generator = true;
-        window.__experiment_id = null;
-        window._Translate = {
-            translations: {},
-            set: function (text, translation) { this.translations[text] = translation; },
-            get: function (text) { return this.translations[text] || text; }
-        };
-    </script>
-    <script id="ip-config" type="application/json">
-  {"mobileDisabled":true,"downloadFileEndpoint":"https://app.instapage.com/ajax/pageserver/files/serve-file","reCaptchaEnabled":false,"snowplowUrl":"https://cdn.instapagemetrics.com/t/js/3/it.js","snowplowWrapperUrl":"https://g.fastcdn.co/js/sptw.3.js"}
-</script>
-
-    <script id="ip-analytics"
-        type="application/json">{"trackingData":{"anthillApiKey":"ee4fc0e0d95288d9ee353dadfe9d9a5673f3e8b597e5a577e4d22207bf1cfa4062c348b7f270e22488a6bd988eaeab061294b656b9e4f1c6d7ae43680c74f4d96467bc6608d71b938a735f21b2ae3291115b913f9b1dc9f9018cf0f3fdd53e2158ab181905658516bed48ed6f7cffecb215eb4cb6e8e1d433e5d9a2cfbd34527f320ace3811764217f180dcd4a3cab47","ownerId":3947740,"customerId":4348490,"pageId":22829165,"publishedVersion":2,"variationName":"A","variationId":1,"linkedVariationId":2,"variation":"A","trackedLinks":[],"allLinks":[{"href":"http://{{epistogramAppUrl}}","ariaLabel":"","id":"jxr92l6awdh","type":"url","track":false,"targetNewWindow":false}],"user_id":3947740},"conversionSettings":{"forms":true,"links":true,"external":false},"visitUrl":"https://anthill.instapage.com/projects/56c2f3d796773d0a7e96a536/events/visit","conversionUrl":"https://anthill.instapage.com/projects/56c2f3d796773d0a7e96a536/events/conversion"}</script>
-
-    <script id="ip-trkr" type="text/javascript" async=1>
-        ; (function (p, l, o, w, i, n, g) {
-            if (!p[i]) {
-                p.GlobalSnowplowNamespace = p.GlobalSnowplowNamespace || [];
-                p.GlobalSnowplowNamespace.push(i); p[i] = function () {
-                    (p[i].q = p[i].q || []).push(arguments)
-                }; p[i].q = p[i].q || []; n = l.createElement(o); g = l.getElementsByTagName(o)[0]; n.async = 1;
-                n.src = w; g.parentNode.insertBefore(n, g)
-            }
-        }(window, document, "script", "https://cdn.instapagemetrics.com/t/js/3/it.js", "instapageSp"));
-        ; (function (i, n, s, t, a, p, g) {
-            i[a] || (i[a] = function () { (i[a].q = i[a].q || []).push(arguments) },
-                i[a].q = i[a].q || [], p = n.createElement(s), g = n.getElementsByTagName(s)[0], p.async = 1,
-                p.src = t, g.parentNode.insertBefore(p, g))
-        }(window, document, "script", "https://g.fastcdn.co/js/sptw.3.js", "_instapageSnowplow"));
-        try {
-            var trackingData = JSON.parse(document.querySelector('#ip-analytics').text).trackingData;
-            window._instapageSnowplow('setWrapperConfig', {
-                lpContext: {
-                    lp_id: trackingData.pageId,
-                    lp_variation_id: trackingData.variationId,
-                    lp_version: trackingData.publishedVersion,
-                    subaccount_id: trackingData.customerId
-                },
-                collectorHost: "ec.instapagemetrics.com"
-            });
-            window._instapageSnowplow('enableActivityTracking');
-            window._instapageSnowplow('trackPageView');
-        } catch (e) {
-            console.warn('Snowplow tracker error', e);
-        }
-    </script>
-
-    <script id="ip-cm" type="text/javascript" async=1>
-        ; (function (c, o, n, s, e, m, a) {
-            c[e] || (c[e] = function () { (c[e].q = c[e].q || []).push(arguments) },
-                c[e].q = c[e].q || [], m = o.createElement(n), a = o.getElementsByTagName(n)[0], m.async = 1,
-                m.src = s, a.parentNode.insertBefore(m, a))
-        }(window, document, "script", "https://g.fastcdn.co/js/cm.js", "_instapageConsentManagement"));
-    </script>
-
-
-
-
-
-
-    <!-- F_INSTAPAGE[dynamic_text_replacement;page_generator] -->
-
-
-    <!-- custom HEAD code-->
-
-
-    <!-- end custom HEAD code-->
 </head>
 
-<body id="landing-page">
+<body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">
+    <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8"
+        style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;">
+        <tr>
+            <td>
+                <table style="background-color: #f2f3f8; max-width:670px;  margin:0 auto;" width="100%" border="0"
+                    align="center" cellpadding="0" cellspacing="0">
 
-    <!-- custom BODY code-->
+                    <tr>
+                        <td style="height:80px;">&nbsp;</td>
+                    </tr>
 
+                    <tr>
+                        <td style="text-align:center;">
+                            <a href="www.epistogram.com" title="logo" target="_blank">
+                                <img width="300" src="{{epistogramLogoUrl}}" title="logo" alt="logo">
+                            </a>
+                        </td>
+                    </tr>
 
-    <!-- end custom BODY code-->
+                    <tr>
+                        <td style="height:20px;">&nbsp;</td>
+                    </tr>
 
+                    <tr>
+                        <td>
+                            <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"
+                                style="max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
+                                <tr>
+                                    <td style="height:40px;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:0 35px;">
+                                        <h1
+                                            style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;">
+                                            Örömmel értesítünk, hogy fiókod elkészült!</h1>
+                                        <span
+                                            style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
+                                        <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
+                                            Kedves {{userFullName}}!<br><br>
+                                            Vállalatod, a P029 a mai naptól bevezette az EpistoGram oktatási keretrendszer használatát, melybe most az elsők között kapsz meghívást!
+											A HR-es kolléganőd, Vani már hozzá is adott a rendszerhez, nincs más dolgod, mint az alábbi linkre kattintva befejezni a regisztrációs folyamatot.
+											Először egy pár perces kérdőív vár majd, ezután pedig szabad az út a tanfolyamainkhoz!
+                                            <br><br>
+											Jó tanulást kíván,<br>
+											Az EpistoGram Csapata
+                                        </p>
+                                        <a href="{{registrationUrl}}"
+                                            style="background:#97C9CC;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">
 
-
-
-    <main>
-        <section class="section section-relative " id="page_block_header" data-at="section">
-
-            <div class="section-holder-border item-block item-absolute" data-at="section-border"></div>
-            <div class="section-holder-overlay item-block item-absolute" data-at="section-overlay"></div>
-            <div class="section-block">
-                <div class="section-inner section-fit section-relative">
-                    <div class="widget item-absolute " id="element-4">
-                        <div class="contents shape  box figure " data-at="shape"></div>
-                    </div>
-
-                    <div class="widget item-absolute " id="element-5">
-                        <div class="contents shape  box figure " data-at="shape"></div>
-                    </div>
-
-                    <div class="widget item-absolute  " id="element-6">
-                        <div class="contents cropped item-block" data-at="image-cropp">
-                            <img class="item-content-box item-block image " data-at="image" alt=""
-                                src="https://epistogram.com/wp-content/uploads/2022/01/logo.png"
-                                srcset="https://epistogram.com/wp-content/uploads/2022/01/logo.png 2x">
-                        </div>
-                    </div>
-
-                    <div class="widget item-absolute headline  " id="element-7" data-at="headline">
-                        <div class="contents">
-                            <h2>
-                                <span class="x_1925a137 x_0d91ddff">Köszöntünk az EpistoGramban!
-                                </span><span class="x_1925a137 x_0d91ddff"><br></span>
-                            </h2>
-                        </div>
-                    </div>
-
-                    <div class="widget item-absolute paragraph  " id="element-8" data-at="paragraph">
-                        <div class="contents">
-                            <p class="x_3579aa00 x_ef245e2e">Kedves {{userFullName}}!
-                            </p><br>
-                            <p class="x_3579aa00 x_ef245e2e">Az aktivációs kódod beváltása sikeres volt, így már csak
-                                pár kattintás választ el téged az oldaltól.&nbsp;</p><br>
-                            <p class="x_3579aa00 x_ef245e2e">Először egy pár perces kérdőív vár majd, ezután pedig
-                                szabad az út a tanfolyamainkhoz!<br></p><br>
-                            <p class="x_3579aa00 x_ef245e2e">Jó tanulást kíván,
-                            </p>
-                            <p class="x_3579aa00 x_ef245e2e">Az EpistoGram Csapata</p>
-                            <p class="x_3579aa00 x_ef245e2e">
-                            </p>
-                            <p class="x_3579aa00 x_ef245e2e">
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="widget item-absolute  " id="element-9">
-                        <a href="http://{{epistogramAppUrl}}" id="link-jxr92l6awdh" class="url-link btn    item-block"
-                            data-at="button" data-link-jxr92l6awdh>
-                            Irány a platform!
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-
-
-
-
-
-
-    <!-- custom FOOTER code-->
-
-
-    <!-- end custom FOOTER code-->
-
-
-    <script src="//g.fastcdn.co/js/utils.baec6ab095abccec712d.js"></script>
-    <script src="//g.fastcdn.co/js/Cradle.4dac59f2328b0387640d.js"></script>
-    <script src="//g.fastcdn.co/js/LazyImage.b311ea858a228d7bc9b2.js"></script>
-
-    <!-- Generated at: 2022-01-13T13:45:54.659Z -->
-    <!--
-
--->
+                                            Belépek a platformba
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height:40px;">&nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                    <tr>
+                        <td style="height:20px;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">
+                            <p
+                                style="font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;">
+                                &copy; <strong>www.epistogram.com</strong></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:80px;">&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>
