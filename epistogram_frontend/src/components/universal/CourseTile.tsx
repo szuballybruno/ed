@@ -118,11 +118,11 @@ const CourseTile = (props: {
             <Flex mt={7}>
 
                 <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
+                    iconUrl={getAssetUrl("images/videos3D.png")}
                     text={"119"} />
 
                 <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
+                    iconUrl={getAssetUrl("images/difficulty3D.png")}
                     text={"6.9/10"} />
             </Flex>
 
@@ -133,18 +133,13 @@ const CourseTile = (props: {
 
                 {/* teacher name */}
                 <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
+                    iconUrl={getAssetUrl("images/flag3D.png")}
                     text={courseTeacherName} />
 
-                <StarBorderOutlined />
-
-                <Text
-                    as={"text"}
-                    color={"grey"}
-                    ml={5}>
-
-                    4.1
-                </Text>
+                {/* rating */}
+                <SmallStat
+                    iconUrl={getAssetUrl("images/star3D.png")}
+                    text={"4.1"} />
             </Flex>
 
         </Flex>

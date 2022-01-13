@@ -54,7 +54,7 @@ export const LearningCourseStats = () => {
         <DashboardSection w="100%" variant="noShadow" title="Folyamatban lévő kurzusaim">
             {isAnyCoursesInProgress
                 ? <EpistoGrid
-                    minColumnWidth="320px"
+                    minColumnWidth="250px"
                     auto="fill"
                     gap="10px"
                     p="10px">

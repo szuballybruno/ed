@@ -16,7 +16,8 @@ export type EpistoEntryPropsType = {
     name?: string,
     marginTop?: string,
     flex?: string,
-    type?: "password" | "number" | "text"
+    type?: "password" | "number" | "text",
+    style?: React.CSSProperties
 }
 
 export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((props: EpistoEntryPropsType, ref) => {
@@ -35,7 +36,8 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         postfix,
         type,
         marginTop,
-        flex
+        flex,
+        style
     } = props;
 
     const onChanged = (value: string) => {
@@ -46,7 +48,7 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         setValue(value);
     }
 
-    return <Flex direction="column" mt={marginTop ?? "10px"} flex={flex}>
+    return <Flex direction="column" mt={marginTop ?? "10px"} flex={flex} style={style}>
 
         {labelVariant === "top" && <Typography
             variant={"overline"}>

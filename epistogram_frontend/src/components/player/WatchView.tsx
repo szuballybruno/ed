@@ -200,7 +200,11 @@ export const WatchView = (props: {
                 videoPlayerState={videoPlayerState}>
 
                 {/* next video */}
-                <AbsoluteFlexOverlay isVisible={isVideoEnded} hasPointerEvents={false} align="flex-end" justify="flex-end">
+                <AbsoluteFlexOverlay
+                    isVisible={isVideoEnded}
+                    hasPointerEvents={false}
+                    align="flex-end"
+                    justify="flex-end">
 
                     <EpistoButton
                         style={{
@@ -210,10 +214,13 @@ export const WatchView = (props: {
                         }}
                         onClick={continueCourse}
                         variant="colored">
+
                         <TimeoutFrame reactTimer={reactTimer}>
+
                             <Typography style={{
                                 margin: "10px"
                             }}>
+
                                 Tovább
                             </Typography>
                         </TimeoutFrame>

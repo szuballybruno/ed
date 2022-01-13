@@ -91,8 +91,8 @@ export const LearningCourseStatsTile = (props: {
         <Box
             flex="1"
             position="relative"
-            minHeight={200}
-            maxHeight={200}>
+            minHeight={150}
+            maxHeight={150}>
 
             {/* cover image */}
             <img
@@ -163,17 +163,17 @@ export const LearningCourseStatsTile = (props: {
 
                 {/* spent time  */}
                 <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_lenght_left.svg")}
+                    iconUrl={getAssetUrl("images/time3D.png")}
                     text={formattedSpentTime} />
 
                 {/* videos  */}
                 <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
+                    iconUrl={getAssetUrl("images/videos3D.png")}
                     text={`${totalVideoCount}/${completedVideoCount}`} />
 
                 {/* video questions */}
                 <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_questions.svg")}
+                    iconUrl={getAssetUrl("images/rightanswerontile3D.png")}
                     text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
 
                 {/* final exam  

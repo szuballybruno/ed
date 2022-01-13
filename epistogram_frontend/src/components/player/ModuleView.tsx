@@ -15,7 +15,7 @@ export const ModuleView = (params: {
     const isVisible = !!module;
 
     return <Flex display={isVisible ? undefined : "none"} direction="column" className="whall">
-        <Flex flex="1" align="center" justify="center">
+        <Flex flex="1" maxH="500px" align="center" justify="center">
 
             <Flex direction="column">
                 <EpistoHeader
