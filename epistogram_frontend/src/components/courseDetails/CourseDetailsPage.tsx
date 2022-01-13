@@ -271,10 +271,17 @@ const CourseDetailsPage = () => {
 
                         {/* start coures */}
                         <EpistoButton
-                            style={{ flex: "1", color: "var(--epistoTeal)", maxHeight: 40, marginTop: 15, marginBottom: 15 }}
+                            style={{
+                                flex: "1",
+                                color: "var(--epistoTeal)",
+                                maxHeight: 40,
+                                marginTop: 15,
+                                marginBottom: 15,
+                                display: courseDetails?.canStartCourse ? undefined : "none"
+                            }}
                             variant="outlined"
                             onClick={playCourseAsync}
-                            icon={
+                            icon={(
                                 <img
                                     src={getAssetUrl("/icons/play2.svg")}
                                     alt=""
@@ -283,7 +290,7 @@ const CourseDetailsPage = () => {
                                         height: "25px",
                                         marginRight: "5px"
                                     }} />
-                            }>
+                            )}>
                             {translatableTexts.courseDetails.startCourse}
                         </EpistoButton>
 

@@ -36,7 +36,7 @@ const HomePage = () => {
                 <LeftPanel>
 
                     {/* current course items and progress */}
-                    {pageDTO?.currentCourseProgress ? <Flex
+                    {pageDTO?.currentCourseProgress && <Flex
                         className='roundBorders'
                         mx="10px"
                         direction="column">
@@ -55,9 +55,11 @@ const HomePage = () => {
                                 .map(x => (
                                     <CourseItemView courseItem={x} />))}
                         </Flex>
-                    </Flex> : <FlexListItem
-                        mx="10"
-                        isLocked={false}
+                    </Flex>}
+
+                    {/* no current course  */}
+                    {!pageDTO?.currentCourseProgress && <FlexListItem
+                        px="10"
                         onClick={() => navigate(applicationRoutes.availableCoursesRoute.route)}
                         midContent={<Flex>
 
@@ -68,16 +70,8 @@ const HomePage = () => {
                                 m="7px 10px 7px 0px"
                                 bgColor={"var(--epistoTeal)"} />
 
-                            <FlexListTitleSubtitle
-                                title={translatableTexts.homePage.availableCoursesLinkTitle}
-                                subTitle={translatableTexts.homePage.availableCoursesText} />
-                        </Flex>}
-                        endContent={<Flex
-                            align="center"
-                            justify="center"
-                            flexBasis="50px">
-                        </Flex>}>
-                    </FlexListItem>}
+                            <FlexListTitleSubtitle title={translatableTexts.homePage.availableCoursesLinkTitle} subTitle={translatableTexts.homePage.availableCoursesText} />
+                        </Flex>} />}
                 </LeftPanel>
 
                 <RightPanel>

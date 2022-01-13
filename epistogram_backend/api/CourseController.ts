@@ -57,9 +57,11 @@ export class CourseController {
 
     getCourseDetailsAction = async (params: ActionParams) => {
 
-        const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
+        const courseId = params
+            .getQuery<any>()
+            .getValue(x => x.courseId, "int");
 
-        return await this._courseService.getCourseDetailsAsync(courseId);
+        return await this._courseService.getCourseDetailsAsync(params.currentUserId, courseId);
     }
 
     saveCourseDetailsAction = async (params: ActionParams) => {

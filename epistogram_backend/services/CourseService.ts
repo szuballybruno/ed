@@ -104,12 +104,13 @@ export class CourseService {
             .map(Course, CourseBriefData, course);
     }
 
-    async getCourseDetailsAsync(courseId: number) {
+    async getCourseDetailsAsync(userId: number, courseId: number) {
 
         const view = await this._ormService
             .getRepository(CourseDetailsView)
             .createQueryBuilder("cdv")
             .where("cdv.courseId = :courseId", { courseId })
+            .andWhere("cdv.userId = :userId", { userId })
             .getOneOrFail();
 
         const moduleViews = await this._ormService
@@ -131,6 +132,18 @@ export class CourseService {
                 teacherId: 1,
                 categoryId: 1,
                 subCategoryId: 1,
+                difficulty: 0,
+                benchmark: 0,
+                description: "",
+                shortDescription: "",
+                language: "magyar",
+                previouslyCompletedCount: 0,
+                visibility: "private",
+                technicalRequirements: "",
+                humanSkillBenefits: "",
+                humanSkillBenefitsDescription: "",
+                requirementsDescription: "",
+                skillBenefits: ""
             });
     }
 
