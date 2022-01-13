@@ -7,7 +7,7 @@ import { isArray } from "../../static/frontendHelpers";
 import { LoadingStateType } from "../../models/types";
 
 export type LoadingFramePropsType = {
-    loadingState: LoadingStateType | LoadingStateType[],
+    loadingState?: LoadingStateType | LoadingStateType[],
     error?: any | any[],
     onlyRenderIfLoaded?: boolean
 };
@@ -107,25 +107,28 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     </Flex>
 }
 
-const getLoadingState = (loadingState: LoadingStateType | LoadingStateType[], error?: any) => {
+const getLoadingState = (loadingState?: LoadingStateType | LoadingStateType[], error?: any): LoadingStateType => {
 
     if (error)
-        return "error" as LoadingStateType;
+        return "error";
+
+    if (!loadingState)
+        return "idle";
 
     if (isArray(loadingState)) {
 
         const loadingStates = loadingState as LoadingStateType[];
 
         if (loadingStates.some(x => x === "error"))
-            return "error" as LoadingStateType;
+            return "error";
 
         if (loadingStates.some(x => x === "loading"))
-            return "loading" as LoadingStateType;
+            return "loading";
 
         if (loadingStates.some(x => x === "success"))
-            return "success" as LoadingStateType;
+            return "success";
 
-        return "idle" as LoadingStateType;
+        return "idle";
     }
     else {
 
