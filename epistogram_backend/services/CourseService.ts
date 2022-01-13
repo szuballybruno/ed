@@ -558,8 +558,14 @@ export class CourseService {
             .where("c.courseId = :courseId", { courseId: courseId })
             .getMany();
 
+        const viewAsAdmin = views
+            .first();
+
+        const courseItems = views
+            .filter(x => !!x.moduleId);
+
         return this._mapperService
-            .map(CourseAdminContentView, CourseContentEditDataDTO, views.first(), views);
+            .map(CourseAdminContentView, CourseContentEditDataDTO, viewAsAdmin, courseItems);
     }
 
     /**
