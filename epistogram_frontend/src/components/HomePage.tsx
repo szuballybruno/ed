@@ -78,10 +78,9 @@ const HomePage = () => {
                             flexBasis="50px">
                         </Flex>}>
                     </FlexListItem>}
-
                 </LeftPanel>
 
-            <RightPanel>
+                <RightPanel>
 
                     <Flex
                         direction="column"
@@ -116,7 +115,6 @@ const HomePage = () => {
 
                                 <DailyTip />
                             </DashboardSection>
-
                         </Flex>
 
                         {/* stats */}

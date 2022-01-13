@@ -184,6 +184,7 @@ export const CourseItemList = (props: {
 
                             {/* open/close */}
                             <Flex align="center">
+
                                 <EpistoButton onClick={() => handleToggle(module.id)}>
 
                                     {unclickable
@@ -201,10 +202,12 @@ export const CourseItemList = (props: {
 
                             {/* play */}
                             <Box width="50px">
+
                                 {isStartable && <EpistoButton
                                     padding="3px"
                                     onClick={() => startModule(module.code)}
                                     variant="outlined">
+
                                     <PlayArrowIcon style={{ color: "var(--epistoTeal)" }} />
                                 </EpistoButton>}
                             </Box>

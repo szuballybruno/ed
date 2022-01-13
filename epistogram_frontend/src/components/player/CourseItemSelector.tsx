@@ -99,7 +99,10 @@ export const CourseItemSelector = (props: {
             }}
             placementX="left"
             handleClose={() => setIsInfoDialogOpen(false)}>
-            <Typography>Kezdő módban a meghatározott sorrendben haladhatsz, és előre csak addig részig tekerhetsz, melyet már megtekintettél. Haladó módban korlátlanul váltogathatsz a videók között!</Typography>
+
+            <Typography>
+                Kezdő módban a meghatározott sorrendben haladhatsz, és előre csak addig részig tekerhetsz, melyet már megtekintettél. Haladó módban korlátlanul váltogathatsz a videók között!
+            </Typography>
         </EpistoPopper>
 
         <CourseItemList modules={modules}></CourseItemList>

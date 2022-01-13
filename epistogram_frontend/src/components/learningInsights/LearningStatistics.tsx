@@ -334,6 +334,7 @@ export const LearningStatistics = () => {
                                 isOpenByDefault={item.isOpenByDefault}
                                 isComingSoon={item.isDummy}
                                 chartSize={item.large ? "large" : undefined}>
+
                                 {item.chart}
                             </StatisticsCard>
                         })}

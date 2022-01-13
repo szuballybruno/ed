@@ -122,6 +122,7 @@ const AvailableCoursesPage = () => {
                                         h="30px"
                                         m="2px 10px 2px 0px"
                                         bgColor="var(--epistoTeal)" />
+
                                     {categoryOption}
                                 </ToggleButton>
                             })}
@@ -194,7 +195,7 @@ const AvailableCoursesPage = () => {
                             </ToggleButton>
                         </ToggleButtonGroup>
 
-                        <EpistoSearch flex="5"h="40px" mx="10px" />
+                        <EpistoSearch flex="5" h="40px" mx="10px" />
 
                         <Select
                             native
@@ -227,7 +228,7 @@ const AvailableCoursesPage = () => {
                     <LoadingFrame loadingState={[coursesState, startCourseState]} error={[coursesError]}>
 
                         <Box id="scrollContainer" className="whall">
-                            
+
                             <EpistoGrid auto="fill" gap="15" minColumnWidth="250px">
                                 {courses
                                     .map((course, index) => {
@@ -235,6 +236,7 @@ const AvailableCoursesPage = () => {
                                         return <GridItem
                                             className="roundBorders"
                                             background="var(--transparentWhite70)">
+
                                             <CourseTile
                                                 course={course}
                                                 key={index}>

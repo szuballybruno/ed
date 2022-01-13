@@ -76,6 +76,7 @@ export const ShopPage = () => {
                     {[{ id: -1, name: "Mutasd mindet" }]
                         .concat(shopItemCategories)
                         .map((category, index) => {
+                            
                             return <ToggleButton
                                 className={classes.categoriesListItem}
                                 selected={categoryFilterId === category.id}
@@ -94,6 +95,7 @@ export const ShopPage = () => {
                                 }}
                                 onClick={() => setCategoryFilterId(category.id)}
                                 key={index}>
+
                                 <Flex
                                     className="roundBorders"
                                     boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"

@@ -131,6 +131,7 @@ export const LearningCourseStatsTile = (props: {
                     <Text
                         textTransform={"uppercase"}
                         color="white">
+
                         Teljesítve!
                     </Text>
                 </Flex>
@@ -139,6 +140,7 @@ export const LearningCourseStatsTile = (props: {
 
         {/* content */}
         <Flex p="10px" direction="column">
+
             {/* category  */}
             <Text
                 as="text"
@@ -187,6 +189,7 @@ export const LearningCourseStatsTile = (props: {
                 mt={7}
                 w="100%"
                 h="10px">
+                    
                 <LinearProgress
                     variant="determinate"
                     style={{

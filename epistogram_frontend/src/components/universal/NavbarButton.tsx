@@ -18,6 +18,7 @@ const NavbarButton = (props: {
                 onClick={() => navigate(menuPath)}
                 style={{ flex: "1" }}
                 variant="plain" >
+
                 {menuName}
             </EpistoButton>}
     </Flex>

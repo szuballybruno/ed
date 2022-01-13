@@ -24,7 +24,11 @@ export const LearningCourseStats = () => {
         flex="1">
 
         {/* completed courses */}
-        <DashboardSection w="100%" variant="normal" title="Elvégzett kurzusaim" >
+        <DashboardSection
+            w="100%"
+            variant="normal"
+            title="Elvégzett kurzusaim" >
+
             {isAnyCoursesComplete
                 ? <EpistoGrid
                     minColumnWidth="300px"
@@ -38,7 +42,9 @@ export const LearningCourseStats = () => {
                 </EpistoGrid>
 
                 : <Flex p="100px">
+
                     <Typography variant={"h6"}>
+
                         Még nem végeztél el egyetlen kurzust sem.
                     </Typography>
                 </Flex>}
@@ -59,7 +65,9 @@ export const LearningCourseStats = () => {
                     }
                 </EpistoGrid>
                 : <Flex p="100px">
+
                     <Typography variant={"h6"}>
+
                         Még nem kezdtel el egyetlen kurzust sem.
                     </Typography>
                 </Flex>}

@@ -121,6 +121,7 @@ const DesktopNavbar = (props: {
                 !hideLinks && <>
                     {(isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo) ?
                         <Flex height="50px" flex="1 0 600px">
+
                             {menuItems
                                 .map((item, index) => {
                                     return <NavbarButton
@@ -129,7 +130,7 @@ const DesktopNavbar = (props: {
                                         menuPath={item.route} />
                                 })}
 
-                            {/* continue watching  */}
+                            {/* continue watching with or without text  */}
                             {currentCourseItemCode &&
                                 <NavbarButton
                                     menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
@@ -194,14 +195,14 @@ const DesktopNavbar = (props: {
                                                     width: "25px",
                                                     height: "25px",
                                                 }} />
-                                        }>
-                                    </EpistoButton>
+                                        } />
                                 </NavbarButton>}
                         </Flex>}
 
-                    {/* content */}
+                    {/* shop and notification buttons */}
                     <Flex pr="10px" align="center" mr="15px">
 
+                        {/* shop button */}
                         <EpistoButton
                             style={{
                                 height: 40,
@@ -210,13 +211,17 @@ const DesktopNavbar = (props: {
                             onClick={() => {
                                 navigate("/shop")
                             }}
-                            variant={"plain"}
-                        >
-                            <Typography fontSize={"1.0em"} style={{
-                                margin: "0 7px",
-                                fontWeight: 500,
-                                textTransform: "uppercase"
-                            }}>Áruház</Typography>
+                            variant={"plain"}>
+
+                            <Typography
+                                fontSize={"1.0em"}
+                                style={{
+                                    margin: "0 7px",
+                                    fontWeight: 500,
+                                    textTransform: "uppercase"
+                                }}>
+                                Áruház
+                            </Typography>
 
                             <img
                                 className="square50"
@@ -227,13 +232,14 @@ const DesktopNavbar = (props: {
                                 }} />
                         </EpistoButton>
 
+                        {/* notification bell */}
                         <EpistoButton
                             className="roundBorders square50"
                             variant={"plain"}
                             onClick={() => {
                                 setNotificationsPopperOpen(true)
-                            }}
-                        >
+                            }}>
+
                             <img
                                 className="square50"
                                 src={getAssetUrl("/images/bell3D.png")}
@@ -243,7 +249,14 @@ const DesktopNavbar = (props: {
                                 }} />
                         </EpistoButton>
 
-                        <Box width="1px" height="40px" margin="0 10px 0 10px" bg="var(--mildGrey)"></Box>
+                        {/* vertical divider */}
+                        <Box
+                            width="1px"
+                            height="40px"
+                            margin="0 10px 0 10px"
+                            bg="var(--mildGrey)">
+
+                        </Box>
 
                         {!!user && <ProfileImage
                             url={user?.avatarUrl ?? null}
@@ -261,17 +274,25 @@ const DesktopNavbar = (props: {
                 target={ref?.current}
                 placementX="left"
                 handleClose={() => setNotificationsPopperOpen(false)}>
+
                 {mockNotifications
                     .map((x, index) => {
 
-                        return <Flex w={200} flexDirection={"column"} >
-                            <Flex w={200} alignItems={"center"} justifyContent={"center"} my={10}>
-                                <div style={{
-                                    width: 3,
-                                    height: 3,
-                                    backgroundColor: "blue",
-                                    borderRadius: "50%"
-                                }} />
+                        return <Flex w={200} flexDirection={"column"}>
+
+                            <Flex
+                                w={200}
+                                alignItems={"center"}
+                                justifyContent={"center"}
+                                my={10}>
+
+                                <div
+                                    style={{
+                                        width: 3,
+                                        height: 3,
+                                        backgroundColor: "blue",
+                                        borderRadius: "50%"
+                                    }} />
 
                                 <Typography
                                     style={{
@@ -282,6 +303,7 @@ const DesktopNavbar = (props: {
                                     {x.title}
                                 </Typography>
                             </Flex>
+
                             {index + 1 < mockNotifications.length && <Divider h={1} w={"100%"} bgColor={"grey"} />}
                         </Flex>
                     })}
@@ -306,14 +328,18 @@ const DesktopNavbar = (props: {
                     onClick={() => {
                         navigate(applicationRoutes.administrationRoute.usersRoute.route)
                     }}>
+
                     <Flex className="whall" m="5px" align="center">
+
                         {applicationRoutes.administrationRoute.icon}
+
                         <Typography
                             style={{
                                 marginLeft: "14px",
                                 textAlign: "left",
                                 fontSize: "14px"
                             }}>
+
                             {applicationRoutes.administrationRoute.title}
                         </Typography>
                     </Flex>
@@ -326,20 +352,23 @@ const DesktopNavbar = (props: {
                             variant={x.color ? "colored" : undefined}
                             style={{ background: x.color }}
                             onClick={x.onClick}>
+
                             <Flex className="whall" m="5px" align="center">
+
                                 {x.icon}
+
                                 <Typography
                                     style={{
                                         marginLeft: "14px",
                                         textAlign: "left",
                                         fontSize: "14px"
                                     }}>
+
                                     {x.name}
                                 </Typography>
                             </Flex>
                         </EpistoButton>
                     })}
-
             </EpistoPopper>
         </Flex >
     );

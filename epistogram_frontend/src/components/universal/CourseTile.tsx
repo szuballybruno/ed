@@ -82,6 +82,7 @@ const CourseTile = (props: {
                     w={130}
                     bg="#97CC9B"
                     borderRadius="7px 0 0 7px">
+
                     <img
                         src={getAssetUrl("course_exam_tile_icons/tile_badge_completed.svg")}
                         alt={""}
@@ -93,6 +94,7 @@ const CourseTile = (props: {
                     <Text
                         textTransform={"uppercase"}
                         color="white">
+
                         Teljesítve!
                     </Text>
                 </Flex>

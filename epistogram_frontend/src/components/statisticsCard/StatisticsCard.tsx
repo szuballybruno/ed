@@ -51,7 +51,9 @@ const StatisticsCard = (props: {
 
         {/* open state */}
         {isOpen && <Flex w={"100%"} mt="50px" p="0 20px 20px 20px" direction="column">
+
             <EpistoHeader variant="strongSub" text={props.title} />
+            
             <Box>
                 {props.children}
             </Box>
@@ -62,11 +64,11 @@ const StatisticsCard = (props: {
 
             {/* image */}
             {iconPath && <img
-                style={{ 
-                    margin: "5px 10px 5px 20px", 
-                    width: 70, 
-                    height: 70, 
-                    objectFit: "contain" 
+                style={{
+                    margin: "5px 10px 5px 20px",
+                    width: 70,
+                    height: 70,
+                    objectFit: "contain"
                 }}
                 alt=""
                 src={iconPath} />}
