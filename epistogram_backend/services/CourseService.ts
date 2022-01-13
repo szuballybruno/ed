@@ -523,6 +523,7 @@ export class CourseService {
             .save({
                 id: dto.courseId,
                 title: dto.title,
+                teacherId: dto.teacherId,
                 categoryId: dto.category.id,
                 subCategoryId: dto.subCategory.id,
                 benchmark: dto.benchmark,
@@ -538,8 +539,6 @@ export class CourseService {
                     .humanSkillBenefits
                     .map(x => `${x.text}: ${x.value}`)
                     .join(", "),
-
-                // teacherId: dto.teacherId,
                 visibility: dto.visibility
             });
     }
