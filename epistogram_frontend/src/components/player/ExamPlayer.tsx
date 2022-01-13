@@ -72,7 +72,6 @@ export const ExamPlayer = (props: {
 
     return <SlidesDisplay
         flex="1"
-        height="100%"
         slides={slides}
         index={slidesState.currentIndex} />
 }
