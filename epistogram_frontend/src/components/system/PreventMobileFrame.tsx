@@ -1,5 +1,6 @@
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import { Typography, Checkbox } from "@mui/material";
+import { prototype } from "events";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoEntry } from "../universal/EpistoEntry";
@@ -11,12 +12,12 @@ export const PreventMobileFrame = (props) => {
 
     const isMobile = () => (isNarrowerThan1024 || isLowerThan600)
 
-    const DesktopOnlyScreen = () => {
-
-        return <Flex
+    return <>
+        {isMobile() && <Flex
             background="var(--gradientBlueBackground)"
             align="center"
             justify="center"
+            zIndex="100000"
             h="100vh"
             w="100vw">
 
@@ -96,6 +97,7 @@ export const PreventMobileFrame = (props) => {
                             rel="noreferrer"
                             style={{ color: "#0055CC" }}
                             href={"https://epistogram.com/adatkezelesi-tajekoztato"}>
+
                             Adatkezelési Nyilatkozat
                         </a>
                         {"ban foglaltakat"}
@@ -111,11 +113,9 @@ export const PreventMobileFrame = (props) => {
                     Küldés
                 </EpistoButton>
             </Flex>
-        </Flex>
-    }
+        </Flex>}
 
-    if (isMobile())
-        return <DesktopOnlyScreen />
+        {props.children}
+    </>
 
-    return props.children
 }
