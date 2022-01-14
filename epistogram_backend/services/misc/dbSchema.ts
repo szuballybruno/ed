@@ -66,6 +66,7 @@ import { CourseDetailsView } from "../../models/views/CourseDetailsView";
 import { CourseModuleOverviewView } from "../../models/views/CourseModuleOverviewView";
 import { TeacherInfo } from "../../models/entity/TeacherInfo";
 import { ExamView } from "../../models/views/ExamView";
+import { VideoRating } from "../../models/entity/VideoRating";
 
 export const dbSchema = {
 
@@ -208,6 +209,7 @@ export const dbSchema = {
         UserCourseAccessBridge,
         ShopItem,
         ShopItemCategory,
-        DiscountCode
+        DiscountCode,
+        VideoRating
     ] as any[]
 }

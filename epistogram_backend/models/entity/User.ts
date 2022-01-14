@@ -17,6 +17,7 @@ import { UserCourseAccessBridge } from "./UserCourseAccessBridge";
 import { UserCourseBridge } from "./UserCourseBridge";
 import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
+import { VideoRating } from "./VideoRating";
 
 @Entity()
 export class User {
@@ -167,4 +168,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => DiscountCode, x => x.user)
     discountCodes: DiscountCode[];
+
+    // ratings
+    @JoinColumn()
+    @OneToMany(_ => VideoRating, x => x.user)
+    videoRatings: VideoRating[];
 }

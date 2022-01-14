@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Divider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getAssetUrl, getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../static/frontendHelpers";
+import { getAssetUrl, getRandomInteger, isBetweenThreshold, iterate, useIsDesktopView, usePaging } from "../../static/frontendHelpers";
 import { useReactTimer } from "../../helpers/reactTimer";
 import { ModuleDTO } from "../../models/shared_models/ModuleDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
@@ -25,6 +25,7 @@ import { OverlayDialog } from "./OverlayDialog";
 import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
 import { StillWatching } from "./StillWatching";
 import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
+import { VideoRating } from "./VideoRating";
 
 const autoplayTimeoutInS = 8;
 
@@ -295,70 +296,8 @@ export const WatchView = (props: {
                     <EpistoHeader variant="sub" text={video!.subTitle} />
                 </Flex>
 
-                <Flex direction="column">
-
-                    {/* experience rating */}
-                    <Flex
-                        mx="10px"
-                        direction="column">
-
-                        <Flex>
-
-                            <Typography
-                                variant="overline">
-
-                                Mennyire volt hasznos ez a videó?
-                            </Typography>
-                        </Flex>
-
-                        <Flex>
-
-                            {new Array(5).fill("", 0, 5).map(item => {
-                                return <img
-                                    src={getAssetUrl("images/star3D.png")}
-                                    alt=""
-                                    style={{
-                                        width: 25,
-                                        height: 25,
-                                        marginRight: 5,
-                                        objectFit: "contain"
-                                    }} />
-                            })}
-                        </Flex>
-                    </Flex>
-
-                    {/* difficulty rating */}
-                    <Flex
-                        mx="10px"
-                        direction="column">
-
-                        <Flex>
-
-                            <Typography
-                                variant="overline">
-
-                                Ennyire volt nehéz megérteni
-                            </Typography>
-                        </Flex>
-
-                        <Flex>
-
-                            {new Array(5).fill("", 0, 5).map(item => {
-                                return <img
-                                    src={getAssetUrl("images/difficulty3D.png")}
-                                    alt=""
-                                    style={{
-                                        width: 25,
-                                        height: 25,
-                                        marginRight: 5,
-                                        objectFit: "contain"
-                                    }} />
-                            })}
-                        </Flex>
-                    </Flex>
-                </Flex>
-
-                {/*<SegmentedButton paging={descCommentPaging}></SegmentedButton>*/}
+                {/* ratings */}
+                <VideoRating videoId={video!.id} />
             </Flex>
 
             <Divider

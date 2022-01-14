@@ -7,6 +7,7 @@ import { Question } from "./Question";
 import { StorageFile } from "./StorageFile";
 import { VideoPlaybackData } from "./VideoPlaybackData";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
+import { VideoRating } from "./VideoRating";
 
 @Entity()
 export class Video {
@@ -85,4 +86,9 @@ export class Video {
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.activitySession)
     coinAcquires: CoinTransaction[];
+    
+    // ratings
+    @JoinColumn()
+    @OneToMany(_ => VideoRating, x => x.video)
+    videoRatings: VideoRating[];
 }

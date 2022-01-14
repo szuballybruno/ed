@@ -71,6 +71,8 @@ import { ActionParams } from './utilities/helpers';
 import { TurboExpress } from './utilities/TurboExpress';
 import { LoggerService } from './services/LoggerService';
 import { HashService } from './services/HashService';
+import { VideoRatingService } from './services/VideoRatingService';
+import { VideoRatingController } from './api/VideoRatingController';
 
 (async () => {
 
@@ -121,6 +123,7 @@ import { HashService } from './services/HashService';
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService);
+    const videoRatingService = new VideoRatingService(ormConnectionService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -141,6 +144,7 @@ import { HashService } from './services/HashService';
     const shopController = new ShopController(shopService);
     const teacherInfoController = new TeacherInfoController(teacherInfoService);
     const passwordChangeController = new PasswordChangeController(passwordChangeService);
+    const videoRatingController = new VideoRatingController(videoRatingService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -192,6 +196,11 @@ import { HashService } from './services/HashService';
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
+
+    // video rating 
+    addEndpoint(apiRoutes.videoRating.getVideoRating, videoRatingController.getVideoRatingAction);
+    addEndpoint(apiRoutes.videoRating.rateVideoDifficulty, videoRatingController.rateVideoDifficultyAction, { isPost: true });
+    addEndpoint(apiRoutes.videoRating.rateVideoExperience, videoRatingController.rateVideoExperienceAction, { isPost: true });
 
     // password change 
     addEndpoint(apiRoutes.passwordChange.setNewPassword, passwordChangeController.setNewPasswordAction, { isPost: true, isPublic: true });

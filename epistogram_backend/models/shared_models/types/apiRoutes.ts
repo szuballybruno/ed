@@ -26,6 +26,12 @@ export const apiRoutes = {
         requestPasswordChange: "/pwchange/request-password-change"
     },
 
+    videoRating: {
+        rateVideoExperience: "/videorating/rate-video-experience",
+        rateVideoDifficulty: "/videorating/rate-video-difficulty",
+        getVideoRating: "/videorating/get-video-rating",
+    },
+
     authentication: {
         getCurrentUser: "/authentication/get-current-user",
         renewUserSession: "/authentication/renew-user-session",
