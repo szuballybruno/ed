@@ -20,8 +20,8 @@ export const VideoRating = (props: { videoId: number }) => {
 
     // state 
     const [showDificultyRating, setShowDificultyRating] = useState(false);
-    const [difficultyRating, setDifficultyRating] = useState(0);
-    const [experienceRating, setExperienceRating] = useState(0);
+    const [difficultyRating, setDifficultyRating] = useState<number | null>(null);
+    const [experienceRating, setExperienceRating] = useState<number | null>(null);
 
     // func
     const handleRateVideoExperienceAsync = async (rating: number) => {
@@ -54,14 +54,13 @@ export const VideoRating = (props: { videoId: number }) => {
 
     useEffect(() => {
 
-        if (!videoRating)
-            return;
+        setShowDificultyRating(false);
+    }, [videoId]);
 
-        if (videoRating.difficulty)
-            setDifficultyRating(videoRating.difficulty);
+    useEffect(() => {
 
-        if (videoRating.experience)
-            setExperienceRating(videoRating.experience);
+        setDifficultyRating(videoRating?.difficulty ?? null);
+        setExperienceRating(videoRating?.experience ?? null);
     }, [videoRating]);
 
     return (
@@ -95,7 +94,7 @@ export const VideoRating = (props: { videoId: number }) => {
                                 className="square25"
                                 style={{
                                     objectFit: "contain",
-                                    filter: experienceRating >= index + 1
+                                    filter: experienceRating && (experienceRating >= index + 1)
                                         ? undefined
                                         : "saturate(0) opacity(0.5)"
                                 }} />
@@ -133,7 +132,7 @@ export const VideoRating = (props: { videoId: number }) => {
                                 className="square25"
                                 style={{
                                     objectFit: "contain",
-                                    filter: difficultyRating >= index + 1
+                                    filter: difficultyRating && (difficultyRating >= index + 1)
                                         ? undefined
                                         : "saturate(0) opacity(0.5)"
                                 }} />
