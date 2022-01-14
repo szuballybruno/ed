@@ -108,6 +108,7 @@ const AvailableCoursesPage = () => {
                                         textAlign: "left",
                                         justifyContent: "flex-start",
                                         alignItems: "center",
+                                        height: 40,
                                         paddingLeft: "10px",
                                         border: "none"
                                     }}
@@ -241,7 +242,7 @@ const AvailableCoursesPage = () => {
                                                 course={course}
                                                 key={index}>
 
-                                                <Flex my="10px">
+                                                <Flex mb="10px">
 
                                                     {/* details */}
                                                     <EpistoButton

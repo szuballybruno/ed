@@ -22,7 +22,7 @@ export const LearningInsightsOverview = () => {
         {/* learning curves */}
         <LearningCurves />
 
-        {/* badges */}
+        {/* badges 
         <DashboardSection
             className="roundBorders largeSoftShadow"
             background="var(--transparentWhite70)"
@@ -31,6 +31,6 @@ export const LearningInsightsOverview = () => {
             minHeight="200px">
 
             <Badges />
-        </DashboardSection>
+        </DashboardSection>*/}
     </Flex>
 };

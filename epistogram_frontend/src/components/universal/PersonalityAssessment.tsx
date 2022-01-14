@@ -175,14 +175,14 @@ export const PersonalityAssessment = (props: FlexProps) => {
 
                             <AccordionButton>
 
-                                <Box flex='1' fontWeight="600" textAlign='left'>
+                                <Box flex='1' fontWeight="500" fontSize="15px" textAlign='left'>
                                     {item.title}
                                 </Box>
 
                                 <AccordionIcon />
                             </AccordionButton>
 
-                            <AccordionPanel pb={4} mt="10px">
+                            <AccordionPanel pb={4} mt="10px" fontSize="13px">
 
                                 {item.description}
                             </AccordionPanel>

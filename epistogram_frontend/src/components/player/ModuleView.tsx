@@ -14,21 +14,43 @@ export const ModuleView = (params: {
     const { module, startModule } = params;
     const isVisible = !!module;
 
-    return <Flex display={isVisible ? undefined : "none"} direction="column" className="whall">
-        <Flex flex="1" align="center" justify="center">
+    return <Flex
+        className="roundBorders mildShadow"
+        display={isVisible ? undefined : "none"}
+        direction="column"
+        background="var(--transparentWhite70)">
 
-            <Flex direction="column">
-                <EpistoHeader
-                    text={module?.name ?? ""}
-                    variant="giant" />
+        <Flex
+            h="500px"
+            maxH="500px"
+            align="center"
+            justify="center">
 
-                <Image
-                    width="400px"
-                    src={module?.imageFilePath ?? ""} />
+            <Flex direction="row">
 
-                <Typography>
-                    {module?.description}
-                </Typography>
+                {module?.imageFilePath && <Flex>
+                    <img
+                        className="roundBorders"
+                        src={module?.imageFilePath ?? ""}
+                        style={{
+                            width: "100px",
+                            objectFit: "cover",
+                            margin: 10
+                        }} />
+                </Flex>}
+
+                <Flex
+                    direction="column"
+                    justify="center">
+
+                    <EpistoHeader
+                        text={module?.name ?? ""}
+                        variant="giant" />
+
+                    <Typography>
+                        {module?.description}
+                    </Typography>
+                </Flex>
             </Flex>
         </Flex>
 

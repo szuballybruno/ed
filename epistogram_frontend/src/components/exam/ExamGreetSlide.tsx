@@ -23,13 +23,15 @@ export const ExamGreetSlide = (props: {
         showNextButton={exam.canTakeAgain}
         handleNext={startExam}
         nextButtonTitle={translatableTexts.exam.startExam}>
+
         <Flex direction="column" align="center">
             <img
-                src={getAssetUrl("/images/examCover.jpg")}
+                src={getAssetUrl("/images/examCover.png")}
                 alt={""}
                 style={{
                     objectFit: "contain",
-                    maxHeight: 300
+                    maxHeight: 200,
+                    margin: "30px 0"
                 }} />
 
             <Typography

@@ -32,7 +32,7 @@ export const EpistoHeader = (props: {
                     : "fontLarge"}
             style={{
                 fontWeight: type === "strong" ? "bold" : "normal",
-                color: variant === "sub" ? "var(--intenseGray)" : undefined
+                color: variant === "sub" ? "black" : undefined
             }}>
             {text}
         </Typography>

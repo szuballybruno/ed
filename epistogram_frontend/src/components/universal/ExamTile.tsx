@@ -143,7 +143,7 @@ export const ExamTile = (props: {
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_lenght_left.svg")}
+                                src={getAssetUrl("images/time3D.png")}
                                 alt={""}
                                 style={{
                                     width: 15,
@@ -162,7 +162,7 @@ export const ExamTile = (props: {
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
+                                src={getAssetUrl("images/testoutcome3D.png")}
                                 alt={""}
                                 style={{
                                     width: 15,
@@ -186,7 +186,7 @@ export const ExamTile = (props: {
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
+                                src={getAssetUrl("images/difficulty3D.png")}
                                 alt={""}
                                 style={{
                                     width: 20,
@@ -208,7 +208,7 @@ export const ExamTile = (props: {
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_questions.svg")}
+                                src={getAssetUrl("images/correctanswernumber3D.png")}
                                 alt={""}
                                 style={{
                                     width: 20,

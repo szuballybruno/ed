@@ -40,10 +40,11 @@ export const ExamLayout = (props: {
         <Flex
             direction={"row"}
             alignItems={"center"}
-            className="dividerBorderBottom"
+            className="roundBorders"
+            background="var(--transparentWhite70)"
             w={"100%"}
             h={60}
-            pl={5}>
+            pl={20}>
 
             <Flex minW="200">
                 {(headerLeftItem && isString(headerLeftItem)) && <Text as="text">
@@ -82,6 +83,8 @@ export const ExamLayout = (props: {
         <Flex
             flex="1"
             overflow="hidden"
+            my="20px"
+            minH="300px"
             width="100%"
             align="center"
             justify="center"
@@ -93,8 +96,9 @@ export const ExamLayout = (props: {
         {/* footer */}
         <Flex
             w={"100%"}
-            bgColor={"white"}
-            className="dividerBorderTop"
+            className="roundBorders"
+            background="var(--transparentWhite70)"
+            h="80px"
             p={20}>
 
             {/* progress line */}

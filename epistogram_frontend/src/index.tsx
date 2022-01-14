@@ -15,6 +15,7 @@ import { isUnderMaintenance } from "./static/Environemnt";
 import './index.css';
 import './static/jsExtensions.ts'; // extensions, important
 import { MainRouting } from "./MainRouting";
+import { PreventMobileFrame } from "./components/system/PreventMobileFrame";
 
 // react query 
 const queryClient = new QueryClient();
@@ -66,27 +67,29 @@ ReactDOM.render(
                 <ColorModeScript initialColorMode={"light"} />
                 <ChakraProvider theme={chakraTheme}>
                     <ThemeProvider theme={muiTheme}>
-                        <Switch>
+                        <PreventMobileFrame>
+                            <Switch>
 
-                            {/* under maintanence */}
-                            {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
+                                {/* under maintanence */}
+                                {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
 
-                            {/* under maintanence */}
-                            <Route path={applicationRoutes.underMaintanenceRoute.route} component={UnderMaintanence} />
+                                {/* under maintanence */}
+                                <Route path={applicationRoutes.underMaintanenceRoute.route} component={UnderMaintanence} />
 
-                            {/* app */}
-                            <Route path="/">
-                                <AuthenticationFrame>
-                                    <ErrorDialogFrame>
-                                        <NotificationsFrame>
-                                            <EventListener>
-                                                <MainRouting />
-                                            </EventListener>
-                                        </NotificationsFrame>
-                                    </ErrorDialogFrame>
-                                </AuthenticationFrame>
-                            </Route>
-                        </Switch>
+                                {/* app */}
+                                <Route path="/">
+                                    <AuthenticationFrame>
+                                        <ErrorDialogFrame>
+                                            <NotificationsFrame>
+                                                <EventListener>
+                                                    <MainRouting />
+                                                </EventListener>
+                                            </NotificationsFrame>
+                                        </ErrorDialogFrame>
+                                    </AuthenticationFrame>
+                                </Route>
+                            </Switch>
+                        </PreventMobileFrame>
                     </ThemeProvider>
                 </ChakraProvider>
             </>

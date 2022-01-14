@@ -19,7 +19,7 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
                     to={menuItem.route}
                     key={index}>
                     <Flex
-                        p="20px"
+                        p="5px 15px"
                         // background={isCurrent ? "var(--epistoTeal)" : undefined}
                         align="center">
 

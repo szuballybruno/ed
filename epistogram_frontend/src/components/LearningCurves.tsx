@@ -89,12 +89,23 @@ export const LearningCurves = () => {
                 </Tabs>
             </Flex>
 
-            <TabPanel value={currentTab} index={0}>
-                {translatableTexts.learningOverview.learningCurveDescription}
+            <TabPanel
+                value={currentTab}
+                index={0}>
+
+                <Typography style={{
+                    fontSize: 13
+                }}>
+                    {translatableTexts.learningOverview.learningCurveDescription}
+                </Typography>
             </TabPanel>
 
             <TabPanel value={currentTab} index={1}>
-                {translatableTexts.learningOverview.forgettingCurveDescription}
+                <Typography style={{
+                    fontSize: 13
+                }}>
+                    {translatableTexts.learningOverview.forgettingCurveDescription}
+                </Typography>
             </TabPanel>
 
         </Flex>

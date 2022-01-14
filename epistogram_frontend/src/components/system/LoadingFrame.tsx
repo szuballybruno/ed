@@ -80,7 +80,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
             height="100%"
             top="0"
             left="0"
-            bg="#fffffff0"
+            bg="var(--gradientBlueBackground)"
             p="30px">
 
             {/* error */}

@@ -1,4 +1,5 @@
 import { Flex } from '@chakra-ui/layout';
+import { useMediaQuery } from '@chakra-ui/react';
 import { RoundedCornerOutlined } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
 import { Bar } from "react-chartjs-2";
@@ -107,6 +108,8 @@ type StatisticsItemType = {
 }
 
 export const LearningStatistics = () => {
+
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const params = useParams<{ userId: string }>();
     const userId = parseInt(params.userId);
@@ -317,7 +320,12 @@ export const LearningStatistics = () => {
         }
     ] as StatisticsGroupType[];
 
-    return <Flex direction="column" w="100%" flex="1">
+    return <Flex
+        direction="column"
+        w="100%"
+        flex="1"
+        minW={isSmallerThan1400 ? "1060px" : undefined}>
+            
         {statistics
             .map(statisticSectionData => {
 

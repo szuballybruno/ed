@@ -17,8 +17,8 @@ const SmallStat = (props: { iconUrl: string, text: string }) => {
             src={props.iconUrl}
             alt={""}
             style={{
-                width: 15,
-                height: 15,
+                width: 22,
+                height: 22,
                 margin: "0 2px 0 2px"
             }} />
 
@@ -115,15 +115,27 @@ const CourseTile = (props: {
             </Flex>
 
             {/* small stats  */}
-            <Flex mt={7}>
+            <Flex mt={7} mb="3px" justify="space-between">
 
+                {/* length */}
                 <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
+                    iconUrl={getAssetUrl("images/time3D.png")}
+                    text={"4.1"} />
+
+                {/* videos count */}
+                <SmallStat
+                    iconUrl={getAssetUrl("images/videos3D.png")}
                     text={"119"} />
 
+                {/* difficulty */}
                 <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
+                    iconUrl={getAssetUrl("images/difficulty3D.png")}
                     text={"6.9/10"} />
+
+                {/* rating */}
+                <SmallStat
+                    iconUrl={getAssetUrl("images/star3D.png")}
+                    text={"4.1"} />
             </Flex>
 
             {/* rating */}
@@ -133,18 +145,9 @@ const CourseTile = (props: {
 
                 {/* teacher name */}
                 <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_teacher.svg")}
+                    iconUrl={getAssetUrl("images/flag3D.png")}
                     text={courseTeacherName} />
 
-                <StarBorderOutlined />
-
-                <Text
-                    as={"text"}
-                    color={"grey"}
-                    ml={5}>
-
-                    4.1
-                </Text>
             </Flex>
 
         </Flex>

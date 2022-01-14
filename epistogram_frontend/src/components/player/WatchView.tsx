@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Divider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../static/frontendHelpers";
+import { getAssetUrl, getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../static/frontendHelpers";
 import { useReactTimer } from "../../helpers/reactTimer";
 import { ModuleDTO } from "../../models/shared_models/ModuleDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
@@ -200,7 +200,11 @@ export const WatchView = (props: {
                 videoPlayerState={videoPlayerState}>
 
                 {/* next video */}
-                <AbsoluteFlexOverlay isVisible={isVideoEnded} hasPointerEvents={false} align="flex-end" justify="flex-end">
+                <AbsoluteFlexOverlay
+                    isVisible={isVideoEnded}
+                    hasPointerEvents={false}
+                    align="flex-end"
+                    justify="flex-end">
 
                     <EpistoButton
                         style={{
@@ -210,10 +214,13 @@ export const WatchView = (props: {
                         }}
                         onClick={continueCourse}
                         variant="colored">
+
                         <TimeoutFrame reactTimer={reactTimer}>
+
                             <Typography style={{
                                 margin: "10px"
                             }}>
+
                                 Tovább
                             </Typography>
                         </TimeoutFrame>
@@ -279,7 +286,8 @@ export const WatchView = (props: {
                 flexWrap="wrap"
                 align="center">
 
-                <Flex direction="column">
+                <Flex direction="column" flex="5">
+
                     <Typography variant={"h6"}>
                         {video!.title}
                     </Typography>
@@ -287,7 +295,70 @@ export const WatchView = (props: {
                     <EpistoHeader variant="sub" text={video!.subTitle} />
                 </Flex>
 
-                <SegmentedButton paging={descCommentPaging}></SegmentedButton>
+                <Flex direction="column">
+
+                    {/* experience rating */}
+                    <Flex
+                        mx="10px"
+                        direction="column">
+
+                        <Flex>
+
+                            <Typography
+                                variant="overline">
+
+                                Mennyire volt hasznos ez a videó?
+                            </Typography>
+                        </Flex>
+
+                        <Flex>
+
+                            {new Array(5).fill("", 0, 5).map(item => {
+                                return <img
+                                    src={getAssetUrl("images/star3D.png")}
+                                    alt=""
+                                    style={{
+                                        width: 25,
+                                        height: 25,
+                                        marginRight: 5,
+                                        objectFit: "contain"
+                                    }} />
+                            })}
+                        </Flex>
+                    </Flex>
+
+                    {/* difficulty rating */}
+                    <Flex
+                        mx="10px"
+                        direction="column">
+
+                        <Flex>
+
+                            <Typography
+                                variant="overline">
+
+                                Ennyire volt nehéz megérteni
+                            </Typography>
+                        </Flex>
+
+                        <Flex>
+
+                            {new Array(5).fill("", 0, 5).map(item => {
+                                return <img
+                                    src={getAssetUrl("images/difficulty3D.png")}
+                                    alt=""
+                                    style={{
+                                        width: 25,
+                                        height: 25,
+                                        marginRight: 5,
+                                        objectFit: "contain"
+                                    }} />
+                            })}
+                        </Flex>
+                    </Flex>
+                </Flex>
+
+                {/*<SegmentedButton paging={descCommentPaging}></SegmentedButton>*/}
             </Flex>
 
             <Divider
