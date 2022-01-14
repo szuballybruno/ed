@@ -18,8 +18,13 @@ export const toFullName = (firstName: string, lastName: string, culture?: "en" |
     return `${firstName} ${lastName}`;;
 }
 
-export function replaceAll(str: string, find: string, replace: string) {
-    return str.replace(new RegExp(find, 'g'), replace);
+export function replaceAll(originalText: string, searchText: string, replaceText: string) {
+
+    const result = originalText
+        .split(searchText)
+        .join(replaceText);
+
+    return result;
 }
 
 export const throwNotImplemented = () => {

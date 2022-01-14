@@ -133,7 +133,7 @@ export class ModuleService {
 
             await this._fileService
                 .uploadAssigendFileAsync<CourseModule>(
-                    this._fileService.getFilePath("module_images", "module_image", dto.id, ".jpg"),
+                    this._fileService.getFilePath("module_images", "module_image", dto.id, "jpg"),
                     getModuleAsync,
                     setModuleThumbnailIdAsync,
                     module => module.imageFileId,

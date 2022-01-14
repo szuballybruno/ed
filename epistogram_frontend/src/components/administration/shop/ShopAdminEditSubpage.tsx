@@ -69,6 +69,8 @@ export const ShopAdminEditSubpage = () => {
             } as DiscountCodeDTO));
     })();
 
+    console.log(coverFilePath)
+
     // func
 
     const addCodes = () => {
@@ -132,6 +134,8 @@ export const ShopAdminEditSubpage = () => {
 
         if (!shopItemEditData || shopItemCategories.length === 0 || privateCourses.length === 0)
             return;
+
+        console.log("asd");
 
         setName(shopItemEditData.name);
         setPurchaseLimit(shopItemEditData.purchaseLimit + "");

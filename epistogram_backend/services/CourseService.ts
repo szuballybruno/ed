@@ -265,7 +265,7 @@ export class CourseService {
 
         return this._fileService
             .uploadAssigendFileAsync<Course>(
-                this._fileService.getFilePath("courseCoverImages", "courseCoverImage", courseId, ".jpg"),
+                this._fileService.getFilePath("courseCoverImages", "courseCoverImage", courseId, "jpg"),
                 getCourseAsync,
                 setCourseThumbnailIdAsync,
                 course => course.coverFileId,

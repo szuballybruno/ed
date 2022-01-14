@@ -1,6 +1,7 @@
 import { UploadedFile } from "express-fileupload";
 import { StorageFile } from "../models/entity/StorageFile";
 import { User } from "../models/entity/User";
+import { replaceAll } from "../utilities/helpers";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { StorageService } from "./StorageService";
 import { UserService } from "./UserService";
@@ -64,6 +65,8 @@ export class FileService {
     }
 
     getFilePath = (folderPath: string, fileType: string, fileId: number, extension: string) => {
+
+        extension = replaceAll(extension, ".", "");
 
         return `${folderPath}/${fileType}_${fileId}_${Date.now()}.${extension}`
     }

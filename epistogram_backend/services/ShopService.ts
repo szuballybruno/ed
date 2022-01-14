@@ -212,11 +212,11 @@ export class ShopService {
             });
 
         // save discount codes 
-        this.saveShopItemDiscountCodes(dto.id, dto.discountCodes);
+        await this.saveShopItemDiscountCodes(dto.id, dto.discountCodes);
 
         // upload cover file 
         if (coverFile)
-            this.saveCoverFile(dto.id, coverFile);
+            await this.saveCoverFileAsync(dto.id, coverFile);
     }
 
     async createShopItemAsync() {
@@ -256,25 +256,27 @@ export class ShopService {
             .filter(x => !existingCodes
                 .some(existingCode => existingCode.id === x.id));
 
-        await this._ormService
-            .getRepository(DiscountCode)
-            .insert(addedCodes
-                .map(addedCode => ({
-                    shopItemId,
-                    code: addedCode.code
-                })));
+        if (addedCodes.length > 0)
+            await this._ormService
+                .getRepository(DiscountCode)
+                .insert(addedCodes
+                    .map(addedCode => ({
+                        shopItemId,
+                        code: addedCode.code
+                    })));
 
         // handle deleted codes
         const deletedCodes = existingCodes
             .filter(x => !discountCodes
                 .some(code => code.id === x.id));
 
-        await this._ormService
-            .getRepository(DiscountCode)
-            .delete(deletedCodes.map(x => x.id));
+        if (deletedCodes.length > 0)
+            await this._ormService
+                .getRepository(DiscountCode)
+                .delete(deletedCodes.map(x => x.id));
     }
 
-    private async saveCoverFile(shopItemId: number, file: UploadedFile) {
+    private async saveCoverFileAsync(shopItemId: number, file: UploadedFile) {
 
         const getEntityAsync = () => this._ormService
             .getRepository(ShopItem)
@@ -287,9 +289,9 @@ export class ShopService {
                 coverFileId: fileId
             });
 
-        return this._fileService
+        return await this._fileService
             .uploadAssigendFileAsync<ShopItem>(
-                this._fileService.getFilePath("shop_item_cover_images", "shop_item_cover_image", shopItemId, ".jpg"),
+                this._fileService.getFilePath("shop_item_cover_images", "shop_item_cover_image", shopItemId, "jpg"),
                 getEntityAsync,
                 setFileIdAsync,
                 entity => entity.coverFileId,
