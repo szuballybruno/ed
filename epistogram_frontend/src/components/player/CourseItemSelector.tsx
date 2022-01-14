@@ -1,12 +1,13 @@
 import { Flex } from '@chakra-ui/layout';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Radio, RadioGroup, Typography } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { ModuleDTO } from '../../models/shared_models/ModuleDTO';
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { httpPostAsync } from "../../services/core/httpClient";
 import { useShowErrorDialog } from "../../services/core/notifications";
+import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { CourseItemList } from "../universal/CourseItemList";
 import { EpistoButton } from '../universal/EpistoButton';
 import { EpistoPopper } from '../universal/EpistoPopper';
@@ -22,6 +23,7 @@ export const CourseItemSelector = (props: {
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
+    const user = useContext(CurrentUserContext)!;
 
     const setCourseMode = async (mode: CourseModeType) => {
 
@@ -38,7 +40,11 @@ export const CourseItemSelector = (props: {
     return <>
 
         {/* learning type selector */}
-        <RadioGroup value={mode} style={{ position: "relative" }}>
+        {user.userActivity.canChangeCourseMode && <RadioGroup
+            value={mode}
+            style={{
+                position: "relative"
+            }}>
 
             <Flex height="100px" padding="20px" justify="center">
 
@@ -89,7 +95,7 @@ export const CourseItemSelector = (props: {
                 }}
                 icon={<HelpOutlineIcon />}
                 onClick={() => setIsInfoDialogOpen(true)} />
-        </RadioGroup>
+        </RadioGroup>}
 
         <EpistoPopper
             isOpen={isInfoDialogOpen}
