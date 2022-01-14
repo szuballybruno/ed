@@ -18,14 +18,16 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
         setIsOpen(false);
     }
 
-    const [buttons, setButtons] = useState<ButtonType[]>(defaultCloseButtonType === "bottom"
+    const defaultButtons = defaultCloseButtonType === "bottom"
         ? [
             {
                 title: "Bezaras",
                 action: closeDialog
             }
         ]
-        : []);
+        : [];
+
+    const [buttons, setButtons] = useState<ButtonType[]>(defaultButtons);
 
     const openDialog = (opt?: DialogOptions) => {
 
@@ -38,7 +40,7 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
                 setDescription(opt.description);
 
             if (opt.buttons)
-                setButtons(buttons.concat(opt.buttons ?? []));
+                setButtons(defaultButtons.concat(opt.buttons ?? []));
         }
 
         setIsOpen(true);
