@@ -314,8 +314,8 @@ export const AdminCourseContentSubpage = () => {
         if (!courseContentEditData)
             return;
 
-        console.log(courseContentEditData);
         setModules(courseContentEditData.modules);
+        setOpenModuleIds(courseContentEditData.modules.map(x => x.id));
 
     }, [courseContentEditData]);
 
@@ -335,15 +335,11 @@ export const AdminCourseContentSubpage = () => {
 
             <EpistoDialog logic={deleteWarningDialogLogic} />
 
-
-
             {/* course items */}
             <Flex
                 flex="1"
                 direction={"column"}
                 px={10}>
-
-
 
                 <Flex w={"100%"}>
                     <EpistoSearch flex={1} my={10} />

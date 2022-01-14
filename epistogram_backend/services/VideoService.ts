@@ -12,6 +12,7 @@ import { QuestionAnswerService } from "./QuestionAnswerService";
 import { QuestionService } from "./QuestionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
+import { VideoRating } from "../models/entity/VideoRating";
 
 export class VideoService {
 
@@ -154,6 +155,15 @@ export class VideoService {
             .delete()
             .from(VideoPlaybackSample)
             .where('"video_id" IN (:...videoIds)', { videoIds })
+            .execute();
+
+        // delete ratings 
+        await this._ormConnection
+            .getOrmConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(VideoRating)
+            .where('video_id IN (:...videoIds)', { videoIds })
             .execute();
 
         // delete playback samples 
