@@ -145,11 +145,11 @@ export const CourseDetailsTeacherSection = (props: {
             {courseDetails.teacherData.teacherDescription}
         </Typography>
 
-        {/* more courses */}
+        {/* more courses 
         <Flex h={70} w={"100%"} alignItems={"center"} justifyContent={"center"}>
             <EpistoButton variant={"outlined"}>
                 {courseDetails.teacherData.teacherFullName} további kurzusai
             </EpistoButton>
-        </Flex>
+        </Flex>*/}
     </Flex>
 }

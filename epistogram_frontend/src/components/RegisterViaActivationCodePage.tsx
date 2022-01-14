@@ -206,21 +206,38 @@ export const RegisterViaActivationCodePage = () => {
                                 color: "var(--epistoTeal)"
                             }}>
 
-                            Vásárold meg kedvezményesen erre a linkre kattintva!
+                            <a href="https://pcworld.hu/elofizetes" target="_blank">
+                                Vásárold meg kedvezményesen erre a linkre kattintva!
+                            </a>
                         </Typography>
                     </Flex>
 
 
                     <Flex
-                        position="absolute"
-                        className="whall"
-                        background="white"
+                        position="fixed"
+                        align="center"
+                        justify="center"
+                        w="100vw"
+                        h="100vh"
+                        background="var(--transparentWhite70)"
                         top="0"
+                        left="0"
                         display={registrationSuccessful ? undefined : "none"}>
 
-                        <Typography>
-                            A regisztracio sikeres volt, a belepesi linked elkuldtuk az '{email}' cimre.
-                        </Typography>
+                        <Flex
+                            className="roundBorders mildShadow"
+                            background="white"
+                            align="center"
+                            justify="center"
+                            padding="50px"
+                            w="500px"
+                            h="250px">
+
+                            <Typography align="center">
+                                A regisztráció sikeres volt, a belépési linked elküldtük a(z) '{email}' címre.
+                            </Typography>
+                        </Flex>
+
                     </Flex>
 
                 </LoadingFrame>

@@ -92,7 +92,7 @@ export const QuesitionView = (props: {
                     <EpistoText
                         isAutoFontSize
                         text={answer.answerText}
-                        maxFontSize={16}
+                        maxFontSize={15}
                         style={{
                             width: "100%"
                         }} />
@@ -102,7 +102,6 @@ export const QuesitionView = (props: {
         {!!coinsAcquired && <Flex
             mt="10px"
             borderRadius="5px"
-            border="solid 2px gold"
             p="7px"
             align="center">
 

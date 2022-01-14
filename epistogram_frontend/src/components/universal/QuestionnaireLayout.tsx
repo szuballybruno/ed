@@ -16,18 +16,19 @@ export const QuestionnaireLayout = (props: {
     const { title, answerAction, contentClickable, children, loadingProps, onlyShowAnswers, buttonWrapperStyles, ...css } = props;
 
     return (
-        <Flex id="questionnaireLayoutRoot" direction="column" p="20px" align="center" {...css}>
+        <Flex id="questionnaireLayoutRoot" direction="column" p="0 0 20px 0" align="center" {...css}>
 
             {/* header */}
             <Flex
                 display={onlyShowAnswers === true ? "none" : undefined}
                 direction="column"
                 align="center"
+                p="20px"
                 alignSelf="center">
 
                 {/* title */}
                 <Flex align="center">
-                    <img
+                    {/* <img
                         style={{
                             borderRadius: "50%",
                             padding: "8px",
@@ -37,16 +38,16 @@ export const QuestionnaireLayout = (props: {
                         }}
                         alt=""
                         src="https://static.thenounproject.com/png/92068-200.png"
-                        className="tinyShadow" />
+                        className="tinyShadow" /> */}
 
                     <EpistoText
                         isAutoFontSize
                         text={title}
-                        style={{ width: "80%", fontSize: 16 }} />
+                        style={{ width: "100%", fontSize: 17, fontWeight: 500 }} />
                 </Flex>
 
-                {/* divider */}
-                <Box width="70%" bg="var(--epistoTeal)" height="2px" m="4px" />
+                {/* divider 
+                <Box width="70%" bg="var(--epistoTeal)" height="2px" m="4px" />*/}
             </Flex>
 
             {/* content */}

@@ -1,10 +1,11 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { LinearProgress, Rating } from "@mui/material";
 import React, { ReactNode } from 'react';
-import { getAssetUrl } from "../../static/frontendHelpers";
+import { formatTimespan, getAssetUrl } from "../../static/frontendHelpers";
 import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { FlexFloat } from "./FlexFloat";
 import { Star, StarBorderOutlined, StarOutline } from "@mui/icons-material";
+import { useCourseDetails } from "../../services/api/courseApiService";
 
 const SmallStat = (props: { iconUrl: string, text: string }) => {
 
@@ -43,6 +44,8 @@ const CourseTile = (props: {
     const courseSubCategory = course.subCategoryName;
     const thumbnailImageUrl = course.thumbnailImageURL;
     const isComplete = course.isComplete;
+
+    const { courseDetails } = useCourseDetails(course.courseId);
 
     return <FlexFloat
         className="whall roundBorders"
@@ -102,16 +105,19 @@ const CourseTile = (props: {
         </Box>
 
         {/* content  */}
-        <Flex p="10px" direction={"column"}>
+        <Flex p="10px" direction={"column"} flex="1">
 
-            {/* category  */}
-            <Text as="text" fontSize="13px" color="grey">
-                {courseSubCategory}
-            </Text>
+            <Flex direction="column" flex="5">
 
-            {/* title */}
-            <Flex direction="column">
-                <Text fontWeight={"600"} fontSize="15px">{courseTitle}</Text>
+                {/* category  */}
+                <Text as="text" fontSize="13px" color="grey">
+                    {courseSubCategory}
+                </Text>
+
+                {/* title */}
+                <Flex direction="column">
+                    <Text fontWeight={"600"} fontSize="15px">{courseTitle}</Text>
+                </Flex>
             </Flex>
 
             {/* small stats  */}
@@ -120,22 +126,22 @@ const CourseTile = (props: {
                 {/* length */}
                 <SmallStat
                     iconUrl={getAssetUrl("images/time3D.png")}
-                    text={"4.1"} />
+                    text={formatTimespan(courseDetails?.totalVideoSumLengthSeconds || 0)} />
 
                 {/* videos count */}
                 <SmallStat
                     iconUrl={getAssetUrl("images/videos3D.png")}
-                    text={"119"} />
+                    text={courseDetails?.totalVideoCount + "" || "0"} />
 
                 {/* difficulty */}
                 <SmallStat
                     iconUrl={getAssetUrl("images/difficulty3D.png")}
-                    text={"6.9/10"} />
+                    text={courseDetails?.difficulty + ""} />
 
                 {/* rating */}
                 <SmallStat
                     iconUrl={getAssetUrl("images/star3D.png")}
-                    text={"4.1"} />
+                    text={courseDetails?.benchmark + ""} />
             </Flex>
 
             {/* rating */}

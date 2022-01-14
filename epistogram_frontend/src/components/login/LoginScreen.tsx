@@ -9,6 +9,7 @@ import { getAssetUrl, TypedError, useIsScreenWiderThan } from "../../static/fron
 import { useEpistoDialogLogic } from "../EpistoDialog";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { LoadingFrame } from "../system/LoadingFrame";
+import { MainWrapper } from "../system/MainPanels";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoEntry } from "../universal/EpistoEntry";
 import { LoginPasswordResetDialog } from "./LoginPasswordResetDialog";
@@ -116,156 +117,208 @@ const LoginScreen = () => {
         };
     }, []);
 
-    return (
-        <Flex h={"100vh"} justifyContent={"center"} alignItems={"flex-start"}>
+    return <MainWrapper>
+
+        <Flex
+            justify={"center"}
+            background="gradientBlueBackground"
+            py="60px"
+            overflowY={"scroll"}
+            h="100%"
+            w="100%">
 
             {/* pw reset dialog */}
             <LoginPasswordResetDialog
                 passwordResetDialogLogic={passwordResetDialogLogic} />
 
-            {/* side image pane */}
-            <Flex
-                direction={"column"}
-                w={"60%"}
-                h={"100vh"}
-                display={isDesktopView ? undefined : "none"}
-                backgroundSize={"100%"}
-                backgroundRepeat={"space"}
-                alignItems={"center"}
-                justifyContent={"center"}
-                position={"relative"}>
-
-                {/* bg image */}
-                <img
-                    src={getAssetUrl("/loginScreen/loginbackground.png")}
-                    style={{
-                        position: "absolute",
-                        objectFit: "cover",
-                        filter: "contrast(0.7)"
-                    }}
-                    className="whall"
-                    alt={""} />
-
-                {/* logo overlay */}
-                <img
-                    style={{
-                        zIndex: 1,
-                        width: 200
-                    }}
-                    src={getAssetUrl("/loginScreen/logofeher.svg")}
-                    alt={""} />
-
-                {/* motto */}
-                <Typography zIndex={1} color={"white"} fontSize={"3.5rem"}>
-                    Rethink knowledge
-                </Typography>
-            </Flex>
-
             {/* content pane */}
             <LoadingFrame
+                className="roundBorders mildShadow"
                 loadingState={loginUserState}
-                direction={"column"}
-                minH={"100%"}
-                w={"40%"}
-                maxW={"90%"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                bgColor={"white"}
-                zIndex={5}>
+                background="var(--transparentWhite70)"
+                zIndex="6"
+                mx="100px"
+                p="50px 150px"
+                overflow="hidden"
+                position={"relative"}>
 
                 <Flex
-                    direction="column"
-                    alignItems={"center"}
-                    width={window.innerWidth > 600 ? 450 : "90%"}>
-
-                    <img
-                        style={{
-                            zIndex: 1,
-                            width: 320,
-                            marginBottom: 25,
-                        }}
-                        src={getAssetUrl("/loginScreen/pcworldloginlogo.png")}
-                        alt={""} />
+                    wrap={"wrap"}
+                    className="whall"
+                    maxW="700px">
 
                     <Flex
                         direction="column"
-                        w={"100%"}
-                        alignItems="center">
+                        align="center"
+                        justify="center"
+                        //bgColor="green"
+                        zIndex="7"
+                        flex="1">
 
-                        <Typography fontSize={"1.5rem"}>
-                            Örülünk, hogy ismét itt vagy velünk!
-                        </Typography>
+                        {/* epi logo */}
+                        <img
+                            src={getAssetUrl("/images/logo.png")}
+                            style={{
+                                width: "250px",
+                                maxHeight: "100px",
+                                objectFit: "contain",
+                                marginLeft: "15px",
+                                cursor: "pointer",
+                            }}
+                            alt="" />
+
+                        {/* 3d redeem image */}
+                        <img
+                            src={getAssetUrl("/images/redeem3D.png")}
+                            style={{
+                                width: "100%",
+                                maxHeight: "350px",
+                                objectFit: "contain",
+                                marginLeft: "15px",
+                                cursor: "pointer",
+                            }}
+                            alt="" />
 
                     </Flex>
 
-                    <Box w={"100%"}>
+                    <Flex
+                        id="form"
+                        direction="column"
+                        justify="center"
+                        zIndex="7"
+                        flex="1">
 
-                        <EpistoEntry
-                            ref={emailRef}
-                            labelVariant="top"
-                            label="E-mail"
-                            placeholder="E-mail"
-                            name="email"
-                            setValue={handleValidation}
-                            height="50px" />
 
-                        <EpistoEntry
-                            ref={pwRef}
-                            labelVariant="top"
-                            label="Jelszó"
-                            placeholder="Jelszó"
-                            name="password"
-                            type="password"
-                            setValue={handleValidation}
-                            height="50px" />
-                      
-                        {/* forgot password */}
-                        <EpistoButton
-                            type="reset"
-                            onClick={() => passwordResetDialogLogic.openDialog()}>
+                        <Flex
+                            direction="column"
+                            w={"100%"}
+                            alignItems="flex-start">
 
-                            <Typography
-                                className="fontSmall fontGrey"
-                                style={{
-                                    textTransform: "none",
-                                    marginTop: "5px"
-                                }}>
-
-                                Elfelejtettem a jelszavam
+                            <Typography fontSize={"1.2rem"}>
+                                Örülünk, hogy ismét itt vagy velünk!
                             </Typography>
+
+                        </Flex>
+
+                        <Box w={"100%"}>
+
+                            <EpistoEntry
+                                ref={emailRef}
+                                labelVariant="top"
+                                label="E-mail"
+                                placeholder="E-mail"
+                                name="email"
+                                setValue={handleValidation} />
+
+                            <EpistoEntry
+                                ref={pwRef}
+                                labelVariant="top"
+                                label="Jelszó"
+                                placeholder="Jelszó"
+                                name="password"
+                                type="password"
+                                setValue={handleValidation} />
+
+                            {/* forgot password */}
+                            <EpistoButton
+                                type="reset"
+                                onClick={() => passwordResetDialogLogic.openDialog()}>
+
+                                <Typography
+                                    className="fontSmall fontGrey"
+                                    style={{
+                                        textTransform: "none",
+                                        marginTop: "5px"
+                                    }}>
+
+                                    Elfelejtettem a jelszavam
+                                </Typography>
+                            </EpistoButton>
+
+                            {/* error msg */}
+                            <Typography style={{ color: "var(--mildRed)" }}>
+                                {errorMessage}
+                            </Typography>
+                        </Box>
+
+                        <EpistoButton
+                            variant="colored"
+                            padding="10px"
+                            type="submit"
+                            style={{
+                                marginTop: 15,
+                                marginBottom: 15,
+                                width: "100%",
+                                backgroundColor: "var(--deepBlue)"
+                            }} 
+                            onClick={handleLoginUserAsync}>
+                                
+                            Bejelentkezés
                         </EpistoButton>
 
-                        {/* error msg */}
-                        <Typography style={{ color: "var(--mildRed)" }}>
-                            {errorMessage}
-                        </Typography>
-                    </Box>
+                        <Flex
+                            direction={"row"}
+                            justifyContent={"space-between"}
+                            w={"100%"}>
 
-                    <EpistoButton 
-                        variant="colored" 
-                        padding="15px"
-                        type="submit"
-                        style={{
-                            marginTop: 15,
-                            marginBottom: 15,
-                            width: "100%",
-                            backgroundColor: "#AE1E2E"//"#6437AB"
-                        }} onClick={handleLoginUserAsync}>
-                        Bejelentkezés
-                    </EpistoButton>
+                            <Typography fontSize="13px">
+                                Még nincs hozzáférésed?
+                            </Typography>
 
-                    <Flex direction={"row"} justifyContent={"space-between"} w={"100%"}>
-                        <Typography>Még nincs hozzáférésed?</Typography>
-                        <Typography textAlign={"right"} style={{
-                            color: "#AE1E2E"
-                        }}>Aktiváld a PCWorld Ultimate kódodat az alábbi oldalon</Typography>
+                            <Typography
+                                onClick={() => navigate("/register-via-activation-code")}
+                                textAlign={"right"}
+                                fontSize="13px"
+                                style={{
+                                    color: "--deepBlue"
+                                }}>
+
+                                Aktiváld a PCWorld Ultimate kódodat az alábbi oldalon
+                            </Typography>
+                        </Flex>
                     </Flex>
                 </Flex>
 
+                {/* Magic powder top-left */}
+                <img
+                    style={{
+                        position: "absolute",
+                        left: 50,
+                        top: -80,
+                        width: 300,
+                        transform: "rotate(270deg)",
+                        objectFit: "contain",
+                        zIndex: 0,
+                    }}
+                    src={getAssetUrl("/images/bg-art-2.png")}
+                    alt="" />
 
+                {/* Magic powder bottom-left */}
+                <img
+                    style={{
+                        position: "absolute",
+                        left: -55,
+                        bottom: -150,
+                        transform: "rotate(-90deg) scale(50%)",
+                        zIndex: 0,
+                    }}
+                    src={getAssetUrl("/images/bg-art-5.png")}
+                    alt="" />
+
+                {/* Magic powder top-left */}
+                <img
+                    style={{
+                        position: "absolute",
+                        right: -20,
+                        top: -120,
+                        transform: "rotate(270deg) scale(70%)",
+                        zIndex: 0,
+                    }}
+                    src={getAssetUrl("/images/bg-art-6.png")}
+                    alt="" />
             </LoadingFrame>
         </Flex>
-    )
+    </MainWrapper>
 };
 
 export default LoginScreen

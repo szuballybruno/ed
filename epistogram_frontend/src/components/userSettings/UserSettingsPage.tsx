@@ -34,8 +34,8 @@ export const UserSettingsPage = () => {
                     items={[
                         applicationRoutes.settingsRoute.preferencesRoute,
                         applicationRoutes.settingsRoute.featurePreviewRoute,
-                        applicationRoutes.settingsRoute.developmentNotes,
-                        applicationRoutes.settingsRoute.coinTransactionsRoute
+                        applicationRoutes.settingsRoute.developmentNotes/* ,
+                        applicationRoutes.settingsRoute.coinTransactionsRoute */
                     ]}></NavigationLinkList>
             </LeftPanel>
 
@@ -44,8 +44,8 @@ export const UserSettingsPage = () => {
                 <Switch>
                     {getRoute(applicationRoutes.settingsRoute.preferencesRoute, <Preferences />)}
                     {getRoute(applicationRoutes.settingsRoute.featurePreviewRoute, <FeaturePreview />)}
-                    {getRoute(applicationRoutes.settingsRoute.developmentNotes, <DevelopmentNotes />)}
-                    {getRoute(applicationRoutes.settingsRoute.coinTransactionsRoute, <CoinTransactions />)}
+                    {getRoute(applicationRoutes.settingsRoute.developmentNotes, <DevelopmentNotes />)}{/* 
+                    {getRoute(applicationRoutes.settingsRoute.coinTransactionsRoute, <CoinTransactions />)} */}
                 </Switch>
             </RightPanel>
         </ContentWrapper>

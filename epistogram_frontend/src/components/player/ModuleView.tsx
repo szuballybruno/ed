@@ -26,7 +26,7 @@ export const ModuleView = (params: {
             align="center"
             justify="center">
 
-            <Flex direction="row">
+            <Flex direction="row" align="center">
 
                 {module?.imageFilePath && <Flex>
                     <img
@@ -34,12 +34,14 @@ export const ModuleView = (params: {
                         src={module?.imageFilePath ?? ""}
                         style={{
                             width: "100px",
+                            height: "100px",
                             objectFit: "cover",
                             margin: 10
                         }} />
                 </Flex>}
 
                 <Flex
+                    maxW="300px"
                     direction="column"
                     justify="center">
 

@@ -128,17 +128,17 @@ const CourseDetailsPage = () => {
 
     return <MainWrapper>
 
-        <Navbar />
-
         <ContentWrapper
             direction="column"
             overflowY="scroll"
             px="100px">
 
+            <Navbar showLogo />
+
             {/* Title */}
             <EpistoHeader
-                alignSelf="center"
-                margin="80px 40px 40px 40px"
+                alignSelf="left"
+                margin="80px 40px 40px 0px"
                 variant="xxl"
                 text={courseDetails?.title ?? ""} />
 
@@ -296,7 +296,7 @@ const CourseDetailsPage = () => {
 
                     </Flex>
 
-                    {/* Recommended courses section */}
+                    {/* Recommended courses section 
                     <Flex direction={"column"}>
                         <Flex
                             direction={"column"}
@@ -321,7 +321,7 @@ const CourseDetailsPage = () => {
                             ])}
 
                         </Flex>
-                    </Flex>
+                    </Flex>*/}
 
                 </Flex>
             </Flex>

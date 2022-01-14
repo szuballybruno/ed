@@ -20,8 +20,8 @@ const LearningInsightsPage = () => {
                     items={[
                         applicationRoutes.learningRoute.learningOverviewRoute,
                         applicationRoutes.learningRoute.myStatisticsRoute,
-                        applicationRoutes.learningRoute.myCoursesRoute,
-                        applicationRoutes.learningRoute.myExamsRoute
+                        applicationRoutes.learningRoute.myCoursesRoute/* ,
+                        applicationRoutes.learningRoute.myExamsRoute */
                     ]} />
             </LeftPanel>
 
@@ -38,9 +38,9 @@ const LearningInsightsPage = () => {
                     <Route path={applicationRoutes.learningRoute.myCoursesRoute.route}>
                         <LearningCourseStats />
                     </Route>
-                    <Route path={applicationRoutes.learningRoute.myExamsRoute.route}>
+                    {/* <Route path={applicationRoutes.learningRoute.myExamsRoute.route}>
                         <MyExams />
-                    </Route>
+                    </Route> */}
                 </Switch>
             </RightPanel>
         </ContentWrapper >

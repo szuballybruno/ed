@@ -147,7 +147,7 @@ const AvailableCoursesPage = () => {
                         align="center"
                         justify="space-between"
                         w="100%"
-                        p="20px 0">
+                        p="0 0 20px 0">
 
                         {/* toggle buttons */}
                         <ToggleButtonGroup

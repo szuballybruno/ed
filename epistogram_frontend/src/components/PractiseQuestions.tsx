@@ -145,39 +145,22 @@ export const PractiseQuestions = () => {
 
         {practiseQuestion && <Flex className="whall" wrap="wrap">
 
-            {/* gif section */}
             <Flex
-                display={isAnswered ? undefined : "none"}
+                position="absolute"
+                top="-35"
+                right="10"
                 align="center"
-                flex="1">
+                display={isCorrectAnswer ? undefined : "none"}>
 
-                <Flex direction="column">
-                    <Image
-                        minWidth="200px"
-                        minHeight="200px"
-                        flex="1"
-                        alignSelf="stretch"
-                        margin="20px 30px 0 30px"
-                        objectFit="contain"
-                        src={gifSource} />
+                <Typography>
+                    {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
+                </Typography>
 
-                    <Flex
-                        align="center"
-                        alignSelf="center"
-                        flexBasis="50px"
-                        display={isCorrectAnswer ? undefined : "none"}>
+                <EpistoConinImage />
 
-                        <Typography>
-                            {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
-                        </Typography>
-
-                        <EpistoConinImage />
-
-                        <Typography>
-                            {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
-                        </Typography>
-                    </Flex>
-                </Flex>
+                <Typography>
+                    {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
+                </Typography>
             </Flex>
 
             {/* question section */}
@@ -188,9 +171,14 @@ export const PractiseQuestions = () => {
                 minWidth="300px">
 
                 <Typography
+                    style={{
+                        marginTop: 10,
+                        fontSize: 18
+                    }}
                     display={isAnswered ? undefined : "none"}
                     variant="h5"
                     alignSelf="center">
+
                     {isCorrectAnswer
                         ? translatableTexts.practiseQuestions.answerIsCorrect
                         : translatableTexts.practiseQuestions.answerIsIncorrect}
@@ -210,7 +198,10 @@ export const PractiseQuestions = () => {
                     display={isAnswered ? undefined : "none"}>
 
                     <EpistoButton
-                        variant="outlined"
+                        variant="colored"
+                        style={{
+                            fontSize: 15
+                        }}
                         onClick={handleNextQuestion}>
 
                         {translatableTexts.practiseQuestions.nextQuestion}
