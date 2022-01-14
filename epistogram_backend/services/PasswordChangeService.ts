@@ -1,4 +1,5 @@
 import { User } from "../models/entity/User";
+import { validatePassowrd } from "../models/shared_models/logic/sharedLogic";
 import { TypedError } from "../utilities/helpers";
 import { EmailService } from "./EmailService";
 import { HashService } from "./HashService";
@@ -115,8 +116,8 @@ export class PasswordChangeService {
         passwordResetToken: string) => {
 
         // verify new password with compare password 
-        if (password !== passwordCompare)
-            throw new TypedError("Passwords don't match.", "bad request");
+        if (validatePassowrd(password, passwordCompare))
+            throw new TypedError("Password is invalid.", "bad request");
 
         // verify token
         const tokenPayload = this._tokenService

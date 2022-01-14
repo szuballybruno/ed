@@ -1,4 +1,5 @@
 import generatePassword from "password-generator";
+import { validatePassowrd } from "../models/shared_models/logic/sharedLogic";
 import { JobTitleIdEnum, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { getFullName, TypedError } from "../utilities/helpers";
 import { ActivationCodeService } from "./ActivationCodeService";
@@ -144,8 +145,8 @@ export class RegistrationService {
         const userId = user.id;
 
         // check passwords 
-        if (password !== passwordControl)
-            throw new TypedError("Passwords don't match!", "bad request");
+        if (validatePassowrd(password, passwordControl))
+            throw new TypedError("Password is invalid.", "bad request");
 
         // update user 
         await this._userService

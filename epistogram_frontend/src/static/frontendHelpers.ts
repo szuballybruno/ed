@@ -3,10 +3,11 @@ import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { matchPath, useLocation, useParams } from "react-router-dom";
-import { assetStorageUrl } from "./Environemnt";
+import { validatePassowrd } from "../models/shared_models/logic/sharedLogic";
 import { ErrorType, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { ApplicationRoute, LoadingStateType } from "../models/types";
 import { httpGetAsync } from "../services/core/httpClient";
+import { assetStorageUrl } from "./Environemnt";
 import { translatableTexts } from "./translatableTexts";
 
 export const iterate = <T>(n: number, fn: (index) => T) => {
@@ -338,32 +339,40 @@ export const usePasswordEntryState = () => {
 
     const validate = () => {
 
-        // check if there's even a password typed in
-        if (password === "") {
+        const error = validatePassowrd(password, passwordCompare);
 
-            setPasswordError(null);
-            return;
+        switch (error) {
+
+            case "passwordIsEmpty":
+                setPasswordError(null);
+                setPasswordCompareError(null);
+                return false;
+
+            case "tooShort":
+                setPasswordError("A jelszó túl rövid!");
+                setPasswordCompareError(null);
+                return false;
+
+            case "tooLong":
+                setPasswordError("A jelszó túl hosszú!");
+                setPasswordCompareError(null);
+                return false;
+
+            case "doesNotMatchControlPassword":
+                setPasswordError("A jelszavak nem egyeznek!");
+                setPasswordCompareError("A jelszavak nem egyeznek!");
+                return false;
+
+            case "hasNoNumber":
+                setPasswordError("A jelszó nem tartalmaz számot!");
+                setPasswordCompareError(null);
+                return false;
+
+            default:
+                setPasswordError(null);
+                setPasswordCompareError(null);
+                return true;
         }
-
-        // check length 
-        if (password.length < 3) {
-
-            setPasswordError("A jelszó túl rövid!");
-            return;
-        }
-
-        // check compare 
-        if (password != passwordCompare) {
-
-            setPasswordError("A jelszavak nem egyeznek!");
-            setPasswordCompareError("A jelszavak nem egyeznek!");
-            return false;
-        }
-
-        setPasswordError(null);
-        setPasswordCompareError(null);
-
-        return true;
     }
 
     useEffect(() => {
