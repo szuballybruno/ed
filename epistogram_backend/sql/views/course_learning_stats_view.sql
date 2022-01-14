@@ -86,4 +86,4 @@ FROM public.course_view cv
 LEFT JOIN public.course_spent_time_view cstv
 ON cstv.user_id = cv.user_id AND cstv.course_id = cv.id
 
-WHERE cv.is_started = true OR cv.is_completed = true
+-- WHERE cv.is_started = true OR cv.is_completed = true
