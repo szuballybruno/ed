@@ -5,6 +5,7 @@ import { ActivationCodeService } from "./ActivationCodeService";
 import { AuthenticationService } from "./AuthenticationService";
 import { EmailService } from "./EmailService";
 import { log } from "./misc/logger";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { TokenService } from "./TokenService";
 import { UserService } from "./UserService";
 
@@ -15,19 +16,22 @@ export class RegistrationService {
     private _userService: UserService;
     private _authenticationService: AuthenticationService;
     private _tokenService: TokenService;
+    private _ormService: ORMConnectionService;
 
     constructor(
         acs: ActivationCodeService,
         emailService: EmailService,
         userService: UserService,
         authenticationService: AuthenticationService,
-        tokenService: TokenService) {
+        tokenService: TokenService,
+        ormService: ORMConnectionService) {
 
         this._userService = userService;
         this._authenticationService = authenticationService;
         this._activationCodeService = acs;
         this._emailService = emailService;
         this._tokenService = tokenService;
+        this._ormService = ormService;
     }
 
     /**
@@ -53,10 +57,6 @@ export class RegistrationService {
         if (!activationCodeEntity)
             throw new Error("Code is not valid");
 
-        // invalidate activation code 
-        await this._activationCodeService
-            .invalidateCodeAsync(activationCodeEntity.id);
-
         // create user 
         await this.createInvitedUserAsync({
             email,
@@ -66,6 +66,10 @@ export class RegistrationService {
             roleId: RoleIdEnum.user,
             jobTitleId: JobTitleIdEnum.genericUser
         });
+
+        // invalidate activation code 
+        await this._activationCodeService
+            .invalidateCodeAsync(activationCodeEntity.id);
     }
 
     /**

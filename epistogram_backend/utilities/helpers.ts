@@ -244,6 +244,11 @@ export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => 
     return parseType(objWithValue, type ?? "any") as T;
 };
 
+export const sleepAsync = (seconds: number) => {
+
+    return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+}
+
 export const getBearerTokenFromRequest = (req: Request) => {
 
     const authHeader = req.headers.authorization;
