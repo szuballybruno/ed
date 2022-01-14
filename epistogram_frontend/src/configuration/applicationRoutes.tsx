@@ -4,6 +4,7 @@ import { translatableTexts } from "../static/translatableTexts";
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { getAssetUrl } from "../static/frontendHelpers";
 
 export const applicationRoutes = {
 
@@ -78,26 +79,54 @@ export const applicationRoutes = {
         learningOverviewRoute: {
             title: translatableTexts.routeTitles.learningOverview,
             route: "/learning",
-            icon: <School color={"secondary"} />,
+            icon: <img
+                src={getAssetUrl("images/overview3D.png")}
+                alt=""
+                style={{
+                    width: 45,
+                    height: 45,
+                    objectFit: "contain"
+                }} />,
             exact: true
         },
 
         myStatisticsRoute: {
             title: translatableTexts.routeTitles.learningStatistics,
             route: "/learning/myStatistics",
-            icon: <Equalizer color="secondary" />,
+            icon: <img
+                src={getAssetUrl("images/mystatsicon3D.png")}
+                alt=""
+                style={{
+                    width: 45,
+                    height: 45,
+                    objectFit: "contain"
+                }} />,
         },
 
         myCoursesRoute: {
             title: translatableTexts.routeTitles.learningCourses,
             route: "/learning/myCourses",
-            icon: <Subscriptions color={"secondary"} />
+            icon: <img
+                src={getAssetUrl("images/watchedvideos3Dsmaller.png")}
+                alt=""
+                style={{
+                    width: 45,
+                    height: 45,
+                    objectFit: "contain"
+                }} />,
         },
 
         myExamsRoute: {
             title: translatableTexts.routeTitles.learningExams,
             route: "/learning/myExams",
-            icon: <Assignment color={"secondary"} />
+            icon: <img
+                src={getAssetUrl("images/examsicon3D.png")}
+                alt=""
+                style={{
+                    width: 45,
+                    height: 45,
+                    objectFit: "contain"
+                }} />,
         }
     },
 

@@ -189,13 +189,18 @@ export const LearningCourseStatsTile = (props: {
                 mt={7}
                 w="100%"
                 h="10px">
-                    
+
                 <LinearProgress
                     variant="determinate"
                     style={{
                         width: "100%",
                     }}
                     value={progressPercentage} />
+
+                <Flex m="0 5px 0 20px">
+                    {`${progressPercentage}%`}
+                </Flex>
+
             </Flex>
 
             {/* more stats 

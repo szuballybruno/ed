@@ -232,7 +232,7 @@ const DesktopNavbar = (props: {
                                 }} />
                         </EpistoButton>
 
-                        {/* notification bell */}
+                        {/* notification bell 
                         <EpistoButton
                             className="roundBorders square50"
                             variant={"plain"}
@@ -247,7 +247,7 @@ const DesktopNavbar = (props: {
                                 style={{
                                     objectFit: "cover"
                                 }} />
-                        </EpistoButton>
+                        </EpistoButton>*/}
 
                         {/* vertical divider */}
                         <Box

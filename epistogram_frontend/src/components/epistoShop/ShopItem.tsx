@@ -46,7 +46,7 @@ export const ShopItem = (props: {
         {...css}>
 
         {/* cover image box */}
-        <Box flex="1" position="relative" minH={200} maxH={200}>
+        <Box flex="7" position="relative" minH={150} maxH={150}>
 
             {/* cover image */}
             <img
@@ -118,49 +118,50 @@ export const ShopItem = (props: {
         </Box>
 
         {/* title */}
-        <Box flexBasis="80px" zIndex={1}>
+        <Box flex="3" flexBasis="80px" zIndex={1}>
 
             <Flex direction="column" p="10px" >
 
                 {/* category  */}
-                <Text as="text" color="grey">
+                <Text as="text" color="grey" fontSize="13px">
                     {shopItemCategoryName}
                 </Text>
 
                 {/* title */}
                 <Flex direction="column">
-                    <Text as="h6" fontWeight={"bold"} fontSize="large">{name}</Text>
+                    <Text fontWeight={"600"} fontSize="15px">{name}</Text>
                 </Flex>
             </Flex>
         </Box>
 
         {/* prices */}
-        {!isPurchased && <Flex alignItems={"center"} justifyContent={"center"}>
-            <Flex alignItems={"center"}>
-                <LocalOffer style={{
-                    height: 17,
-                    transform: "scaleX(-1)"
-                }} />
+        {!isPurchased &&
+            <Flex alignItems={"center"} justifyContent={"center"} mb="5px">
+                <Flex alignItems={"center"}>
+                    <LocalOffer style={{
+                        height: 17,
+                        transform: "scaleX(-1)"
+                    }} />
 
-                {/* episto coin price */}
-                <Typography style={{ color: isSufficientFundsAvailable ? "var(--deepGreen)" : "var(--mildRed)" }}>
-                    {`Ár: ${coinPrice}`}
-                </Typography>
-                <img
-                    style={{
-                        width: 20,
-                        height: 20,
-                        margin: 2
-                    }}
-                    src={getAssetUrl("/images/epistoCoin.png")} alt={""} />
+                    {/* episto coin price */}
+                    <Typography style={{ color: isSufficientFundsAvailable ? "var(--deepGreen)" : "var(--mildRed)" }}>
+                        {`Ár: ${coinPrice}`}
+                    </Typography>
+                    <img
+                        style={{
+                            width: 20,
+                            height: 20,
+                            margin: 2
+                        }}
+                        src={getAssetUrl("/images/epistoCoin.png")} alt={""} />
 
-                {/* currency price
+                    {/* currency price
                 {currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}*/}
-            </Flex>
-        </Flex>}
+                </Flex>
+            </Flex>}
 
         {/* buttons */}
-        <Flex height="45px" margin="5px 5px 5px 5px">
+        <Flex height="40px" margin="5px 5px 5px 5px">
 
             {/* item details */}
             <EpistoButton
