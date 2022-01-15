@@ -20,7 +20,7 @@ export const VideoQuestionnaire = (props: {
     const { question, isShowing, onAnswered, answerSessionId, onClosed, ...css } = props;
     const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = useAnswerQuestion();
     const isAnswered = !!answerResult;
-    const autoCloseSecs = 2;
+    const autoCloseSecs = 8;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
 
     const handleAnswerQuestionAsync = async (answerId) => {
