@@ -1,4 +1,4 @@
-import { Box, Flex, Image } from "@chakra-ui/react";
+import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
 import { ArrowBack } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
@@ -41,6 +41,7 @@ export const SignupWrapper = (props: {
     const onNext = props.onNext;
 
     const isDesktop = useIsDesktopView();
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1350px)');
 
     return <Flex
         id="signupWrapperRoot"
@@ -48,11 +49,10 @@ export const SignupWrapper = (props: {
         alignItems="center"
         width="100%"
         height="100%"
-        px="125px"
+        px={isSmallerThan1400 ? 125 : 0}
         zIndex="3"
         maxH="100vh"
-        position="relative"
-        overflow="hidden">
+        position="relative">
 
         {/* header */}
         <Flex
@@ -106,28 +106,33 @@ export const SignupWrapper = (props: {
             {/* content */}
             <Flex
                 id="content"
-                wrap="wrap"
+                wrap="nowrap"
                 justify="center"
                 align="center"
-                width="90vw"
+                width={isSmallerThan1400 ? "100vw" : "90vw"}
                 height={"90%"}>
 
                 {/* image */}
                 {hasImage && <Flex
                     flex="5"
-                    minWidth={window.innerWidth > 500 ? 400 : "100%"}
+                    align="center"
+                    flexShrink={1}
+                    minW="300px"
                     minH={400}
                     h="400"
                     justifyContent={isDesktop ? "flex-end" : "center"}>
 
-                    <Image maxW={450} height="100%" src={currentImage!} />
+                    <Image maxW={350} minW="300px" maxH="300px" height="100%" style={{
+                        objectFit: "contain",
+                        margin: "0 30px"
+                    }} src={currentImage!} />
                 </Flex>}
 
                 {/* question content */}
                 <Flex
                     id="content"
                     flex="5"
-                    minWidth={window.innerWidth > 500 ? 300 : "calc(100% - 200px)"}
+                    minWidth={400}//window.innerWidth > 500 ? 300 : "calc(100% - 200px)"}
                     direction="column">
 
                     {/* title */}

@@ -95,8 +95,24 @@ export const DailyTip = (props: {} & FlexProps) => {
         </EpistoDialog >
 
         {/* text daily tip */}
-        <Flex align="flex-start" flex="1" p="10px" fontSize="13px">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem voluptates illo placeat id ab provident, possimus fugit vero sunt exercitationem, architecto nemo nesciunt, minus eius iusto adipisci laudantium necessitatibus consequuntur?
+        <Flex
+            direction="column"
+            align="center"
+            flex="1"
+            p="10px"
+            fontSize="13px">
+
+            <img
+                src={getAssetUrl("images/dailytip3D.png")}
+                alt=""
+                style={{
+                    maxWidth: 200
+                }} />
+
+            <Flex p="20px" textAlign="center">
+
+                Személyes tanulási tipped 48 óra múlva válik elérhetővé
+            </Flex>
         </Flex>
 
         {/* preview (disabled temporarily) */}

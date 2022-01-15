@@ -239,7 +239,7 @@ export const LearningCourseStatsTile = (props: {
                 onClick={handleStartCourse}
                 style={{ flex: "1" }}>
 
-                {isComplete ? "Ujrakezdem" : "Folytatom"}
+                {isComplete ? "Újrakezdem" : "Folytatom"}
             </EpistoButton>
         </Flex>
     </FlexFloat>

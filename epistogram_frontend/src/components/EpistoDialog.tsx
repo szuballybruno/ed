@@ -21,7 +21,7 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
     const defaultButtons = defaultCloseButtonType === "bottom"
         ? [
             {
-                title: "Bezaras",
+                title: "Bezárás",
                 action: closeDialog
             }
         ]
@@ -102,19 +102,21 @@ export const EpistoDialog = (props: {
             {logic.dialogOptions?.defaultCloseButtonType === "top" && <Close
                 onClick={closeDialog}
                 style={{
+                    color: "white",
                     margin: "15px",
                     cursor: "pointer",
                     position: "absolute",
+                    zIndex: 9999,
                     right: 0,
-                    top: 0
+                    top: 5
                 }}>
-                Bezaras
+                Bezárás
             </Close>}
 
             <Flex
                 id="dialogContentFlex"
                 style={{
-                    padding: "10px 0px 10px 0px"
+                    padding: "0"
                 }}>
                 {description && description}
                 {children}

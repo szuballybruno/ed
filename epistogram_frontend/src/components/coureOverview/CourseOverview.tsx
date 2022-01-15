@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { useCourseOverviewData } from "../../services/api/miscApiService";
 
 export const CourseOverview = () => {
@@ -7,9 +7,7 @@ export const CourseOverview = () => {
 
     console.log(courseOverviewData);
 
-    return (
-        <Box>
-            asd
-        </Box>
-    )
+    return <Flex>
+        asd
+    </Flex>
 };

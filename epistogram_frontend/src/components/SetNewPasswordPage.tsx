@@ -38,7 +38,7 @@ export const SetNewPasswordPage = () => {
 
         if (!token) {
 
-            showErrorDialog("Helytelen url cim. Nincs token megadva. Probald ujra egy masik linkel.");
+            showErrorDialog("Helytelen url cím. Nincs token megadva. Próbáld újra egy másik linkkel.");
             return;
         }
 

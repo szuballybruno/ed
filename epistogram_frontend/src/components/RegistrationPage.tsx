@@ -57,7 +57,7 @@ export const RegistrationPage = () => {
                 await registerUserAsync(token, emailAddress, firstName, lastName);
             }
 
-            showNotification("Sikeres regisztracio!");
+            showNotification("Sikeres regisztráció!");
             await refetchUser();
             navigate(applicationRoutes.signupRoute.route);
         }

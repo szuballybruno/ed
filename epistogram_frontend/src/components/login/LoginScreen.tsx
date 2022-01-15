@@ -31,8 +31,7 @@ const LoginScreen = () => {
     const pwRef = React.useRef<HTMLInputElement>(null);
 
     const passwordResetDialogLogic = useEpistoDialogLogic({
-        defaultCloseButtonType: "top",
-        title: "Jelszo visszaallitasa"
+        defaultCloseButtonType: "top"
     });
 
     const isDesktopView = useIsScreenWiderThan(1200);
@@ -61,7 +60,7 @@ const LoginScreen = () => {
 
             if (e.errorType === "bad request") {
 
-                setErrorMessage("Hibas adatok!");
+                setErrorMessage("Hibás adatok!");
             }
             else if (e.errorType) {
 

@@ -35,7 +35,7 @@ export const RegisterViaActivationCodePage = () => {
 
             await registerUserViaActivationCodeAsync(activationCode, email, firstName, lastName);
             setRegistrationSuccessful(true);
-            showNotification("Sikeres regisztracio!");
+            showNotification("Sikeres regisztráció!");
         }
         catch (e) {
 
