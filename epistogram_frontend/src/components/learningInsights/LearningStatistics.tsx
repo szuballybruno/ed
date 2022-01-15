@@ -107,12 +107,12 @@ type StatisticsItemType = {
     chart?: ReactNode;
 }
 
-export const LearningStatistics = () => {
+export const LearningStatistics = (props: {
+    userId: number
+}) => {
 
+    const { userId } = props;
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
-
-    const params = useParams<{ userId: string }>();
-    const userId = parseInt(params.userId);
 
     // http
     const { userStats } = useUserStats(userId);
@@ -325,7 +325,7 @@ export const LearningStatistics = () => {
         w="100%"
         flex="1"
         minW={isSmallerThan1400 ? "1060px" : undefined}>
-            
+
         {statistics
             .map(statisticSectionData => {
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Switch } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { LearningCourseStats } from "./LearningCourseStats";
@@ -7,8 +7,11 @@ import { LearningInsightsOverview } from "../LearningInsightsOverview";
 import { NavigationLinkList } from "../NavigationLinkList";
 import { MyExams } from "../MyExams";
 import { LearningStatistics } from "./LearningStatistics";
+import { CurrentUserContext } from "../system/AuthenticationFrame";
 
 const LearningInsightsPage = () => {
+
+    const user = useContext(CurrentUserContext)!;
 
     return <MainWrapper>
 
@@ -33,7 +36,7 @@ const LearningInsightsPage = () => {
                         <LearningInsightsOverview />
                     </Route>
                     <Route path={applicationRoutes.learningRoute.myStatisticsRoute.route}>
-                        <LearningStatistics />
+                        <LearningStatistics userId={user.id} />
                     </Route>
                     <Route path={applicationRoutes.learningRoute.myCoursesRoute.route}>
                         <LearningCourseStats />

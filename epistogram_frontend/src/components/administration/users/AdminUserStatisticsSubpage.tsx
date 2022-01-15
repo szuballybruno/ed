@@ -9,8 +9,8 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 export const AdminUserStatisticsSubpage = () => {
 
     const params = useParams<{ userId: string }>();
-    const editedUserId = parseInt(params.userId);
-    const { userEditData } = useEditUserData(editedUserId);
+    const userId = parseInt(params.userId);
+    const { userEditData } = useEditUserData(userId);
 
     return (
         <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
@@ -21,7 +21,7 @@ export const AdminUserStatisticsSubpage = () => {
                 applicationRoutes.administrationRoute.usersRoute.statsRoute
             ].concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
 
-                <LearningStatistics />
+                <LearningStatistics userId={userId} />
 
             </AdminSubpageHeader>
         </Flex>
