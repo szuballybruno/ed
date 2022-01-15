@@ -31,7 +31,10 @@ const HomePage = () => {
 
         <ContentWrapper>
 
-            <LoadingFrame loadingState={status} error={error}>
+            <LoadingFrame
+                width="100%"
+                loadingState={status}
+                error={error}>
 
                 <LeftPanel>
 
