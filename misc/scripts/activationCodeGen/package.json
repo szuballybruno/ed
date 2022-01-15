@@ -1,0 +1,16 @@
+{
+  "name": "activationCodeGen",
+  "version": "0.3.0",
+  "private": true,
+  "scripts": {
+    "start": "tsc && node dist/activationCodeGen.js"
+  },
+  "dependencies": {
+    "@types/generate-password": "^1.5.1",
+    "generate-password": "^1.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.17.11",
+    "typescript": "^4.2.2"
+  }
+}

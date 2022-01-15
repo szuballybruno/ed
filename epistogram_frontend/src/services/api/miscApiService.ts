@@ -14,6 +14,15 @@ export const useCurrentCourseItemCode = () => {
     };
 }
 
+export const useCourseOverviewData = () => {
+
+    const qr = useReactQuery2<string>(apiRoutes.misc.getCourseOverviewData);
+
+    return {
+        courseOverviewData: qr.data
+    };
+}
+
 export const useJobTitles = () => {
 
     const queryRes = useReactQuery2<JobTitleDTO[]>(apiRoutes.misc.getJobTitles);

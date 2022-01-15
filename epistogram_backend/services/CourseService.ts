@@ -349,6 +349,18 @@ export class CourseService {
     }
 
     /**
+     * Returns the current course id 
+     */
+    async getCurrentCourseIdOrFail(userId: number) {
+
+        const id = await this.getCurrentCourseId(userId)
+        if (!id)
+            throw new Error("Accessing current course, but none found.");
+
+        return id;
+    };
+
+    /**
      * Returns the course id from an item code.
      * 
      * @param descriptorCode 

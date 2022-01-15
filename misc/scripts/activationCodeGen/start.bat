@@ -1,0 +1,1 @@
+tsc activationCodeGen.ts && node activationCodeGen.js

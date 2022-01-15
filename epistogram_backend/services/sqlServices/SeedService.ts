@@ -63,8 +63,8 @@ export class SeedService {
         await this._regService
             .registerInvitedUserAsync(
                 invitationToken,
-                "admin",
-                "admin");
+                "admin123",
+                "admin123");
 
         log("seeding User 2...")
         const { invitationToken: it2, createdUser: u2 } = await this._regService
@@ -82,8 +82,8 @@ export class SeedService {
         await this._regService
             .registerInvitedUserAsync(
                 it2,
-                "admin",
-                "admin");
+                "admin123",
+                "admin123");
 
         log("User 2 token: " + it2);
     }

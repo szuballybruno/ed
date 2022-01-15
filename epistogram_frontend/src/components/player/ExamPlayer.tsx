@@ -3,6 +3,7 @@ import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO"
 import { useStartExam } from "../../services/api/examApiService";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { usePaging } from "../../static/frontendHelpers";
+import { CourseOverview } from "../coureOverview/CourseOverview";
 import { ExamGreetSlide } from "../exam/ExamGreetSlide";
 import { ExamQuestions } from "../exam/ExamQuestions";
 import { ExamResultsSlide } from "../exam/ExamResultsSlide";
@@ -25,7 +26,7 @@ export const ExamPlayer = (props: {
     const { startExamAsync, startExamState } = useStartExam();
     const showError = useShowErrorDialog();
 
-    const slidesState = usePaging([1, 2, 3]);
+    const slidesState = usePaging([1, 2, 3, 4]);
 
     const handleStartExamAsync = async () => {
 
@@ -43,6 +44,11 @@ export const ExamPlayer = (props: {
     const handleExamFinished = () => {
 
         slidesState.next();
+    }
+
+    const goToCourseOverview = () => {
+
+        slidesState.setItem(3);
     }
 
     const handleContinueCourse = () => {
@@ -67,7 +73,10 @@ export const ExamPlayer = (props: {
             continueCourse={handleContinueCourse}
             setIsExamInProgress={setIsExamInProgress}
             exam={exam}
-            answerSessionId={answerSessionId} />
+            answerSessionId={answerSessionId}
+            goToCourseOverview={goToCourseOverview} />,
+
+        () => <CourseOverview />
     ];
 
     return <SlidesDisplay

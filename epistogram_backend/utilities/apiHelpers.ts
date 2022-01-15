@@ -17,7 +17,8 @@ export const onActionError = (error: any, req: Request, res: Response) => {
 
     log(`${requestPath}: Failed...`);
     logError(error);
-    respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
+
+    respondError(res, "", (error.type ?? "internal server error") as ErrorType);
 }
 
 export const onActionSuccess = (value: any, req: Request, res: Response) => {

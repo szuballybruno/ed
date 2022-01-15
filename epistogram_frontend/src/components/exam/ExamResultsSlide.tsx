@@ -17,9 +17,10 @@ export const ExamResultsSlide = (props: {
     setIsExamInProgress: (isExamInProgress: boolean) => void,
     continueCourse: () => void,
     answerSessionId: number,
+    goToCourseOverview: () => void
 }) => {
 
-    const { answerSessionId, continueCourse, setIsExamInProgress, exam } = props;
+    const { answerSessionId, goToCourseOverview, continueCourse, setIsExamInProgress, exam } = props;
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
     const { navigate } = useNavigation();
@@ -42,7 +43,7 @@ export const ExamResultsSlide = (props: {
         footerButtons={new ArrayBuilder<any>()
             .addIf(exam.isFinalExam, {
                 text: "Kurzus osszegzo",
-                action: () => { }
+                action: goToCourseOverview
             })
             .addIf(exam.isFinalExam, {
                 text: "Vissza a tanfolyamkeresobe",

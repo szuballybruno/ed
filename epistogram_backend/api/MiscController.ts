@@ -119,4 +119,10 @@ export class MiscController {
         return this._mapperService
             .map(DailyTipView, DailyTipDTO, newCurrentTip);
     };
+
+    getCourseOverviewDataAction = async (params: ActionParams) => {
+
+        return this._miscService
+            .getCourseOverviewDataAsync(params.currentUserId);
+    }
 }

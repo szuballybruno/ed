@@ -87,6 +87,8 @@ import { ShopItemStatefulView } from "../../models/views/ShopItemStatefulView";
 import { ShopItemView } from "../../models/views/ShopItemView";
 import { DiscountCode } from "../../models/entity/DiscountCode";
 import { DiscountCodeDTO } from "../../models/shared_models/DiscountCodeDTO";
+import { CourseOverviewView } from "../../models/views/CourseOverviewView";
+import { CourseOverviewDataDTO } from "../../models/shared_models/CourseOverviewDataDTO";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -714,6 +716,17 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             coverImagePath: course.coverFile
                 ? getAssetUrl(course.coverFile.filePath)
                 : null
+        }));
+
+    mapperService
+        .addMap(CourseOverviewView, CourseOverviewDataDTO, c => ({
+            answeredVideoQuestionCount: c.answeredVideoQuestionCount,
+            coinsAcquired: c.coinsAcquired,
+            completedVideoCount: c.completedVideoCount,
+            examSuccessRateAverage: c.examSuccessRateAverage,
+            finalExamSuccessRate: c.finalExamSuccessRate,
+            questionSuccessRate: c.questionSuccessRate,
+            totalSpentTime: c.totalSpentTime
         }));
 }
 

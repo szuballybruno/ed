@@ -117,7 +117,7 @@ import { VideoRatingController } from './api/VideoRatingController';
     const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService);
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService);
-    const miscService = new MiscService(courseService, ormConnectionService);
+    const miscService = new MiscService(courseService, ormConnectionService, mapperService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, vpss, coinAcquireService, userSessionActivityService, mapperService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
@@ -178,6 +178,7 @@ import { VideoRatingController } from './api/VideoRatingController';
     addEndpoint(apiRoutes.misc.getDailyTip, miscController.getDailyTipAction);
     addEndpoint(apiRoutes.misc.getOrganizations, miscController.getOrganizationsAction);
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
+    addEndpoint(apiRoutes.misc.getCourseOverviewData, miscController.getCourseOverviewDataAction);
 
     // teacher info
     addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ["administrator"] });

@@ -1,10 +1,13 @@
 
 import { Organization } from "../models/entity/Organization";
 import { User } from "../models/entity/User";
+import { CourseOverviewDataDTO } from "../models/shared_models/CourseOverviewDataDTO";
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
 import { UserDTO } from "../models/shared_models/UserDTO";
+import { CourseOverviewView } from "../models/views/CourseOverviewView";
 import { CourseService } from "./CourseService";
+import { MapperService } from "./MapperService";
 import { toOrganizationDTO } from "./misc/mappings";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
@@ -12,13 +15,16 @@ export class MiscService {
 
     private _courseService: CourseService;
     private _ormService: ORMConnectionService;
+    private _mapperService: MapperService;
 
     constructor(
         courseService: CourseService,
-        ormService: ORMConnectionService) {
+        ormService: ORMConnectionService,
+        mapperService: MapperService) {
 
         this._courseService = courseService;
         this._ormService = ormService;
+        this._mapperService = mapperService;
     }
 
     getOrganizationsAsync = async (userId: number) => {
@@ -41,6 +47,22 @@ export class MiscService {
                 lastName: dto.lastName,
                 phoneNumber: dto.phoneNumber
             });
+    }
+
+    async getCourseOverviewDataAsync(userId: number) {
+
+        const courseId = await this._courseService
+            .getCurrentCourseIdOrFail(userId);
+
+        const view = await this._ormService
+            .getRepository(CourseOverviewView)
+            .findOneOrFail({
+                courseId,
+                userId
+            });
+
+        return this._mapperService
+            .map(CourseOverviewView, CourseOverviewDataDTO, view);
     }
 
     getOverviewPageDTOAsync = async (userId: number) => {

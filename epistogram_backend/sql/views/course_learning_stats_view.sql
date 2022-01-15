@@ -36,8 +36,7 @@ SELECT
 		WHERE v.course_id = cv.id
 	) total_video_question_count,
 	(
-		SELECT 
-			SUM ((sq.times_answered > 0)::int)::int
+		SELECT COALESCE(SUM ((sq.times_answered > 0)::int)::int, 0)
 		FROM
 		(
 			SELECT COUNT(ga.id) times_answered

@@ -12,7 +12,8 @@ export const apiRoutes = {
         getDailyTip: "/misc/get-get-daily-tip",
         getOrganizations: "/misc/get-organizations",
         getHomePageDTO: "/misc/get-overview-page-dto",
-        getCurrentCourseItemCode: '/misc/get-current-course-item-code'
+        getCurrentCourseItemCode: '/misc/get-current-course-item-code',
+        getCourseOverviewData: '/misc/get-course-overview-data'
     },
 
     teacherInfo: {
