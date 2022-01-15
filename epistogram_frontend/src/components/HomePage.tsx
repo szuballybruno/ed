@@ -33,7 +33,6 @@ const HomePage = () => {
 
             <LoadingFrame
                 width="100%"
-                loadingState={status}
                 error={error}>
 
                 <LeftPanel>
