@@ -3,6 +3,7 @@ import { Typography } from '@mui/material';
 import React, { CSSProperties, ReactNode, useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
+import { startUserGuideHelp } from '../../services/core/userGuidingService';
 import { currentVersion } from '../../static/Environemnt';
 import { getAssetUrl } from '../../static/frontendHelpers';
 import Navbar from '../navbar/Navbar';
@@ -128,6 +129,7 @@ export const LeftPanel = (props: FlexProps) => {
                 }}
                 src={getAssetUrl("/images/bela3D.png")} alt="" />
 
+            {/* tina image */}
             <Flex
                 direction="column"
                 position="absolute"
@@ -142,6 +144,7 @@ export const LeftPanel = (props: FlexProps) => {
                 </Typography>
             </Flex>
 
+            {/* tina button */}
             <Flex
                 direction="column"
                 position="absolute"
@@ -149,8 +152,11 @@ export const LeftPanel = (props: FlexProps) => {
                 right="20"
                 w="130px">
 
-                <EpistoButton variant='colored'>
-                    Antal
+                <EpistoButton
+                    variant='colored'
+                    onClick={() => startUserGuideHelp()}>
+                    
+                    Segítség
                 </EpistoButton>
             </Flex>
         </FlexFloat>

@@ -9,6 +9,7 @@ import { SignupQuestions } from '../SignupQuestions';
 import { PersonalityAssessment } from '../universal/PersonalityAssessment';
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupWrapper } from "./SignupWrapper";
+import { startUserGuide } from '../../services/core/userGuidingService';
 
 export const SignupPage = () => {
 
@@ -31,7 +32,7 @@ export const SignupPage = () => {
         navigate(applicationRoutes.homeRoute.route);
 
         console.log("Showing guide...");
-        (window as any).userGuiding.previewGuide(38873);
+        startUserGuide();
     }
 
     const GreetSlide = () => <SignupWrapper
