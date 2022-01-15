@@ -1,5 +1,6 @@
 import { Flex } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
+import { getAssetUrl } from "../static/frontendHelpers"
 import { EpistoHeader } from "./EpistoHeader"
 
 export const UnderMaintanence = () => {
@@ -13,16 +14,17 @@ export const UnderMaintanence = () => {
                     width: "400px",
                     objectFit: "contain"
                 }}
-                src="https://pbs.twimg.com/media/EDSNRZjXUAEneoE.png" />
+                src={getAssetUrl("images/maintenance3D.png")} />
 
             <EpistoHeader
                 mt="20px"
                 mb="5px"
                 variant="giant"
-                text="Az applikáció jelenleg karbantartás alatt áll!"></EpistoHeader>
+                text="Ez egy előre tervezett leállás, és átlagosan maximum 30 percig tart."></EpistoHeader>
 
             <Typography>
-                Ez egy előre tervezett leállás, és átlagosan rövid ideig tart.
+
+                Ha bármilyen kérdésed lenne, írj bátran a <a style={{color: "blue"}} href="mailto:support@epistogram.com">support@epistogram.com</a> e-mail címre
             </Typography>
         </Flex>
     </Flex>

@@ -41,7 +41,7 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
                                 <Flex align="center">
                                     {/* icon */}
                                     <img
-                                        src={getAssetUrl("/course_page_icons/curriculum_video.svg")}
+                                        src={getAssetUrl("images/videosdatasheetd3D.png")}
                                         alt={""}
                                         className="square50"
                                         style={{ marginRight: '10px' }} />

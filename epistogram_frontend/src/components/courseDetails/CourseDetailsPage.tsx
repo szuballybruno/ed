@@ -79,11 +79,11 @@ const CourseDetailsPage = () => {
         {
             title: translatableTexts.courseDetails.tabLabels.teacher,
             component: <CourseDetailsTeacherSection courseDetails={courseDetails!} />
-        },
+        }/* ,
         {
             title: translatableTexts.courseDetails.tabLabels.ratings,
             component: <CourseDetailsRatingSection />
-        }
+        } */
     ];
 
     const sidebarInfos = courseDetails

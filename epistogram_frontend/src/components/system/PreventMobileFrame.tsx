@@ -70,10 +70,9 @@ export const PreventMobileFrame = (props) => {
                     }}>
 
                     Egyéb okoseszközökön hamarosan debütáló mobilalkalmazásunkon keresztül érheted majd el platformunkat.
-                    Ha elsőként szeretnél  értesülni erről, add meg e-mail címedet a lenti mezőben, mi pedig tájékoztatni fogunk, egy ajándék tanfolyammal kiegészítve.
                 </Typography>
 
-                {/* signup for news */}
+                {/* signup for news 
                 <EpistoEntry
                     label="E-mail"
                     labelVariant="top"
@@ -111,7 +110,7 @@ export const PreventMobileFrame = (props) => {
                     }}>
 
                     Küldés
-                </EpistoButton>
+                </EpistoButton>*/}
             </Flex>
         </Flex>}
 
