@@ -107,7 +107,7 @@ const StatisticsCard = (props: {
             </Flex>
         </Flex>}
 
-        {/* open / close button */}
+        {/* open / close button 
         {children && <Box position="absolute">
             <EpistoButton
                 style={{
@@ -117,7 +117,7 @@ const StatisticsCard = (props: {
 
                 {isOpen ? <FullscreenExit /> : <Fullscreen />}
             </EpistoButton>
-        </Box>}
+        </Box>}*/}
     </FlexFloat>
 };
 

@@ -14,6 +14,7 @@ import { EpistoButton } from "./universal/EpistoButton";
 import { EpistoConinImage } from "./universal/EpistoCoinImage";
 import { useAnswerPractiseQuestion, usePractiseQuestion } from "../services/api/questionApiService";
 import { useCurrentCourseItemCode } from "../services/api/miscApiService";
+import { EpistoFont } from "./controls/EpistoFont";
 
 const NoQuestionsAvailable = () => {
     const { navigate } = useNavigation()
@@ -63,28 +64,51 @@ const InitialGreetings = () => {
             justifyContent="flex-start"
             h="100%">
 
-            <Text as={"text"} p="20px 20px 10px 10px">
+            <EpistoFont
+                classes={[
+                    "fontSmall"
+                ]}
+                style={{
+                    padding: "20px 20px 10px 10px"
+                }}>
+
                 {translatableTexts.practiseQuestions.initialGreetingsFirst + " " + firstName + ","}
-            </Text>
+            </EpistoFont>
 
-            <Text as={"text"} p="20px 20px 10px 10px">
+            <EpistoFont 
+                classes={[
+                    "fontSmall"
+                ]}
+                style={{
+                    padding: "20px 20px 10px 10px"
+                }}>
+
                 {translatableTexts.practiseQuestions.initialGreetingsSecond}
-            </Text>
+            </EpistoFont>
 
-            <Text as={"text"} p="20px 20px 10px 10px">
+            <EpistoFont 
+                classes={[
+                    "fontSmall"
+                ]}
+                style={{
+                    padding: "20px 20px 10px 10px"
+                }}>
+
                 {translatableTexts.practiseQuestions.initialGreetingsThird}
-            </Text>
+            </EpistoFont>
 
             <Flex
                 direction="column"
                 width="100%"
-                alignItems="center">
+                alignItems="center"
+                mt="10px">
 
                 <EpistoButton
-                    variant={"outlined"}
+                    variant={"colored"}
                     onClick={() => {
                         navigate(applicationRoutes.availableCoursesRoute.route)
                     }}>
+                        
                     {translatableTexts.practiseQuestions.goToCourses}
                 </EpistoButton>
             </Flex>
@@ -210,7 +234,7 @@ export const PractiseQuestions = () => {
             </Flex>
         </Flex>}
 
-        {(!practiseQuestion && currentCourseItemCode) && <NoQuestionsAvailable />}
-        {(!practiseQuestion && !currentCourseItemCode) && <InitialGreetings />}
+        {(!practiseQuestion && !currentCourseItemCode) && <NoQuestionsAvailable />}
+        {(!practiseQuestion && currentCourseItemCode) && <InitialGreetings />}
     </LoadingFrame>
 }

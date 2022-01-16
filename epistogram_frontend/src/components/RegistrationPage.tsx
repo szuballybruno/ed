@@ -10,6 +10,8 @@ import { RefetchUserAsyncContext } from "./system/AuthenticationFrame";
 import { LoadingFrame } from "./system/LoadingFrame";
 import { EpistoButton } from "./universal/EpistoButton";
 import { useRegisterInvitedUser, useRegisterUser } from "../services/api/registrationApiService";
+import { translatableTexts } from "../static/translatableTexts";
+import { EpistoFont } from "./controls/EpistoFont";
 
 export const RegistrationPage = () => {
 
@@ -35,7 +37,7 @@ export const RegistrationPage = () => {
         validate
     } = usePasswordEntryState();
 
-    const showErrorDialog = useShowErrorDialog("Hiba!");
+    const showErrorDialog = useShowErrorDialog(translatableTexts.registrationPage.error);
     const { navigate } = useNavigation();
     const { registerUserAsync, registerUserState } = useRegisterUser();
     const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();
@@ -57,13 +59,13 @@ export const RegistrationPage = () => {
                 await registerUserAsync(token, emailAddress, firstName, lastName);
             }
 
-            showNotification("Sikeres regisztráció!");
+            showNotification(translatableTexts.registrationPage.successfulRegistration);
             await refetchUser();
             navigate(applicationRoutes.signupRoute.route);
         }
         catch (e) {
 
-            showErrorDialog("Ismeretlen hiba történt, kérjük próbálkozzon újra!");
+            showErrorDialog(translatableTexts.registrationPage.unknownErrorTryAgain);
         }
     }
 
@@ -93,27 +95,29 @@ export const RegistrationPage = () => {
                 <Image width="50%" src={getAssetUrl("/images/logo.svg")} />
             </Flex>
 
-            <Typography>Tanulási stílust felmérő kérdőív</Typography>
+            {!isInvited && <EpistoFont>{translatableTexts.registrationPage.learningStyleSurvey}</EpistoFont>}
+
+            {isInvited && <EpistoFont isMultiline>{translatableTexts.registrationPage.setPasswordDescription}</EpistoFont>}
 
             {/* registration */}
             {!isInvited && <>
                 <TextField
                     variant="standard"
-                    label="Keresztnév"
+                    label={translatableTexts.registrationPage.firstNameLabel}
                     value={firstName}
                     onChange={x => setFirstName(x.currentTarget.value)}
                     style={{ margin: "10px" }}></TextField>
 
                 <TextField
                     variant="standard"
-                    label="Vezetéknév"
+                    label={translatableTexts.registrationPage.lastNameLabel}
                     value={lastName}
                     onChange={x => setLastName(x.currentTarget.value)}
                     style={{ margin: "10px" }}></TextField>
 
                 <TextField
                     variant="standard"
-                    label="E-mail cím"
+                    label={translatableTexts.registrationPage.emailLabel}
                     value={emailAddress}
                     onChange={x => setEmailAddress(x.currentTarget.value)}
                     style={{ margin: "10px" }}></TextField>
@@ -124,7 +128,7 @@ export const RegistrationPage = () => {
 
                 <TextField
                     variant="standard"
-                    label="Jelszó"
+                    label={translatableTexts.registrationPage.passwordLabel}
                     type="password"
                     value={password}
                     error={!!passwordError}
@@ -137,7 +141,7 @@ export const RegistrationPage = () => {
                 <TextField
                     variant="standard"
                     type="password"
-                    label="Jelszó mégegyszer"
+                    label={translatableTexts.registrationPage.passwordAgainLabel}
                     value={passwordCompare}
                     error={!!passwordCompareError}
                     helperText={passwordCompareError}
@@ -161,15 +165,18 @@ export const RegistrationPage = () => {
                         userSelect: "none"
                     }}>
 
-                    {"Elfogadom az "}
+                    {translatableTexts.registrationPage.privacyPolicyDescriptionParts[0]}
+
                     <a
                         target="_blank"
                         rel="noreferrer"
                         style={{ color: "#0055CC" }}
                         href={"https://epistogram.com/adatkezelesi-tajekoztato"}>
-                        Adatkezelési Nyilatkozat
+
+                        {" " + translatableTexts.registrationPage.privacyPolicyDescriptionParts[1]}
                     </a>
-                    {"ban foglaltakat"}
+
+                    {translatableTexts.registrationPage.privacyPolicyDescriptionParts[2]}
                 </Typography>
             </Flex>
 
@@ -184,7 +191,7 @@ export const RegistrationPage = () => {
                     marginTop: "20px"
                 }}>
 
-                Kezdhetjük
+                {translatableTexts.registrationPage.letsStart}
             </EpistoButton>
         </LoadingFrame>
     </Flex>

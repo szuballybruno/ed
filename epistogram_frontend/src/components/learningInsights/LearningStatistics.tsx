@@ -274,10 +274,10 @@ export const LearningStatistics = (props: {
                     value: "45",
                     suffix: "%",
                     title: "Fókuszálás a videómegtekintések során",
-                    isOpenByDefault: true,
+                    isOpenByDefault: false,
                     isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/focus_during_videos.svg"),
-                    large: true,
+                    large: false,
                     chart: <Bar
                         className={classes.progressLineChart}
                         options={chartDefaultOptions}
@@ -308,7 +308,7 @@ export const LearningStatistics = (props: {
                     value: "13.82",
                     suffix: "db",
                     title: "Mennyi EpistoCoint szereztem az elmúlt hónapban",
-                    isOpenByDefault: true,
+                    isOpenByDefault: false,
                     isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/acquired_episto_coin.svg"),
                     chart: <Bar

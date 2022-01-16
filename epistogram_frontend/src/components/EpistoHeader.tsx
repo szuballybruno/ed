@@ -31,7 +31,7 @@ export const EpistoHeader = (props: {
                     ? "fontXXL"
                     : "fontLarge"}
             style={{
-                fontWeight: type === "strong" ? "bold" : "normal",
+                fontWeight: type === "strong" ? 500 : "normal",
                 color: variant === "sub" ? "black" : undefined
             }}>
             {text}

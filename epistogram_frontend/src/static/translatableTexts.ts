@@ -10,6 +10,43 @@ export const translatableTexts = {
         user: "Felhasználó"
     },
 
+    registrationPage: {
+
+        error: "Hiba!",
+        successfulRegistration: "Sikeres regisztráció!",
+        unknownErrorTryAgain: "Ismeretlen hiba történt, kérjük próbálkozzon újra!",
+
+        learningStyleSurvey: "Tanulási stílust felmérő kérdőív",
+        setPasswordDescription: `Itt tudod megadni (lehetőleg) erős jelszavadat. \n \n Fontos, hogy minimum 6 karakterből álljon, és tartalmaznia kell minimum egy számot! \n \n Ha esetleg megszakadna a regisztrációs folyamat (például elmegy az internet, vagy bármi egyéb probléma adódik), ne aggódj, az e-mailedre küldött (ezt, amit most megnyitottál) linkre kattintva folytathatod, ugyanakkor ebben az esetben ismét meg kell adnod a jelszavad.`,
+    
+        firstNameLabel: "Keresztnév",
+        lastNameLabel: "Vezetéknév",
+        emailLabel: "E-mail cím",
+        passwordLabel: "Jelszó",
+        passwordAgainLabel: "Jelszó mégegyszer",
+
+        privacyPolicyDescriptionParts: [
+            `Elfogadom az`,
+            "Adatkezelési Nyilatkozat",
+            "ban foglaltakat"
+        ],
+        letsStart: "Kezdhetjük"
+    },
+
+    signupPage: {
+
+        greetSlideTitle: "Regisztráció",
+        greetSlideDescription: "A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az EpistoGramot",
+        greetSlideNextButton: "Tovább",
+
+        summarySlideDescriptionParts: [
+            `Az előző kérdőív segítségével azt vizsgáltuk, milyen módszerekkel érzed komfortosnak a tanulást.`,
+            `\n A platformunk további adatokat gyűjt majd arról, milyen típusú tananyagokban haladsz a legjobban, mely idősávokban vagy a leghatékonyabb, a felméréssel kombinálva pedig hamarosan személyre szabott tippeket is kapsz majd, valamint a tanulás sebessége és a módszereink is a te igényeidhez fognak idomulni. \n \n`,
+            `Most pedig nem maradt más dolgod, mint a lenti gombra kattintani, és elkezdeni a tanulást!`
+        ],
+        goToHomePage: "Irány a platform!"
+    },
+
     homePage: {
         courseProgress: "Haladás a kurzusaiddal",
         excelCourseTitle: "Excel kurzus",
@@ -217,10 +254,6 @@ export const translatableTexts = {
         
         myStatisticsTitle: "Statisztikám",
         myBadgesTitle: "Megszerzett jelvényeim"
-    },
-
-    signup: {
-        goToHomePage: "Irány a platform"
     },
 
     exam: {

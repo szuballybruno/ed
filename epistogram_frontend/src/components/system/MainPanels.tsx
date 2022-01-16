@@ -26,21 +26,6 @@ export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode 
 
         {props.children}
 
-        {/* version */}
-        <Typography
-            style={{
-                position: "absolute",
-                bottom: 20,
-                left: 20,
-                zIndex: 3,
-                color: "gray",
-                background: "white",
-                padding: "5px",
-                borderRadius: "5px"
-            }}
-            className="fontMid mildShadow">
-            Verzió: {currentVersion ?? "1999.01.01.01:01"}
-        </Typography>
     </Flex>
 };
 
