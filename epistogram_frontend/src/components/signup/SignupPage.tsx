@@ -11,6 +11,7 @@ import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupWrapper } from "./SignupWrapper";
 import { EpistoText } from '../universal/EpistoText';
 import { EpistoFont } from '../controls/EpistoFont';
+import { Flex } from '@chakra-ui/react';
 
 export const SignupPage = () => {
 
@@ -86,7 +87,8 @@ export const SignupPage = () => {
 
             {/* navbar */}
 
-            <ContentPane
+            <Flex
+                className='whall'
                 alignItems={"center"}
                 justifyContent={"center"}
                 style={{
@@ -99,11 +101,12 @@ export const SignupPage = () => {
                     maxW="calc(100% - 300px)"
                     h="calc(100vh - 100px)"
                     background="var(--transparentWhite70)"
+                    p="10px"
                     zIndex="1"
                     flex="1"
                     slides={slides}
                     index={slidesState.currentIndex} />
-            </ContentPane>
+            </Flex>
         </PageRootContainer >
     );
 };
