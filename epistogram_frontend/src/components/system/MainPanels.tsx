@@ -11,17 +11,16 @@ import { EpistoButton } from '../universal/EpistoButton';
 import { FlexFloat } from '../universal/FlexFloat';
 import { CurrentUserContext } from './AuthenticationFrame';
 
-export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode }) => {
+export const PageRootContainer = (props: { style?: CSSProperties, children: ReactNode }) => {
 
     return <Flex
         background="var(--gradientBlueBackground)"
-        id="mainWrapper"
+        id="pageRootContainer"
         direction="column"
-        height="100%"
-        width="100%"
-        maxW="1920px"
+        maxWidth="1920px"
         margin="0 auto"
         position="relative"
+        className="whall"
         style={props.style}>
 
         {props.children}
@@ -44,20 +43,20 @@ export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode 
     </Flex>
 };
 
-export const ContentWrapper = (props: {
-    children: ReactNode
-} & FlexProps) => {
+// export const ContentWrapper = (props: {
+//     children: ReactNode
+// } & FlexProps) => {
 
-    const { children, ...css } = props;
+//     const { children, ...css } = props;
 
-    return <Flex
-        id="contentWrapper"
-        flex="1"
-        overflow="hidden"
-        {...css}>
-        {children}
-    </Flex>
-};
+//     return <Flex
+//         id="contentWrapper"
+//         flex="1"
+//         overflow="hidden"
+//         {...css}>
+//         {children}
+//     </Flex>
+// };
 
 export const LeftPanel = (props: FlexProps) => {
 

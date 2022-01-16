@@ -3,7 +3,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from "../../models/types";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../system/MainPanels";
+import { ContentWrapper, LeftPanel, PageRootContainer, RightPanel } from "../system/MainPanels";
 import { NavigationLinkList } from '../NavigationLinkList';
 import Navbar from "../navbar/Navbar";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
@@ -40,7 +40,7 @@ const AdminPage = () => {
         .add(administrationRoutes.myCompanyRoute)
         .getArray();
 
-    return <MainWrapper>
+    return <PageRootContainer>
         
         <ContentWrapper>
 
@@ -112,7 +112,7 @@ const AdminPage = () => {
                 </Switch>
             </RightPanel>
         </ContentWrapper>
-    </MainWrapper>
+    </PageRootContainer>
 };
 
 export default withRouter(AdminPage);

@@ -9,7 +9,7 @@ import { getAssetUrl, TypedError, useIsScreenWiderThan } from "../../static/fron
 import { useEpistoDialogLogic } from "../EpistoDialog";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { LoadingFrame } from "../system/LoadingFrame";
-import { MainWrapper } from "../system/MainPanels";
+import { PageRootContainer } from "../system/MainPanels";
 import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoEntry } from "../universal/EpistoEntry";
 import { LoginPasswordResetDialog } from "./LoginPasswordResetDialog";
@@ -116,7 +116,7 @@ const LoginScreen = () => {
         };
     }, []);
 
-    return <MainWrapper>
+    return <PageRootContainer>
 
         <Flex
             justify={"center"}
@@ -317,7 +317,7 @@ const LoginScreen = () => {
                     alt="" />
             </LoadingFrame>
         </Flex>
-    </MainWrapper>
+    </PageRootContainer>
 };
 
 export default LoginScreen

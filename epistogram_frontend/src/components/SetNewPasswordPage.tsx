@@ -8,7 +8,7 @@ import { getAssetUrl, getQueryParam, usePasswordEntryState } from "../static/fro
 import { EpistoHeader } from "./EpistoHeader";
 import Navbar from "./navbar/Navbar";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { ContentWrapper, MainWrapper } from "./system/MainPanels";
+import { ContentWrapper, PageRootContainer } from "./system/MainPanels";
 import { EpistoButton } from "./universal/EpistoButton";
 
 export const SetNewPasswordPage = () => {
@@ -56,7 +56,7 @@ export const SetNewPasswordPage = () => {
         }
     }
 
-    return <MainWrapper>
+    return <PageRootContainer>
 
         <Navbar></Navbar>
 
@@ -110,5 +110,5 @@ export const SetNewPasswordPage = () => {
                 </EpistoButton>
             </LoadingFrame>
         </ContentWrapper>
-    </MainWrapper>
+    </PageRootContainer>
 }

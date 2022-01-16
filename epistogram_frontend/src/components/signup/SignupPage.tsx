@@ -4,7 +4,7 @@ import { getAssetUrl, usePaging } from "../../static/frontendHelpers";
 import { useNavigation } from '../../services/core/navigatior';
 import { translatableTexts } from '../../static/translatableTexts';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
-import { ContentWrapper, MainWrapper } from "../system/MainPanels";
+import { ContentWrapper, PageRootContainer } from "../system/MainPanels";
 import { SignupQuestions } from '../SignupQuestions';
 import { PersonalityAssessment } from '../universal/PersonalityAssessment';
 import { SlidesDisplay } from "../universal/SlidesDisplay";
@@ -68,7 +68,7 @@ export const SignupPage = () => {
 
     return (
 
-        <MainWrapper>
+        <PageRootContainer>
 
             {/* navbar */}
 
@@ -91,6 +91,6 @@ export const SignupPage = () => {
                     slides={slides}
                     index={slidesState.currentIndex} />
             </ContentWrapper>
-        </MainWrapper >
+        </PageRootContainer >
     );
 };

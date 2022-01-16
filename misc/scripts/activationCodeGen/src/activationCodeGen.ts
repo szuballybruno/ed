@@ -2,9 +2,9 @@ import { readFileSync, writeFileSync } from "fs";
 import { generate } from "generate-password";
 
 const count = 100;
-const idStart = 800;
+const idStart = 900;
 const codeCommandPairArray = [] as { code: string, command: string }[];
-const prefix = "EPI";
+const prefix = "DEBUG";
 
 const genCode = () => `${prefix}-${generate({ numbers: true, length: 6 }).toUpperCase()}`;
 

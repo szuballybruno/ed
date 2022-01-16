@@ -2,18 +2,17 @@ import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router";
-import { distinct, getAssetUrl } from "../static/frontendHelpers";
+import { useStartCourse, useUserCourses } from "../services/api/courseApiService";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
+import { distinct } from "../static/frontendHelpers";
 import { translatableTexts } from "../static/translatableTexts";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "./system/MainPanels";
+import { LeftPanel, PageRootContainer, RightPanel } from "./system/MainPanels";
+import CourseTile from "./universal/CourseTile";
 import { EpistoButton } from "./universal/EpistoButton";
 import { EpistoGrid } from "./universal/EpistoGrid";
 import { EpistoSearch } from "./universal/EpistoSearch";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import { useUserCourses, useStartCourse } from "../services/api/courseApiService";
-import CourseTile from "./universal/CourseTile";
 
 const AvailableCoursesPage = () => {
 
@@ -75,201 +74,198 @@ const AvailableCoursesPage = () => {
         }
     }
 
-    return <MainWrapper>
+    return <PageRootContainer>
 
-        <ContentWrapper>
+        <LeftPanel>
 
-            <LeftPanel>
+            {/* categories  */}
+            <Flex direction="column">
 
-                {/* categories  */}
-                <Flex direction="column">
+                {/* categories title */}
+                <Typography
+                    variant="overline"
+                    style={{ margin: "10px" }}>
 
-                    {/* categories title */}
-                    <Typography
-                        variant="overline"
-                        style={{ margin: "10px" }}>
+                    {translatableTexts.availableCourses.categoriesTitle}
+                </Typography>
 
-                        {translatableTexts.availableCourses.categoriesTitle}
-                    </Typography>
+                {/* categories list */}
+                <ToggleButtonGroup
+                    style={{
+                        flex: 1,
+                        textAlign: "left"
+                    }}
+                    orientation={"vertical"}>
 
-                    {/* categories list */}
-                    <ToggleButtonGroup
-                        style={{
-                            flex: 1,
-                            textAlign: "left"
-                        }}
-                        orientation={"vertical"}>
+                    {categoryOptions
+                        .map((categoryOption, index) => {
+                            return <ToggleButton
+                                value={categoryOption}
+                                style={{
+                                    textAlign: "left",
+                                    justifyContent: "flex-start",
+                                    alignItems: "center",
+                                    height: 40,
+                                    paddingLeft: "10px",
+                                    border: "none"
+                                }}
+                                onClick={() => {
+                                    setSearchCategory(categoryOption)
+                                }}
+                                key={index}>
+                                <Flex
+                                    className="roundBorders"
+                                    boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
+                                    p="3px"
+                                    h="30px"
+                                    m="2px 10px 2px 0px"
+                                    bgColor="var(--epistoTeal)" />
 
-                        {categoryOptions
-                            .map((categoryOption, index) => {
-                                return <ToggleButton
-                                    value={categoryOption}
-                                    style={{
-                                        textAlign: "left",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                        height: 40,
-                                        paddingLeft: "10px",
-                                        border: "none"
-                                    }}
-                                    onClick={() => {
-                                        setSearchCategory(categoryOption)
-                                    }}
-                                    key={index}>
-                                    <Flex
-                                        className="roundBorders"
-                                        boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
-                                        p="3px"
-                                        h="30px"
-                                        m="2px 10px 2px 0px"
-                                        bgColor="var(--epistoTeal)" />
+                                {categoryOption}
+                            </ToggleButton>
+                        })}
+                </ToggleButtonGroup>
+            </Flex>
+        </LeftPanel>
 
-                                    {categoryOption}
-                                </ToggleButton>
-                            })}
-                    </ToggleButtonGroup>
-                </Flex>
-            </LeftPanel>
+        <RightPanel>
 
-            <RightPanel>
+            <Flex
+                id="coursesPanelRoot"
+                direction="column"
+                align="stretch"
+                width="100%"
+                minW={isSmallerThan1400 ? "1060px" : undefined}>
 
+                {/* search */}
                 <Flex
-                    id="coursesPanelRoot"
-                    direction="column"
-                    align="stretch"
-                    width="100%"
-                    minW={isSmallerThan1400 ? "1060px" : undefined}>
+                    id="courseSearchRoot"
+                    direction="row"
+                    align="center"
+                    justify="space-between"
+                    w="100%"
+                    p="0 0 20px 0">
 
-                    {/* search */}
-                    <Flex
-                        id="courseSearchRoot"
-                        direction="row"
-                        align="center"
-                        justify="space-between"
-                        w="100%"
-                        p="0 0 20px 0">
+                    {/* toggle buttons */}
+                    <ToggleButtonGroup
+                        className="mildShadow"
+                        style={{
+                            background: "var(--transparentWhite70)",
+                            height: 40,
+                            border: "none",
+                            flex: 2
+                        }}
+                        sx={{
+                            "& .MuiButtonBase-root": {
+                                border: "none"
+                            }
+                        }}
+                        size={"small"}>
 
-                        {/* toggle buttons */}
-                        <ToggleButtonGroup
-                            className="mildShadow"
-                            style={{
-                                background: "var(--transparentWhite70)",
-                                height: 40,
-                                border: "none",
-                                flex: 2
-                            }}
-                            sx={{
-                                "& .MuiButtonBase-root": {
-                                    border: "none"
-                                }
-                            }}
-                            size={"small"}>
+                        {/* recommended */}
+                        <ToggleButton
+                            onClick={() => setIsRecommended(!isRecommended)}
+                            selected={isRecommended}
+                            value="recommended"
+                            style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
 
-                            {/* recommended */}
-                            <ToggleButton
-                                onClick={() => setIsRecommended(!isRecommended)}
-                                selected={isRecommended}
-                                value="recommended"
-                                style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                            {translatableTexts.availableCourses.recommendedForYou}
+                        </ToggleButton>
 
-                                {translatableTexts.availableCourses.recommendedForYou}
-                            </ToggleButton>
+                        {/* featured */}
+                        <ToggleButton
+                            onClick={() => setIsFeatured(!isFeatured)}
+                            selected={isFeatured}
+                            value="featured"
+                            style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
 
-                            {/* featured */}
-                            <ToggleButton
-                                onClick={() => setIsFeatured(!isFeatured)}
-                                selected={isFeatured}
-                                value="featured"
-                                style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                            {translatableTexts.availableCourses.highlighted}
+                        </ToggleButton>
 
-                                {translatableTexts.availableCourses.highlighted}
-                            </ToggleButton>
+                        {/* show all */}
+                        <ToggleButton
+                            onClick={() => clearFilters()}
+                            selected={isRecommended && isFeatured}
+                            value="showAll"
+                            style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
 
-                            {/* show all */}
-                            <ToggleButton
-                                onClick={() => clearFilters()}
-                                selected={isRecommended && isFeatured}
-                                value="showAll"
-                                style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                            {translatableTexts.availableCourses.all}
+                        </ToggleButton>
+                    </ToggleButtonGroup>
 
-                                {translatableTexts.availableCourses.all}
-                            </ToggleButton>
-                        </ToggleButtonGroup>
+                    <EpistoSearch flex="5" h="40px" mx="10px" />
 
-                        <EpistoSearch flex="5" h="40px" mx="10px" />
-
-                        <Select
-                            native
-                            onChange={() => { }}
-                            className="roundBorders fontSmall mildShadow"
-                            inputProps={{
-                                name: 'A-Z',
-                                id: 'outlined-age-native-simple',
-                            }}
-                            sx={{
-                                "& .MuiOutlinedInput-notchedOutline": {
-                                    border: "none"
-                                }
-                            }}
-                            style={{
-                                background: "var(--transparentWhite70)",
-                                border: "none",
-                                height: "40px",
-                                color: "3F3F3F",
-                                flex: 1
-                            }}>
-                            <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
-                            <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
-                            <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
-                            <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
-                        </Select>
-                    </Flex>
-
-                    {/* courses */}
-                    <LoadingFrame loadingState={[coursesState, startCourseState]} error={[coursesError]}>
-
-                        <Box id="scrollContainer" className="whall">
-
-                            <EpistoGrid auto="fill" gap="15" minColumnWidth="250px">
-                                {courses
-                                    .map((course, index) => {
-
-                                        return <GridItem
-                                            className="roundBorders"
-                                            background="var(--transparentWhite70)">
-
-                                            <CourseTile
-                                                course={course}
-                                                key={index}>
-
-                                                <Flex mb="10px">
-
-                                                    {/* details */}
-                                                    <EpistoButton
-                                                        onClick={() => navigateToDetailsPage(course.courseId, course.firstItemCode)}
-                                                        style={{ flex: "1" }}>
-                                                        {translatableTexts.availableCourses.courseDataSheet}
-                                                    </EpistoButton>
-
-                                                    {/* start course */}
-                                                    <EpistoButton
-                                                        onClick={() => playCourse(course.courseId, course.firstItemCode)}
-                                                        variant="colored"
-                                                        style={{ flex: "1" }}>
-
-                                                        {translatableTexts.availableCourses.startCourse}
-                                                    </EpistoButton>
-                                                </Flex>
-                                            </CourseTile>
-                                        </GridItem>
-                                    })}
-                            </EpistoGrid>
-                        </Box>
-                    </LoadingFrame>
+                    <Select
+                        native
+                        onChange={() => { }}
+                        className="roundBorders fontSmall mildShadow"
+                        inputProps={{
+                            name: 'A-Z',
+                            id: 'outlined-age-native-simple',
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-notchedOutline": {
+                                border: "none"
+                            }
+                        }}
+                        style={{
+                            background: "var(--transparentWhite70)",
+                            border: "none",
+                            height: "40px",
+                            color: "3F3F3F",
+                            flex: 1
+                        }}>
+                        <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
+                        <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
+                        <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
+                        <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
+                    </Select>
                 </Flex>
-            </RightPanel>
-        </ContentWrapper>
-    </MainWrapper >
+
+                {/* courses */}
+                <LoadingFrame loadingState={[coursesState, startCourseState]} error={[coursesError]}>
+
+                    <Box id="scrollContainer" className="whall">
+
+                        <EpistoGrid auto="fill" gap="15" minColumnWidth="250px">
+                            {courses
+                                .map((course, index) => {
+
+                                    return <GridItem
+                                        className="roundBorders"
+                                        background="var(--transparentWhite70)">
+
+                                        <CourseTile
+                                            course={course}
+                                            key={index}>
+
+                                            <Flex mb="10px">
+
+                                                {/* details */}
+                                                <EpistoButton
+                                                    onClick={() => navigateToDetailsPage(course.courseId, course.firstItemCode)}
+                                                    style={{ flex: "1" }}>
+                                                    {translatableTexts.availableCourses.courseDataSheet}
+                                                </EpistoButton>
+
+                                                {/* start course */}
+                                                <EpistoButton
+                                                    onClick={() => playCourse(course.courseId, course.firstItemCode)}
+                                                    variant="colored"
+                                                    style={{ flex: "1" }}>
+
+                                                    {translatableTexts.availableCourses.startCourse}
+                                                </EpistoButton>
+                                            </Flex>
+                                        </CourseTile>
+                                    </GridItem>
+                                })}
+                        </EpistoGrid>
+                    </Box>
+                </LoadingFrame>
+            </Flex>
+        </RightPanel>
+    </PageRootContainer >
 }
 
 export default AvailableCoursesPage

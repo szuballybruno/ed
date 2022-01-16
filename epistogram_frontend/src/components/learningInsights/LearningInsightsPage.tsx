@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Route, Switch } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { LearningCourseStats } from "./LearningCourseStats";
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from "../system/MainPanels";
+import { ContentWrapper, LeftPanel, PageRootContainer, RightPanel } from "../system/MainPanels";
 import { LearningInsightsOverview } from "../LearningInsightsOverview";
 import { NavigationLinkList } from "../NavigationLinkList";
 import { MyExams } from "../MyExams";
@@ -13,7 +13,7 @@ const LearningInsightsPage = () => {
 
     const user = useContext(CurrentUserContext)!;
 
-    return <MainWrapper>
+    return <PageRootContainer>
 
         <ContentWrapper>
 
@@ -47,6 +47,6 @@ const LearningInsightsPage = () => {
                 </Switch>
             </RightPanel>
         </ContentWrapper >
-    </MainWrapper >
+    </PageRootContainer >
 };
 export default LearningInsightsPage

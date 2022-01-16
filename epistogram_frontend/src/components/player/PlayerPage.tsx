@@ -5,7 +5,7 @@ import { useIsDesktopView } from "../../static/frontendHelpers";
 import { useNavigation } from "../../services/core/navigatior";
 import { EpistoDialog, useEpistoDialogLogic } from "../EpistoDialog";
 import { LoadingFrame } from "../system/LoadingFrame";
-import { ContentWrapper, MainWrapper } from "../system/MainPanels";
+import { ContentWrapper, PageRootContainer } from "../system/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { FlexFloat } from "../universal/FlexFloat";
 import { CourseItemSelector } from "./CourseItemSelector";
@@ -82,7 +82,7 @@ export const PlayerPage = () => {
     }
 
     return (
-        <MainWrapper
+        <PageRootContainer
             style={{
                 "--playerWidth": "min(min(100vw, 180vh), 1700px)",
                 background: "var(--gradientBlueBackground)"
@@ -157,6 +157,6 @@ export const PlayerPage = () => {
                     
                 </LoadingFrame>
             </ContentWrapper>
-        </MainWrapper >
+        </PageRootContainer >
     )
 };

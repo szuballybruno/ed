@@ -5,7 +5,7 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { getRoute } from '../../MainRouting';
 import Navbar from '../navbar/Navbar';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from '../system/MainPanels';
+import { ContentWrapper, LeftPanel, PageRootContainer, RightPanel } from '../system/MainPanels';
 import { CoinTransactions } from './CoinTransactions';
 import { Preferences } from './Preferences';
 
@@ -25,7 +25,7 @@ const DevelopmentNotes = () => {
 
 export const UserSettingsPage = () => {
 
-    return <MainWrapper>
+    return <PageRootContainer>
 
         <ContentWrapper>
 
@@ -49,5 +49,5 @@ export const UserSettingsPage = () => {
                 </Switch>
             </RightPanel>
         </ContentWrapper>
-    </MainWrapper>
+    </PageRootContainer>
 }

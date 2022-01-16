@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { formatTimespan, getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
 import { useNavigation } from "../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
-import { ContentWrapper, MainWrapper } from "../system/MainPanels";
+import { ContentWrapper, PageRootContainer } from "../system/MainPanels";
 import Navbar from "../navbar/Navbar";
 import { EpistoButton } from "../universal/EpistoButton";
 import { TabPanel } from "./TabPanel";
@@ -126,7 +126,7 @@ const CourseDetailsPage = () => {
         ]
         : [];
 
-    return <MainWrapper>
+    return <PageRootContainer>
 
         <ContentWrapper
             direction="column"
@@ -348,7 +348,7 @@ const CourseDetailsPage = () => {
                 backgroundClip={"padding-box"} />
 
         </ContentWrapper>
-    </MainWrapper >
+    </PageRootContainer >
 };
 
 export default CourseDetailsPage;
