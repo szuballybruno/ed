@@ -8,7 +8,7 @@ import { showNotification, useShowErrorDialog } from "../services/core/notificat
 import { distinct } from "../static/frontendHelpers";
 import { translatableTexts } from "../static/translatableTexts";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { LeftPanel, PageRootContainer, RightPanel } from "./system/MainPanels";
+import { LeftPane, PageRootContainer, ContentPane } from "./system/MainPanels";
 import CourseTile from "./universal/CourseTile";
 import { EpistoButton } from "./universal/EpistoButton";
 import { EpistoGrid } from "./universal/EpistoGrid";
@@ -76,7 +76,7 @@ const AvailableCoursesPage = () => {
 
     return <PageRootContainer>
 
-        <LeftPanel>
+        <LeftPane>
 
             {/* categories  */}
             <Flex direction="column">
@@ -126,9 +126,9 @@ const AvailableCoursesPage = () => {
                         })}
                 </ToggleButtonGroup>
             </Flex>
-        </LeftPanel>
+        </LeftPane>
 
-        <RightPanel>
+        <ContentPane>
 
             <Flex
                 id="coursesPanelRoot"
@@ -264,7 +264,7 @@ const AvailableCoursesPage = () => {
                     </Box>
                 </LoadingFrame>
             </Flex>
-        </RightPanel>
+        </ContentPane>
     </PageRootContainer >
 }
 

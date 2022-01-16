@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { getAssetUrl, usePaging } from "../../static/frontendHelpers";
 import { useNavigation } from '../../services/core/navigatior';
+import { startUserGuide } from '../../services/core/userGuidingService';
+import { getAssetUrl, usePaging } from "../../static/frontendHelpers";
 import { translatableTexts } from '../../static/translatableTexts';
-import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
-import { ContentWrapper, PageRootContainer } from "../system/MainPanels";
 import { SignupQuestions } from '../SignupQuestions';
-import { PersonalityAssessment } from '../universal/PersonalityAssessment';
+import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { PageRootContainer, ContentPane } from "../system/MainPanels";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupWrapper } from "./SignupWrapper";
-import { startUserGuide } from '../../services/core/userGuidingService';
 
 export const SignupPage = () => {
 
@@ -67,18 +66,15 @@ export const SignupPage = () => {
     ];
 
     return (
-
         <PageRootContainer>
 
-            {/* navbar */}
-
-            <ContentWrapper 
-                alignItems={"center"} 
-                justifyContent={"center"}
+            <ContentPane
+                align="center"
+                justify="center"
                 style={{
                     background: "radial-gradient(farthest-corner at 300px 100px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
-                }}
-            >
+                }}>
+
                 <SlidesDisplay
                     alwaysRender={true}
                     maxW="calc(100% - 300px)"
@@ -90,7 +86,7 @@ export const SignupPage = () => {
                     borderRadius={6}
                     slides={slides}
                     index={slidesState.currentIndex} />
-            </ContentWrapper>
+            </ContentPane>
         </PageRootContainer >
     );
 };

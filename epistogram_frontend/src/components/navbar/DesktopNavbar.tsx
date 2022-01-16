@@ -26,11 +26,12 @@ const menuItems = [
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,
     hideLinks: boolean,
-    showLogo?: boolean
+    showLogo?: boolean,
+    backgroundContent?: any
 }) => {
 
+    const { backgroundContent, showLogo, currentCourseItemCode } = props;
     const { navigateToPlayer, navigate } = useNavigation();
-    const { currentCourseItemCode, showLogo } = props;
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
     const homeUrl = applicationRoutes.rootHomeRoute.route;
@@ -97,6 +98,7 @@ const DesktopNavbar = (props: {
             h="60px"
             mt="10px"
             mb="10px"
+            bg={backgroundContent}
             justify={hideLinks ? "center" : "space-between"}>
 
             {/* logo link */}

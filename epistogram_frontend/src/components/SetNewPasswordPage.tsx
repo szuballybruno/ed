@@ -6,9 +6,8 @@ import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { getAssetUrl, getQueryParam, usePasswordEntryState } from "../static/frontendHelpers";
 import { EpistoHeader } from "./EpistoHeader";
-import Navbar from "./navbar/Navbar";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { ContentWrapper, PageRootContainer } from "./system/MainPanels";
+import { PageRootContainer, ContentPane } from "./system/MainPanels";
 import { EpistoButton } from "./universal/EpistoButton";
 
 export const SetNewPasswordPage = () => {
@@ -56,18 +55,13 @@ export const SetNewPasswordPage = () => {
         }
     }
 
-    return <PageRootContainer>
+    return <PageRootContainer
+        align="flex-start"
+        justify="center"
+        backgoundImageSrc={getAssetUrl("loginScreen/surveybg.png")}
+        position="relative">
 
-        <Navbar></Navbar>
-
-        <ContentWrapper align="flex-start" justify="center" bg="var(--whiteGrey)" position="relative">
-
-            <Image
-                position="absolute"
-                top="0"
-                objectFit="cover"
-                className="whall"
-                src={getAssetUrl("loginScreen/surveybg.png")} />
+        <ContentPane navbarBg="white">
 
             <LoadingFrame
                 direction="column"
@@ -109,6 +103,6 @@ export const SetNewPasswordPage = () => {
                     Elküldés
                 </EpistoButton>
             </LoadingFrame>
-        </ContentWrapper>
+        </ContentPane>
     </PageRootContainer>
 }

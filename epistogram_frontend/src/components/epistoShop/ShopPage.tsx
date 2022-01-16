@@ -11,7 +11,7 @@ import { EpistoConinInfo } from "../EpistoCoinInfo";
 import { useEpistoDialogLogic } from "../EpistoDialog";
 import { ProfileImage } from "../ProfileImage";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { LeftPanel, PageRootContainer, RightPanel } from "../system/MainPanels";
+import { LeftPane, PageRootContainer, ContentPane } from "../system/MainPanels";
 import { EpistoGrid } from "../universal/EpistoGrid";
 import { EpistoSearch } from "../universal/EpistoSearch";
 import { ShopItem } from "./ShopItem";
@@ -56,7 +56,7 @@ export const ShopPage = () => {
             }} />
 
         {/* category filters left pane */}
-        <LeftPanel direction="column" align="stretch">
+        <LeftPane direction="column" align="stretch">
 
             {/* categories title */}
             <Typography
@@ -112,10 +112,10 @@ export const ShopPage = () => {
                         </ToggleButton>
                     })}
             </ToggleButtonGroup>
-        </LeftPanel>
+        </LeftPane>
 
         {/* content */}
-        <RightPanel>
+        <ContentPane>
             <Flex
                 id="coursesPanelRoot"
                 direction="column"
@@ -210,6 +210,6 @@ export const ShopPage = () => {
                     </EpistoFont>
                 </Flex>}
             </Flex>
-        </RightPanel>
+        </ContentPane>
     </PageRootContainer>
 }

@@ -8,7 +8,7 @@ import { DailyTip } from './DailyTip';
 import { PractiseQuestions } from './PractiseQuestions';
 import { StatsSummary } from "./StatsSummary";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { LeftPanel, PageRootContainer, RightPanel } from "./system/MainPanels";
+import { LeftPane, PageRootContainer, ContentPane } from "./system/MainPanels";
 import { CourseItemView } from './universal/CourseItemList';
 import { CourseProgressDisplay } from './universal/CourseProgressDisplay';
 import { DashboardSection } from './universal/DashboardSection';
@@ -30,7 +30,7 @@ const HomePage = () => {
             width="100%"
             error={error}>
 
-            <LeftPanel>
+            <LeftPane>
 
                 {/* current course items and progress */}
                 {pageDTO?.currentCourseProgress && <Flex
@@ -69,9 +69,9 @@ const HomePage = () => {
 
                         <FlexListTitleSubtitle title={translatableTexts.homePage.availableCoursesLinkTitle} subTitle={translatableTexts.homePage.availableCoursesText} />
                     </Flex>} />}
-            </LeftPanel>
+            </LeftPane>
 
-            <RightPanel>
+            <ContentPane>
 
                 <Flex
                     direction="column"
@@ -114,7 +114,7 @@ const HomePage = () => {
                     </Flex>
 
                 </Flex>
-            </RightPanel>
+            </ContentPane>
         </LoadingFrame>
     </PageRootContainer>
 };
