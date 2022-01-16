@@ -1,6 +1,6 @@
-import { Flex, FlexProps, useMediaQuery } from '@chakra-ui/react';
+import { Flex, FlexProps, Image, useMediaQuery } from '@chakra-ui/react';
 import { Typography } from '@mui/material';
-import React, { CSSProperties, ReactNode, useContext } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuideHelp } from '../../services/core/userGuidingService';
@@ -11,40 +11,38 @@ import { EpistoButton } from '../universal/EpistoButton';
 import { FlexFloat } from '../universal/FlexFloat';
 import { CurrentUserContext } from './AuthenticationFrame';
 
-export const MainWrapper = (props: { style?: CSSProperties, children: ReactNode }) => {
+export const PageRootContainer = (props: {
+    children: ReactNode,
+    backgoundImageSrc?: string
+} & FlexProps) => {
+
+    const { children, backgoundImageSrc, ...css } = props;
 
     return <Flex
-        background="var(--gradientBlueBackground)"
-        id="mainWrapper"
-        direction="column"
-        height="100%"
-        width="100%"
-        maxW="1920px"
+        background={backgoundImageSrc
+            ? undefined
+            : "var(--gradientBlueBackground)"}
+        id="pageRootContainer"
+        maxWidth="1920px"
         margin="0 auto"
         position="relative"
-        style={props.style}>
+        overflow="hidden"
+        className="whall"
+        {...css}>
+
+        <Image
+            position="absolute"
+            top="0"
+            objectFit="cover"
+            className="whall"
+            src={backgoundImageSrc} />
 
         {props.children}
 
     </Flex>
 };
 
-export const ContentWrapper = (props: {
-    children: ReactNode
-} & FlexProps) => {
-
-    const { children, ...css } = props;
-
-    return <Flex
-        id="contentWrapper"
-        flex="1"
-        overflow="hidden"
-        {...css}>
-        {children}
-    </Flex>
-};
-
-export const LeftPanel = (props: FlexProps) => {
+export const LeftPane = (props: FlexProps) => {
 
     const homeUrl = applicationRoutes.rootHomeRoute.route;
     const user = useContext(CurrentUserContext);
@@ -53,7 +51,7 @@ export const LeftPanel = (props: FlexProps) => {
     return (
         <FlexFloat
             borderRadius="none"
-            id="leftPanel"
+            id="leftPane"
             bg="white"
             zIndex={2}
             flexBasis="320px"
@@ -140,7 +138,7 @@ export const LeftPanel = (props: FlexProps) => {
                 <EpistoButton
                     variant='colored'
                     onClick={() => startUserGuideHelp()}>
-                    
+
                     Segítség
                 </EpistoButton>
             </Flex>
@@ -148,33 +146,27 @@ export const LeftPanel = (props: FlexProps) => {
     );
 };
 
-export const RightPanel = (props: FlexProps & { noPadding?: boolean }) => {
+export const ContentPane = (props: {
+    noPadding?: boolean,
+    navbarBg?: any
+} & FlexProps) => {
 
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
-
-    const { noPadding, ...css } = props;
+    const { noPadding, navbarBg, ...css } = props;
 
     return (
         <Flex
-            id="rightPanel"
+            id="contentPane"
             p={props.noPadding ? undefined : "0 10px 40px 10px"}
-            overflowY="scroll"
             flex="1"
+            maxWidth="1400px"
+            direction="column"
+            margin="auto"
+            overflowY="scroll"
+            className="whall"
             {...css}>
 
-            {/* left side dynamic spacer */}
-            {isSmallerThan1400 && <Flex flex="0 1 100px" />}
-
-            {/* center wrapper */}
-            <Flex direction="column" align="center" flex="1">
-
-                <Navbar />
-
-                {props.children}
-            </Flex>
-
-            {/* right side dynamic spacer */}
-            {isSmallerThan1400 && <Flex flex="0 1 100px" />}
+            <Navbar backgroundContent={navbarBg} />
+            {props.children}
         </Flex>
     );
 };

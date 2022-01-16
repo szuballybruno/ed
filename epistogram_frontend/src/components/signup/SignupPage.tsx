@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { getAssetUrl, usePaging } from "../../static/frontendHelpers";
 import { useNavigation } from '../../services/core/navigatior';
+import { startUserGuide } from '../../services/core/userGuidingService';
+import { getAssetUrl, usePaging } from "../../static/frontendHelpers";
 import { translatableTexts } from '../../static/translatableTexts';
-import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
-import { ContentWrapper, MainWrapper } from "../system/MainPanels";
 import { SignupQuestions } from '../SignupQuestions';
-import { PersonalityAssessment } from '../universal/PersonalityAssessment';
+import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { PageRootContainer, ContentPane } from "../system/MainPanels";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupWrapper } from "./SignupWrapper";
-import { startUserGuide } from '../../services/core/userGuidingService';
 import { EpistoText } from '../universal/EpistoText';
 import { EpistoFont } from '../controls/EpistoFont';
 
@@ -83,12 +82,11 @@ export const SignupPage = () => {
     ];
 
     return (
-
-        <MainWrapper>
+        <PageRootContainer>
 
             {/* navbar */}
 
-            <ContentWrapper
+            <ContentPane
                 alignItems={"center"}
                 justifyContent={"center"}
                 style={{
@@ -105,7 +103,7 @@ export const SignupPage = () => {
                     flex="1"
                     slides={slides}
                     index={slidesState.currentIndex} />
-            </ContentWrapper>
-        </MainWrapper >
+            </ContentPane>
+        </PageRootContainer >
     );
 };

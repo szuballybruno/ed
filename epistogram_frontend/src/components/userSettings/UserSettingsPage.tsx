@@ -3,10 +3,8 @@ import React from 'react';
 import { Switch } from 'react-router';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { getRoute } from '../../MainRouting';
-import Navbar from '../navbar/Navbar';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { ContentWrapper, LeftPanel, MainWrapper, RightPanel } from '../system/MainPanels';
-import { CoinTransactions } from './CoinTransactions';
+import { LeftPane, PageRootContainer, ContentPane } from '../system/MainPanels';
 import { Preferences } from './Preferences';
 
 const FeaturePreview = () => {
@@ -25,29 +23,24 @@ const DevelopmentNotes = () => {
 
 export const UserSettingsPage = () => {
 
-    return <MainWrapper>
+    return <PageRootContainer>
 
-        <ContentWrapper>
+        <LeftPane p="20px" flexBasis="300px" >
+            <NavigationLinkList
+                items={[
+                    applicationRoutes.settingsRoute.preferencesRoute,
+                    applicationRoutes.settingsRoute.featurePreviewRoute,
+                    applicationRoutes.settingsRoute.developmentNotes
+                ]}></NavigationLinkList>
+        </LeftPane>
 
-            <LeftPanel p="20px" flexBasis="300px" >
-                <NavigationLinkList
-                    items={[
-                        applicationRoutes.settingsRoute.preferencesRoute,
-                        applicationRoutes.settingsRoute.featurePreviewRoute,
-                        applicationRoutes.settingsRoute.developmentNotes/* ,
-                        applicationRoutes.settingsRoute.coinTransactionsRoute */
-                    ]}></NavigationLinkList>
-            </LeftPanel>
+        <ContentPane>
 
-            <RightPanel>
-
-                <Switch>
-                    {getRoute(applicationRoutes.settingsRoute.preferencesRoute, <Preferences />)}
-                    {getRoute(applicationRoutes.settingsRoute.featurePreviewRoute, <FeaturePreview />)}
-                    {getRoute(applicationRoutes.settingsRoute.developmentNotes, <DevelopmentNotes />)}{/* 
-                    {getRoute(applicationRoutes.settingsRoute.coinTransactionsRoute, <CoinTransactions />)} */}
-                </Switch>
-            </RightPanel>
-        </ContentWrapper>
-    </MainWrapper>
+            <Switch>
+                {getRoute(applicationRoutes.settingsRoute.preferencesRoute, <Preferences />)}
+                {getRoute(applicationRoutes.settingsRoute.featurePreviewRoute, <FeaturePreview />)}
+                {getRoute(applicationRoutes.settingsRoute.developmentNotes, <DevelopmentNotes />)}
+            </Switch>
+        </ContentPane>
+    </PageRootContainer>
 }

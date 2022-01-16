@@ -142,7 +142,10 @@ export const PractiseQuestions = () => {
         clearAnswerResults
     } = useAnswerPractiseQuestion();
 
-    const currentCourseItemCode = useCurrentCourseItemCode();
+    const currentCourseItemCodeWrapper = useCurrentCourseItemCode();
+    const currentCourseItemCode = currentCourseItemCodeWrapper?.currentCourseItemCode;
+
+    console.log(currentCourseItemCode);
 
     const handleAnswerQuestionAsync = async (answerId: number[]) => {
 
@@ -164,7 +167,6 @@ export const PractiseQuestions = () => {
 
     return <LoadingFrame
         className="whall"
-        loadingState={practiseQuestionState}
         error={practiseQuestionError}>
 
         {practiseQuestion && <Flex className="whall" wrap="wrap">

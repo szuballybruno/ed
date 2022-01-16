@@ -2,26 +2,22 @@ import { Box, Container, Flex } from "@chakra-ui/react";
 import { Tab, Tabs, Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { useParams } from "react-router-dom";
-import { formatTimespan, getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
+import { useCourseDetails, useStartCourse } from "../../services/api/courseApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
-import { ContentWrapper, MainWrapper } from "../system/MainPanels";
-import Navbar from "../navbar/Navbar";
-import { EpistoButton } from "../universal/EpistoButton";
-import { TabPanel } from "./TabPanel";
-import { FlexListItem } from "../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../universal/FlexListTitleSubtitle";
-import { CourseDetailsRequirementsSection } from "./CourseDetailsRequirementsSection";
-import { CourseDetailsSummarySection } from "./CourseDetailsSummarySection";
-import { CourseDetailsContentSection } from "./CourseDetailsContentSection";
-import { CourseDetailsTeacherSection } from "./CourseDetailsTeacherSection";
-import { CourseDetailsRatingSection } from "./CourseDetailsRatingSection";
-import { CourseDetailsBriefingInfoItem } from "./CourseDetailsBriefingInfoItem";
+import { formatTimespan, getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
-import { mockCourseDetails } from "../../static/mockData";
-import { useStartCourse, useCourseDetails } from "../../services/api/courseApiService";
 import { EpistoHeader } from "../EpistoHeader";
 import { ProfileImage } from "../ProfileImage";
+import { PageRootContainer, ContentPane } from "../system/MainPanels";
+import { EpistoButton } from "../universal/EpistoButton";
+import { FlexListItem } from "../universal/FlexListItem";
+import { CourseDetailsBriefingInfoItem } from "./CourseDetailsBriefingInfoItem";
+import { CourseDetailsContentSection } from "./CourseDetailsContentSection";
+import { CourseDetailsRequirementsSection } from "./CourseDetailsRequirementsSection";
+import { CourseDetailsSummarySection } from "./CourseDetailsSummarySection";
+import { CourseDetailsTeacherSection } from "./CourseDetailsTeacherSection";
+import { TabPanel } from "./TabPanel";
 
 const CourseDetailsPage = () => {
 
@@ -126,14 +122,12 @@ const CourseDetailsPage = () => {
         ]
         : [];
 
-    return <MainWrapper>
+    return <PageRootContainer>
 
-        <ContentWrapper
+        <ContentPane
             direction="column"
             overflowY="scroll"
             px="100px">
-
-            <Navbar showLogo />
 
             {/* Title */}
             <EpistoHeader
@@ -296,33 +290,6 @@ const CourseDetailsPage = () => {
 
                     </Flex>
 
-                    {/* Recommended courses section 
-                    <Flex direction={"column"}>
-                        <Flex
-                            direction={"column"}
-                            alignItems={"center"}
-                            margin={10}
-                            boxSizing={"border-box"}
-                            bg={"white"}
-                            h={500}
-                            borderWidth={1}
-                            borderRadius={10}
-                            shadow={"#00000024 0px 0px 5px 0px"}>
-                            <Flex width={"100%"} height={60} justifyContent={"center"} alignItems={"center"} p={10}>
-                                <Typography>{translatableTexts.courseDetails.recommendedCoursesTitle}</Typography>
-                            </Flex>
-
-                            {mockCourseDetails.recommendedCourses.map(course => [
-                                <FlexListItem
-                                    width={"100%"}
-                                    midContent={
-                                        <FlexListTitleSubtitle title={course.title} subTitle={course.subTitle} />
-                                    } />
-                            ])}
-
-                        </Flex>
-                    </Flex>*/}
-
                 </Flex>
             </Flex>
 
@@ -347,8 +314,8 @@ const CourseDetailsPage = () => {
                 zIndex={-1}
                 backgroundClip={"padding-box"} />
 
-        </ContentWrapper>
-    </MainWrapper >
+        </ContentPane>
+    </PageRootContainer>
 };
 
 export default CourseDetailsPage;

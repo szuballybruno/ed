@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
 const generate_password_1 = require("generate-password");
 const count = 100;
-const idStart = 800;
+const idStart = 900;
 const codeCommandPairArray = [];
-const prefix = "EPI";
+const prefix = "DEBUG";
 const genCode = () => `${prefix}-${(0, generate_password_1.generate)({ numbers: true, length: 6 }).toUpperCase()}`;
 for (let index = 0; index < count; index++) {
     const id = idStart + index;

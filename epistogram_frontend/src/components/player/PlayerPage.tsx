@@ -1,19 +1,19 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from 'react';
 import { useParams } from "react-router";
-import { useIsDesktopView } from "../../static/frontendHelpers";
+import { usePlayerData } from "../../services/api/playerApiService";
 import { useNavigation } from "../../services/core/navigatior";
+import { useIsDesktopView } from "../../static/frontendHelpers";
 import { EpistoDialog, useEpistoDialogLogic } from "../EpistoDialog";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { ContentWrapper, MainWrapper } from "../system/MainPanels";
 import Navbar from "../navbar/Navbar";
+import { LoadingFrame } from "../system/LoadingFrame";
+import { PageRootContainer, ContentPane } from "../system/MainPanels";
+import { Copyright } from "../universal/Copyright";
 import { FlexFloat } from "../universal/FlexFloat";
 import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
 import { ModuleView } from "./ModuleView";
 import { WatchView } from "./WatchView";
-import { usePlayerData } from "../../services/api/playerApiService";
-import { Copyright } from "../universal/Copyright";
 
 export const PlayerPage = () => {
 
@@ -82,7 +82,7 @@ export const PlayerPage = () => {
     }
 
     return (
-        <MainWrapper
+        <PageRootContainer
             style={{
                 "--playerWidth": "min(min(100vw, 180vh), 1700px)",
                 background: "var(--gradientBlueBackground)"
@@ -90,7 +90,7 @@ export const PlayerPage = () => {
 
             <EpistoDialog logic={warningDialogLogic} />
 
-            <ContentWrapper
+            <ContentPane
                 width="var(--playerWidth)"
                 margin="auto">
 
@@ -143,7 +143,7 @@ export const PlayerPage = () => {
                                 id="courseItemSelectorRoot"
                                 width="420px"
                                 minWidth="420px">
-                                
+
                                 <CourseItemSelector
                                     courseId={courseId!}
                                     mode={courseMode}
@@ -154,9 +154,9 @@ export const PlayerPage = () => {
                     </Flex>
 
                     <Copyright />
-                    
+
                 </LoadingFrame>
-            </ContentWrapper>
-        </MainWrapper >
+            </ContentPane>
+        </PageRootContainer >
     )
 };

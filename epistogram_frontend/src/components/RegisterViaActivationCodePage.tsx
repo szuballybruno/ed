@@ -7,7 +7,7 @@ import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { getAssetUrl } from "../static/frontendHelpers";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { MainWrapper } from "./system/MainPanels";
+import { PageRootContainer } from "./system/MainPanels";
 import { EpistoButton } from "./universal/EpistoButton";
 import { EpistoEntry } from "./universal/EpistoEntry";
 
@@ -43,7 +43,7 @@ export const RegisterViaActivationCodePage = () => {
         }
     }
 
-    return <MainWrapper>
+    return <PageRootContainer>
 
         <Flex
             justify={"center"}
@@ -281,5 +281,5 @@ export const RegisterViaActivationCodePage = () => {
                     alt="" />
             </Flex>
         </Flex>
-    </MainWrapper>
+    </PageRootContainer>
 }
