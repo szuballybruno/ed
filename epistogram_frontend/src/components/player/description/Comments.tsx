@@ -8,9 +8,9 @@ import { EpistoButton } from "../../controls/EpistoButton";
 const Comments = () => {
     return (
         <Flex direction={"column"} minH={600}>
-            <Flex w={"100%"} h={40} mt={5}>
+            <Flex width="100%" height={40} mt={5}>
                 <Input
-                    w={"100%"}
+                    width="100%"
 
                     outline="none"
                     padding="10px"

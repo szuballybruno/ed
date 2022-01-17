@@ -11,7 +11,7 @@ export const ExamResultStats = (props: {
     const { correctAnswerRate, correctAnswerCount, totalQuestionCount } = props;
 
     return <Flex
-        w={"100%"}
+        width="100%"
         flexWrap="wrap"
         justify="center"
         align="center">

@@ -59,15 +59,15 @@ export const SignupWrapper = (props: {
         <Flex
             id="header"
             direction="column"
-            w="100%"
-            h="100px"
+            width="100%"
+            height="100px"
             py="25px"
             maxH="100px">
 
             {/* logo */}
             <Flex
-                h={50}
-                w={"100%"}
+                height={50}
+                width="100%"
                 hidden={window.innerWidth > 1000}
                 justify={"center"}
                 align={"center"}>
@@ -82,8 +82,8 @@ export const SignupWrapper = (props: {
                 justify="space-between">
 
                 <Flex
-                    h={80}
-                    w={"100%"}
+                    height={80}
+                    width="100%"
                     hidden={window.innerWidth < 1000}
                     justifyContent={"center"}
                     alignItems={"center"}>
@@ -118,12 +118,12 @@ export const SignupWrapper = (props: {
                     flex="5"
                     align="center"
                     flexShrink={1}
-                    minW="300px"
+                    minWidth="300px"
                     minH={400}
-                    h="400"
+                    height="400"
                     justifyContent={isDesktop ? "flex-end" : "center"}>
 
-                    <Image maxW={350} minW="300px" maxH="300px" height="100%" style={{
+                    <Image maxW={350} minWidth="300px" maxH="300px" height="100%" style={{
                         objectFit: "contain",
                         margin: "0 30px"
                     }} src={currentImage!} />
@@ -169,8 +169,8 @@ export const SignupWrapper = (props: {
         {/* progress bar */}
         <Flex
             align="center"
-            h="60px"
-            w="100%"
+            height="60px"
+            width="100%"
             borderRadius="7px"
             bgColor="white"
             justifyContent={"space-between"}

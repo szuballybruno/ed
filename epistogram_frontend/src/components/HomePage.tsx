@@ -77,7 +77,7 @@ const HomePage = () => {
 
                 <Flex
                     direction="column"
-                    minW={isSmallerThan1400 ? "1060px" : undefined}>
+                    minWidth={isSmallerThan1400 ? "1060px" : undefined}>
 
                     <Flex wrap="wrap">
 

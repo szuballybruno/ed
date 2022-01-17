@@ -213,7 +213,7 @@ export const CourseItemList = (props: {
                             </Box>
                         </Flex>}>
 
-                        <FlexList id="courseItemListContainer" p="10px" h={"100%"}>
+                        <FlexList id="courseItemListContainer" p="10px" height="100%">
                             {module
                                 .items
                                 .map((courseItem, index) => <CourseItemView

@@ -54,7 +54,7 @@ export const DailyTip = (props: {} & FlexProps) => {
         }
     }
 
-    return <Flex direction="column" h={"100%"} justify="center" {...css}>
+    return <Flex direction="column" height="100%" justify="center" {...css}>
 
         {/* dialog */}
         <EpistoDialog logic={dialogLogic} fullScreenX={true}>

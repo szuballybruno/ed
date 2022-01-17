@@ -28,7 +28,7 @@ export const QuestionAnswer = (props: {
     return <FlexFloat
         alignItems={"center"}
         borderRadius={7}
-        minW={150}
+        minWidth={150}
         cursor={onClick ? "pointer" : undefined}
         onClick={onClick ? () => onClick(!isSelected) : undefined}
         style={{

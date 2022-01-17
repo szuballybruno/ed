@@ -341,7 +341,7 @@ export const AdminCourseContentSubpage = () => {
                 direction={"column"}
                 px={10}>
 
-                <Flex w={"100%"}>
+                <Flex width="100%">
                     <EpistoSearch flex={1} my={10} />
                     <EpistoButton
                         onClick={handleAddNewModuleAsync}

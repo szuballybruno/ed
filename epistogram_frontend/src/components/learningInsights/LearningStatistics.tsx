@@ -322,9 +322,9 @@ export const LearningStatistics = (props: {
 
     return <Flex
         direction="column"
-        w="100%"
+        width="100%"
         flex="1"
-        minW={isSmallerThan1400 ? "1060px" : undefined}>
+        minWidth={isSmallerThan1400 ? "1060px" : undefined}>
 
         {statistics
             .map(statisticSectionData => {

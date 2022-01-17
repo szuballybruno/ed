@@ -30,7 +30,7 @@ export const StatsSummary = () => {
             background="var(--transparentWhite70)"
             direction="column"
             p="10px"
-            minW={250}
+            minWidth={250}
             style={{
                 gridColumn: `auto / span 2`,
                 gridRow: `auto / span 2`

@@ -30,16 +30,20 @@ export const PersonalityAssessment = (props: FlexProps) => {
         {
             title: "Egyedül, vagy csoportosan tanulsz szívesebben?",
             description: descriptions?.category1
-        }, {
+        },
+        {
             title: "Térben vizualizálsz, vagy inkább hangosan kimondod az információt?",
             description: descriptions?.category2
-        }, {
+        },
+        {
             title: "Gyakorlati vagy elméleti oldalról érdekel inkább egy-egy adott probléma?",
             description: descriptions?.category3
-        }, {
+        },
+        {
             title: "Hallás, vagy látás után jegyzel meg könnyebben valamit?",
             description: descriptions?.category4
-        }, {
+        },
+        {
             title: "Kreatív, vagy analitikus gondolkodást részesítesz előnyben?",
             description: descriptions?.category5
         }
@@ -60,34 +64,28 @@ export const PersonalityAssessment = (props: FlexProps) => {
             align="flex-start"
             justify="center"
             flex="1"
-            w="100%">
+            width="100%">
 
+            {/* personality chart panel */}
             <Flex
                 className="roundBorders"
                 justify="center"
                 direction="column"
                 background="var(--transparentWhite70)"
                 position="relative"
-                p="10px"
-                minWidth={window.innerWidth < 600 ? "100%" : 450}
-                w={"100%"}
                 flex="1"
-                h="100%"
-                maxH="600px"
-                maxW={window.innerWidth < 600 ? "100%" : "50%"}>
+                padding="10px"
+                width="100%"
+                height="400px">
 
-                {/* personality chart */}
-                <Flex>
-
-                    <PersonalityChart data={personalityData?.chartData ?? null} />
-                </Flex>
-
+                {personalityData?.chartData && <PersonalityChart
+                    data={personalityData.chartData} />}
             </Flex>
 
             {/* personality info accordions */}
             <Flex
                 flex="1"
-                minW="300px"
+                minWidth="300px"
                 direction="column"
                 pl="10px">
 

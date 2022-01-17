@@ -87,7 +87,7 @@ export const ExamResultsSlide = (props: {
                         {translatableTexts.exam.questionsLabel}
                     </Text>
 
-                    <Flex w={"25%"}>
+                    <Flex width={"25%"}>
                         <Text
                             as="text"
                             className="fontHuge">
@@ -123,13 +123,13 @@ export const ExamResultsSlide = (props: {
                                     aria-controls="panel1a-content"
                                     id="panel1a-header">
 
-                                    <Flex w={"77%"}>
+                                    <Flex width={"77%"}>
                                         <Typography>
                                             {question.text}
                                         </Typography>
                                     </Flex>
 
-                                    <Flex w={"23%"}>
+                                    <Flex width={"23%"}>
                                         <Typography style={{
                                             padding: "2px 15px",
                                             backgroundColor: bgColor,

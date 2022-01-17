@@ -33,7 +33,7 @@ export const LeftPane = (props: FlexProps) => {
             {...props}>
 
             {/* logo link */}
-            <Flex w="100%" alignItems={"center"} justifyContent="flex-start" mb="20px">
+            <Flex width="100%" alignItems={"center"} justifyContent="flex-start" mb="20px">
                 <img
                     src={getAssetUrl("/images/logo.svg")}
                     style={{
@@ -85,7 +85,7 @@ export const LeftPane = (props: FlexProps) => {
                 position="absolute"
                 bottom="160"
                 right="25"
-                w="170px">
+                width="170px">
 
                 <Typography
                     fontSize="13px"
@@ -100,7 +100,7 @@ export const LeftPane = (props: FlexProps) => {
                 position="absolute"
                 bottom="100"
                 right="20"
-                w="130px">
+                width="130px">
 
                 <EpistoButton
                     variant='colored'

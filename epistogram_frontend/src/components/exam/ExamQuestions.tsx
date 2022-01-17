@@ -81,7 +81,7 @@ export const ExamQuestions = (props: {
         flex="1"
         direction={"column"}
         alignItems={"center"}
-        w={"100%"}
+        width="100%"
         px={40}>
 
         <ExamLayout
@@ -107,7 +107,7 @@ export const ExamQuestions = (props: {
                 direction={"column"}
                 alignItems={"center"}
                 justifyContent={"center"}
-                w={"80%"}
+                width={"80%"}
                 flex={1}>
 
                 <Flex
@@ -138,7 +138,7 @@ export const ExamQuestions = (props: {
                     direction={"row"}
                     justifyContent={"center"}
                     pt={10}
-                    w={"100%"}
+                    width="100%"
                     mx={200}>
 
                     <Grid

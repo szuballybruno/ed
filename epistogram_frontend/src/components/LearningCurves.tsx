@@ -26,13 +26,13 @@ export const LearningCurves = () => {
         direction="row"
         flexWrap="wrap"
         mt="10px"
-        w="100%">
+        width="100%">
 
         {/* left wrapper */}
         <Flex
             className="roundBorders"
             flex="1"
-            minW="300px"
+            minWidth="300px"
             direction="column"
             background="var(--transparentWhite70)"
             minH="400px"
@@ -117,7 +117,7 @@ export const LearningCurves = () => {
             justify="center"
             p="10px"
             flex="1"
-            minW={250}
+            minWidth={250}
             style={{
                 gridColumn: `auto / span 2`,
                 gridRow: `auto / span 2`

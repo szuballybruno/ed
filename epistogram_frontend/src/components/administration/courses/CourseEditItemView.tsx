@@ -44,14 +44,14 @@ export const CourseEditItemView = (props: {
             <Flex flexDirection={"row"} alignItems={"flex-start"} justifyContent={"center"} >
 
                 {/* index */}
-                <Flex alignItems={"center"} h={"100%"}>
+                <Flex alignItems={"center"} height="100%">
                     <Typography style={{ marginRight: "10px" }}>
                         {index + 1}.
                     </Typography>
                 </Flex>
 
 
-                <Flex flexDir={"column"} justifyContent={"center"} minW={250}>
+                <Flex flexDir={"column"} justifyContent={"center"} minWidth={250}>
                     <Flex>
 
                         {/* title */}
@@ -110,6 +110,6 @@ export const CourseEditItemView = (props: {
 
 
         </Flex>
-        {props.isShowDivider && <Divider h={1} my={5} w={"100%"} bgColor={"#AAAAAA"} />}
+        {props.isShowDivider && <Divider height={1} my={5} width="100%" bgColor={"#AAAAAA"} />}
     </Flex>
 }

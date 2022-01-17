@@ -117,7 +117,7 @@ export const CourseDetailsTeacherSection = (props: {
 
             {infoCards
                 .map(infoCard => <Flex
-                    w={160}
+                    width={160}
                     mx={20}
                     alignItems={"center"}>
 
@@ -146,7 +146,7 @@ export const CourseDetailsTeacherSection = (props: {
         </Typography>
 
         {/* more courses 
-        <Flex h={70} w={"100%"} alignItems={"center"} justifyContent={"center"}>
+        <Flex height={70} width="100%" alignItems={"center"} justifyContent={"center"}>
             <EpistoButton variant={"outlined"}>
                 {courseDetails.teacherData.teacherFullName} további kurzusai
             </EpistoButton>

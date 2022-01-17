@@ -230,7 +230,7 @@ export const AdminUserListSubpage = () => {
                             endContent={<Flex
                                 align="center"
                                 justifyContent={"flex-end"}
-                                h={"100%"}
+                                height="100%"
                                 width={165}
                                 px={10}>
 

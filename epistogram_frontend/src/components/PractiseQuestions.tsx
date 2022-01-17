@@ -62,7 +62,7 @@ const InitialGreetings = () => {
         <Flex
             direction="column"
             justifyContent="flex-start"
-            h="100%">
+            height="100%">
 
             <EpistoFont
                 classes={[
@@ -75,7 +75,7 @@ const InitialGreetings = () => {
                 {translatableTexts.practiseQuestions.initialGreetingsFirst + " " + firstName + ","}
             </EpistoFont>
 
-            <EpistoFont 
+            <EpistoFont
                 classes={[
                     "fontSmall"
                 ]}
@@ -86,7 +86,7 @@ const InitialGreetings = () => {
                 {translatableTexts.practiseQuestions.initialGreetingsSecond}
             </EpistoFont>
 
-            <EpistoFont 
+            <EpistoFont
                 classes={[
                     "fontSmall"
                 ]}
@@ -108,7 +108,7 @@ const InitialGreetings = () => {
                     onClick={() => {
                         navigate(applicationRoutes.availableCoursesRoute.route)
                     }}>
-                        
+
                     {translatableTexts.practiseQuestions.goToCourses}
                 </EpistoButton>
             </Flex>
@@ -169,74 +169,78 @@ export const PractiseQuestions = () => {
         className="whall"
         error={practiseQuestionError}>
 
-        {practiseQuestion && <Flex className="whall" wrap="wrap">
+        {/* if practise question is found */}
+        {practiseQuestion
+            ? (
+                <Flex className="whall" wrap="wrap">
 
-            <Flex
-                position="absolute"
-                top="-35"
-                right="10"
-                align="center"
-                display={isCorrectAnswer ? undefined : "none"}>
+                    <Flex
+                        position="absolute"
+                        top="-35"
+                        right="10"
+                        align="center"
+                        display={isCorrectAnswer ? undefined : "none"}>
 
-                <Typography>
-                    {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
-                </Typography>
+                        <Typography>
+                            {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
+                        </Typography>
 
-                <EpistoConinImage />
+                        <EpistoConinImage />
 
-                <Typography>
-                    {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
-                </Typography>
-            </Flex>
+                        <Typography>
+                            {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
+                        </Typography>
+                    </Flex>
 
-            {/* question section */}
-            <Flex
-                flex="1"
-                direction="column"
-                margin="auto"
-                minWidth="300px">
+                    {/* question section */}
+                    <Flex
+                        flex="1"
+                        direction="column"
+                        margin="auto"
+                        minWidth="300px">
 
-                <Typography
-                    style={{
-                        marginTop: 10,
-                        fontSize: 18
-                    }}
-                    display={isAnswered ? undefined : "none"}
-                    variant="h5"
-                    alignSelf="center">
+                        <Typography
+                            style={{
+                                marginTop: 10,
+                                fontSize: 18
+                            }}
+                            display={isAnswered ? undefined : "none"}
+                            variant="h5"
+                            alignSelf="center">
 
-                    {isCorrectAnswer
-                        ? translatableTexts.practiseQuestions.answerIsCorrect
-                        : translatableTexts.practiseQuestions.answerIsIncorrect}
-                </Typography>
+                            {isCorrectAnswer
+                                ? translatableTexts.practiseQuestions.answerIsCorrect
+                                : translatableTexts.practiseQuestions.answerIsIncorrect}
+                        </Typography>
 
-                <QuesitionView
-                    answerQuesitonAsync={handleAnswerQuestionAsync}
-                    correctAnswerIds={answerResults?.correctAnswerIds ?? []}
-                    loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
-                    question={practiseQuestion}
-                    onlyShowAnswers={isAnswered}
-                    coinsAcquired={null}
-                    bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null} />
+                        <QuesitionView
+                            answerQuesitonAsync={handleAnswerQuestionAsync}
+                            correctAnswerIds={answerResults?.correctAnswerIds ?? []}
+                            loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
+                            question={practiseQuestion}
+                            onlyShowAnswers={isAnswered}
+                            coinsAcquired={null}
+                            bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null} />
 
-                <Flex
-                    justifyContent="center"
-                    display={isAnswered ? undefined : "none"}>
+                        <Flex
+                            justifyContent="center"
+                            display={isAnswered ? undefined : "none"}>
 
-                    <EpistoButton
-                        variant="colored"
-                        style={{
-                            fontSize: 15
-                        }}
-                        onClick={handleNextQuestion}>
+                            <EpistoButton
+                                variant="colored"
+                                style={{
+                                    fontSize: 15
+                                }}
+                                onClick={handleNextQuestion}>
 
-                        {translatableTexts.practiseQuestions.nextQuestion}
-                    </EpistoButton>
+                                {translatableTexts.practiseQuestions.nextQuestion}
+                            </EpistoButton>
+                        </Flex>
+                    </Flex>
                 </Flex>
-            </Flex>
-        </Flex>}
-
-        {(!practiseQuestion && !currentCourseItemCode) && <NoQuestionsAvailable />}
-        {(!practiseQuestion && currentCourseItemCode) && <InitialGreetings />}
+            )
+            : currentCourseItemCode
+                ? <NoQuestionsAvailable />
+                : <InitialGreetings />}
     </LoadingFrame>
 }

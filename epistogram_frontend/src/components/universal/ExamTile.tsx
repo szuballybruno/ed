@@ -19,7 +19,7 @@ export const ExamTile = (props: {
             justifyContent="space-around"
             alignItems="center"
             padding="4px"
-            w={140}
+            width={140}
             bg="white"
             borderRadius="0 7px 7px 0">
             <Text
@@ -42,7 +42,7 @@ export const ExamTile = (props: {
             justifyContent="space-around"
             alignItems="center"
             padding="4px"
-            w={160}
+            width={160}
             bg="var(--epistoTeal)"
             borderRadius="7px 0 0 7px">
             <Text
@@ -232,7 +232,7 @@ export const ExamTile = (props: {
             minH="50px">
 
             <Flex
-                w="100%"
+                width="100%"
                 justifyContent="space-between"
                 p="5">
 

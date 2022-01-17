@@ -10,7 +10,7 @@ export const LearningInsightsOverview = () => {
     return <Flex
         direction="column"
         pb="40px"
-        minW={isSmallerThan1400 ? "1060px" : undefined}>
+        minWidth={isSmallerThan1400 ? "1060px" : undefined}>
 
         {/* personality */}
         <PersonalityAssessment />

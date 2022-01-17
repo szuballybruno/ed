@@ -83,7 +83,7 @@ export const AdminUserTeacherInfoSubpage = () => {
     }
 
     return (
-        <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
+        <Flex flex="1" direction="column" bgColor="white" maxW="100%">
 
             {/* admin header */}
             <AdminSubpageHeader
@@ -164,7 +164,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                                         flex={"0 0 calc(33.3333333% - 10px)"}
                                         bgColor={"#f2f2f2"}
                                         borderRadius={7}
-                                        h={180}
+                                        height={180}
                                         boxSizing={"border-box"}
                                         m={5}>
 

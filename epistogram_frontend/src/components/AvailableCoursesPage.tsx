@@ -119,7 +119,7 @@ const AvailableCoursesPage = () => {
                                     className="roundBorders"
                                     boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
                                     p="3px"
-                                    h="30px"
+                                    height="30px"
                                     m="2px 10px 2px 0px"
                                     bgColor="var(--epistoTeal)" />
 
@@ -137,7 +137,7 @@ const AvailableCoursesPage = () => {
                 direction="column"
                 align="stretch"
                 width="100%"
-                minW={isSmallerThan1400 ? "1060px" : undefined}>
+                minWidth={isSmallerThan1400 ? "1060px" : undefined}>
 
                 {/* search */}
                 <Flex
@@ -145,7 +145,7 @@ const AvailableCoursesPage = () => {
                     direction="row"
                     align="center"
                     justify="space-between"
-                    w="100%"
+                    width="100%"
                     p="0 0 20px 0">
 
                     {/* toggle buttons */}
@@ -195,7 +195,7 @@ const AvailableCoursesPage = () => {
                         </ToggleButton>
                     </ToggleButtonGroup>
 
-                    <EpistoSearch flex="5" h="40px" mx="10px" />
+                    <EpistoSearch flex="5" height="40px" mx="10px" />
 
                     <Select
                         native

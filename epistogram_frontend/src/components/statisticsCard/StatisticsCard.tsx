@@ -27,7 +27,7 @@ const StatisticsCard = (props: {
         gridColumn={props.chartSize === "large" ? "1 / -1" : (isOpen ? "span 2" : "unset")} // do not remove!!
         gridRow={props.chartSize === "large" ? "span 2" : (isOpen ? "span 2" : "unset")} // do not remove!!
         direction="column"
-        minW={250}
+        minWidth={250}
         position="relative">
 
         {/* locked overlay */}
@@ -37,8 +37,8 @@ const StatisticsCard = (props: {
             justifyContent={"flex-start"}
             color={"black"}
             pos={"absolute"}
-            w={"100%"}
-            h={"100%"}
+            width="100%"
+            height="100%"
             borderRadius={5}
             bgColor={"#33333317"}>
 
@@ -50,7 +50,7 @@ const StatisticsCard = (props: {
         </Flex>}
 
         {/* open state */}
-        {isOpen && <Flex w={"100%"} mt="50px" p="0 20px 20px 20px" direction="column">
+        {isOpen && <Flex width="100%" mt="50px" p="0 20px 20px 20px" direction="column">
 
             <EpistoHeader variant="strongSub" text={props.title} />
             

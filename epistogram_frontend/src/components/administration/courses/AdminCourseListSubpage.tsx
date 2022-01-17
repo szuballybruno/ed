@@ -185,7 +185,7 @@ export const AdminCourseListSubpage = () => {
 
                         return <FlexListItem
                             align="center"
-                            h={100}
+                            height={100}
                             mb="1"
                             thumbnailContent={
                                 <Image
@@ -214,7 +214,7 @@ export const AdminCourseListSubpage = () => {
                                     }
                                 />
                             }
-                            endContent={<Flex align="center" justifyContent={"flex-end"} h={"100%"} width={165} px={10}>
+                            endContent={<Flex align="center" justifyContent={"flex-end"} height="100%" width={165} px={10}>
                                 <EpistoButton
                                     variant={"colored"}
                                     onClick={() => {

@@ -20,7 +20,7 @@ export const ModuleView = (params: {
         background="var(--transparentWhite70)">
 
         <Flex
-            h="500px"
+            height="500px"
             maxH="500px"
             align="center"
             justify="center">

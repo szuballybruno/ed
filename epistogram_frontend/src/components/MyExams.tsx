@@ -14,7 +14,7 @@ const finisedExams = [
 
 export const MyExams = () => {
 
-    return <Flex direction="column" w="100%">
+    return <Flex direction="column" width="100%">
         <DashboardSection variant="noShadow" title="Teljesített vizsgáim">
             <EpistoGrid auto="fill" gap="15px" minColumnWidth="330px">
                 {finisedExams

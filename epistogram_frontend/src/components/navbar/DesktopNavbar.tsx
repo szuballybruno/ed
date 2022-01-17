@@ -96,7 +96,7 @@ const DesktopNavbar = (props: {
             align="center"
             width="100%"
             flex="1"
-            h="60px"
+            height="60px"
             mt="10px"
             mb="10px"
             bg={backgroundContent}
@@ -281,10 +281,10 @@ const DesktopNavbar = (props: {
                 {mockNotifications
                     .map((x, index) => {
 
-                        return <Flex w={200} flexDirection={"column"}>
+                        return <Flex width={200} flexDirection={"column"}>
 
                             <Flex
-                                w={200}
+                                width={200}
                                 alignItems={"center"}
                                 justifyContent={"center"}
                                 my={10}>
@@ -307,7 +307,7 @@ const DesktopNavbar = (props: {
                                 </Typography>
                             </Flex>
 
-                            {index + 1 < mockNotifications.length && <Divider h={1} w={"100%"} bgColor={"grey"} />}
+                            {index + 1 < mockNotifications.length && <Divider height={1} width="100%" bgColor={"grey"} />}
                         </Flex>
                     })}
             </EpistoPopper>
@@ -324,7 +324,7 @@ const DesktopNavbar = (props: {
                     <EpistoConinInfo height="45px" />
                 </EpistoButton>
 
-                <Divider h={1} w={"100%"} bgColor={"black"} />
+                <Divider height={1} width="100%" bgColor={"black"} />
 
                 {user?.userActivity?.canAccessAdministration && <EpistoButton
                     variant={undefined}

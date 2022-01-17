@@ -5,7 +5,7 @@ import classes from "./signupWrapper.module.scss";
 
 export const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
     return <Box className={classes.progressWrapper}>
-        <Box width={"100%"} mr={1} >
+        <Box width="100%" mr={1} >
             <LinearProgress variant={"determinate"} className={classes.progressBar} {...props} />
         </Box>
         < Box minWidth={35} >

@@ -1,110 +1,130 @@
-import { Box } from "@chakra-ui/layout";
+import ReactECharts, { EChartsOption } from 'echarts-for-react';
 import React from "react";
-import { Radar } from "react-chartjs-2";
+import wrap from 'word-wrap';
 import { PersonalityDataDTO } from "../../models/shared_models/PersonalityDataDTO";
 
-export const PersonalityChart = (props: { data: PersonalityDataDTO | null }) => {
+export const PersonalityChart = (props: { data: PersonalityDataDTO }) => {
 
     const personalityData = props.data;
 
-    const splitKeysByCharCount = (keys: string[], maxChar: number) => {
-        return keys.map(k => {
-            let sections: string[] = [];
-            let words = k.split(" ");
-            let temp = "";
+    const traitNames = personalityData
+        .traits
+        .map(x => wrap(x.traitName, { width: 20 }));
 
-            words.forEach(function (item, index) {
-                if (temp.length > 0) {
-                    var concat = temp + ' ' + item;
+    const traitValues = personalityData
+        .traits
+        .map(x => x.traitScore);
 
-                    if (concat.length > maxChar) {
-                        sections.push(temp);
-                        temp = "";
-                    } else {
-                        if (index === (words.length - 1)) {
-                            sections.push(concat);
-                            return;
-                        } else {
-                            temp = concat;
-                            return;
-                        }
+    const averageGraphColor = "#ffa565";
+    const userGraphColor = "#97deef";
+    const gridColor = "#969fb7";
+    const shadowColor = "rgba(0, 0, 0, .4)";
+
+    const options = {
+        textStyle: {
+            fontWeight: "400",
+            color: "black"
+        },
+        legend: {
+            data: [
+                {
+                    name: "A felhasználók átlaga",
+                    itemStyle: {
+                        color: averageGraphColor
+                    }
+                },
+                {
+                    name: "A te tanulási analízised",
+                    itemStyle: {
+                        color: userGraphColor
                     }
                 }
+            ],
+            orient: "vertical",
+            icon: "circle",
+            bottom: 0,
 
-                if (index === (words.length - 1)) {
-                    sections.push(item);
-                    return;
-                }
-
-                if (item.length < maxChar) {
-                    temp = item;
-                } else {
-                    sections.push(item);
-                }
-
-            });
-
-            return sections as string[];
-        })
-    }
-
-    if (!personalityData)
-        return <Box></Box>
-
-    const keys = personalityData
-        ?.traits
-        ?.map(x => x.traitName) ?? [];
-
-    const values = personalityData
-        ?.traits
-        ?.map(x => x.traitScore) ?? [];
-
-    const dummyAverageValues = [4, 3, 4, 2, 3, 3, 4, 3, 5, 4]
-
-    const sets = [
-        {
-            label: 'Saját analízisem',
-            fill: true,
-            backgroundColor: '#97c9cc60',
-            borderColor: '#97c9cc',
-            pointBackgroundColor: '#97c9cc',
-            pointBorderColor: '#97c9cc',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: '#97c9cc',
-            data: values
-        },
-        {
-            label: 'Céges átlag',
-            fill: true,
-            backgroundColor: 'rgba(229,168,111,0.59)',
-            borderColor: '#fda23e',
-            pointBackgroundColor: '#ccb797',
-            pointBorderColor: '#ccb797',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: '#97c9cc',
-            data: dummyAverageValues
-        }
-    ];
-
-    return <Radar
-        options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                r: {
-                    angleLines: {
-                        display: false
-                    },
-                    suggestedMin: 0,
-                    suggestedMax: 7
-                },
+            left: 0,
+            textStyle: {
+                fontWeight: "700",
+                color: "black"
             }
-        }}
-        data={{
-            labels: splitKeysByCharCount(keys, 20),
-            datasets: sets
-        }}
-        style={{
-            height: 400
-        }} />
+        },
+        radar: {
+            splitNumber: 7,
+            splitLine: {
+                lineStyle: {
+                    color: gridColor
+                }
+            },
+            center: ["50%", "50%"],
+            splitArea: false,
+            indicator: traitNames
+                .map(traitName => ({
+                    name: traitName,
+                    max: 7
+                })),
+            axisLine: {
+                lineStyle: {
+                    color: gridColor
+                }
+            }
+        },
+        series: [
+            {
+                type: "radar",
+                symbolSize: 0,
+
+                data: [
+                    {
+                        value: [3, 4, 5, 7, 4, 2, 4, 5, 4, 4],
+                        name: "A felhasználók átlaga",
+                        lineStyle: {
+                            width: 3,
+                            color: averageGraphColor,
+                            shadowColor: averageGraphColor,
+                            shadowOffsetY: 2,
+                            shadowOffsetX: 2
+                        },
+                        areaStyle: {
+                            opacity: 0.8,
+                            color: averageGraphColor,
+                            shadowColor: shadowColor,
+                            shadowBlur: 12,
+                            shadowOffsetY: 10,
+                            shadowOffsetX: 4
+                        }
+                    },
+                    {
+                        value: traitValues,
+                        name: "A te tanulási analízised",
+                        lineStyle: {
+                            width: 3,
+                            color: userGraphColor,
+                            shadowColor: userGraphColor,
+                            shadowOffsetY: 2,
+                            shadowOffsetX: 2
+                        },
+                        areaStyle: {
+                            opacity: 0.8,
+                            color: userGraphColor,
+                            shadowColor: shadowColor,
+                            shadowBlur: 12,
+                            shadowOffsetY: 10,
+                            shadowOffsetX: 4
+                        }
+                    }
+                ]
+            }
+        ]
+    } as EChartsOption;
+
+    return (
+        <ReactECharts
+            option={options}
+            style={{
+                height: "100%",
+                width: "100%"
+            }} />
+    );
 }

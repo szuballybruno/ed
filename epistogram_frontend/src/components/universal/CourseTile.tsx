@@ -83,7 +83,7 @@ const CourseTile = (props: {
                     justifyContent="space-around"
                     alignItems="center"
                     padding="4px"
-                    w={130}
+                    width={130}
                     bg="#97CC9B"
                     borderRadius="7px 0 0 7px">
 

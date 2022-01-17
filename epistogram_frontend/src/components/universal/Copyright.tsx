@@ -2,7 +2,7 @@ import React from "react";
 import { Flex } from "@chakra-ui/react"
 
 export const Copyright = () => <Flex
-    w="100%"
+    width="100%"
     justify="center"
     py="10px">
 

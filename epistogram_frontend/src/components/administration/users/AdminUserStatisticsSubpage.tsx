@@ -13,7 +13,7 @@ export const AdminUserStatisticsSubpage = () => {
     const { userEditData } = useEditUserData(userId);
 
     return (
-        <Flex flex="1" direction="column" bgColor="white" maxW={"100%"}>
+        <Flex flex="1" direction="column" bgColor="white" maxW="100%">
 
             {/* admin header */}
             <AdminSubpageHeader tabMenuItems={[

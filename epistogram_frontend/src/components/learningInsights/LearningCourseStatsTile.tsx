@@ -117,7 +117,7 @@ export const LearningCourseStatsTile = (props: {
                     justifyContent="space-around"
                     alignItems="center"
                     padding="4px"
-                    w={130}
+                    width={130}
                     bg="#97CC9B"
                     borderRadius="7px 0 0 7px">
                     <img
@@ -182,8 +182,8 @@ export const LearningCourseStatsTile = (props: {
                 direction={"row"}
                 alignItems={"center"}
                 mt={7}
-                w="100%"
-                h="10px">
+                width="100%"
+                height="10px">
 
                 <LinearProgress
                     variant="determinate"

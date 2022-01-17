@@ -106,7 +106,7 @@ export const ShopPage = () => {
                                 className="roundBorders"
                                 boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
                                 p="3px"
-                                h="30px"
+                                height="30px"
                                 m="2px 10px 2px 0px"
                                 bgColor="var(--epistoTeal)" />
 
@@ -122,20 +122,20 @@ export const ShopPage = () => {
                 id="coursesPanelRoot"
                 direction="column"
                 pb="40px"
-                w="100%"
+                width="100%"
                 className="whall"
-                minW={isSmallerThan1400 ? "1060px" : undefined}>
+                minWidth={isSmallerThan1400 ? "1060px" : undefined}>
 
                 {/* search */}
                 <Flex
                     direction="row"
                     align="center"
                     justify="space-between"
-                    w="100%"
+                    width="100%"
                     p="20px 0">
 
                     {/* user coin balance */}
-                    <Flex align="center" flex="3" pr="20px" minW="300px">
+                    <Flex align="center" flex="3" pr="20px" minWidth="300px">
                         <ProfileImage
                             url={user.avatarUrl}
                             cursor="pointer"
@@ -152,7 +152,7 @@ export const ShopPage = () => {
                     </Flex>
 
                     {/* search */}
-                    <EpistoSearch h="40px" mx="10px" flex="5" />
+                    <EpistoSearch height="40px" mx="10px" flex="5" />
 
                     {/* order settings  */}
                     <Select

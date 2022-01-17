@@ -121,11 +121,11 @@ export const Preferences = () => {
         justify="flex-start"
         flex="1"
         align="center"
-        w="100%"
+        width="100%"
         loadingState={[saveUserSimpleState, postAvatarFileState, requestChangePasswordState]}>
 
         {/* profile image selector */}
-        <Flex justify="center" w="100%" maxW="500px">
+        <Flex justify="center" width="100%" maxW="500px">
 
             <SelectImage
                 className='circle'
@@ -144,7 +144,7 @@ export const Preferences = () => {
         </Flex>
 
         {/* inputs container */}
-        <Flex direction="column" justify="flex-start" flex="1" w="100%" maxW="500px">
+        <Flex direction="column" justify="flex-start" flex="1" width="100%" maxW="500px">
 
             <EpistoEntry
                 label="Vezetéknév"
@@ -180,7 +180,7 @@ export const Preferences = () => {
                 direction="column"
                 justify="flex-start"
                 align="center"
-                w="100%">
+                width="100%">
 
                 {!isPasswordChangeOpen && <EpistoButton
                     style={{
@@ -195,7 +195,7 @@ export const Preferences = () => {
                 </EpistoButton>}
 
                 {isPasswordChangeOpen && <Flex
-                    w="100%"
+                    width="100%"
                     direction="column"
                     flex="1">
 
@@ -206,7 +206,7 @@ export const Preferences = () => {
                         labelVariant='top'
                         setValue={setCurrentPassword} />
 
-                    <Flex mt="20px" w="100%">
+                    <Flex mt="20px" width="100%">
 
                         <EpistoButton
                             variant="colored"

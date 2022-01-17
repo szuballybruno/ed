@@ -177,7 +177,7 @@ const CourseDetailsPage = () => {
                     </Flex>
 
                     {/* tabs */}
-                    <Box width={"100%"} mt={30} mb={50}>
+                    <Box width="100%" mt={30} mb={50}>
 
                         {/* tab button headers */}
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -212,11 +212,11 @@ const CourseDetailsPage = () => {
                         margin={10}
                         boxSizing={"border-box"}
                         bg={"white"}
-                        h={580}
+                        height={580}
                         borderWidth={1}
                         borderRadius={10}
                         shadow={"#00000024 0px 0px 5px 0px"}>
-                        <Flex width={"100%"} height={230} justifyContent={"center"} p={10}>
+                        <Flex width="100%" height={230} justifyContent={"center"} p={10}>
                             <img
                                 src={courseDetails?.thumbnailURL}
                                 style={{
@@ -230,9 +230,9 @@ const CourseDetailsPage = () => {
                         {sidebarInfos
                             .map(sidebarInfo => (
                                 <FlexListItem
-                                    width={"100%"}
+                                    width="100%"
                                     px={15}
-                                    h={40}
+                                    height={40}
                                     thumbnailContent={(
                                         <img
                                             src={sidebarInfo.icon}
@@ -310,7 +310,7 @@ const CourseDetailsPage = () => {
                 top={0}
                 left={0}
                 width={"70%"}
-                h={300}
+                height={300}
                 bg={"#eff9ff"}
                 zIndex={-1}
                 backgroundClip={"padding-box"} />

@@ -42,11 +42,11 @@ export const ExamLayout = (props: {
             alignItems={"center"}
             className="roundBorders"
             background="var(--transparentWhite70)"
-            w={"100%"}
-            h={60}
+            width="100%"
+            height={60}
             pl={20}>
 
-            <Flex minW="200">
+            <Flex minWidth="200">
                 {(headerLeftItem && isString(headerLeftItem)) && <Text as="text">
                     {headerLeftItem}
                 </Text>}
@@ -65,7 +65,7 @@ export const ExamLayout = (props: {
                 </Text>
             </Flex>
 
-            <Flex minW="200" justify="flex-end">
+            <Flex minWidth="200" justify="flex-end">
                 {exitExamAction && <EpistoButton
                     onClick={exitExamAction}
                     style={{
@@ -95,10 +95,10 @@ export const ExamLayout = (props: {
 
         {/* footer */}
         <Flex
-            w={"100%"}
+            width="100%"
             className="roundBorders"
             background="var(--transparentWhite70)"
-            h="80px"
+            height="80px"
             p={20}>
 
             {/* progress line */}

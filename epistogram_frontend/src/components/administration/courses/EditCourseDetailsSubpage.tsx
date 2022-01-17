@@ -137,7 +137,7 @@ export const AdminCourseDetailsSubpage = () => {
         loadingState={[saveCourseDataState, courseDetailsEditDataState, saveCourseThumbnailState]}
         error={courseDetailsEditDataError}
         className="whall">
-        <Flex flex="1" direction="column" maxW={"100%"}>
+        <Flex flex="1" direction="column" maxW="100%">
 
             {/* admin header */}
             <AdminSubpageHeader

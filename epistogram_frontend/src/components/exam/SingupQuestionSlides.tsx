@@ -89,7 +89,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
         return <FlexFloat
             alignItems={"center"}
             borderRadius={7}
-            minW={150}
+            minWidth={150}
             cursor={onClick ? "pointer" : undefined}
             onClick={onClick ? () => onClick(!isSelected) : undefined}
             style={{
@@ -122,7 +122,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
-            upperComponent={<Flex alignItems={"center"} justifyContent={"flex-end"} w={"30%"}><Typography>{questionnaireProgressLabel}</Typography></Flex>}>
+            upperComponent={<Flex alignItems={"center"} justifyContent={"flex-end"} width={"30%"}><Typography>{questionnaireProgressLabel}</Typography></Flex>}>
 
             <RadioGroup
                 id="answers"

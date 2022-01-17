@@ -16,8 +16,8 @@ export const CourseDetailsSummarySection = (props: {
 
     return <Flex
         mt={10}
-        w={"100%"}
-        h={500}
+        width="100%"
+        height={500}
         direction={"column"}
         alignItems={"flex-start"}>
 
@@ -76,15 +76,15 @@ export const CourseDetailsSummarySection = (props: {
             mt={40} />
 
         {/* humam skill benefits */}
-        <Flex w={"100%"} mb={100}>
+        <Flex width="100%" mb={100}>
 
             {/* human skill benefits description */}
-            <Flex direction={"column"} minW={"50%"} >
+            <Flex direction={"column"} minWidth={"50%"} >
                 {courseDetails.humanSkillBenefitsDescription}
             </Flex>
 
             {/* human skill benefits chart  */}
-            <Flex direction={"column"} minW={"50%"}>
+            <Flex direction={"column"} minWidth={"50%"}>
                 <CourseImprovementStatsRadar stats={courseDetails?.humanSkillBenefits ?? []} />
             </Flex>
         </Flex>

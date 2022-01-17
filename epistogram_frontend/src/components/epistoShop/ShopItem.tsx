@@ -64,7 +64,7 @@ export const ShopItem = (props: {
             {isPurchased && <Flex
                 position="absolute"
                 align="center"
-                w="100%"
+                width="100%"
                 bottom="0"
                 padding="5px 20px"
                 borderRadius="0px 0 6px 6px"

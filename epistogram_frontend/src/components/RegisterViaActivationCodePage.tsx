@@ -84,17 +84,17 @@ export const RegisterViaActivationCodePage = () => {
             background="gradientBlueBackground"
             py="60px"
             overflowY={"scroll"}
-            h="100%"
-            w="100%">
+            height="100%"
+            width="100%">
 
             {/* content */}
             <Flex
                 wrap={"wrap"}
                 background="var(--transparentWhite70)"
                 zIndex="6"
-                w="100%"
+                width="100%"
                 maxW="1700px"
-                h="fit-content"
+                height="fit-content"
                 mx="100px"
                 p="50px 150px"
                 overflow="hidden"
@@ -106,7 +106,7 @@ export const RegisterViaActivationCodePage = () => {
                     justify="center"
                     //bgColor="green"
                     zIndex="7"
-                    minW="300px"
+                    minWidth="300px"
                     flex="5">
 
                     {/* epi logo */}
@@ -138,7 +138,7 @@ export const RegisterViaActivationCodePage = () => {
                 {/* form */}
                 <LoadingFrame
                     id="form"
-                    minW="400px"
+                    minWidth="400px"
                     loadingState={registerUserViaActivationCodeState}
                     direction="column"
                     zIndex="7"
@@ -219,7 +219,7 @@ export const RegisterViaActivationCodePage = () => {
                     <Flex
                         justify="space-between"
                         align="center"
-                        h={80}>
+                        height={80}>
 
                         <Typography
                             style={{
@@ -247,8 +247,8 @@ export const RegisterViaActivationCodePage = () => {
                         position="fixed"
                         align="center"
                         justify="center"
-                        w="100vw"
-                        h="100vh"
+                        width="100vw"
+                        height="100vh"
                         background="var(--transparentWhite70)"
                         top="0"
                         left="0"
@@ -260,8 +260,8 @@ export const RegisterViaActivationCodePage = () => {
                             align="center"
                             justify="center"
                             padding="50px"
-                            w="500px"
-                            h="250px">
+                            width="500px"
+                            height="250px">
 
                             <Typography align="center">
                                 A regisztráció sikeres volt, a belépési linked elküldtük a(z) '{emailEntryState.value}' címre.

@@ -18,8 +18,8 @@ export const PreventMobileFrame = (props) => {
             align="center"
             justify="center"
             zIndex="100000"
-            h="100vh"
-            w="100vw">
+            height="100vh"
+            width="100vw">
 
             <Flex
                 className="roundBorders"

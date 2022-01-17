@@ -13,15 +13,15 @@ export const CourseDetailsBriefingInfoItem = (props: {
 
     return <Flex
         direction={"row"}
-        w={200}
-        h={60}
+        width={200}
+        height={60}
         bg={"white"}
         borderWidth={1}
         borderRadius={5}
         shadow={"#00000024 0px 0px 3px 0px"}>
 
         <Flex
-            w={60}
+            width={60}
             align={"center"}
             justify={"center"}>
 
@@ -37,7 +37,7 @@ export const CourseDetailsBriefingInfoItem = (props: {
 
         <Flex
             ml={5}
-            w={135}
+            width={135}
             direction={"column"}
             justify={"center"}
             align={"flex-start"}>

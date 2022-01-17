@@ -91,7 +91,7 @@ export const RegistrationPage = () => {
             boxShadow="#00000024 10px 30px 50px 0px">
 
 
-            <Flex w={"100%"} maxH={50} my="25px" justifyContent={"center"}>
+            <Flex width="100%" maxH={50} my="25px" justifyContent={"center"}>
                 <Image width="50%" src={getAssetUrl("/images/logo.svg")} />
             </Flex>
 

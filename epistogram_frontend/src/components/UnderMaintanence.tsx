@@ -5,7 +5,7 @@ import { EpistoHeader } from "./EpistoHeader"
 
 export const UnderMaintanence = () => {
 
-    return <Flex align="center" justify="center" w="100vw" h="100vh">
+    return <Flex align="center" justify="center" width="100vw" height="100vh">
 
         <Flex direction="column" align="center">
             <img

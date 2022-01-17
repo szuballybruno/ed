@@ -54,7 +54,7 @@ export const AdminSubpageHeader = (props: {
     }) => {
 
         const Content = () => <Flex>
-            {props.iconComponent && <Flex w={27} h="100%" p={2}>
+            {props.iconComponent && <Flex width={27} height="100%" p={2}>
                 {props.iconComponent}
             </Flex>}
 
@@ -127,7 +127,7 @@ export const AdminSubpageHeader = (props: {
                 flexDirection="row"
                 alignItems="center"
                 justify={"space-between"}
-                h={65}>
+                height={65}>
 
                 {/* tabs */}
                 <Flex flex="1">

@@ -33,7 +33,7 @@ export const FlexListItem = (props: FlexProps & {
         {...css}>
 
         {setIsChecked && <Flex
-            minW={60}
+            minWidth={60}
             alignItems={"center"}
             justifyContent={"center"}>
 

@@ -23,7 +23,7 @@ export default function OverflowMenu({ children, className, visibilityMap }) {
     return null;
   }
   return (
-    <Flex minW={40} w={40} alignItems={"center"} justifyContent={"center"} className={className}>
+    <Flex minWidth={40} width={40} alignItems={"center"} justifyContent={"center"} className={className}>
 
       <IconButton
         aria-label="more"

@@ -123,8 +123,8 @@ const LoginScreen = () => {
             background="gradientBlueBackground"
             py="60px"
             overflowY={"scroll"}
-            h="100%"
-            w="100%">
+            height="100%"
+            width="100%">
 
             {/* pw reset dialog */}
             <LoginPasswordResetDialog
@@ -190,7 +190,7 @@ const LoginScreen = () => {
 
                         <Flex
                             direction="column"
-                            w={"100%"}
+                            width="100%"
                             alignItems="flex-start">
 
                             <Typography fontSize={"1.2rem"}>
@@ -199,7 +199,7 @@ const LoginScreen = () => {
 
                         </Flex>
 
-                        <Box w={"100%"}>
+                        <Box width="100%">
 
                             <EpistoEntry
                                 ref={emailRef}
@@ -258,7 +258,7 @@ const LoginScreen = () => {
                         <Flex
                             direction={"row"}
                             justifyContent={"space-between"}
-                            w={"100%"}>
+                            width="100%">
 
                             <Typography fontSize="13px">
                                 Még nincs hozzáférésed?

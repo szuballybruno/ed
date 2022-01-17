@@ -79,14 +79,14 @@ export const AdminListEditHeader = (props: {
 
         {/* search */}
         <Flex
-            h={"100%"}
+            height="100%"
             direction={"row"}
             justifyContent={"flex-start"}
             alignItems={"center"}
-            w={140}
+            width={140}
             mx={10}>
             <EpistoSearch
-                w={140}
+                width={140}
                 onChange={(x) => {
 
                     if (onSearchChanged)
@@ -97,10 +97,10 @@ export const AdminListEditHeader = (props: {
         {/* order by */}
         <Flex
             className="align-center"
-            h={"100%"}
+            height="100%"
             mx={10}>
             <EpistoSelect
-                minW={"fit-content"}
+                minWidth={"fit-content"}
                 items={[]}
                 onSelected={x => { }}
                 selectedValue="1"

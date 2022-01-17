@@ -20,12 +20,12 @@ export const LearningCourseStats = () => {
         error={coursesDataError}
         direction="column"
         className="Whall"
-        minW="100%"
+        minWidth="100%"
         flex="1">
 
         {/* completed courses */}
         <DashboardSection
-            w="100%"
+            width="100%"
             variant="normal"
             title="Elvégzett kurzusaim" >
 
@@ -51,7 +51,7 @@ export const LearningCourseStats = () => {
         </DashboardSection >
 
         {/* in progress courses  */}
-        <DashboardSection w="100%" variant="noShadow" title="Folyamatban lévő kurzusaim">
+        <DashboardSection width="100%" variant="noShadow" title="Folyamatban lévő kurzusaim">
             {isAnyCoursesInProgress
                 ? <EpistoGrid
                     minColumnWidth="250px"

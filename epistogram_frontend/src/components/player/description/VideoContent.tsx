@@ -23,7 +23,7 @@ export const VideoContent = () => {
             icon: <CalendarToday />
         }
     ]
-    return <Flex minH={600} direction={"column"} w={"100%"}>
+    return <Flex minH={600} direction={"column"} width="100%">
         <FlexListItem
             align="center"
             p="5px"
