@@ -152,15 +152,16 @@ export const ContentPane = (props: {
     noPadding?: boolean,
     navbarBg?: any,
     hideNavbar?: boolean,
-    noMaxWidth?: boolean
+    noMaxWidth?: boolean,
+    showLogo?: boolean
 } & FlexProps) => {
 
-    const { noPadding, noMaxWidth, navbarBg, hideNavbar, ...css } = props;
+    const { noPadding, showLogo, noMaxWidth, navbarBg, hideNavbar, ...css } = props;
 
     return (
         <Flex
             id="contentPane"
-            p={props.noPadding ? undefined : "0 10px 40px 10px"}
+            p={props.noPadding ? undefined : "0 30px 40px 30px"}
             flex="1"
             maxWidth={noMaxWidth ? undefined : "1400px"}
             direction="column"
@@ -169,7 +170,10 @@ export const ContentPane = (props: {
             className="whall"
             {...css}>
 
-            {!hideNavbar && <Navbar backgroundContent={navbarBg} />}
+            {!hideNavbar && <Navbar
+                showLogo={showLogo}
+                backgroundContent={navbarBg} />}
+
             {props.children}
         </Flex>
     );

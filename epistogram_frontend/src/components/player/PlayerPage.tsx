@@ -92,16 +92,14 @@ export const PlayerPage = () => {
 
             <ContentPane
                 width="var(--playerWidth)"
-                margin="auto">
+                margin="auto"
+                showLogo>
 
                 <LoadingFrame
                     loadingState={[]}
                     className="whall"
                     direction="column"
-                    overflowY="scroll"
                     error={[playerDataError]}>
-
-                    <Navbar showLogo />
 
                     <Flex px="20px" mb="50px">
 
