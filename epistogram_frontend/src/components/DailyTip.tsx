@@ -4,6 +4,7 @@ import ReactPlayer from "react-player"
 import { useDailyTip } from "../services/api/miscApiService"
 import { getAssetUrl, usePaging } from "../static/frontendHelpers"
 import { translatableTexts } from "../static/translatableTexts"
+import { EpistoFont } from "./controls/EpistoFont"
 import { EpistoDialog, useEpistoDialogLogic } from "./EpistoDialog"
 import { SlidesDisplay } from "./universal/SlidesDisplay"
 
@@ -36,9 +37,9 @@ export const DailyTip = (props: {} & FlexProps) => {
 
     const openDialog = () => dialogLogic.openDialog();
 
-    const DescriptionSlide = () => <Typography variant={"h6"} fontSize="16px">
+    const DescriptionSlide = () => <EpistoFont classes={["fontMidPlus", "fontGrey"]}>
         {dailyTipData?.description}
-    </Typography>;
+    </EpistoFont>;
 
     const VideoSlide = () => <ModalPlayer videoUrl={dailyTipData?.videoUrl ?? ""}></ModalPlayer>
 

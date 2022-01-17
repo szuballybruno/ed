@@ -1,6 +1,7 @@
 import { Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
 import { useCoinBalance } from "../services/api/coinTransactionsApiService";
+import { EpistoFont } from "./controls/EpistoFont";
 import { EpistoConinImage } from "./universal/EpistoCoinImage"
 
 export const EpistoConinInfo = (props: {} & FlexProps) => {
@@ -10,14 +11,13 @@ export const EpistoConinInfo = (props: {} & FlexProps) => {
     return <Flex align="center" {...props}>
 
         {/* coin value  */}
-        <Typography
+        <EpistoFont
             style={{ marginRight: "5px" }}
-            className="fontHuge"
-            variant={"button"}>
+            fontSize="fontHuge">
 
             {coinBalance}
-        </Typography>
-
+        </EpistoFont>
+        
         {/* coin image */}
         <EpistoConinImage />
     </Flex>

@@ -15,6 +15,7 @@ import CourseTile from "./universal/CourseTile";
 import { EpistoButton } from "./controls/EpistoButton";
 import { EpistoGrid } from "./controls/EpistoGrid";
 import { EpistoSearch } from "./universal/EpistoSearch";
+import { EpistoFont } from "./controls/EpistoFont";
 
 const AvailableCoursesPage = () => {
 
@@ -84,12 +85,13 @@ const AvailableCoursesPage = () => {
             <Flex direction="column">
 
                 {/* categories title */}
-                <Typography
-                    variant="overline"
+                <EpistoFont
+                    fontSize="fontExtraSmall"
+                    isUppercase
                     style={{ margin: "10px" }}>
 
                     {translatableTexts.availableCourses.categoriesTitle}
-                </Typography>
+                </EpistoFont>
 
                 {/* categories list */}
                 <ToggleButtonGroup

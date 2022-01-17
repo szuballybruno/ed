@@ -8,6 +8,8 @@ import { getAssetUrl } from '../static/frontendHelpers';
 import { CurrentUserContext } from './system/AuthenticationFrame';
 import { EpistoButton } from './controls/EpistoButton';
 import { FlexFloat } from './controls/FlexFloat';
+import { EpistoFont } from './controls/EpistoFont';
+import { translatableTexts } from '../static/translatableTexts';
 
 export const LeftPane = (props: FlexProps) => {
 
@@ -87,11 +89,14 @@ export const LeftPane = (props: FlexProps) => {
                 right="25"
                 width="170px">
 
-                <Typography
-                    fontSize="13px"
-                    mb="5px">
-                    Szia, én Tina vagyok, a te személyes segítőd, ha elakadnál, kérdezz bátran!
-                </Typography>
+                <EpistoFont
+                    fontSize="fontSmall"
+                    style={{
+                        marginBottom: 5
+                    }}>
+
+                    {translatableTexts.leftPane.assistantDescription}
+                </EpistoFont>
             </Flex>
 
             {/* tina button */}
@@ -106,7 +111,7 @@ export const LeftPane = (props: FlexProps) => {
                     variant='colored'
                     onClick={() => startUserGuideHelp()}>
 
-                    Segítség
+                    {translatableTexts.leftPane.assistantButtonTitle}
                 </EpistoButton>
             </Flex>
         </FlexFloat>

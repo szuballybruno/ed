@@ -2,6 +2,7 @@ import { Image } from "@chakra-ui/image";
 import { Flex, FlexProps } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
 import { forwardRef, useContext } from "react";
+import { EpistoFont } from "./controls/EpistoFont";
 import { CurrentUserContext } from "./system/AuthenticationFrame";
 
 type ProfileImageProps = {
@@ -41,11 +42,13 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
                 src={url ?? ""}
                 display={showImage ? undefined : "none"} />
 
-            <Typography
-                display={showSingature ? undefined : "none"}>
+            <EpistoFont
+                style={{
+                    display: showSingature ? undefined : "none"
+                }}>
 
                 {signature.toUpperCase()}
-            </Typography>
+            </EpistoFont>
         </Flex>
-    </Flex>
+    </Flex >
 });

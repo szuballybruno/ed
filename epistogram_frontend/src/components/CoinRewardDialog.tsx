@@ -41,6 +41,10 @@ export const CoinRewardDialog = (props: {
                 {text}
             </Typography>
 
+            <Typography className="fontDark" noWrap>
+                {text}
+            </Typography>
+
             <Flex align="flex-end" mt="10px">
                 
                 <Typography className="fontGiant" style={{ color: "var(--epistoTeal)", fontWeight: "bold" }}>

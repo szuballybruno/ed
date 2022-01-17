@@ -1,6 +1,7 @@
 import {Flex} from "@chakra-ui/react";
 import {LinearProgress, Paper, Rating, Typography} from "@mui/material";
 import React from "react";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const CourseDetailsRatingSection = () => {
     const mockRatingProgresses = [60, 20, 10, 0, 0]
@@ -17,9 +18,9 @@ export const CourseDetailsRatingSection = () => {
                       color="white"
                       alignItems={"center"}
                       justifyContent={"center"}>
-                    <Typography>
+                    <EpistoFont>
                         ND
-                    </Typography>
+                    </EpistoFont>
                 </Flex>
             </Flex>
             <Flex flex={1} flexDir={"column"}>
