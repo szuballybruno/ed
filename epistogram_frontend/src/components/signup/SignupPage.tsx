@@ -66,19 +66,21 @@ export const SignupPage = () => {
     ];
 
     return (
-        <PageRootContainer>
+        <PageRootContainer noBackground noMaxWidth>
 
             <ContentPane
                 align="center"
                 justify="center"
+                hideNavbar
+                noMaxWidth
                 style={{
                     background: "radial-gradient(farthest-corner at 300px 100px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
                 }}>
 
                 <SlidesDisplay
                     alwaysRender={true}
-                    maxW="calc(100% - 300px)"
-                    h="calc(100vh - 100px)"
+                    maxWidth="1400px"
+                    height="calc(100vh - 100px)"
                     background="var(--transparentWhite70)"
                     zIndex="1"
                     boxShadow={"5px 5px 25px 5px rgba(0,0,0,0.10)"}

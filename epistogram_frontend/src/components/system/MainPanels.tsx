@@ -13,29 +13,31 @@ import { CurrentUserContext } from './AuthenticationFrame';
 
 export const PageRootContainer = (props: {
     children: ReactNode,
-    backgoundImageSrc?: string
+    backgoundImageSrc?: string,
+    noBackground?: boolean,
+    noMaxWidth?: boolean
 } & FlexProps) => {
 
-    const { children, backgoundImageSrc, ...css } = props;
+    const { children, noMaxWidth, noBackground, backgoundImageSrc, ...css } = props;
 
     return <Flex
-        background={backgoundImageSrc
+        background={backgoundImageSrc || noBackground
             ? undefined
             : "var(--gradientBlueBackground)"}
         id="pageRootContainer"
-        maxWidth="1920px"
+        maxWidth={noMaxWidth ? undefined : "1920px"}
         margin="0 auto"
         position="relative"
         overflow="hidden"
         className="whall"
         {...css}>
 
-        <Image
+        {(!noBackground && backgoundImageSrc) && <Image
             position="absolute"
             top="0"
             objectFit="cover"
             className="whall"
-            src={backgoundImageSrc} />
+            src={backgoundImageSrc} />}
 
         {props.children}
 
@@ -163,24 +165,26 @@ export const LeftPane = (props: FlexProps) => {
 
 export const ContentPane = (props: {
     noPadding?: boolean,
-    navbarBg?: any
+    navbarBg?: any,
+    hideNavbar?: boolean,
+    noMaxWidth?: boolean
 } & FlexProps) => {
 
-    const { noPadding, navbarBg, ...css } = props;
+    const { noPadding, noMaxWidth, navbarBg, hideNavbar, ...css } = props;
 
     return (
         <Flex
             id="contentPane"
             p={props.noPadding ? undefined : "0 10px 40px 10px"}
             flex="1"
-            maxWidth="1400px"
+            maxWidth={noMaxWidth ? undefined : "1400px"}
             direction="column"
             margin="auto"
             overflowY="scroll"
             className="whall"
             {...css}>
 
-            <Navbar backgroundContent={navbarBg} />
+            {!hideNavbar && <Navbar backgroundContent={navbarBg} />}
             {props.children}
         </Flex>
     );
