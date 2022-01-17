@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { User } from '../../models/entity/User';
 import { apiRoutes } from '../../models/shared_models/types/apiRoutes';
 import { getAsyncMiddlewareHandler } from '../../utilities/apiHelpers';
-import { getAuthTokenFromRequest, getCookie, TypedError } from '../../utilities/helpers';
+import { getAuthTokenFromRequest, getCookie, ErrorCode } from '../../utilities/helpers';
 import { GlobalConfiguration } from './GlobalConfiguration';
 import { log } from './logger';
 
@@ -55,7 +55,7 @@ export const getUnderMaintanenceMiddleware = (config: GlobalConfiguration) => ge
     if (!config.misc.isUnderMaintanence)
         return;
 
-    throw new TypedError("Server is under maintanence!", "under maintenance")
+    throw new ErrorCode("Server is under maintanence!", "under maintenance")
 });
 
 export const getCORSMiddleware = (config: GlobalConfiguration) => cors({

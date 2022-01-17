@@ -1,6 +1,6 @@
 import { User } from "../models/entity/User";
 import { validatePassowrd } from "../models/shared_models/logic/sharedLogic";
-import { TypedError } from "../utilities/helpers";
+import { ErrorCode } from "../utilities/helpers";
 import { EmailService } from "./EmailService";
 import { HashService } from "./HashService";
 import { GlobalConfiguration } from "./misc/GlobalConfiguration";
@@ -88,7 +88,7 @@ export class PasswordChangeService {
             .getUserById(userId);
 
         if (!await this._hashService.comparePasswordAsync(oldPassword, user.password))
-            throw new TypedError("Wrong password!", "bad request");
+            throw new ErrorCode("Wrong password!", "bad request");
 
         await this._ormService
             .getRepository(User)
@@ -117,7 +117,7 @@ export class PasswordChangeService {
 
         // verify new password with compare password 
         if (validatePassowrd(password, passwordCompare))
-            throw new TypedError("Password is invalid.", "bad request");
+            throw new ErrorCode("Password is invalid.", "bad request");
 
         // verify token
         const tokenPayload = this._tokenService
@@ -131,7 +131,7 @@ export class PasswordChangeService {
 
         // verify user reset password token
         if (user.resetPasswordToken !== passwordResetToken)
-            throw new TypedError("Wrong token.", "bad request");
+            throw new ErrorCode("Wrong token.", "bad request");
 
         // hash new password
         const hashedPassword = await this._hashService

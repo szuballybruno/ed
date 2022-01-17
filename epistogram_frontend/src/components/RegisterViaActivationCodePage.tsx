@@ -1,15 +1,17 @@
 import { Text } from "@chakra-ui/layout";
-import { Flex, useMediaQuery } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { useState } from "react";
+import { ErrorCodeType } from "../models/shared_models/types/sharedTypes";
 import { useRegisterUserViaActivationCode } from "../services/api/registrationApiService";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { getAssetUrl } from "../static/frontendHelpers";
-import { LoadingFrame } from "./system/LoadingFrame";
-import { PageRootContainer } from "./PageRootContainer";
 import { EpistoButton } from "./controls/EpistoButton";
-import { EpistoEntry } from "./controls/EpistoEntry";
+import { EpistoEntryNew, useEpistoEntryState } from "./controls/EpistoEntryNew";
+import { validateAllEntries } from "./controls/logic/controlsLogic";
+import { PageRootContainer } from "./PageRootContainer";
+import { LoadingFrame } from "./system/LoadingFrame";
 
 export const RegisterViaActivationCodePage = () => {
 
@@ -21,25 +23,57 @@ export const RegisterViaActivationCodePage = () => {
     const showError = useShowErrorDialog();
     const { navigate } = useNavigation();
 
+    // state 
     const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
-    const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [activationCode, setActivationCode] = useState("");
 
-    const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
+    const emailEntryState = useEpistoEntryState({ isMandatory: true });
+    const firstNameEntryState = useEpistoEntryState({ isMandatory: true });
+    const lastNameEntryState = useEpistoEntryState({ isMandatory: true });
+    const activationCodeEntryState = useEpistoEntryState({ isMandatory: true });
+
+    // func
+
+    const validateAll = () => validateAllEntries([
+        emailEntryState,
+        firstNameEntryState,
+        lastNameEntryState,
+        activationCodeEntryState
+    ]);
 
     const handleRegisterAsync = async () => {
 
         try {
 
-            await registerUserViaActivationCodeAsync(activationCode, email, firstName, lastName);
+            if (!validateAll())
+                return;
+
+            await registerUserViaActivationCodeAsync(
+                activationCodeEntryState.value,
+                emailEntryState.value,
+                firstNameEntryState.value,
+                lastNameEntryState.value);
+
             setRegistrationSuccessful(true);
             showNotification("Sikeres regisztráció!");
         }
-        catch (e) {
+        catch (e: any) {
 
-            showError(e);
+            const errorCode = e.code as ErrorCodeType;
+
+            if (errorCode === "activation_code_issue") {
+
+                activationCodeEntryState
+                    .setError("Helytelen aktivációs kód.");
+            }
+            else if (errorCode === "email_taken") {
+
+                emailEntryState
+                    .setError("Nem megfelelő email cím, vagy már használatban van.");
+            }
+            else {
+
+                showError(e);
+            }
         }
     }
 
@@ -130,36 +164,32 @@ export const RegisterViaActivationCodePage = () => {
                     <Flex
                         direction="column">
 
-                        <EpistoEntry
-                            value={email}
-                            setValue={setEmail}
+                        <EpistoEntryNew
+                            state={emailEntryState}
                             labelVariant="top"
                             label="E-mail"
                             placeholder="te@email.com"
                             name="email"
                             height="30px" />
 
-                        <EpistoEntry
-                            value={firstName}
-                            setValue={setFirstName}
+                        <EpistoEntryNew
+                            state={lastNameEntryState}
                             labelVariant="top"
                             label="Vezetéknév"
                             placeholder="Vezetéknév"
                             name="lastName"
                             height="30px" />
 
-                        <EpistoEntry
-                            value={lastName}
-                            setValue={setLastName}
+                        <EpistoEntryNew
+                            state={firstNameEntryState}
                             labelVariant="top"
                             label="Keresztnév"
                             placeholder="Keresztnév"
                             name="firstName"
                             height="30px" />
 
-                        <EpistoEntry
-                            value={activationCode}
-                            setValue={setActivationCode}
+                        <EpistoEntryNew
+                            state={activationCodeEntryState}
                             labelVariant="top"
                             label="Aktivációs kódod"
                             placeholder="Kód"
@@ -234,7 +264,7 @@ export const RegisterViaActivationCodePage = () => {
                             h="250px">
 
                             <Typography align="center">
-                                A regisztráció sikeres volt, a belépési linked elküldtük a(z) '{email}' címre.
+                                A regisztráció sikeres volt, a belépési linked elküldtük a(z) '{emailEntryState.value}' címre.
                             </Typography>
                         </Flex>
 

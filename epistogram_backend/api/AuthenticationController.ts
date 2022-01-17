@@ -2,7 +2,7 @@
 import { AuthenticationService } from "../services/AuthenticationService";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { setAuthCookies } from "../utilities/cookieHelpers";
-import { ActionParams, getCookie, TypedError } from "../utilities/helpers";
+import { ActionParams, getCookie, ErrorCode } from "../utilities/helpers";
 
 export class AuthenticationController {
 
@@ -29,7 +29,7 @@ export class AuthenticationController {
 
         // check request 
         if (!params.req.body)
-            throw new TypedError("Body is null.", "bad request");
+            throw new ErrorCode("Body is null.", "bad request");
 
         // get credentials from request
         const { email, password } = params.req.body;

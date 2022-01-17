@@ -1,12 +1,12 @@
-import { ErrorType } from "./types/sharedTypes";
+import { ErrorCodeType } from "./types/sharedTypes";
 
 export default class HttpErrorResponseDTO {
 
     message: string;
-    errorType: ErrorType;
+    code: ErrorCodeType;
 
-    constructor(message: string, errorType: ErrorType) {
+    constructor(message: string, code: ErrorCodeType) {
         this.message = message;
-        this.errorType = errorType;
+        this.code = code;
     }
 }

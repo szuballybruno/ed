@@ -114,7 +114,7 @@ export class SQLBootstrapperService {
 
         // drop constraints
         const drops = constraints
-            .map(constraint => `ALTER TABLE ${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.name};`);
+            .map(constraint => `ALTER TABLE public.${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.name};`);
 
         await this._sqlConnectionService.executeSQLAsync(drops.join("\n"));
 

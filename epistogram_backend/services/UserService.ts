@@ -8,7 +8,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { UserEditSimpleDTO } from "../models/shared_models/UserEditSimpleDTO";
 import { RegistrationType } from "../models/Types";
-import { getFullName, toFullName, TypedError } from "../utilities/helpers";
+import { getFullName, toFullName, ErrorCode } from "../utilities/helpers";
 import { HashService } from "./HashService";
 import { MapperService } from "./MapperService";
 import { log } from "./misc/logger";
@@ -171,7 +171,7 @@ export class UserService {
         // does user already exist?
         const existingUser = await this.getUserByEmailAsync(opts.email);
         if (existingUser)
-            throw new TypedError("User already exists. Email: " + opts.email, "bad request");
+            throw new ErrorCode("User already exists. Email: " + opts.email, "email_taken");
 
         // hash user password 
         const hashedPassword = await this._hashService
@@ -259,7 +259,7 @@ export class UserService {
             });
 
         if (connectedCourses.length > 0)
-            throw new TypedError("Cannot delete user when it's set as teacher on undeleted courses!", "bad request");
+            throw new ErrorCode("Cannot delete user when it's set as teacher on undeleted courses!", "bad request");
 
         return await this._ormService
             .getRepository(User)

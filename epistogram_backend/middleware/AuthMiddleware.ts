@@ -8,7 +8,7 @@ import { LoggerService } from "../services/LoggerService";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { UserService } from "../services/UserService";
 import { EndpointOptionsType } from "../utilities/apiHelpers";
-import { ActionParams, getAuthTokenFromRequest, TypedError } from "../utilities/helpers";
+import { ActionParams, getAuthTokenFromRequest, ErrorCode } from "../utilities/helpers";
 import { ITurboMiddleware } from "../utilities/TurboExpress";
 
 export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOptionsType> {
@@ -88,7 +88,7 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
             .some(x => x === currentRoutePath);
 
         if (!isCurrentRouteAccessable)
-            throw new TypedError("User has not proper rights to access the requested resource.", "forbidden");
+            throw new ErrorCode("User has not proper rights to access the requested resource.", "forbidden");
     }
 
     private authorizeUserAsync = async (role: RoleType, authorize: RoleType[] | undefined) => {

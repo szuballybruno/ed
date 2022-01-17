@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { matchPath, useLocation, useParams } from "react-router-dom";
 import { validatePassowrd } from "../models/shared_models/logic/sharedLogic";
-import { ErrorType, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
+import { ErrorCodeType, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { ApplicationRoute, LoadingStateType } from "../models/types";
 import { httpGetAsync } from "../services/core/httpClient";
 import { assetStorageUrl } from "./Environemnt";
@@ -566,14 +566,14 @@ export const stringifyQueryObject = (queryObj: any) => {
 
 export const isCurrentRoute = (route: string) => window.location.pathname === route;
 
-export class TypedError extends Error {
+export class ErrorCode extends Error {
 
-    errorType: ErrorType;
+    code: ErrorCodeType;
 
-    constructor(message: string, errorType: ErrorType) {
+    constructor(message: string, code: ErrorCodeType) {
 
         super(message);
-        this.errorType = errorType;
+        this.code = code;
     }
 }
 
@@ -597,7 +597,7 @@ export const getEventFileCallback = (callback: (value: any) => void) => {
     return inputChangeHandler;
 }
 
-export const getErrorTypeByHTTPCode = (code: number): ErrorType => {
+export const getErrorTypeByHTTPCode = (code: number): ErrorCodeType => {
 
     if (code === 400)
         return "bad request";

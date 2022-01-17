@@ -132,11 +132,15 @@ export const dbSchema = {
             name: "activation_code_uniqe_constraint"
         }
     ],
-
+    
     indices: [
         {
             tableName: "exam",
             name: "exam_is_final_index"
+        },
+        {
+            tableName: "user",
+            name: "user_email_unique_index"
         }
     ],
 

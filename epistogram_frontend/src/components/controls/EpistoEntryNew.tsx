@@ -1,11 +1,70 @@
 import { Flex } from "@chakra-ui/layout";
 import { InputAdornment, TextField, Typography } from "@mui/material";
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useEffect, useState } from "react";
 
-export type EpistoEntryPropsType = {
-    value?: string,
+// state
+
+export const useEpistoEntryState = (options?: {
+    isMandatory?: boolean
+}) => {
+
+    // state 
+
+    const [value, setValue] = useState("");
+    const [error, setError] = useState<string | null>(null);
+    const [initialState, setInitialState] = useState(true);
+
+    // funcs 
+
+    const validate = () => {
+
+        const error = ((): string | null => {
+
+            if (options?.isMandatory && !value)
+                return "Ez a mező nem lehet üres!";
+
+            return null;
+        })();
+
+        setError(error);
+
+        return !error;
+    };
+
+    const setValue2 = (value: string) => {
+
+        setValue(value);
+
+        if (initialState)
+            setInitialState(false);
+    }
+
+    // effects 
+
+    useEffect(() => {
+
+        if (initialState)
+            return;
+
+        validate();
+    }, [value]);
+
+    return {
+        value,
+        error,
+        validate,
+        setValue: setValue2,
+        setError
+    }
+}
+
+export type EpistoEntryStateType = ReturnType<typeof useEpistoEntryState>;
+
+// component 
+
+export type EpistoEntryNewPropsType = {
+    state: EpistoEntryStateType,
     label?: string,
-    setValue?: (value: string) => void,
     onFocusLost?: (value: string) => void,
     disabled?: boolean,
     isMultiline?: boolean,
@@ -17,13 +76,10 @@ export type EpistoEntryPropsType = {
     marginTop?: string,
     flex?: string,
     type?: "password" | "number" | "text",
-    style?: React.CSSProperties,
-    errorText?: string | null,
-    setError?: (errorText: string | null) => void,
-    isMandatory?: boolean
+    style?: React.CSSProperties
 }
 
-export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((props: EpistoEntryPropsType, ref) => {
+export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsType>((props: EpistoEntryNewPropsType, ref) => {
 
     const {
         label,
@@ -31,8 +87,6 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         labelVariant,
         placeholder,
         disabled,
-        value,
-        setValue,
         isMultiline,
         onFocusLost,
         name,
@@ -41,36 +95,14 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         marginTop,
         flex,
         style,
-        errorText,
-        setError,
-        isMandatory
+        state
     } = props;
 
-    // set value 
-    const onChanged = (value: string) => {
-
-        if (!setValue)
-            return;
-
-        setValue(value);
-    }
-
-    // set error
-    useEffect(() => {
-
-        if (!setError)
-            return;
-
-        const error = ((): string | null => {
-
-            if (isMandatory && !value)
-                return "Ez a mező nem lehet üres!";
-
-            return null;
-        })();
-
-        setError(error);
-    }, [value]);
+    const {
+        error,
+        setValue,
+        value
+    } = state;
 
     return <Flex direction="column" mt={marginTop ?? "10px"} flex={flex} style={style}>
 
@@ -88,8 +120,8 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
             placeholder={placeholder}
             name={name}
             value={value}
-            error={!!errorText}
-            helperText={errorText}
+            error={!!error}
+            helperText={error}
             multiline={isMultiline}
             type={type}
             sx={{
@@ -113,7 +145,7 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
             }}
             onChange={x => {
 
-                onChanged(x.currentTarget.value);
+                setValue(x.currentTarget.value);
             }}
             style={{
                 border: "none"

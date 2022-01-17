@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { serverUrl } from "../../static/Environemnt";
-import { getErrorTypeByHTTPCode, getUrl, stringifyQueryObject, TypedError } from "../../static/frontendHelpers";
+import { getErrorTypeByHTTPCode, getUrl, stringifyQueryObject, ErrorCode } from "../../static/frontendHelpers";
 import HttpErrorResponseDTO from "../../models/shared_models/HttpErrorResponseDTO";
 import { LoadingStateType } from "../../models/types";
 
@@ -180,7 +180,7 @@ export const usePostMultipartDataUnsafe = <TData>(url: string) => {
 export const usePostData = <TData, TResult>(url: string) => {
 
     const [state, setState] = useState<LoadingStateType>("success");
-    const [error, setError] = useState<TypedError | null>(null);
+    const [error, setError] = useState<ErrorCode | null>(null);
     const [result, setResult] = useState<TResult | null>(null);
 
     const postDataAsync = async (data: TData) => {
@@ -197,7 +197,7 @@ export const usePostData = <TData, TResult>(url: string) => {
         catch (e) {
 
             setState("error");
-            setError(e as TypedError);
+            setError(e as ErrorCode);
         }
     }
 
@@ -272,24 +272,24 @@ const handleHttpError = (error: any) => {
         // get & check error response data
         const error = response.data as HttpErrorResponseDTO;
         if (!error)
-            throw new TypedError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
 
         // get & check error response data properties
-        if (!error.message && !error.errorType)
-            throw new TypedError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+        if (!error.message && !error.code)
+            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
 
         // message only
         // throw with a more informative message
-        if (error.message && !error.errorType)
-            throw new TypedError(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
+        if (error.message && !error.code)
+            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
 
         // error type and maybe message as well
         const message = error.message
             ? `Http response code (${responseCode}) did not indicate success. Message: ${error.message}`
-            : `Http response code (${responseCode}) did not indicate success. Code: ${error.errorType}`
+            : `Http response code (${responseCode}) did not indicate success. Code: ${error.code}`
 
         // throw with a more informative message
         // and error type
-        throw new TypedError(message, error.errorType);
+        throw new ErrorCode(message, error.code);
     }
 }

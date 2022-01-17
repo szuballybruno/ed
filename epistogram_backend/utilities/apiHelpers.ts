@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import HttpErrorResponseDTO from "../models/shared_models/HttpErrorResponseDTO";
-import { ErrorType, RoleType } from "../models/shared_models/types/sharedTypes";
+import { ErrorCodeType, RoleType } from "../models/shared_models/types/sharedTypes";
 import { log, logError } from "../services/misc/logger";
+import { ErrorCode } from "./helpers";
 import { IRouteOptions } from "./TurboExpress";
 
 export class EndpointOptionsType implements IRouteOptions {
@@ -18,7 +19,7 @@ export const onActionError = (error: any, req: Request, res: Response) => {
     log(`${requestPath}: Failed...`);
     logError(error);
 
-    respondError(res, "", (error.type ?? "internal server error") as ErrorType);
+    respondError(res, "", ((error as ErrorCode).code ?? "internal server error") as ErrorCodeType);
 }
 
 export const onActionSuccess = (value: any, req: Request, res: Response) => {
@@ -52,23 +53,23 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
 
                 logError(error);
 
-                respondError(wrapperRes, error.message, (error.type ?? "internal server error") as ErrorType);
+                respondError(wrapperRes, error.message, ((error as ErrorCode).code ?? "internal server error") as ErrorCodeType);
             });
     }
 
     return wrapperFunction;
 }
 
-export const respondError = (res: Response, msg: string, type: ErrorType) => {
+export const respondError = (res: Response, msg: string, code: ErrorCodeType) => {
 
-    logError(`Responding typed error: Type: ${type} Msg: ${msg}`);
+    logError(`Responding typed error: Type: ${code} Msg: ${msg}`);
 
     const errorDTO = {
-        errorType: type,
+        code: code,
         message: msg
     } as HttpErrorResponseDTO;
 
-    switch (type) {
+    switch (code) {
         case "bad request":
             respond(res, 400, errorDTO);
             break;

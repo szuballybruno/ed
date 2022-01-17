@@ -1,6 +1,6 @@
 import { User } from "../models/entity/User";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { TypedError } from "../utilities/helpers";
+import { ErrorCode } from "../utilities/helpers";
 import { EmailService } from "./EmailService";
 import { HashService } from "./HashService";
 import { GlobalConfiguration } from "./misc/GlobalConfiguration";
@@ -32,11 +32,11 @@ export class AuthenticationService {
     getRequestAccessTokenPayload = (accessToken: string) => {
 
         if (!accessToken)
-            throw new TypedError("Token not sent.", "bad request");
+            throw new ErrorCode("Token not sent.", "bad request");
 
         const tokenPayload = this._tokenService.verifyAccessToken(accessToken);
         if (!tokenPayload)
-            throw new TypedError("Token is invalid.", "bad request");
+            throw new ErrorCode("Token is invalid.", "bad request");
 
         return tokenPayload;
     }
@@ -61,7 +61,7 @@ export class AuthenticationService {
 
         // check if there is a refresh token sent in the request 
         if (!prevRefreshToken)
-            throw new TypedError("Refresh token not sent.", "bad request");
+            throw new ErrorCode("Refresh token not sent.", "bad request");
 
         // check sent refresh token if invalid by signature or expired
         const tokenMeta = this._tokenService.verifyRefreshToken(prevRefreshToken);
@@ -71,14 +71,14 @@ export class AuthenticationService {
             .getUserActiveTokenById(tokenMeta.userId);
 
         if (!refreshTokenFromDb)
-            throw new TypedError(`User has no active token, or it's not the same as the one in request! User id '${tokenMeta.userId}', active token '${refreshTokenFromDb}'`, "forbidden");
+            throw new ErrorCode(`User has no active token, or it's not the same as the one in request! User id '${tokenMeta.userId}', active token '${refreshTokenFromDb}'`, "forbidden");
 
         // get user 
         const user = await this._userService
             .getUserById(tokenMeta.userId);
 
         if (!user)
-            throw new TypedError("User not found by id " + tokenMeta.userId, "internal server error");
+            throw new ErrorCode("User not found by id " + tokenMeta.userId, "internal server error");
 
         // get tokens
         const { accessToken, refreshToken } = await this.getUserLoginTokens(user, user.userActivity);
@@ -99,20 +99,20 @@ export class AuthenticationService {
 
         // further validate request 
         if (!email || !password)
-            throw new TypedError("Email or password is null.", "bad request");
+            throw new ErrorCode("Email or password is null.", "bad request");
 
         // authenticate
         const user = await this._userService
             .getUserByEmailAsync(email);
 
         if (!user)
-            throw new TypedError("Invalid email.", "forbidden");
+            throw new ErrorCode("Invalid email.", "forbidden");
 
         const isPasswordCorrect = await this._hashService
             .comparePasswordAsync(password, user.password);
 
         if (!isPasswordCorrect)
-            throw new TypedError("Invalid password.", "forbidden");
+            throw new ErrorCode("Invalid password.", "forbidden");
 
         const userId = user.id;
 

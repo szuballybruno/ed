@@ -1,13 +1,17 @@
 
 export type InvitationTokenPayload = { userEmail: string };
 
-export type HTTPErrorType = "forbidden" | "internal server error" | "bad request" | "http error" | "under maintenance";
-
-export type MiscErrorType = "passwordInvalid" | "unknown";
-
-export type CoursePlaybackErrorType = "courseItemNotFound";
-
-export type ErrorType = HTTPErrorType | MiscErrorType | CoursePlaybackErrorType;
+export type ErrorCodeType =
+    "forbidden" |
+    "internal server error" |
+    "bad request" |
+    "http error" |
+    "under maintenance" |
+    "passwordInvalid" |
+    "unknown" |
+    "courseItemNotFound" |
+    "activation_code_issue" | 
+    "email_taken";
 
 // tasks
 export type TaskObjectiveType = "video" | "playlist" | "course" | "exam";

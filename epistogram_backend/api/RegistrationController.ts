@@ -9,7 +9,7 @@ import { RegistrationService } from "../services/RegistrationService";
 import { TokenService } from "../services/TokenService";
 import { UserService } from "../services/UserService";
 import { setAuthCookies } from "../utilities/cookieHelpers";
-import { ActionParams, TypedError } from "../utilities/helpers";
+import { ActionParams, ErrorCode } from "../utilities/helpers";
 
 export class RegistrationController {
 
@@ -81,7 +81,7 @@ export class RegistrationController {
             : currentUser.organizationId;
 
         if (!organizationId)
-            throw new TypedError(
+            throw new ErrorCode(
                 `Current user is not an administrator, 
                 but has rights to add users, but has no organization, 
                 in which he/she could add users.`, "bad request");

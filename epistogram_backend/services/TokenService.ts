@@ -3,7 +3,7 @@ import { AccessTokenPayload } from "../models/DTOs/AccessTokenPayload";
 import { User } from "../models/entity/User";
 import { InvitationTokenPayload, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { TypedError } from "../utilities/helpers";
+import { ErrorCode } from "../utilities/helpers";
 import { GlobalConfiguration } from "./misc/GlobalConfiguration";
 
 export class TokenService {
@@ -106,7 +106,7 @@ export class TokenService {
         const payload = verify(token, secret) as TTokenPayload;
 
         if (!payload)
-            throw new TypedError("Token verification failed!", "forbidden");
+            throw new ErrorCode("Token verification failed!", "forbidden");
 
         return payload;
     }

@@ -1,12 +1,11 @@
 import { log } from "console";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { User } from "../models/entity/User";
-import { ErrorType } from "../models/shared_models/types/sharedTypes";
+import { ErrorCodeType } from "../models/shared_models/types/sharedTypes";
 import { ParsableValueType } from "../models/Types";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { logError } from "../services/misc/logger";
-import { respond, respondError } from "./apiHelpers";
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
@@ -106,7 +105,7 @@ export class ActionParams {
 
         const file = this.req.files?.file;
         if (!file)
-            throw new TypedError("File not sent!", "bad request");
+            throw new ErrorCode("File not sent!", "bad request");
 
         return file as UploadedFile;
     }
@@ -133,24 +132,6 @@ export class SafeObjectWrapper<T> {
 
         return value;
     }
-}
-
-// TODO REMOVE THIS FROM HERE 
-export const getAsyncActionHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
-
-    const wrapperFunction = (req: Request, res: Response, next: NextFunction) => {
-
-        wrappedAction(req, res, next)
-            .then((returnValue: any) => respond(res, 200, returnValue))
-            .catch((error: any) => {
-
-                logError(error);
-
-                respondError(res, error.message, (error.type ?? "internal server error") as ErrorType);
-            });
-    }
-
-    return wrapperFunction;
 }
 
 export const toSqlDate = (date: Date) => {
@@ -232,7 +213,7 @@ export const requestHasFiles = (req: Request) => {
 export const getSingleFileFromRequest = (req: Request) => {
 
     if (!req.files)
-        throw new TypedError("Request contains no files.", "bad request");
+        throw new ErrorCode("Request contains no files.", "bad request");
 
     // TODO multiple file error check
 
@@ -243,7 +224,7 @@ export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => 
 
     const objWithValue = withValue<T>(obj, () => {
 
-        throw new TypedError("Requied field has no value!", "bad request");
+        throw new ErrorCode("Requied field has no value!", "bad request");
     });
 
     return parseType(objWithValue, type ?? "any") as T;
@@ -296,20 +277,20 @@ export declare type DeepOptionalEntity<TObject> = {
         : DeepOptionalEntity<TObject[TProperty]>) | (() => string);
 };
 
-export class TypedError extends Error {
+export class ErrorCode extends Error {
 
-    type: ErrorType;
+    code: ErrorCodeType;
 
-    constructor(msg: string, type: ErrorType) {
+    constructor(msg: string, code: ErrorCodeType) {
 
         super(msg);
 
-        this.type = type;
+        this.code = code;
 
         logError("Error thrown: " + this.toString());
     }
 
     toString() {
-        return `${this.type}: ${this.message}`;
+        return `${this.code}: ${this.message}`;
     }
 }
