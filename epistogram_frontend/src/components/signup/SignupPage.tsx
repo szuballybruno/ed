@@ -87,32 +87,25 @@ export const SignupPage = () => {
             <ContentPane
                 align="center"
                 justify="center"
+                background="radial-gradient(farthest-corner at 300px 100px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
                 hideNavbar
                 noMaxWidth
-                style={{
-                    background: "radial-gradient(farthest-corner at 300px 100px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
-                }}>
+                padding={20}>
 
-                <Flex
-                    className='whall'
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                    style={{
-                        background: "var(--gradientBlueBackground)"
-                    }}>
+                <SlidesDisplay
+                    className="roundBorders largeSoftShadow"
+                    alwaysRender={true}
+                    width="calc(100% - 150px)"
+                    maxW="1400px"
+                    height="calc(100vh - 100px)"
+                    background="var(--transparentWhite70)"
+                    maxH="800px"
+                    p="10px"
+                    zIndex="1"
+                    flex="1"
+                    slides={slides}
+                    index={slidesState.currentIndex} />
 
-                    <SlidesDisplay
-                        className="roundBorders largeSoftShadow"
-                        alwaysRender={true}
-                        maxWidth="1400px"
-                        height="calc(100vh - 100px)"
-                        background="var(--transparentWhite70)"
-                        p="10px"
-                        zIndex="1"
-                        flex="1"
-                        slides={slides}
-                        index={slidesState.currentIndex} />
-                </Flex>
             </ContentPane>
         </PageRootContainer>
     );
