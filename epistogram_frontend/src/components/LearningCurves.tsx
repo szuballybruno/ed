@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { Tab, Tabs, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { translatableTexts } from "../static/translatableTexts";
-import { FlexFloat } from "./universal/FlexFloat";
+import { FlexFloat } from "./controls/FlexFloat";
 import { TabPanel } from "./courseDetails/TabPanel";
 import { getAssetUrl } from "../static/frontendHelpers";
 import { EpistoHeader } from "./EpistoHeader";

@@ -1,6 +1,6 @@
 import { Box, Flex } from "@chakra-ui/layout"
 import { CSSProperties, ReactNode } from "react"
-import { EpistoButton } from "./EpistoButton";
+import { EpistoButton } from "../controls/EpistoButton";
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 

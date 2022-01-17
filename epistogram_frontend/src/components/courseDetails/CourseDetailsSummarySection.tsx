@@ -4,9 +4,9 @@ import { Typography } from "@mui/material";
 import React from "react";
 import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
 import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoHeader } from "../EpistoHeader";
 import { CourseImprovementStatsRadar } from "../universal/CourseImprovementStatsRadar";
-import { EpistoButton } from "../universal/EpistoButton";
 
 export const CourseDetailsSummarySection = (props: {
     courseDetails: CourseDetailsDTO

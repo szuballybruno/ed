@@ -7,11 +7,13 @@ import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { distinct } from "../static/frontendHelpers";
 import { translatableTexts } from "../static/translatableTexts";
+import { ContentPane } from "./ContentPane";
+import { LeftPane } from "./LeftPane";
+import { PageRootContainer } from "./PageRootContainer";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { LeftPane, PageRootContainer, ContentPane } from "./system/MainPanels";
 import CourseTile from "./universal/CourseTile";
-import { EpistoButton } from "./universal/EpistoButton";
-import { EpistoGrid } from "./universal/EpistoGrid";
+import { EpistoButton } from "./controls/EpistoButton";
+import { EpistoGrid } from "./controls/EpistoGrid";
 import { EpistoSearch } from "./universal/EpistoSearch";
 
 const AvailableCoursesPage = () => {

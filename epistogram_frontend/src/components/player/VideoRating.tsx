@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from "../../services/api/videoRatingApiService"
 import { useShowErrorDialog } from "../../services/core/notifications"
 import { getAssetUrl, iterate } from "../../static/frontendHelpers"
-import { EpistoButton } from "../universal/EpistoButton"
+import { EpistoButton } from "../controls/EpistoButton"
 
 export const VideoRating = (props: { videoId: number }) => {
 

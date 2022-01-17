@@ -2,15 +2,14 @@ import { Flex } from '@chakra-ui/layout';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useContext, useRef, useState } from 'react';
-import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
 import { ModuleDTO } from '../../models/shared_models/ModuleDTO';
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { httpPostAsync } from "../../services/core/httpClient";
 import { useShowErrorDialog } from "../../services/core/notifications";
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoPopper } from '../controls/EpistoPopper';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { CourseItemList } from "../universal/CourseItemList";
-import { EpistoButton } from '../universal/EpistoButton';
-import { EpistoPopper } from '../universal/EpistoPopper';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,

@@ -4,12 +4,12 @@ import { useIntParam } from "../../../static/frontendHelpers"
 import { ModuleAdminEditDTO } from "../../../models/shared_models/ModuleAdminEditDTO"
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications"
 import { LoadingFrame } from "../../system/LoadingFrame"
-import { EpistoEntry } from "../../universal/EpistoEntry"
+import { EpistoEntry } from "../../controls/EpistoEntry"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
 import { useModuleEditData, useSaveModule } from "../../../services/api/moduleApiService"
-import { EpistoLabel } from "../../universal/EpistoLabel"
 import { SelectImage } from "../../universal/SelectImage"
 import { Image } from "@chakra-ui/react";
+import { EpistoLabel } from "../../controls/EpistoLabel"
 
 export const EditModuleSubpage = () => {
 

@@ -3,7 +3,7 @@ import { EpistoHeader } from "../EpistoHeader";
 import React from "react";
 import { Typography } from "@mui/material";
 import { getAssetUrl } from "../../static/frontendHelpers";
-import { EpistoButton } from "../universal/EpistoButton";
+import { EpistoButton } from "../controls/EpistoButton";
 import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
 import { ProfileImage } from "../ProfileImage";
 

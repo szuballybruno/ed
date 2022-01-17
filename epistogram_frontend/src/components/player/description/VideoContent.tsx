@@ -8,7 +8,7 @@ import {
 import { Typography } from "@mui/material";
 import React from 'react';
 import { getAssetUrl } from "../../../static/frontendHelpers";
-import { EpistoButton } from "../../universal/EpistoButton";
+import { EpistoButton } from "../../controls/EpistoButton";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FloatChip } from "../../universal/FloatChip";
 

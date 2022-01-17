@@ -1,5 +1,5 @@
 import React from "react";
-import { EpistoEntry } from "../universal/EpistoEntry";
+import { EpistoEntry } from "../controls/EpistoEntry";
 import { RegFormStateType } from "./SignupFormLogic";
 
 export const SignupForm = (props: { regFormState: RegFormStateType }) => {

@@ -3,8 +3,8 @@ import { Fullscreen, FullscreenExit, Lock } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { EpistoHeader } from '../EpistoHeader';
-import { EpistoButton } from '../universal/EpistoButton';
-import { FlexFloat } from '../universal/FlexFloat';
+import { EpistoButton } from '../controls/EpistoButton';
+import { FlexFloat } from '../controls/FlexFloat';
 import classes from "./learningStatisticsItem.module.scss";
 
 const StatisticsCard = (props: {

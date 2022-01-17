@@ -1,7 +1,7 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
+import { EpistoText } from '../controls/EpistoText';
 import { LoadingFrame, LoadingFramePropsType } from '../system/LoadingFrame';
-import { EpistoText } from './EpistoText';
 
 export const QuestionnaireLayout = (props: {
     title: string,
@@ -28,26 +28,12 @@ export const QuestionnaireLayout = (props: {
 
                 {/* title */}
                 <Flex align="center">
-                    {/* <img
-                        style={{
-                            borderRadius: "50%",
-                            padding: "8px",
-                            width: "50px",
-                            height: "50px",
-                            marginRight: "30px"
-                        }}
-                        alt=""
-                        src="https://static.thenounproject.com/png/92068-200.png"
-                        className="tinyShadow" /> */}
 
                     <EpistoText
                         isAutoFontSize
                         text={title}
                         style={{ width: "100%", fontSize: 17, fontWeight: 500 }} />
                 </Flex>
-
-                {/* divider 
-                <Box width="70%" bg="var(--epistoTeal)" height="2px" m="4px" />*/}
             </Flex>
 
             {/* content */}

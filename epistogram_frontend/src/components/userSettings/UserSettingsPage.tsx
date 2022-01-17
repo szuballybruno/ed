@@ -3,8 +3,10 @@ import React from 'react';
 import { Switch } from 'react-router';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { getRoute } from '../../MainRouting';
+import { ContentPane } from '../ContentPane';
+import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { LeftPane, PageRootContainer, ContentPane } from '../system/MainPanels';
+import { PageRootContainer } from '../PageRootContainer';
 import { Preferences } from './Preferences';
 
 const FeaturePreview = () => {

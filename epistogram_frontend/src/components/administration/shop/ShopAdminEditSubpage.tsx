@@ -10,15 +10,15 @@ import { usePrivateCourses, useSaveShopItem, useShopItemCategories, useShopItemE
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { LoadingFrame } from "../../system/LoadingFrame";
-import { EpistoButton } from "../../universal/EpistoButton";
-import { EpistoEntry } from "../../universal/EpistoEntry";
-import { EpistoLabel } from "../../universal/EpistoLabel";
-import { EpistoSelect } from "../../universal/EpistoSelect";
+import { EpistoEntry } from "../../controls/EpistoEntry";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import LockIcon from '@mui/icons-material/Lock';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import { EpistoLabel } from "../../controls/EpistoLabel";
+import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoSelect } from "../../controls/EpistoSelect";
 
 export const ShopAdminEditSubpage = () => {
 

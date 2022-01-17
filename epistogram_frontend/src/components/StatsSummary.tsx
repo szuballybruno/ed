@@ -1,7 +1,7 @@
 import StatisticsCard from "./statisticsCard/StatisticsCard";
 import { useContext } from "react";
 import { getAssetUrl, roundNumber } from "../static/frontendHelpers";
-import { FlexFloat } from "./universal/FlexFloat";
+import { FlexFloat } from "./controls/FlexFloat";
 import { Typography } from "@mui/material";
 import { translatableTexts } from "../static/translatableTexts";
 import { useUserStats } from "../services/api/userStatsApiService";

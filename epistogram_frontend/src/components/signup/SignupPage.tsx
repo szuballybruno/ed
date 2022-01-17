@@ -8,9 +8,10 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 import { SignupQuestions } from '../SignupQuestions';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
-import { ContentPane, PageRootContainer } from "../system/MainPanels";
+import { PageRootContainer } from "../PageRootContainer";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 import { SignupWrapper } from "./SignupWrapper";
+import { ContentPane } from '../ContentPane';
 
 export const SignupPage = () => {
 

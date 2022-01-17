@@ -6,7 +6,7 @@ import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
 import { useAnswerQuestion } from "../../services/api/playerApiService";
 import { epochDates } from "../../static/frontendHelpers";
 import { QuesitionView } from "../QuestionView";
-import { EpistoButton } from "./EpistoButton";
+import { EpistoButton } from "../controls/EpistoButton";
 import { TimeoutFrame } from "./TimeoutFrame";
 
 export const VideoQuestionnaire = (props: {

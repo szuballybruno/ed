@@ -1,5 +1,5 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
-import { EpistoFont } from "../controls/EpistoFont";
+import { EpistoFont } from "./EpistoFont";
 
 export const EpistoLabel = (props: { text: string } & FlexProps) => {
 

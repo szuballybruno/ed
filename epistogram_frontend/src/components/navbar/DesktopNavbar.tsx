@@ -12,11 +12,11 @@ import { useShowErrorDialog } from "../../services/core/notifications";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
 import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { ProfileImage } from "../ProfileImage";
-import { EpistoButton } from "../universal/EpistoButton";
-import { EpistoPopper } from "../universal/EpistoPopper";
 import NavbarButton from "../universal/NavbarButton";
 import { useLogout } from "../../services/api/authenticationApiService";
 import { currentVersion } from "../../static/Environemnt";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoPopper } from "../controls/EpistoPopper";
 
 const menuItems = [
     applicationRoutes.homeRoute,

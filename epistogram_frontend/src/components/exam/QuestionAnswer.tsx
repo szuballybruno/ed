@@ -1,6 +1,6 @@
 import { FlexProps } from "@chakra-ui/layout";
 import { Checkbox, Typography } from "@mui/material";
-import { FlexFloat } from "../universal/FlexFloat";
+import { FlexFloat } from "../controls/FlexFloat";
 
 export const QuestionAnswer = (props: {
     onClick?: (selected: boolean) => void,

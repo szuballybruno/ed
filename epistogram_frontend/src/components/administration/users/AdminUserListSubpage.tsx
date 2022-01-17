@@ -1,30 +1,28 @@
 import { Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Edit, Email, Equalizer, School, Task, WorkTwoTone } from "@mui/icons-material";
+import { ApartmentTwoTone, Edit, Email, Equalizer, School, WorkTwoTone } from "@mui/icons-material";
+import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
 import React, { ReactNode, useContext, useState } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { AdminPageUserDTO } from "../../../models/shared_models/AdminPageUserDTO";
-import { apiRoutes } from "../../../models/shared_models/types/apiRoutes";
-import { httpPostAsync } from "../../../services/core/httpClient";
+import { deleteUserAsync, useUserListQuery } from "../../../services/api/userApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { useShowErrorDialog } from "../../../services/core/notifications";
+import { getRoleName } from "../../../static/frontendHelpers";
+import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { FloatAddButton } from "../../FloatAddButton";
+import { ProfileImage } from "../../ProfileImage";
 import { CurrentUserContext } from "../../system/AuthenticationFrame";
 import { LoadingFrame } from "../../system/LoadingFrame";
-import { ProfileImage } from "../../ProfileImage";
-import { EpistoButton } from "../../universal/EpistoButton";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { FloatChip } from "../../universal/FloatChip";
 import { AdminListEditHeader } from "../AdminListEditHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import AccessibilityIcon from '@mui/icons-material/Accessibility';
-import { getRoleName } from "../../../static/frontendHelpers";
-import { deleteUserAsync, useUserListQuery } from "../../../services/api/userApiService";
 
 export const AdminUserListSubpage = () => {
 

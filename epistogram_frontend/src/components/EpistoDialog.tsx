@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/layout";
 import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { ButtonType, DialogOptions } from "../models/types";
-import { EpistoButton } from "./universal/EpistoButton";
+import { EpistoButton } from "./controls/EpistoButton";
 import { Close } from "@mui/icons-material";
 import { EpistoHeader } from "./EpistoHeader";
 

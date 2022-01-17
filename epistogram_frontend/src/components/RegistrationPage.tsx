@@ -8,7 +8,7 @@ import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { RefetchUserAsyncContext } from "./system/AuthenticationFrame";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { EpistoButton } from "./universal/EpistoButton";
+import { EpistoButton } from "./controls/EpistoButton";
 import { useRegisterInvitedUser, useRegisterUser } from "../services/api/registrationApiService";
 import { translatableTexts } from "../static/translatableTexts";
 import { EpistoFont } from "./controls/EpistoFont";

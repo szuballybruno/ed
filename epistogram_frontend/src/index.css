@@ -30,7 +30,7 @@
 
   /* gradients */
 
-  --gradientBlueBackground: radial-gradient(farthest-corner at 300px 300px, rgba(177,208,242,0.7) 33%, white 100%);
+  --gradientBlueBackground: radial-gradient(farthest-corner at 300px 300px, rgba(177,208,242,0.45) 20%, white 80%);
 
 }
 

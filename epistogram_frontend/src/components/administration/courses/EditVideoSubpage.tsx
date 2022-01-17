@@ -15,14 +15,14 @@ import { getVirtualId } from "../../../services/core/idService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { LoadingFrame } from "../../system/LoadingFrame";
-import { EpistoButton } from "../../universal/EpistoButton";
-import { EpistoEntry } from "../../universal/EpistoEntry";
+import { EpistoEntry } from "../../controls/EpistoEntry";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "./EditSection";
 import { useSaveVideo, useVideoEditData, useUploadVideoFileAsync } from "../../../services/api/videoApiService";
+import { EpistoButton } from "../../controls/EpistoButton";
 
 const QuestionItem = (props: {
     currentSeconds: number,

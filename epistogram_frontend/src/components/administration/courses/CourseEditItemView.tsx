@@ -5,7 +5,7 @@ import { Chip, Typography } from "@mui/material";
 import React from 'react';
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
 import { formatTime } from "../../../static/frontendHelpers";
-import { EpistoButton } from "../../universal/EpistoButton";
+import { EpistoButton } from "../../controls/EpistoButton";
 
 export const CourseEditItemView = (props: {
     moduleIndex: number,

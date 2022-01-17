@@ -6,8 +6,8 @@ import React, { useRef, useState } from "react";
 import { usePersonalityData } from "../../services/api/signupApiService";
 import { translatableTexts } from "../../static/translatableTexts";
 import { LoadingFrame } from "../system/LoadingFrame";
-import { EpistoButton } from "./EpistoButton";
-import { EpistoPopper } from "./EpistoPopper";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoPopper } from "../controls/EpistoPopper";
 import { PersonalityChart } from "./PersonalityChart";
 
 export const PersonalityAssessment = (props: FlexProps) => {

@@ -4,7 +4,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { UserDTO } from '../../../../models/shared_models/UserDTO';
 import { EpistoConinInfo } from "../../../EpistoCoinInfo";
-import { EpistoButton } from "../../../universal/EpistoButton";
+import { EpistoButton } from "../../../controls/EpistoButton";
 import classes from './profileStats.module.scss';
 
 const ProfileStats = (props: { user: UserDTO }) => {

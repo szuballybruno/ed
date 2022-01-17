@@ -7,8 +7,9 @@ import { showNotification, useShowErrorDialog } from "../services/core/notificat
 import { getAssetUrl, getQueryParam, usePasswordEntryState } from "../static/frontendHelpers";
 import { EpistoHeader } from "./EpistoHeader";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { PageRootContainer, ContentPane } from "./system/MainPanels";
-import { EpistoButton } from "./universal/EpistoButton";
+import { PageRootContainer } from "./PageRootContainer";
+import { EpistoButton } from "./controls/EpistoButton";
+import { ContentPane } from "./ContentPane";
 
 export const SetNewPasswordPage = () => {
 

@@ -8,9 +8,9 @@ import { UserDTO } from "../../../models/shared_models/UserDTO";
 import { UserEditDTO } from "../../../models/shared_models/UserEditDTO";
 import { useJobTitles, useOrganizations } from "../../../services/api/miscApiService";
 import { CurrentUserContext } from "../../system/AuthenticationFrame";
-import { EpistoEntry } from "../../universal/EpistoEntry";
-import { EpistoLabel } from "../../universal/EpistoLabel";
-import { EpistoSelect } from "../../universal/EpistoSelect";
+import { EpistoEntry } from "../../controls/EpistoEntry";
+import { EpistoSelect } from "../../controls/EpistoSelect";
+import { EpistoLabel } from "../../controls/EpistoLabel";
 
 export const roles = [
     {

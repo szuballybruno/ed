@@ -1,5 +1,5 @@
 import { FlexProps, Text } from "@chakra-ui/layout";
-import { FlexFloat } from "./FlexFloat";
+import { FlexFloat } from "../controls/FlexFloat";
 
 export const FloatChip = (props: FlexProps & { name: string, icon: any }) => {
 

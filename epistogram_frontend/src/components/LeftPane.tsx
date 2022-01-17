@@ -1,48 +1,13 @@
-import { Flex, FlexProps, Image, useMediaQuery } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import { Typography } from '@mui/material';
-import React, { ReactNode, useContext } from 'react';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useNavigation } from '../../services/core/navigatior';
-import { startUserGuideHelp } from '../../services/core/userGuidingService';
-import { currentVersion } from '../../static/Environemnt';
-import { getAssetUrl } from '../../static/frontendHelpers';
-import Navbar from '../navbar/Navbar';
-import { EpistoButton } from '../universal/EpistoButton';
-import { FlexFloat } from '../universal/FlexFloat';
-import { CurrentUserContext } from './AuthenticationFrame';
-
-export const PageRootContainer = (props: {
-    children: ReactNode,
-    backgoundImageSrc?: string,
-    noBackground?: boolean,
-    noMaxWidth?: boolean
-} & FlexProps) => {
-
-    const { children, noMaxWidth, noBackground, backgoundImageSrc, ...css } = props;
-
-    return <Flex
-        background={backgoundImageSrc || noBackground
-            ? undefined
-            : "var(--gradientBlueBackground)"}
-        id="pageRootContainer"
-        maxWidth={noMaxWidth ? undefined : "1920px"}
-        margin="0 auto"
-        position="relative"
-        overflow="hidden"
-        className="whall"
-        {...css}>
-
-        {(!noBackground && backgoundImageSrc) && <Image
-            position="absolute"
-            top="0"
-            objectFit="cover"
-            className="whall"
-            src={backgoundImageSrc} />}
-
-        {props.children}
-
-    </Flex>
-};
+import React, { useContext } from 'react';
+import { applicationRoutes } from '../configuration/applicationRoutes';
+import { useNavigation } from '../services/core/navigatior';
+import { startUserGuideHelp } from '../services/core/userGuidingService';
+import { getAssetUrl } from '../static/frontendHelpers';
+import { CurrentUserContext } from './system/AuthenticationFrame';
+import { EpistoButton } from './controls/EpistoButton';
+import { FlexFloat } from './controls/FlexFloat';
 
 export const LeftPane = (props: FlexProps) => {
 
@@ -145,36 +110,5 @@ export const LeftPane = (props: FlexProps) => {
                 </EpistoButton>
             </Flex>
         </FlexFloat>
-    );
-};
-
-export const ContentPane = (props: {
-    noPadding?: boolean,
-    navbarBg?: any,
-    hideNavbar?: boolean,
-    noMaxWidth?: boolean,
-    showLogo?: boolean
-} & FlexProps) => {
-
-    const { noPadding, showLogo, noMaxWidth, navbarBg, hideNavbar, ...css } = props;
-
-    return (
-        <Flex
-            id="contentPane"
-            p={props.noPadding ? undefined : "0 30px 40px 30px"}
-            flex="1"
-            maxWidth={noMaxWidth ? undefined : "1400px"}
-            direction="column"
-            margin="auto"
-            overflowY="scroll"
-            className="whall"
-            {...css}>
-
-            {!hideNavbar && <Navbar
-                showLogo={showLogo}
-                backgroundContent={navbarBg} />}
-
-            {props.children}
-        </Flex>
     );
 };

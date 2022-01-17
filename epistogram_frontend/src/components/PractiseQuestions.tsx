@@ -10,7 +10,7 @@ import { translatableTexts } from "../static/translatableTexts";
 import { CurrentUserContext } from "./system/AuthenticationFrame";
 import { LoadingFrame } from "./system/LoadingFrame";
 import { QuesitionView } from "./QuestionView";
-import { EpistoButton } from "./universal/EpistoButton";
+import { EpistoButton } from "./controls/EpistoButton";
 import { EpistoConinImage } from "./universal/EpistoCoinImage";
 import { useAnswerPractiseQuestion, usePractiseQuestion } from "../services/api/questionApiService";
 import { useCurrentCourseItemCode } from "../services/api/miscApiService";

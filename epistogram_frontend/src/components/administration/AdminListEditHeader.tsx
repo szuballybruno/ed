@@ -1,11 +1,11 @@
 import { Flex } from "@chakra-ui/layout"
 import { Close } from "@mui/icons-material"
 import { ButtonType } from "../../models/types"
+import { EpistoButton } from "../controls/EpistoButton"
 import { EpistoCheckbox } from "../controls/EpistoCheckbox"
 import { EpistoFont } from "../controls/EpistoFont"
-import { EpistoButton } from "../universal/EpistoButton"
-import { EpistoSearch } from "../universal/EpistoSearch"
-import { EpistoSelect } from "../universal/EpistoSelect"
+import { EpistoSearch } from "../controls/EpistoSearch"
+import { EpistoSelect } from "../controls/EpistoSelect"
 import { BulkEditButtons, BulkEditButtonType } from "./BulkEditButtons"
 
 export const AdminListEditHeader = (props: {

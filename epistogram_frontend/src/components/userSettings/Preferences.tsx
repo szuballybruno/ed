@@ -7,12 +7,12 @@ import { showNotification, useShowErrorDialog } from '../../services/core/notifi
 import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { LoadingFrame } from '../system/LoadingFrame';
-import { EpistoButton } from '../universal/EpistoButton';
+import { EpistoButton } from '../controls/EpistoButton';
 import { SelectImage } from '../universal/SelectImage';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useSaveUserSimple } from '../../services/api/userApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
-import { EpistoEntry } from '../universal/EpistoEntry';
+import { EpistoEntry } from '../controls/EpistoEntry';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 

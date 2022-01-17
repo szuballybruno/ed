@@ -4,8 +4,8 @@ import React from 'react';
 import { CourseLearningDTO } from "../../models/shared_models/CourseLearningDTO";
 import { useNavigation } from "../../services/core/navigatior";
 import { formatTimespan, getAssetUrl, roundNumber } from "../../static/frontendHelpers";
-import { EpistoButton } from "../universal/EpistoButton";
-import { FlexFloat } from "../universal/FlexFloat";
+import { EpistoButton } from "../controls/EpistoButton";
+import { FlexFloat } from "../controls/FlexFloat";
 
 const SmallStat = (props: { iconUrl: string, text: string }) => {
 
@@ -175,11 +175,6 @@ export const LearningCourseStatsTile = (props: {
                 <SmallStat
                     iconUrl={getAssetUrl("images/rightanswerontile3D.png")}
                     text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
-
-                {/* final exam  
-                <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_test.svg")}
-                    text={finalExamSuccessRate ? finalExamSuccessRate + "%" : "Nincs kitöltve"} />*/}
             </Flex>
 
             {/* course progress bar chart */}
@@ -202,25 +197,6 @@ export const LearningCourseStatsTile = (props: {
                 </Flex>
 
             </Flex>
-
-            {/* more stats 
-            <Flex
-                align={"center"}
-                mt={7}
-                justify="space-evenly">
-
-                <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_progress.svg")}
-                    text={`${progressPercentage}%-os haladás`} />
-
-                <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_achivement.svg")}
-                    text={`Video kerdes atlag ${questionSuccessRate}%`} />
-
-                <SmallStat
-                    iconUrl={getAssetUrl("course_exam_tile_icons/tile_achivement.svg")}
-                    text={`Vizsga atlag ${examSuccessRateAverage}%`} />
-            </Flex>*/}
         </Flex>
 
         {/* buttons */}

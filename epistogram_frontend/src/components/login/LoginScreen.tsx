@@ -5,13 +5,13 @@ import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { useLogInUser } from "../../services/api/authenticationApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
-import { getAssetUrl, TypedError, useIsScreenWiderThan } from "../../static/frontendHelpers";
+import { getAssetUrl, useIsScreenWiderThan } from "../../static/frontendHelpers";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoEntry } from "../controls/EpistoEntry";
 import { useEpistoDialogLogic } from "../EpistoDialog";
+import { PageRootContainer } from "../PageRootContainer";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { LoadingFrame } from "../system/LoadingFrame";
-import { PageRootContainer } from "../system/MainPanels";
-import { EpistoButton } from "../universal/EpistoButton";
-import { EpistoEntry } from "../universal/EpistoEntry";
 import { LoginPasswordResetDialog } from "./LoginPasswordResetDialog";
 
 const LoginScreen = () => {

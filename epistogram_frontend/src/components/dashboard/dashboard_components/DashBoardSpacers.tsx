@@ -2,7 +2,7 @@ import { Flex, FlexProps } from '@chakra-ui/layout';
 import { PlayArrow } from '@mui/icons-material';
 import { Divider, Typography } from "@mui/material";
 import React from 'react';
-import { EpistoButton } from '../../universal/EpistoButton';
+import { EpistoButton } from '../../controls/EpistoButton';
 import classes from "./dashBoardSpacers.module.scss";
 
 export const DashoardLeftItemGroup = (props:

@@ -6,8 +6,8 @@ import { usePurchaseShopItem } from "../../services/api/shopApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { usePaging } from "../../static/frontendHelpers";
+import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
-import { EpistoButton } from "../universal/EpistoButton";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 
 export const ShopPurchaseConfirmationDialog = (props: {

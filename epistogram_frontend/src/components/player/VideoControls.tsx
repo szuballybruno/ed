@@ -7,7 +7,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import { Fullscreen, Pause, PlayArrow } from '@mui/icons-material';
 import { Slider, Typography } from '@mui/material';
 import { secondsToTime } from '../../static/frontendHelpers';
-import { EpistoButton } from '../universal/EpistoButton';
+import { EpistoButton } from '../controls/EpistoButton';
 
 export const VideoControls = (props: {
     controlsVisible: boolean,

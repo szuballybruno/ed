@@ -4,7 +4,7 @@ import React from 'react';
 import { useUserCourseData } from "../../services/api/courseApiService";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { DashboardSection } from "../universal/DashboardSection";
-import { EpistoGrid } from "../universal/EpistoGrid";
+import { EpistoGrid } from "../controls/EpistoGrid";
 import { LearningCourseStatsTile } from "./LearningCourseStatsTile";
 
 export const LearningCourseStats = () => {

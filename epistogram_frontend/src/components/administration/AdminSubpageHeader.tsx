@@ -9,10 +9,10 @@ import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
 import { ApplicationRoute, ButtonType } from "../../models/types";
 import { useNavigation } from "../../services/core/navigatior";
-import { EpistoButton } from "../universal/EpistoButton";
 import { useCourseBriefData } from "../../services/api/courseApiService";
 import { useBriefUserData } from "../../services/api/userApiService";
 import { useShopItemBriefData } from "../../services/api/shopApiService";
+import { EpistoButton } from "../controls/EpistoButton";
 
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: ApplicationRoute[],

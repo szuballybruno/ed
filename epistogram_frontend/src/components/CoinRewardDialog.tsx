@@ -4,7 +4,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import { Typography } from "@mui/material";
 import { getAssetUrl } from "../static/frontendHelpers";
 import { EpistoDialog, EpistoDialogLogicType } from "./EpistoDialog";
-import { EpistoButton } from "./universal/EpistoButton";
+import { EpistoButton } from "./controls/EpistoButton";
 
 export const CoinRewardDialog = (props: {
     coinRewardAmount: number,

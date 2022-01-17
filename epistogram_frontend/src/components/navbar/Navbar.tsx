@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { useCurrentCourseItemCode } from "../../services/api/miscApiService";
 import { getAssetUrl, useIsDesktopView } from "../../static/frontendHelpers";
-import { FlexFloat } from "../universal/FlexFloat";
+import { FlexFloat } from "../controls/FlexFloat";
 import DesktopNavbar from "./DesktopNavbar";
 import classes from "./navbar.module.scss";
 

@@ -2,8 +2,8 @@ import { Flex, useMediaQuery } from "@chakra-ui/react";
 import { Typography, Checkbox } from "@mui/material";
 import { prototype } from "events";
 import { getAssetUrl } from "../../static/frontendHelpers";
-import { EpistoButton } from "../universal/EpistoButton";
-import { EpistoEntry } from "../universal/EpistoEntry";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoEntry } from "../controls/EpistoEntry";
 
 export const PreventMobileFrame = (props) => {
 

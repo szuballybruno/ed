@@ -7,9 +7,9 @@ import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { getAssetUrl } from "../static/frontendHelpers";
 import { LoadingFrame } from "./system/LoadingFrame";
-import { PageRootContainer } from "./system/MainPanels";
-import { EpistoButton } from "./universal/EpistoButton";
-import { EpistoEntry } from "./universal/EpistoEntry";
+import { PageRootContainer } from "./PageRootContainer";
+import { EpistoButton } from "./controls/EpistoButton";
+import { EpistoEntry } from "./controls/EpistoEntry";
 
 export const RegisterViaActivationCodePage = () => {
 

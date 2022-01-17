@@ -9,12 +9,12 @@ import { AnswerEditDTO } from "../../../models/shared_models/AnswerEditDTO";
 import { getVirtualId } from "../../../services/core/idService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { LoadingFrame } from "../../system/LoadingFrame";
-import { EpistoButton } from "../../universal/EpistoButton";
-import { EpistoEntry } from "../../universal/EpistoEntry";
+import { EpistoEntry } from "../../controls/EpistoEntry";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { useEditQuestionData, useSaveQuestion } from "../../../services/api/questionApiService";
+import { EpistoButton } from "../../controls/EpistoButton";
 
 export const EditQuestionSubpage = () => {
 

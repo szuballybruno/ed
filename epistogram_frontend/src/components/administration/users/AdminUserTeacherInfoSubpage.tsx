@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Checkbox, Slider, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -6,9 +6,9 @@ import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { TeacherBadgeNameType } from "../../../models/shared_models/types/sharedTypes";
 import { useSaveTeacherInfoData, useTeacherInfoEditData } from "../../../services/api/teacherInfoApiService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { EpistoButton } from "../../universal/EpistoButton";
-import { EpistoEntry } from "../../universal/EpistoEntry";
-import { EpistoLabel } from "../../universal/EpistoLabel";
+import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoEntry } from "../../controls/EpistoEntry";
+import { EpistoLabel } from "../../controls/EpistoLabel";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const AdminUserTeacherInfoSubpage = () => {

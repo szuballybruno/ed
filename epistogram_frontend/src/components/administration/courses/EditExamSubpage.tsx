@@ -14,11 +14,11 @@ import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { DragAndDropList } from "../../universal/DragAndDropList";
-import { EpistoButton } from "../../universal/EpistoButton";
-import { EpistoEntry } from "../../universal/EpistoEntry";
-import { EpistoLabel } from "../../universal/EpistoLabel";
+import { EpistoEntry } from "../../controls/EpistoEntry";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoLabel } from "../../controls/EpistoLabel";
 
 export const EditExamSubpage = () => {
 

@@ -5,8 +5,8 @@ import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultD
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { showNotification } from "../services/core/notifications";
 import { getAssetUrl } from "../static/frontendHelpers";
+import { EpistoText } from "./controls/EpistoText";
 import { LoadingFramePropsType } from "./system/LoadingFrame";
-import { EpistoText } from "./universal/EpistoText";
 import { QuestionnaierAnswer } from "./universal/QuestionnaireAnswer";
 import { QuestionnaireLayout } from "./universal/QuestionnaireLayout";
 

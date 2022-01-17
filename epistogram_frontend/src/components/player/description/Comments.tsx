@@ -3,7 +3,7 @@ import { Flex } from "@chakra-ui/react";
 import { Avatar, Divider, Grid, Paper } from "@mui/material";
 import React from 'react';
 import { getAssetUrl } from "../../../static/frontendHelpers";
-import { EpistoButton } from "../../universal/EpistoButton";
+import { EpistoButton } from "../../controls/EpistoButton";
 
 const Comments = () => {
     return (

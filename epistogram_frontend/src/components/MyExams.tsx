@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/layout";
 import { DashboardSection } from "./universal/DashboardSection";
-import { EpistoGrid } from "./universal/EpistoGrid";
+import { EpistoGrid } from "./controls/EpistoGrid";
 import { ExamTile } from "./universal/ExamTile";
 
 const finisedExams = [

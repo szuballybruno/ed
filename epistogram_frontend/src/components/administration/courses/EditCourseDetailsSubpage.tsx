@@ -12,13 +12,13 @@ import { showNotification, useShowErrorDialog } from "../../../services/core/not
 import { iterate } from "../../../static/frontendHelpers";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { CourseImprovementStatsRadar } from "../../universal/CourseImprovementStatsRadar";
-import { EpistoEntry } from "../../universal/EpistoEntry";
-import { EpistoLabel } from "../../universal/EpistoLabel";
-import { EpistoSelect } from "../../universal/EpistoSelect";
+import { EpistoEntry } from "../../controls/EpistoEntry";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "./EditSection";
 import { SimpleEditList } from "../SimpleEditList";
+import { EpistoLabel } from "../../controls/EpistoLabel";
+import { EpistoSelect } from "../../controls/EpistoSelect";
 
 export const AdminCourseDetailsSubpage = () => {
 

@@ -7,8 +7,8 @@ import { ShopItemAdminShortDTO } from "../../../models/shared_models/ShopItemAdm
 import { useAdminShopItems, useCreateShopItem } from "../../../services/api/shopApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
+import { EpistoButton } from "../../controls/EpistoButton";
 import { LoadingFrame } from "../../system/LoadingFrame";
-import { EpistoButton } from "../../universal/EpistoButton";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { AdminListEditHeader } from "../AdminListEditHeader";

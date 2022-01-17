@@ -6,11 +6,11 @@ import React, { useState } from 'react';
 import { useRequestPasswordChange } from "../../services/api/passwordChangeApiService";
 import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
 import { getEventValueCallback } from "../../static/frontendHelpers";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoLabel } from "../controls/EpistoLabel";
+import { FlexFloat } from "../controls/FlexFloat";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
 import { EpistoHeader } from "../EpistoHeader";
-import { EpistoButton } from "../universal/EpistoButton";
-import { EpistoLabel } from "../universal/EpistoLabel";
-import { FlexFloat } from "../universal/FlexFloat";
 
 export const LoginPasswordResetDialog = (params: {
     passwordResetDialogLogic: EpistoDialogLogicType

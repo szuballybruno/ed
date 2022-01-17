@@ -5,10 +5,10 @@ import React from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoButton } from "../universal/EpistoButton";
-import { FlexFloat } from "../universal/FlexFloat";
 import StarsIcon from '@mui/icons-material/Stars';
 import { useNavigation } from "../../services/core/navigatior";
+import { EpistoButton } from "../controls/EpistoButton";
+import { FlexFloat } from "../controls/FlexFloat";
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,

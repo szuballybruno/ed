@@ -2,9 +2,8 @@ import { Flex } from "@chakra-ui/layout";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Typography } from "@mui/material";
 import { ModuleDetailedDTO } from "../../models/shared_models/ModuleDetailedDTO";
+import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoHeader } from "../EpistoHeader";
-import { EpistoButton } from "../universal/EpistoButton";
-import { Image } from "@chakra-ui/react";
 
 export const ModuleView = (params: {
     module?: ModuleDetailedDTO,

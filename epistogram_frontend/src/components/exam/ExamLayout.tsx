@@ -3,7 +3,7 @@ import { ArrowForward } from "@mui/icons-material";
 import { LinearProgress, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
 import { isString } from "../../static/frontendHelpers";
-import { EpistoButton } from "../universal/EpistoButton";
+import { EpistoButton } from "../controls/EpistoButton";
 
 export const ExamLayout = (props: {
     children: ReactNode,

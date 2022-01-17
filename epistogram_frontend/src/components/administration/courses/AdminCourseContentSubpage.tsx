@@ -18,13 +18,13 @@ import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiSe
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../static/frontendHelpers";
+import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoSearch } from "../../controls/EpistoSearch";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { EpistoHeader } from "../../EpistoHeader";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { CollapseItem } from "../../universal/CollapseItem";
 import { DragAndDropContext, DragItem, DropZone } from "../../universal/DragAndDrop";
-import { EpistoButton } from "../../universal/EpistoButton";
-import { EpistoSearch } from "../../universal/EpistoSearch";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseEditItemView } from "./CourseEditItemView";
 
