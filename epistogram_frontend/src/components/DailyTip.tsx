@@ -98,6 +98,7 @@ export const DailyTip = (props: {} & FlexProps) => {
         <Flex
             direction="column"
             align="center"
+            justify="center"
             flex="1"
             p="10px"
             fontSize="13px">

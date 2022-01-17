@@ -16,6 +16,7 @@ import { EpistoButton } from "../universal/EpistoButton";
 import { EpistoPopper } from "../universal/EpistoPopper";
 import NavbarButton from "../universal/NavbarButton";
 import { useLogout } from "../../services/api/authenticationApiService";
+import { currentVersion } from "../../static/Environemnt";
 
 const menuItems = [
     applicationRoutes.homeRoute,
@@ -371,6 +372,18 @@ const DesktopNavbar = (props: {
                             </Flex>
                         </EpistoButton>
                     })}
+                {/* version */}
+                <Typography
+                    style={{
+                        zIndex: 3,
+                        color: "gray",
+                        background: "white",
+                        padding: "5px",
+                        marginTop: "20px"
+                    }}
+                    className="fontMid">
+                    Verzió: {currentVersion ?? "1999.01.01.01:01"}
+                </Typography>
             </EpistoPopper>
         </Flex >
     );

@@ -18,16 +18,16 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
         direction="column"
         align="flex-start">
 
-        {/* course requirements description title */}
+        {/* course requirements description title 
         <EpistoHeader
             type="strong"
             text={translatableTexts.courseDetails.requirementsSection.whenTheCourseGoodForYou}
             my={10} />
 
-        {/* course requirements description */}
+         course requirements description 
         <Typography>
             {mockCourseDetails.lorem}
-        </Typography>
+        </Typography>*/}
 
         {/* technical requirements title */}
         <EpistoHeader

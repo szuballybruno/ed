@@ -10,6 +10,7 @@ import { useCourseDetails } from "../../services/api/courseApiService";
 const SmallStat = (props: { iconUrl: string, text: string }) => {
 
     return <Flex
+        title="Kurzus adatok"
         align="center"
         mr={5}>
 

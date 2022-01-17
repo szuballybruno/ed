@@ -44,7 +44,7 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
                                         src={getAssetUrl("images/videosdatasheetd3D.png")}
                                         alt={""}
                                         className="square50"
-                                        style={{ marginRight: '10px' }} />
+                                        style={{ margin: '10px', objectFit: "contain" }} />
 
                                     {/* name */}
                                     <Typography

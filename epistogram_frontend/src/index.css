@@ -66,8 +66,12 @@
   font-size: 14px !important;
 }
 
-.fontLarge {
+.font15 {
   font-size: 15px !important;
+}
+
+.fontLarge {
+  font-size: 17px !important;
 }
 
 .fontHuge {

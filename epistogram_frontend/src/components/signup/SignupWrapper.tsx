@@ -3,6 +3,7 @@ import { ArrowBack } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { getAssetUrl, hasValue, isString, useIsDesktopView } from "../../static/frontendHelpers";
+import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
 import { EpistoButton } from "../universal/EpistoButton";
 import classes from "./signupWrapper.module.scss";
@@ -138,6 +139,7 @@ export const SignupWrapper = (props: {
                     {/* title */}
                     {hasTitle && <EpistoHeader
                         variant="strongSub"
+                        type="strong"
                         m="10px 10px 10px 0px"
                         alignSelf={hasImage ? "flex-start" : "center"}
                         text={title!}
@@ -148,9 +150,9 @@ export const SignupWrapper = (props: {
                     {hasDescription && <Box maxWidth="400px">
                         {
                             isString(description!)
-                                ? <Typography>
+                                ? <EpistoFont isMultiline classes={["fontMid"]}>
                                     {description!}
-                                </Typography>
+                                </EpistoFont>
                                 : description
                         }
                     </Box>}

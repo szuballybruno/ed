@@ -5,12 +5,16 @@ export const EpistoFont = (params: {
     children: ReactNode,
     classes?: string[],
     style?: CSSProperties,
+    isMultiline?: boolean
 }) => {
 
-    const { classes, style, children } = params;
+    const { classes, style, isMultiline, children } = params;
 
     return <p
-        style={style}
+        style={{
+           whiteSpace: isMultiline ? "pre-line" : undefined,
+           ...style
+        }}
         className={`${styles["episto-font-main"]} ${classes?.join(" ")}`}>
 
         {children}
