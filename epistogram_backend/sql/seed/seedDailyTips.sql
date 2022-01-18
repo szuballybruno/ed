@@ -11,13 +11,15 @@ VALUES
 );
 	
 -- 	insert new daily tip
-INSERT INTO public."daily_tip" 
+INSERT INTO public.daily_tip 
 (
     description,
-    video_file_id
+    video_file_id,
+    personality_trait_category_id
 )
 VALUES 
 (
     'daily tip desc',
-    16
+    16,
+    1
 );

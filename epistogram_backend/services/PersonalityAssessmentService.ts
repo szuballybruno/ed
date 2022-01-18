@@ -1,17 +1,23 @@
+import { DailyTip } from "../models/entity/DailyTip";
+import { PersonalityTraitCategory } from "../models/entity/PersonalityTraitCategory";
 import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
 import { PersonalityCategoryTraitDTO } from "../models/shared_models/PersonalityCategoryTraitDTO";
 import { PersonalityChartDataDTO } from "../models/shared_models/PersonalityChartDataDTO";
+import { PersonalityTraitCategoryShortDTO } from "../models/shared_models/PersonalityTraitCategoryShortDTO";
 import { PersonalityTraitDataDTO } from "../models/shared_models/PersonalityTraitDataDTO";
 import { PersonalityTraitView } from "../models/views/PersonalityTraitView";
+import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class PersonalityAssessmentService {
 
     private _ormService: ORMConnectionService;
+    private _mapperService: MapperService;
 
-    constructor(ormService: ORMConnectionService) {
+    constructor(ormService: ORMConnectionService, mapperService: MapperService) {
 
         this._ormService = ormService;
+        this._mapperService = mapperService;
     }
 
     /**
@@ -32,7 +38,7 @@ export class PersonalityAssessmentService {
     }
 
     /**
-     * Returns the personality trait views for a specified user
+     * Returns personality trait views for a specified user
      * 
      * @param userId 
      * @returns 
@@ -46,6 +52,46 @@ export class PersonalityAssessmentService {
                     userId: userId,
                 }
             });
+    }
+
+    /**
+     * Return the personality trait category with details, like tips etc.
+     * 
+     * @param personalityTraitCategoryId 
+     */
+    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: any) {
+
+        const category = await this._ormService
+            .getRepository(PersonalityTraitCategory)
+            .findOneOrFail({
+                where: {
+                    id: personalityTraitCategoryId
+                }
+            });
+
+        const tips = await this._ormService
+            .getRepository(DailyTip)
+            .find({
+                where: {
+                    personalityTraitCategoryId
+                }
+            });
+
+        return this._mapperService
+            .map(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, category, tips);
+    }
+
+    /**
+     * Returns all of the personality trait categories.
+     */
+    async getPersonalityTraitCategoriesAsync() {
+
+        const categories = await this._ormService
+            .getRepository(PersonalityTraitCategory)
+            .find();
+
+        return this._mapperService
+            .mapMany(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, categories);
     }
 
     /**

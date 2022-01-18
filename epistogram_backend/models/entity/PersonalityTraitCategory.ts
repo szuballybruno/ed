@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { DailyTip } from "./DailyTip";
 import { Question } from "./Question";
 
 @Entity()
@@ -26,4 +27,9 @@ export class PersonalityTraitCategory {
     @OneToMany(_ => Question, x => x.personalityTraitCategory)
     @JoinColumn()
     questions: Question[];
+
+    // daily tips 
+    @OneToMany(_ => DailyTip, x => x.personalityTraitCategory)
+    @JoinColumn()
+    tips: DailyTip[];
 }

@@ -40,6 +40,11 @@ export const apiRoutes = {
         loginUser: "/authentication/login-user",
     },
 
+    personalityAssessment: {
+        getPersonalityTraitCategories: "/personalityassessment/get-personality-trait-categories",
+        getPersonalityTraitCategoryDetails: "/personalityassessment/get-personality-trait-category-details"
+    },
+
     shop: {
         getShopItems: "/shop/get-shop-items",
         getShopItemCategories: "/shop/get-shop-items-categories",

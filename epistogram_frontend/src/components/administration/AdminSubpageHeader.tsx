@@ -18,10 +18,11 @@ export const AdminSubpageHeader = (props: {
     tabMenuItems?: ApplicationRoute[],
     children?: ReactNode,
     onSave?: () => void,
-    headerButtons?: ButtonType[]
+    headerButtons?: ButtonType[],
+    subRouteLabel?: string
 } & FlexProps) => {
 
-    const { children, headerButtons, tabMenuItems, onSave, ...css } = props;
+    const { children, subRouteLabel, headerButtons, tabMenuItems, onSave, ...css } = props;
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
@@ -41,7 +42,10 @@ export const AdminSubpageHeader = (props: {
     const { courseBriefData } = useCourseBriefData(courseId);
     const { shopItemBriefData } = useShopItemBriefData(shopItemId);
 
-    const subRouteName = (briefUserData?.fullName || courseBriefData?.title || shopItemBriefData?.name);
+    const subRouteName = subRouteLabel
+        ? subRouteLabel
+        : (briefUserData?.fullName || courseBriefData?.title || shopItemBriefData?.name);
+
     const subRoute = subRouteName
         ? { title: subRouteName! }
         : null;

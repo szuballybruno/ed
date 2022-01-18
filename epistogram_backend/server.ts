@@ -73,6 +73,7 @@ import { LoggerService } from './services/LoggerService';
 import { HashService } from './services/HashService';
 import { VideoRatingService } from './services/VideoRatingService';
 import { VideoRatingController } from './api/VideoRatingController';
+import { PersonalityAssessmentController } from './api/PersonalityAssessmentController';
 
 (async () => {
 
@@ -122,7 +123,7 @@ import { VideoRatingController } from './api/VideoRatingController';
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, vpss, coinAcquireService, userSessionActivityService, mapperService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService);
-    const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService);
+    const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
 
     // controllers 
@@ -145,6 +146,7 @@ import { VideoRatingController } from './api/VideoRatingController';
     const teacherInfoController = new TeacherInfoController(teacherInfoService);
     const passwordChangeController = new PasswordChangeController(passwordChangeService);
     const videoRatingController = new VideoRatingController(videoRatingService);
+    const personalityAssessmentController = new PersonalityAssessmentController(personalityAssessmentService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -183,6 +185,10 @@ import { VideoRatingController } from './api/VideoRatingController';
     // teacher info
     addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true, authorize: ["administrator"] });
+
+    // personality assessment 
+    addEndpoint(apiRoutes.personalityAssessment.getPersonalityTraitCategories, personalityAssessmentController.getPersonalityTraitCategoriesAction);
+    addEndpoint(apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails, personalityAssessmentController.getPersonalityTraitCategoryDetailsAction);
 
     // shop 
     addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
