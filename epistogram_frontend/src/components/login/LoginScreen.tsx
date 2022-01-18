@@ -8,6 +8,7 @@ import { useShowErrorDialog } from "../../services/core/notifications";
 import { getAssetUrl, useIsScreenWiderThan } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoEntry } from "../controls/EpistoEntry";
+import { EpistoFont } from "../controls/EpistoFont";
 import { useEpistoDialogLogic } from "../EpistoDialog";
 import { PageRootContainer } from "../PageRootContainer";
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
@@ -193,9 +194,10 @@ const LoginScreen = () => {
                             width="100%"
                             alignItems="flex-start">
 
-                            <Typography fontSize={"1.2rem"}>
+                            <EpistoFont fontSize={"fontLargePlus"}>
+
                                 Örülünk, hogy ismét itt vagy velünk!
-                            </Typography>
+                            </EpistoFont>
 
                         </Flex>
 
@@ -223,21 +225,23 @@ const LoginScreen = () => {
                                 type="reset"
                                 onClick={() => passwordResetDialogLogic.openDialog()}>
 
-                                <Typography
-                                    className="fontSmall fontGrey"
+                                <EpistoFont
+                                    fontSize="fontSmall"
+                                    classes={["fontGrey"]}
                                     style={{
                                         textTransform: "none",
-                                        marginTop: "5px"
+                                        marginTop: "5px",
+                                        fontWeight: 400
                                     }}>
 
                                     Elfelejtettem a jelszavam
-                                </Typography>
+                                </EpistoFont>
                             </EpistoButton>
 
                             {/* error msg */}
-                            <Typography style={{ color: "var(--mildRed)" }}>
+                            <EpistoFont style={{ color: "var(--mildRed)" }}>
                                 {errorMessage}
-                            </Typography>
+                            </EpistoFont>
                         </Box>
 
                         <EpistoButton
@@ -249,9 +253,9 @@ const LoginScreen = () => {
                                 marginBottom: 15,
                                 width: "100%",
                                 backgroundColor: "var(--deepBlue)"
-                            }} 
+                            }}
                             onClick={handleLoginUserAsync}>
-                                
+
                             Bejelentkezés
                         </EpistoButton>
 
@@ -260,20 +264,20 @@ const LoginScreen = () => {
                             justifyContent={"space-between"}
                             width="100%">
 
-                            <Typography fontSize="13px">
+                            <EpistoFont fontSize="fontSmall">
                                 Még nincs hozzáférésed?
-                            </Typography>
+                            </EpistoFont>
 
-                            <Typography
+                            <EpistoFont
                                 onClick={() => navigate("/register-via-activation-code")}
-                                textAlign={"right"}
-                                fontSize="13px"
+                                fontSize="fontSmall"
                                 style={{
-                                    color: "--deepBlue"
+                                    color: "--deepBlue",
+                                    textAlign: "right"
                                 }}>
 
                                 Aktiváld a PCWorld Ultimate kódodat az alábbi oldalon
-                            </Typography>
+                            </EpistoFont>
                         </Flex>
                     </Flex>
                 </Flex>

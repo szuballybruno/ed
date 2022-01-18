@@ -3,6 +3,7 @@ import React from 'react';
 
 export const CourseVideoList = (props: { courseId: string }) => {
 
+    // TODO: Remove. It is not used anywhere
     return <Box>WIP</Box>;
     // const admin = useState(adminSideState)
 
