@@ -20,36 +20,19 @@ export const PersonalityAssessment = (props: FlexProps) => {
         personalityDataState
     } = usePersonalityData();
 
-    const descriptions = personalityData?.personalityDescriptions;
-
     const ref = useRef<HTMLButtonElement>(null);
 
     const [isShowHelperPopper, setIsShowHelperPopper] = useState(false);
 
-    const personalityDescriptionAccordions = [
-        {
-            title: "Egyedül, vagy csoportosan tanulsz szívesebben?",
-            description: descriptions?.category1
-        },
-        {
-            title: "Térben vizualizálsz, vagy inkább hangosan kimondod az információt?",
-            description: descriptions?.category2
-        },
-        {
-            title: "Gyakorlati vagy elméleti oldalról érdekel inkább egy-egy adott probléma?",
-            description: descriptions?.category3
-        },
-        {
-            title: "Hallás, vagy látás után jegyzel meg könnyebben valamit?",
-            description: descriptions?.category4
-        },
-        {
-            title: "Kreatív, vagy analitikus gondolkodást részesítesz előnyben?",
-            description: descriptions?.category5
-        }
-    ]
+    const personalityDescriptionAccordions = (personalityData?.personalityTraitCategories ?? [])
+        .map(x => ({
+            title: x.categoryTitle,
+            description: x.activeDescription
+        }));
 
-    const [descriptionAccordionsState, setDescriptionAccordionsState] = useState([0])
+    const [openAccordions, setOpenAccordions] = useState([0])
+
+    const allOrAllButOneAccordionsClosed = openAccordions.length <= 1;
 
     return <LoadingFrame
         loadingState={personalityDataState}
@@ -148,46 +131,62 @@ export const PersonalityAssessment = (props: FlexProps) => {
                             flex: 1
                         }}
                         onClick={() => {
-                            descriptionAccordionsState.length <= 1 ?
-                                setDescriptionAccordionsState([0, 1, 2, 3, 4]) :
-                                setDescriptionAccordionsState([0])
+
+                            // open all 
+                            if (allOrAllButOneAccordionsClosed) {
+
+                                setOpenAccordions(personalityDescriptionAccordions
+                                    .map((_, index) => index))
+                            }
+
+                            // close all 
+                            else {
+
+                                setOpenAccordions([0])
+                            }
                         }}>
 
-                        {descriptionAccordionsState.length <= 1 ? "Összes kibontása" : "Összecsukás"}
+                        {allOrAllButOneAccordionsClosed
+                            ? "Összes kibontása"
+                            : "Összecsukás"}
                     </EpistoButton>
                 </Flex>
 
 
-                <Accordion defaultIndex={[0, 1, 2, 3, 4]} index={descriptionAccordionsState}>
+                <Accordion
+                    index={openAccordions}>
 
-                    {personalityDescriptionAccordions.map((item, index) => {
+                    {personalityDescriptionAccordions
+                        .map((item, index) => {
 
-                        return <AccordionItem
-                            className="roundBorders mildShadow"
-                            p="10px 10px"
-                            mb="10px"
-                            background="var(--transparentWhite70)"
-                            onClick={() => {
-                                setDescriptionAccordionsState([index])
-                            }}>
+                            return <AccordionItem
+                                className="roundBorders mildShadow"
+                                p="10px 10px"
+                                mb="10px"
+                                background="var(--transparentWhite70)"
+                                onClick={() => {
+                                    setOpenAccordions([index])
+                                }}>
 
-                            <AccordionButton>
+                                {/* header */}
+                                <AccordionButton>
 
-                                <Box flex='1' fontWeight="500" fontSize="15px" textAlign='left'>
-                                    {item.title}
-                                </Box>
+                                    <Box flex='1' fontWeight="500" fontSize="15px" textAlign='left'>
+                                        {item.title}
+                                    </Box>
 
-                                <AccordionIcon />
-                            </AccordionButton>
+                                    <AccordionIcon />
+                                </AccordionButton>
 
-                            <AccordionPanel pb={4} mt="10px" fontSize="13px">
+                                {/* content  */}
+                                <AccordionPanel pb={4} mt="10px" fontSize="13px">
 
-                                {item.description}
-                            </AccordionPanel>
-                        </AccordionItem>
-                    })}
+                                    {item.description}
+                                </AccordionPanel>
+                            </AccordionItem>
+                        })}
                 </Accordion>
             </Flex>
         </Flex>
-    </LoadingFrame>
+    </LoadingFrame >
 }

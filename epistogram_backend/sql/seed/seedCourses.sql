@@ -49,10 +49,10 @@ VALUES
         3.5,
         7842,
         'magyar',
-        'Windows vagy Mac operacios rendszer, Alma, Barack',
+        'Windows vagy Mac operacios rendszer | Alma | Barack',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique suscipit tempor. Pellentesque dictum, augue a egestas faucibus, augue ipsum vehicula dui, faucibus eleifend risus orci quis ante. Curabitur porttitor fringilla blandit. Suspendisse placerat tempus vehicula. In dignissim tellus magna. Donec non tincidunt risus. Morbi sit amet turpis dolor. Proin vulputate leo eu leo bibendum, in condimentum ex efficitur. Maecenas risus sem, pharetra eu magna vel, gravida luctus urna. Sed diam urna, blandit id justo a, consectetur lacinia risus. Donec porttitor, sem vitae posuere lacinia, mauris libero sagittis dui, non viverra purus lectus ut urna. Pellentesque semper, eros ac maximus vehicula, orci odio tempor magna, vel rutrum nisi nisl id mauris. Cras ullamcorper lacus elementum venenatis feugiat. Donec magna dui, vulputate ac massa ut, placerat imperdiet mauris. Fusce pellentesque ipsum nunc, eu lobortis libero porttitor id. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc tempor euismod erat, finibus commodo felis mollis a. Ut rhoncus convallis sem, in varius tortor dapibus et. Donec ultricies accumsan neque, eget bibendum ante fringilla sed.',
-        'Alapvető műveletek elvégzése, Grafikai elemek használata, Grafikonok és diagramok létrehozása, Táblázatok, munkalapok kezelése, Függvényekkel való munkavégzés, Riportok készítése',
-        'Egyeduli: 1, Hangos kimondas: 2, Elmeleti: 4, Vizualis alapu: 2, Analitikus: 5, Szocialis: 7, Terbeli elhelyezes: 8, Gyakorlati: 3, Audio alapu: 7, Kreativ: 9',
+        'Alapvető műveletek elvégzése | Grafikai elemek használata | Grafikonok és diagramok létrehozása | Táblázatok | munkalapok kezelése | Függvényekkel való munkavégzés | Riportok készítése',
+        'Egyeduli: 1 | Hangos kimondas: 2 | Elmeleti: 4 | Vizualis alapu: 2 | Analitikus: 5 | Szocialis: 7 | Terbeli elhelyezes: 8 | Gyakorlati: 3 | Audio alapu: 7 | Kreativ: 9',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique suscipit tempor. Pellentesque dictum, augue a egestas faucibus, augue ipsum vehicula dui, faucibus eleifend risus orci quis ante. Curabitur porttitor fringilla blandit. Suspendisse placerat tempus vehicula. In dignissim tellus magna. Donec non tincidunt risus. Morbi sit amet turpis dolor. Proin vulputate leo eu leo bibendum, in condimentum ex efficitur. Maecenas risus sem, pharetra eu magna vel, gravida luctus urna. Sed diam urna, blandit id justo a, consectetur lacinia risus.'
     ),
     (
@@ -69,10 +69,10 @@ VALUES
         3.5,
         2314,
         'magyar',
-        'Windows vagy Mac operacios rendszer, Alma, Barack',
+        'Windows vagy Mac operacios rendszer | Alma | Barack',
         '',
-        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt',
-        'reflex: 1, figyelem: 2',
+        'Megtanulhatsz ezt | Megtanulhatsz azt | Megtanulhatsz amazt',
+        'reflex: 1 | figyelem: 2',
         ''
     ),
     (
@@ -89,10 +89,10 @@ VALUES
         3.5,
         321,
         'magyar',
-        'Windows vagy Mac operacios rendszer, Alma, Barack',
+        'Windows vagy Mac operacios rendszer | Alma | Barack',
         '',
-        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt',
-        'reflex: 1, figyelem: 2',
+        'Megtanulhatsz ezt | Megtanulhatsz azt | Megtanulhatsz amazt',
+        'reflex: 1 | figyelem: 2',
         ''
     ),
     (
@@ -109,10 +109,10 @@ VALUES
         3.5,
         1482,
         'magyar',
-        'Windows vagy Mac operacios rendszer, Alma, Barack',
+        'Windows vagy Mac operacios rendszer | Alma | Barack',
         '',
-        'Megtanulhatsz ezt, Megtanulhatsz azt, Megtanulhatsz amazt',
-        'reflex: 1, figyelem: 2',
+        'Megtanulhatsz ezt | Megtanulhatsz azt | Megtanulhatsz amazt',
+        'reflex: 1 | figyelem: 2',
         ''
     )
 

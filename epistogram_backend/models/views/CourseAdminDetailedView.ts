@@ -32,6 +32,9 @@ export class CourseAdminDetailedView {
     humanSkillBenefitsDescription: string;
 
     @ViewColumn()
+    technicalRequirementsDescription: string;
+
+    @ViewColumn()
     visibility: CourseVisibilityType;
 
     @ViewColumn()

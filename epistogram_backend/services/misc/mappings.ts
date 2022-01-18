@@ -223,6 +223,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 visibility: view.visibility,
                 teacherId: view.teacherId,
                 humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
+                technicalRequirementsDescription: view.technicalRequirementsDescription,
 
                 skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
                 technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
@@ -730,9 +731,19 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 }
 
+const separationChar = "|";
+
+export const createCharSeparatedList = (list: string[]) => {
+
+    return list.join(` ${separationChar} `);
+}
+
 const parseCommaSeparatedStringList = (str: string) => {
 
-    return (str ?? "").split(",").map(x => x.trim());
+    return (str ?? "")
+        .split(separationChar)
+        .map(x => x
+            .trim());
 }
 
 const parseSkillBenefits = (str: string) => {
@@ -741,7 +752,7 @@ const parseSkillBenefits = (str: string) => {
         return [];
 
     return (str ?? "")
-        .split(',')
+        .split(separationChar)
         .map(x => {
 
             const trimmed = x.trim();

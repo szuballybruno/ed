@@ -1,9 +1,11 @@
 import ReactECharts, { EChartsOption } from 'echarts-for-react';
 import React from "react";
 import wrap from 'word-wrap';
-import { PersonalityDataDTO } from "../../models/shared_models/PersonalityDataDTO";
+import { PersonalityChartDataDTO } from '../../models/shared_models/PersonalityChartDataDTO';
 
-export const PersonalityChart = (props: { data: PersonalityDataDTO }) => {
+export const PersonalityChart = (props: {
+    data: PersonalityChartDataDTO
+}) => {
 
     const personalityData = props.data;
 

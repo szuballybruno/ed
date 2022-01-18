@@ -3,7 +3,7 @@ import { PractiseQuestionView } from "../views/PractiseQuestionView";
 import { Answer } from "./Answer";
 import { Exam } from "./Exam";
 import { GivenAnswer } from "./GivenAnswer";
-import { QuestionCategory } from "./QuestionCategory";
+import { PersonalityTraitCategory } from "./PersonalityTraitCategory";
 import { QuestionType } from "./QuestionType";
 import { Video } from "./Video";
 
@@ -27,11 +27,11 @@ export class Question {
 
     // category
     @Column({ nullable: true })
-    categoryId: number;
+    personalityTraitCategoryId: number;
 
-    @ManyToOne(_ => QuestionCategory, x => x.questions)
-    @JoinColumn({ name: "category_id" })
-    category: QuestionCategory | null;
+    @ManyToOne(_ => PersonalityTraitCategory, x => x.questions)
+    @JoinColumn({ name: "personality_trait_category_id" })
+    personalityTraitCategory: PersonalityTraitCategory | null;
 
     // type 
     @Column({ default: 1 })

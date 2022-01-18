@@ -12,6 +12,7 @@ SELECT
 	co.visibility visibility,
 	co.human_skill_benefits human_skill_benefits,
 	co.human_skill_benefits_description human_skill_benefits_description,
+	co.requirements_description technical_requirements_description,
 	
 	-- cat 
 	cc.id category_id,

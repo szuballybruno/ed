@@ -1,6 +1,6 @@
 import { PersonalityTraitDataDTO } from "./PersonalityTraitDataDTO";
 
-export type PersonalityDataDTO = {
+export type PersonalityChartDataDTO = {
 
     traits: PersonalityTraitDataDTO[];
 }

@@ -5,6 +5,7 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { getAssetUrl } from "../static/frontendHelpers";
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 
 export const applicationRoutes = {
 
@@ -225,6 +226,18 @@ export const applicationRoutes = {
             editRoute: {
                 title: translatableTexts.routeTitles.administrationShopEdit,
                 route: "/administration/shop/edit/:shopItemId"
+            }
+        },
+
+        personalityAssessmentRoute: {
+            title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
+            route: "/administration/personality-assessment",
+            icon: <SupervisedUserCircleIcon color={"secondary"} />,
+            exact: true,
+
+            editTips: {
+                title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,
+                route: "/administration/personality-assessment/:traitCategoryId/tips"
             }
         },
 

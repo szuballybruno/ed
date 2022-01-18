@@ -39,6 +39,7 @@ import { CourseAdminListItemDTO } from "../models/shared_models/CourseAdminListI
 import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { ExamService } from "./ExamService";
 import { CourseProgressDTO } from "../models/shared_models/CourseProgressDTO";
+import { createCharSeparatedList } from "./misc/mappings";
 
 export class CourseService {
 
@@ -545,12 +546,12 @@ export class CourseService {
                 shortDescription: dto.shortDescription,
                 previouslyCompletedCount: dto.previouslyCompletedCount,
                 humanSkillBenefitsDescription: dto.humanSkillBenefitsDescription,
-                skillBenefits: dto.skillBenefits?.join(", "),
-                technicalRequirements: dto.technicalRequirements?.join(", "),
-                humanSkillBenefits: dto
+                skillBenefits: createCharSeparatedList(dto.skillBenefits ?? []),
+                technicalRequirements: createCharSeparatedList(dto.technicalRequirements ?? []),
+                requirementsDescription: dto.technicalRequirementsDescription,
+                humanSkillBenefits: createCharSeparatedList(dto
                     .humanSkillBenefits
-                    .map(x => `${x.text}: ${x.value}`)
-                    .join(", "),
+                    .map(x => `${x.text}: ${x.value}`)),
                 visibility: dto.visibility
             });
     }

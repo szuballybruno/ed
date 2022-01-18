@@ -105,6 +105,9 @@ export const translatableTexts = {
         administrationAddGroup: "Csoport hozzáadása",
         administrationEditGroup: "Csoport szerkesztése",
         administrationGroupStatistics: "Statisztika",
+        
+        administrationPersonalityAssessmentMain: "Szemelyiseg analizis adminisztracio",
+        administrationPersonalityAssessmentTips: "Szemelyiseg szerinti tippek",
 
         settings: "Beállítások",
         settingsOverview: "Beállítások",

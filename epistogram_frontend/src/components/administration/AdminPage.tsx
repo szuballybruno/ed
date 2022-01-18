@@ -18,6 +18,7 @@ import { EditExamSubpage } from './courses/EditExamSubpage';
 import { EditModuleSubpage } from './courses/EditModuleSubpage';
 import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditVideoSubpage } from './courses/EditVideoSubpage';
+import { PersonalityAssessmentAdminSubpage } from './personalityAssessment/PersonalityAssessmentAdminSubpage';
 import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
@@ -38,6 +39,7 @@ const AdminPage = () => {
         .add(administrationRoutes.usersRoute)
         .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
+        .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
         .add(administrationRoutes.myCompanyRoute)
         .getArray();
 
@@ -102,6 +104,15 @@ const AdminPage = () => {
                     render={() => <Switch>
                         {getRoute(administrationRoutes.shopRoute, <ShopAdminSubpage />)}
                         {getRoute(administrationRoutes.shopRoute.editRoute, <ShopAdminEditSubpage />)}
+                    </Switch>} />
+
+                {/* personality assessment administartion */}
+                <ProtectedRoute
+                    path={administrationRoutes.personalityAssessmentRoute.route}
+                    isAuthorizedToView={x => x.canAccessShopAdministration}
+                    render={() => <Switch>
+                        {getRoute(administrationRoutes.personalityAssessmentRoute, <PersonalityAssessmentAdminSubpage />)}
+                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTips, <ShopAdminEditSubpage />)}
                     </Switch>} />
 
                 {/* statistics */}

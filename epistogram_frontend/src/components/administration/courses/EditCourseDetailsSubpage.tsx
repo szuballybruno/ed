@@ -40,6 +40,7 @@ export const AdminCourseDetailsSubpage = () => {
     const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
     const [subCategory, setSubCategory] = useState<CourseCategoryDTO | null>(null);
     const [shortDescription, setShortDescription] = useState("");
+    const [technicalRequirementsDescription, setTechnicalRequirementsDescription] = useState("");
     const [description, setDescription] = useState("");
     const [difficulty, setDifficulty] = useState(0);
     const [benchmark, setBenchmark] = useState(0);
@@ -80,6 +81,7 @@ export const AdminCourseDetailsSubpage = () => {
             visibility: visibility,
             teacherId: teacherId,
             previouslyCompletedCount: parseInt(prevCompletedCount),
+            technicalRequirementsDescription: technicalRequirementsDescription,
 
             category: {
                 id: category?.id!
@@ -130,6 +132,7 @@ export const AdminCourseDetailsSubpage = () => {
         setTechnicalRequirements(courseDetailsEditData.technicalRequirements);
         setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits);
         setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + "");
+        setTechnicalRequirementsDescription(courseDetailsEditData.technicalRequirementsDescription + "");
 
     }, [courseDetailsEditData]);
 
@@ -278,7 +281,19 @@ export const AdminCourseDetailsSubpage = () => {
                         </EditSection>
 
                         {/* requirements section */}
-                        <EditSection title="Technikai követelmények" style={{ marginBottom: 50 }}>
+                        <EditSection
+                            title="Technikai követelmények"
+                            style={{
+                                marginBottom: 50
+                            }}>
+
+                            {/* technical requirtements description */}
+                            <EpistoEntry
+                                labelVariant={"top"}
+                                isMultiline={true}
+                                value={technicalRequirementsDescription}
+                                label="Technikai ajánlás"
+                                setValue={setTechnicalRequirementsDescription} />
 
                             <SimpleEditList
                                 mt="10px"
