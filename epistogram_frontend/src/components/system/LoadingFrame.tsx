@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from 'react';
 import { isArray } from "../../static/frontendHelpers";
 import { LoadingStateType } from "../../models/types";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export type LoadingFramePropsType = {
     loadingState?: LoadingStateType | LoadingStateType[],
@@ -100,7 +101,9 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
                 <CircularProgress style={{ 'color': 'black' }} size={50} />
 
                 <Box pt="20px">
-                    <Typography>Betöltés...</Typography>
+                    <EpistoFont>
+                        Betöltés...
+                    </EpistoFont>
                 </Box>
             </Flex>}
         </Flex>}

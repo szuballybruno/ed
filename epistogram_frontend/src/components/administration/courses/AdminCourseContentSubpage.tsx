@@ -19,6 +19,7 @@ import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoSearch } from "../../controls/EpistoSearch";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { EpistoHeader } from "../../EpistoHeader";
@@ -29,7 +30,7 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseEditItemView } from "./CourseEditItemView";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
-    return props.isEditable ? <TextField value={props.value} /> : <Typography>{props.value}</Typography>
+    return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
 }
 
 export const AdminCourseContentSubpage = () => {

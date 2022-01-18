@@ -3,6 +3,7 @@ import React from 'react';
 import { globalConfig } from "../../configuration/config";
 import classes from './mobileDemo.module.scss';
 
+//TODO: Remove
 export const MobileDemo = () => {
     const showNextPage = useState(true)
     const wrongAnswer = useState({

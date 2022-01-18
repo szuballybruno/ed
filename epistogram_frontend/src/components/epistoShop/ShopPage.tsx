@@ -61,15 +61,16 @@ export const ShopPage = () => {
         <LeftPane direction="column" align="stretch">
 
             {/* categories title */}
-            <Typography
-                variant="overline"
+            <EpistoFont
+                fontSize="fontExtraSmall"
+                isUppercase
                 style={{
                     textAlign: "left",
                     margin: 10
                 }}>
 
                 {translatableTexts.availableCourses.categoriesTitle}
-            </Typography>
+            </EpistoFont>
 
             {/* categories list */}
             <ToggleButtonGroup
@@ -144,9 +145,9 @@ export const ShopPage = () => {
                                 minWidth: 50
                             }} />
 
-                        <Typography style={{ margin: "0 0 0 10px" }} fontSize="13px">
+                        <EpistoFont style={{ margin: "0 0 0 10px" }} fontSize="fontSmall">
                             Aktuális EpistoCoin egyenleged:
-                        </Typography>
+                        </EpistoFont>
 
                         <EpistoConinInfo />
                     </Flex>

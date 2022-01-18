@@ -9,6 +9,7 @@ import { showNotification, useShowErrorDialog } from "../services/core/notificat
 import { getAssetUrl } from "../static/frontendHelpers";
 import { EpistoButton } from "./controls/EpistoButton";
 import { EpistoEntryNew, useEpistoEntryState } from "./controls/EpistoEntryNew";
+import { EpistoFont } from "./controls/EpistoFont";
 import { validateAllEntries } from "./controls/logic/controlsLogic";
 import { PageRootContainer } from "./PageRootContainer";
 import { LoadingFrame } from "./system/LoadingFrame";
@@ -152,12 +153,14 @@ export const RegisterViaActivationCodePage = () => {
                         maxW="320px"
                         align="center">
 
-                        <Text
-                            textAlign="left"
-                            fontSize="1.3em">
+                        <EpistoFont
+                            style={{
+                                textAlign: "left"
+                            }}
+                            fontSize={20}>
 
                             Váltsd be egyedi kódodat, hogy belekezdhess a tanulásba!
-                        </Text>
+                        </EpistoFont>
                     </Flex>
 
                     {/* Redeem info input fields */}
@@ -221,15 +224,13 @@ export const RegisterViaActivationCodePage = () => {
                         align="center"
                         height={80}>
 
-                        <Typography
-                            style={{
-                                color: "#9FA2B4"
-                            }}>
+                        <EpistoFont
+                            classes={["fontGrey"]}>
 
                             Nincs még hozzáférésed?
-                        </Typography>
+                        </EpistoFont>
 
-                        <Typography
+                        <EpistoFont
                             style={{
                                 maxWidth: "250px",
                                 textAlign: "right",
@@ -237,9 +238,10 @@ export const RegisterViaActivationCodePage = () => {
                             }}>
 
                             <a href="https://pcworld.hu/elofizetes" target="_blank">
+
                                 Vásárold meg kedvezményesen erre a linkre kattintva!
                             </a>
-                        </Typography>
+                        </EpistoFont>
                     </Flex>
 
 
@@ -263,9 +265,9 @@ export const RegisterViaActivationCodePage = () => {
                             width="500px"
                             height="250px">
 
-                            <Typography align="center">
+                            <EpistoFont style={{ textAlign: "center" }}>
                                 A regisztráció sikeres volt, a belépési linked elküldtük a(z) '{emailEntryState.value}' címre.
-                            </Typography>
+                            </EpistoFont>
                         </Flex>
 
                     </Flex>
@@ -310,6 +312,6 @@ export const RegisterViaActivationCodePage = () => {
                     src={getAssetUrl("/images/bg-art-6.png")}
                     alt="" />
             </Flex>
-        </Flex>
-    </PageRootContainer>
+        </Flex >
+    </PageRootContainer >
 }

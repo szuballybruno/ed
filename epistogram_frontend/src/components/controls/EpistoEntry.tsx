@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/layout";
 import { InputAdornment, TextField, Typography } from "@mui/material";
 import { forwardRef, useEffect } from "react";
+import { EpistoFont } from "./EpistoFont";
 
 export type EpistoEntryPropsType = {
     value?: string,
@@ -74,11 +75,15 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
 
     return <Flex direction="column" mt={marginTop ?? "10px"} flex={flex} style={style}>
 
-        {labelVariant === "top" && <Typography
-            variant={"overline"}>
+        {labelVariant === "top" && <EpistoFont
+            isUppercase
+            fontSize="fontExtraSmall"
+            style={{
+                margin: "5px 0"
+            }}>
 
             {label}
-        </Typography>}
+        </EpistoFont>}
 
         <TextField
             inputRef={ref}

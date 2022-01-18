@@ -13,6 +13,7 @@ import { useCourseBriefData } from "../../services/api/courseApiService";
 import { useBriefUserData } from "../../services/api/userApiService";
 import { useShopItemBriefData } from "../../services/api/shopApiService";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: ApplicationRoute[],
@@ -58,7 +59,7 @@ export const AdminSubpageHeader = (props: {
                 {props.iconComponent}
             </Flex>}
 
-            <Typography
+            <EpistoFont
                 style={{
                     display: "flex",
                     flexDirection: "row",
@@ -67,7 +68,7 @@ export const AdminSubpageHeader = (props: {
                     padding: "0 2px 0 5px"
                 }}>
                 {props.title}
-            </Typography>
+            </EpistoFont>
         </Flex>
 
         return <Box>

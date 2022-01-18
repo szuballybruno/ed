@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import { CSSProperties, RefObject, useCallback, useEffect, useRef, useState } from "react";
 
+//TODO Remove. Replaced with EpistoFont
 export const EpistoText = (props: {
     isAutoFontSize?: boolean,
     style?: CSSProperties,

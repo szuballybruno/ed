@@ -6,6 +6,7 @@ import { EpistoHeader } from '../EpistoHeader';
 import { EpistoButton } from '../controls/EpistoButton';
 import { FlexFloat } from '../controls/FlexFloat';
 import classes from "./learningStatisticsItem.module.scss";
+import { EpistoFont } from '../controls/EpistoFont';
 
 const StatisticsCard = (props: {
     iconPath?: string
@@ -53,7 +54,7 @@ const StatisticsCard = (props: {
         {isOpen && <Flex width="100%" mt="50px" p="0 20px 20px 20px" direction="column">
 
             <EpistoHeader variant="strongSub" text={props.title} />
-            
+
             <Box>
                 {props.children}
             </Box>
@@ -80,30 +81,31 @@ const StatisticsCard = (props: {
                 <Flex align="flex-end">
 
                     {/* value */}
-                    <Typography
+                    <EpistoFont
+                        fontSize={40}
                         style={{
                             lineHeight: 1,
-                            fontSize: "40px"
                         }}>
 
                         {props.value}
-                    </Typography>
+                    </EpistoFont>
 
                     {/* suffix */}
-                    <Typography
+                    <EpistoFont
+                        fontSize="fontLargePlus"
                         style={{
                             fontSize: "20px",
                             marginLeft: "5px"
                         }}>
 
                         {props.suffix}
-                    </Typography>
+                    </EpistoFont>
                 </Flex>
 
                 {/* title */}
-                <Typography fontSize="13px" >
+                <EpistoFont fontSize="fontSmall" >
                     {props.title}
-                </Typography>
+                </EpistoFont>
             </Flex>
         </Flex>}
 

@@ -4,6 +4,7 @@ import { LinearProgress, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
 import { isString } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const ExamLayout = (props: {
     children: ReactNode,
@@ -117,9 +118,9 @@ export const ExamLayout = (props: {
                             marginRight: "10px"
                         }} />
 
-                    <Typography variant="body2"  >
+                    <EpistoFont fontSize={"fontSmallPlus"}>
                         {`${Math.round(progressValue)}%`}
-                    </Typography>
+                    </EpistoFont>
                 </>}
             </Flex>
 

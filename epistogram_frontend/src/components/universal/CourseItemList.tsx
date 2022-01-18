@@ -17,6 +17,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { CollapseItem } from "./CollapseItem";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { getAssetUrl } from "../../static/frontendHelpers";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
@@ -195,9 +196,9 @@ export const CourseItemList = (props: {
                                 </EpistoButton>
 
                                 {/* title */}
-                                <Typography>
+                                <EpistoFont>
                                     {module.name}
-                                </Typography>
+                                </EpistoFont>
                             </Flex>
 
                             {/* play */}

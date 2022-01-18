@@ -1,5 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
+import { EpistoFont } from "../controls/EpistoFont";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -19,7 +20,7 @@ export function TabPanel(props: TabPanelProps) {
             {...other}>
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    <EpistoFont>{children}</EpistoFont>
                 </Box>
             )}
         </div>

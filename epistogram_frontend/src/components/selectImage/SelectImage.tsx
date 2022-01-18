@@ -1,6 +1,7 @@
 import { Add, EditOutlined } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import React, { useRef } from 'react';
+import { EpistoFont } from "../controls/EpistoFont";
 import classes from "./selectImage.module.scss";
 
 const SelectImage = (props: {
@@ -14,8 +15,12 @@ const SelectImage = (props: {
         hiddenFileInput.current.click();
     }
     return <div className={classes.selectImageWrapper}>
+
         <div className={classes.titleWrapper}>
-            <Typography variant={"overline"}>{props.title}</Typography>
+
+            <EpistoFont fontSize={"fontExtraSmall"} isUppercase>
+                {props.title}
+            </EpistoFont>
         </div>
         {props.uploadedImageUrls.map((image) => {
             return image ? <div className={classes.selectedImageWrapper}>

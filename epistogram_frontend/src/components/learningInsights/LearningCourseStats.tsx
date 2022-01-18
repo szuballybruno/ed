@@ -6,6 +6,7 @@ import { LoadingFrame } from "../system/LoadingFrame";
 import { DashboardSection } from "../universal/DashboardSection";
 import { EpistoGrid } from "../controls/EpistoGrid";
 import { LearningCourseStatsTile } from "./LearningCourseStatsTile";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const LearningCourseStats = () => {
 
@@ -43,10 +44,10 @@ export const LearningCourseStats = () => {
 
                 : <Flex p="100px">
 
-                    <Typography variant={"h6"}>
+                    <EpistoFont fontSize="fontHuge">
 
                         Még nem végeztél el egyetlen kurzust sem.
-                    </Typography>
+                    </EpistoFont>
                 </Flex>}
         </DashboardSection >
 
@@ -66,10 +67,10 @@ export const LearningCourseStats = () => {
                 </EpistoGrid>
                 : <Flex p="100px">
 
-                    <Typography variant={"h6"}>
+                    <EpistoFont fontSize="fontHuge">
 
                         Még nem kezdtel el egyetlen kurzust sem.
-                    </Typography>
+                    </EpistoFont>
                 </Flex>}
         </DashboardSection>
     </LoadingFrame>

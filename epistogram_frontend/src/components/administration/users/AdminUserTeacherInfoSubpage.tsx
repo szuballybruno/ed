@@ -8,6 +8,7 @@ import { useSaveTeacherInfoData, useTeacherInfoEditData } from "../../../service
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoEntry } from "../../controls/EpistoEntry";
+import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
@@ -187,9 +188,9 @@ export const AdminUserTeacherInfoSubpage = () => {
                                                     }
                                                 }} />
 
-                                            <Typography fontSize={"0.8em"}>
+                                            <EpistoFont fontSize={"fontSmall"}>
                                                 {badge.name}
-                                            </Typography>
+                                            </EpistoFont>
                                         </Flex>
                                     </Flex>
                                 })}
@@ -202,7 +203,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                         onClick={() => handleSaveAsync()}
                         style={{ marginTop: "20px" }}>
 
-                        Mentes
+                        Mentés
                     </EpistoButton>
                 </Flex>
             </AdminSubpageHeader>

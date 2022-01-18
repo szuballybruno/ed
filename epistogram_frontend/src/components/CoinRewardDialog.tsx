@@ -5,6 +5,7 @@ import { Typography } from "@mui/material";
 import { getAssetUrl } from "../static/frontendHelpers";
 import { EpistoDialog, EpistoDialogLogicType } from "./EpistoDialog";
 import { EpistoButton } from "./controls/EpistoButton";
+import { EpistoFont } from "./controls/EpistoFont";
 
 export const CoinRewardDialog = (props: {
     coinRewardAmount: number,
@@ -37,23 +38,19 @@ export const CoinRewardDialog = (props: {
                     style={{ position: "absolute", width: "100%", height: "100%" }} />
             </Box>
 
-            <Typography className="fontDark" noWrap>
+            <EpistoFont classes={["fontDark"]}>
                 {text}
-            </Typography>
-
-            <Typography className="fontDark" noWrap>
-                {text}
-            </Typography>
+            </EpistoFont>
 
             <Flex align="flex-end" mt="10px">
                 
-                <Typography className="fontGiant" style={{ color: "var(--epistoTeal)", fontWeight: "bold" }}>
+                <EpistoFont fontSize="fontGiant" style={{ color: "var(--epistoTeal)", fontWeight: "bold" }}>
                     {coinRewardAmount}
-                </Typography>
+                </EpistoFont>
 
-                <Typography className="fontDark" style={{ margin: "0px 0px 4px 4px" }}>
+                <EpistoFont classes={["fontDark"]} style={{ margin: "0px 0px 4px 4px" }}>
                     EpistoCoin
-                </Typography>
+                </EpistoFont>
 
                 <img
                     src={getAssetUrl("images/epistoCoin.png")}

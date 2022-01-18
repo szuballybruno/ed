@@ -9,6 +9,7 @@ import { Typography } from "@mui/material";
 import React from 'react';
 import { getAssetUrl } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoFont } from "../../controls/EpistoFont";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FloatChip } from "../../universal/FloatChip";
 
@@ -34,9 +35,9 @@ export const VideoContent = () => {
                 m="10px" />}
             midContent={<Flex className="whall" direction="column">
                 <Flex ml={10}>
-                    <Typography>
+                    <EpistoFont>
                         {"Munkafüzet1.xlsx"}
-                    </Typography>
+                    </EpistoFont>
                 </Flex>
                 <Box>
                     <Flex wrap="wrap" mt="10px">

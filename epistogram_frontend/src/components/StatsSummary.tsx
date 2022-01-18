@@ -7,6 +7,7 @@ import { translatableTexts } from "../static/translatableTexts";
 import { useUserStats } from "../services/api/userStatsApiService";
 import { CurrentUserContext } from "./system/AuthenticationFrame";
 import { EpistoHeader } from "./EpistoHeader";
+import { EpistoFont } from "./controls/EpistoFont";
 
 export const StatsSummary = () => {
 
@@ -52,11 +53,12 @@ export const StatsSummary = () => {
                     margin: "0 10px 0 0",
                 }} />
 
-            <Typography align="center" fontSize="13px" style={{
+            <EpistoFont fontSize="fontSmall" style={{
+                textAlign: "center",
                 margin: "0 20px"
             }}>
                 {translatableTexts.homePage.noStatsYet}
-            </Typography>
+            </EpistoFont>
         </FlexFloat>
 
         {/* total completed video count */}

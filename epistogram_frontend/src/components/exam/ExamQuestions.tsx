@@ -12,6 +12,8 @@ import { ExamLayout } from "./ExamLayout";
 import { QuestionAnswer } from "./QuestionAnswer";
 import { useSaveExamAnswer } from "../../services/api/examApiService";
 import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
@@ -92,9 +94,9 @@ export const ExamQuestions = (props: {
                     src={getAssetUrl("course_page_icons/curriculum_test.svg")}
                     className="square35" />
                     
-                <Typography style={{ marginLeft: "10px" }}>
+                <EpistoFont style={{ marginLeft: "10px" }}>
                     {questions.length}/{questionPaging.currentIndex + 1}
-                </Typography>
+                </EpistoFont>
             </Flex>}
             headerCenterText={exam.title}
             exitExamAction={() => { }}

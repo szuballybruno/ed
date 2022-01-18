@@ -17,6 +17,7 @@ import { useLogout } from "../../services/api/authenticationApiService";
 import { currentVersion } from "../../static/Environemnt";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoPopper } from "../controls/EpistoPopper";
+import { EpistoFont } from "../controls/EpistoFont";
 
 const menuItems = [
     applicationRoutes.homeRoute,
@@ -216,15 +217,16 @@ const DesktopNavbar = (props: {
                             }}
                             variant={"plain"}>
 
-                            <Typography
-                                fontSize={"1.0em"}
+                            <EpistoFont
+                                fontSize={"fontSmallPlus"}
+                                isUppercase
                                 style={{
                                     margin: "0 7px",
-                                    fontWeight: 500,
-                                    textTransform: "uppercase"
+                                    fontWeight: 500
                                 }}>
+
                                 Áruház
-                            </Typography>
+                            </EpistoFont>
 
                             <img
                                 className="square50"
@@ -297,14 +299,15 @@ const DesktopNavbar = (props: {
                                         borderRadius: "50%"
                                     }} />
 
-                                <Typography
+                                <EpistoFont
+                                    fontSize="fontSmallPlus"
                                     style={{
                                         marginLeft: "14px",
-                                        textAlign: "left",
-                                        fontSize: "14px"
+                                        textAlign: "left"
                                     }}>
+
                                     {x.title}
-                                </Typography>
+                                </EpistoFont>
                             </Flex>
 
                             {index + 1 < mockNotifications.length && <Divider height={1} width="100%" bgColor={"grey"} />}
@@ -336,15 +339,17 @@ const DesktopNavbar = (props: {
 
                         {applicationRoutes.administrationRoute.icon}
 
-                        <Typography
+                        <EpistoFont
+                            fontSize="fontSmallPlus"
+                            isUppercase
                             style={{
                                 marginLeft: "14px",
                                 textAlign: "left",
-                                fontSize: "14px"
+                                fontWeight: 400
                             }}>
 
                             {applicationRoutes.administrationRoute.title}
-                        </Typography>
+                        </EpistoFont>
                     </Flex>
                 </EpistoButton>}
 
@@ -360,20 +365,22 @@ const DesktopNavbar = (props: {
 
                                 {x.icon}
 
-                                <Typography
+                                <EpistoFont
+                                    fontSize="fontSmallPlus"
+                                    isUppercase
                                     style={{
                                         marginLeft: "14px",
                                         textAlign: "left",
-                                        fontSize: "14px"
+                                        fontWeight: 400
                                     }}>
 
                                     {x.name}
-                                </Typography>
+                                </EpistoFont>
                             </Flex>
                         </EpistoButton>
                     })}
                 {/* version */}
-                <Typography
+                <EpistoFont
                     style={{
                         zIndex: 3,
                         color: "gray",
@@ -381,9 +388,10 @@ const DesktopNavbar = (props: {
                         padding: "5px",
                         marginTop: "20px"
                     }}
-                    className="fontMid">
+                    fontSize="fontSmallPlus">
+
                     Verzió: {currentVersion ?? "1999.01.01.01:01"}
-                </Typography>
+                </EpistoFont>
             </EpistoPopper>
         </Flex >
     );

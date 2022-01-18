@@ -7,6 +7,7 @@ import { useRequestPasswordChange } from "../../services/api/passwordChangeApiSe
 import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
 import { getEventValueCallback } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoLabel } from "../controls/EpistoLabel";
 import { FlexFloat } from "../controls/FlexFloat";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
@@ -63,24 +64,24 @@ export const LoginPasswordResetDialog = (params: {
                 </Flex>
 
                 {/* desc */}
-                <Typography
-                    className="fontSmall"
+                <EpistoFont
+                    fontSize="fontSmall"
                     style={{
                         padding: "15px 15px 0px 15px"
                     }}>
                     Nem kell aggódnod, ha jelszavad most esetleg nem jut eszedbe, másodpercek alatt segítünk azt visszaállítani!
                     Nincs más dolgod, mint megadni azt az e-mail címet, mellyel korábban regisztráltál, mi pedig küldeni fogunk neked egy linket, ahol új jelszót állíthatsz be.
-                </Typography>
+                </EpistoFont>
 
                 {/* desc */}
-                <Typography
-                    className="fontSmall"
+                <EpistoFont
+                    fontSize="fontSmall"
                     style={{
                         padding: "15px"
                     }}>
                     Biztonsági okokból ez a link csak 8 óráig él, és új visszaállítási linket 24 óránként csak egyszer kérhetsz, így érdemes még most befejezned a visszaállítási folyamatot!
 
-                </Typography>
+                </EpistoFont>
 
                 {/* email */}
                 <EpistoLabel
@@ -108,14 +109,16 @@ export const LoginPasswordResetDialog = (params: {
                 </EpistoLabel>
 
                 {/* affirmation */}
-                <Typography
-                    className="fontGrey fontSmall"
+                <EpistoFont
+                    fontSize="fontSmall"
+                    classes={["fontGrey"]}
                     style={{
                         marginTop: "20px",
                         padding: "15px",
                     }}>
+
                     Kattints a visszaállítás gombra, és küldjük is a linket! 
-                </Typography>
+                </EpistoFont>
 
                 {/* buttons */}
                 <EpistoButton

@@ -8,6 +8,7 @@ import { useExamResults } from "../../services/api/examApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { ArrayBuilder } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoFont } from "../controls/EpistoFont";
 import { ExamLayout } from './ExamLayout';
 import { ExamResultStats } from "./ExamResultStats";
 import { QuestionAnswer } from "./QuestionAnswer";
@@ -124,21 +125,22 @@ export const ExamResultsSlide = (props: {
                                     id="panel1a-header">
 
                                     <Flex width={"77%"}>
-                                        <Typography>
+                                        <EpistoFont>
                                             {question.text}
-                                        </Typography>
+                                        </EpistoFont>
                                     </Flex>
 
                                     <Flex width={"23%"}>
-                                        <Typography style={{
-                                            padding: "2px 15px",
-                                            backgroundColor: bgColor,
-                                            borderRadius: 7
-                                        }}>
+                                        <EpistoFont
+                                            classes={["roundBorders"]}
+                                            style={{
+                                                padding: "2px 15px",
+                                                backgroundColor: bgColor
+                                            }}>
                                             {question.isCorrect
                                                 ? translatableTexts.exam.correctAnswer
                                                 : translatableTexts.exam.incorrectAnswer}
-                                        </Typography>
+                                        </EpistoFont>
                                     </Flex>
                                 </AccordionSummary>
 

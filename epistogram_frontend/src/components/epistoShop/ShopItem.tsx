@@ -9,6 +9,7 @@ import StarsIcon from '@mui/icons-material/Stars';
 import { useNavigation } from "../../services/core/navigatior";
 import { EpistoButton } from "../controls/EpistoButton";
 import { FlexFloat } from "../controls/FlexFloat";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
@@ -79,14 +80,16 @@ export const ShopItem = (props: {
 
                 }} />
 
-                <Typography
-                    variant="overline"
-                    fontSize="13px"
-                    color="white"
-                    fontWeight={500}>
+                <EpistoFont
+                    classes={["fontLight"]}
+                    isUppercase
+                    fontSize="fontSmall"
+                    style={{
+                        fontWeight: 500
+                    }}>
 
                     Megvásárolva
-                </Typography>
+                </EpistoFont>
             </Flex>}
 
             {/* purchase overlay  */}
@@ -102,14 +105,14 @@ export const ShopItem = (props: {
                     borderRadius="0 0 0 10px"
                     boxShadow="0 0 20px 0px #00000035">
 
-                    <Typography
-                        className="fontLight"
+                    <EpistoFont
+                        classes={["fontLight"]}
                         style={{
                             marginRight: "5px",
                         }}>
 
                         Megvéve!
-                    </Typography>
+                    </EpistoFont>
 
                     <StarsIcon style={{ color: "white" }}></StarsIcon>
                 </Flex>
@@ -123,14 +126,19 @@ export const ShopItem = (props: {
             <Flex direction="column" p="10px" >
 
                 {/* category  */}
-                <Text as="text" color="grey" fontSize="13px">
+                <EpistoFont classes={["fontGrey"]} fontSize="fontSmall">
                     {shopItemCategoryName}
-                </Text>
+                </EpistoFont>
 
                 {/* title */}
-                <Flex direction="column">
-                    <Text fontWeight={"600"} fontSize="15px">{name}</Text>
-                </Flex>
+                <EpistoFont
+                    fontSize="fontMid"
+                    style={{
+                        fontWeight: 600
+                    }}>
+
+                    {name}
+                </EpistoFont>
             </Flex>
         </Box>
 
@@ -144,9 +152,9 @@ export const ShopItem = (props: {
                     }} />
 
                     {/* episto coin price */}
-                    <Typography style={{ color: isSufficientFundsAvailable ? "var(--deepGreen)" : "var(--mildRed)" }}>
+                    <EpistoFont style={{ color: isSufficientFundsAvailable ? "var(--deepGreen)" : "var(--mildRed)" }}>
                         {`Ár: ${coinPrice}`}
-                    </Typography>
+                    </EpistoFont>
                     <img
                         style={{
                             width: 20,

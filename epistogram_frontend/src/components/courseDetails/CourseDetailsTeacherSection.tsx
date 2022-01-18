@@ -6,6 +6,7 @@ import { getAssetUrl } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
 import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
 import { ProfileImage } from "../ProfileImage";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const CourseDetailsTeacherSection = (props: {
     courseDetails: CourseDetailsDTO
@@ -62,21 +63,21 @@ export const CourseDetailsTeacherSection = (props: {
                 <Flex flexDir={"column"} marginLeft="10px">
 
                     {/* full name */}
-                    <Typography style={{
-                        fontWeight: "bold",
-                        fontSize: "0.9em"
-                    }}>
-                        {courseDetails.teacherData.teacherFullName}
-                    </Typography>
-
-                    {/* teacher skills  */}
-                    <Typography
+                    <EpistoFont
+                        fontSize={"fontSmallPlus"}
                         style={{
-                            fontSize: "0.8em"
+                            fontWeight: "bold"
                         }}>
 
+                        {courseDetails.teacherData.teacherFullName}
+                    </EpistoFont>
+
+                    {/* teacher skills  */}
+                    <EpistoFont
+                        fontSize="fontSmall">
+
                         {courseDetails.teacherData.teacherSkills}
-                    </Typography>
+                    </EpistoFont>
                 </Flex>
             </Flex>
 
@@ -102,9 +103,11 @@ export const CourseDetailsTeacherSection = (props: {
                                 }}
                                 src={getAssetUrl("/course_page_icons/teacher_award.svg")} />
 
-                            <Typography className="fontLight">
+                            <EpistoFont
+                                classes={["fontLight"]}>
+
                                 {badge}
-                            </Typography>
+                            </EpistoFont>
                         </Flex>
                     })}
             </Flex>
@@ -130,20 +133,20 @@ export const CourseDetailsTeacherSection = (props: {
                         alt={""} />
 
                     {/* text */}
-                    <Typography
+                    <EpistoFont
                         style={{
                             marginLeft: 5
                         }}>
 
                         {infoCard.title}
-                    </Typography>
+                    </EpistoFont>
                 </Flex>)}
         </Flex>
 
         {/* description */}
-        <Typography>
+        <EpistoFont>
             {courseDetails.teacherData.teacherDescription}
-        </Typography>
+        </EpistoFont>
 
         {/* more courses 
         <Flex height={70} width="100%" alignItems={"center"} justifyContent={"center"}>

@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './listItem.module.scss'
 import { NavLink } from "react-router-dom";
 import { Typography } from "@mui/material";
+import { EpistoFont } from '../../controls/EpistoFont';
 
 const LinkSelector = (props: {
     to?: string,
@@ -40,10 +41,22 @@ const ListItem = (props: {
         <ThumbnailSelector thumbnailUrl={props.thumbnailUrl} />
         <div className={classes.videoDataWrapper}>
             <div className={classes.videoMainTitleWrapper}>
-                <Typography variant={"button"}>{props.mainTitle}</Typography>
+
+                <EpistoFont
+                    fontSize="fontSmallPlus"
+                    isUppercase
+                    style={{
+                        fontWeight: 500
+                    }}>
+                    {props.mainTitle}
+                </EpistoFont>
             </div>
             <div className={classes.videoSubTitleWrapper}>
-                <Typography variant={"caption"}>{props.subTitle}</Typography>
+
+                <EpistoFont fontSize="fontExtraSmall">
+                    
+                    {props.subTitle}
+                </EpistoFont>
             </div>
             <div className={classes.statusBar} />
         </div>

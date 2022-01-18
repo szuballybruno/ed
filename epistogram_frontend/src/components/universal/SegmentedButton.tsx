@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 import { PagingType } from "../../static/frontendHelpers";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const SegmentedButton = (props: { paging: PagingType<string> }) => {
 
@@ -28,9 +29,9 @@ export const SegmentedButton = (props: { paging: PagingType<string> }) => {
                             value={index}
                             onClick={() => paging.setItem(index)}>
 
-                            <Typography className="fontSmallPlus">
+                            <EpistoFont fontSize="fontSmallPlus">
                                 {buttonText}
-                            </Typography>
+                            </EpistoFont>
                         </ToggleButton>
                     )
                 })}

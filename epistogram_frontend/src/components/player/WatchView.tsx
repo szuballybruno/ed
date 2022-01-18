@@ -9,6 +9,7 @@ import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { StillWatchingDialogMarker } from "../../models/types";
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
 import { NavigateToCourseItemActionType } from "../universal/CourseItemList";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
@@ -216,12 +217,14 @@ export const WatchView = (props: {
 
                         <TimeoutFrame reactTimer={reactTimer}>
 
-                            <Typography style={{
-                                margin: "10px"
-                            }}>
+                            <EpistoFont
+                                isUppercase
+                                style={{
+                                    margin: "10px"
+                                }}>
 
                                 Tovább
-                            </Typography>
+                            </EpistoFont>
                         </TimeoutFrame>
                     </EpistoButton>
                 </AbsoluteFlexOverlay>
@@ -287,9 +290,14 @@ export const WatchView = (props: {
 
                 <Flex direction="column" flex="5">
 
-                    <Typography variant={"h6"}>
+                    <EpistoFont
+                        fontSize="fontLargePlus"
+                        style={{
+                            fontWeight: 500
+                        }}>
+                            
                         {video!.title}
-                    </Typography>
+                    </EpistoFont>
 
                     <EpistoHeader variant="sub" text={video!.subTitle} />
                 </Flex>

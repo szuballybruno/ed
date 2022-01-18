@@ -181,15 +181,15 @@ export const PractiseQuestions = () => {
                         align="center"
                         display={isCorrectAnswer ? undefined : "none"}>
 
-                        <Typography>
+                        <EpistoFont>
                             {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
-                        </Typography>
+                        </EpistoFont>
 
                         <EpistoConinImage />
 
-                        <Typography>
+                        <EpistoFont>
                             {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
-                        </Typography>
+                        </EpistoFont>
                     </Flex>
 
                     {/* question section */}
@@ -199,19 +199,18 @@ export const PractiseQuestions = () => {
                         margin="auto"
                         minWidth="300px">
 
-                        <Typography
+                        <EpistoFont
                             style={{
+                                display: isAnswered ? undefined : "none",
                                 marginTop: 10,
-                                fontSize: 18
-                            }}
-                            display={isAnswered ? undefined : "none"}
-                            variant="h5"
-                            alignSelf="center">
+                                fontSize: 18,
+                                alignSelf: "center"
+                            }}>
 
                             {isCorrectAnswer
                                 ? translatableTexts.practiseQuestions.answerIsCorrect
                                 : translatableTexts.practiseQuestions.answerIsIncorrect}
-                        </Typography>
+                        </EpistoFont>
 
                         <QuesitionView
                             answerQuesitonAsync={handleAnswerQuestionAsync}

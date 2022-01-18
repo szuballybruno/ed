@@ -1,5 +1,6 @@
 import { FlexProps } from "@chakra-ui/layout";
 import { Checkbox, Typography } from "@mui/material";
+import { EpistoFont } from "../controls/EpistoFont";
 import { FlexFloat } from "../controls/FlexFloat";
 
 export const QuestionAnswer = (props: {
@@ -43,8 +44,8 @@ export const QuestionAnswer = (props: {
             size="small"
             value="advanced" />
 
-        <Typography style={{ fontSize: "14px" }}>
+        <EpistoFont fontSize="fontSmallPlus">
             {answerText}
-        </Typography>
+        </EpistoFont>
     </FlexFloat>
 }

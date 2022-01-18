@@ -7,6 +7,7 @@ import { EpistoConinInfo } from "../../../EpistoCoinInfo";
 import { EpistoButton } from "../../../controls/EpistoButton";
 import classes from './profileStats.module.scss';
 
+//TODO: Remove, not used anywhere
 const ProfileStats = (props: { user: UserDTO }) => {
 
     return <div className={classes.welcomeWrapper}>
