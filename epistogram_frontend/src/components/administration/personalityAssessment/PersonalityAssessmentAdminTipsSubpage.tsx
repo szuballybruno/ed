@@ -3,8 +3,10 @@ import { Delete } from "@mui/icons-material";
 import Edit from "@mui/icons-material/Edit";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { DailyTipDTO } from "../../../models/shared_models/DailyTipDTO";
+import { useCreateDailyTip, useDeleteDailyTip } from "../../../services/api/dailyTipApiService";
 import { usePersonalityTraitCategoryDetails } from "../../../services/api/personalityAssessmentApiService";
 import { useNavigation } from "../../../services/core/navigatior";
+import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { useIntParam } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { LoadingFrame } from "../../system/LoadingFrame";
@@ -16,14 +18,19 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
 
     //util
     const { navigate } = useNavigation();
-    const traitCategoryId = useIntParam("traitCategoryId");
+    const showError = useShowErrorDialog();
+    const personalityTraitCategoryId = useIntParam("traitCategoryId");
 
     // http 
     const {
         personalityTraitCategoryDetails,
         personalityTraitCategoryDetailsError,
-        personalityTraitCategoryDetailsState
-    } = usePersonalityTraitCategoryDetails(traitCategoryId);
+        personalityTraitCategoryDetailsState,
+        refetchPersonalityTraitCategoryDetails
+    } = usePersonalityTraitCategoryDetails(personalityTraitCategoryId);
+
+    const { deleteDailyTipAsync, deleteDailyTipState } = useDeleteDailyTip();
+    const { createDailyTipAsync, createDailyTipState } = useCreateDailyTip();
 
     // state 
 
@@ -31,14 +38,37 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
 
     const tips = personalityTraitCategoryDetails?.tips ?? [];
 
-    const handleEdit = (traitCategoryId: number) => {
+    const handleEdit = (dailyTipId: number) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips, { traitCategoryId })
+        // navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips, { traitCategoryId: dailyTipId })
     }
 
-    const handleDelete = (traitCategoryId: number) => {
+    const handleAddTip = async () => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips, { traitCategoryId })
+        try {
+
+            await createDailyTipAsync({ personalityTraitCategoryId });
+            showNotification("Napi tipp sikeresen hozzaadva.");
+            await refetchPersonalityTraitCategoryDetails();
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
+
+    const handleDelete = async (dailyTipId: number) => {
+
+        try {
+
+            await deleteDailyTipAsync({ dailyTipId });
+            showNotification("Napi tipp sikeresen torolve.");
+            await refetchPersonalityTraitCategoryDetails();
+        }
+        catch (e) {
+
+            showError(e);
+        }
     }
 
     const rowButtons = [
@@ -60,7 +90,24 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
 
             {/* admin header */}
             <AdminSubpageHeader
-                subRouteLabel={""}>
+                subRouteLabel={personalityTraitCategoryDetails?.title ?? ""}>
+
+                <Flex
+                    bg="white"
+                    align="center"
+                    justify="flex-end"
+                    className="dividerBorderBottom">
+
+                    <EpistoButton
+                        variant="colored"
+                        onClick={handleAddTip}
+                        style={{
+                            margin: "10px"
+                        }}>
+
+                        Add tip
+                    </EpistoButton>
+                </Flex>
 
                 {tips
                     .map((tip, index) => (

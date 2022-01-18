@@ -9,7 +9,6 @@ export const apiRoutes = {
 
     misc: {
         getJobTitles: "/misc/get-job-titles",
-        getDailyTip: "/misc/get-get-daily-tip",
         getOrganizations: "/misc/get-organizations",
         getHomePageDTO: "/misc/get-overview-page-dto",
         getCurrentCourseItemCode: '/misc/get-current-course-item-code',
@@ -43,6 +42,12 @@ export const apiRoutes = {
     personalityAssessment: {
         getPersonalityTraitCategories: "/personalityassessment/get-personality-trait-categories",
         getPersonalityTraitCategoryDetails: "/personalityassessment/get-personality-trait-category-details"
+    },
+
+    dailyTip: {
+        getDailyTip: "/dailytip/get-daily-tip",
+        deleteDailyTip: "/dailytip/delete-daily-tip",
+        createDailyTip: "/dailytip/create-daily-tip",
     },
 
     shop: {

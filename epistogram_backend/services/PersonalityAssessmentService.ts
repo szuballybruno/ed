@@ -3,6 +3,7 @@ import { PersonalityTraitCategory } from "../models/entity/PersonalityTraitCateg
 import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
 import { PersonalityCategoryTraitDTO } from "../models/shared_models/PersonalityCategoryTraitDTO";
 import { PersonalityChartDataDTO } from "../models/shared_models/PersonalityChartDataDTO";
+import { PersonalityTraitCategoryDTO } from "../models/shared_models/PersonalityTraitCategoryDTO";
 import { PersonalityTraitCategoryShortDTO } from "../models/shared_models/PersonalityTraitCategoryShortDTO";
 import { PersonalityTraitDataDTO } from "../models/shared_models/PersonalityTraitDataDTO";
 import { PersonalityTraitView } from "../models/views/PersonalityTraitView";
@@ -78,7 +79,7 @@ export class PersonalityAssessmentService {
             });
 
         return this._mapperService
-            .map(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, category, tips);
+            .map(PersonalityTraitCategory, PersonalityTraitCategoryDTO, category, tips);
     }
 
     /**

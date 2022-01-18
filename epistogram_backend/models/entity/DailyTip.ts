@@ -12,13 +12,16 @@ export class DailyTip {
     @Column()
     description: string;
 
-    // video file
     @Column()
-    videoFileId: number;
+    isLive: boolean;
+
+    // video file
+    @Column({ nullable: true, type: "int" })
+    videoFileId: number | null;
 
     @OneToOne(_ => StorageFile)
     @JoinColumn({ name: "video_file_id" })
-    videoFile: StorageFile;
+    videoFile: StorageFile | null;
 
     // occurrances
     @OneToMany(_ => DailyTipOccurrence, x => x.dailyTip)

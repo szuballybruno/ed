@@ -15,11 +15,13 @@ INSERT INTO public.daily_tip
 (
     description,
     video_file_id,
+    is_live,
     personality_trait_category_id
 )
 VALUES 
 (
     'daily tip desc',
     16,
+    true,
     1
 );

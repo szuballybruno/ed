@@ -45,17 +45,6 @@ export const useOverviewPageDTO = () => {
     }
 }
 
-export const useDailyTip = () => {
-
-    const qr = useReactQuery2<DailyTipDTO>(apiRoutes.misc.getDailyTip);
-
-    return {
-        dailyTipData: qr.data,
-        dailyTipError: qr.error,
-        dailyTipState: qr.state
-    }
-}
-
 export const useOrganizations = () => {
 
     const qr = useReactQuery2<OrganizationDTO[]>(apiRoutes.misc.getOrganizations);

@@ -74,6 +74,8 @@ import { HashService } from './services/HashService';
 import { VideoRatingService } from './services/VideoRatingService';
 import { VideoRatingController } from './api/VideoRatingController';
 import { PersonalityAssessmentController } from './api/PersonalityAssessmentController';
+import { DailyTipController } from './api/DailyTipController';
+import { DailyTipService } from './services/DailyTipService';
 
 (async () => {
 
@@ -125,6 +127,7 @@ import { PersonalityAssessmentController } from './api/PersonalityAssessmentCont
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
+    const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -147,6 +150,7 @@ import { PersonalityAssessmentController } from './api/PersonalityAssessmentCont
     const passwordChangeController = new PasswordChangeController(passwordChangeService);
     const videoRatingController = new VideoRatingController(videoRatingService);
     const personalityAssessmentController = new PersonalityAssessmentController(personalityAssessmentService);
+    const dailyTipController = new DailyTipController(dailyTipService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -177,7 +181,6 @@ import { PersonalityAssessmentController } from './api/PersonalityAssessmentCont
     // misc
     addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
     addEndpoint(apiRoutes.misc.getJobTitles, miscController.getJobTitlesAction);
-    addEndpoint(apiRoutes.misc.getDailyTip, miscController.getDailyTipAction);
     addEndpoint(apiRoutes.misc.getOrganizations, miscController.getOrganizationsAction);
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
     addEndpoint(apiRoutes.misc.getCourseOverviewData, miscController.getCourseOverviewDataAction);
@@ -185,6 +188,11 @@ import { PersonalityAssessmentController } from './api/PersonalityAssessmentCont
     // teacher info
     addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true, authorize: ["administrator"] });
+
+    // daily tip 
+    addEndpoint(apiRoutes.dailyTip.getDailyTip, dailyTipController.getDailyTipAction);
+    addEndpoint(apiRoutes.dailyTip.deleteDailyTip, dailyTipController.deleteDailyTipAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.dailyTip.createDailyTip, dailyTipController.createDailyTipAction, { isPost: true, authorize: ["administrator"] });
 
     // personality assessment 
     addEndpoint(apiRoutes.personalityAssessment.getPersonalityTraitCategories, personalityAssessmentController.getPersonalityTraitCategoriesAction);

@@ -93,33 +93,6 @@ export class MiscController {
             .getPractiseQuestionAsync(params.currentUserId);
     };
 
-    getDailyTipAction = async (params: ActionParams) => {
-
-        const dailyTipViews = await this._ormService
-            .getRepository(DailyTipView)
-            .find();
-
-        // filter for todays tip,
-        // if it's found, there is no need to do anything else, just return it
-        const todaysTip = dailyTipViews.firstOrNull(x => x.isCurrentTip);
-        if (todaysTip)
-            return this._mapperService
-                .map(DailyTipView, DailyTipDTO, todaysTip);
-
-        // first is used here since the tips are in order of relevance
-        const newCurrentTip = dailyTipViews.first(x => true);
-
-        // insert new occurrence, this sets it as current in the DB as well
-        await this._ormService
-            .getRepository(DailyTipOccurrence)
-            .insert({
-                dailyTipId: newCurrentTip.dailyTipId
-            });
-
-        return this._mapperService
-            .map(DailyTipView, DailyTipDTO, newCurrentTip);
-    };
-
     getCourseOverviewDataAction = async (params: ActionParams) => {
 
         return this._miscService
