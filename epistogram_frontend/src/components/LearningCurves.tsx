@@ -1,11 +1,12 @@
 import { Flex } from "@chakra-ui/react";
-import { Tab, Tabs, Typography } from "@mui/material";
+import { Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import { translatableTexts } from "../static/translatableTexts";
 import { FlexFloat } from "./controls/FlexFloat";
 import { TabPanel } from "./courseDetails/TabPanel";
 import { getAssetUrl } from "../static/frontendHelpers";
 import { EpistoHeader } from "./EpistoHeader";
+import { EpistoFont } from "./controls/EpistoFont";
 
 export const LearningCurves = () => {
 
@@ -93,19 +94,18 @@ export const LearningCurves = () => {
                 value={currentTab}
                 index={0}>
 
-                <Typography style={{
-                    fontSize: 13
-                }}>
+                <EpistoFont fontSize="fontSmall">
+
                     {translatableTexts.learningOverview.learningCurveDescription}
-                </Typography>
+                </EpistoFont>
             </TabPanel>
 
             <TabPanel value={currentTab} index={1}>
-                <Typography style={{
-                    fontSize: 13
-                }}>
+
+                <EpistoFont fontSize="fontSmall">
+
                     {translatableTexts.learningOverview.forgettingCurveDescription}
-                </Typography>
+                </EpistoFont>
             </TabPanel>
 
         </Flex>
@@ -133,9 +133,12 @@ export const LearningCurves = () => {
                     margin: "0 10px 0 0",
                 }} />
 
-            <Typography align="center">
+            <EpistoFont style={{
+                textAlign: "center"
+            }}>
+                
                 {translatableTexts.homePage.noStatsYet}
-            </Typography>
+            </EpistoFont>
         </FlexFloat>
     </Flex>
 }

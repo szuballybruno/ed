@@ -7,6 +7,7 @@ import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { usePaging } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
 import { SlidesDisplay } from "../universal/SlidesDisplay";
 
@@ -52,11 +53,16 @@ export const ShopPurchaseConfirmationDialog = (props: {
     const confirmationSlide = () => (
         <Flex direction="column" align="center">
 
-            <Typography className="dividerBorderBottom" style={{ padding: "10px" }}>
+            <EpistoFont
+                classes={["dividerBorderBottom"]}
+                style={{
+                    padding: "10px"
+                }}>
+
                 {isCourse
                     ? "Biztonsan feloldod az alábbi tanfolyamot?"
                     : "Biztonsan megveszed az alábbi terméket?"}
-            </Typography>
+            </EpistoFont>
 
             <img
                 style={{
@@ -68,14 +74,14 @@ export const ShopPurchaseConfirmationDialog = (props: {
                 src={shopItem?.coverFilePath}
                 alt="" />
 
-            <Typography
+            <EpistoFont
                 style={{
                     fontWeight: "bold",
                     maxWidth: "300px"
                 }}>
 
                 {shopItem?.name}
-            </Typography>
+            </EpistoFont>
 
             <EpistoButton
                 variant="colored"
@@ -90,23 +96,23 @@ export const ShopPurchaseConfirmationDialog = (props: {
         <Flex direction="column">
 
             {/* greet */}
-            <Typography>
+            <EpistoFont>
                 {isCourse
                     ? "Sikeresen feloldottad a tanfolyamot!"
                     : "Sikeresen megvásároltad a terméket!"}
-            </Typography>
+            </EpistoFont>
 
             {/* info */}
-            <Typography>
+            <EpistoFont>
                 {isCourse
                     ? "Mostantól megtalálhatod a Tanfolyamkeresőben is!"
                     : `Kodod amit bevalthatsz a partner cegunknel: ${purchaseShopItemResult?.discountCode}`}
-            </Typography>
+            </EpistoFont>
 
             {/* details */}
-            {!isCourse && <Typography>
+            {!isCourse && <EpistoFont>
                 A kodod emailben is elkuldtuk Neked, hogy kesobb konnyen megtalalhasd!
-            </Typography>}
+            </EpistoFont>}
 
             {isCourse && <EpistoButton
                 onClick={() => {
@@ -119,7 +125,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
                 }}
                 variant="colored">
 
-                Irany a tanfolyam!
+                Irány a tanfolyam!
             </EpistoButton>}
         </Flex>
     );

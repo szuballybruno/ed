@@ -7,6 +7,7 @@ import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { httpPostAsync } from "../../services/core/httpClient";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { CourseItemList } from "../universal/CourseItemList";
@@ -56,9 +57,12 @@ export const CourseItemSelector = (props: {
                         border: mode === "beginner" ? "2px solid var(--epistoTeal)" : undefined
                     }}>
 
-                    <Typography style={{ fontSize: "14px" }}>
+                    <EpistoFont
+                        isUppercase
+                        fontSize="fontSmallPlus">
+
                         Kezdő Mód
-                    </Typography>
+                    </EpistoFont>
 
                     <Radio size="small" value="beginner" />
                 </EpistoButton>
@@ -74,9 +78,12 @@ export const CourseItemSelector = (props: {
                             undefined
                     }}>
 
-                    <Typography style={{ fontSize: "14px" }}>
+                    <EpistoFont
+                        isUppercase
+                        fontSize="fontSmallPlus">
+                            
                         Haladó Mód
-                    </Typography>
+                    </EpistoFont>
 
                     <Radio size="small" value="advanced" />
                 </EpistoButton>
@@ -105,9 +112,9 @@ export const CourseItemSelector = (props: {
             placementX="left"
             handleClose={() => setIsInfoDialogOpen(false)}>
 
-            <Typography>
+            <EpistoFont>
                 Kezdő módban a meghatározott sorrendben haladhatsz, és előre csak addig részig tekerhetsz, melyet már megtekintettél. Haladó módban korlátlanul váltogathatsz a videók között!
-            </Typography>
+            </EpistoFont>
         </EpistoPopper>
 
         <CourseItemList modules={modules}></CourseItemList>

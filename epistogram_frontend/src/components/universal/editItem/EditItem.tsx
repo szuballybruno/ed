@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './editItem.module.scss'
 import { TextField, Typography } from "@mui/material";
+import { EpistoFont } from '../../controls/EpistoFont';
 
 const EditItem = (props: {
     title: string
@@ -23,7 +24,7 @@ const EditItem = (props: {
     return (
         <div className={`${classes.dataSheetItem} ${props.className}`} >
             <div className={classes.dataSheetItemTitleWrapper}>
-                <Typography>{props.title}</Typography>
+                <EpistoFont>{props.title}</EpistoFont>
             </div>
             <div className={classes.textOrInputWrapper}>
                 {props.isEditing ?
@@ -33,9 +34,9 @@ const EditItem = (props: {
                         value={props.value}
                         onChange={props.onChange}
                     /> :
-                    <Typography>
+                    <EpistoFont>
                         {props.value}
-                    </Typography>
+                    </EpistoFont>
                 }
             </div>
         </div>

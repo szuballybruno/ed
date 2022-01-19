@@ -14,6 +14,7 @@
   --mildGreen: #7cf25e;
   --mildGrey: #e1e1e1;
   --mildOrange: #ffcd2b;
+  --mildDeepBlue: #1d6784;
 
   --epistoTeal: #97c9cc;
   --whiteGrey: #f7f7f7;
@@ -57,21 +58,32 @@
 }
 
 /* font sizes */
+.fontExtraSmall {
+  font-size: 12px !important;
+}
 
 .fontSmall {
   font-size: 13px !important;
 }
 
-.fontMid {
+.fontSmallPlus {
   font-size: 14px !important;
 }
 
-.font15 {
+.fontMid {
   font-size: 15px !important;
+}
+
+.fontMidPlus {
+  font-size: 16px !important;
 }
 
 .fontLarge {
   font-size: 17px !important;
+}
+
+.fontLargePlus {
+  font-size: 19px !important;
 }
 
 .fontHuge {

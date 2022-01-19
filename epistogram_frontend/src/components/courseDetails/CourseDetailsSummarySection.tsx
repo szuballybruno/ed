@@ -5,6 +5,7 @@ import React from "react";
 import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
 import { CourseImprovementStatsRadar } from "../universal/CourseImprovementStatsRadar";
 
@@ -28,9 +29,9 @@ export const CourseDetailsSummarySection = (props: {
             my={10} />
 
         {/* description */}
-        <Typography>
+        <EpistoFont>
             {courseDetails.description}
-        </Typography>
+        </EpistoFont>
 
         {/* expand more description */}
         <EpistoButton
@@ -62,9 +63,9 @@ export const CourseDetailsSummarySection = (props: {
                         }} />
 
                     {/* text */}
-                    <Typography>
+                    <EpistoFont>
                         {skillBenefit}
-                    </Typography>
+                    </EpistoFont>
                 </Flex>)}
         </Grid>
 

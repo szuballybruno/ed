@@ -10,6 +10,7 @@ export type DashboardSearchItemAction = {
     onClick: (additionalData: any) => void
 }
 
+// TODO: Remove. It is not used anywhere
 export const AdministrationListItem = (props: {
     key: any,
     title: string,

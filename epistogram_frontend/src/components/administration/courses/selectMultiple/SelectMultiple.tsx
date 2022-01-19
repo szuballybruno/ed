@@ -3,6 +3,8 @@ import classes from "./selectMultiple.module.scss";
 import { Fab, FormControl, TextField, Typography } from "@mui/material";
 import { Add } from "@mui/icons-material";
 
+
+// TODO: Remove. It is not used anywhere
 export const SelectMultiple = (props: {
     children: React.ReactNode
     items?: any

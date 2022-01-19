@@ -11,6 +11,7 @@ import { CurrentUserContext } from "../../system/AuthenticationFrame";
 import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoLabel } from "../../controls/EpistoLabel";
+import { EpistoFont } from "../../controls/EpistoFont";
 
 export const roles = [
     {
@@ -112,10 +113,22 @@ export const EditUserControl = (props: {
                 label="Email" />
 
             {/* organization */}
-            {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
-                <Typography variant={"overline"} style={{ marginTop: "10px" }}>
+            {canSetInvitedUserOrganization && <Flex
+                direction="column"
+                align="stretch"
+                mt="10px"
+                width="100%">
+
+                <EpistoFont
+                    isUppercase
+                    fontSize="fontExtraSmall"
+                    style={{
+                        marginTop: "10px"
+                    }}>
+
                     Cég
-                </Typography>
+                </EpistoFont>
+
                 <EpistoSelect
                     items={organizations}
                     selectedValue={selectedOrganization}
@@ -125,10 +138,22 @@ export const EditUserControl = (props: {
             </Flex>}
 
             {/* job title */}
-            {canSetInvitedUserOrganization && <Flex direction="column" align="stretch" mt="10px" width="100%">
-                <Typography variant={"overline"} style={{ marginTop: "10px" }}>
+            {canSetInvitedUserOrganization && <Flex
+                direction="column"
+                align="stretch"
+                mt="10px"
+                width="100%">
+
+                <EpistoFont
+                    isUppercase
+                    fontSize="fontExtraSmall"
+                    style={{
+                        marginTop: "10px"
+                    }}>
+
                     Beosztás
-                </Typography>
+                </EpistoFont>
+
                 <EpistoSelect
                     items={jobTitles}
                     selectedValue={selectedJobTitle}
@@ -138,10 +163,21 @@ export const EditUserControl = (props: {
             </Flex>}
 
             {/* role */}
-            <Flex direction="column" align="stretch" width="100%">
-                <Typography variant={"overline"} style={{ marginTop: "10px" }}>
+            <Flex
+                direction="column"
+                align="stretch"
+                width="100%">
+
+                <EpistoFont
+                    isUppercase
+                    fontSize="fontExtraSmall"
+                    style={{
+                        marginTop: "10px"
+                    }}>
+
                     Jogosultsági kör
-                </Typography>
+                </EpistoFont>
+
                 <EpistoSelect
                     selectedValue={selectedRole}
                     items={roles}
@@ -157,11 +193,11 @@ export const EditUserControl = (props: {
                         checked={isTeacher}
                         onChange={(_, x) => setIsTeacher(x)} />
 
-                    <Typography
+                    <EpistoFont
                         style={{ flex: "1" }}>
 
                         Megjelolom a felhasznalot tanarkent.
-                    </Typography>
+                    </EpistoFont>
                 </Flex>
             </EpistoLabel>
 

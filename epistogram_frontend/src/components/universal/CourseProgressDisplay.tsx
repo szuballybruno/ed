@@ -3,6 +3,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { LinearProgress, Typography } from "@mui/material";
 import { useNavigation } from "../../services/core/navigatior";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const CourseProgressDisplay = (props: {
     value: number,
@@ -28,9 +29,9 @@ export const CourseProgressDisplay = (props: {
             <Flex align="center">
 
                 {/* title  */}
-                <Typography>
+                <EpistoFont>
                     {label}
-                </Typography>
+                </EpistoFont>
 
                 {/* start button */}
                 <EpistoButton onClick={continueCourse}>
@@ -53,9 +54,9 @@ export const CourseProgressDisplay = (props: {
                     }} />
 
                 {/* progress percentage */}
-                <Typography>
+                <EpistoFont>
                     {`${roundValue}%`}
-                </Typography>
+                </EpistoFont>
             </Flex>
         </Flex>
     );

@@ -9,6 +9,7 @@ import { LoadingFrame } from "../system/LoadingFrame";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoPopper } from "../controls/EpistoPopper";
 import { PersonalityChart } from "./PersonalityChart";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const PersonalityAssessment = (props: FlexProps) => {
 
@@ -85,7 +86,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                             background: "var(--transparentWhite70)",
                             color: "black",
                             marginRight: 5,
-                            flex: 1
+                            flex: 3
                         }}
                         onClick={() => {
                             setIsShowHelperPopper(true)
@@ -93,14 +94,15 @@ export const PersonalityAssessment = (props: FlexProps) => {
                         ref={ref}
                         icon={<InfoOutlined />}>
 
-                        <Typography
+                        <EpistoFont
+                            isUppercase
+                            fontSize="fontSmallPlus"
                             style={{
-                                marginLeft: 5,
-                                fontSize: "0.9em"
+                                marginLeft: 5
                             }}>
 
                             {translatableTexts.learningOverview.whatIsThisGraphGoodFor}
-                        </Typography>
+                        </EpistoFont>
                     </EpistoButton>
 
                     {/* personality chart info description */}
@@ -112,14 +114,14 @@ export const PersonalityAssessment = (props: FlexProps) => {
                         }}
                         target={ref?.current}>
 
-                        <Typography
+                        <EpistoFont
+                            fontSize="fontSmallPlus"
                             style={{
-                                maxWidth: "300px",
-                                fontSize: "0.9em"
+                                maxWidth: "300px"
                             }}>
 
                             {translatableTexts.learningOverview.whatIsThisGraphGoodForDescription}
-                        </Typography>
+                        </EpistoFont>
                     </EpistoPopper>
 
                     <EpistoButton
@@ -128,7 +130,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                         style={{
                             background: "var(--transparentWhite70)",
                             color: "black",
-                            flex: 1
+                            flex: 2
                         }}
                         onClick={() => {
 

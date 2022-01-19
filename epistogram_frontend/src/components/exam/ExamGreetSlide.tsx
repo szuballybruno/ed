@@ -4,6 +4,7 @@ import React from "react";
 import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoFont } from "../controls/EpistoFont";
 import { ExamLayout } from "./ExamLayout";
 import { ExamResultStats } from "./ExamResultStats";
 
@@ -34,31 +35,29 @@ export const ExamGreetSlide = (props: {
                     margin: "30px 0"
                 }} />
 
-            <Typography
-                className="fontHuge">
+            <EpistoFont
+                fontSize="fontHuge">
 
                 {exam.title}
-            </Typography>
+            </EpistoFont>
 
-            <Typography
+            <EpistoFont
                 style={{
                     padding: "30px",
                     maxWidth: "400px"
                 }}>
 
                 {translatableTexts.exam.greetText}
-            </Typography>
+            </EpistoFont>
 
             {/* if previously completed  */}
             {exam.isCompletedPreviously && <>
 
                 {/* stats label */}
-                <Typography
-                    style={{
-                    }}>
+                <EpistoFont>
 
                     {translatableTexts.exam.statsLabelText}
-                </Typography>
+                </EpistoFont>
 
                 {/* stats */}
                 <Flex align="center" justify="center">

@@ -6,6 +6,7 @@ import React from 'react';
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
 import { formatTime } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoFont } from "../../controls/EpistoFont";
 
 export const CourseEditItemView = (props: {
     moduleIndex: number,
@@ -45,9 +46,9 @@ export const CourseEditItemView = (props: {
 
                 {/* index */}
                 <Flex alignItems={"center"} height="100%">
-                    <Typography style={{ marginRight: "10px" }}>
+                    <EpistoFont style={{ marginRight: "10px" }}>
                         {index + 1}.
-                    </Typography>
+                    </EpistoFont>
                 </Flex>
 
 
@@ -55,27 +56,23 @@ export const CourseEditItemView = (props: {
                     <Flex>
 
                         {/* title */}
-                        <Typography>
+                        <EpistoFont>
                             {item.title}
-                        </Typography>
+                        </EpistoFont>
 
                     </Flex>
 
                     <Flex>
 
                         {/* subtitle */}
-                        <Typography
-                            style={{
-                                fontSize: "0.8em",
-                                color: "gray"
-                            }}>
+                        <EpistoFont
+                            fontSize={"fontSmall"}
+                            classes={["fontGrey"]}>
+
                             {item.subTitle}
-                        </Typography>
-
+                        </EpistoFont>
                     </Flex>
-
                 </Flex>
-
             </Flex>
 
 

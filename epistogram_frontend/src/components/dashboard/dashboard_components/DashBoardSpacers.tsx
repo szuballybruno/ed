@@ -3,8 +3,10 @@ import { PlayArrow } from '@mui/icons-material';
 import { Divider, Typography } from "@mui/material";
 import React from 'react';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
 import classes from "./dashBoardSpacers.module.scss";
 
+//TODO Remove. Not used anywhere.
 export const DashoardLeftItemGroup = (props:
     FlexProps & {
         title: string,
@@ -20,11 +22,13 @@ export const DashoardLeftItemGroup = (props:
 
         <Flex justify="space-between">
 
-            <Typography
-                variant={"overline"}
-                lineHeight="16px">
+            <EpistoFont
+                isUppercase
+                style={{
+                    lineHeight: 16
+                }}>
                 {props.title}
-            </Typography>
+            </EpistoFont>
 
             <EpistoButton
                 variant="plain"
@@ -58,7 +62,7 @@ export const DashBoardRightSpacer = (props: { title: string }) => {
 
             <Typography variant={"h4"}>
                 {props.title}
-                </Typography>
+            </Typography>
 
             <div className={classes.dashBoardRightSpacerWrapperDivider}>
                 <Divider />

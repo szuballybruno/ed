@@ -6,6 +6,7 @@ import { useShowErrorDialog } from "../../services/core/notifications";
 import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
 import { SignupWrapper } from "../signup/SignupWrapper";
 import { borderRadius } from "@mui/system";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const useSignupQuestionsState = (options: {
     questions: SignupQuestionDTO[],
@@ -104,9 +105,9 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
                 size="small"
                 value="advanced" />
 
-            <Typography style={{ fontSize: "14px" }}>
+            <EpistoFont fontSize="fontSmallPlus">
                 {answerText}
-            </Typography>
+            </EpistoFont>
         </FlexFloat>
     }*/}
 
@@ -122,7 +123,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
-            upperComponent={<Flex alignItems={"center"} justifyContent={"flex-end"} width={"30%"}><Typography>{questionnaireProgressLabel}</Typography></Flex>}>
+            upperComponent={<Flex alignItems={"center"} justifyContent={"flex-end"} width={"30%"}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
 
             <RadioGroup
                 id="answers"

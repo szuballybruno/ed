@@ -2,6 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import { Typography } from "@mui/material";
 import { isString } from "../../static/frontendHelpers";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const CourseDetailsBriefingInfoItem = (props: {
     icon?: string | ReactNode,
@@ -42,16 +43,20 @@ export const CourseDetailsBriefingInfoItem = (props: {
             justify={"center"}
             align={"flex-start"}>
 
-            <Typography
-                fontSize={12}
-                fontWeight={"bold"}>
-                {title}
-            </Typography>
+            <EpistoFont
+                fontSize={"fontExtraSmall"}
+                style={{
+                    fontWeight: "bold"
+                }}>
 
-            <Typography
-                fontSize={12}>
+                {title}
+            </EpistoFont>
+
+            <EpistoFont
+                fontSize={"fontExtraSmall"}>
+
                 {subTitle}
-            </Typography>
+            </EpistoFont>
         </Flex>
     </Flex>
 }

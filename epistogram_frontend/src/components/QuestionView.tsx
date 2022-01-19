@@ -5,6 +5,7 @@ import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultD
 import { QuestionDTO } from "../models/shared_models/QuestionDTO";
 import { showNotification } from "../services/core/notifications";
 import { getAssetUrl } from "../static/frontendHelpers";
+import { EpistoFont } from "./controls/EpistoFont";
 import { EpistoText } from "./controls/EpistoText";
 import { LoadingFramePropsType } from "./system/LoadingFrame";
 import { QuestionnaierAnswer } from "./universal/QuestionnaireAnswer";
@@ -89,13 +90,16 @@ export const QuesitionView = (props: {
                     isSelected={isSelected}
                     mb="8px"
                     onClick={() => handleSelectedAnswerAsync(answer.answerId)} >
-                    <EpistoText
+
+                    <EpistoFont
                         isAutoFontSize
-                        text={answer.answerText}
                         maxFontSize={15}
                         style={{
+                            fontWeight: 400,
                             width: "100%"
-                        }} />
+                        }}>
+                        {answer.answerText}
+                    </EpistoFont>
                 </QuestionnaierAnswer>;
             })}
 
@@ -105,9 +109,9 @@ export const QuesitionView = (props: {
             p="7px"
             align="center">
 
-            <Typography>
+            <EpistoFont>
                 +1 EpistoCoin megszerezve!
-            </Typography>
+            </EpistoFont>
 
             <img
                 src={getAssetUrl("images/epistoCoin.png")}

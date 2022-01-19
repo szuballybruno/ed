@@ -8,6 +8,7 @@ import { epochDates } from "../../static/frontendHelpers";
 import { QuesitionView } from "../QuestionView";
 import { EpistoButton } from "../controls/EpistoButton";
 import { TimeoutFrame } from "./TimeoutFrame";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -72,9 +73,16 @@ export const VideoQuestionnaire = (props: {
                 onClick={() => handleCloseDialog()}>
 
                 <TimeoutFrame reactTimer={reactTimer}>
-                    <Typography style={{ position: "relative", margin: "10px" }}>
+                    <EpistoFont
+                        isUppercase
+                        fontSize="fontSmallPlus"
+                        style={{
+                            position: "relative",
+                            margin: "10px"
+                        }}>
+
                         Bezárás
-                    </Typography>
+                    </EpistoFont>
                 </TimeoutFrame>
             </EpistoButton>
         </Flex>

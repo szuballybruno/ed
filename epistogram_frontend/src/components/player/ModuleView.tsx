@@ -3,6 +3,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Typography } from "@mui/material";
 import { ModuleDetailedDTO } from "../../models/shared_models/ModuleDetailedDTO";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
 
 export const ModuleView = (params: {
@@ -48,9 +49,9 @@ export const ModuleView = (params: {
                         text={module?.name ?? ""}
                         variant="giant" />
 
-                    <Typography>
+                    <EpistoFont>
                         {module?.description}
-                    </Typography>
+                    </EpistoFont>
                 </Flex>
             </Flex>
         </Flex>
@@ -58,9 +59,13 @@ export const ModuleView = (params: {
         <Flex height="60px" borderTop="1px solid var(--mildGrey)" justify="flex-end" p="10px">
             <EpistoButton variant="colored" onClick={startModule} padding="0">
                 <Flex className="whall" mx="15px" align="center">
-                    <Typography style={{ marginRight: "5px" }} className="fontSmall">
+                    <EpistoFont
+                        isUppercase
+                        style={{ marginRight: "5px" }}
+                        fontSize="fontSmall">
+                            
                         Kezdhetjük!
-                    </Typography>
+                    </EpistoFont>
 
                     <ArrowForwardIcon></ArrowForwardIcon>
                 </Flex>

@@ -160,7 +160,7 @@ export const RegistrationPage = () => {
                     value={acceptPrivacyPolicy}
                     onClick={() => setAcceptPrivacyPolicy(p => !p)} />
 
-                <Typography
+                <EpistoFont
                     style={{
                         userSelect: "none"
                     }}>
@@ -177,7 +177,7 @@ export const RegistrationPage = () => {
                     </a>
 
                     {translatableTexts.registrationPage.privacyPolicyDescriptionParts[2]}
-                </Typography>
+                </EpistoFont>
             </Flex>
 
 

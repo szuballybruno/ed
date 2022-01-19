@@ -8,6 +8,7 @@ import { Fullscreen, Pause, PlayArrow } from '@mui/icons-material';
 import { Slider, Typography } from '@mui/material';
 import { secondsToTime } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const VideoControls = (props: {
     controlsVisible: boolean,
@@ -69,9 +70,9 @@ export const VideoControls = (props: {
         </button>
 
         {/* timestamp */}
-        <Typography>
+        <EpistoFont>
             {`${secondsToTime(playedSeconds)}/${secondsToTime(videoLength)}`}
-        </Typography>
+        </EpistoFont>
 
         {/* slider */}
         <Slider

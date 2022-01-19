@@ -9,6 +9,7 @@ import { formatTimespan, getAssetUrl, getQueryParam } from "../../static/fronten
 import { translatableTexts } from "../../static/translatableTexts";
 import { ContentPane } from "../ContentPane";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
 import { PageRootContainer } from "../PageRootContainer";
 import { ProfileImage } from "../ProfileImage";
@@ -245,9 +246,9 @@ const CourseDetailsPage = () => {
                                     )}
                                     midContent={(
                                         <Flex flex={1} p={5}>
-                                            <Typography>
+                                            <EpistoFont>
                                                 {sidebarInfo.name}
-                                            </Typography>
+                                            </EpistoFont>
                                         </Flex>
                                     )}
                                     endContent={(
@@ -257,9 +258,9 @@ const CourseDetailsPage = () => {
                                             justifyContent={"space-between"}
                                             alignItems={"center"}>
 
-                                            <Typography>
+                                            <EpistoFont>
                                                 {sidebarInfo.value}
-                                            </Typography>
+                                            </EpistoFont>
                                         </Flex>
                                     )} />
                             ))}

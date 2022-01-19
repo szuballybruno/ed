@@ -5,6 +5,7 @@ import React from "react";
 import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
 import { mockCourseDetails } from "../../static/mockData";
 import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
 
 export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseDetailsDTO }) => {
@@ -25,9 +26,9 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
             my={10} />
 
          course requirements description 
-        <Typography>
+        <EpistoFont>
             {mockCourseDetails.lorem}
-        </Typography>*/}
+        </EpistoFont>*/}
 
         {/* technical requirements title */}
         <EpistoHeader
@@ -43,9 +44,9 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
                 .map(x => (
                     <Flex align="center">
                         <SettingsSuggestIcon style={{ color: "var(--deepBlue)", marginRight: "10px" }} className="square35" />
-                        <Typography>
+                        <EpistoFont>
                             {x}
-                        </Typography>
+                        </EpistoFont>
                     </Flex>
                 ))}
         </Flex>

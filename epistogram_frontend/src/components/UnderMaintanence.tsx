@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
 import { getAssetUrl } from "../static/frontendHelpers"
+import { EpistoFont } from "./controls/EpistoFont"
 import { EpistoHeader } from "./EpistoHeader"
 
 export const UnderMaintanence = () => {
@@ -22,10 +23,10 @@ export const UnderMaintanence = () => {
                 variant="giant"
                 text="Ez egy előre tervezett leállás, és átlagosan maximum 30 percig tart."></EpistoHeader>
 
-            <Typography>
+            <EpistoFont>
 
                 Ha bármilyen kérdésed lenne, írj bátran a <a style={{color: "blue"}} href="mailto:support@epistogram.com">support@epistogram.com</a> e-mail címre
-            </Typography>
+            </EpistoFont>
         </Flex>
     </Flex>
 }

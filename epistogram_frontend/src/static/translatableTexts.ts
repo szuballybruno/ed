@@ -33,6 +33,11 @@ export const translatableTexts = {
         letsStart: "Kezdhetjük"
     },
 
+    leftPane: {
+        assistantDescription: "Szia, én Tina vagyok, a te személyes segítőd, ha elakadnál, kérdezz bátran!",
+        assistantButtonTitle: "Segítség"
+    },
+
     signupPage: {
 
         greetSlideTitle: "Regisztráció",

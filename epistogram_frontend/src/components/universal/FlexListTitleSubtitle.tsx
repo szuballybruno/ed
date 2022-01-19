@@ -2,19 +2,26 @@ import { Flex } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
 import { ReactNode } from "react";
 import { isString } from "../../static/frontendHelpers";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const FlexListTitleSubtitle = (props: { title: string, subTitle: string | ReactNode }) => {
 
     return <Flex direction="column">
 
-        <Typography variant={"button"}>
+        <EpistoFont
+            fontSize="fontSmallPlus"
+            isUppercase
+            style={{
+                fontWeight: 500
+            }}>
+
             {props.title}
-        </Typography>
+        </EpistoFont>
 
         {isString(props.subTitle)
-            ? <Typography variant={"caption"}>
+            ? <EpistoFont fontSize={"fontExtraSmall"}>
                 {props.subTitle}
-            </Typography>
+            </EpistoFont>
             : props.subTitle}
     </Flex>;
 }

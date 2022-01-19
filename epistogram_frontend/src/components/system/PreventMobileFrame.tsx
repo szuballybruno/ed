@@ -4,6 +4,7 @@ import { prototype } from "events";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoEntry } from "../controls/EpistoEntry";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const PreventMobileFrame = (props) => {
 
@@ -42,35 +43,35 @@ export const PreventMobileFrame = (props) => {
                     alt="" />
 
                 {/* descriptions */}
-                <Typography
+                <EpistoFont
+                    fontSize="fontSmall"
                     style={{
                         width: "100%",
-                        padding: "5px 0",
-                        fontSize: "13px"
+                        padding: "5px 0"
                     }}>
 
                     Kedves Látogató!
-                </Typography>
+                </EpistoFont>
 
-                <Typography
+                <EpistoFont
+                    fontSize="fontSmall"
                     style={{
                         width: "100%",
-                        padding: "5px 0",
-                        fontSize: "13px"
+                        padding: "5px 0"
                     }}>
 
                     Az optimális felhasználási élmény érdekében az EpistoGram webalkalmazása jelenleg csak asztali számítógépeken, notebookokon, vagy olyan táblagépeken fut el, melyek felbontása minimum 1280 x 720 pixeles.
-                </Typography>
+                </EpistoFont>
 
-                <Typography
+                <EpistoFont
+                    fontSize="fontSmall"
                     style={{
                         width: "100%",
-                        padding: "5px 0",
-                        fontSize: "13px"
+                        padding: "5px 0"
                     }}>
 
                     Egyéb okoseszközökön hamarosan debütáló mobilalkalmazásunkon keresztül érheted majd el platformunkat.
-                </Typography>
+                </EpistoFont>
 
                 {/* signup for news 
                 <EpistoEntry
@@ -84,9 +85,9 @@ export const PreventMobileFrame = (props) => {
 
                     <Checkbox />
 
-                    <Typography
+                    <EpistoFont
+                        fontSize="fontSmall"
                         style={{
-                            fontSize: 13,
                             userSelect: "none"
                         }}>
 
@@ -100,7 +101,7 @@ export const PreventMobileFrame = (props) => {
                             Adatkezelési Nyilatkozat
                         </a>
                         {"ban foglaltakat"}
-                    </Typography>
+                    </EpistoFont>
                 </Flex>
 
                 <EpistoButton

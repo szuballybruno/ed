@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { isCurrentRoute } from "../static/frontendHelpers";
 import { ApplicationRoute } from "../models/types";
+import { EpistoFont } from "./controls/EpistoFont";
 
 export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
 
@@ -27,15 +28,17 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
                         {menuItem.icon}
 
                         {/* text */}
-                        <Typography
-                            color={"secondary"}
-                            variant={"button"}
+                        <EpistoFont
+                            fontSize="fontSmallPlus"
+                            isUppercase
                             style={{
                                 marginLeft: "10px",
-                                fontWeight: isCurrent ? "bold" : undefined
+                                color: "var(--mildDeepBlue)",
+                                fontWeight: isCurrent ? "bold" : 500
                             }}>
                             {menuItem.title}
-                        </Typography>
+                        </EpistoFont>
+                        
                     </Flex>
                 </NavLink>
             })}

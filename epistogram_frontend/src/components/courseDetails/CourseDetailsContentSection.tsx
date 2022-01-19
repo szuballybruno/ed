@@ -4,6 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/
 import React from "react";
 import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
 import { getAssetUrl, roundNumber } from "../../static/frontendHelpers";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export const CourseDetailsContentSection = (props: { courseDetails: CourseDetailsDTO }) => {
 
@@ -28,9 +29,9 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
                     <AccordionSummary
                         expandIcon={<ExpandMore />}>
 
-                        <Typography>
+                        <EpistoFont>
                             {module.name}
-                        </Typography>
+                        </EpistoFont>
                     </AccordionSummary>
 
                     <AccordionDetails>
@@ -47,17 +48,19 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
                                         style={{ margin: '10px', objectFit: "contain" }} />
 
                                     {/* name */}
-                                    <Typography
-                                        fontSize={12}
-                                        fontWeight={"bold"}>
+                                    <EpistoFont
+                                        fontSize={"fontExtraSmall"}
+                                        style={{
+                                            fontWeight: "bold"
+                                        }}>
 
                                         {video.title}
-                                    </Typography>
+                                    </EpistoFont>
                                 </Flex>
 
-                                <Typography>
+                                <EpistoFont>
                                     {formatSeconds(video.length)}
-                                </Typography>
+                                </EpistoFont>
                             </Flex>)}
                     </AccordionDetails>
                 </Accordion>

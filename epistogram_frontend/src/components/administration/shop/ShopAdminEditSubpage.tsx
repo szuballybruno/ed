@@ -19,6 +19,7 @@ import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoSelect } from "../../controls/EpistoSelect";
+import { EpistoFont } from "../../controls/EpistoFont";
 
 export const ShopAdminEditSubpage = () => {
 
@@ -205,9 +206,9 @@ export const ShopAdminEditSubpage = () => {
                             onChange={(x, y) => setIsCourse(y)}
                             className="square50" />
 
-                        <Typography>
+                        <EpistoFont>
                             Ez a ShopItem kurzust reprezental?
-                        </Typography>
+                        </EpistoFont>
                     </Flex>
 
                     {isCourse && <EpistoSelect
@@ -307,7 +308,7 @@ export const ShopAdminEditSubpage = () => {
                                     onClick={handleDeleteAll}>
 
                                     <Flex>
-                                        Osszes torlese
+                                        Összes törlése
 
                                         <DeleteSweepIcon
                                             style={{
@@ -320,9 +321,9 @@ export const ShopAdminEditSubpage = () => {
                             {discountCodes
                                 .map(x => (
                                     <Flex m="5px" justify="space-between">
-                                        <Typography>
+                                        <EpistoFont>
                                             {x.id ? "id:" + x.id : "Uj"} - {x.code}
-                                        </Typography>
+                                        </EpistoFont>
 
                                         {x.isUsed && <LockIcon
                                             style={{
@@ -342,21 +343,21 @@ export const ShopAdminEditSubpage = () => {
                         <Flex flex="1" direction="column">
 
                             <Flex align="center" justify="space-between">
-                                <Typography>
-                                    Bejegyzesek szama: {addedCodes.length}
-                                </Typography>
+                                <EpistoFont>
+                                    Bejegyzések száma: {addedCodes.length}
+                                </EpistoFont>
 
                                 <EpistoButton
                                     variant="colored"
                                     onClick={addCodes}>
 
-                                    Hozzaadas
+                                    Hozzáadás
                                 </EpistoButton>
                             </Flex>
 
                             <EpistoEntry
                                 flex="1"
-                                label="Kod(ok) hozzaadasa"
+                                label="Kód(ok) hozzáadása"
                                 value={addCodesField}
                                 setValue={setAddCodesField}
                                 isMultiline />

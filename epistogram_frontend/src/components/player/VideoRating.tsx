@@ -5,6 +5,7 @@ import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from "
 import { useShowErrorDialog } from "../../services/core/notifications"
 import { getAssetUrl, iterate } from "../../static/frontendHelpers"
 import { EpistoButton } from "../controls/EpistoButton"
+import { EpistoFont } from "../controls/EpistoFont"
 
 export const VideoRating = (props: { videoId: number }) => {
 
@@ -77,11 +78,12 @@ export const VideoRating = (props: { videoId: number }) => {
                 align="flex-end">
 
                 {/* title */}
-                <Typography
-                    variant="overline">
+                <EpistoFont
+                    fontSize="fontExtraSmall"
+                    isUppercase>
 
                     Mennyire volt hasznos ez a videó?
-                </Typography>
+                </EpistoFont>
 
                 {/* rating buttons  */}
                 <Flex>
@@ -121,11 +123,12 @@ export const VideoRating = (props: { videoId: number }) => {
                 align="flex-end">
 
                 {/* title */}
-                <Typography
-                    variant="overline">
+                <EpistoFont
+                    fontSize="fontExtraSmall"
+                    isUppercase>
 
                     Ennyire volt nehéz megérteni
-                </Typography>
+                </EpistoFont>
 
                 {/* rating buttons  */}
                 <Flex>

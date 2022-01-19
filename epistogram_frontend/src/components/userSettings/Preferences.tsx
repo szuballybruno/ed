@@ -13,6 +13,7 @@ import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useSaveUserSimple } from '../../services/api/userApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
 import { EpistoEntry } from '../controls/EpistoEntry';
+import { EpistoFont } from '../controls/EpistoFont';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -23,9 +24,9 @@ const EditField = (props: { children: ReactNode, label: string }) => {
         p="10px"
         align="flex-end">
 
-        <Typography>
+        <EpistoFont>
             {props.label}
-        </Typography>
+        </EpistoFont>
         {props.children}
     </Flex>
 }
@@ -165,15 +166,15 @@ export const Preferences = () => {
                 setValue={setPhoneNumber} />
 
             {/* open password change options */}
-            {!isPasswordChangeOpen && <Typography
+            {!isPasswordChangeOpen && <EpistoFont
+                isUppercase
+                fontSize="fontExtraSmall"
                 style={{
-                    marginTop: "10px",
-                    color: "#9FA2B4"
-                }}
-                variant={"overline"}>
+                    margin: "10px 0 5px 0",
+                }}>
 
                 {"Jelszó megváltoztatása"}
-            </Typography>}
+            </EpistoFont>}
 
             {/* password change options */}
             <Flex
