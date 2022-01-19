@@ -1,7 +1,7 @@
-import { PersonalityDataDTO } from "./PersonalityDataDTO";
-import { PersonalityDescriptionsDTO } from "./PersonalityDescriptionsDTO";
+import { PersonalityCategoryTraitDTO } from "./PersonalityCategoryTraitDTO";
+import { PersonalityChartDataDTO } from "./PersonalityChartDataDTO";
 
 export type PersonalityAssessmentDTO = {
-    chartData: PersonalityDataDTO;
-    personalityDescriptions: PersonalityDescriptionsDTO;
+    chartData: PersonalityChartDataDTO;
+    personalityTraitCategories: PersonalityCategoryTraitDTO[];
 }

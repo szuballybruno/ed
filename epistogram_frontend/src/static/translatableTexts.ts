@@ -110,6 +110,10 @@ export const translatableTexts = {
         administrationAddGroup: "Csoport hozzáadása",
         administrationEditGroup: "Csoport szerkesztése",
         administrationGroupStatistics: "Statisztika",
+        
+        administrationPersonalityAssessmentMain: "Szemelyiseg analizis adminisztracio",
+        administrationPersonalityAssessmentTips: "Szemelyiseg szerinti tippek",
+        administrationPersonalityAssessmentTip: "Tipp szerkesztese",
 
         settings: "Beállítások",
         settingsOverview: "Beállítások",

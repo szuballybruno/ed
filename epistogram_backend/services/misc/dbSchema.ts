@@ -10,9 +10,8 @@ import { Exam } from "../../models/entity/Exam";
 import { GivenAnswer } from "../../models/entity/GivenAnswer";
 import { JobTitle } from "../../models/entity/JobTitle";
 import { Organization } from "../../models/entity/Organization";
-import { PersonalityCategoryDescription } from "../../models/entity/PersonalityCategoryDescription";
 import { Question } from "../../models/entity/Question";
-import { QuestionCategory } from "../../models/entity/QuestionCategory";
+import { PersonalityTraitCategory } from "../../models/entity/PersonalityTraitCategory";
 import { QuestionType } from "../../models/entity/QuestionType";
 import { Role } from "../../models/entity/Role";
 import { RoleActivityBridge } from "../../models/entity/RoleActivityBridge";
@@ -31,7 +30,6 @@ import { CourseView } from "../../models/views/CourseView";
 import { DailyTipView } from "../../models/views/DailyTipView";
 import { ExamCompletedView } from "../../models/views/ExamCompletedView";
 import { PractiseQuestionView } from "../../models/views/PractiseQuestionView";
-import { SignupAnswersView } from "../../models/views/SignupAnswersView";
 import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
 import { SignupCompletedView } from "../../models/views/SignupCompletedView";
 import { VideoCompletedView } from "../../models/views/VideoCompletedView";
@@ -68,6 +66,7 @@ import { TeacherInfo } from "../../models/entity/TeacherInfo";
 import { ExamView } from "../../models/views/ExamView";
 import { VideoRating } from "../../models/entity/VideoRating";
 import { CourseOverviewView } from "../../models/views/CourseOverviewView";
+import { PersonalityTraitView } from "../../models/views/PersonalityTraitView";
 
 export const dbSchema = {
 
@@ -82,7 +81,7 @@ export const dbSchema = {
         "course_item_all_view",
         "course_view",
         "signup_question_view",
-        "signup_answers_view",
+        "personality_trait_view",
         "signup_completed_view",
         "user_activity_view",
         "user_activity_flat_view",
@@ -152,7 +151,7 @@ export const dbSchema = {
         CourseStateView,
         CourseItemAllView,
         CourseView,
-        SignupAnswersView,
+        PersonalityTraitView,
         UserActivityFlatView,
         SignupCompletedView,
         DailyTipView,
@@ -196,11 +195,10 @@ export const dbSchema = {
         TeacherInfo,
         VideoPlaybackData,
         UserCourseBridge,
-        QuestionCategory,
+        PersonalityTraitCategory,
         Role,
         Activity,
         RoleActivityBridge,
-        PersonalityCategoryDescription,
         PractiseQuestionView,
         JobTitle,
         DailyTip,

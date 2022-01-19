@@ -1,7 +1,7 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout"
 import { Typography } from "@mui/material"
 import ReactPlayer from "react-player"
-import { useDailyTip } from "../services/api/miscApiService"
+import { useDailyTip } from "../services/api/dailyTipApiService"
 import { getAssetUrl, usePaging } from "../static/frontendHelpers"
 import { translatableTexts } from "../static/translatableTexts"
 import { EpistoFont } from "./controls/EpistoFont"

@@ -16,6 +16,7 @@ export class CourseDetailsEditDataDTO {
     visibility: CourseVisibilityType;
     teacherId: number;
     humanSkillBenefitsDescription: string;
+    technicalRequirementsDescription: string;
 
     technicalRequirements: string[];
     skillBenefits: string[];

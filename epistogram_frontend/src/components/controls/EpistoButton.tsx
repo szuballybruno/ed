@@ -8,7 +8,7 @@ export type EpistoButtonPropsType = {
     isRound?: boolean,
     padding?: string,
     fontSize?: string,
-    variant?: "outlined" | "plain" | "colored",
+    variant?: "outlined" | "plain" | "colored" | "light",
     style?: CSSProperties,
     className?: string,
     icon?: ReactNode,
@@ -38,14 +38,24 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
 
     const { variant: _, ...buttonProps } = props.buttonProps ?? { variant: null };
 
+    const getVariant = () => {
+
+        if (variant === "colored")
+            return "contained";
+
+        if (variant === "light")
+            return "contained";
+
+        if (variant === "outlined")
+            return "outlined";
+
+        return "text";
+    };
+
     return <Button
         onClick={onClick}
         name={name}
-        variant={variant === "colored"
-            ? "contained"
-            : variant === "outlined"
-                ? "outlined"
-                : "text"}
+        variant={getVariant()}
         color="primary"
         ref={ref}
         disabled={isDisabled}
@@ -56,6 +66,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             whiteSpace: "nowrap",
             fontWeight: 500,
             minWidth: "0px",
+            background: variant === "light" ? "white" : undefined,
             color: isDisabled
                 ? "white"
                 : variant === "colored"

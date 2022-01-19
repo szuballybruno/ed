@@ -29,11 +29,11 @@ export const FlexListItem = (props: FlexProps & {
         align="center"
         pointerEvents={isLocked ? "none" : "all"}
         color="#3F3F3F"
+        padding="5px"
         onClick={onClick}
         {...css}>
 
         {setIsChecked && <Flex
-            minWidth={60}
             alignItems={"center"}
             justifyContent={"center"}>
 
@@ -52,7 +52,7 @@ export const FlexListItem = (props: FlexProps & {
 
         <Flex
             flex="1"
-            p="10px"
+            px="10px"
             alignItems={"center"}
             justifyContent={"flex-start"}>
 

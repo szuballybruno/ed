@@ -1,4 +1,3 @@
-import { fontSize } from "@mui/system";
 import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./css/EpistoFont.module.css";
 

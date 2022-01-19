@@ -9,19 +9,21 @@ import { EpistoSelect } from "../controls/EpistoSelect"
 import { BulkEditButtons, BulkEditButtonType } from "./BulkEditButtons"
 
 export const AdminListEditHeader = (props: {
-    isAllSelected: boolean,
-    selectAllOrNone: (isAll: boolean) => void,
-    selectedIds: number[],
-    headerButtons: BulkEditButtonType[],
-    itemLabel: string,
+    isAllSelected?: boolean,
+    selectAllOrNone?: (isAll: boolean) => void,
+    selectedIds?: number[],
+    headerButtons?: BulkEditButtonType[],
+    itemLabel?: string,
     onSearchChanged?: (value: string) => void,
     buttons?: ButtonType[]
 }) => {
 
     const { isAllSelected, selectedIds, buttons, onSearchChanged, itemLabel, headerButtons, selectAllOrNone } = props;
-    const isAnySelected = selectedIds.some(x => true);
-    const isSingleSelected = selectedIds.length === 1;
-    const selectionCount = selectedIds.length;
+
+    const selectedIdsNullSafe = selectedIds ?? [];
+    const isAnySelected = selectedIdsNullSafe.some(x => true);
+    const isSingleSelected = selectedIdsNullSafe.length === 1;
+    const selectionCount = selectedIdsNullSafe.length;
 
     return <Flex
         bg="var(--deepBlue)"
@@ -35,11 +37,16 @@ export const AdminListEditHeader = (props: {
 
             {/* select all */}
             <EpistoButton
-                onClick={() => selectAllOrNone(true)}>
+                onClick={() => {
+
+                    if (selectAllOrNone)
+                        selectAllOrNone(true)
+                }}>
 
                 <div className="h-flex align-center fontLight">
+
                     <EpistoCheckbox
-                        value={isAllSelected} />
+                        value={!!isAllSelected} />
 
                     <EpistoFont
                         style={{ marginLeft: "20px" }}>
@@ -51,7 +58,11 @@ export const AdminListEditHeader = (props: {
 
             {/* deselect all */}
             <EpistoButton
-                onClick={() => selectAllOrNone(false)}>
+                onClick={() => {
+
+                    if (selectAllOrNone)
+                        selectAllOrNone(false)
+                }}>
 
                 <div className="h-flex align-center fontLight">
 
@@ -62,7 +73,11 @@ export const AdminListEditHeader = (props: {
                     </EpistoFont>
 
                     <Close
-                        onClick={() => selectAllOrNone(false)}
+                        onClick={() => {
+
+                            if (selectAllOrNone)
+                                selectAllOrNone(false);
+                        }}
                         style={{
                             width: 18,
                             marginLeft: 5
@@ -75,7 +90,8 @@ export const AdminListEditHeader = (props: {
         <Flex flex={1} />
 
         {/* bulk edit buttons */}
-        {isSingleSelected && <BulkEditButtons buttons={headerButtons} />}
+        {isSingleSelected && <BulkEditButtons
+            buttons={headerButtons ?? []} />}
 
         {/* search */}
         <Flex

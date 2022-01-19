@@ -89,6 +89,11 @@ import { DiscountCode } from "../../models/entity/DiscountCode";
 import { DiscountCodeDTO } from "../../models/shared_models/DiscountCodeDTO";
 import { CourseOverviewView } from "../../models/views/CourseOverviewView";
 import { CourseOverviewDataDTO } from "../../models/shared_models/CourseOverviewDataDTO";
+import { PersonalityTraitCategory } from "../../models/entity/PersonalityTraitCategory";
+import { PersonalityTraitCategoryShortDTO } from "../../models/shared_models/PersonalityTraitCategoryShortDTO";
+import { DailyTip } from "../../models/entity/DailyTip";
+import { PersonalityTraitCategoryDTO } from "../../models/shared_models/PersonalityTraitCategoryDTO";
+import { DailyTipEditDataDTO } from "../../models/shared_models/DailyTipEditDataDTO";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -223,6 +228,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 visibility: view.visibility,
                 teacherId: view.teacherId,
                 humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
+                technicalRequirementsDescription: view.technicalRequirementsDescription,
 
                 skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
                 technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
@@ -510,6 +516,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(DailyTipView, DailyTipDTO, view => {
 
             return {
+                id: view.dailyTipId,
                 description: view.description,
                 videoUrl: getAssetUrl(view.videoFilePath)
             } as DailyTipDTO;
@@ -728,11 +735,55 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             questionSuccessRate: c.questionSuccessRate,
             totalSpentTime: c.totalSpentTime
         }));
+
+    mapperService
+        .addMap(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, x => ({
+            id: x.id,
+            title: x.title,
+            maxLabel: x.maxLabel,
+            minLabel: x.minLabel
+        }));
+
+    mapperService
+        .addMap(DailyTip, DailyTipDTO, x => ({
+            description: x.description,
+            id: x.id,
+            videoUrl: ""
+        }));
+
+    mapperService
+        .addMap(PersonalityTraitCategory, PersonalityTraitCategoryDTO, (category, tips: DailyTip[]) => ({
+            id: category.id,
+            maxDescription: category.maxDescription,
+            maxLabel: category.maxLabel,
+            minDescription: category.minDescription,
+            minLabel: category.minLabel,
+            title: category.title,
+            tips: mapperService
+                .mapMany(DailyTip, DailyTipDTO, tips)
+        }));
+
+    mapperService
+        .addMap(DailyTip, DailyTipEditDataDTO, x => ({
+            description: x.description,
+            id: x.id,
+            isLive: x.isLive
+        }));
+}
+
+const separationChar = "|";
+
+export const createCharSeparatedList = (list: string[]) => {
+
+    return list.join(` ${separationChar} `);
 }
 
 const parseCommaSeparatedStringList = (str: string) => {
 
-    return (str ?? "").split(",").map(x => x.trim());
+    return (str ?? "")
+        .split(separationChar)
+        .map(x => x
+            .trim());
 }
 
 const parseSkillBenefits = (str: string) => {
@@ -741,7 +792,7 @@ const parseSkillBenefits = (str: string) => {
         return [];
 
     return (str ?? "")
-        .split(',')
+        .split(separationChar)
         .map(x => {
 
             const trimmed = x.trim();
@@ -911,3 +962,4 @@ export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
             : []
     } as CourseCategoryDTO;
 }
+
