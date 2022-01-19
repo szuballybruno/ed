@@ -113,6 +113,7 @@ export const translatableTexts = {
         
         administrationPersonalityAssessmentMain: "Szemelyiseg analizis adminisztracio",
         administrationPersonalityAssessmentTips: "Szemelyiseg szerinti tippek",
+        administrationPersonalityAssessmentTip: "Tipp szerkesztese",
 
         settings: "Beállítások",
         settingsOverview: "Beállítások",

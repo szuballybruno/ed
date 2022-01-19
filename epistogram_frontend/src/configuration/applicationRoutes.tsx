@@ -238,6 +238,11 @@ export const applicationRoutes = {
             editTips: {
                 title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,
                 route: "/administration/personality-assessment/:traitCategoryId/tips"
+            },
+
+            editTip: {
+                title: translatableTexts.routeTitles.administrationPersonalityAssessmentTip,
+                route: "/administration/personality-assessment/:traitCategoryId/tip/:dailyTipId"
             }
         },
 

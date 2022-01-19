@@ -93,6 +93,7 @@ import { PersonalityTraitCategory } from "../../models/entity/PersonalityTraitCa
 import { PersonalityTraitCategoryShortDTO } from "../../models/shared_models/PersonalityTraitCategoryShortDTO";
 import { DailyTip } from "../../models/entity/DailyTip";
 import { PersonalityTraitCategoryDTO } from "../../models/shared_models/PersonalityTraitCategoryDTO";
+import { DailyTipEditDataDTO } from "../../models/shared_models/DailyTipEditDataDTO";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -760,6 +761,13 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             title: category.title,
             tips: mapperService
                 .mapMany(DailyTip, DailyTipDTO, tips)
+        }));
+
+    mapperService
+        .addMap(DailyTip, DailyTipEditDataDTO, x => ({
+            description: x.description,
+            id: x.id,
+            isLive: x.isLive
         }));
 }
 

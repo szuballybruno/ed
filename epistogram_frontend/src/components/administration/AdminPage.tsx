@@ -19,6 +19,7 @@ import { EditModuleSubpage } from './courses/EditModuleSubpage';
 import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditVideoSubpage } from './courses/EditVideoSubpage';
 import { PersonalityAssessmentAdminSubpage } from './personalityAssessment/PersonalityAssessmentAdminSubpage';
+import { PersonalityAssessmentAdminTipEditSubpage } from './personalityAssessment/PersonalityAssessmentAdminTipEditSubpage';
 import { PersonalityAssessmentAdminTipsSubpage } from './personalityAssessment/PersonalityAssessmentAdminTipsSubpage';
 import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
@@ -114,6 +115,7 @@ const AdminPage = () => {
                     render={() => <Switch>
                         {getRoute(administrationRoutes.personalityAssessmentRoute, <PersonalityAssessmentAdminSubpage />)}
                         {getRoute(administrationRoutes.personalityAssessmentRoute.editTips, <PersonalityAssessmentAdminTipsSubpage />)}
+                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTip, <PersonalityAssessmentAdminTipEditSubpage />)}
                     </Switch>} />
 
                 {/* statistics */}

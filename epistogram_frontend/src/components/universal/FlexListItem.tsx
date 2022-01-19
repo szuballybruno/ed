@@ -29,6 +29,7 @@ export const FlexListItem = (props: FlexProps & {
         align="center"
         pointerEvents={isLocked ? "none" : "all"}
         color="#3F3F3F"
+        padding="5px"
         onClick={onClick}
         {...css}>
 

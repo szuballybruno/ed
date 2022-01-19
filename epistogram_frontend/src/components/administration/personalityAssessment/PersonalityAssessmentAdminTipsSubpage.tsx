@@ -20,6 +20,7 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const personalityTraitCategoryId = useIntParam("traitCategoryId");
+    const traitCategoryId = useIntParam("traitCategoryId");
 
     // http 
     const {
@@ -40,7 +41,7 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
 
     const handleEdit = (dailyTipId: number) => {
 
-        // navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips, { traitCategoryId: dailyTipId })
+        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTip, { traitCategoryId, dailyTipId })
     }
 
     const handleAddTip = async () => {
@@ -90,6 +91,9 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
 
             {/* admin header */}
             <AdminSubpageHeader
+                tabMenuItems={[
+                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips
+                ]}
                 subRouteLabel={personalityTraitCategoryDetails?.title ?? ""}>
 
                 <Flex

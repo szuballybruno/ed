@@ -2,16 +2,15 @@ import { Box, FlexProps } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
 import { Tab, Tabs } from "@mui/material";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Typography from '@mui/material/Typography';
 import React, { ReactNode } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
 import { ApplicationRoute, ButtonType } from "../../models/types";
-import { useNavigation } from "../../services/core/navigatior";
 import { useCourseBriefData } from "../../services/api/courseApiService";
-import { useBriefUserData } from "../../services/api/userApiService";
 import { useShopItemBriefData } from "../../services/api/shopApiService";
+import { useBriefUserData } from "../../services/api/userApiService";
+import { useNavigation } from "../../services/core/navigatior";
+import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoFont } from "../controls/EpistoFont";
 
@@ -20,10 +19,11 @@ export const AdminSubpageHeader = (props: {
     children?: ReactNode,
     onSave?: () => void,
     headerButtons?: ButtonType[],
-    subRouteLabel?: string
+    subRouteLabel?: string,
+    navigationQueryParams?: any
 } & FlexProps) => {
 
-    const { children, subRouteLabel, headerButtons, tabMenuItems, onSave, ...css } = props;
+    const { children, subRouteLabel, headerButtons, navigationQueryParams, tabMenuItems, onSave, ...css } = props;
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
@@ -92,7 +92,7 @@ export const AdminSubpageHeader = (props: {
 
     const navigateToTab = (path: string) => {
 
-        navigate(path, { userId, courseId, videoId, examId, shopItemId });
+        navigate(path, { userId, courseId, videoId, examId, shopItemId, ...navigationQueryParams });
     };
 
     return <Flex

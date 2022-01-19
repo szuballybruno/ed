@@ -193,6 +193,8 @@ import { DailyTipService } from './services/DailyTipService';
     addEndpoint(apiRoutes.dailyTip.getDailyTip, dailyTipController.getDailyTipAction);
     addEndpoint(apiRoutes.dailyTip.deleteDailyTip, dailyTipController.deleteDailyTipAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.dailyTip.createDailyTip, dailyTipController.createDailyTipAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.dailyTip.getDailyTipEditData, dailyTipController.getDailyTipEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.dailyTip.saveDailyTip, dailyTipController.saveDailyTipAction, { isPost: true,authorize: ["administrator"] });
 
     // personality assessment 
     addEndpoint(apiRoutes.personalityAssessment.getPersonalityTraitCategories, personalityAssessmentController.getPersonalityTraitCategoriesAction);

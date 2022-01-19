@@ -48,6 +48,8 @@ export const apiRoutes = {
         getDailyTip: "/dailytip/get-daily-tip",
         deleteDailyTip: "/dailytip/delete-daily-tip",
         createDailyTip: "/dailytip/create-daily-tip",
+        getDailyTipEditData: "/dailytip/get-daily-tip-edit-data",
+        saveDailyTip: "/dailytip/save-daily-tip",
     },
 
     shop: {

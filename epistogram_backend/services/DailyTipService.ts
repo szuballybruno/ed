@@ -1,6 +1,7 @@
 import { DailyTip } from "../models/entity/DailyTip";
 import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
 import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
+import { DailyTipEditDataDTO } from "../models/shared_models/DailyTipEditDataDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -28,10 +29,34 @@ export class DailyTipService {
         await this._ormService
             .getRepository(DailyTip)
             .insert({
-                personalityTraitCategoryId ,
+                personalityTraitCategoryId,
                 description: "",
                 isLive: false
             });
+    }
+
+    async getDailyTipEditDataAsync(dailyTipId: number) {
+
+        const dailyTip = await this._ormService
+            .getRepository(DailyTip)
+            .findOneOrFail(dailyTipId);
+
+        return this._mapperService
+            .map(DailyTip, DailyTipEditDataDTO, dailyTip);
+    }
+
+    async saveDailyTipAsync(dto: DailyTipEditDataDTO) {
+
+        const dailyTip = await this._ormService
+            .getRepository(DailyTip)
+            .save({
+                id: dto.id,
+                description: dto.description,
+                isLive: dto.isLive
+            });
+
+        return this._mapperService
+            .map(DailyTip, DailyTipEditDataDTO, dailyTip);
     }
 
     async getDailyTipAsync() {
