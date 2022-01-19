@@ -102,13 +102,13 @@ export const EpistoDialog = (props: {
             {logic.dialogOptions?.defaultCloseButtonType === "top" && <Close
                 onClick={closeDialog}
                 style={{
-                    color: "white",
+                    color: "black",
                     margin: "15px",
                     cursor: "pointer",
                     position: "absolute",
                     zIndex: 9999,
                     right: 0,
-                    top: 5
+                    top: 0
                 }}>
                 Bezárás
             </Close>}
