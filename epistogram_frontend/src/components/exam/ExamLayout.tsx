@@ -41,7 +41,7 @@ export const ExamLayout = (props: {
         <Flex
             direction={"row"}
             alignItems={"center"}
-            className="roundBorders"
+            className="roundBorders mildShadow"
             background="var(--transparentWhite70)"
             width="100%"
             height={60}
@@ -83,7 +83,6 @@ export const ExamLayout = (props: {
         {/* content */}
         <Flex
             flex="1"
-            overflow="hidden"
             my="20px"
             minH="300px"
             width="100%"
@@ -97,7 +96,7 @@ export const ExamLayout = (props: {
         {/* footer */}
         <Flex
             width="100%"
-            className="roundBorders"
+            className="roundBorders mildShadow"
             background="var(--transparentWhite70)"
             height="80px"
             p={20}>

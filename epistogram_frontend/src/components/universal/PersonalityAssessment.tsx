@@ -58,9 +58,8 @@ export const PersonalityAssessment = (props: FlexProps) => {
                 background="var(--transparentWhite70)"
                 position="relative"
                 flex="1"
-                padding="10px"
-                width="100%"
-                height="400px">
+                height="400px"
+                padding="10px">
 
                 {personalityData?.chartData && <PersonalityChart
                     data={personalityData.chartData} />}

@@ -42,25 +42,28 @@ export const PersonalityChart = (props: {
                     }
                 }
             ],
-            orient: "vertical",
+            top: 0,
+            orient: "horizontal",
             icon: "circle",
-            bottom: 0,
-
-            left: 0,
+            itemHeight: 30,
             textStyle: {
                 fontWeight: "700",
                 color: "black"
             }
         },
         radar: {
+            scale: true,
+            radius: "50%",
             splitNumber: 7,
             splitLine: {
                 lineStyle: {
                     color: gridColor
                 }
             },
-            center: ["50%", "50%"],
             splitArea: false,
+            axisLabel: {
+                overflow: "break"
+            },
             indicator: traitNames
                 .map(traitName => ({
                     name: traitName,
@@ -76,7 +79,6 @@ export const PersonalityChart = (props: {
             {
                 type: "radar",
                 symbolSize: 0,
-
                 data: [
                     {
                         value: [3, 4, 5, 7, 4, 2, 4, 5, 4, 4],
@@ -126,7 +128,9 @@ export const PersonalityChart = (props: {
             option={options}
             style={{
                 height: "100%",
-                width: "100%"
+                minHeight: 350,
+                minWidth: 500,
+                maxWidth: "100%"
             }} />
     );
 }
