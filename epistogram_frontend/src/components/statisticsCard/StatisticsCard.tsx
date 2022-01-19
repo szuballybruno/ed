@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import { Fullscreen, FullscreenExit, Lock } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React, { useState } from 'react';
@@ -17,9 +17,9 @@ const StatisticsCard = (props: {
     children?: React.ReactNode
     chartSize?: string,
     isComingSoon?: boolean
-}) => {
+} & FlexProps) => {
 
-    const { iconPath, isComingSoon, children } = props;
+    const { iconPath, isComingSoon, children, ...css } = props;
 
     const [isOpen, setIsOpen] = useState(!!props.isOpenByDefault)
 
@@ -29,7 +29,8 @@ const StatisticsCard = (props: {
         gridRow={props.chartSize === "large" ? "span 2" : (isOpen ? "span 2" : "unset")} // do not remove!!
         direction="column"
         minWidth={250}
-        position="relative">
+        position="relative"
+        {...css}>
 
         {/* locked overlay */}
         {isComingSoon && <Flex

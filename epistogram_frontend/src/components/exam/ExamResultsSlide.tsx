@@ -80,6 +80,7 @@ export const ExamResultsSlide = (props: {
                 {/* list header */}
                 <Flex
                     alignItems={"center"}
+                    mt="20px"
                     justifyContent={"space-between"}>
 
                     <Text
