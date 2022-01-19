@@ -93,13 +93,13 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
                 subRouteLabel={personalityTraitCategoryDetails?.title ?? ""}>
 
                 <Flex
-                    bg="white"
+                    bg="var(--deepBlue)"
                     align="center"
                     justify="flex-end"
                     className="dividerBorderBottom">
 
                     <EpistoButton
-                        variant="colored"
+                        variant="light"
                         onClick={handleAddTip}
                         style={{
                             margin: "10px"
@@ -114,17 +114,14 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
                         <FlexListItem
                             key={index}
                             background="white"
+                            padding="5px"
                             midContent={(
                                 <FlexListTitleSubtitle
                                     title={`Tipp ${tip.id}`}
                                     subTitle={tip.description.substring(0, 30)} />
                             )}
                             endContent={<Flex
-                                align="center"
-                                justifyContent={"flex-end"}
-                                height="100%"
-                                width={165}
-                                px={10}>
+                                align="center">
 
                                 {/* go to edit */}
                                 {rowButtons
@@ -132,7 +129,10 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
                                         <EpistoButton
                                             variant={"colored"}
                                             onClick={() => x.action(tip)}
-                                            style={{ width: 20, margin: "3px" }}>
+                                            className="square30"
+                                            style={{
+                                                margin: "3px"
+                                            }}>
 
                                             {x.icon}
                                         </EpistoButton>
