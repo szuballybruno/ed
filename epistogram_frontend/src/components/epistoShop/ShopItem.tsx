@@ -51,12 +51,12 @@ export const ShopItem = (props: {
 
             {/* cover image */}
             <img
+                className="roundBorders"
                 style={{
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    position: 'absolute',
-                    borderRadius: 10
+                    position: 'absolute'
                 }}
                 src={coverFilePath}
                 alt="" />
@@ -92,7 +92,7 @@ export const ShopItem = (props: {
                 </EpistoFont>
             </Flex>}
 
-            {/* purchase overlay  */}
+           {/*  purchase overlay 
             {isPurchased && <Flex
                 className="whall"
                 position="absolute"
@@ -117,7 +117,7 @@ export const ShopItem = (props: {
                     <StarsIcon style={{ color: "white" }}></StarsIcon>
                 </Flex>
 
-            </Flex>}
+            </Flex>} */}
         </Box>
 
         {/* title */}
@@ -183,7 +183,7 @@ export const ShopItem = (props: {
                 onClick={() => handlePurchaseItem(shopItem)}
                 variant="colored"
                 isDisabled={!isSufficientFundsAvailable}
-                style={{ flex: "1", overflowWrap: "break-word" }}>
+                style={{ flex: "3", overflowWrap: "break-word" }}>
 
                 {shopItem.courseId
                     ? "Feloldom"

@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/react";
+import { Close } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { useEffect } from "react";
 import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
@@ -23,6 +24,8 @@ export const ShopPurchaseConfirmationDialog = (props: {
     const { navigateToPlayer } = useNavigation();
 
     const showError = useShowErrorDialog();
+
+    const { openNewTab } = useNavigation();
 
     const { purchaseShopItemAsync, purchaseShopItemState, purchaseShopItemResult } = usePurchaseShopItem();
 
@@ -51,7 +54,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
     }, [dialogLogic.isOpen])
 
     const confirmationSlide = () => (
-        <Flex direction="column" align="center">
+        <Flex direction="column" align="center" w="500px">
 
             <EpistoFont
                 classes={["dividerBorderBottom"]}
@@ -61,7 +64,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
                 {isCourse
                     ? "Biztonsan feloldod az alábbi tanfolyamot?"
-                    : "Biztonsan megveszed az alábbi terméket?"}
+                    : "Biztonsan feloldod az alábbi kedvezményt?"}
             </EpistoFont>
 
             <img
@@ -84,16 +87,19 @@ export const ShopPurchaseConfirmationDialog = (props: {
             </EpistoFont>
 
             <EpistoButton
+                style={{
+                    margin: "15px 0"
+                }}
                 variant="colored"
                 onClick={onConfirmPurchaseAsync}>
 
-                Fizetés
+                Feloldom
             </EpistoButton>
         </Flex>
     );
 
     const feedbackSlide = () => (
-        <Flex direction="column">
+        <Flex direction="column" align="center" w="500px" h="200px" justify="space-between" p="20px">
 
             {/* greet */}
             <EpistoFont>
@@ -106,15 +112,15 @@ export const ShopPurchaseConfirmationDialog = (props: {
             <EpistoFont>
                 {isCourse
                     ? "Mostantól megtalálhatod a Tanfolyamkeresőben is!"
-                    : `Kodod amit bevalthatsz a partner cegunknel: ${purchaseShopItemResult?.discountCode}`}
+                    : `Kódod amit beválthatsz a partnerünknél: ${purchaseShopItemResult?.discountCode}`}
             </EpistoFont>
 
             {/* details */}
             {!isCourse && <EpistoFont>
-                A kodod emailben is elkuldtuk Neked, hogy kesobb konnyen megtalalhasd!
+                A kódod e-mailben is elküldtük neked, hogy később könnyen megtalálhasd.
             </EpistoFont>}
 
-            {isCourse && <EpistoButton
+            {isCourse ? <EpistoButton
                 onClick={() => {
 
                     const code = purchaseShopItemResult?.firstItemCode;
@@ -126,6 +132,12 @@ export const ShopPurchaseConfirmationDialog = (props: {
                 variant="colored">
 
                 Irány a tanfolyam!
+            </EpistoButton> : <EpistoButton
+                onClick={() => {
+                    //openNewTab(detailsUrl); //TODO: Details url should be here
+                }}>
+
+                Termék oldala
             </EpistoButton>}
         </Flex>
     );
