@@ -1,25 +1,29 @@
 SELECT 
-	dt.id AS "daily_tip_id",
-	dt.description AS "description",
-	sf."file_path" AS "video_file_path",
-	COUNT (oc.id) AS "occurrence_count",
-	MAX (oc."creation_date") AS "last_occurrence_date",
-	MAX (oc."creation_date")::date IS NOT DISTINCT FROM NOW()::date AS "is_current_tip"
-	
-FROM daily_tip 
-AS dt
+	dt.id daily_tip_id,
+	u.id user_id,
+	dt.description,
+	sf.file_path video_file_path,
+	latest_occurance.latest_creation_date last_occurrence_date,
+	latest_occurance.latest_creation_date IS NULL is_new,
+	latest_occurance.latest_creation_date::date IS NOT DISTINCT FROM NOW()::date is_current_tip
+FROM daily_tip dt
+
+CROSS JOIN public.user u
+
+LEFT JOIN 
+(
+	SELECT 
+		dto.user_id, 
+		MAX(dto.creation_date) latest_creation_date 
+	FROM public.daily_tip_occurrence dto
+	GROUP BY dto.user_id 
+) latest_occurance
+ON latest_occurance.user_id = u.id
 
 LEFT JOIN storage_file AS sf 
-ON sf.id = dt."video_file_id"
-
-LEFT JOIN daily_tip_occurrence AS oc
-ON oc."daily_tip_id" = dt.id 
-
-GROUP BY 
-	dt.id, 
-	dt.description,
-	sf."file_path"
+ON sf.id = dt.video_file_id
 	
 ORDER BY
-	COUNT (oc.id) ASC,
+	u.id,
+	latest_occurance.latest_creation_date DESC,
 	dt.id

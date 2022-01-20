@@ -59,6 +59,6 @@ export class DailyTipController {
     getDailyTipAction = async (params: ActionParams) => {
 
         return await this._dailyTipService
-            .getDailyTipAsync();
+            .getDailyTipAsync(params.currentUserId);
     }
 }

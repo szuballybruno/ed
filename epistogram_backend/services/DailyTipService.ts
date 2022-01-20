@@ -3,6 +3,7 @@ import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
 import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
 import { DailyTipEditDataDTO } from "../models/shared_models/DailyTipEditDataDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
+import { getRandomNumber } from "../utilities/helpers";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
@@ -17,6 +18,11 @@ export class DailyTipService {
         this._mapperService = mapperService;
     }
 
+    /**
+     * Deletes a daily tip.
+     * 
+     * @param id 
+     */
     async deleteDailyTipAsync(id: number) {
 
         await this._ormService
@@ -24,6 +30,13 @@ export class DailyTipService {
             .delete(id);
     }
 
+    /**
+     * Creates a new daily tip, but with isLive switched off, 
+     * thus it won't be shown to users until it's enabled manually.
+     * 
+     * @param personalityTraitCategoryId 
+     * @param isMax 
+     */
     async createDailyTipAsync(personalityTraitCategoryId: number, isMax: boolean) {
 
         await this._ormService
@@ -36,6 +49,12 @@ export class DailyTipService {
             });
     }
 
+    /**
+     * Returns edit data of a specified daily tip.
+     * 
+     * @param dailyTipId 
+     * @returns 
+     */
     async getDailyTipEditDataAsync(dailyTipId: number) {
 
         const dailyTip = await this._ormService
@@ -46,6 +65,12 @@ export class DailyTipService {
             .map(DailyTip, DailyTipEditDataDTO, dailyTip);
     }
 
+    /**
+     * Saves a daily tip.
+     * 
+     * @param dto 
+     * @returns 
+     */
     async saveDailyTipAsync(dto: DailyTipEditDataDTO) {
 
         const dailyTip = await this._ormService
@@ -60,30 +85,74 @@ export class DailyTipService {
             .map(DailyTip, DailyTipEditDataDTO, dailyTip);
     }
 
-    async getDailyTipAsync() {
+    /**
+     * Returns a daily tip for the user, 
+     * and registers that this tip was shown on this day.
+     * If a user calls this the next day, this will return a different daily tip. 
+     * This will go on until we run out of suitable daily tips, and the cycle will start again. 
+     * 
+     * @returns 
+     */
+    async getDailyTipAsync(userId: number) {
 
-        const dailyTipViews = await this._ormService
+        // get daily tip views 
+        const dailyTips = await this._ormService
             .getRepository(DailyTipView)
-            .find();
+            .createQueryBuilder("dtv")
+            .where("dtv.userId = :userId", { userId })
+            .getMany();
 
-        // filter for todays tip,
-        // if it's found, there is no need to do anything else, just return it
-        const todaysTip = dailyTipViews.firstOrNull(x => x.isCurrentTip);
-        if (todaysTip)
-            return this._mapperService
-                .map(DailyTipView, DailyTipDTO, todaysTip);
+        // get a tip 
+        const tip = (() => {
 
-        // first is used here since the tips are in order of relevance
-        const newCurrentTip = dailyTipViews.first(x => true);
+            // check if there are daily tips 
+            if (dailyTips.length === 0)
+                return null;
 
-        // insert new occurrence, this sets it as current in the DB as well
-        await this._ormService
-            .getRepository(DailyTipOccurrence)
-            .insert({
-                dailyTipId: newCurrentTip.dailyTipId
-            });
+            // is current tip available 
+            const todaysTip = dailyTips
+                .firstOrNull(x => x.isCurrentTip);
 
+            if (todaysTip)
+                return todaysTip;
+
+            // is new tip available  
+            const newTip = dailyTips
+                .firstOrNull(x => x.isNew);
+
+            if (newTip)
+                return newTip;
+
+            // reuse already shown tip
+            const newCurrentTip = dailyTips
+                .splice(0, dailyTips.length > 3
+                    ? dailyTips.length - 3
+                    : dailyTips.length)
+                .orderBy(_ => getRandomNumber())
+                .first();
+
+            return newCurrentTip;
+        })();
+
+        // no tips found :(
+        if (!tip)
+            return null;
+
+        // if tip is not current, 
+        // meaning it already has an occurance for today, 
+        // insert a new occurance 
+        if (!tip.isCurrentTip) {
+
+            await this._ormService
+                .getRepository(DailyTipOccurrence)
+                .insert({
+                    dailyTipId: tip.dailyTipId,
+                    userId
+                });
+        }
+
+        // map tip
         return this._mapperService
-            .map(DailyTipView, DailyTipDTO, newCurrentTip);
+            .map(DailyTipView, DailyTipDTO, tip);
     }
 }

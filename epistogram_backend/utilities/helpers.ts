@@ -145,6 +145,11 @@ export class SafeObjectWrapper<T> {
     }
 }
 
+export const getRandomNumber = () => {
+
+    return Math.random();
+}
+
 export const toSqlDate = (date: Date) => {
 
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`;

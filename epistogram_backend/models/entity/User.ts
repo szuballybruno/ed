@@ -5,6 +5,7 @@ import { ActivitySession } from "./ActivitySession";
 import { AnswerSession } from "./AnswerSession";
 import { CoinTransaction } from "./CoinTransaction";
 import { Course } from "./Course";
+import { DailyTipOccurrence } from "./DailyTipOccurrence";
 import { DiscountCode } from "./DiscountCode";
 import { Event } from "./Event";
 import { JobTitle } from "./JobTitle";
@@ -173,4 +174,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => VideoRating, x => x.user)
     videoRatings: VideoRating[];
+
+    // dailyTipOccurrences
+    @JoinColumn()
+    @OneToMany(_ => DailyTipOccurrence, x => x.user)
+    dailyTipOccurrences: DailyTipOccurrence[];
 }
