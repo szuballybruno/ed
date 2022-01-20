@@ -90,20 +90,20 @@ export const DailyTip = (props: {} & FlexProps) => {
         <Flex
             direction="column"
             align="center"
-            justify="center"
+            justify="flex-start"
             flex="1"
             p="10px"
             fontSize="13px">
 
-            <img
+            {/* <img
                 src={getAssetUrl("images/dailytip3D.png")}
                 alt=""
                 style={{
                     maxWidth: 200
-                }} />
+                }} /> */}
 
             <EpistoFont>
-                {dailyTipData?.description}
+                {dailyTipData?.description + "Lorem ipsum dolor sit amet consectetur adipisicing elit. Id ipsa nostrum consequuntur, ipsam deserunt modi! Ullam, a temporibus sapiente atque magnam consequuntur? Cupiditate corrupti nobis corporis excepturi harum repellat eos!"}
             </EpistoFont>
         </Flex>
 
