@@ -18,9 +18,9 @@ import { EditExamSubpage } from './courses/EditExamSubpage';
 import { EditModuleSubpage } from './courses/EditModuleSubpage';
 import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditVideoSubpage } from './courses/EditVideoSubpage';
-import { PersonalityAssessmentAdminSubpage } from './personalityAssessment/PersonalityAssessmentAdminSubpage';
-import { PersonalityAssessmentAdminTipEditSubpage } from './personalityAssessment/PersonalityAssessmentAdminTipEditSubpage';
-import { PersonalityAssessmentAdminTipsSubpage } from './personalityAssessment/PersonalityAssessmentAdminTipsSubpage';
+import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
+import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
+import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
 import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
@@ -113,9 +113,9 @@ const AdminPage = () => {
                     path={administrationRoutes.personalityAssessmentRoute.route}
                     isAuthorizedToView={x => x.canAccessShopAdministration}
                     render={() => <Switch>
-                        {getRoute(administrationRoutes.personalityAssessmentRoute, <PersonalityAssessmentAdminSubpage />)}
-                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTips, <PersonalityAssessmentAdminTipsSubpage />)}
-                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTip, <PersonalityAssessmentAdminTipEditSubpage />)}
+                        {getRoute(administrationRoutes.personalityAssessmentRoute, <PersonalityTraitCategoriesSubpage />)}
+                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTips, <EditPersonalityTraitCategorySubpage />)}
+                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTips.editTip, <EditDailyTipSubpage />)}
                     </Switch>} />
 
                 {/* statistics */}

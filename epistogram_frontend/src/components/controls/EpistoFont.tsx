@@ -12,6 +12,7 @@ export const EpistoFont = (params: {
     allowedLines?: number,
     maxFontSize?: number,
     isMultiline?: boolean,
+    noLineBreak?: boolean,
     isUppercase?: boolean,
     isAutoFontSize?: boolean
 }) => {
@@ -24,6 +25,7 @@ export const EpistoFont = (params: {
         allowedLines,
         maxFontSize,
         isMultiline,
+        noLineBreak,
         isUppercase,
         isAutoFontSize,
         children
@@ -47,7 +49,9 @@ export const EpistoFont = (params: {
                 ? "pre-line" //required for new lines
                 : isAutoFontSize
                     ? "normal" //required for autoFontSize
-                    : undefined,
+                    : noLineBreak
+                        ? "nowrap"
+                        : undefined,
             textTransform: isUppercase
                 ? "uppercase"
                 : undefined,

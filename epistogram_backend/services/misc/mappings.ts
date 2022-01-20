@@ -94,6 +94,7 @@ import { PersonalityTraitCategoryShortDTO } from "../../models/shared_models/Per
 import { DailyTip } from "../../models/entity/DailyTip";
 import { PersonalityTraitCategoryDTO } from "../../models/shared_models/PersonalityTraitCategoryDTO";
 import { DailyTipEditDataDTO } from "../../models/shared_models/DailyTipEditDataDTO";
+import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -737,12 +738,16 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, x => ({
-            id: x.id,
-            title: x.title,
-            maxLabel: x.maxLabel,
-            minLabel: x.minLabel
-        }));
+        .addMap(PersonalityTraitCategoryView, PersonalityTraitCategoryShortDTO, (x, isMax: boolean): PersonalityTraitCategoryShortDTO => {
+
+            return {
+                id: x.id,
+                title: x.title,
+                label: isMax ? x.maxLabel : x.minLabel,
+                isMax,
+                tipCount: isMax ? x.maxTipsCount : x.minTipsCount
+            }
+        });
 
     mapperService
         .addMap(DailyTip, DailyTipDTO, x => ({

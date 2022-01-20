@@ -6,6 +6,7 @@ import { PersonalityChartDataDTO } from "../models/shared_models/PersonalityChar
 import { PersonalityTraitCategoryDTO } from "../models/shared_models/PersonalityTraitCategoryDTO";
 import { PersonalityTraitCategoryShortDTO } from "../models/shared_models/PersonalityTraitCategoryShortDTO";
 import { PersonalityTraitDataDTO } from "../models/shared_models/PersonalityTraitDataDTO";
+import { PersonalityTraitCategoryView } from "../models/views/PersonalityTraitCategoryView";
 import { PersonalityTraitView } from "../models/views/PersonalityTraitView";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -60,7 +61,7 @@ export class PersonalityAssessmentService {
      * 
      * @param personalityTraitCategoryId 
      */
-    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: any) {
+    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: number, isMax: number) {
 
         const category = await this._ormService
             .getRepository(PersonalityTraitCategory)
@@ -74,6 +75,7 @@ export class PersonalityAssessmentService {
             .getRepository(DailyTip)
             .find({
                 where: {
+                    isMax,
                     personalityTraitCategoryId
                 }
             });
@@ -84,15 +86,28 @@ export class PersonalityAssessmentService {
 
     /**
      * Returns all of the personality trait categories.
+     * Expanded, so in the return data one category will 
+     * be split to 2 objects, min <> max value
      */
     async getPersonalityTraitCategoriesAsync() {
 
         const categories = await this._ormService
-            .getRepository(PersonalityTraitCategory)
+            .getRepository(PersonalityTraitCategoryView)
             .find();
 
-        return this._mapperService
-            .mapMany(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, categories);
+        const minMaxCatList = categories
+            .flatMap(category => {
+
+                const minCat = this._mapperService
+                    .map(PersonalityTraitCategoryView, PersonalityTraitCategoryShortDTO, category, false);
+
+                const maxCat = this._mapperService
+                    .map(PersonalityTraitCategoryView, PersonalityTraitCategoryShortDTO, category, true);
+
+                return [minCat, maxCat];
+            });
+
+        return minMaxCatList;
     }
 
     /**

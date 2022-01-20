@@ -18,11 +18,16 @@ export class PersonalityAssessmentController {
 
     getPersonalityTraitCategoryDetailsAction = async (params: ActionParams) => {
 
-        const personalityTraitCategoryId = params
-            .getQuery<any>()
+        const query = params
+            .getQuery<any>();
+
+        const personalityTraitCategoryId = query
             .getValue(x => x.personalityTraitCategoryId, "int");
 
+        const isMax = query
+            .getValue(x => x.isMax, "boolean");
+
         return this._personalityAssessmentService
-            .getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId);
+            .getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId, isMax);
     }
 }

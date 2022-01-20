@@ -15,9 +15,11 @@ export const usePersonalityTraitCategories = () => {
     };
 }
 
-export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: number) => {
+export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: number, isMax: boolean) => {
 
-    const qr = useReactQuery2<PersonalityTraitCategoryDTO>(apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails, { personalityTraitCategoryId });
+    const qr = useReactQuery2<PersonalityTraitCategoryDTO>(
+        apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails,
+        { personalityTraitCategoryId, isMax });
 
     return {
         personalityTraitCategoryDetails: qr.data,

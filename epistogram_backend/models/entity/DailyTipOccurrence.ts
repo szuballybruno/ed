@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { DailyTip } from "./DailyTip";
+import { User } from "./User";
 
 @Entity()
 export class DailyTipOccurrence {
@@ -17,4 +18,12 @@ export class DailyTipOccurrence {
     @ManyToOne(_ => DailyTip, x => x.occurrences)
     @JoinColumn({ name: "daily_tip_id" })
     dailyTip: DailyTip;
+
+    // user
+    @Column()
+    userId: number;
+
+    @ManyToOne(_ => User, x => x.dailyTipOccurrences)
+    @JoinColumn({ name: "user_id" })
+    user: User;
 }

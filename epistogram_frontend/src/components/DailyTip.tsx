@@ -5,60 +5,65 @@ import { useDailyTip } from "../services/api/dailyTipApiService"
 import { getAssetUrl, usePaging } from "../static/frontendHelpers"
 import { translatableTexts } from "../static/translatableTexts"
 import { EpistoFont } from "./controls/EpistoFont"
+import { EpistoText } from "./controls/EpistoText"
 import { EpistoDialog, useEpistoDialogLogic } from "./EpistoDialog"
 import { SlidesDisplay } from "./universal/SlidesDisplay"
 
-const ModalPlayer = (props: {
-    videoUrl: string
-}) => {
+// const ModalPlayer = (props: {
+//     videoUrl: string
+// }) => {
 
-    return <ReactPlayer
-        width="100%"
-        height="100%"
-        style={{
-            margin: "auto"
-        }}
-        playing={true}
-        controls={true}
-        url={props.videoUrl} />
-}
+//     return <ReactPlayer
+//         width="100%"
+//         height="100%"
+//         style={{
+//             margin: "auto"
+//         }}
+//         playing={true}
+//         controls={true}
+//         url={props.videoUrl} />
+// }
 
 export const DailyTip = (props: {} & FlexProps) => {
 
     const { ...css } = props;
-    const { currentIndex, next, previous } = usePaging([1, 2]);
+    // const { currentIndex, next, previous } = usePaging([1, 2]);
 
-    const dialogLogic = useEpistoDialogLogic({
-        title: translatableTexts.homePage.tipOfTheDay,
-        defaultCloseButtonType: "top"
-    });
+    // const dialogLogic = useEpistoDialogLogic({
+    //     title: translatableTexts.homePage.tipOfTheDay,
+    //     defaultCloseButtonType: "top"
+    // });
 
     const { dailyTipData } = useDailyTip();
 
-    const openDialog = () => dialogLogic.openDialog();
+    // const openDialog = () => dialogLogic.openDialog();
 
-    const DescriptionSlide = () => <EpistoFont classes={["fontMidPlus", "fontGrey"]}>
-        {dailyTipData?.description}
-    </EpistoFont>;
+    // const DescriptionSlide = () => <EpistoFont classes={["fontMidPlus", "fontGrey"]}>
+    //     {dailyTipData?.description}
+    // </EpistoFont>;
 
-    const VideoSlide = () => <ModalPlayer videoUrl={dailyTipData?.videoUrl ?? ""}></ModalPlayer>
+    // const VideoSlide = () => <ModalPlayer videoUrl={dailyTipData?.videoUrl ?? ""}></ModalPlayer>
 
-    const toggleDisplayModes = () => {
+    // const toggleDisplayModes = () => {
 
-        if (currentIndex === 0) {
+    //     if (currentIndex === 0) {
 
-            next();
-        }
-        else {
+    //         next();
+    //     }
+    //     else {
 
-            previous();
-        }
-    }
+    //         previous();
+    //     }
+    // }
 
-    return <Flex direction="column" height="100%" justify="center" {...css}>
+    return <Flex
+        direction="column"
+        height="100%"
+        justify="center"
+        {...css}>
 
         {/* dialog */}
-        <EpistoDialog logic={dialogLogic} fullScreenX={true}>
+        {/* <EpistoDialog logic={dialogLogic} fullScreenX={true}>
             <Flex direction="column" align="center">
                 <Flex
                     id="customContentRoot"
@@ -78,22 +83,8 @@ export const DailyTip = (props: {} & FlexProps) => {
                             DescriptionSlide,
                         ]} />
                 </Flex>
-
-                {/*<Flex>
-                    <EpistoButton variant="outlined" style={{ margin: "10px" }}>
-                        {translatableTexts.tipOfTheDay.prevoiusVideos}
-                    </EpistoButton>
-
-                    <EpistoButton
-                        variant="outlined"
-                        style={{ margin: "10px" }}
-                        onClick={toggleDisplayModes}>
-
-                        {currentIndex === 0 ? translatableTexts.tipOfTheDay.description : translatableTexts.tipOfTheDay.video}
-                    </EpistoButton>
-                </Flex>*/}
             </Flex>
-        </EpistoDialog >
+        </EpistoDialog > */}
 
         {/* text daily tip */}
         <Flex
@@ -111,10 +102,9 @@ export const DailyTip = (props: {} & FlexProps) => {
                     maxWidth: 200
                 }} />
 
-            <Flex p="20px" textAlign="center">
-
-                {translatableTexts.homePage.noTipOfTheDayYet}
-            </Flex>
+            <EpistoFont>
+                {dailyTipData?.description}
+            </EpistoFont>
         </Flex>
 
         {/* preview (disabled temporarily) */}

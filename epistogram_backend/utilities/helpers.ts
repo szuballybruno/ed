@@ -120,18 +120,34 @@ export class SafeObjectWrapper<T> {
         this.data = data;
     }
 
-    getValue<TValue>(getter: (data: T) => TValue, castType?: "int" | "float") {
+    getValue<TValue>(getter: (data: T) => TValue, castType?: "int" | "float" | "boolean"): TValue {
 
-        const value = withValueOrBadRequest<TValue>(getter(this.data));
+        const value = withValueOrBadRequest<any>(getter(this.data));
 
         if (castType === "int")
-            return parseInt(value as any as string) as any as TValue;
+            return parseInt(value as any as string) as any;
 
         if (castType === "float")
-            return parseFloat(value as any as string) as any as TValue;
+            return parseFloat(value as any as string) as any;
+
+        if (castType === "boolean") {
+
+            if (value === true || value === false)
+                return value;
+
+            if (value !== "true" && value !== "false")
+                throw new Error("Error parsing boolean value: " + value);
+
+            return (value === "true") as any;
+        }
 
         return value;
     }
+}
+
+export const getRandomNumber = () => {
+
+    return Math.random();
 }
 
 export const toSqlDate = (date: Date) => {

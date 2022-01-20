@@ -38,7 +38,7 @@ export const useSaveDailyTip = () => {
 
 export const useCreateDailyTip = () => {
 
-    const qr = usePostDataUnsafe<{ personalityTraitCategoryId: number }, void>(apiRoutes.dailyTip.createDailyTip);
+    const qr = usePostDataUnsafe<{ personalityTraitCategoryId: number, isMax: boolean }, void>(apiRoutes.dailyTip.createDailyTip);
 
     return {
         createDailyTipAsync: qr.postDataAsync,

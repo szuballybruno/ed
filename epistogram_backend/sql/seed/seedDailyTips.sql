@@ -16,12 +16,14 @@ INSERT INTO public.daily_tip
     description,
     video_file_id,
     is_live,
-    personality_trait_category_id
+    personality_trait_category_id,
+    is_max
 )
 VALUES 
 (
     'daily tip desc',
     16,
     true,
-    1
+    1,
+    true
 );

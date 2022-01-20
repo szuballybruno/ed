@@ -5,12 +5,13 @@ import { PersonalityTraitCategoryShortDTO } from "../../../models/shared_models/
 import { usePersonalityTraitCategories } from "../../../services/api/personalityAssessmentApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoFont } from "../../controls/EpistoFont";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
-export const PersonalityAssessmentAdminSubpage = () => {
+export const PersonalityTraitCategoriesSubpage = () => {
 
     // http 
     const { personalityTraitCategories, personalityTraitCategoriesState, personalityTraitCategoriesError } = usePersonalityTraitCategories();
@@ -22,17 +23,35 @@ export const PersonalityAssessmentAdminSubpage = () => {
 
     // func
 
-    const handleEdit = (traitCategoryId: number) => {
+    const handleEdit = (traitCategoryId: number, isMax: boolean) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips, { traitCategoryId })
+        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips, { traitCategoryId, isMax })
     }
 
     const rowButtons = [
         {
-            action: (dto: PersonalityTraitCategoryShortDTO) => handleEdit(dto.id),
+            action: (dto: PersonalityTraitCategoryShortDTO) => handleEdit(dto.id, dto.isMax),
             icon: <Edit></Edit>
         }
     ];
+
+    const truncateTo = (num: number, threshold: number) => {
+
+        if (num > threshold)
+            num = truncateTo(num - threshold, threshold);
+
+        return num;
+    }
+
+    const colors = personalityTraitCategories
+        .map(x => x.id)
+        .map(id => {
+
+            const seed = id * 31;
+            const hue = truncateTo(160 + seed, 240);
+
+            return `hsl(${hue}, 80%, 60%)`;
+        });
 
     return (
         <LoadingFrame
@@ -47,11 +66,12 @@ export const PersonalityAssessmentAdminSubpage = () => {
                     .map((personalityTraitCategory, index) => (
                         <FlexListItem
                             key={index}
+                            borderLeft={`5px solid ${colors[index]}`}
                             background="white"
                             midContent={(
                                 <FlexListTitleSubtitle
                                     title={personalityTraitCategory.title}
-                                    subTitle={personalityTraitCategory.maxLabel + " / " + personalityTraitCategory.minLabel} />
+                                    subTitle={personalityTraitCategory.label} />
                             )}
                             endContent={<Flex
                                 align="center"
@@ -59,6 +79,21 @@ export const PersonalityAssessmentAdminSubpage = () => {
                                 height="100%"
                                 width={165}
                                 px={10}>
+
+                                <EpistoFont noLineBreak>
+                                    Napi tippek:
+                                </EpistoFont>
+
+                                <EpistoFont
+                                    style={{
+                                        margin: "5px",
+                                        background: personalityTraitCategory.tipCount > 0 ? "var(--mildGreen)" : "var(--mildRed)",
+                                        padding: "2px 5px 2px 5px",
+                                        borderRadius: "7px"
+                                    }}>
+
+                                    {personalityTraitCategory.tipCount}
+                                </EpistoFont>
 
                                 {/* go to edit */}
                                 {rowButtons
