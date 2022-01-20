@@ -103,7 +103,7 @@ export const DailyTip = (props: {} & FlexProps) => {
                 }} /> */}
 
             <EpistoFont>
-                {dailyTipData?.description + "Lorem ipsum dolor sit amet consectetur adipisicing elit. Id ipsa nostrum consequuntur, ipsam deserunt modi! Ullam, a temporibus sapiente atque magnam consequuntur? Cupiditate corrupti nobis corporis excepturi harum repellat eos!"}
+                {dailyTipData?.description}
             </EpistoFont>
         </Flex>
 
