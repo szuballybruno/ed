@@ -60,7 +60,7 @@ export class PersonalityAssessmentService {
      * 
      * @param personalityTraitCategoryId 
      */
-    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: any) {
+    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: number, isMax: number) {
 
         const category = await this._ormService
             .getRepository(PersonalityTraitCategory)
@@ -74,6 +74,7 @@ export class PersonalityAssessmentService {
             .getRepository(DailyTip)
             .find({
                 where: {
+                    isMax,
                     personalityTraitCategoryId
                 }
             });
@@ -84,6 +85,8 @@ export class PersonalityAssessmentService {
 
     /**
      * Returns all of the personality trait categories.
+     * Expanded, so in the return data one category will 
+     * be split to 2 objects, min <> max value
      */
     async getPersonalityTraitCategoriesAsync() {
 
@@ -91,8 +94,19 @@ export class PersonalityAssessmentService {
             .getRepository(PersonalityTraitCategory)
             .find();
 
-        return this._mapperService
-            .mapMany(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, categories);
+        const minMaxCatList = categories
+            .flatMap(category => {
+
+                const minCat = this._mapperService
+                    .map(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, category, false);
+
+                const maxCat = this._mapperService
+                    .map(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, category, true);
+
+                return [minCat, maxCat];
+            });
+
+        return minMaxCatList;
     }
 
     /**

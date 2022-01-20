@@ -23,12 +23,17 @@ export class DailyTipController {
 
     createDailyTipAction = async (params: ActionParams) => {
 
-        const personalityTraitCategoryId = params
-            .getBody<any>()
+        const body = params
+            .getBody<any>();
+
+        const personalityTraitCategoryId = body
             .getValue(x => x.personalityTraitCategoryId, "int");
 
+        const isMax = body
+            .getValue(x => x.isMax, "boolean");
+
         await this._dailyTipService
-            .createDailyTipAsync(personalityTraitCategoryId);
+            .createDailyTipAsync(personalityTraitCategoryId, isMax);
     }
 
     getDailyTipEditDataAction = async (params: ActionParams) => {

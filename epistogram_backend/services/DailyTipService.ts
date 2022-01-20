@@ -24,14 +24,15 @@ export class DailyTipService {
             .delete(id);
     }
 
-    async createDailyTipAsync(personalityTraitCategoryId: number) {
+    async createDailyTipAsync(personalityTraitCategoryId: number, isMax: boolean) {
 
         await this._ormService
             .getRepository(DailyTip)
             .insert({
                 personalityTraitCategoryId,
                 description: "",
-                isLive: false
+                isLive: false,
+                isMax
             });
     }
 

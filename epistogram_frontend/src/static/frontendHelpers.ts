@@ -60,6 +60,17 @@ export const useIntParam = (name: string) => {
     return parseInt(params[name]);
 }
 
+export const useBoolParam = (name: string) => {
+
+    const params = useParams();
+    const value = params[name];
+
+    if (value !== "true" && value !== "false")
+        throw new Error("Failed to parse boolean url param!");
+
+    return value === "true";
+}
+
 export const getUrl = (path: string, params?: any, query?: any) => {
 
     let replacedPath = path;

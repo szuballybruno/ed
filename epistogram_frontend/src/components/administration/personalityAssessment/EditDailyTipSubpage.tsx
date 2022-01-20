@@ -3,19 +3,20 @@ import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useDailyTipEditData, useSaveDailyTip } from "../../../services/api/dailyTipApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { useIntParam } from "../../../static/frontendHelpers";
+import { useBoolParam, useIntParam } from "../../../static/frontendHelpers";
 import { EpistoCheckbox } from "../../controls/EpistoCheckbox";
 import { EpistoEntryNew, useEpistoEntryState } from "../../controls/EpistoEntryNew";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
-export const PersonalityAssessmentAdminTipEditSubpage = () => {
+export const EditDailyTipSubpage = () => {
 
     //util
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const traitCategoryId = useIntParam("traitCategoryId");
+    const isMax = useBoolParam("isMax");
     const dailyTipId = useIntParam("dailyTipId");
 
     // http 
@@ -66,11 +67,11 @@ export const PersonalityAssessmentAdminTipEditSubpage = () => {
             <AdminSubpageHeader
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips,
-                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTip
+                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip
                 ]}
                 subRouteLabel={"Tipp " + dailyTipEditData?.id}
                 onSave={handleSaveAsync}
-                navigationQueryParams={{ traitCategoryId }}>
+                navigationQueryParams={{ traitCategoryId, isMax }}>
 
                 <EpistoLabel text="Leiras">
                     <EpistoEntryNew

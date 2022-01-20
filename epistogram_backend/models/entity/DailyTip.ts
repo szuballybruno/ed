@@ -15,6 +15,9 @@ export class DailyTip {
     @Column()
     isLive: boolean;
 
+    @Column()
+    isMax: boolean;
+
     // video file
     @Column({ nullable: true, type: "int" })
     videoFileId: number | null;

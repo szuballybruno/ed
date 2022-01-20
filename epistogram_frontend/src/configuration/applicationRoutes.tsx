@@ -237,13 +237,14 @@ export const applicationRoutes = {
 
             editTips: {
                 title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,
-                route: "/administration/personality-assessment/:traitCategoryId/tips"
-            },
+                route: "/administration/personality-assessment/:traitCategoryId/:isMax/",
+                exact: true,
 
-            editTip: {
-                title: translatableTexts.routeTitles.administrationPersonalityAssessmentTip,
-                route: "/administration/personality-assessment/:traitCategoryId/tip/:dailyTipId"
-            }
+                editTip: {
+                    title: translatableTexts.routeTitles.administrationPersonalityAssessmentTip,
+                    route: "/administration/personality-assessment/:traitCategoryId/:isMax/tip/:dailyTipId"
+                }
+            },
         },
 
         myCompanyRoute: {

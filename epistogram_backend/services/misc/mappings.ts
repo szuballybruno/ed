@@ -737,12 +737,15 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, x => ({
-            id: x.id,
-            title: x.title,
-            maxLabel: x.maxLabel,
-            minLabel: x.minLabel
-        }));
+        .addMap(PersonalityTraitCategory, PersonalityTraitCategoryShortDTO, (x, isMax: boolean): PersonalityTraitCategoryShortDTO => {
+
+            return {
+                id: x.id,
+                title: x.title,
+                label: isMax ? x.maxLabel : x.minLabel,
+                isMax
+            }
+        });
 
     mapperService
         .addMap(DailyTip, DailyTipDTO, x => ({

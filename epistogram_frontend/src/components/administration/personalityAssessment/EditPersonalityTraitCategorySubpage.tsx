@@ -7,20 +7,20 @@ import { useCreateDailyTip, useDeleteDailyTip } from "../../../services/api/dail
 import { usePersonalityTraitCategoryDetails } from "../../../services/api/personalityAssessmentApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { useIntParam } from "../../../static/frontendHelpers";
+import { useBoolParam, useIntParam } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
-export const PersonalityAssessmentAdminTipsSubpage = () => {
+export const EditPersonalityTraitCategorySubpage = () => {
 
     //util
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const personalityTraitCategoryId = useIntParam("traitCategoryId");
     const traitCategoryId = useIntParam("traitCategoryId");
+    const isMax = useBoolParam("isMax");
 
     // http 
     const {
@@ -28,7 +28,7 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
         personalityTraitCategoryDetailsError,
         personalityTraitCategoryDetailsState,
         refetchPersonalityTraitCategoryDetails
-    } = usePersonalityTraitCategoryDetails(personalityTraitCategoryId);
+    } = usePersonalityTraitCategoryDetails(traitCategoryId, isMax);
 
     const { deleteDailyTipAsync, deleteDailyTipState } = useDeleteDailyTip();
     const { createDailyTipAsync, createDailyTipState } = useCreateDailyTip();
@@ -41,14 +41,14 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
 
     const handleEdit = (dailyTipId: number) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTip, { traitCategoryId, dailyTipId })
+        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip, { traitCategoryId, isMax, dailyTipId })
     }
 
     const handleAddTip = async () => {
 
         try {
 
-            await createDailyTipAsync({ personalityTraitCategoryId });
+            await createDailyTipAsync({ personalityTraitCategoryId: traitCategoryId, isMax });
             showNotification("Napi tipp sikeresen hozzaadva.");
             await refetchPersonalityTraitCategoryDetails();
         }
@@ -83,6 +83,10 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
         }
     ];
 
+    const pageLabel = isMax
+        ? personalityTraitCategoryDetails?.maxLabel
+        : personalityTraitCategoryDetails?.minLabel;
+
     return (
         <LoadingFrame
             loadingState={personalityTraitCategoryDetailsState}
@@ -94,7 +98,7 @@ export const PersonalityAssessmentAdminTipsSubpage = () => {
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips
                 ]}
-                subRouteLabel={personalityTraitCategoryDetails?.title ?? ""}>
+                subRouteLabel={pageLabel ?? ""}>
 
                 <Flex
                     bg="var(--deepBlue)"
