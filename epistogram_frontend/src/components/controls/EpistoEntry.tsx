@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/layout";
 import { InputAdornment, TextField, Typography } from "@mui/material";
 import { forwardRef, useEffect } from "react";
+import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "./EpistoFont";
 
 export type EpistoEntryPropsType = {
@@ -65,7 +66,7 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         const error = ((): string | null => {
 
             if (isMandatory && !value)
-                return "Ez a mező nem lehet üres!";
+                return translatableTexts.misc.epistoEntry.shouldntBeEmpty;
 
             return null;
         })();

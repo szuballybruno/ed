@@ -17,7 +17,7 @@ export const EpistoConinInfo = (props: {} & FlexProps) => {
 
             {coinBalance}
         </EpistoFont>
-        
+
         {/* coin image */}
         <EpistoConinImage />
     </Flex>

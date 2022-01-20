@@ -18,6 +18,7 @@ import { currentVersion } from "../../static/Environemnt";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoPopper } from "../controls/EpistoPopper";
 import { EpistoFont } from "../controls/EpistoFont";
+import { translatableTexts } from "../../static/translatableTexts";
 
 const menuItems = [
     applicationRoutes.homeRoute,
@@ -80,7 +81,7 @@ const DesktopNavbar = (props: {
             onClick: () => navigate(applicationRoutes.settingsRoute.developmentNotes.route)
         },
         {
-            name: "Kijelentkezés",
+            name: translatableTexts.navbar.signout,
             icon: <LogoutIcon></LogoutIcon>,
             color: "var(--mildRed)",
             onClick: handleLogout
@@ -159,7 +160,7 @@ const DesktopNavbar = (props: {
                                                     marginRight: "5px"
                                                 }} />
                                         }>
-                                        Aktuális Kurzus
+                                        {translatableTexts.navbar.currentCourse}
                                     </EpistoButton>
                                 </NavbarButton>}
                         </Flex> : <Flex>
@@ -225,7 +226,7 @@ const DesktopNavbar = (props: {
                                     fontWeight: 500
                                 }}>
 
-                                Áruház
+                                {translatableTexts.navbar.shop}
                             </EpistoFont>
 
                             <img
@@ -390,7 +391,7 @@ const DesktopNavbar = (props: {
                     }}
                     fontSize="fontSmallPlus">
 
-                    Verzió: {currentVersion ?? "1999.01.01.01:01"}
+                    {translatableTexts.navbar.version}{currentVersion ?? "1999.01.01.01:01"}
                 </EpistoFont>
             </EpistoPopper>
         </Flex >

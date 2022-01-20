@@ -12,22 +12,23 @@ import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoFont } from "../../controls/EpistoFont";
+import { translatableTexts } from "../../../static/translatableTexts";
 
 export const roles = [
     {
         name: "admin",
         id: 1,
-        optionText: "Adminisztrátor",
+        optionText: translatableTexts.roleNames.administrator,
     },
     {
         name: "supervisor",
         id: 2,
-        optionText: "Vezető",
+        optionText: translatableTexts.roleNames.supervisor,
     },
     {
         name: "user",
         id: 3,
-        optionText: "Felhasználó"
+        optionText: translatableTexts.roleNames.user
     }
 ];
 
@@ -94,14 +95,14 @@ export const EditUserControl = (props: {
                     name="fname"
                     setValue={setFirstName}
                     labelVariant={"top"}
-                    label="Keresztnév" />
+                    label={translatableTexts.misc.firstName} />
 
                 <EpistoEntry
                     name="lname"
                     value={lastName}
                     setValue={setLastName}
                     labelVariant={"top"}
-                    label="Vezetéknév" />
+                    label={translatableTexts.misc.lastName} />
             </Flex>
 
             {/* email */}
@@ -126,7 +127,7 @@ export const EditUserControl = (props: {
                         marginTop: "10px"
                     }}>
 
-                    Cég
+                    {translatableTexts.misc.company}
                 </EpistoFont>
 
                 <EpistoSelect
@@ -151,7 +152,7 @@ export const EditUserControl = (props: {
                         marginTop: "10px"
                     }}>
 
-                    Beosztás
+                    {translatableTexts.misc.jobTitle}
                 </EpistoFont>
 
                 <EpistoSelect
@@ -175,7 +176,7 @@ export const EditUserControl = (props: {
                         marginTop: "10px"
                     }}>
 
-                    Jogosultsági kör
+                    {translatableTexts.misc.role}
                 </EpistoFont>
 
                 <EpistoSelect
@@ -187,7 +188,7 @@ export const EditUserControl = (props: {
             </Flex>
 
             {/* is teacher */}
-            <EpistoLabel text="Tanar-e?">
+            <EpistoLabel text={translatableTexts.administration.editUserControl.isItTeacher}>
                 <Flex align="center">
                     <Checkbox
                         checked={isTeacher}
@@ -196,7 +197,7 @@ export const EditUserControl = (props: {
                     <EpistoFont
                         style={{ flex: "1" }}>
 
-                        Megjelolom a felhasznalot tanarkent.
+                        {translatableTexts.administration.editUserControl.selectUserAsTeacher}
                     </EpistoFont>
                 </Flex>
             </EpistoLabel>
@@ -208,7 +209,7 @@ export const EditUserControl = (props: {
                 onClick={() => handleSaveUserAsync()}
                 style={{ marginTop: "20px" }}>
 
-                Mentes
+                {translatableTexts.misc.save}
             </Button>
         </Flex>
     </Box>

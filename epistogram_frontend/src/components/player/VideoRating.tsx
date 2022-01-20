@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from "../../services/api/videoRatingApiService"
 import { useShowErrorDialog } from "../../services/core/notifications"
 import { getAssetUrl, iterate } from "../../static/frontendHelpers"
+import { translatableTexts } from "../../static/translatableTexts"
 import { EpistoButton } from "../controls/EpistoButton"
 import { EpistoFont } from "../controls/EpistoFont"
 
@@ -82,7 +83,7 @@ export const VideoRating = (props: { videoId: number }) => {
                     fontSize="fontExtraSmall"
                     isUppercase>
 
-                    Mennyire volt hasznos ez a videó?
+                    {translatableTexts.player.videoRating.experienceRating}
                 </EpistoFont>
 
                 {/* rating buttons  */}
@@ -127,7 +128,7 @@ export const VideoRating = (props: { videoId: number }) => {
                     fontSize="fontExtraSmall"
                     isUppercase>
 
-                    Ennyire volt nehéz megérteni
+                    {translatableTexts.player.videoRating.difficultyRating}
                 </EpistoFont>
 
                 {/* rating buttons  */}

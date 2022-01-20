@@ -14,6 +14,7 @@ import { useSaveUserSimple } from '../../services/api/userApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
+import { translatableTexts } from '../../static/translatableTexts';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -75,7 +76,7 @@ export const Preferences = () => {
             });
 
             // notification
-            showNotification("A változtatások sikeresen mentésre kerültek.");
+            showNotification(translatableTexts.preferences.changesHasBeenSaved);
 
             // reload
             if (avatarFile) {
@@ -101,7 +102,7 @@ export const Preferences = () => {
 
             // ok
             setIsPasswordChangeOpen(false);
-            showNotification("Sikeresen visszaállítottad a jelszavad, az új jelszó megadásához szükséges linket e-mail-ben elküldtük Neked.");
+            showNotification(translatableTexts.preferences.resetPasswordSuccessful);
         }
         catch (e: any) {
 
@@ -148,19 +149,19 @@ export const Preferences = () => {
         <Flex direction="column" justify="flex-start" flex="1" width="100%" maxW="500px">
 
             <EpistoEntry
-                label="Vezetéknév"
+                label={translatableTexts.preferences.lastName}
                 value={lastName}
                 labelVariant='top'
                 setValue={setLastName} />
 
             <EpistoEntry
-                label="Keresztnév"
+                label={translatableTexts.preferences.firstName}
                 value={firstName}
                 labelVariant='top'
                 setValue={setFirstName} />
 
             <EpistoEntry
-                label="Telefonszám"
+                label={translatableTexts.preferences.phoneNumber}
                 value={phoneNumber}
                 labelVariant='top'
                 setValue={setPhoneNumber} />
@@ -173,7 +174,7 @@ export const Preferences = () => {
                     margin: "10px 0 5px 0",
                 }}>
 
-                {"Jelszó megváltoztatása"}
+                {translatableTexts.preferences.changePassword}
             </EpistoFont>}
 
             {/* password change options */}
@@ -192,7 +193,7 @@ export const Preferences = () => {
                     onClick={() => setIsPasswordChangeOpen(true)}
                     variant="colored">
 
-                    Jelszó megváltoztatása
+                    {translatableTexts.preferences.changePassword}
                 </EpistoButton>}
 
                 {isPasswordChangeOpen && <Flex
@@ -201,7 +202,7 @@ export const Preferences = () => {
                     flex="1">
 
                     <EpistoEntry
-                        label="Jelenlegi jelszó"
+                        label={translatableTexts.preferences.currentPassword}
                         value={currentPassword}
                         type='password'
                         labelVariant='top'
@@ -218,7 +219,7 @@ export const Preferences = () => {
                             }}
                             onClick={() => setIsPasswordChangeOpen(false)}>
 
-                            Bezárás
+                            {translatableTexts.preferences.close}
                         </EpistoButton>
 
                         <EpistoButton
@@ -231,7 +232,7 @@ export const Preferences = () => {
                                 flex: "1"
                             }}>
 
-                            Kérelem elküldése
+                            {translatableTexts.preferences.sendResetMail}
                         </EpistoButton>
                     </Flex>
                 </Flex>}
@@ -250,7 +251,7 @@ export const Preferences = () => {
                     color: "black",
                 }}>
 
-                Változtatások mentése
+                {translatableTexts.preferences.saveChanges}
             </EpistoButton>}
         </Flex>
     </LoadingFrame>

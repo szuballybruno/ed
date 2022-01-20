@@ -39,7 +39,7 @@ export const StatsSummary = () => {
 
             {/* locked overlay */}
             <EpistoHeader
-                text={"Legfontosabb statisztikáid"}
+                text={translatableTexts.homePage.statsSummary.mostImportantStatistics}
                 showDivider variant="strongSub"
                 m="5px 10px 20px 10px" />
 
@@ -63,33 +63,33 @@ export const StatsSummary = () => {
 
         {/* total completed video count */}
         <StatisticsCard
-            title="Megtekintett videók a hónapban"
+            title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
             value={userStats ? userStats.completedVideoCount + "" : "0"}
-            suffix="db"
+            suffix={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.suffix}
             iconPath={getAssetUrl("images/watchedvideos3Dsmaller.png")}
             isOpenByDefault={false} />
 
         {/* total playback time */}
         <StatisticsCard
-            title="Videónézéssel eltöltött idő a hónapban"
+            title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
             value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + "" : "0"}
-            suffix="óra"
+            suffix={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.suffix}
             iconPath={getAssetUrl("images/watch3D.png")}
             isOpenByDefault={false} />
 
         {/* total given answer count  */}
         <StatisticsCard
-            title="Megválaszolt tudást vizsgáló kérdések száma"
+            title={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.title}
             value={userStats ? userStats.totalGivenAnswerCount + "" : "0"}
-            suffix="db"
+            suffix={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.suffix}
             iconPath={getAssetUrl("images/answeredquestions3D.png")}
             isOpenByDefault={false} />
 
         {/* correct answer rate  */}
         <StatisticsCard
-            title="Helyes válaszok aránya"
+            title={translatableTexts.homePage.statsSummary.correctAnswerRate.title}
             value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + "" : "0"}
-            suffix="%"
+            suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
             iconPath={getAssetUrl("images/rightanswer3D.png")}
             isOpenByDefault={false} />
     </div>

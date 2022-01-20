@@ -6,6 +6,7 @@ import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
 import { FlexFloat } from "../controls/FlexFloat";
 import { Star, StarBorderOutlined, StarOutline } from "@mui/icons-material";
 import { useCourseDetails } from "../../services/api/courseApiService";
+import { translatableTexts } from "../../static/translatableTexts";
 
 const SmallStat = (props: { iconUrl: string, text: string }) => {
 
@@ -99,7 +100,7 @@ const CourseTile = (props: {
                         textTransform={"uppercase"}
                         color="white">
 
-                        Teljesítve!
+                        {translatableTexts.availableCourses.courseDone}
                     </Text>
                 </Flex>
             </Flex>}

@@ -3,6 +3,7 @@ import { ArrowForward } from "@mui/icons-material";
 import { LinearProgress, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
 import { isString } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoFont } from "../controls/EpistoFont";
 
@@ -74,7 +75,7 @@ export const ExamLayout = (props: {
                     }}
                     variant={"outlined"}>
 
-                    Kilépek a tesztből
+                    {translatableTexts.exam.exitExam}
                 </EpistoButton>}
             </Flex>
 

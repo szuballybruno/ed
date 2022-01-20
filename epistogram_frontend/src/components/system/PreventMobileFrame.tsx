@@ -2,6 +2,7 @@ import { Flex, useMediaQuery } from "@chakra-ui/react";
 import { Typography, Checkbox } from "@mui/material";
 import { prototype } from "events";
 import { getAssetUrl } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoEntry } from "../controls/EpistoEntry";
 import { EpistoFont } from "../controls/EpistoFont";
@@ -50,7 +51,7 @@ export const PreventMobileFrame = (props) => {
                         padding: "5px 0"
                     }}>
 
-                    Kedves Látogató!
+                    {translatableTexts.preventMobileFrame.descriptions[0]}
                 </EpistoFont>
 
                 <EpistoFont
@@ -60,7 +61,7 @@ export const PreventMobileFrame = (props) => {
                         padding: "5px 0"
                     }}>
 
-                    Az optimális felhasználási élmény érdekében az EpistoGram webalkalmazása jelenleg csak asztali számítógépeken, notebookokon, vagy olyan táblagépeken fut el, melyek felbontása minimum 1280 x 720 pixeles.
+                    {translatableTexts.preventMobileFrame.descriptions[1]}
                 </EpistoFont>
 
                 <EpistoFont
@@ -70,7 +71,7 @@ export const PreventMobileFrame = (props) => {
                         padding: "5px 0"
                     }}>
 
-                    Egyéb okoseszközökön hamarosan debütáló mobilalkalmazásunkon keresztül érheted majd el platformunkat.
+                    {translatableTexts.preventMobileFrame.descriptions[2]}
                 </EpistoFont>
 
                 {/* signup for news 

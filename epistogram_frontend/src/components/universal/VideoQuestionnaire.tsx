@@ -9,6 +9,7 @@ import { QuesitionView } from "../QuestionView";
 import { EpistoButton } from "../controls/EpistoButton";
 import { TimeoutFrame } from "./TimeoutFrame";
 import { EpistoFont } from "../controls/EpistoFont";
+import { translatableTexts } from "../../static/translatableTexts";
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -81,7 +82,7 @@ export const VideoQuestionnaire = (props: {
                             margin: "10px"
                         }}>
 
-                        Bezárás
+                        {translatableTexts.videoQuestionnaire.close}
                     </EpistoFont>
                 </TimeoutFrame>
             </EpistoButton>

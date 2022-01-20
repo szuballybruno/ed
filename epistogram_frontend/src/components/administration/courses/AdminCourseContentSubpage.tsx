@@ -18,6 +18,7 @@ import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiSe
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../static/frontendHelpers";
+import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoSearch } from "../../controls/EpistoSearch";
@@ -103,7 +104,7 @@ export const AdminCourseContentSubpage = () => {
 
             await saveCourseDataAsync(dto);
 
-            showNotification("Kurzus sikeresen mentve!");
+            showNotification(translatableTexts.administration.courseContentSubpage.courseSavedSuccessfully);
         }
         catch (e) {
 
@@ -132,13 +133,13 @@ export const AdminCourseContentSubpage = () => {
             if (type === "video") {
 
                 const idResult = await createVideoAsync(moduleId)
-                showNotification("Új videó sikeresen hozzáadva!");
+                showNotification(translatableTexts.administration.courseContentSubpage.newVideoAddedSuccessfully);
                 navToVideoEdit(idResult.id);
             }
             else {
 
                 const idResult = await createExamAsync(moduleId);
-                showNotification("Új vizsga sikeresen hozzáadva!");
+                showNotification(translatableTexts.administration.courseContentSubpage.newExamAddedSuccessfully);
                 navToExamEdit(idResult.id);
             }
         } catch (e) {
@@ -164,17 +165,17 @@ export const AdminCourseContentSubpage = () => {
 
             deleteWarningDialogLogic
                 .openDialog({
-                    title: "Biztosan törlöd a vizsgát?",
-                    description: "A benne lévő összes kérdés el fog veszni.",
+                    title: translatableTexts.administration.courseContentSubpage.doYouReallyRemoveTheExam,
+                    description: translatableTexts.administration.courseContentSubpage.allQuestionsWillBeLost,
                     buttons: [
                         {
-                            title: "Vizsga törlése",
+                            title: translatableTexts.administration.courseContentSubpage.removeExam,
                             action: async () => {
 
                                 try {
 
                                     await deleteExamAsync(courseItem.id);
-                                    showNotification("Vizsga sikeresen törölve!");
+                                    showNotification(translatableTexts.administration.courseContentSubpage.examRemovedSuccessfully);
                                     removeCourseItem(courseItem.descriptorCode);
                                 }
                                 catch (e) {
@@ -192,17 +193,17 @@ export const AdminCourseContentSubpage = () => {
 
             deleteWarningDialogLogic
                 .openDialog({
-                    title: "Biztosan törlöd a videót?",
-                    description: "A feltöltött fájl, és az összes kérdés el fog veszni.",
+                    title: translatableTexts.administration.courseContentSubpage.doYouReallyRemoveTheVideo,
+                    description: translatableTexts.administration.courseContentSubpage.uploadedVideoWillBeLost,
                     buttons: [
                         {
-                            title: "Videó törlése",
+                            title: translatableTexts.administration.courseContentSubpage.removeVideo,
                             action: async () => {
 
                                 try {
 
                                     await deleteVideoAsync(courseItem.id);
-                                    showNotification("Videó sikeresen törölve!");
+                                    showNotification(translatableTexts.administration.courseContentSubpage.videoRemovedSuccessfully);
                                     removeCourseItem(courseItem.descriptorCode);
                                 }
                                 catch (e) {
@@ -219,17 +220,17 @@ export const AdminCourseContentSubpage = () => {
     const handleDeleteModule = async (module: ModuleAdminShortDTO) => {
         deleteWarningDialogLogic
             .openDialog({
-                title: "Biztosan törlöd a modult?",
-                description: "A benne lévő összes videó, és vizsga el fog veszni.",
+                title: translatableTexts.administration.courseContentSubpage.doYouReallyRemoveTheModule,
+                description: translatableTexts.administration.courseContentSubpage.uploadedContentWillBeLost,
                 buttons: [
                     {
-                        title: "Modul törlése",
+                        title: translatableTexts.administration.courseContentSubpage.removeModule,
                         action: async () => {
 
                             try {
 
                                 await deleteModuleAsync(module.id);
-                                showNotification("Modul sikeresen törölve!");
+                                showNotification(translatableTexts.administration.courseContentSubpage.moduleRemovedSuccessfully);
                                 setModules(modules.filter(x => x.id !== module.id));
                             }
                             catch (e) {
@@ -254,11 +255,11 @@ export const AdminCourseContentSubpage = () => {
 
             await createModuleAsync({
                 courseId: courseId,
-                name: "Uj modul",
+                name: translatableTexts.administration.courseContentSubpage.addModule,
                 orderIndex: modules.length
             });
 
-            showNotification("Modul sikeresen hozzaadva!");
+            showNotification(translatableTexts.administration.courseContentSubpage.newModuleAddedSuccessfully);
             await refetchCourseContentEditData();
         }
         catch (e) {
@@ -348,7 +349,7 @@ export const AdminCourseContentSubpage = () => {
                         onClick={handleAddNewModuleAsync}
                         style={{ alignSelf: "center", marginLeft: 20 }}
                         variant="outlined">
-                        Új modul hozzáadása
+                        {translatableTexts.administration.courseContentSubpage.addModuleExtended}
                     </EpistoButton>
                     {openModuleIds.some(x => modules.map(x => x.id).includes(x)) ? <EpistoButton
                         onClick={() => {
@@ -356,14 +357,14 @@ export const AdminCourseContentSubpage = () => {
                         }}
                         style={{ alignSelf: "center", marginLeft: 20 }}
                         variant="outlined">
-                        Összes becsukása
+                        {translatableTexts.misc.openAll}
                     </EpistoButton> : <EpistoButton
                         onClick={() => {
                             setOpenModuleIds(modules.map(x => x.id))
                         }}
                         style={{ alignSelf: "center", marginLeft: 20 }}
                         variant="outlined">
-                        Összes kinyitása
+                        {translatableTexts.misc.closeAll}
                     </EpistoButton>}
                 </Flex>
 

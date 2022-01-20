@@ -2,6 +2,7 @@ import { Flex } from "@chakra-ui/layout";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Typography } from "@mui/material";
 import { ModuleDetailedDTO } from "../../models/shared_models/ModuleDetailedDTO";
+import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
@@ -63,8 +64,8 @@ export const ModuleView = (params: {
                         isUppercase
                         style={{ marginRight: "5px" }}
                         fontSize="fontSmall">
-                            
-                        Kezdhetjük!
+
+                        {translatableTexts.player.moduleView.letsStart}
                     </EpistoFont>
 
                     <ArrowForwardIcon></ArrowForwardIcon>

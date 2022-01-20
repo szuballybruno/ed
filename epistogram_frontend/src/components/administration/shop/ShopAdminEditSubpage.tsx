@@ -20,6 +20,7 @@ import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoFont } from "../../controls/EpistoFont";
+import { translatableTexts } from "../../../static/translatableTexts";
 
 export const ShopAdminEditSubpage = () => {
 
@@ -82,7 +83,7 @@ export const ShopAdminEditSubpage = () => {
 
         if (codeAlreadyExists) {
 
-            showError("Code already exits!");
+            showError(translatableTexts.administration.shopAdminEditSubpage.codeAlreadyExists);
             return;
         }
 
@@ -109,7 +110,7 @@ export const ShopAdminEditSubpage = () => {
             } as ShopItemEditDTO;
 
             await saveShopItemAsync(dto, coverFileImage ?? undefined);
-            showNotification("Sikeresen mentve!");
+            showNotification(translatableTexts.misc.savedSuccessfully);
             await refetchItemEditData();
         }
         catch (e) {
@@ -199,7 +200,7 @@ export const ShopAdminEditSubpage = () => {
                 px="30px"
                 onSave={handleSaveAsync}>
 
-                <EpistoLabel text="Kuruz/termek">
+                <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.courseOrItem}>
                     <Flex align="center">
                         <Checkbox
                             checked={isCourse}
@@ -207,7 +208,7 @@ export const ShopAdminEditSubpage = () => {
                             className="square50" />
 
                         <EpistoFont>
-                            Ez a ShopItem kurzust reprezental?
+                            {translatableTexts.administration.shopAdminEditSubpage.isThisACourse}
                         </EpistoFont>
                     </Flex>
 
@@ -219,7 +220,7 @@ export const ShopAdminEditSubpage = () => {
                         onSelected={setCourse} />}
                 </EpistoLabel>
 
-                <EpistoLabel text="Borítókép">
+                <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.coverImage}>
                     <SelectImage
                         isInteractionBlocked={isCourse}
                         width="300px"
@@ -236,18 +237,18 @@ export const ShopAdminEditSubpage = () => {
                 <EpistoEntry
                     value={name}
                     setValue={setName}
-                    label="Termek neve"
+                    label={translatableTexts.administration.shopAdminEditSubpage.itemName}
                     labelVariant="top"
                     disabled={isCourse} />
 
                 <EpistoEntry
                     value={detailsUrl}
                     setValue={setDetailsUrl}
-                    label="Reszletek URL cime"
+                    label={translatableTexts.administration.shopAdminEditSubpage.detailsUrl}
                     labelVariant="top"
                     disabled={isCourse} />
 
-                <EpistoLabel text="Kategória">
+                <EpistoLabel text={translatableTexts.misc.category}>
                     <EpistoSelect
                         getCompareKey={x => x?.id + ""}
                         getDisplayValue={x => x?.name + ""}
@@ -257,7 +258,7 @@ export const ShopAdminEditSubpage = () => {
                         isDisabled={isCourse} />
                 </EpistoLabel>
 
-                <EpistoLabel text="Vasarlasi limit">
+                <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.purchaseLimit}>
                     <Flex align="center">
 
                         <Checkbox
@@ -271,7 +272,7 @@ export const ShopAdminEditSubpage = () => {
                             value={purchaseLimit}
                             setValue={setPurchaseLimit}
                             type="number"
-                            postfix="Darab"
+                            postfix={translatableTexts.administration.shopAdminEditSubpage.purchaseLimitPostfix}
                             disabled={isCourse || !isPurchaseLimited} />
                     </Flex>
                 </EpistoLabel>
@@ -280,19 +281,19 @@ export const ShopAdminEditSubpage = () => {
                     value={coinPrice}
                     setValue={setCoinPrice}
                     type="number"
-                    label="EpistoCoin ar"
+                    label={translatableTexts.administration.shopAdminEditSubpage.epistoCoinPrice}
                     labelVariant="top"
-                    postfix="EpistoCoin(s)" />
+                    postfix={translatableTexts.administration.shopAdminEditSubpage.epistoCoinPricePostfix} />
 
                 <EpistoEntry
                     value={currencyPrice}
                     setValue={setCurrencyPrice}
                     type="number"
-                    label="Valuta ar"
+                    label={translatableTexts.administration.shopAdminEditSubpage.fiatMoneyPrice}
                     labelVariant="top"
-                    postfix="Huf" />
+                    postfix={translatableTexts.administration.shopAdminEditSubpage.fiatMoneyPricePostfix} />
 
-                <EpistoLabel text="Kuponkodok">
+                <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.couponCodes}>
 
                     <Flex>
 
@@ -308,7 +309,7 @@ export const ShopAdminEditSubpage = () => {
                                     onClick={handleDeleteAll}>
 
                                     <Flex>
-                                        Összes törlése
+                                        {translatableTexts.misc.removeAll}
 
                                         <DeleteSweepIcon
                                             style={{
@@ -344,20 +345,20 @@ export const ShopAdminEditSubpage = () => {
 
                             <Flex align="center" justify="space-between">
                                 <EpistoFont>
-                                    Bejegyzések száma: {addedCodes.length}
+                                    {`${translatableTexts.administration.shopAdminEditSubpage.addedCodes} ${addedCodes.length}`}
                                 </EpistoFont>
 
                                 <EpistoButton
                                     variant="colored"
                                     onClick={addCodes}>
 
-                                    Hozzáadás
+                                    {translatableTexts.misc.add}
                                 </EpistoButton>
                             </Flex>
 
                             <EpistoEntry
                                 flex="1"
-                                label="Kód(ok) hozzáadása"
+                                label={translatableTexts.administration.shopAdminEditSubpage.addCodesField}
                                 value={addCodesField}
                                 setValue={setAddCodesField}
                                 isMultiline />

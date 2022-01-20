@@ -7,6 +7,7 @@ import { useRegisterUserViaActivationCode } from "../services/api/registrationAp
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";
 import { getAssetUrl } from "../static/frontendHelpers";
+import { translatableTexts } from "../static/translatableTexts";
 import { EpistoButton } from "./controls/EpistoButton";
 import { EpistoEntryNew, useEpistoEntryState } from "./controls/EpistoEntryNew";
 import { EpistoFont } from "./controls/EpistoFont";
@@ -55,7 +56,7 @@ export const RegisterViaActivationCodePage = () => {
                 lastNameEntryState.value);
 
             setRegistrationSuccessful(true);
-            showNotification("Sikeres regisztráció!");
+            showNotification(translatableTexts.registerViaActivationCodePage.successfulSignup);
         }
         catch (e: any) {
 
@@ -64,12 +65,12 @@ export const RegisterViaActivationCodePage = () => {
             if (errorCode === "activation_code_issue") {
 
                 activationCodeEntryState
-                    .setError("Helytelen aktivációs kód.");
+                    .setError(translatableTexts.registerViaActivationCodePage.wrongActivationCode);
             }
             else if (errorCode === "email_taken") {
 
                 emailEntryState
-                    .setError("Nem megfelelő email cím, vagy már használatban van.");
+                    .setError(translatableTexts.registerViaActivationCodePage.wrongEmailAddress);
             }
             else {
 
@@ -159,7 +160,7 @@ export const RegisterViaActivationCodePage = () => {
                             }}
                             fontSize={20}>
 
-                            Váltsd be egyedi kódodat, hogy belekezdhess a tanulásba!
+                            {translatableTexts.registerViaActivationCodePage.redeemYourCode}
                         </EpistoFont>
                     </Flex>
 
@@ -178,24 +179,24 @@ export const RegisterViaActivationCodePage = () => {
                         <EpistoEntryNew
                             state={lastNameEntryState}
                             labelVariant="top"
-                            label="Vezetéknév"
-                            placeholder="Vezetéknév"
+                            label={translatableTexts.misc.lastName}
+                            placeholder={translatableTexts.misc.lastName}
                             name="lastName"
                             height="30px" />
 
                         <EpistoEntryNew
                             state={firstNameEntryState}
                             labelVariant="top"
-                            label="Keresztnév"
-                            placeholder="Keresztnév"
+                            label={translatableTexts.misc.firstName}
+                            placeholder={translatableTexts.misc.firstName}
                             name="firstName"
                             height="30px" />
 
                         <EpistoEntryNew
                             state={activationCodeEntryState}
                             labelVariant="top"
-                            label="Aktivációs kódod"
-                            placeholder="Kód"
+                            label={translatableTexts.registerViaActivationCodePage.activationCode.label}
+                            placeholder={translatableTexts.registerViaActivationCodePage.activationCode.placeholder}
                             name="activationCode"
                             height="30px" />
                     </Flex>
@@ -215,7 +216,7 @@ export const RegisterViaActivationCodePage = () => {
                             onClick={handleRegisterAsync}
                             variant="colored">
 
-                            Regisztráció
+                            {translatableTexts.registerViaActivationCodePage.signup}
                         </EpistoButton>
                     </Flex>
 
@@ -227,7 +228,7 @@ export const RegisterViaActivationCodePage = () => {
                         <EpistoFont
                             classes={["fontGrey"]}>
 
-                            Nincs még hozzáférésed?
+                            {translatableTexts.registerViaActivationCodePage.dontHaveAccount}
                         </EpistoFont>
 
                         <EpistoFont
@@ -239,7 +240,7 @@ export const RegisterViaActivationCodePage = () => {
 
                             <a href="https://pcworld.hu/elofizetes" target="_blank">
 
-                                Vásárold meg kedvezményesen erre a linkre kattintva!
+                                {translatableTexts.registerViaActivationCodePage.buySubscription}
                             </a>
                         </EpistoFont>
                     </Flex>
@@ -266,7 +267,9 @@ export const RegisterViaActivationCodePage = () => {
                             height="250px">
 
                             <EpistoFont style={{ textAlign: "center" }}>
-                                A regisztráció sikeres volt, a belépési linked elküldtük a(z) '{emailEntryState.value}' címre.
+                                {translatableTexts.registerViaActivationCodePage.signupSuccessfulDescriptions[0]}
+                                {emailEntryState.value}
+                                {translatableTexts.registerViaActivationCodePage.signupSuccessfulDescriptions[1]}
                             </EpistoFont>
                         </Flex>
 

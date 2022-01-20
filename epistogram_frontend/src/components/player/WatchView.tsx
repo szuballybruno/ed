@@ -8,6 +8,7 @@ import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { StillWatchingDialogMarker } from "../../models/types";
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
@@ -223,7 +224,7 @@ export const WatchView = (props: {
                                     margin: "10px"
                                 }}>
 
-                                Tovább
+                                {translatableTexts.misc.next}
                             </EpistoFont>
                         </TimeoutFrame>
                     </EpistoButton>
@@ -295,7 +296,7 @@ export const WatchView = (props: {
                         style={{
                             fontWeight: 500
                         }}>
-                            
+
                         {video!.title}
                     </EpistoFont>
 
