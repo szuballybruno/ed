@@ -67,7 +67,7 @@ const AvailableCoursesPage = () => {
                 }
                 else {
 
-                    showNotification("A kurzus jelenleg nem indítható, ez annak lehet a jele, hogy folyamatban van a feltöltése, kérjük próbáld meg később!", "warning");
+                    showNotification(translatableTexts.availableCourses.couldNotStartCourse, "warning");
                 }
             }
         }

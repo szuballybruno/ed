@@ -6,6 +6,7 @@ import { ModuleDTO } from '../../models/shared_models/ModuleDTO';
 import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { httpPostAsync } from "../../services/core/httpClient";
 import { useShowErrorDialog } from "../../services/core/notifications";
+import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
@@ -33,7 +34,7 @@ export const CourseItemSelector = (props: {
         }
         catch (e: any) {
 
-            showErrorDialog("Switching coures mode failed!");
+            showErrorDialog(translatableTexts.player.courseItemSelector.switchingCourseModeFailed);
         }
     }
 
@@ -61,7 +62,7 @@ export const CourseItemSelector = (props: {
                         isUppercase
                         fontSize="fontSmallPlus">
 
-                        Kezdő Mód
+                        {translatableTexts.player.courseItemSelector.beginner}
                     </EpistoFont>
 
                     <Radio size="small" value="beginner" />
@@ -81,8 +82,8 @@ export const CourseItemSelector = (props: {
                     <EpistoFont
                         isUppercase
                         fontSize="fontSmallPlus">
-                            
-                        Haladó Mód
+
+                        {translatableTexts.player.courseItemSelector.advanced}
                     </EpistoFont>
 
                     <Radio size="small" value="advanced" />
@@ -113,7 +114,7 @@ export const CourseItemSelector = (props: {
             handleClose={() => setIsInfoDialogOpen(false)}>
 
             <EpistoFont>
-                Kezdő módban a meghatározott sorrendben haladhatsz, és előre csak addig részig tekerhetsz, melyet már megtekintettél. Haladó módban korlátlanul váltogathatsz a videók között!
+                {translatableTexts.player.courseItemSelector.courseModeSwitchDescription}
             </EpistoFont>
         </EpistoPopper>
 

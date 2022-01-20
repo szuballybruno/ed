@@ -113,7 +113,7 @@ export const DailyTip = (props: {} & FlexProps) => {
 
             <Flex p="20px" textAlign="center">
 
-                Személyes tanulási tipped 48 óra múlva válik elérhetővé
+                {translatableTexts.homePage.noTipOfTheDayYet}
             </Flex>
         </Flex>
 

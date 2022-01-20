@@ -37,9 +37,16 @@ const ListItem = (props: {
     onClick?: any
 }) => {
 
-    return <LinkSelector to={props.to} onClick={props.onClick} className={`${classes.playbackContainer} ${props.className} ${props.active ? classes.playbackContainerActive : null}`}>
-        <ThumbnailSelector thumbnailUrl={props.thumbnailUrl} />
+    return <LinkSelector
+        to={props.to}
+        onClick={props.onClick}
+        className={`${classes.playbackContainer} ${props.className} ${props.active ? classes.playbackContainerActive : null}`}>
+
+        <ThumbnailSelector
+            thumbnailUrl={props.thumbnailUrl} />
+
         <div className={classes.videoDataWrapper}>
+
             <div className={classes.videoMainTitleWrapper}>
 
                 <EpistoFont
@@ -48,13 +55,15 @@ const ListItem = (props: {
                     style={{
                         fontWeight: 500
                     }}>
+
                     {props.mainTitle}
                 </EpistoFont>
             </div>
+
             <div className={classes.videoSubTitleWrapper}>
 
                 <EpistoFont fontSize="fontExtraSmall">
-                    
+
                     {props.subTitle}
                 </EpistoFont>
             </div>

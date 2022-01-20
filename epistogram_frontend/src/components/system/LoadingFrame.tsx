@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { isArray } from "../../static/frontendHelpers";
 import { LoadingStateType } from "../../models/types";
 import { EpistoFont } from "../controls/EpistoFont";
+import { translatableTexts } from "../../static/translatableTexts";
 
 export type LoadingFramePropsType = {
     loadingState?: LoadingStateType | LoadingStateType[],
@@ -102,7 +103,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
 
                 <Box pt="20px">
                     <EpistoFont>
-                        Betöltés...
+                        {translatableTexts.misc.loading}
                     </EpistoFont>
                 </Box>
             </Flex>}

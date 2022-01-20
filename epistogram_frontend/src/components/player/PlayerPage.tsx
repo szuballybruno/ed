@@ -14,6 +14,7 @@ import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
 import { ModuleView } from "./ModuleView";
 import { WatchView } from "./WatchView";
+import { translatableTexts } from "../../static/translatableTexts";
 
 export const PlayerPage = () => {
 
@@ -60,11 +61,11 @@ export const PlayerPage = () => {
 
         warningDialogLogic
             .openDialog({
-                title: "Biztosan megszakítod a vizsgát?",
-                description: "Figyelem! Ha most kilépsz, a jelenlegi vizsgád elveszik és nem kezdhető újra.",
+                title: translatableTexts.player.doYouReallyStopExam,
+                description: translatableTexts.player.stopExamWarning,
                 buttons: [
                     {
-                        title: "Igen",
+                        title: translatableTexts.player.yes,
                         action: () => navigateToPlayer(descriptorCode)
                     }
                 ],

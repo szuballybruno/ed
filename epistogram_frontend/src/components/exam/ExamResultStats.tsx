@@ -1,5 +1,6 @@
 import { Flex } from "@chakra-ui/react"
 import { getAssetUrl } from "../../static/frontendHelpers"
+import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoGrid } from "../controls/EpistoGrid";
 import StatisticsCard from "../statisticsCard/StatisticsCard"
 
@@ -20,29 +21,29 @@ export const ExamResultStats = (props: {
         <StatisticsCard
             height="150px"
             iconPath={getAssetUrl("/icons/exam_result_good_answer_count.svg")}
-            suffix={"%"}
-            title={"Helyes válaszok aránya"}
+            suffix={translatableTexts.exam.examResultStats.correctAnswersRatio.suffix}
+            title={translatableTexts.exam.examResultStats.correctAnswersRatio.title}
             value={"" + correctAnswerRate} />
 
         <StatisticsCard
             height="150px"
             iconPath={getAssetUrl("/icons/exam_result_good_answer_percent.svg")}
-            suffix={""}
-            title={"Helyes válasz a kérdésekre"}
+            suffix={translatableTexts.exam.examResultStats.correctAnswersCount.suffix}
+            title={translatableTexts.exam.examResultStats.correctAnswersCount.title}
             value={`${correctAnswerCount}/${totalQuestionCount}`} />
 
         <StatisticsCard
             height="150px"
             iconPath={getAssetUrl("/icons/exam_result_time.svg")}
-            suffix={"perc"}
-            title={"Alatt teljesítetted a tesztet"}
+            suffix={translatableTexts.exam.examResultStats.examDoneInMinutes.suffix}
+            title={translatableTexts.exam.examResultStats.examDoneInMinutes.title}
             value={"66"} />
 
         <StatisticsCard
             height="150px"
             iconPath={getAssetUrl("/icons/exam_result_top_percent.svg")}
-            suffix={"%"}
-            title={"Az összes felhaszáló között"}
+            suffix={translatableTexts.exam.examResultStats.fromAllUsers.suffix}
+            title={translatableTexts.exam.examResultStats.fromAllUsers.title}
             value={"top 20"} />
     </EpistoGrid>
 }

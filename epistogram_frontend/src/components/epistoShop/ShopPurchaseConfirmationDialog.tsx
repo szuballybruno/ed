@@ -7,6 +7,7 @@ import { usePurchaseShopItem } from "../../services/api/shopApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { usePaging } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
@@ -63,8 +64,8 @@ export const ShopPurchaseConfirmationDialog = (props: {
                 }}>
 
                 {isCourse
-                    ? "Biztonsan feloldod az alábbi tanfolyamot?"
-                    : "Biztonsan feloldod az alábbi kedvezményt?"}
+                    ? translatableTexts.shop.purchaseConfirmationDialog.unlockCourse
+                    : translatableTexts.shop.purchaseConfirmationDialog.unlockItem}
             </EpistoFont>
 
             <img
@@ -93,31 +94,37 @@ export const ShopPurchaseConfirmationDialog = (props: {
                 variant="colored"
                 onClick={onConfirmPurchaseAsync}>
 
-                Feloldom
+                {translatableTexts.shop.purchaseConfirmationDialog.unlock}
             </EpistoButton>
         </Flex>
     );
 
     const feedbackSlide = () => (
-        <Flex direction="column" align="center" w="500px" h="200px" justify="space-between" p="20px">
+        <Flex
+            direction="column"
+            align="center"
+            w="500px"
+            h="200px"
+            justify="space-between"
+            p="20px">
 
             {/* greet */}
             <EpistoFont>
                 {isCourse
-                    ? "Sikeresen feloldottad a tanfolyamot!"
-                    : "Sikeresen megvásároltad a terméket!"}
+                    ? translatableTexts.shop.purchaseConfirmationDialog.courseSuccessfullyUnlocked
+                    : translatableTexts.shop.purchaseConfirmationDialog.itemSuccessfullyPurchased}
             </EpistoFont>
 
             {/* info */}
             <EpistoFont>
                 {isCourse
-                    ? "Mostantól megtalálhatod a Tanfolyamkeresőben is!"
-                    : `Kódod amit beválthatsz a partnerünknél: ${purchaseShopItemResult?.discountCode}`}
+                    ? translatableTexts.shop.purchaseConfirmationDialog.canBeFoundInTheCourseSearch
+                    : `${translatableTexts.shop.purchaseConfirmationDialog.yourCode} ${purchaseShopItemResult?.discountCode}`}
             </EpistoFont>
 
             {/* details */}
             {!isCourse && <EpistoFont>
-                A kódod e-mailben is elküldtük neked, hogy később könnyen megtalálhasd.
+                {translatableTexts.shop.purchaseConfirmationDialog.codeHasBeenSent}
             </EpistoFont>}
 
             {isCourse ? <EpistoButton
@@ -131,13 +138,13 @@ export const ShopPurchaseConfirmationDialog = (props: {
                 }}
                 variant="colored">
 
-                Irány a tanfolyam!
+                {translatableTexts.shop.purchaseConfirmationDialog.letsGoToCourse}
             </EpistoButton> : <EpistoButton
                 onClick={() => {
                     //openNewTab(detailsUrl); //TODO: Details url should be here
                 }}>
 
-                Termék oldala
+                {translatableTexts.shop.purchaseConfirmationDialog.itemPage}
             </EpistoButton>}
         </Flex>
     );

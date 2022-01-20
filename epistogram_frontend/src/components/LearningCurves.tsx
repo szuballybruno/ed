@@ -136,7 +136,7 @@ export const LearningCurves = () => {
             <EpistoFont style={{
                 textAlign: "center"
             }}>
-                
+
                 {translatableTexts.homePage.noStatsYet}
             </EpistoFont>
         </FlexFloat>

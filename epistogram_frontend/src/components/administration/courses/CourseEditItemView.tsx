@@ -5,6 +5,7 @@ import { Chip, Typography } from "@mui/material";
 import React from 'react';
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
 import { formatTime } from "../../../static/frontendHelpers";
+import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 
@@ -85,11 +86,11 @@ export const CourseEditItemView = (props: {
                     {isVideo && chip(
                         item.videoLength > 0 ? "var(--deepGreen)" : "var(--deepRed)",
                         item.videoLength
-                            ? `Videó hossza: ${formatTime(Math.round(item.videoLength))}`
-                            : "Nincs feltöltött videó")}
+                            ? `${translatableTexts.administration.courseEditItemView.videoLength} ${formatTime(Math.round(item.videoLength))}`
+                            : translatableTexts.administration.courseEditItemView.noVideoUploaded)}
 
                     {/* question count */}
-                    {chip(item.questionCount > 0 ? "var(--deepGreen)" : "var(--deepRed)", `Kérdések: ${item.questionCount}`)}
+                    {chip(item.questionCount > 0 ? "var(--deepGreen)" : "var(--deepRed)", `${translatableTexts.administration.courseEditItemView.questions} ${item.questionCount}`)}
                 </Flex>
 
                 <Flex>

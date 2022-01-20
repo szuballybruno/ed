@@ -11,6 +11,7 @@ import { useShopItemBriefData } from "../../services/api/shopApiService";
 import { useBriefUserData } from "../../services/api/userApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoFont } from "../controls/EpistoFont";
 
@@ -168,7 +169,7 @@ export const AdminSubpageHeader = (props: {
                         variant="colored"
                         onClick={() => onSave()}>
 
-                        Mentés
+                        {translatableTexts.misc.save}
                     </EpistoButton>}
                 </Flex>
             </Flex>

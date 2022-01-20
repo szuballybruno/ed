@@ -6,6 +6,7 @@ import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { TeacherBadgeNameType } from "../../../models/shared_models/types/sharedTypes";
 import { useSaveTeacherInfoData, useTeacherInfoEditData } from "../../../services/api/teacherInfoApiService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
+import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoFont } from "../../controls/EpistoFont";
@@ -75,7 +76,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                 description
             });
 
-            showNotification("Tanar informaciok sikeresen mentve!");
+            showNotification(translatableTexts.administration.teacherInfoSubpage.teacherInfoSaved);
         }
         catch (e) {
 
@@ -105,14 +106,14 @@ export const AdminUserTeacherInfoSubpage = () => {
                     <EpistoEntry
                         labelVariant={"top"}
                         value={skills}
-                        label="Szakterület"
+                        label={translatableTexts.administration.teacherInfoSubpage.teacherSkills}
                         setValue={setSkills} />
 
                     {/* description */}
                     <EpistoEntry
                         labelVariant={"top"}
                         value={description}
-                        label="Leiras"
+                        label={translatableTexts.administration.teacherInfoSubpage.teacherDescription}
                         isMultiline
                         setValue={setDescription} />
 
@@ -121,7 +122,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                         labelVariant={"top"}
                         type="number"
                         value={courseCount}
-                        label="Kurzusok száma"
+                        label={translatableTexts.administration.teacherInfoSubpage.teacherCoursesCount}
                         setValue={setCoursesCount} />
 
                     {/* Teacher videos count */}
@@ -129,7 +130,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                         labelVariant={"top"}
                         type="number"
                         value={videoCount}
-                        label="Videók száma"
+                        label={translatableTexts.administration.teacherInfoSubpage.teacherVideosCount}
                         setValue={setVideoCount} />
 
                     {/* Teacher students count */}
@@ -137,11 +138,11 @@ export const AdminUserTeacherInfoSubpage = () => {
                         labelVariant={"top"}
                         type="number"
                         value={studentCount}
-                        label="Hallgatók száma"
+                        label={translatableTexts.administration.teacherInfoSubpage.teacherStudentsCount}
                         setValue={setStudentCount} />
 
                     {/* Teacher rating */}
-                    <EpistoLabel text="Értékelés">
+                    <EpistoLabel text={translatableTexts.administration.teacherInfoSubpage.teacherRating}>
                         <Slider
                             defaultValue={0}
                             valueLabelDisplay="auto"
@@ -154,7 +155,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                     </EpistoLabel>
 
                     {/* Teacher badges */}
-                    <EpistoLabel text="Tanár jelvényei">
+                    <EpistoLabel text={translatableTexts.administration.teacherInfoSubpage.teacherBadges}>
                         <Flex flexWrap={"wrap"}>
                             {allBadges
                                 .map((badge, index) => {
@@ -203,7 +204,7 @@ export const AdminUserTeacherInfoSubpage = () => {
                         onClick={() => handleSaveAsync()}
                         style={{ marginTop: "20px" }}>
 
-                        Mentés
+                        {translatableTexts.misc.save}
                     </EpistoButton>
                 </Flex>
             </AdminSubpageHeader>

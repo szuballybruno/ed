@@ -1,7 +1,9 @@
+import { Flex } from '@chakra-ui/react';
 import ReactECharts, { EChartsOption } from 'echarts-for-react';
 import React from "react";
 import wrap from 'word-wrap';
 import { PersonalityChartDataDTO } from '../../models/shared_models/PersonalityChartDataDTO';
+import { translatableTexts } from '../../static/translatableTexts';
 
 export const PersonalityChart = (props: {
     data: PersonalityChartDataDTO
@@ -30,19 +32,18 @@ export const PersonalityChart = (props: {
         legend: {
             data: [
                 {
-                    name: "A felhasználók átlaga",
+                    name: translatableTexts.learningOverview.usersAverage,
                     itemStyle: {
                         color: averageGraphColor
                     }
                 },
                 {
-                    name: "A te tanulási analízised",
+                    name: translatableTexts.learningOverview.yourLearningAnalysis,
                     itemStyle: {
                         color: userGraphColor
                     }
                 }
             ],
-            top: 0,
             orient: "horizontal",
             icon: "circle",
             itemHeight: 30,
@@ -53,7 +54,7 @@ export const PersonalityChart = (props: {
         },
         radar: {
             scale: true,
-            radius: "50%",
+            radius: "60%",
             splitNumber: 7,
             splitLine: {
                 lineStyle: {
@@ -82,7 +83,7 @@ export const PersonalityChart = (props: {
                 data: [
                     {
                         value: [3, 4, 5, 7, 4, 2, 4, 5, 4, 4],
-                        name: "A felhasználók átlaga",
+                        name: translatableTexts.learningOverview.usersAverage,
                         lineStyle: {
                             width: 3,
                             color: averageGraphColor,
@@ -101,7 +102,7 @@ export const PersonalityChart = (props: {
                     },
                     {
                         value: traitValues,
-                        name: "A te tanulási analízised",
+                        name: translatableTexts.learningOverview.yourLearningAnalysis,
                         lineStyle: {
                             width: 3,
                             color: userGraphColor,
@@ -123,14 +124,12 @@ export const PersonalityChart = (props: {
         ]
     } as EChartsOption;
 
-    return (
-        <ReactECharts
-            option={options}
-            style={{
-                height: "100%",
-                minHeight: 350,
-                minWidth: 500,
-                maxWidth: "100%"
-            }} />
-    );
+    return <ReactECharts
+        option={options}
+        style={{
+            height: "100%",
+            minHeight: 350,
+            minWidth: 500,
+            maxWidth: "100%"
+        }} />
 }
