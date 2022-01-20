@@ -3,4 +3,5 @@ export class PersonalityTraitCategoryShortDTO {
     title: string;
     label: string;
     isMax: boolean;
+    tipCount: number;
 }

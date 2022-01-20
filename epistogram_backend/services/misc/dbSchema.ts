@@ -67,6 +67,7 @@ import { ExamView } from "../../models/views/ExamView";
 import { VideoRating } from "../../models/entity/VideoRating";
 import { CourseOverviewView } from "../../models/views/CourseOverviewView";
 import { PersonalityTraitView } from "../../models/views/PersonalityTraitView";
+import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
 
 export const dbSchema = {
 
@@ -109,7 +110,8 @@ export const dbSchema = {
         "course_details_view",
         "exam_view",
         "coin_acquire_per_course_view",
-        "course_overview_view"
+        "course_overview_view",
+        "personality_trait_category_view"
     ],
 
     functionScripts: [
@@ -174,7 +176,8 @@ export const dbSchema = {
         CourseDetailsView,
         CourseModuleOverviewView,
         ExamView,
-        CourseOverviewView
+        CourseOverviewView,
+        PersonalityTraitCategoryView
     ] as any[],
 
     entities: [

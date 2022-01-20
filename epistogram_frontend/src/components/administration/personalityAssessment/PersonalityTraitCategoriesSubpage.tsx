@@ -5,6 +5,7 @@ import { PersonalityTraitCategoryShortDTO } from "../../../models/shared_models/
 import { usePersonalityTraitCategories } from "../../../services/api/personalityAssessmentApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoFont } from "../../controls/EpistoFont";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
@@ -78,6 +79,21 @@ export const PersonalityTraitCategoriesSubpage = () => {
                                 height="100%"
                                 width={165}
                                 px={10}>
+
+                                <EpistoFont noLineBreak>
+                                    Napi tippek:
+                                </EpistoFont>
+
+                                <EpistoFont
+                                    style={{
+                                        margin: "5px",
+                                        background: personalityTraitCategory.tipCount > 0 ? "var(--mildGreen)" : "var(--mildRed)",
+                                        padding: "2px 5px 2px 5px",
+                                        borderRadius: "7px"
+                                    }}>
+
+                                    {personalityTraitCategory.tipCount}
+                                </EpistoFont>
 
                                 {/* go to edit */}
                                 {rowButtons
