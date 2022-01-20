@@ -62,7 +62,7 @@ export const translatableTexts = {
         availableCoursesText: "Válaszd ki a legszimpatikusabb tanfolyamot",
         currentCourseTitle: "Jelenlegi kurzus",
         practiseTitle: "Gyakorolj, hogy a legjobb lehess!",
-        tipOfTheDay: "Személyre szabott videós tipped",
+        tipOfTheDay: "Személyre szabott tipped",
         tasks: "Feladatok",
         stats: "Legfontosabb statisztikáid",
         noStatsYet: "Tanulási és felejtési görbéd kalkulálásához legalább 30 nap és minimum 20 órányi belépés szükséges"
