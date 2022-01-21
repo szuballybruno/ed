@@ -39,15 +39,13 @@ export class CoinTransactionService {
 
     async giftCoinsToUserAsync(userId: number, amount: number) {
 
-        const coinBalance = await this._ormConnectionService
-            .getRepository(CoinBalanceView)
-            .findOneOrFail({
-                where: {
-                    userId
-                }
+        await this._ormConnectionService
+            .getRepository(CoinTransaction)
+            .insert({
+                userId,
+                amount,
+                isGifted: true
             });
-
-        return coinBalance.coinBalance;
     }
 
     async getCoinTransactionsAsync(userId: number) {

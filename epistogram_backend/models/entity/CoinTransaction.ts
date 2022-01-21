@@ -19,6 +19,9 @@ export class CoinTransaction {
     @Column()
     amount: number;
 
+    @Column({ default: false })
+    isGifted: boolean;
+
     //
     // user  
     //

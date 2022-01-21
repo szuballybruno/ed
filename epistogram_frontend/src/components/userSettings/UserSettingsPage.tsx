@@ -7,6 +7,7 @@ import { ContentPane } from '../ContentPane';
 import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
+import { CoinTransactions } from './CoinTransactions';
 import { Preferences } from './Preferences';
 
 const FeaturePreview = () => {
@@ -40,6 +41,7 @@ export const UserSettingsPage = () => {
 
             <Switch>
                 {getRoute(applicationRoutes.settingsRoute.preferencesRoute, <Preferences />)}
+                {getRoute(applicationRoutes.settingsRoute.coinTransactionsRoute, <CoinTransactions />)}
                 {getRoute(applicationRoutes.settingsRoute.featurePreviewRoute, <FeaturePreview />)}
                 {getRoute(applicationRoutes.settingsRoute.developmentNotes, <DevelopmentNotes />)}
             </Switch>

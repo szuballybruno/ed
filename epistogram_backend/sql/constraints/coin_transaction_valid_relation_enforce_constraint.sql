@@ -7,5 +7,6 @@ CHECK
 	given_answer_id IS NOT NULL OR
 	given_answer_streak_id IS NOT NULL OR
 	activity_streak_id IS NOT NULL OR
-	shop_item_id IS NOT NULL
+	shop_item_id IS NOT NULL OR 
+	is_gifted
 );

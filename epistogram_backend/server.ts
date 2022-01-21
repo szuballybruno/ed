@@ -234,7 +234,7 @@ import { DailyTipService } from './services/DailyTipService';
     addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);
     addEndpoint(apiRoutes.coinTransactions.getCoinBalance, coinTransactionsController.getCoinBalanceAction);
     addEndpoint(apiRoutes.coinTransactions.getCoinBalanceOfUser, coinTransactionsController.getCoinBalanceOfUserAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.coinTransactions.giftCoinsToUser, coinTransactionsController.giftCoinsToUser, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.coinTransactions.giftCoinsToUser, coinTransactionsController.giftCoinsToUser, { isPost: true, authorize: ["administrator"] });
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);

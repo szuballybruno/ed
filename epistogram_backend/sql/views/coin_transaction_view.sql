@@ -18,7 +18,10 @@ SELECT
 						THEN 'activity_streak'
 						ELSE CASE WHEN ca.shop_item_id IS NOT NULL 
 							THEN 'shop_item_purchase'
-							ELSE 'unknown'
+							ELSE CASE WHEN ca.is_gifted
+								THEN 'gifted'
+								ELSE 'unknown'
+							END
 						END
 					END
 				END 
