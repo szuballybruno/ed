@@ -10,7 +10,7 @@ import { AdminPageUserDTO } from "../../../models/shared_models/AdminPageUserDTO
 import { deleteUserAsync, useUserListQuery } from "../../../services/api/userApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { useShowErrorDialog } from "../../../services/core/notifications";
-import { getRoleName } from "../../../static/frontendHelpers";
+import { ArrayBuilder, dateTimeToString, formatTimespan, getRoleName } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { FloatAddButton } from "../../FloatAddButton";
@@ -23,6 +23,9 @@ import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { FloatChip } from "../../universal/FloatChip";
 import { AdminListEditHeader } from "../AdminListEditHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import LoginIcon from '@mui/icons-material/Login';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 export const AdminUserListSubpage = () => {
 
@@ -57,7 +60,7 @@ export const AdminUserListSubpage = () => {
         deleteWaningDialogLogic
             .openDialog({
                 title: "Biztosan törlöd a felhasználót?",
-                description: `A ${user.firstName} ${user.lastName} nevű felhasználó visszavonhatatlanul törölve lesz!`,
+                description: `A ${user.name} nevű felhasználó visszavonhatatlanul törölve lesz!`,
                 buttons: [
                     {
                         title: "Törlés",
@@ -146,46 +149,44 @@ export const AdminUserListSubpage = () => {
 
     const getChips = (user: AdminPageUserDTO) => {
 
-        const chips = [] as { name: string, icon: ReactNode }[];
-
-        if (!user.userActivity.canAccessApplication)
-            chips.push({
+        return new ArrayBuilder<{ name: string, icon: ReactNode }>()
+            .addIf(!user.canAccessApplication, {
                 name: "Nincs hozzáférése az applikációhoz",
                 icon: <DesktopAccessDisabledIcon />
-            });
-
-        if (!user.isInvitationAccepted)
-            chips.push({
+            })
+            .addIf(!user.isInvitationAccepted, {
                 name: "A meghívás elfogadásra vár",
                 icon: <Email />
-            });
-
-        chips.push(
-            {
+            })
+            .add({
                 name: user.email,
                 icon: <AlternateEmailIcon />
-            });
-
-        chips.push(
-            {
+            })
+            .add({
                 name: user.organizationName,
                 icon: <ApartmentTwoTone />
-            });
-
-        chips.push(
-            {
+            })
+            .add({
                 name: getRoleName(user.roleId),
                 icon: <AccessibilityIcon />
-            });
-
-        if (user.jobTitle)
-            chips.push(
-                {
-                    name: user.jobTitle.name,
-                    icon: <WorkTwoTone />
-                })
-
-        return chips;
+            })
+            .addIf(!!user.jobTitleName, {
+                name: user.jobTitleName,
+                icon: <WorkTwoTone />
+            })
+            .add({
+                name: formatTimespan(user.totalSpentTimeSeconds),
+                icon: <AccessTimeFilledIcon />
+            })
+            .addIf(!!user.latestActivityDate, {
+                name: dateTimeToString(user.latestActivityDate),
+                icon: <LoginIcon />
+            })
+            .add({
+                name: "EpistoCoin egyenleg: " + user.coinBalance,
+                icon: <MonetizationOnIcon />
+            })
+            .getArray();
     }
 
     return <LoadingFrame loadingState={usersStatus} error={usersError} className="whall">
@@ -218,7 +219,7 @@ export const AdminUserListSubpage = () => {
                             setIsChecked={x => setSelectedUser(user.id, x)}
                             isChecked={selectedUserIds.some(x => x === user.id)}
                             midContent={<FlexListTitleSubtitle
-                                title={`${user.lastName} ${user.firstName}`}
+                                title={`${user.name}`}
                                 subTitle={<Flex wrap="wrap">
                                     {getChips(user)
                                         .map((chip, index) => <FloatChip

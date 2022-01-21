@@ -63,16 +63,22 @@ export class GlobalConfiguration {
         port: parseInt(GlobalConfiguration.getEnvConfigEntry("DB_PORT")),
         serviceUserName: GlobalConfiguration.getEnvConfigEntry("DB_SERVICE_USER_NAME"),
         serviceUserPassword: GlobalConfiguration.getEnvConfigEntry("DB_SERVICE_USER_PASSWORD"),
-        isOrmSyncEnabled: GlobalConfiguration.getEnvConfigEntry("DB_IS_ORM_SYNC_ENABLED") === "true",
         isOrmLoggingEnabled: GlobalConfiguration.getEnvConfigEntry("DB_IS_ORM_LOGGING_ENABLED") === "true",
-        allowPurge: GlobalConfiguration.getEnvConfigEntry("DB_ALLOW_PURGE") === "true",
-        forcePurge: GlobalConfiguration.getEnvConfigEntry("DB_FORCE_PURGE") === "true",
+        isDangerousDBPurgeEnabled: GlobalConfiguration.getEnvConfigEntry("IS_DANGEROUS_DB_PURGE_ENABLED") === "true",
         isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry("IS_HOSTED_ON_GCP") === "true"
     }
 
     constructor(rootDirectory: string) {
 
         this.rootDirectory = rootDirectory;
+    }
+
+    getIsProdEnvironment = () => {
+
+        const envName = this.misc.environmentName.toLowerCase();
+        const isProdEnvironemnt = envName.includes("prod");
+
+        return isProdEnvironemnt;
     }
 
     getDatabaseConnectionParameters = () => {

@@ -37,6 +37,19 @@ export class CoinTransactionService {
         return coinBalance.coinBalance;
     }
 
+    async giftCoinsToUserAsync(userId: number, amount: number) {
+
+        const coinBalance = await this._ormConnectionService
+            .getRepository(CoinBalanceView)
+            .findOneOrFail({
+                where: {
+                    userId
+                }
+            });
+
+        return coinBalance.coinBalance;
+    }
+
     async getCoinTransactionsAsync(userId: number) {
 
         const coinTransactions = await this._ormConnectionService

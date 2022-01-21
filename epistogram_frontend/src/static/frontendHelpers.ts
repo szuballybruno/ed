@@ -42,7 +42,7 @@ export const formatTime = (seconds: number) => {
         });
 }
 
-export const dateTimeToString = (date: Date) => {
+export const dateTimeToString = (date: Date | string) => {
 
     if (!date)
         return "";

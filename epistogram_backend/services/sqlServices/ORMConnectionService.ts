@@ -17,23 +17,18 @@ export class ORMConnectionService {
 
     private _config: GlobalConfiguration;
     private _schema: ORMSchemaType;
-    private _sqlBootstrapperService: SQLBootstrapperService;
     private _ormConnection: ORMConnection;
 
-    constructor(config: GlobalConfiguration, schema: ORMSchemaType, bootrstrapper: SQLBootstrapperService) {
+    constructor(config: GlobalConfiguration, schema: ORMSchemaType) {
 
         this._config = config;
         this._schema = schema;
-        this._sqlBootstrapperService = bootrstrapper;
     }
 
     connectORMAsync = async () => {
 
-        const isSyncEnabled = this._config.database.isOrmSyncEnabled;
         const isLoggingEnabled = this._config.database.isOrmLoggingEnabled;
-        const allowPurge = this._config.database.allowPurge;
-        const forcePurge = this._config.database.forcePurge;
-        const canPurgeOnRetry = allowPurge && !forcePurge;
+        const isDangerousDBPurgeEnabled = this._config.database.isDangerousDBPurgeEnabled;
         const dbConnOpts = this._config.getDatabaseConnectionParameters();
 
         const options = {
@@ -43,7 +38,7 @@ export class ORMConnectionService {
             username: dbConnOpts.username,
             password: dbConnOpts.password,
             database: dbConnOpts.databaseName,
-            synchronize: isSyncEnabled,
+            synchronize: isDangerousDBPurgeEnabled,
             logging: isLoggingEnabled,
             namingStrategy: new SnakeNamingStrategy(),
             extra: {
@@ -56,22 +51,8 @@ export class ORMConnectionService {
             ],
         } as ConnectionOptions;
 
-        try {
-
-            log("Connecting to database with TypeORM...", "strong");
-            this._ormConnection = await this.createTypeORMConnection(options);
-        }
-        catch (e) {
-
-            if (!canPurgeOnRetry)
-                throw e;
-
-            log("Purging DB...", "strong");
-            await this._sqlBootstrapperService.purgeDBAsync();
-
-            log("(#2 attempt) Connecting to database with TypeORM...", "strong");
-            this._ormConnection = await this.createTypeORMConnection(options);
-        }
+        log("Connecting to database with TypeORM...", "strong");
+        this._ormConnection = await this.createTypeORMConnection(options);
     }
 
     getRepository<T>(classType: ClassType<T>) {

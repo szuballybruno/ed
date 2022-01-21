@@ -68,7 +68,7 @@ export class AuthenticationService {
 
         // check if this refresh token is associated to the user
         const refreshTokenFromDb = await this._userService
-            .getUserActiveTokenById(tokenMeta.userId);
+            .getUserRefreshTokenById(tokenMeta.userId);
 
         if (!refreshTokenFromDb)
             throw new ErrorCode(`User has no active token, or it's not the same as the one in request! User id '${tokenMeta.userId}', active token '${refreshTokenFromDb}'`, "forbidden");

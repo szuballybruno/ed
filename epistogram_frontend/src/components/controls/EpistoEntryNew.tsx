@@ -6,7 +6,8 @@ import { EpistoFont } from "./EpistoFont";
 // state
 
 export const useEpistoEntryState = (options?: {
-    isMandatory?: boolean
+    isMandatory?: boolean,
+    validateFunction?: (value: string) => string | null
 }) => {
 
     // state 
@@ -21,9 +22,19 @@ export const useEpistoEntryState = (options?: {
 
         const error = ((): string | null => {
 
+            // is mandatory validation 
             if (options?.isMandatory && !value)
                 return "Ez a mező nem lehet üres!";
 
+            // external validation
+            if (options?.validateFunction) {
+
+                const extError = options?.validateFunction(value);
+                if (extError)
+                    return extError;
+            }
+
+            // no error 
             return null;
         })();
 

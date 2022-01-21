@@ -91,7 +91,7 @@ import { DailyTipService } from './services/DailyTipService';
     const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
-    const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlBootstrapperService);
+    const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema);
     const userStatsService = new UserStatsService(ormConnectionService, mapperService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService);
     const eventService = new EventService(mapperService, ormConnectionService);
@@ -194,7 +194,7 @@ import { DailyTipService } from './services/DailyTipService';
     addEndpoint(apiRoutes.dailyTip.deleteDailyTip, dailyTipController.deleteDailyTipAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.dailyTip.createDailyTip, dailyTipController.createDailyTipAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.dailyTip.getDailyTipEditData, dailyTipController.getDailyTipEditDataAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.dailyTip.saveDailyTip, dailyTipController.saveDailyTipAction, { isPost: true,authorize: ["administrator"] });
+    addEndpoint(apiRoutes.dailyTip.saveDailyTip, dailyTipController.saveDailyTipAction, { isPost: true, authorize: ["administrator"] });
 
     // personality assessment 
     addEndpoint(apiRoutes.personalityAssessment.getPersonalityTraitCategories, personalityAssessmentController.getPersonalityTraitCategoriesAction);
@@ -233,6 +233,8 @@ import { DailyTipService } from './services/DailyTipService';
     // coin transactions 
     addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);
     addEndpoint(apiRoutes.coinTransactions.getCoinBalance, coinTransactionsController.getCoinBalanceAction);
+    addEndpoint(apiRoutes.coinTransactions.getCoinBalanceOfUser, coinTransactionsController.getCoinBalanceOfUserAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.coinTransactions.giftCoinsToUser, coinTransactionsController.giftCoinsToUser, { authorize: ["administrator"] });
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);

@@ -25,11 +25,15 @@ LEFT JOIN
 (
 	SELECT 
 		dto.user_id, 
+		dto.daily_tip_id,
 		MAX(dto.creation_date) latest_creation_date 
 	FROM public.daily_tip_occurrence dto
-	GROUP BY dto.user_id 
+	GROUP BY 
+		dto.daily_tip_id,
+		dto.user_id 
 ) latest_occurance
-ON latest_occurance.user_id = u.id
+ON latest_occurance.user_id = u.id 
+	AND latest_occurance.daily_tip_id = dt.id
 
 LEFT JOIN storage_file AS sf 
 ON sf.id = dt.video_file_id
@@ -42,5 +46,5 @@ WHERE dt.is_max = utc.is_max
 	
 ORDER BY
 	u.id,
-	latest_occurance.latest_creation_date DESC,
+	latest_occurance.latest_creation_date ASC NULLS FIRST,
 	dt.id

@@ -95,6 +95,7 @@ import { DailyTip } from "../../models/entity/DailyTip";
 import { PersonalityTraitCategoryDTO } from "../../models/shared_models/PersonalityTraitCategoryDTO";
 import { DailyTipEditDataDTO } from "../../models/shared_models/DailyTipEditDataDTO";
 import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
+import { UserAdminListView } from "../../models/views/UserAdminListView";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -430,18 +431,27 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(User, AdminPageUserDTO, user => {
-
-            const userDTO = mapperService
-                .map(User, UserDTO, user);
-
-            return {
-                ...userDTO,
-                organizationName: user.organization ? user.organization.name : "",
-                tasks: user.tasks.map(x => toTaskDTO(x)),
-                roleId: user.roleId
-            } as AdminPageUserDTO;
-        });
+        .addMap(UserAdminListView, AdminPageUserDTO, v => ({
+            id: v.userId,
+            name: toFullName(v.firstName, v.lastName, "hu"),
+            firstName: v.firstName,
+            lastName: v.lastName,
+            roleId: v.roleId,
+            avatarUrl: v.avatarFilePath
+                ? getAssetUrl(v.avatarFilePath)
+                : null,
+            email: v.email,
+            isInvitationAccepted: v.isInvitationAccepted,
+            isTrusted: v.isTrusted,
+            jobTitleId: v.jobTitleId,
+            jobTitleName: v.jobTitleName,
+            organizationId: v.organizationId,
+            organizationName: v.organizationName,
+            canAccessApplication: v.canAccessApplication,
+            latestActivityDate: v.latestActivityDate,
+            totalSpentTimeSeconds: v.totalSpentTimeSeconds,
+            coinBalance: v.coinBalance,
+        }));
 
     mapperService
         .addMap(Video, VideoDTO, (video, maxWatchedSeconds: number) => {

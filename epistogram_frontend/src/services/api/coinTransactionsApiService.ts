@@ -1,6 +1,7 @@
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { CoinTransactionDTO } from "../../models/shared_models/CoinTransactionDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { usePostDataUnsafe } from "../core/httpClient";
 
 export const useCoinTransactions = () => {
 
@@ -22,5 +23,27 @@ export const useCoinBalance = () => {
         coinBalanceError: qr.error,
         coinBalanceStatus: qr.state,
         refetchCoinBalance: qr.refetch
+    }
+}
+
+export const useCoinBalanceOfUser = (userId: number) => {
+
+    const qr = useReactQuery2<number>(apiRoutes.coinTransactions.getCoinBalanceOfUser, { userId });
+
+    return {
+        coinBalance: qr.data ?? 0,
+        coinBalanceError: qr.error,
+        coinBalanceStatus: qr.state,
+        refetchCoinBalance: qr.refetch
+    }
+}
+
+export const useGiftCoinsToUser = () => {
+
+    const qr = usePostDataUnsafe<{ amount: number, userId: number }, void>(apiRoutes.coinTransactions.giftCoinsToUser);
+
+    return {
+        giftCoinsToUserAsync: qr.postDataAsync,
+        giftCoinsToUserState: qr.state
     }
 }

@@ -1,21 +1,20 @@
-import { JobTitleDTO } from "./JobTitleDTO";
-import { TaskDTO } from "./TaskDTO";
-import { UserActivityDTO } from "./UserActivityDTO";
 
 export class AdminPageUserDTO {
     id: number;
-    firstName: string;
-    lastName: string;
-    organizationId: number;
     isTrusted: boolean;
     email: string;
-    phoneNumber: string;
     name: string;
+    firstName: string;
+    lastName: string;
+    canAccessApplication: boolean;
     isInvitationAccepted: boolean;
     avatarUrl: string | null;
-    jobTitle: JobTitleDTO | null;
-    userActivity: UserActivityDTO;
+    jobTitleId: number;
+    jobTitleName: string;
+    organizationId: number;
     organizationName: string;
-    tasks: TaskDTO[];
     roleId: number;
+    latestActivityDate: Date;
+    totalSpentTimeSeconds: number;
+    coinBalance: number;
 }

@@ -68,6 +68,7 @@ import { VideoRating } from "../../models/entity/VideoRating";
 import { CourseOverviewView } from "../../models/views/CourseOverviewView";
 import { PersonalityTraitView } from "../../models/views/PersonalityTraitView";
 import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
+import { UserAdminListView } from "../../models/views/UserAdminListView";
 
 export const dbSchema = {
 
@@ -82,6 +83,7 @@ export const dbSchema = {
         "course_item_all_view",
         "course_view",
         "signup_question_view",
+        "latest_given_answer_view",
         "personality_trait_view",
         "signup_completed_view",
         "user_activity_view",
@@ -111,7 +113,9 @@ export const dbSchema = {
         "exam_view",
         "coin_acquire_per_course_view",
         "course_overview_view",
-        "personality_trait_category_view"
+        "personality_trait_category_view",
+        "user_latest_activity_view",
+        "user_admin_list_view"
     ],
 
     functionScripts: [
@@ -133,7 +137,7 @@ export const dbSchema = {
             name: "activation_code_uniqe_constraint"
         }
     ],
-    
+
     indices: [
         {
             tableName: "exam",
@@ -177,7 +181,8 @@ export const dbSchema = {
         CourseModuleOverviewView,
         ExamView,
         CourseOverviewView,
-        PersonalityTraitCategoryView
+        PersonalityTraitCategoryView,
+        UserAdminListView
     ] as any[],
 
     entities: [

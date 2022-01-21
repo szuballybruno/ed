@@ -35,17 +35,18 @@ export class DbConnectionService {
 
     async initializeAsync() {
 
-        const allowPurge = this._config.database.allowPurge;
-        const forcePurge = this._config.database.forcePurge;
+        const isPurgeDbEnabled = this._config.database.isDangerousDBPurgeEnabled;
+        const isProdEnvironemnt = this._config.getIsProdEnvironment();
+
+        // check for prod <> purge conflict 
+        if (isPurgeDbEnabled && isProdEnvironemnt)
+            throw new Error("----- TRYING TO PURGE DB ON PROD!!!! ----");
 
         // connect sql
         await this._sqlConnectionService.establishConnectionAsync();
 
-        // test DB
-        // await this.testDbConnection();
-
         // purge DB
-        if (allowPurge && forcePurge)
+        if (isPurgeDbEnabled)
             await this._sqlBootstrapperSvc.purgeDBAsync();
 
         await this.connectDatabaseAsync();

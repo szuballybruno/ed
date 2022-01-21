@@ -8,6 +8,7 @@ import { UserDTO } from "../models/shared_models/UserDTO";
 import { UserEditDTO } from "../models/shared_models/UserEditDTO";
 import { UserEditSimpleDTO } from "../models/shared_models/UserEditSimpleDTO";
 import { RegistrationType } from "../models/Types";
+import { UserAdminListView } from "../models/views/UserAdminListView";
 import { getFullName, toFullName, ErrorCode } from "../utilities/helpers";
 import { HashService } from "./HashService";
 import { MapperService } from "./MapperService";
@@ -55,17 +56,19 @@ export class UserService {
             .map(User, UserEditDTO, user);
     }
 
+    /**
+     * Get user dto-s for the admin page user list.
+     * 
+     * @param searchText 
+     * @returns 
+     */
     async getAdminPageUsersListAsync(searchText: string | null) {
 
         const searchTextLower = searchText?.toLowerCase();
 
         const users = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder("user")
-            .leftJoinAndSelect("user.organization", "org")
-            .leftJoinAndSelect("user.tasks", "tasks")
-            .leftJoinAndSelect("user.avatarFile", "sf")
-            .leftJoinAndSelect("user.userActivity", "ua")
+            .getRepository(UserAdminListView)
+            .createQueryBuilder("ualv")
             .getMany();
 
         const filteredUsers = searchTextLower
@@ -76,9 +79,15 @@ export class UserService {
             : users;
 
         return this._mapperService
-            .mapMany(User, AdminPageUserDTO, filteredUsers);
+            .mapMany(UserAdminListView, AdminPageUserDTO, filteredUsers);
     }
 
+    /**
+     * Save user data which the user itself can edit.  
+     * 
+     * @param userId 
+     * @param dto 
+     */
     async saveUserSimpleAsync(userId: number, dto: UserEditSimpleDTO) {
 
         // save user 
@@ -92,6 +101,11 @@ export class UserService {
             });
     }
 
+    /**
+     * Save user from admin page, where you can edit almost all fileds.
+     * 
+     * @param dto 
+     */
     async saveUserAsync(dto: UserEditDTO) {
 
         const userId = dto.id;
@@ -135,6 +149,13 @@ export class UserService {
         }
     }
 
+    /**
+     * Get a very minimalistic user dto for displaying 
+     * very minimal info about the user.
+     * 
+     * @param userId 
+     * @returns 
+     */
     async getBriefUserDataAsync(userId: unknown) {
 
         const user = await this._ormService
@@ -153,6 +174,12 @@ export class UserService {
         } as BriefUserDataDTO;
     }
 
+    /**
+     * Create a new user.
+     * 
+     * @param opts 
+     * @returns 
+     */
     createUserAsync = async (opts: {
         email: string,
         password: string,
@@ -220,6 +247,13 @@ export class UserService {
         return user;
     }
 
+    /**
+     * Accept the invitation, 
+     * whilst giving the user a password, for further logins.
+     * 
+     * @param userId 
+     * @param rawPassword 
+     */
     setUserInivitationDataAsync = async (userId: number, rawPassword: string,) => {
 
         await this._ormService
@@ -232,6 +266,12 @@ export class UserService {
             });
     }
 
+    /**
+     * Get user entity by it's id.
+     * 
+     * @param userId 
+     * @returns 
+     */
     getUserById = async (userId: number) => {
 
         const user = await this._ormService
@@ -246,6 +286,13 @@ export class UserService {
         return user;
     }
 
+    /**
+     * Delete a user entity by it's id.
+     * 
+     * @param userId 
+     * @param deletedUserId 
+     * @returns 
+     */
     deleteUserAsync = async (userId: number, deletedUserId: number) => {
 
         // TODO permissions
@@ -266,6 +313,12 @@ export class UserService {
             .softDelete(deletedUserId);
     }
 
+    /**
+     * Get user dto by userId.
+     * 
+     * @param userId 
+     * @returns 
+     */
     getUserDTOById = async (userId: number) => {
 
         const foundUser = await this.getUserById(userId);
@@ -276,17 +329,28 @@ export class UserService {
             .map(User, UserDTO, foundUser);
     }
 
-    getUserActiveTokenById = async (userId: number) => {
+    /**
+     * Get user's active refresh token by userId.
+     * 
+     * @param userId 
+     * @returns 
+     */
+    getUserRefreshTokenById = async (userId: number) => {
 
-        //const userFromDB = await Connection.db.collection("users").findOne({ "_id": userId }) as User;
-
-        const foundUser = await this.getUserById(userId);
-        if (!foundUser)
+        const user = await this.getUserById(userId);
+        if (!user)
             return null;
 
-        return foundUser.refreshToken;
+        return user.refreshToken;
     }
 
+    /**
+     * Get a user by it's email address. 
+     * Which is also a unique identifier, like the id. 
+     * 
+     * @param email 
+     * @returns 
+     */
     getUserByEmailAsync = async (email: string) => {
 
         const user = await this._ormService
@@ -302,6 +366,12 @@ export class UserService {
         return user;
     }
 
+    /**
+     * Set user's avatar file id.
+     * 
+     * @param userId 
+     * @param avatarFileId 
+     */
     setUserAvatarFileId = async (userId: number, avatarFileId: number) => {
 
         await this._ormService
@@ -312,6 +382,13 @@ export class UserService {
             });
     }
 
+    /**
+     * Set user's refresh token.
+     * 
+     * @param userId 
+     * @param refreshToken 
+     * @returns 
+     */
     setUserActiveRefreshToken = (userId: number, refreshToken: string) => {
 
         log(`Setting refresh token of user '${userId}' to '${refreshToken}'`);
@@ -324,7 +401,13 @@ export class UserService {
             });
     }
 
-    setUserInvitationTokenasync = async (userId: number, invitationToken: string) => {
+    /**
+     * Set user's invitation token.
+     * 
+     * @param userId 
+     * @param invitationToken 
+     */
+    setUserInvitationTokenAsync = async (userId: number, invitationToken: string) => {
 
         await this._ormService
             .getRepository(User)
@@ -334,6 +417,14 @@ export class UserService {
             });
     }
 
+    /**
+     * Remove user's refresh token, 
+     * so it can't get a new activation token, 
+     * even if it holds a valid refresh token on the client side.
+     * 
+     * @param userId 
+     * @returns 
+     */
     removeRefreshToken = (userId: number) => {
 
         return this._ormService
@@ -344,6 +435,11 @@ export class UserService {
             });
     }
 
+    /**
+     * Get a list of the users marked as teacher.
+     * 
+     * @returns 
+     */
     getTeachersAsync = async () => {
 
         const teachers = await this._ormService

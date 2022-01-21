@@ -74,7 +74,9 @@ export const apiRoutes = {
 
     coinTransactions: {
         getCoinTransactions: "/cointransactions/get-coin-transactions",
-        getCoinBalance: "/cointransactions/get-coin-balance"
+        getCoinBalance: "/cointransactions/get-coin-balance",
+        getCoinBalanceOfUser: "/cointransactions/get-coin-balance-of-user",
+        giftCoinsToUser: "/cointransactions/gift-coins-to-user"
     },
 
     user: {
