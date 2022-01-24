@@ -38,3 +38,5 @@ LEFT JOIN public.coin_balance_view cbv
 ON cbv.user_id = u.id
 
 WHERE u.deletion_date IS NULL
+
+ORDER BY ulav.latest_activity_date DESC NULLS LAST
