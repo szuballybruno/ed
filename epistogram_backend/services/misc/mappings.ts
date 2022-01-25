@@ -96,6 +96,8 @@ import { PersonalityTraitCategoryDTO } from "../../models/shared_models/Personal
 import { DailyTipEditDataDTO } from "../../models/shared_models/DailyTipEditDataDTO";
 import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
 import { UserAdminListView } from "../../models/views/UserAdminListView";
+import { CourseAdminItemQuestionDTO } from "../../models/shared_models/CourseAdminItemQuestionDTO";
+import { CourseAdminItemQuestionAnswerDTO } from "../../models/shared_models/CourseAdminItemQuestionAnswerDTO";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -254,39 +256,25 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(CourseAdminContentView, CourseContentEditDataDTO, (view, params) => {
-
-            const modules = params as CourseAdminContentView[];
-
-            const moduleDTOs = modules
-                .groupBy(x => x.moduleId)
-                .map(grouping => {
-
-                    const viewAsModule = grouping.items.first();
-
-                    const items = grouping
-                        .items
-                        .filter(x => !!x.itemId)
-                        .map(viewAsItem => mapperService
-                            .map(CourseAdminContentView, CourseAdminItemShortDTO, viewAsItem));
-
-                    return {
-                        id: viewAsModule.moduleId,
-                        name: viewAsModule.moduleName,
-                        orderIndex: viewAsModule.moduleOrderIndex,
-                        code: viewAsModule.moduleCode,
-                        items: items
-                    } as ModuleAdminShortDTO;
-                });
+        .addMap(CourseAdminContentView, CourseContentEditDataDTO, (viewAsAdmin, modules: ModuleAdminShortDTO[]) => {
 
             return {
-                courseId: view.courseId,
-                modules: moduleDTOs
+                courseId: viewAsAdmin.courseId,
+                modules
             } as CourseContentEditDataDTO;
         });
 
     mapperService
-        .addMap(CourseAdminContentView, CourseAdminItemShortDTO, view => ({
+        .addMap(CourseAdminContentView, ModuleAdminShortDTO, (viewAsModule, items: CourseAdminItemShortDTO[]) => ({
+            id: viewAsModule.moduleId,
+            name: viewAsModule.moduleName,
+            orderIndex: viewAsModule.moduleOrderIndex,
+            code: viewAsModule.moduleCode,
+            items: items
+        }));
+
+    mapperService
+        .addMap(CourseAdminContentView, CourseAdminItemShortDTO, (view, questions: CourseAdminItemQuestionDTO[]) => ({
             id: view.itemId,
             subTitle: view.itemSubtitle,
             title: view.itemTitle,
@@ -295,7 +283,25 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             type: view.videoId ? "video" : "exam",
             questionCount: view.itemQuestionCount,
             videoLength: view.videoLength,
-            isFinalExam: view.itemIsFinalExam
+            isFinalExam: view.itemIsFinalExam,
+            questions
+        }));
+
+    mapperService
+        .addMap(CourseAdminContentView, CourseAdminItemQuestionDTO, (viewAsQuestion, answers: CourseAdminItemQuestionAnswerDTO[]) => ({
+            questionText: viewAsQuestion.questionText,
+            questionId: viewAsQuestion.questionId,
+            questionShowUpSeconds: viewAsQuestion.questionShowUpSeconds,
+            answerCount: viewAsQuestion.answerCount,
+            correctAnswerCount: viewAsQuestion.correctAnswerCount,
+            answers
+        }));
+
+    mapperService
+        .addMap(CourseAdminContentView, CourseAdminItemQuestionAnswerDTO, viewAsAnswer => ({
+            answerId: viewAsAnswer.answerId,
+            answerIsCorrect: viewAsAnswer.answerIsCorrect,
+            answerText: viewAsAnswer.answerText,
         }));
 
     mapperService

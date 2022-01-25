@@ -59,4 +59,28 @@ export class CourseAdminContentView {
 
     @ViewColumn()
     videoLength: number;
+
+    @ViewColumn()
+    questionId: number;
+    
+    @ViewColumn()
+	questionText: string;
+    
+    @ViewColumn()
+	questionShowUpSeconds: number;
+    
+    @ViewColumn()
+	answerId: number;
+    
+    @ViewColumn()
+	answerText: string;
+
+    @ViewColumn()
+	answerIsCorrect: boolean;
+
+    @ViewColumn()
+    answerCount: number;
+
+    @ViewColumn()
+    correctAnswerCount: number;
 }

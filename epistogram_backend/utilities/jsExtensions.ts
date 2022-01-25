@@ -19,7 +19,8 @@ declare global {
 
 export type Grouping<T> = {
     key: any,
-    items: T[]
+    items: T[],
+    first: T
 }
 
 Array.prototype.groupBy = function <T>(func: (item: T) => any) {
@@ -43,7 +44,8 @@ Array.prototype.groupBy = function <T>(func: (item: T) => any) {
                 groups
                     .push({
                         key: key,
-                        items: [item]
+                        items: [item],
+                        first: item
                     })
             }
         });
