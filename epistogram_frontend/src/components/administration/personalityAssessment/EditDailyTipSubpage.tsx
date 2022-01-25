@@ -17,7 +17,7 @@ export const EditDailyTipSubpage = () => {
     const showError = useShowErrorDialog();
     const traitCategoryId = useIntParam("traitCategoryId");
     const isMax = useBoolParam("isMax");
-    const dailyTipId = useIntParam("dailyTipId");
+    const dailyTipId = useIntParam("dailyTipId")!;
 
     // http 
     const { dailyTipEditData, dailyTipEditState, dailyTipEditError } = useDailyTipEditData(dailyTipId);

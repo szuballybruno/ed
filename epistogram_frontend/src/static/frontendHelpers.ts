@@ -58,9 +58,11 @@ export const dateTimeToString = (date: Date | string) => {
 
 export const useIntParam = (name: string) => {
 
-    const params = useParams();
-
-    return parseInt(params[name]);
+    const param = useParams()[name];
+    if (!param)
+        return null;
+        
+    return parseInt(param);
 }
 
 export const useBoolParam = (name: string) => {

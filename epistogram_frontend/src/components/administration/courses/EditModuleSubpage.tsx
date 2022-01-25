@@ -18,7 +18,7 @@ export const EditModuleSubpage = () => {
     const [moduleImageSource, setMoudleImageSource] = useState<string | null>(null);
     const [moduleImageFile, setMoudleImageFile] = useState<File | null>(null);
 
-    const moduleId = useIntParam("moduleId");
+    const moduleId = useIntParam("moduleId")!;
     const { moduleEditData } = useModuleEditData(moduleId);
     const { saveModuleAsync } = useSaveModule();
     const showError = useShowErrorDialog();

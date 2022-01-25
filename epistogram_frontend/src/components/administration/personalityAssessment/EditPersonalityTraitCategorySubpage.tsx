@@ -19,7 +19,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
     //util
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const traitCategoryId = useIntParam("traitCategoryId");
+    const traitCategoryId = useIntParam("traitCategoryId")!;
     const isMax = useBoolParam("isMax");
 
     // http 
