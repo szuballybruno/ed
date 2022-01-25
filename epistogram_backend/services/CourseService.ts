@@ -586,7 +586,8 @@ export class CourseService {
                 const viewAsModule = moduleGroup.first;
 
                 // items
-                const items = views
+                const items = moduleGroup
+                    .items
                     .filter(x => !!x.itemId)
                     .groupBy(x => x.itemCode)
                     .map(itemGroup => {
