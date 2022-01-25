@@ -1,4 +1,6 @@
-import { useIntParam } from "../../static/frontendHelpers";
+import { Switch } from "react-router";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { getRoute } from "../../MainRouting";
 import { ContentPane } from "../ContentPane";
 import { PageRootContainer } from "../PageRootContainer";
 import { PreplayerSubpage } from "../preplayer/PreplayerSubpage2";
@@ -6,8 +8,6 @@ import { PlayerSubpage } from "./PlayerSubpage";
 
 export const PlayerPage = () => {
 
-    const isCourse = !!useIntParam("courseId");
-    
     return (
         <PageRootContainer
             style={{
@@ -20,10 +20,11 @@ export const PlayerPage = () => {
                 margin="auto"
                 showLogo>
 
-                {isCourse
-                    ? <PreplayerSubpage></PreplayerSubpage>
-                    : <PlayerSubpage></PlayerSubpage>}
-                
+                <Switch>
+                    {getRoute(applicationRoutes.playerRoute.watchRoute, <PlayerSubpage />)}
+                    {getRoute(applicationRoutes.playerRoute.gettingReadyRoute, <PreplayerSubpage />)}
+                    {getRoute(applicationRoutes.playerRoute.finishedRoute, <PreplayerSubpage />)}
+                </Switch>
             </ContentPane>
         </PageRootContainer >
     )

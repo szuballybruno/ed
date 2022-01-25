@@ -1,5 +1,5 @@
 import { Flex, FlexProps, Image } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
 export const PageRootContainer = (props: {
     children: ReactNode,
@@ -9,6 +9,11 @@ export const PageRootContainer = (props: {
 } & FlexProps) => {
 
     const { children, noMaxWidth, noBackground, backgoundImageSrc, ...css } = props;
+
+    useEffect(() => {
+
+        document.title = "EpistoGram";
+    }, []);
 
     return <Flex
         background={backgoundImageSrc || noBackground

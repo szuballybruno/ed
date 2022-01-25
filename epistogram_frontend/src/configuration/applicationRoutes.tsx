@@ -20,8 +20,24 @@ export const applicationRoutes = {
     },
 
     playerRoute: {
-        title: "",
-        route: "/watch/:itemCode"
+        title: translatableTexts.routeTitles.player,
+        route: "/watch",
+
+        watchRoute: {
+            title: translatableTexts.routeTitles.player,
+            route: "/watch/:descriptorCode",
+            exact: true
+        },
+
+        gettingReadyRoute: {
+            title: translatableTexts.routeTitles.player,
+            route: "/watch/start/:courseId"
+        },
+    
+        finishedRoute: {
+            title: translatableTexts.routeTitles.player,
+            route: "/watch/finished/:courseId"
+        },
     },
 
     registrationRoute: {

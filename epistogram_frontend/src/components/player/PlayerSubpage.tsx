@@ -37,6 +37,7 @@ export const PlayerSubpage = () => {
     const courseId = playerData?.courseId;
     const courseModules = playerData?.modules ?? [];
     const nextItemCode = playerData?.nextItemCode;
+    const title = video?.title || exam?.title || module?.name;
 
     console.log("nextItemCode: " + nextItemCode)
 
@@ -52,6 +53,12 @@ export const PlayerSubpage = () => {
         console.log("Invalid course item code: " + descriptorCode);
         navigateToPlayer(playerData.courseItemCode);
     }, [playerData?.courseItemCode]);
+
+    useEffect(() => {
+
+        if (title)
+            document.title = title;
+    }, [title]);
 
     const navigateToCourseItem = (descriptorCode: string) => {
 

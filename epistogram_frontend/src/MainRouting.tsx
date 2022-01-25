@@ -37,7 +37,7 @@ export const MainRouting = () => {
 
         {/* protected paths */}
         <ProtectedRoute
-            path="/watch/:descriptorCode"
+            path={applicationRoutes.playerRoute.route}
             render={() => <PlayerPage />} />
 
         <ProtectedRoute
