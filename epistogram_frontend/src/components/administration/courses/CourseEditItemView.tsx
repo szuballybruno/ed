@@ -4,22 +4,26 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Chip, Typography } from "@mui/material";
 import React from 'react';
 import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
-import { formatTime } from "../../../static/frontendHelpers";
+import { formatTime, secondsToTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 
-const ChipSmall = (props: { text: string, color?: string }) => {
+const ChipSmall = (props: { text: string, color?: string, style?: React.CSSProperties }) => {
 
     const color = props.color ?? "var(--deepBlue)";
 
     return (
         <EpistoFont
-            noLineBreak
+            classes={["roundBorders"]}
+            fontSize="fontSmall"
             style={{
-                border: "1px solid " + color,
-                borderRadius: "5px",
-                margin: "2px"
+                border: "1px solid var(--deepBlue)",
+                color: color,
+                padding: "0 5px",
+                margin: "0 2px",
+                fontWeight: 700,
+                ...props.style
             }}>
 
             {props.text}
@@ -104,75 +108,112 @@ export const CourseEditItemView = (props: {
 
             <Flex>
 
-                <Flex direction="column">
+                {/* chips  */}
+                <Flex
+                    direction="column"
+                    flexWrap="wrap"
+                    flex="1">
 
-                    {/* chips  */}
-                    <Flex alignItems={"center"}>
+                    <Flex>
 
                         {/* final exam */}
-                        {item.isFinalExam && chip("var(--deepBlue)", "Zarovizsga")}
+                        {item.isFinalExam && <ChipSmall
+                            color={"var(--deepBlue)"}
+                            text={"Záróvizsga"} />}
 
                         {/* video lenght / uploaded video */}
-                        {isVideo && chip(
-                            item.videoLength > 0
+                        {isVideo && <ChipSmall
+                            color={item.videoLength > 0
                                 ? "var(--deepGreen)"
-                                : "var(--deepRed)",
-                            item.videoLength
-                                ? `${translatableTexts.administration.courseEditItemView.videoLength} ${formatTime(Math.round(item.videoLength))}`
-                                : translatableTexts.administration.courseEditItemView.noVideoUploaded)}
+                                : "var(--deepRed)"}
+                            text={
+                                item.videoLength
+                                    ? `${translatableTexts.administration.courseEditItemView.videoLength} ${formatTime(Math.round(item.videoLength))}`
+                                    : translatableTexts.administration.courseEditItemView.noVideoUploaded} />}
 
                         {/* question count */}
-                        {chip(item.questionCount > 0
-                            ? "var(--deepGreen)"
-                            : "var(--deepRed)",
-                            `${translatableTexts.administration.courseEditItemView.questions} ${item.questionCount}`)}
+                        <ChipSmall
+                            color={
+                                item.questionCount > 0
+                                    ? "var(--deepGreen)"
+                                    : "var(--deepRed)"
+                            }
+                            text={
+                                item.videoLength || item.videoLength === 0
+                                    ? `${translatableTexts.administration.courseEditItemView.questions} ${item.questionCount}`
+                                    : "Nincs kérdés feltöltve"
+                            } />
                     </Flex>
 
-                    {/* questions */}
-                    <Flex direction="column">
-                        {item
-                            .questions
-                            .map(question => (
-                                <Flex direction="column">
+                    {item
+                        .questions
+                        .map(question => (
+                            question.questionText && <Flex direction="column" mt="20px">
+                                <Divider w="100%" h="1" bgColor="black" />
+                                <Flex direction="row" flexWrap="wrap" mt="20px">
 
-                                    <Flex direction="column">
-                                        <EpistoFont noLineBreak>
-                                            {question.questionText}
-                                        </EpistoFont>
+                                    {/* question text */}
+                                    {question.questionText && <ChipSmall
+                                        style={{
+                                            width: "100%",
+                                            marginBottom: 5
+                                        }}
+                                        color={question.questionText
+                                            ? "var(--deepGreen)"
+                                            : "var(--deepRed)"} text={"Kérdés: " + question.questionText} />}
 
-                                        {item.type === "video" && <EpistoFont
-                                            noLineBreak
-                                            style={{
-                                                color: question.questionShowUpSeconds === 0 ? "var(--deepRed)" : undefined
-                                            }}>
+                                    {/* question show up time */}
+                                    {(item.type === "video" && question.questionShowUpSeconds) && <ChipSmall
+                                        color={question.questionShowUpSeconds || question.questionShowUpSeconds === 0
+                                            ? "var(--deepGreen)"
+                                            : "var(--deepRed)"}
+                                        text={question.questionShowUpSeconds ? "Megjelenés időpontja: " + secondsToTime(question.questionShowUpSeconds) : "Nincs megadva időpont"} />}
 
-                                            Show up seconds: {question.questionShowUpSeconds}
-                                        </EpistoFont>}
-                                    </Flex>
+                                    {/* question answer count */}
+                                    {question.answerCount && <ChipSmall
+                                        color={question.answerCount == 4 ? "var(--deepGreen)" : "var(--deepRed)"}
+                                        text={question.answerCount
+                                            ? "Válaszok: " + question.answerCount
+                                            : "Nincsenek válaszok megadva"} />}
 
-                                    <Flex>
-                                        <ChipSmall text={`Answer count: ${question.answerCount}`} />
-                                        <ChipSmall text={`Correct answer count: ${question.correctAnswerCount}`} />
-                                    </Flex>
+                                    {/* correct answer count */}
+                                    {question.correctAnswerCount && <ChipSmall
+                                        color={question.correctAnswerCount == 1
+                                            ? "var(--deepGreen)"
+                                            : "var(--deepRed)"}
+                                        text={question.correctAnswerCount
+                                            ? "Megadott helyes válaszok: " + question.correctAnswerCount
+                                            : "Nincs helyes válasz megadva"} />}
 
-                                    {/* answers */}
-                                    <Flex direction="column">
+                                    {/* answer */}
+                                    {question.answers && <Flex
+                                        className="roundBorders"
+                                        direction="column"
+                                        width="100%"
+                                        m="5px 2px 0 2px"
+                                        border="1px solid var(--deepBlue)">
+
                                         {question
                                             .answers
                                             .map(answer => {
 
                                                 return <EpistoFont
+                                                    fontSize="fontSmall"
                                                     style={{
-                                                        marginLeft: "15px"
+                                                        padding: "0 5px",
+                                                        fontWeight: 700,
+                                                        color: answer.answerIsCorrect
+                                                            ? "var(--deepGreen)"
+                                                            : "var(--deepBlue)"
                                                     }}>
 
-                                                    {answer.answerText} {answer.answerIsCorrect ? "- correct" : ""}
+                                                    {answer.answerText}
                                                 </EpistoFont>
                                             })}
-                                    </Flex>
+                                    </Flex>}
                                 </Flex>
-                            ))}
-                    </Flex>
+                            </Flex>
+                        ))}
                 </Flex>
 
                 {/* item toolbar */}
