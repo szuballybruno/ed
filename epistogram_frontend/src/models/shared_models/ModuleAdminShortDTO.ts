@@ -1,6 +1,6 @@
 import { CourseAdminItemShortDTO } from "./CourseAdminItemShortDTO";
 
-export type ModuleAdminShortDTO = {
+export class ModuleAdminShortDTO {
     id: number;
     name: string;
     orderIndex: number;

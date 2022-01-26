@@ -4,7 +4,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VideocamIcon from '@mui/icons-material/Videocam';
-import { TextField, Typography } from "@mui/material";
+import { TextField } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
@@ -21,7 +21,6 @@ import { insertAtIndex, isNullOrUndefined, swapItems } from "../../../static/fro
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoSearch } from "../../controls/EpistoSearch";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { EpistoHeader } from "../../EpistoHeader";
 import { LoadingFrame } from "../../system/LoadingFrame";
@@ -57,11 +56,15 @@ export const AdminCourseContentSubpage = () => {
     const { createModuleAsync } = useCreateModule();
     const { deleteModuleAsync } = useDeleteModule();
 
+    // calc 
+    const isAnyModulesOpen = openModuleIds.length > 0;
+
     // nav
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
     const navToVideoEdit = (videoId: number) => navigate(courseRoutes.editVideoRoute.route, { courseId, videoId });
     const navToExamEdit = (examId: number) => navigate(courseRoutes.editExamRoute.route, { courseId, examId });
 
+    // opens / closes a module 
     const setModuleOpenState = (isOpen: boolean, moduleId: number) => {
 
         if (isOpen) {
@@ -74,6 +77,9 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
+    // saves everything. considers 
+    // the current order of things in memory,
+    // and sets the order indices accordingly 
     const handleSaveCourseAsync = async () => {
 
         if (!courseContentEditData)
@@ -112,6 +118,7 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
+    // navigates to edit course item 
     const handleEditCourseItem = (courseItem: CourseAdminItemShortDTO) => {
 
         if (courseItem.type === "exam") {
@@ -124,6 +131,8 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
+    // adds a course item,
+    // video or exam 
     const handleAddCourseItemAsync = async (moduleId: number, type: "video" | "exam") => {
 
         await handleSaveCourseAsync();
@@ -148,6 +157,8 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
+    // removes a course item from the list 
+    // non async, does not make API calls 
     const removeCourseItem = (code: string) => {
 
         setModules([...modules]
@@ -158,6 +169,8 @@ export const AdminCourseContentSubpage = () => {
             }));
     }
 
+    // deletes a course item 
+    // shows warning dialog
     const handleDeleteCourseItemAsync = async (courseItem: CourseAdminItemShortDTO) => {
 
         // exam
@@ -217,6 +230,8 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
+    // deletes a module,
+    // shows a warning dialog
     const handleDeleteModule = async (module: ModuleAdminShortDTO) => {
         deleteWarningDialogLogic
             .openDialog({
@@ -243,12 +258,16 @@ export const AdminCourseContentSubpage = () => {
             });
     }
 
+    // navigate to edit module 
+    // saves the changes beforehand
     const handleEditModule = async (module: ModuleAdminShortDTO) => {
 
         await handleSaveCourseAsync();
         navigate(applicationRoutes.administrationRoute.coursesRoute.editModuleRoute.route, { courseId, moduleId: module.id });
     }
 
+    // adds a new module to the course 
+    // saved instantly
     const handleAddNewModuleAsync = async () => {
 
         try {
@@ -268,9 +287,10 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
+    // move item to the proper module
+    // or change order of items in the current module. 
+    // order indices ate inteact, will be set when saved.
     const onDragEnd = (srcId: string, destId: string | null, srcIndex: number, destIndex: number | null) => {
-
-        console.log(`${srcId} - ${destId} - Src:${srcIndex} - Dest:${destIndex}`);
 
         if (isNullOrUndefined(destId) || isNullOrUndefined(destIndex))
             return;
@@ -310,6 +330,20 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
+    // opens / closes all modules depending 
+    // on if any or none are currently open
+    const handleOpenCloseAllModules = () => {
+
+        if (isAnyModulesOpen) {
+
+            setOpenModuleIds([]);
+        }
+        else {
+
+            setOpenModuleIds(modules.map(x => x.id))
+        }
+    }
+
     // effects 
     useEffect(() => {
 
@@ -333,7 +367,19 @@ export const AdminCourseContentSubpage = () => {
                 applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
             ]}
             onSave={handleSaveCourseAsync}
-            direction="column">
+            direction="column"
+            headerButtons={[
+                {
+                    action: () => handleAddNewModuleAsync(),
+                    title: translatableTexts.administration.courseContentSubpage.addModuleExtended
+                },
+                {
+                    action: handleOpenCloseAllModules,
+                    title: isAnyModulesOpen
+                        ? translatableTexts.misc.closeAll
+                        : translatableTexts.misc.openAll
+                }
+            ]}>
 
             <EpistoDialog logic={deleteWarningDialogLogic} />
 
@@ -342,31 +388,6 @@ export const AdminCourseContentSubpage = () => {
                 flex="1"
                 direction={"column"}
                 px={10}>
-
-                <Flex width="100%">
-                    <EpistoSearch flex={1} my={10} />
-                    <EpistoButton
-                        onClick={handleAddNewModuleAsync}
-                        style={{ alignSelf: "center", marginLeft: 20 }}
-                        variant="outlined">
-                        {translatableTexts.administration.courseContentSubpage.addModuleExtended}
-                    </EpistoButton>
-                    {openModuleIds.some(x => modules.map(x => x.id).includes(x)) ? <EpistoButton
-                        onClick={() => {
-                            setOpenModuleIds([])
-                        }}
-                        style={{ alignSelf: "center", marginLeft: 20 }}
-                        variant="outlined">
-                        {translatableTexts.misc.openAll}
-                    </EpistoButton> : <EpistoButton
-                        onClick={() => {
-                            setOpenModuleIds(modules.map(x => x.id))
-                        }}
-                        style={{ alignSelf: "center", marginLeft: 20 }}
-                        variant="outlined">
-                        {translatableTexts.misc.closeAll}
-                    </EpistoButton>}
-                </Flex>
 
                 <DragAndDropContext onDragEnd={onDragEnd}>
                     <DropZone zoneId="zone-root" groupId="root">
@@ -437,6 +458,7 @@ export const AdminCourseContentSubpage = () => {
                                                 </Flex>
                                             </Flex>
                                         </Flex>}>
+                                            
                                         <DropZone
                                             width="100%"
                                             my="5px"

@@ -40,6 +40,10 @@ import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
 import { ExamService } from "./ExamService";
 import { CourseProgressDTO } from "../models/shared_models/CourseProgressDTO";
 import { createCharSeparatedList } from "./misc/mappings";
+import { ModuleAdminShortDTO } from "../models/shared_models/ModuleAdminShortDTO";
+import { CourseAdminItemShortDTO } from "../models/shared_models/CourseAdminItemShortDTO";
+import { CourseAdminItemQuestionDTO } from "../models/shared_models/CourseAdminItemQuestionDTO";
+import { CourseAdminItemQuestionAnswerDTO } from "../models/shared_models/CourseAdminItemQuestionAnswerDTO";
 
 export class CourseService {
 
@@ -154,7 +158,7 @@ export class CourseService {
      * @param userId 
      * @returns 
      */
-    getCourseProgressDataAsync = async (userId: number) => {
+    async getCourseProgressDataAsync(userId: number) {
 
         const courses = await this._ormService
             .getRepository2(CourseLearningStatsView)
@@ -561,23 +565,63 @@ export class CourseService {
      * @param courseId 
      * @returns 
      */
-    getCourseContentEditDataAsync = async (courseId: number) => {
+    async getCourseContentEditDataAsync(courseId: number) {
 
-        // get course 
+        // get views 
         const views = await this._ormService
             .getRepository(CourseAdminContentView)
             .createQueryBuilder("c")
             .where("c.courseId = :courseId", { courseId: courseId })
             .getMany();
 
+        // first view as admin data 
         const viewAsAdmin = views
             .first();
 
-        const courseItems = views
-            .filter(x => !!x.moduleId);
+        // modules
+        const modules = views
+            .groupBy(x => x.moduleId)
+            .map(moduleGroup => {
+
+                const viewAsModule = moduleGroup.first;
+
+                // items
+                const items = moduleGroup
+                    .items
+                    .filter(x => !!x.itemId)
+                    .groupBy(x => x.itemCode)
+                    .map(itemGroup => {
+
+                        const viewAsItem = itemGroup.first;
+
+                        // questions
+                        const questions = itemGroup
+                            .items
+                            .groupBy(x => x.questionId)
+                            .map(questionGroup => {
+
+                                const viewAsQuestion = questionGroup
+                                    .items
+                                    .first();
+
+                                // answers
+                                const answers = this._mapperService
+                                    .mapMany(CourseAdminContentView, CourseAdminItemQuestionAnswerDTO, questionGroup.items);
+
+                                return this._mapperService
+                                    .map(CourseAdminContentView, CourseAdminItemQuestionDTO, viewAsQuestion, answers);
+                            });
+
+                        return this._mapperService
+                            .map(CourseAdminContentView, CourseAdminItemShortDTO, viewAsItem, questions);
+                    });
+
+                return this._mapperService
+                    .map(CourseAdminContentView, ModuleAdminShortDTO, viewAsModule, items);
+            });
 
         return this._mapperService
-            .map(CourseAdminContentView, CourseContentEditDataDTO, viewAsAdmin, courseItems);
+            .map(CourseAdminContentView, CourseContentEditDataDTO, viewAsAdmin, modules);
     }
 
     /**

@@ -1,3 +1,4 @@
+import { CourseAdminItemQuestionDTO } from "./CourseAdminItemQuestionDTO";
 import { CourseItemStateType, CourseItemType } from "./types/sharedTypes";
 
 export class CourseAdminItemShortDTO {
@@ -11,4 +12,5 @@ export class CourseAdminItemShortDTO {
     questionCount: number;
     videoLength: number;
     isFinalExam: boolean;
+    questions: CourseAdminItemQuestionDTO[];
 }
