@@ -163,8 +163,8 @@ export const CourseEditItemView = (props: {
                                             : "var(--deepRed)"} text={"Kérdés: " + question.questionText} />}
 
                                     {/* question show up time */}
-                                    {(item.type === "video" && question.questionShowUpSeconds) && <ChipSmall
-                                        color={question.questionShowUpSeconds || question.questionShowUpSeconds === 0
+                                    {(item.type === "video") && <ChipSmall
+                                        color={(question.questionShowUpSeconds || question.questionShowUpSeconds != 0)
                                             ? "var(--deepGreen)"
                                             : "var(--deepRed)"}
                                         text={question.questionShowUpSeconds ? "Megjelenés időpontja: " + secondsToTime(question.questionShowUpSeconds) : "Nincs megadva időpont"} />}
