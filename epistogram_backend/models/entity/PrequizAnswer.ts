@@ -15,12 +15,12 @@ export class PrequizAnswer {
     @Column()
     questionId: number;
 
-    @JoinColumn({ name: "questionId" })
     @ManyToOne(_ => PrequizQuestion, x => x.answers)
+    @JoinColumn({ name: "questionId" })
     question: PrequizQuestion;
 
-    // answers 
-    @OneToMany(_ => PrequizUserAnswer, x => x.question)
+    // user answers 
+    @OneToMany(_ => PrequizUserAnswer, x => x.answer)
     @JoinColumn()
     userAnswers: PrequizUserAnswer[];
 }

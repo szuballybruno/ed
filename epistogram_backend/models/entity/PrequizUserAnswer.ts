@@ -20,22 +20,22 @@ export class PrequizUserAnswer {
     questionId: number;
 
     @JoinColumn({ name: "questionId" })
-    @ManyToOne(_ => PrequizQuestion, x => x.answers)
+    @ManyToOne(_ => PrequizQuestion, x => x.userAnswers)
     question: PrequizQuestion;
 
     // answer 
     @Column({ type: "int", nullable: true })
     answerId: number | null;
 
-    @JoinColumn({ name: "questionId" })
+    @JoinColumn({ name: "answerId" })
     @ManyToOne(_ => PrequizAnswer, x => x.userAnswers)
     answer: PrequizAnswer | null;
 
-    // answer 
+    // user  
     @Column()
     userId: number;
 
-    @JoinColumn({ name: "questionId" })
+    @JoinColumn({ name: "userId" })
     @ManyToOne(_ => User, x => x.prequizAnswers)
     user: User;
 }
