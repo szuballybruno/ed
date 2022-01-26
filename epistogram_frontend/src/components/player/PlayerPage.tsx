@@ -3,7 +3,7 @@ import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getRoute } from "../../MainRouting";
 import { ContentPane } from "../ContentPane";
 import { PageRootContainer } from "../PageRootContainer";
-import { PreplayerSubpage } from "../preplayer/PreplayerSubpage2";
+import { PrequizSubpage } from "../prequiz/PrequizSubpage";
 import { PlayerSubpage } from "./PlayerSubpage";
 
 export const PlayerPage = () => {
@@ -21,9 +21,9 @@ export const PlayerPage = () => {
                 showLogo>
 
                 <Switch>
+                    {getRoute(applicationRoutes.playerRoute.startRoute, <PrequizSubpage />)}
                     {getRoute(applicationRoutes.playerRoute.watchRoute, <PlayerSubpage />)}
-                    {getRoute(applicationRoutes.playerRoute.gettingReadyRoute, <PreplayerSubpage />)}
-                    {getRoute(applicationRoutes.playerRoute.finishedRoute, <PreplayerSubpage />)}
+                    {getRoute(applicationRoutes.playerRoute.finishedRoute, <PrequizSubpage />)}
                 </Switch>
             </ContentPane>
         </PageRootContainer >

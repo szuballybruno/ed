@@ -69,6 +69,9 @@ import { CourseOverviewView } from "../../models/views/CourseOverviewView";
 import { PersonalityTraitView } from "../../models/views/PersonalityTraitView";
 import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
 import { UserAdminListView } from "../../models/views/UserAdminListView";
+import { PrequizQuestion } from "../../models/entity/PrequizQuestion";
+import { PrequizAnswer } from "../../models/entity/PrequizAnswer";
+import { PrequizUserAnswer } from "../../models/entity/PrequizUserAnswer";
 
 export const dbSchema = {
 
@@ -224,6 +227,9 @@ export const dbSchema = {
         ShopItem,
         ShopItemCategory,
         DiscountCode,
-        VideoRating
+        VideoRating,
+        PrequizQuestion,
+        PrequizAnswer,
+        PrequizUserAnswer
     ] as any[]
 }

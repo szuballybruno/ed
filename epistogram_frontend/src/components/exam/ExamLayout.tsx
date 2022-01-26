@@ -1,5 +1,5 @@
 import { Flex, Text } from "@chakra-ui/react";
-import { ArrowForward } from "@mui/icons-material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { LinearProgress, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
 import { isString } from "../../static/frontendHelpers";
@@ -10,6 +10,7 @@ import { EpistoFont } from "../controls/EpistoFont";
 export const ExamLayout = (props: {
     children: ReactNode,
     handleNext: () => void,
+    handleBack?: () => void,
     nextButtonTitle: string,
     showNextButton?: boolean,
     exitExamAction?: () => void,
@@ -19,15 +20,16 @@ export const ExamLayout = (props: {
     footerButtons?: ({ text: string, action: () => void })[]
 }) => {
 
-    const { exitExamAction, footerButtons, headerCenterText, showNextButton, headerLeftItem, children, progressValue, handleNext, nextButtonTitle } = props;
+    const { exitExamAction, footerButtons, headerCenterText, showNextButton, headerLeftItem, children, progressValue, handleNext, handleBack, nextButtonTitle } = props;
 
-    const footerButton = (title: string, action: () => void, icon?: any) => <EpistoButton
+    const footerButton = (title: string, action: () => void, icon?: any, iconFront?: any) => <EpistoButton
         variant={"colored"}
         onClick={action}
         style={{
             height: "40px",
             marginLeft: "10px"
         }}>
+        {iconFront}
         {title}
         {icon}
     </EpistoButton>
@@ -101,6 +103,9 @@ export const ExamLayout = (props: {
             background="var(--transparentWhite70)"
             height="80px"
             p={20}>
+
+            {/* back button */}
+            {handleBack && footerButton("Vissza", handleBack, undefined, <ArrowBack />)}
 
             {/* progress line */}
             <Flex

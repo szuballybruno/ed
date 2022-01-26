@@ -4,6 +4,7 @@ import { ApplicationRoute } from "../../models/types";
 import { verboseLogging } from "../../static/Environemnt";
 import { getUrl } from "../../static/frontendHelpers";
 
+// asd
 export const useNavigation = () => {
 
     const history = useHistory();
@@ -24,8 +25,8 @@ export const useNavigation = () => {
     return {
         history,
         navigate,
-        navigateToPlayer: (descriptorCode: string) => navigate(applicationRoutes.playerRoute, { itemCode: descriptorCode }),
-        navigateToCourseDetails: (courseId: number, itemCode?: string) => navigate(applicationRoutes.courseDetailsRoute, { courseId }, { code: itemCode }),
+        navigateToPlayer: (descriptorCode: string) => navigate(applicationRoutes.playerRoute.watchRoute, { descriptorCode  }),
+        navigateToCourseDetails: (courseId: number, descriptorCode?: string) => navigate(applicationRoutes.courseDetailsRoute, { courseId }, { descriptorCode }),
         openNewTab,
     };
 }

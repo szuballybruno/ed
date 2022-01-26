@@ -29,9 +29,10 @@ export const applicationRoutes = {
             exact: true
         },
 
-        gettingReadyRoute: {
+        startRoute: {
             title: translatableTexts.routeTitles.player,
-            route: "/watch/start/:courseId"
+            route: "/watch/start/:courseId",
+            exact: true
         },
     
         finishedRoute: {

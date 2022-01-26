@@ -10,6 +10,7 @@ import { DiscountCode } from "./DiscountCode";
 import { Event } from "./Event";
 import { JobTitle } from "./JobTitle";
 import { Organization } from "./Organization";
+import { PrequizUserAnswer } from "./PrequizUserAnswer";
 import { Role } from "./Role";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";
@@ -179,4 +180,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => DailyTipOccurrence, x => x.user)
     dailyTipOccurrences: DailyTipOccurrence[];
+    
+    // answers 
+    @OneToMany(_ => PrequizUserAnswer, x => x.question)
+    @JoinColumn()
+    prequizAnswers: PrequizUserAnswer[];
 }
