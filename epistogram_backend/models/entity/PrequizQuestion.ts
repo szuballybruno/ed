@@ -11,6 +11,9 @@ export class PrequizQuestion {
     @Column()
     text: string;
 
+    @Column() 
+    isNumericAnswer: boolean;
+
     // answers 
     @OneToMany(_ => PrequizAnswer, x => x.question)
     @JoinColumn()

@@ -72,6 +72,7 @@ import { UserAdminListView } from "../../models/views/UserAdminListView";
 import { PrequizQuestion } from "../../models/entity/PrequizQuestion";
 import { PrequizAnswer } from "../../models/entity/PrequizAnswer";
 import { PrequizUserAnswer } from "../../models/entity/PrequizUserAnswer";
+import { PrequizQuestionView } from "../../models/views/PrequizQuestionView";
 
 export const dbSchema = {
 
@@ -118,7 +119,8 @@ export const dbSchema = {
         "course_overview_view",
         "personality_trait_category_view",
         "user_latest_activity_view",
-        "user_admin_list_view"
+        "user_admin_list_view",
+        "prequiz_question_view"
     ],
 
     functionScripts: [
@@ -185,7 +187,8 @@ export const dbSchema = {
         ExamView,
         CourseOverviewView,
         PersonalityTraitCategoryView,
-        UserAdminListView
+        UserAdminListView,
+        PrequizQuestionView
     ] as any[],
 
     entities: [

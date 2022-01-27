@@ -76,6 +76,8 @@ import { VideoRatingController } from './api/VideoRatingController';
 import { PersonalityAssessmentController } from './api/PersonalityAssessmentController';
 import { DailyTipController } from './api/DailyTipController';
 import { DailyTipService } from './services/DailyTipService';
+import { PrequizController } from './api/PrequizController';
+import { PrequizService } from './services/PrequizService';
 
 (async () => {
 
@@ -128,9 +130,11 @@ import { DailyTipService } from './services/DailyTipService';
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
+    const prequizService = new PrequizService(ormConnectionService, mapperService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
+    const prequizController = new PrequizController(prequizService);
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
     const registrationController = new RegistrationController(registrationService, userService, globalConfig);
@@ -235,6 +239,11 @@ import { DailyTipService } from './services/DailyTipService';
     addEndpoint(apiRoutes.coinTransactions.getCoinBalance, coinTransactionsController.getCoinBalanceAction);
     addEndpoint(apiRoutes.coinTransactions.getCoinBalanceOfUser, coinTransactionsController.getCoinBalanceOfUserAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.coinTransactions.giftCoinsToUser, coinTransactionsController.giftCoinsToUser, { isPost: true, authorize: ["administrator"] });
+
+    // prequiz
+    addEndpoint(apiRoutes.prequiz.getQuestions, prequizController.getQuestionsAction);
+    addEndpoint(apiRoutes.prequiz.getUserAnswer, prequizController.getUserAnswerAction);
+    addEndpoint(apiRoutes.prequiz.answerPrequizQuestion, prequizController.answerPrequizQuestionAction, { isPost: true });
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);

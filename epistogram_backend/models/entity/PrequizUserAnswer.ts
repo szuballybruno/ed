@@ -9,9 +9,6 @@ export class PrequizUserAnswer {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    text: string;
-
     @Column({ type: "int", nullable: true })
     value: number | null;
 
@@ -19,7 +16,7 @@ export class PrequizUserAnswer {
     @Column()
     questionId: number;
 
-    @JoinColumn({ name: "questionId" })
+    @JoinColumn({ name: "question_id" })
     @ManyToOne(_ => PrequizQuestion, x => x.userAnswers)
     question: PrequizQuestion;
 
@@ -27,7 +24,7 @@ export class PrequizUserAnswer {
     @Column({ type: "int", nullable: true })
     answerId: number | null;
 
-    @JoinColumn({ name: "answerId" })
+    @JoinColumn({ name: "answer_id" })
     @ManyToOne(_ => PrequizAnswer, x => x.userAnswers)
     answer: PrequizAnswer | null;
 
@@ -35,7 +32,7 @@ export class PrequizUserAnswer {
     @Column()
     userId: number;
 
-    @JoinColumn({ name: "userId" })
+    @JoinColumn({ name: "user_id" })
     @ManyToOne(_ => User, x => x.prequizAnswers)
     user: User;
 }

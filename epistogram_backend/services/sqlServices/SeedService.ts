@@ -17,6 +17,7 @@ export class SeedService {
 
     seedDBAsync = async () => {
 
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_prequiz_questions");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedOrganizations");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionTypes");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedActivities");

@@ -1,5 +1,8 @@
-import { Flex, Grid } from "@chakra-ui/react";
-import { useState } from "react";
+import { Box, Flex, Grid } from "@chakra-ui/react";
+import { Slider } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from "../../services/api/prequizApiService";
+import { useShowErrorDialog } from "../../services/core/notifications";
 import { getAssetUrl, useIntParam, usePaging } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "../controls/EpistoFont";
@@ -10,46 +13,55 @@ import { QuestionAnswer } from "../exam/QuestionAnswer";
 export const PrequizSubpage = () => {
 
     const courseId = useIntParam("courseId");
-
-    const questions = [
-        {
-            title: "asd",
-            answers: [
-                {
-                    id: 1,
-                    title: "as1"
-                }
-            ]
-        },
-        {
-            title: "asd2",
-            answers: [
-                {
-                    id: 1,
-                    title: "as2"
-                }
-            ]
-        }
-    ];
+    const showError = useShowErrorDialog();
+    const { questions } = usePrequizQuestions();
 
     const paging = usePaging(questions);
     const question = paging.currentItem;
+
+    const { userAnswer, userAnswerError, userAnswerState } = usePrequizUserAnswer(question?.id ?? null);
+    const { answerPrequizQuestionAsync, answerPrequizQuestionState } = useAnswerPrequizQuestion();
+
     const currentQuestionIndex = paging.currentIndex;
     const totalQuestionsCount = questions.length;
 
     const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>();
-    const hasSelectedAnswer = !!selectedAnswerId;
+    const canContinue = question?.isNumeric || !!selectedAnswerId;
     const progressPercentage = (currentQuestionIndex + 1) / totalQuestionsCount * 100;
 
-    const handleNextAsync = () => {
+    const [numericValue, setNumericValue] = useState(0);
 
-        paging.next();
+    const handleNextAsync = async () => {
+
+        try {
+
+            await answerPrequizQuestionAsync({
+                answerId: selectedAnswerId ?? null,
+                questionId: question?.id!,
+                value: numericValue
+            });
+
+            paging.next();
+
+        } catch (e) {
+
+            showError(e);
+        }
     }
 
     const handleBackAsync = () => {
 
         paging.previous();
     }
+
+    useEffect(() => {
+
+        if (!userAnswer)
+            return;
+
+        setNumericValue(userAnswer.answerValue ?? 0);
+        setSelectedAnswerId(userAnswer.answerId);
+    }, [userAnswer]);
 
     return (
         <ExamLayout
@@ -64,36 +76,72 @@ export const PrequizSubpage = () => {
                     {totalQuestionsCount}/{currentQuestionIndex + 1}
                 </EpistoFont>
             </Flex>}
-            headerCenterText={"Prequiz courseId:" + courseId}
+            headerCenterText="Kurzus elotti felmero"
             handleNext={handleNextAsync}
-            showNextButton={hasSelectedAnswer}
+            showNextButton={canContinue}
             nextButtonTitle={translatableTexts.exam.nextQuestion}
             progressValue={progressPercentage}
             handleBack={currentQuestionIndex !== 0 ? handleBackAsync : undefined}>
 
             <ExamLayoutContent
-                title={question?.title ?? ""}>
+                title={question?.text ?? ""}>
 
-                <Grid
-                    templateColumns="repeat(2, 1fr)"
-                    gridAutoRows="minmax(0,1fr)"
-                    direction="column"
-                    gridGap="10px"
-                    flex="1">
+                {question?.isNumeric
+                    ? <Flex direction="column" align="center">
+                        <Flex justify="space-between">
+                            <EpistoFont>
+                                Nem erzem tapasztaltnak magam
+                            </EpistoFont>
 
-                    {question && question
-                        .answers
-                        .map((answer, index) => {
+                            <Box width="80px" />
 
-                            const isAnswerSelected = answer.id === selectedAnswerId;
+                            <EpistoFont>
+                                Tapasztaltnak erzem magam
+                            </EpistoFont>
+                        </Flex>
 
-                            return <QuestionAnswer
-                                onClick={() => setSelectedAnswerId(answer.id)}
-                                answerText={answer.title}
-                                isSelected={isAnswerSelected} />
-                        })}
-                </Grid>
+                        <Slider
+                            max={10}
+                            valueLabelDisplay="auto"
+                            marks={true}
+                            style={{
+                                color: "var(--deepBlue)"
+                            }}
+                            onChange={(_, value) => setNumericValue(value as any)}
+                            value={numericValue} />
+
+                        <EpistoFont
+                            fontSize="fontHuge"
+                            style={{
+                                boxShadow: "-1px 3px 16px 17px white",
+                                background: "white",
+                                borderRadius: "10px",
+                                marginTop: "10px"
+                            }}>
+
+                            {numericValue}
+                        </EpistoFont>
+                    </Flex>
+                    : <Grid
+                        templateColumns="repeat(2, 1fr)"
+                        gridAutoRows="minmax(0,1fr)"
+                        direction="column"
+                        gridGap="10px"
+                        flex="1">
+
+                        {question && question
+                            .answers
+                            .map((answer, index) => {
+
+                                const isAnswerSelected = answer.id === selectedAnswerId;
+
+                                return <QuestionAnswer
+                                    onClick={() => setSelectedAnswerId(answer.id)}
+                                    answerText={answer.text}
+                                    isSelected={isAnswerSelected} />
+                            })}
+                    </Grid>}
             </ExamLayoutContent>
-        </ExamLayout>
+        </ExamLayout >
     )
 }

@@ -16,7 +16,7 @@ export class PrequizAnswer {
     questionId: number;
 
     @ManyToOne(_ => PrequizQuestion, x => x.answers)
-    @JoinColumn({ name: "questionId" })
+    @JoinColumn({ name: "question_id" })
     question: PrequizQuestion;
 
     // user answers 

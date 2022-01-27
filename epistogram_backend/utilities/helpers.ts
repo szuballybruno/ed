@@ -120,6 +120,14 @@ export class SafeObjectWrapper<T> {
         this.data = data;
     }
 
+    getValueOrNull<TValue>(getter: (data: T) => TValue, castType?: "int" | "float" | "boolean"): TValue | null {
+
+        if (getter(this.data) === undefined || getter(this.data) === null)
+            return null;
+
+        return this.getValue(getter, castType);
+    }
+
     getValue<TValue>(getter: (data: T) => TValue, castType?: "int" | "float" | "boolean"): TValue {
 
         const value = withValueOrBadRequest<any>(getter(this.data));

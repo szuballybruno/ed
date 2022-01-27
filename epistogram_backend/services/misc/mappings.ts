@@ -98,6 +98,9 @@ import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTrai
 import { UserAdminListView } from "../../models/views/UserAdminListView";
 import { CourseAdminItemQuestionDTO } from "../../models/shared_models/CourseAdminItemQuestionDTO";
 import { CourseAdminItemQuestionAnswerDTO } from "../../models/shared_models/CourseAdminItemQuestionAnswerDTO";
+import { PrequizQuestionDTO } from "../../models/shared_models/PrequizQuestionDTO";
+import { PrequizQuestionView } from "../../models/views/PrequizQuestionView";
+import { PrequizAnswerDTO } from "../../models/shared_models/PrequizAnswerDTO";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -789,6 +792,20 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             description: x.description,
             id: x.id,
             isLive: x.isLive
+        }));
+
+    mapperService
+        .addMap(PrequizQuestionView, PrequizQuestionDTO, (x, answers) => ({
+            id: x.questionId,
+            isNumeric: x.isNumericAnswer,
+            text: x.questionText,
+            answers
+        }));
+
+    mapperService
+        .addMap(PrequizQuestionView, PrequizAnswerDTO, x => ({
+            id: x.answerId,
+            text: x.answerText
         }));
 }
 

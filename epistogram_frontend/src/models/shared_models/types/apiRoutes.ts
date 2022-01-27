@@ -68,6 +68,12 @@ export const apiRoutes = {
         getUnfulfilledEvent: "/event/get-unfulfilled-event"
     },
 
+    prequiz: {
+        getQuestions: "/prequiz/get-questions",
+        getUserAnswer: "/prequiz/get-user-answer",
+        answerPrequizQuestion: "/prequiz/answer-prequiz-question"
+    },
+
     userStats: {
         getUserStats: "/userstats/get-user-stats"
     },
