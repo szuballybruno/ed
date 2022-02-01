@@ -232,7 +232,7 @@ export class UserService {
             .getRepository(AnswerSession)
             .insert({
                 examId: 1, // -- 1 always points to signup exam 
-                isSignupAnswerSession: true,
+                type: "signup",
                 userId: userId
             });
 
@@ -241,7 +241,7 @@ export class UserService {
             .getRepository(AnswerSession)
             .insert({
                 userId: userId,
-                isPractiseAnswerSession: true
+                type: "practise"
             });
 
         return user;

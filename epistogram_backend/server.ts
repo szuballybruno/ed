@@ -78,6 +78,8 @@ import { DailyTipController } from './api/DailyTipController';
 import { DailyTipService } from './services/DailyTipService';
 import { PrequizController } from './api/PrequizController';
 import { PrequizService } from './services/PrequizService';
+import { PretestController } from './api/PretestController';
+import { PretestService } from './services/PretestService';
 
 (async () => {
 
@@ -131,10 +133,12 @@ import { PrequizService } from './services/PrequizService';
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
     const prequizService = new PrequizService(ormConnectionService, mapperService);
+    const pretestService = new PretestService(ormConnectionService, mapperService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
     const prequizController = new PrequizController(prequizService);
+    const pretestController = new PretestController(pretestService);
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
     const registrationController = new RegistrationController(registrationService, userService, globalConfig);
@@ -244,6 +248,9 @@ import { PrequizService } from './services/PrequizService';
     addEndpoint(apiRoutes.prequiz.getQuestions, prequizController.getQuestionsAction);
     addEndpoint(apiRoutes.prequiz.getUserAnswer, prequizController.getUserAnswerAction);
     addEndpoint(apiRoutes.prequiz.answerPrequizQuestion, prequizController.answerPrequizQuestionAction, { isPost: true });
+
+    // pretest 
+    addEndpoint(apiRoutes.pretest.getPretestData, pretestController.getPretestDataAction);
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);

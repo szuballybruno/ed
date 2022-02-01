@@ -64,9 +64,7 @@ export const ExamPlayer = (props: {
 
         () => <ExamQuestions
             exam={exam}
-            slidesState={slidesState}
             answerSessionId={answerSessionId}
-            questions={exam.questions}
             onExamFinished={handleExamFinished} />,
 
         () => <ExamResultsSlide

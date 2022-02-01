@@ -74,6 +74,10 @@ export const apiRoutes = {
         answerPrequizQuestion: "/prequiz/answer-prequiz-question"
     },
 
+    pretest: {
+        getPretestData: "/pretest/get-pretest-data"
+    },
+
     userStats: {
         getUserStats: "/userstats/get-user-stats"
     },

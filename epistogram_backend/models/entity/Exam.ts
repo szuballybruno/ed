@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ExamType } from "../shared_models/types/sharedTypes";
 import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { CourseModule } from "./CourseModule";
@@ -12,6 +13,9 @@ export class Exam {
 
     @Column()
     title: string;
+
+    @Column()
+    type: ExamType;
 
     @Column({ nullable: true })
     subtitle: string;
@@ -50,10 +54,10 @@ export class Exam {
     answerSessions: AnswerSession[];
 
     // module
-    @Column()
-    moduleId: number;
+    @Column({ nullable: true, type: "int" })
+    moduleId: number | null;
 
     @ManyToOne(_ => CourseModule, x => x.exams)
     @JoinColumn({ name: "module_id" })
-    module: CourseModule;
+    module: CourseModule | null;
 }

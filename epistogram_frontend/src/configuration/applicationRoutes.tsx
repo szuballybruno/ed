@@ -29,9 +29,15 @@ export const applicationRoutes = {
             exact: true
         },
 
-        startRoute: {
-            title: translatableTexts.routeTitles.player,
-            route: "/watch/start/:courseId",
+        prequizRoute: {
+            title: translatableTexts.routeTitles.prequiz,
+            route: "/watch/prequiz/:courseId",
+            exact: true
+        },
+
+        pretestRoute: {
+            title: translatableTexts.routeTitles.pretest,
+            route: "/watch/pretest/:courseId",
             exact: true
         },
     

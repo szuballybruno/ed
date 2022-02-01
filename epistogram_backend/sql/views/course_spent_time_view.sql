@@ -45,7 +45,7 @@ FROM
 			LEFT JOIN public.answer_session ase
 			ON ase.video_id = v.id 
 				AND ase.user_id = u.id
-				AND ase.is_practise_answer_session = false
+				AND ase.type = 'normal'
 
 			LEFT JOIN public.given_answer ga
 			ON ga.answer_session_id = ase.id
@@ -60,7 +60,7 @@ FROM
 			LEFT JOIN public.answer_session ase
 			ON ase.video_id = v.id 
 				AND ase.user_id = u.id
-				AND ase.is_practise_answer_session = true
+				AND ase.type = 'practise'
 
 			LEFT JOIN public.given_answer ga
 			ON ga.answer_session_id = ase.id

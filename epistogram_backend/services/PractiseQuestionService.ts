@@ -67,7 +67,7 @@ export class PractiseQuestionService {
         const userPractiseAnswerSession = await this._ormService
             .getRepository(AnswerSession)
             .createQueryBuilder("as")
-            .where("as.isPractiseAnswerSession = true")
+            .where("as.type = 'practise'")
             .andWhere("as.userId = :userId", { userId })
             .getOneOrFail();
 

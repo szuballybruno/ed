@@ -11,7 +11,7 @@ FROM
 		e.id exam_id,
 		e.is_final_exam is_final_exam,
 		ase.id answer_session_id,
-		ase.is_signup_answer_session is_signup_answer_session, 
+		ase.type answer_session_type, 
 		SUM ((ga.is_correct IS NOT DISTINCT FROM true)::INT) correct_given_answer_count,
 		COUNT (ga.id) given_answer_count,
 		COUNT (q.id) question_count,

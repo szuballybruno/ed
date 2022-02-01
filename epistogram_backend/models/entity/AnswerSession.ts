@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AnswerSessionType } from "../shared_models/types/sharedTypes";
 import { Exam } from "./Exam";
 import { GivenAnswer } from "./GivenAnswer";
 import { User } from "./User";
@@ -16,11 +17,8 @@ export class AnswerSession {
     @Column({ nullable: true, type: "timestamptz" })
     endDate: Date | null;
 
-    @Column({ default: false })
-    isPractiseAnswerSession: boolean;
-
-    @Column({ default: false })
-    isSignupAnswerSession: boolean;
+    @Column({ default: "exam" as AnswerSessionType })
+    type: AnswerSessionType;
 
     // given answers
     @OneToMany(_ => GivenAnswer, x => x.answerSession)

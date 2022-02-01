@@ -1,7 +1,9 @@
 import { Box, Flex, Grid } from "@chakra-ui/react";
 import { Slider } from "@mui/material";
 import { useEffect, useState } from "react";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from "../../services/api/prequizApiService";
+import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { getAssetUrl, useIntParam, usePaging } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
@@ -14,6 +16,7 @@ export const PrequizSubpage = () => {
 
     const courseId = useIntParam("courseId");
     const showError = useShowErrorDialog();
+    const { navigate } = useNavigation();
     const { questions } = usePrequizQuestions();
 
     const paging = usePaging(questions);
@@ -41,7 +44,13 @@ export const PrequizSubpage = () => {
                 value: numericValue
             });
 
-            paging.next();
+            if (paging.isLast) {
+
+                navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
+            } else {
+
+                paging.next();
+            }
 
         } catch (e) {
 

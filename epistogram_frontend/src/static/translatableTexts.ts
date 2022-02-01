@@ -172,6 +172,8 @@ export const translatableTexts = {
         underMaintanence: "Under maintanence",
         registration: "Regisztráció",
         player: "Lejátszó",
+        pretest: "Pretest",
+        prequiz: "Prequiz",
         setNewPassword: "Új jelszó beállítása",
         registerViaActivationCode: "Kód beváltása",
         homePage: "Kezdőlap",

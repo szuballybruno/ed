@@ -4,6 +4,7 @@ import { getRoute } from "../../MainRouting";
 import { ContentPane } from "../ContentPane";
 import { PageRootContainer } from "../PageRootContainer";
 import { PrequizSubpage } from "../prequiz/PrequizSubpage";
+import { PretestSubpage } from "../pretest/PretestSubpage";
 import { PlayerSubpage } from "./PlayerSubpage";
 
 export const PlayerPage = () => {
@@ -21,7 +22,8 @@ export const PlayerPage = () => {
                 showLogo>
 
                 <Switch>
-                    {getRoute(applicationRoutes.playerRoute.startRoute, <PrequizSubpage />)}
+                    {getRoute(applicationRoutes.playerRoute.prequizRoute, <PrequizSubpage />)}
+                    {getRoute(applicationRoutes.playerRoute.pretestRoute, <PretestSubpage />)}
                     {getRoute(applicationRoutes.playerRoute.watchRoute, <PlayerSubpage />)}
                     {getRoute(applicationRoutes.playerRoute.finishedRoute, <PrequizSubpage />)}
                 </Switch>

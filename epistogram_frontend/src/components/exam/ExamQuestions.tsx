@@ -1,36 +1,32 @@
 import { Grid } from "@chakra-ui/layout";
-import { Flex, Text } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
+import { Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { getAssetUrl, PagingType, usePaging } from "../../static/frontendHelpers";
+import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
 import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../../models/shared_models/types/sharedTypes";
+import { useSaveExamAnswer } from "../../services/api/examApiService";
 import { useShowErrorDialog } from "../../services/core/notifications";
+import { getAssetUrl, usePaging } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoFont } from "../controls/EpistoFont";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { ExamLayout } from "./ExamLayout";
-import { QuestionAnswer } from "./QuestionAnswer";
-import { useSaveExamAnswer } from "../../services/api/examApiService";
-import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
 import { ExamLayoutContent } from "./ExamLayoutContent";
+import { QuestionAnswer } from "./QuestionAnswer";
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
-    slidesState: PagingType<number>
-    questions: QuestionDTO[],
     answerSessionId: number,
     onExamFinished: () => void
 }) => {
 
     const {
-        questions,
         answerSessionId,
         onExamFinished,
         exam
     } = props;
 
+    const questions = exam.questions;
     const showError = useShowErrorDialog();
     const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
     const questionPaging = usePaging(questions, undefined, onExamFinished);
