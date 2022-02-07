@@ -127,79 +127,95 @@ export const EditExamSubpage = () => {
                 applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
                 applicationRoutes.administrationRoute.coursesRoute.editExamRoute,
             ]}
-            px="10px"
             onSave={handleSaveAsync}>
+            <Flex
+                direction="column"
+                className="roundBorders"
+                mt="5px"
+                p="0 10px 10px 10px"
+                background="var(--transparentWhite70)">
+                <EpistoEntry
+                    label="Cím"
+                    labelVariant="top"
+                    value={title}
+                    setValue={setTitle} />
 
-            <EpistoEntry
-                label="Cím"
-                value={title}
-                setValue={setTitle} />
+                <EpistoEntry
+                    label="Alcím"
+                    labelVariant="top"
+                    value={subtitle}
+                    setValue={setSubtitle} />
 
-            <EpistoEntry
-                label="Alcím"
-                value={subtitle}
-                setValue={setSubtitle} />
+                <EpistoLabel
+                    text="Újrakezdési limit">
 
-            <EpistoLabel
-                text="Ujrakezdesi limit">
+                    <Flex align="center">
+                        <Checkbox
+                            checked={isRetakeLimited}
+                            style={{
+                                alignSelf: "flex-start"
+                            }}
+                            onChange={(_, value) => setIsRetakeLimited(value)} />
 
-                <Flex align="center">
+                        <EpistoEntry
+                            marginTop="0"
+                            value={reateLimit}
+                            disabled={!isRetakeLimited}
+                            type="number"
+                            setValue={setRetakeLimit} />
+                    </Flex>
+                </EpistoLabel>
+
+                <EpistoLabel text="Záróvizsga?">
                     <Checkbox
-                        checked={isRetakeLimited}
+                        checked={isFinalExam}
                         style={{
                             alignSelf: "flex-start"
                         }}
-                        onChange={(_, value) => setIsRetakeLimited(value)} />
+                        onChange={(_, value) => setIsFinalExam(value)} />
+                </EpistoLabel>
+            </Flex>
+            <Flex
+                direction="column"
+                className="roundBorders"
+                mt="5px"
+                mb="100px"
+                p="0 10px 10px 10px"
+                background="var(--transparentWhite70)">
 
-                    <EpistoEntry
-                        marginTop="0"
-                        value={reateLimit}
-                        disabled={!isRetakeLimited}
-                        type="number"
-                        setValue={setRetakeLimit} />
-                </Flex>
-            </EpistoLabel>
 
-            <EpistoLabel text="Zarovizsga?">
-                <Checkbox
-                    checked={isFinalExam}
-                    style={{
-                        alignSelf: "flex-start"
-                    }}
-                    onChange={(_, value) => setIsFinalExam(value)} />
-            </EpistoLabel>
+                <EpistoButton
+                    variant="outlined"
+                    style={{ margin: "10px", alignSelf: "flex-end" }}
+                    onClick={handleAddNewQuesiton}>
+                    Új kérdés hozzáadása
+                </EpistoButton>
 
-            <EpistoButton
-                variant="outlined"
-                style={{ margin: "10px", alignSelf: "flex-end" }}
-                onClick={handleAddNewQuesiton}>
-                Új kérdés hozzáadása
-            </EpistoButton>
-
-            <DragAndDropList
-                width="100%"
-                list={questions}
-                setList={setQuestions}
-                getKey={x => x.questionId + ""}
-                renderListItem={(question) => <FlexListItem
+                <DragAndDropList
                     width="100%"
-                    thumbnailContent={<LiveHelpIcon className="square40" />}
-                    midContent={<EpistoEntry
-                        setValue={x => setQuesitonText(question.questionId, x)}
-                        value={question.questionText} />}
-                    endContent={<Flex>
+                    list={questions}
+                    setList={setQuestions}
+                    getKey={x => x.questionId + ""}
+                    renderListItem={(question) => <FlexListItem
+                        width="100%"
+                        thumbnailContent={<LiveHelpIcon className="square40" />}
+                        midContent={<EpistoEntry
+                            setValue={x => setQuesitonText(question.questionId, x)}
+                            value={question.questionText} />}
+                        endContent={<Flex>
 
-                        <EpistoButton
-                            onClick={() => navToEditQuestion(question.questionId)}
-                            isDisabled={question.questionId >= 0 ? false : true}>
+                            <EpistoButton
+                                onClick={() => navToEditQuestion(question.questionId)}
+                                isDisabled={question.questionId >= 0 ? false : true}>
 
-                            <EditIcon className="square30" />
-                        </EpistoButton>
+                                <EditIcon className="square30" />
+                            </EpistoButton>
 
-                        <EpistoButton onClick={() => handleDelete(question.questionId)}>
-                            <Delete className="square30" />
-                        </EpistoButton>
-                    </Flex >} />} />
+                            <EpistoButton onClick={() => handleDelete(question.questionId)}>
+                                <Delete className="square30" />
+                            </EpistoButton>
+                        </Flex >} />} />
+            </Flex>
         </AdminSubpageHeader>
     </LoadingFrame>
 }

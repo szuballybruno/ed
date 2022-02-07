@@ -202,12 +202,12 @@ export const LearningCourseStatsTile = (props: {
         {/* buttons */}
         <Flex mt="10px">
 
-            {/* details */}
+            {/* details 
             <EpistoButton
                 style={{ flex: "1" }}>
 
                 Statisztika
-            </EpistoButton>
+            </EpistoButton>*/}
 
             {/* start course */}
             <EpistoButton

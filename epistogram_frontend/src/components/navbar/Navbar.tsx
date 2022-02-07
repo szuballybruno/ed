@@ -10,10 +10,11 @@ import classes from "./navbar.module.scss";
 const Navbar = (props: {
     hideLinks?: boolean,
     showLogo?: boolean,
+    isLowHeight?: boolean,
     backgroundContent?: any
 }) => {
 
-    const { backgroundContent, hideLinks, showLogo } = props;
+    const { backgroundContent, hideLinks, isLowHeight, showLogo } = props;
     const isDesktop = useIsDesktopView();
     const currentCourseItemCode = useCurrentCourseItemCode();
 
@@ -22,6 +23,7 @@ const Navbar = (props: {
         backgroundContent={backgroundContent}
         currentCourseItemCode={currentCourseItemCode?.currentCourseItemCode}
         hideLinks={!!hideLinks}
+        isLowHeight={isLowHeight}
         showLogo={showLogo} />;
 
     // render mobile
@@ -49,7 +51,7 @@ const Navbar = (props: {
         boxShadow="none"
         borderRadius={0}
         bgColor="unset"
-        padding="20px 20px 20px 20px">
+        padding={isLowHeight ? "20px 0 20px 0" : "20px 20px 20px 20px"}>
 
         {isDesktop
             ? renderDesktopNavbar()

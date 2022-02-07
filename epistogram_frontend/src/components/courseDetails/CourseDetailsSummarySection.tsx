@@ -33,13 +33,13 @@ export const CourseDetailsSummarySection = (props: {
             {courseDetails.description}
         </EpistoFont>
 
-        {/* expand more description */}
+        {/* expand more description 
         <EpistoButton
             style={{
                 marginTop: 20
             }}>
             {translatableTexts.courseDetails.summarySection.moreButton}
-        </EpistoButton>
+        </EpistoButton>*/}
 
         {/* skill benefits title */}
         <EpistoHeader

@@ -84,7 +84,12 @@ export const EditUserControl = (props: {
         await saveUserAsync(editedUserDTO);
     }
 
-    return <Box px="20px" flex="1" alignItems={"flex-start"} maxW={500}>
+    return <Box
+        p="0 10px 10px 10px"
+        className="roundBorders"
+        background="var(--transparentWhite70)"
+        flex="1"
+        alignItems={"flex-start"}>
 
         <Flex direction="column">
 

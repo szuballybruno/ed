@@ -111,6 +111,7 @@ export const EditQuestionSubpage = () => {
                 ...(isVideoQuestion
                     ? [
                         applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
+                        applicationRoutes.administrationRoute.coursesRoute.videoStatsRoute,
                         applicationRoutes.administrationRoute.coursesRoute.editVideoQuestionRoute,
                     ]
                     : []),
@@ -121,62 +122,76 @@ export const EditQuestionSubpage = () => {
                     ]
                     : [])
             ]}
-            px="20px"
             onSave={handleSaveQuesitonAsync}>
 
-            <EpistoEntry
-                label="Kérdés szövege"
-                value={questionText}
-                setValue={setQuestionText}
-                isMultiline />
+            <Flex
+                className="roundBorders"
+                mt="5px"
+                p="0 10px 10px 10px"
+                background="var(--transparentWhite70)"
+                direction="column">
+                <EpistoEntry
+                    label="Kérdés szövege"
+                    labelVariant="top"
+                    value={questionText}
+                    setValue={setQuestionText}
+                    isMultiline />
+            </Flex>
+            <Flex
+                className="roundBorders"
+                mt="5px"
+                px="10px"
+                background="var(--transparentWhite70)"
+                direction="column">
 
-            {/* correct answers display */}
-            <FlexList>
-                {correctAnswers
-                    .map(x => <FlexListItem midContent={x.text} />)}
-            </FlexList>
+                {/* correct answers display */}
+                <FlexList>
+                    {correctAnswers
+                        .map(x => <FlexListItem midContent={x.text} />)}
+                </FlexList>
 
-            <Flex direction="column" className="dividerBorderTop">
+                <Flex direction="column" className="dividerBorderTop">
 
-                <EpistoButton
-                    variant="outlined"
-                    onClick={handleAddNewAnswer}
-                    style={{ margin: "10px", alignSelf: "flex-end" }}>
-                    Új válasz hozzáadása
-                </EpistoButton>
+                    <EpistoButton
+                        variant="outlined"
+                        onClick={handleAddNewAnswer}
+                        style={{ margin: "10px", alignSelf: "flex-end" }}>
+                        Új válasz hozzáadása
+                    </EpistoButton>
 
-                <RadioGroup
-                    value={correctAnswer?.id + ""}
-                    onChange={x => {
+                    <RadioGroup
+                        value={correctAnswer?.id + ""}
+                        onChange={x => {
 
-                        const answerId = parseInt(x.currentTarget.value);
-                        setAnswerValues(answerId, true);
-                    }}>
-                    <FlexList >
-                        {answers
-                            .map(answer => <FlexListItem
-                                pr="20px"
-                                midContent={<EpistoEntry
-                                    value={answer.text}
-                                    setValue={value => setAnswerValues(answer.id, undefined, value)} />}
-                                endContent={<Flex>
+                            const answerId = parseInt(x.currentTarget.value);
+                            setAnswerValues(answerId, true);
+                        }}>
+                        <FlexList >
+                            {answers
+                                .map(answer => <FlexListItem
+                                    pr="20px"
+                                    midContent={<EpistoEntry
+                                        value={answer.text}
+                                        setValue={value => setAnswerValues(answer.id, undefined, value)} />}
+                                    endContent={<Flex>
 
-                                    <FormControlLabel
-                                        value={answer.id + ""}
-                                        labelPlacement="start"
-                                        control={<Checkbox
-                                            checked={answer.isCorrect}
-                                            onChange={y => setAnswerValues(answer.id, y.currentTarget.checked)} />}
-                                        label="Helyes válasz" />
+                                        <FormControlLabel
+                                            value={answer.id + ""}
+                                            labelPlacement="start"
+                                            control={<Checkbox
+                                                checked={answer.isCorrect}
+                                                onChange={y => setAnswerValues(answer.id, y.currentTarget.checked)} />}
+                                            label="Helyes válasz" />
 
-                                    <EpistoButton
-                                        onClick={() => handleDeleteAnswer(answer.id)}>
-                                        <Delete className="square30" />
-                                    </EpistoButton>
-                                </Flex>} />)}
-                    </FlexList>
-                </RadioGroup>
+                                        <EpistoButton
+                                            onClick={() => handleDeleteAnswer(answer.id)}>
+                                            <Delete className="square30" />
+                                        </EpistoButton>
+                                    </Flex>} />)}
+                        </FlexList>
+                    </RadioGroup>
+                </Flex>
             </Flex>
         </AdminSubpageHeader>
-    </LoadingFrame>
+    </LoadingFrame >
 }

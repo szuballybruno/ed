@@ -152,13 +152,16 @@ export const AdminCourseDetailsSubpage = () => {
                 onSave={handleSaveCourseAsync}>
 
                 {/* Course edit */}
-                <Flex bgColor="#f9f9f9" direction="row">
+                <Flex direction="row">
 
                     {/* left pane  */}
-                    <Flex direction="column" flex="1" mr="5px" ml="10px">
+                    <Flex direction="column" flex="1" mr="5px">
 
                         {/* details section */}
-                        <EditSection title="Alapadatok">
+                        <EditSection
+                            className="roundBorders"
+                            background="var(--transparentWhite70)"
+                            title="Alapadatok">
 
                             <EpistoLabel text="Borítókép">
                                 <SelectImage
@@ -282,6 +285,8 @@ export const AdminCourseDetailsSubpage = () => {
 
                         {/* requirements section */}
                         <EditSection
+                            className="roundBorders"
+                            background="var(--transparentWhite70)"
                             title="Technikai követelmények"
                             style={{
                                 marginBottom: 50
@@ -304,10 +309,13 @@ export const AdminCourseDetailsSubpage = () => {
                     </Flex>
 
                     {/* right pane  */}
-                    <Flex direction="column" flex="1" mr="10px" ml="5px">
+                    <Flex direction="column" flex="1" ml="5px">
 
                         {/* skill improvements section */}
-                        <EditSection title="Milyen technikai megoladsokat fogsz megtanulni?">
+                        <EditSection
+                            className="roundBorders"
+                            background="var(--transparentWhite70)"
+                            title="Milyen technikai megoladsokat fogsz megtanulni?">
 
                             <SimpleEditList
                                 mt="10px"
@@ -317,7 +325,10 @@ export const AdminCourseDetailsSubpage = () => {
                         </EditSection>
 
                         {/* skill improvements section */}
-                        <EditSection title="Milyen human skilleket fejleszt?">
+                        <EditSection
+                            className="roundBorders"
+                            background="var(--transparentWhite70)"
+                            title="Milyen human skilleket fejleszt?">
 
                             {/* skill improvement description */}
                             <EpistoEntry

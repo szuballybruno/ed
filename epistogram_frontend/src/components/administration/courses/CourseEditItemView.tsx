@@ -1,4 +1,5 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
+import { Equalizer } from "@mui/icons-material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Chip, Typography } from "@mui/material";
@@ -36,11 +37,12 @@ export const CourseEditItemView = (props: {
     index: number,
     item: CourseAdminItemShortDTO,
     editCourseItem: (item: CourseAdminItemShortDTO) => void,
+    showCourseItemStats: (item: CourseAdminItemShortDTO) => void,
     deleteCourseItem: (item: CourseAdminItemShortDTO) => void,
     isShowDivider?: boolean,
 }) => {
 
-    const { moduleIndex, index, item, editCourseItem, deleteCourseItem } = props;
+    const { moduleIndex, index, item, editCourseItem, showCourseItemStats, deleteCourseItem } = props;
     const isVideo = item.type === "video";
 
     const chip = (color: any, label: string) => (
@@ -221,6 +223,11 @@ export const CourseEditItemView = (props: {
                     <EpistoButton
                         onClick={() => editCourseItem(item)}>
                         <EditIcon></EditIcon>
+                    </EpistoButton>
+
+                    <EpistoButton
+                        onClick={() => showCourseItemStats(item)}>
+                        <Equalizer></Equalizer>
                     </EpistoButton>
 
                     <EpistoButton

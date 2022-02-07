@@ -5,11 +5,12 @@ export const ContentPane = (props: {
     noPadding?: boolean,
     navbarBg?: any,
     hideNavbar?: boolean,
+    isNavbarLowHeight?: boolean,
     noMaxWidth?: boolean,
     showLogo?: boolean
 } & FlexProps) => {
 
-    const { noPadding, showLogo, noMaxWidth, navbarBg, hideNavbar, ...css } = props;
+    const { noPadding, showLogo, noMaxWidth, isNavbarLowHeight, navbarBg, hideNavbar, ...css } = props;
 
     return (
         <Flex
@@ -20,10 +21,12 @@ export const ContentPane = (props: {
             direction="column"
             margin="auto"
             overflowY="scroll"
+            overflowX="hidden"
             className="whall"
             {...css}>
 
             {!hideNavbar && <Navbar
+                isLowHeight={isNavbarLowHeight}
                 showLogo={showLogo}
                 backgroundContent={navbarBg} />}
 

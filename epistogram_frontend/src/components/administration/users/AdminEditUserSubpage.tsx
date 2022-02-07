@@ -80,7 +80,12 @@ const AdminEditUserSubpage = () => {
             ]
                 .concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
 
-        <Flex flexWrap="wrap">
+        <Flex
+            className='roundBorders'
+            mt="5px"
+            pb="10px"
+            background="var(--transparentWhite70)"
+            flexWrap="wrap">
 
             <Box flex="1" minWidth="300px">
                 <EditUserControl

@@ -217,36 +217,53 @@ export const EditVideoSubpage = () => {
                 applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
                 applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
                 applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
+                applicationRoutes.administrationRoute.coursesRoute.videoStatsRoute,
             ]}>
 
-            <Flex direction="column" px="20px" className="dividerBorderBottom">
+            <Flex direction="column">
 
                 <HiddenFileUploadInput
                     type="video"
                     ref={videoUploadInputRef}
                     onFileSelected={(file) => setVideoFile(file)} />
 
-                <EditSection title="Általános adatok">
+                <EditSection
+                    className="roundBorders"
+                    background="var(--transparentWhite70)"
+                    title="Általános adatok">
 
                     <EpistoEntry
                         label="Cím"
+                        labelVariant="top"
                         setValue={setVideoTitle}
                         value={videoTitle} />
 
                     <EpistoEntry
                         label="Alcím"
+                        labelVariant="top"
                         setValue={setVideoSubtitle}
                         value={videoSubtitle} />
 
                     <EpistoEntry
                         label="Leírás"
+                        labelVariant="top"
                         setValue={setVideoDescription}
                         value={videoDescription}
                         isMultiline />
 
                 </EditSection>
 
-                <EditSection title="Videó fájl" align="flex-start">
+
+            </Flex>
+
+            <Flex direction="row">
+                <EditSection
+                    flex="1"
+                    mr="5px"
+                    className="roundBorders"
+                    background="var(--transparentWhite70)"
+                    title="Videó fájl">
+
                     <EpistoButton
                         variant="outlined"
                         style={{ margin: "10px 0 10px 0" }}
@@ -266,27 +283,26 @@ export const EditVideoSubpage = () => {
                         label="Videó fájl"
                         disabled
                         value={videoFile?.name ?? ""} />}
-                </EditSection>
-            </Flex>
-
-            <Flex direction="column">
-
-                <Box p="20px">
                     <Slider
                         defaultValue={80}
                         style={{ pointerEvents: "none" }}
                         max={videoLength}
                         value={playedSeconds}
                         marks={marks} />
+                </EditSection>
+                <EditSection
+                    title="Kérdések"
+                    className="roundBorders"
+                    background="var(--transparentWhite70)"
+                    flex="1"
+                    ml="5px"
+                    direction="column">
 
                     <EpistoButton
                         onClick={handleAddNewQuestion}
                         variant="outlined">
                         Kérdés hozzáadása
                     </EpistoButton>
-                </Box>
-
-                <Box minHeight="300px" mb="100px">
                     <FlexList>
                         {questions
                             .map(question => <QuestionItem
@@ -296,8 +312,9 @@ export const EditVideoSubpage = () => {
                                 onDeleted={() => handleDeleteQuestion(question.questionId)}
                                 question={question} />)}
                     </FlexList>
-                </Box>
+
+                </EditSection>
             </Flex>
         </AdminSubpageHeader>
-    </LoadingFrame>
+    </LoadingFrame >
 }
