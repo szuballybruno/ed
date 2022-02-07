@@ -25,7 +25,6 @@ export const VideoStatisticsSubpage = () => {
                 padding="10px"
                 label={value}
                 placement="top"
-                background="grey"
                 zIndex="9999"
                 h="100px"
                 w="200px">
