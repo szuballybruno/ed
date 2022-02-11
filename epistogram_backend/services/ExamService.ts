@@ -124,26 +124,29 @@ export class ExamService {
             .where("e.id = :examId", { examId })
             .getOneOrFail();
 
+        const courseId = examBeforeSave.module!.courseId;
+
         // if this exam was not a final exam previously, 
         // but now it is, set every other exam in the course as non final exam
-        if (dto.isFinalExam && !examBeforeSave.isFinalExam) {
+        if (dto.isFinalExam && examBeforeSave.type !== "final") {
 
             // get all exams in course 
-            const allExamsInCourse = await this._ormService
+            const previousFinalExam = await this._ormService
                 .getRepository(Exam)
                 .createQueryBuilder("e")
                 .leftJoinAndSelect("e.module", "mo")
                 .leftJoinAndSelect("mo.course", "co")
-                .where("co.id = :courseId", { courseId: examBeforeSave.module.courseId })
+                .where("co.id = :courseId", { courseId })
+                .andWhere("e.type = 'final'")
                 .getMany();
 
             // set all exams to non final 
             await this._ormService
                 .getRepository(Exam)
-                .save(allExamsInCourse
+                .save(previousFinalExam
                     .map(x => ({
                         id: x.id,
-                        isFinalExam: false
+                        type: "normal"
                     } as Exam)));
         }
 

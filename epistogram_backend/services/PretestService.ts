@@ -1,5 +1,8 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Exam } from "../models/entity/Exam";
+import { PretestDataDTO } from "../models/shared_models/PretestDataDTO";
+import { CourseView } from "../models/views/CourseView";
+import { ExamService } from "./ExamService";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
@@ -7,15 +10,21 @@ export class PretestService {
 
     private _mapperSerice: MapperService;
     private _ormService: ORMConnectionService;
+    private _examService: ExamService;
 
-    constructor(ormService: ORMConnectionService, mapperSerice: MapperService) {
+    constructor(
+        ormService: ORMConnectionService,
+        mapperSerice: MapperService,
+        examService: ExamService) {
 
         this._ormService = ormService;
         this._mapperSerice = mapperSerice;
+        this._examService = examService;
     }
 
     async getPretestDataAsync(userId: number, courseId: number) {
 
+        // pretest exam 
         const pretestExam = await this._ormService
             .getRepository(Exam)
             .findOneOrFail({
@@ -25,8 +34,10 @@ export class PretestService {
                 }
             });
 
-        // const examDTO =
+        const pretestExamDTO = await this._examService
+            .getExamPlayerDTOAsync(userId, pretestExam.id);
 
+        // answer session
         let answerSession = await this._ormService
             .getRepository(AnswerSession)
             .findOne({
@@ -50,10 +61,20 @@ export class PretestService {
                 .insert(answerSession);
         }
 
+        // course 
+        const course = await this._ormService
+            .getRepository(CourseView)
+            .findOneOrFail({
+                where: {
+                    id: courseId,
+                    userId
+                }
+            });
+
         return {
             answerSessionId: answerSession.id,
-            exam: pretestExam,
-
-        }
+            exam: pretestExamDTO,
+            firstItemCode: course.firstItemCode
+        } as PretestDataDTO;
     }
 }

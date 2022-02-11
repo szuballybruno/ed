@@ -78,7 +78,7 @@ SELECT
 		LEFT JOIN public.exam_latest_success_rate_view elsv
 		ON elsv.user_id = cv.user_id AND elsv.exam_id = ex.id
 		
-		WHERE ex.course_id = cv.id AND ex.is_final_exam = true
+		WHERE ex.course_id = cv.id AND ex.type = 'final'
 	) final_exam_success_rate
 FROM public.course_view cv
 

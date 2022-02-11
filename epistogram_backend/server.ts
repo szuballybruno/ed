@@ -133,7 +133,7 @@ import { PretestService } from './services/PretestService';
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
     const prequizService = new PrequizService(ormConnectionService, mapperService);
-    const pretestService = new PretestService(ormConnectionService, mapperService);
+    const pretestService = new PretestService(ormConnectionService, mapperService, examService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);

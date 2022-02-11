@@ -11,7 +11,7 @@ SELECT
 	e.description description,
 	e.thumbnail_url thumbnail_url,
 	e.order_index order_index,
-	e.is_final_exam is_final_exam,
+	e.type = 'final' is_final_exam,
 	e.course_id course_id,
 	e.module_id module_id,
 	e.retake_limit retake_limit,

@@ -22,11 +22,12 @@ export class PrequizService {
      * 
      * @returns 
      */
-    async getQuestionsAsync() {
+    async getQuestionsAsync(courseId: number) {
 
         const views = await this._ormService
             .getRepository(PrequizQuestionView)
             .createQueryBuilder("pqv")
+            .where("pqv.course_id = :courseId", { courseId })
             .getMany();
 
         const questions = views

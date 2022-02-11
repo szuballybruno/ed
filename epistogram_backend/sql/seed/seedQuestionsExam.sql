@@ -9,7 +9,8 @@ VALUES
     (60, 'Exam question 1', 2, 2), 
     (61, 'Exam question 2', 2, 1),
     (62, 'Exam question 3', 2, 1),
-    (63, 'Excel filal exam / question 1?', 5, 1);
+    (63, 'Excel filal exam / question 1?', 5, 1),
+    (64, 'Pretest question 1', 6, 1);
 
 INSERT INTO public.answer
     (text, is_correct, question_id) 
@@ -28,4 +29,8 @@ VALUES
 
     ('Exam answer 1', false, 63), 
     ('Exam answer 2', false, 63), 
-    ('Exam answer 3 - c', true, 63);
+    ('Exam answer 3 - c', true, 63),
+
+    ('Prequiz q 1 - answer 1', false, 64), 
+    ('Prequiz q 1 - answer 2', false, 64), 
+    ('Prequiz q 1 - answer 3', true, 64);

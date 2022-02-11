@@ -10,7 +10,7 @@ export type ErrorCodeType =
     "passwordInvalid" |
     "unknown" |
     "courseItemNotFound" |
-    "activation_code_issue" | 
+    "activation_code_issue" |
     "email_taken";
 
 // tasks
@@ -33,6 +33,10 @@ export type CoinAcquireReasonType =
     "answer_streak_5" |
     "answer_streak_10" |
     "correct_answer";
+
+export type AnswerSessionType = "signup" | "normal" | "practise" | "pretest";
+
+export type ExamType = "signup" | "normal" | "pretest" | "final";
 
 export type EventType = "coin_acquire_answer_streak" | "coin_acquire_session_streak";
 

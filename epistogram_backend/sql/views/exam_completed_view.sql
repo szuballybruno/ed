@@ -2,7 +2,7 @@ SELECT
 	u.id user_id,
 	e.id exam_id,
 	e.course_id course_id,
-	e.is_final_exam is_final_exam,
+	e.type = 'final' is_final_exam,
 	e.order_index order_index,
 	SUM (asv.is_completed::int) completed_session_count,
 	SUM (asv.is_completed::int) > 0 has_completed_session,
@@ -25,7 +25,7 @@ GROUP BY
 	u.id,
 	e.course_id,
 	e.order_index,
-	e.is_final_exam
+	e.type
 	
 ORDER BY 
 	u.id,

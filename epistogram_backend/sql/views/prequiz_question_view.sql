@@ -1,4 +1,5 @@
 SELECT 
+	pq.course_id course_id,
 	pq.id question_id,
 	pq.text question_text,
 	pq.is_numeric_answer is_numeric_answer,

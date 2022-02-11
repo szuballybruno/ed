@@ -9,7 +9,7 @@ FROM
 	SELECT 
 		u.id user_id,
 		e.id exam_id,
-		e.is_final_exam is_final_exam,
+		e.type type,
 		ase.id answer_session_id,
 		ase.type answer_session_type, 
 		SUM ((ga.is_correct IS NOT DISTINCT FROM true)::INT) correct_given_answer_count,

@@ -14,10 +14,10 @@ import { QuestionAnswer } from "../exam/QuestionAnswer";
 
 export const PrequizSubpage = () => {
 
-    const courseId = useIntParam("courseId");
+    const courseId = useIntParam("courseId")!;
     const showError = useShowErrorDialog();
     const { navigate } = useNavigation();
-    const { questions } = usePrequizQuestions();
+    const { questions } = usePrequizQuestions(courseId);
 
     const paging = usePaging(questions);
     const question = paging.currentItem;

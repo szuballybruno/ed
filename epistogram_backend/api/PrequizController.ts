@@ -12,8 +12,12 @@ export class PrequizController {
 
     getQuestionsAction = async (params: ActionParams) => {
 
+        const courseId = params
+            .getQuery<any>()
+            .getValue(x => x.courseId, "int");
+
         return await this._prequizService
-            .getQuestionsAsync();
+            .getQuestionsAsync(courseId);
     }
 
     getUserAnswerAction = async (params: ActionParams) => {

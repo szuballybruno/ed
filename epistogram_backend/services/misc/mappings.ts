@@ -649,7 +649,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 title: exam.title,
                 courseId: exam.courseId,
                 subTitle: exam.subtitle,
-                isFinalExam: exam.isFinalExam,
+                isFinalExam: exam.type === "final",
                 reatakeLimit: exam.retakeLimit,
                 questions: exam
                     .questions

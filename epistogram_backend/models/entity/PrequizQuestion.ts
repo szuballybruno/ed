@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Course } from "./Course";
 import { PrequizAnswer } from "./PrequizAnswer";
 import { PrequizUserAnswer } from "./PrequizUserAnswer";
 
@@ -11,7 +12,7 @@ export class PrequizQuestion {
     @Column()
     text: string;
 
-    @Column() 
+    @Column()
     isNumericAnswer: boolean;
 
     // answers 
@@ -23,4 +24,12 @@ export class PrequizQuestion {
     @OneToMany(_ => PrequizUserAnswer, x => x.question)
     @JoinColumn()
     userAnswers: PrequizUserAnswer[];
+
+    // course 
+    @Column()
+    courseId: number;
+
+    @JoinColumn({ name: "course_id" })
+    @ManyToOne(_ => Course, x => x.prequizQuestions)
+    course: Course;
 }

@@ -5,6 +5,7 @@ import { CourseStateView } from "../views/CourseStateView";
 import { CourseCategory } from "./CourseCategory";
 import { CourseModule } from "./CourseModule";
 import { Exam } from "./Exam";
+import { PrequizQuestion } from "./PrequizQuestion";
 import { ShopItem } from "./ShopItem";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
@@ -126,4 +127,9 @@ export class Course {
     @ManyToOne(_ => ShopItem, x => x.course)
     @JoinColumn()
     shopItems: ShopItem[];
+
+    // prequiz questions
+    @OneToMany(_ => PrequizQuestion, x => x.course)
+    @JoinColumn()
+    prequizQuestions: PrequizQuestion[];
 }

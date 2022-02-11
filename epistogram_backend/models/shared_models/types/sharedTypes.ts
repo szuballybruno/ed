@@ -36,7 +36,7 @@ export type CoinAcquireReasonType =
 
 export type AnswerSessionType = "signup" | "normal" | "practise" | "pretest";
 
-export type ExamType = "signup" | "normal" | "pretest";
+export type ExamType = "signup" | "normal" | "pretest" | "final";
 
 export type EventType = "coin_acquire_answer_streak" | "coin_acquire_session_streak";
 

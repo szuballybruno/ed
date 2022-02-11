@@ -146,7 +146,7 @@ export const dbSchema = {
     indices: [
         {
             tableName: "exam",
-            name: "exam_is_final_index"
+            name: "exam_final_type_index"
         },
         {
             tableName: "user",

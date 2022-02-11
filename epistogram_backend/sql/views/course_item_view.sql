@@ -43,7 +43,7 @@ LEFT JOIN
 		e.order_index item_order_index,
 		e.title item_title,
 		e.subtitle item_subtitle,
-		e.is_final_exam item_is_final_exam,
+		e.type = 'final' item_is_final_exam,
 		(SELECT encode((e.id || '@exam')::bytea, 'base64')) item_code
 	FROM public.exam e
 ) sq

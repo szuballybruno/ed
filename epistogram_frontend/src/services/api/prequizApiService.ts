@@ -4,9 +4,9 @@ import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe } from "../core/httpClient";
 
-export const usePrequizQuestions = () => {
+export const usePrequizQuestions = (courseId: number) => {
 
-    const qr = useReactQuery2<PrequizQuestionDTO[]>(apiRoutes.prequiz.getQuestions);
+    const qr = useReactQuery2<PrequizQuestionDTO[]>(apiRoutes.prequiz.getQuestions, { courseId });
 
     return {
         questions: qr.data ?? [],

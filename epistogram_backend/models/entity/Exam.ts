@@ -29,9 +29,6 @@ export class Exam {
     @Column({ nullable: true })
     orderIndex: number;
 
-    @Column({ default: false })
-    isFinalExam: boolean;
-
     @Column({ type: "integer", nullable: true })
     retakeLimit: number | null;
 
