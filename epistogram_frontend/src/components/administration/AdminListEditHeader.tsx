@@ -26,7 +26,8 @@ export const AdminListEditHeader = (props: {
     const selectionCount = selectedIdsNullSafe.length;
 
     return <Flex
-        bg="var(--deepBlue)"
+        bg="var(--transparentWhite70)"
+        className="roundBorders"
         direction="row"
         justifyContent="space-between"
         alignItems="center"
@@ -49,7 +50,7 @@ export const AdminListEditHeader = (props: {
                         value={!!isAllSelected} />
 
                     <EpistoFont
-                        style={{ marginLeft: "20px" }}>
+                        style={{ marginLeft: "20px", color: "black" }}>
 
                         Összes kijelölése
                     </EpistoFont>
@@ -67,7 +68,7 @@ export const AdminListEditHeader = (props: {
                 <div className="h-flex align-center fontLight">
 
                     <EpistoFont
-                        style={{ marginLeft: "20px" }}>
+                        style={{ marginLeft: "20px", color: "black" }}>
 
                         {`${selectionCount} ${itemLabel} kijelölve`}
                     </EpistoFont>

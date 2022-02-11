@@ -21,6 +21,7 @@ import { EmailService } from "./EmailService";
 import { FileService } from "./FileService";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { UrlService } from "./UrlService";
 
 export class ShopService {
 
@@ -30,6 +31,7 @@ export class ShopService {
     private _courseService: CourseService;
     private _emailService: EmailService;
     private _fileService: FileService;
+    private _urlService: UrlService;
 
     constructor(
         ormService: ORMConnectionService,
@@ -37,7 +39,8 @@ export class ShopService {
         coinTransactionService: CoinTransactionService,
         courseService: CourseService,
         emailService: EmailService,
-        fileService: FileService) {
+        fileService: FileService,
+        urlService: UrlService) {
 
         this._courseService = courseService;
         this._ormService = ormService;
@@ -45,6 +48,7 @@ export class ShopService {
         this._coinTransactionService = coinTransactionService;
         this._emailService = emailService;
         this._fileService = fileService;
+        this._urlService = urlService;
     }
 
     async getShopItemsAsync(userId: number) {
@@ -76,21 +80,29 @@ export class ShopService {
             .getRepository(ShopItem)
             .findOneOrFail(shopItemId);
 
+        const shopItemView = await this._ormService
+            .getRepository(ShopItemView)
+            .findOneOrFail({
+                where: {
+                    id: shopItemId
+                }
+            });
+
         await this._coinTransactionService
             .makeCoinTransactionAsync({
-                amount: 0 - shopItem.coinPrice,
+                amount: 0 - shopItemView.coinPrice,
                 userId,
-                shopItemId: shopItem.id
+                shopItemId: shopItemView.id
             });
 
         // unlock course 
-        if (shopItem.courseId) {
+        if (shopItemView.courseId) {
 
             await this._courseService
-                .createCourseAccessBridge(userId, shopItem.courseId);
+                .createCourseAccessBridge(userId, shopItemView.courseId);
 
             const firstItemCode = await this._courseService
-                .getFirstItemCodeById(userId, shopItem.courseId);
+                .getFirstItemCodeById(userId, shopItemView.courseId);
 
             return {
                 firstItemCode: firstItemCode,
@@ -124,7 +136,12 @@ export class ShopService {
                 .findOneOrFail(userId);
 
             await this._emailService
-                .sendDiscountCodePurchasedMailAsync(user, discountCode.code);
+                .sendDiscountCodePurchasedMailAsync(
+                    user.email,
+                    discountCode.code,
+                    shopItemView.name,
+                    shopItem.detailsUrl + "",
+                    this._urlService.getAssetUrl(shopItemView.coverFilePath));
 
             return {
                 firstItemCode: null,

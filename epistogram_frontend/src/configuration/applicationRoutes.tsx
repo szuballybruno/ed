@@ -162,7 +162,7 @@ export const applicationRoutes = {
         usersRoute: {
             title: translatableTexts.routeTitles.administrationUserAdmin,
             route: "/administration/users",
-            icon: <Person color={"secondary"} />,
+            icon: <Person className="fontXXL" color={"secondary"} />,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationAddUser,
@@ -188,7 +188,7 @@ export const applicationRoutes = {
         coursesRoute: {
             title: translatableTexts.routeTitles.administrationCourseAdmin,
             route: "/administration/courses",
-            icon: <Subscriptions color={"secondary"} />,
+            icon: <Subscriptions className="fontXXL" color={"secondary"} />,
             exact: true,
 
             addRoute: {
@@ -216,6 +216,10 @@ export const applicationRoutes = {
                 route: "/administration/courses/:courseId/video/:videoId",
                 exact: true,
             },
+            videoStatsRoute: {
+                title: translatableTexts.routeTitles.administrationVideoStatistics,
+                route: "/administration/courses/:courseId/video/:videoId/stats"
+            },
             editVideoQuestionRoute: {
                 title: translatableTexts.routeTitles.administrationEditQuestion,
                 route: "/administration/courses/:courseId/video/:videoId/question/:questionId"
@@ -238,7 +242,7 @@ export const applicationRoutes = {
         shopRoute: {
             title: translatableTexts.routeTitles.administrationShopMain,
             route: "/administration/shop",
-            icon: <ShoppingCartIcon color={"secondary"} />,
+            icon: <ShoppingCartIcon className="fontXXL" color={"secondary"} />,
             exact: true,
 
             addRoute: {
@@ -255,7 +259,7 @@ export const applicationRoutes = {
         personalityAssessmentRoute: {
             title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
             route: "/administration/personality-assessment",
-            icon: <SupervisedUserCircleIcon color={"secondary"} />,
+            icon: <SupervisedUserCircleIcon className="fontXXL" color={"secondary"} />,
             exact: true,
 
             editTips: {
@@ -273,7 +277,7 @@ export const applicationRoutes = {
         myCompanyRoute: {
             title: "Céges statisztika",
             route: "/administration/mycompany",
-            icon: <Business color={"secondary"} />,
+            icon: <Business className="fontXXL" color={"secondary"} />,
             exact: true
         },
     },

@@ -85,7 +85,7 @@ export const AdminUserTeacherInfoSubpage = () => {
     }
 
     return (
-        <Flex flex="1" direction="column" bgColor="white" maxW="100%">
+        <Flex flex="1" direction="column" maxW="100%">
 
             {/* admin header */}
             <AdminSubpageHeader
@@ -96,11 +96,13 @@ export const AdminUserTeacherInfoSubpage = () => {
                 ]}>
 
                 <Flex
-                    px="20px"
                     flex="1"
                     direction="column"
                     width="100%"
-                    maxW={900}>
+                    mt="5px"
+                    className="roundBorders"
+                    p="0 10px 10px 10px"
+                    background="var(--transparentWhite70)">
 
                     {/* Teacher skills */}
                     <EpistoEntry

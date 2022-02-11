@@ -13,13 +13,14 @@ export const AdminUserStatisticsSubpage = () => {
     const { userEditData } = useEditUserData(userId);
 
     return (
-        <Flex flex="1" direction="column" bgColor="white" maxW="100%">
+        <Flex flex="1" direction="column" maxW="100%">
 
             {/* admin header */}
             <AdminSubpageHeader tabMenuItems={[
                 applicationRoutes.administrationRoute.usersRoute.editRoute,
                 applicationRoutes.administrationRoute.usersRoute.statsRoute
             ].concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
+
 
                 <LearningStatistics userId={userId} />
 

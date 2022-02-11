@@ -86,6 +86,7 @@ const HomePage = () => {
                             title={translatableTexts.homePage.practiseTitle}
                             background="var(--transparentIntenseBlue)"
                             className="largeSoftShadow roundBorders"
+                            //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
                             color="white"
                             showDivider
                             minHeight="200px"
@@ -102,6 +103,7 @@ const HomePage = () => {
                             borderRadius="6px"
                             showDivider
                             className="largeSoftShadow"
+                            //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
                             minHeight="30px"
                             m="0 0 10px 5px"
                             flex="2 2 300px">

@@ -1,8 +1,7 @@
 import { Grid } from "@chakra-ui/layout";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
-import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
 import { QuestionTypeEnum } from "../../models/shared_models/types/sharedTypes";
 import { useSaveExamAnswer } from "../../services/api/examApiService";
 import { useShowErrorDialog } from "../../services/core/notifications";
@@ -11,7 +10,6 @@ import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "../controls/EpistoFont";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { ExamLayout } from "./ExamLayout";
-import { ExamLayoutContent } from "./ExamLayoutContent";
 import { QuestionAnswer } from "./QuestionAnswer";
 
 export const ExamQuestions = (props: {
@@ -102,30 +100,64 @@ export const ExamQuestions = (props: {
             nextButtonTitle={translatableTexts.exam.nextQuestion}
             progressValue={progressPercentage}>
 
-            <ExamLayoutContent
-                title={currentQuestion.questionText}>
+            <Flex
+                direction={"column"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                width={"80%"}
+                flex={1}>
 
-                <Grid
-                    templateColumns="repeat(2, 1fr)"
-                    gridAutoRows="minmax(0,1fr)"
-                    direction="column"
-                    gridGap="10px"
-                    flex="1">
+                <Flex
+                    p="20px"
+                    align="center">
 
-                    {currentQuestion
-                        .answers
-                        .map((answer, index) => {
+                    <img
+                        style={{
+                            borderRadius: "50%",
+                            padding: "8px",
+                            width: "50px",
+                            height: "50px",
+                            marginRight: "30px"
+                        }}
+                        alt=""
+                        src="https://static.thenounproject.com/png/92068-200.png"
+                        className="tinyShadow" />
 
-                            const isAnswerSelected = selectedAnswerIds
-                                .some(x => x === answer.answerId);
+                    <Text
+                        as="text"
+                        fontSize="1.3rem">
+                        {currentQuestion.questionText}
+                    </Text>
+                </Flex>
 
-                            return <QuestionAnswer
-                                onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
-                                answerText={answer.answerText}
-                                isSelected={isAnswerSelected} />
-                        })}
-                </Grid>
-            </ExamLayoutContent>
+                {/* answers */}
+                <Flex
+                    direction={"row"}
+                    justifyContent={"center"}
+                    pt={10}
+                    width="100%"
+                    mx={200}>
+
+                    <Grid
+                        templateColumns="repeat(2, 1fr)"
+                        gridAutoRows="minmax(0,1fr)"
+                        gridGap="10px">
+
+                        {currentQuestion
+                            .answers
+                            .map((answer, index) => {
+
+                                const isAnswerSelected = selectedAnswerIds
+                                    .some(x => x === answer.answerId);
+
+                                return <QuestionAnswer
+                                    onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
+                                    answerText={answer.answerText}
+                                    isSelected={isAnswerSelected} />
+                            })}
+                    </Grid>
+                </Flex>
+            </Flex>
         </ExamLayout>
     </LoadingFrame>
 }

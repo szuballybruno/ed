@@ -46,7 +46,8 @@ export const PersonalityChart = (props: {
             ],
             orient: "horizontal",
             icon: "circle",
-            itemHeight: 30,
+            itemHeight: 10,
+            top: 10,
             textStyle: {
                 fontWeight: "700",
                 color: "black"

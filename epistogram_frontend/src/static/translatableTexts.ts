@@ -201,13 +201,14 @@ export const translatableTexts = {
         administrationCourseStatistics: "Statisztika",
         administrationAddVideo: "Videó hozzáadása",
         administrationEditVideo: "Videó szerkesztése",
+        administrationVideoStatistics: "Videó statisztikája",
         administrationEditExam: "Vizsga szerkesztése",
         administrationEditQuestion: "Kerdes szerkesztése",
         administrationEditModule: "Modul szerkesztése",
 
-        administrationShopMain: "Shop adminisztracio",
-        administrationShopAdd: "Shop item hozzaaadasa",
-        administrationShopEdit: "Shop item szerkesztese",
+        administrationShopMain: "Shop adminisztráció",
+        administrationShopAdd: "Shop item hozzáadása",
+        administrationShopEdit: "Shop item szerkesztése",
 
         administrationAddGroup: "Csoport hozzáadása",
         administrationEditGroup: "Csoport szerkesztése",

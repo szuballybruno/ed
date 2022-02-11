@@ -82,18 +82,24 @@ export class EmailService {
         await this.sendMailAsync(epistoEmail);
     }
 
-    sendDiscountCodePurchasedMailAsync = async (user: User, discountCode: string) => {
-
-        const { email, firstName, lastName } = user;
+    sendDiscountCodePurchasedMailAsync = async (
+        toEmail: string,
+        discountCode: string,
+        itemName: string,
+        detailsUrl: string,
+        itemCoverUrl: string) => {
 
         const epistoEmail = {
-            to: email,
-            subject: "Bonusz kod megveve",
+            to: toEmail,
+            subject: "Bónusz kód megvéve",
             template: {
                 name: "discountCodePurchasedMailTemplate",
                 params: {
                     epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
-                    discountCode
+                    discountCode: discountCode,
+                    itemCoverUrl: itemCoverUrl,
+                    itemName: itemName,
+                    detailsUrl: detailsUrl
                 }
             }
         } as EpistoEmail;

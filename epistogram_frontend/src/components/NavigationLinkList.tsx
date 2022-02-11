@@ -5,7 +5,7 @@ import { isCurrentRoute } from "../static/frontendHelpers";
 import { ApplicationRoute } from "../models/types";
 import { EpistoFont } from "./controls/EpistoFont";
 
-export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
+export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?: boolean }) => {
 
     const { items } = props;
 
@@ -28,7 +28,7 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
                         {menuItem.icon}
 
                         {/* text */}
-                        <EpistoFont
+                        {!props.isNoText && <EpistoFont
                             fontSize="fontSmallPlus"
                             isUppercase
                             style={{
@@ -37,7 +37,7 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
                                 fontWeight: isCurrent ? "bold" : 500
                             }}>
                             {menuItem.title}
-                        </EpistoFont>
+                        </EpistoFont>}
 
                     </Flex>
                 </NavLink>

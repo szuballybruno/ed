@@ -6,7 +6,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 const CourseStatisticsSubpage = () => {
 
     return (
-        <Flex flex="1" direction="column" bgColor="white" maxW="100%">
+        <Flex flex="1" direction="column" maxW="100%">
 
             {/* admin header */}
             <AdminSubpageHeader

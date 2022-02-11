@@ -29,6 +29,7 @@ export const StatsSummary = () => {
         {/* chart item  */}
         <FlexFloat
             background="var(--transparentWhite70)"
+            //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
             direction="column"
             p="10px"
             minWidth={250}

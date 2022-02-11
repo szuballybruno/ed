@@ -29,11 +29,12 @@ const menuItems = [
 const DesktopNavbar = (props: {
     currentCourseItemCode: string | null,
     hideLinks: boolean,
+    isLowHeight?: boolean,
     showLogo?: boolean,
     backgroundContent?: any
 }) => {
 
-    const { backgroundContent, showLogo, currentCourseItemCode } = props;
+    const { backgroundContent, showLogo, isLowHeight, currentCourseItemCode } = props;
     const { navigateToPlayer, navigate } = useNavigation();
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
@@ -98,9 +99,9 @@ const DesktopNavbar = (props: {
             align="center"
             width="100%"
             flex="1"
-            height="60px"
-            mt="10px"
-            mb="10px"
+            height={isLowHeight ? "40px" : "60px"}
+            mt={isLowHeight ? undefined : "10px"}
+            mb={isLowHeight ? undefined : "10px"}
             bg={backgroundContent}
             justify={hideLinks ? "center" : "space-between"}>
 
@@ -205,7 +206,10 @@ const DesktopNavbar = (props: {
                         </Flex>}
 
                     {/* shop and notification buttons */}
-                    <Flex pr="10px" align="center" mr="15px">
+                    <Flex
+                        pr={isLowHeight ? 0 : "10px"}
+                        align="center"
+                        mr={isLowHeight ? 0 : "15px"}>
 
                         {/* shop button */}
                         <EpistoButton

@@ -204,7 +204,11 @@ export const AdminUserListSubpage = () => {
             <EpistoDialog logic={deleteWaningDialogLogic} />
 
             {/* user list */}
-            <FlexList className="whall">
+            <FlexList
+                background="var(--transparentWhite70)"
+                className="whall roundBorders"
+                mt="5px">
+
                 {users
                     .map((user, index) => {
 
@@ -215,7 +219,6 @@ export const AdminUserListSubpage = () => {
                                 lastName={user.lastName}
                                 firstName={user.firstName}
                                 className="square70" />}
-                            background="white"
                             setIsChecked={x => setSelectedUser(user.id, x)}
                             isChecked={selectedUserIds.some(x => x === user.id)}
                             midContent={<FlexListTitleSubtitle

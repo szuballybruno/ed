@@ -8,7 +8,7 @@ import { EpistoEntry } from "../../controls/EpistoEntry"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
 import { useModuleEditData, useSaveModule } from "../../../services/api/moduleApiService"
 import { SelectImage } from "../../universal/SelectImage"
-import { Image } from "@chakra-ui/react";
+import { Flex, Image } from "@chakra-ui/react";
 import { EpistoLabel } from "../../controls/EpistoLabel"
 
 export const EditModuleSubpage = () => {
@@ -64,32 +64,39 @@ export const EditModuleSubpage = () => {
                 applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
                 applicationRoutes.administrationRoute.coursesRoute.editModuleRoute
             ]}
-            px="20px"
             onSave={handleSaveModuleAsync}>
 
-            <EpistoLabel text="Udvozlo kep">
-                <SelectImage
-                    width="300px"
-                    height="200px"
-                    setImageSource={setMoudleImageSource}
-                    setImageFile={setMoudleImageFile}>
-                    <Image
-                        className="whall"
-                        objectFit="cover"
-                        src={moduleImageSource ?? ""} />
-                </SelectImage>
-            </EpistoLabel>
+            <Flex
+                className="roundBorders"
+                background="var(--transparentWhite70)"
+                mt="5px"
+                p="0 10px 10px 10px"
+                direction="column">
 
-            <EpistoEntry
-                label="Modul neve"
-                value={moduleName}
-                setValue={setModuleName} />
+                <EpistoLabel text="Üdvözlő kép">
+                    <SelectImage
+                        width="300px"
+                        height="200px"
+                        setImageSource={setMoudleImageSource}
+                        setImageFile={setMoudleImageFile}>
+                        <Image
+                            className="whall"
+                            objectFit="cover"
+                            src={moduleImageSource ?? ""} />
+                    </SelectImage>
+                </EpistoLabel>
 
-            <EpistoEntry
-                label="Modul leirasa"
-                value={moduleDescription}
-                setValue={setModuleDescription}
-                isMultiline />
+                <EpistoEntry
+                    label="Modul neve"
+                    value={moduleName}
+                    setValue={setModuleName} />
+
+                <EpistoEntry
+                    label="Modul leírása"
+                    value={moduleDescription}
+                    setValue={setModuleDescription}
+                    isMultiline />
+            </Flex>
 
         </AdminSubpageHeader>
     </LoadingFrame>

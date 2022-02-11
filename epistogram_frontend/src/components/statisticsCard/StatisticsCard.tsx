@@ -27,6 +27,7 @@ const StatisticsCard = (props: {
         background="var(--transparentWhite70)"
         gridColumn={props.chartSize === "large" ? "1 / -1" : (isOpen ? "span 2" : "unset")} // do not remove!!
         gridRow={props.chartSize === "large" ? "span 2" : (isOpen ? "span 2" : "unset")} // do not remove!!
+        //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
         direction="column"
         minWidth={250}
         position="relative"

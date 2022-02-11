@@ -153,7 +153,7 @@ export const AdminCourseListSubpage = () => {
                 itemLabel="kurzus" />
 
             {/* List of courses */}
-            <FlexList flex={1} pb="300px">
+            <FlexList flex={1} pb="300px" mt="5px" className="roundBorders" background="var(--transparentWhite70)">
                 {courses
                     .map(course => {
 

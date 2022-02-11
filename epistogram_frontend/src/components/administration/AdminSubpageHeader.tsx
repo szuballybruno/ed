@@ -60,7 +60,7 @@ export const AdminSubpageHeader = (props: {
     }) => {
 
         const Content = () => <Flex>
-            {props.iconComponent && <Flex width={27} height="100%" p={2}>
+            {props.iconComponent && <Flex width={27} height="100%" m={"2px 10px 2px 2px"}>
                 {props.iconComponent}
             </Flex>}
 
@@ -104,11 +104,9 @@ export const AdminSubpageHeader = (props: {
         {/* breadcrumbs */}
         <Flex
             direction={"row"}
-            height={60}
-            pl={20}
-            bg="white"
-            align={"center"}
-            className="dividerBorderBottom">
+            height={40}
+            mb="10px"
+            align={"center"}>
 
             {/* breadcrumbds */}
             <Breadcrumbs>
@@ -127,9 +125,9 @@ export const AdminSubpageHeader = (props: {
         {/* tabs */}
         {(tabMenuItems || onSave) && (
             <Flex
-                bg="white"
-                px="20px"
-                className="dividerBorderBottom"
+                className="roundBorders"
+                bg="var(--transparentWhite70)"
+                px="5px"
                 flexDirection="row"
                 alignItems="center"
                 justify={"space-between"}

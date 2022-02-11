@@ -61,6 +61,7 @@ export const AdminCourseContentSubpage = () => {
 
     // nav
     const courseRoutes = applicationRoutes.administrationRoute.coursesRoute;
+    const navToVideoStats = (videoId: number) => navigate(courseRoutes.videoStatsRoute.route, { courseId, videoId });
     const navToVideoEdit = (videoId: number) => navigate(courseRoutes.editVideoRoute.route, { courseId, videoId });
     const navToExamEdit = (examId: number) => navigate(courseRoutes.editExamRoute.route, { courseId, examId });
 
@@ -129,6 +130,11 @@ export const AdminCourseContentSubpage = () => {
 
             navToVideoEdit(courseItem.id);
         }
+    }
+
+    const handleCourseItemStatistics = (courseItem: CourseAdminItemShortDTO) => {
+        if (courseItem.type === "video")
+            navToVideoStats(courseItem.id)
     }
 
     // adds a course item,
@@ -387,7 +393,9 @@ export const AdminCourseContentSubpage = () => {
             <Flex
                 flex="1"
                 direction={"column"}
-                px={10}>
+                className="roundBorders"
+                background="var(--transparentWhite70)"
+                mt="5px">
 
                 <DragAndDropContext onDragEnd={onDragEnd}>
                     <DropZone zoneId="zone-root" groupId="root">
@@ -450,6 +458,7 @@ export const AdminCourseContentSubpage = () => {
                                                         <EditIcon />
                                                     </EpistoButton>
 
+
                                                     {/* delete module */}
                                                     <EpistoButton
                                                         onClick={() => handleDeleteModule(module)}>
@@ -458,7 +467,7 @@ export const AdminCourseContentSubpage = () => {
                                                 </Flex>
                                             </Flex>
                                         </Flex>}>
-                                            
+
                                         <DropZone
                                             width="100%"
                                             my="5px"
@@ -479,6 +488,7 @@ export const AdminCourseContentSubpage = () => {
                                                             index={itemIndex}
                                                             item={item}
                                                             deleteCourseItem={handleDeleteCourseItemAsync}
+                                                            showCourseItemStats={handleCourseItemStatistics}
                                                             editCourseItem={handleEditCourseItem}
                                                             isShowDivider={itemIndex + 1 < module.items.length} />
                                                     </DragItem>
