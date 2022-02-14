@@ -75,7 +75,7 @@ export class PlayerService {
 
         // set current course 
         await this._courseService
-            .setCurrentCourse(userId, courseId, validItemCode);
+            .setCurrentCourse(userId, courseId, "watch", validItemCode);
 
         // course items 
         const modules = await this._courseService

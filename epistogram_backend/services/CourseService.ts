@@ -14,7 +14,7 @@ import { CourseLearningDTO } from "../models/shared_models/CourseLearningDTO";
 import { CourseProgressShortDTO } from "../models/shared_models/CourseProgressShortDTO";
 import { ModuleDTO } from "../models/shared_models/ModuleDTO";
 import { TextDTO } from "../models/shared_models/TextDTO";
-import { CourseModeType } from "../models/shared_models/types/sharedTypes";
+import { CourseModeType, CourseStageNameType } from "../models/shared_models/types/sharedTypes";
 import { UserCoursesDataDTO } from "../models/shared_models/UserCoursesDataDTO";
 import { CourseAdminContentView } from "../models/views/CourseAdminContentView";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
@@ -111,7 +111,7 @@ export class CourseService {
 
     async getCourseDetailsAsync(userId: number, courseId: number) {
 
-        const view = await this._ormService
+        const courseDetailsView = await this._ormService
             .getRepository(CourseDetailsView)
             .createQueryBuilder("cdv")
             .where("cdv.courseId = :courseId", { courseId })
@@ -125,7 +125,7 @@ export class CourseService {
             .getMany();
 
         return this._mapperService
-            .map(CourseDetailsView, CourseDetailsDTO, view, moduleViews);
+            .map(CourseDetailsView, CourseDetailsDTO, courseDetailsView, moduleViews);
     }
 
     async createCourseAsync(dto: CreateCourseDTO) {
@@ -387,34 +387,6 @@ export class CourseService {
     }
 
     /**
-     * Starts the first module of a course.
-     * 
-     * @param userId 
-     * @param courseId 
-     * @returns 
-     */
-    async startCourseAsync(userId: number, courseId: number) {
-
-        const module = await this._ormService
-            .getRepository(CourseModule)
-            .findOne({
-                where: {
-                    courseId,
-                    orderIndex: 0
-                }
-            });
-
-        const moduleCode = module ? getItemCode(module.id, "module") : null;
-
-        if (moduleCode)
-            await this.setCurrentCourse(userId, courseId, moduleCode);
-
-        return {
-            text: moduleCode
-        } as TextDTO;
-    }
-
-    /**
      * Set current course and course current item code.
      * 
      * @param userId 
@@ -424,7 +396,8 @@ export class CourseService {
     setCurrentCourse = async (
         userId: number,
         courseId: number,
-        itemCode: string) => {
+        stageName: CourseStageNameType,
+        itemCode: string | null) => {
 
         const currentCourseBridge = await this._userCourseBridgeService
             .getUserCourseBridgeAsync(userId, courseId);
@@ -438,7 +411,9 @@ export class CourseService {
                     courseId: courseId,
                     userId: userId,
                     courseMode: "advanced",
-                    currentItemCode: itemCode
+                    currentItemCode: itemCode,
+                    stageName,
+                    isCurrent: true
                 } as UserCourseBridge);
         }
 
@@ -449,7 +424,9 @@ export class CourseService {
                 .getRepository(UserCourseBridge)
                 .save({
                     id: currentCourseBridge.id,
-                    currentItemCode: itemCode
+                    currentItemCode: itemCode,
+                    stageName,
+                    isCurrent: true
                 } as UserCourseBridge);
         }
 

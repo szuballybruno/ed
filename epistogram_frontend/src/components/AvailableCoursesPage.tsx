@@ -1,21 +1,22 @@
 import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
-import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { Select, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router";
-import { useStartCourse, useUserCourses } from "../services/api/courseApiService";
+import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
+import { useUserCourses } from "../services/api/courseApiService";
 import { useNavigation } from "../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../services/core/notifications";
+import { useShowErrorDialog } from "../services/core/notifications";
 import { distinct } from "../static/frontendHelpers";
 import { translatableTexts } from "../static/translatableTexts";
 import { ContentPane } from "./ContentPane";
+import { EpistoButton } from "./controls/EpistoButton";
+import { EpistoFont } from "./controls/EpistoFont";
+import { EpistoGrid } from "./controls/EpistoGrid";
 import { LeftPane } from "./LeftPane";
 import { PageRootContainer } from "./PageRootContainer";
 import { LoadingFrame } from "./system/LoadingFrame";
 import CourseTile from "./universal/CourseTile";
-import { EpistoButton } from "./controls/EpistoButton";
-import { EpistoGrid } from "./controls/EpistoGrid";
 import { EpistoSearch } from "./universal/EpistoSearch";
-import { EpistoFont } from "./controls/EpistoFont";
 
 const AvailableCoursesPage = () => {
 
@@ -27,9 +28,8 @@ const AvailableCoursesPage = () => {
     const [isRecommended, setIsRecommended] = React.useState(false);
 
     const { courses, coursesState, coursesError } = useUserCourses();
-    const { startCourseAsync, startCourseState } = useStartCourse();
 
-    const { navigate, navigateToPlayer, navigateToCourseDetails } = useNavigation();
+    const { playCourse, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
@@ -44,37 +44,14 @@ const AvailableCoursesPage = () => {
     const categoryOptions = distinct(courses
         .map((course, index) => course.subCategoryName));
 
-    const navigateToDetailsPage = (courseId: number, currentItemDescriptior: string | null) => {
+    const navigateToDetailsPage = (course: CourseShortDTO) => {
 
-        navigateToCourseDetails(courseId, currentItemDescriptior ?? undefined);
+        navigateToCourseDetails(course.courseId, course.currentItemCode ?? undefined);
     }
 
-    const playCourse = async (courseId: number, currentItemDescriptior: string | null) => {
+    const handlePlayCourse = async (course: CourseShortDTO) => {
 
-        try {
-
-            if (currentItemDescriptior) {
-
-                navigateToPlayer(currentItemDescriptior);
-            }
-            else {
-
-                const { text: firstItemDescriptor } = await startCourseAsync(courseId);
-
-                if (firstItemDescriptor) {
-
-                    navigateToPlayer(firstItemDescriptor);
-                }
-                else {
-
-                    showNotification(translatableTexts.availableCourses.couldNotStartCourse, "warning");
-                }
-            }
-        }
-        catch (e) {
-
-            showError(e);
-        }
+        playCourse(course.courseId, course.stageName, course.currentItemCode);
     }
 
     return <PageRootContainer>
@@ -227,7 +204,9 @@ const AvailableCoursesPage = () => {
                 </Flex>
 
                 {/* courses */}
-                <LoadingFrame loadingState={[coursesState, startCourseState]} error={[coursesError]}>
+                <LoadingFrame
+                    loadingState={[coursesState]}
+                    error={[coursesError]}>
 
                     <Box id="scrollContainer" className="whall">
 
@@ -247,14 +226,14 @@ const AvailableCoursesPage = () => {
 
                                                 {/* details */}
                                                 <EpistoButton
-                                                    onClick={() => navigateToDetailsPage(course.courseId, course.firstItemCode)}
+                                                    onClick={() => navigateToDetailsPage(course)}
                                                     style={{ flex: "1" }}>
                                                     {translatableTexts.availableCourses.courseDataSheet}
                                                 </EpistoButton>
 
                                                 {/* start course */}
                                                 <EpistoButton
-                                                    onClick={() => playCourse(course.courseId, course.firstItemCode)}
+                                                    onClick={() => handlePlayCourse(course)}
                                                     variant="colored"
                                                     style={{ flex: "1" }}>
 

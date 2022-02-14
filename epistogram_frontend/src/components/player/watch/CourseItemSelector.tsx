@@ -2,16 +2,16 @@ import { Flex } from '@chakra-ui/layout';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useContext, useRef, useState } from 'react';
-import { ModuleDTO } from '../../models/shared_models/ModuleDTO';
-import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
-import { httpPostAsync } from "../../services/core/httpClient";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoPopper } from '../controls/EpistoPopper';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
-import { CourseItemList } from "../universal/CourseItemList";
+import { ModuleDTO } from '../../../models/shared_models/ModuleDTO';
+import { CourseModeType } from "../../../models/shared_models/types/sharedTypes";
+import { httpPostAsync } from "../../../services/core/httpClient";
+import { useShowErrorDialog } from "../../../services/core/notifications";
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoPopper } from '../../controls/EpistoPopper';
+import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { CourseItemList } from "../../universal/CourseItemList";
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,

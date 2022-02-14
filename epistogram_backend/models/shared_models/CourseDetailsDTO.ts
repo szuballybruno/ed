@@ -1,6 +1,6 @@
 import { HumanSkillBenefitDTO } from "./HumanSkillBenefitDTO";
 import { ModuleShortDTO } from "./ModuleShortDTO";
-import { CourseVisibilityType, TeacherBadgeNameType } from "./types/sharedTypes";
+import { CourseStageNameType, CourseVisibilityType, TeacherBadgeNameType } from "./types/sharedTypes";
 
 export class CourseDetailsDTO {
     title: string;
@@ -18,6 +18,8 @@ export class CourseDetailsDTO {
     language: string;
     visibility: CourseVisibilityType;
     humanSkillBenefitsDescription: string;
+    stageName: CourseStageNameType;
+    currentItemCode: string;
     teacherData: {
         teacherFirstName: string;
         teacherLastName: string;

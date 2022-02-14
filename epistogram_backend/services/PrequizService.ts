@@ -3,6 +3,7 @@ import { PrequizAnswerDTO } from "../models/shared_models/PrequizAnswerDTO";
 import { PrequizQuestionDTO } from "../models/shared_models/PrequizQuestionDTO";
 import { PrequizUserAnswerDTO } from "../models/shared_models/PrequizUserAnswerDTO";
 import { PrequizQuestionView } from "../models/views/PrequizQuestionView";
+import { CourseService } from "./CourseService";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
@@ -10,11 +11,16 @@ export class PrequizService {
 
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
+    private _courseService: CourseService;
 
-    constructor(ormService: ORMConnectionService, mapperService: MapperService) {
+    constructor(
+        ormService: ORMConnectionService,
+        mapperService: MapperService,
+        courseService: CourseService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
+        this._courseService = courseService;
     }
 
     /**
@@ -22,8 +28,13 @@ export class PrequizService {
      * 
      * @returns 
      */
-    async getQuestionsAsync(courseId: number) {
+    async getQuestionsAsync(userId: number, courseId: number) {
 
+        // set course as started, and stage to prequiz
+        await this._courseService
+            .setCurrentCourse(userId, courseId, "prequiz", null)
+
+        // 
         const views = await this._ormService
             .getRepository(PrequizQuestionView)
             .createQueryBuilder("pqv")

@@ -122,7 +122,6 @@ export const apiRoutes = {
         saveCourseDetails: '/course/save-course-details-data',
         saveCourseContent: '/course/save-course-content-data',
         saveCourseThumbnail: '/course/save-course-thumbnail',
-        startCourse: "/course/start-course",
         getAvailableCourses: "/course/get-available-courses",
         deleteCourse: "/course/delete-course",
         createCourse: "/course/create-course",

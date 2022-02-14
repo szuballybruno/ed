@@ -89,16 +89,6 @@ export const useSaveCourseContentData = () => {
     };
 }
 
-export const useStartCourse = () => {
-
-    const qr = usePostDataUnsafe<IdResultDTO, TextDTO>(apiRoutes.course.startCourse);
-
-    return {
-        startCourseAsync: (courseId: number) => qr.postDataAsync({ id: courseId }),
-        startCourseState: qr.state,
-    }
-}
-
 export const useUploadCourseThumbnailAsync = () => {
 
     const qr = usePostMultipartDataUnsafe<{ courseId: number }>(apiRoutes.course.saveCourseThumbnail);

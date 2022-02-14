@@ -1,5 +1,5 @@
 import { ViewColumn, ViewEntity } from "typeorm";
-import { CourseVisibilityType } from "../shared_models/types/sharedTypes";
+import { CourseStageNameType, CourseVisibilityType } from "../shared_models/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,
@@ -66,6 +66,12 @@ export class CourseDetailsView {
 
     @ViewColumn()
     subCategoryName: string;
+
+    @ViewColumn()
+    stageName: CourseStageNameType;
+
+    @ViewColumn()
+    currentItemCode: string;
 
     // teacher 
 

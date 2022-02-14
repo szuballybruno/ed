@@ -1,10 +1,6 @@
-import { usePretestData } from "../../services/api/pretestApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { useIntParam } from "../../static/frontendHelpers";
-import { ExamQuestions } from "../exam/ExamQuestions";
-import { LoadingFrame } from "../system/LoadingFrame";
+import { LoadingFrame } from "../../system/LoadingFrame";
 
-export const PretestSubpage = () => {
+export const PretestResultsSubpage = () => {
 
     const courseId = useIntParam("courseId")!;
     const { navigateToPlayer } = useNavigation();

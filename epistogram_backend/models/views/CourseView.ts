@@ -1,5 +1,6 @@
 import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from "typeorm";
 import { User } from "../entity/User";
+import { CourseStageNameType } from "../shared_models/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,
@@ -33,6 +34,9 @@ export class CourseView {
 
     @ViewColumn()
     continueItemCode: string;
+
+    @ViewColumn()
+    stageName: CourseStageNameType;
 
     @ViewColumn()
     title: string;

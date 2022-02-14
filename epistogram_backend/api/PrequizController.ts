@@ -17,7 +17,7 @@ export class PrequizController {
             .getValue(x => x.courseId, "int");
 
         return await this._prequizService
-            .getQuestionsAsync(courseId);
+            .getQuestionsAsync(params.currentUserId, courseId);
     }
 
     getUserAnswerAction = async (params: ActionParams) => {

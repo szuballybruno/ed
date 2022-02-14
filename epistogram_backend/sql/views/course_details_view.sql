@@ -14,6 +14,8 @@ SELECT
 	co.human_skill_benefits human_skill_benefits,
 	co.human_skill_benefits_description human_skill_benefits_description,
 	co.modification_date modification_date,
+	cv.stage_name stage_name,
+	cv.current_item_code current_item_code,
 	
 	-- cat 
 	cc.id category_id,
@@ -80,6 +82,9 @@ SELECT
 FROM public.course co
 
 CROSS JOIN public.user u
+
+LEFT JOIN public.course_view cv
+ON cv.user_id = u.id AND cv.course_id = co.id
 
 LEFT JOIN public.storage_file sf
 ON sf.id = co.cover_file_id

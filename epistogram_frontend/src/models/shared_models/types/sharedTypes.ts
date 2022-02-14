@@ -38,6 +38,8 @@ export type AnswerSessionType = "signup" | "normal" | "practise" | "pretest";
 
 export type ExamType = "signup" | "normal" | "pretest" | "final";
 
+export type CourseStageNameType = "prequiz" | "pretest" | "watch" | "finished";
+
 export type EventType = "coin_acquire_answer_streak" | "coin_acquire_session_streak";
 
 export type CourseVisibilityType = "public" | "private";

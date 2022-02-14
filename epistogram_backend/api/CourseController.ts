@@ -16,13 +16,6 @@ export class CourseController {
         this._courseService = courseService;
     }
 
-    startCourseAction = async (params: ActionParams) => {
-
-        const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
-
-        return this._courseService.startCourseAsync(params.currentUserId, courseId);
-    };
-
     getAvailableCoursesAction = async (params: ActionParams) => {
 
         return this._courseService.getAvailableCoursesAsync(params.currentUserId);

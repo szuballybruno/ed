@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { CourseModeType } from "../shared_models/types/sharedTypes";
+import { CourseModeType, CourseStageNameType } from "../shared_models/types/sharedTypes";
 import { Course } from "./Course";
 import { User } from "./User";
 
@@ -12,11 +12,14 @@ export class UserCourseBridge {
     @Column({ type: "text", default: "beginner" })
     courseMode: CourseModeType;
 
-    @Column({ default: false })
+    @Column()
     isCurrent: boolean;
 
     @Column({ nullable: true, type: "text" })
     currentItemCode: string | null;
+
+    @Column()
+    stageName: CourseStageNameType;
 
     // user
     @Column()

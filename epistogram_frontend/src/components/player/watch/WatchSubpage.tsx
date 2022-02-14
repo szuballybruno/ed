@@ -1,20 +1,20 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from 'react';
 import { useParams } from "react-router";
-import { usePlayerData } from "../../services/api/playerApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { useIsDesktopView } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { FlexFloat } from "../controls/FlexFloat";
-import { EpistoDialog, useEpistoDialogLogic } from "../EpistoDialog";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { Copyright } from "../universal/Copyright";
+import { usePlayerData } from "../../../services/api/playerApiService";
+import { useNavigation } from "../../../services/core/navigatior";
+import { useIsDesktopView } from "../../../static/frontendHelpers";
+import { translatableTexts } from "../../../static/translatableTexts";
+import { FlexFloat } from "../../controls/FlexFloat";
+import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
+import { LoadingFrame } from "../../system/LoadingFrame";
+import { Copyright } from "../../universal/Copyright";
 import { CourseItemSelector } from "./CourseItemSelector";
 import { ExamPlayer } from "./ExamPlayer";
 import { ModuleView } from "./ModuleView";
 import { WatchView } from "./WatchView";
 
-export const PlayerSubpage = () => {
+export const WatchSubpage = () => {
 
     const warningDialogLogic = useEpistoDialogLogic();
     const { navigateToPlayer } = useNavigation();

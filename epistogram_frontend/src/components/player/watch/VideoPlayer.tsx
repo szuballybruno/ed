@@ -8,9 +8,9 @@ import ReactPlayer from "react-player";
 import { TrackProps } from "react-player/file";
 import useEventListener from 'react-use-event-listener';
 import screenfull from "screenfull";
-import { SubtitleDTO } from "../../models/shared_models/SubtitleDTO";
-import { VideoDTO } from "../../models/shared_models/VideoDTO";
-import { readVolumeSettings, writeVolumeSettings } from "../../services/core/storageService";
+import { SubtitleDTO } from "../../../models/shared_models/SubtitleDTO";
+import { VideoDTO } from "../../../models/shared_models/VideoDTO";
+import { readVolumeSettings, writeVolumeSettings } from "../../../services/core/storageService";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
 import { VideoControls } from "./VideoControls";
 

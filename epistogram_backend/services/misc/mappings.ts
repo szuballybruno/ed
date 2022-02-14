@@ -308,12 +308,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(CourseDetailsView, CourseDetailsDTO, (view, params) => {
+        .addMap(CourseDetailsView, CourseDetailsDTO, (detailsView, params) => {
 
             const moduleViews = params as CourseModuleOverviewView[];
 
-            const thumbnailImageURL = view.coverFilePath
-                ? getAssetUrl(view.coverFilePath)
+            const thumbnailImageURL = detailsView.coverFilePath
+                ? getAssetUrl(detailsView.coverFilePath)
                 : getAssetUrl("/images/defaultCourseCover.jpg");
 
             const modules = moduleViews
@@ -332,48 +332,50 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 }) as ModuleShortDTO);
 
             return {
-                title: view.title,
-                modificationDate: view.modificationDate.toString(),
-                description: view.description,
-                categoryName: view.categoryName,
-                subCategoryName: view.subCategoryName,
+                title: detailsView.title,
+                modificationDate: detailsView.modificationDate.toString(),
+                description: detailsView.description,
+                categoryName: detailsView.categoryName,
+                subCategoryName: detailsView.subCategoryName,
                 thumbnailURL: thumbnailImageURL,
-                canStartCourse: view.canStartCourse,
-                courseId: view.courseId,
-                shortDescription: view.shortDescription,
-                language: view.languageName,
-                difficulty: view.difficulty,
-                benchmark: view.benchmark,
-                previouslyCompletedCount: view.previouslyCompletedCount,
-                visibility: view.visibility,
-                humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
+                canStartCourse: detailsView.canStartCourse,
+                courseId: detailsView.courseId,
+                shortDescription: detailsView.shortDescription,
+                language: detailsView.languageName,
+                difficulty: detailsView.difficulty,
+                benchmark: detailsView.benchmark,
+                previouslyCompletedCount: detailsView.previouslyCompletedCount,
+                visibility: detailsView.visibility,
+                humanSkillBenefitsDescription: detailsView.humanSkillBenefitsDescription,
+                currentItemCode: detailsView.currentItemCode,
+                stageName: detailsView.stageName,
 
-                skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
-                technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
-                humanSkillBenefits: parseSkillBenefits(view.humanSkillBenefits),
+                skillBenefits: parseCommaSeparatedStringList(detailsView.skillBenefits),
+                technicalRequirements: parseCommaSeparatedStringList(detailsView.technicalRequirements),
+                humanSkillBenefits: parseSkillBenefits(detailsView.humanSkillBenefits),
 
                 modules: modules,
 
                 teacherData: {
-                    teacherFullName: toFullName(view.teacherFirstName, view.teacherLastName),
-                    teacherFirstName: view.teacherFirstName,
-                    teacherLastName: view.teacherLastName,
-                    teacherBadges: parseCommaSeparatedStringList(view.teacherBadges),
-                    teacherCourseCount: view.teacherCourseCount,
-                    teacherDescription: view.teacherDescription,
-                    teacherRating: view.teacherRating,
-                    teacherSkills: view.teacherSkills,
-                    teacherStudentCount: view.teacherStudentCount,
-                    teacherVideoCount: view.teacherVideoCount,
-                    teacherAvatarFilePath: view.teacherAvatarFilePath
-                        ? getAssetUrl(view.teacherAvatarFilePath)
+                    teacherFullName: toFullName(detailsView.teacherFirstName, detailsView.teacherLastName),
+                    teacherFirstName: detailsView.teacherFirstName,
+                    teacherLastName: detailsView.teacherLastName,
+                    teacherBadges: parseCommaSeparatedStringList(detailsView.teacherBadges),
+                    teacherCourseCount: detailsView.teacherCourseCount,
+                    teacherDescription: detailsView.teacherDescription,
+                    teacherRating: detailsView.teacherRating,
+                    teacherSkills: detailsView.teacherSkills,
+                    teacherStudentCount: detailsView.teacherStudentCount,
+                    teacherVideoCount: detailsView.teacherVideoCount,
+                    teacherAvatarFilePath: detailsView.teacherAvatarFilePath
+                        ? getAssetUrl(detailsView.teacherAvatarFilePath)
                         : null
                 },
 
-                totalModuleCount: view.totalModuleCount,
-                totalVideoCount: view.totalVideoCount,
-                totalVideoQuestionCount: view.totalVideoQuestionCount,
-                totalVideoSumLengthSeconds: view.totalVideoSumLengthSeconds
+                totalModuleCount: detailsView.totalModuleCount,
+                totalVideoCount: detailsView.totalVideoCount,
+                totalVideoQuestionCount: detailsView.totalVideoQuestionCount,
+                totalVideoSumLengthSeconds: detailsView.totalVideoSumLengthSeconds
             } as CourseDetailsDTO;
         });
 
@@ -549,7 +551,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 ? getAssetUrl(course.filePath)
                 : getAssetUrl("/images/defaultCourseCover.jpg");
 
-            const firstItemCode = course.isStarted
+            const currentItemCode = course.isStarted
                 ? course.currentItemCode
                 : null;
 
@@ -558,7 +560,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 title: course.title,
                 categoryName: course.categoryName,
                 subCategoryName: course.subCategoryName,
-                firstItemCode: firstItemCode,
+                currentItemCode: currentItemCode,
+                stageName: course.stageName,
                 teacherName: toFullName(course.teacherFirstName, course.teacherLastName),
                 thumbnailImageURL: thumbnailImageURL,
                 isComplete: course.isCompleted

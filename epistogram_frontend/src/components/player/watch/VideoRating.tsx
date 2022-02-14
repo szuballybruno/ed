@@ -1,12 +1,12 @@
 import { Flex } from "@chakra-ui/react"
 import { Typography } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from "../../services/api/videoRatingApiService"
-import { useShowErrorDialog } from "../../services/core/notifications"
-import { getAssetUrl, iterate } from "../../static/frontendHelpers"
-import { translatableTexts } from "../../static/translatableTexts"
-import { EpistoButton } from "../controls/EpistoButton"
-import { EpistoFont } from "../controls/EpistoFont"
+import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from "../../../services/api/videoRatingApiService"
+import { useShowErrorDialog } from "../../../services/core/notifications"
+import { getAssetUrl, iterate } from "../../../static/frontendHelpers"
+import { translatableTexts } from "../../../static/translatableTexts"
+import { EpistoButton } from "../../controls/EpistoButton"
+import { EpistoFont } from "../../controls/EpistoFont"
 
 export const VideoRating = (props: { videoId: number }) => {
 

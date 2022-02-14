@@ -2,6 +2,7 @@ import { AnswerSession } from "../models/entity/AnswerSession";
 import { Exam } from "../models/entity/Exam";
 import { PretestDataDTO } from "../models/shared_models/PretestDataDTO";
 import { CourseView } from "../models/views/CourseView";
+import { CourseService } from "./CourseService";
 import { ExamService } from "./ExamService";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -11,18 +12,25 @@ export class PretestService {
     private _mapperSerice: MapperService;
     private _ormService: ORMConnectionService;
     private _examService: ExamService;
+    private _courseService: CourseService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperSerice: MapperService,
-        examService: ExamService) {
+        examService: ExamService,
+        courseService: CourseService) {
 
         this._ormService = ormService;
         this._mapperSerice = mapperSerice;
         this._examService = examService;
+        this._courseService = courseService;
     }
 
     async getPretestDataAsync(userId: number, courseId: number) {
+
+        // set course as started, and stage to pretest
+        await this._courseService
+            .setCurrentCourse(userId, courseId, "pretest", null)
 
         // pretest exam 
         const pretestExam = await this._ormService
@@ -76,5 +84,10 @@ export class PretestService {
             exam: pretestExamDTO,
             firstItemCode: course.firstItemCode
         } as PretestDataDTO;
+    }
+
+    async getPretestResultsAsync(userId: number, courseId: number) {
+
+
     }
 }

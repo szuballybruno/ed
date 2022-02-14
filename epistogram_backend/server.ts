@@ -132,8 +132,8 @@ import { PretestService } from './services/PretestService';
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
-    const prequizService = new PrequizService(ormConnectionService, mapperService);
-    const pretestService = new PretestService(ormConnectionService, mapperService, examService);
+    const prequizService = new PrequizService(ormConnectionService, mapperService, courseService);
+    const pretestService = new PretestService(ormConnectionService, mapperService, examService, courseService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -288,7 +288,6 @@ import { PretestService } from './services/PretestService';
     addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.course.getAvailableCourses, courseController.getAvailableCoursesAction);
-    addEndpoint(apiRoutes.course.startCourse, courseController.startCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.getCourseBriefData, courseController.getCourseBriefDataAction);
     addEndpoint(apiRoutes.course.getCourseDetails, courseController.getCourseDetailsAction);
     addEndpoint(apiRoutes.course.getCourseProgressData, courseController.getCourseProgressDataAction);

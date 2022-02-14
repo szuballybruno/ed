@@ -1,5 +1,6 @@
 import { useHistory } from "react-router";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { CourseStageNameType } from "../../models/shared_models/types/sharedTypes";
 import { ApplicationRoute } from "../../models/types";
 import { verboseLogging } from "../../static/Environemnt";
 import { getUrl } from "../../static/frontendHelpers";
@@ -22,11 +23,39 @@ export const useNavigation = () => {
 
     const openNewTab = (url: string) => (window as any).open(url, '_blank').focus();
 
+    const navigateToPlayer = (descriptorCode: string) => navigate(applicationRoutes.playerRoute.watchRoute, { descriptorCode });
+
+    const navigateToCourseDetails = (courseId: number, descriptorCode?: string) => navigate(applicationRoutes.courseDetailsRoute, { courseId }, { descriptorCode });
+
+    const navigateToWatchPrequiz = (courseId: number) => navigate(applicationRoutes.playerRoute.prequizRoute, { courseId });
+
+    const navigateToWatchPretest = (courseId: number) => navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
+
+    const playCourse = (courseId: number, stageName: CourseStageNameType, currentItemCode: string | null) => {
+
+        if (currentItemCode) {
+
+            navigateToPlayer(currentItemCode);
+            return;
+        }
+
+        if (stageName === "pretest") {
+
+            navigateToWatchPretest(courseId);
+            return;
+        }
+
+        navigateToWatchPrequiz(courseId);
+    }
+
     return {
         history,
         navigate,
-        navigateToPlayer: (descriptorCode: string) => navigate(applicationRoutes.playerRoute.watchRoute, { descriptorCode  }),
-        navigateToCourseDetails: (courseId: number, descriptorCode?: string) => navigate(applicationRoutes.courseDetailsRoute, { courseId }, { descriptorCode }),
+        navigateToPlayer,
+        navigateToCourseDetails,
         openNewTab,
+        navigateToWatchPrequiz,
+        navigateToWatchPretest,
+        playCourse
     };
 }

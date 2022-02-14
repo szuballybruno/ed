@@ -13,6 +13,7 @@ SELECT
 		THEN first_civ.item_code 
 		ELSE ucb.current_item_code 
 	END continue_item_code,
+	ucb.stage_name stage_name,
 	teacher.first_name teacher_first_name,
 	teacher.last_name teacher_last_name,
 	course.*

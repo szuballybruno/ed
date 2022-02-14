@@ -1,10 +1,10 @@
 import { Box, Container, Flex } from "@chakra-ui/react";
-import { Tab, Tabs, Typography } from "@mui/material";
+import { Tab, Tabs } from "@mui/material";
 import React, { useState } from 'react';
 import { useParams } from "react-router-dom";
-import { useCourseDetails, useStartCourse } from "../../services/api/courseApiService";
+import { useCourseDetails } from "../../services/api/courseApiService";
 import { useNavigation } from "../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
+import { useShowErrorDialog } from "../../services/core/notifications";
 import { formatTimespan, getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import { ContentPane } from "../ContentPane";
@@ -26,39 +26,14 @@ const CourseDetailsPage = () => {
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
     const [currentTab, setCurrentTab] = useState(0);
-    const { navigateToPlayer } = useNavigation();
+    const { playCourse } = useNavigation();
     const showError = useShowErrorDialog();
-    const { startCourseAsync } = useStartCourse();
-    const currentItemDescriptior = getQueryParam("code");
 
     const { courseDetails } = useCourseDetails(courseId);
 
-    const playCourseAsync = async () => {
+    const handlePlayCourse = async () => {
 
-        try {
-
-            if (currentItemDescriptior) {
-
-                navigateToPlayer(currentItemDescriptior);
-            }
-            else {
-
-                const { text: firstItemDescriptor } = await startCourseAsync(courseId);
-
-                if (firstItemDescriptor) {
-
-                    navigateToPlayer(firstItemDescriptor);
-                }
-                else {
-
-                    showNotification(translatableTexts.courseDetails.cannotStartCourseNotification, "warning");
-                }
-            }
-        }
-        catch (e) {
-
-            showError(e);
-        }
+        playCourse(courseId, courseDetails!.stageName, courseDetails!.currentItemCode);
     }
 
     const tabs = [
@@ -276,7 +251,7 @@ const CourseDetailsPage = () => {
                                 display: courseDetails?.canStartCourse ? undefined : "none"
                             }}
                             variant="outlined"
-                            onClick={playCourseAsync}
+                            onClick={handlePlayCourse}
                             icon={(
                                 <img
                                     src={getAssetUrl("/icons/play2.svg")}

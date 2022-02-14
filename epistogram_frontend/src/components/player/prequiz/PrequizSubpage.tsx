@@ -1,22 +1,21 @@
 import { Box, Flex, Grid } from "@chakra-ui/react";
 import { Slider } from "@mui/material";
 import { useEffect, useState } from "react";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from "../../services/api/prequizApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { getAssetUrl, useIntParam, usePaging } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
-import { ExamLayout } from "../exam/ExamLayout";
-import { ExamLayoutContent } from "../exam/ExamLayoutContent";
-import { QuestionAnswer } from "../exam/QuestionAnswer";
+import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from "../../../services/api/prequizApiService";
+import { useNavigation } from "../../../services/core/navigatior";
+import { useShowErrorDialog } from "../../../services/core/notifications";
+import { getAssetUrl, useIntParam, usePaging } from "../../../static/frontendHelpers";
+import { translatableTexts } from "../../../static/translatableTexts";
+import { EpistoFont } from "../../controls/EpistoFont";
+import { ExamLayout } from "../../exam/ExamLayout";
+import { ExamLayoutContent } from "../../exam/ExamLayoutContent";
+import { QuestionAnswer } from "../../exam/QuestionAnswer";
 
 export const PrequizSubpage = () => {
 
     const courseId = useIntParam("courseId")!;
     const showError = useShowErrorDialog();
-    const { navigate } = useNavigation();
+    const { navigateToWatchPretest } = useNavigation();
     const { questions } = usePrequizQuestions(courseId);
 
     const paging = usePaging(questions);
@@ -46,7 +45,7 @@ export const PrequizSubpage = () => {
 
             if (paging.isLast) {
 
-                navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
+                navigateToWatchPretest(courseId);
             } else {
 
                 paging.next();
