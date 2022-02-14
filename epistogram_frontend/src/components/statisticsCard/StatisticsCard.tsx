@@ -35,6 +35,7 @@ const StatisticsCard = (props: {
 
         {/* locked overlay */}
         {isComingSoon && <Flex
+            title="Ez az adat jelenleg nem áll rendelkezésre. Nézz vissza később."
             flexDir={"column"}
             alignItems={"flex-end"}
             justifyContent={"flex-start"}

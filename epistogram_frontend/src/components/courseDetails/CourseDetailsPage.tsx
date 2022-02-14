@@ -129,12 +129,12 @@ const CourseDetailsPage = () => {
         <ContentPane
             direction="column"
             overflowY="scroll"
-            px="100px">
+            p="0 100px 0 100px">
 
             {/* Title */}
             <EpistoHeader
                 alignSelf="left"
-                margin="80px 40px 40px 0px"
+                margin="0px 40px 40px 0px"
                 variant="xxl"
                 text={courseDetails?.title ?? ""} />
 
@@ -150,7 +150,7 @@ const CourseDetailsPage = () => {
                     </Container>
 
                     {/* briefing info items */}
-                    <Flex mt="20px" flexWrap="wrap" justify="space-evenly">
+                    <Flex mt="20px" justify="space-evenly">
 
                         <CourseDetailsBriefingInfoItem
                             icon={getAssetUrl("/course_page_icons/about_category.svg")}

@@ -17,6 +17,7 @@ export const CourseDetailsBriefingInfoItem = (props: {
         width={200}
         height={60}
         bg={"white"}
+        mr="5px"
         borderWidth={1}
         borderRadius={5}
         shadow={"#00000024 0px 0px 3px 0px"}>

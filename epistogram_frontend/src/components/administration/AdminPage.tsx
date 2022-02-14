@@ -32,6 +32,7 @@ import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage
 import { useNavigation } from '../../services/core/navigatior';
 import { Flex, FlexProps } from '@chakra-ui/react';
 import { VideoStatisticsSubpage } from './courses/VideoStatisticsSubpage';
+import { AdminInteractiveCourseSubpage } from './courses/AdminInteractiveCourseSubpage';
 
 const AdminPage = () => {
 
@@ -134,6 +135,7 @@ const AdminPage = () => {
                         {getRoute(administrationRoutes.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
+                        {getRoute(administrationRoutes.coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.videoStatsRoute, <VideoStatisticsSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}

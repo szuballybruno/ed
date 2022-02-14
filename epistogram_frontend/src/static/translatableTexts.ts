@@ -196,6 +196,7 @@ export const translatableTexts = {
         administrationCourseDetails: "Adatok",
         administrationCourseContent: "Tartalom",
         administrationCourseStatistics: "Statisztika",
+        administrationInteractiveCourse: "Interaktív kurzus",
         administrationAddVideo: "Videó hozzáadása",
         administrationEditVideo: "Videó szerkesztése",
         administrationVideoStatistics: "Videó statisztikája",

@@ -8,10 +8,10 @@ import { Star, StarBorderOutlined, StarOutline } from "@mui/icons-material";
 import { useCourseDetails } from "../../services/api/courseApiService";
 import { translatableTexts } from "../../static/translatableTexts";
 
-const SmallStat = (props: { iconUrl: string, text: string }) => {
+const SmallStat = (props: { iconUrl: string, text: string, title: string }) => {
 
     return <Flex
-        title="Kurzus adatok"
+        title={props.title}
         align="center"
         mr={5}>
 
@@ -127,21 +127,25 @@ const CourseTile = (props: {
 
                 {/* length */}
                 <SmallStat
+                    title="Ennyi idő alatt tudod elvégezni a kurzust"
                     iconUrl={getAssetUrl("images/time3D.png")}
                     text={formatTimespan(courseDetails?.totalVideoSumLengthSeconds || 0)} />
 
                 {/* videos count */}
                 <SmallStat
+                    title="Ennyi videót tartalmaz a kurzus"
                     iconUrl={getAssetUrl("images/videos3D.png")}
                     text={courseDetails?.totalVideoCount + "" || "0"} />
 
                 {/* difficulty */}
                 <SmallStat
+                    title="A kurzus nehézsége 1-5-ig értékelve"
                     iconUrl={getAssetUrl("images/difficulty3D.png")}
                     text={courseDetails?.difficulty + ""} />
 
                 {/* rating */}
                 <SmallStat
+                    title="1-5-ig ennyire érékelték a hallgatók a tanfolyamot"
                     iconUrl={getAssetUrl("images/star3D.png")}
                     text={courseDetails?.benchmark + ""} />
             </Flex>
@@ -153,6 +157,7 @@ const CourseTile = (props: {
 
                 {/* teacher name */}
                 <SmallStat
+                    title="A kurzus nyelve"
                     iconUrl={getAssetUrl("images/flag3D.png")}
                     text={courseTeacherName} />
 
