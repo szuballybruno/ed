@@ -7,13 +7,13 @@ import { LoadingFrame } from "../../system/LoadingFrame";
 export const PretestSubpage = () => {
 
     const courseId = useIntParam("courseId")!;
-    const { navigateToPlayer } = useNavigation();
+    const { navigateToWatchPretestResults } = useNavigation();
 
     const { pretestData, pretestDataError, pretestDataState } = usePretestData(courseId);
 
     const goToFirstWatchItem = () => {
 
-        navigateToPlayer(pretestData!.firstItemCode);
+        navigateToWatchPretestResults(courseId);
     }
 
     return (

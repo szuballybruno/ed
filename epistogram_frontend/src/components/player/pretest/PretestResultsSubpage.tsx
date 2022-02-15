@@ -1,3 +1,6 @@
+import { usePretestResults } from "../../../services/api/pretestApiService";
+import { useNavigation } from "../../../services/core/navigatior";
+import { useIntParam } from "../../../static/frontendHelpers";
 import { LoadingFrame } from "../../system/LoadingFrame";
 
 export const PretestResultsSubpage = () => {
@@ -5,23 +8,15 @@ export const PretestResultsSubpage = () => {
     const courseId = useIntParam("courseId")!;
     const { navigateToPlayer } = useNavigation();
 
-    const { pretestData, pretestDataError, pretestDataState } = usePretestData(courseId);
-
-    const goToFirstWatchItem = () => {
-
-        navigateToPlayer(pretestData!.firstItemCode);
-    }
+    const { pretestResults, pretestResultsError, pretestResultsState } = usePretestResults(courseId);
 
     return (
         <LoadingFrame
             height="100%"
-            loadingState={pretestDataState}
-            error={pretestDataError}>
+            loadingState={pretestResultsState}
+            error={pretestResultsError}>
 
-            {pretestData && <ExamQuestions
-                exam={pretestData?.exam}
-                answerSessionId={pretestData?.answerSessionId}
-                onExamFinished={goToFirstWatchItem} />}
+            {pretestResults?.correctAnswerRate}
         </LoadingFrame>
     )
 }

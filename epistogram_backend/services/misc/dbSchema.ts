@@ -73,6 +73,7 @@ import { PrequizQuestion } from "../../models/entity/PrequizQuestion";
 import { PrequizAnswer } from "../../models/entity/PrequizAnswer";
 import { PrequizUserAnswer } from "../../models/entity/PrequizUserAnswer";
 import { PrequizQuestionView } from "../../models/views/PrequizQuestionView";
+import { PretestResultView } from "../../models/views/PretestResultView";
 
 export const dbSchema = {
 
@@ -120,7 +121,8 @@ export const dbSchema = {
         "personality_trait_category_view",
         "user_latest_activity_view",
         "user_admin_list_view",
-        "prequiz_question_view"
+        "prequiz_question_view",
+        "pretest_result_view"
     ],
 
     functionScripts: [
@@ -188,7 +190,8 @@ export const dbSchema = {
         CourseOverviewView,
         PersonalityTraitCategoryView,
         UserAdminListView,
-        PrequizQuestionView
+        PrequizQuestionView,
+        PretestResultView
     ] as any[],
 
     entities: [

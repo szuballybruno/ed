@@ -101,6 +101,8 @@ import { CourseAdminItemQuestionAnswerDTO } from "../../models/shared_models/Cou
 import { PrequizQuestionDTO } from "../../models/shared_models/PrequizQuestionDTO";
 import { PrequizQuestionView } from "../../models/views/PrequizQuestionView";
 import { PrequizAnswerDTO } from "../../models/shared_models/PrequizAnswerDTO";
+import { PretestResultView } from "../../models/views/PretestResultView";
+import { PretestResultDTO } from "../../models/shared_models/PretestResultDTO";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -809,6 +811,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(PrequizQuestionView, PrequizAnswerDTO, x => ({
             id: x.answerId,
             text: x.answerText
+        }));
+
+    mapperService
+        .addMap(PretestResultView, PretestResultDTO, x => ({
+            isCompleted: x.isCompleted,
+            correctAnswerRate: x.correctAnswerRate
         }));
 }
 

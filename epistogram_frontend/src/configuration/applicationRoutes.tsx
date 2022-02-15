@@ -40,6 +40,12 @@ export const applicationRoutes = {
             route: "/watch/pretest/:courseId",
             exact: true
         },
+
+        pretestResultsRoute: {
+            title: translatableTexts.routeTitles.pretestResults,
+            route: "/watch/pretest-results/:courseId",
+            exact: true
+        },
     
         finishedRoute: {
             title: translatableTexts.routeTitles.player,

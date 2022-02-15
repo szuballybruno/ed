@@ -21,4 +21,12 @@ export class PretestController {
         return await this._pretestService
             .getPretestDataAsync(params.currentUserId, courseId);
     }
+
+    getPretestResultsAction = async (params: ActionParams) => {
+
+        return this._pretestService
+            .getPretestResultsAsync(params.currentUserId, params
+                .getQuery<any>()
+                .getValue(x => x.courseId));
+    }
 }

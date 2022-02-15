@@ -75,7 +75,8 @@ export const apiRoutes = {
     },
 
     pretest: {
-        getPretestData: "/pretest/get-pretest-data"
+        getPretestData: "/pretest/get-pretest-data",
+        getPretestResults: "/pretest/get-pretest-results"
     },
 
     userStats: {

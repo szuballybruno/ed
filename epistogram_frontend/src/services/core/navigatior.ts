@@ -30,6 +30,8 @@ export const useNavigation = () => {
     const navigateToWatchPrequiz = (courseId: number) => navigate(applicationRoutes.playerRoute.prequizRoute, { courseId });
 
     const navigateToWatchPretest = (courseId: number) => navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
+    
+    const navigateToWatchPretestResults = (courseId: number) => navigate(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
 
     const playCourse = (courseId: number, stageName: CourseStageNameType, currentItemCode: string | null) => {
 
@@ -45,6 +47,12 @@ export const useNavigation = () => {
             return;
         }
 
+        if (stageName === "pretest_results") {
+
+            navigateToWatchPretestResults(courseId);
+            return;
+        }
+
         navigateToWatchPrequiz(courseId);
     }
 
@@ -56,6 +64,7 @@ export const useNavigation = () => {
         openNewTab,
         navigateToWatchPrequiz,
         navigateToWatchPretest,
+        navigateToWatchPretestResults,
         playCourse
     };
 }

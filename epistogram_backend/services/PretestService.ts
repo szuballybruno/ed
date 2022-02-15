@@ -1,7 +1,9 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Exam } from "../models/entity/Exam";
 import { PretestDataDTO } from "../models/shared_models/PretestDataDTO";
+import { PretestResultDTO } from "../models/shared_models/PretestResultDTO";
 import { CourseView } from "../models/views/CourseView";
+import { PretestResultView } from "../models/views/PretestResultView";
 import { CourseService } from "./CourseService";
 import { ExamService } from "./ExamService";
 import { MapperService } from "./MapperService";
@@ -88,6 +90,20 @@ export class PretestService {
 
     async getPretestResultsAsync(userId: number, courseId: number) {
 
+        // set current course stage 
+        await this._courseService
+            .setCurrentCourse(userId, courseId, "pretest_results", null);
 
+        const view = await this._ormService
+            .getRepository(PretestResultView)
+            .findOneOrFail({
+                where: {
+                    userId,
+                    courseId
+                }
+            });
+
+        return this._mapperSerice
+            .map(PretestResultView, PretestResultDTO, view);
     }
 }

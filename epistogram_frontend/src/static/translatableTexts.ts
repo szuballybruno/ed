@@ -173,6 +173,7 @@ export const translatableTexts = {
         registration: "Regisztráció",
         player: "Lejátszó",
         pretest: "Pretest",
+        pretestResults: "Pretest results",
         prequiz: "Prequiz",
         setNewPassword: "Új jelszó beállítása",
         registerViaActivationCode: "Kód beváltása",

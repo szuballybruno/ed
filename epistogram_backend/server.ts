@@ -251,7 +251,8 @@ import { PretestService } from './services/PretestService';
 
     // pretest 
     addEndpoint(apiRoutes.pretest.getPretestData, pretestController.getPretestDataAction);
-
+    addEndpoint(apiRoutes.pretest.getPretestResults, pretestController.getPretestResultsAction);
+    
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
 
