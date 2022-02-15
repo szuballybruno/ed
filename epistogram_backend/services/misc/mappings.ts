@@ -814,9 +814,10 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(PretestResultView, PretestResultDTO, x => ({
+        .addMap(PretestResultView, PretestResultDTO, (x, cv: CourseView) => ({
             isCompleted: x.isCompleted,
-            correctAnswerRate: x.correctAnswerRate
+            correctAnswerRate: x.correctAnswerRate,
+            firstItemCode: cv.firstItemCode
         }));
 }
 

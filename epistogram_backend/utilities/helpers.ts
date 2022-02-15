@@ -2,6 +2,7 @@ import { log } from "console";
 import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { User } from "../models/entity/User";
+import { typecheck } from "../models/shared_models/logic/sharedLogic";
 import { ErrorCodeType } from "../models/shared_models/types/sharedTypes";
 import { ParsableValueType } from "../models/Types";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
@@ -111,16 +112,18 @@ export class ActionParams {
     }
 };
 
-export class SafeObjectWrapper<T> {
+type SafeObjectValidatorFunctionType<TValue> = (value: TValue) => boolean;
 
-    data: T;
+export class SafeObjectWrapper<TObject> {
 
-    constructor(data: T) {
+    data: TObject;
+
+    constructor(data: TObject) {
 
         this.data = data;
     }
 
-    getValueOrNull<TValue>(getter: (data: T) => TValue, castType?: "int" | "float" | "boolean"): TValue | null {
+    getValueOrNull<TValue>(getter: (data: TObject) => TValue, castType?: "int" | "float" | "boolean"): TValue | null {
 
         if (getter(this.data) === undefined || getter(this.data) === null)
             return null;
@@ -128,25 +131,35 @@ export class SafeObjectWrapper<T> {
         return this.getValue(getter, castType);
     }
 
-    getValue<TValue>(getter: (data: T) => TValue, castType?: "int" | "float" | "boolean"): TValue {
+    getValue<TValue>(getter: (data: TObject) => TValue, castTypeOrFn?: "int" | "float" | "boolean" | SafeObjectValidatorFunctionType<TValue>): TValue {
 
         const value = withValueOrBadRequest<any>(getter(this.data));
 
-        if (castType === "int")
-            return parseInt(value as any as string) as any;
+        if (typecheck(castTypeOrFn, "function")) {
 
-        if (castType === "float")
-            return parseFloat(value as any as string) as any;
+            const validatorFn = castTypeOrFn as SafeObjectValidatorFunctionType<TValue>;
+            const isValid = validatorFn(value);
+            if (!isValid)
+                throw new Error("Validator function failed on value in safe object.");
 
-        if (castType === "boolean") {
+        } else {
 
-            if (value === true || value === false)
-                return value;
+            if (castTypeOrFn === "int")
+                return parseInt(value as any as string) as any;
 
-            if (value !== "true" && value !== "false")
-                throw new Error("Error parsing boolean value: " + value);
+            if (castTypeOrFn === "float")
+                return parseFloat(value as any as string) as any;
 
-            return (value === "true") as any;
+            if (castTypeOrFn === "boolean") {
+
+                if (value === true || value === false)
+                    return value;
+
+                if (value !== "true" && value !== "false")
+                    throw new Error("Error parsing boolean value: " + value);
+
+                return (value === "true") as any;
+            }
         }
 
         return value;

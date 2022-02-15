@@ -102,10 +102,14 @@ export class CourseController {
 
     setCourseModeAction = async (params: ActionParams) => {
 
-        const courseId = withValueOrBadRequest<number>(params.req.query.courseId, "number");
-        const modeType = withValueOrBadRequest<CourseModeType>(params.req.query.mode);
+        const dto = params
+            .getBody<{ courseId: number, mode: CourseModeType }>();
 
-        return this._courseService.setCourseModeAsync(params.currentUserId, courseId, modeType);
+        const courseId = dto.getValue(x => x.courseId);
+        const courseMode = dto.getValue(x => x.mode, value => value === "advanced" || value === "beginner");
+
+        return this._courseService
+            .setCourseModeAsync(params.currentUserId, courseId, courseMode);
     };
 
     getCourseProgressShortAction = async (params: ActionParams) => {

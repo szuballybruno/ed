@@ -9,6 +9,7 @@ import { CreateCourseDTO } from "../../models/shared_models/CreateCourseDTO";
 import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
 import { TextDTO } from "../../models/shared_models/TextDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { CourseModeType } from "../../models/shared_models/types/sharedTypes";
 import { UserCoursesDataDTO } from "../../models/shared_models/UserCoursesDataDTO";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
@@ -22,6 +23,16 @@ export const useAdminCourseList = (searchText: string) => {
         coursesError: qr.error,
         coursesStatus: qr.state,
         refetchCoursesAsync: qr.refetch
+    }
+}
+
+export const useSetCourseMode = () => {
+
+    const qr = usePostDataUnsafe<{ courseId: number, mode: CourseModeType }, void>(apiRoutes.course.setCourseMode);
+
+    return {
+        setCourseModeAsync: qr.postDataAsync,
+        setCourseModeState: qr.state
     }
 }
 

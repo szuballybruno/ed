@@ -85,7 +85,7 @@ export class CourseService {
             .mapMany(CourseProgressView, CourseProgressShortDTO, views);
     }
 
-    async getFirstItemCodeById(userId: number, courseId: number) {
+    async getCourseViewAsync(userId: number, courseId: number) {
 
         const view = await this._ormService
             .getRepository(CourseView)
@@ -96,7 +96,7 @@ export class CourseService {
                 }
             });
 
-        return view.firstItemCode;
+        return view;
     }
 
     async getCourseBriefDataAsync(courseId: number) {

@@ -4,6 +4,7 @@ import { Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useContext, useRef, useState } from 'react';
 import { ModuleDTO } from '../../../models/shared_models/ModuleDTO';
 import { CourseModeType } from "../../../models/shared_models/types/sharedTypes";
+import { useSetCourseMode } from '../../../services/api/courseApiService';
 import { httpPostAsync } from "../../../services/core/httpClient";
 import { useShowErrorDialog } from "../../../services/core/notifications";
 import { translatableTexts } from '../../../static/translatableTexts';
@@ -26,10 +27,13 @@ export const CourseItemSelector = (props: {
     const ref = useRef<HTMLButtonElement>(null);
     const user = useContext(CurrentUserContext)!;
 
+    const { setCourseModeAsync } = useSetCourseMode();
+
     const setCourseMode = async (mode: CourseModeType) => {
 
         try {
-            await httpPostAsync(`/course/set-course-mode?courseId=${courseId}&mode=${mode}`);
+
+            await setCourseModeAsync({ courseId, mode });
             await refetchPlayerData();
         }
         catch (e: any) {

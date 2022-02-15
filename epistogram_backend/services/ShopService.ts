@@ -101,11 +101,11 @@ export class ShopService {
             await this._courseService
                 .createCourseAccessBridge(userId, shopItemView.courseId);
 
-            const firstItemCode = await this._courseService
-                .getFirstItemCodeById(userId, shopItemView.courseId);
+            const courseView = await this._courseService
+                .getCourseViewAsync(userId, shopItemView.courseId);
 
             return {
-                firstItemCode: firstItemCode,
+                firstItemCode: courseView.firstItemCode,
                 discountCode: null
             };
         }

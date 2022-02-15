@@ -71,20 +71,9 @@ export class PretestService {
                 .insert(answerSession);
         }
 
-        // course 
-        const course = await this._ormService
-            .getRepository(CourseView)
-            .findOneOrFail({
-                where: {
-                    id: courseId,
-                    userId
-                }
-            });
-
         return {
             answerSessionId: answerSession.id,
-            exam: pretestExamDTO,
-            firstItemCode: course.firstItemCode
+            exam: pretestExamDTO
         } as PretestDataDTO;
     }
 
@@ -103,7 +92,10 @@ export class PretestService {
                 }
             });
 
+        const courseView = await this._courseService
+            .getCourseViewAsync(userId, courseId);
+
         return this._mapperSerice
-            .map(PretestResultView, PretestResultDTO, view);
+            .map(PretestResultView, PretestResultDTO, view, courseView);
     }
 }

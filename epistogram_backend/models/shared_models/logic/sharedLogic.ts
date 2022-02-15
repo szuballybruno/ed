@@ -27,3 +27,11 @@ export const textContainsNumber = (text: string) => {
 
     return /\d/.test(text);
 }
+
+export const typecheck = (obj: any, type: "function") => {
+
+    if (type === "function")
+        return typeof obj === 'function';
+
+    return false;
+}

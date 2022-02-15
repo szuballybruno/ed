@@ -210,6 +210,7 @@ export const useIsMatchingCurrentRoute = () => {
 }
 
 export const isString = (obj: any) => typeof obj === 'string' || obj instanceof String;
+export const isNumber = (obj: any) => typeof obj === 'number' || obj instanceof Number;
 
 export function distinct<T>(array: T[]) {
 

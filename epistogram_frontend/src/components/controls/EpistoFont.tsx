@@ -1,4 +1,6 @@
 import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { createClassBuiler } from "../../helpers/classBuilder";
+import { isNumber, isString } from "../../static/frontendHelpers";
 import styles from "./css/EpistoFont.module.css";
 
 type FontSizeType = number | "fontExtraSmall" | "fontSmall" | "fontSmallPlus" | "fontMid" | "fontMidPlus" | "fontLarge" | "fontLargePlus" | "fontHuge" | "fontGiant" | "fontXXL"
@@ -35,44 +37,61 @@ export const EpistoFont = (params: {
 
     const autoFontSize = useAutoFontSize(
         ref,
-        typeof children === "string"
-            ? children
-            : "",
+        isString(children) ? children as any : "",
         allowedLines ?? 2,
-        maxFontSize ?? 20)
+        maxFontSize ?? 20,
+        !!isAutoFontSize);
 
+    const calcFontSize = isNumber(fontSize)
+        ? fontSize as number
+        : autoFontSize ?? undefined;
+
+    const whiteSpace = (() => {
+
+        if (isMultiline)
+            return "pre-line";
+
+        if (isAutoFontSize)
+            return "normal";
+
+        if (noLineBreak)
+            return "nowrap";
+
+        return undefined;
+    })();
+
+    // NOTES
+    // whiteSpace: "pre-line" is required for new lines
+    // whiteSpace: "normal" is required for autoFontSize
     return <p
         onClick={onClick}
         ref={ref}
         style={{
-            whiteSpace: isMultiline
-                ? "pre-line" //required for new lines
-                : isAutoFontSize
-                    ? "normal" //required for autoFontSize
-                    : noLineBreak
-                        ? "nowrap"
-                        : undefined,
+            whiteSpace,
             textTransform: isUppercase
                 ? "uppercase"
                 : undefined,
-            fontSize: (typeof fontSize === "number" && !isAutoFontSize)
-                ? fontSize
-                : (!fontSize && isAutoFontSize)
-                    ? autoFontSize
-                    : undefined,
+            fontSize: calcFontSize,
             ...style
         }}
-        className={`${styles["episto-font-main"]} ${typeof fontSize === "string" && fontSize} ${classes?.join(" ")}`}>
+        className={createClassBuiler()
+            .custom(styles["episto-font-main"])
+            .if(isString(fontSize), builder => builder
+                .custom(fontSize as string))
+            .if(!!classes, builder => builder
+                .appendList(classes!))
+            .build()}>
 
         {children}
-    </p>
+    </p >
 }
 
 export const useAutoFontSize = (
     ref: RefObject<HTMLSpanElement> | null,
     text: string,
     allowedLines: number,
-    maxSize: number) => {
+    maxSize: number,
+    enabled: boolean) => {
 
     const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
@@ -105,6 +124,10 @@ export const useAutoFontSize = (
             }
         }
     }, [ref, resizeListener]);
+
+    // IF DISABLED
+    if (!enabled)
+        return null;
 
     const characterCount = text.length;
     const offset = 1.9;
