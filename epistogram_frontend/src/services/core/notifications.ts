@@ -23,18 +23,18 @@ export const showNotification = (text: string, type?: NotificationType, options?
     });
 }
 
-export const useShowErrorDialog = (title?: string) => {
+export const useShowErrorDialog = () => {
 
     const errorDialogLogic = useContext(ErrorDialogContext)!;
 
-    const showErrorDialog = (descriptionOrError: string | any) => {
+    const showErrorDialog = (descriptionOrError: string | any, title?: string) => {
 
         const asAny = descriptionOrError as any;
 
         errorDialogLogic
             .openDialog({
-                title: title ?? "An error has occured.",
-                description: asAny.message ?? asAny ?? "Unknown error."
+                title: title ?? "Hiba",
+                description: asAny.message ?? asAny ?? "Ismeretlen hiba, kerlek probald ujra kesobb!."
             });
     }
 

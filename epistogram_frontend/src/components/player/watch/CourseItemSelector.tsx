@@ -11,6 +11,7 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoPopper } from '../../controls/EpistoPopper';
+import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { CourseItemList } from "../../universal/CourseItemList";
 
@@ -33,7 +34,8 @@ export const CourseItemSelector = (props: {
 
         try {
 
-            await setCourseModeAsync({ courseId, mode });
+            const payload = { courseId, mode };
+            await setCourseModeAsync(payload);
             await refetchPlayerData();
         }
         catch (e: any) {
@@ -42,10 +44,48 @@ export const CourseItemSelector = (props: {
         }
     }
 
+    const dialogLogic = useEpistoDialogLogic({
+        defaultCloseButtonType: "top"
+    });
+
+    const changeToAdvancedModePermanently = () => {
+
+        dialogLogic
+            .openDialog({
+                buttons: [
+                    {
+                        action: () => setCourseMode("advanced"),
+                        title: "Go ahead",
+                    }
+                ]
+            });
+    }
+
+    const canChangeCourseMode = user.userActivity.canChangeCourseMode;
+
     return <>
 
-        {/* learning type selector */}
-        {user.userActivity.canChangeCourseMode && <RadioGroup
+        {/* warning dialog */}
+        <EpistoDialog logic={dialogLogic}>
+            Point of no return
+        </EpistoDialog>
+
+        {/* option to enable advanced mode
+        IF STARTED COURSE  IN BEGINNER MODE */}
+        {(mode === "beginner" && !canChangeCourseMode) && <>
+            <EpistoButton
+                style={{
+                    margin: "30px"
+                }}
+                variant="colored"
+                onClick={changeToAdvancedModePermanently}>
+
+                Change to advanced mode
+            </EpistoButton>
+        </>}
+
+        {/* learning type selector FOR ADMINS ONLY */}
+        {canChangeCourseMode && <RadioGroup
             value={mode}
             style={{
                 position: "relative"
@@ -106,7 +146,8 @@ export const CourseItemSelector = (props: {
                 }}
                 icon={<HelpOutlineIcon />}
                 onClick={() => setIsInfoDialogOpen(true)} />
-        </RadioGroup>}
+        </RadioGroup>
+        }
 
         <EpistoPopper
             isOpen={isInfoDialogOpen}

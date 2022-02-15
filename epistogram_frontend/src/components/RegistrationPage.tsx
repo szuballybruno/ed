@@ -37,7 +37,7 @@ export const RegistrationPage = () => {
         validate
     } = usePasswordEntryState();
 
-    const showErrorDialog = useShowErrorDialog(translatableTexts.registrationPage.error);
+    const showErrorDialog = useShowErrorDialog();
     const { navigate } = useNavigation();
     const { registerUserAsync, registerUserState } = useRegisterUser();
     const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();

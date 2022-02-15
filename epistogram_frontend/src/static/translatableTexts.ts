@@ -47,7 +47,6 @@ export const translatableTexts = {
 
     registrationPage: {
 
-        error: "Hiba!",
         successfulRegistration: "Sikeres regisztráció!",
         unknownErrorTryAgain: "Ismeretlen hiba történt, kérjük próbálkozzon újra!",
 

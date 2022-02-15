@@ -27,7 +27,8 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
         ]
         : [];
 
-    const [buttons, setButtons] = useState<ButtonType[]>(defaultButtons);
+    const [buttons, setButtons] = useState<ButtonType[]>(defaultButtons
+        .concat(dialogOptions?.buttons ?? []));
 
     const openDialog = (opt?: DialogOptions) => {
 
@@ -115,27 +116,35 @@ export const EpistoDialog = (props: {
 
             <Flex
                 id="dialogContentFlex"
-                style={{
-                    padding: "0"
-                }}>
+                padding={children ? "0px" : "10px"}
+                minHeight="70px">
+
+                {/* simple text content */}
                 {description && description}
+
+                {/* react node contnet */}
                 {children}
             </Flex>
         </Flex>
 
         {/* buttons */}
-        {buttons.length > 0 && <Flex p="10px" flexDirection="row-reverse">
-            {buttons
-                .map(x => <EpistoButton
-                    variant="outlined"
-                    onClick={() => {
+        {buttons.length > 0 && <>
+            <Flex
+                p="10px"
+                flexDirection="row-reverse">
 
-                        x.action();
-                        closeDialog();
-                    }}>
-                    {x.title}
-                </EpistoButton>)}
-            {buttonComponents}
-        </Flex>}
-    </Dialog>
+                {buttons
+                    .map(x => <EpistoButton
+                        variant="outlined"
+                        onClick={() => {
+
+                            x.action();
+                            closeDialog();
+                        }}>
+                        {x.title}
+                    </EpistoButton>)}
+                {buttonComponents}
+            </Flex>
+        </>}
+    </Dialog >
 }
