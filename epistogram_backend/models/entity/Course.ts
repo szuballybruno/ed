@@ -4,6 +4,8 @@ import { CourseVisibilityType } from "../shared_models/types/sharedTypes";
 import { CourseStateView } from "../views/CourseStateView";
 import { CourseCategory } from "./CourseCategory";
 import { CourseModule } from "./CourseModule";
+import { CourseRatingGroup } from "./courseRating/CourseRatingGroup";
+import { CourseRatingQuestionUserAnswer } from "./courseRating/CourseRatingQuestionUserAnswer";
 import { Exam } from "./Exam";
 import { PrequizQuestion } from "./PrequizQuestion";
 import { ShopItem } from "./ShopItem";
@@ -132,4 +134,9 @@ export class Course {
     @OneToMany(_ => PrequizQuestion, x => x.course)
     @JoinColumn()
     prequizQuestions: PrequizQuestion[];
+
+    // courseRatingUserAnswers
+    @JoinColumn()
+    @OneToMany(_ => CourseRatingQuestionUserAnswer, x => x.course)
+    courseRatingUserAnswers: CourseRatingQuestionUserAnswer[];
 }

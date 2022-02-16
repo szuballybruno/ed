@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { serverUrl } from "../../static/Environemnt";
-import { getErrorTypeByHTTPCode, getUrl, stringifyQueryObject, ErrorCode } from "../../static/frontendHelpers";
+import { getErrorTypeByHTTPCode, getUrl, ErrorCode } from "../../static/frontendHelpers";
 import HttpErrorResponseDTO from "../../models/shared_models/HttpErrorResponseDTO";
 import { LoadingStateType } from "../../models/types";
 

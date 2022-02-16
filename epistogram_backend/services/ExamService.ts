@@ -124,7 +124,7 @@ export class ExamService {
             .where("e.id = :examId", { examId })
             .getOneOrFail();
 
-        const courseId = examBeforeSave.module!.courseId;
+        const courseId = examBeforeSave.module?.courseId ?? dto.courseId;
 
         // if this exam was not a final exam previously, 
         // but now it is, set every other exam in the course as non final exam

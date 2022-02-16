@@ -14,6 +14,7 @@ import { ModuleAdminShortDTO } from "../../../models/shared_models/ModuleAdminSh
 import { useCourseContentEditData, useSaveCourseContentData } from "../../../services/api/courseApiService";
 import { useCreateExam, useDeleteExam } from "../../../services/api/examApiService";
 import { useCreateModule, useDeleteModule } from "../../../services/api/moduleApiService";
+import { usePretestExamId } from "../../../services/api/pretestApiService";
 import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
@@ -49,6 +50,7 @@ export const AdminCourseContentSubpage = () => {
     // http
     const { courseContentEditData, courseContentEditDataError, courseContentEditDataState, refetchCourseContentEditData } = useCourseContentEditData(courseId);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseContentData();
+    const { pretestExamId, pretestExamIdError, pretestExamIdState } = usePretestExamId(courseId);
     const { createVideoAsync } = useCreateVideo();
     const { createExamAsync } = useCreateExam();
     const { deleteVideoAsync } = useDeleteVideo();
@@ -380,6 +382,16 @@ export const AdminCourseContentSubpage = () => {
                     title: translatableTexts.administration.courseContentSubpage.addModuleExtended
                 },
                 {
+                    action: () => {
+
+                        navigate(applicationRoutes.administrationRoute.coursesRoute.editExamRoute, {
+                            courseId,
+                            examId: pretestExamId
+                        })
+                    },
+                    title: "Edit pretest exam"
+                },
+                {
                     action: handleOpenCloseAllModules,
                     title: isAnyModulesOpen
                         ? translatableTexts.misc.closeAll
@@ -457,7 +469,6 @@ export const AdminCourseContentSubpage = () => {
                                                         onClick={() => handleEditModule(module)}>
                                                         <EditIcon />
                                                     </EpistoButton>
-
 
                                                     {/* delete module */}
                                                     <EpistoButton

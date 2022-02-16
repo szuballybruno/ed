@@ -5,6 +5,7 @@ import { ActivitySession } from "./ActivitySession";
 import { AnswerSession } from "./AnswerSession";
 import { CoinTransaction } from "./CoinTransaction";
 import { Course } from "./Course";
+import { CourseRatingQuestionUserAnswer } from "./courseRating/CourseRatingQuestionUserAnswer";
 import { DailyTipOccurrence } from "./DailyTipOccurrence";
 import { DiscountCode } from "./DiscountCode";
 import { Event } from "./Event";
@@ -180,9 +181,14 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => DailyTipOccurrence, x => x.user)
     dailyTipOccurrences: DailyTipOccurrence[];
-    
+
     // answers 
     @OneToMany(_ => PrequizUserAnswer, x => x.question)
     @JoinColumn()
     prequizAnswers: PrequizUserAnswer[];
+
+    // courseRatingAnswers
+    @OneToMany(_ => CourseRatingQuestionUserAnswer, x => x.user)
+    @JoinColumn()
+    courseRatingAnswers: CourseRatingQuestionUserAnswer[];
 }

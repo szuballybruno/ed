@@ -80,6 +80,8 @@ import { PrequizController } from './api/PrequizController';
 import { PrequizService } from './services/PrequizService';
 import { PretestController } from './api/PretestController';
 import { PretestService } from './services/PretestService';
+import { CourseRatingController } from './api/CourseRatingController';
+import { CourseRatingService } from './services/CourseRatingService';
 
 (async () => {
 
@@ -134,11 +136,13 @@ import { PretestService } from './services/PretestService';
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
     const prequizService = new PrequizService(ormConnectionService, mapperService, courseService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, courseService);
+    const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
     const prequizController = new PrequizController(prequizService);
     const pretestController = new PretestController(pretestService);
+    const courseRatingController = new CourseRatingController(courseRatingService);
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
     const registrationController = new RegistrationController(registrationService, userService, globalConfig);
@@ -252,7 +256,11 @@ import { PretestService } from './services/PretestService';
     // pretest 
     addEndpoint(apiRoutes.pretest.getPretestData, pretestController.getPretestDataAction);
     addEndpoint(apiRoutes.pretest.getPretestResults, pretestController.getPretestResultsAction);
-    
+    addEndpoint(apiRoutes.pretest.getPretestExamId, pretestController.getPretestExamIdAction);
+
+    // course rating 
+    addEndpoint(apiRoutes.courseRating.getCourseRatingGroups, courseRatingController.getCourseRatingGroupsAction);
+
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
 

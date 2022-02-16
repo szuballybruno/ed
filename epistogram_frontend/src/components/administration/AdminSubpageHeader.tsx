@@ -25,6 +25,7 @@ export const AdminSubpageHeader = (props: {
 } & FlexProps) => {
 
     const { children, subRouteLabel, headerButtons, navigationQueryParams, tabMenuItems, onSave, ...css } = props;
+    const tabMenuItemsList = (tabMenuItems ?? []);
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
@@ -36,9 +37,6 @@ export const AdminSubpageHeader = (props: {
 
     const currentRoute = objToArray(applicationRoutes.administrationRoute)
         .filter(route => isMatchingCurrentRoute(route, false))[0];
-
-    // const subRoute = objToArray(currentRoute)
-    //     .filter(x => isMatchingCurrentRoute(x.route, true))[0];
 
     const { briefUserData } = useBriefUserData(userId);
     const { courseBriefData } = useCourseBriefData(courseId);
@@ -88,13 +86,30 @@ export const AdminSubpageHeader = (props: {
         </Box>
     }
 
-    const currentMatchingRoute = (tabMenuItems ?? [])
+    const currentMatchingRoute = tabMenuItemsList
         .filter(route => isMatchingCurrentRoute(route))[0];
 
-    const navigateToTab = (path: string) => {
+    const handleNavigateToTab = (route: string) => {
 
-        navigate(path, { userId, courseId, videoId, examId, shopItemId, ...navigationQueryParams });
-    };
+        const tabRoute = tabMenuItemsList
+            .filter(x => x.route === route)[0];
+
+        if (tabRoute.navAction) {
+
+            tabRoute.navAction();
+        }
+        else {
+
+            navigate(route, {
+                userId,
+                courseId,
+                videoId,
+                examId,
+                shopItemId,
+                ...navigationQueryParams
+            });
+        }
+    }
 
     return <Flex
         direction={"column"}
@@ -137,12 +152,14 @@ export const AdminSubpageHeader = (props: {
                 <Flex flex="1">
                     {tabMenuItems && <Tabs
                         value={currentMatchingRoute?.route}
-                        onChange={(x, path) => navigateToTab(path)} >
+                        onChange={(_, route: string) => handleNavigateToTab(route)}>
 
                         {tabMenuItems
-                            .map(x => {
+                            .map(tabRoute => {
 
-                                return <Tab label={x.title} value={x.route} />
+                                return <Tab
+                                    label={tabRoute.title}
+                                    value={tabRoute.route} />
                             })}
                     </Tabs>}
                 </Flex>

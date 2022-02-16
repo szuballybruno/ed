@@ -37,6 +37,7 @@ export class SeedService {
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedShopItems");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seedDiscountCodes");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_prequiz_questions");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_course_rating");
 
         // recalc seqs
         await this._sqlBootstrapperService.recalcSequencesAsync();

@@ -1,3 +1,4 @@
+import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
 import { PretestDataDTO } from "../../models/shared_models/PretestDataDTO";
 import { PretestResultDTO } from "../../models/shared_models/PretestResultDTO";
 import { apiRoutes } from "../../models/shared_models/types/apiRoutes"
@@ -22,5 +23,16 @@ export const usePretestResults = (courseId: number) => {
         pretestResults: qr.data,
         pretestResultsError: qr.error,
         pretestResultsState: qr.state
+    }
+}
+
+export const usePretestExamId = (courseId: number) => {
+
+    const qr = useReactQuery2<IdResultDTO>(apiRoutes.pretest.getPretestExamId, { courseId });
+
+    return {
+        pretestExamId: qr.data?.id ?? null,
+        pretestExamIdError: qr.error,
+        pretestExamIdState: qr.state
     }
 }

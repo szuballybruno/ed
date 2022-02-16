@@ -1,6 +1,6 @@
 import { usePretestData } from "../../../services/api/pretestApiService";
 import { useNavigation } from "../../../services/core/navigatior";
-import { useIntParam } from "../../../static/frontendHelpers";
+import { useIntParam } from "../../../static/locationHelpers";
 import { ExamQuestions } from "../../exam/ExamQuestions";
 import { LoadingFrame } from "../../system/LoadingFrame";
 

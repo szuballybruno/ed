@@ -2,12 +2,13 @@ import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { matchPath, useLocation, useParams } from "react-router-dom";
+import { matchPath, useHistory, useLocation, useParams } from "react-router-dom";
 import { validatePassowrd } from "../models/shared_models/logic/sharedLogic";
 import { ErrorCodeType, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
 import { ApplicationRoute, LoadingStateType } from "../models/types";
 import { httpGetAsync } from "../services/core/httpClient";
 import { assetStorageUrl } from "./Environemnt";
+import { stringifyQueryObject } from "./locationHelpers";
 import { translatableTexts } from "./translatableTexts";
 
 export const iterate = <T>(n: number, fn: (index) => T) => {
@@ -54,26 +55,6 @@ export const dateTimeToString = (date: Date | string) => {
         return new Date(date).toLocaleString();
 
     return date.toLocaleString();
-}
-
-export const useIntParam = (name: string) => {
-
-    const param = useParams()[name];
-    if (!param)
-        return null;
-        
-    return parseInt(param);
-}
-
-export const useBoolParam = (name: string) => {
-
-    const params = useParams();
-    const value = params[name];
-
-    if (value !== "true" && value !== "false")
-        throw new Error("Failed to parse boolean url param!");
-
-    return value === "true";
 }
 
 export const getUrl = (path: string, params?: any, query?: any) => {
@@ -559,26 +540,6 @@ export const objToArray = (obj: any) => {
     }
 
     return properties;
-}
-
-export const stringifyQueryObject = (queryObj: any) => {
-
-    let qs = "?";
-
-    for (const key in queryObj) {
-        if (Object.prototype.hasOwnProperty.call(queryObj, key)) {
-
-            const element = queryObj[key];
-            const andMark = qs === "?"
-                ? ""
-                : "&";
-
-            if (element !== undefined && element !== null)
-                qs += andMark + key + "=" + element;
-        }
-    }
-
-    return qs;
 }
 
 export const isCurrentRoute = (route: string) => window.location.pathname === route;

@@ -19,11 +19,17 @@ import { FlexListItem } from "../../universal/FlexListItem";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoLabel } from "../../controls/EpistoLabel";
+import { ApplicationRoute } from "../../../models/types";
 
-export const EditExamSubpage = () => {
+export const EditExamSubpage = (props: {
+    examId?: number,
+    activeRoute?: ApplicationRoute
+}) => {
 
     const params = useParams<{ examId: string, courseId: string }>();
-    const examId = parseInt(params.examId);
+    const examId = props.examId
+        ? props.examId
+        : parseInt(params.examId);
     const courseId = parseInt(params.courseId);
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
@@ -66,7 +72,10 @@ export const EditExamSubpage = () => {
                 id: examEditData?.id!,
                 questions: questions,
                 isFinalExam: isFinalExam,
-                reatakeLimit: isRetakeLimited ? parseInt(reateLimit) : null
+                reatakeLimit: isRetakeLimited
+                    ? parseInt(reateLimit)
+                    : null,
+                courseId
             } as ExamEditDataDTO;
 
             await saveExamAsync(dto);
@@ -125,7 +134,9 @@ export const EditExamSubpage = () => {
                 applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
                 applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
                 applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                applicationRoutes.administrationRoute.coursesRoute.editExamRoute,
+                props.activeRoute
+                    ? props.activeRoute
+                    : applicationRoutes.administrationRoute.coursesRoute.editExamRoute,
             ]}
             onSave={handleSaveAsync}>
             <Flex

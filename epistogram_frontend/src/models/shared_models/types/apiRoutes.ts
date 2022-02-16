@@ -76,7 +76,12 @@ export const apiRoutes = {
 
     pretest: {
         getPretestData: "/pretest/get-pretest-data",
-        getPretestResults: "/pretest/get-pretest-results"
+        getPretestResults: "/pretest/get-pretest-results",
+        getPretestExamId: "/pretest/get-pretest-exam-id"
+    },
+
+    courseRating: {
+        getCourseRatingGroups: "/courserating/get-course-rating-groups"
     },
 
     userStats: {

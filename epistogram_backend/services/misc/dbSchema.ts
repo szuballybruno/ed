@@ -74,6 +74,10 @@ import { PrequizAnswer } from "../../models/entity/PrequizAnswer";
 import { PrequizUserAnswer } from "../../models/entity/PrequizUserAnswer";
 import { PrequizQuestionView } from "../../models/views/PrequizQuestionView";
 import { PretestResultView } from "../../models/views/PretestResultView";
+import { CourseRatingGroup } from "../../models/entity/courseRating/CourseRatingGroup";
+import { CourseRatingQuestion } from "../../models/entity/courseRating/CourseRatingQuestion";
+import { CourseRatingQuestionUserAnswer } from "../../models/entity/courseRating/CourseRatingQuestionUserAnswer";
+import { CourseRatingQuestionView } from "../../models/views/CourseRatingQuestionView";
 
 export const dbSchema = {
 
@@ -122,7 +126,8 @@ export const dbSchema = {
         "user_latest_activity_view",
         "user_admin_list_view",
         "prequiz_question_view",
-        "pretest_result_view"
+        "pretest_result_view",
+        "course_rating_question_view"
     ],
 
     functionScripts: [
@@ -191,7 +196,8 @@ export const dbSchema = {
         PersonalityTraitCategoryView,
         UserAdminListView,
         PrequizQuestionView,
-        PretestResultView
+        PretestResultView,
+        CourseRatingQuestionView
     ] as any[],
 
     entities: [
@@ -236,6 +242,9 @@ export const dbSchema = {
         VideoRating,
         PrequizQuestion,
         PrequizAnswer,
-        PrequizUserAnswer
+        PrequizUserAnswer,
+        CourseRatingGroup,
+        CourseRatingQuestion,
+        CourseRatingQuestionUserAnswer
     ] as any[]
 }

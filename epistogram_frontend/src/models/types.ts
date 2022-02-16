@@ -12,6 +12,7 @@ export type ApplicationRoute = {
     route: string;
     icon?: any;
     exact?: boolean;
+    navAction?: () => void;
 }
 
 export type DialogOptions = {

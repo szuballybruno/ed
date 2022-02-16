@@ -1,5 +1,6 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Exam } from "../models/entity/Exam";
+import { IdResultDTO } from "../models/shared_models/IdResultDTO";
 import { PretestDataDTO } from "../models/shared_models/PretestDataDTO";
 import { PretestResultDTO } from "../models/shared_models/PretestResultDTO";
 import { CourseView } from "../models/views/CourseView";
@@ -97,5 +98,21 @@ export class PretestService {
 
         return this._mapperSerice
             .map(PretestResultView, PretestResultDTO, view, courseView);
+    }
+
+    async getPretestExamIdAsync(courseId: number) {
+
+        const exam = await this._ormService
+            .getRepository(Exam)
+            .findOneOrFail({
+                where: {
+                    courseId,
+                    type: "pretest"
+                }
+            });
+
+        return {
+            id: exam.id
+        } as IdResultDTO;
     }
 }

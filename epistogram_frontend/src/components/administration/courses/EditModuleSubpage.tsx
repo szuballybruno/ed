@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { useIntParam } from "../../../static/frontendHelpers"
 import { ModuleAdminEditDTO } from "../../../models/shared_models/ModuleAdminEditDTO"
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications"
 import { LoadingFrame } from "../../system/LoadingFrame"
@@ -10,6 +9,7 @@ import { useModuleEditData, useSaveModule } from "../../../services/api/moduleAp
 import { SelectImage } from "../../universal/SelectImage"
 import { Flex, Image } from "@chakra-ui/react";
 import { EpistoLabel } from "../../controls/EpistoLabel"
+import { useIntParam } from "../../../static/locationHelpers"
 
 export const EditModuleSubpage = () => {
 

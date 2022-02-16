@@ -29,4 +29,12 @@ export class PretestController {
                 .getQuery<any>()
                 .getValue(x => x.courseId));
     }
+
+    getPretestExamIdAction = async (params: ActionParams) => {
+
+        return this._pretestService
+            .getPretestExamIdAsync(params
+                .getQuery<any>()
+                .getValue(x => x.courseId));
+    }
 }

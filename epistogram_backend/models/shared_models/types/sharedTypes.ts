@@ -46,6 +46,8 @@ export type CourseVisibilityType = "public" | "private";
 
 export type RoleType = "administrator" | "supervisor" | "user";
 
+export type CourseRatingQuesitonType = "rating_stars" | "range_1_10" | "free_text";
+
 export const RoleIdEnum = {
     administrator: 1,
     supervisor: 2,

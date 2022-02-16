@@ -7,7 +7,7 @@ import { useCreateDailyTip, useDeleteDailyTip } from "../../../services/api/dail
 import { usePersonalityTraitCategoryDetails } from "../../../services/api/personalityAssessmentApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { useBoolParam, useIntParam } from "../../../static/frontendHelpers";
+import { useBoolParam, useIntParam } from "../../../static/locationHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { FlexListItem } from "../../universal/FlexListItem";

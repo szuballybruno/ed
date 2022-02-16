@@ -4,7 +4,7 @@ import { useSetCourseMode } from "../../../services/api/courseApiService";
 import { usePretestResults } from "../../../services/api/pretestApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { useShowErrorDialog } from "../../../services/core/notifications";
-import { useIntParam } from "../../../static/frontendHelpers";
+import { useIntParam } from "../../../static/locationHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { LoadingFrame } from "../../system/LoadingFrame";
