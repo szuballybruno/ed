@@ -1,7 +1,9 @@
 import { Flex } from "@chakra-ui/react";
 import { Slider } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useCourseRatingAnswers, useCourseRatingGroups, useSaveCourseRatingGroupAnswers } from "../../../services/api/courseRatingApiService";
+import { useCourseRatingGroups, useSaveCourseRatingGroupAnswers } from "../../../services/api/courseRatingApiService";
+import { useNavigation } from "../../../services/core/navigatior";
+import { useShowErrorDialog } from "../../../services/core/notifications";
 import { usePaging } from "../../../static/frontendHelpers";
 import { useIntParam } from "../../../static/locationHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
@@ -15,10 +17,21 @@ import { RatingStars } from "../../universal/RatingStars";
 export const CourseRatingSubpage = () => {
 
     const courseId = useIntParam("courseId")!;
+    const { navigateToCourseOverview } = useNavigation();
 
-    const { courseRatingGroups, courseRatingGroupsError, courseRatingGroupsState } = useCourseRatingGroups(courseId);
+    const { courseRatingGroups, courseRatingGroupsError, courseRatingGroupsState, refetchCourseRatingGroupsAsync } = useCourseRatingGroups(courseId);
 
-    const paging = usePaging(courseRatingGroups ?? [])
+    const showError = useShowErrorDialog();
+
+    const paging = usePaging(
+        courseRatingGroups ?? [],
+        undefined,
+        () => {
+
+            console.log('asdasdaw');
+            navigateToCourseOverview(courseId);
+        });
+
     const [questionAnswers, setQuestionAnswers] = useState<{ quesitionId: number, value: number | null, text: string | null }[]>([]);
     const currentRatingGroup = paging.currentItem;
     const currentQuestions = currentRatingGroup?.questions ?? [];
@@ -33,9 +46,27 @@ export const CourseRatingSubpage = () => {
         paging.previous();
     }
 
-    const handleNextAsync = () => {
+    const handleNextAsync = async () => {
 
-        paging.next();
+        try {
+
+            await saveCourseRatingGroupAnswers({
+                answers: questionAnswers
+                    .map(x => ({
+                        quesitonId: x.quesitionId,
+                        text: x.text,
+                        value: x.value
+                    })),
+                courseId
+            });
+
+            await refetchCourseRatingGroupsAsync();
+
+            paging.next();
+        } catch (e) {
+
+            showError(e);
+        }
     }
 
     useEffect(() => {

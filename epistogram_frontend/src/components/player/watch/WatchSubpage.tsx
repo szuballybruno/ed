@@ -114,6 +114,7 @@ export const WatchSubpage = () => {
                             continueCourse={handleContinueCourse}
                             answerSessionId={answerSessionId!}
                             setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
+                            courseId={courseId!}
                             exam={exam} />}
 
                         <ModuleView module={module} startModule={handleContinueCourse} />

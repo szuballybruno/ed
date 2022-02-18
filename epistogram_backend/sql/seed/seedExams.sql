@@ -11,4 +11,5 @@ VALUES
 INSERT INTO public.exam 
     (id, course_id, title, subtitle, description, order_index, module_id, type)
 VALUES
-    (6, 1, 'Pretest exam course 1', 'Pretest exam course 1 desc', '', 0, NULL, 'pretest')
+    (6, 1, 'Pretest exam course 1', 'Pretest exam course 1 desc', '', 0, NULL, 'pretest'),
+    (7, 4, 'Pretest exam course 4', 'Pretest exam course 4 desc', '', 0, NULL, 'pretest');

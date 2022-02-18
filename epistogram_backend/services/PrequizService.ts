@@ -1,4 +1,4 @@
-import { PrequizUserAnswer } from "../models/entity/PrequizUserAnswer";
+import { PrequizUserAnswer } from "../models/entity/prequiz/PrequizUserAnswer";
 import { PrequizAnswerDTO } from "../shared/dtos/PrequizAnswerDTO";
 import { PrequizQuestionDTO } from "../shared/dtos/PrequizQuestionDTO";
 import { PrequizUserAnswerDTO } from "../shared/dtos/PrequizUserAnswerDTO";
@@ -34,11 +34,9 @@ export class PrequizService {
         await this._courseService
             .setCurrentCourse(userId, courseId, "prequiz", null)
 
-        // 
         const views = await this._ormService
             .getRepository(PrequizQuestionView)
             .createQueryBuilder("pqv")
-            .where("pqv.course_id = :courseId", { courseId })
             .getMany();
 
         const questions = views
@@ -67,7 +65,7 @@ export class PrequizService {
      * @param userId 
      * @returns 
      */
-    async getUserAnswerAsync(questionId: number, userId: number) {
+    async getUserAnswerAsync(userId: number, courseId: number, questionId: number) {
 
         const userAnswer = await this._ormService
             .getRepository(PrequizUserAnswer)
@@ -75,6 +73,7 @@ export class PrequizService {
             .leftJoinAndSelect("pua.answer", "puaa")
             .where("pua.userId = :userId", { userId })
             .andWhere("pua.questionId = :questionId", { questionId })
+            .andWhere("pua.courseId = :courseId", { courseId })
             .getOne();
 
         if (!userAnswer)
@@ -95,7 +94,7 @@ export class PrequizService {
      * @param answerId 
      * @param value 
      */
-    async answerPrequizQuestionAsync(userId: number, questionId: number, answerId: number | null, value: number | null) {
+    async answerPrequizQuestionAsync(userId: number, questionId: number, courseId: number, answerId: number | null, value: number | null) {
 
         const previousAnswer = await this._ormService
             .getRepository(PrequizUserAnswer)
@@ -112,6 +111,7 @@ export class PrequizService {
                 id: previousAnswer?.id,
                 answerId,
                 questionId,
+                courseId,
                 userId,
                 value
             })

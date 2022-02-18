@@ -30,6 +30,7 @@ export const useAnswerPrequizQuestion = () => {
 
     const qr = usePostDataUnsafe<{
         questionId: number,
+        courseId: number,
         answerId: number | null,
         value: number | null
     }, void>(apiRoutes.prequiz.answerPrequizQuestion);

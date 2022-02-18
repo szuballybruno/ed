@@ -23,13 +23,16 @@ export class PrequizController {
     getUserAnswerAction = async (params: ActionParams) => {
 
         const query = params
-            .getQuery<{ questionId: number }>();
+            .getQuery<{ questionId: number, courseId: number }>();
 
         const questionId = query
             .getValue(x => x.questionId, "int");
 
+        const courseId = query
+            .getValue(x => x.courseId, "int");
+
         return await this._prequizService
-            .getUserAnswerAsync(questionId, params.currentUserId);
+            .getUserAnswerAsync(params.currentUserId, courseId, questionId);
     }
 
     answerPrequizQuestionAction = async (params: ActionParams) => {
@@ -38,11 +41,15 @@ export class PrequizController {
             .getBody<{
                 questionId: number,
                 value: number | null,
-                answerId: number | null
+                answerId: number | null,
+                courseId: number
             }>();
 
         const questionId = bod
             .getValue(x => x.questionId, "int");
+
+        const courseId = bod
+            .getValue(x => x.courseId, "int");
 
         const value = bod
             .getValueOrNull(x => x.value, "int");
@@ -51,6 +58,6 @@ export class PrequizController {
             .getValueOrNull(x => x.answerId, "int");
 
         return await this._prequizService
-            .answerPrequizQuestionAsync(params.currentUserId, questionId, answerId, value);
+            .answerPrequizQuestionAsync(params.currentUserId, questionId, courseId, answerId, value);
     }
 }

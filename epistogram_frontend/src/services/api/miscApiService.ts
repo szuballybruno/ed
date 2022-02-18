@@ -4,6 +4,7 @@ import { JobTitleDTO } from "../../shared/dtos/JobTitleDTO";
 import { OrganizationDTO } from "../../shared/dtos/OrganizationDTO";
 import { OverviewPageDTO } from "../../shared/dtos/OverviewPageDTO";
 import { apiRoutes } from "../../shared/types/apiRoutes";
+import { CourseOverviewDataDTO } from "../../shared/dtos/CourseOverviewDataDTO";
 
 export const useCurrentCourseItemCode = () => {
 
@@ -16,7 +17,7 @@ export const useCurrentCourseItemCode = () => {
 
 export const useCourseOverviewData = () => {
 
-    const qr = useReactQuery2<string>(apiRoutes.misc.getCourseOverviewData);
+    const qr = useReactQuery2<CourseOverviewDataDTO>(apiRoutes.misc.getCourseOverviewData);
 
     return {
         courseOverviewData: qr.data

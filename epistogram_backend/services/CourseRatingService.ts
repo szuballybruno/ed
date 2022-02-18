@@ -61,16 +61,34 @@ export class CourseRatingService extends ServiceBase {
      */
     async saveCourseRatingGroupAnswersAsync(userId: number, answersDTO: CourseRatingQuestionAnswersDTO) {
 
+        const courseId = answersDTO.courseId;
+
+        const prevAnswers = await this._ormService
+            .getRepository(CourseRatingQuestionUserAnswer)
+            .createQueryBuilder("crqua")
+            .where("crqua.userId = :userId", { userId })
+            .andWhere("crqua.courseId = :courseId", { courseId })
+            .andWhere("crqua.courseRatingQuestionId IN (:...questionIds)", {
+                questionIds: answersDTO
+                    .answers
+                    .map(x => x.quesitonId)
+            })
+            .getMany();
+
+        const answers = answersDTO
+            .answers
+            .map(x => ({
+                id: prevAnswers
+                    .firstOrNull(y => y.courseRatingQuestionId === x.quesitonId)?.id ?? undefined,
+                userId,
+                courseId,
+                text: x.text ?? null,
+                value: x.value ?? null,
+                courseRatingQuestionId: x.quesitonId
+            } as CourseRatingQuestionUserAnswer));
+
         await this._ormService
             .getRepository(CourseRatingQuestionUserAnswer)
-            .save(answersDTO
-                .answers
-                .map(x => ({
-                    userId,
-                    courseId: answersDTO.courseId,
-                    text: x.text ?? null,
-                    value: x.value ?? null,
-                    courseRatingQuestionId: x.quesitonId
-                } as CourseRatingQuestionUserAnswer)));
+            .save(answers);
     }
 }

@@ -30,8 +30,12 @@ export const useNavigation = () => {
     const navigateToWatchPrequiz = (courseId: number) => navigate(applicationRoutes.playerRoute.prequizRoute, { courseId });
 
     const navigateToWatchPretest = (courseId: number) => navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
-    
+
     const navigateToWatchPretestResults = (courseId: number) => navigate(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
+
+    const navigateToCourseRating = (courseId: number) => navigate(applicationRoutes.playerRoute.courseRatingRoute, { courseId });
+
+    const navigateToCourseOverview = (courseId: number) => navigate(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
 
     const playCourse = (courseId: number, stageName: CourseStageNameType, currentItemCode: string | null) => {
 
@@ -65,6 +69,8 @@ export const useNavigation = () => {
         navigateToWatchPrequiz,
         navigateToWatchPretest,
         navigateToWatchPretestResults,
+        navigateToCourseRating,
+        navigateToCourseOverview,
         playCourse
     };
 }

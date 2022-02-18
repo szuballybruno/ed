@@ -69,15 +69,15 @@ import { CourseOverviewView } from "../../models/views/CourseOverviewView";
 import { PersonalityTraitView } from "../../models/views/PersonalityTraitView";
 import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
 import { UserAdminListView } from "../../models/views/UserAdminListView";
-import { PrequizQuestion } from "../../models/entity/PrequizQuestion";
-import { PrequizAnswer } from "../../models/entity/PrequizAnswer";
-import { PrequizUserAnswer } from "../../models/entity/PrequizUserAnswer";
+import { PrequizQuestion } from "../../models/entity/prequiz/PrequizQuestion";
+import { PrequizUserAnswer } from "../../models/entity/prequiz/PrequizUserAnswer";
 import { PrequizQuestionView } from "../../models/views/PrequizQuestionView";
 import { PretestResultView } from "../../models/views/PretestResultView";
 import { CourseRatingGroup } from "../../models/entity/courseRating/CourseRatingGroup";
 import { CourseRatingQuestion } from "../../models/entity/courseRating/CourseRatingQuestion";
 import { CourseRatingQuestionUserAnswer } from "../../models/entity/courseRating/CourseRatingQuestionUserAnswer";
 import { CourseRatingQuestionView } from "../../models/views/CourseRatingQuestionView";
+import { PrequizAnswer } from "../../models/entity/prequiz/PrequizAnswer";
 
 export const dbSchema = {
 

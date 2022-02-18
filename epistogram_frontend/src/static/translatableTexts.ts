@@ -171,6 +171,7 @@ export const translatableTexts = {
         underMaintanence: "Under maintanence",
         registration: "Regisztráció",
         player: "Lejátszó",
+        courseOverview: "Kurzus összegző",
         pretest: "Pretest",
         pretestResults: "Pretest results",
         prequiz: "Prequiz",

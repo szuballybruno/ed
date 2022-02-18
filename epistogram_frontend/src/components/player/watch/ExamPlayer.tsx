@@ -1,9 +1,9 @@
 import React from "react";
-import { ExamPlayerDataDTO } from "../../../shared/dtos/ExamPlayerDataDTO";
 import { useStartExam } from "../../../services/api/examApiService";
+import { useNavigation } from "../../../services/core/navigatior";
 import { useShowErrorDialog } from "../../../services/core/notifications";
+import { ExamPlayerDataDTO } from "../../../shared/dtos/ExamPlayerDataDTO";
 import { usePaging } from "../../../static/frontendHelpers";
-import { CourseOverview } from "../../coureOverview/CourseOverview";
 import { ExamGreetSlide } from "../../exam/ExamGreetSlide";
 import { ExamQuestions } from "../../exam/ExamQuestions";
 import { ExamResultsSlide } from "../../exam/ExamResultsSlide";
@@ -12,6 +12,7 @@ import { SlidesDisplay } from "../../universal/SlidesDisplay";
 export const ExamPlayer = (props: {
     exam: ExamPlayerDataDTO,
     answerSessionId: number,
+    courseId: number,
     continueCourse: () => void,
     setIsExamInProgress: (isExamStarted: boolean) => void
 }) => {
@@ -20,11 +21,13 @@ export const ExamPlayer = (props: {
         exam,
         setIsExamInProgress,
         answerSessionId,
-        continueCourse
+        continueCourse,
+        courseId
     } = props;
 
     const { startExamAsync, startExamState } = useStartExam();
     const showError = useShowErrorDialog();
+    const { navigateToCourseRating } = useNavigation();
 
     const slidesState = usePaging([1, 2, 3, 4]);
 
@@ -46,9 +49,9 @@ export const ExamPlayer = (props: {
         slidesState.next();
     }
 
-    const goToCourseOverview = () => {
+    const goToCourseRating = () => {
 
-        slidesState.setItem(3);
+        navigateToCourseRating(courseId);
     }
 
     const handleContinueCourse = () => {
@@ -72,9 +75,7 @@ export const ExamPlayer = (props: {
             setIsExamInProgress={setIsExamInProgress}
             exam={exam}
             answerSessionId={answerSessionId}
-            goToCourseOverview={goToCourseOverview} />,
-
-        () => <CourseOverview />
+            goToCourseRating={goToCourseRating} />
     ];
 
     return <SlidesDisplay

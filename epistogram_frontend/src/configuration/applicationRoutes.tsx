@@ -51,6 +51,11 @@ export const applicationRoutes = {
             title: translatableTexts.routeTitles.player,
             route: "/watch/course-rating/:courseId"
         },
+    
+        courseOverviewRoute: {
+            title: translatableTexts.routeTitles.courseOverview,
+            route: "/watch/course-overview/:courseId"
+        },
     },
 
     registrationRoute: {

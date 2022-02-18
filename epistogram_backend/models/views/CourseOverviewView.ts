@@ -13,10 +13,10 @@ export class CourseOverviewView {
     courseId: number;
 
     @ViewColumn()
-    totalSpentTime: string;
+    totalSpentTime: number;
 
     @ViewColumn()
-    completedVideoCount: string;
+    completedVideoCount: number;
 
     @ViewColumn()
     answeredVideoQuestionCount: number;

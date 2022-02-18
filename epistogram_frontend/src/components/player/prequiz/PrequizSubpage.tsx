@@ -41,7 +41,8 @@ export const PrequizSubpage = () => {
             await answerPrequizQuestionAsync({
                 answerId: selectedAnswerId ?? null,
                 questionId: question?.id!,
-                value: numericValue
+                value: numericValue,
+                courseId
             });
 
             if (paging.isLast) {

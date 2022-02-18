@@ -1,7 +1,7 @@
 export class CourseOverviewDataDTO {
 
-    totalSpentTime: string;
-    completedVideoCount: string;
+    totalSpentTime: number;
+    completedVideoCount: number;
     answeredVideoQuestionCount: number;
     questionSuccessRate: number;
     examSuccessRateAverage: number;

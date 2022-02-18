@@ -11,7 +11,7 @@ import { DiscountCode } from "./DiscountCode";
 import { Event } from "./Event";
 import { JobTitle } from "./JobTitle";
 import { Organization } from "./Organization";
-import { PrequizUserAnswer } from "./PrequizUserAnswer";
+import { PrequizUserAnswer } from "./prequiz/PrequizUserAnswer";
 import { Role } from "./Role";
 import { StorageFile } from "./StorageFile";
 import { Task } from "./Task";

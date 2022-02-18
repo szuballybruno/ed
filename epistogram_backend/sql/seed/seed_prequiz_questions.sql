@@ -6,33 +6,28 @@ INSERT INTO public.prequiz_question
 (
     id, 
     text,
-    is_numeric_answer,
-    course_id
+    is_numeric_answer
 )
 VALUES 
 (
     1,
     'Tapasztalat szinted?',
-    true,
-    1
+    true
 ),
 (
     2,
     'Mire szeretnéd használni a kurzuson tanultakat?',
-    false,
-    1
+    false
 ),
 (
     3,
     'Mennyi időt tudsz naponta rászánni egyszerre?',
-    false,
-    1
+    false
 ),
 (
     4,
     'Mennyi időt tudsz hetente rászánni?',
-    false,
-    1
+    false
 );
 
 --

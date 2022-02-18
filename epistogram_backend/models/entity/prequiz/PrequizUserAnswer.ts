@@ -1,7 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { PrequizAnswer } from "./PrequizAnswer";
 import { PrequizQuestion } from "./PrequizQuestion";
-import { User } from "./User";
+import { User } from "../User";
+import { Course } from "../Course";
 
 @Entity()
 export class PrequizUserAnswer {
@@ -35,4 +36,12 @@ export class PrequizUserAnswer {
     @JoinColumn({ name: "user_id" })
     @ManyToOne(_ => User, x => x.prequizAnswers)
     user: User;
+    
+    // course 
+    @Column()
+    courseId: number;
+
+    @JoinColumn({ name: "course_id" })
+    @ManyToOne(_ => Course, x => x.prequizUserAnswers)
+    course: Course;
 }

@@ -7,7 +7,8 @@ import { CourseModule } from "./CourseModule";
 import { CourseRatingGroup } from "./courseRating/CourseRatingGroup";
 import { CourseRatingQuestionUserAnswer } from "./courseRating/CourseRatingQuestionUserAnswer";
 import { Exam } from "./Exam";
-import { PrequizQuestion } from "./PrequizQuestion";
+import { PrequizQuestion } from "./prequiz/PrequizQuestion";
+import { PrequizUserAnswer } from "./prequiz/PrequizUserAnswer";
 import { ShopItem } from "./ShopItem";
 import { StorageFile } from "./StorageFile";
 import { User } from "./User";
@@ -131,9 +132,9 @@ export class Course {
     shopItems: ShopItem[];
 
     // prequiz questions
-    @OneToMany(_ => PrequizQuestion, x => x.course)
+    @OneToMany(_ => PrequizUserAnswer, x => x.course)
     @JoinColumn()
-    prequizQuestions: PrequizQuestion[];
+    prequizUserAnswers: PrequizUserAnswer[];
 
     // courseRatingUserAnswers
     @JoinColumn()
