@@ -106,6 +106,9 @@ import { PretestResultDTO } from "../../models/shared_models/PretestResultDTO";
 import { CourseRatingQuestionView } from "../../models/views/CourseRatingQuestionView";
 import { CourseRatingQuestionDTO } from "../../models/shared_models/CourseRatingQuestionDTO";
 import { CourseRatingGroupDTO } from "../../models/shared_models/CourseRatingGroupDTO";
+import { CourseRatingQuestionUserAnswer } from "../../models/entity/courseRating/CourseRatingQuestionUserAnswer";
+import { CourseRatingQuestionAnswersDTO } from "../../models/shared_models/CourseRatingQuestionAnswersDTO";
+import { CourseRatingQuestionAnswerDTO } from "../../models/shared_models/CourseRatingQuestionAnswerDTO";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -827,7 +830,9 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(CourseRatingQuestionView, CourseRatingQuestionDTO, x => ({
             id: x.questionId,
             text: x.questionText,
-            type: x.questionType
+            type: x.questionType,
+            answerText: x.answerText,
+            answerValue: x.answerValue
         }));
 
     mapperService

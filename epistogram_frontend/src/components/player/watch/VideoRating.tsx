@@ -7,6 +7,7 @@ import { getAssetUrl, iterate } from "../../../static/frontendHelpers"
 import { translatableTexts } from "../../../static/translatableTexts"
 import { EpistoButton } from "../../controls/EpistoButton"
 import { EpistoFont } from "../../controls/EpistoFont"
+import { RatingStars } from "../../universal/RatingStars"
 
 export const VideoRating = (props: { videoId: number }) => {
 
@@ -24,10 +25,6 @@ export const VideoRating = (props: { videoId: number }) => {
     const [showDificultyRating, setShowDificultyRating] = useState(false);
     const [difficultyRating, setDifficultyRating] = useState<number | null>(null);
     const [experienceRating, setExperienceRating] = useState<number | null>(null);
-    const [isHovered, setIsHovered] = useState({
-        hovered: false,
-        index: 0
-    })
 
     // func
     const handleRateVideoExperienceAsync = async (rating: number) => {
@@ -87,34 +84,9 @@ export const VideoRating = (props: { videoId: number }) => {
                 </EpistoFont>
 
                 {/* rating buttons  */}
-                <Flex>
-                    {iterate(5, (index) => (
-                        <EpistoButton
-                            onClick={() => handleRateVideoExperienceAsync(index + 1)}
-                            style={{
-                                // marginRight: "5px"
-                            }}>
-
-                            <img
-                                onMouseEnter={() => { setIsHovered({ hovered: true, index: index }) }}
-                                onMouseLeave={() => setIsHovered({ hovered: false, index: 0 })}
-                                src={getAssetUrl("images/star3D.png")}
-                                alt=""
-                                className="square25"
-                                style={{
-                                    objectFit: "contain",
-                                    filter: experienceRating
-                                        ? (experienceRating >= index + 1) || (isHovered.hovered && index <= isHovered.index)
-                                            ? undefined
-                                            : "saturate(0) opacity(0.5)"
-                                        : (isHovered.hovered && index <= isHovered.index)
-                                            ? undefined
-                                            : "saturate(0) opacity(0.5)"
-
-                                }} />
-                        </EpistoButton>
-                    ))}
-                </Flex>
+                <RatingStars
+                    setSelectedIndex={handleRateVideoExperienceAsync}
+                    selectedIndex={experienceRating} />
             </Flex>}
 
             {/* difficulty rating */}
@@ -132,34 +104,10 @@ export const VideoRating = (props: { videoId: number }) => {
                 </EpistoFont>
 
                 {/* rating buttons  */}
-                <Flex>
-
-                    {iterate(5, (index) => (
-                        <EpistoButton
-                            onClick={() => handleRateVideoDifficultyAsync(index + 1)}
-                            style={{
-                                // marginRight: "5px"
-                            }}>
-
-                            <img
-                                onMouseEnter={() => { setIsHovered({ hovered: true, index: index }) }}
-                                onMouseLeave={() => setIsHovered({ hovered: false, index: 0 })}
-                                src={getAssetUrl("images/difficulty3D.png")}
-                                alt=""
-                                className="square25"
-                                style={{
-                                    objectFit: "contain",
-                                    filter: difficultyRating
-                                        ? (difficultyRating >= index + 1) || (isHovered.hovered && index <= isHovered.index)
-                                            ? undefined
-                                            : "saturate(0) opacity(0.5)"
-                                        : (isHovered.hovered && index <= isHovered.index)
-                                            ? undefined
-                                            : "saturate(0) opacity(0.5)"
-                                }} />
-                        </EpistoButton>
-                    ))}
-                </Flex>
+                <RatingStars
+                    selectedIndex={difficultyRating}
+                    setSelectedIndex={handleRateVideoDifficultyAsync}
+                    iconUrl={getAssetUrl("images/difficulty3D.png")} />
             </Flex>}
         </Flex>
     )

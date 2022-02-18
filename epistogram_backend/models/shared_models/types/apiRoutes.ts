@@ -81,7 +81,9 @@ export const apiRoutes = {
     },
 
     courseRating: {
-        getCourseRatingGroups: "/courserating/get-course-rating-groups"
+        getCourseRatingGroups: "/courserating/get-course-rating-groups",
+        getCourseRatingAnswers: "/courserating/get-course-rating-answers",
+        saveCourseRatingGroupAnswers: "/courserating/save-course-rating-answers"
     },
 
     userStats: {

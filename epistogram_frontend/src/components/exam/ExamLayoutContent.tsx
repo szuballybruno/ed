@@ -1,23 +1,27 @@
 import { Flex, Text } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
+import React, { CSSProperties, ReactNode } from "react";
 
 export const ExamLayoutContent = (props: {
     children: ReactNode,
-    title: string
+    title: string,
+    style?: CSSProperties
 }) => {
 
-    const { children, title } = props;
+    const { children, title, style } = props;
 
     return (
         <Flex
+            id="examLayoutContentRoot"
             direction={"column"}
             alignItems={"center"}
             justifyContent={"center"}
             width={"80%"}
-            flex={1}>
+            flex={1}
+            style={style}>
 
             {/* header */}
             <Flex
+                id="examLayoutContentHeader"
                 p="20px"
                 align="center">
 
@@ -42,11 +46,11 @@ export const ExamLayoutContent = (props: {
 
             {/* answers */}
             <Flex
+                id="examLayoutContentContainer"
                 direction={"row"}
                 justifyContent={"center"}
                 pt={10}
-                width="100%"
-                mx={200}>
+                width="100%">
 
                 {children}
             </Flex>

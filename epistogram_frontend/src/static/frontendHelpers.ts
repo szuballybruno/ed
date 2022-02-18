@@ -239,6 +239,9 @@ export const usePaging = <T>(
     const isLast = currentItemIndex === items.length - 1;
     const isFirst = currentItemIndex === 0;
     const currentItem = items[currentItemIndex] as T | null;
+    const progressPercentage = items.length > 0
+        ? currentItemIndex / items.length * 100
+        : 0;
 
     const next = () => {
 
@@ -288,6 +291,7 @@ export const usePaging = <T>(
         isFirst,
         currentIndex: currentItemIndex,
         currentItem,
+        progressPercentage,
         setItem,
         jumpToLast
     } as PagingType<T>;
@@ -306,6 +310,7 @@ export type PagingType<T> = {
     isLast: boolean;
     isFirst: boolean;
     currentIndex: number;
+    progressPercentage: number;
 };
 
 export const getQueryParam = (name: string) => {

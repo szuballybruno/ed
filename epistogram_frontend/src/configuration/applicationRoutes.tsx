@@ -47,9 +47,9 @@ export const applicationRoutes = {
             exact: true
         },
     
-        finishedRoute: {
+        courseRatingRoute: {
             title: translatableTexts.routeTitles.player,
-            route: "/watch/finished/:courseId"
+            route: "/watch/course-rating/:courseId"
         },
     },
 

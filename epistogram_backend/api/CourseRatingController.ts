@@ -1,3 +1,4 @@
+import { CourseRatingQuestionAnswersDTO } from "../models/shared_models/CourseRatingQuestionAnswersDTO";
 import { CourseRatingService } from "../services/CourseRatingService";
 import { ActionParams } from "../utilities/helpers";
 
@@ -12,7 +13,23 @@ export class CourseRatingController {
 
     getCourseRatingGroupsAction = async (params: ActionParams) => {
 
+        const query = params
+            .getQuery<any>();
+
+        const courseId = query
+            .getValue(x => x.courseId);
+
         return this._courseRatingService
-            .getCourseRatingGroupsAsync();
+            .getCourseRatingGroupsAsync(params.currentUserId, courseId);
+    }
+
+    saveCourseRatingGroupAnswersAction = async (params: ActionParams) => {
+
+        const dto = params
+            .getBody<CourseRatingQuestionAnswersDTO>()
+            .data;
+
+        return this._courseRatingService
+            .saveCourseRatingGroupAnswersAsync(params.currentUserId, dto);
     }
 }

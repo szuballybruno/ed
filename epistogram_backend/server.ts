@@ -63,7 +63,7 @@ import { UserStatsService } from './services/UserStatsService';
 import { VideoPlaybackSampleService } from './services/VideoPlaybackSampleService';
 import { VideoService } from './services/VideoService';
 import { EndpointOptionsType, onActionError, onActionSuccess } from './utilities/apiHelpers';
-import './utilities/jsExtensions';
+import './models/shared_models/logic/jsExtensions';
 import { PasswordChangeService } from './services/PasswordChangeService';
 import { PasswordChangeController } from './api/PasswordChangeController';
 import { AuthMiddleware } from './middleware/AuthMiddleware';
@@ -260,6 +260,7 @@ import { CourseRatingService } from './services/CourseRatingService';
 
     // course rating 
     addEndpoint(apiRoutes.courseRating.getCourseRatingGroups, courseRatingController.getCourseRatingGroupsAction);
+    addEndpoint(apiRoutes.courseRating.saveCourseRatingGroupAnswers, courseRatingController.saveCourseRatingGroupAnswersAction, { isPost: true });
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);

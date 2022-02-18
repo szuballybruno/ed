@@ -8,6 +8,12 @@ import { CourseRatingQuesitonType } from "../shared_models/types/sharedTypes";
 export class CourseRatingQuestionView {
     
     @ViewColumn()
+    userId: number;
+
+    @ViewColumn()
+    courseId: number;
+
+    @ViewColumn()
     groupId: number;
 
     @ViewColumn()
@@ -21,4 +27,10 @@ export class CourseRatingQuestionView {
 	
     @ViewColumn()
     questionType: CourseRatingQuesitonType;
+	
+    @ViewColumn()
+    answerValue: number;
+	
+    @ViewColumn()
+    answerText: string;
 }

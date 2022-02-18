@@ -3,6 +3,7 @@ import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getRoute } from "../../MainRouting";
 import { ContentPane } from "../ContentPane";
 import { PageRootContainer } from "../PageRootContainer";
+import { CourseRatingSubpage } from "./courseRating/CourseRatingSubpage";
 import { PrequizSubpage } from "./prequiz/PrequizSubpage";
 import { PretestResultsSubpage } from "./pretest/PretestResultsSubpage";
 import { PretestSubpage } from "./pretest/PretestSubpage";
@@ -27,7 +28,7 @@ export const PlayerPage = () => {
                     {getRoute(applicationRoutes.playerRoute.pretestRoute, <PretestSubpage />)}
                     {getRoute(applicationRoutes.playerRoute.pretestResultsRoute, <PretestResultsSubpage />)}
                     {getRoute(applicationRoutes.playerRoute.watchRoute, <WatchSubpage />)}
-                    {getRoute(applicationRoutes.playerRoute.finishedRoute, <PrequizSubpage />)}
+                    {getRoute(applicationRoutes.playerRoute.courseRatingRoute, <CourseRatingSubpage />)}
                 </Switch>
             </ContentPane>
         </PageRootContainer >
