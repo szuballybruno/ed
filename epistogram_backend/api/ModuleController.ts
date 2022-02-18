@@ -1,5 +1,5 @@
-import { ModuleCreateDTO } from "../models/shared_models/ModuleCreateDTO";
-import { ModuleAdminEditDTO } from "../models/shared_models/ModuleAdminEditDTO";
+import { ModuleCreateDTO } from "../shared/dtos/ModuleCreateDTO";
+import { ModuleAdminEditDTO } from "../shared/dtos/ModuleAdminEditDTO";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 import { ModuleService } from "../services/ModuleService";
 

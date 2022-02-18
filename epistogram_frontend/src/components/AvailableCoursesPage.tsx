@@ -2,7 +2,7 @@ import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router";
-import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
+import { CourseShortDTO } from "../shared/dtos/CourseShortDTO";
 import { useUserCourses } from "../services/api/courseApiService";
 import { useNavigation } from "../services/core/navigatior";
 import { useShowErrorDialog } from "../services/core/notifications";

@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { Typography } from "@mui/material";
 import React from "react";
-import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
+import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
 import { mockCourseDetails } from "../../static/mockData";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "../controls/EpistoFont";

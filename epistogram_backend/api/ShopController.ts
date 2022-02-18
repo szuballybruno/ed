@@ -1,4 +1,4 @@
-import { ShopItemEditDTO } from "../models/shared_models/ShopItemEditDTO";
+import { ShopItemEditDTO } from "../shared/dtos/ShopItemEditDTO";
 import { ShopService } from "../services/ShopService";
 import { ActionParams } from "../utilities/helpers";
 

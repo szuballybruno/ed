@@ -1,4 +1,4 @@
-import { TeacherInfoEditDTO } from "../models/shared_models/TeacherInfoEditDTO";
+import { TeacherInfoEditDTO } from "../shared/dtos/TeacherInfoEditDTO";
 import { TeacherInfoService } from "../services/TeacherInfoService";
 import { ActionParams } from "../utilities/helpers";
 

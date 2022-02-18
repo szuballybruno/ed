@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import ReactECharts, { EChartsOption } from 'echarts-for-react';
 import React from "react";
 import wrap from 'word-wrap';
-import { PersonalityChartDataDTO } from '../../models/shared_models/PersonalityChartDataDTO';
+import { PersonalityChartDataDTO } from '../../shared/dtos/PersonalityChartDataDTO';
 import { translatableTexts } from '../../static/translatableTexts';
 
 export const VideoHotspotsChart = () => {

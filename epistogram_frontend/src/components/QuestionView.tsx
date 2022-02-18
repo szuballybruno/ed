@@ -1,8 +1,8 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
-import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
-import { QuestionDTO } from "../models/shared_models/QuestionDTO";
+import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
+import { QuestionDTO } from "../shared/dtos/QuestionDTO";
 import { showNotification } from "../services/core/notifications";
 import { getAssetUrl } from "../static/frontendHelpers";
 import { EpistoFont } from "./controls/EpistoFont";

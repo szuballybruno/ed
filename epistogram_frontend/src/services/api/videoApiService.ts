@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { CreateVideoDTO } from "../../models/shared_models/CreateVideoDTO";
-import { IdBodyDTO } from "../../models/shared_models/IdBodyDTO";
-import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { VideoEditDTO } from "../../models/shared_models/VideoEditDTO";
+import { CreateVideoDTO } from "../../shared/dtos/CreateVideoDTO";
+import { IdBodyDTO } from "../../shared/dtos/IdBodyDTO";
+import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
+import { VideoEditDTO } from "../../shared/dtos/VideoEditDTO";
 import { LoadingStateType } from "../../models/types";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { uploadeFileChunksAsync } from "../core/fileUploadClient";

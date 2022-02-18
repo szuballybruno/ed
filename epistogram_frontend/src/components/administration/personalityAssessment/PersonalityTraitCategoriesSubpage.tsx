@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import Edit from "@mui/icons-material/Edit";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { PersonalityTraitCategoryShortDTO } from "../../../models/shared_models/PersonalityTraitCategoryShortDTO";
+import { PersonalityTraitCategoryShortDTO } from "../../../shared/dtos/PersonalityTraitCategoryShortDTO";
 import { usePersonalityTraitCategories } from "../../../services/api/personalityAssessmentApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { EpistoButton } from "../../controls/EpistoButton";

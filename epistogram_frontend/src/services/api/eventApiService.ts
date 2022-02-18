@@ -2,8 +2,8 @@ import { useContext } from "react";
 import { useQuery } from "react-query";
 import { AuthenticationStateContext } from "../../components/system/AuthenticationFrame";
 import { eventPoolingIntervalInMs } from "../../static/Environemnt";
-import { EventDTO } from "../../models/shared_models/EventDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { EventDTO } from "../../shared/dtos/EventDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { httpGetAsync } from "../core/httpClient";
 
 export const useEventListener = () => {

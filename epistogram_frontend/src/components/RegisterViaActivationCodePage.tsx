@@ -2,7 +2,7 @@ import { Text } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { useState } from "react";
-import { ErrorCodeType } from "../models/shared_models/types/sharedTypes";
+import { ErrorCodeType } from "../shared/types/sharedTypes";
 import { useRegisterUserViaActivationCode } from "../services/api/registrationApiService";
 import { useNavigation } from "../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../services/core/notifications";

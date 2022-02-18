@@ -2,7 +2,7 @@ import { Flex, Grid } from "@chakra-ui/react";
 import DoneIcon from '@mui/icons-material/Done';
 import { Typography } from "@mui/material";
 import React from "react";
-import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
+import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoFont } from "../controls/EpistoFont";

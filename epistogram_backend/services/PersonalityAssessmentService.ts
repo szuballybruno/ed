@@ -1,11 +1,11 @@
 import { DailyTip } from "../models/entity/DailyTip";
 import { PersonalityTraitCategory } from "../models/entity/PersonalityTraitCategory";
-import { PersonalityAssessmentDTO } from "../models/shared_models/PersonalityAssessmentDTO";
-import { PersonalityCategoryTraitDTO } from "../models/shared_models/PersonalityCategoryTraitDTO";
-import { PersonalityChartDataDTO } from "../models/shared_models/PersonalityChartDataDTO";
-import { PersonalityTraitCategoryDTO } from "../models/shared_models/PersonalityTraitCategoryDTO";
-import { PersonalityTraitCategoryShortDTO } from "../models/shared_models/PersonalityTraitCategoryShortDTO";
-import { PersonalityTraitDataDTO } from "../models/shared_models/PersonalityTraitDataDTO";
+import { PersonalityAssessmentDTO } from "../shared/dtos/PersonalityAssessmentDTO";
+import { PersonalityCategoryTraitDTO } from "../shared/dtos/PersonalityCategoryTraitDTO";
+import { PersonalityChartDataDTO } from "../shared/dtos/PersonalityChartDataDTO";
+import { PersonalityTraitCategoryDTO } from "../shared/dtos/PersonalityTraitCategoryDTO";
+import { PersonalityTraitCategoryShortDTO } from "../shared/dtos/PersonalityTraitCategoryShortDTO";
+import { PersonalityTraitDataDTO } from "../shared/dtos/PersonalityTraitDataDTO";
 import { PersonalityTraitCategoryView } from "../models/views/PersonalityTraitCategoryView";
 import { PersonalityTraitView } from "../models/views/PersonalityTraitView";
 import { MapperService } from "./MapperService";

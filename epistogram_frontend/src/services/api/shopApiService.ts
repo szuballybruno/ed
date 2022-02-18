@@ -1,12 +1,12 @@
-import { CourseBriefData } from "../../models/shared_models/CourseBriefData";
-import { CourseShopItemListDTO } from "../../models/shared_models/CourseShopItemListDTO";
-import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
-import { ShopItemAdminShortDTO } from "../../models/shared_models/ShopItemAdminShortDTO";
-import { ShopItemBriefData } from "../../models/shared_models/ShopItemBriefData";
-import { ShopItemCategoryDTO } from "../../models/shared_models/ShopItemCategoryDTO";
-import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
-import { ShopItemEditDTO } from "../../models/shared_models/ShopItemEditDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { CourseBriefData } from "../../shared/dtos/CourseBriefData";
+import { CourseShopItemListDTO } from "../../shared/dtos/CourseShopItemListDTO";
+import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
+import { ShopItemAdminShortDTO } from "../../shared/dtos/ShopItemAdminShortDTO";
+import { ShopItemBriefData } from "../../shared/dtos/ShopItemBriefData";
+import { ShopItemCategoryDTO } from "../../shared/dtos/ShopItemCategoryDTO";
+import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
+import { ShopItemEditDTO } from "../../shared/dtos/ShopItemEditDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
 

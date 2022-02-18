@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import { CourseModeType } from "../../../models/shared_models/types/sharedTypes";
+import { CourseModeType } from "../../../shared/types/sharedTypes";
 import { useSetCourseMode } from "../../../services/api/courseApiService";
 import { usePretestResults } from "../../../services/api/pretestApiService";
 import { useNavigation } from "../../../services/core/navigatior";

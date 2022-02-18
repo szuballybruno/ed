@@ -1,5 +1,5 @@
 import { Course } from "../models/entity/Course";
-import { CourseItemListDTO } from "../models/shared_models/CourseItemListDTO";
+import { CourseItemListDTO } from "../shared/dtos/CourseItemListDTO";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 

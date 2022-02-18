@@ -1,9 +1,9 @@
 import { useReactQuery2 } from "../../static/frontendHelpers";
-import { DailyTipDTO } from "../../models/shared_models/DailyTipDTO";
-import { JobTitleDTO } from "../../models/shared_models/JobTitleDTO";
-import { OrganizationDTO } from "../../models/shared_models/OrganizationDTO";
-import { OverviewPageDTO } from "../../models/shared_models/OverviewPageDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { DailyTipDTO } from "../../shared/dtos/DailyTipDTO";
+import { JobTitleDTO } from "../../shared/dtos/JobTitleDTO";
+import { OrganizationDTO } from "../../shared/dtos/OrganizationDTO";
+import { OverviewPageDTO } from "../../shared/dtos/OverviewPageDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 
 export const useCurrentCourseItemCode = () => {
 

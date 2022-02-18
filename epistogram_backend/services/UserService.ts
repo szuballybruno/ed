@@ -1,12 +1,12 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
 import { User } from "../models/entity/User";
-import { AdminPageUserDTO } from "../models/shared_models/AdminPageUserDTO";
-import { BriefUserDataDTO } from "../models/shared_models/BriefUserDataDTO";
-import { RoleIdEnum } from "../models/shared_models/types/sharedTypes";
-import { UserDTO } from "../models/shared_models/UserDTO";
-import { UserEditDTO } from "../models/shared_models/UserEditDTO";
-import { UserEditSimpleDTO } from "../models/shared_models/UserEditSimpleDTO";
+import { AdminPageUserDTO } from "../shared/dtos/AdminPageUserDTO";
+import { BriefUserDataDTO } from "../shared/dtos/BriefUserDataDTO";
+import { RoleIdEnum } from "../shared/types/sharedTypes";
+import { UserDTO } from "../shared/dtos/UserDTO";
+import { UserEditDTO } from "../shared/dtos/UserEditDTO";
+import { UserEditSimpleDTO } from "../shared/dtos/UserEditSimpleDTO";
 import { RegistrationType } from "../models/Types";
 import { UserAdminListView } from "../models/views/UserAdminListView";
 import { getFullName, toFullName, ErrorCode } from "../utilities/helpers";

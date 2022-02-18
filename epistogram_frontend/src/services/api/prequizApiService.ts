@@ -1,6 +1,6 @@
-import { PrequizQuestionDTO } from "../../models/shared_models/PrequizQuestionDTO";
-import { PrequizUserAnswerDTO } from "../../models/shared_models/PrequizUserAnswerDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { PrequizQuestionDTO } from "../../shared/dtos/PrequizQuestionDTO";
+import { PrequizUserAnswerDTO } from "../../shared/dtos/PrequizUserAnswerDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe } from "../core/httpClient";
 

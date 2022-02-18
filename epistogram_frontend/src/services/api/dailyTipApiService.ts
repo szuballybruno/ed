@@ -1,6 +1,6 @@
-import { DailyTipDTO } from "../../models/shared_models/DailyTipDTO";
-import { DailyTipEditDataDTO } from "../../models/shared_models/DailyTipEditDataDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { DailyTipDTO } from "../../shared/dtos/DailyTipDTO";
+import { DailyTipEditDataDTO } from "../../shared/dtos/DailyTipEditDataDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe } from "../core/httpClient";
 

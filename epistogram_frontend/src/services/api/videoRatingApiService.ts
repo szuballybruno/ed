@@ -1,5 +1,5 @@
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes"
-import { VideoRatingDTO } from "../../models/shared_models/VideoRatingDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes"
+import { VideoRatingDTO } from "../../shared/dtos/VideoRatingDTO";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe } from "../core/httpClient"
 

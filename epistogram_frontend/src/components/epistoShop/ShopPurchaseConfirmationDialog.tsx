@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { Close } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { useEffect } from "react";
-import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
+import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
 import { usePurchaseShopItem } from "../../services/api/shopApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";

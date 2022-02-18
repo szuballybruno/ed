@@ -3,7 +3,7 @@ import { Delete } from "@mui/icons-material";
 import Edit from "@mui/icons-material/Edit";
 import { useState } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { ShopItemAdminShortDTO } from "../../../models/shared_models/ShopItemAdminShortDTO";
+import { ShopItemAdminShortDTO } from "../../../shared/dtos/ShopItemAdminShortDTO";
 import { useAdminShopItems, useCreateShopItem } from "../../../services/api/shopApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";

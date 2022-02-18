@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { Delete } from "@mui/icons-material";
 import Edit from "@mui/icons-material/Edit";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { DailyTipDTO } from "../../../models/shared_models/DailyTipDTO";
+import { DailyTipDTO } from "../../../shared/dtos/DailyTipDTO";
 import { useCreateDailyTip, useDeleteDailyTip } from "../../../services/api/dailyTipApiService";
 import { usePersonalityTraitCategoryDetails } from "../../../services/api/personalityAssessmentApiService";
 import { useNavigation } from "../../../services/core/navigatior";

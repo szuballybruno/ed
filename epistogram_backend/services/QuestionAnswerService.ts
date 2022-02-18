@@ -1,6 +1,6 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
-import { AnswerResultDTO } from "../models/shared_models/AnswerResultDTO";
-import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
+import { AnswerResultDTO } from "../shared/dtos/AnswerResultDTO";
+import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
 import { CoinAcquireService } from "./CoinAcquireService";
 import { SQLFunctionsService } from "./sqlServices/FunctionsService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";

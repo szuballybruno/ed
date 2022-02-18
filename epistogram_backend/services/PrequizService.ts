@@ -1,7 +1,7 @@
 import { PrequizUserAnswer } from "../models/entity/PrequizUserAnswer";
-import { PrequizAnswerDTO } from "../models/shared_models/PrequizAnswerDTO";
-import { PrequizQuestionDTO } from "../models/shared_models/PrequizQuestionDTO";
-import { PrequizUserAnswerDTO } from "../models/shared_models/PrequizUserAnswerDTO";
+import { PrequizAnswerDTO } from "../shared/dtos/PrequizAnswerDTO";
+import { PrequizQuestionDTO } from "../shared/dtos/PrequizQuestionDTO";
+import { PrequizUserAnswerDTO } from "../shared/dtos/PrequizUserAnswerDTO";
 import { PrequizQuestionView } from "../models/views/PrequizQuestionView";
 import { CourseService } from "./CourseService";
 import { MapperService } from "./MapperService";

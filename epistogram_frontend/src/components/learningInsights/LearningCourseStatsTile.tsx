@@ -1,7 +1,7 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { LinearProgress } from "@mui/material";
 import React from 'react';
-import { CourseLearningDTO } from "../../models/shared_models/CourseLearningDTO";
+import { CourseLearningDTO } from "../../shared/dtos/CourseLearningDTO";
 import { useNavigation } from "../../services/core/navigatior";
 import { formatTimespan, getAssetUrl, roundNumber } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";

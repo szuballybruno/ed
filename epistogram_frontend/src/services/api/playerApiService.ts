@@ -1,11 +1,11 @@
 import { useReactQuery2 } from "../../static/frontendHelpers";
-import { AnswerQuestionDTO } from "../../models/shared_models/AnswerQuestionDTO";
-import { AnswerResultDTO } from "../../models/shared_models/AnswerResultDTO";
-import { CourseItemDTO } from "../../models/shared_models/CourseItemDTO";
-import { PlayerDataDTO } from "../../models/shared_models/PlayerDataDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { VideoPlaybackSampleDTO } from "../../models/shared_models/VideoPlaybackSampleDTO";
-import { VideoSamplingResultDTO } from "../../models/shared_models/VideoSamplingResultDTO";
+import { AnswerQuestionDTO } from "../../shared/dtos/AnswerQuestionDTO";
+import { AnswerResultDTO } from "../../shared/dtos/AnswerResultDTO";
+import { CourseItemDTO } from "../../shared/dtos/CourseItemDTO";
+import { PlayerDataDTO } from "../../shared/dtos/PlayerDataDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
+import { VideoPlaybackSampleDTO } from "../../shared/dtos/VideoPlaybackSampleDTO";
+import { VideoSamplingResultDTO } from "../../shared/dtos/VideoSamplingResultDTO";
 import { usePostData } from "../core/httpClient";
 
 export const usePlayerData = (descriptorCode: string) => {

@@ -1,5 +1,5 @@
-import { UserEditDTO } from "../models/shared_models/UserEditDTO";
-import { UserEditSimpleDTO } from "../models/shared_models/UserEditSimpleDTO";
+import { UserEditDTO } from "../shared/dtos/UserEditDTO";
+import { UserEditSimpleDTO } from "../shared/dtos/UserEditSimpleDTO";
 import { UserService } from "../services/UserService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 

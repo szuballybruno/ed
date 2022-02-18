@@ -2,7 +2,7 @@ import React, { ReactNode, useContext, useEffect } from 'react';
 import { Redirect, Route, useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { verboseLogging } from '../../static/Environemnt';
-import { UserActivityDTO } from '../../models/shared_models/UserActivityDTO';
+import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 
 export const ProtectedRoute = (props: {

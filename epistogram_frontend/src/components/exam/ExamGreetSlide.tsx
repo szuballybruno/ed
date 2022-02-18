@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React from "react";
-import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
+import { ExamPlayerDataDTO } from "../../shared/dtos/ExamPlayerDataDTO";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "../controls/EpistoFont";

@@ -1,7 +1,7 @@
 import cors from 'cors';
 import { Request } from 'express';
 import { User } from '../../models/entity/User';
-import { apiRoutes } from '../../models/shared_models/types/apiRoutes';
+import { apiRoutes } from '../../shared/types/apiRoutes';
 import { getAsyncMiddlewareHandler } from '../../utilities/apiHelpers';
 import { getAuthTokenFromRequest, getCookie, ErrorCode } from '../../utilities/helpers';
 import { GlobalConfiguration } from './GlobalConfiguration';

@@ -1,8 +1,8 @@
 import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
 import { JobTitle } from "../models/entity/JobTitle";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { DailyTipDTO } from "../models/shared_models/DailyTipDTO";
-import { UserDTO } from "../models/shared_models/UserDTO";
+import { DailyTipDTO } from "../shared/dtos/DailyTipDTO";
+import { UserDTO } from "../shared/dtos/UserDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { AuthenticationService } from "../services/AuthenticationService";
 import { MapperService } from "../services/MapperService";

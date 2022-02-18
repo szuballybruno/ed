@@ -1,6 +1,6 @@
 import { useHistory } from "react-router";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { CourseStageNameType } from "../../models/shared_models/types/sharedTypes";
+import { CourseStageNameType } from "../../shared/types/sharedTypes";
 import { ApplicationRoute } from "../../models/types";
 import { verboseLogging } from "../../static/Environemnt";
 import { getUrl } from "../../static/frontendHelpers";

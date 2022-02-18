@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { AnswerSessionType } from "../shared_models/types/sharedTypes";
+import { AnswerSessionType } from "../../shared/types/sharedTypes";
 import { Exam } from "./Exam";
 import { GivenAnswer } from "./GivenAnswer";
 import { User } from "./User";

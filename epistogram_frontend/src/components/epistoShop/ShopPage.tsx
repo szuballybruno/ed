@@ -1,7 +1,7 @@
 import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useContext, useState } from "react";
-import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
+import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
 import { useCoinBalance } from "../../services/api/coinTransactionsApiService";
 import { useShopItemCategories, useShopItems } from "../../services/api/shopApiService";
 import { translatableTexts } from "../../static/translatableTexts";

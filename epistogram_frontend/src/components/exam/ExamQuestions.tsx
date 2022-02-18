@@ -1,8 +1,8 @@
 import { Grid } from "@chakra-ui/layout";
 import { Flex, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
-import { QuestionTypeEnum } from "../../models/shared_models/types/sharedTypes";
+import { ExamPlayerDataDTO } from "../../shared/dtos/ExamPlayerDataDTO";
+import { QuestionTypeEnum } from "../../shared/types/sharedTypes";
 import { useSaveExamAnswer } from "../../services/api/examApiService";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { getAssetUrl, usePaging } from "../../static/frontendHelpers";

@@ -1,8 +1,8 @@
-import { AdminPageUserDTO } from "../../models/shared_models/AdminPageUserDTO";
-import { BriefUserDataDTO } from "../../models/shared_models/BriefUserDataDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { UserEditDTO } from "../../models/shared_models/UserEditDTO";
-import { UserEditSimpleDTO } from "../../models/shared_models/UserEditSimpleDTO";
+import { AdminPageUserDTO } from "../../shared/dtos/AdminPageUserDTO";
+import { BriefUserDataDTO } from "../../shared/dtos/BriefUserDataDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
+import { UserEditDTO } from "../../shared/dtos/UserEditDTO";
+import { UserEditSimpleDTO } from "../../shared/dtos/UserEditSimpleDTO";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { httpPostAsync, usePostDataUnsafe } from "../core/httpClient";
 

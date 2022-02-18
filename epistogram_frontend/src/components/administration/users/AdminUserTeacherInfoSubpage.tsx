@@ -3,7 +3,7 @@ import { Checkbox, Slider, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { TeacherBadgeNameType } from "../../../models/shared_models/types/sharedTypes";
+import { TeacherBadgeNameType } from "../../../shared/types/sharedTypes";
 import { useSaveTeacherInfoData, useTeacherInfoEditData } from "../../../services/api/teacherInfoApiService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { translatableTexts } from "../../../static/translatableTexts";

@@ -1,4 +1,4 @@
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { usePostDataUnsafe } from "../core/httpClient";
 
 export const useRequestPasswordChange = () => {

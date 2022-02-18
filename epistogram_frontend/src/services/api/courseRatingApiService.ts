@@ -1,7 +1,7 @@
-import { CourseRatingGroupDTO } from "../../models/shared_models/CourseRatingGroupDTO";
-import { CourseRatingQuestionAnswerDTO } from "../../models/shared_models/CourseRatingQuestionAnswerDTO";
-import { CourseRatingQuestionAnswersDTO } from "../../models/shared_models/CourseRatingQuestionAnswersDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { CourseRatingGroupDTO } from "../../shared/dtos/CourseRatingGroupDTO";
+import { CourseRatingQuestionAnswerDTO } from "../../shared/dtos/CourseRatingQuestionAnswerDTO";
+import { CourseRatingQuestionAnswersDTO } from "../../shared/dtos/CourseRatingQuestionAnswersDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe } from "../core/httpClient";
 

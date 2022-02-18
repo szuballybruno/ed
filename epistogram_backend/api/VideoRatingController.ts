@@ -1,4 +1,4 @@
-import { VideoRatingDTO } from "../models/shared_models/VideoRatingDTO";
+import { VideoRatingDTO } from "../shared/dtos/VideoRatingDTO";
 import { VideoRatingService } from "../services/VideoRatingService";
 import { ActionParams } from "../utilities/helpers";
 

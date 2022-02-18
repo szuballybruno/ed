@@ -1,7 +1,7 @@
 import { Exam } from "../models/entity/Exam";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
-import { CourseItemDTO } from "../models/shared_models/CourseItemDTO";
+import { CourseItemDTO } from "../shared/dtos/CourseItemDTO";
 import { CourseItemsService } from "./CourseItemsService";
 import { MapperService } from "./MapperService";
 import { getItemCode } from "./misc/encodeService";

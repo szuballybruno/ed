@@ -1,5 +1,5 @@
 import { Radar } from "react-chartjs-2"
-import { HumanSkillBenefitDTO } from "../../models/shared_models/HumanSkillBenefitDTO";
+import { HumanSkillBenefitDTO } from "../../shared/dtos/HumanSkillBenefitDTO";
 
 export const CourseImprovementStatsRadar = (props: { stats: HumanSkillBenefitDTO[] }) => {
 

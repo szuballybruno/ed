@@ -2,7 +2,7 @@ import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { Done, LocalOffer } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import React from "react";
-import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
+import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import StarsIcon from '@mui/icons-material/Stars';

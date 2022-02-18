@@ -1,10 +1,10 @@
 
 import { Organization } from "../models/entity/Organization";
 import { User } from "../models/entity/User";
-import { CourseOverviewDataDTO } from "../models/shared_models/CourseOverviewDataDTO";
-import { CourseShortDTO } from "../models/shared_models/CourseShortDTO";
-import { OverviewPageDTO } from "../models/shared_models/OverviewPageDTO";
-import { UserDTO } from "../models/shared_models/UserDTO";
+import { CourseOverviewDataDTO } from "../shared/dtos/CourseOverviewDataDTO";
+import { CourseShortDTO } from "../shared/dtos/CourseShortDTO";
+import { OverviewPageDTO } from "../shared/dtos/OverviewPageDTO";
+import { UserDTO } from "../shared/dtos/UserDTO";
 import { CourseOverviewView } from "../models/views/CourseOverviewView";
 import { CourseService } from "./CourseService";
 import { MapperService } from "./MapperService";

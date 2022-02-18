@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../models/entity/User";
-import { apiRoutes } from "../models/shared_models/types/apiRoutes";
-import { RoleIdEnum, RoleType } from "../models/shared_models/types/sharedTypes";
+import { apiRoutes } from "../shared/types/apiRoutes";
+import { RoleIdEnum, RoleType } from "../shared/types/sharedTypes";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { AuthenticationService } from "../services/AuthenticationService";
 import { LoggerService } from "../services/LoggerService";

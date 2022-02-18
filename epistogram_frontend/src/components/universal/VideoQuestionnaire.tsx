@@ -2,7 +2,7 @@ import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { useReactTimer } from "../../helpers/reactTimer";
-import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { useAnswerQuestion } from "../../services/api/playerApiService";
 import { epochDates } from "../../static/frontendHelpers";
 import { QuesitionView } from "../QuestionView";

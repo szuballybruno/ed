@@ -1,7 +1,7 @@
 import { createContext, useEffect } from "react";
 import { hotjar } from "react-hotjar";
 import { isLocalhost, oneSignalAppId, verboseLogging } from "../../static/Environemnt";
-import { UserDTO } from "../../models/shared_models/UserDTO";
+import { UserDTO } from "../../shared/dtos/UserDTO";
 import setTheme from "../../services/core/setTheme";
 import OneSignal from 'react-onesignal';
 import { useLocation } from "react-router-dom";

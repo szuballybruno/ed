@@ -2,7 +2,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { UserEditDTO } from '../../../models/shared_models/UserEditDTO';
+import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { useEditUserData, useSaveUser } from '../../../services/api/userApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';

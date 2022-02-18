@@ -1,9 +1,9 @@
 import { useReactQuery2 } from "../../static/frontendHelpers";
-import { AnswerDTO } from "../../models/shared_models/AnswerDTO";
-import { AnswerSignupQuestionDTO } from "../../models/shared_models/AnswerSignupQuestionDTO";
-import { PersonalityAssessmentDTO } from "../../models/shared_models/PersonalityAssessmentDTO";
-import { SignupDataDTO } from "../../models/shared_models/SignupDataDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { AnswerDTO } from "../../shared/dtos/AnswerDTO";
+import { AnswerSignupQuestionDTO } from "../../shared/dtos/AnswerSignupQuestionDTO";
+import { PersonalityAssessmentDTO } from "../../shared/dtos/PersonalityAssessmentDTO";
+import { SignupDataDTO } from "../../shared/dtos/SignupDataDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { usePostDataUnsafe } from "../core/httpClient";
 
 export const usePersonalityData = () => {

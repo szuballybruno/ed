@@ -1,11 +1,11 @@
 import { useReactQuery2 } from "../../static/frontendHelpers";
-import { AnswerQuestionDTO } from "../../models/shared_models/AnswerQuestionDTO";
-import { AnswerResultDTO } from "../../models/shared_models/AnswerResultDTO";
-import { CreateExamDTO } from "../../models/shared_models/CreateExamDTO";
-import { ExamEditDataDTO } from "../../models/shared_models/ExamEditDataDTO";
-import { ExamResultsDTO } from "../../models/shared_models/ExamResultsDTO";
-import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { AnswerQuestionDTO } from "../../shared/dtos/AnswerQuestionDTO";
+import { AnswerResultDTO } from "../../shared/dtos/AnswerResultDTO";
+import { CreateExamDTO } from "../../shared/dtos/CreateExamDTO";
+import { ExamEditDataDTO } from "../../shared/dtos/ExamEditDataDTO";
+import { ExamResultsDTO } from "../../shared/dtos/ExamResultsDTO";
+import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { usePostDataUnsafe } from "../core/httpClient";
 
 export const useEditExamData = (examId: number) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CourseShortDTO } from '../../../../models/shared_models/CourseShortDTO';
+import { CourseShortDTO } from '../../../../shared/dtos/CourseShortDTO';
 import CourseTile from '../../../universal/CourseTile';
 import classes from "./recommendedCourses.module.scss";
 

@@ -1,5 +1,5 @@
 import { User } from "../models/entity/User";
-import { validatePassowrd } from "../models/shared_models/logic/sharedLogic";
+import { validatePassowrd } from "../shared/logic/sharedLogic";
 import { ErrorCode } from "../utilities/helpers";
 import { EmailService } from "./EmailService";
 import { HashService } from "./HashService";

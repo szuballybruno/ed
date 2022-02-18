@@ -2,7 +2,7 @@ import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { LinearProgress, Rating } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { formatTimespan, getAssetUrl } from "../../static/frontendHelpers";
-import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
+import { CourseShortDTO } from "../../shared/dtos/CourseShortDTO";
 import { FlexFloat } from "../controls/FlexFloat";
 import { Star, StarBorderOutlined, StarOutline } from "@mui/icons-material";
 import { useCourseDetails } from "../../services/api/courseApiService";

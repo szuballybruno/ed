@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Chip, Typography } from "@mui/material";
 import React from 'react';
-import { CourseAdminItemShortDTO } from "../../../models/shared_models/CourseAdminItemShortDTO";
+import { CourseAdminItemShortDTO } from "../../../shared/dtos/CourseAdminItemShortDTO";
 import { formatTime, secondsToTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";

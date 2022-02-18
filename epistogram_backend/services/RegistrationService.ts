@@ -1,6 +1,6 @@
 import generatePassword from "password-generator";
-import { validatePassowrd } from "../models/shared_models/logic/sharedLogic";
-import { JobTitleIdEnum, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
+import { validatePassowrd } from "../shared/logic/sharedLogic";
+import { JobTitleIdEnum, RoleIdEnum } from "../shared/types/sharedTypes";
 import { getFullName, ErrorCode } from "../utilities/helpers";
 import { ActivationCodeService } from "./ActivationCodeService";
 import { AuthenticationService } from "./AuthenticationService";

@@ -4,7 +4,7 @@ import React from "react";
 import { Typography } from "@mui/material";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
-import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
+import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
 import { ProfileImage } from "../ProfileImage";
 import { EpistoFont } from "../controls/EpistoFont";
 

@@ -1,4 +1,4 @@
-import { CourseItemType } from "../../models/shared_models/types/sharedTypes";
+import { CourseItemType } from "../../shared/types/sharedTypes";
 import { withValue } from "../../utilities/helpers";
 import { base64Decode, base64Encode } from "./base64Service";
 

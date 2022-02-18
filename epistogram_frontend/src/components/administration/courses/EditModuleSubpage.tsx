@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { ModuleAdminEditDTO } from "../../../models/shared_models/ModuleAdminEditDTO"
+import { ModuleAdminEditDTO } from "../../../shared/dtos/ModuleAdminEditDTO"
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications"
 import { LoadingFrame } from "../../system/LoadingFrame"
 import { EpistoEntry } from "../../controls/EpistoEntry"

@@ -1,11 +1,11 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Button, Checkbox, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from 'react';
-import { JobTitleDTO } from "../../../models/shared_models/JobTitleDTO";
-import { OrganizationDTO } from "../../../models/shared_models/OrganizationDTO";
-import { RoleDTO } from "../../../models/shared_models/RoleDTO";
-import { UserDTO } from "../../../models/shared_models/UserDTO";
-import { UserEditDTO } from "../../../models/shared_models/UserEditDTO";
+import { JobTitleDTO } from "../../../shared/dtos/JobTitleDTO";
+import { OrganizationDTO } from "../../../shared/dtos/OrganizationDTO";
+import { RoleDTO } from "../../../shared/dtos/RoleDTO";
+import { UserDTO } from "../../../shared/dtos/UserDTO";
+import { UserEditDTO } from "../../../shared/dtos/UserEditDTO";
 import { useJobTitles, useOrganizations } from "../../../services/api/miscApiService";
 import { CurrentUserContext } from "../../system/AuthenticationFrame";
 import { EpistoEntry } from "../../controls/EpistoEntry";

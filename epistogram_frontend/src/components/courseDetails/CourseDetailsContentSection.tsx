@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
 import React from "react";
-import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
+import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
 import { getAssetUrl, roundNumber } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
 

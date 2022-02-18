@@ -1,4 +1,4 @@
-import { ChangePasswordDTO } from "../models/shared_models/SetNewPasswordDTO";
+import { ChangePasswordDTO } from "../shared/dtos/SetNewPasswordDTO";
 import { PasswordChangeService } from "../services/PasswordChangeService";
 import { ActionParams } from "../utilities/helpers";
 

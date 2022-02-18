@@ -1,9 +1,9 @@
 import { UploadedFile } from "express-fileupload";
-import { CourseContentEditDataDTO } from "../models/shared_models/CourseContentEditDataDTO";
-import { CourseDetailsEditDataDTO as CourseDetailsEditDataDTO } from "../models/shared_models/CourseDetailsEditDataDTO";
-import { CreateCourseDTO } from "../models/shared_models/CreateCourseDTO";
-import { IdResultDTO } from "../models/shared_models/IdResultDTO";
-import { CourseModeType } from "../models/shared_models/types/sharedTypes";
+import { CourseContentEditDataDTO } from "../shared/dtos/CourseContentEditDataDTO";
+import { CourseDetailsEditDataDTO as CourseDetailsEditDataDTO } from "../shared/dtos/CourseDetailsEditDataDTO";
+import { CreateCourseDTO } from "../shared/dtos/CreateCourseDTO";
+import { IdResultDTO } from "../shared/dtos/IdResultDTO";
+import { CourseModeType } from "../shared/types/sharedTypes";
 import { CourseService } from "../services/CourseService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 

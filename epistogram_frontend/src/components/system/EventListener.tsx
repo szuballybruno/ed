@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { EventCoinAcquireNotificationDTO } from "../../models/shared_models/EventCoinAcquireNotificationDTO";
+import { EventCoinAcquireNotificationDTO } from "../../shared/dtos/EventCoinAcquireNotificationDTO";
 import { useEventListener } from "../../services/api/eventApiService";
 import { translatableTexts } from "../../static/translatableTexts";
 import { CoinRewardDialog } from "../CoinRewardDialog";

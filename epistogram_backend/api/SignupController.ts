@@ -1,4 +1,4 @@
-import { AnswerSignupQuestionDTO } from "../models/shared_models/AnswerSignupQuestionDTO";
+import { AnswerSignupQuestionDTO } from "../shared/dtos/AnswerSignupQuestionDTO";
 import { PersonalityAssessmentService } from "../services/PersonalityAssessmentService";
 import { SignupService } from "../services/SignupService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";

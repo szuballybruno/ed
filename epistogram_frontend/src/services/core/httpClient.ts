@@ -3,7 +3,7 @@ import { useState } from "react";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { serverUrl } from "../../static/Environemnt";
 import { getErrorTypeByHTTPCode, getUrl, ErrorCode } from "../../static/frontendHelpers";
-import HttpErrorResponseDTO from "../../models/shared_models/HttpErrorResponseDTO";
+import HttpErrorResponseDTO from "../../shared/dtos/HttpErrorResponseDTO";
 import { LoadingStateType } from "../../models/types";
 
 export class HTTPResponse {

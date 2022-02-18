@@ -13,7 +13,7 @@ import { UnderMaintanence } from "./components/UnderMaintanence";
 import { applicationRoutes } from "./configuration/applicationRoutes";
 import { isUnderMaintenance } from "./static/Environemnt";
 import './index.css';
-import './models/shared_models/logic/jsExtensions.ts'; // extensions, important
+import './shared/logic/jsExtensions.ts'; // extensions, important
 import { MainRouting } from "./MainRouting";
 import { PreventMobileFrame } from "./components/system/PreventMobileFrame";
 

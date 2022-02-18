@@ -2,7 +2,7 @@ import { Image } from "@chakra-ui/image";
 import { Typography } from "@mui/material";
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { UserDTO } from '../../../../models/shared_models/UserDTO';
+import { UserDTO } from '../../../../shared/dtos/UserDTO';
 import { EpistoConinInfo } from "../../../EpistoCoinInfo";
 import { EpistoButton } from "../../../controls/EpistoButton";
 import classes from './profileStats.module.scss';

@@ -1,6 +1,6 @@
-import { PersonalityTraitCategoryDTO } from "../../models/shared_models/PersonalityTraitCategoryDTO";
-import { PersonalityTraitCategoryShortDTO } from "../../models/shared_models/PersonalityTraitCategoryShortDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { PersonalityTraitCategoryDTO } from "../../shared/dtos/PersonalityTraitCategoryDTO";
+import { PersonalityTraitCategoryShortDTO } from "../../shared/dtos/PersonalityTraitCategoryShortDTO";
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 
 export const usePersonalityTraitCategories = () => {

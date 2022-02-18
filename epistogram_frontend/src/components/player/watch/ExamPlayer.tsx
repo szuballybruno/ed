@@ -1,5 +1,5 @@
 import React from "react";
-import { ExamPlayerDataDTO } from "../../../models/shared_models/ExamPlayerDataDTO";
+import { ExamPlayerDataDTO } from "../../../shared/dtos/ExamPlayerDataDTO";
 import { useStartExam } from "../../../services/api/examApiService";
 import { useShowErrorDialog } from "../../../services/core/notifications";
 import { usePaging } from "../../../static/frontendHelpers";

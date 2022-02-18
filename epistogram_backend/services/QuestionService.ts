@@ -2,10 +2,10 @@ import { Answer } from "../models/entity/Answer";
 import { AnswerGivenAnswerBridge } from "../models/entity/AnswerGivenAnswerBridge";
 import { GivenAnswer } from "../models/entity/GivenAnswer";
 import { Question } from "../models/entity/Question";
-import { AnswerEditDTO } from "../models/shared_models/AnswerEditDTO";
-import { QuestionDTO } from "../models/shared_models/QuestionDTO";
-import { QuestionEditDataDTO } from "../models/shared_models/QuestionEditDataDTO";
-import { QuestionTypeEnum } from "../models/shared_models/types/sharedTypes";
+import { AnswerEditDTO } from "../shared/dtos/AnswerEditDTO";
+import { QuestionDTO } from "../shared/dtos/QuestionDTO";
+import { QuestionEditDataDTO } from "../shared/dtos/QuestionEditDataDTO";
+import { QuestionTypeEnum } from "../shared/types/sharedTypes";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class QuestionService {

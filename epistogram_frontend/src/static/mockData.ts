@@ -1,5 +1,5 @@
-import { CurrentTasksDTO } from "../models/shared_models/CurrentTasksDTO";
-import { ShopCategoryDTO } from "../models/shared_models/ShopCategoryDTO";
+import { CurrentTasksDTO } from "../shared/dtos/CurrentTasksDTO";
+import { ShopCategoryDTO } from "../shared/dtos/ShopCategoryDTO";
 import { getAssetUrl } from "./frontendHelpers";
 
 /**

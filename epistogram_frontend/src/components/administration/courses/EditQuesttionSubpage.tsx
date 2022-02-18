@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useIsMatchingCurrentRoute } from "../../../static/frontendHelpers";
-import { AnswerEditDTO } from "../../../models/shared_models/AnswerEditDTO";
+import { AnswerEditDTO } from "../../../shared/dtos/AnswerEditDTO";
 import { getVirtualId } from "../../../services/core/idService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { LoadingFrame } from "../../system/LoadingFrame";

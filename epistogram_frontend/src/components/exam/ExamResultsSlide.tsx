@@ -3,7 +3,7 @@ import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
 import React, { useEffect } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
+import { ExamPlayerDataDTO } from "../../shared/dtos/ExamPlayerDataDTO";
 import { useExamResults } from "../../services/api/examApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { ArrayBuilder } from "../../static/frontendHelpers";
