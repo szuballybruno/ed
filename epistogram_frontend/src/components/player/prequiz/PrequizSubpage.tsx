@@ -135,7 +135,7 @@ export const PrequizSubpage = () => {
                     : <Grid
                         templateColumns="repeat(2, 1fr)"
                         gridAutoRows="minmax(0,1fr)"
-                        direction="column"
+                        dir="column"
                         gridGap="10px"
                         flex="1">
 
