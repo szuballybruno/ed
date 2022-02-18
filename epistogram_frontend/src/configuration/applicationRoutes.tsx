@@ -218,6 +218,10 @@ export const applicationRoutes = {
                 title: translatableTexts.routeTitles.administrationCourseStatistics,
                 route: "/administration/courses/:courseId/statistics"
             },
+            interactiveCourseRoute: {
+                title: translatableTexts.routeTitles.administrationInteractiveCourse,
+                route: "/administration/courses/:courseId/editinteractive"
+            },
             addVideoRoute: {
                 title: translatableTexts.routeTitles.administrationAddVideo,
                 route: "/administration/courses/:courseId/item/add"
