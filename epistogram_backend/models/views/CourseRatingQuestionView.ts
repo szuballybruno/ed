@@ -1,5 +1,5 @@
 import { ViewColumn, ViewEntity } from "typeorm";
-import { CourseRatingQuesitonType } from "../../shared/types/sharedTypes";
+import { CourseRatingQuesitonType } from "../../sharedd/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,

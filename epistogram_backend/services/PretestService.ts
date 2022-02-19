@@ -1,8 +1,8 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Exam } from "../models/entity/Exam";
-import { IdResultDTO } from "../shared/dtos/IdResultDTO";
-import { PretestDataDTO } from "../shared/dtos/PretestDataDTO";
-import { PretestResultDTO } from "../shared/dtos/PretestResultDTO";
+import { IdResultDTO } from "../sharedd/dtos/IdResultDTO";
+import { PretestDataDTO } from "../sharedd/dtos/PretestDataDTO";
+import { PretestResultDTO } from "../sharedd/dtos/PretestResultDTO";
 import { CourseView } from "../models/views/CourseView";
 import { PretestResultView } from "../models/views/PretestResultView";
 import { CourseService } from "./CourseService";

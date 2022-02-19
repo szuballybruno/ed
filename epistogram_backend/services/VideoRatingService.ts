@@ -1,5 +1,5 @@
 import { VideoRating } from "../models/entity/VideoRating";
-import { VideoRatingDTO } from "../shared/dtos/VideoRatingDTO";
+import { VideoRatingDTO } from "../sharedd/dtos/VideoRatingDTO";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
 export class VideoRatingService {

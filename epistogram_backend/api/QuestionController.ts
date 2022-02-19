@@ -1,6 +1,6 @@
 import { Question } from "../models/entity/Question";
-import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
-import { QuestionEditDataDTO } from "../shared/dtos/QuestionEditDataDTO";
+import { AnswerQuestionDTO } from "../sharedd/dtos/AnswerQuestionDTO";
+import { QuestionEditDataDTO } from "../sharedd/dtos/QuestionEditDataDTO";
 import { toAnswerEditDTO } from "../services/misc/mappings";
 import { PractiseQuestionService } from "../services/PractiseQuestionService";
 import { QuestionService } from "../services/QuestionService";

@@ -1,4 +1,4 @@
-import { ChangePasswordDTO } from "../shared/dtos/SetNewPasswordDTO";
+import { ChangePasswordDTO } from "../sharedd/dtos/SetNewPasswordDTO";
 import { PasswordChangeService } from "../services/PasswordChangeService";
 import { ActionParams } from "../utilities/helpers";
 

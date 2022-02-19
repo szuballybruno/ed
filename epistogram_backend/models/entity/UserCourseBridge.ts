@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { CourseModeType, CourseStageNameType } from "../../shared/types/sharedTypes";
+import { CourseModeType, CourseStageNameType } from "../../sharedd/types/sharedTypes";
 import { Course } from "./Course";
 import { User } from "./User";
 

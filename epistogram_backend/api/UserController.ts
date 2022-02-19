@@ -1,5 +1,5 @@
-import { UserEditDTO } from "../shared/dtos/UserEditDTO";
-import { UserEditSimpleDTO } from "../shared/dtos/UserEditSimpleDTO";
+import { UserEditDTO } from "../sharedd/dtos/UserEditDTO";
+import { UserEditSimpleDTO } from "../sharedd/dtos/UserEditSimpleDTO";
 import { UserService } from "../services/UserService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 

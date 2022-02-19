@@ -1,7 +1,7 @@
 import { DailyTip } from "../models/entity/DailyTip";
 import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
-import { DailyTipDTO } from "../shared/dtos/DailyTipDTO";
-import { DailyTipEditDataDTO } from "../shared/dtos/DailyTipEditDataDTO";
+import { DailyTipDTO } from "../sharedd/dtos/DailyTipDTO";
+import { DailyTipEditDataDTO } from "../sharedd/dtos/DailyTipEditDataDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
 import { getRandomNumber } from "../utilities/helpers";
 import { MapperService } from "./MapperService";

@@ -1,9 +1,9 @@
 import { Course } from "../models/entity/Course";
 import { Exam } from "../models/entity/Exam";
-import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
-import { CreateExamDTO } from "../shared/dtos/CreateExamDTO";
-import { ExamEditDataDTO } from "../shared/dtos/ExamEditDataDTO";
-import { IdResultDTO } from "../shared/dtos/IdResultDTO";
+import { AnswerQuestionDTO } from "../sharedd/dtos/AnswerQuestionDTO";
+import { CreateExamDTO } from "../sharedd/dtos/CreateExamDTO";
+import { ExamEditDataDTO } from "../sharedd/dtos/ExamEditDataDTO";
+import { IdResultDTO } from "../sharedd/dtos/IdResultDTO";
 import { ExamService } from "../services/ExamService";
 import { toQuestionDTO } from "../services/misc/mappings";
 import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";

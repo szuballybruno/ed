@@ -1,7 +1,7 @@
 import { sign, verify } from "jsonwebtoken";
 import { AccessTokenPayload } from "../models/DTOs/AccessTokenPayload";
 import { User } from "../models/entity/User";
-import { InvitationTokenPayload, RoleIdEnum } from "../shared/types/sharedTypes";
+import { InvitationTokenPayload, RoleIdEnum } from "../sharedd/types/sharedTypes";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
 import { ErrorCode } from "../utilities/helpers";
 import { GlobalConfiguration } from "./misc/GlobalConfiguration";

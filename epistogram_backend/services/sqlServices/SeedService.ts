@@ -1,5 +1,5 @@
 
-import { RoleIdEnum } from "../../shared/types/sharedTypes";
+import { RoleIdEnum } from "../../sharedd/types/sharedTypes";
 import { RegistrationService } from "../RegistrationService";
 import { log } from "./../misc/logger";
 import { SQLBootstrapperService } from "./SQLBootstrapper";

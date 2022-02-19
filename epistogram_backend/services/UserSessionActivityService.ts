@@ -1,4 +1,4 @@
-import { SessionActivityType } from "../shared/types/sharedTypes";
+import { SessionActivityType } from "../sharedd/types/sharedTypes";
 import { CoinAcquireService } from "./CoinAcquireService";
 import { SQLFunctionsService } from "./sqlServices/FunctionsService";
 

@@ -1,4 +1,4 @@
-import { DailyTipEditDataDTO } from "../shared/dtos/DailyTipEditDataDTO";
+import { DailyTipEditDataDTO } from "../sharedd/dtos/DailyTipEditDataDTO";
 import { DailyTipService } from "../services/DailyTipService";
 import { ActionParams } from "../utilities/helpers";
 

@@ -1,10 +1,10 @@
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { ModuleDTO } from "../shared/dtos/ModuleDTO";
-import { PlayerDataDTO } from "../shared/dtos/PlayerDataDTO";
-import { CourseItemStateType } from "../shared/types/sharedTypes";
-import { VideoPlaybackSampleDTO } from "../shared/dtos/VideoPlaybackSampleDTO";
-import { VideoSamplingResultDTO } from "../shared/dtos/VideoSamplingResultDTO";
+import { ModuleDTO } from "../sharedd/dtos/ModuleDTO";
+import { PlayerDataDTO } from "../sharedd/dtos/PlayerDataDTO";
+import { CourseItemStateType } from "../sharedd/types/sharedTypes";
+import { VideoPlaybackSampleDTO } from "../sharedd/dtos/VideoPlaybackSampleDTO";
+import { VideoSamplingResultDTO } from "../sharedd/dtos/VideoSamplingResultDTO";
 import { VideoCompletedView } from "../models/views/VideoCompletedView";
 import { VideoProgressView } from "../models/views/VideoProgressView";
 import { CourseService } from "./CourseService";
@@ -20,7 +20,7 @@ import { CoinAcquireService } from "./CoinAcquireService";
 import { UserSessionActivityService } from "./UserSessionActivityService";
 import { MapperService } from "./MapperService";
 import { Video } from "../models/entity/Video";
-import { VideoDTO } from "../shared/dtos/VideoDTO";
+import { VideoDTO } from "../sharedd/dtos/VideoDTO";
 
 export class PlayerService {
 

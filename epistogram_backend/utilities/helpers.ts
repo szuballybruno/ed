@@ -5,8 +5,8 @@ import { User } from "../models/entity/User";
 import { ParsableValueType } from "../models/Types";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { logError } from "../services/misc/logger";
-import { typecheck } from "../shared/logic/sharedLogic";
-import { ErrorCodeType } from "../shared/types/sharedTypes";
+import { typecheck } from "../sharedd/logic/sharedLogic";
+import { ErrorCodeType } from "../sharedd/types/sharedTypes";
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 

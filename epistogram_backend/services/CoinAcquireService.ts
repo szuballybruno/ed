@@ -1,5 +1,5 @@
 import { GivenAnswer } from "../models/entity/GivenAnswer";
-import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
+import { CoinAcquireResultDTO } from "../sharedd/dtos/CoinAcquireResultDTO";
 import { ActivityStreakView } from "../models/views/ActivityStreakView";
 import { UserSessionDailyView } from "../models/views/UserActivityDailyView";
 import { trimTimeFromDate } from "../utilities/helpers";

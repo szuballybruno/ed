@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { EventType } from "../../shared/types/sharedTypes";
+import { EventType } from "../../sharedd/types/sharedTypes";
 import { User } from "./User";
 
 @Entity()

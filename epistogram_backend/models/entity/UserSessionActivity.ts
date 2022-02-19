@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { SessionActivityType } from "../../shared/types/sharedTypes";
+import { SessionActivityType } from "../../sharedd/types/sharedTypes";
 import { ActivitySession } from "./ActivitySession";
 import { CoinTransaction } from "./CoinTransaction";
 import { User } from "./User";

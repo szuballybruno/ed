@@ -1,8 +1,8 @@
 import { CourseRatingQuestionUserAnswer } from "../models/entity/courseRating/CourseRatingQuestionUserAnswer";
-import { CourseRatingGroupDTO } from "../shared/dtos/CourseRatingGroupDTO";
-import { CourseRatingQuestionAnswerDTO } from "../shared/dtos/CourseRatingQuestionAnswerDTO";
-import { CourseRatingQuestionAnswersDTO } from "../shared/dtos/CourseRatingQuestionAnswersDTO";
-import { CourseRatingQuestionDTO } from "../shared/dtos/CourseRatingQuestionDTO";
+import { CourseRatingGroupDTO } from "../sharedd/dtos/CourseRatingGroupDTO";
+import { CourseRatingQuestionAnswerDTO } from "../sharedd/dtos/CourseRatingQuestionAnswerDTO";
+import { CourseRatingQuestionAnswersDTO } from "../sharedd/dtos/CourseRatingQuestionAnswersDTO";
+import { CourseRatingQuestionDTO } from "../sharedd/dtos/CourseRatingQuestionDTO";
 import { CourseRatingQuestionView } from "../models/views/CourseRatingQuestionView";
 import { MapperService } from "./MapperService";
 import { ServiceBase } from "./misc/ServiceBase";

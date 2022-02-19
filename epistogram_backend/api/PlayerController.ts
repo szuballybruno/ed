@@ -1,5 +1,5 @@
-import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
-import { VideoPlaybackSampleDTO } from "../shared/dtos/VideoPlaybackSampleDTO";
+import { AnswerQuestionDTO } from "../sharedd/dtos/AnswerQuestionDTO";
+import { VideoPlaybackSampleDTO } from "../sharedd/dtos/VideoPlaybackSampleDTO";
 import { CourseService } from "../services/CourseService";
 import { PlayerService } from "../services/PlayerService";
 import { VideoService } from "../services/VideoService";

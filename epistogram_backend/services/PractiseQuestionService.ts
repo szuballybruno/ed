@@ -1,6 +1,6 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
-import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
-import { PractiseQuestionDTO } from "../shared/dtos/PractiseQuestionDTO";
+import { AnswerQuestionDTO } from "../sharedd/dtos/AnswerQuestionDTO";
+import { PractiseQuestionDTO } from "../sharedd/dtos/PractiseQuestionDTO";
 import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
 import { PlayerService } from "./PlayerService";
 import { QuestionAnswerService } from "./QuestionAnswerService";
