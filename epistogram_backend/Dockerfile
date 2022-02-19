@@ -20,15 +20,12 @@ RUN npm run build
 # copy runtime dependnecy files, 
 # note, these are not built and copied to the /build
 # folder by the compiler, since these are not source files. 
-COPY config.env ./app/build/config.env
-COPY /src/emails ./app/build/emails
-COPY /src/sql ./app/build/sql
-
-# set /build as the WD
-WORKDIR /app/build
+COPY config.env ./build/config.env
+COPY /src/emails ./build/emails
+COPY /src/sql ./build/sql
 
 # expose port 5000
 EXPOSE 5000
 
 # start container 
-CMD node server.js
+CMD node ./build/server.js
