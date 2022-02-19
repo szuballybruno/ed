@@ -1,11 +1,7 @@
 import cors from 'cors';
-import { Request } from 'express';
-import { User } from '../../models/entity/User';
-import { apiRoutes } from '../../shared/types/apiRoutes';
 import { getAsyncMiddlewareHandler } from '../../utilities/apiHelpers';
-import { getAuthTokenFromRequest, getCookie, ErrorCode } from '../../utilities/helpers';
+import { ErrorCode } from '../../utilities/helpers';
 import { GlobalConfiguration } from './GlobalConfiguration';
-import { log } from './logger';
 
 // export const getAuthMiddleware = (
 //     config: GlobalConfiguration,

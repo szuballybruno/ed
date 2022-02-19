@@ -2,11 +2,11 @@ import { log } from "console";
 import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { User } from "../models/entity/User";
-import { typecheck } from "../shared/logic/sharedLogic";
-import { ErrorCodeType } from "../shared/types/sharedTypes";
 import { ParsableValueType } from "../models/Types";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { logError } from "../services/misc/logger";
+import { typecheck } from "../shared/logic/sharedLogic";
+import { ErrorCodeType } from "../shared/types/sharedTypes";
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
