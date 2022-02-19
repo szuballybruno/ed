@@ -20,7 +20,7 @@ RUN npm run build
 # copy runtime dependnecy files, 
 # note, these are not built and copied to the /build
 # folder by the compiler, since these are not source files. 
-COPY config.env ./build/config.env
+COPY config.env ./config.env
 COPY /src/emails ./build/emails
 COPY /src/sql ./build/sql
 
