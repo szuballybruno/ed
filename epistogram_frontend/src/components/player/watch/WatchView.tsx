@@ -6,7 +6,7 @@ import { ModuleDTO } from "../../../shared/dtos/ModuleDTO";
 import { QuestionDTO } from "../../../shared/dtos/QuestionDTO";
 import { CourseModeType } from "../../../shared/types/sharedTypes";
 import { VideoDTO } from "../../../shared/dtos/VideoDTO";
-import { StillWatchingDialogMarker } from "../../models/types";
+import { StillWatchingDialogMarker } from "../../../models/types";
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";

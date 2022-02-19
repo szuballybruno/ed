@@ -1,26 +1,29 @@
-import React, { Children, useContext } from 'react';
+import { Flex, FlexProps } from '@chakra-ui/react';
+import React, { useContext } from 'react';
 import { Route, Switch, withRouter } from "react-router-dom";
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { getRoute } from "../../MainRouting";
 import { ApplicationRoute } from "../../models/types";
+import { useNavigation } from '../../services/core/navigatior';
 import { ArrayBuilder, getAssetUrl } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
-import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from "../PageRootContainer";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
 import { AdminCourseListSubpage } from "./courses/AdminCourseListSubpage";
+import { AdminInteractiveCourseSubpage } from './courses/AdminInteractiveCourseSubpage';
 import CourseStatisticsSubpage from "./courses/CourseStatisticsSubpage";
 import { AdminCourseDetailsSubpage } from "./courses/EditCourseDetailsSubpage";
 import { EditExamSubpage } from './courses/EditExamSubpage';
 import { EditModuleSubpage } from './courses/EditModuleSubpage';
 import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
 import { EditVideoSubpage } from './courses/EditVideoSubpage';
-import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
+import { VideoStatisticsSubpage } from './courses/VideoStatisticsSubpage';
 import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
 import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
+import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
 import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
@@ -29,10 +32,6 @@ import AdminStatistics from "./users/AdminStatisticsSubpage";
 import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
 import { AdminUserStatisticsSubpage } from "./users/AdminUserStatisticsSubpage";
 import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage";
-import { useNavigation } from '../../services/core/navigatior';
-import { Flex, FlexProps } from '@chakra-ui/react';
-import { VideoStatisticsSubpage } from './courses/VideoStatisticsSubpage';
-import { AdminInteractiveCourseSubpage } from './courses/AdminInteractiveCourseSubpage';
 
 const AdminPage = () => {
 

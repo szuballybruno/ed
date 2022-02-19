@@ -1,24 +1,22 @@
 import { Box, Divider, Flex, useMediaQuery } from "@chakra-ui/react";
-import { Home, LocalMallOutlined, NotificationsNone } from "@mui/icons-material";
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Typography } from "@mui/material";
 import React, { useContext, useRef, useState } from 'react';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { getAssetUrl, getUrl } from "../../static/frontendHelpers";
-import { mockNotifications } from "../../static/mockData";
 import { ApplicationRoute } from "../../models/types";
+import { useLogout } from "../../services/api/authenticationApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
-import { EpistoConinInfo } from "../EpistoCoinInfo";
-import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
-import { ProfileImage } from "../ProfileImage";
-import NavbarButton from "../universal/NavbarButton";
-import { useLogout } from "../../services/api/authenticationApiService";
 import { currentVersion } from "../../static/Environemnt";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoPopper } from "../controls/EpistoPopper";
-import { EpistoFont } from "../controls/EpistoFont";
+import { getAssetUrl, getUrl } from "../../static/frontendHelpers";
+import { mockNotifications } from "../../static/mockData";
 import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
+import { EpistoPopper } from "../controls/EpistoPopper";
+import { EpistoConinInfo } from "../EpistoCoinInfo";
+import { ProfileImage } from "../ProfileImage";
+import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
+import NavbarButton from "../universal/NavbarButton";
 
 const menuItems = [
     applicationRoutes.homeRoute,

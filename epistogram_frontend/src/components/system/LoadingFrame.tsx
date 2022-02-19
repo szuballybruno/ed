@@ -1,12 +1,11 @@
 import { Box, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from 'react';
-import { isArray } from "../../static/frontendHelpers";
 import { LoadingStateType } from "../../models/types";
-import { EpistoFont } from "../controls/EpistoFont";
+import { isArray } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export type LoadingFramePropsType = {
     loadingState?: LoadingStateType | LoadingStateType[],
