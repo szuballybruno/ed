@@ -2,15 +2,15 @@ import { UploadedFile } from "express-fileupload";
 import fs from "fs";
 import { Course } from "../models/entity/Course";
 import { Video } from "../models/entity/Video";
-import { CreateVideoDTO } from "../shared/dtos/CreateVideoDTO";
-import { IdBodyDTO } from "../shared/dtos/IdBodyDTO";
-import { IdResultDTO } from "../shared/dtos/IdResultDTO";
-import { VideoEditDTO } from "../shared/dtos/VideoEditDTO";
-import { MapperService } from "../services/MapperService";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { QuestionService } from "../services/QuestionService";
-import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
-import { VideoService } from "../services/VideoService";
+import { CreateVideoDTO } from "../src/shared/dtos/CreateVideoDTO";
+import { IdBodyDTO } from "../src/shared/dtos/IdBodyDTO";
+import { IdResultDTO } from "../src/shared/dtos/IdResultDTO";
+import { VideoEditDTO } from "../src/shared/dtos/VideoEditDTO";
+import { MapperService } from "../src/services/MapperService";
+import { GlobalConfiguration } from "../src/services/misc/GlobalConfiguration";
+import { QuestionService } from "../src/services/QuestionService";
+import { ORMConnectionService } from "../src/services/sqlServices/ORMConnectionService";
+import { VideoService } from "../src/services/VideoService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class VideoController {

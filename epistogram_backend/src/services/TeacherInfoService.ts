@@ -1,6 +1,6 @@
 import { TeacherInfo } from "../models/entity/TeacherInfo";
 import { User } from "../models/entity/User";
-import { TeacherInfoEditDTO } from "../sharedd/dtos/TeacherInfoEditDTO";
+import { TeacherInfoEditDTO } from "../shared/dtos/TeacherInfoEditDTO";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 

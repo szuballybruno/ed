@@ -1,6 +1,6 @@
 import Module from "module";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { CourseVisibilityType } from "../../sharedd/types/sharedTypes";
+import { CourseVisibilityType } from "../../shared/types/sharedTypes";
 import { CourseStateView } from "../views/CourseStateView";
 import { CourseCategory } from "./CourseCategory";
 import { CourseModule } from "./CourseModule";

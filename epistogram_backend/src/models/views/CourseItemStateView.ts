@@ -1,5 +1,5 @@
 import { ViewColumn, ViewEntity } from "typeorm";
-import { CourseItemStateType, CourseModeType } from "../../sharedd/types/sharedTypes";
+import { CourseItemStateType, CourseModeType } from "../../shared/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,

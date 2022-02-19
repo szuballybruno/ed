@@ -1,4 +1,4 @@
-import { AnswerSignupQuestionDTO } from "../sharedd/dtos/AnswerSignupQuestionDTO";
+import { AnswerSignupQuestionDTO } from "../shared/dtos/AnswerSignupQuestionDTO";
 import { SignupCompletedView } from "../models/views/SignupCompletedView";
 import { SignupQuestionView } from "../models/views/SignupQuestionView";
 import { EmailService } from "./EmailService";

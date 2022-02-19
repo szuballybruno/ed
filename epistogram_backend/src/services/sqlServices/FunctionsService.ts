@@ -1,4 +1,4 @@
-import { SessionActivityType } from "../../sharedd/types/sharedTypes";
+import { SessionActivityType } from "../../shared/types/sharedTypes";
 import { logObject } from "../misc/logger";
 import { SQLConnectionService } from "./SQLConnectionService";
 

@@ -1,6 +1,6 @@
 import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from "typeorm";
 import { User } from "../entity/User";
-import { CourseStageNameType } from "../../sharedd/types/sharedTypes";
+import { CourseStageNameType } from "../../shared/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,

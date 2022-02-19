@@ -1,7 +1,7 @@
 import { Event } from "../models/entity/Event";
-import { CoinAcquireResultDTO } from "../sharedd/dtos/CoinAcquireResultDTO";
-import { EventDTO } from "../sharedd/dtos/EventDTO";
-import { EventType } from "../sharedd/types/sharedTypes";
+import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
+import { EventDTO } from "../shared/dtos/EventDTO";
+import { EventType } from "../shared/types/sharedTypes";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 

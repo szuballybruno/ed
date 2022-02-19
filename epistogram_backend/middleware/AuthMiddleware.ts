@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
+import { User } from "../models/entity/User";
+import { apiRoutes } from "../src/shared/types/apiRoutes";
+import { RoleIdEnum, RoleType } from "../src/shared/types/sharedTypes";
 import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { AuthenticationService } from "../services/AuthenticationService";
-import { LoggerService } from "../services/LoggerService";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { UserService } from "../services/UserService";
-import { apiRoutes } from "../shared/types/apiRoutes";
-import { RoleIdEnum, RoleType } from "../shared/types/sharedTypes";
+import { AuthenticationService } from "../src/services/AuthenticationService";
+import { LoggerService } from "../src/services/LoggerService";
+import { GlobalConfiguration } from "../src/services/misc/GlobalConfiguration";
+import { UserService } from "../src/services/UserService";
 import { EndpointOptionsType } from "../utilities/apiHelpers";
-import { ActionParams, ErrorCode, getAuthTokenFromRequest } from "../utilities/helpers";
+import { ActionParams, getAuthTokenFromRequest, ErrorCode } from "../utilities/helpers";
 import { ITurboMiddleware } from "../utilities/TurboExpress";
 
 export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOptionsType> {

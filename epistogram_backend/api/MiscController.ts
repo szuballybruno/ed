@@ -1,16 +1,16 @@
 import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
 import { JobTitle } from "../models/entity/JobTitle";
 import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { DailyTipDTO } from "../shared/dtos/DailyTipDTO";
-import { UserDTO } from "../shared/dtos/UserDTO";
+import { DailyTipDTO } from "../src/shared/dtos/DailyTipDTO";
+import { UserDTO } from "../src/shared/dtos/UserDTO";
 import { DailyTipView } from "../models/views/DailyTipView";
-import { AuthenticationService } from "../services/AuthenticationService";
-import { MapperService } from "../services/MapperService";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { MiscService } from "../services/MiscService";
-import { PractiseQuestionService } from "../services/PractiseQuestionService";
-import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
-import { TokenService } from "../services/TokenService";
+import { AuthenticationService } from "../src/services/AuthenticationService";
+import { MapperService } from "../src/services/MapperService";
+import { GlobalConfiguration } from "../src/services/misc/GlobalConfiguration";
+import { MiscService } from "../src/services/MiscService";
+import { PractiseQuestionService } from "../src/services/PractiseQuestionService";
+import { ORMConnectionService } from "../src/services/sqlServices/ORMConnectionService";
+import { TokenService } from "../src/services/TokenService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class MiscController {

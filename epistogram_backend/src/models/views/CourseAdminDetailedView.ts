@@ -1,5 +1,5 @@
 import { ViewColumn, ViewEntity } from "typeorm";
-import { CourseVisibilityType } from "../../sharedd/types/sharedTypes";
+import { CourseVisibilityType } from "../../shared/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,

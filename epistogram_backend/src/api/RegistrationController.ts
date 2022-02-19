@@ -1,8 +1,8 @@
-import { CreateInvitedUserDTO } from "../sharedd/dtos/CreateInvitedUserDTO";
-import { RegisterUserViaActivationCodeDTO } from "../sharedd/dtos/RegisterUserViaActivationCodeDTO";
-import { RegisterUserViaInvitationTokenDTO } from "../sharedd/dtos/RegisterUserViaInvitationTokenDTO";
-import { RegisterUserViaPublicTokenDTO } from "../sharedd/dtos/RegisterUserViaPublicTokenDTO";
-import { RoleIdEnum } from "../sharedd/types/sharedTypes";
+import { CreateInvitedUserDTO } from "../shared/dtos/CreateInvitedUserDTO";
+import { RegisterUserViaActivationCodeDTO } from "../shared/dtos/RegisterUserViaActivationCodeDTO";
+import { RegisterUserViaInvitationTokenDTO } from "../shared/dtos/RegisterUserViaInvitationTokenDTO";
+import { RegisterUserViaPublicTokenDTO } from "../shared/dtos/RegisterUserViaPublicTokenDTO";
+import { RoleIdEnum } from "../shared/types/sharedTypes";
 import { EmailService } from "../services/EmailService";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
 import { RegistrationService } from "../services/RegistrationService";

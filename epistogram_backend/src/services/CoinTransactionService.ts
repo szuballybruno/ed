@@ -1,5 +1,5 @@
 import { CoinTransaction } from "../models/entity/CoinTransaction";
-import { CoinTransactionDTO } from "../sharedd/dtos/CoinTransactionDTO";
+import { CoinTransactionDTO } from "../shared/dtos/CoinTransactionDTO";
 import { CoinBalanceView } from "../models/views/CoinBalanceView";
 import { CoinTransactionView } from "../models/views/CoinTransactionView";
 import { MapperService } from "./MapperService";

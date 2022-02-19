@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import HttpErrorResponseDTO from "../sharedd/dtos/HttpErrorResponseDTO";
-import { ErrorCodeType, RoleType } from "../sharedd/types/sharedTypes";
+import HttpErrorResponseDTO from "../shared/dtos/HttpErrorResponseDTO";
+import { ErrorCodeType, RoleType } from "../shared/types/sharedTypes";
 import { log, logError } from "../services/misc/logger";
 import { ErrorCode } from "./helpers";
 import { IRouteOptions } from "./TurboExpress";

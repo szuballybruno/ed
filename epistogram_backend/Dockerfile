@@ -13,10 +13,16 @@ RUN npm install
 # copy files from the project root to the WD
 COPY /src ./src
 COPY tsconfig.json .
-COPY config.env .
 
 # compile TypeScript to /build folder
 RUN npm run build
+
+# copy runtime dependnecy files, 
+# note, these are not built and copied to the /build
+# folder by the compiler, since these are not source files. 
+COPY config.env ./app/build/config.env
+COPY /emails ./app/build/emails
+COPY /sql ./app/build/sql
 
 # set /build as the WD
 WORKDIR /app/build
@@ -25,4 +31,4 @@ WORKDIR /app/build
 EXPOSE 5000
 
 # start container 
-CMD node src/server.js
+CMD node server.js

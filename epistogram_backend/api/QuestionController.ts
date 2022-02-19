@@ -1,10 +1,10 @@
 import { Question } from "../models/entity/Question";
-import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
-import { QuestionEditDataDTO } from "../shared/dtos/QuestionEditDataDTO";
-import { toAnswerEditDTO } from "../services/misc/mappings";
-import { PractiseQuestionService } from "../services/PractiseQuestionService";
-import { QuestionService } from "../services/QuestionService";
-import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
+import { AnswerQuestionDTO } from "../src/shared/dtos/AnswerQuestionDTO";
+import { QuestionEditDataDTO } from "../src/shared/dtos/QuestionEditDataDTO";
+import { toAnswerEditDTO } from "../src/services/misc/mappings";
+import { PractiseQuestionService } from "../src/services/PractiseQuestionService";
+import { QuestionService } from "../src/services/QuestionService";
+import { ORMConnectionService } from "../src/services/sqlServices/ORMConnectionService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class QuestionController {

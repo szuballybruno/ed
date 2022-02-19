@@ -3,10 +3,10 @@ import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { User } from "../models/entity/User";
 import { ParsableValueType } from "../models/Types";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { logError } from "../services/misc/logger";
-import { typecheck } from "../shared/logic/sharedLogic";
-import { ErrorCodeType } from "../shared/types/sharedTypes";
+import { GlobalConfiguration } from "../src/services/misc/GlobalConfiguration";
+import { logError } from "../src/services/misc/logger";
+import { typecheck } from "../src/shared/logic/sharedLogic";
+import { ErrorCodeType } from "../src/shared/types/sharedTypes";
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 

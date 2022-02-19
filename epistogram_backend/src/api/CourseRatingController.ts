@@ -1,4 +1,4 @@
-import { CourseRatingQuestionAnswersDTO } from "../sharedd/dtos/CourseRatingQuestionAnswersDTO";
+import { CourseRatingQuestionAnswersDTO } from "../shared/dtos/CourseRatingQuestionAnswersDTO";
 import { CourseRatingService } from "../services/CourseRatingService";
 import { ActionParams } from "../utilities/helpers";
 

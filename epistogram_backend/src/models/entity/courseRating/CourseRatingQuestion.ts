@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CourseRatingQuesitonType } from "../../../sharedd/types/sharedTypes";
+import { CourseRatingQuesitonType } from "../../../shared/types/sharedTypes";
 import { CourseRatingGroup } from "./CourseRatingGroup";
 import { CourseRatingQuestionUserAnswer } from "./CourseRatingQuestionUserAnswer";
 

@@ -1,4 +1,4 @@
-import { UserStatsDTO } from "../sharedd/dtos/UserStatsDTO";
+import { UserStatsDTO } from "../shared/dtos/UserStatsDTO";
 import { UserStatsView } from "../models/views/UserStatsView";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
