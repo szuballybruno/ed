@@ -1,0 +1,91 @@
+
+import { RoleIdEnum } from "../../sharedd/types/sharedTypes";
+import { RegistrationService } from "../RegistrationService";
+import { log } from "../misc/logger";
+import { SQLBootstrapperService } from "./SQLBootstrapper";
+
+export class SeedService {
+
+    private _sqlBootstrapperService: SQLBootstrapperService;
+    private _regService: RegistrationService;
+
+    constructor(sqlBootstrapperService: SQLBootstrapperService, regService: RegistrationService) {
+
+        this._sqlBootstrapperService = sqlBootstrapperService;
+        this._regService = regService;
+    }
+
+    seedDBAsync = async () => {
+
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedOrganizations");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionTypes");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedActivities");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedRoles");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedSignupExam");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedJobTitles");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedUsers");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedSignupQuestions");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedCourseCategories");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedCourses");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedExams");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedVideos");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionsVideo");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionsExam");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedDailyTips");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedActivationCodes");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedShopItemCategories");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedShopItems");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seedDiscountCodes");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_prequiz_questions");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_course_rating");
+
+        // recalc seqs
+        await this._sqlBootstrapperService.recalcSequencesAsync();
+
+        // seed users 
+        await this.seedUsersAsync();
+    }
+
+    private seedUsersAsync = async () => {
+
+        log("seeding User 1...")
+        const { invitationToken, createdUser } = await this._regService
+            .createInvitedUserAsync(
+                {
+                    firstName: "Endre",
+                    lastName: "Marosi",
+                    jobTitleId: 1,
+                    roleId: RoleIdEnum.administrator,
+                    email: "marosi.endre@email.com",
+                    organizationId: 1
+                },
+                true);
+
+        await this._regService
+            .registerInvitedUserAsync(
+                invitationToken,
+                "admin123",
+                "admin123");
+
+        log("seeding User 2...")
+        const { invitationToken: it2, createdUser: u2 } = await this._regService
+            .createInvitedUserAsync(
+                {
+                    firstName: "Elon",
+                    lastName: "Musk",
+                    jobTitleId: 1,
+                    roleId: RoleIdEnum.user,
+                    email: "elon.musk@email.com",
+                    organizationId: 1
+                },
+                true);
+
+        await this._regService
+            .registerInvitedUserAsync(
+                it2,
+                "admin123",
+                "admin123");
+
+        log("User 2 token: " + it2);
+    }
+}

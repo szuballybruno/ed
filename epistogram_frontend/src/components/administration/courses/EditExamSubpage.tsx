@@ -19,7 +19,7 @@ import { FlexListItem } from "../../universal/FlexListItem";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoLabel } from "../../controls/EpistoLabel";
-import { ApplicationRoute } from "../../../models/types";
+import { ApplicationRoute } from "../../models/types";
 
 export const EditExamSubpage = (props: {
     examId?: number,

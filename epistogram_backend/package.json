@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "start": "react-scripts start",
-    "nodemon": "npx nodemon server.ts",
+    "nodemon": "npx nodemon src/server.ts",
+    "mon": "npx nodemon src/server.ts",
     "tsdev": "tsnd --respawn server.ts",
     "nodestart": "npx node server.ts",
     "migrate": "typeorm migrations:generate -n mig_1",

@@ -10,15 +10,10 @@ COPY package.json .
 # run npm install in the WD
 RUN npm install
 
-# copy application source files from the project root to the WD
-COPY /api ./api
-COPY /models ./models
-COPY /services ./services
-COPY /middleware ./middleware
-COPY /utilities ./utilities
-
-COPY server.ts .
+# copy files from the project root to the WD
+COPY /src ./src
 COPY tsconfig.json .
+COPY config.env .
 
 # compile TypeScript to /build folder
 RUN npm run build
@@ -26,13 +21,8 @@ RUN npm run build
 # set /build as the WD
 WORKDIR /app/build
 
-# copy runtime misc dependnecy files
-COPY config.env ./config.env
-COPY /emails ./emails
-COPY /sql ./sql
-
 # expose port 5000
 EXPOSE 5000
 
 # start container 
-CMD node server.js
+CMD node src/server.js
