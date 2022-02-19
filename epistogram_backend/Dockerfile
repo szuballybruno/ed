@@ -21,8 +21,8 @@ RUN npm run build
 # note, these are not built and copied to the /build
 # folder by the compiler, since these are not source files. 
 COPY config.env ./app/build/config.env
-COPY /emails ./app/build/emails
-COPY /sql ./app/build/sql
+COPY /src/emails ./app/build/emails
+COPY /src/sql ./app/build/sql
 
 # set /build as the WD
 WORKDIR /app/build
