@@ -87,8 +87,7 @@ export const CourseRatingSubpage = () => {
 
     return (
         <LoadingFrame
-            loadingState={[courseRatingGroupsState, saveCourseRatingGroupAnswersState]}
-            error={[courseRatingGroupsError]}
+            error={[courseRatingGroupsError]} 
             height="100%">
 
             <ExamLayout

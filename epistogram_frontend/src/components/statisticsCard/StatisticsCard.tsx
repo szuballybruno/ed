@@ -1,18 +1,15 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
-import { Fullscreen, FullscreenExit, Lock } from "@mui/icons-material";
-import { Typography } from "@mui/material";
+import { Lock } from "@mui/icons-material";
 import React, { useState } from 'react';
-import { EpistoHeader } from '../EpistoHeader';
-import { EpistoButton } from '../controls/EpistoButton';
-import { FlexFloat } from '../controls/FlexFloat';
-import classes from "./learningStatisticsItem.module.scss";
 import { EpistoFont } from '../controls/EpistoFont';
+import { FlexFloat } from '../controls/FlexFloat';
+import { EpistoHeader } from '../EpistoHeader';
 
 const StatisticsCard = (props: {
     iconPath?: string
     suffix: string
     title: string
-    value: string
+    value?: string
     isOpenByDefault?: boolean
     children?: React.ReactNode
     chartSize?: string,
@@ -90,7 +87,7 @@ const StatisticsCard = (props: {
                             lineHeight: 1,
                         }}>
 
-                        {props.value}
+                        {props.value ?? "-"}
                     </EpistoFont>
 
                     {/* suffix */}

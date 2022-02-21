@@ -15,13 +15,15 @@ import { QuestionAnswer } from "./QuestionAnswer";
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
     answerSessionId: number,
-    onExamFinished: () => void
+    onExamFinished: () => void,
+    hideLoading?: boolean
 }) => {
 
     const {
         answerSessionId,
         onExamFinished,
-        exam
+        exam,
+        hideLoading
     } = props;
 
     const questions = exam.questions;
@@ -74,7 +76,7 @@ export const ExamQuestions = (props: {
 
     return <LoadingFrame
         className="whall"
-        loadingState={saveExamAnswerState}
+        loadingState={hideLoading ? undefined : saveExamAnswerState}
         flex="1"
         direction={"column"}
         alignItems={"center"}

@@ -19,13 +19,13 @@ export const PretestSubpage = () => {
     return (
         <LoadingFrame
             height="100%"
-            loadingState={pretestDataState}
             error={pretestDataError}>
 
             {pretestData && <ExamQuestions
                 exam={pretestData?.exam}
                 answerSessionId={pretestData?.answerSessionId}
-                onExamFinished={goToFirstWatchItem} />}
+                onExamFinished={goToFirstWatchItem}
+                hideLoading />}
         </LoadingFrame>
     )
 }

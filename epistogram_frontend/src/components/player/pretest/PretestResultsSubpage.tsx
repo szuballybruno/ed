@@ -37,7 +37,6 @@ export const PretestResultsSubpage = () => {
     return (
         <LoadingFrame
             height="100%"
-            loadingState={[pretestResultsState, setCourseModeState]}
             error={pretestResultsError}
             direction="column">
 

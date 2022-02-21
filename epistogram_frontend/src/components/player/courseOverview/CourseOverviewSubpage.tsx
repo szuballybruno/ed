@@ -2,6 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useCourseOverviewData } from "../../../services/api/miscApiService";
 import { useNavigation } from "../../../services/core/navigatior";
+import { isNullOrUndefined } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoGrid } from "../../controls/EpistoGrid";
 import { ExamLayout } from "../../exam/ExamLayout";
@@ -83,7 +84,7 @@ export const CourseOverviewSubpage = () => {
                         return <StatisticsCard
                             suffix={item.suffix}
                             title={item.title}
-                            value={item.value + ""}
+                            value={isNullOrUndefined(item.value) ? undefined : item.value + ""}
                             height={150}
                             p="10px 10px 10px 30px" />
                     })}
