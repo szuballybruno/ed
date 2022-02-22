@@ -9,7 +9,7 @@ export class CourseLearningDTO {
     currentItemCode: string;
     firstItemCode: string;
     isComplete: boolean;
-    totalSpentTime: number;
+    totalSpentSeconds: number;
     totalCourseItemCount: number;
     completedCourseItemCount: number;
     totalVideoCount: number;

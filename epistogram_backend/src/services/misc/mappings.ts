@@ -197,7 +197,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 teacherName: toFullName(x.teacherFirstName, x.teacherLastName),
                 thumbnailImageURL: thumbnailImageURL,
                 isComplete: x.isCompleted,
-                totalSpentTime: x.totalSpentTime,
+                totalSpentSeconds: x.totalSpentSeconds,
                 totalCourseItemCount: x.totalCourseItemCount,
                 completedCourseItemCount: x.completedCourseItemCount,
                 totalVideoCount: x.totalVideoCount,
@@ -761,7 +761,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             examSuccessRateAverage: c.examSuccessRateAverage,
             finalExamSuccessRate: c.finalExamSuccessRate,
             questionSuccessRate: c.questionSuccessRate,
-            totalSpentTime: c.totalSpentTime
+            totalSpentSeconds: c.totalSpentSeconds
         }));
 
     mapperService

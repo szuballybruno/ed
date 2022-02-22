@@ -13,7 +13,7 @@ WITH session_view_max AS (
 SELECT
 	u.id,
 	u.email,
-	ustv.total_session_length_seconds * interval '1 sec' total_spent_time,
+	ustv.total_session_length_seconds * interval '1 sec' total_spent_seconds,
 	svm.latest_activity_date
 FROM public.user u
 

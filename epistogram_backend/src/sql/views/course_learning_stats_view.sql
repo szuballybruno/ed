@@ -1,6 +1,6 @@
 SELECT 
 	cv.*,
-	cstv.total_spent_time,
+	cstv.total_spent_seconds,
 	(
 		SELECT COUNT(course_id)::integer
 		FROM public.course_item_view cisv

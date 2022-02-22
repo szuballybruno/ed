@@ -36,7 +36,7 @@ export const CourseOverviewSubpage = () => {
             suffix: "db"
         },
         {
-            value: Math.ceil((courseOverviewData?.totalSpentTime ?? 0) / 60),
+            value: Math.ceil((courseOverviewData?.totalSpentSeconds ?? 0) / 60),
             title: "Ennyi idő alatt végezted el a kurzust",
             suffix: "perc"
         },

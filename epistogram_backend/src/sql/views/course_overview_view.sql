@@ -1,7 +1,7 @@
 SELECT 
 	u.id user_id,
 	co.id course_id,
-	clsv.total_spent_time,
+	clsv.total_spent_seconds,
 	clsv.completed_video_count,
 	clsv.answered_video_question_count,
 	clsv.question_success_rate,

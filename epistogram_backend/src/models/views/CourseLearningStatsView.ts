@@ -53,7 +53,7 @@ export class CourseLearningStatsView {
     teacherLastName: string;
 
     @ViewColumn()
-    totalSpentTime: number;
+    totalSpentSeconds: number;
 
     @ViewColumn()
     totalCourseItemCount: number;

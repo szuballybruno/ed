@@ -127,7 +127,10 @@ export const dbSchema = {
         "user_admin_list_view",
         "prequiz_question_view",
         "pretest_result_view",
-        "course_rating_question_view"
+        "course_rating_question_view",
+        "user_course_estimated_time_frame_view",
+        "user_spent_time_view",
+        "user_progress_view"
     ],
 
     functionScripts: [
