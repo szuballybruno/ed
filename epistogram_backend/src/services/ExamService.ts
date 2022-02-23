@@ -235,7 +235,8 @@ export class ExamService {
                 dto.answerSessionId,
                 dto.questionId,
                 dto.answerIds,
-                true);
+                true,
+                0);
     }
 
     /**

@@ -44,7 +44,7 @@ export class VideoService {
         answerSessionId: number,
         questionId: number,
         answerIds: number[],
-        elapsedSeconds?: number) => {
+        elapsedSeconds: number) => {
 
         // validation comes here
 

@@ -79,7 +79,7 @@ export class SQLFunctionsService {
         answerSessionId: number,
         questionId: number,
         answerIds: number[],
-        elapsedSeconds: number | null,
+        elapsedSeconds: number,
         isPractiseAnswer: boolean) => {
 
         type ReType = {

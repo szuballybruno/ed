@@ -17,7 +17,7 @@ export class GivenAnswer {
     @Column()
     isCorrect: boolean;
 
-    @Column({ nullable: true, type: "double precision" })
+    @Column({ type: "double precision" })
     elapsedSeconds: number;
 
     @Column({ default: false })

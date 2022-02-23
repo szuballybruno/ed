@@ -43,7 +43,8 @@ export const ExamQuestions = (props: {
             await saveExamAnswer({
                 answerSessionId: answerSessionId,
                 answerIds: selectedAnswerIds!,
-                questionId: currentQuestion.questionId
+                questionId: currentQuestion.questionId,
+                elapsedSeconds: 0
             });
 
             setSelectedAnswerIds([]);

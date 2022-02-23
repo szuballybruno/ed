@@ -130,7 +130,8 @@ export const dbSchema = {
         "course_rating_question_view",
         "user_course_estimated_time_frame_view",
         "user_spent_time_view",
-        "user_progress_view"
+        "user_progress_view",
+        "user_daily_progress_view"
     ],
 
     functionScripts: [

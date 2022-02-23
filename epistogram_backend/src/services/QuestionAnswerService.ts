@@ -45,7 +45,7 @@ export class QuestionAnswerService {
         questionId: number,
         answerIds: number[],
         isExamQuestion: boolean,
-        elapsedSeconds?: number,
+        elapsedSeconds: number,
         isPractiseAnswer?: boolean) => {
 
         const {
@@ -55,7 +55,7 @@ export class QuestionAnswerService {
             streakLength,
             streakId
         } = await this._sqlFunctionsService
-            .answerQuestionFn(userId, answerSessionId, questionId, answerIds, elapsedSeconds ?? null, !!isPractiseAnswer);
+            .answerQuestionFn(userId, answerSessionId, questionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
 
         let coinAcquires = null as null | {
             normal: CoinAcquireResultDTO | null,
