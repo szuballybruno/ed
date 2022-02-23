@@ -18,10 +18,9 @@ FROM
 
 		-- completed video count 
 		(
-			SELECT COUNT(vcv.video_id)::int
-			FROM public.video_completed_view vcv
-			WHERE vcv.user_id = u.id
-				AND vcv.is_completed = true
+			SELECT COUNT(uvpb.completion_date)::int
+			FROM public.user_video_progress_bridge uvpb
+			WHERE uvpb.user_id = u.id
 		) completed_video_count,
 
 		-- completed_exam_count

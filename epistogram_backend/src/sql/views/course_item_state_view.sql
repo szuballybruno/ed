@@ -19,7 +19,7 @@ FROM
 	SELECT 
 		civ.*,
 		u.id user_id,
-		(vcv.is_completed OR ecv.has_successful_session) IS NOT DISTINCT FROM true is_completed,
+		(uvpb.completion_date IS NOT NULL OR ecv.has_successful_session) IS NOT DISTINCT FROM true is_completed,
 		ucb.course_mode course_mode,
 		ucb.current_item_code = civ.item_code IS NOT DISTINCT FROM true is_current,
 		ucb.current_item_code = civ.module_code IS NOT DISTINCT FROM true is_module_current
@@ -28,9 +28,9 @@ FROM
 	LEFT JOIN public.user u
 	ON 1 = 1
 
-	LEFT JOIN public.video_completed_view vcv
-	ON vcv.video_id = civ.video_id
-		AND vcv.user_id = u.id
+	LEFT JOIN public.user_video_progress_bridge uvpb
+	ON uvpb.video_id = civ.video_id
+		AND uvpb.user_id = u.id
 
 	LEFT JOIN public.exam_completed_view ecv
 	ON ecv.exam_id = civ.exam_id

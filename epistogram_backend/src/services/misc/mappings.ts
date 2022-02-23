@@ -40,6 +40,7 @@ import { ShopItemView } from "../../models/views/ShopItemView";
 import { SignupQuestionView } from "../../models/views/SignupQuestionView";
 import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
 import { UserAdminListView } from "../../models/views/UserAdminListView";
+import { UserDailyProgressView } from "../../models/views/UserDailyProgressView";
 import { UserStatsView } from "../../models/views/UserStatsView";
 import { AdminPageUserDTO } from "../../shared/dtos/AdminPageUserDTO";
 import { AnswerDTO } from "../../shared/dtos/AnswerDTO";
@@ -97,6 +98,7 @@ import { SignupQuestionDTO } from "../../shared/dtos/SignupQuestionDTO";
 import { TaskDTO } from "../../shared/dtos/TaskDTO";
 import { TeacherInfoEditDTO } from "../../shared/dtos/TeacherInfoEditDTO";
 import { UserActivityDTO } from "../../shared/dtos/UserActivityDTO";
+import { UserDailyProgressDTO } from "../../shared/dtos/UserDailyProgressDTO";
 import { UserDTO } from "../../shared/dtos/UserDTO";
 import { UserEditDTO } from "../../shared/dtos/UserEditDTO";
 import { UserStatsDTO } from "../../shared/dtos/UserStatsDTO";
@@ -837,6 +839,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             id: x.groupId,
             name: x.groupName,
             questions
+        }));
+
+    mapperService
+        .addMap(UserDailyProgressView, UserDailyProgressDTO, view => ({
+            date: view.creationDate,
+            spentSeconds: view.spentSeconds
         }));
 }
 

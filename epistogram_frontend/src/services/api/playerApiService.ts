@@ -32,24 +32,6 @@ export const useCourseItemList = (descriptorCode: string, isEnabled: boolean) =>
     }
 }
 
-export const usePostVideoPlaybackSample = () => {
-
-    const qr = usePostData<VideoPlaybackSampleDTO, VideoSamplingResultDTO>(apiRoutes.player.saveVideoPlaybackSample);
-
-    const postVideoPlaybackSampleAsync = (fromPlayedSeconds: number, toPlayedSeconds: number) => {
-
-        return qr.postDataAsync({
-            fromSeconds: fromPlayedSeconds,
-            toSeconds: toPlayedSeconds
-        });
-    }
-
-    return {
-        postVideoPlaybackSampleAsync,
-        videoSamplingResult: qr.result
-    }
-}
-
 export const useAnswerQuestion = () => {
 
     const queryRes = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.player.answerVideoQuestion);

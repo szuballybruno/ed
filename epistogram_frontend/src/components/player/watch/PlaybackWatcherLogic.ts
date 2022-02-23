@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePostVideoPlaybackSample } from "../../../services/api/playerApiService";
+import { usePostVideoPlaybackSample } from "../../../services/api/playbackApiService";
 import { verboseLogging } from "../../../static/Environemnt";
 import { isBetweenThreshold } from "../../../static/frontendHelpers";
 

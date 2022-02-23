@@ -4,6 +4,7 @@ import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
 import { CourseModule } from "./CourseModule";
 import { Question } from "./Question";
+import { UserExamProgressBridge } from "./UserExamProgressBridge";
 
 @Entity()
 export class Exam {
@@ -57,4 +58,9 @@ export class Exam {
     @ManyToOne(_ => CourseModule, x => x.exams)
     @JoinColumn({ name: "module_id" })
     module: CourseModule | null;
+    
+    // userProgressBridges
+    @JoinColumn()
+    @OneToMany(_ => UserExamProgressBridge, x => x.exam)
+    userProgressBridges: UserExamProgressBridge[];
 }

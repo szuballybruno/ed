@@ -8,11 +8,13 @@ import { useUserStats } from "../services/api/userStatsApiService";
 import { CurrentUserContext } from "./system/AuthenticationFrame";
 import { EpistoHeader } from "./EpistoHeader";
 import { EpistoFont } from "./controls/EpistoFont";
+import { useUserProgressData } from "../services/api/userProgressService";
 
 export const StatsSummary = () => {
 
     const currentUser = useContext(CurrentUserContext);
     const { userStats } = useUserStats(currentUser!.id);
+    const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData();
 
     return <div
         style={{
