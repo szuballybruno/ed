@@ -4,7 +4,9 @@ import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useEditUserData } from "../../../services/api/userApiService";
 import { LearningStatistics } from "../../learningInsights/LearningStatistics";
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { AdminUserList } from "./AdminUserList";
 
 export const AdminUserStatisticsSubpage = () => {
 
@@ -12,19 +14,19 @@ export const AdminUserStatisticsSubpage = () => {
     const userId = parseInt(params.userId);
     const { userEditData } = useEditUserData(userId);
 
-    return (
-        <Flex flex="1" direction="column" maxW="100%">
+    return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
-            {/* admin header */}
-            <AdminSubpageHeader tabMenuItems={[
-                applicationRoutes.administrationRoute.usersRoute.editRoute,
-                applicationRoutes.administrationRoute.usersRoute.statsRoute
-            ].concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
+        <AdminUserList />
+
+        {/* admin header */}
+        <AdminSubpageHeader tabMenuItems={[
+            applicationRoutes.administrationRoute.usersRoute.editRoute,
+            applicationRoutes.administrationRoute.usersRoute.statsRoute
+        ].concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
 
 
-                <LearningStatistics userId={userId} />
+            <LearningStatistics userId={userId} />
 
-            </AdminSubpageHeader>
-        </Flex>
-    );
+        </AdminSubpageHeader>
+    </AdminBreadcrumbsHeader>
 };

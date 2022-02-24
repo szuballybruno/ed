@@ -19,6 +19,9 @@ import { EditSection } from "./EditSection";
 import { SimpleEditList } from "../SimpleEditList";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoSelect } from "../../controls/EpistoSelect";
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
+import { AdminCourseList } from "./AdminCourseList";
+import { useNavigation } from "../../../services/core/navigatior";
 
 export const AdminCourseDetailsSubpage = () => {
 
@@ -59,6 +62,10 @@ export const AdminCourseDetailsSubpage = () => {
         text: "",
         value: 0
     })));
+
+    const { navigate } = useNavigation();
+
+    const administrationRoutes = applicationRoutes.administrationRoute;
 
     const handleSaveCourseAsync = async () => {
 
@@ -139,8 +146,11 @@ export const AdminCourseDetailsSubpage = () => {
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseDetailsEditDataState, saveCourseThumbnailState]}
         error={courseDetailsEditDataError}
+        direction="column"
         className="whall">
-        <Flex flex="1" direction="column" maxW="100%">
+
+        <AdminBreadcrumbsHeader>
+            <AdminCourseList currentCoursePage="details" />
 
             {/* admin header */}
             <AdminSubpageHeader
@@ -152,7 +162,7 @@ export const AdminCourseDetailsSubpage = () => {
                 onSave={handleSaveCourseAsync}>
 
                 {/* Course edit */}
-                <Flex direction="row">
+                <Flex direction="row" flex="1">
 
                     {/* left pane  */}
                     <Flex direction="column" flex="1" mr="5px">
@@ -388,7 +398,7 @@ export const AdminCourseDetailsSubpage = () => {
                     </Flex>
                 </Flex>
             </AdminSubpageHeader>
-        </Flex>
+        </AdminBreadcrumbsHeader>
 
     </LoadingFrame>
 }

@@ -8,6 +8,7 @@ export const translatableTexts = {
         next: "Tovább",
         removeAll: "Összes törlése",
         add: "Hozzáadás",
+        remove: "Törlés",
         openAll: "Összes kinyitása",
         closeAll: "Összes becsukása",
         loading: "Betöltés...",
@@ -447,7 +448,7 @@ export const translatableTexts = {
     administration: {
         editUserControl: {
             selectUserAsTeacher: "Megjelölöm a felhasználót tanárként",
-            isItTeacher: "Tanár?"
+            selectAsTeacher: "Megjelölés tanárként"
         },
         teacherInfoSubpage: {
             teacherInfoSaved: "Tanár információk sikeresen mentve!",

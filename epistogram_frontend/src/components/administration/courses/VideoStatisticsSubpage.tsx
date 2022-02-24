@@ -12,7 +12,9 @@ import { LoadingFrame } from "../../system/LoadingFrame"
 import { DashboardSection } from "../../universal/DashboardSection"
 import { VideoHotspotsChart } from "../../universal/VideoHotspotsChart"
 import { VideoPieChart } from "../../universal/VideoPieChart"
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
+import { AdminCourseItemList } from "./AdminCourseItemList"
 
 export const VideoStatisticsSubpage = () => {
     const ValueLabelComponent = (props) => {
@@ -34,13 +36,11 @@ export const VideoStatisticsSubpage = () => {
         );
     }
     const [playedSeconds, setPlayedSeconds] = useState(0);
-    return <Flex>
-
+    return <AdminBreadcrumbsHeader>
+        <AdminCourseItemList />
         <AdminSubpageHeader
+            direction="column"
             tabMenuItems={[
-                applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
                 applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
                 applicationRoutes.administrationRoute.coursesRoute.videoStatsRoute,
             ]}>
@@ -411,5 +411,5 @@ export const VideoStatisticsSubpage = () => {
                     suffix="x" />
             </Grid>
         </AdminSubpageHeader>
-    </Flex>
+    </AdminBreadcrumbsHeader>
 }

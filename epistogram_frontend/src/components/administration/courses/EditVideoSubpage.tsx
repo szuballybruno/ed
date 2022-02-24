@@ -23,6 +23,8 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "./EditSection";
 import { useSaveVideo, useVideoEditData, useUploadVideoFileAsync } from "../../../services/api/videoApiService";
 import { EpistoButton } from "../../controls/EpistoButton";
+import { AdminCourseItemList } from "./AdminCourseItemList";
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 
 const QuestionItem = (props: {
     currentSeconds: number,
@@ -210,111 +212,115 @@ export const EditVideoSubpage = () => {
         error={[videoEditDataError]}
         className="whall">
 
-        <AdminSubpageHeader
-            onSave={handleSaveAsync}
-            tabMenuItems={[
-                applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
-                applicationRoutes.administrationRoute.coursesRoute.videoStatsRoute,
-            ]}>
+        <AdminBreadcrumbsHeader>
+            <AdminCourseItemList />
 
-            <Flex direction="column">
+            <AdminSubpageHeader
+                onSave={handleSaveAsync}
+                direction="column"
+                tabMenuItems={[
+                    applicationRoutes.administrationRoute.coursesRoute.editVideoRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.videoStatsRoute,
+                ]}>
 
-                <HiddenFileUploadInput
-                    type="video"
-                    ref={videoUploadInputRef}
-                    onFileSelected={(file) => setVideoFile(file)} />
+                <Flex direction="column">
 
-                <EditSection
-                    className="roundBorders"
-                    background="var(--transparentWhite70)"
-                    title="Általános adatok">
+                    <HiddenFileUploadInput
+                        type="video"
+                        ref={videoUploadInputRef}
+                        onFileSelected={(file) => setVideoFile(file)} />
 
-                    <EpistoEntry
-                        label="Cím"
-                        labelVariant="top"
-                        setValue={setVideoTitle}
-                        value={videoTitle} />
+                    <EditSection
+                        className="roundBorders"
+                        background="var(--transparentWhite70)"
+                        title="Általános adatok">
 
-                    <EpistoEntry
-                        label="Alcím"
-                        labelVariant="top"
-                        setValue={setVideoSubtitle}
-                        value={videoSubtitle} />
+                        <EpistoEntry
+                            label="Cím"
+                            labelVariant="top"
+                            setValue={setVideoTitle}
+                            value={videoTitle} />
 
-                    <EpistoEntry
-                        label="Leírás"
-                        labelVariant="top"
-                        setValue={setVideoDescription}
-                        value={videoDescription}
-                        isMultiline />
+                        <EpistoEntry
+                            label="Alcím"
+                            labelVariant="top"
+                            setValue={setVideoSubtitle}
+                            value={videoSubtitle} />
 
-                </EditSection>
+                        <EpistoEntry
+                            label="Leírás"
+                            labelVariant="top"
+                            setValue={setVideoDescription}
+                            value={videoDescription}
+                            isMultiline />
+
+                    </EditSection>
 
 
-            </Flex>
+                </Flex>
 
-            <Flex direction="row">
-                <EditSection
-                    flex="1"
-                    mr="5px"
-                    className="roundBorders"
-                    background="var(--transparentWhite70)"
-                    title="Videó fájl">
+                <Flex direction="row">
+                    <EditSection
+                        flex="1"
+                        mr="5px"
+                        className="roundBorders"
+                        background="var(--transparentWhite70)"
+                        title="Videó fájl">
 
-                    <EpistoButton
-                        variant="outlined"
-                        style={{ margin: "10px 0 10px 0" }}
-                        onClick={() => videoUploadInputRef?.current?.click()}>
-                        Videó kiválasztása
-                    </EpistoButton>
+                        <EpistoButton
+                            variant="outlined"
+                            style={{ margin: "10px 0 10px 0" }}
+                            onClick={() => videoUploadInputRef?.current?.click()}>
+                            Videó kiválasztása
+                        </EpistoButton>
 
-                    {/* player */}
-                    {(videoEditData?.videoFileUrl && !videoFile) && <ReactPlayer
-                        width="100%"
-                        controls
-                        onProgress={x => setPlayedSeconds(x.playedSeconds)}
-                        progressInterval={100}
-                        url={videoEditData.videoFileUrl} />}
+                        {/* player */}
+                        {(videoEditData?.videoFileUrl && !videoFile) && <ReactPlayer
+                            width="100%"
+                            controls
+                            onProgress={x => setPlayedSeconds(x.playedSeconds)}
+                            progressInterval={100}
+                            url={videoEditData.videoFileUrl} />}
 
-                    {videoFile && <EpistoEntry
-                        label="Videó fájl"
-                        disabled
-                        value={videoFile?.name ?? ""} />}
-                    <Slider
-                        defaultValue={80}
-                        style={{ pointerEvents: "none" }}
-                        max={videoLength}
-                        value={playedSeconds}
-                        marks={marks} />
-                </EditSection>
-                <EditSection
-                    title="Kérdések"
-                    className="roundBorders"
-                    background="var(--transparentWhite70)"
-                    flex="1"
-                    ml="5px"
-                    direction="column">
+                        {videoFile && <EpistoEntry
+                            label="Videó fájl"
+                            disabled
+                            value={videoFile?.name ?? ""} />}
+                        <Slider
+                            defaultValue={80}
+                            style={{ pointerEvents: "none" }}
+                            max={videoLength}
+                            value={playedSeconds}
+                            marks={marks} />
+                    </EditSection>
+                    <EditSection
+                        title="Kérdések"
+                        className="roundBorders"
+                        background="var(--transparentWhite70)"
+                        flex="1"
+                        ml="5px"
+                        direction="column">
 
-                    <EpistoButton
-                        onClick={handleAddNewQuestion}
-                        variant="outlined">
-                        Kérdés hozzáadása
-                    </EpistoButton>
-                    <FlexList>
-                        {questions
-                            .map(question => <QuestionItem
-                                navToEditQuestion={navToEditQuestion}
-                                currentSeconds={playedSeconds}
-                                onChanged={(x, y) => setQuestionValues(question.questionId, x, y)}
-                                onDeleted={() => handleDeleteQuestion(question.questionId)}
-                                question={question} />)}
-                    </FlexList>
+                        <EpistoButton
+                            onClick={handleAddNewQuestion}
+                            variant="outlined">
+                            Kérdés hozzáadása
+                        </EpistoButton>
+                        <FlexList>
+                            {questions
+                                .map(question => <QuestionItem
+                                    navToEditQuestion={navToEditQuestion}
+                                    currentSeconds={playedSeconds}
+                                    onChanged={(x, y) => setQuestionValues(question.questionId, x, y)}
+                                    onDeleted={() => handleDeleteQuestion(question.questionId)}
+                                    question={question} />)}
+                        </FlexList>
 
-                </EditSection>
-            </Flex>
-        </AdminSubpageHeader>
+                    </EditSection>
+                </Flex>
+            </AdminSubpageHeader>
+        </AdminBreadcrumbsHeader>
+
+
     </LoadingFrame >
 }

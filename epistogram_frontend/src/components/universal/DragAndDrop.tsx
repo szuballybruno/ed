@@ -15,6 +15,7 @@ export const DropZone = (params: {
     return <Droppable droppableId={zoneId} type={groupId}>
         {(provided, _) => (
             <Box
+                id="asdasdasd"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 {...css}>

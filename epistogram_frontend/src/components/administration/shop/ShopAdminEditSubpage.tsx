@@ -197,6 +197,7 @@ export const ShopAdminEditSubpage = () => {
             className="whall">
 
             <AdminSubpageHeader
+                direction="column"
                 px="30px"
                 onSave={handleSaveAsync}>
 

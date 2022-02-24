@@ -13,6 +13,8 @@ import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { translatableTexts } from "../../../static/translatableTexts";
+import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { useHistory } from "react-router-dom";
 
 export const roles = [
     {
@@ -35,9 +37,10 @@ export const roles = [
 export const EditUserControl = (props: {
     editDTO: UserEditDTO | null,
     saveUserAsync: (editDTO: UserEditDTO) => Promise<void>
+    showDeleteUserDialog?: (UserEditDTO: UserEditDTO | null) => void
 }) => {
 
-    const { editDTO, saveUserAsync } = props;
+    const { editDTO, saveUserAsync, showDeleteUserDialog } = props;
 
     // editable fields
     const [firstName, setFirstName] = useState("");
@@ -47,6 +50,7 @@ export const EditUserControl = (props: {
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
     const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
+    const history = useHistory()
 
     const user = useContext(CurrentUserContext) as UserDTO;
     const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;
@@ -86,8 +90,6 @@ export const EditUserControl = (props: {
 
     return <Box
         p="0 10px 10px 10px"
-        className="roundBorders"
-        background="var(--transparentWhite70)"
         flex="1"
         alignItems={"flex-start"}>
 
@@ -193,19 +195,22 @@ export const EditUserControl = (props: {
             </Flex>
 
             {/* is teacher */}
-            <EpistoLabel text={translatableTexts.administration.editUserControl.isItTeacher}>
-                <Flex align="center">
-                    <Checkbox
-                        checked={isTeacher}
-                        onChange={(_, x) => setIsTeacher(x)} />
+            <EpistoFont isUppercase fontSize="fontExtraSmall" style={{
+                marginTop: 10
+            }}>
+                {translatableTexts.administration.editUserControl.selectAsTeacher}
+            </EpistoFont>
+            <Flex align="center">
+                <Checkbox
+                    checked={isTeacher}
+                    onChange={(_, x) => setIsTeacher(x)} />
 
-                    <EpistoFont
-                        style={{ flex: "1" }}>
+                <EpistoFont
+                    style={{ flex: "1" }}>
 
-                        {translatableTexts.administration.editUserControl.selectUserAsTeacher}
-                    </EpistoFont>
-                </Flex>
-            </EpistoLabel>
+                    {translatableTexts.administration.editUserControl.selectUserAsTeacher}
+                </EpistoFont>
+            </Flex>
 
             {/* submit button */}
             <Button
@@ -215,6 +220,25 @@ export const EditUserControl = (props: {
                 style={{ marginTop: "20px" }}>
 
                 {translatableTexts.misc.save}
+            </Button>
+
+            {/* remove button */}
+            <Button
+                variant={"outlined"}
+                color={"error"}
+                onClick={() => {
+
+                    if (showDeleteUserDialog) {
+
+                        showDeleteUserDialog(editDTO)
+                    } else {
+
+                        history.goBack()
+                    }
+                }}
+                style={{ marginTop: "20px" }}>
+
+                {translatableTexts.misc.remove}
             </Button>
         </Flex>
     </Box>

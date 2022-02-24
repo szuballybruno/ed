@@ -144,7 +144,7 @@ export const AdminCourseListSubpage = () => {
         <EpistoDialog logic={warnDialogLogic} />
 
         {/* admin header */}
-        <AdminSubpageHeader>
+        <AdminSubpageHeader direction="column">
             <AdminListEditHeader
                 headerButtons={bulkEditButtons}
                 isAllSelected={isAllCoursesSelected}

@@ -1,10 +1,10 @@
-import { Box, Flex } from '@chakra-ui/react';
-import React from 'react';
+import { Box, Divider, Flex } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { useEditUserData, useSaveUser } from '../../../services/api/userApiService';
+import { deleteUserAsync, useEditUserData, useSaveUser, useUserListQuery } from '../../../services/api/userApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { parseIntOrNull } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -14,16 +14,26 @@ import { EpistoLabel } from '../../controls/EpistoLabel';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditUserControl } from './EditUserControl';
+import { AdminUserList } from './AdminUserList';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { useNavigation } from '../../../services/core/navigatior';
+import { ButtonType } from '../../../models/types';
+import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
+import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 
 const AdminEditUserSubpage = () => {
 
     const params = useParams<{ userId: string }>();
+    const [searchText, setSearchText] = useState<string | null>(null);
     const editedUserId = parseInt(params.userId);
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveUserAsync } = useSaveUser();
     const showError = useShowErrorDialog();
+    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(searchText);
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
+    const { navigate } = useNavigation();
+    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
 
     const handleSaveUserAsync = async (dto: UserEditDTO) => {
 
@@ -44,10 +54,10 @@ const AdminEditUserSubpage = () => {
         validateFunction: (value) => {
 
             if (value === "0")
-                return "Nem adhatsz hozza '0' coin-t."
+                return "Nem adhatsz hozzá '0' coin-t."
 
             if (!parseIntOrNull(value))
-                return "Helytelen formatum."
+                return "Helytelen formátum"
 
             return null;
         }
@@ -63,7 +73,7 @@ const AdminEditUserSubpage = () => {
             const amount = parseInt(coinAmountEntryState.value);
 
             await giftCoinsToUserAsync({ userId: editedUserId, amount });
-            showNotification(`Sikeresen hozzaadtal ${amount} Coint.`);
+            showNotification(`Sikeresen hozzáadtál ${amount} Coint.`);
             await refetchCoinBalance();
         }
         catch (e) {
@@ -72,58 +82,116 @@ const AdminEditUserSubpage = () => {
         }
     }
 
-    return <AdminSubpageHeader
-        tabMenuItems={
-            [
-                applicationRoutes.administrationRoute.usersRoute.editRoute,
-                applicationRoutes.administrationRoute.usersRoute.statsRoute
-            ]
-                .concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
+    const deleteWaningDialogLogic = useEpistoDialogLogic();
 
-        <Flex
-            className='roundBorders'
-            mt="5px"
-            pb="10px"
-            background="var(--transparentWhite70)"
-            flexWrap="wrap">
+    const handleSearch = (value: string) => {
 
-            <Box flex="1" minWidth="300px">
+        if (value === "")
+            setSearchText(null);
+
+        if (value.length > 2)
+            setSearchText(value);
+    }
+
+    const showDeleteUserDialog = (user: UserEditDTO | null) => {
+        if (!user)
+            return
+
+        deleteWaningDialogLogic
+            .openDialog({
+                title: "Biztosan törlöd a felhasználót?",
+                description: `${user.lastName} ${user.firstName} nevű felhasználó visszavonhatatlanul törölve lesz!`,
+                buttons: [
+                    {
+                        title: "Törlés",
+                        action: async () => {
+
+                            try {
+
+                                await deleteUserAsync(user.id);
+                                await refetchUsers();
+                            }
+                            catch (e) {
+
+                                showError(e);
+                            }
+                        }
+                    }
+                ]
+            });
+    }
+
+    const bulkEditButtons = [
+        {
+            title: "Hozzáadás",
+            action: () => navigateToAddUser()
+        }
+    ] as ButtonType[]
+
+    return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
+
+        <AdminUserList />
+        <AdminSubpageHeader
+            direction="row"
+            headerButtons={bulkEditButtons}
+            tabMenuItems={
+                [
+                    applicationRoutes.administrationRoute.usersRoute.editRoute,
+                    applicationRoutes.administrationRoute.usersRoute.statsRoute
+                ]
+                    .concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
+
+            <EpistoDialog logic={deleteWaningDialogLogic} />
+
+            <Flex
+                className='roundBorders'
+                flex="1"
+                mt="5px"
+                background="var(--transparentWhite70)"
+                flexWrap="wrap">
+
                 <EditUserControl
                     editDTO={userEditData}
+                    showDeleteUserDialog={showDeleteUserDialog}
                     saveUserAsync={handleSaveUserAsync} />
-            </Box>
 
-            <Box
-                flex="1"
-                minWidth="300px">
+                <Divider orientation='vertical' h="calc(100% - 20px)" w="1px" background="grey" my="10px" />
 
-                <LoadingFrame
-                    loadingState={[coinBalanceStatus, giftCoinsToUserState]}
-                    error={coinBalanceError}
-                    direction="column">
+                <Box
+                    className='roundBorders'
+                    flex="1"
+                    p="10px"
+                    minWidth="300px"
+                >
 
-                    <EpistoFont>
-                        Balance: {coinBalance}
-                    </EpistoFont>
+                    <LoadingFrame
+                        loadingState={[coinBalanceStatus, giftCoinsToUserState]}
+                        error={coinBalanceError}
+                        direction="column">
 
-                    <EpistoLabel text="Add coins">
+                        <EpistoFont>
+                            Egyenleg: {coinBalance}
+                        </EpistoFont>
 
-                        <EpistoEntryNew
-                            type="number"
-                            state={coinAmountEntryState} />
+                        <EpistoLabel text="EpistoCoin hozzáadása">
 
-                        <EpistoButton
-                            isDisabled={!!coinAmountEntryState.error}
-                            onClick={handleAddCoinsAsync}
-                            style={{ alignSelf: "flex-start" }}
-                            variant="colored">
-                            Add coins
-                        </EpistoButton>
-                    </EpistoLabel>
-                </LoadingFrame>
-            </Box>
-        </Flex>
-    </AdminSubpageHeader>
+                            <EpistoEntryNew
+                                type="number"
+                                state={coinAmountEntryState} />
+
+                            <EpistoButton
+                                isDisabled={!!coinAmountEntryState.error}
+                                onClick={handleAddCoinsAsync}
+                                style={{ alignSelf: "flex-start" }}
+                                variant="colored">
+                                Hozzáadás
+                            </EpistoButton>
+                        </EpistoLabel>
+                    </LoadingFrame>
+                </Box>
+            </Flex>
+        </AdminSubpageHeader>
+    </AdminBreadcrumbsHeader>
 };
 
 export default AdminEditUserSubpage;

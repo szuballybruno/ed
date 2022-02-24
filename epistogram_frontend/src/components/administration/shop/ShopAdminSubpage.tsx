@@ -107,7 +107,7 @@ export const ShopAdminSubpage = () => {
             className="whall">
 
             {/* admin header */}
-            <AdminSubpageHeader>
+            <AdminSubpageHeader direction="column">
                 <AdminListEditHeader
                     headerButtons={headerButtons}
                     isAllSelected={isAllSelected}

@@ -65,6 +65,7 @@ export const EditDailyTipSubpage = () => {
 
             {/* admin header */}
             <AdminSubpageHeader
+                direction="column"
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips,
                     applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip

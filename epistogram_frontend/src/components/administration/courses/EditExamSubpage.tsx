@@ -20,6 +20,8 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { ApplicationRoute } from "../../../models/types";
+import { AdminCourseItemList } from "./AdminCourseItemList";
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 
 export const EditExamSubpage = (props: {
     examId?: number,
@@ -129,104 +131,107 @@ export const EditExamSubpage = (props: {
         error={examEditDataError}
         className="whall">
 
-        <AdminSubpageHeader
-            tabMenuItems={[
-                applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                props.activeRoute
-                    ? props.activeRoute
-                    : applicationRoutes.administrationRoute.coursesRoute.editExamRoute,
-            ]}
-            onSave={handleSaveAsync}>
-            <Flex
-                direction="column"
-                className="roundBorders"
-                mt="5px"
-                p="0 10px 10px 10px"
-                background="var(--transparentWhite70)">
-                <EpistoEntry
-                    label="Cím"
-                    labelVariant="top"
-                    value={title}
-                    setValue={setTitle} />
+        <AdminBreadcrumbsHeader>
 
-                <EpistoEntry
-                    label="Alcím"
-                    labelVariant="top"
-                    value={subtitle}
-                    setValue={setSubtitle} />
+            <AdminCourseItemList />
 
-                <EpistoLabel
-                    text="Újrakezdési limit">
+            <AdminSubpageHeader
+                tabMenuItems={[
+                    props.activeRoute
+                        ? props.activeRoute
+                        : applicationRoutes.administrationRoute.coursesRoute.editExamRoute,
+                ]}
+                onSave={handleSaveAsync}>
+                <Flex
+                    direction="column"
+                    className="roundBorders"
+                    mt="5px"
+                    p="0 10px 10px 10px"
+                    background="var(--transparentWhite70)">
+                    <EpistoEntry
+                        label="Cím"
+                        labelVariant="top"
+                        value={title}
+                        setValue={setTitle} />
 
-                    <Flex align="center">
+                    <EpistoEntry
+                        label="Alcím"
+                        labelVariant="top"
+                        value={subtitle}
+                        setValue={setSubtitle} />
+
+                    <EpistoLabel
+                        text="Újrakezdési limit">
+
+                        <Flex align="center">
+                            <Checkbox
+                                checked={isRetakeLimited}
+                                style={{
+                                    alignSelf: "flex-start"
+                                }}
+                                onChange={(_, value) => setIsRetakeLimited(value)} />
+
+                            <EpistoEntry
+                                marginTop="0"
+                                value={reateLimit}
+                                disabled={!isRetakeLimited}
+                                type="number"
+                                setValue={setRetakeLimit} />
+                        </Flex>
+                    </EpistoLabel>
+
+                    <EpistoLabel text="Záróvizsga?">
                         <Checkbox
-                            checked={isRetakeLimited}
+                            checked={isFinalExam}
                             style={{
                                 alignSelf: "flex-start"
                             }}
-                            onChange={(_, value) => setIsRetakeLimited(value)} />
-
-                        <EpistoEntry
-                            marginTop="0"
-                            value={reateLimit}
-                            disabled={!isRetakeLimited}
-                            type="number"
-                            setValue={setRetakeLimit} />
-                    </Flex>
-                </EpistoLabel>
-
-                <EpistoLabel text="Záróvizsga?">
-                    <Checkbox
-                        checked={isFinalExam}
-                        style={{
-                            alignSelf: "flex-start"
-                        }}
-                        onChange={(_, value) => setIsFinalExam(value)} />
-                </EpistoLabel>
-            </Flex>
-            <Flex
-                direction="column"
-                className="roundBorders"
-                mt="5px"
-                mb="100px"
-                p="0 10px 10px 10px"
-                background="var(--transparentWhite70)">
+                            onChange={(_, value) => setIsFinalExam(value)} />
+                    </EpistoLabel>
+                </Flex>
+                <Flex
+                    direction="column"
+                    className="roundBorders"
+                    mt="5px"
+                    mb="100px"
+                    p="0 10px 10px 10px"
+                    background="var(--transparentWhite70)">
 
 
-                <EpistoButton
-                    variant="outlined"
-                    style={{ margin: "10px", alignSelf: "flex-end" }}
-                    onClick={handleAddNewQuesiton}>
-                    Új kérdés hozzáadása
-                </EpistoButton>
+                    <EpistoButton
+                        variant="outlined"
+                        style={{ margin: "10px", alignSelf: "flex-end" }}
+                        onClick={handleAddNewQuesiton}>
+                        Új kérdés hozzáadása
+                    </EpistoButton>
 
-                <DragAndDropList
-                    width="100%"
-                    list={questions}
-                    setList={setQuestions}
-                    getKey={x => x.questionId + ""}
-                    renderListItem={(question) => <FlexListItem
+                    <DragAndDropList
                         width="100%"
-                        thumbnailContent={<LiveHelpIcon className="square40" />}
-                        midContent={<EpistoEntry
-                            setValue={x => setQuesitonText(question.questionId, x)}
-                            value={question.questionText} />}
-                        endContent={<Flex>
+                        list={questions}
+                        setList={setQuestions}
+                        getKey={x => x.questionId + ""}
+                        renderListItem={(question) => <FlexListItem
+                            width="100%"
+                            thumbnailContent={<LiveHelpIcon className="square40" />}
+                            midContent={<EpistoEntry
+                                setValue={x => setQuesitonText(question.questionId, x)}
+                                value={question.questionText} />}
+                            endContent={<Flex>
 
-                            <EpistoButton
-                                onClick={() => navToEditQuestion(question.questionId)}
-                                isDisabled={question.questionId >= 0 ? false : true}>
+                                <EpistoButton
+                                    onClick={() => navToEditQuestion(question.questionId)}
+                                    isDisabled={question.questionId >= 0 ? false : true}>
 
-                                <EditIcon className="square30" />
-                            </EpistoButton>
+                                    <EditIcon className="square30" />
+                                </EpistoButton>
 
-                            <EpistoButton onClick={() => handleDelete(question.questionId)}>
-                                <Delete className="square30" />
-                            </EpistoButton>
-                        </Flex >} />} />
-            </Flex>
-        </AdminSubpageHeader>
+                                <EpistoButton onClick={() => handleDelete(question.questionId)}>
+                                    <Delete className="square30" />
+                                </EpistoButton>
+                            </Flex >} />} />
+                </Flex>
+            </AdminSubpageHeader>
+        </AdminBreadcrumbsHeader>
+
     </LoadingFrame>
 }

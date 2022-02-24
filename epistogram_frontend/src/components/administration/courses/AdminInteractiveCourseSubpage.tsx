@@ -2,6 +2,7 @@ import { Flex } from "@chakra-ui/react"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
 
 import ReactFlow, { Handle, Position } from 'react-flow-renderer';
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 
 const elements = [
     {
@@ -57,14 +58,16 @@ const CustomNodeComponent = ({ data }) => {
 
 export const AdminInteractiveCourseSubpage = () => {
 
-    return <AdminSubpageHeader direction="row" flex="1" mb="50px">
-        <Flex flex="1" mr="5px" background="var(--transparentWhite70)">
-            <ReactFlow nodeTypes={{
-                special: CustomNodeComponent
-            }} elements={elements} />
-        </Flex>
-        <Flex flexBasis={"350px"} background="var(--transparentWhite70)">
+    return <AdminBreadcrumbsHeader>
+        <AdminSubpageHeader direction="row" flex="1" mb="50px">
+            <Flex flex="1" mr="5px" background="var(--transparentWhite70)">
+                <ReactFlow nodeTypes={{
+                    special: CustomNodeComponent
+                }} elements={elements} />
+            </Flex>
+            <Flex flexBasis={"350px"} background="var(--transparentWhite70)">
 
-        </Flex>
-    </AdminSubpageHeader>
+            </Flex>
+        </AdminSubpageHeader>
+    </AdminBreadcrumbsHeader>
 }
