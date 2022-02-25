@@ -1,4 +1,7 @@
+import { UserCourseCompletionEstimationView } from "../models/views/UserCourseCompletionEstimationView";
+import { UserDailyCourseItemProgressView } from "../models/views/UserDailyCourseItemProgressView";
 import { UserDailyProgressView } from "../models/views/UserDailyProgressView";
+import { UserCourseProgressChartDTO } from "../shared/dtos/UserCourseProgressChartDTO";
 import { UserDailyProgressDTO } from "../shared/dtos/UserDailyProgressDTO";
 import { MapperService } from "./MapperService";
 import { ServiceBase } from "./misc/ServiceBase";
@@ -15,14 +18,39 @@ export class UserProgressService extends ServiceBase {
 
         const courseId = 4;
 
-        const views = await this._ormService
-            .getRepository(UserDailyProgressView)
-            .createQueryBuilder("udpv")
-            .where("udpv.userId = :userId", { userId })
-            .andWhere("udpv.courseId = :courseId", { courseId })
+        const estimationView = await this._ormService
+            .getRepository(UserCourseCompletionEstimationView)
+            .createQueryBuilder("uccev")
+            .where("uccev.userId = :userId", { userId })
+            .andWhere("uccev.courseId = :courseId", { courseId })
+            .getOneOrFail();
+
+        const dailyViews = await this._ormService
+            .getRepository(UserDailyCourseItemProgressView)
+            .createQueryBuilder("udcipv")
+            .where("udcipv.courseId = :courseId", { courseId })
+            .andWhere("udcipv.userId = :userId", { userId })
             .getMany();
 
-        return this._mapperService
-            .mapMany(UserDailyProgressView, UserDailyProgressDTO, views);
+        console.log(estimationView)
+        console.log(dailyViews)
+
+        const dto = {
+            courseLengthSeconds: estimationView.courseLengthSeconds,
+            estimatedCompletionDate: estimationView.estimatedCompletionDate,
+            estimatedLengthInDays: estimationView.estimatedLengthInDays,
+            estimatedSecondsPerDay: estimationView.estimatedSecondsPerDay,
+            originalCompletionDaysEstimation: estimationView.originalCompletionDaysEstimation,
+            startDate: estimationView.startDate,
+            days: dailyViews
+                .map(x => ({
+                    completedItemCount: x.completedItemCount,
+                    completedPercentage: x.completedPercentage,
+                    completionDate: x.completionDate,
+                    offsetDaysFromStart: x.offsetDaysFromStart
+                }))
+        } as UserCourseProgressChartDTO;
+
+        return dto;
     }
 }

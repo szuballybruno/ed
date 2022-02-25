@@ -9,6 +9,8 @@ import { CurrentUserContext } from "./system/AuthenticationFrame";
 import { EpistoHeader } from "./EpistoHeader";
 import { EpistoFont } from "./controls/EpistoFont";
 import { useUserProgressData } from "../services/api/userProgressService";
+import { NoProgressChartYet } from "./home/NoProgressChartYet";
+import { UserProgressChart } from "./home/UserProgressChart";
 
 export const StatsSummary = () => {
 
@@ -40,28 +42,9 @@ export const StatsSummary = () => {
                 gridRow: `auto / span 2`
             }} >
 
-            {/* locked overlay */}
-            <EpistoHeader
-                text={translatableTexts.homePage.statsSummary.mostImportantStatistics}
-                showDivider variant="strongSub"
-                m="5px 10px 20px 10px" />
-
-            {/* bar chart */}
-            <img
-                src={getAssetUrl("/images/learningcurve3D.png")}
-                alt={""}
-                style={{
-                    maxHeight: 180,
-                    objectFit: "contain",
-                    margin: "0 10px 0 0",
-                }} />
-
-            <EpistoFont fontSize="fontSmall" style={{
-                textAlign: "center",
-                margin: "0 20px"
-            }}>
-                {translatableTexts.homePage.noStatsYet}
-            </EpistoFont>
+            {userProgressData
+                ? <UserProgressChart />
+                : <NoProgressChartYet />}
         </FlexFloat>
 
         {/* total completed video count */}

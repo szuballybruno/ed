@@ -1,0 +1,13 @@
+SELECT 
+	co.id course_id,
+	COUNT(civ.item_code) item_count
+FROM public.course co 
+
+LEFT JOIN public.course_item_view civ
+ON civ.course_id = co.id 
+
+GROUP BY
+	co.id
+	
+ORDER BY
+	co.id

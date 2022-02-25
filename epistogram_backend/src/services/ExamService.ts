@@ -15,6 +15,8 @@ import { QuestionService } from "./QuestionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { UserSessionActivityService } from "./UserSessionActivityService";
+import { AnswerSessionView } from "../models/views/AnswerSessionView";
+import { UserExamProgressBridge } from "../models/entity/UserExamProgressBridge";
 
 export class ExamService {
 
@@ -202,7 +204,9 @@ export class ExamService {
      */
     answerExamQuestionAsync = async (userId: number, dto: AnswerQuestionDTO) => {
 
-        // validation comes here 
+        // TODO validation comes here
+
+        const { answerSessionId, answerIds, elapsedSeconds, questionId } = dto;
 
         // save user activity
         await this._userSessionActivityService
@@ -214,29 +218,62 @@ export class ExamService {
             .createQueryBuilder("q")
             .leftJoinAndSelect("q.exam", "e")
             .leftJoinAndSelect("e.answerSessions", "as")
-            .where("as.id = :asid", { asid: dto.answerSessionId })
+            .where("as.id = :asid", { asid: answerSessionId })
             .orderBy("q.orderIndex")
             .getMany();
 
-        const isLast = questions[questions.length - 1].id === dto.questionId;
+        const isLast = questions[questions.length - 1].id === questionId;
+        const examId = questions.first().examId!;
 
-        // if last, set answer session end date 
-        if (isLast)
-            await this._ormService
-                .getRepository(AnswerSession)
-                .save({
-                    id: dto.answerSessionId,
-                    endDate: new Date()
-                });
-
-        return this._quesitonAnswerService
+        // save answer 
+        const result = this._quesitonAnswerService
             .answerQuestionAsync(
                 userId,
-                dto.answerSessionId,
-                dto.questionId,
-                dto.answerIds,
+                answerSessionId,
+                questionId,
+                answerIds,
                 true,
-                0);
+                elapsedSeconds);
+
+        if (!isLast)
+            return result;
+
+        // set answer session end date 
+        await this._ormService
+            .getRepository(AnswerSession)
+            .save({
+                id: answerSessionId,
+                endDate: new Date()
+            });
+
+        // set user exam progress
+        const answerSessionViews = await this._ormService
+            .getRepository(AnswerSessionView)
+            .createQueryBuilder("asv")
+            .where("asv.userId = :userId", { userId })
+            .andWhere("asv.examId = :examId", { examId })
+            .getMany();
+
+        const currentAnswerSessionIsSuccessful = answerSessionViews
+            .first(x => x.answerSessionId == answerSessionId);
+
+        const successfulAsvCount = answerSessionViews
+            .count(x => x.isSuccessful);
+
+        const currentIsFirstSuccessfulAse = successfulAsvCount === 1 && currentAnswerSessionIsSuccessful;
+
+        // if not first successful ase return
+        if (!currentIsFirstSuccessfulAse)
+            return result;
+
+        // if first successful ase, save user exam progress bridge
+        await this._ormService
+            .getRepository(UserExamProgressBridge)
+            .save({
+                completionDate: new Date(),
+                examId,
+                userId
+            });
     }
 
     /**

@@ -80,6 +80,9 @@ import { PrequizAnswer } from "../../models/entity/prequiz/PrequizAnswer";
 import { UserDailyProgressView } from "../../models/views/UserDailyProgressView";
 import { UserVideoProgressBridge } from "../../models/entity/UserVideoProgressBridge";
 import { UserExamProgressBridge } from "../../models/entity/UserExamProgressBridge";
+import { AnswerSessionView } from "../../models/views/AnswerSessionView";
+import { UserCourseCompletionEstimationView } from "../../models/views/UserCourseCompletionEstimationView";
+import { UserDailyCourseItemProgressView } from "../../models/views/UserDailyCourseItemProgressView";
 
 export const dbSchema = {
 
@@ -128,11 +131,13 @@ export const dbSchema = {
         "user_admin_list_view", 
         "prequiz_question_view",
         "pretest_result_view",
+        "course_item_count_view",
         "course_rating_question_view",
         "user_course_estimated_time_frame_view",
         "user_spent_time_view",
         "user_course_completion_estimation_view",
-        "user_daily_progress_view"
+        "user_daily_progress_view",
+        "user_daily_course_item_progress_view"
     ],
 
     functionScripts: [
@@ -203,7 +208,10 @@ export const dbSchema = {
         PrequizQuestionView,
         PretestResultView,
         CourseRatingQuestionView,
-        UserDailyProgressView
+        UserDailyProgressView,
+        AnswerSessionView,
+        UserCourseCompletionEstimationView,
+        UserDailyCourseItemProgressView
     ] as any[],
 
     entities: [
