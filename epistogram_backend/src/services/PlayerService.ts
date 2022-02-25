@@ -1,28 +1,21 @@
-import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
+import { Video } from "../models/entity/Video";
 import { ModuleDTO } from "../shared/dtos/ModuleDTO";
 import { PlayerDataDTO } from "../shared/dtos/PlayerDataDTO";
+import { VideoDTO } from "../shared/dtos/VideoDTO";
 import { CourseItemStateType } from "../shared/types/sharedTypes";
-import { VideoPlaybackSampleDTO } from "../shared/dtos/VideoPlaybackSampleDTO";
-import { VideoSamplingResultDTO } from "../shared/dtos/VideoSamplingResultDTO";
-import { VideoCompletedView } from "../models/views/VideoCompletedView";
-import { VideoProgressView } from "../models/views/VideoProgressView";
 import { CourseService } from "./CourseService";
-import { readItemCode } from "./misc/encodeService";
 import { ExamService } from "./ExamService";
+import { MapperService } from "./MapperService";
+import { readItemCode } from "./misc/encodeService";
+import { ServiceBase } from "./misc/ServiceBase";
 import { ModuleService } from "./ModuleService";
+import { PlaybackService } from "./PlaybackService";
 import { QuestionAnswerService } from "./QuestionAnswerService";
+import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { VideoService } from "./VideoService";
-import { VideoPlaybackSampleService } from "./VideoPlaybackSampleService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { CoinAcquireService } from "./CoinAcquireService";
-import { UserSessionActivityService } from "./UserSessionActivityService";
-import { MapperService } from "./MapperService";
-import { Video } from "../models/entity/Video";
-import { VideoDTO } from "../shared/dtos/VideoDTO";
 
-export class PlayerService {
+export class PlayerService extends ServiceBase {
 
     private _courseService: CourseService;
     private _examService: ExamService;
@@ -30,11 +23,7 @@ export class PlayerService {
     private _userCourseBridgeService: UserCourseBridgeService;
     private _videoService: VideoService;
     private _questionAnswerService: QuestionAnswerService;
-    private _vpss: VideoPlaybackSampleService;
-    private _ormService: ORMConnectionService;
-    private _coinAcquireService: CoinAcquireService;
-    private _userSessionActivityService: UserSessionActivityService;
-    private _mappserService: MapperService;
+    private _playbackService: PlaybackService;
 
     constructor(
         ormService: ORMConnectionService,
@@ -44,22 +33,18 @@ export class PlayerService {
         userCourseBridge: UserCourseBridgeService,
         videoService: VideoService,
         questionAnswerService: QuestionAnswerService,
-        vpss: VideoPlaybackSampleService,
-        coinAcquireService: CoinAcquireService,
-        userSessionActivityService: UserSessionActivityService,
-        mappserService: MapperService) {
+        mappserService: MapperService,
+        playbackService: PlaybackService) {
 
-        this._ormService = ormService;
+        super(mappserService, ormService);
+
         this._courseService = courseService;
         this._examService = examService;
         this._moduleService = moduleService;
         this._userCourseBridgeService = userCourseBridge;
         this._videoService = videoService;
         this._questionAnswerService = questionAnswerService;
-        this._vpss = vpss;
-        this._coinAcquireService = coinAcquireService;
-        this._userSessionActivityService = userSessionActivityService;
-        this._mappserService = mappserService;
+        this._playbackService = playbackService;
     }
 
     getPlayerDataAsync = async (
@@ -193,103 +178,13 @@ export class PlayerService {
 
     getVideoDTOAsync = async (userId: number, videoId: number) => {
 
-        const maxWathcedSeconds = await this.getMaxWatchedSeconds(userId, videoId);
-        const video = await this._videoService.getVideoByIdAsync(videoId);
+        const maxWathcedSeconds = await this._playbackService
+            .getMaxWatchedSeconds(userId, videoId);
 
-        return this._mappserService
+        const video = await this._videoService
+            .getVideoByIdAsync(videoId);
+
+        return this._mapperService
             .map(Video, VideoDTO, video, maxWathcedSeconds);
-    }
-
-    saveVideoPlaybackSample = async (userId: number, dto: VideoPlaybackSampleDTO) => {
-
-        const currentBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOneOrFail({
-                where: {
-                    userId,
-                    isCurrent: true
-                }
-            });
-
-        if (!currentBridge.currentItemCode)
-            throw new Error("Course has no current item!");
-
-        const { itemId: videoId, itemType } = readItemCode(currentBridge.currentItemCode);
-        if (itemType !== "video")
-            throw new Error("Current item is not of type: video!");
-
-        await this._ormService
-            .getRepository(VideoPlaybackSample)
-            .insert({
-                videoId: videoId,
-                userId: userId,
-                fromSeconds: dto.fromSeconds,
-                toSeconds: dto.toSeconds
-            });
-
-        // get sample chunks
-        const chunks = await this._vpss.getSampleChunksAsync(userId, videoId);
-
-        // calucate and save watched percent
-        const watchedPercent = await this._vpss.getVideoWatchedPercentAsync(userId, videoId, chunks);
-
-        // 5% is a very low number only for development
-        const newIsWatchedState = watchedPercent > 5;
-
-        // get old watched state, can be null on first sampling.
-        const isCompletedBefore = await this.getVideoIsCompletedState(userId, videoId);
-
-        // squish chunks to store less data 
-        await this._vpss.squishSamplesAsync(userId, videoId, chunks);
-        await this._videoService.saveVideoPlaybackDataAsync(userId, videoId, watchedPercent, newIsWatchedState);
-
-        // calculate is watched state changed
-        const isCompletedAfter = await this.getVideoIsCompletedState(userId, videoId);
-        const isWatchedStateChanged = isCompletedBefore?.isCompleted !== isCompletedAfter?.isCompleted;
-
-        const maxWathcedSeconds = await this.getMaxWatchedSeconds(userId, videoId);
-
-        // if is watched state changed 
-        // reward user with episto coins
-        if (isWatchedStateChanged) {
-
-            await this._coinAcquireService
-                .acquireVideoWatchedCoinsAsync(userId, videoId);
-        }
-
-        // save user activity
-        await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, "video");
-
-        return {
-            isWatchedStateChanged,
-            maxWathcedSeconds
-        } as VideoSamplingResultDTO;
-    }
-
-    getMaxWatchedSeconds = async (userId: number, videoId: number) => {
-
-        const ads = await this._ormService
-            .getRepository(VideoProgressView)
-            .findOneOrFail({
-                where: {
-                    userId: userId,
-                    videoId: videoId
-                }
-            })
-
-        return ads.toSeconds;
-    }
-
-    getVideoIsCompletedState = async (userId: number, videoId: number) => {
-
-        return await this._ormService
-            .getRepository(VideoCompletedView)
-            .findOne({
-                where: {
-                    userId: userId,
-                    videoId: videoId
-                }
-            });
     }
 }

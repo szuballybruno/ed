@@ -14,6 +14,7 @@ declare global {
         first(func?: (item: T) => boolean): T;
         last(func: (item: T) => boolean): T;
         firstOrNull(func?: (item: T) => boolean): T | null;
+        count(func: (item: T) => boolean): number;
     }
 }
 
@@ -149,4 +150,19 @@ Array.prototype.orderBy = function <T>(func: (item: T) => number | string | Date
         });
 
     return sorted;
+}
+
+Array.prototype.count = function <T>(func: (item: T) => boolean): number {
+
+    let count = 0;
+
+    for (let index = 0; index < this.length; index++) {
+
+        const element = this[index];
+        const result = func(element);
+        if (result)
+            count++;
+    }
+
+    return count;
 }

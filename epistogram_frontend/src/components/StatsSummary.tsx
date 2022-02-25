@@ -8,11 +8,15 @@ import { useUserStats } from "../services/api/userStatsApiService";
 import { CurrentUserContext } from "./system/AuthenticationFrame";
 import { EpistoHeader } from "./EpistoHeader";
 import { EpistoFont } from "./controls/EpistoFont";
+import { useUserProgressData } from "../services/api/userProgressService";
+import { NoProgressChartYet } from "./home/NoProgressChartYet";
+import { UserProgressChart } from "./home/UserProgressChart";
 
 export const StatsSummary = () => {
 
     const currentUser = useContext(CurrentUserContext);
     const { userStats } = useUserStats(currentUser!.id);
+    const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData();
 
     return <div
         style={{
@@ -38,28 +42,9 @@ export const StatsSummary = () => {
                 gridRow: `auto / span 2`
             }} >
 
-            {/* locked overlay */}
-            <EpistoHeader
-                text={translatableTexts.homePage.statsSummary.mostImportantStatistics}
-                showDivider variant="strongSub"
-                m="5px 10px 20px 10px" />
-
-            {/* bar chart */}
-            <img
-                src={getAssetUrl("/images/learningcurve3D.png")}
-                alt={""}
-                style={{
-                    maxHeight: 180,
-                    objectFit: "contain",
-                    margin: "0 10px 0 0",
-                }} />
-
-            <EpistoFont fontSize="fontSmall" style={{
-                textAlign: "center",
-                margin: "0 20px"
-            }}>
-                {translatableTexts.homePage.noStatsYet}
-            </EpistoFont>
+            {userProgressData
+                ? <UserProgressChart userProgress={userProgressData} />
+                : <NoProgressChartYet />}
         </FlexFloat>
 
         {/* total completed video count */}

@@ -48,7 +48,7 @@ export const LearningCourseStatsTile = (props: {
         completedVideoCount,
         totalVideoQuestionCount,
         answeredVideoQuestionCount,
-        totalSpentTime,
+        totalSpentSeconds,
         completedCourseItemCount,
         totalCourseItemCount,
         examSuccessRateAverage,
@@ -60,7 +60,7 @@ export const LearningCourseStatsTile = (props: {
 
     const { navigateToPlayer } = useNavigation();
 
-    const formattedSpentTime = formatTimespan(totalSpentTime);
+    const formattedSpentTime = formatTimespan(totalSpentSeconds);
     const progressPercentage = roundNumber(completedCourseItemCount / totalCourseItemCount * 100);
 
     const handleStartCourse = () => {

@@ -90,6 +90,10 @@ export const apiRoutes = {
         getUserStats: "/userstats/get-user-stats"
     },
 
+    userProgress: {
+        getUserProgressData: "/userprogress/get-user-progress-data"
+    },
+
     coinTransactions: {
         getCoinTransactions: "/cointransactions/get-coin-transactions",
         getCoinBalance: "/cointransactions/get-coin-balance",
@@ -118,9 +122,12 @@ export const apiRoutes = {
 
     player: {
         getPlayerData: '/player/get-player-data',
-        saveVideoPlaybackSample: '/player/save-video-playback-sample',
         getCourseItems: '/player/get-course-items',
         answerVideoQuestion: "/questions/answer-video-question"
+    },
+
+    playback: {
+        saveVideoPlaybackSample: '/playback/save-video-playback-sample',
     },
 
     course: {

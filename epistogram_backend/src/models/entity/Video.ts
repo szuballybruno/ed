@@ -5,7 +5,7 @@ import { Course } from "./Course";
 import { CourseModule } from "./CourseModule";
 import { Question } from "./Question";
 import { StorageFile } from "./StorageFile";
-import { VideoPlaybackData } from "./VideoPlaybackData";
+import { UserVideoProgressBridge } from "./UserVideoProgressBridge";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
 import { VideoRating } from "./VideoRating";
 
@@ -69,11 +69,6 @@ export class Video {
     @JoinColumn()
     videoPlaybackSamples: VideoPlaybackSample[];
 
-    // video playback datas 
-    @OneToMany(_ => VideoPlaybackData, x => x.video)
-    @JoinColumn()
-    videoPlaybackDatas: VideoPlaybackData[];
-
     // module
     @Column()
     moduleId: number;
@@ -86,9 +81,14 @@ export class Video {
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.activitySession)
     coinAcquires: CoinTransaction[];
-    
+
     // ratings
     @JoinColumn()
     @OneToMany(_ => VideoRating, x => x.video)
     videoRatings: VideoRating[];
+
+    // userProgressBridges
+    @JoinColumn()
+    @OneToMany(_ => UserVideoProgressBridge, x => x.video)
+    userProgressBridges: UserVideoProgressBridge[];
 }

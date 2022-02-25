@@ -12,8 +12,8 @@ SELECT
 	u.job_title_id,
 	jt.name job_title_name,
 	ulav.latest_activity_date,
-	ulav.total_spent_time,
-	EXTRACT(epoch FROM ulav.total_spent_time)::int total_spent_time_seconds,
+	ulav.total_spent_seconds,
+	EXTRACT(epoch FROM ulav.total_spent_seconds)::int total_spent_seconds_seconds,
 	sf.file_path avatar_file_path,
 	uafv.can_access_application,
 	cbv.coin_balance

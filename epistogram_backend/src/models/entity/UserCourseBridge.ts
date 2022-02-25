@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CourseModeType, CourseStageNameType } from "../../shared/types/sharedTypes";
 import { Course } from "./Course";
 import { User } from "./User";
@@ -8,6 +8,9 @@ export class UserCourseBridge {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @CreateDateColumn({ default: () => "now()", type: "timestamptz" })
+    creationDate: Date;
 
     @Column({ type: "text", default: "beginner" })
     courseMode: CourseModeType;

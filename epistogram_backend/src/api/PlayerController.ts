@@ -1,5 +1,4 @@
 import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
-import { VideoPlaybackSampleDTO } from "../shared/dtos/VideoPlaybackSampleDTO";
 import { CourseService } from "../services/CourseService";
 import { PlayerService } from "../services/PlayerService";
 import { VideoService } from "../services/VideoService";
@@ -28,13 +27,6 @@ export class PlayerController {
 
         return this._videoService
             .answerVideoQuestionAsync(params.currentUserId, answerSessionId, questionId, answerIds, elapsedSeconds);
-    };
-
-    saveVideoPlaybackSampleAction = (params: ActionParams) => {
-
-        const dto = withValueOrBadRequest<VideoPlaybackSampleDTO>(params.req.body);
-
-        return this._playerService.saveVideoPlaybackSample(params.currentUserId, dto);
     };
 
     getPlayerDataAction = (params: ActionParams) => {

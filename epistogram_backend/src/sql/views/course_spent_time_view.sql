@@ -3,7 +3,7 @@ SELECT
 	COALESCE(sq.total_exam_session_elapsed_time, 0)
 		+ COALESCE(sq.total_video_watch_elapsed_time, 0)
 		+ COALESCE(sq.total_video_question_elapsed_time, 0)
-		+ COALESCE(sq.total_practise_question_elapsed_time, 0) AS total_spent_time
+		+ COALESCE(sq.total_practise_question_elapsed_time, 0) total_spent_seconds
 FROM 
 (
 	SELECT 

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
 import { Video } from "./Video";
 
@@ -7,6 +7,9 @@ export class VideoPlaybackSample {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @CreateDateColumn({ default: () => "now()", type: "timestamptz" })
+    creationDate: Date;
 
     @Column({ type: "double precision" })
     fromSeconds: number;

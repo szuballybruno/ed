@@ -82,6 +82,10 @@ import { PretestController } from './api/PretestController';
 import { PretestService } from './services/PretestService';
 import { CourseRatingController } from './api/CourseRatingController';
 import { CourseRatingService } from './services/CourseRatingService';
+import { UserProgressService } from './services/UserProgressService';
+import { UserProgressController } from './api/UserProgressController';
+import { PlaybackService } from './services/PlaybackService';
+import { PlaybackController } from './api/PlaybackController';
 
 (async () => {
 
@@ -128,7 +132,8 @@ import { CourseRatingService } from './services/CourseRatingService';
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService);
     const miscService = new MiscService(courseService, ormConnectionService, mapperService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
-    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, vpss, coinAcquireService, userSessionActivityService, mapperService);
+    const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService);
+    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
@@ -137,6 +142,7 @@ import { CourseRatingService } from './services/CourseRatingService';
     const prequizService = new PrequizService(ormConnectionService, mapperService, courseService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, courseService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
+    const userProgressService = new UserProgressService(mapperService, ormConnectionService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -163,6 +169,8 @@ import { CourseRatingService } from './services/CourseRatingService';
     const videoRatingController = new VideoRatingController(videoRatingService);
     const personalityAssessmentController = new PersonalityAssessmentController(personalityAssessmentService);
     const dailyTipController = new DailyTipController(dailyTipService);
+    const userProgressController = new UserProgressController(userProgressService);
+    const playbackController = new PlaybackController(playbackService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -265,6 +273,9 @@ import { CourseRatingService } from './services/CourseRatingService';
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
 
+    // user progress
+    addEndpoint(apiRoutes.userProgress.getUserProgressData, userProgressController.getUserProgressDataAction);
+
     // user
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
     addEndpoint(apiRoutes.user.saveUserSimple, userController.saveUserSimpleAction, { isPost: true });
@@ -283,9 +294,11 @@ import { CourseRatingService } from './services/CourseRatingService';
 
     // player
     addEndpoint(apiRoutes.player.getPlayerData, playerController.getPlayerDataAction);
-    addEndpoint(apiRoutes.player.saveVideoPlaybackSample, playerController.saveVideoPlaybackSampleAction, { isPost: true });
     addEndpoint(apiRoutes.player.getCourseItems, playerController.getCourseItemsAction);
     addEndpoint(apiRoutes.player.answerVideoQuestion, playerController.answerVideoQuestionAction, { isPost: true });
+
+    // playback
+    addEndpoint(apiRoutes.playback.saveVideoPlaybackSample, playbackController.saveVideoPlaybackSampleAction, { isPost: true });
 
     // course
     addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true, authorize: ["administrator"] });

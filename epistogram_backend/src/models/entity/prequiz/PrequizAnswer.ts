@@ -11,6 +11,9 @@ export class PrequizAnswer {
     @Column()
     text: string;
 
+    @Column({ type: "double precision", nullable: true })
+    value: number;
+
     // question 
     @Column()
     questionId: number;

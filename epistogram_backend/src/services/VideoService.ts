@@ -2,7 +2,6 @@ import { AnswerSession } from "../models/entity/AnswerSession";
 import { Question } from "../models/entity/Question";
 import { StorageFile } from "../models/entity/StorageFile";
 import { Video } from "../models/entity/Video";
-import { VideoPlaybackData } from "../models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { FileService } from "./FileService";
 import { log } from "./misc/logger";
@@ -13,6 +12,7 @@ import { QuestionService } from "./QuestionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { VideoRating } from "../models/entity/VideoRating";
+import { UserVideoProgressBridge } from "../models/entity/UserVideoProgressBridge";
 
 export class VideoService {
 
@@ -44,7 +44,7 @@ export class VideoService {
         answerSessionId: number,
         questionId: number,
         answerIds: number[],
-        elapsedSeconds?: number) => {
+        elapsedSeconds: number) => {
 
         // validation comes here
 
@@ -85,33 +85,6 @@ export class VideoService {
                 id: videoId,
                 videoFileId: videoFileId
             });
-    }
-
-    saveVideoPlaybackDataAsync = async (
-        userId: number, videoId: number, watchedPercent: number, isWatched: boolean) => {
-
-        const repo = this._ormConnection
-            .getRepository(VideoPlaybackData);
-
-        const pbd = await repo
-            .findOne({
-                videoId: videoId,
-                userId: userId
-            });
-
-        const videoPlaybackData = {
-            id: pbd?.id,
-            userId: userId,
-            videoId: videoId,
-            watchedPercent: watchedPercent,
-            isWatched: isWatched
-        } as VideoPlaybackData;
-
-        log("Saving video playback data:");
-        log(videoPlaybackData);
-
-        await repo
-            .save(videoPlaybackData);
     }
 
     deleteVideosAsync = async (videoIds: number[], unsetCurrentCourseItem: boolean) => {
@@ -171,7 +144,7 @@ export class VideoService {
             .getOrmConnection()
             .createQueryBuilder()
             .delete()
-            .from(VideoPlaybackData)
+            .from(UserVideoProgressBridge)
             .where('"video_id" IN (:...videoIds)', { videoIds })
             .execute();
 
@@ -211,16 +184,6 @@ export class VideoService {
                 id: videoId,
                 lengthSeconds: lengthSeconds
             })
-    }
-
-    getVideoPlaybackData = async (userId: number, videoId: number) => {
-
-        return this._ormConnection
-            .getRepository(VideoPlaybackData)
-            .findOne({
-                videoId: videoId,
-                userId: userId
-            });
     }
 
     setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: number) => {

@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/layout";
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, SxProps } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { ButtonType, DialogOptions } from "../models/types";
 import { EpistoButton } from "./controls/EpistoButton";
@@ -65,7 +65,8 @@ export const EpistoDialog = (props: {
     fullScreenX?: boolean,
     fullScreenY?: boolean,
     buttonComponents?: ReactNode,
-    children?: ReactNode
+    children?: ReactNode,
+    sx?: SxProps<any>
 }) => {
 
     const {
@@ -76,7 +77,7 @@ export const EpistoDialog = (props: {
         closeDialog,
     } = props.logic;
 
-    const { children, logic, buttonComponents, fullScreenX, fullScreenY } = props;
+    const { children, logic, buttonComponents, fullScreenX, fullScreenY, sx } = props;
 
     return <Dialog
         open={isOpen}
@@ -84,6 +85,7 @@ export const EpistoDialog = (props: {
         aria-describedby="alert-dialog-description"
         maxWidth={fullScreenX ? "xl" : undefined}
         fullWidth={fullScreenX}
+        sx={sx}
         style={{
             zIndex: 10000
         }}>

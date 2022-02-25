@@ -18,7 +18,8 @@ import { Task } from "./Task";
 import { TeacherInfo } from "./TeacherInfo";
 import { UserCourseAccessBridge } from "./UserCourseAccessBridge";
 import { UserCourseBridge } from "./UserCourseBridge";
-import { VideoPlaybackData } from "./VideoPlaybackData";
+import { UserExamProgressBridge } from "./UserExamProgressBridge";
+import { UserVideoProgressBridge } from "./UserVideoProgressBridge";
 import { VideoPlaybackSample } from "./VideoPlaybackSample";
 import { VideoRating } from "./VideoRating";
 
@@ -137,11 +138,6 @@ export class User {
     @JoinColumn()
     videoPlaybackSamples: VideoPlaybackSample[];
 
-    // video playback datas 
-    @OneToMany(_ => VideoPlaybackData, x => x.user)
-    @JoinColumn()
-    videoPlaybackDatas: VideoPlaybackData[];
-
     // user course bridges 
     @OneToMany(_ => UserCourseBridge, x => x.user)
     @JoinColumn()
@@ -191,4 +187,14 @@ export class User {
     @OneToMany(_ => CourseRatingQuestionUserAnswer, x => x.user)
     @JoinColumn()
     courseRatingAnswers: CourseRatingQuestionUserAnswer[];
+
+    // videoProgressBridges
+    @JoinColumn()
+    @OneToMany(_ => UserVideoProgressBridge, x => x.user)
+    videoProgressBridges: UserVideoProgressBridge[];
+
+    // videoProgressBridges
+    @JoinColumn()
+    @OneToMany(_ => UserExamProgressBridge, x => x.user)
+    examProgressBridges: UserExamProgressBridge[];
 }

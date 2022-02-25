@@ -21,7 +21,6 @@ import { User } from "../../models/entity/User";
 import { UserCourseBridge } from "../../models/entity/UserCourseBridge";
 import { UserSessionActivity } from "../../models/entity/UserSessionActivity";
 import { Video } from "../../models/entity/Video";
-import { VideoPlaybackData } from "../../models/entity/VideoPlaybackData";
 import { VideoPlaybackSample } from "../../models/entity/VideoPlaybackSample";
 import { CourseItemAllView } from "../../models/views/CourseItemAllView";
 import { CourseItemStateView } from "../../models/views/CourseItemStateView";
@@ -78,11 +77,16 @@ import { CourseRatingQuestion } from "../../models/entity/courseRating/CourseRat
 import { CourseRatingQuestionUserAnswer } from "../../models/entity/courseRating/CourseRatingQuestionUserAnswer";
 import { CourseRatingQuestionView } from "../../models/views/CourseRatingQuestionView";
 import { PrequizAnswer } from "../../models/entity/prequiz/PrequizAnswer";
+import { UserDailyProgressView } from "../../models/views/UserDailyProgressView";
+import { UserVideoProgressBridge } from "../../models/entity/UserVideoProgressBridge";
+import { UserExamProgressBridge } from "../../models/entity/UserExamProgressBridge";
+import { AnswerSessionView } from "../../models/views/AnswerSessionView";
+import { UserCourseCompletionEstimationView } from "../../models/views/UserCourseCompletionEstimationView";
+import { UserDailyCourseItemProgressView } from "../../models/views/UserDailyCourseItemProgressView";
 
 export const dbSchema = {
 
     viewScripts: [
-        "video_completed_view",
         "answer_session_view",
         "exam_completed_view",
         "video_progress_view",
@@ -124,10 +128,16 @@ export const dbSchema = {
         "course_overview_view",
         "personality_trait_category_view",
         "user_latest_activity_view",
-        "user_admin_list_view",
+        "user_admin_list_view", 
         "prequiz_question_view",
         "pretest_result_view",
-        "course_rating_question_view"
+        "course_item_count_view",
+        "course_rating_question_view",
+        "user_course_estimated_time_frame_view",
+        "user_spent_time_view",
+        "user_course_completion_estimation_view",
+        "user_daily_progress_view",
+        "user_daily_course_item_progress_view"
     ],
 
     functionScripts: [
@@ -197,7 +207,11 @@ export const dbSchema = {
         UserAdminListView,
         PrequizQuestionView,
         PretestResultView,
-        CourseRatingQuestionView
+        CourseRatingQuestionView,
+        UserDailyProgressView,
+        AnswerSessionView,
+        UserCourseCompletionEstimationView,
+        UserDailyCourseItemProgressView
     ] as any[],
 
     entities: [
@@ -216,7 +230,6 @@ export const dbSchema = {
         AnswerSession,
         VideoPlaybackSample,
         TeacherInfo,
-        VideoPlaybackData,
         UserCourseBridge,
         PersonalityTraitCategory,
         Role,
@@ -245,6 +258,8 @@ export const dbSchema = {
         PrequizUserAnswer,
         CourseRatingGroup,
         CourseRatingQuestion,
-        CourseRatingQuestionUserAnswer
+        CourseRatingQuestionUserAnswer,
+        UserVideoProgressBridge,
+        UserExamProgressBridge
     ] as any[]
 }

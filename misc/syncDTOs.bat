@@ -7,4 +7,4 @@
 mkdir %~dp0..\epistogram_frontend\src\shared
 
 @REM copy shared folder contents to target destination
-xcopy /s %~dp0..\epistogram_backend\shared %~dp0..\epistogram_frontend\src\shared /Y
+xcopy /s %~dp0..\epistogram_backend\src\shared %~dp0..\epistogram_frontend\src\shared /Y
