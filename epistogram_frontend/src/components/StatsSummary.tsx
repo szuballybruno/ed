@@ -43,7 +43,7 @@ export const StatsSummary = () => {
             }} >
 
             {userProgressData
-                ? <UserProgressChart />
+                ? <UserProgressChart userProgress={userProgressData} />
                 : <NoProgressChartYet />}
         </FlexFloat>
 
