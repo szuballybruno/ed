@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import ReactECharts, { EChartsOption } from 'echarts-for-react';
 import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgressChartDTO';
+import { iterate } from '../../static/frontendHelpers';
 
 const addDays = (inputDate: Date, days: number) => {
 
@@ -15,17 +16,21 @@ export const UserProgressChart = (props: {
 
     const { userProgress } = props;
 
-    let dates = [] as string[];
+    const courseLengthDays = userProgress.estimatedLengthInDays + 1;
 
-    for (let index = 0; index <= userProgress.estimatedLengthInDays; index++) {
+    const dates = iterate(courseLengthDays, index => {
 
         const date = addDays(userProgress.startDate, index);
-        dates.push(date.toLocaleDateString());
-    }
+        return date.toLocaleDateString();
+    });
 
     const actualProgress = userProgress
         .days
         .map(x => x.completedPercentageSum);
+
+    const interval = Math.floor(dates.length / 20);
+
+    console.log(interval);
 
     const option = {
         xAxis: {
@@ -33,7 +38,7 @@ export const UserProgressChart = (props: {
             data: dates,
             axisLabel: {
                 show: true,
-                interval: 0,
+                interval: interval,
                 rotate: 70,
             },
         },
