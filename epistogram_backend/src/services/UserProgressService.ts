@@ -32,9 +32,6 @@ export class UserProgressService extends ServiceBase {
             .andWhere("udcipv.userId = :userId", { userId })
             .getMany();
 
-        console.log(estimationView)
-        console.log(dailyViews)
-
         const dto = {
             courseLengthSeconds: estimationView.courseLengthSeconds,
             estimatedCompletionDate: estimationView.estimatedCompletionDate,
@@ -43,12 +40,21 @@ export class UserProgressService extends ServiceBase {
             originalCompletionDaysEstimation: estimationView.originalCompletionDaysEstimation,
             startDate: estimationView.startDate,
             days: dailyViews
-                .map(x => ({
-                    completedItemCount: x.completedItemCount,
-                    completedPercentage: x.completedPercentage,
-                    completionDate: x.completionDate,
-                    offsetDaysFromStart: x.offsetDaysFromStart
-                }))
+                .map((x, index) => {
+
+                    const prevView = dailyViews[index - 1];
+                    const completedPercentageSum = prevView
+                        ? prevView.completedPercentage + x.completedPercentage
+                        : x.completedPercentage;
+
+                    return {
+                        completedItemCount: x.completedItemCount,
+                        completedPercentage: x.completedPercentage,
+                        completionDate: x.completionDate,
+                        offsetDaysFromStart: x.offsetDaysFromStart,
+                        completedPercentageSum
+                    }
+                })
         } as UserCourseProgressChartDTO;
 
         return dto;

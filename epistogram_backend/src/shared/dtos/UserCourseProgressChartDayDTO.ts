@@ -3,4 +3,5 @@ export class UserCourseProgressChartDayDTO {
     completedItemCount: number;
     completedPercentage: number;
     offsetDaysFromStart: number;
+    completedPercentageSum: number;
 }
