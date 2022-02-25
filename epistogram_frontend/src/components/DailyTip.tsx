@@ -1,5 +1,6 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout"
-import { Typography } from "@mui/material"
+import { ArrowBack, ArrowForward, FiberManualRecord, MoreHoriz, ThreeDRotation } from "@mui/icons-material"
+import { LinearProgress, Typography } from "@mui/material"
 import ReactPlayer from "react-player"
 import { useDailyTip } from "../services/api/dailyTipApiService"
 import { getAssetUrl, usePaging } from "../static/frontendHelpers"
@@ -61,6 +62,172 @@ export const DailyTip = (props: {} & FlexProps) => {
         height="100%"
         justify="center"
         {...css}>
+
+        {/* Home page tempomat design */}
+        <Flex align="center">
+            <Flex
+                flex="3"
+                direction="column">
+
+                <Flex
+                    flex="2"
+                    direction="column">
+
+                    {/* Daily recommended videos count */}
+                    <Flex
+                        align="center"
+                        p="0 15px">
+
+                        <EpistoFont fontSize="fontSmall">
+
+                            Napi ajánlott videók
+                        </EpistoFont>
+                    </Flex>
+                    <Flex
+                        align="center"
+                        p="5px 15px">
+
+                        <img
+                            src={getAssetUrl("/images/videos3D.png")}
+                            alt=""
+                            style={{
+                                height: "25px",
+                                width: "25px",
+                                marginRight: 5
+                            }} />
+
+                        <Flex h="100%" align="flex-end">
+
+                            <EpistoFont
+                                fontSize={"fontLargePlus"}
+                                style={{
+                                    fontWeight: 500,
+                                    marginRight: 2
+                                }}>
+
+                                8/13
+                            </EpistoFont>
+
+                            <EpistoFont
+                                fontSize="fontSmall"
+                                style={{
+                                    marginBottom: 2
+                                }}>
+
+                                videó
+                            </EpistoFont>
+                        </Flex>
+                    </Flex>
+
+                    <Flex w="100%" px="15px">
+
+                        <LinearProgress
+                            value={60}
+                            variant="determinate"
+                            style={{
+                                width: "100%",
+                                height: "5px"
+                            }} />
+                    </Flex>
+                </Flex>
+
+                {/* Weekly recommended videos count */}
+                <Flex
+                    flex="2"
+                    direction="column">
+
+                    <Flex
+                        align="center"
+                        mt="15px"
+                        p="0 15px">
+
+                        <EpistoFont fontSize="fontSmall">
+
+                            Heti ajánlott videók
+                        </EpistoFont>
+                    </Flex>
+                    <Flex
+                        align="center"
+                        p="5px 15px">
+
+                        <img
+                            src={getAssetUrl("/images/videos3D.png")}
+                            alt=""
+                            style={{
+                                height: "25px",
+                                width: "25px",
+                                marginRight: 5
+                            }} />
+
+                        <Flex h="100%" align="flex-end">
+
+                            <EpistoFont
+                                fontSize={"fontLargePlus"}
+                                style={{
+                                    fontWeight: 500,
+                                    marginRight: 2
+                                }}>
+
+                                8/13
+                            </EpistoFont>
+
+                            <EpistoFont
+                                fontSize="fontSmall"
+                                style={{
+                                    marginBottom: 2
+                                }}>
+
+                                videó
+                            </EpistoFont>
+                        </Flex>
+                    </Flex>
+
+                    <Flex w="100%" px="15px">
+
+                        <LinearProgress
+                            value={60}
+                            variant="determinate"
+                            style={{
+                                width: "100%",
+                                height: "5px"
+                            }} />
+                    </Flex>
+                </Flex>
+            </Flex>
+
+            {/* Current course image */}
+            <Flex flex="4" p="20px">
+                <img
+                    src={getAssetUrl("/courseCoverImages/4.png")}
+                    alt=""
+                    className="roundBorders"
+                    style={{
+
+                    }} />
+            </Flex>
+        </Flex>
+        <Flex
+            h="30px"
+            align="center"
+            justify="center">
+
+            <ArrowBack />
+            <FiberManualRecord style={{
+                width: "10px",
+                height: "8px"
+            }} />
+            <FiberManualRecord style={{
+                color: "grey",
+                width: "10px",
+                height: "8px"
+            }} />
+            <FiberManualRecord style={{
+                color: "grey",
+                width: "10px",
+                height: "8px"
+            }} />
+            <ArrowForward />
+        </Flex>
 
         {/* dialog */}
         {/* <EpistoDialog logic={dialogLogic} fullScreenX={true}>
