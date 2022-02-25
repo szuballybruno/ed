@@ -3,18 +3,18 @@ import { Divider, Flex, Text } from "@chakra-ui/layout";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { Typography } from "@mui/material";
 import { useContext } from "react";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import { getAssetUrl, getRandomInteger } from "../static/frontendHelpers";
-import { useNavigation } from "../services/core/navigatior";
-import { translatableTexts } from "../static/translatableTexts";
-import { CurrentUserContext } from "./system/AuthenticationFrame";
-import { LoadingFrame } from "./system/LoadingFrame";
-import { QuesitionView } from "./QuestionView";
-import { EpistoButton } from "./controls/EpistoButton";
-import { EpistoConinImage } from "./universal/EpistoCoinImage";
-import { useAnswerPractiseQuestion, usePractiseQuestion } from "../services/api/questionApiService";
-import { useCurrentCourseItemCode } from "../services/api/miscApiService";
-import { EpistoFont } from "./controls/EpistoFont";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { getAssetUrl, getRandomInteger } from "../../static/frontendHelpers";
+import { useNavigation } from "../../services/core/navigatior";
+import { translatableTexts } from "../../static/translatableTexts";
+import { CurrentUserContext } from "../system/AuthenticationFrame";
+import { LoadingFrame } from "../system/LoadingFrame";
+import { QuesitionView } from "../QuestionView";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoConinImage } from "../universal/EpistoCoinImage";
+import { useAnswerPractiseQuestion, usePractiseQuestion } from "../../services/api/questionApiService";
+import { useCurrentCourseItemCode } from "../../services/api/miscApiService";
+import { EpistoFont } from "../controls/EpistoFont";
 
 const NoQuestionsAvailable = () => {
     const { navigate } = useNavigation()

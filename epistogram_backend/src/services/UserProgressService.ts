@@ -1,6 +1,7 @@
 import { UserCourseCompletionEstimationView } from "../models/views/UserCourseCompletionEstimationView";
 import { UserDailyCourseItemProgressView } from "../models/views/UserDailyCourseItemProgressView";
 import { UserDailyProgressView } from "../models/views/UserDailyProgressView";
+import { RecomendedItemQuotaDTO } from "../shared/dtos/RecomendedItemQuotaDTO";
 import { UserCourseProgressChartDTO } from "../shared/dtos/UserCourseProgressChartDTO";
 import { UserDailyProgressDTO } from "../shared/dtos/UserDailyProgressDTO";
 import { MapperService } from "./MapperService";
@@ -14,16 +15,26 @@ export class UserProgressService extends ServiceBase {
         super(mapperService, ormservice);
     }
 
+    async getRecommendedItemQuotaAsync(userId: number) {
+
+        const courseId = 4;
+
+        const estimationView = await this
+            .getEstimationViewAsync(courseId, userId);
+
+        return {
+            recommendedItemsPerDay: estimationView.recommendedItemsPerDay,
+            recommendedItemsPerWeek: estimationView.recommendedItemsPerWeek,
+            allItemsCount: estimationView.itemCount
+        } as RecomendedItemQuotaDTO;
+    }
+
     async getProgressChartDataAsync(userId: number) {
 
         const courseId = 4;
 
-        const estimationView = await this._ormService
-            .getRepository(UserCourseCompletionEstimationView)
-            .createQueryBuilder("uccev")
-            .where("uccev.userId = :userId", { userId })
-            .andWhere("uccev.courseId = :courseId", { courseId })
-            .getOneOrFail();
+        const estimationView = await this
+            .getEstimationViewAsync(courseId, userId);
 
         const dailyViews = await this._ormService
             .getRepository(UserDailyCourseItemProgressView)
@@ -58,5 +69,17 @@ export class UserProgressService extends ServiceBase {
         } as UserCourseProgressChartDTO;
 
         return dto;
+    }
+
+    async getEstimationViewAsync(courseId: number, userId: number) {
+
+        const estimationView = await this._ormService
+            .getRepository(UserCourseCompletionEstimationView)
+            .createQueryBuilder("uccev")
+            .where("uccev.userId = :userId", { userId })
+            .andWhere("uccev.courseId = :courseId", { courseId })
+            .getOneOrFail();
+
+        return estimationView;
     }
 }
