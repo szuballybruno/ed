@@ -1,21 +1,21 @@
 import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
-import { applicationRoutes } from '../configuration/applicationRoutes';
-import { useOverviewPageDTO } from '../services/api/miscApiService';
-import { useNavigation } from '../services/core/navigatior';
-import { translatableTexts } from '../static/translatableTexts';
-import { ContentPane } from './ContentPane';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useOverviewPageDTO } from '../../services/api/miscApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { translatableTexts } from '../../static/translatableTexts';
+import { ContentPane } from '../ContentPane';
 import { DailyTip } from './DailyTip';
-import { LeftPane } from './LeftPane';
-import { PageRootContainer } from './PageRootContainer';
+import { LeftPane } from '../LeftPane';
+import { PageRootContainer } from '../PageRootContainer';
 import { PractiseQuestions } from './PractiseQuestions';
 import { StatsSummary } from "./StatsSummary";
-import { LoadingFrame } from "./system/LoadingFrame";
-import { CourseItemView } from './universal/CourseItemList';
-import { CourseProgressDisplay } from './universal/CourseProgressDisplay';
-import { DashboardSection } from './universal/DashboardSection';
-import { FlexListItem } from './universal/FlexListItem';
-import { FlexListTitleSubtitle } from './universal/FlexListTitleSubtitle';
+import { LoadingFrame } from "../system/LoadingFrame";
+import { CourseItemView } from '../universal/CourseItemList';
+import { CourseProgressDisplay } from './CourseProgressDisplay';
+import { DashboardSection } from '../universal/DashboardSection';
+import { FlexListItem } from '../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 
 const HomePage = () => {
 

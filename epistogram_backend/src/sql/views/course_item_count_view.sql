@@ -1,6 +1,6 @@
 SELECT 
 	co.id course_id,
-	COUNT(civ.item_code) item_count
+	COUNT(civ.item_code)::int item_count
 FROM public.course co 
 
 LEFT JOIN public.course_item_view civ

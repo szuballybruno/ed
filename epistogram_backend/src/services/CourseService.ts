@@ -230,7 +230,7 @@ export class CourseService {
         const modules = await this.getCourseModulesAsync(userId, courseId);
 
         const currentModule = modules
-            .single(x => x.state === "current");
+            .firstOrNull(x => x.state === "current") ?? modules.first();
 
         const nextOrCurrentModules = modules
             .filter(x => x.orderIndex >= currentModule.orderIndex);

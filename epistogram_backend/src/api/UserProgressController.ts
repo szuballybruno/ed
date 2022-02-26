@@ -10,6 +10,12 @@ export class UserProgressController {
         this._userProgressService = userProgressService;
     }
 
+    getRecommendedItemQuotaAction = (params: ActionParams) => {
+
+        return this._userProgressService
+            .getRecommendedItemQuotaAsync(params.currentUserId);
+    }
+
     getUserProgressDataAction = (params: ActionParams) => {
 
         return this._userProgressService

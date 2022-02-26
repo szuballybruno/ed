@@ -1,16 +1,13 @@
-import StatisticsCard from "./statisticsCard/StatisticsCard";
 import { useContext } from "react";
-import { getAssetUrl, roundNumber } from "../static/frontendHelpers";
-import { FlexFloat } from "./controls/FlexFloat";
-import { Typography } from "@mui/material";
-import { translatableTexts } from "../static/translatableTexts";
-import { useUserStats } from "../services/api/userStatsApiService";
-import { CurrentUserContext } from "./system/AuthenticationFrame";
-import { EpistoHeader } from "./EpistoHeader";
-import { EpistoFont } from "./controls/EpistoFont";
-import { useUserProgressData } from "../services/api/userProgressService";
-import { NoProgressChartYet } from "./home/NoProgressChartYet";
-import { UserProgressChart } from "./home/UserProgressChart";
+import { useUserProgressData } from "../../services/api/userProgressApiService";
+import { useUserStats } from "../../services/api/userStatsApiService";
+import { getAssetUrl, roundNumber } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
+import { FlexFloat } from "../controls/FlexFloat";
+import StatisticsCard from "../statisticsCard/StatisticsCard";
+import { CurrentUserContext } from "../system/AuthenticationFrame";
+import { NoProgressChartYet } from "./NoProgressChartYet";
+import { UserProgressChart } from "./UserProgressChart";
 
 export const StatsSummary = () => {
 
@@ -42,7 +39,7 @@ export const StatsSummary = () => {
                 gridRow: `auto / span 2`
             }} >
 
-            {userProgressData
+            {userProgressData && userProgressData.days.length > 0
                 ? <UserProgressChart userProgress={userProgressData} />
                 : <NoProgressChartYet />}
         </FlexFloat>

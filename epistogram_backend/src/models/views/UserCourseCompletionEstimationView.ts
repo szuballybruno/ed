@@ -29,4 +29,13 @@ export class UserCourseCompletionEstimationView {
 
     @ViewColumn()
     estimatedLengthInDays: number;
+
+    @ViewColumn()
+    recommendedItemsPerDay: number;
+
+    @ViewColumn()
+    recommendedItemsPerWeek: number;
+
+    @ViewColumn()
+    itemCount: number;
 }
