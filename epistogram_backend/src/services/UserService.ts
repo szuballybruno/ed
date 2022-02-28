@@ -8,7 +8,7 @@ import { UserDTO } from "../shared/dtos/UserDTO";
 import { UserEditDTO } from "../shared/dtos/UserEditDTO";
 import { UserEditSimpleDTO } from "../shared/dtos/UserEditSimpleDTO";
 import { RegistrationType } from "../models/Types";
-import { UserAdminListView } from "../models/views/UserAdminListView";
+import { AdminUserListView } from "../models/views/UserAdminListView";
 import { getFullName, toFullName, ErrorCode } from "../utilities/helpers";
 import { HashService } from "./HashService";
 import { MapperService } from "./MapperService";
@@ -67,7 +67,7 @@ export class UserService {
         const searchTextLower = searchText?.toLowerCase();
 
         const users = await this._ormService
-            .getRepository(UserAdminListView)
+            .getRepository(AdminUserListView)
             .createQueryBuilder("ualv")
             .getMany();
 
@@ -79,7 +79,7 @@ export class UserService {
             : users;
 
         return this._mapperService
-            .mapMany(UserAdminListView, AdminPageUserDTO, filteredUsers);
+            .mapMany(AdminUserListView, AdminPageUserDTO, filteredUsers);
     }
 
     /**

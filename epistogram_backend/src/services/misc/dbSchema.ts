@@ -67,7 +67,7 @@ import { VideoRating } from "../../models/entity/VideoRating";
 import { CourseOverviewView } from "../../models/views/CourseOverviewView";
 import { PersonalityTraitView } from "../../models/views/PersonalityTraitView";
 import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
-import { UserAdminListView } from "../../models/views/UserAdminListView";
+import { AdminUserListView } from "../../models/views/UserAdminListView";
 import { PrequizQuestion } from "../../models/entity/prequiz/PrequizQuestion";
 import { PrequizUserAnswer } from "../../models/entity/prequiz/PrequizUserAnswer";
 import { PrequizQuestionView } from "../../models/views/PrequizQuestionView";
@@ -129,7 +129,7 @@ export const dbSchema = {
         "course_overview_view",
         "personality_trait_category_view",
         "user_latest_activity_view",
-        "user_admin_list_view", 
+        "admin_user_list_view", 
         "prequiz_question_view",
         "pretest_result_view",
         "course_item_count_view",
@@ -206,7 +206,7 @@ export const dbSchema = {
         ExamView,
         CourseOverviewView,
         PersonalityTraitCategoryView,
-        UserAdminListView,
+        AdminUserListView,
         PrequizQuestionView,
         PretestResultView,
         CourseRatingQuestionView,

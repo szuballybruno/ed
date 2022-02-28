@@ -40,7 +40,7 @@ import { ShopItemView } from "../../models/views/ShopItemView";
 import { SignupQuestionView } from "../../models/views/SignupQuestionView";
 import { UserActiveCourseView } from "../../models/views/UserActiveCourseView";
 import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
-import { UserAdminListView } from "../../models/views/UserAdminListView";
+import { AdminUserListView } from "../../models/views/UserAdminListView";
 import { UserDailyProgressView } from "../../models/views/UserDailyProgressView";
 import { UserStatsView } from "../../models/views/UserStatsView";
 import { AdminPageUserDTO } from "../../shared/dtos/AdminPageUserDTO";
@@ -451,7 +451,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(UserAdminListView, AdminPageUserDTO, v => ({
+        .addMap(AdminUserListView, AdminPageUserDTO, v => ({
             id: v.userId,
             name: toFullName(v.firstName, v.lastName, "hu"),
             firstName: v.firstName,
@@ -469,7 +469,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             organizationName: v.organizationName,
             canAccessApplication: v.canAccessApplication,
             latestActivityDate: v.latestActivityDate,
-            totalSpentTimeSeconds: v.totalSpentTimeSeconds,
+            totalSpentTimeSeconds: v.totalSpentSeconds,
             coinBalance: v.coinBalance,
         }));
 
