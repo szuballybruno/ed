@@ -115,7 +115,7 @@ export const CourseItemSelector = (props: {
 
                 <RecommendedItemQuota
                     isDaily
-                    maxItemCount={recommendedItemQuota?.allItemsCount ?? 0}
+                    completedCount={recommendedItemQuota?.completedToday ?? 0}
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0} />
             </Flex>
 

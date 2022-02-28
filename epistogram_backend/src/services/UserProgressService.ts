@@ -1,6 +1,7 @@
 import { UserActiveCourseView } from "../models/views/UserActiveCourseView";
 import { UserCourseCompletionEstimationView } from "../models/views/UserCourseCompletionEstimationView";
 import { UserDailyCourseItemProgressView } from "../models/views/UserDailyCourseItemProgressView";
+import { UserWeeklyCourseItemProgressView } from "../models/views/UserWeeklyCourseItemProgressView";
 import { RecomendedItemQuotaDTO } from "../shared/dtos/RecomendedItemQuotaDTO";
 import { UserActiveCourseDTO } from "../shared/dtos/UserActiveCourseDTO";
 import { UserCourseProgressChartDTO } from "../shared/dtos/UserCourseProgressChartDTO";
@@ -15,7 +16,7 @@ export class UserProgressService extends ServiceBase {
         super(mapperService, ormservice);
     }
 
-async getActiveCoursesAsync(userId: number) {
+    async getActiveCoursesAsync(userId: number) {
 
         const views = await this._ormService
             .getRepository(UserActiveCourseView)
@@ -32,16 +33,31 @@ async getActiveCoursesAsync(userId: number) {
         const estimationView = await this
             .getEstimationViewAsync(courseId, userId);
 
+        const currentDailyCompletedView = await this._ormService
+            .getRepository(UserDailyCourseItemProgressView)
+            .createQueryBuilder("udcipv")
+            .where("udcipv.userId = :userId", { userId })
+            .andWhere("udcipv.courseId = :courseId", { courseId })
+            .andWhere("udcipv.isCurrent = true", { courseId })
+            .getOne();
+
+        const getCurrentWeeklyCompletedView = await this._ormService
+            .getRepository(UserWeeklyCourseItemProgressView)
+            .createQueryBuilder("udcipv")
+            .where("udcipv.userId = :userId", { userId })
+            .andWhere("udcipv.courseId = :courseId", { courseId })
+            .andWhere("udcipv.isCurrent = true", { courseId })
+            .getOne();
+
         return {
             recommendedItemsPerDay: estimationView.recommendedItemsPerDay,
             recommendedItemsPerWeek: estimationView.recommendedItemsPerWeek,
-            allItemsCount: estimationView.itemCount
+            completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
+            completedToday: currentDailyCompletedView?.completedItemCount ?? 0
         } as RecomendedItemQuotaDTO;
     }
 
-    async getProgressChartDataAsync(userId: number) {
-
-        const courseId = 4;
+    async getProgressChartDataAsync(userId: number, courseId: number) {
 
         const estimationView = await this
             .getEstimationViewAsync(courseId, userId);

@@ -9,11 +9,15 @@ import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { NoProgressChartYet } from "./NoProgressChartYet";
 import { UserProgressChart } from "./UserProgressChart";
 
-export const StatsSummary = () => {
+export const StatsSummary = (props: {
+    courseId: number | null
+}) => {
+
+    const { courseId } = props;
 
     const currentUser = useContext(CurrentUserContext);
     const { userStats } = useUserStats(currentUser!.id);
-    const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData();
+    const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(courseId ?? 0, !!courseId);
 
     return <div
         style={{

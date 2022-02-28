@@ -1,7 +1,8 @@
 SELECT 
 	sq2.*,
 	sq2.completed_item_count * (100 / cicv.item_count::int) completed_percentage,
-	sq2.completion_date::date - uccev.start_date::date offset_days_from_start
+	sq2.completion_date::date - uccev.start_date::date offset_days_from_start,
+	sq2.completion_date = DATE_TRUNC('day', now()) is_current
 FROM 
 (
 	SELECT 
@@ -34,6 +35,8 @@ FROM
 
 			LEFT JOIN public.exam e
 			ON e.id = uepb.exam_id 
+			
+			WHERE e.type = 'normal'
 		) itms
 
 		WHERE itms.completion_date IS NOT NULL

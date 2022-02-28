@@ -25,6 +25,6 @@ export class UserProgressController {
     getUserProgressDataAction = (params: ActionParams) => {
 
         return this._userProgressService
-            .getProgressChartDataAsync(params.currentUserId);
+            .getProgressChartDataAsync(params.currentUserId, params.getQuery<any>().getValue(x => x.courseId, "int"));
     }
 }

@@ -4,7 +4,7 @@ import { ViewColumn, ViewEntity } from "typeorm";
     synchronize: false,
     expression: ``
 })
-export class UserDailyCourseItemProgressView {
+export class UserWeeklyCourseItemProgressView {
 
     @ViewColumn()
     userId: number;
@@ -16,14 +16,8 @@ export class UserDailyCourseItemProgressView {
     completionDate: Date;
 
     @ViewColumn()
+    isCurrent: boolean;
+
+    @ViewColumn()
     completedItemCount: number;
-
-    @ViewColumn()
-    completedPercentage: number;
-
-    @ViewColumn()
-    isCurrent: number;
-
-    @ViewColumn()
-    offsetDaysFromStart: number;
 }

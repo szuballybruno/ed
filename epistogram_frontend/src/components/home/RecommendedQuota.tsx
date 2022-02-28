@@ -40,13 +40,13 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
 
                 {/* daily recommended videos count */}
                 <RecommendedItemQuota
-                    maxItemCount={recommendedItemQuota?.allItemsCount ?? 0}
+                    completedCount={recommendedItemQuota?.completedToday ?? 0}
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0}
                     isDaily />
 
                 {/* weekly recommended videos count */}
                 <RecommendedItemQuota
-                    maxItemCount={recommendedItemQuota?.allItemsCount ?? 0}
+                    completedCount={recommendedItemQuota?.completedThisWeek ?? 0}
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerWeek ?? 0} />
             </Flex>
 

@@ -118,7 +118,7 @@ const HomePage = () => {
 
                     {/* stats */}
                     <Flex pb="40px">
-                        <StatsSummary />
+                        <StatsSummary courseId={activeCoursesPaging?.currentItem?.courseId ?? null} />
                     </Flex>
 
                 </Flex>

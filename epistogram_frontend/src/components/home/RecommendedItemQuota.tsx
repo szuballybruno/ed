@@ -4,12 +4,12 @@ import { getAssetUrl } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
 
 export const RecommendedItemQuota = (props: {
-    maxItemCount: number,
+    completedCount: number,
     recommendedItemCount: number,
     isDaily?: boolean
 }) => {
 
-    const { isDaily, maxItemCount, recommendedItemCount } = props;
+    const { isDaily, completedCount, recommendedItemCount } = props;
 
     const label = isDaily
         ? "Napi ajánlott videók"
@@ -41,7 +41,7 @@ export const RecommendedItemQuota = (props: {
                         marginRight: 2
                     }}>
 
-                    {recommendedItemCount}/{maxItemCount}
+                    {completedCount}/{recommendedItemCount}
                 </EpistoFont>
 
                 <EpistoFont
@@ -51,7 +51,7 @@ export const RecommendedItemQuota = (props: {
             </Flex>
 
             <LinearProgress
-                value={recommendedItemCount / maxItemCount * 100}
+                value={completedCount / recommendedItemCount * 100}
                 variant="determinate"
                 style={{
                     width: "80%",

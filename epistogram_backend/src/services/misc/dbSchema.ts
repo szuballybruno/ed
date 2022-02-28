@@ -84,6 +84,7 @@ import { AnswerSessionView } from "../../models/views/AnswerSessionView";
 import { UserCourseCompletionEstimationView } from "../../models/views/UserCourseCompletionEstimationView";
 import { UserDailyCourseItemProgressView } from "../../models/views/UserDailyCourseItemProgressView";
 import { UserActiveCourseView } from "../../models/views/UserActiveCourseView";
+import { UserWeeklyCourseItemProgressView } from "../../models/views/UserWeeklyCourseItemProgressView";
 
 export const dbSchema = {
 
@@ -139,7 +140,8 @@ export const dbSchema = {
         "user_course_completion_estimation_view",
         "user_daily_progress_view",
         "user_daily_course_item_progress_view",
-        "user_active_course_view"
+        "user_active_course_view",
+        "user_weekly_course_item_progress_view"
     ],
 
     functionScripts: [
@@ -214,7 +216,8 @@ export const dbSchema = {
         AnswerSessionView,
         UserCourseCompletionEstimationView,
         UserDailyCourseItemProgressView,
-        UserActiveCourseView
+        UserActiveCourseView,
+        UserWeeklyCourseItemProgressView
     ] as any[],
 
     entities: [
