@@ -122,6 +122,7 @@ export const translatableTexts = {
         practiseTitle: "Gyakorolj, hogy a legjobb lehess!",
         noTipOfTheDayYet: "Személyes tanulási tipped 48 óra múlva válik elérhetővé",
         tipOfTheDay: "Személyre szabott tipped",
+        recommendedQuota: "Személyre szabott haladási ajánlás",
         tasks: "Feladatok",
         stats: "Legfontosabb statisztikáid",
         noStatsYet: "Tanulási és felejtési görbéd kalkulálásához legalább 30 nap és minimum 20 órányi belépés szükséges",

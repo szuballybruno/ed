@@ -101,7 +101,8 @@ export class PrequizService {
             .findOne({
                 where: {
                     questionId,
-                    userId
+                    userId,
+                    courseId
                 }
             });
 

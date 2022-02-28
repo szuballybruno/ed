@@ -103,14 +103,13 @@ const HomePage = () => {
 
                         {/* tip of the day */}
                         <DashboardSection
-                            title={translatableTexts.homePage.tipOfTheDay}
+                            title={translatableTexts.homePage.recommendedQuota}
                             background="var(--transparentWhite70)"
                             borderRadius="6px"
                             showDivider
                             className="largeSoftShadow"
-                            //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
                             minHeight="30px"
-                            m="0 0 10px 5px"
+                            marginBottom="10px"
                             flex="2 2 300px">
 
                             <RecommendedQuota activeCoursesPaging={activeCoursesPaging} />
