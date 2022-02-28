@@ -16,6 +16,11 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
     const currentCourse = activeCoursesPaging.currentItem;
     const { recommendedItemQuota } = useRecommendedItemQuota(currentCourse?.courseId ?? 0, !!currentCourse);
 
+    if (!currentCourse)
+        return <Flex>
+            TODO NO ACTIVE COURSE SCREEN
+        </Flex>
+
     return <Flex
         direction="column"
         height="100%"
