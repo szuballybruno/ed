@@ -22,7 +22,8 @@ export const useRecommendedItemQuota = (courseId: number, enabled: boolean) => {
     return {
         recommendedItemQuota: qr.data,
         recommendedItemQuotaState: qr.state,
-        recommendedItemQuotaError: qr.error
+        recommendedItemQuotaError: qr.error,
+        refetchRecommendedItemQuota: qr.refetch
     }
 }
 

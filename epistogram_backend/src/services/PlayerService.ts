@@ -49,14 +49,14 @@ export class PlayerService extends ServiceBase {
 
     getPlayerDataAsync = async (
         userId: number,
-        descriptorCode: string) => {
+        currentItemCode: string) => {
 
         // get current course id
         const courseId = await this._courseService
-            .getCourseIdByItemCodeAsync(descriptorCode);
+            .getCourseIdByItemCodeAsync(currentItemCode);
 
         // get valid course item 
-        const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, descriptorCode);
+        const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, currentItemCode);
 
         // set current course 
         await this._courseService
@@ -88,7 +88,9 @@ export class PlayerService extends ServiceBase {
         const currentItemIndexInFlatList = flat
             .findIndex(x => x.code === validItemCode);
 
-        const nextItemCode = flat[currentItemIndexInFlatList + 1]?.code ?? null;
+        const nextItem = flat[currentItemIndexInFlatList + 1];
+        const nextItemCode = nextItem?.code ?? null;
+        const nextItemState = nextItem?.state ?? null;
 
         return {
             video: videoDTO,
@@ -97,9 +99,10 @@ export class PlayerService extends ServiceBase {
             answerSessionId: answerSessionId,
             mode: userCourseBridge.courseMode,
             courseId: courseId!,
-            courseItemCode: descriptorCode,
+            courseItemCode: currentItemCode,
             modules: modules,
-            nextItemCode
+            nextItemCode,
+            nextItemState
         } as PlayerDataDTO;
     }
 

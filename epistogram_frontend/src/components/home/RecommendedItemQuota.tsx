@@ -51,7 +51,7 @@ export const RecommendedItemQuota = (props: {
             </Flex>
 
             <LinearProgress
-                value={completedCount / recommendedItemCount * 100}
+                value={Math.min(100, completedCount / recommendedItemCount * 100)}
                 variant="determinate"
                 style={{
                     width: "80%",

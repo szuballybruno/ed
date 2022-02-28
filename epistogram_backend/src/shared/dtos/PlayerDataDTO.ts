@@ -1,7 +1,7 @@
 import { ExamPlayerDataDTO } from "./ExamPlayerDataDTO";
 import { ModuleDetailedDTO } from "./ModuleDetailedDTO";
 import { ModuleDTO } from "./ModuleDTO";
-import { CourseModeType } from "../types/sharedTypes";
+import { CourseItemStateType, CourseModeType } from "../types/sharedTypes";
 import { VideoDTO } from "./VideoDTO";
 
 export type PlayerDataDTO = {
@@ -14,4 +14,5 @@ export type PlayerDataDTO = {
     courseItemCode: string;
     modules: ModuleDTO[];
     nextItemCode: string | null;
+    nextItemState: CourseItemStateType | null;
 }

@@ -1,25 +1,20 @@
 import { Divider, Flex } from '@chakra-ui/layout';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { LinearProgress, Radio, RadioGroup, Typography } from '@mui/material';
-import React, { useContext, useRef, useState } from 'react';
-import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
-import { CourseModeType } from "../../../shared/types/sharedTypes";
+import { Radio, RadioGroup } from '@mui/material';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useSetCourseMode } from '../../../services/api/courseApiService';
-import { httpPostAsync } from "../../../services/core/httpClient";
+import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from "../../../services/core/notifications";
+import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
+import { CourseItemStateType, CourseModeType } from "../../../shared/types/sharedTypes";
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoPopper } from '../../controls/EpistoPopper';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { CourseItemList } from "../../universal/CourseItemList";
-import { Info, InfoOutlined, Settings } from '@mui/icons-material';
-import { getAssetUrl } from '../../../static/frontendHelpers';
-import { Image } from '@chakra-ui/react';
-import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
-import { TempomatModeTile } from '../tempomat/TempomatModeTile';
-import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
 
@@ -28,9 +23,11 @@ export const CourseItemSelector = (props: {
     modules: ModuleDTO[],
     courseId: number,
     refetchPlayerData: () => Promise<void>,
+    currentItemCode: string,
+    nextItemState: CourseItemStateType | null
 }) => {
 
-    const { mode, refetchPlayerData, courseId, modules } = props;
+    const { currentItemCode, nextItemState: itemState, mode, refetchPlayerData, courseId, modules } = props;
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
@@ -38,7 +35,7 @@ export const CourseItemSelector = (props: {
     const canChangeCourseMode = user.userActivity.canChangeCourseMode;
 
     // http 
-    const { recommendedItemQuota } = useRecommendedItemQuota(courseId, true);
+    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId, true);
     const { setCourseModeAsync } = useSetCourseMode();
 
     // dialog state 
@@ -79,6 +76,13 @@ export const CourseItemSelector = (props: {
             showErrorDialog(translatableTexts.player.courseItemSelector.switchingCourseModeFailed);
         }
     }
+
+    // effect
+
+    useEffect(() => {
+
+        refetchRecommendedItemQuota();
+    }, [currentItemCode, itemState]);
 
     return <>
 
