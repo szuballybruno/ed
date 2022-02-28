@@ -13,7 +13,13 @@ export class UserProgressController {
     getRecommendedItemQuotaAction = (params: ActionParams) => {
 
         return this._userProgressService
-            .getRecommendedItemQuotaAsync(params.currentUserId);
+            .getRecommendedItemQuotaAsync(params.currentUserId, params.getQuery<any>().getValue(x => x.courseId, "int"));
+    }
+
+    getActiveCoursesAction = (params: ActionParams) => {
+
+        return this._userProgressService
+            .getActiveCoursesAsync(params.currentUserId);
     }
 
     getUserProgressDataAction = (params: ActionParams) => {

@@ -1,79 +1,20 @@
 import { Flex, FlexProps } from "@chakra-ui/layout"
 import { ArrowBack, ArrowForward, FiberManualRecord } from "@mui/icons-material"
-import { LinearProgress } from "@mui/material"
 import { useDailyTip } from "../../services/api/dailyTipApiService"
 import { useRecommendedItemQuota } from "../../services/api/userProgressApiService"
-import { getAssetUrl } from "../../static/frontendHelpers"
+import { UserActiveCourseDTO } from "../../shared/dtos/UserActiveCourseDTO"
+import { PagingType } from "../../static/frontendHelpers"
+import { EpistoButton } from "../controls/EpistoButton"
 import { EpistoFont } from "../controls/EpistoFont"
+import { RecommendedItemQuota } from "./RecommendedItemQuota"
 
-const RecommendedItemQuota = (props: {
-    label: string,
-    maxItemCount: number,
-    recommendedItemCount: number
-}) => {
+export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserActiveCourseDTO> } & FlexProps) => {
 
-    const { label, maxItemCount, recommendedItemCount } = props;
-
-    return (
-        <Flex
-            width="80%"
-            direction="column">
-
-            <EpistoFont fontSize="fontSmall">
-                {label}
-            </EpistoFont>
-
-            <Flex
-                align="center">
-
-                <img
-                    src={getAssetUrl("/images/videos3D.png")}
-                    alt=""
-                    className="square25"
-                    style={{
-                        marginRight: 5
-                    }} />
-
-                <EpistoFont
-                    fontSize={"fontLargePlus"}
-                    style={{
-                        fontWeight: 500,
-                        marginRight: 2
-                    }}>
-
-                    {recommendedItemCount}/{maxItemCount}
-                </EpistoFont>
-
-                <EpistoFont
-                    fontSize="fontSmall">
-                    videó
-                </EpistoFont>
-            </Flex>
-
-            <LinearProgress
-                value={recommendedItemCount / maxItemCount * 100}
-                variant="determinate"
-                style={{
-                    width: "80%",
-                    height: "5px"
-                }} />
-        </Flex>
-    )
-}
-
-export const DailyTip = (props: {} & FlexProps) => {
-
-    const { ...css } = props;
+    const { activeCoursesPaging, ...css } = props;
     const { dailyTipData } = useDailyTip();
 
-    const activeCourseIds = [4, 4, 4];
-
-    const currentCourse = {
-        thumbnailUrl: getAssetUrl("/courseCoverImages/4.png"),
-        id: 4
-    }
-
-    const { recommendedItemQuota } = useRecommendedItemQuota();
+    const currentCourse = activeCoursesPaging.currentItem;
+    const { recommendedItemQuota } = useRecommendedItemQuota(currentCourse?.courseId ?? 0, !!currentCourse);
 
     return <Flex
         direction="column"
@@ -111,7 +52,7 @@ export const DailyTip = (props: {} & FlexProps) => {
                 flex="1"
                 padding="20px">
                 <img
-                    src={currentCourse.thumbnailUrl}
+                    src={currentCourse?.coverFilePath ?? ""}
                     alt=""
                     className="roundBorders" />
             </Flex>
@@ -123,15 +64,23 @@ export const DailyTip = (props: {} & FlexProps) => {
             align="center"
             justify="center">
 
-            <ArrowBack />
+            <EpistoButton onClick={() => activeCoursesPaging.previous()}>
+                <ArrowBack />
+            </EpistoButton>
 
-            {activeCourseIds
-                .map(x => <FiberManualRecord style={{
-                    width: "10px",
-                    height: "8px"
-                }} />)}
+            {activeCoursesPaging
+                .items
+                .map((x, index) => <FiberManualRecord
+                    style={{
+                        width: "10px",
+                        height: "8px",
+                        color: index === activeCoursesPaging.currentIndex ? "black" : "gray"
+                    }} />)}
 
-            <ArrowForward />
+            <EpistoButton onClick={() => activeCoursesPaging.next()}>
+                <ArrowForward />
+            </EpistoButton>
+
         </Flex>
 
         {/* text daily tip */}

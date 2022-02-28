@@ -1,9 +1,9 @@
+import { UserActiveCourseView } from "../models/views/UserActiveCourseView";
 import { UserCourseCompletionEstimationView } from "../models/views/UserCourseCompletionEstimationView";
 import { UserDailyCourseItemProgressView } from "../models/views/UserDailyCourseItemProgressView";
-import { UserDailyProgressView } from "../models/views/UserDailyProgressView";
 import { RecomendedItemQuotaDTO } from "../shared/dtos/RecomendedItemQuotaDTO";
+import { UserActiveCourseDTO } from "../shared/dtos/UserActiveCourseDTO";
 import { UserCourseProgressChartDTO } from "../shared/dtos/UserCourseProgressChartDTO";
-import { UserDailyProgressDTO } from "../shared/dtos/UserDailyProgressDTO";
 import { MapperService } from "./MapperService";
 import { ServiceBase } from "./misc/ServiceBase";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -15,9 +15,19 @@ export class UserProgressService extends ServiceBase {
         super(mapperService, ormservice);
     }
 
-    async getRecommendedItemQuotaAsync(userId: number) {
+async getActiveCoursesAsync(userId: number) {
 
-        const courseId = 4;
+        const views = await this._ormService
+            .getRepository(UserActiveCourseView)
+            .createQueryBuilder("uacv")
+            .where("uacv.userId = :userId", { userId })
+            .getMany();
+
+        return this._mapperService
+            .mapMany(UserActiveCourseView, UserActiveCourseDTO, views);
+    }
+
+    async getRecommendedItemQuotaAsync(userId: number, courseId: number) {
 
         const estimationView = await this
             .getEstimationViewAsync(courseId, userId);

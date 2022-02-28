@@ -83,6 +83,7 @@ import { UserExamProgressBridge } from "../../models/entity/UserExamProgressBrid
 import { AnswerSessionView } from "../../models/views/AnswerSessionView";
 import { UserCourseCompletionEstimationView } from "../../models/views/UserCourseCompletionEstimationView";
 import { UserDailyCourseItemProgressView } from "../../models/views/UserDailyCourseItemProgressView";
+import { UserActiveCourseView } from "../../models/views/UserActiveCourseView";
 
 export const dbSchema = {
 
@@ -137,7 +138,8 @@ export const dbSchema = {
         "user_spent_time_view",
         "user_course_completion_estimation_view",
         "user_daily_progress_view",
-        "user_daily_course_item_progress_view"
+        "user_daily_course_item_progress_view",
+        "user_active_course_view"
     ],
 
     functionScripts: [
@@ -211,7 +213,8 @@ export const dbSchema = {
         UserDailyProgressView,
         AnswerSessionView,
         UserCourseCompletionEstimationView,
-        UserDailyCourseItemProgressView
+        UserDailyCourseItemProgressView,
+        UserActiveCourseView
     ] as any[],
 
     entities: [

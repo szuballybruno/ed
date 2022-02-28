@@ -276,6 +276,7 @@ import { PlaybackController } from './api/PlaybackController';
     // user progress
     addEndpoint(apiRoutes.userProgress.getUserProgressData, userProgressController.getUserProgressDataAction);
     addEndpoint(apiRoutes.userProgress.getRecommendedItemQuota, userProgressController.getRecommendedItemQuotaAction);
+    addEndpoint(apiRoutes.userProgress.getActiveCourses, userProgressController.getActiveCoursesAction);
 
     // user
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);

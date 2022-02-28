@@ -92,7 +92,8 @@ export const apiRoutes = {
 
     userProgress: {
         getUserProgressData: "/userprogress/get-user-progress-data",
-        getRecommendedItemQuota: "/userprogress/get-recommended-item-quota"
+        getRecommendedItemQuota: "/userprogress/get-recommended-item-quota",
+        getActiveCourses: "/userprogress/get-active-courses"
     },
 
     coinTransactions: {
