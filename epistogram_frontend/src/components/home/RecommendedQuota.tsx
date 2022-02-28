@@ -35,13 +35,12 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
 
                 {/* daily recommended videos count */}
                 <RecommendedItemQuota
-                    label="Napi ajánlott videók"
                     maxItemCount={recommendedItemQuota?.allItemsCount ?? 0}
-                    recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0} />
+                    recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0}
+                    isDaily />
 
                 {/* weekly recommended videos count */}
                 <RecommendedItemQuota
-                    label="Heti ajánlott videók"
                     maxItemCount={recommendedItemQuota?.allItemsCount ?? 0}
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerWeek ?? 0} />
             </Flex>

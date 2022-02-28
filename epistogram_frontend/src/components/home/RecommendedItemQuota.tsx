@@ -4,16 +4,19 @@ import { getAssetUrl } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
 
 export const RecommendedItemQuota = (props: {
-    label: string,
     maxItemCount: number,
-    recommendedItemCount: number
+    recommendedItemCount: number,
+    isDaily?: boolean
 }) => {
 
-    const { label, maxItemCount, recommendedItemCount } = props;
+    const { isDaily, maxItemCount, recommendedItemCount } = props;
+
+    const label = isDaily
+        ? "Napi ajánlott videók"
+        : "Heti ajánlott videók";
 
     return (
         <Flex
-            width="80%"
             direction="column">
 
             <EpistoFont fontSize="fontSmall">
