@@ -1,9 +1,4 @@
-import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
 import { JobTitle } from "../models/entity/JobTitle";
-import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { DailyTipDTO } from "../shared/dtos/DailyTipDTO";
-import { UserDTO } from "../shared/dtos/UserDTO";
-import { DailyTipView } from "../models/views/DailyTipView";
 import { AuthenticationService } from "../services/AuthenticationService";
 import { MapperService } from "../services/MapperService";
 import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
@@ -11,6 +6,8 @@ import { MiscService } from "../services/MiscService";
 import { PractiseQuestionService } from "../services/PractiseQuestionService";
 import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
 import { TokenService } from "../services/TokenService";
+import { UserCourseBridgeService } from "../services/UserCourseBridgeService";
+import { UserDTO } from "../shared/dtos/UserDTO";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
 
 export class MiscController {
@@ -22,6 +19,7 @@ export class MiscController {
     private _ormService: ORMConnectionService;
     private _config: GlobalConfiguration;
     private _mapperService: MapperService;
+    private _courseBridgeService: UserCourseBridgeService;
 
     constructor(
         miscService: MiscService,
@@ -30,7 +28,8 @@ export class MiscController {
         tokenService: TokenService,
         ormService: ORMConnectionService,
         config: GlobalConfiguration,
-        mapperService: MapperService) {
+        mapperService: MapperService,
+        courseBridgeService: UserCourseBridgeService) {
 
         this._miscService = miscService;
         this._practiseQuestionService = practiseQuestionService;
@@ -39,23 +38,13 @@ export class MiscController {
         this._ormService = ormService;
         this._config = config;
         this._mapperService = mapperService;
+        this._courseBridgeService = courseBridgeService;
     }
 
     getCurrentCourseItemCodeAction = async (parms: ActionParams) => {
 
-        const currentBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    isCurrent: true,
-                    userId: parms.currentUserId
-                }
-            });
-
-        if (!currentBridge)
-            return null;
-
-        return currentBridge.currentItemCode;
+        return this._courseBridgeService
+            .getCurrentItemCodeAsync(parms.currentUserId);
     };
 
     getOverviewPageDTOAction = async (params: ActionParams) => {

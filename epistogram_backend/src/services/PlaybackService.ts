@@ -1,4 +1,3 @@
-import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { UserVideoProgressBridge } from "../models/entity/UserVideoProgressBridge";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
 import { VideoProgressView } from "../models/views/VideoProgressView";
@@ -9,47 +8,42 @@ import { MapperService } from "./MapperService";
 import { readItemCode } from "./misc/encodeService";
 import { ServiceBase } from "./misc/ServiceBase";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { UserSessionActivityService } from "./UserSessionActivityService";
 import { VideoPlaybackSampleService } from "./VideoPlaybackSampleService";
 
 export class PlaybackService extends ServiceBase {
 
+    // TODO 5% is a very low number only for development
+    private VIDEO_COMPLETED_PERCENTAGE = 5;
+
     private _videoPlaybackSampleService: VideoPlaybackSampleService;
     private _coinAcquireService: CoinAcquireService;
     private _userSessionActivityService: UserSessionActivityService;
-
-    // TODO 5% is a very low number only for development
-    private VIDEO_COMPLETED_PERCENTAGE = 5;
+    private _courseBridgeService: UserCourseBridgeService;
 
     constructor(
         mapperService: MapperService,
         ormService: ORMConnectionService,
         videoPlaybackSampleService: VideoPlaybackSampleService,
         coinAcquireService: CoinAcquireService,
-        userSessionActivityService: UserSessionActivityService) {
+        userSessionActivityService: UserSessionActivityService,
+        courseBridgeService: UserCourseBridgeService) {
 
         super(mapperService, ormService);
 
         this._userSessionActivityService = userSessionActivityService;
         this._coinAcquireService = coinAcquireService;
         this._videoPlaybackSampleService = videoPlaybackSampleService;
+        this._courseBridgeService = courseBridgeService;
     }
 
     saveVideoPlaybackSample = async (userId: number, dto: VideoPlaybackSampleDTO) => {
 
-        const currentBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOneOrFail({
-                where: {
-                    userId,
-                    isCurrent: true
-                }
-            });
+        const currentItemCode = await this._courseBridgeService
+            .getCurrentItemCodeOrFailAsync(userId);
 
-        if (!currentBridge.currentItemCode)
-            throw new Error("Course has no current item!");
-
-        const { itemId: videoId, itemType } = readItemCode(currentBridge.currentItemCode);
+        const { itemId: videoId, itemType } = readItemCode(currentItemCode);
         if (itemType !== "video")
             throw new Error("Current item is not of type: video!");
 

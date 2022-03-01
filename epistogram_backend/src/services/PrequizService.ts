@@ -6,21 +6,22 @@ import { PrequizQuestionView } from "../models/views/PrequizQuestionView";
 import { CourseService } from "./CourseService";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { UserCourseBridgeService } from "./UserCourseBridgeService";
 
 export class PrequizService {
 
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
-    private _courseService: CourseService;
+    private _courseBridgeService: UserCourseBridgeService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        courseService: CourseService) {
+        courseBridgeService: UserCourseBridgeService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
-        this._courseService = courseService;
+        this._courseBridgeService = courseBridgeService;
     }
 
     /**
@@ -31,7 +32,7 @@ export class PrequizService {
     async getQuestionsAsync(userId: number, courseId: number) {
 
         // set course as started, and stage to prequiz
-        await this._courseService
+        await this._courseBridgeService
             .setCurrentCourse(userId, courseId, "prequiz", null)
 
         const views = await this._ormService

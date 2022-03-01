@@ -1,12 +1,13 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Exam } from "../models/entity/Exam";
 import { Question } from "../models/entity/Question";
-import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { UserExamProgressBridge } from "../models/entity/UserExamProgressBridge";
+import { AnswerSessionView } from "../models/views/AnswerSessionView";
+import { ExamResultView } from "../models/views/ExamResultView";
+import { ExamView } from "../models/views/ExamView";
 import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
 import { ExamEditDataDTO } from "../shared/dtos/ExamEditDataDTO";
 import { ExamPlayerDataDTO } from "../shared/dtos/ExamPlayerDataDTO";
-import { ExamResultView } from "../models/views/ExamResultView";
-import { ExamView } from "../models/views/ExamView";
 import { MapperService } from "./MapperService";
 import { readItemCode } from "./misc/encodeService";
 import { toExamResultDTO } from "./misc/mappings";
@@ -15,8 +16,6 @@ import { QuestionService } from "./QuestionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { UserSessionActivityService } from "./UserSessionActivityService";
-import { AnswerSessionView } from "../models/views/AnswerSessionView";
-import { UserExamProgressBridge } from "../models/entity/UserExamProgressBridge";
 
 export class ExamService {
 
@@ -333,22 +332,13 @@ export class ExamService {
      * @param userId 
      * @param answerSessionId 
      * @returns 
-     */
+     */ 
     getExamResultsAsync = async (userId: number, answerSessionId: number) => {
 
-        const bridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOneOrFail({
-                where: {
-                    userId,
-                    isCurrent: true
-                }
-            });
+        const currentItemCode = await this._userCourseBridgeService
+            .getCurrentItemCodeOrFailAsync(userId);
 
-        if (!bridge.currentItemCode)
-            throw new Error("No current item found");
-
-        const { itemId: currentExamId, itemType } = readItemCode(bridge.currentItemCode);
+        const { itemId: currentExamId, itemType } = readItemCode(currentItemCode);
 
         if (itemType !== "exam")
             throw new Error("Current item is not an exam!");

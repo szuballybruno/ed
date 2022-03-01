@@ -59,7 +59,7 @@ export class PlayerService extends ServiceBase {
         const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, currentItemCode);
 
         // set current course 
-        await this._courseService
+        await this._userCourseBridgeService
             .setCurrentCourse(userId, courseId, "watch", validItemCode);
 
         // course items 

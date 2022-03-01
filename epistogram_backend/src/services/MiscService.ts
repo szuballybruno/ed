@@ -10,21 +10,25 @@ import { CourseService } from "./CourseService";
 import { MapperService } from "./MapperService";
 import { toOrganizationDTO } from "./misc/mappings";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { UserCourseBridgeService } from "./UserCourseBridgeService";
 
 export class MiscService {
 
     private _courseService: CourseService;
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
+    private _userCourseBridgeService: UserCourseBridgeService;
 
     constructor(
         courseService: CourseService,
         ormService: ORMConnectionService,
-        mapperService: MapperService) {
+        mapperService: MapperService,
+        userCourseBridgeService: UserCourseBridgeService) {
 
         this._courseService = courseService;
         this._ormService = ormService;
         this._mapperService = mapperService;
+        this._userCourseBridgeService = userCourseBridgeService;
     }
 
     getOrganizationsAsync = async (userId: number) => {
@@ -51,7 +55,7 @@ export class MiscService {
 
     async getCourseOverviewDataAsync(userId: number) {
 
-        const courseId = await this._courseService
+        const courseId = await this._userCourseBridgeService
             .getCurrentCourseIdOrFail(userId);
 
         const view = await this._ormService
