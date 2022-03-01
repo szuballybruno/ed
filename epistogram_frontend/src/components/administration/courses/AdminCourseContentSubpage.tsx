@@ -31,6 +31,7 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseEditItemView } from "./CourseEditItemView";
 import { AdminCourseList } from "./AdminCourseList";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
+import { GridRowsProp, GridColDef, DataGrid } from "@mui/x-data-grid";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
@@ -365,6 +366,33 @@ export const AdminCourseContentSubpage = () => {
 
     }, [courseContentEditData]);
 
+    const items = modules.map(module => {
+        return module.items
+    }).flat()
+
+    console.log(items)
+
+    const getRowsFromModules = () => items.map((item) => {
+        return {
+            id: item.id,
+            title: item.title,
+            module: item.moduleId,
+            type: item.type,
+            questionsCount: item.questionCount
+        }
+    })
+
+    const moduleRows: GridRowsProp = getRowsFromModules()
+
+    const columns: GridColDef[] = [
+        { field: 'id', headerName: 'Azonosító', width: 100 },
+        { field: 'title', headerName: 'Cím', width: 300, editable: true, resizable: true },
+        { field: 'module', headerName: 'Modul neve', width: 150, resizable: true },
+        { field: 'subCategory', headerName: 'Alkategória', width: 150, resizable: true },
+        { field: 'videosCount', headerName: 'Videók száma', width: 150, resizable: true },
+        { field: 'editCourse', headerName: 'Kurzus szerkesztése', width: 150, renderCell: (params) => <EpistoButton variant="outlined" onClick={() => navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + params.value + "/details")}>Szerkesztés</EpistoButton> }
+    ];
+
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseContentEditDataState]}
         error={courseContentEditDataError}
@@ -412,6 +440,12 @@ export const AdminCourseContentSubpage = () => {
                     className="roundBorders"
                     background="var(--transparentWhite70)"
                     mt="5px">
+
+                    <DataGrid
+                        getRowClassName={(a) => a.row.type === "exam" ? "dataGridExamRow" : "dataGridVideoRow"}
+                        rows={moduleRows} columns={columns} style={{
+                            background: "var(--transparentWhite70)"
+                        }} />
 
                     <DragAndDropContext onDragEnd={onDragEnd}>
                         <DropZone zoneId="zone-root" groupId="root">

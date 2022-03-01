@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import React, { ReactNode, useState } from "react";
+import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { ApplicationRoute } from "../../../models/types";
 import { useAdminCourseList, useCreateCourse, useDeleteCourse } from "../../../services/api/courseApiService";
@@ -20,13 +21,15 @@ import { LoadingFrame } from "../../system/LoadingFrame";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
-import { FloatChip } from "../../universal/FloatChip";
-import { AdminListEditHeader } from "../AdminListEditHeader";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const AdminCourseList = (props: {
     currentCoursePage: "details" | "content" | "statistics"
 }) => {
+
+    const params = useParams<{ courseId: string }>();
+    const courseId = parseInt(params.courseId);
+
+
 
     const [searchText] = React.useState("");
 
@@ -35,9 +38,16 @@ export const AdminCourseList = (props: {
     const { createCourseAsync, createCourseState } = useCreateCourse();
     const { deleteCourseAsync, deleteCourseState } = useDeleteCourse();
 
-    const { navigate } = useNavigation()
-
     const { currentCoursePage } = props
+
+    const { navigate } = useNavigation()
+    const found = courses.some(course => course.courseId === courseId);
+
+    if (!found && courses[0]) {
+        navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courses[0].courseId + "/" + currentCoursePage)
+    }
+
+
 
     const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
 

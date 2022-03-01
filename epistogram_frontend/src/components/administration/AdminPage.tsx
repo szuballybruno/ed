@@ -11,6 +11,7 @@ import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from "../PageRootContainer";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
+import { AdminOverviewTablePage } from './AdminOverviewTablePage';
 import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
 import { AdminCourseListSubpage } from "./courses/AdminCourseListSubpage";
 import { AdminInteractiveCourseSubpage } from './courses/AdminInteractiveCourseSubpage';
@@ -42,10 +43,11 @@ const AdminPage = () => {
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
         .add(administrationRoutes.usersRoute)
-        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
+        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute.courseDetailsRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
         .add(administrationRoutes.myCompanyRoute)
+        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.overviewTableRoute)
         .getArray();
 
     const AdminLeftPane = (props: FlexProps) => {
@@ -130,7 +132,6 @@ const AdminPage = () => {
                     path={administrationRoutes.coursesRoute.route}
                     isAuthorizedToView={x => x.canAccessCourseAdministration}
                     render={() => <Switch>
-                        {getRoute(administrationRoutes.coursesRoute, <AdminCourseListSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
@@ -166,6 +167,12 @@ const AdminPage = () => {
                 <Route exact path={administrationRoutes.myCompanyRoute.route}>
                     <AdminStatistics />
                 </Route>
+
+                <ProtectedRoute
+                    exact
+                    path={administrationRoutes.overviewTableRoute.route}
+                    isAuthorizedToView={x => x.canAccessCourseAdministration}
+                    render={() => <AdminOverviewTablePage />} />
             </Switch>
         </ContentPane>
     </PageRootContainer>
