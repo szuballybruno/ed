@@ -28,15 +28,16 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
         {...css}>
 
         {/* recommended item quota */}
-        <Flex align="center" flexWrap="wrap">
+        <Flex align="center">
 
             {/* quota */}
             <Flex
                 flex="1"
-                align="center"
+                align="flex-start"
+                p="10px 10px 10px 20px"
                 direction="column"
-                minWidth="250px"
-                justify="space-evenly">
+                minWidth="150px"
+                justify="center">
 
                 {/* daily recommended videos count */}
                 <RecommendedItemQuota
@@ -88,7 +89,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
         </Flex>
 
         {/* text daily tip */}
-        <Flex
+        {dailyTipData?.description && <Flex
             direction="column"
             align="center"
             justify="flex-start"
@@ -99,6 +100,6 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
             <EpistoFont>
                 {dailyTipData?.description}
             </EpistoFont>
-        </Flex>
+        </Flex>}
     </Flex >
 }

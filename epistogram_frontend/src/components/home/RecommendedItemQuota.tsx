@@ -17,6 +17,7 @@ export const RecommendedItemQuota = (props: {
 
     return (
         <Flex
+            mb="10px"
             direction="column">
 
             <EpistoFont fontSize="fontSmall">
@@ -27,7 +28,7 @@ export const RecommendedItemQuota = (props: {
                 align="center">
 
                 <img
-                    src={getAssetUrl("/images/videos3D.png")}
+                    src={isDaily ? getAssetUrl("/images/dailyquota.png") : getAssetUrl("/images/weeklyquota.png")}
                     alt=""
                     className="square25"
                     style={{
@@ -55,6 +56,7 @@ export const RecommendedItemQuota = (props: {
                 variant="determinate"
                 style={{
                     width: "80%",
+                    marginTop: 10,
                     height: "5px"
                 }} />
         </Flex>
