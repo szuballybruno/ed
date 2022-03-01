@@ -372,6 +372,6 @@ button {
 }
 
 .shadowOnHover:hover{
-  box-shadow: 0 0 4px #0000001f
+  box-shadow: 0 0 15px #0000001f
 }
 

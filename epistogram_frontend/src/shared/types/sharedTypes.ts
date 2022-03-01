@@ -41,6 +41,8 @@ export type ExamType = "signup" | "normal" | "pretest" | "final";
 
 export type CourseStageNameType = "prequiz" | "pretest" | "pretest_results" | "watch" | "finished";
 
+export type TempomatModeType = "auto" | "light" | "balanced" | "strict"; 
+
 export type EventType = "coin_acquire_answer_streak" | "coin_acquire_session_streak";
 
 export type CourseVisibilityType = "public" | "private";

@@ -24,6 +24,10 @@ export const translatableTexts = {
         }
     },
 
+    tempomat: {
+        autoModeDescription: "Válaszd ezt ha Béla vagy és egy gomb gyárban dolgozol, de azt mondja a főnököd, te Béla, te Béla, nem dolgozol rendesen. Fogd azt a gombot a jobb kezeddel is te utolsó kis Bélakulom Hornyákin."
+    },
+
     roleNames: {
         administrator: "Adminisztátor",
         supervisor: "Vezető",

@@ -129,6 +129,7 @@ export const dbSchema = {
         "coin_acquire_per_course_view",
         "course_overview_view",
         "personality_trait_category_view",
+        "course_item_completed_view",
         "user_latest_activity_view",
         "admin_user_list_view", 
         "prequiz_question_view",
@@ -141,7 +142,7 @@ export const dbSchema = {
         "user_daily_progress_view",
         "user_daily_course_item_progress_view",
         "user_active_course_view",
-        "user_weekly_course_item_progress_view"
+        "user_weekly_course_item_progress_view",
     ],
 
     functionScripts: [

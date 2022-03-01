@@ -1,14 +1,37 @@
 import { Flex, Image, Divider } from "@chakra-ui/react"
+import { useSetTempomatMode, useTempomatMode } from "../../../services/api/tempomatApiService"
+import { useShowErrorDialog } from "../../../services/core/notifications"
+import { TempomatModeType } from "../../../shared/types/sharedTypes"
 import { getAssetUrl } from "../../../static/frontendHelpers"
+import { translatableTexts } from "../../../static/translatableTexts"
 import { EpistoFont } from "../../controls/EpistoFont"
 import { EpistoDialog, EpistoDialogLogicType } from "../../EpistoDialog"
 import { TempomatModeTile } from "./TempomatModeTile"
 
 export const TempomatSettingsDialog = (props: {
-    tempomatDialogLogic: EpistoDialogLogicType
+    tempomatDialogLogic: EpistoDialogLogicType,
+    courseId: number
 }) => {
 
-    const { tempomatDialogLogic } = props;
+    const { tempomatDialogLogic, courseId } = props;
+
+    const showError = useShowErrorDialog();
+
+    const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, tempomatDialogLogic.isOpen);
+    const { setTempomatMode } = useSetTempomatMode();
+
+    const handleSetTempomatMode = async (mode: TempomatModeType) => {
+
+        try {
+
+            await setTempomatMode({ mode, courseId });
+            await refetchTempomatMode();
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
 
     return (
         <EpistoDialog
@@ -19,7 +42,6 @@ export const TempomatSettingsDialog = (props: {
                     alignItems: "center"
                 },
                 ".MuiPaper-root": {
-                    background: "#efefef",
                     width: "100%",
                     margin: "200px"
 
@@ -27,7 +49,7 @@ export const TempomatSettingsDialog = (props: {
             }}
             logic={tempomatDialogLogic}>
 
-            <Flex direction="column" align="center" flex="1" background="#efefef">
+            <Flex direction="column" align="center" flex="1" >
                 <Divider
                     h="1px"
                     w="calc(100% - 20px)"
@@ -35,28 +57,35 @@ export const TempomatSettingsDialog = (props: {
 
                 <Flex
                     justify="space-between"
-                    p="20px">
+                    padding="5px">
 
                     <TempomatModeTile
                         thumbnailImage={getAssetUrl("/images/autopilot.png")}
                         title="Automata üzemmód"
-                        description="Válaszd ezt ha Béla vagy és egy gomb gyárban dolgozol, de azt mondja a főnököd, te Béla, te Béla, nem dolgozol rendesen. Fogd azt a gombot a jobb kezeddel is te utolsó kis Bélakulom Hornyákin."
-                        isSelected />
+                        description={translatableTexts.tempomat.autoModeDescription}
+                        isSelected={tempomatMode === "auto"}
+                        onClick={() => handleSetTempomatMode("auto")} />
 
                     <TempomatModeTile
                         thumbnailImage={getAssetUrl("/images/lightmode.png")}
-                        title="Automata üzemmód"
-                        description="Válaszd ezt ha Béla vagy és egy gomb gyárban dolgozol, de azt mondja a főnököd, te Béla, te Béla, nem dolgozol rendesen. Fogd azt a gombot a jobb kezeddel is te utolsó kis Bélakulom Hornyákin." />
+                        title="Megengedő üzemmód"
+                        isSelected={tempomatMode === "light"}
+                        description={translatableTexts.tempomat.autoModeDescription}
+                        onClick={() => handleSetTempomatMode("light")} />
 
                     <TempomatModeTile
                         thumbnailImage={getAssetUrl("/images/balancedmode.png")}
-                        title="Automata üzemmód"
-                        description="Válaszd ezt ha Béla vagy és egy gomb gyárban dolgozol, de azt mondja a főnököd, te Béla, te Béla, nem dolgozol rendesen. Fogd azt a gombot a jobb kezeddel is te utolsó kis Bélakulom Hornyákin." />
+                        title="Kiegyensúlyozott üzemmód"
+                        isSelected={tempomatMode === "balanced"}
+                        description={translatableTexts.tempomat.autoModeDescription}
+                        onClick={() => handleSetTempomatMode("balanced")} />
 
                     <TempomatModeTile
                         thumbnailImage={getAssetUrl("/images/strictmode.png")}
-                        title="Automata üzemmód"
-                        description="Válaszd ezt ha Béla vagy és egy gomb gyárban dolgozol, de azt mondja a főnököd, te Béla, te Béla, nem dolgozol rendesen. Fogd azt a gombot a jobb kezeddel is te utolsó kis Bélakulom Hornyákin." />
+                        title="Szigorú üzemmód"
+                        isSelected={tempomatMode === "strict"}
+                        description={translatableTexts.tempomat.autoModeDescription}
+                        onClick={() => handleSetTempomatMode("strict")} />
                 </Flex>
 
                 <Divider

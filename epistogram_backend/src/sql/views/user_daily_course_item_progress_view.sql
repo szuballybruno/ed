@@ -13,33 +13,10 @@ FROM
 	FROM 
 	(
 		SELECT 
-			itms.user_id,
-			itms.course_id,
-			DATE_TRUNC('day', itms.completion_date) completion_date
-		FROM 
-		(
-			SELECT 
-				uvpb.user_id,
-				v.course_id,
-				uvpb.completion_date
-			FROM public.user_video_progress_bridge uvpb
-
-			LEFT JOIN public.video v
-			ON v.id = uvpb.video_id
-			UNION ALL
-			SELECT 
-				uepb.user_id,
-				e.course_id,
-				uepb.completion_date
-			FROM public.user_exam_progress_bridge uepb
-
-			LEFT JOIN public.exam e
-			ON e.id = uepb.exam_id 
-			
-			WHERE e.type = 'normal'
-		) itms
-
-		WHERE itms.completion_date IS NOT NULL
+			cicv.user_id,
+			cicv.course_id,
+			DATE_TRUNC('day', cicv.completion_date) completion_date
+		FROM public.course_item_completed_view cicv
 	) sq
 
 	GROUP BY 

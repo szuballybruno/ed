@@ -86,6 +86,9 @@ import { UserProgressService } from './services/UserProgressService';
 import { UserProgressController } from './api/UserProgressController';
 import { PlaybackService } from './services/PlaybackService';
 import { PlaybackController } from './api/PlaybackController';
+import { TempomatService } from './services/TempomatService';
+import { TempomatController } from './api/TempomatController';
+import { ScheduledJobService } from './services/ScheduledJobService';
 
 (async () => {
 
@@ -143,6 +146,8 @@ import { PlaybackController } from './api/PlaybackController';
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, courseService, userCourseBridgeService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
+    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService);
+    const scheduledJobService = new ScheduledJobService();
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -171,6 +176,7 @@ import { PlaybackController } from './api/PlaybackController';
     const dailyTipController = new DailyTipController(dailyTipService);
     const userProgressController = new UserProgressController(userProgressService);
     const playbackController = new PlaybackController(playbackService);
+    const tempomatController = new TempomatController(tempomatService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -179,6 +185,15 @@ import { PlaybackController } from './api/PlaybackController';
     initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
+
+    // initailize jobs
+    // scheduledJobService
+    //     .scheduleJob(
+    //         {
+    //             seconds: "*/2"
+    //         },
+    //         () => tempomatService
+    //             .evaluateUserProgressesAsync());
 
     // initialize express
     const expressServer = express();
@@ -208,6 +223,10 @@ import { PlaybackController } from './api/PlaybackController';
     // teacher info
     addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true, authorize: ["administrator"] });
+
+    // tempomat
+    addEndpoint(apiRoutes.tempomat.getTempomatMode, tempomatController.getTempomatModeAction);
+    addEndpoint(apiRoutes.tempomat.setTempomatMode, tempomatController.setTempomatModeAction, { isPost: true });
 
     // daily tip 
     addEndpoint(apiRoutes.dailyTip.getDailyTip, dailyTipController.getDailyTipAction);

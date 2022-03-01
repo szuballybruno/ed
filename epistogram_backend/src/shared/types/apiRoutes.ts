@@ -20,6 +20,11 @@ export const apiRoutes = {
         saveTeacherInfo: "/teacherinfo/save-teacher-info"
     },
 
+    tempomat: {
+        setTempomatMode: "/tempomat/set-tempomat-mode",
+        getTempomatMode: "/tempomat/get-tempomat-mode"
+    },
+
     passwordChange: {
         setNewPassword: "/pwchange/set-new-password",
         requestPasswordChangeAuthenticated: "/pwchange/request-password-change-authenticated",

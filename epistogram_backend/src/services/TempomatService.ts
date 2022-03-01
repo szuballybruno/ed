@@ -18,17 +18,22 @@ export class TempomatService extends ServiceBase {
         this._userCourseBridgeService = courseBridgeServie;
     }
 
-    async setTempomatMode(userId: number, courseId: number, tempomatMode: TempomatModeType) {
+    async setTempomatModeAsync(userId: number, courseId: number, tempomatMode: TempomatModeType) {
+
+        const bridge = await this._userCourseBridgeService
+            .getOrFailAsync({
+                courseId,
+                userId
+            });
 
         await this._userCourseBridgeService
             .updateAsync({
-                courseId,
-                userId,
+                id: bridge.id,
                 tempomatMode
             });
     }
 
-    async getTempomatMode(userId: number, courseId: number) {
+    async getTempomatModeAsync(userId: number, courseId: number) {
 
         const bridge = await this._userCourseBridgeService
             .getOrFailAsync({
@@ -37,5 +42,10 @@ export class TempomatService extends ServiceBase {
             });
 
         return bridge.tempomatMode;
+    }
+
+    async evaluateUserProgressesAsync() {
+
+        console.log("Evaluating user progresses...");
     }
 }

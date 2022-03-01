@@ -87,7 +87,9 @@ export const CourseItemSelector = (props: {
     return <>
 
         {/* Tempomat info dialog */}
-        <TempomatSettingsDialog tempomatDialogLogic={tempomatDialogLogic} />
+        <TempomatSettingsDialog
+            courseId={courseId}
+            tempomatDialogLogic={tempomatDialogLogic} />
 
         {/* warning dialog */}
         <EpistoDialog logic={dialogLogic}>
