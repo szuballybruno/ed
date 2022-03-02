@@ -43,7 +43,7 @@ export const StatsSummary = (props: {
                 gridRow: `auto / span 2`
             }} >
 
-            {userProgressData && userProgressData.days.length == 0
+            {userProgressData && userProgressData.days.length > 0
                 ? <UserProgressChart userProgress={userProgressData} />
                 : <NoProgressChartYet />}
         </FlexFloat>
