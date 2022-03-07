@@ -1,6 +1,8 @@
 
 export type StyleSizeType = "0" | "5" | "10" | "15" | "40";
 
+export type ClassBuilderCustomizationFnType = (classBuilder: ClassBuilder) => void;
+
 export class ClassBuilder {
 
     private _classes: string[];
@@ -26,6 +28,14 @@ export class ClassBuilder {
     appendList = (classes: string[]) => {
 
         this._classes = this._classes.concat(classes);
+
+        return this;
+    }
+
+    customize = (fn?: ClassBuilderCustomizationFnType) => {
+
+        if (fn)
+            fn(this);
 
         return this;
     }

@@ -39,7 +39,8 @@ export const WatchView = (props: {
     navigateToCourseItem: NavigateToCourseItemActionType,
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
-    nextItemState: CourseItemStateType | null
+    nextItemState: CourseItemStateType | null,
+    isPlayerLoaded: boolean
 }) => {
 
     const {
@@ -49,6 +50,7 @@ export const WatchView = (props: {
         modules,
         answerSessionId,
         courseMode,
+        isPlayerLoaded,
         courseId,
         continueCourse,
         refetchPlayerData
@@ -279,6 +281,7 @@ export const WatchView = (props: {
             background="var(--transparentWhite70)">
 
             {!isDesktopView && <CourseItemSelector
+                isPlayerLoaded={isPlayerLoaded}
                 currentItemCode={currentItemCode}
                 nextItemState={nextItemState}
                 courseId={courseId}

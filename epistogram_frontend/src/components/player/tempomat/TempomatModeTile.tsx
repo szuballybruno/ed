@@ -1,16 +1,20 @@
 import { Flex, Image } from "@chakra-ui/react"
+import { height } from "@mui/system";
+import { ReactNode } from "react";
 import { ClassBuilder } from "../../../helpers/classBuilder";
+import { TempomatModeType } from "../../../shared/types/sharedTypes";
 import { EpistoFont } from "../../controls/EpistoFont"
+import { TempomatModeImage } from "./TempomatModeImage";
 
 export const TempomatModeTile = (props: {
-    thumbnailImage: string,
     title: string,
     description: string,
     isSelected: boolean,
-    onClick: () => void
+    onClick: () => void,
+    tempomatMode: TempomatModeType
 }) => {
 
-    const { isSelected, onClick } = props;
+    const { isSelected, tempomatMode, onClick } = props;
 
     return <Flex
         flex="1"
@@ -24,16 +28,19 @@ export const TempomatModeTile = (props: {
         onClick={onClick}
         align="center" >
 
-        <Image
-            background={props.isSelected ? "#97c9cc50" : "#efefef"}
-            border="none"
-            className="roundBorders"
-            p="10px"
-            objectFit="contain"
-            src={props.thumbnailImage}
-            alt=""
-            w="140px"
-            h="80px" />
+        <TempomatModeImage
+            style={{
+                background: isSelected
+                    ? "#97c9cc50"
+                    : "#efefef",
+                padding: "10px",
+                objectFit: "contain",
+                width: "140px",
+                height: "80px"
+            }}
+            mode={tempomatMode}
+            customizeFn={builder => builder
+                .custom("roundBorders")} />
 
         <EpistoFont
             fontSize="fontSmall"

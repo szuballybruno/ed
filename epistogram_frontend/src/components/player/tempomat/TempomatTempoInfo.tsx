@@ -1,13 +1,31 @@
 import { Flex } from "@chakra-ui/react"
 import { InfoOutlined } from "@mui/icons-material"
+import { TempomatModeType } from "../../../shared/types/sharedTypes"
 import { getAssetUrl } from "../../../static/frontendHelpers"
+import { EpistoButton } from "../../controls/EpistoButton"
 import { EpistoFont } from "../../controls/EpistoFont"
+import { TempomatModeImage } from "./TempomatModeImage"
 
 export const TempomatTempoInfo = (props: {
-    onClick: () => void
+    onClick: () => void,
+    tempomatMode: TempomatModeType
 }) => {
 
-    const { onClick } = props;
+    const { onClick, tempomatMode } = props;
+
+    const tempomatLabel = (() => {
+
+        if (tempomatMode === "auto")
+            return "Automata";
+
+        if (tempomatMode === "balanced")
+            return "Kiegyensúlyozott";
+
+        if (tempomatMode === "light")
+            return "Megengedő";
+
+        return "Szigorú";
+    })();
 
     return (
         <Flex direction="column">
@@ -28,39 +46,38 @@ export const TempomatTempoInfo = (props: {
             </Flex>
 
             {/* Current speed and settings button */}
-            <Flex
-                align="center"
-                flex="1">
+            <EpistoButton
+                onClick={onClick}>
 
-                <img
-                    src={getAssetUrl("/images/balancedmode.png")}
-                    alt=""
-                    style={{
-                        height: "25px",
-                        width: "25px",
-                        marginRight: 5
-                    }} />
+                <Flex
+                    align="center"
+                    flex="1">
 
-                <EpistoFont
-                    fontSize="fontSmall"
-                    style={{
-                        margin: "0 5px",
-                        fontWeight: 600
-                    }}>
+                    <TempomatModeImage
+                        mode={tempomatMode}
+                        customizeFn={builder => builder
+                            .custom("square25")} />
 
-                    Kiegyensúlyozott
-                </EpistoFont>
+                    <EpistoFont
+                        fontSize="fontSmall"
+                        style={{
+                            margin: "0 5px",
+                            fontWeight: 600
+                        }}>
 
-                <img
-                    onClick={onClick}
-                    src={getAssetUrl("/images/tempomatsettings.png")}
-                    alt=""
-                    style={{
-                        height: "20px",
-                        width: "20px",
-                        marginRight: 5
-                    }} />
-            </Flex>
+                        {tempomatLabel}
+                    </EpistoFont>
+
+                    <img
+                        src={getAssetUrl("/images/tempomatsettings.png")}
+                        alt=""
+                        style={{
+                            height: "20px",
+                            width: "20px",
+                            marginRight: 5
+                        }} />
+                </Flex>
+            </EpistoButton>
         </Flex>
     )
 }

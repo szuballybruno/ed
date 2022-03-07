@@ -3,6 +3,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Radio, RadioGroup } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useSetCourseMode } from '../../../services/api/courseApiService';
+import { useTempomatMode } from '../../../services/api/tempomatApiService';
 import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from "../../../services/core/notifications";
 import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
@@ -24,10 +25,11 @@ export const CourseItemSelector = (props: {
     courseId: number,
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
-    nextItemState: CourseItemStateType | null
+    nextItemState: CourseItemStateType | null,
+    isPlayerLoaded: boolean
 }) => {
 
-    const { currentItemCode, nextItemState: itemState, mode, refetchPlayerData, courseId, modules } = props;
+    const { currentItemCode, nextItemState: itemState, isPlayerLoaded, mode, refetchPlayerData, courseId, modules } = props;
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
@@ -35,7 +37,8 @@ export const CourseItemSelector = (props: {
     const canChangeCourseMode = user.userActivity.canChangeCourseMode;
 
     // http 
-    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId, true);
+    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId, isPlayerLoaded);
+    const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
     const { setCourseModeAsync } = useSetCourseMode();
 
     // dialog state 
@@ -88,6 +91,8 @@ export const CourseItemSelector = (props: {
 
         {/* Tempomat info dialog */}
         <TempomatSettingsDialog
+            onTempomatModeChanged={refetchTempomatMode}
+            tempomatMode={tempomatMode ?? "auto"}
             courseId={courseId}
             tempomatDialogLogic={tempomatDialogLogic} />
 
@@ -106,7 +111,9 @@ export const CourseItemSelector = (props: {
             <Flex
                 flex="1">
 
-                <TempomatTempoInfo onClick={() => tempomatDialogLogic.openDialog()} />
+                <TempomatTempoInfo
+                    tempomatMode={tempomatMode ?? "auto"}
+                    onClick={() => tempomatDialogLogic.openDialog()} />
             </Flex>
 
             <Divider

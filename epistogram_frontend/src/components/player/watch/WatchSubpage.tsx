@@ -40,6 +40,7 @@ export const WatchSubpage = () => {
     const title = video?.title || exam?.title || module?.name;
     const currentItemCode = playerData?.courseItemCode ?? "";
     const nextItemState = playerData?.nextItemState ?? null;
+    const isPlayerLoaded = playerDataStatus === "success";
 
     console.log("nextItemCode: " + nextItemCode)
 
@@ -103,6 +104,7 @@ export const WatchSubpage = () => {
                     <Box id="mainColumn" className="whall" >
 
                         {video && <WatchView
+                            isPlayerLoaded={isPlayerLoaded}
                             currentItemCode={currentItemCode}
                             nextItemState={nextItemState}
                             courseId={courseId!}
@@ -147,6 +149,7 @@ export const WatchSubpage = () => {
                                 courseId={courseId!}
                                 mode={courseMode}
                                 modules={courseModules}
+                                isPlayerLoaded={isPlayerLoaded}
                                 refetchPlayerData={refetchPlayerData} />
                         </Flex>}
                     </FlexFloat>

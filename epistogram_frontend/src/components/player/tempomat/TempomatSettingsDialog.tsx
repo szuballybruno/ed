@@ -1,5 +1,5 @@
-import { Flex, Image, Divider } from "@chakra-ui/react"
-import { useSetTempomatMode, useTempomatMode } from "../../../services/api/tempomatApiService"
+import { Divider, Flex, Image } from "@chakra-ui/react"
+import { useSetTempomatMode } from "../../../services/api/tempomatApiService"
 import { useShowErrorDialog } from "../../../services/core/notifications"
 import { TempomatModeType } from "../../../shared/types/sharedTypes"
 import { getAssetUrl } from "../../../static/frontendHelpers"
@@ -10,14 +10,15 @@ import { TempomatModeTile } from "./TempomatModeTile"
 
 export const TempomatSettingsDialog = (props: {
     tempomatDialogLogic: EpistoDialogLogicType,
-    courseId: number
+    courseId: number,
+    onTempomatModeChanged: () => void,
+    tempomatMode: TempomatModeType
 }) => {
 
-    const { tempomatDialogLogic, courseId } = props;
+    const { tempomatDialogLogic, tempomatMode, courseId, onTempomatModeChanged } = props;
 
     const showError = useShowErrorDialog();
 
-    const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, tempomatDialogLogic.isOpen);
     const { setTempomatMode } = useSetTempomatMode();
 
     const handleSetTempomatMode = async (mode: TempomatModeType) => {
@@ -25,7 +26,7 @@ export const TempomatSettingsDialog = (props: {
         try {
 
             await setTempomatMode({ mode, courseId });
-            await refetchTempomatMode();
+            onTempomatModeChanged();
         }
         catch (e) {
 
@@ -60,28 +61,28 @@ export const TempomatSettingsDialog = (props: {
                     padding="5px">
 
                     <TempomatModeTile
-                        thumbnailImage={getAssetUrl("/images/autopilot.png")}
+                        tempomatMode="auto"
                         title="Automata üzemmód"
                         description={translatableTexts.tempomat.autoModeDescription}
                         isSelected={tempomatMode === "auto"}
                         onClick={() => handleSetTempomatMode("auto")} />
 
                     <TempomatModeTile
-                        thumbnailImage={getAssetUrl("/images/lightmode.png")}
+                        tempomatMode="light"
                         title="Megengedő üzemmód"
                         isSelected={tempomatMode === "light"}
                         description={translatableTexts.tempomat.autoModeDescription}
                         onClick={() => handleSetTempomatMode("light")} />
 
                     <TempomatModeTile
-                        thumbnailImage={getAssetUrl("/images/balancedmode.png")}
+                        tempomatMode="balanced"
                         title="Kiegyensúlyozott üzemmód"
                         isSelected={tempomatMode === "balanced"}
                         description={translatableTexts.tempomat.autoModeDescription}
                         onClick={() => handleSetTempomatMode("balanced")} />
 
                     <TempomatModeTile
-                        thumbnailImage={getAssetUrl("/images/strictmode.png")}
+                        tempomatMode="strict"
                         title="Szigorú üzemmód"
                         isSelected={tempomatMode === "strict"}
                         description={translatableTexts.tempomat.autoModeDescription}
