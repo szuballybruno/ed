@@ -142,11 +142,11 @@ import { ScheduledJobService } from './services/ScheduledJobService';
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
-    const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService);
+    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService);
+    const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, courseService, userCourseBridgeService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
-    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService);
     const scheduledJobService = new ScheduledJobService();
 
     // controllers 
@@ -187,13 +187,15 @@ import { ScheduledJobService } from './services/ScheduledJobService';
     await dbConnectionService.seedDBAsync();
 
     // initailize jobs
-    // scheduledJobService
-    //     .scheduleJob(
-    //         {
-    //             seconds: "*/2"
-    //         },
-    //         () => tempomatService
-    //             .evaluateUserProgressesAsync());
+    scheduledJobService
+        .scheduleJob(
+            {
+                seconds: "*/4"
+            },
+            () => tempomatService
+                .evaluateUserProgressesAsync());
+    // tempomatService
+    //     .evaluateUserProgressesAsync();
 
     // initialize express
     const expressServer = express();

@@ -4,7 +4,7 @@ SELECT
 	pua_per_week.answer_id,
 	pa.text answer_text,
 	pa.value estimated_hours_per_week,
-	pa.value * 60 * 60 estimated_seconds_per_week
+	(pa.value * 60 * 60) / 7 estimated_seconds_per_day
 FROM public.user u
 
 CROSS JOIN public.course co

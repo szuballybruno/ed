@@ -81,10 +81,13 @@ import { UserDailyProgressView } from "../../models/views/UserDailyProgressView"
 import { UserVideoProgressBridge } from "../../models/entity/UserVideoProgressBridge";
 import { UserExamProgressBridge } from "../../models/entity/UserExamProgressBridge";
 import { AnswerSessionView } from "../../models/views/AnswerSessionView";
-import { UserCourseCompletionEstimationView } from "../../models/views/UserCourseCompletionEstimationView";
 import { UserDailyCourseItemProgressView } from "../../models/views/UserDailyCourseItemProgressView";
 import { UserActiveCourseView } from "../../models/views/UserActiveCourseView";
 import { UserWeeklyCourseItemProgressView } from "../../models/views/UserWeeklyCourseItemProgressView";
+import { UserCourseProgressView } from "../../models/views/UserCourseProgressView";
+import { UserCourseCompletionPrevisionedView } from "../../models/views/UserCourseCompletionPrevisionedView";
+import { UserCourseRecommendedItemQuotaView } from "../../models/views/UserCourseRecommendedItemQuotaView";
+import { TempomatAdjustmentValue } from "../../models/entity/TempomatAdjustmentValue";
 
 export const dbSchema = {
 
@@ -116,6 +119,7 @@ export const dbSchema = {
         "activity_streak_view",
         "shop_item_view",
         "shop_item_stateful_view",
+        "course_length_estimation_view",
         "coin_transaction_view",
         "coin_balance_view",
         "course_questions_success_view",
@@ -136,13 +140,18 @@ export const dbSchema = {
         "pretest_result_view",
         "course_item_count_view",
         "course_rating_question_view",
-        "user_course_estimated_time_frame_view",
+        "user_course_schedule_previsioned_view",
         "user_spent_time_view",
-        "user_course_completion_estimation_view",
         "user_daily_progress_view",
         "user_daily_course_item_progress_view",
         "user_active_course_view",
         "user_weekly_course_item_progress_view",
+        "user_course_completion_previsioned_view",
+        "user_course_progress_actual",
+        "user_course_progress_view",
+        "user_course_recommended_item_quota_view",
+        "user_prequiz_answers_view",
+        "user_tempomat_adjustment_value_view"
     ],
 
     functionScripts: [
@@ -215,10 +224,12 @@ export const dbSchema = {
         CourseRatingQuestionView,
         UserDailyProgressView,
         AnswerSessionView,
-        UserCourseCompletionEstimationView,
         UserDailyCourseItemProgressView,
         UserActiveCourseView,
-        UserWeeklyCourseItemProgressView
+        UserWeeklyCourseItemProgressView,
+        UserCourseProgressView,
+        UserCourseCompletionPrevisionedView,
+        UserCourseRecommendedItemQuotaView
     ] as any[],
 
     entities: [
@@ -267,6 +278,7 @@ export const dbSchema = {
         CourseRatingQuestion,
         CourseRatingQuestionUserAnswer,
         UserVideoProgressBridge,
-        UserExamProgressBridge
+        UserExamProgressBridge,
+        TempomatAdjustmentValue
     ] as any[]
 }

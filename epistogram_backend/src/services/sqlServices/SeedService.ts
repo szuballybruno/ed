@@ -17,28 +17,29 @@ export class SeedService {
 
     seedDBAsync = async () => {
 
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedOrganizations");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionTypes");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedActivities");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedRoles");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedSignupExam");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedJobTitles");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedUsers");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedSignupQuestions");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedCourseCategories");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedCourses");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedExams");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedVideos");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionsVideo");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedQuestionsExam");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedDailyTips");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedActivationCodes");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedShopItemCategories");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedShopItems");
-        await this._sqlBootstrapperService.executeSeedScriptAsync("seedDiscountCodes");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_organizations");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_question_types");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_activities");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_roles");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_signup_exam");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_job_titles");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_users");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_signup_questions");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_course_categories");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_courses");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_exams");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_videos");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_questions_video");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_questions_exam");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_daily_tips");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_activation_codes");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_shop_item_categories");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_shop_items");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_discount_codes");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_prequiz_questions");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_course_rating");
-
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_tempomat_adjustment_values");
+        
         // recalc seqs
         await this._sqlBootstrapperService.recalcSequencesAsync();
 

@@ -1,7 +1,7 @@
 SELECT 
 	sq2.*,
 	sq2.completed_item_count * (100 / cicv.item_count::int) completed_percentage,
-	sq2.completion_date::date - uccev.start_date::date offset_days_from_start,
+	sq2.completion_date::date - ucb.creation_date::date offset_days_from_start,
 	sq2.completion_date = DATE_TRUNC('day', now()) is_current
 FROM 
 (
@@ -25,8 +25,8 @@ FROM
 		sq.completion_date
 ) sq2
 
-LEFT JOIN public.user_course_completion_estimation_view uccev
-ON uccev.course_id = sq2.course_id AND uccev.user_id = sq2.user_id
+LEFT JOIN public.user_course_bridge ucb
+ON ucb.course_id = sq2.course_id AND ucb.user_id = sq2.user_id
 
 LEFT JOIN public.course_item_count_view cicv
 ON cicv.course_id = sq2.course_id

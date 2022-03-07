@@ -1,5 +1,6 @@
 import { UserActiveCourseView } from "../models/views/UserActiveCourseView";
-import { UserCourseCompletionEstimationView } from "../models/views/UserCourseCompletionEstimationView";
+import { UserCourseProgressView } from "../models/views/UserCourseProgressView";
+import { UserCourseRecommendedItemQuotaView } from "../models/views/UserCourseRecommendedItemQuotaView";
 import { UserDailyCourseItemProgressView } from "../models/views/UserDailyCourseItemProgressView";
 import { UserWeeklyCourseItemProgressView } from "../models/views/UserWeeklyCourseItemProgressView";
 import { RecomendedItemQuotaDTO } from "../shared/dtos/RecomendedItemQuotaDTO";
@@ -30,8 +31,14 @@ export class UserProgressService extends ServiceBase {
 
     async getRecommendedItemQuotaAsync(userId: number, courseId: number) {
 
-        const estimationView = await this
-            .getEstimationViewAsync(courseId, userId);
+        const courseProgressView = await this._ormService
+            .getRepository(UserCourseRecommendedItemQuotaView)
+            .findOne({
+                where: {
+                    courseId,
+                    userId
+                }
+            });
 
         const currentDailyCompletedView = await this._ormService
             .getRepository(UserDailyCourseItemProgressView)
@@ -50,8 +57,8 @@ export class UserProgressService extends ServiceBase {
             .getOne();
 
         return {
-            recommendedItemsPerDay: estimationView.recommendedItemsPerDay,
-            recommendedItemsPerWeek: estimationView.recommendedItemsPerWeek,
+            recommendedItemsPerDay: courseProgressView?.recommendedItemsPerDay ?? 0,
+            recommendedItemsPerWeek: courseProgressView?.recommendedItemsPerWeek ?? 0,
             completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
             completedToday: currentDailyCompletedView?.completedItemCount ?? 0
         } as RecomendedItemQuotaDTO;
@@ -59,8 +66,8 @@ export class UserProgressService extends ServiceBase {
 
     async getProgressChartDataAsync(userId: number, courseId: number) {
 
-        const estimationView = await this
-            .getEstimationViewAsync(courseId, userId);
+        // const estimationView = await this
+        //     .getEstimationViewAsync(courseId, userId);
 
         const dailyViews = await this._ormService
             .getRepository(UserDailyCourseItemProgressView)
@@ -70,12 +77,12 @@ export class UserProgressService extends ServiceBase {
             .getMany();
 
         const dto = {
-            courseLengthSeconds: estimationView.courseLengthSeconds,
-            estimatedCompletionDate: estimationView.estimatedCompletionDate,
-            estimatedLengthInDays: estimationView.estimatedLengthInDays,
-            estimatedSecondsPerDay: estimationView.estimatedSecondsPerDay,
-            originalCompletionDaysEstimation: estimationView.originalCompletionDaysEstimation,
-            startDate: estimationView.startDate,
+            courseLengthSeconds: 0,//estimationView.courseLengthSeconds,
+            estimatedCompletionDate: new Date(),//estimationView.estimatedCompletionDate,
+            estimatedLengthInDays: 0,//estimationView.estimatedLengthInDays,
+            estimatedSecondsPerDay: 0,//estimationView.estimatedSecondsPerDay,
+            originalCompletionDaysEstimation: 0,//estimationView.originalCompletionDaysEstimation,
+            startDate: new Date(),//estimationView.startDate,
             days: dailyViews
                 .map((x, index) => {
 
@@ -95,17 +102,5 @@ export class UserProgressService extends ServiceBase {
         } as UserCourseProgressChartDTO;
 
         return dto;
-    }
-
-    async getEstimationViewAsync(courseId: number, userId: number) {
-
-        const estimationView = await this._ormService
-            .getRepository(UserCourseCompletionEstimationView)
-            .createQueryBuilder("uccev")
-            .where("uccev.userId = :userId", { userId })
-            .andWhere("uccev.courseId = :courseId", { courseId })
-            .getOneOrFail();
-
-        return estimationView;
     }
 }

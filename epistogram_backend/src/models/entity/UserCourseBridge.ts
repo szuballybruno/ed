@@ -27,6 +27,9 @@ export class UserCourseBridge {
     @Column({ type: "text" })
     tempomatMode: TempomatModeType;
 
+    @Column({ type: "int", nullable: true })
+    recommendedItemsPerDay: number;
+
     // user
     @Column()
     userId: number;
