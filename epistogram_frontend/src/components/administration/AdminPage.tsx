@@ -42,7 +42,7 @@ const AdminPage = () => {
     const { navigate } = useNavigation();
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
-        .add(administrationRoutes.usersRoute)
+        .add(administrationRoutes.usersRoute.editRoute)
         .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute.courseDetailsRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)

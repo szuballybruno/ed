@@ -182,7 +182,8 @@ export const applicationRoutes = {
 
             editRoute: {
                 title: translatableTexts.routeTitles.administrationEditUser,
-                route: "/administration/users/:userId/edit"
+                route: "/administration/users/:userId/edit",
+                icon: <Person className="fontXXL" color={"secondary"} />,
             },
 
             statsRoute: {

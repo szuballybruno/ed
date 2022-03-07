@@ -16,7 +16,7 @@ export const AdminUserStatisticsSubpage = () => {
 
     return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
-        <AdminUserList />
+        <AdminUserList currentUserPage="statistics" />
 
         {/* admin header */}
         <AdminSubpageHeader tabMenuItems={[

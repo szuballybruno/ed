@@ -9,8 +9,13 @@ import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { EpistoSearch } from "../../controls/EpistoSearch";
+import { useParams } from "react-router-dom";
 
-export const AdminUserList = () => {
+export const AdminUserList = (props: {
+    currentUserPage?: "edit" | "statistics" | "teacherinfo"
+}) => {
+    const params = useParams<{ userId: string }>();
+    const userId = parseInt(params.userId);
 
     const user = useContext(CurrentUserContext)!;
     const currentUserId = user.id;
@@ -22,6 +27,8 @@ export const AdminUserList = () => {
 
     const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(searchText);
 
+    const { currentUserPage } = props
+
 
     const handleSearch = (value: string) => {
 
@@ -30,6 +37,12 @@ export const AdminUserList = () => {
 
         if (value.length > 2)
             setSearchText(value);
+    }
+
+    const found = users.some(user => user.id === userId);
+
+    if (!found && users[0]) {
+        navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + users[0].id + "/" + currentUserPage)
     }
 
     return <LoadingFrame loadingState={usersStatus} error={usersError} direction="column" minW="350px" flexBasis="350px" >

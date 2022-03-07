@@ -130,7 +130,7 @@ const AdminEditUserSubpage = () => {
 
     return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
-        <AdminUserList />
+        <AdminUserList currentUserPage='edit' />
         <AdminSubpageHeader
             direction="row"
             headerButtons={bulkEditButtons}
