@@ -4,7 +4,7 @@ import { ViewColumn, ViewEntity } from "typeorm";
     synchronize: false,
     expression: ``
 })
-export class UserAdminListView {
+export class AdminUserListView {
 
     @ViewColumn()
     userId: number;
@@ -49,7 +49,7 @@ export class UserAdminListView {
     latestActivityDate: Date;
 
     @ViewColumn()
-    totalSpentTimeSeconds: number;
+    totalSpentSeconds: number;
 
     @ViewColumn()
     avatarFilePath: string;

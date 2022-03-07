@@ -25,6 +25,10 @@ export const translatableTexts = {
         }
     },
 
+    tempomat: {
+        autoModeDescription: "Válaszd ezt ha Béla vagy és egy gomb gyárban dolgozol, de azt mondja a főnököd, te Béla, te Béla, nem dolgozol rendesen. Fogd azt a gombot a jobb kezeddel is te utolsó kis Bélakulom Hornyákin."
+    },
+
     roleNames: {
         administrator: "Adminisztátor",
         supervisor: "Vezető",
@@ -123,6 +127,7 @@ export const translatableTexts = {
         practiseTitle: "Gyakorolj, hogy a legjobb lehess!",
         noTipOfTheDayYet: "Személyes tanulási tipped 48 óra múlva válik elérhetővé",
         tipOfTheDay: "Személyre szabott tipped",
+        recommendedQuota: "Személyre szabott haladási ajánlás",
         tasks: "Feladatok",
         stats: "Legfontosabb statisztikáid",
         noStatsYet: "Tanulási és felejtési görbéd kalkulálásához legalább 30 nap és minimum 20 órányi belépés szükséges",

@@ -1,9 +1,11 @@
-import { UserCourseCompletionEstimationView } from "../models/views/UserCourseCompletionEstimationView";
+import { UserActiveCourseView } from "../models/views/UserActiveCourseView";
+import { UserCourseProgressView } from "../models/views/UserCourseProgressView";
+import { UserCourseRecommendedItemQuotaView } from "../models/views/UserCourseRecommendedItemQuotaView";
 import { UserDailyCourseItemProgressView } from "../models/views/UserDailyCourseItemProgressView";
-import { UserDailyProgressView } from "../models/views/UserDailyProgressView";
+import { UserWeeklyCourseItemProgressView } from "../models/views/UserWeeklyCourseItemProgressView";
 import { RecomendedItemQuotaDTO } from "../shared/dtos/RecomendedItemQuotaDTO";
+import { UserActiveCourseDTO } from "../shared/dtos/UserActiveCourseDTO";
 import { UserCourseProgressChartDTO } from "../shared/dtos/UserCourseProgressChartDTO";
-import { UserDailyProgressDTO } from "../shared/dtos/UserDailyProgressDTO";
 import { MapperService } from "./MapperService";
 import { ServiceBase } from "./misc/ServiceBase";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -15,26 +17,57 @@ export class UserProgressService extends ServiceBase {
         super(mapperService, ormservice);
     }
 
-    async getRecommendedItemQuotaAsync(userId: number) {
+    async getActiveCoursesAsync(userId: number) {
 
-        const courseId = 4;
+        const views = await this._ormService
+            .getRepository(UserActiveCourseView)
+            .createQueryBuilder("uacv")
+            .where("uacv.userId = :userId", { userId })
+            .getMany();
 
-        const estimationView = await this
-            .getEstimationViewAsync(courseId, userId);
+        return this._mapperService
+            .mapMany(UserActiveCourseView, UserActiveCourseDTO, views);
+    }
+
+    async getRecommendedItemQuotaAsync(userId: number, courseId: number) {
+
+        const courseProgressView = await this._ormService
+            .getRepository(UserCourseRecommendedItemQuotaView)
+            .findOne({
+                where: {
+                    courseId,
+                    userId
+                }
+            });
+
+        const currentDailyCompletedView = await this._ormService
+            .getRepository(UserDailyCourseItemProgressView)
+            .createQueryBuilder("udcipv")
+            .where("udcipv.userId = :userId", { userId })
+            .andWhere("udcipv.courseId = :courseId", { courseId })
+            .andWhere("udcipv.isCurrent = true", { courseId })
+            .getOne();
+
+        const getCurrentWeeklyCompletedView = await this._ormService
+            .getRepository(UserWeeklyCourseItemProgressView)
+            .createQueryBuilder("udcipv")
+            .where("udcipv.userId = :userId", { userId })
+            .andWhere("udcipv.courseId = :courseId", { courseId })
+            .andWhere("udcipv.isCurrent = true", { courseId })
+            .getOne();
 
         return {
-            recommendedItemsPerDay: estimationView.recommendedItemsPerDay,
-            recommendedItemsPerWeek: estimationView.recommendedItemsPerWeek,
-            allItemsCount: estimationView.itemCount
+            recommendedItemsPerDay: courseProgressView?.recommendedItemsPerDay ?? 0,
+            recommendedItemsPerWeek: courseProgressView?.recommendedItemsPerWeek ?? 0,
+            completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
+            completedToday: currentDailyCompletedView?.completedItemCount ?? 0
         } as RecomendedItemQuotaDTO;
     }
 
-    async getProgressChartDataAsync(userId: number) {
+    async getProgressChartDataAsync(userId: number, courseId: number) {
 
-        const courseId = 4;
-
-        const estimationView = await this
-            .getEstimationViewAsync(courseId, userId);
+        // const estimationView = await this
+        //     .getEstimationViewAsync(courseId, userId);
 
         const dailyViews = await this._ormService
             .getRepository(UserDailyCourseItemProgressView)
@@ -44,12 +77,12 @@ export class UserProgressService extends ServiceBase {
             .getMany();
 
         const dto = {
-            courseLengthSeconds: estimationView.courseLengthSeconds,
-            estimatedCompletionDate: estimationView.estimatedCompletionDate,
-            estimatedLengthInDays: estimationView.estimatedLengthInDays,
-            estimatedSecondsPerDay: estimationView.estimatedSecondsPerDay,
-            originalCompletionDaysEstimation: estimationView.originalCompletionDaysEstimation,
-            startDate: estimationView.startDate,
+            courseLengthSeconds: 0,//estimationView.courseLengthSeconds,
+            estimatedCompletionDate: new Date(),//estimationView.estimatedCompletionDate,
+            estimatedLengthInDays: 0,//estimationView.estimatedLengthInDays,
+            estimatedSecondsPerDay: 0,//estimationView.estimatedSecondsPerDay,
+            originalCompletionDaysEstimation: 0,//estimationView.originalCompletionDaysEstimation,
+            startDate: new Date(),//estimationView.startDate,
             days: dailyViews
                 .map((x, index) => {
 
@@ -69,17 +102,5 @@ export class UserProgressService extends ServiceBase {
         } as UserCourseProgressChartDTO;
 
         return dto;
-    }
-
-    async getEstimationViewAsync(courseId: number, userId: number) {
-
-        const estimationView = await this._ormService
-            .getRepository(UserCourseCompletionEstimationView)
-            .createQueryBuilder("uccev")
-            .where("uccev.userId = :userId", { userId })
-            .andWhere("uccev.courseId = :courseId", { courseId })
-            .getOneOrFail();
-
-        return estimationView;
     }
 }

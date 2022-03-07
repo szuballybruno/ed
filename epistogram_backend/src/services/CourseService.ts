@@ -5,17 +5,7 @@ import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { User } from "../models/entity/User";
 import { UserCourseAccessBridge } from "../models/entity/UserCourseAccessBridge";
-import { UserCourseBridge } from "../models/entity/UserCourseBridge";
 import { Video } from "../models/entity/Video";
-import { CourseContentEditDataDTO } from "../shared/dtos/CourseContentEditDataDTO";
-import { CourseDetailsDTO } from "../shared/dtos/CourseDetailsDTO";
-import { CourseDetailsEditDataDTO } from "../shared/dtos/CourseDetailsEditDataDTO";
-import { CourseLearningDTO } from "../shared/dtos/CourseLearningDTO";
-import { CourseProgressShortDTO } from "../shared/dtos/CourseProgressShortDTO";
-import { ModuleDTO } from "../shared/dtos/ModuleDTO";
-import { TextDTO } from "../shared/dtos/TextDTO";
-import { CourseModeType, CourseStageNameType } from "../shared/types/sharedTypes";
-import { UserCoursesDataDTO } from "../shared/dtos/UserCoursesDataDTO";
 import { CourseAdminContentView } from "../models/views/CourseAdminContentView";
 import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
 import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
@@ -25,25 +15,32 @@ import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView
 import { CourseModuleOverviewView } from "../models/views/CourseModuleOverviewView";
 import { CourseProgressView } from "../models/views/CourseProgressView";
 import { CourseView } from "../models/views/CourseView";
-import { getItemCode, readItemCode } from "./misc/encodeService";
+import { CourseAdminItemQuestionAnswerDTO } from "../shared/dtos/CourseAdminItemQuestionAnswerDTO";
+import { CourseAdminItemQuestionDTO } from "../shared/dtos/CourseAdminItemQuestionDTO";
+import { CourseAdminItemShortDTO } from "../shared/dtos/CourseAdminItemShortDTO";
+import { CourseAdminListItemDTO } from "../shared/dtos/CourseAdminListItemDTO";
+import { CourseBriefData } from "../shared/dtos/CourseBriefData";
+import { CourseContentEditDataDTO } from "../shared/dtos/CourseContentEditDataDTO";
+import { CourseDetailsDTO } from "../shared/dtos/CourseDetailsDTO";
+import { CourseDetailsEditDataDTO } from "../shared/dtos/CourseDetailsEditDataDTO";
+import { CourseItemDTO } from "../shared/dtos/CourseItemDTO";
+import { CourseLearningDTO } from "../shared/dtos/CourseLearningDTO";
+import { CourseProgressDTO } from "../shared/dtos/CourseProgressDTO";
+import { CourseProgressShortDTO } from "../shared/dtos/CourseProgressShortDTO";
+import { CourseShortDTO } from "../shared/dtos/CourseShortDTO";
+import { CreateCourseDTO } from "../shared/dtos/CreateCourseDTO";
+import { ModuleAdminShortDTO } from "../shared/dtos/ModuleAdminShortDTO";
+import { ModuleDTO } from "../shared/dtos/ModuleDTO";
+import { UserCoursesDataDTO } from "../shared/dtos/UserCoursesDataDTO";
+import { ExamService } from "./ExamService";
 import { FileService } from "./FileService";
 import { MapperService } from "./MapperService";
+import { readItemCode } from "./misc/encodeService";
+import { createCharSeparatedList } from "./misc/mappings";
 import { ModuleService } from "./ModuleService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { VideoService } from "./VideoService";
-import { CreateCourseDTO } from "../shared/dtos/CreateCourseDTO";
-import { CourseBriefData } from "../shared/dtos/CourseBriefData";
-import { CourseItemDTO } from "../shared/dtos/CourseItemDTO";
-import { CourseAdminListItemDTO } from "../shared/dtos/CourseAdminListItemDTO";
-import { CourseShortDTO } from "../shared/dtos/CourseShortDTO";
-import { ExamService } from "./ExamService";
-import { CourseProgressDTO } from "../shared/dtos/CourseProgressDTO";
-import { createCharSeparatedList } from "./misc/mappings";
-import { ModuleAdminShortDTO } from "../shared/dtos/ModuleAdminShortDTO";
-import { CourseAdminItemShortDTO } from "../shared/dtos/CourseAdminItemShortDTO";
-import { CourseAdminItemQuestionDTO } from "../shared/dtos/CourseAdminItemQuestionDTO";
-import { CourseAdminItemQuestionAnswerDTO } from "../shared/dtos/CourseAdminItemQuestionAnswerDTO";
 
 export class CourseService {
 
@@ -73,6 +70,12 @@ export class CourseService {
         this._examService = examService;
     }
 
+    /**
+     * Returns a course progress short view
+     * 
+     * @param userId 
+     * @returns 
+     */
     async getCourseProgressShortAsync(userId: number) {
 
         const views = await this._ormService
@@ -85,6 +88,13 @@ export class CourseService {
             .mapMany(CourseProgressView, CourseProgressShortDTO, views);
     }
 
+    /**
+     * Reruns a course view
+     * 
+     * @param userId 
+     * @param courseId 
+     * @returns 
+     */
     async getCourseViewAsync(userId: number, courseId: number) {
 
         const view = await this._ormService
@@ -99,6 +109,11 @@ export class CourseService {
         return view;
     }
 
+    /**
+     * Returns course brief data async 
+     * @param courseId 
+     * @returns 
+     */
     async getCourseBriefDataAsync(courseId: number) {
 
         const course = await this._ormService
@@ -109,6 +124,13 @@ export class CourseService {
             .map(Course, CourseBriefData, course);
     }
 
+    /**
+     * Returns course detals 
+     * 
+     * @param userId 
+     * @param courseId 
+     * @returns 
+     */
     async getCourseDetailsAsync(userId: number, courseId: number) {
 
         const courseDetailsView = await this._ormService
@@ -128,6 +150,11 @@ export class CourseService {
             .map(CourseDetailsView, CourseDetailsDTO, courseDetailsView, moduleViews);
     }
 
+    /**
+     * Creates a new course 
+     * 
+     * @param dto 
+     */
     async createCourseAsync(dto: CreateCourseDTO) {
 
         await this._ormService
@@ -195,7 +222,9 @@ export class CourseService {
     async getCurrentCourseProgressAsync(userId: number) {
 
         // get current course id 
-        const currentCourseId = await this.getCurrentCourseId(userId);
+        const currentCourseId = await this._userCourseBridgeService
+            .getCurrentCourseId(userId);
+
         if (!currentCourseId)
             return null;
 
@@ -225,6 +254,13 @@ export class CourseService {
         } as CourseProgressDTO;
     }
 
+    /**
+     * Returns the next items in course 
+     * 
+     * @param userId 
+     * @param courseId 
+     * @returns 
+     */
     async getCourseNextItemsAsync(userId: number, courseId: number) {
 
         const modules = await this.getCourseModulesAsync(userId, courseId);
@@ -283,7 +319,9 @@ export class CourseService {
      */
     async getCurrentCourseModulesAsync(userId: number) {
 
-        const courseId = await this.getCurrentCourseId(userId);
+        const courseId = await this._userCourseBridgeService
+            .getCurrentCourseId(userId);
+
         if (!courseId)
             throw new Error("There's no current course!");
 
@@ -337,35 +375,6 @@ export class CourseService {
     }
 
     /**
-     * Returns the current course id 
-     */
-    async getCurrentCourseId(userId: number) {
-
-        const courseBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    userId,
-                    isCurrent: true
-                }
-            });
-
-        return courseBridge?.courseId ?? null;
-    }
-
-    /**
-     * Returns the current course id 
-     */
-    async getCurrentCourseIdOrFail(userId: number) {
-
-        const id = await this.getCurrentCourseId(userId)
-        if (!id)
-            throw new Error("Accessing current course, but none found.");
-
-        return id;
-    };
-
-    /**
      * Returns the course id from an item code.
      * 
      * @param descriptorCode 
@@ -387,99 +396,11 @@ export class CourseService {
     }
 
     /**
-     * Set current course and course current item code.
-     * 
-     * @param userId 
-     * @param courseId 
-     * @param itemCode 
-     */
-    setCurrentCourse = async (
-        userId: number,
-        courseId: number,
-        stageName: CourseStageNameType,
-        itemCode: string | null) => {
-
-        const currentCourseBridge = await this._userCourseBridgeService
-            .getUserCourseBridgeAsync(userId, courseId);
-
-        // insert new bridge
-        if (!currentCourseBridge) {
-
-            await this._ormService
-                .getRepository(UserCourseBridge)
-                .insert({
-                    courseId: courseId,
-                    userId: userId,
-                    courseMode: "advanced",
-                    currentItemCode: itemCode,
-                    stageName,
-                    isCurrent: true
-                } as UserCourseBridge);
-        }
-
-        // update current video/exam id 
-        else {
-
-            await this._ormService
-                .getRepository(UserCourseBridge)
-                .save({
-                    id: currentCourseBridge.id,
-                    currentItemCode: itemCode,
-                    stageName,
-                    isCurrent: true
-                } as UserCourseBridge);
-        }
-
-        // get all bridges for user 
-        const bridges = await this._ormService
-            .getRepository(UserCourseBridge)
-            .find({
-                where: {
-                    userId
-                }
-            });
-
-        // update current bridge 
-        await this._ormService
-            .getRepository(UserCourseBridge)
-            .save(bridges
-                .map(bridge => ({
-                    id: bridge.id,
-                    isCurrent: bridge.courseId === courseId,
-                } as UserCourseBridge)));
-    }
-
-    /**
-     * Sets the course mode (beginner / advanced).
-     * 
-     * @param userId 
-     * @param courseId 
-     * @param mode 
-     */
-    setCourseModeAsync = async (userId: number, courseId: number, mode: CourseModeType) => {
-
-        const userCourseBridge = await this._userCourseBridgeService
-            .getUserCourseBridgeAsync(userId, courseId);
-
-        if (!userCourseBridge)
-            throw new Error("User course bridge not found!");
-
-        await this._ormService
-            .getRepository(UserCourseBridge)
-            .save({
-                courseId: courseId,
-                userId: userId,
-                id: userCourseBridge.id,
-                courseMode: mode
-            } as UserCourseBridge);
-    }
-
-    /**
      * Gets the course details edit DTO.
      * @param courseId 
      * @returns 
      */
-    getCourseDetailsEditDataAsync = async (courseId: number) => {
+    async getCourseDetailsEditDataAsync(courseId: number) {
 
         // get course 
         const view = await this._ormService
@@ -643,7 +564,11 @@ export class CourseService {
                 } as Video)));
     }
 
-    getAdminCoursesAsync = async () => {
+    /**
+     * Returns admin list items 
+     * @returns 
+     */
+    async getAdminCoursesAsync() {
 
         const courseAdminShortViews = await this._ormService
             .getRepository(CourseAdminShortView)
@@ -659,16 +584,11 @@ export class CourseService {
      * 
      * @param courseId 
      */
-    deleteCourseAsync = async (courseId: number) => {
+    async deleteCourseAsync(courseId: number) {
 
         // delete user course bridges
-        await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(UserCourseBridge)
-            .where("courseId = :courseId", { courseId })
-            .execute();
+        this._userCourseBridgeService
+            .deleteAllBridgesAsync(courseId);
 
         // delete modules 
         const modules = await this._ormService

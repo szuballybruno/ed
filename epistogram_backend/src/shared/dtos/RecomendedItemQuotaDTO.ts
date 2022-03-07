@@ -1,5 +1,6 @@
 export class RecomendedItemQuotaDTO {
     recommendedItemsPerDay: number;
     recommendedItemsPerWeek: number;
-    allItemsCount: number;
+    completedToday: number;
+    completedThisWeek: number;
 }

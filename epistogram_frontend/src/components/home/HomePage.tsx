@@ -5,7 +5,7 @@ import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
-import { DailyTip } from './DailyTip';
+import { RecommendedQuota } from './RecommendedQuota';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { PractiseQuestions } from './PractiseQuestions';
@@ -16,6 +16,8 @@ import { CourseProgressDisplay } from './CourseProgressDisplay';
 import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
+import { useActiveCourses } from '../../services/api/userProgressApiService';
+import { usePaging } from '../../static/frontendHelpers';
 
 const HomePage = () => {
 
@@ -25,6 +27,9 @@ const HomePage = () => {
     console.log(pageDTO?.currentCourseProgress?.title)
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+
+    const { activeCourses } = useActiveCourses();
+    const activeCoursesPaging = usePaging(activeCourses);
 
     return <PageRootContainer>
 
@@ -98,23 +103,22 @@ const HomePage = () => {
 
                         {/* tip of the day */}
                         <DashboardSection
-                            title={translatableTexts.homePage.tipOfTheDay}
+                            title={translatableTexts.homePage.recommendedQuota}
                             background="var(--transparentWhite70)"
                             borderRadius="6px"
                             showDivider
                             className="largeSoftShadow"
-                            //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
                             minHeight="30px"
-                            m="0 0 10px 5px"
+                            marginBottom="10px"
                             flex="2 2 300px">
 
-                            <DailyTip />
+                            <RecommendedQuota activeCoursesPaging={activeCoursesPaging} />
                         </DashboardSection>
                     </Flex>
 
                     {/* stats */}
                     <Flex pb="40px">
-                        <StatsSummary />
+                        <StatsSummary courseId={activeCoursesPaging?.currentItem?.courseId ?? null} />
                     </Flex>
 
                 </Flex>

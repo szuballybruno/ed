@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TempomatAdjustmentValue } from "../TempomatAdjustmentValue";
 import { PrequizQuestion } from "./PrequizQuestion";
 import { PrequizUserAnswer } from "./PrequizUserAnswer";
 
@@ -26,4 +27,9 @@ export class PrequizAnswer {
     @OneToMany(_ => PrequizUserAnswer, x => x.answer)
     @JoinColumn()
     userAnswers: PrequizUserAnswer[];
+
+    // tempomat adjustment values
+    @JoinColumn()
+    @OneToMany(_ => TempomatAdjustmentValue, x => x.prequizAnswer)
+    tempomatAdjustmentValues: TempomatAdjustmentValue[];
 }

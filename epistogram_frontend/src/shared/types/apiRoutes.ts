@@ -20,6 +20,11 @@ export const apiRoutes = {
         saveTeacherInfo: "/teacherinfo/save-teacher-info"
     },
 
+    tempomat: {
+        setTempomatMode: "/tempomat/set-tempomat-mode",
+        getTempomatMode: "/tempomat/get-tempomat-mode"
+    },
+
     passwordChange: {
         setNewPassword: "/pwchange/set-new-password",
         requestPasswordChangeAuthenticated: "/pwchange/request-password-change-authenticated",
@@ -92,7 +97,8 @@ export const apiRoutes = {
 
     userProgress: {
         getUserProgressData: "/userprogress/get-user-progress-data",
-        getRecommendedItemQuota: "/userprogress/get-recommended-item-quota"
+        getRecommendedItemQuota: "/userprogress/get-recommended-item-quota",
+        getActiveCourses: "/userprogress/get-active-courses"
     },
 
     coinTransactions: {

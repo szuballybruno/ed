@@ -9,6 +9,7 @@ import { CourseService } from "./CourseService";
 import { ExamService } from "./ExamService";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { UserCourseBridgeService } from "./UserCourseBridgeService";
 
 export class PretestService {
 
@@ -16,23 +17,26 @@ export class PretestService {
     private _ormService: ORMConnectionService;
     private _examService: ExamService;
     private _courseService: CourseService;
+    private _courseBridgeService: UserCourseBridgeService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperSerice: MapperService,
         examService: ExamService,
-        courseService: CourseService) {
+        courseService: CourseService,
+        courseBridgeService: UserCourseBridgeService) {
 
         this._ormService = ormService;
         this._mapperSerice = mapperSerice;
         this._examService = examService;
         this._courseService = courseService;
+        this._courseBridgeService = courseBridgeService;
     }
 
     async getPretestDataAsync(userId: number, courseId: number) {
 
         // set course as started, and stage to pretest
-        await this._courseService
+        await this._courseBridgeService
             .setCurrentCourse(userId, courseId, "pretest", null)
 
         // pretest exam 
@@ -81,7 +85,7 @@ export class PretestService {
     async getPretestResultsAsync(userId: number, courseId: number) {
 
         // set current course stage 
-        await this._courseService
+        await this._courseBridgeService
             .setCurrentCourse(userId, courseId, "pretest_results", null);
 
         const view = await this._ormService

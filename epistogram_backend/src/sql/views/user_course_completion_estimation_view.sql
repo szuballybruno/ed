@@ -42,7 +42,7 @@ FROM
 					LEFT JOIN public.course_details_view det
 					ON det.course_id = co.id AND det.user_id = u.id
 
-					LEFT JOIN public.user_course_estimated_time_frame_view ucetf
+					LEFT JOIN public.user_course_schedule_previsioned_view ucetf
 					ON ucetf.user_id = u.id AND ucetf.course_id = co.id
 
 					ORDER BY

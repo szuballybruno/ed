@@ -8,6 +8,7 @@ type FontSizeType = number | "fontExtraSmall" | "fontSmall" | "fontSmallPlus" | 
 export const EpistoFont = (params: {
     children: ReactNode,
     classes?: string[],
+    className?: string,
     style?: CSSProperties,
     fontSize?: FontSizeType,
     onClick?: any,
@@ -21,6 +22,7 @@ export const EpistoFont = (params: {
 
     const {
         classes,
+        className,
         style,
         fontSize,
         onClick,
@@ -80,6 +82,8 @@ export const EpistoFont = (params: {
                 .custom(fontSize as string))
             .if(!!classes, builder => builder
                 .appendList(classes!))
+            .if(!!className, builder => builder
+                .custom(className!))
             .build()}>
 
         {children}

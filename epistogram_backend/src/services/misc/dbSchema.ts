@@ -67,7 +67,7 @@ import { VideoRating } from "../../models/entity/VideoRating";
 import { CourseOverviewView } from "../../models/views/CourseOverviewView";
 import { PersonalityTraitView } from "../../models/views/PersonalityTraitView";
 import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
-import { UserAdminListView } from "../../models/views/UserAdminListView";
+import { AdminUserListView } from "../../models/views/UserAdminListView";
 import { PrequizQuestion } from "../../models/entity/prequiz/PrequizQuestion";
 import { PrequizUserAnswer } from "../../models/entity/prequiz/PrequizUserAnswer";
 import { PrequizQuestionView } from "../../models/views/PrequizQuestionView";
@@ -81,8 +81,13 @@ import { UserDailyProgressView } from "../../models/views/UserDailyProgressView"
 import { UserVideoProgressBridge } from "../../models/entity/UserVideoProgressBridge";
 import { UserExamProgressBridge } from "../../models/entity/UserExamProgressBridge";
 import { AnswerSessionView } from "../../models/views/AnswerSessionView";
-import { UserCourseCompletionEstimationView } from "../../models/views/UserCourseCompletionEstimationView";
 import { UserDailyCourseItemProgressView } from "../../models/views/UserDailyCourseItemProgressView";
+import { UserActiveCourseView } from "../../models/views/UserActiveCourseView";
+import { UserWeeklyCourseItemProgressView } from "../../models/views/UserWeeklyCourseItemProgressView";
+import { UserCourseProgressView } from "../../models/views/UserCourseProgressView";
+import { UserCourseCompletionPrevisionedView } from "../../models/views/UserCourseCompletionPrevisionedView";
+import { UserCourseRecommendedItemQuotaView } from "../../models/views/UserCourseRecommendedItemQuotaView";
+import { TempomatAdjustmentValue } from "../../models/entity/TempomatAdjustmentValue";
 
 export const dbSchema = {
 
@@ -114,6 +119,7 @@ export const dbSchema = {
         "activity_streak_view",
         "shop_item_view",
         "shop_item_stateful_view",
+        "course_length_estimation_view",
         "coin_transaction_view",
         "coin_balance_view",
         "course_questions_success_view",
@@ -127,17 +133,25 @@ export const dbSchema = {
         "coin_acquire_per_course_view",
         "course_overview_view",
         "personality_trait_category_view",
+        "course_item_completed_view",
         "user_latest_activity_view",
-        "user_admin_list_view", 
+        "admin_user_list_view", 
         "prequiz_question_view",
         "pretest_result_view",
         "course_item_count_view",
         "course_rating_question_view",
-        "user_course_estimated_time_frame_view",
+        "user_course_schedule_previsioned_view",
         "user_spent_time_view",
-        "user_course_completion_estimation_view",
         "user_daily_progress_view",
-        "user_daily_course_item_progress_view"
+        "user_daily_course_item_progress_view",
+        "user_active_course_view",
+        "user_weekly_course_item_progress_view",
+        "user_course_completion_previsioned_view",
+        "user_course_progress_actual",
+        "user_course_progress_view",
+        "user_course_recommended_item_quota_view",
+        "user_prequiz_answers_view",
+        "user_tempomat_adjustment_value_view"
     ],
 
     functionScripts: [
@@ -204,14 +218,18 @@ export const dbSchema = {
         ExamView,
         CourseOverviewView,
         PersonalityTraitCategoryView,
-        UserAdminListView,
+        AdminUserListView,
         PrequizQuestionView,
         PretestResultView,
         CourseRatingQuestionView,
         UserDailyProgressView,
         AnswerSessionView,
-        UserCourseCompletionEstimationView,
-        UserDailyCourseItemProgressView
+        UserDailyCourseItemProgressView,
+        UserActiveCourseView,
+        UserWeeklyCourseItemProgressView,
+        UserCourseProgressView,
+        UserCourseCompletionPrevisionedView,
+        UserCourseRecommendedItemQuotaView
     ] as any[],
 
     entities: [
@@ -260,6 +278,7 @@ export const dbSchema = {
         CourseRatingQuestion,
         CourseRatingQuestionUserAnswer,
         UserVideoProgressBridge,
-        UserExamProgressBridge
+        UserExamProgressBridge,
+        TempomatAdjustmentValue
     ] as any[]
 }

@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { CourseModeType, CourseStageNameType } from "../../shared/types/sharedTypes";
+import { CourseModeType, CourseStageNameType, TempomatModeType } from "../../shared/types/sharedTypes";
 import { Course } from "./Course";
 import { User } from "./User";
 
@@ -21,8 +21,14 @@ export class UserCourseBridge {
     @Column({ nullable: true, type: "text" })
     currentItemCode: string | null;
 
-    @Column()
+    @Column({ type: "text" })
     stageName: CourseStageNameType;
+
+    @Column({ type: "text" })
+    tempomatMode: TempomatModeType;
+
+    @Column({ type: "int", nullable: true })
+    recommendedItemsPerDay: number;
 
     // user
     @Column()

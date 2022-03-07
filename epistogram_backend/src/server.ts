@@ -86,6 +86,9 @@ import { UserProgressService } from './services/UserProgressService';
 import { UserProgressController } from './api/UserProgressController';
 import { PlaybackService } from './services/PlaybackService';
 import { PlaybackController } from './api/PlaybackController';
+import { TempomatService } from './services/TempomatService';
+import { TempomatController } from './api/TempomatController';
+import { ScheduledJobService } from './services/ScheduledJobService';
 
 (async () => {
 
@@ -130,19 +133,21 @@ import { PlaybackController } from './api/PlaybackController';
     const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService);
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService);
-    const miscService = new MiscService(courseService, ormConnectionService, mapperService);
+    const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
-    const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService);
+    const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService, userCourseBridgeService);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
-    const prequizService = new PrequizService(ormConnectionService, mapperService, courseService);
-    const pretestService = new PretestService(ormConnectionService, mapperService, examService, courseService);
+    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService);
+    const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
+    const pretestService = new PretestService(ormConnectionService, mapperService, examService, courseService, userCourseBridgeService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
+    const scheduledJobService = new ScheduledJobService();
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -152,13 +157,13 @@ import { PlaybackController } from './api/PlaybackController';
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
     const registrationController = new RegistrationController(registrationService, userService, globalConfig);
-    const miscController = new MiscController(miscService, practiseQuestionService, authenticationService, tokenService, ormConnectionService, globalConfig, mapperService);
+    const miscController = new MiscController(miscService, practiseQuestionService, authenticationService, tokenService, ormConnectionService, globalConfig, mapperService, userCourseBridgeService);
     const authenticationController = new AuthenticationController(authenticationService, globalConfig);
     const userController = new UserController(userService);
     const fileController = new FileController(fileService);
     const signupController = new SignupController(signupService, personalityAssessmentService);
     const playerController = new PlayerController(courseService, playerService, videoService);
-    const courseController = new CourseController(courseService);
+    const courseController = new CourseController(courseService, userCourseBridgeService);
     const moduleController = new ModuleController(moduleService);
     const videoController = new VideoController(videoService, questionService, ormConnectionService, globalConfig, mapperService);
     const questionController = new QuestionController(practiseQuestionService, questionService, ormConnectionService);
@@ -171,6 +176,7 @@ import { PlaybackController } from './api/PlaybackController';
     const dailyTipController = new DailyTipController(dailyTipService);
     const userProgressController = new UserProgressController(userProgressService);
     const playbackController = new PlaybackController(playbackService);
+    const tempomatController = new TempomatController(tempomatService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -179,6 +185,17 @@ import { PlaybackController } from './api/PlaybackController';
     initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
+
+    // initailize jobs
+    scheduledJobService
+        .scheduleJob(
+            {
+                seconds: "*/4"
+            },
+            () => tempomatService
+                .evaluateUserProgressesAsync());
+    // tempomatService
+    //     .evaluateUserProgressesAsync();
 
     // initialize express
     const expressServer = express();
@@ -208,6 +225,10 @@ import { PlaybackController } from './api/PlaybackController';
     // teacher info
     addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true, authorize: ["administrator"] });
+
+    // tempomat
+    addEndpoint(apiRoutes.tempomat.getTempomatMode, tempomatController.getTempomatModeAction);
+    addEndpoint(apiRoutes.tempomat.setTempomatMode, tempomatController.setTempomatModeAction, { isPost: true });
 
     // daily tip 
     addEndpoint(apiRoutes.dailyTip.getDailyTip, dailyTipController.getDailyTipAction);
@@ -276,6 +297,7 @@ import { PlaybackController } from './api/PlaybackController';
     // user progress
     addEndpoint(apiRoutes.userProgress.getUserProgressData, userProgressController.getUserProgressDataAction);
     addEndpoint(apiRoutes.userProgress.getRecommendedItemQuota, userProgressController.getRecommendedItemQuotaAction);
+    addEndpoint(apiRoutes.userProgress.getActiveCourses, userProgressController.getActiveCoursesAction);
 
     // user
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);

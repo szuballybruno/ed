@@ -6,14 +6,17 @@ import { IdResultDTO } from "../shared/dtos/IdResultDTO";
 import { CourseModeType } from "../shared/types/sharedTypes";
 import { CourseService } from "../services/CourseService";
 import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
+import { UserCourseBridgeService } from "../services/UserCourseBridgeService";
 
 export class CourseController {
 
     private _courseService: CourseService;
+    private _userCourseBridgeService: UserCourseBridgeService;
 
-    constructor(courseService: CourseService) {
+    constructor(courseService: CourseService, userCourseBridgeService: UserCourseBridgeService) {
 
         this._courseService = courseService;
+        this._userCourseBridgeService = userCourseBridgeService;
     }
 
     getAvailableCoursesAction = async (params: ActionParams) => {
@@ -108,7 +111,7 @@ export class CourseController {
         const courseId = dto.getValue(x => x.courseId);
         const courseMode = dto.getValue(x => x.mode, value => value === "advanced" || value === "beginner");
 
-        return this._courseService
+        return this._userCourseBridgeService
             .setCourseModeAsync(params.currentUserId, courseId, courseMode);
     };
 

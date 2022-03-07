@@ -22,5 +22,8 @@ export class UserDailyCourseItemProgressView {
     completedPercentage: number;
 
     @ViewColumn()
+    isCurrent: number;
+
+    @ViewColumn()
     offsetDaysFromStart: number;
 }

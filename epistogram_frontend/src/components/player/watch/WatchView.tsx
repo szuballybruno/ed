@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useReactTimer } from "../../../helpers/reactTimer";
 import { ModuleDTO } from "../../../shared/dtos/ModuleDTO";
 import { QuestionDTO } from "../../../shared/dtos/QuestionDTO";
-import { CourseModeType } from "../../../shared/types/sharedTypes";
+import { CourseItemStateType, CourseModeType } from "../../../shared/types/sharedTypes";
 import { VideoDTO } from "../../../shared/dtos/VideoDTO";
 import { StillWatchingDialogMarker } from "../../../models/types";
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../../static/frontendHelpers";
@@ -38,13 +38,19 @@ export const WatchView = (props: {
     continueCourse: () => void,
     navigateToCourseItem: NavigateToCourseItemActionType,
     refetchPlayerData: () => Promise<void>,
+    currentItemCode: string,
+    nextItemState: CourseItemStateType | null,
+    isPlayerLoaded: boolean
 }) => {
 
     const {
+        nextItemState,
+        currentItemCode,
         video,
         modules,
         answerSessionId,
         courseMode,
+        isPlayerLoaded,
         courseId,
         continueCourse,
         refetchPlayerData
@@ -90,9 +96,7 @@ export const WatchView = (props: {
 
     const handleVideoCompletedStateChanged = () => {
 
-        console.log("refetchCourseItemList");
         refetchPlayerData();
-        // showNotification("Video unlocked!");
     }
 
     // handle autoplay timeout if video ended
@@ -277,6 +281,9 @@ export const WatchView = (props: {
             background="var(--transparentWhite70)">
 
             {!isDesktopView && <CourseItemSelector
+                isPlayerLoaded={isPlayerLoaded}
+                currentItemCode={currentItemCode}
+                nextItemState={nextItemState}
                 courseId={courseId}
                 mode={courseMode}
                 refetchPlayerData={refetchPlayerData}
