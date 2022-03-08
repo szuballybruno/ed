@@ -132,7 +132,7 @@ export class PrequizService {
         if (questionId === 4) {
 
             await this._tempomatService
-                .calcRecommendedItemsPerDayAsync(userId, courseId);
+                .calcOriginalPrevisionedScheduleAsync(userId, courseId);
         }
     }
 }

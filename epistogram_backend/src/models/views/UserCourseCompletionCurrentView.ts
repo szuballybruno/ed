@@ -1,21 +1,26 @@
 import { ViewColumn, ViewEntity } from "typeorm";
-import { TempomatModeType } from "../../shared/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,
     expression: ``
 })
-export class UserCourseProgressView {
-    
+export class UserCourseCompletionCurrentView {
+
     @ViewColumn()
     userId: number;
 
     @ViewColumn()
     courseId: number;
-    
+
     @ViewColumn()
-    lagBehindPercentage: number;
-    
+    previsionedItemsPerDay: number;
+
     @ViewColumn()
-    tempomatMode: TempomatModeType;
+    previsionedCompletionDate: Date;
+
+    @ViewColumn()
+    previsionedLengthDays: number;
+
+    @ViewColumn()
+    startDate: Date;
 }
