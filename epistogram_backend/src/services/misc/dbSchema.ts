@@ -85,9 +85,12 @@ import { UserDailyCourseItemProgressView } from "../../models/views/UserDailyCou
 import { UserActiveCourseView } from "../../models/views/UserActiveCourseView";
 import { UserWeeklyCourseItemProgressView } from "../../models/views/UserWeeklyCourseItemProgressView";
 import { UserCourseProgressView } from "../../models/views/UserCourseProgressView";
-import { UserCourseCompletionPrevisionedView } from "../../models/views/UserCourseCompletionPrevisionedView";
+import { UserCourseCompletionCurrentView } from "../../models/views/UserCourseCompletionCurrentView";
 import { UserCourseRecommendedItemQuotaView } from "../../models/views/UserCourseRecommendedItemQuotaView";
 import { TempomatAdjustmentValue } from "../../models/entity/TempomatAdjustmentValue";
+import { UserTempomatAdjustmentValueView } from "../../models/views/UserTempomatAdjustmentValueView";
+import { UserCourseBridgeView } from "../../models/views/UserCourseBridgeView";
+import { UserCourseCompletionOriginalEstimationView } from "../../models/views/UserCourseCompletionOriginalEstimationView";
 
 export const dbSchema = {
 
@@ -140,17 +143,18 @@ export const dbSchema = {
         "pretest_result_view",
         "course_item_count_view",
         "course_rating_question_view",
-        "user_course_schedule_previsioned_view",
+        "user_prequiz_answers_view",
+        "user_course_bridge_view",
+        "user_course_completion_original_estimation_view",
+        "user_course_completion_current_view",
         "user_spent_time_view",
         "user_daily_progress_view",
         "user_daily_course_item_progress_view",
         "user_active_course_view",
         "user_weekly_course_item_progress_view",
-        "user_course_completion_previsioned_view",
         "user_course_progress_actual",
         "user_course_progress_view",
         "user_course_recommended_item_quota_view",
-        "user_prequiz_answers_view",
         "user_tempomat_adjustment_value_view"
     ],
 
@@ -228,8 +232,11 @@ export const dbSchema = {
         UserActiveCourseView,
         UserWeeklyCourseItemProgressView,
         UserCourseProgressView,
-        UserCourseCompletionPrevisionedView,
-        UserCourseRecommendedItemQuotaView
+        UserCourseCompletionCurrentView,
+        UserCourseRecommendedItemQuotaView,
+        UserTempomatAdjustmentValueView,
+        UserCourseBridgeView,
+        UserCourseCompletionOriginalEstimationView
     ] as any[],
 
     entities: [

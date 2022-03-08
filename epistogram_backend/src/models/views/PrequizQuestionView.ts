@@ -20,4 +20,22 @@ export class PrequizQuestionView {
     
     @ViewColumn()
     answerText: string;
+    
+    @ViewColumn()
+    minValue: number;
+    
+    @ViewColumn()
+    maxValue: number;
+
+    @ViewColumn()
+    stepValue: number;
+    
+    @ViewColumn()
+    minLabel: string;
+
+    @ViewColumn()
+    maxLabel: string;
+
+    @ViewColumn()
+    valuePostfix: string;
 }

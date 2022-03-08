@@ -15,6 +15,24 @@ export class PrequizQuestion {
     @Column()
     isNumericAnswer: boolean;
 
+    @Column({ type: "int", nullable: true })
+    minValue: number;
+
+    @Column({ type: "int", nullable: true })
+    maxValue: number;
+
+    @Column({ type: "text", nullable: true })
+    minLabel: string;
+
+    @Column({ type: "text", nullable: true })
+    maxLabel: string;
+
+    @Column({ type: "int", nullable: true })
+    stepValue: number;
+
+    @Column({ type: "text", nullable: true })
+    valuePostfix: string;
+
     // answers 
     @OneToMany(_ => PrequizAnswer, x => x.question)
     @JoinColumn()

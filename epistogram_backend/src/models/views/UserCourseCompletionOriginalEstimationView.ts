@@ -4,7 +4,7 @@ import { ViewColumn, ViewEntity } from "typeorm";
     synchronize: false,
     expression: ``
 })
-export class UserCourseCompletionPrevisionedView {
+export class UserCourseCompletionOriginalEstimationView {
 
     @ViewColumn()
     userId: number;
@@ -14,4 +14,10 @@ export class UserCourseCompletionPrevisionedView {
 
     @ViewColumn()
     previsionedItemsPerDay: number;
+
+    @ViewColumn()
+    previsionedDurationDays: number;
+
+    @ViewColumn()
+    previsionedCompletionDate: Date;
 }
