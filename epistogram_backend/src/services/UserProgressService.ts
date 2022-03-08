@@ -1,4 +1,5 @@
 import { UserActiveCourseView } from "../models/views/UserActiveCourseView";
+import { UserCourseCompletionCurrentView } from "../models/views/UserCourseCompletionCurrentView";
 import { UserCourseProgressView } from "../models/views/UserCourseProgressView";
 import { UserCourseRecommendedItemQuotaView } from "../models/views/UserCourseRecommendedItemQuotaView";
 import { UserDailyCourseItemProgressView } from "../models/views/UserDailyCourseItemProgressView";
@@ -66,8 +67,15 @@ export class UserProgressService extends ServiceBase {
 
     async getProgressChartDataAsync(userId: number, courseId: number) {
 
-        // const estimationView = await this
-        //     .getEstimationViewAsync(courseId, userId);
+        const estimationView = await this
+            ._ormService
+            .getRepository(UserCourseCompletionCurrentView)
+            .findOneOrFail({
+                where: {
+                    courseId,
+                    userId
+                }
+            });
 
         const dailyViews = await this._ormService
             .getRepository(UserDailyCourseItemProgressView)
@@ -77,12 +85,9 @@ export class UserProgressService extends ServiceBase {
             .getMany();
 
         const dto = {
-            courseLengthSeconds: 0,//estimationView.courseLengthSeconds,
-            estimatedCompletionDate: new Date(),//estimationView.estimatedCompletionDate,
-            estimatedLengthInDays: 0,//estimationView.estimatedLengthInDays,
-            estimatedSecondsPerDay: 0,//estimationView.estimatedSecondsPerDay,
-            originalCompletionDaysEstimation: 0,//estimationView.originalCompletionDaysEstimation,
-            startDate: new Date(),//estimationView.startDate,
+            estimatedCompletionDate: estimationView.previsionedCompletionDate,
+            estimatedLengthInDays: estimationView.previsionedLengthDays,
+            startDate: estimationView.startDate,
             days: dailyViews
                 .map((x, index) => {
 

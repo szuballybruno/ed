@@ -77,6 +77,10 @@ export class TempomatService extends ServiceBase {
         for (let index = 0; index < userCourseProgressViews.length; index++) {
 
             const userCourseProgressView = userCourseProgressViews[index];
+            const { courseId, userId } = userCourseProgressView;
+
+            console.log(`USER PROGRESS EVAL: userId: ${userId} courseId: ${courseId}`);
+
             await this.recalculateUserProgressAsync(userCourseProgressView);
         }
     }
@@ -103,15 +107,8 @@ export class TempomatService extends ServiceBase {
                 }
             });
 
-        console.log(`User ${userId} course ${courseId} is in '${tempomatMode}' tempomat mode.`);
-
         const adjustmentThresholdPercentage = adjustmentValue.actualAdjustmentValue;
-        const targetStretchPercentage = Math.min(100, lagBehindPercentage * 1.05);
-        const allowedStretchPercetage = Math.min(adjustmentThresholdPercentage, targetStretchPercentage);
-
-        console.log(`Adjustment threshold percentage: ${adjustmentThresholdPercentage}%`);
-        console.log(`Adjustment target percentage: ${targetStretchPercentage}%`);
-        console.log(`Adjustment percentage: ${allowedStretchPercetage}%`);
+        const allowedStretchPercetage = Math.min(adjustmentThresholdPercentage, lagBehindPercentage);
 
         const currentView = await this._ormService
             .getRepository(UserCourseCompletionCurrentView)
@@ -122,13 +119,17 @@ export class TempomatService extends ServiceBase {
                 }
             });
 
-        const adjustmentDays = currentView.previsionedLengthDays / 100.0 * allowedStretchPercetage;
-        const newDurationDays = Math.ceil(currentView.previsionedLengthDays + adjustmentDays);
+        const adjustmentDays = Math.ceil(currentView.previsionedLengthDays / 100.0 * allowedStretchPercetage);
+        const newDurationDays = currentView.previsionedLengthDays + adjustmentDays;
         const newCompletionDate = currentView.startDate.addDays(newDurationDays);
 
-        console.log(`Adjustment days: ${adjustmentDays}`);
-        console.log(`Duration days ${currentView.previsionedLengthDays} -> ${newDurationDays}`);
-        console.log(`Date ${currentView.previsionedCompletionDate} -> ${newCompletionDate}`);
+        console.log(`TEMPOMAT ADJUSTMENT: `);
+        console.log(`-- Lag behind: ${lagBehindPercentage}%`);
+        console.log(`-- Mode: '${tempomatMode}'`);
+        console.log(`-- Threshold: ${adjustmentThresholdPercentage}%`);
+        console.log(`-- Applied adjustment: ${allowedStretchPercetage}%`);
+        console.log(`-- Adjustment days: +${adjustmentDays}`);
+        console.log(`-- New previsoned length: ${newDurationDays} days`);
 
         await this.setPrevisionedScheduleAsync(
             userId,

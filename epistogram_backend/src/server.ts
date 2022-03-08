@@ -190,7 +190,7 @@ import { ScheduledJobService } from './services/ScheduledJobService';
     scheduledJobService
         .scheduleJob(
             {
-                seconds: "*/10"
+                seconds: "*/20"
             },
             () => tempomatService
                 .evaluateUserProgressesAsync());
