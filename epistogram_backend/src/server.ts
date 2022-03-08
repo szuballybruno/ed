@@ -135,7 +135,7 @@ import { ScheduledJobService } from './services/ScheduledJobService';
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService);
     const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
-    const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService, userCourseBridgeService);
+    const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService, userCourseBridgeService, globalConfig);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
@@ -187,16 +187,15 @@ import { ScheduledJobService } from './services/ScheduledJobService';
     await dbConnectionService.seedDBAsync();
 
     // initailize jobs
-    if (false)
-        scheduledJobService
-            .scheduleJob(
-                {
-                    seconds: "*/20"
-                },
-                () => tempomatService
-                    .evaluateUserProgressesAsync());
-    // tempomatService
-    //     .evaluateUserProgressesAsync();
+    scheduledJobService
+        .scheduleJob(
+            {
+                // seconds: "*/20",
+                minutes: "0",
+                hours: "0"
+            },
+            () => tempomatService
+                .evaluateUserProgressesAsync());
 
     // initialize express
     const expressServer = express();

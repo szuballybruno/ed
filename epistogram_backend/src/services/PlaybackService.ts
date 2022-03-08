@@ -6,6 +6,7 @@ import { VideoSamplingResultDTO } from "../shared/dtos/VideoSamplingResultDTO";
 import { CoinAcquireService } from "./CoinAcquireService";
 import { MapperService } from "./MapperService";
 import { readItemCode } from "./misc/encodeService";
+import { GlobalConfiguration } from "./misc/GlobalConfiguration";
 import { ServiceBase } from "./misc/ServiceBase";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
@@ -14,13 +15,11 @@ import { VideoPlaybackSampleService } from "./VideoPlaybackSampleService";
 
 export class PlaybackService extends ServiceBase {
 
-    // TODO 5% is a very low number only for development
-    private VIDEO_COMPLETED_PERCENTAGE = 5;
-
     private _videoPlaybackSampleService: VideoPlaybackSampleService;
     private _coinAcquireService: CoinAcquireService;
     private _userSessionActivityService: UserSessionActivityService;
     private _courseBridgeService: UserCourseBridgeService;
+    private _config: GlobalConfiguration;
 
     constructor(
         mapperService: MapperService,
@@ -28,7 +27,8 @@ export class PlaybackService extends ServiceBase {
         videoPlaybackSampleService: VideoPlaybackSampleService,
         coinAcquireService: CoinAcquireService,
         userSessionActivityService: UserSessionActivityService,
-        courseBridgeService: UserCourseBridgeService) {
+        courseBridgeService: UserCourseBridgeService,
+        config: GlobalConfiguration) {
 
         super(mapperService, ormService);
 
@@ -36,6 +36,7 @@ export class PlaybackService extends ServiceBase {
         this._coinAcquireService = coinAcquireService;
         this._videoPlaybackSampleService = videoPlaybackSampleService;
         this._courseBridgeService = courseBridgeService;
+        this._config = config;
     }
 
     saveVideoPlaybackSample = async (userId: number, dto: VideoPlaybackSampleDTO) => {
@@ -64,7 +65,7 @@ export class PlaybackService extends ServiceBase {
         const watchedPercent = await this._videoPlaybackSampleService
             .getVideoWatchedPercentAsync(userId, videoId, chunks);
 
-        const isCompleted = watchedPercent > this.VIDEO_COMPLETED_PERCENTAGE;
+        const isCompleted = watchedPercent > this._config.misc.videoCompletedPercentage;
         const isCompletedBefore = await this.getVideoIsCompletedStateAsync(userId, videoId);
         const isFirstCompletion = isCompleted && !isCompletedBefore;
         const completionDate = isFirstCompletion ? new Date() : undefined;
