@@ -39,9 +39,9 @@ export const AdminUserList = (props: {
             setSearchText(value);
     }
 
-    const found = users.some(user => user.id === userId);
+    const isUserFound = users.some(user => user.id === userId);
 
-    if (!found && users[0]) {
+    if (!isUserFound && users[0]) {
         navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + users[0].id + "/" + currentUserPage)
     }
 
@@ -74,6 +74,7 @@ export const AdminUserList = (props: {
                             firstName={user.firstName}
                             className="square60" />}
                         midContent={<FlexListTitleSubtitle
+                            isSelected={user.id === userId}
                             title={`${user.name}`}
                             subTitle={user.email}
                         />}

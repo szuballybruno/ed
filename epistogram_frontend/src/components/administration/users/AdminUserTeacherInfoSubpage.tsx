@@ -12,12 +12,16 @@ import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
+import { AdminUserList } from "./AdminUserList";
+import { useEditUserData } from "../../../services/api/userApiService";
 
 export const AdminUserTeacherInfoSubpage = () => {
 
     const params = useParams<{ userId: string }>();
     const editedUserId = parseInt(params.userId);
     const { teacherInfoEditData } = useTeacherInfoEditData(editedUserId);
+    const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveTeacherInfoAsync, saveTeacherInfoState } = useSaveTeacherInfoData();
     const showError = useShowErrorDialog();
 
@@ -84,132 +88,132 @@ export const AdminUserTeacherInfoSubpage = () => {
         }
     }
 
-    return (
-        <Flex flex="1" direction="column" maxW="100%">
+    return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
-            {/* admin header */}
-            <AdminSubpageHeader
-                tabMenuItems={[
-                    applicationRoutes.administrationRoute.usersRoute.editRoute,
-                    applicationRoutes.administrationRoute.usersRoute.statsRoute,
-                    applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute
-                ]}>
+        <AdminUserList currentUserPage='edit' />
 
-                <Flex
-                    flex="1"
-                    direction="column"
-                    width="100%"
-                    mt="5px"
-                    className="roundBorders"
-                    p="0 10px 10px 10px"
-                    background="var(--transparentWhite70)">
+        {/* admin header */}
+        <AdminSubpageHeader
+            tabMenuItems={[
+                applicationRoutes.administrationRoute.usersRoute.editRoute,
+                applicationRoutes.administrationRoute.usersRoute.statsRoute,
+                applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute
+            ]}>
 
-                    {/* Teacher skills */}
-                    <EpistoEntry
-                        labelVariant={"top"}
-                        value={skills}
-                        label={translatableTexts.administration.teacherInfoSubpage.teacherSkills}
-                        setValue={setSkills} />
+            <Flex
+                flex="1"
+                direction="column"
+                width="100%"
+                mt="5px"
+                className="roundBorders"
+                p="0 10px 10px 10px"
+                background="var(--transparentWhite70)">
 
-                    {/* description */}
-                    <EpistoEntry
-                        labelVariant={"top"}
-                        value={description}
-                        label={translatableTexts.administration.teacherInfoSubpage.teacherDescription}
-                        isMultiline
-                        setValue={setDescription} />
+                {/* Teacher skills */}
+                <EpistoEntry
+                    labelVariant={"top"}
+                    value={skills}
+                    label={translatableTexts.administration.teacherInfoSubpage.teacherSkills}
+                    setValue={setSkills} />
 
-                    {/* Teacher courses count */}
-                    <EpistoEntry
-                        labelVariant={"top"}
-                        type="number"
-                        value={courseCount}
-                        label={translatableTexts.administration.teacherInfoSubpage.teacherCoursesCount}
-                        setValue={setCoursesCount} />
+                {/* description */}
+                <EpistoEntry
+                    labelVariant={"top"}
+                    value={description}
+                    label={translatableTexts.administration.teacherInfoSubpage.teacherDescription}
+                    isMultiline
+                    setValue={setDescription} />
 
-                    {/* Teacher videos count */}
-                    <EpistoEntry
-                        labelVariant={"top"}
-                        type="number"
-                        value={videoCount}
-                        label={translatableTexts.administration.teacherInfoSubpage.teacherVideosCount}
-                        setValue={setVideoCount} />
+                {/* Teacher courses count */}
+                <EpistoEntry
+                    labelVariant={"top"}
+                    type="number"
+                    value={courseCount}
+                    label={translatableTexts.administration.teacherInfoSubpage.teacherCoursesCount}
+                    setValue={setCoursesCount} />
 
-                    {/* Teacher students count */}
-                    <EpistoEntry
-                        labelVariant={"top"}
-                        type="number"
-                        value={studentCount}
-                        label={translatableTexts.administration.teacherInfoSubpage.teacherStudentsCount}
-                        setValue={setStudentCount} />
+                {/* Teacher videos count */}
+                <EpistoEntry
+                    labelVariant={"top"}
+                    type="number"
+                    value={videoCount}
+                    label={translatableTexts.administration.teacherInfoSubpage.teacherVideosCount}
+                    setValue={setVideoCount} />
 
-                    {/* Teacher rating */}
-                    <EpistoLabel text={translatableTexts.administration.teacherInfoSubpage.teacherRating}>
-                        <Slider
-                            defaultValue={0}
-                            valueLabelDisplay="auto"
-                            step={0.5}
-                            marks
-                            value={rating}
-                            onChange={(_, x) => setRating(x as number)}
-                            min={0}
-                            max={5} />
-                    </EpistoLabel>
+                {/* Teacher students count */}
+                <EpistoEntry
+                    labelVariant={"top"}
+                    type="number"
+                    value={studentCount}
+                    label={translatableTexts.administration.teacherInfoSubpage.teacherStudentsCount}
+                    setValue={setStudentCount} />
 
-                    {/* Teacher badges */}
-                    <EpistoLabel text={translatableTexts.administration.teacherInfoSubpage.teacherBadges}>
-                        <Flex flexWrap={"wrap"}>
-                            {allBadges
-                                .map((badge, index) => {
-                                    return <Flex
-                                        flexDir={"column"}
-                                        justifyContent={"space-between"}
-                                        alignItems={"center"}
-                                        flex={"0 0 calc(33.3333333% - 10px)"}
-                                        bgColor={"#f2f2f2"}
-                                        borderRadius={7}
-                                        height={180}
-                                        boxSizing={"border-box"}
-                                        m={5}>
+                {/* Teacher rating */}
+                <EpistoLabel text={translatableTexts.administration.teacherInfoSubpage.teacherRating}>
+                    <Slider
+                        defaultValue={0}
+                        valueLabelDisplay="auto"
+                        step={0.5}
+                        marks
+                        value={rating}
+                        onChange={(_, x) => setRating(x as number)}
+                        min={0}
+                        max={5} />
+                </EpistoLabel>
 
-                                        <Flex>
-                                            <img src={badge.icon} alt={""} />
-                                        </Flex>
+                {/* Teacher badges */}
+                <EpistoLabel text={translatableTexts.administration.teacherInfoSubpage.teacherBadges}>
+                    <Flex flexWrap={"wrap"}>
+                        {allBadges
+                            .map((badge, index) => {
+                                return <Flex
+                                    flexDir={"column"}
+                                    justifyContent={"space-between"}
+                                    alignItems={"center"}
+                                    flex={"0 0 calc(33.3333333% - 10px)"}
+                                    bgColor={"#f2f2f2"}
+                                    borderRadius={7}
+                                    height={180}
+                                    boxSizing={"border-box"}
+                                    m={5}>
 
-                                        <Flex>
-                                            <Checkbox
-                                                checked={selectedBadges.some(x => x === badge.name)}
-                                                onChange={(_, y) => {
-
-                                                    if (y) {
-
-                                                        setSelectedBadges([...selectedBadges, badge.name]);
-                                                    }
-                                                    else {
-
-                                                        setSelectedBadges(selectedBadges.filter(x => x !== badge.name));
-                                                    }
-                                                }} />
-
-                                            <EpistoFont fontSize={"fontSmall"}>
-                                                {badge.name}
-                                            </EpistoFont>
-                                        </Flex>
+                                    <Flex>
+                                        <img src={badge.icon} alt={""} />
                                     </Flex>
-                                })}
-                        </Flex>
-                    </EpistoLabel>
 
-                    {/* submit button */}
-                    <EpistoButton
-                        variant={"outlined"}
-                        onClick={() => handleSaveAsync()}
-                        style={{ marginTop: "20px" }}>
+                                    <Flex>
+                                        <Checkbox
+                                            checked={selectedBadges.some(x => x === badge.name)}
+                                            onChange={(_, y) => {
 
-                        {translatableTexts.misc.save}
-                    </EpistoButton>
-                </Flex>
-            </AdminSubpageHeader>
-        </Flex>
-    )
+                                                if (y) {
+
+                                                    setSelectedBadges([...selectedBadges, badge.name]);
+                                                }
+                                                else {
+
+                                                    setSelectedBadges(selectedBadges.filter(x => x !== badge.name));
+                                                }
+                                            }} />
+
+                                        <EpistoFont fontSize={"fontSmall"}>
+                                            {badge.name}
+                                        </EpistoFont>
+                                    </Flex>
+                                </Flex>
+                            })}
+                    </Flex>
+                </EpistoLabel>
+
+                {/* submit button */}
+                <EpistoButton
+                    variant={"outlined"}
+                    onClick={() => handleSaveAsync()}
+                    style={{ marginTop: "20px" }}>
+
+                    {translatableTexts.misc.save}
+                </EpistoButton>
+            </Flex>
+        </AdminSubpageHeader>
+    </AdminBreadcrumbsHeader>
 }
