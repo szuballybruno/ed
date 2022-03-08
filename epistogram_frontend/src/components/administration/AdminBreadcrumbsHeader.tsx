@@ -9,11 +9,48 @@ import { useBriefUserData } from "../../services/api/userApiService";
 import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
 
+export const BreadcrumbLink = (props: {
+    to?: string,
+    title: string,
+    iconComponent?: ReactNode,
+    isCurrent?: boolean
+}) => {
+
+    const Content = () => <Flex>
+        {props.iconComponent && <Flex width={27} height="100%" m={"2px 10px 2px 2px"}>
+            {props.iconComponent}
+        </Flex>}
+
+        <EpistoFont
+            style={{
+                display: "flex",
+                flexDirection: "row",
+                fontWeight: props.isCurrent ? "bold" : undefined,
+                alignItems: "center",
+                padding: "0 2px 0 5px"
+            }}>
+            {props.title}
+        </EpistoFont>
+    </Flex>
+
+    return <Box>
+
+        {/* current is not a link */}
+        {!!props.isCurrent && <Content></Content>}
+
+        {/* otherwise is a link */}
+        {!props.isCurrent && <NavLink to={props.to ?? ""}>
+            {<Content></Content>}
+        </NavLink>}
+    </Box>
+}
+
 export const AdminBreadcrumbsHeader = (props: {
     children?: ReactNode,
+    breadcrumbs?: ReactNode[],
     subRouteLabel?: string,
 } & FlexProps) => {
-    const { subRouteLabel, children, ...css } = props;
+    const { subRouteLabel, children, breadcrumbs, ...css } = props;
 
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
 
@@ -38,41 +75,6 @@ export const AdminBreadcrumbsHeader = (props: {
         ? { title: subRouteName! }
         : null;
 
-    const BreadcrumbLink = (props: {
-        to?: string,
-        title: string,
-        iconComponent?: ReactNode,
-        isCurrent?: boolean
-    }) => {
-
-        const Content = () => <Flex>
-            {props.iconComponent && <Flex width={27} height="100%" m={"2px 10px 2px 2px"}>
-                {props.iconComponent}
-            </Flex>}
-
-            <EpistoFont
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    fontWeight: props.isCurrent ? "bold" : undefined,
-                    alignItems: "center",
-                    padding: "0 2px 0 5px"
-                }}>
-                {props.title}
-            </EpistoFont>
-        </Flex>
-
-        return <Box>
-
-            {/* current is not a link */}
-            {!!props.isCurrent && <Content></Content>}
-
-            {/* otherwise is a link */}
-            {!props.isCurrent && <NavLink to={props.to ?? ""}>
-                {<Content></Content>}
-            </NavLink>}
-        </Box>
-    }
 
     return <Flex
         flex="1"
@@ -80,17 +82,21 @@ export const AdminBreadcrumbsHeader = (props: {
         direction={"column"}>
 
         {/* breadcrumbs */}
-        <Breadcrumbs>
-            {currentRoute && <BreadcrumbLink
-                isCurrent={!subRoute}
-                to={currentRoute.route}
-                title={currentRoute.title}
-                iconComponent={currentRoute.icon} />}
+        {breadcrumbs
+            ? <Breadcrumbs>
+                {breadcrumbs}
+            </Breadcrumbs>
+            : <Breadcrumbs>
+                {currentRoute && <BreadcrumbLink
+                    isCurrent={!subRoute}
+                    to={currentRoute.route}
+                    title={currentRoute.title}
+                    iconComponent={currentRoute.icon} />}
 
-            {subRoute && <BreadcrumbLink
-                isCurrent
-                title={subRoute.title} />}
-        </Breadcrumbs>
+                {subRoute && <BreadcrumbLink
+                    isCurrent
+                    title={subRoute.title} />}
+            </Breadcrumbs>}
 
         {/* children  */}
         <Flex

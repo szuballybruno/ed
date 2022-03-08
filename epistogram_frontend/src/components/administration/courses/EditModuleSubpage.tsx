@@ -60,7 +60,7 @@ export const EditModuleSubpage = () => {
         justify="flex-start"
         flex="1">
         <AdminBreadcrumbsHeader subRouteLabel={moduleName} >
-            <AdminCourseItemList />
+            {/* <AdminCourseItemList /> */}
 
             <AdminSubpageHeader
                 tabMenuItems={[

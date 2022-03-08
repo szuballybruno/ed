@@ -10,7 +10,7 @@ import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 
-const ChipSmall = (props: { text: string, color?: string, style?: React.CSSProperties }) => {
+export const ChipSmall = (props: { text: string, color?: string, style?: React.CSSProperties }) => {
 
     const color = props.color ?? "var(--deepBlue)";
 

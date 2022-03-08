@@ -7,7 +7,7 @@ import { CourseCategoryDTO } from "../../../shared/dtos/CourseCategoryDTO";
 import { CourseDetailsEditDataDTO } from "../../../shared/dtos/CourseDetailsEditDataDTO";
 import { HumanSkillBenefitDTO } from "../../../shared/dtos/HumanSkillBenefitDTO";
 import { CourseVisibilityType } from "../../../shared/types/sharedTypes";
-import { useCourseDetailsEditData, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
+import { useAdminCourseList, useCourseDetailsEditData, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { iterate } from "../../../static/frontendHelpers";
 import { LoadingFrame } from "../../system/LoadingFrame";
@@ -33,6 +33,9 @@ export const AdminCourseDetailsSubpage = () => {
     const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = useCourseDetailsEditData(courseId);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseDetailsData();
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = useUploadCourseThumbnailAsync();
+
+    // TODO: use courseStatus and coursesError in loadingframe too
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList("");
 
     const categories = courseDetailsEditData?.categories ?? [];
     const teachers = courseDetailsEditData?.teachers ?? [];
@@ -114,6 +117,17 @@ export const AdminCourseDetailsSubpage = () => {
         }
     }
 
+    // TODO: create better, reusable check function
+    const checkIfCurrentCourseFromUrl = () => {
+        const found = courses.some(course => course.courseId === courseId);
+
+        if (!found && courses[0]) {
+            navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courses[0].courseId + "/details")
+        }
+    }
+
+    checkIfCurrentCourseFromUrl()
+
     // effects 
     useEffect(() => {
 
@@ -150,7 +164,9 @@ export const AdminCourseDetailsSubpage = () => {
         className="whall">
 
         <AdminBreadcrumbsHeader>
-            <AdminCourseList currentCoursePage="details" />
+            <AdminCourseList
+                courses={courses}
+                navigationFunction={(courseId) => navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courseId + "/details")} />
 
             {/* admin header */}
             <AdminSubpageHeader

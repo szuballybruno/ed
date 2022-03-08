@@ -15,7 +15,7 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditUserControl } from './EditUserControl';
 import { AdminUserList } from './AdminUserList';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { useNavigation } from '../../../services/core/navigatior';
 import { ButtonType } from '../../../models/types';
 import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
@@ -34,6 +34,7 @@ const AdminEditUserSubpage = () => {
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
+    const navigateToUserCourses = () => navigate(`${applicationRoutes.administrationRoute.usersRoute.route}/${editedUserId}/courses/:courseId/statistics`)
 
     const handleSaveUserAsync = async (dto: UserEditDTO) => {
 
@@ -123,14 +124,27 @@ const AdminEditUserSubpage = () => {
 
     const bulkEditButtons = [
         {
+            title: "Összes megtekintett kurzus",
+            action: () => navigateToUserCourses()
+        },
+        {
             title: "Hozzáadás",
             action: () => navigateToAddUser()
         }
     ] as ButtonType[]
 
-    return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
+    return <AdminBreadcrumbsHeader breadcrumbs={[
+        <BreadcrumbLink
+            title="Felhasználók"
+            iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
+            to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
+        <BreadcrumbLink
+            title={userEditData?.lastName + " " + userEditData?.firstName}
+            isCurrent />
+    ]}>
 
         <AdminUserList currentUserPage='edit' />
+
         <AdminSubpageHeader
             direction="row"
             headerButtons={bulkEditButtons}

@@ -37,7 +37,7 @@ export const VideoStatisticsSubpage = () => {
     }
     const [playedSeconds, setPlayedSeconds] = useState(0);
     return <AdminBreadcrumbsHeader>
-        <AdminCourseItemList />
+        {/* <AdminCourseItemList /> */}
         <AdminSubpageHeader
             direction="column"
             tabMenuItems={[

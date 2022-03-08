@@ -398,7 +398,7 @@ export const AdminCourseContentSubpage = () => {
         error={courseContentEditDataError}
         className="whall">
         <AdminBreadcrumbsHeader>
-            <AdminCourseList currentCoursePage={"content"} />
+            {/* <AdminCourseList currentCoursePage={"content"} /> */}
 
             <AdminSubpageHeader
                 tabMenuItems={[

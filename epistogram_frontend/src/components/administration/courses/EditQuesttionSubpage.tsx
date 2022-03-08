@@ -107,7 +107,7 @@ export const EditQuestionSubpage = () => {
 
         <AdminBreadcrumbsHeader>
 
-            <AdminCourseItemList />
+            {/* <AdminCourseItemList /> */}
 
             <AdminSubpageHeader
                 tabMenuItems={[

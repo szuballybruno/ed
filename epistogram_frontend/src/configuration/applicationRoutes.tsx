@@ -194,6 +194,31 @@ export const applicationRoutes = {
             teacherInfoRoute: {
                 title: translatableTexts.routeTitles.administrationEditTeacherInfo,
                 route: "/administration/users/:userId/teacherinfo"
+            },
+
+            courseStatisticsRoute: {
+                title: translatableTexts.routeTitles.administrationUserCourseStatistics,
+                route: "/administration/users/:userId/courses/:courseId/statistics"
+            },
+
+            courseContentRoute: {
+                title: translatableTexts.routeTitles.administrationUserCourseContent,
+                route: "/administration/users/:userId/courses/:courseId/content"
+            },
+
+            moduleStatisticsRoute: {
+                title: translatableTexts.routeTitles.administrationUserModuleStatistics,
+                route: "/administration/users/:userId/courses/:courseId/module/:moduleId"
+            },
+
+            videoStatisticsRoute: {
+                title: translatableTexts.routeTitles.administrationUserVideoStatistics,
+                route: "/administration/users/:userId/courses/:courseId/video/:videoId"
+            },
+
+            examStatisticsRoute: {
+                title: translatableTexts.routeTitles.administrationUserExamStatistics,
+                route: "/administration/users/:userId/courses/:courseId/exam/:examId"
             }
         },
 

@@ -200,6 +200,11 @@ export const translatableTexts = {
         administrationUserStatistics: "Statisztika",
         administrationUserTasks: "Feladatok",
         administrationEditTeacherInfo: "Oktató adatai",
+        administrationUserCourseStatistics: "Tanulási jelentés",
+        administrationUserCourseContent: "Tartalom",
+        administrationUserModuleStatistics: "Statisztika",
+        administrationUserVideoStatistics: "Statisztika",
+        administrationUserExamStatistics: "Statisztika",
 
         administrationCourseAdmin: "Kurzusok",
         administrationAddCourse: "Kurzus hozzáadása",

@@ -14,7 +14,7 @@ const CourseStatisticsSubpage = () => {
 
     return <AdminBreadcrumbsHeader>
 
-        <AdminCourseList currentCoursePage={"statistics"} />
+        {/* <AdminCourseList currentCoursePage={"statistics"} /> */}
 
         <AdminSubpageHeader
             tabMenuItems={[

@@ -213,7 +213,7 @@ export const EditVideoSubpage = () => {
         className="whall">
 
         <AdminBreadcrumbsHeader>
-            <AdminCourseItemList />
+            {/* <AdminCourseItemList /> */}
 
             <AdminSubpageHeader
                 onSave={handleSaveAsync}

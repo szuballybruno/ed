@@ -30,9 +30,12 @@ import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
 import AdminEditUserSubpage from './users/AdminEditUserSubpage';
 import AdminStatistics from "./users/AdminStatisticsSubpage";
+import { AdminUserCourseContentSubpage } from './users/AdminUserCourseContentSubpage';
+import { AdminUserCourseStatisticsSubpage } from './users/AdminUserCourseStatisticsSubpage';
 import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
 import { AdminUserStatisticsSubpage } from "./users/AdminUserStatisticsSubpage";
 import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage";
+import { AdminUserVideoStatistics } from './users/AdminUserVideoStatistics';
 
 const AdminPage = () => {
 
@@ -123,6 +126,26 @@ const AdminPage = () => {
 
                         <Route exact path={applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route}>
                             <AdminUserTeacherInfoSubpage />
+                        </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.courseStatisticsRoute.route}>
+                            <AdminUserCourseStatisticsSubpage />
+                        </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.courseContentRoute.route}>
+                            <AdminUserCourseContentSubpage />
+                        </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.moduleStatisticsRoute.route}>
+                            <AdminUserVideoStatistics />
+                        </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.videoStatisticsRoute.route}>
+                            <AdminUserVideoStatistics />
+                        </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.examStatisticsRoute.route}>
+                            <AdminUserVideoStatistics />
                         </Route>
                     </Switch>
                 </Route>

@@ -133,7 +133,7 @@ export const EditExamSubpage = (props: {
 
         <AdminBreadcrumbsHeader>
 
-            <AdminCourseItemList />
+            {/* <AdminCourseItemList /> */}
 
             <AdminSubpageHeader
                 tabMenuItems={[
