@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Image } from "@chakra-ui/react";
 import { CourseModeType } from "../../../shared/types/sharedTypes";
 import { useSetCourseMode } from "../../../services/api/courseApiService";
 import { usePretestResults } from "../../../services/api/pretestApiService";
@@ -8,6 +8,9 @@ import { useIntParam } from "../../../static/locationHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { LoadingFrame } from "../../system/LoadingFrame";
+import StatisticsCard from "../../statisticsCard/StatisticsCard";
+import { EpistoGrid } from "../../controls/EpistoGrid";
+import { getAssetUrl } from "../../../static/frontendHelpers";
 
 export const PretestResultsSubpage = () => {
 
@@ -40,35 +43,125 @@ export const PretestResultsSubpage = () => {
             error={pretestResultsError}
             direction="column">
 
-            <EpistoFont fontSize="fontMid">
-                Your test success rate:
-            </EpistoFont>
+            <Flex
+                flex="1"
+                direction="column"
+                p="20px"
+                className="roundBorders largeSoftShadow"
+                mx="50px"
+                background="var(--transparentWhite70)">
 
-            <EpistoFont
-                style={{
-                    margin: "5px",
-                    color: "var(--mildGreen)"
-                }}
-                fontSize="fontLarge">
+                <Flex
+                    align="center"
+                    justify="center"
+                    h="50px">
 
-                {correctAnswerRate}
-            </EpistoFont>
+                    <EpistoFont
+                        fontSize="fontLargePlus"
+                        style={{
+                        }}>
 
-            {pretestResults && <Flex>
-                <EpistoButton
-                    onClick={() => setModeAndNavigateAsync("beginner")}
-                    variant={isBeginner ? "colored" : "outlined"}>
+                        Előzetes felmérés kiértékelése
+                    </EpistoFont>
+                </Flex>
 
-                    Select beginner mode
-                </EpistoButton>
+                <EpistoGrid
+                    gap={"10"}
+                    padding="10px"
+                    minColumnWidth={"280px"}
+                    auto={"fill"}
+                    gridAutoRows="150px" >
 
-                <EpistoButton
-                    onClick={() => setModeAndNavigateAsync("advanced")}
-                    variant={isBeginner ? "outlined" : "colored"}>
+                    <StatisticsCard
+                        iconPath={getAssetUrl("/images/watchedvideos3Dsmaller.png")}
+                        value={correctAnswerRate.toString()}
+                        suffix="%"
+                        title="Elért eredmény a felmérő teszten" />
 
-                    Select advanced mode
-                </EpistoButton>
-            </Flex>}
-        </LoadingFrame>
+                    <StatisticsCard
+                        iconPath={getAssetUrl("/images/watchedvideos3Dsmaller.png")}
+                        value="6"
+                        suffix="db"
+                        title="Megtekintésre ajánlott napi videó" />
+
+                    <StatisticsCard
+                        iconPath={getAssetUrl("/images/watchedvideos3Dsmaller.png")}
+                        value="Kezdő"
+                        suffix=""
+                        title="Üzemmód ajánlott" />
+
+                    <StatisticsCard
+                        iconPath={getAssetUrl("/images/watchedvideos3Dsmaller.png")}
+                        value="Automata"
+                        suffix=""
+                        title="Megtekintésre ajánlott napi videó" />
+
+                </EpistoGrid>
+
+                <Flex justify="center" align="center" my="10px">
+
+                    <Image
+                        h="30px"
+                        w="30px"
+                        mr="5px"
+                        src={getAssetUrl("/images/tempomatdatechange.png")}
+                    />
+
+                    <EpistoFont fontSize={"fontLarge"}>
+
+                        A tanfolyam várható befejezésének dátuma:
+                    </EpistoFont>
+
+                    <EpistoFont
+                        fontSize={"fontLarge"}
+                        style={{
+                            marginLeft: "5px",
+                            fontWeight: 600
+                        }}>
+
+                        2022.03.14.
+                    </EpistoFont>
+                </Flex>
+                <Flex
+                    px="10px"
+                    justify="center"
+                    align="center">
+
+                    <EpistoFont
+                        fontSize="fontSmallPlus"
+                        style={{
+                            maxWidth: 600
+                        }}>
+
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sunt temporibus, natus corporis eos maiores nobis at ab consectetur magni? Nobis, dolore. In vitae fugiat recusandae facere quibusdam, laboriosam molestias. Cum.
+                    </EpistoFont>
+                </Flex>
+                {
+                    pretestResults && <Flex
+                        my="15px"
+                        justify="center"
+                        align="center">
+
+                        <EpistoButton
+                            onClick={() => setModeAndNavigateAsync("beginner")}
+                            variant={isBeginner ? "colored" : "plain"}>
+
+                            Kezdő üzemmóddal indulok
+                        </EpistoButton>
+
+                        <EpistoButton
+                            style={{
+                                marginLeft: 10
+                            }}
+                            onClick={() => setModeAndNavigateAsync("advanced")}
+                            variant={isBeginner ? "plain" : "colored"}>
+
+                            Inkább haladó üzemmóddal kezdek
+                        </EpistoButton>
+                    </Flex>
+                }
+            </Flex>
+
+        </LoadingFrame >
     )
 }
