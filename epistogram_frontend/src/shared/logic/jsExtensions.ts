@@ -16,12 +16,23 @@ declare global {
         firstOrNull(func?: (item: T) => boolean): T | null;
         count(func: (item: T) => boolean): number;
     }
+
+    interface Date {
+        addDays(days: number): Date;
+    }
 }
 
 export type Grouping<T> = {
     key: any,
     items: T[],
     first: T
+}
+
+Date.prototype.addDays = function (days: number) {
+
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
 }
 
 Array.prototype.groupBy = function <T>(func: (item: T) => any) {

@@ -6,28 +6,47 @@ INSERT INTO public.prequiz_question
 (
     id, 
     text,
-    is_numeric_answer
+    is_numeric_answer,
+    min_value,
+    max_value,
+    step_value,
+    min_label,
+    max_label,
+    value_postfix
 )
 VALUES 
 (
     1,
     'Tapasztalat szinted?',
-    true
+    true,
+    1,
+    10,
+    1,
+    'Nem érzem tapasztaltnak magam',
+    'Tapasztaltnak érzem magam',
+    NULL
 ),
 (
     2,
     'Mire szeretnéd használni a kurzuson tanultakat?',
-    false
+    false,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
 ),
 (
     3,
-    'Mennyi időt tudsz naponta rászánni egyszerre?',
-    false
-),
-(
-    4,
     'Mennyi időt tudsz hetente rászánni?',
-    false
+    true,
+    1,
+    10,
+    1,
+    'Kevesebb időt tudok tanulással tölteni',
+    'Több időt tudok tanulással tölteni',
+    'óra'
 );
 
 --
@@ -66,56 +85,4 @@ VALUES
     'Csak szeretnék valami újat tanulni, a tanulás öröme motivál',
     2,
     NULL
-),
-
--- question 3
-(
-    5,
-    'Maximum 30 percet',
-    3,
-    NULL
-),
-(
-    6,
-    '30-60 percet',
-    3,
-    NULL
-),
-(
-    7,
-    '60-90 percet',
-    3,
-    NULL
-),
-(
-    8,
-    'Több, mint 90 percet',
-    3,
-    NULL
-),
-
--- question 4
-(
-    9,
-    '1-2 óra',
-    4,
-    1.5
-),
-(
-    10,
-    '3-4 óra',
-    4,
-    3.5
-),
-(
-    11,
-    '5-6 óra',
-    4,
-    5.5
-),
-(
-    12,
-    'Több, mint 6 óra',
-    4,
-    7
 )

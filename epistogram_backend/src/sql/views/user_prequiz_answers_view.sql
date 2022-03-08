@@ -17,7 +17,6 @@ prequiz_question_answers AS
 SELECT 
 	ucb.user_id,
 	ucb.course_id,
-	ROUND((pqa_per_week.answer_value * 60 * 60) / 7) estimated_seconds_per_day,
 	(
 		SELECT pqa.raw_value
 		FROM prequiz_question_answers pqa
@@ -31,13 +30,15 @@ SELECT
 		WHERE pqa.user_id = ucb.user_id 
 			AND pqa.course_id = ucb.course_id
 			AND pqa.question_id = 2
-	) planned_usage_answer_id
+	) planned_usage_answer_id,
+	(
+		SELECT ROUND((pqa.raw_value * 60) / 7)
+		FROM prequiz_question_answers pqa
+		WHERE pqa.user_id = ucb.user_id 
+			AND pqa.course_id = ucb.course_id
+			AND pqa.question_id = 3
+	) estimated_minutes_per_day
 FROM public.user_course_bridge ucb
-
-LEFT JOIN prequiz_question_answers pqa_per_week
-	ON pqa_per_week.user_id = ucb.user_id 
-		AND pqa_per_week.question_id = 4 
-		AND pqa_per_week.course_id = ucb.course_id 
 
 ORDER BY
 	ucb.user_id,

@@ -1,5 +1,8 @@
-import { UserCourseCompletionPrevisionedView } from "../models/views/UserCourseCompletionPrevisionedView";
+import { UserCourseBridge } from "../models/entity/UserCourseBridge";
+import { UserCourseCompletionOriginalEstimationView } from "../models/views/UserCourseCompletionOriginalEstimationView";
+import { UserCourseCompletionCurrentView } from "../models/views/UserCourseCompletionCurrentView";
 import { UserCourseProgressView } from "../models/views/UserCourseProgressView";
+import { UserTempomatAdjustmentValueView } from "../models/views/UserTempomatAdjustmentValueView";
 import { TempomatModeType } from "../shared/types/sharedTypes";
 import { MapperService } from "./MapperService";
 import { ServiceBase } from "./misc/ServiceBase";
@@ -46,10 +49,10 @@ export class TempomatService extends ServiceBase {
         return bridge.tempomatMode;
     }
 
-    async calcRecommendedItemsPerDayAsync(userId: number, courseId: number) {
+    async calcOriginalPrevisionedScheduleAsync(userId: number, courseId: number) {
 
-        const previsioned = await this._ormService
-            .getRepository(UserCourseCompletionPrevisionedView)
+        const originalEstimation = await this._ormService
+            .getRepository(UserCourseCompletionOriginalEstimationView)
             .findOneOrFail({
                 where: {
                     courseId,
@@ -57,15 +60,15 @@ export class TempomatService extends ServiceBase {
                 }
             });
 
-        const recommendedItemsPerDay = Math
-            .ceil(previsioned.previsionedItemsPerDay);
-
-        await this.setRecommendedItemsPerDayAsync(userId, courseId, recommendedItemsPerDay);
+        await this.setPrevisionedScheduleAsync(
+            userId,
+            courseId,
+            originalEstimation.previsionedCompletionDate);
     }
 
     async evaluateUserProgressesAsync() {
 
-        console.log("Evaluating user progresses...");
+        console.log("------- Evaluating user progresses... -------");
 
         const userCourseProgressViews = await this._ormService
             .getRepository(UserCourseProgressView)
@@ -74,6 +77,10 @@ export class TempomatService extends ServiceBase {
         for (let index = 0; index < userCourseProgressViews.length; index++) {
 
             const userCourseProgressView = userCourseProgressViews[index];
+            const { courseId, userId } = userCourseProgressView;
+
+            console.log(`USER PROGRESS EVAL: userId: ${userId} courseId: ${courseId}`);
+
             await this.recalculateUserProgressAsync(userCourseProgressView);
         }
     }
@@ -89,31 +96,45 @@ export class TempomatService extends ServiceBase {
 
     async recalculateUserRecommendedItemsPerDay(userCourseProgressView: UserCourseProgressView) {
 
-        const { userId, courseId, tempomatMode, recommendedItemsPerDay } = userCourseProgressView;
+        const { userId, courseId, tempomatMode, lagBehindPercentage } = userCourseProgressView;
 
-        console.log(`User ${userId} course ${courseId} is in ${tempomatMode} tempomat mode.`)
+        const adjustmentValue = await this._ormService
+            .getRepository(UserTempomatAdjustmentValueView)
+            .findOneOrFail({
+                where: {
+                    courseId,
+                    userId
+                }
+            });
 
-        // no recommended item recalc in light mode
-        if (tempomatMode === "light") {
+        const adjustmentThresholdPercentage = adjustmentValue.actualAdjustmentValue;
+        const allowedStretchPercetage = Math.min(adjustmentThresholdPercentage, lagBehindPercentage);
 
-            console.log("No new recommended daily item count has been set.");
-            return;
-        }
+        const currentView = await this._ormService
+            .getRepository(UserCourseCompletionCurrentView)
+            .findOneOrFail({
+                where: {
+                    courseId,
+                    userId
+                }
+            });
 
-        // full recommended item recalc in strict mode
-        if (tempomatMode === "strict") {
+        const adjustmentDays = Math.ceil(currentView.previsionedLengthDays / 100.0 * allowedStretchPercetage);
+        const newDurationDays = currentView.previsionedLengthDays + adjustmentDays;
+        const newCompletionDate = currentView.startDate.addDays(newDurationDays);
 
-            await this.setRecommendedItemsPerDayAsync(userId, courseId, recommendedItemsPerDay);
-            return;
-        }
+        console.log(`TEMPOMAT ADJUSTMENT: `);
+        console.log(`-- Lag behind: ${lagBehindPercentage}%`);
+        console.log(`-- Mode: '${tempomatMode}'`);
+        console.log(`-- Threshold: ${adjustmentThresholdPercentage}%`);
+        console.log(`-- Applied adjustment: ${allowedStretchPercetage}%`);
+        console.log(`-- Adjustment days: +${adjustmentDays}`);
+        console.log(`-- New previsoned length: ${newDurationDays} days`);
 
-        // in auto or balanced mode, 
-        // recalc by modifying the previsioned completion date 
-        if (tempomatMode === "auto" || tempomatMode === "balanced") {
-
-            console.log("TODO auto & balanced mode");
-            return;
-        }
+        await this.setPrevisionedScheduleAsync(
+            userId,
+            courseId,
+            newCompletionDate);
     }
 
     async handleLagBehindAsync(userCourseProgressView: UserCourseProgressView) {
@@ -128,7 +149,10 @@ export class TempomatService extends ServiceBase {
         // TODO notify user
     }
 
-    async setRecommendedItemsPerDayAsync(userId: number, courseId: number, recommendedItemsPerDay: number) {
+    async setPrevisionedScheduleAsync(
+        userId: number,
+        courseId: number,
+        previsionedCompletionDate: Date) {
 
         const b = await this._userCourseBridgeService
             .getUserCourseBridgeOrFailAsync(userId, courseId);
@@ -136,9 +160,7 @@ export class TempomatService extends ServiceBase {
         await this._userCourseBridgeService
             .updateAsync({
                 id: b.id,
-                recommendedItemsPerDay
+                previsionedCompletionDate
             });
-
-        console.log(`Recommended daily item count set to ${recommendedItemsPerDay} for user ${userId}.`);
     }
 }

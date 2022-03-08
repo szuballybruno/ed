@@ -811,6 +811,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             id: x.questionId,
             isNumeric: x.isNumericAnswer,
             text: x.questionText,
+            minValue: x.minValue,
+            maxValue: x.maxValue,
+            stepValue: x.stepValue,
+            maxLabel: x.maxLabel,
+            minLabel: x.minLabel,
+            valuePostfix: x.valuePostfix,
             answers
         }));
 

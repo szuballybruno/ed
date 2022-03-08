@@ -42,7 +42,8 @@ export class GlobalConfiguration {
         isLocalhost: GlobalConfiguration.getEnvConfigEntry("IS_LOCALHOST") === "true",
         accessTokenCookieName: "accessToken",
         refreshTokenCookieName: "refreshToken",
-        isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry("IS_UNDER_MAINTENANCE") === "true"
+        isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry("IS_UNDER_MAINTENANCE") === "true",
+        videoCompletedPercentage: GlobalConfiguration.getEnvConfigEntryInt("VIDEO_COMPLETED_PERCENTAGE")
     }
 
     fileStorage = {
@@ -118,6 +119,14 @@ export class GlobalConfiguration {
 
         log(entryName + " -> " + value);
         return value ?? "";
+    }
+
+    static getEnvConfigEntryInt = (entryName: string, allowEmptyStr?: boolean) => {
+
+        const value = GlobalConfiguration
+            .getEnvConfigEntry(entryName, allowEmptyStr);
+
+        return parseInt(value);
     }
 
     static initGlobalConfig = (rootDirectory: string) => {
