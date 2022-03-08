@@ -129,7 +129,7 @@ export class PrequizService {
         // handle tempomat
         // qId: 4 is the question about how much 
         // time do you have for this per week 
-        if (questionId === 4) {
+        if (questionId === 3) {
 
             await this._tempomatService
                 .calcOriginalPrevisionedScheduleAsync(userId, courseId);

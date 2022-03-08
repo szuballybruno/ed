@@ -187,13 +187,14 @@ import { ScheduledJobService } from './services/ScheduledJobService';
     await dbConnectionService.seedDBAsync();
 
     // initailize jobs
-    scheduledJobService
-        .scheduleJob(
-            {
-                seconds: "*/20"
-            },
-            () => tempomatService
-                .evaluateUserProgressesAsync());
+    if (false)
+        scheduledJobService
+            .scheduleJob(
+                {
+                    seconds: "*/20"
+                },
+                () => tempomatService
+                    .evaluateUserProgressesAsync());
     // tempomatService
     //     .evaluateUserProgressesAsync();
 

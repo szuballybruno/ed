@@ -8,11 +8,11 @@ FROM
 	SELECT 
 		ucb.user_id user_id,
 		ucb.course_id course_id,
-		clev.total_length_seconds course_length_seconds,
 		cicv.item_count total_item_count,
 		DATE_TRUNC('days', ucb.creation_date) start_date,
-		upav.estimated_seconds_per_day previsioned_seconds_per_day,
-		CEIL(clev.total_length_seconds::numeric / upav.estimated_seconds_per_day) previsioned_duration_days
+		upav.estimated_minutes_per_day,
+		CEIL(clev.total_length_seconds / 60.0) course_duration_minutes,
+		CEIL(clev.total_length_seconds / 60.0 / upav.estimated_minutes_per_day) previsioned_duration_days
 	FROM public.user_course_bridge ucb
 
 	LEFT JOIN public.user_prequiz_answers_view upav

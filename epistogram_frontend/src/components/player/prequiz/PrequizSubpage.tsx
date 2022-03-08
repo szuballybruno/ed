@@ -73,6 +73,11 @@ export const PrequizSubpage = () => {
         setSelectedAnswerId(userAnswer.answerId);
     }, [userAnswer]);
 
+    useEffect(() => {
+
+        setNumericValue(question?.minValue ?? 0);
+    }, [question?.minValue])
+
     return (
         <ExamLayout
             headerLeftItem={<Flex align="center">
@@ -100,18 +105,20 @@ export const PrequizSubpage = () => {
                     ? <Flex direction="column" align="center">
                         <Flex justify="space-between">
                             <EpistoFont>
-                                Nem erzem tapasztaltnak magam
+                                {question.minLabel}
                             </EpistoFont>
 
                             <Box width="80px" />
 
                             <EpistoFont>
-                                Tapasztaltnak erzem magam
+                                {question.maxLabel}
                             </EpistoFont>
                         </Flex>
 
                         <Slider
-                            max={10}
+                            max={question.maxValue}
+                            min={question.minValue}
+                            step={question.stepValue}
                             valueLabelDisplay="auto"
                             marks={true}
                             style={{
@@ -129,7 +136,7 @@ export const PrequizSubpage = () => {
                                 marginTop: "10px"
                             }}>
 
-                            {numericValue}
+                            {numericValue} {question.valuePostfix ?? undefined}
                         </EpistoFont>
                     </Flex>
                     : <Grid
