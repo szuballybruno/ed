@@ -197,7 +197,7 @@ export const translatableTexts = {
         administrationUserAdmin: "Felhasználók",
         administrationAddUser: "Felhasználó hozzáadása",
         administrationEditUser: "Szerkesztés",
-        administrationUserStatistics: "Statisztika",
+        administrationUserStatistics: "Tanulási jelentés",
         administrationUserTasks: "Feladatok",
         administrationEditTeacherInfo: "Oktató adatai",
         administrationUserCourseStatistics: "Tanulási jelentés",

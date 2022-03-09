@@ -335,7 +335,7 @@ const DesktopNavbar = (props: {
                 {user?.userActivity?.canAccessAdministration && <EpistoButton
                     variant={undefined}
                     onClick={() => {
-                        navigate(applicationRoutes.administrationRoute.usersRoute.route)
+                        navigate(applicationRoutes.administrationRoute.usersRoute.route + "/:asd/edit")
                     }}>
 
                     <Flex className="whall" m="5px" align="center">
