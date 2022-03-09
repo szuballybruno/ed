@@ -29,6 +29,9 @@ import { CollapseItem } from "../../universal/CollapseItem";
 import { DragAndDropContext, DragItem, DropZone } from "../../universal/DragAndDrop";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseEditItemView } from "./CourseEditItemView";
+import { AdminCourseList } from "./AdminCourseList";
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
+import { GridRowsProp, GridColDef, DataGrid } from "@mui/x-data-grid";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
@@ -363,155 +366,193 @@ export const AdminCourseContentSubpage = () => {
 
     }, [courseContentEditData]);
 
+    const items = modules.map(module => {
+        return module.items
+    }).flat()
+
+    console.log(items)
+
+    const getRowsFromModules = () => items.map((item) => {
+        return {
+            id: item.id,
+            title: item.title,
+            module: item.moduleId,
+            type: item.type,
+            questionsCount: item.questionCount
+        }
+    })
+
+    const moduleRows: GridRowsProp = getRowsFromModules()
+
+    const columns: GridColDef[] = [
+        { field: 'id', headerName: 'Azonosító', width: 100 },
+        { field: 'title', headerName: 'Cím', width: 300, editable: true, resizable: true },
+        { field: 'module', headerName: 'Modul neve', width: 150, resizable: true },
+        { field: 'subCategory', headerName: 'Alkategória', width: 150, resizable: true },
+        { field: 'videosCount', headerName: 'Videók száma', width: 150, resizable: true },
+        { field: 'editCourse', headerName: 'Kurzus szerkesztése', width: 150, renderCell: (params) => <EpistoButton variant="outlined" onClick={() => navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + params.value + "/details")}>Szerkesztés</EpistoButton> }
+    ];
+
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseContentEditDataState]}
         error={courseContentEditDataError}
         className="whall">
+        <AdminBreadcrumbsHeader>
+            {/* <AdminCourseList currentCoursePage={"content"} /> */}
 
-        <AdminSubpageHeader
-            tabMenuItems={[
-                applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
-            ]}
-            onSave={handleSaveCourseAsync}
-            direction="column"
-            headerButtons={[
-                {
-                    action: () => handleAddNewModuleAsync(),
-                    title: translatableTexts.administration.courseContentSubpage.addModuleExtended
-                },
-                {
-                    action: () => {
-
-                        navigate(applicationRoutes.administrationRoute.coursesRoute.editExamRoute, {
-                            courseId,
-                            examId: pretestExamId
-                        })
+            <AdminSubpageHeader
+                tabMenuItems={[
+                    applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
+                ]}
+                onSave={handleSaveCourseAsync}
+                direction="column"
+                headerButtons={[
+                    {
+                        action: () => handleAddNewModuleAsync(),
+                        title: translatableTexts.administration.courseContentSubpage.addModuleExtended
                     },
-                    title: "Edit pretest exam"
-                },
-                {
-                    action: handleOpenCloseAllModules,
-                    title: isAnyModulesOpen
-                        ? translatableTexts.misc.closeAll
-                        : translatableTexts.misc.openAll
-                }
-            ]}>
+                    {
+                        action: () => {
 
-            <EpistoDialog logic={deleteWarningDialogLogic} />
+                            navigate(applicationRoutes.administrationRoute.coursesRoute.editExamRoute, {
+                                courseId,
+                                examId: pretestExamId
+                            })
+                        },
+                        title: "Edit pretest exam"
+                    },
+                    {
+                        action: handleOpenCloseAllModules,
+                        title: isAnyModulesOpen
+                            ? translatableTexts.misc.closeAll
+                            : translatableTexts.misc.openAll
+                    }
+                ]}>
 
-            {/* course items */}
-            <Flex
-                flex="1"
-                direction={"column"}
-                className="roundBorders"
-                background="var(--transparentWhite70)"
-                mt="5px">
+                <EpistoDialog logic={deleteWarningDialogLogic} />
 
-                <DragAndDropContext onDragEnd={onDragEnd}>
-                    <DropZone zoneId="zone-root" groupId="root">
-                        {modules
-                            .map((module, moduleIndex) => {
+                {/* course items */}
+                <Flex
+                    flex="1"
+                    direction={"column"}
+                    className="roundBorders"
+                    background="var(--transparentWhite70)"
+                    mt="5px">
 
-                                return <DragItem
-                                    alignHandle="top"
-                                    itemId={module.id + ""}
-                                    index={moduleIndex}>
+                    <DataGrid
+                        getRowClassName={(a) => a.row.type === "exam" ? "dataGridExamRow" : "dataGridVideoRow"}
+                        rows={moduleRows} columns={columns} style={{
+                            background: "var(--transparentWhite70)"
+                        }} />
 
-                                    <CollapseItem
-                                        handleToggle={(targetIsOpen) => setModuleOpenState(targetIsOpen, module.id)}
-                                        isOpen={openModuleIds.some(x => x === module.id)}
-                                        style={{ width: "100%" }}
-                                        header={(ecButton) => <Flex
-                                            p="2px">
+                    <DragAndDropContext onDragEnd={onDragEnd}>
+                        <DropZone zoneId="zone-root" groupId="root">
+                            {modules
+                                .map((module, moduleIndex) => {
 
-                                            {ecButton}
+                                    return <DragItem
+                                        alignHandle="top"
+                                        itemId={module.id + ""}
+                                        index={moduleIndex}>
 
-                                            <Flex
-                                                width="100%"
-                                                align="center"
-                                                justify="space-between">
+                                        <CollapseItem
+                                            handleToggle={(targetIsOpen) => setModuleOpenState(targetIsOpen, module.id)}
+                                            isOpen={openModuleIds.some(x => x === module.id)}
+                                            style={{ width: "100%" }}
+                                            header={(ecButton) => <Flex
+                                                p="2px">
 
-                                                <EpistoHeader
-                                                    text={module.name}
-                                                    variant="strongSub"
-                                                    style={{ marginLeft: "10px" }} />
+                                                {ecButton}
 
-                                                <Flex>
+                                                <Flex
+                                                    width="100%"
+                                                    align="center"
+                                                    justify="space-between">
 
-                                                    {/* new video */}
-                                                    <EpistoButton
-                                                        onClick={() => handleAddCourseItemAsync(module.id, "video")}
-                                                        style={{ alignSelf: "center", margin: "2px" }}
-                                                        padding="2px"
-                                                        variant="outlined">
-                                                        <Flex>
-                                                            <AddIcon />
-                                                            <VideocamIcon />
-                                                        </Flex>
-                                                    </EpistoButton>
+                                                    <EpistoHeader
+                                                        text={module.name}
+                                                        variant="strongSub"
+                                                        style={{ marginLeft: "10px" }} />
 
-                                                    {/* new exam */}
-                                                    <EpistoButton
-                                                        onClick={() => handleAddCourseItemAsync(module.id, "exam")}
-                                                        style={{ alignSelf: "center", margin: "2px" }}
-                                                        padding="2px"
-                                                        variant="outlined">
-                                                        <Flex>
-                                                            <AddIcon />
-                                                            <AssignmentIcon />
-                                                        </Flex>
-                                                    </EpistoButton>
+                                                    <Flex>
 
-                                                    {/* edit module */}
-                                                    <EpistoButton
-                                                        onClick={() => handleEditModule(module)}>
-                                                        <EditIcon />
-                                                    </EpistoButton>
+                                                        {/* new video */}
+                                                        <EpistoButton
+                                                            onClick={() => handleAddCourseItemAsync(module.id, "video")}
+                                                            style={{ alignSelf: "center", margin: "2px" }}
+                                                            padding="2px"
+                                                            variant="outlined">
+                                                            <Flex>
+                                                                <AddIcon />
+                                                                <VideocamIcon />
+                                                            </Flex>
+                                                        </EpistoButton>
 
-                                                    {/* delete module */}
-                                                    <EpistoButton
-                                                        onClick={() => handleDeleteModule(module)}>
-                                                        <DeleteIcon />
-                                                    </EpistoButton>
+                                                        {/* new exam */}
+                                                        <EpistoButton
+                                                            onClick={() => handleAddCourseItemAsync(module.id, "exam")}
+                                                            style={{ alignSelf: "center", margin: "2px" }}
+                                                            padding="2px"
+                                                            variant="outlined">
+                                                            <Flex>
+                                                                <AddIcon />
+                                                                <AssignmentIcon />
+                                                            </Flex>
+                                                        </EpistoButton>
+
+                                                        {/* edit module */}
+                                                        <EpistoButton
+                                                            onClick={() => handleEditModule(module)}>
+                                                            <EditIcon />
+                                                        </EpistoButton>
+
+                                                        {/* delete module */}
+                                                        <EpistoButton
+                                                            onClick={() => handleDeleteModule(module)}>
+                                                            <DeleteIcon />
+                                                        </EpistoButton>
+                                                    </Flex>
                                                 </Flex>
-                                            </Flex>
-                                        </Flex>}>
+                                            </Flex>}>
 
-                                        <DropZone
-                                            width="100%"
-                                            my="5px"
-                                            mt="10px"
-                                            zoneId={module.id + ""}
-                                            groupId="child">
+                                            <DropZone
+                                                width="100%"
+                                                my="5px"
+                                                mt="10px"
+                                                zoneId={module.id + ""}
+                                                groupId="child">
 
-                                            {module
-                                                .items
-                                                .map((item, itemIndex) => {
+                                                {module
+                                                    .items
+                                                    .map((item, itemIndex) => {
 
-                                                    return <DragItem
-                                                        itemId={item.descriptorCode}
-                                                        index={itemIndex}>
+                                                        return <DragItem
+                                                            itemId={item.descriptorCode}
+                                                            index={itemIndex}>
 
-                                                        <CourseEditItemView
-                                                            moduleIndex={moduleIndex}
-                                                            index={itemIndex}
-                                                            item={item}
-                                                            deleteCourseItem={handleDeleteCourseItemAsync}
-                                                            showCourseItemStats={handleCourseItemStatistics}
-                                                            editCourseItem={handleEditCourseItem}
-                                                            isShowDivider={itemIndex + 1 < module.items.length} />
-                                                    </DragItem>
-                                                })}
-                                        </DropZone>
-                                    </CollapseItem>
-                                </DragItem>
-                            })}
-                    </DropZone>
-                </DragAndDropContext>
-            </Flex>
-        </AdminSubpageHeader>
+                                                            <CourseEditItemView
+                                                                moduleIndex={moduleIndex}
+                                                                index={itemIndex}
+                                                                item={item}
+                                                                deleteCourseItem={handleDeleteCourseItemAsync}
+                                                                showCourseItemStats={handleCourseItemStatistics}
+                                                                editCourseItem={handleEditCourseItem}
+                                                                isShowDivider={itemIndex + 1 < module.items.length} />
+                                                        </DragItem>
+                                                    })}
+                                            </DropZone>
+                                        </CollapseItem>
+                                    </DragItem>
+                                })}
+                        </DropZone>
+                    </DragAndDropContext>
+                </Flex>
+            </AdminSubpageHeader>
+        </AdminBreadcrumbsHeader>
+
+
 
     </LoadingFrame>
 };

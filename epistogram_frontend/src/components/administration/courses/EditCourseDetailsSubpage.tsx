@@ -7,7 +7,7 @@ import { CourseCategoryDTO } from "../../../shared/dtos/CourseCategoryDTO";
 import { CourseDetailsEditDataDTO } from "../../../shared/dtos/CourseDetailsEditDataDTO";
 import { HumanSkillBenefitDTO } from "../../../shared/dtos/HumanSkillBenefitDTO";
 import { CourseVisibilityType } from "../../../shared/types/sharedTypes";
-import { useCourseDetailsEditData, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
+import { useAdminCourseList, useCourseDetailsEditData, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { iterate } from "../../../static/frontendHelpers";
 import { LoadingFrame } from "../../system/LoadingFrame";
@@ -19,6 +19,9 @@ import { EditSection } from "./EditSection";
 import { SimpleEditList } from "../SimpleEditList";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoSelect } from "../../controls/EpistoSelect";
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
+import { AdminCourseList } from "./AdminCourseList";
+import { useNavigation } from "../../../services/core/navigatior";
 
 export const AdminCourseDetailsSubpage = () => {
 
@@ -30,6 +33,9 @@ export const AdminCourseDetailsSubpage = () => {
     const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = useCourseDetailsEditData(courseId);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseDetailsData();
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = useUploadCourseThumbnailAsync();
+
+    // TODO: use courseStatus and coursesError in loadingframe too
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList("");
 
     const categories = courseDetailsEditData?.categories ?? [];
     const teachers = courseDetailsEditData?.teachers ?? [];
@@ -59,6 +65,10 @@ export const AdminCourseDetailsSubpage = () => {
         text: "",
         value: 0
     })));
+
+    const { navigate } = useNavigation();
+
+    const administrationRoutes = applicationRoutes.administrationRoute;
 
     const handleSaveCourseAsync = async () => {
 
@@ -107,6 +117,17 @@ export const AdminCourseDetailsSubpage = () => {
         }
     }
 
+    // TODO: create better, reusable check function
+    const checkIfCurrentCourseFromUrl = () => {
+        const found = courses.some(course => course.courseId === courseId);
+
+        if (!found && courses[0]) {
+            navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courses[0].courseId + "/details")
+        }
+    }
+
+    checkIfCurrentCourseFromUrl()
+
     // effects 
     useEffect(() => {
 
@@ -139,8 +160,13 @@ export const AdminCourseDetailsSubpage = () => {
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseDetailsEditDataState, saveCourseThumbnailState]}
         error={courseDetailsEditDataError}
+        direction="column"
         className="whall">
-        <Flex flex="1" direction="column" maxW="100%">
+
+        <AdminBreadcrumbsHeader>
+            <AdminCourseList
+                courses={courses}
+                navigationFunction={(courseId) => navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courseId + "/details")} />
 
             {/* admin header */}
             <AdminSubpageHeader
@@ -152,7 +178,7 @@ export const AdminCourseDetailsSubpage = () => {
                 onSave={handleSaveCourseAsync}>
 
                 {/* Course edit */}
-                <Flex direction="row">
+                <Flex direction="row" flex="1">
 
                     {/* left pane  */}
                     <Flex direction="column" flex="1" mr="5px">
@@ -388,7 +414,7 @@ export const AdminCourseDetailsSubpage = () => {
                     </Flex>
                 </Flex>
             </AdminSubpageHeader>
-        </Flex>
+        </AdminBreadcrumbsHeader>
 
     </LoadingFrame>
 }

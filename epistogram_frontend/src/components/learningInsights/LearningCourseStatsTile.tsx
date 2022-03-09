@@ -7,7 +7,7 @@ import { formatTimespan, getAssetUrl, roundNumber } from "../../static/frontendH
 import { EpistoButton } from "../controls/EpistoButton";
 import { FlexFloat } from "../controls/FlexFloat";
 
-const SmallStat = (props: { iconUrl: string, text: string }) => {
+export const SmallStat = (props: { iconUrl: string, text: string }) => {
 
     return <Flex
         align="center"

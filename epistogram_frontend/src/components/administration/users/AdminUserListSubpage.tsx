@@ -192,7 +192,7 @@ export const AdminUserListSubpage = () => {
     return <LoadingFrame loadingState={usersStatus} error={usersError} className="whall">
 
         {/* admin header */}
-        <AdminSubpageHeader>
+        <AdminSubpageHeader direction="column">
             <AdminListEditHeader
                 headerButtons={headerButtons}
                 isAllSelected={isAllUsersSelected}

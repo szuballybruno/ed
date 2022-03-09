@@ -10,6 +10,8 @@ import { SelectImage } from "../../universal/SelectImage"
 import { Flex, Image } from "@chakra-ui/react";
 import { EpistoLabel } from "../../controls/EpistoLabel"
 import { useIntParam } from "../../../static/locationHelpers"
+import { AdminCourseItemList } from "./AdminCourseItemList"
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader"
 
 export const EditModuleSubpage = () => {
 
@@ -54,50 +56,52 @@ export const EditModuleSubpage = () => {
     }, [moduleEditData]);
 
     return <LoadingFrame
-        className="whall"
-        loadingState={[]}>
+        direction="column"
+        justify="flex-start"
+        flex="1">
+        <AdminBreadcrumbsHeader subRouteLabel={moduleName} >
+            {/* <AdminCourseItemList /> */}
 
-        <AdminSubpageHeader
-            tabMenuItems={[
-                applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                applicationRoutes.administrationRoute.coursesRoute.editModuleRoute
-            ]}
-            onSave={handleSaveModuleAsync}>
+            <AdminSubpageHeader
+                tabMenuItems={[
+                    applicationRoutes.administrationRoute.coursesRoute.editModuleRoute
+                ]}
+                onSave={handleSaveModuleAsync}>
 
-            <Flex
-                className="roundBorders"
-                background="var(--transparentWhite70)"
-                mt="5px"
-                p="0 10px 10px 10px"
-                direction="column">
+                <Flex
+                    className="roundBorders"
+                    background="var(--transparentWhite70)"
+                    mt="5px"
+                    p="0 10px 10px 10px"
+                    direction="column">
 
-                <EpistoLabel text="Üdvözlő kép">
-                    <SelectImage
-                        width="300px"
-                        height="200px"
-                        setImageSource={setMoudleImageSource}
-                        setImageFile={setMoudleImageFile}>
-                        <Image
-                            className="whall"
-                            objectFit="cover"
-                            src={moduleImageSource ?? ""} />
-                    </SelectImage>
-                </EpistoLabel>
+                    <EpistoLabel text="Üdvözlő kép">
+                        <SelectImage
+                            width="300px"
+                            height="200px"
+                            setImageSource={setMoudleImageSource}
+                            setImageFile={setMoudleImageFile}>
+                            <Image
+                                className="whall"
+                                objectFit="cover"
+                                src={moduleImageSource ?? ""} />
+                        </SelectImage>
+                    </EpistoLabel>
 
-                <EpistoEntry
-                    label="Modul neve"
-                    value={moduleName}
-                    setValue={setModuleName} />
+                    <EpistoEntry
+                        label="Modul neve"
+                        value={moduleName}
+                        setValue={setModuleName} />
 
-                <EpistoEntry
-                    label="Modul leírása"
-                    value={moduleDescription}
-                    setValue={setModuleDescription}
-                    isMultiline />
-            </Flex>
+                    <EpistoEntry
+                        label="Modul leírása"
+                        value={moduleDescription}
+                        setValue={setModuleDescription}
+                        isMultiline />
+                </Flex>
 
-        </AdminSubpageHeader>
+            </AdminSubpageHeader>
+        </AdminBreadcrumbsHeader>
+
     </LoadingFrame>
 }

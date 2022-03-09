@@ -95,6 +95,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
             {/* admin header */}
             <AdminSubpageHeader
+                direction="column"
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips
                 ]}

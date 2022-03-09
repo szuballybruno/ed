@@ -7,6 +7,8 @@ import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditUserControl } from "./EditUserControl";
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminUserList } from './AdminUserList';
 
 const AdminAddUserSubpage = () => {
 
@@ -29,7 +31,9 @@ const AdminAddUserSubpage = () => {
             await inviteUserAsync(createInvitedUserDTO);
 
             showNotification("Felhasználó sikeresen hozzáadva");
-            navigate(applicationRoutes.administrationRoute.usersRoute.route);
+
+            // TODO return added user's id
+            //navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + user.id + "/edit")
         } catch (error) {
 
             // TODO
@@ -40,11 +44,15 @@ const AdminAddUserSubpage = () => {
         }
     }
 
-    return <AdminSubpageHeader>
-        <EditUserControl
-            editDTO={null}
-            saveUserAsync={submitAddUserRequestAsync}></EditUserControl>
-    </AdminSubpageHeader>
+    return <AdminBreadcrumbsHeader subRouteLabel={`Felhasználó hozzáadása`}>
+
+        <AdminUserList />
+        <AdminSubpageHeader background="var(--transparentWhite70)" className='roundBorders'>
+            <EditUserControl
+                editDTO={null}
+                saveUserAsync={submitAddUserRequestAsync}></EditUserControl>
+        </AdminSubpageHeader>
+    </AdminBreadcrumbsHeader>
 };
 
 export default AdminAddUserSubpage;

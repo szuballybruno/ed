@@ -375,3 +375,10 @@ button {
   box-shadow: 0 0 15px #0000001f
 }
 
+.dataGridExamRow {
+  background: #fff0bd;
+}
+
+.dataGridVideoRow {
+  background: #aad6ff;
+}

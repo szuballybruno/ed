@@ -47,7 +47,7 @@ const AdminStatistics = () => {
 
     return (
         <Flex>
-            <AdminSubpageHeader>
+            <AdminSubpageHeader direction="column">
                 <LearningStatisticsSeciton title={"Leggyakoribb adatok"}>
                     <StatisticsCard suffix={"%"} value={"95"} title={"Kurzus teljesítési ráta"} iconPath={getAssetUrl("company_statistics_icons/course_progress_rate.svg")} />
                     <StatisticsCard suffix={"perc"} value={"38"} title={"Átlagosan eltöltött idő/belépés"} iconPath={getAssetUrl("company_statistics_icons/spent_time_login.svg")} />

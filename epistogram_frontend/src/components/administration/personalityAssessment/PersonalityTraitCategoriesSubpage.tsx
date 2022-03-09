@@ -60,7 +60,7 @@ export const PersonalityTraitCategoriesSubpage = () => {
             className="whall">
 
             {/* admin header */}
-            <AdminSubpageHeader>
+            <AdminSubpageHeader direction="column">
 
                 {personalityTraitCategories
                     .map((personalityTraitCategory, index) => (

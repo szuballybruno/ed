@@ -1,4 +1,4 @@
-import { AdminPanelSettings, Assignment, Business, Equalizer, GraphicEq, Home, People, Person, School, Search, Settings, Subscriptions } from "@mui/icons-material";
+import { AdminPanelSettings, Assignment, Business, Equalizer, GraphicEq, GridOn, Home, People, Person, School, Search, Settings, Subscriptions, TableBar } from "@mui/icons-material";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { translatableTexts } from "../static/translatableTexts";
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -46,12 +46,12 @@ export const applicationRoutes = {
             route: "/watch/pretest-results/:courseId",
             exact: true
         },
-    
+
         courseRatingRoute: {
             title: translatableTexts.routeTitles.player,
             route: "/watch/course-rating/:courseId"
         },
-    
+
         courseOverviewRoute: {
             title: translatableTexts.routeTitles.courseOverview,
             route: "/watch/course-overview/:courseId"
@@ -182,7 +182,8 @@ export const applicationRoutes = {
 
             editRoute: {
                 title: translatableTexts.routeTitles.administrationEditUser,
-                route: "/administration/users/:userId/edit"
+                route: "/administration/users/:userId/edit",
+                icon: <Person className="fontXXL" color={"secondary"} />,
             },
 
             statsRoute: {
@@ -193,6 +194,31 @@ export const applicationRoutes = {
             teacherInfoRoute: {
                 title: translatableTexts.routeTitles.administrationEditTeacherInfo,
                 route: "/administration/users/:userId/teacherinfo"
+            },
+
+            courseStatisticsRoute: {
+                title: translatableTexts.routeTitles.administrationUserCourseStatistics,
+                route: "/administration/users/:userId/courses/:courseId/statistics"
+            },
+
+            courseContentRoute: {
+                title: translatableTexts.routeTitles.administrationUserCourseContent,
+                route: "/administration/users/:userId/courses/:courseId/content"
+            },
+
+            moduleStatisticsRoute: {
+                title: translatableTexts.routeTitles.administrationUserModuleStatistics,
+                route: "/administration/users/:userId/courses/:courseId/module/:moduleId"
+            },
+
+            videoStatisticsRoute: {
+                title: translatableTexts.routeTitles.administrationUserVideoStatistics,
+                route: "/administration/users/:userId/courses/:courseId/video/:videoId"
+            },
+
+            examStatisticsRoute: {
+                title: translatableTexts.routeTitles.administrationUserExamStatistics,
+                route: "/administration/users/:userId/courses/:courseId/exam/:examId"
             }
         },
 
@@ -208,7 +234,8 @@ export const applicationRoutes = {
             },
             courseDetailsRoute: {
                 title: translatableTexts.routeTitles.administrationCourseDetails,
-                route: "/administration/courses/:courseId/details"
+                route: "/administration/courses/:courseId/details",
+                icon: <Subscriptions className="fontXXL" color={"secondary"} />,
             },
             courseContentRoute: {
                 title: translatableTexts.routeTitles.administrationCourseContent,
@@ -293,6 +320,13 @@ export const applicationRoutes = {
             title: "Céges statisztika",
             route: "/administration/mycompany",
             icon: <Business className="fontXXL" color={"secondary"} />,
+            exact: true
+        },
+
+        overviewTableRoute: {
+            title: "Áttekintés",
+            route: "/administration/overview",
+            icon: <GridOn className="fontXXL" color={"secondary"} />,
             exact: true
         },
     },

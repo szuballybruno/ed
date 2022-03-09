@@ -8,6 +8,7 @@ export const translatableTexts = {
         next: "Tovább",
         removeAll: "Összes törlése",
         add: "Hozzáadás",
+        remove: "Törlés",
         openAll: "Összes kinyitása",
         closeAll: "Összes becsukása",
         loading: "Betöltés...",
@@ -196,9 +197,14 @@ export const translatableTexts = {
         administrationUserAdmin: "Felhasználók",
         administrationAddUser: "Felhasználó hozzáadása",
         administrationEditUser: "Szerkesztés",
-        administrationUserStatistics: "Statisztika",
+        administrationUserStatistics: "Tanulási jelentés",
         administrationUserTasks: "Feladatok",
         administrationEditTeacherInfo: "Oktató adatai",
+        administrationUserCourseStatistics: "Tanulási jelentés",
+        administrationUserCourseContent: "Tartalom",
+        administrationUserModuleStatistics: "Statisztika",
+        administrationUserVideoStatistics: "Statisztika",
+        administrationUserExamStatistics: "Statisztika",
 
         administrationCourseAdmin: "Kurzusok",
         administrationAddCourse: "Kurzus hozzáadása",
@@ -452,7 +458,7 @@ export const translatableTexts = {
     administration: {
         editUserControl: {
             selectUserAsTeacher: "Megjelölöm a felhasználót tanárként",
-            isItTeacher: "Tanár?"
+            selectAsTeacher: "Megjelölés tanárként"
         },
         teacherInfoSubpage: {
             teacherInfoSaved: "Tanár információk sikeresen mentve!",

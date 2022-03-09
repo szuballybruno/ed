@@ -35,57 +35,6 @@ export const AdminSubpageHeader = (props: {
     const examId = urlParams.examId ? parseInt(urlParams.examId) : null;
     const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
 
-    const currentRoute = objToArray(applicationRoutes.administrationRoute)
-        .filter(route => isMatchingCurrentRoute(route, false))[0];
-
-    const { briefUserData } = useBriefUserData(userId);
-    const { courseBriefData } = useCourseBriefData(courseId);
-    const { shopItemBriefData } = useShopItemBriefData(shopItemId);
-
-    const subRouteName = subRouteLabel
-        ? subRouteLabel
-        : (briefUserData?.fullName || courseBriefData?.title || shopItemBriefData?.name);
-
-    const subRoute = subRouteName
-        ? { title: subRouteName! }
-        : null;
-
-    const BreadcrumbLink = (props: {
-        to?: string,
-        title: string,
-        iconComponent?: ReactNode,
-        isCurrent?: boolean
-    }) => {
-
-        const Content = () => <Flex>
-            {props.iconComponent && <Flex width={27} height="100%" m={"2px 10px 2px 2px"}>
-                {props.iconComponent}
-            </Flex>}
-
-            <EpistoFont
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    fontWeight: props.isCurrent ? "bold" : undefined,
-                    alignItems: "center",
-                    padding: "0 2px 0 5px"
-                }}>
-                {props.title}
-            </EpistoFont>
-        </Flex>
-
-        return <Box>
-
-            {/* current is not a link */}
-            {!!props.isCurrent && <Content></Content>}
-
-            {/* otherwise is a link */}
-            {!props.isCurrent && <NavLink to={props.to ?? ""}>
-                {<Content></Content>}
-            </NavLink>}
-        </Box>
-    }
-
     const currentMatchingRoute = tabMenuItemsList
         .filter(route => isMatchingCurrentRoute(route))[0];
 
@@ -114,28 +63,8 @@ export const AdminSubpageHeader = (props: {
     return <Flex
         direction={"column"}
         className="whall"
+        ml="5px"
         position="relative">
-
-        {/* breadcrumbs */}
-        <Flex
-            direction={"row"}
-            height={40}
-            mb="10px"
-            align={"center"}>
-
-            {/* breadcrumbds */}
-            <Breadcrumbs>
-                {currentRoute && <BreadcrumbLink
-                    isCurrent={!subRoute}
-                    to={currentRoute.route}
-                    title={currentRoute.title}
-                    iconComponent={currentRoute.icon} />}
-
-                {subRoute && <BreadcrumbLink
-                    isCurrent
-                    title={subRoute.title} />}
-            </Breadcrumbs>
-        </Flex>
 
         {/* tabs */}
         {(tabMenuItems || onSave) && (
@@ -192,7 +121,7 @@ export const AdminSubpageHeader = (props: {
 
         {/* children  */}
         <Flex
-            direction="column"
+            direction="row"
             flex="1"
             {...css}>
 

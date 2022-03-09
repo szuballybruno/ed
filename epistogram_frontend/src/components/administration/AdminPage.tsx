@@ -11,6 +11,7 @@ import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from "../PageRootContainer";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
+import { AdminOverviewTablePage } from './AdminOverviewTablePage';
 import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
 import { AdminCourseListSubpage } from "./courses/AdminCourseListSubpage";
 import { AdminInteractiveCourseSubpage } from './courses/AdminInteractiveCourseSubpage';
@@ -29,9 +30,12 @@ import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
 import AdminEditUserSubpage from './users/AdminEditUserSubpage';
 import AdminStatistics from "./users/AdminStatisticsSubpage";
+import { AdminUserCourseContentSubpage } from './users/AdminUserCourseContentSubpage';
+import { AdminUserCourseStatisticsSubpage } from './users/AdminUserCourseStatisticsSubpage';
 import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
 import { AdminUserStatisticsSubpage } from "./users/AdminUserStatisticsSubpage";
 import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage";
+import { AdminUserVideoStatistics } from './users/AdminUserVideoStatistics';
 
 const AdminPage = () => {
 
@@ -41,11 +45,12 @@ const AdminPage = () => {
     const { navigate } = useNavigation();
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
-        .add(administrationRoutes.usersRoute)
-        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
+        .add(administrationRoutes.usersRoute.editRoute)
+        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute.courseDetailsRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
         .add(administrationRoutes.myCompanyRoute)
+        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.overviewTableRoute)
         .getArray();
 
     const AdminLeftPane = (props: FlexProps) => {
@@ -122,6 +127,26 @@ const AdminPage = () => {
                         <Route exact path={applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route}>
                             <AdminUserTeacherInfoSubpage />
                         </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.courseStatisticsRoute.route}>
+                            <AdminUserCourseStatisticsSubpage />
+                        </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.courseContentRoute.route}>
+                            <AdminUserCourseContentSubpage />
+                        </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.moduleStatisticsRoute.route}>
+                            <AdminUserVideoStatistics />
+                        </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.videoStatisticsRoute.route}>
+                            <AdminUserVideoStatistics />
+                        </Route>
+
+                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.examStatisticsRoute.route}>
+                            <AdminUserVideoStatistics />
+                        </Route>
                     </Switch>
                 </Route>
 
@@ -130,7 +155,6 @@ const AdminPage = () => {
                     path={administrationRoutes.coursesRoute.route}
                     isAuthorizedToView={x => x.canAccessCourseAdministration}
                     render={() => <Switch>
-                        {getRoute(administrationRoutes.coursesRoute, <AdminCourseListSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
                         {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
@@ -166,6 +190,12 @@ const AdminPage = () => {
                 <Route exact path={administrationRoutes.myCompanyRoute.route}>
                     <AdminStatistics />
                 </Route>
+
+                <ProtectedRoute
+                    exact
+                    path={administrationRoutes.overviewTableRoute.route}
+                    isAuthorizedToView={x => x.canAccessCourseAdministration}
+                    render={() => <AdminOverviewTablePage />} />
             </Switch>
         </ContentPane>
     </PageRootContainer>
