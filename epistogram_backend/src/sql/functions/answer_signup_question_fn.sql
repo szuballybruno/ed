@@ -37,14 +37,16 @@ BEGIN
 		creation_date,
 		question_id,
 		answer_session_id,
-		is_correct
+		is_correct,
+		elapsed_seconds
 	)
 	VALUES
 	(
 		NOW(),
 		param_question_id,
 		var_signup_answer_session_id,
-		var_is_correct
+		var_is_correct,
+		0
 	)
 	RETURNING id
 	INTO var_given_answer_id;
