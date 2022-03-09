@@ -19,35 +19,23 @@ export const TempomatModeTile = (props: {
     return <Flex
         flex="1"
         direction="column"
-        padding="15px"
-        margin="5px"
-        borderRadius="5px"
+        p="10px"
+        mx="10px"
+        maxW="220px"
+        align="center"
         cursor="pointer"
         className="shadowOnHover"
-        bg={isSelected ? "var(--deepBlue)" : undefined}
-        onClick={onClick}
-        align="center" >
+        //bg={isSelected ? "var(--deepBlue)" : undefined}
+        onClick={onClick}>
 
         <TempomatModeImage
-            style={{
-                background: isSelected
-                    ? "#97c9cc50"
-                    : "#efefef",
-                padding: "10px",
-                objectFit: "contain",
-                width: "140px",
-                height: "80px"
-            }}
+            isSelected={isSelected}
             mode={tempomatMode}
             customizeFn={builder => builder
                 .custom("roundBorders")} />
 
         <EpistoFont
             fontSize="fontSmall"
-            className={new ClassBuilder()
-                .if(isSelected, x => x
-                    .custom("fontLight"))
-                .build()}
             style={{
                 margin: "15px 0 0 0",
                 width: "100%",
@@ -59,10 +47,6 @@ export const TempomatModeTile = (props: {
         </EpistoFont>
 
         <EpistoFont
-            className={new ClassBuilder()
-                .if(isSelected, x => x
-                    .custom("fontLight"))
-                .build()}
             fontSize="fontSmall"
             style={{
                 textAlign: "justify",
