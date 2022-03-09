@@ -26,6 +26,11 @@ export class EventService {
         await this.addEventAsync(userId, "coin_acquire_session_streak", data);
     }
 
+    async addLagBehindNotificationEventAsync(userId: number, data: any) {
+
+        await this.addEventAsync(userId, "lag_behind_notification", data);
+    }
+
     async addEventAsync(userId: number, eventType: EventType, eventDataDTO: any) {
 
         await this._ormService

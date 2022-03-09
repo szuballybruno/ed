@@ -324,7 +324,7 @@ import { ScheduledJobService } from './services/ScheduledJobService';
     addEndpoint(apiRoutes.playback.saveVideoPlaybackSample, playbackController.saveVideoPlaybackSampleAction, { isPost: true });
 
     // course
-    addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true });
     addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction, { authorize: ["administrator"] });
