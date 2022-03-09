@@ -269,7 +269,17 @@ export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => 
 
 export const sleepAsync = (seconds: number) => {
 
-    return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+    return new Promise<void>((resolve, reject) => {
+
+        const handler = () => {
+
+            console.log(`Timeout is over.`)
+            resolve();
+        }
+
+        console.log(`Timeout set for ${seconds}s.`)
+        setTimeout(handler, seconds * 1000);
+    });
 }
 
 export const getBearerTokenFromRequest = (req: Request) => {

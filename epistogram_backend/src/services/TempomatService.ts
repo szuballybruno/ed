@@ -1,25 +1,32 @@
-import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { UserCourseCompletionOriginalEstimationView } from "../models/views/UserCourseCompletionOriginalEstimationView";
 import { UserCourseCompletionCurrentView } from "../models/views/UserCourseCompletionCurrentView";
+import { UserCourseCompletionOriginalEstimationView } from "../models/views/UserCourseCompletionOriginalEstimationView";
 import { UserCourseProgressView } from "../models/views/UserCourseProgressView";
 import { UserTempomatAdjustmentValueView } from "../models/views/UserTempomatAdjustmentValueView";
 import { TempomatModeType } from "../shared/types/sharedTypes";
+import { LoggerService } from "./LoggerService";
 import { MapperService } from "./MapperService";
 import { ServiceBase } from "./misc/ServiceBase";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { TaskLockService } from "./TaskLockService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 
 export class TempomatService extends ServiceBase {
 
     private _userCourseBridgeService: UserCourseBridgeService;
+    private _taskLockService: TaskLockService;
+    private _loggerService: LoggerService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        courseBridgeServie: UserCourseBridgeService) {
+        courseBridgeServie: UserCourseBridgeService,
+        taskLockService: TaskLockService,
+        loggerService: LoggerService) {
 
         super(mapperService, ormService);
 
+        this._loggerService = loggerService;
+        this._taskLockService = taskLockService;
         this._userCourseBridgeService = courseBridgeServie;
     }
 
@@ -68,20 +75,51 @@ export class TempomatService extends ServiceBase {
 
     async evaluateUserProgressesAsync() {
 
-        console.log("------- Evaluating user progresses... -------");
+        this._loggerService.log("------- Evaluating user progresses... -------");
 
-        const userCourseProgressViews = await this._ormService
-            .getRepository(UserCourseProgressView)
-            .find();
+        // acquire task lock 
+        this._loggerService.log("-- Acquireing task lock... ");
 
-        for (let index = 0; index < userCourseProgressViews.length; index++) {
+        const isLockAcquired = await this._taskLockService
+            .acquireTaskLockAsync("user_progress_evaluation");
 
-            const userCourseProgressView = userCourseProgressViews[index];
-            const { courseId, userId } = userCourseProgressView;
+        if (!isLockAcquired) {
 
-            console.log(`USER PROGRESS EVAL: userId: ${userId} courseId: ${courseId}`);
+            this._loggerService.log("-- Failed to acquire task lock, another process is currently locking this task.");
+            this._loggerService.log("-- Job aborted.");
+            return;
+        }
 
-            await this.recalculateUserProgressAsync(userCourseProgressView);
+        try {
+
+            this._loggerService.log("-- Task lock acquired successfully.");
+
+            // get all user progresses and handle them accordingly 
+            const userCourseProgressViews = await this._ormService
+                .getRepository(UserCourseProgressView)
+                .find();
+
+            for (let index = 0; index < userCourseProgressViews.length; index++) {
+
+                const userCourseProgressView = userCourseProgressViews[index];
+                const { courseId, userId } = userCourseProgressView;
+
+                this._loggerService.log(`USER PROGRESS EVAL: userId: ${userId} courseId: ${courseId}`);
+
+                await this.recalculateUserProgressAsync(userCourseProgressView);
+            }
+        }
+        finally {
+
+            try {
+
+                await this._taskLockService
+                    .dissolveLockAsync("user_progress_evaluation");
+            }
+            catch (e: any) {
+
+                throw new Error("Fatal error, task lock failed to dissolve! " + e?.message);
+            }
         }
     }
 
@@ -123,13 +161,13 @@ export class TempomatService extends ServiceBase {
         const newDurationDays = currentView.previsionedLengthDays + adjustmentDays;
         const newCompletionDate = currentView.startDate.addDays(newDurationDays);
 
-        console.log(`TEMPOMAT ADJUSTMENT: `);
-        console.log(`-- Lag behind: ${lagBehindPercentage}%`);
-        console.log(`-- Mode: '${tempomatMode}'`);
-        console.log(`-- Threshold: ${adjustmentThresholdPercentage}%`);
-        console.log(`-- Applied adjustment: ${allowedStretchPercetage}%`);
-        console.log(`-- Adjustment days: +${adjustmentDays}`);
-        console.log(`-- New previsoned length: ${newDurationDays} days`);
+        this._loggerService.log(`TEMPOMAT ADJUSTMENT: `);
+        this._loggerService.log(`-- Lag behind: ${lagBehindPercentage}%`);
+        this._loggerService.log(`-- Mode: '${tempomatMode}'`);
+        this._loggerService.log(`-- Threshold: ${adjustmentThresholdPercentage}%`);
+        this._loggerService.log(`-- Applied adjustment: ${allowedStretchPercetage}%`);
+        this._loggerService.log(`-- Adjustment days: +${adjustmentDays}`);
+        this._loggerService.log(`-- New previsoned length: ${newDurationDays} days`);
 
         await this.setPrevisionedScheduleAsync(
             userId,
@@ -144,7 +182,7 @@ export class TempomatService extends ServiceBase {
         if (lagBehindPercentage < 35)
             return;
 
-        console.log(`User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}%`);
+        this._loggerService.log(`User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}%`);
 
         // TODO notify user
     }
