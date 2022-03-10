@@ -1,3 +1,4 @@
+import { TaskCodeType } from "../../models/Types";
 import { SessionActivityType } from "../../shared/types/sharedTypes";
 import { logObject } from "../misc/logger";
 import { SQLConnectionService } from "./SQLConnectionService";
@@ -151,6 +152,16 @@ export class SQLFunctionsService {
             [
                 userId,
                 param_activity_type
+            ]
+        )
+    }
+
+    acquireTaskLockAsync = (taskCode: TaskCodeType) => {
+
+        return this.execSQLFunctionAsync<boolean>(
+            "acquire_task_lock_fn",
+            [
+                taskCode
             ]
         )
     }

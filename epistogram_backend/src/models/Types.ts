@@ -5,3 +5,5 @@ export declare type ClassType<T> = {
 } | Function;
 
 export type RegistrationType = "ActivationCode" | "PublicRegistrationToken" | "Invitation";
+
+export type TaskCodeType = "user_progress_evaluation";

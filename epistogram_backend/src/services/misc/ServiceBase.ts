@@ -1,4 +1,5 @@
 import { DeepPartial, FindConditions } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { ClassType } from "../../models/Types";
 import { MapperService } from "../MapperService";
 import { ORMConnectionService } from "../sqlServices/ORMConnectionService";
@@ -25,18 +26,41 @@ export class QueryServiceBase<TMainEntity> extends ServiceBase {
         this._mainEntityClass = mainEntityClass;
     }
 
-    public updateAsync(obj: DeepPartial<TMainEntity>) {
+    public async updateAsync(obj: DeepPartial<TMainEntity>) {
 
-        this._ormService
+        await this._ormService
             .getRepository(this._mainEntityClass)
             .save(obj);
     }
 
-    public getOrFailAsync(obj: FindConditions<TMainEntity>) {
+    public async createAsync(entity: QueryDeepPartialEntity<TMainEntity>) {
 
-        return this._ormService
+        await this._ormService
+            .getRepository(this._mainEntityClass)
+            .insert(entity);
+    }
+
+    public async deleteAsync(entity: FindConditions<TMainEntity>) {
+
+        await this._ormService
+            .getRepository(this._mainEntityClass)
+            .delete(entity);
+    }
+
+    public async getOrFailAsync(obj: FindConditions<TMainEntity>) {
+
+        return await this._ormService
             .getRepository(this._mainEntityClass)
             .findOneOrFail({
+                where: obj
+            });
+    }
+
+    public async getAsync(obj: FindConditions<TMainEntity>) {
+
+        return await this._ormService
+            .getRepository(this._mainEntityClass)
+            .findOne({
                 where: obj
             });
     }

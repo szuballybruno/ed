@@ -91,6 +91,7 @@ import { TempomatAdjustmentValue } from "../../models/entity/TempomatAdjustmentV
 import { UserTempomatAdjustmentValueView } from "../../models/views/UserTempomatAdjustmentValueView";
 import { UserCourseBridgeView } from "../../models/views/UserCourseBridgeView";
 import { UserCourseCompletionOriginalEstimationView } from "../../models/views/UserCourseCompletionOriginalEstimationView";
+import { TaskLock } from "../../models/entity/TaskLock";
 
 export const dbSchema = {
 
@@ -160,6 +161,7 @@ export const dbSchema = {
 
     functionScripts: [
         "answer_signup_question_fn",
+        "acquire_task_lock_fn",
         "answer_question_fn",
         "create_daily_tip_fn",
         "insert_coin_transaction",
@@ -286,6 +288,7 @@ export const dbSchema = {
         CourseRatingQuestionUserAnswer,
         UserVideoProgressBridge,
         UserExamProgressBridge,
-        TempomatAdjustmentValue
+        TempomatAdjustmentValue,
+        TaskLock
     ] as any[]
 }

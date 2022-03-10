@@ -89,6 +89,7 @@ import { PlaybackController } from './api/PlaybackController';
 import { TempomatService } from './services/TempomatService';
 import { TempomatController } from './api/TempomatController';
 import { ScheduledJobService } from './services/ScheduledJobService';
+import { TaskLockService } from './services/TaskLockService';
 
 (async () => {
 
@@ -142,7 +143,8 @@ import { ScheduledJobService } from './services/ScheduledJobService';
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
-    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService);
+    const taskLockService = new TaskLockService(mapperService, ormConnectionService, sqlFunctionService);
+    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, taskLockService, loggerService);
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, courseService, userCourseBridgeService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
