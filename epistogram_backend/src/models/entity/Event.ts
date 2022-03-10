@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { EventType } from "../../shared/types/sharedTypes";
+import { EventCodeType } from "../../shared/types/sharedTypes";
 import { User } from "./User";
 
 @Entity()
@@ -12,7 +12,7 @@ export class Event {
     creationDate: Date;
 
     @Column({ type: "text" })
-    type: EventType;
+    type: EventCodeType;
 
     @Column()
     isFulfilled: boolean;

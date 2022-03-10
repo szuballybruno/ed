@@ -43,7 +43,7 @@ export type CourseStageNameType = "prequiz" | "pretest" | "pretest_results" | "w
 
 export type TempomatModeType = "auto" | "light" | "balanced" | "strict"; 
 
-export type EventType = "coin_acquire_answer_streak" | "coin_acquire_session_streak" | "lag_behind_notification";
+export type EventCodeType = "coin_acquire_answer_streak" | "coin_acquire_session_streak" | "lag_behind_notification";
 
 export type CourseVisibilityType = "public" | "private";
 

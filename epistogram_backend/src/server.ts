@@ -90,6 +90,7 @@ import { TempomatService } from './services/TempomatService';
 import { TempomatController } from './api/TempomatController';
 import { ScheduledJobService } from './services/ScheduledJobService';
 import { TaskLockService } from './services/TaskLockService';
+import { randomInt } from 'crypto';
 
 (async () => {
 
@@ -145,7 +146,7 @@ import { TaskLockService } from './services/TaskLockService';
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
     const taskLockService = new TaskLockService(mapperService, ormConnectionService, sqlFunctionService, globalConfig);
-    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, taskLockService, loggerService);
+    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, taskLockService, loggerService, eventService);
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);

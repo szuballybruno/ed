@@ -3,6 +3,7 @@ import { UserCourseCompletionOriginalEstimationView } from "../models/views/User
 import { UserCourseProgressView } from "../models/views/UserCourseProgressView";
 import { UserTempomatAdjustmentValueView } from "../models/views/UserTempomatAdjustmentValueView";
 import { TempomatModeType } from "../shared/types/sharedTypes";
+import { EventService } from "./EventService";
 import { LoggerService } from "./LoggerService";
 import { MapperService } from "./MapperService";
 import { ServiceBase } from "./misc/ServiceBase";
@@ -15,16 +16,19 @@ export class TempomatService extends ServiceBase {
     private _userCourseBridgeService: UserCourseBridgeService;
     private _taskLockService: TaskLockService;
     private _loggerService: LoggerService;
+    private _eventService: EventService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
         courseBridgeServie: UserCourseBridgeService,
         taskLockService: TaskLockService,
-        loggerService: LoggerService) {
+        loggerService: LoggerService,
+        eventService: EventService) {
 
         super(mapperService, ormService);
 
+        this._eventService = eventService;
         this._loggerService = loggerService;
         this._taskLockService = taskLockService;
         this._userCourseBridgeService = courseBridgeServie;
@@ -188,9 +192,13 @@ export class TempomatService extends ServiceBase {
         if (lagBehindPercentage < 35)
             return;
 
-        this._loggerService.log(`User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}%`);
+        this._loggerService
+            .log(`User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}% Sending notification...`);
 
-        // TODO notify user
+        await this._eventService
+            .addLagBehindNotificationEventAsync(userId, {
+                lagBehindPercentage
+            });
     }
 
     async setPrevisionedScheduleAsync(
