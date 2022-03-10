@@ -7,7 +7,7 @@ import { CourseCategoryDTO } from "../../../shared/dtos/CourseCategoryDTO";
 import { CourseDetailsEditDataDTO } from "../../../shared/dtos/CourseDetailsEditDataDTO";
 import { HumanSkillBenefitDTO } from "../../../shared/dtos/HumanSkillBenefitDTO";
 import { CourseVisibilityType } from "../../../shared/types/sharedTypes";
-import { useAdminCourseList, useCourseDetailsEditData, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
+import { useAdminCourseList, useCourseDetailsEditData, useCreateCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { iterate } from "../../../static/frontendHelpers";
 import { LoadingFrame } from "../../system/LoadingFrame";
@@ -22,6 +22,7 @@ import { EpistoSelect } from "../../controls/EpistoSelect";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminCourseList } from "./AdminCourseList";
 import { useNavigation } from "../../../services/core/navigatior";
+import { ButtonType } from "../../../models/types";
 
 export const AdminCourseDetailsSubpage = () => {
 
@@ -32,6 +33,7 @@ export const AdminCourseDetailsSubpage = () => {
     // api calls
     const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = useCourseDetailsEditData(courseId);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseDetailsData();
+    const { createCourseAsync, createCourseState } = useCreateCourse();
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = useUploadCourseThumbnailAsync();
 
     // TODO: use courseStatus and coursesError in loadingframe too
@@ -128,6 +130,24 @@ export const AdminCourseDetailsSubpage = () => {
 
     checkIfCurrentCourseFromUrl()
 
+    const handleCreateCourseAsync = async () => {
+
+        try {
+
+            await createCourseAsync({
+                title: "Uj kurzus"
+            });
+
+            showNotification("Uj kurzus sikeresen letrehozva!");
+
+            await refetchCoursesAsync();
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }
+
     // effects 
     useEffect(() => {
 
@@ -157,6 +177,13 @@ export const AdminCourseDetailsSubpage = () => {
 
     }, [courseDetailsEditData]);
 
+    const bulkEditButtons = [
+        {
+            title: "Hozzáadás",
+            action: () => handleCreateCourseAsync()
+        }
+    ] as ButtonType[]
+
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseDetailsEditDataState, saveCourseThumbnailState]}
         error={courseDetailsEditDataError}
@@ -175,6 +202,7 @@ export const AdminCourseDetailsSubpage = () => {
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
                     applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
                 ]}
+                headerButtons={bulkEditButtons}
                 onSave={handleSaveCourseAsync}>
 
                 {/* Course edit */}
