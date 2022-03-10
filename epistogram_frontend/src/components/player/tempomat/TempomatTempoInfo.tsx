@@ -54,6 +54,7 @@ export const TempomatTempoInfo = (props: {
                     flex="1">
 
                     <TempomatModeImage
+                        isSmall
                         mode={tempomatMode}
                         customizeFn={builder => builder
                             .custom("square25")} />
