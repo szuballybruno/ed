@@ -144,7 +144,7 @@ import { TaskLockService } from './services/TaskLockService';
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
-    const taskLockService = new TaskLockService(mapperService, ormConnectionService, sqlFunctionService);
+    const taskLockService = new TaskLockService(mapperService, ormConnectionService, sqlFunctionService, globalConfig);
     const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, taskLockService, loggerService);
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);

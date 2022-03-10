@@ -12,7 +12,7 @@ FROM
 		ucbv.course_id course_id,
 		ucbv.start_date,
 		ucbv.previsioned_length_days,
-		now()::date - ucbv.start_date days_elapsed_since_start,
+		now()::date - ucbv.start_date + 1 days_elapsed_since_start,
 		cicv.item_count total_item_count
 	FROM public.user_course_bridge_view ucbv
 

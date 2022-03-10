@@ -145,8 +145,11 @@ export class TempomatService extends ServiceBase {
                 }
             });
 
+        const isPositiveAdjustment = lagBehindPercentage >= 0;
         const adjustmentThresholdPercentage = adjustmentValue.actualAdjustmentValue;
-        const allowedStretchPercetage = Math.min(adjustmentThresholdPercentage, lagBehindPercentage);
+        const allowedStretchPercetage = isPositiveAdjustment
+            ? Math.min(adjustmentThresholdPercentage, lagBehindPercentage)
+            : Math.max(-1 * adjustmentThresholdPercentage, lagBehindPercentage);
 
         const currentView = await this._ormService
             .getRepository(UserCourseCompletionCurrentView)
@@ -157,7 +160,10 @@ export class TempomatService extends ServiceBase {
                 }
             });
 
-        const adjustmentDays = Math.ceil(currentView.previsionedLengthDays / 100.0 * allowedStretchPercetage);
+        const adjustmentDaysFraction = currentView.previsionedLengthDays / 100.0 * allowedStretchPercetage;
+        const adjustmentDays = isPositiveAdjustment
+            ? Math.ceil(adjustmentDaysFraction)
+            : Math.floor(adjustmentDaysFraction);
         const newDurationDays = currentView.previsionedLengthDays + adjustmentDays;
         const newCompletionDate = currentView.startDate.addDays(newDurationDays);
 
@@ -166,7 +172,7 @@ export class TempomatService extends ServiceBase {
         this._loggerService.log(`-- Mode: '${tempomatMode}'`);
         this._loggerService.log(`-- Threshold: ${adjustmentThresholdPercentage}%`);
         this._loggerService.log(`-- Applied adjustment: ${allowedStretchPercetage}%`);
-        this._loggerService.log(`-- Adjustment days: +${adjustmentDays}`);
+        this._loggerService.log(`-- Adjustment days: ${isPositiveAdjustment ? "+" : ""}${adjustmentDays}`);
         this._loggerService.log(`-- New previsoned length: ${newDurationDays} days`);
 
         await this.setPrevisionedScheduleAsync(
