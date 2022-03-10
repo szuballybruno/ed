@@ -43,6 +43,16 @@ export class ExamService {
     }
 
     /**
+     * Creates a new exam
+     */
+    async createExamAsync(exam: Exam) {
+
+        await this._ormService
+            .getRepository(Exam)
+            .insert(exam);
+    }
+
+    /**
      * Returns an exam player dto that contains 
      * all the data necessary to play an exam.
      * 
@@ -332,7 +342,7 @@ export class ExamService {
      * @param userId 
      * @param answerSessionId 
      * @returns 
-     */ 
+     */
     getExamResultsAsync = async (userId: number, answerSessionId: number) => {
 
         const currentItemCode = await this._userCourseBridgeService

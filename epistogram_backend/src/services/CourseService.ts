@@ -38,6 +38,7 @@ import { MapperService } from "./MapperService";
 import { readItemCode } from "./misc/encodeService";
 import { createCharSeparatedList } from "./misc/mappings";
 import { ModuleService } from "./ModuleService";
+import { PretestService } from "./PretestService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { VideoService } from "./VideoService";
@@ -51,6 +52,7 @@ export class CourseService {
     private _mapperService: MapperService;
     private _fileService: FileService;
     private _examService: ExamService;
+    private _pretestService: PretestService;
 
     constructor(
         moduleService: ModuleService,
@@ -59,7 +61,8 @@ export class CourseService {
         ormService: ORMConnectionService,
         mapperService: MapperService,
         fileService: FileService,
-        examService: ExamService) {
+        examService: ExamService,
+        pretestService: PretestService) {
 
         this._moduleService = moduleService;
         this._userCourseBridgeService = userCourseBridgeService;
@@ -68,6 +71,7 @@ export class CourseService {
         this._mapperService = mapperService;
         this._fileService = fileService;
         this._examService = examService;
+        this._pretestService = pretestService;
     }
 
     /**
@@ -157,26 +161,31 @@ export class CourseService {
      */
     async createCourseAsync(dto: CreateCourseDTO) {
 
+        const newCourse = {
+            title: dto.title,
+            teacherId: 1,
+            categoryId: 1,
+            subCategoryId: 1,
+            difficulty: 0,
+            benchmark: 0,
+            description: "",
+            shortDescription: "",
+            language: "magyar",
+            previouslyCompletedCount: 0,
+            visibility: "private",
+            technicalRequirements: "",
+            humanSkillBenefits: "",
+            humanSkillBenefitsDescription: "",
+            requirementsDescription: "",
+            skillBenefits: ""
+        } as Course;
+
         await this._ormService
             .getRepository(Course)
-            .insert({
-                title: dto.title,
-                teacherId: 1,
-                categoryId: 1,
-                subCategoryId: 1,
-                difficulty: 0,
-                benchmark: 0,
-                description: "",
-                shortDescription: "",
-                language: "magyar",
-                previouslyCompletedCount: 0,
-                visibility: "private",
-                technicalRequirements: "",
-                humanSkillBenefits: "",
-                humanSkillBenefitsDescription: "",
-                requirementsDescription: "",
-                skillBenefits: ""
-            });
+            .insert(newCourse);
+
+        await this._pretestService
+            .createPretestExamAsync(newCourse.id);
     }
 
     /**
