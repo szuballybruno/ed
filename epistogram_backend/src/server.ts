@@ -200,6 +200,18 @@ import { randomInt } from 'crypto';
             () => tempomatService
                 .evaluateUserProgressesAsync());
 
+
+    let asd = 0;
+    scheduledJobService
+        .scheduleJob(
+            {
+                seconds: "*/20",
+            },
+            () => {
+                console.log("Something.... " + asd)
+                asd++;
+            });
+
     // initialize express
     const expressServer = express();
     const turboExpress = new TurboExpress<ActionParams, EndpointOptionsType>(expressServer, [authMiddleware], onActionError, onActionSuccess);
