@@ -1,6 +1,6 @@
 SELECT
 	sq.*,
-	GREATEST(0, sq.previsioned_percent_completed_by_now - sq.completed_percentage) lag_behind_percentage,
+	sq.previsioned_percent_completed_by_now - sq.completed_percentage lag_behind_percentage,
 	ucb.tempomat_mode
 FROM 
 (

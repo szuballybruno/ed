@@ -1,11 +1,10 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Exam } from "../models/entity/Exam";
+import { CourseView } from "../models/views/CourseView";
+import { PretestResultView } from "../models/views/PretestResultView";
 import { IdResultDTO } from "../shared/dtos/IdResultDTO";
 import { PretestDataDTO } from "../shared/dtos/PretestDataDTO";
 import { PretestResultDTO } from "../shared/dtos/PretestResultDTO";
-import { CourseView } from "../models/views/CourseView";
-import { PretestResultView } from "../models/views/PretestResultView";
-import { CourseService } from "./CourseService";
 import { ExamService } from "./ExamService";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
@@ -16,21 +15,34 @@ export class PretestService {
     private _mapperSerice: MapperService;
     private _ormService: ORMConnectionService;
     private _examService: ExamService;
-    private _courseService: CourseService;
     private _courseBridgeService: UserCourseBridgeService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperSerice: MapperService,
         examService: ExamService,
-        courseService: CourseService,
         courseBridgeService: UserCourseBridgeService) {
 
         this._ormService = ormService;
         this._mapperSerice = mapperSerice;
         this._examService = examService;
-        this._courseService = courseService;
         this._courseBridgeService = courseBridgeService;
+    }
+
+    async createPretestExamAsync(courseId: number) {
+
+        const newExam = {
+            courseId,
+            orderIndex: 0,
+            title: "",
+            type: "pretest",
+            subtitle: ""
+        } as Exam;
+
+        await this._examService
+            .createExamAsync(newExam);
+
+        return newExam.id;
     }
 
     async getPretestDataAsync(userId: number, courseId: number) {
@@ -97,8 +109,14 @@ export class PretestService {
                 }
             });
 
-        const courseView = await this._courseService
-            .getCourseViewAsync(userId, courseId);
+        const courseView = await this._ormService
+            .getRepository(CourseView)
+            .findOneOrFail({
+                where: {
+                    id: courseId,
+                    userId
+                }
+            });
 
         return this._mapperSerice
             .map(PretestResultView, PretestResultDTO, view, courseView);

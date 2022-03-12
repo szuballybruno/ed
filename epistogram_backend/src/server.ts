@@ -90,6 +90,7 @@ import { TempomatService } from './services/TempomatService';
 import { TempomatController } from './api/TempomatController';
 import { ScheduledJobService } from './services/ScheduledJobService';
 import { TaskLockService } from './services/TaskLockService';
+import { randomInt } from 'crypto';
 
 (async () => {
 
@@ -133,7 +134,8 @@ import { TaskLockService } from './services/TaskLockService';
     const fileService = new FileService(userService, storageService, ormConnectionService);
     const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService);
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
-    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService);
+    const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService);
+    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService);
     const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
     const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService, userCourseBridgeService, globalConfig);
@@ -143,10 +145,9 @@ import { TaskLockService } from './services/TaskLockService';
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
-    const taskLockService = new TaskLockService(mapperService, ormConnectionService, sqlFunctionService);
-    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, taskLockService, loggerService);
+    const taskLockService = new TaskLockService(mapperService, ormConnectionService, sqlFunctionService, globalConfig);
+    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, taskLockService, loggerService, eventService);
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
-    const pretestService = new PretestService(ormConnectionService, mapperService, examService, courseService, userCourseBridgeService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
     const scheduledJobService = new ScheduledJobService();

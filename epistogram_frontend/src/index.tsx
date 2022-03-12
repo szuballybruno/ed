@@ -81,7 +81,7 @@ ReactDOM.render(
                                     <AuthenticationFrame>
                                         <ErrorDialogFrame>
                                             <NotificationsFrame>
-                                                <EventListener>
+                                                <EventListener >
                                                     <MainRouting />
                                                 </EventListener>
                                             </NotificationsFrame>

@@ -3,6 +3,7 @@ import { UserCourseCompletionOriginalEstimationView } from "../models/views/User
 import { UserCourseProgressView } from "../models/views/UserCourseProgressView";
 import { UserTempomatAdjustmentValueView } from "../models/views/UserTempomatAdjustmentValueView";
 import { TempomatModeType } from "../shared/types/sharedTypes";
+import { EventService } from "./EventService";
 import { LoggerService } from "./LoggerService";
 import { MapperService } from "./MapperService";
 import { ServiceBase } from "./misc/ServiceBase";
@@ -15,16 +16,19 @@ export class TempomatService extends ServiceBase {
     private _userCourseBridgeService: UserCourseBridgeService;
     private _taskLockService: TaskLockService;
     private _loggerService: LoggerService;
+    private _eventService: EventService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
         courseBridgeServie: UserCourseBridgeService,
         taskLockService: TaskLockService,
-        loggerService: LoggerService) {
+        loggerService: LoggerService,
+        eventService: EventService) {
 
         super(mapperService, ormService);
 
+        this._eventService = eventService;
         this._loggerService = loggerService;
         this._taskLockService = taskLockService;
         this._userCourseBridgeService = courseBridgeServie;
@@ -145,8 +149,11 @@ export class TempomatService extends ServiceBase {
                 }
             });
 
+        const isPositiveAdjustment = lagBehindPercentage >= 0;
         const adjustmentThresholdPercentage = adjustmentValue.actualAdjustmentValue;
-        const allowedStretchPercetage = Math.min(adjustmentThresholdPercentage, lagBehindPercentage);
+        const allowedStretchPercetage = isPositiveAdjustment
+            ? Math.min(adjustmentThresholdPercentage, lagBehindPercentage)
+            : Math.max(-1 * adjustmentThresholdPercentage, lagBehindPercentage);
 
         const currentView = await this._ormService
             .getRepository(UserCourseCompletionCurrentView)
@@ -157,7 +164,10 @@ export class TempomatService extends ServiceBase {
                 }
             });
 
-        const adjustmentDays = Math.ceil(currentView.previsionedLengthDays / 100.0 * allowedStretchPercetage);
+        const adjustmentDaysFraction = currentView.previsionedLengthDays / 100.0 * allowedStretchPercetage;
+        const adjustmentDays = isPositiveAdjustment
+            ? Math.ceil(adjustmentDaysFraction)
+            : Math.floor(adjustmentDaysFraction);
         const newDurationDays = currentView.previsionedLengthDays + adjustmentDays;
         const newCompletionDate = currentView.startDate.addDays(newDurationDays);
 
@@ -166,7 +176,7 @@ export class TempomatService extends ServiceBase {
         this._loggerService.log(`-- Mode: '${tempomatMode}'`);
         this._loggerService.log(`-- Threshold: ${adjustmentThresholdPercentage}%`);
         this._loggerService.log(`-- Applied adjustment: ${allowedStretchPercetage}%`);
-        this._loggerService.log(`-- Adjustment days: +${adjustmentDays}`);
+        this._loggerService.log(`-- Adjustment days: ${isPositiveAdjustment ? "+" : ""}${adjustmentDays}`);
         this._loggerService.log(`-- New previsoned length: ${newDurationDays} days`);
 
         await this.setPrevisionedScheduleAsync(
@@ -182,9 +192,13 @@ export class TempomatService extends ServiceBase {
         if (lagBehindPercentage < 35)
             return;
 
-        this._loggerService.log(`User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}%`);
+        this._loggerService
+            .log(`User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}% Sending notification...`);
 
-        // TODO notify user
+        await this._eventService
+            .addLagBehindNotificationEventAsync(userId, {
+                lagBehindPercentage
+            });
     }
 
     async setPrevisionedScheduleAsync(

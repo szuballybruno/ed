@@ -1,7 +1,8 @@
 import { Event } from "../models/entity/Event";
 import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
 import { EventDTO } from "../shared/dtos/EventDTO";
-import { EventType } from "../shared/types/sharedTypes";
+import { LagBehindNotificationDTO } from "../shared/dtos/LagBehindNotificationDTO";
+import { EventCodeType } from "../shared/types/sharedTypes";
 import { MapperService } from "./MapperService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 
@@ -26,18 +27,20 @@ export class EventService {
         await this.addEventAsync(userId, "coin_acquire_session_streak", data);
     }
 
-    async addLagBehindNotificationEventAsync(userId: number, data: any) {
+    async addLagBehindNotificationEventAsync(userId: number, data: LagBehindNotificationDTO) {
 
         await this.addEventAsync(userId, "lag_behind_notification", data);
     }
 
-    async addEventAsync(userId: number, eventType: EventType, eventDataDTO: any) {
+    async addEventAsync(userId: number, eventCode: EventCodeType, eventDataDTO: any) {
+
+        console.log(`Queueing new event for user: ${userId} code: ${eventCode}`);
 
         await this._ormService
             .getRepository(Event)
             .insert({
                 userId: userId,
-                type: eventType,
+                type: eventCode,
                 isFulfilled: false,
                 data: JSON.stringify(eventDataDTO)
             });
