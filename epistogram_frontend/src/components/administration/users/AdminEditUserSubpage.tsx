@@ -21,6 +21,7 @@ import { ButtonType } from '../../../models/types';
 import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import { Add, List } from '@mui/icons-material';
 
 export const AdminEditUserSubpage = (props: {
     users: AdminPageUserDTO[],
@@ -122,10 +123,12 @@ export const AdminEditUserSubpage = (props: {
     const bulkEditButtons = [
         {
             title: "Összes megtekintett kurzus",
+            icon: <List style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
             action: () => navigateToUserCourses()
         },
         {
             title: "Hozzáadás",
+            icon: <Add style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
             action: () => navigateToAddUser()
         }
     ] as ButtonType[]
@@ -177,7 +180,7 @@ export const AdminEditUserSubpage = (props: {
                 className='roundBorders'
                 flex="1"
                 mt="5px"
-                background="var(--transparentWhite70)"
+                //background="var(--transparentWhite70)"
                 flexWrap="wrap">
 
                 <EditUserControl
@@ -190,7 +193,7 @@ export const AdminEditUserSubpage = (props: {
                 <Box
                     className='roundBorders'
                     flex="1"
-                    p="10px"
+                    p="0 10px 10px 10px"
                     minWidth="300px"
                 >
 
@@ -198,10 +201,29 @@ export const AdminEditUserSubpage = (props: {
                         loadingState={[coinBalanceStatus, giftCoinsToUserState]}
                         error={coinBalanceError}
                         direction="column">
+                        <EpistoFont
+                            fontSize={"fontHuge"}
+                            style={{
+                                marginTop: 10,
+                                fontWeight: 600
+                            }}>
 
-                        <EpistoFont>
-                            Egyenleg: {coinBalance}
+                            EpistoCoin egyenleg
                         </EpistoFont>
+
+                        <Flex mt="20px">
+
+                            Egyenleg:
+
+                            <EpistoFont
+                                style={{
+                                    marginLeft: 5,
+                                    fontWeight: 600
+                                }}>
+
+                                {coinBalance}
+                            </EpistoFont>
+                        </Flex>
 
                         <EpistoLabel text="EpistoCoin hozzáadása">
 
@@ -218,6 +240,15 @@ export const AdminEditUserSubpage = (props: {
                                 Hozzáadás
                             </EpistoButton>
                         </EpistoLabel>
+                        <EpistoFont
+                            fontSize={"fontHuge"}
+                            style={{
+                                marginTop: 50,
+                                fontWeight: 600
+                            }}>
+
+                            Alkalmazás adatai
+                        </EpistoFont>
                     </LoadingFrame>
                 </Box>
             </Flex>

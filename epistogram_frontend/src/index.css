@@ -16,12 +16,14 @@
   --mildOrange: #ffcd2b;
   --mildDeepBlue: #1d6784;
 
-  --epistoTeal: #97c9cc;
+  --epistoTeal: rgb(151, 201, 204);
   --whiteGrey: #f7f7f7;
  
   /* transparent colors */
   
   --transparentIntenseBlue: rgba(69, 97, 238, 0.847);
+  --transparentIntenseTeal: rgba(151, 201, 204, 0.7);
+  /*--transparentIntenseTeal: rgba(151, 201, 204, 0.847);*/
 
   /* --transparentMildGreen70: rgba(151, 204, 155, 0.7); */
 

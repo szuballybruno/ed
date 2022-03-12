@@ -94,22 +94,37 @@ export const EditUserControl = (props: {
         alignItems={"flex-start"}>
 
         <Flex direction="column">
+            <EpistoFont
+                fontSize={"fontHuge"}
+                style={{
+                    fontWeight: 600,
+                    marginTop: 10
+                }}>
+
+                Alapadatok
+            </EpistoFont>
 
             {/* first & last name */}
-            <Flex>
+            <Flex flex="1" justify="space-between">
                 <EpistoEntry
-                    value={firstName}
-                    name="fname"
-                    setValue={setFirstName}
-                    labelVariant={"top"}
-                    label={translatableTexts.misc.firstName} />
-
-                <EpistoEntry
+                    style={{
+                        flex: 1,
+                        marginRight: 5
+                    }}
                     name="lname"
                     value={lastName}
                     setValue={setLastName}
                     labelVariant={"top"}
                     label={translatableTexts.misc.lastName} />
+                <EpistoEntry
+                    style={{
+                        flex: 1
+                    }}
+                    value={firstName}
+                    name="fname"
+                    setValue={setFirstName}
+                    labelVariant={"top"}
+                    label={translatableTexts.misc.firstName} />
             </Flex>
 
             {/* email */}
@@ -120,18 +135,29 @@ export const EditUserControl = (props: {
                 labelVariant={"top"}
                 label="Email" />
 
+            <EpistoFont
+                fontSize={"fontHuge"}
+                style={{
+                    marginTop: 50,
+                    fontWeight: 600
+                }}>
+
+                Cég és beosztás
+            </EpistoFont>
+
             {/* organization */}
             {canSetInvitedUserOrganization && <Flex
                 direction="column"
                 align="stretch"
-                mt="10px"
+                mt="5px"
                 width="100%">
 
                 <EpistoFont
                     isUppercase
                     fontSize="fontExtraSmall"
                     style={{
-                        marginTop: "10px"
+                        marginTop: "10px",
+                        letterSpacing: "1.2px"
                     }}>
 
                     {translatableTexts.misc.company}
@@ -149,14 +175,15 @@ export const EditUserControl = (props: {
             {canSetInvitedUserOrganization && <Flex
                 direction="column"
                 align="stretch"
-                mt="10px"
+                mt="5px"
                 width="100%">
 
                 <EpistoFont
                     isUppercase
                     fontSize="fontExtraSmall"
                     style={{
-                        marginTop: "10px"
+                        marginTop: "10px",
+                        letterSpacing: "1.2px"
                     }}>
 
                     {translatableTexts.misc.jobTitle}
@@ -170,6 +197,16 @@ export const EditUserControl = (props: {
                     getCompareKey={jt => "" + jt?.id} />
             </Flex>}
 
+            <EpistoFont
+                fontSize={"fontHuge"}
+                style={{
+                    marginTop: 50,
+                    fontWeight: 600
+                }}>
+
+                Jogosultságkezelés
+            </EpistoFont>
+
             {/* role */}
             <Flex
                 direction="column"
@@ -180,7 +217,8 @@ export const EditUserControl = (props: {
                     isUppercase
                     fontSize="fontExtraSmall"
                     style={{
-                        marginTop: "10px"
+                        marginTop: "10px",
+                        letterSpacing: "1.2px"
                     }}>
 
                     {translatableTexts.misc.role}
@@ -196,7 +234,8 @@ export const EditUserControl = (props: {
 
             {/* is teacher */}
             <EpistoFont isUppercase fontSize="fontExtraSmall" style={{
-                marginTop: 10
+                marginTop: 10,
+                letterSpacing: "1.2px"
             }}>
                 {translatableTexts.administration.editUserControl.selectAsTeacher}
             </EpistoFont>
@@ -214,7 +253,7 @@ export const EditUserControl = (props: {
 
             {/* submit button */}
             <Button
-                variant={"outlined"}
+                variant="contained"
                 color={"secondary"}
                 onClick={() => handleSaveUserAsync()}
                 style={{ marginTop: "20px" }}>

@@ -80,11 +80,13 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
             isUppercase
             fontSize="fontExtraSmall"
             style={{
-                margin: "5px 0"
+                margin: "5px 0",
+                letterSpacing: "1.2px"
             }}>
 
             {label}
-        </EpistoFont>}
+        </EpistoFont>
+        }
 
         <TextField
             inputRef={ref}
@@ -126,5 +128,5 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
                 // margin: "10px 0px 10px 0px",
                 // padding: "2px"
             }} />
-    </Flex>
+    </Flex >
 });

@@ -42,9 +42,18 @@ export const AdminUserList = (props: {
 
 
 
-    return <Flex direction="column" minW="350px" flexBasis="350px" >
+    return <Flex
+        className="roundBorders"
+        direction="column"
+        minW="350px"
+        flexBasis="350px"
+        mr="5px"
+        background="var(--transparentWhite90)">
 
         <EpistoSearch
+            background="white"
+            boxShadow="inset 0px -2px 10px -5px #33333315"
+            borderRadius="7px 0 0 0"
             onChange={(x) => {
 
                 //if (handleSearch)
@@ -53,10 +62,9 @@ export const AdminUserList = (props: {
 
         {/* user list */}
         <FlexList
-            background="var(--transparentWhite70)"
             className="whall roundBorders"
-            h="100%"
-            mt="5px">
+            pt="5px"
+            h="100%">
 
             {users
                 .map((user, index) => {

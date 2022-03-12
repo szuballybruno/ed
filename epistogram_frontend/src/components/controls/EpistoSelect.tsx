@@ -34,35 +34,32 @@ export const EpistoSelect = <T,>(props: {
 
     const currentSelectedKey = selectedValue ? getCompareKey(selectedValue) : defaultKey;
 
-    return <Box
-        className="controlPadding simpleBorder roundBorders" {...css} >
+    return <select
+        className="whall roundBorders"
+        onChange={(x) => onSelectedValue(x.target.value)}
+        value={currentSelectedKey}
+        disabled={isDisabled}
+        style={{
+            outline: "none",
+            padding: "10px 10px",
+            marginTop: "5px",
+            cursor: "pointer",
+            pointerEvents: isDisabled ? "none" : undefined
+        }}>
 
-        <select
-            className="whall"
-            onChange={(x) => onSelectedValue(x.target.value)}
-            value={currentSelectedKey}
-            disabled={isDisabled}
-            style={{
-                width: "fit-content",
-                outline: "none",
-                cursor: "pointer",
-                pointerEvents: isDisabled ? "none" : undefined
-            }}>
+        {!selectedValue && <option value={defaultKey}>
+            {defaultValue ?? translatableTexts.misc.selectOption}
+        </option>}
 
-            {!selectedValue && <option value={defaultKey}>
-                {defaultValue ?? translatableTexts.misc.selectOption}
-            </option>}
+        {items
+            .map((item) => {
 
-            {items
-                .map((item) => {
-
-                    return <option
-                        value={getCompareKey(item)}>
-                        {getDisplayValue
-                            ? getDisplayValue(item)
-                            : "" + item}
-                    </option>
-                })}
-        </select>
-    </Box>
+                return <option
+                    value={getCompareKey(item)}>
+                    {getDisplayValue
+                        ? getDisplayValue(item)
+                        : "" + item}
+                </option>
+            })}
+    </select>
 };
