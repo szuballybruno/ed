@@ -10,9 +10,12 @@ import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { EpistoSearch } from "../../controls/EpistoSearch";
 import { useParams } from "react-router-dom";
+import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { Flex } from "@chakra-ui/react";
 
 export const AdminUserList = (props: {
-    currentUserPage?: "edit" | "statistics" | "teacherinfo"
+    users: AdminPageUserDTO[],
+    navigationFunction: (userId: number) => void
 }) => {
     const params = useParams<{ userId: string }>();
     const userId = parseInt(params.userId);
@@ -23,35 +26,29 @@ export const AdminUserList = (props: {
 
     const administrationRoutes = applicationRoutes.administrationRoute;
 
-    const [searchText, setSearchText] = useState<string | null>(null);
+    //const [searchText, setSearchText] = useState<string | null>(null);
 
-    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(searchText);
-
-    const { currentUserPage } = props
+    const { users, navigationFunction } = props
 
 
-    const handleSearch = (value: string) => {
+    /* const handleSearch = (value: string) => {
 
         if (value === "")
             setSearchText(null);
 
         if (value.length > 2)
             setSearchText(value);
-    }
+    } */
 
-    const isUserFound = users.some(user => user.id === userId);
 
-    if (!isUserFound && users[0]) {
-        navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + users[0].id + "/" + currentUserPage)
-    }
 
-    return <LoadingFrame loadingState={usersStatus} error={usersError} direction="column" minW="350px" flexBasis="350px" >
+    return <Flex direction="column" minW="350px" flexBasis="350px" >
 
         <EpistoSearch
             onChange={(x) => {
 
-                if (handleSearch)
-                    handleSearch(x.target.value)
+                //if (handleSearch)
+                //handleSearch(x.target.value)
             }} />
 
         {/* user list */}
@@ -65,7 +62,7 @@ export const AdminUserList = (props: {
                 .map((user, index) => {
 
                     return <FlexListItem
-                        onClick={() => navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })}
+                        onClick={() => navigationFunction(user.id)}
                         key={index}
                         thumbnailContent={<ProfileImage
                             mx="5px"
@@ -81,5 +78,5 @@ export const AdminUserList = (props: {
                     />
                 })}
         </FlexList>
-    </LoadingFrame >
+    </Flex>
 }

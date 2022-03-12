@@ -7,11 +7,15 @@ import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditUserControl } from "./EditUserControl";
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { AdminUserList } from './AdminUserList';
+import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
 
-const AdminAddUserSubpage = () => {
+const AdminAddUserSubpage = (props: {
+    users: AdminPageUserDTO[]
+}) => {
 
+    const { users } = props
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
 
@@ -44,9 +48,21 @@ const AdminAddUserSubpage = () => {
         }
     }
 
-    return <AdminBreadcrumbsHeader subRouteLabel={`Felhasználó hozzáadása`}>
+    return <AdminBreadcrumbsHeader breadcrumbs={[
+        <BreadcrumbLink
+            title="Felhasználók"
+            iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
+            to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
+        <BreadcrumbLink
+            title={"Felhasználó hozzáadása"}
+            isCurrent />
+    ]}>
 
-        <AdminUserList />
+        <AdminUserList
+            users={users}
+            navigationFunction={() => {
+                navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route)
+            }} />
         <AdminSubpageHeader background="var(--transparentWhite70)" className='roundBorders'>
             <EditUserControl
                 editDTO={null}

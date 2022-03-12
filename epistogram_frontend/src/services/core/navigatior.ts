@@ -5,7 +5,6 @@ import { ApplicationRoute } from "../../models/types";
 import { verboseLogging } from "../../static/Environemnt";
 import { getUrl } from "../../static/frontendHelpers";
 
-// asd
 export const useNavigation = () => {
 
     const history = useHistory();

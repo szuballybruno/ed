@@ -20,16 +20,20 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { ButtonType } from '../../../models/types';
 import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 
-const AdminEditUserSubpage = () => {
+export const AdminEditUserSubpage = (props: {
+    users: AdminPageUserDTO[],
+    refetchUsersFunction: () => void
+}) => {
+
+    const { users, refetchUsersFunction } = props
 
     const params = useParams<{ userId: string }>();
-    const [searchText, setSearchText] = useState<string | null>(null);
     const editedUserId = parseInt(params.userId);
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveUserAsync } = useSaveUser();
     const showError = useShowErrorDialog();
-    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(searchText);
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
     const { navigate } = useNavigation();
@@ -85,14 +89,7 @@ const AdminEditUserSubpage = () => {
 
     const deleteWaningDialogLogic = useEpistoDialogLogic();
 
-    const handleSearch = (value: string) => {
 
-        if (value === "")
-            setSearchText(null);
-
-        if (value.length > 2)
-            setSearchText(value);
-    }
 
     const showDeleteUserDialog = (user: UserEditDTO | null) => {
         if (!user)
@@ -110,7 +107,7 @@ const AdminEditUserSubpage = () => {
                             try {
 
                                 await deleteUserAsync(user.id);
-                                await refetchUsers();
+                                await refetchUsersFunction();
                             }
                             catch (e) {
 
@@ -133,17 +130,36 @@ const AdminEditUserSubpage = () => {
         }
     ] as ButtonType[]
 
-    return <AdminBreadcrumbsHeader breadcrumbs={[
-        <BreadcrumbLink
-            title="Felhasználók"
-            iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-            to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
-        <BreadcrumbLink
-            title={userEditData?.lastName + " " + userEditData?.firstName}
-            isCurrent />
-    ]}>
+    const checkIfCurrentUserFromUrl = () => {
+        const isUserFound = users.some(user => user.id === editedUserId);
 
-        <AdminUserList currentUserPage='edit' />
+        if (!isUserFound && users[0]) {
+            navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + users[0].id + "/edit")
+        }
+    }
+    checkIfCurrentUserFromUrl()
+
+
+
+    return <AdminBreadcrumbsHeader
+        viewSwitchFunction={() => {
+            navigate(applicationRoutes.administrationRoute.usersRoute.route)
+        }}
+        breadcrumbs={[
+            <BreadcrumbLink
+                title="Felhasználók"
+                iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
+                to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
+            <BreadcrumbLink
+                title={userEditData?.lastName + " " + userEditData?.firstName}
+                isCurrent />
+        ]}>
+
+        <AdminUserList
+            users={users}
+            navigationFunction={(userId) => {
+                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId })
+            }} />
 
         <AdminSubpageHeader
             direction="row"
@@ -198,6 +214,7 @@ const AdminEditUserSubpage = () => {
                                 onClick={handleAddCoinsAsync}
                                 style={{ alignSelf: "flex-start" }}
                                 variant="colored">
+
                                 Hozzáadás
                             </EpistoButton>
                         </EpistoLabel>
