@@ -7,31 +7,31 @@ INSERT INTO public.storage_file
 )
 VALUES 
 (
-    20,
+    521,
     '/images/SHOProuter.png'
 ),
 (
-    21,
+    522,
     '/images/SHOPgephaz.png'
 ),
 (
-    22,
+    523,
     '/images/SHOPoffice.png'
 ),
 (
-    23,
+    524,
     '/images/SHOPlego.png'
 ),
 (
-    24,
+    525,
     '/images/SHOPwindows.png'
 ),
 (
-    25,
+    526,
     '/images/SHOPkostolas.png'
 ),
 (
-    26,
+    527,
     '/images/SHOPeger.png'
 );
 
@@ -51,7 +51,7 @@ VALUES
     (
         1,
         3, -- items
-        20,
+        521,
         'Xiaomi Mi Router 4 Pro Vezeték nélküli router - 50% kedvezmény',
         5000,
         0,
@@ -61,7 +61,7 @@ VALUES
     (
         2,
         3, -- items
-        21,
+        522,
         'Fractal design prémium gépház',
         29000,
         0,
@@ -75,13 +75,13 @@ VALUES
         '',
         3000,
         0,
-        3,
+        4,
         1
     ),
     (
         4,
         2, -- software,
-        22,
+        523,
         'Microsoft Office 2019 Professional Plus - 50% kedvezmény',
         100,
         0,
@@ -91,7 +91,7 @@ VALUES
     (
         5,
         3, -- items
-        23,
+        524,
         'LEGO Ford Mustang GT 1967 - 20% kedvezmény',
         5000,
         0,
@@ -101,7 +101,7 @@ VALUES
     (
         6,
         2, -- items
-        24,
+        525,
         'Microsoft Windows 11 Pro - 50% kedvezmény',
         300,
         0,
@@ -111,7 +111,7 @@ VALUES
     (
         7,
         5, -- activities
-        25,
+        526,
         'Exkluzív borkóstolás Egerben, 2 főre - 50% kedvezmény',
         8000,
         0,
@@ -121,7 +121,7 @@ VALUES
     (
         8,
         3, -- items
-        26,
+        527,
         'Lenovo YOGA vezeték nélküli egér',
         10000,
         0,
