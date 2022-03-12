@@ -1,6 +1,6 @@
-import { EventType } from "../types/sharedTypes";
+import { EventCodeType } from "../types/sharedTypes";
 
 export class EventDTO {
-    type: EventType;
+    type: EventCodeType;
     data: any;
 }

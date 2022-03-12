@@ -81,6 +81,7 @@ jobs:
           --region europe-west1 \
           --platform managed \
           --max-instances 1 \
+          --min-instances 1 \
           --port 5000 \
           --allow-unauthenticated \
           --memory 4Gi \

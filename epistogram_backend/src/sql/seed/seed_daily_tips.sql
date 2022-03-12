@@ -6,7 +6,7 @@ INSERT INTO public."storage_file"
 )
 VALUES 
 (
-    16,
+    520,
     '/daily_tip_videos/video_1.mp4'
 );
 	
@@ -22,7 +22,7 @@ INSERT INTO public.daily_tip
 VALUES 
 (
     'daily tip desc',
-    16,
+    520,
     true,
     1,
     true

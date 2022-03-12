@@ -6,15 +6,15 @@ INSERT INTO public.question
     video_id 
 ) 
 VALUES 
-    (36, 'Hogy lehet e legyegyszerűbben a munkalapon a X789654-es cellához jutni?', 101, 4), 
-    (37, 'Hogy érem el, hogy az Excel a Pí szám 15 számjegyű értékével számoljon?', 110, 8),
+    (36, 'Hogy lehet e legyegyszerűbben a munkalapon a X789654-es cellához jutni?', 101, 60), 
+    (37, 'Hogy érem el, hogy az Excel a Pí szám 15 számjegyű értékével számoljon?', 110, 60),
 
     -- video 1
-    (38, 'Question 1', 100, 1),
-    (39, 'Question 2', 150, 1),
-    (40, 'Question 3', 200, 1),
-    (41, 'Question 4', 250, 1),
-    (42, 'Question 5', 300, 1);
+    (38, 'Question 1', 100, 54),
+    (39, 'Question 2', 150, 54),
+    (40, 'Question 3', 200, 54),
+    (41, 'Question 4', 250, 54),
+    (42, 'Question 5', 300, 54);
 
 INSERT INTO public.answer
     (text, is_correct, question_id) 
