@@ -1,7 +1,9 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/react"
+import { GridOn, List } from "@mui/icons-material";
+import { FormControlLabel, FormGroup, Switch, styled, FormControl } from "@mui/material";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { ReactNode } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { ReactNode, useState } from "react";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { useCourseBriefData } from "../../services/api/courseApiService";
 import { useShopItemBriefData } from "../../services/api/shopApiService";
@@ -49,10 +51,13 @@ export const AdminBreadcrumbsHeader = (props: {
     children?: ReactNode,
     breadcrumbs?: ReactNode[],
     subRouteLabel?: string,
+    viewSwitchFunction?: (checked: boolean) => void
 } & FlexProps) => {
-    const { subRouteLabel, children, breadcrumbs, ...css } = props;
+
+    const { subRouteLabel, children, breadcrumbs, viewSwitchFunction, ...css } = props;
 
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
+    const location = useLocation()
 
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
     const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
@@ -65,7 +70,6 @@ export const AdminBreadcrumbsHeader = (props: {
     const { briefUserData } = useBriefUserData(userId);
     const { courseBriefData } = useCourseBriefData(courseId);
     const { shopItemBriefData } = useShopItemBriefData(shopItemId);
-
 
     const subRouteName = subRouteLabel
         ? subRouteLabel
@@ -81,22 +85,45 @@ export const AdminBreadcrumbsHeader = (props: {
         mb="20px"
         direction={"column"}>
 
-        {/* breadcrumbs */}
-        {breadcrumbs
-            ? <Breadcrumbs>
-                {breadcrumbs}
-            </Breadcrumbs>
-            : <Breadcrumbs>
-                {currentRoute && <BreadcrumbLink
-                    isCurrent={!subRoute}
-                    to={currentRoute.route}
-                    title={currentRoute.title}
-                    iconComponent={currentRoute.icon} />}
+        <Flex justify="space-between">
+            {/* breadcrumbs */}
+            {breadcrumbs
+                ? <Breadcrumbs>
+                    {breadcrumbs}
+                </Breadcrumbs>
+                : <Breadcrumbs>
+                    {currentRoute && <BreadcrumbLink
+                        isCurrent={!subRoute}
+                        to={currentRoute.route}
+                        title={currentRoute.title}
+                        iconComponent={currentRoute.icon} />}
 
-                {subRoute && <BreadcrumbLink
-                    isCurrent
-                    title={subRoute.title} />}
-            </Breadcrumbs>}
+                    {subRoute && <BreadcrumbLink
+                        isCurrent
+                        title={subRoute.title} />}
+                </Breadcrumbs>}
+
+            <FormGroup>
+
+                <FormControl style={{
+                    flexDirection: "row",
+                    alignItems: "center"
+                }}>
+                    <List />
+                    <Switch
+                        checked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
+                        onChange={(e) => {
+                            if (!viewSwitchFunction)
+                                return
+
+                            viewSwitchFunction(e.currentTarget.checked)
+                        }} />
+                    <GridOn />
+                </FormControl>
+            </FormGroup>
+        </Flex>
+
+
 
         {/* children  */}
         <Flex

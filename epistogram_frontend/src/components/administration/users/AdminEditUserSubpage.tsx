@@ -20,16 +20,21 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { ButtonType } from '../../../models/types';
 import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import { Add, List } from '@mui/icons-material';
 
-const AdminEditUserSubpage = () => {
+export const AdminEditUserSubpage = (props: {
+    users: AdminPageUserDTO[],
+    refetchUsersFunction: () => void
+}) => {
+
+    const { users, refetchUsersFunction } = props
 
     const params = useParams<{ userId: string }>();
-    const [searchText, setSearchText] = useState<string | null>(null);
     const editedUserId = parseInt(params.userId);
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveUserAsync } = useSaveUser();
     const showError = useShowErrorDialog();
-    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(searchText);
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
     const { navigate } = useNavigation();
@@ -85,14 +90,7 @@ const AdminEditUserSubpage = () => {
 
     const deleteWaningDialogLogic = useEpistoDialogLogic();
 
-    const handleSearch = (value: string) => {
 
-        if (value === "")
-            setSearchText(null);
-
-        if (value.length > 2)
-            setSearchText(value);
-    }
 
     const showDeleteUserDialog = (user: UserEditDTO | null) => {
         if (!user)
@@ -110,7 +108,7 @@ const AdminEditUserSubpage = () => {
                             try {
 
                                 await deleteUserAsync(user.id);
-                                await refetchUsers();
+                                await refetchUsersFunction();
                             }
                             catch (e) {
 
@@ -125,25 +123,46 @@ const AdminEditUserSubpage = () => {
     const bulkEditButtons = [
         {
             title: "Összes megtekintett kurzus",
+            icon: <List style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
             action: () => navigateToUserCourses()
         },
         {
             title: "Hozzáadás",
+            icon: <Add style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
             action: () => navigateToAddUser()
         }
     ] as ButtonType[]
 
-    return <AdminBreadcrumbsHeader breadcrumbs={[
-        <BreadcrumbLink
-            title="Felhasználók"
-            iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-            to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
-        <BreadcrumbLink
-            title={userEditData?.lastName + " " + userEditData?.firstName}
-            isCurrent />
-    ]}>
+    const checkIfCurrentUserFromUrl = () => {
+        const isUserFound = users.some(user => user.id === editedUserId);
 
-        <AdminUserList currentUserPage='edit' />
+        if (!isUserFound && users[0]) {
+            navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + users[0].id + "/edit")
+        }
+    }
+    checkIfCurrentUserFromUrl()
+
+
+
+    return <AdminBreadcrumbsHeader
+        viewSwitchFunction={() => {
+            navigate(applicationRoutes.administrationRoute.usersRoute.route)
+        }}
+        breadcrumbs={[
+            <BreadcrumbLink
+                title="Felhasználók"
+                iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
+                to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
+            <BreadcrumbLink
+                title={userEditData?.lastName + " " + userEditData?.firstName}
+                isCurrent />
+        ]}>
+
+        <AdminUserList
+            users={users}
+            navigationFunction={(userId) => {
+                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId })
+            }} />
 
         <AdminSubpageHeader
             direction="row"
@@ -161,7 +180,7 @@ const AdminEditUserSubpage = () => {
                 className='roundBorders'
                 flex="1"
                 mt="5px"
-                background="var(--transparentWhite70)"
+                //background="var(--transparentWhite70)"
                 flexWrap="wrap">
 
                 <EditUserControl
@@ -174,7 +193,7 @@ const AdminEditUserSubpage = () => {
                 <Box
                     className='roundBorders'
                     flex="1"
-                    p="10px"
+                    p="0 10px 10px 10px"
                     minWidth="300px"
                 >
 
@@ -182,10 +201,29 @@ const AdminEditUserSubpage = () => {
                         loadingState={[coinBalanceStatus, giftCoinsToUserState]}
                         error={coinBalanceError}
                         direction="column">
+                        <EpistoFont
+                            fontSize={"fontHuge"}
+                            style={{
+                                marginTop: 10,
+                                fontWeight: 600
+                            }}>
 
-                        <EpistoFont>
-                            Egyenleg: {coinBalance}
+                            EpistoCoin egyenleg
                         </EpistoFont>
+
+                        <Flex mt="20px">
+
+                            Egyenleg:
+
+                            <EpistoFont
+                                style={{
+                                    marginLeft: 5,
+                                    fontWeight: 600
+                                }}>
+
+                                {coinBalance}
+                            </EpistoFont>
+                        </Flex>
 
                         <EpistoLabel text="EpistoCoin hozzáadása">
 
@@ -198,9 +236,19 @@ const AdminEditUserSubpage = () => {
                                 onClick={handleAddCoinsAsync}
                                 style={{ alignSelf: "flex-start" }}
                                 variant="colored">
+
                                 Hozzáadás
                             </EpistoButton>
                         </EpistoLabel>
+                        <EpistoFont
+                            fontSize={"fontHuge"}
+                            style={{
+                                marginTop: 50,
+                                fontWeight: 600
+                            }}>
+
+                            Alkalmazás adatai
+                        </EpistoFont>
                     </LoadingFrame>
                 </Box>
             </Flex>

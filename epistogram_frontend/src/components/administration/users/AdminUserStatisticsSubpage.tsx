@@ -10,6 +10,7 @@ import { useEditUserData } from "../../../services/api/userApiService";
 import { useActiveCourses, useUserProgressData } from "../../../services/api/userProgressApiService";
 import { useUserStats } from "../../../services/api/userStatsApiService";
 import { useNavigation } from "../../../services/core/navigatior";
+import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
 import { CourseLearningDTO } from "../../../shared/dtos/CourseLearningDTO";
 import { getAssetUrl, roundNumber, usePaging } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
@@ -139,7 +140,11 @@ const DummyLearningCourseStatsModified = () => <GridItem
     </FlexFloat>
 </GridItem>
 
-export const AdminUserStatisticsSubpage = () => {
+export const AdminUserStatisticsSubpage = (props: {
+    users: AdminPageUserDTO[]
+}) => {
+
+    const { users } = props
 
     const params = useParams<{ userId: string }>();
     const userId = parseInt(params.userId);
@@ -169,7 +174,11 @@ export const AdminUserStatisticsSubpage = () => {
 
     return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
-        <AdminUserList currentUserPage="statistics" />
+        <AdminUserList
+            users={users}
+            navigationFunction={(userId) => {
+                navigate(applicationRoutes.administrationRoute.usersRoute.statsRoute.route, { userId: userId })
+            }} />
 
         {/* admin header */}
         <AdminSubpageHeader

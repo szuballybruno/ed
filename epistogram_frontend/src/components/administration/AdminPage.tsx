@@ -30,6 +30,7 @@ import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
 import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
 import AdminEditUserSubpage from './users/AdminEditUserSubpage';
 import AdminStatistics from "./users/AdminStatisticsSubpage";
+import { AdminUserControl } from './users/AdminUserControl';
 import { AdminUserCourseContentSubpage } from './users/AdminUserCourseContentSubpage';
 import { AdminUserCourseStatisticsSubpage } from './users/AdminUserCourseStatisticsSubpage';
 import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
@@ -107,47 +108,7 @@ const AdminPage = () => {
                 {/* user administration */}
                 <Route path={administrationRoutes.usersRoute.route}>
 
-                    <Switch>
-                        <Route exact path={administrationRoutes.usersRoute.route}>
-                            <AdminUserListSubpage />
-                        </Route>
-
-                        <Route path={administrationRoutes.usersRoute.addRoute.route}>
-                            <AdminAddUserSubpage />
-                        </Route>
-
-                        <Route exact path={administrationRoutes.usersRoute.editRoute.route}>
-                            <AdminEditUserSubpage />
-                        </Route>
-
-                        <Route exact path={administrationRoutes.usersRoute.statsRoute.route}>
-                            <AdminUserStatisticsSubpage />
-                        </Route>
-
-                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route}>
-                            <AdminUserTeacherInfoSubpage />
-                        </Route>
-
-                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.courseStatisticsRoute.route}>
-                            <AdminUserCourseStatisticsSubpage />
-                        </Route>
-
-                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.courseContentRoute.route}>
-                            <AdminUserCourseContentSubpage />
-                        </Route>
-
-                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.moduleStatisticsRoute.route}>
-                            <AdminUserVideoStatistics />
-                        </Route>
-
-                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.videoStatisticsRoute.route}>
-                            <AdminUserVideoStatistics />
-                        </Route>
-
-                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.examStatisticsRoute.route}>
-                            <AdminUserVideoStatistics />
-                        </Route>
-                    </Switch>
+                    <AdminUserControl />
                 </Route>
 
                 {/* course administartion */}

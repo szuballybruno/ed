@@ -2,6 +2,7 @@ import { Box, FlexProps } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
 import { Tab, Tabs } from "@mui/material";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
+import { fontWeight } from "@mui/system";
 import React, { ReactNode } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
@@ -62,24 +63,42 @@ export const AdminSubpageHeader = (props: {
 
     return <Flex
         direction={"column"}
-        className="whall"
-        ml="5px"
+        className="whall roundBorders"
+        background="var(--transparentWhite70)"
+        px="5px"
         position="relative">
 
         {/* tabs */}
         {(tabMenuItems || onSave) && (
             <Flex
                 className="roundBorders"
-                bg="var(--transparentWhite70)"
-                px="5px"
+
                 flexDirection="row"
                 alignItems="center"
                 justify={"space-between"}
-                height={65}>
+                height={60}>
 
                 {/* tabs */}
-                <Flex flex="1">
+                <Flex
+                    p="10px"
+                    flex="1">
                     {tabMenuItems && <Tabs
+                        className="roundBorders"
+                        TabIndicatorProps={{
+                            style: {
+                                display: "none",
+                            },
+                        }}
+                        sx={{
+                            "&.MuiTabs-root": {
+                                //background: "var(--transparentIntenseBlue)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                height: 45,
+                                minHeight: 0
+                            }
+                        }}
                         value={currentMatchingRoute?.route}
                         onChange={(_, route: string) => handleNavigateToTab(route)}>
 
@@ -87,6 +106,28 @@ export const AdminSubpageHeader = (props: {
                             .map(tabRoute => {
 
                                 return <Tab
+                                    sx={{
+                                        "&.MuiTab-root": {
+                                            color: "#444",
+                                            cursor: "pointer",
+                                            backgroundColor: "transparent",
+                                            padding: "6px 16px",
+                                            border: "none",
+                                            borderRadius: "5px",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            height: "41px",
+                                            minHeight: "0px"
+                                        },
+                                        "&.MuiTouchRipple-root": {
+                                            lineHeight: "0px"
+                                        },
+                                        "&.Mui-selected": {
+                                            color: "#444",
+                                            fontWeight: "bold",
+                                            background: "var(--transparentIntenseTeal)"
+                                        }
+                                    }}
                                     label={tabRoute.title}
                                     value={tabRoute.route} />
                             })}
@@ -94,15 +135,19 @@ export const AdminSubpageHeader = (props: {
                 </Flex>
 
                 {/* header buttons */}
-                <Flex mr="20px">
+                <Flex>
 
                     {/* header buttons */}
                     {headerButtons && headerButtons
                         .map(x => <EpistoButton
                             style={{
-                                marginRight: "10px"
+                                color: "#555",
+                                marginRight: "10px",
+                                //background: "var(--transparentIntenseTeal)",
+                                fontWeight: "bold",
+                                height: 41
                             }}
-                            variant="colored"
+                            variant="plain"
                             onClick={x.action}>
                             {x.icon}
                             {x.title}
@@ -127,5 +172,5 @@ export const AdminSubpageHeader = (props: {
 
             {children}
         </Flex>
-    </Flex>
+    </Flex >
 }

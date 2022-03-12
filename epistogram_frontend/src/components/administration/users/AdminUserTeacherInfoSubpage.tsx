@@ -15,14 +15,21 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminUserList } from "./AdminUserList";
 import { useEditUserData } from "../../../services/api/userApiService";
+import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { useNavigation } from "../../../services/core/navigatior";
 
-export const AdminUserTeacherInfoSubpage = () => {
+export const AdminUserTeacherInfoSubpage = (props: {
+    users: AdminPageUserDTO[]
+}) => {
+
+    const { users } = props
 
     const params = useParams<{ userId: string }>();
     const editedUserId = parseInt(params.userId);
     const { teacherInfoEditData } = useTeacherInfoEditData(editedUserId);
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveTeacherInfoAsync, saveTeacherInfoState } = useSaveTeacherInfoData();
+    const { navigate } = useNavigation()
     const showError = useShowErrorDialog();
 
     const [skills, setSkills] = useState("");
@@ -90,7 +97,9 @@ export const AdminUserTeacherInfoSubpage = () => {
 
     return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
-        <AdminUserList currentUserPage='edit' />
+        <AdminUserList users={users} navigationFunction={(userId) => {
+            navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: userId })
+        }} />
 
         {/* admin header */}
         <AdminSubpageHeader
