@@ -90,16 +90,18 @@ export const AdminUserDataGridSubpage = (props: {
                 </EpistoButton>
         }
     ];
-    return <AdminBreadcrumbsHeader viewSwitchFunction={() => {
+    return <AdminBreadcrumbsHeader
+        viewSwitchChecked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
+        viewSwitchFunction={() => {
 
-        const lastAdminUserPath = localStorage.getItem("lastAdminUserPath")
+            const lastAdminUserPath = localStorage.getItem("lastAdminUserPath")
 
-        navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: "a" })
-        /* if (!checked && location.pathname === lastAdminUserPath) {
-             navigate(lastAdminUserPath)
-         }  else {
-         } */
-    }}>
+            navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: "a" })
+            /* if (!checked && location.pathname === lastAdminUserPath) {
+                 navigate(lastAdminUserPath)
+             }  else {
+             } */
+        }}>
         <DataGrid
             columns={userColumns}
             rows={userRows}

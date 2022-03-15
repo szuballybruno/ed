@@ -1,5 +1,5 @@
 import { Flex, Image } from "@chakra-ui/react";
-import { Slider } from "@mui/material";
+import { Button, Slider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
@@ -23,8 +23,16 @@ import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminCourseList } from "./AdminCourseList";
 import { useNavigation } from "../../../services/core/navigatior";
 import { ButtonType } from "../../../models/types";
+import { translatableTexts } from "../../../static/translatableTexts";
+import { Add } from "@mui/icons-material";
+import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItemDTO";
 
-export const AdminCourseDetailsSubpage = () => {
+export const AdminCourseDetailsSubpage = (props: {
+    courses: CourseAdminListItemDTO[],
+    refetchCoursesFunction: () => void,
+    navigationFunction: (courseId: number) => void
+}) => {
+    const { courses, refetchCoursesFunction, navigationFunction } = props
 
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
@@ -35,9 +43,6 @@ export const AdminCourseDetailsSubpage = () => {
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseDetailsData();
     const { createCourseAsync, createCourseState } = useCreateCourse();
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = useUploadCourseThumbnailAsync();
-
-    // TODO: use courseStatus and coursesError in loadingframe too
-    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList("");
 
     const categories = courseDetailsEditData?.categories ?? [];
     const teachers = courseDetailsEditData?.teachers ?? [];
@@ -140,7 +145,7 @@ export const AdminCourseDetailsSubpage = () => {
 
             showNotification("Uj kurzus sikeresen letrehozva!");
 
-            await refetchCoursesAsync();
+            await refetchCoursesFunction();
         }
         catch (e) {
 
@@ -180,6 +185,7 @@ export const AdminCourseDetailsSubpage = () => {
     const bulkEditButtons = [
         {
             title: "Hozzáadás",
+            icon: <Add style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
             action: () => handleCreateCourseAsync()
         }
     ] as ButtonType[]
@@ -193,17 +199,18 @@ export const AdminCourseDetailsSubpage = () => {
         <AdminBreadcrumbsHeader>
             <AdminCourseList
                 courses={courses}
-                navigationFunction={(courseId) => navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courseId + "/details")} />
+                navigationFunction={navigationFunction} />
 
             {/* admin header */}
             <AdminSubpageHeader
+                direction="column"
+                pb="20px"
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
                     applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
                 ]}
-                headerButtons={bulkEditButtons}
-                onSave={handleSaveCourseAsync}>
+                headerButtons={bulkEditButtons}>
 
                 {/* Course edit */}
                 <Flex direction="row" flex="1">
@@ -211,16 +218,16 @@ export const AdminCourseDetailsSubpage = () => {
                     {/* left pane  */}
                     <Flex direction="column" flex="1" mr="5px">
 
-                        {/* details section */}
+                        {/* Basic info section */}
                         <EditSection
-                            className="roundBorders"
-                            background="var(--transparentWhite70)"
+                            isFirst
                             title="Alapadatok">
 
-                            <EpistoLabel text="Borítókép">
+                            {/* Thumbnail image */}
+                            <EpistoLabel isOverline text="Borítókép">
                                 <SelectImage
-                                    width="300px"
-                                    height="200px"
+                                    width="192px"
+                                    height="108px"
                                     setImageFile={setThumbnailImageFile}
                                     setImageSource={setThumbnailSrc}>
                                     <Image className="whall" objectFit="cover" src={thumbnailSrc} />
@@ -235,24 +242,19 @@ export const AdminCourseDetailsSubpage = () => {
                                 label="Név"
                                 setValue={setTitle} />
 
-                            {/* Short description */}
+                            {/* Language */}
                             <EpistoEntry
                                 labelVariant={"top"}
                                 isMultiline={true}
-                                value={shortDescription}
-                                label="Rövid leírás"
-                                setValue={setShortDescription} />
-
-                            {/* Overview description */}
-                            <EpistoEntry
-                                labelVariant={"top"}
-                                isMultiline={true}
-                                value={description}
-                                label="Leírás"
-                                setValue={setDescription} />
+                                value={language}
+                                label="Nyelv"
+                                setValue={setLanguage} />
 
                             {/* Main category */}
-                            <EpistoLabel text="Főkategória">
+                            <EpistoLabel
+                                isOverline
+                                text="Főkategória">
+
                                 <EpistoSelect
                                     getCompareKey={x => x?.id + ""}
                                     getDisplayValue={x => x?.name + ""}
@@ -262,7 +264,10 @@ export const AdminCourseDetailsSubpage = () => {
                             </EpistoLabel>
 
                             {/* Subcategory */}
-                            <EpistoLabel text="Alkategória">
+                            <EpistoLabel
+                                isOverline
+                                text="Alkategória">
+
                                 <EpistoSelect
                                     getCompareKey={x => x?.id + ""}
                                     getDisplayValue={x => x?.name + ""}
@@ -272,7 +277,10 @@ export const AdminCourseDetailsSubpage = () => {
                             </EpistoLabel>
 
                             {/* Subcategory */}
-                            <EpistoLabel text="Tanar">
+                            <EpistoLabel
+                                isOverline
+                                text="Tanár">
+
                                 <EpistoSelect
                                     getCompareKey={x => x?.id + ""}
                                     getDisplayValue={x => x?.fullName + ""}
@@ -280,9 +288,14 @@ export const AdminCourseDetailsSubpage = () => {
                                     selectedValue={teachers.filter(x => x.id === teacherId)[0]}
                                     onSelected={x => setTeacherId(x.id)} />
                             </EpistoLabel>
+                        </EditSection>
 
+                        <EditSection title="Jogosultságkezelés">
                             {/* Subcategory */}
-                            <EpistoLabel text="Elerhetosegi szint">
+                            <EpistoLabel
+                                isOverline
+                                text="Elérhetőségi szint">
+
                                 <EpistoSelect
                                     getCompareKey={x => x}
                                     getDisplayValue={x => x === "public" ? "Publikus" : "Privat"}
@@ -290,9 +303,31 @@ export const AdminCourseDetailsSubpage = () => {
                                     selectedValue={visibility}
                                     onSelected={setVisibility} />
                             </EpistoLabel>
+                        </EditSection>
+
+                        <EditSection title="Tartalmi információk">
+
+                            {/* Short description */}
+                            <EpistoEntry
+                                labelVariant={"top"}
+                                isMultiline={true}
+                                value={shortDescription}
+                                label="Áttekintés"
+                                setValue={setShortDescription} />
+
+                            {/* Overview description */}
+                            <EpistoEntry
+                                labelVariant={"top"}
+                                isMultiline={true}
+                                value={description}
+                                label="Részletes leírás"
+                                setValue={setDescription} />
 
                             {/* Difficulty */}
-                            <EpistoLabel text="Nehézség">
+                            <EpistoLabel
+                                isOverline
+                                text="Nehézség">
+
                                 <Slider
                                     aria-label="Nehézség"
                                     defaultValue={0}
@@ -306,7 +341,10 @@ export const AdminCourseDetailsSubpage = () => {
                             </EpistoLabel>
 
                             {/* Benchmark index */}
-                            <EpistoLabel text="Tanulási élmény">
+                            <EpistoLabel
+                                isOverline
+                                text="Tanulási élmény">
+
                                 <Slider
                                     defaultValue={0}
                                     valueLabelDisplay="auto"
@@ -318,13 +356,7 @@ export const AdminCourseDetailsSubpage = () => {
                                     max={5} />
                             </EpistoLabel>
 
-                            {/* Language */}
-                            <EpistoEntry
-                                labelVariant={"top"}
-                                isMultiline={true}
-                                value={language}
-                                label="Nyelv"
-                                setValue={setLanguage} />
+
 
                             {/* previously completed count */}
                             <EpistoEntry
@@ -332,16 +364,19 @@ export const AdminCourseDetailsSubpage = () => {
                                 isMultiline={true}
                                 type="number"
                                 value={prevCompletedCount}
-                                label="Elvegzesek szama"
+                                label="Elvégzések száma"
                                 setValue={setPrevCompletedCount} />
 
                         </EditSection>
+                    </Flex>
 
-                        {/* requirements section */}
+                    {/* right pane  */}
+                    <Flex direction="column" flex="1" ml="5px">
+
                         <EditSection
+                            isFirst
                             className="roundBorders"
-                            background="var(--transparentWhite70)"
-                            title="Technikai követelmények"
+                            title="Követelmények és ajánlás"
                             style={{
                                 marginBottom: 50
                             }}>
@@ -356,93 +391,109 @@ export const AdminCourseDetailsSubpage = () => {
 
                             <SimpleEditList
                                 mt="10px"
+                                title="Technikai követelmények"
                                 items={technicalRequirements}
                                 initialValue=""
                                 setItems={setTechnicalRequirements} />
                         </EditSection>
-                    </Flex>
 
-                    {/* right pane  */}
-                    <Flex direction="column" flex="1" ml="5px">
-
-                        {/* skill improvements section */}
+                        {/* requirements section */}
                         <EditSection
                             className="roundBorders"
-                            background="var(--transparentWhite70)"
-                            title="Milyen technikai megoladsokat fogsz megtanulni?">
+                            title="Előnyök"
+                            style={{
+                                marginBottom: 50
+                            }}>
 
                             <SimpleEditList
                                 mt="10px"
+                                title="Elsajátítható technikai ismeretek"
                                 items={skillBenefits}
                                 initialValue=""
                                 setItems={setSkillBenefits} />
-                        </EditSection>
-
-                        {/* skill improvements section */}
-                        <EditSection
-                            className="roundBorders"
-                            background="var(--transparentWhite70)"
-                            title="Milyen human skilleket fejleszt?">
-
                             {/* skill improvement description */}
                             <EpistoEntry
+                                marginTop="30px"
                                 labelVariant={"top"}
                                 isMultiline={true}
                                 value={humanSkillBenefitsDescription}
-                                label="Elsajátítható készségek"
+                                label="Elsajátítható készségek leírása"
                                 setValue={setHumanSkillBenefitsDescription} />
+                            <SimpleEditList
+                                mt="10px"
+                                title="Elsajátítható készségek és azok aránya"
+                                items={humanSkillBenefits}
+                                initialValue={{ text: "", value: 0 }}
+                                setItems={x => setHumanSkillBenefits(x)}
+                                renderChild={(item, onItemChanged) => (
+                                    <Flex
+                                        flexDir={"row"}
+                                        alignItems={"center"}
+                                        my={3}
+                                        flex="1">
 
-                            {/* improvement stats */}
-                            <EpistoLabel text="Mit fejleszt a tanfolyam?">
+                                        <EpistoEntry
+                                            flex="4"
+                                            marginTop={"0"}
+                                            labelVariant={"top"}
+                                            isMultiline={true}
+                                            value={item.text}
+                                            setValue={(value) => onItemChanged({ ...item, text: value })} />
 
-                                <SimpleEditList
-                                    mt="10px"
-                                    items={humanSkillBenefits}
-                                    initialValue={{ text: "", value: 0 }}
-                                    setItems={x => setHumanSkillBenefits(x)}
-                                    renderChild={(item, onItemChanged) => (
-                                        <Flex
-                                            flexDir={"row"}
-                                            alignItems={"center"}
-                                            my={3}
-                                            flex="1">
-
-                                            <EpistoEntry
-                                                marginTop={"0"}
-                                                labelVariant={"top"}
-                                                isMultiline={false}
-                                                value={item.text}
-                                                setValue={(value) => onItemChanged({ ...item, text: value })} />
-
-                                            <Slider
-                                                defaultValue={0}
-                                                valueLabelDisplay="auto"
-                                                value={item.value}
-                                                onChange={(_, targetValue) => onItemChanged({ ...item, value: targetValue as number })}
-                                                style={{
-                                                    margin: "5px 10px 5px 20px"
-                                                }}
-                                                step={1}
-                                                marks
-                                                min={0}
-                                                max={10} />
-                                        </Flex>
-                                    )} />
-
-                                <Flex direction={"column"}>
-
-                                    {/* radar chart */}
-                                    <Flex mt="10px" align="center" justify="center">
-                                        <CourseImprovementStatsRadar stats={humanSkillBenefits} />
+                                        <Slider
+                                            defaultValue={0}
+                                            valueLabelDisplay="auto"
+                                            value={item.value}
+                                            onChange={(_, targetValue) => onItemChanged({ ...item, value: targetValue as number })}
+                                            style={{
+                                                margin: "5px 10px 5px 10px",
+                                                flex: 3
+                                            }}
+                                            step={1}
+                                            marks
+                                            min={0}
+                                            max={10} />
                                     </Flex>
-                                </Flex>
-                            </EpistoLabel>
-
+                                )} />
+                            {/* radar chart */}
+                            <Flex mt="30px" minH="300px" align="center" justify="center">
+                                <CourseImprovementStatsRadar stats={humanSkillBenefits} />
+                            </Flex>
                         </EditSection>
                     </Flex>
                 </Flex>
+                {/* submit button */}
+                <Button
+                    variant="contained"
+                    color={"secondary"}
+                    onClick={() => {
+                        handleSaveCourseAsync()
+                    }}
+                    style={{ margin: "20px 20px 0 20px" }}>
+
+                    {translatableTexts.misc.save}
+                </Button>
+
+                {/* remove button */}
+                <Button
+                    variant={"outlined"}
+                    color={"error"}
+                    onClick={() => {
+
+                        /* if (showDeleteUserDialog) {
+
+                            showDeleteUserDialog(editDTO)
+                        } else {
+
+                            history.goBack()
+                        } */
+                    }}
+                    style={{ margin: "20px 20px 0 20px" }}>
+
+                    {translatableTexts.misc.remove}
+                </Button>
             </AdminSubpageHeader>
         </AdminBreadcrumbsHeader>
 
-    </LoadingFrame>
+    </LoadingFrame >
 }

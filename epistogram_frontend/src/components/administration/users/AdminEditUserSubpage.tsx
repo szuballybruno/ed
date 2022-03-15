@@ -1,6 +1,6 @@
 import { Box, Divider, Flex } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
@@ -35,11 +35,10 @@ export const AdminEditUserSubpage = (props: {
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveUserAsync } = useSaveUser();
     const showError = useShowErrorDialog();
-    const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
-    const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
     const navigateToUserCourses = () => navigate(`${applicationRoutes.administrationRoute.usersRoute.route}/${editedUserId}/courses/:courseId/statistics`)
+    const location = useLocation()
 
     const handleSaveUserAsync = async (dto: UserEditDTO) => {
 
@@ -48,39 +47,6 @@ export const AdminEditUserSubpage = (props: {
             await saveUserAsync(dto);
             showNotification("A változtatások sikeresen mentésre kerültek.");
             refetchEditUserData();
-        }
-        catch (e) {
-
-            showError(e);
-        }
-    }
-
-    const coinAmountEntryState = useEpistoEntryState({
-        isMandatory: true,
-        validateFunction: (value) => {
-
-            if (value === "0")
-                return "Nem adhatsz hozzá '0' coin-t."
-
-            if (!parseIntOrNull(value))
-                return "Helytelen formátum"
-
-            return null;
-        }
-    });
-
-    const handleAddCoinsAsync = async () => {
-
-        try {
-
-            if (!coinAmountEntryState.validate())
-                return;
-
-            const amount = parseInt(coinAmountEntryState.value);
-
-            await giftCoinsToUserAsync({ userId: editedUserId, amount });
-            showNotification(`Sikeresen hozzáadtál ${amount} Coint.`);
-            await refetchCoinBalance();
         }
         catch (e) {
 
@@ -145,6 +111,7 @@ export const AdminEditUserSubpage = (props: {
 
 
     return <AdminBreadcrumbsHeader
+        viewSwitchChecked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
         viewSwitchFunction={() => {
             navigate(applicationRoutes.administrationRoute.usersRoute.route)
         }}
@@ -176,82 +143,11 @@ export const AdminEditUserSubpage = (props: {
 
             <EpistoDialog logic={deleteWaningDialogLogic} />
 
-            <Flex
-                className='roundBorders'
-                flex="1"
-                mt="5px"
-                //background="var(--transparentWhite70)"
-                flexWrap="wrap">
+            <EditUserControl
+                editDTO={userEditData}
+                showDeleteUserDialog={showDeleteUserDialog}
+                saveUserAsync={handleSaveUserAsync} />
 
-                <EditUserControl
-                    editDTO={userEditData}
-                    showDeleteUserDialog={showDeleteUserDialog}
-                    saveUserAsync={handleSaveUserAsync} />
-
-                <Divider orientation='vertical' h="calc(100% - 20px)" w="1px" background="grey" my="10px" />
-
-                <Box
-                    className='roundBorders'
-                    flex="1"
-                    p="0 10px 10px 10px"
-                    minWidth="300px"
-                >
-
-                    <LoadingFrame
-                        loadingState={[coinBalanceStatus, giftCoinsToUserState]}
-                        error={coinBalanceError}
-                        direction="column">
-                        <EpistoFont
-                            fontSize={"fontHuge"}
-                            style={{
-                                marginTop: 10,
-                                fontWeight: 600
-                            }}>
-
-                            EpistoCoin egyenleg
-                        </EpistoFont>
-
-                        <Flex mt="20px">
-
-                            Egyenleg:
-
-                            <EpistoFont
-                                style={{
-                                    marginLeft: 5,
-                                    fontWeight: 600
-                                }}>
-
-                                {coinBalance}
-                            </EpistoFont>
-                        </Flex>
-
-                        <EpistoLabel text="EpistoCoin hozzáadása">
-
-                            <EpistoEntryNew
-                                type="number"
-                                state={coinAmountEntryState} />
-
-                            <EpistoButton
-                                isDisabled={!!coinAmountEntryState.error}
-                                onClick={handleAddCoinsAsync}
-                                style={{ alignSelf: "flex-start" }}
-                                variant="colored">
-
-                                Hozzáadás
-                            </EpistoButton>
-                        </EpistoLabel>
-                        <EpistoFont
-                            fontSize={"fontHuge"}
-                            style={{
-                                marginTop: 50,
-                                fontWeight: 600
-                            }}>
-
-                            Alkalmazás adatai
-                        </EpistoFont>
-                    </LoadingFrame>
-                </Box>
-            </Flex>
         </AdminSubpageHeader>
     </AdminBreadcrumbsHeader>
 };

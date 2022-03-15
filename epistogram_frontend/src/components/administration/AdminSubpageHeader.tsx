@@ -1,10 +1,11 @@
 import { Box, FlexProps } from "@chakra-ui/layout";
-import { Flex } from "@chakra-ui/react";
-import { Tab, Tabs } from "@mui/material";
+import { Flex, } from "@chakra-ui/react";
+import { GridOn, List } from "@mui/icons-material";
+import { FormControl, FormGroup, Tab, Tabs, Switch } from "@mui/material";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { fontWeight } from "@mui/system";
 import React, { ReactNode } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { ApplicationRoute, ButtonType } from "../../models/types";
 import { useCourseBriefData } from "../../services/api/courseApiService";
@@ -22,10 +23,23 @@ export const AdminSubpageHeader = (props: {
     onSave?: () => void,
     headerButtons?: ButtonType[],
     subRouteLabel?: string,
-    navigationQueryParams?: any
+    navigationQueryParams?: any,
+    viewSwitchChecked?: boolean,
+    viewSwitchFunction?: () => void
 } & FlexProps) => {
 
-    const { children, subRouteLabel, headerButtons, navigationQueryParams, tabMenuItems, onSave, ...css } = props;
+    const {
+        children,
+        subRouteLabel,
+        headerButtons,
+        navigationQueryParams,
+        tabMenuItems,
+        onSave,
+        viewSwitchChecked,
+        viewSwitchFunction,
+        ...css
+    } = props;
+
     const tabMenuItemsList = (tabMenuItems ?? []);
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
@@ -152,6 +166,25 @@ export const AdminSubpageHeader = (props: {
                             {x.icon}
                             {x.title}
                         </EpistoButton>)}
+
+                    {viewSwitchFunction && <FormGroup>
+
+                        <FormControl style={{
+                            flexDirection: "row",
+                            alignItems: "center"
+                        }}>
+                            <List />
+                            <Switch
+                                checked={viewSwitchChecked}
+                                onChange={(e) => {
+                                    if (!viewSwitchFunction)
+                                        return
+
+                                    viewSwitchFunction()
+                                }} />
+                            <GridOn />
+                        </FormControl>
+                    </FormGroup>}
 
                     {/* save button */}
                     {onSave && <EpistoButton

@@ -12,10 +12,11 @@ import { AdminUserList } from './AdminUserList';
 import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
 
 const AdminAddUserSubpage = (props: {
-    users: AdminPageUserDTO[]
+    users: AdminPageUserDTO[],
+    refetchUsersFunction: () => void
 }) => {
 
-    const { users } = props
+    const { users, refetchUsersFunction } = props
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
 
@@ -35,6 +36,8 @@ const AdminAddUserSubpage = (props: {
             await inviteUserAsync(createInvitedUserDTO);
 
             showNotification("Felhasználó sikeresen hozzáadva");
+            refetchUsersFunction()
+            navigate(applicationRoutes.administrationRoute.usersRoute.route + "/a/edit")
 
             // TODO return added user's id
             //navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + user.id + "/edit")
@@ -60,10 +63,10 @@ const AdminAddUserSubpage = (props: {
 
         <AdminUserList
             users={users}
-            navigationFunction={() => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route)
+            navigationFunction={(userId) => {
+                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId })
             }} />
-        <AdminSubpageHeader background="var(--transparentWhite70)" className='roundBorders'>
+        <AdminSubpageHeader background="var(--transparentWhite10)" className='roundBorders'>
             <EditUserControl
                 editDTO={null}
                 saveUserAsync={submitAddUserRequestAsync}></EditUserControl>

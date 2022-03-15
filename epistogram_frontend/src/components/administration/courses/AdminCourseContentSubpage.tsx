@@ -28,16 +28,24 @@ import { LoadingFrame } from "../../system/LoadingFrame";
 import { CollapseItem } from "../../universal/CollapseItem";
 import { DragAndDropContext, DragItem, DropZone } from "../../universal/DragAndDrop";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { CourseEditItemView } from "./CourseEditItemView";
+import { ChipSmall, CourseEditItemView } from "./CourseEditItemView";
 import { AdminCourseList } from "./AdminCourseList";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { GridRowsProp, GridColDef, DataGrid } from "@mui/x-data-grid";
+import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItemDTO";
+import { Add, Equalizer } from "@mui/icons-material";
+import { EpistoSelect } from "../../controls/EpistoSelect";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
 }
 
-export const AdminCourseContentSubpage = () => {
+export const AdminCourseContentSubpage = (props: {
+    courses: CourseAdminListItemDTO[],
+    refetchCoursesFunction: () => void,
+    navigationFunction: (courseId: number) => void
+}) => {
+    const { courses, refetchCoursesFunction, navigationFunction } = props
 
     // util
     const params = useParams<{ courseId: string }>();
@@ -49,6 +57,7 @@ export const AdminCourseContentSubpage = () => {
     // state
     const [modules, setModules] = useState<ModuleAdminShortDTO[]>([])
     const [openModuleIds, setOpenModuleIds] = useState<number[]>([]);
+    const [isDataGridView, setIsDataGridView] = useState<boolean>(false)
 
     // http
     const { courseContentEditData, courseContentEditDataError, courseContentEditDataState, refetchCourseContentEditData } = useCourseContentEditData(courseId);
@@ -367,38 +376,121 @@ export const AdminCourseContentSubpage = () => {
     }, [courseContentEditData]);
 
     const items = modules.map(module => {
-        return module.items
+        return module.items.map(item => ({
+            ...item,
+            module: {
+                id: module.id,
+                name: module.name
+            }
+        }))
     }).flat()
 
-    console.log(items)
 
     const getRowsFromModules = () => items.map((item) => {
         return {
             id: item.id,
             title: item.title,
-            module: item.moduleId,
-            type: item.type,
-            questionsCount: item.questionCount
+            subTitle: item.subTitle,
+            module: item.module as ModuleAdminShortDTO,
+            type: {
+                type: item.type,
+                typeLabel: item.type === "video" ? "Videó" : "Vizsga"
+            },
+            orderIndex: item.orderIndex,
+            questionsCount: item.questionCount,
+            item: item
         }
     })
 
     const moduleRows: GridRowsProp = getRowsFromModules()
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'Azonosító', width: 100 },
-        { field: 'title', headerName: 'Cím', width: 300, editable: true, resizable: true },
-        { field: 'module', headerName: 'Modul neve', width: 150, resizable: true },
-        { field: 'subCategory', headerName: 'Alkategória', width: 150, resizable: true },
-        { field: 'videosCount', headerName: 'Videók száma', width: 150, resizable: true },
-        { field: 'editCourse', headerName: 'Kurzus szerkesztése', width: 150, renderCell: (params) => <EpistoButton variant="outlined" onClick={() => navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + params.value + "/details")}>Szerkesztés</EpistoButton> }
+        {
+            field: 'orderIndex',
+            headerName: 'Elhelyezkedés',
+            width: 80,
+            editable: true
+        },
+        {
+            field: 'title',
+            headerName: 'Cím',
+            width: 220,
+            editable: true,
+            resizable: true
+        },
+        {
+            field: 'subTitle',
+            headerName: 'Alcím',
+            width: 220,
+            resizable: true
+        },
+        {
+            field: 'module',
+            headerName: 'Modul',
+            width: 180,
+            renderCell: (params) => {
+                return params.value.name
+            },
+            renderEditCell: (params) => {
+                const currentModule = params.value as ModuleAdminShortDTO
+                return <EpistoSelect
+                    items={modules}
+                    selectedValue={currentModule}
+                    onSelected={() => { }}
+                    getDisplayValue={x => "" + x?.name}
+                    getCompareKey={module => "" + module?.id} />
+            },
+            editable: true
+        },
+        {
+            field: 'type',
+            headerName: 'Típus',
+            width: 80,
+            renderCell: (params) =>
+                <ChipSmall
+                    text={params.value.typeLabel}
+                    color={params.value.type === "video" ? "var(--epistoTeal)" : "var(--intenseYellow)"} />
+        },
+        {
+            field: 'questionsCount',
+            headerName: 'Kérdések száma',
+            width: 150,
+            resizable: true
+        },
+        {
+            field: 'item',
+            headerName: 'Gyorshivatkozások',
+            width: 150,
+            renderCell: (params) =>
+                <Flex>
+                    <EpistoButton
+                        onClick={() => handleEditCourseItem(params.value)}>
+                        <EditIcon></EditIcon>
+                    </EpistoButton>
+
+                    <EpistoButton
+                        onClick={() => handleCourseItemStatistics(params.value)}>
+                        <Equalizer></Equalizer>
+                    </EpistoButton>
+
+                    <EpistoButton
+                        onClick={() => handleDeleteCourseItemAsync(params.value)}>
+                        <DeleteIcon></DeleteIcon>
+                    </EpistoButton>
+                </Flex>
+        }
     ];
 
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseContentEditDataState]}
         error={courseContentEditDataError}
         className="whall">
+
         <AdminBreadcrumbsHeader>
-            {/* <AdminCourseList currentCoursePage={"content"} /> */}
+
+            {!isDataGridView && <AdminCourseList
+                courses={courses}
+                navigationFunction={navigationFunction} />}
 
             <AdminSubpageHeader
                 tabMenuItems={[
@@ -411,7 +503,8 @@ export const AdminCourseContentSubpage = () => {
                 headerButtons={[
                     {
                         action: () => handleAddNewModuleAsync(),
-                        title: translatableTexts.administration.courseContentSubpage.addModuleExtended
+                        icon: <Add />,
+                        title: translatableTexts.misc.add
                     },
                     {
                         action: () => {
@@ -421,33 +514,35 @@ export const AdminCourseContentSubpage = () => {
                                 examId: pretestExamId
                             })
                         },
-                        title: "Edit pretest exam"
+                        title: "Precourse"
                     },
-                    {
+                    ...!isDataGridView ? [{
                         action: handleOpenCloseAllModules,
                         title: isAnyModulesOpen
                             ? translatableTexts.misc.closeAll
                             : translatableTexts.misc.openAll
-                    }
-                ]}>
+                    }] : []
+                ]}
+                viewSwitchChecked={isDataGridView}
+                viewSwitchFunction={() => {
+                    setIsDataGridView(p => !p)
+                }}>
 
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
                 {/* course items */}
-                <Flex
-                    flex="1"
-                    direction={"column"}
-                    className="roundBorders"
-                    background="var(--transparentWhite70)"
-                    mt="5px">
-
-                    <DataGrid
-                        getRowClassName={(a) => a.row.type === "exam" ? "dataGridExamRow" : "dataGridVideoRow"}
-                        rows={moduleRows} columns={columns} style={{
-                            background: "var(--transparentWhite70)"
-                        }} />
-
-                    <DragAndDropContext onDragEnd={onDragEnd}>
+                {isDataGridView
+                    ? <Flex flexGrow={1}>
+                        <DataGrid
+                            className="fontExtraSmall"
+                            //getRowClassName={(a) => a.row.type === "exam" ? "dataGridExamRow" : "dataGridVideoRow"}
+                            rows={moduleRows}
+                            columns={columns}
+                            style={{
+                                background: "var(--transparentWhite70)"
+                            }} />
+                    </Flex>
+                    : <DragAndDropContext onDragEnd={onDragEnd}>
                         <DropZone zoneId="zone-root" groupId="root">
                             {modules
                                 .map((module, moduleIndex) => {
@@ -547,12 +642,8 @@ export const AdminCourseContentSubpage = () => {
                                     </DragItem>
                                 })}
                         </DropZone>
-                    </DragAndDropContext>
-                </Flex>
+                    </DragAndDropContext>}
             </AdminSubpageHeader>
         </AdminBreadcrumbsHeader>
-
-
-
-    </LoadingFrame>
+    </LoadingFrame >
 };
