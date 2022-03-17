@@ -78,9 +78,9 @@ jobs:
         run: gcloud auth configure-docker --quiet
 
       - name: Copy proper .env file
-          run: |
-            cp -fr ./config/$BRANCH_NAME$.env ./config.env 
-          working-directory: ./$BRANCH_NAME$_repository/epistogram_backend
+        run: |
+          cp -fr ./config/$BRANCH_NAME$.env ./config.env 
+        working-directory: ./$BRANCH_NAME$_repository/epistogram_backend
 
       - name: Set .env additional variables
         run: |
