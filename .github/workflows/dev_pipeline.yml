@@ -10,7 +10,6 @@ env:
   BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-dev
   
   CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
-  asd: asd
 
 jobs:
     
@@ -156,3 +155,15 @@ jobs:
           --memory 4Gi \
           --cpu 2 \
           --concurrency 200
+
+  # DEPLOY JOB SCHEDULER
+  deploy_job_scheduler: 
+    name: Deploy job scheduler
+    runs-on: ubuntu-latest
+    needs: [build_backend, build_frontend]
+
+    steps:
+      run: cloud scheduler jobs delete my-job --location=europe-west1
+
+      if: always()
+      run: gcloud scheduler jobs create http my-job --schedule="*/1 * * * *" --uri="http://example.com/path" --http-method=GET --location=europe-west1
