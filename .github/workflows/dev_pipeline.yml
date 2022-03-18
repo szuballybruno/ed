@@ -62,12 +62,12 @@ jobs:
           --cache-from type=local,src=/tmp/.buildx-cache \
           --cache-to type=local,dest=/tmp/.buildx-cache-new \
           --builder ${{ steps.buildx.outputs.name }} \
-          --t $FRONTEND_IMAGE_NAME \
+          --tag $FRONTEND_IMAGE_NAME \
           --push
 
       - name: List built images
         run: docker image ls
-         
+
       # - name: Build frontend container
       #   uses: docker/build-push-action@v2
       #   with:
