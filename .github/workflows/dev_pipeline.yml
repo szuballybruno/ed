@@ -188,7 +188,7 @@ jobs:
 
       - name: delete prev job 
         run: |
-          cloud scheduler jobs delete my-job \
+          gcloud scheduler jobs delete my-job \
           --location=europe-west1 \
           --project $GCP_PROJECT_NAME
 
