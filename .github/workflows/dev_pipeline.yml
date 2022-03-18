@@ -60,15 +60,15 @@ jobs:
         run: |
           docker buildx build ./epistogram_frontend \
           --cache-from type=local,src=/tmp/.buildx-cache \
-          --cache-to type=local,dest=/tmp/.buildx-cache-new \
+          --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
           --builder ${{ steps.buildx.outputs.name }} \
           --tag $FRONTEND_IMAGE_NAME \
           --push
 
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      # - name: Move cache
+      #   run: |
+      #     rm -rf /tmp/.buildx-cache
+      #     mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       # - name: Push Docker image to GCP Container Registry
       #   run: docker push $FRONTEND_IMAGE_NAME
