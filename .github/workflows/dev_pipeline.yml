@@ -3,7 +3,7 @@ on:
   push:
     branches: [ dev ]
 env:
-  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-dev 
+  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-dev:latest
   FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-dev
 
   BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-dev
@@ -58,14 +58,12 @@ jobs:
 
       - name: Build frontend container
         run: |
-          docker buildx build \
+          docker buildx build ./epistogram_frontend \
           --cache-from type=local,src=/tmp/.buildx-cache \
           --cache-to type=local,dest=/tmp/.buildx-cache-new \
-          --file ./epistogram_frontend/Dockerfile \
           --builder ${{ steps.buildx.outputs.name }} \
-          --tag $FRONTEND_IMAGE_NAME \
-          --push \
-          ./epistogram_frontend
+          --t $FRONTEND_IMAGE_NAME \
+          --push
 
       # - name: Build frontend container
       #   uses: docker/build-push-action@v2
