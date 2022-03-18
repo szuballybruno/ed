@@ -87,6 +87,7 @@ const QuestionItem = (props: {
         pr="20px" />
 }
 
+// deprecated because DataGrid
 export const EditVideoSubpage = () => {
 
     const [videoTitle, setVideoTitle] = useState("");

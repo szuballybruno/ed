@@ -27,16 +27,28 @@ export const AdminCourseControl = () => {
             <AdminCourseDetailsSubpage
                 courses={courses}
                 refetchCoursesFunction={refetchCoursesAsync}
-                navigationFunction={(courseId) => navigate(`${coursesRoute.route}/${courseId}/details`)} />)}
+                navigationFunction={
+                    (courseId) =>
+                        navigate(`${coursesRoute.route}/${courseId}/details`)} />)}
 
         {getRoute(
             coursesRoute.courseContentRoute,
             <AdminCourseContentSubpage
                 courses={courses}
                 refetchCoursesFunction={refetchCoursesAsync}
-                navigationFunction={(courseId) => navigate(`${coursesRoute.route}/${courseId}/content`)} />)}
+                navigationFunction={
+                    (courseId) =>
+                        navigate(`${coursesRoute.route}/${courseId}/content`)} />)}
 
-        {getRoute(coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
+        {getRoute(
+            coursesRoute.statisticsCourseRoute,
+            <CourseStatisticsSubpage
+                courses={courses}
+                refetchCoursesFunction={refetchCoursesAsync}
+                navigationFunction={
+                    (courseId) =>
+                        navigate(`${coursesRoute.route}/${courseId}/content`)} />)}
+
         {getRoute(coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}
         {getRoute(coursesRoute.editVideoRoute, <EditVideoSubpage />)}
         {getRoute(coursesRoute.videoStatsRoute, <VideoStatisticsSubpage />)}

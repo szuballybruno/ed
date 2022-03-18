@@ -23,6 +23,7 @@ import { ApplicationRoute } from "../../../models/types";
 import { AdminCourseItemList } from "./AdminCourseItemList";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 
+// deprecated because DataGrid
 export const EditExamSubpage = (props: {
     examId?: number,
     activeRoute?: ApplicationRoute
@@ -142,12 +143,14 @@ export const EditExamSubpage = (props: {
                         : applicationRoutes.administrationRoute.coursesRoute.editExamRoute,
                 ]}
                 onSave={handleSaveAsync}>
+
                 <Flex
                     direction="column"
                     className="roundBorders"
                     mt="5px"
                     p="0 10px 10px 10px"
                     background="var(--transparentWhite70)">
+
                     <EpistoEntry
                         label="Cím"
                         labelVariant="top"
@@ -164,6 +167,7 @@ export const EditExamSubpage = (props: {
                         text="Újrakezdési limit">
 
                         <Flex align="center">
+
                             <Checkbox
                                 checked={isRetakeLimited}
                                 style={{

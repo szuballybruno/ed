@@ -19,7 +19,7 @@ import { EditSection } from "./EditSection";
 import { SimpleEditList } from "../SimpleEditList";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoSelect } from "../../controls/EpistoSelect";
-import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
 import { AdminCourseList } from "./AdminCourseList";
 import { useNavigation } from "../../../services/core/navigatior";
 import { ButtonType } from "../../../models/types";
@@ -37,6 +37,9 @@ export const AdminCourseDetailsSubpage = (props: {
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
     const showError = useShowErrorDialog();
+
+    const currentCourse = courses.find(course => course.courseId === courseId)
+
 
     // api calls
     const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = useCourseDetailsEditData(courseId);
@@ -196,7 +199,17 @@ export const AdminCourseDetailsSubpage = (props: {
         direction="column"
         className="whall">
 
-        <AdminBreadcrumbsHeader>
+        <AdminBreadcrumbsHeader
+            breadcrumbs={[
+                <BreadcrumbLink
+                    title="Kurzusok"
+                    iconComponent={applicationRoutes.administrationRoute.coursesRoute.icon}
+                    to={applicationRoutes.administrationRoute.coursesRoute.route + "/a/details"} />,
+                <BreadcrumbLink
+                    title={"" + currentCourse?.title}
+                    isCurrent />
+            ]}>
+
             <AdminCourseList
                 courses={courses}
                 navigationFunction={navigationFunction} />

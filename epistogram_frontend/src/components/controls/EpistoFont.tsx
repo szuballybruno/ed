@@ -17,7 +17,8 @@ export const EpistoFont = (params: {
     isMultiline?: boolean,
     noLineBreak?: boolean,
     isUppercase?: boolean,
-    isAutoFontSize?: boolean
+    isAutoFontSize?: boolean,
+    title?: string
 }) => {
 
     const {
@@ -32,7 +33,8 @@ export const EpistoFont = (params: {
         noLineBreak,
         isUppercase,
         isAutoFontSize,
-        children
+        children,
+        title
     } = params;
 
     const ref = useRef<HTMLParagraphElement>(null);
@@ -76,6 +78,7 @@ export const EpistoFont = (params: {
             fontSize: calcFontSize,
             ...style
         }}
+        title={title}
         className={createClassBuiler()
             .custom(styles["episto-font-main"])
             .if(isString(fontSize), builder => builder
