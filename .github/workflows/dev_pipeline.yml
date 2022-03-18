@@ -24,15 +24,15 @@ jobs:
         with:
           ref: dev # references the target branch
         
-      - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_email: ${{ secrets.GCP_EMAIL }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      # - name: Login to GCP
+      #   uses: google-github-actions/setup-gcloud@master
+      #   with:
+      #     project_id: ${{ secrets.GCP_PROJECT_ID }}
+      #     service_account_email: ${{ secrets.GCP_EMAIL }}
+      #     service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Configure GCP Docker
-        run: gcloud auth configure-docker --quiet
+      # - name: Configure GCP Docker
+      #   run: gcloud auth configure-docker --quiet
       
       - name: Set up Docker Buildx for layer caching
         id: buildx
@@ -66,18 +66,19 @@ jobs:
           context: ./epistogram_frontend
           builder: ${{ steps.buildx.outputs.name }}
           file: ./epistogram_frontend/Dockerfile
-          push: false
-          tags: ${{ env.FRONTEND_IMAGE_NAME }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
+          registry: gcr.io
+          username: _json_key
+          password: ${{ secrets.GCP_GCR_PUSHER_SA_KEY }}
 
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-      - name: Push Docker image to GCP Container Registry
-        run: docker push $FRONTEND_IMAGE_NAME
+      # - name: Push Docker image to GCP Container Registry
+      #   run: docker push $FRONTEND_IMAGE_NAME
 
   # BUILD BACKEND
   build_backend: 
