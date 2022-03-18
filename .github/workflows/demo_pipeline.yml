@@ -190,7 +190,8 @@ jobs:
         run: |
           gcloud scheduler jobs delete my-job \
           --location=europe-west1 \
-          --project $GCP_PROJECT_NAME
+          --project $GCP_PROJECT_NAME \
+          --quiet
 
       - name: schedule job
         if: always()
