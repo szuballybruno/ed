@@ -22,17 +22,17 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: dev # references the target branch
+          ref: dev
         
-      # - name: Login to GCP
-      #   uses: google-github-actions/setup-gcloud@master
-      #   with:
-      #     project_id: ${{ secrets.GCP_PROJECT_ID }}
-      #     service_account_email: ${{ secrets.GCP_EMAIL }}
-      #     service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-      # - name: Configure GCP Docker
-      #   run: gcloud auth configure-docker --quiet
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
       
       - name: Set up Docker Buildx for layer caching
         id: buildx
@@ -56,30 +56,37 @@ jobs:
           echo "REACT_APP_UNDER_MAINTENANCE=false" >> ./.env
         working-directory: ./epistogram_frontend
 
-      # - name: Build frontend container
-      #   run: docker build -t $FRONTEND_IMAGE_NAME .
-      #   working-directory: ./dev_repository/epistogram_frontend
-
       - name: Build frontend container
-        uses: docker/build-push-action@v2
-        with:
-          image: ${{ env.FRONTEND_IMAGE_NAME }}
-          context: ./epistogram_frontend
-          builder: ${{ steps.buildx.outputs.name }}
-          file: ./epistogram_frontend/Dockerfile
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
-          registry: gcr.io
-          username: _json_key
-          password: ${{ secrets.GCP_GCR_PUSHER_SA_KEY }}
+        run: |
+          docker buildx build \ 
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache-new \
+          --file ./epistogram_frontend/Dockerfile \
+          --builder ${{ steps.buildx.outputs.name }} \
+          --tag $FRONTEND_IMAGE_NAME
+          ./epistogram_frontend
+
+      # - name: Build frontend container
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     tags: ${{ env.FRONTEND_IMAGE_NAME }}
+      #     context: ./epistogram_frontend
+      #     builder: ${{ steps.buildx.outputs.name }}
+      #     file: ./epistogram_frontend/Dockerfile
+      #     push: true
+      #     cache-from: type=local,src=/tmp/.buildx-cache
+      #     cache-to: type=local,dest=/tmp/.buildx-cache-new
+      #     registry: gcr.io
+      #     username: _json_key
+      #     password: ${{ secrets.GCP_GCR_PUSHER_SA_KEY }}
 
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-      # - name: Push Docker image to GCP Container Registry
-      #   run: docker push $FRONTEND_IMAGE_NAME
+      - name: Push Docker image to GCP Container Registry
+        run: docker push $FRONTEND_IMAGE_NAME
 
   # BUILD BACKEND
   # build_backend: 
