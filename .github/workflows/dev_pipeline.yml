@@ -163,7 +163,9 @@ jobs:
     needs: [build_backend, build_frontend]
 
     steps:
-      run: cloud scheduler jobs delete my-job --location=europe-west1
+      - name: delete prev job
+        run: cloud scheduler jobs delete my-job --location=europe-west1
 
-      if: always()
-      run: gcloud scheduler jobs create http my-job --schedule="*/1 * * * *" --uri="http://example.com/path" --http-method=GET --location=europe-west1
+      - name: schedule job
+        if: always()
+        run: gcloud scheduler jobs create http my-job --schedule="*/1 * * * *" --uri="http://example.com/path" --http-method=GET --location=europe-west1
