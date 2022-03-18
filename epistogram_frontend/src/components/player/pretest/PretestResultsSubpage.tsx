@@ -119,7 +119,7 @@ export const PretestResultsSubpage = () => {
                             fontWeight: 600
                         }}>
 
-                        2022.03.14.
+                        2022.04.03.
                     </EpistoFont>
                 </Flex>
                 <Flex

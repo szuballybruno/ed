@@ -26,7 +26,10 @@ export const translatableTexts = {
     },
 
     tempomat: {
-        autoModeDescription: "Válaszd ezt ha Béla vagy és egy gomb gyárban dolgozol, de azt mondja a főnököd, te Béla, te Béla, nem dolgozol rendesen. Fogd azt a gombot a jobb kezeddel is te utolsó kis Bélakulom Hornyákin."
+        autoModeDescription: "Átvesszük az irányítást, és segítünk, hogy a céljaidnak megfelelő tempóban haladhass. Ha kezdenél lemaradni, több videót fogunk javasolni számodra, de nem hajszolunk túl. Lehetséges, hogy emiatt a befejezés dátuma enyhén ki fog tolódni, ezt lejjebb láthatod.",
+        lightModeDescription: "Csináld, ahogyan szeretnéd, mi nem szólunk bele! Mindig az eredetileg megadott időráfordításod alapján javasoljuk majd a napi videók mennyiségét, ha pedig ettől eltérnél, módosulni fog a befejezés előrejelzett dátuma. ",
+        balancedModeDescription: "Segítünk, ha kicsit lemaradnál, de nem fogunk túlságosan belepiszkálni a haladásodba. Esetleg javaslunk majd pár plusz videót, hogy minden nap tanulhass valami újat! Előfordulhat, hogy a befejezés előrejelzett dátuma változni fog (ezt lent láthatod).",
+        strictModeDescription: "Rajtunk nem múlik, tartani fogjuk az elején kalkulált befejezési dátumot! Ha lemaradnál, növelni fogjuk a javasolt napi videók mennyiségét, hogy ismét a megfelelő tempóba állj. Az erőfeszítéseidnek meglesz a gyümölcse!"
     },
 
     roleNames: {
