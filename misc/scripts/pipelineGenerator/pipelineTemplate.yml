@@ -10,6 +10,7 @@ env:
   BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-$BRANCH_NAME$
   
   CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
+  GCP_PROJECT_NAME: gifted-country-324010
 
 jobs:
     
@@ -177,9 +178,17 @@ jobs:
     needs: [build_backend, build_frontend]
 
     steps:
-      - name: delete prev job
-        run: cloud scheduler jobs delete my-job --location=europe-west1
+      - name: delete prev job 
+        run: |
+          cloud scheduler jobs delete my-job \
+          --location=europe-west1 \
+          --project $GCP_PROJECT_NAME
 
       - name: schedule job
         if: always()
-        run: gcloud scheduler jobs create http my-job --schedule="*/1 * * * *" --uri="http://example.com/path" --http-method=GET --location=europe-west1
+        run: |
+          gcloud scheduler jobs create http my-job \
+          --schedule="*/1 * * * *" \
+          --uri="http://example.com/path" \
+          --http-method=GET --location=europe-west1 \
+          --project $GCP_PROJECT_NAME
