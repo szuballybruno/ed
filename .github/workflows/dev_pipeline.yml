@@ -67,7 +67,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           file: ./epistogram_frontend/Dockerfile
           push: false
-          tags: $FRONTEND_IMAGE_NAME
+          tags: ${{ env.FRONTEND_IMAGE_NAME }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
