@@ -150,7 +150,7 @@ const CourseDetailsPage = () => {
                     </Container>
 
                     {/* briefing info items */}
-                    <Flex mt="20px" flexWrap="wrap" justify="space-evenly">
+                    <Flex mt="20px" justify="space-evenly">
 
                         <CourseDetailsBriefingInfoItem
                             icon={getAssetUrl("/course_page_icons/about_category.svg")}

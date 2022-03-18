@@ -93,7 +93,7 @@ export const ExamQuestions = (props: {
                     alt=""
                     src={getAssetUrl("course_page_icons/curriculum_test.svg")}
                     className="square35" />
-                    
+
                 <EpistoFont style={{ marginLeft: "10px" }}>
                     {questions.length}/{questionPaging.currentIndex + 1}
                 </EpistoFont>
@@ -146,7 +146,6 @@ export const ExamQuestions = (props: {
                     <Grid
                         templateColumns="repeat(2, 1fr)"
                         gridAutoRows="minmax(0,1fr)"
-                        direction="column"
                         gridGap="10px"
                         flex="1">
 
