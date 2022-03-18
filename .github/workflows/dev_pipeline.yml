@@ -65,8 +65,8 @@ jobs:
           --tag $FRONTEND_IMAGE_NAME \
           --push
 
-      - name: List built images
-        run: docker image ls
+      - name: List containers
+        run: docker container ls
 
       # - name: Build frontend container
       #   uses: docker/build-push-action@v2
