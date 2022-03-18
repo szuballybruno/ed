@@ -65,55 +65,51 @@ jobs:
           --tag $FRONTEND_IMAGE_NAME \
           --push
 
-      # - name: Move cache
-      #   run: |
-      #     rm -rf /tmp/.buildx-cache
-      #     mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
-      # - name: Push Docker image to GCP Container Registry
-      #   run: docker push $FRONTEND_IMAGE_NAME
-
   # BUILD BACKEND
-  # build_backend: 
-  #   name: Build backend
-  #   runs-on: ubuntu-latest
+  build_backend: 
+    name: Build backend
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout branch
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: dev # references the target branch
-  #         path: dev_repository # sets a relative folder to checkout to
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: dev # references the target branch
         
-  #     - name: Login to GCP
-  #       uses: google-github-actions/setup-gcloud@master
-  #       with:
-  #         project_id: ${{ secrets.GCP_PROJECT_ID }}
-  #         service_account_email: ${{ secrets.GCP_EMAIL }}
-  #         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-  #     - name: Configure GCP Docker
-  #       run: gcloud auth configure-docker --quiet
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+      
+      - name: Set up Docker Buildx for layer caching
+        id: buildx
+        uses: docker/setup-buildx-action@master
 
-  #     - name: Copy proper .env file
-  #       run: |
-  #         cp -fr ./config/dev.env ./config.env 
-  #       working-directory: ./dev_repository/epistogram_backend
+      - name: Copy proper .env file
+        run: |
+          cp -fr ./config/dev.env ./config.env 
+        working-directory: ./epistogram_backend
 
-  #     - name: Set .env additional variables
-  #       run: |
-  #         echo "" >> ./config.env
-  #         echo "IS_UNDER_MAINTENANCE=false" >> ./config.env
-  #         cat ./config.env
-  #       working-directory: ./dev_repository/epistogram_backend
+      - name: Set .env additional variables
+        run: |
+          echo "" >> ./config.env
+          echo "IS_UNDER_MAINTENANCE=false" >> ./config.env
+          cat ./config.env
+        working-directory: ./epistogram_backend
 
-  #     - name: Build backend container
-  #       run: |
-  #         docker build -t $BACKEND_IMAGE_NAME .
-  #       working-directory: ./dev_repository/epistogram_backend
-
-  #     - name: Push Docker image to GCP Container Registry
-  #       run: docker push $BACKEND_IMAGE_NAME
+      - name: Build backend container
+        run: |
+          docker buildx build ./epistogram_backend \
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
+          --builder ${{ steps.buildx.outputs.name }} \
+          --tag $BACKEND_IMAGE_NAME \
+          --push
   
   # DEPLOY FRONTEND
   deploy_frontend:
@@ -143,47 +139,47 @@ jobs:
           --allow-unauthenticated 
 
   # # DEPLOY BACKEND
-  # deploy_backend:
-  #   name: Deploy backend
-  #   runs-on: ubuntu-latest
-  #   needs: [build_backend, build_frontend]
+  deploy_backend:
+    name: Deploy backend
+    runs-on: ubuntu-latest
+    needs: [build_backend, build_frontend]
 
-  #   steps:
-  #     - name: Login to GCP
-  #       uses: google-github-actions/setup-gcloud@master
-  #       with:
-  #         project_id: ${{ secrets.GCP_PROJECT_ID }}
-  #         service_account_email: ${{ secrets.GCP_EMAIL }}
-  #         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+    steps:
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-  #     - name: Configure GCP Docker
-  #       run: gcloud auth configure-docker --quiet
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
         
-  #     - name: Deploy Docker image to GCP CloudRun
-  #       run: |
-  #         gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
-  #         --image $BACKEND_IMAGE_NAME \
-  #         --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
-  #         --region europe-west1 \
-  #         --platform managed \
-  #         --max-instances 1 \
-  #         --min-instances 1 \
-  #         --port 5000 \
-  #         --allow-unauthenticated \
-  #         --memory 4Gi \
-  #         --cpu 2 \
-  #         --concurrency 200
+      - name: Deploy Docker image to GCP CloudRun
+        run: |
+          gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
+          --image $BACKEND_IMAGE_NAME \
+          --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --min-instances 1 \
+          --port 5000 \
+          --allow-unauthenticated \
+          --memory 4Gi \
+          --cpu 2 \
+          --concurrency 200
 
-  # # DEPLOY JOB SCHEDULER
-  # deploy_job_scheduler: 
-  #   name: Deploy job scheduler
-  #   runs-on: ubuntu-latest
-  #   needs: [build_backend, build_frontend]
+  # DEPLOY JOB SCHEDULER
+  deploy_job_scheduler: 
+    name: Deploy job scheduler
+    runs-on: ubuntu-latest
+    needs: [build_backend, build_frontend]
 
-  #   steps:
-  #     - name: delete prev job
-  #       run: cloud scheduler jobs delete my-job --location=europe-west1
+    steps:
+      - name: delete prev job
+        run: cloud scheduler jobs delete my-job --location=europe-west1
 
-  #     - name: schedule job
-  #       if: always()
-  #       run: gcloud scheduler jobs create http my-job --schedule="*/1 * * * *" --uri="http://example.com/path" --http-method=GET --location=europe-west1
+      - name: schedule job
+        if: always()
+        run: gcloud scheduler jobs create http my-job --schedule="*/1 * * * *" --uri="http://example.com/path" --http-method=GET --location=europe-west1
