@@ -64,6 +64,7 @@ jobs:
           --file ./epistogram_frontend/Dockerfile \
           --builder ${{ steps.buildx.outputs.name }} \
           --tag $FRONTEND_IMAGE_NAME \
+          --push \
           ./epistogram_frontend
 
       # - name: Build frontend container
