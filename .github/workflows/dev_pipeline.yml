@@ -63,6 +63,7 @@ jobs:
       - name: Build frontend container
         uses: docker/build-push-action@v2
         with:
+          image: ${{ env.FRONTEND_IMAGE_NAME }}
           context: ./epistogram_frontend
           builder: ${{ steps.buildx.outputs.name }}
           file: ./epistogram_frontend/Dockerfile
