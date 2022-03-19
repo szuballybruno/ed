@@ -18,6 +18,8 @@ import { EpistoButton } from "../../controls/EpistoButton";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminCourseItemList } from "./AdminCourseItemList";
 
+
+// deprecated because DataGrid
 export const EditQuestionSubpage = () => {
 
     const params = useParams<{ questionId: string }>();

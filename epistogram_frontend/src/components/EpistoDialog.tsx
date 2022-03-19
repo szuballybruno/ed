@@ -94,6 +94,8 @@ export const EpistoDialog = (props: {
         <Flex
             id="dialogTitle"
             direction="column"
+            width="100%"
+            overflow="hidden"
             minWidth="500px"
             height={fullScreenY ? "90vh" : undefined}
             position="relative">

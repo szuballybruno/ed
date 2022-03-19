@@ -56,6 +56,10 @@ const CustomNodeComponent = ({ data }) => {
     );
 };
 
+
+/**
+ * Should be designed properly and implemented into course content page
+ *  */
 export const AdminInteractiveCourseSubpage = () => {
 
     return <AdminBreadcrumbsHeader>

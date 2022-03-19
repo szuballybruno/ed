@@ -30,23 +30,40 @@ export const AdminUserControl = () => {
 
 
     return <Switch>
+
+        {/* Route /administration/users */}
         <Route exact path={usersRoute.route}>
-            {/*<AdminUserListSubpage />*/}
+
             <AdminUserDataGridSubpage users={users} />
         </Route>
 
+        {/* Route /administration/users/add */}
         <Route path={usersRoute.addRoute.route}>
-            <AdminAddUserSubpage users={users} />
+
+            <AdminAddUserSubpage
+                users={users}
+                refetchUsersFunction={refetchUsers} />
         </Route>
 
-        <Route exact path={usersRoute.editRoute.route}>
-            <AdminEditUserSubpage users={users} refetchUsersFunction={refetchUsers} />
+        {/* Route /administration/users/:userId/edit */}
+        <Route
+            exact
+            path={usersRoute.editRoute.route}>
+
+            <AdminEditUserSubpage
+                users={users}
+                refetchUsersFunction={refetchUsers} />
         </Route>
 
-        <Route exact path={usersRoute.statsRoute.route}>
+        {/* Route /administration/users/:userId/statistics */}
+        <Route
+            exact
+            path={usersRoute.statsRoute.route}>
+
             <AdminUserStatisticsSubpage users={users} />
         </Route>
 
+        {/* Route /administration/users/:userId/teacherinfo */}
         <Route exact path={usersRoute.teacherInfoRoute.route}>
             <AdminUserTeacherInfoSubpage users={users} />
         </Route>
@@ -55,8 +72,13 @@ export const AdminUserControl = () => {
             <AdminUserCourseStatisticsSubpage />
         </Route>
 
-        <Route exact path={usersRoute.courseContentRoute.route}>
-            <AdminUserCourseContentSubpage />
+        <Route
+            exact
+            path={usersRoute.courseContentRoute.route}>
+
+            <AdminUserCourseContentSubpage
+                users={users}
+                refetchUsersFunction={refetchUsers} />
         </Route>
 
         <Route exact path={usersRoute.moduleStatisticsRoute.route}>

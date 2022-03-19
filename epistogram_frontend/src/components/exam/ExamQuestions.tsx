@@ -16,12 +16,14 @@ export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
     answerSessionId: number,
     onExamFinished: () => void,
+    exitExamAction?: () => void,
     hideLoading?: boolean
 }) => {
 
     const {
         answerSessionId,
         onExamFinished,
+        exitExamAction,
         exam,
         hideLoading
     } = props;
@@ -97,7 +99,7 @@ export const ExamQuestions = (props: {
                 </EpistoFont>
             </Flex>}
             headerCenterText={exam.title}
-            exitExamAction={() => { }}
+            exitExamAction={exitExamAction}
             handleNext={handleNextAsync}
             showNextButton={hasSelectedAnswer}
             nextButtonTitle={translatableTexts.exam.nextQuestion}

@@ -91,7 +91,7 @@ export const PrequizSubpage = () => {
                     {totalQuestionsCount}/{currentQuestionIndex + 1}
                 </EpistoFont>
             </Flex>}
-            headerCenterText="Kurzus elotti felmero"
+            headerCenterText="Kurzus előtti felmérő"
             handleNext={handleNextAsync}
             showNextButton={canContinue}
             nextButtonTitle={translatableTexts.exam.nextQuestion}

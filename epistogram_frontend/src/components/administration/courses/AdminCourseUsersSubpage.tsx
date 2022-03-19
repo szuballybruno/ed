@@ -1,22 +1,20 @@
-import { NavigateNextTwoTone } from "@mui/icons-material"
-import { GridRowsProp, GridColDef, DataGrid } from "@mui/x-data-grid"
-import { useEffect, useState } from "react"
-import { useLocation } from "react-router"
+import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
+import { useUserListQuery } from "../../../services/api/userApiService"
 import { useNavigation } from "../../../services/core/navigatior"
 import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO"
+import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItemDTO"
 import { formatTimespan } from "../../../static/frontendHelpers"
 import { EpistoButton } from "../../controls/EpistoButton"
 import { ProfileImage } from "../../ProfileImage"
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader"
+import { AdminSubpageHeader } from "../AdminSubpageHeader"
+import { AdminCourseList } from "./AdminCourseList"
 
-export const AdminUserDataGridSubpage = (props: {
-    users: AdminPageUserDTO[]
-}) => {
+export const AdminCourseUsersGrid = () => {
 
-    const { users } = props
+    const { users } = useUserListQuery("")
     const { navigate } = useNavigation()
-    const location = useLocation()
 
     const getRowsFromUsers = () => users.map((user) => {
         return {
@@ -27,7 +25,7 @@ export const AdminUserDataGridSubpage = (props: {
                 lastName: user.lastName
             },
             name: `${user.lastName} ${user.firstName}`,
-            email: user.email,
+            module: user.email,
             coinBalance: `${user.coinBalance} EC`,
             totalSpentTimeSeconds: formatTimespan(user.totalSpentTimeSeconds)
         }
@@ -90,24 +88,30 @@ export const AdminUserDataGridSubpage = (props: {
                 </EpistoButton>
         }
     ];
-    return <AdminBreadcrumbsHeader
-        viewSwitchChecked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
-        viewSwitchFunction={() => {
+    return <DataGrid
+        columns={userColumns}
+        rows={userRows}
+        rowHeight={80}
+        style={{
+            background: "var(--transparentWhite70)"
+        }} />
+}
 
-            const lastAdminUserPath = localStorage.getItem("lastAdminUserPath")
+export const AdminCourseUsersSubpage = (props: {
+    courses: CourseAdminListItemDTO[],
+    refetchCoursesFunction: () => void,
+    navigationFunction: (courseId: number) => void
+}) => {
 
-            navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: "a" })
-            /* if (!checked && location.pathname === lastAdminUserPath) {
-                 navigate(lastAdminUserPath)
-             }  else {
-             } */
-        }}>
-        <DataGrid
-            columns={userColumns}
-            rows={userRows}
-            rowHeight={80}
-            style={{
-                background: "var(--transparentWhite70)"
-            }} />
-    </AdminBreadcrumbsHeader >
+    const { courses, navigationFunction } = props
+
+    return <AdminBreadcrumbsHeader>
+
+        <AdminCourseList courses={courses} navigationFunction={navigationFunction} />
+
+        <AdminSubpageHeader>
+            <AdminCourseUsersGrid />
+        </AdminSubpageHeader>
+
+    </AdminBreadcrumbsHeader>
 }

@@ -35,6 +35,7 @@ const ChipSmall = (props: { text: string, color?: string, style?: React.CSSPrope
     )
 }
 
+// deprecated because DataGrid
 export const CourseEditItemViewNew = (props: {
     moduleIndex: number,
     index: number,

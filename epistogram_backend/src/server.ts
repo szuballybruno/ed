@@ -100,7 +100,7 @@ import { randomInt } from 'crypto';
     log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${globalConfig.misc.environmentName} ----------------`);
     log("");
 
-    // services 
+    // services
     const loggerService = new LoggerService();
     const mapperService = new MapperService();
     const hashService = new HashService(globalConfig);

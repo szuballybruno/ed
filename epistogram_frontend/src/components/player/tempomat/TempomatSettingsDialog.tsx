@@ -71,21 +71,21 @@ export const TempomatSettingsDialog = (props: {
                         tempomatMode="light"
                         title="Megengedő üzemmód"
                         isSelected={tempomatMode === "light"}
-                        description={translatableTexts.tempomat.autoModeDescription}
+                        description={translatableTexts.tempomat.lightModeDescription}
                         onClick={() => handleSetTempomatMode("light")} />
 
                     <TempomatModeTile
                         tempomatMode="balanced"
                         title="Kiegyensúlyozott üzemmód"
                         isSelected={tempomatMode === "balanced"}
-                        description={translatableTexts.tempomat.autoModeDescription}
+                        description={translatableTexts.tempomat.balancedModeDescription}
                         onClick={() => handleSetTempomatMode("balanced")} />
 
                     <TempomatModeTile
                         tempomatMode="strict"
                         title="Szigorú üzemmód"
                         isSelected={tempomatMode === "strict"}
-                        description={translatableTexts.tempomat.autoModeDescription}
+                        description={translatableTexts.tempomat.strictModeDescription}
                         onClick={() => handleSetTempomatMode("strict")} />
                 </Flex>
 

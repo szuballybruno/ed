@@ -29,10 +29,11 @@ const DesktopNavbar = (props: {
     hideLinks: boolean,
     isLowHeight?: boolean,
     showLogo?: boolean,
+    isMinimalMode?: boolean,
     backgroundContent?: any
 }) => {
 
-    const { backgroundContent, showLogo, isLowHeight, currentCourseItemCode } = props;
+    const { backgroundContent, showLogo, isLowHeight, currentCourseItemCode, isMinimalMode } = props;
     const { navigateToPlayer, navigate } = useNavigation();
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
@@ -123,46 +124,8 @@ const DesktopNavbar = (props: {
             {/* menu items */}
             {
                 !hideLinks && <>
-                    {(isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo) ?
-                        <Flex height="50px" flex="1 0 600px">
-
-                            {menuItems
-                                .map((item, index) => {
-                                    return <NavbarButton
-                                        key={index}
-                                        menuName={item.title}
-                                        menuPath={item.route} />
-                                })}
-
-                            {/* continue watching with or without text  */}
-                            {currentCourseItemCode &&
-                                <NavbarButton
-                                    menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
-
-                                    <EpistoButton
-                                        className="mildShadow"
-                                        style={{
-                                            flex: "1",
-                                            color: "--epistoTeal",
-                                            background: "var(--transparentWhite70)",
-                                            border: "none"
-                                        }}
-                                        variant="outlined"
-                                        onClick={() => continueCourse()}
-                                        icon={
-                                            <img
-                                                alt=""
-                                                src={getAssetUrl("/icons/play2.svg")}
-                                                style={{
-                                                    width: "25px",
-                                                    height: "25px",
-                                                    marginRight: "5px"
-                                                }} />
-                                        }>
-                                        {translatableTexts.navbar.currentCourse}
-                                    </EpistoButton>
-                                </NavbarButton>}
-                        </Flex> : <Flex>
+                    {isMinimalMode
+                        ? <Flex>
 
                             {menuItems
                                 .map((item, index) => {
@@ -176,35 +139,90 @@ const DesktopNavbar = (props: {
                                         {item.icon}
                                     </EpistoButton>
                                 })}
+                        </Flex>
+                        : (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo)
+                            ? <Flex height="50px" flex="1 0 600px">
 
-                            {/* continue watching  */}
-                            {currentCourseItemCode &&
-                                <NavbarButton
-                                    menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
+                                {menuItems
+                                    .map((item, index) => {
+                                        return <NavbarButton
+                                            key={index}
+                                            menuName={item.title}
+                                            menuPath={item.route} />
+                                    })}
 
-                                    <EpistoButton
-                                        className="mildShadow"
-                                        style={{
-                                            color: "--epistoTeal",
-                                            background: "var(--transparentWhite70)",
-                                            border: "none"
-                                        }}
-                                        variant="outlined"
-                                        onClick={() => continueCourse()}
-                                        icon={
-                                            <img
-                                                alt=""
-                                                src={getAssetUrl("/icons/play2.svg")}
-                                                style={{
-                                                    width: "25px",
-                                                    height: "25px",
-                                                }} />
-                                        } />
-                                </NavbarButton>}
-                        </Flex>}
+                                {/* continue watching with or without text  */}
+                                {currentCourseItemCode &&
+                                    <NavbarButton
+                                        menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
+
+                                        <EpistoButton
+                                            className="mildShadow"
+                                            style={{
+                                                flex: "1",
+                                                color: "--epistoTeal",
+                                                background: "var(--transparentWhite70)",
+                                                border: "none"
+                                            }}
+                                            variant="outlined"
+                                            onClick={() => continueCourse()}
+                                            icon={
+                                                <img
+                                                    alt=""
+                                                    src={getAssetUrl("/icons/play2.svg")}
+                                                    style={{
+                                                        width: "25px",
+                                                        height: "25px",
+                                                        marginRight: "5px"
+                                                    }} />
+                                            }>
+                                            {translatableTexts.navbar.currentCourse}
+                                        </EpistoButton>
+                                    </NavbarButton>}
+                            </Flex>
+                            : <Flex>
+
+                                {menuItems
+                                    .map((item, index) => {
+
+                                        return <EpistoButton
+                                            variant="plain"
+                                            key={index}
+                                            onClick={() => {
+                                                navigate(item.route)
+                                            }}>
+                                            {item.icon}
+                                        </EpistoButton>
+                                    })}
+
+                                {/* continue watching  */}
+                                {currentCourseItemCode &&
+                                    <NavbarButton
+                                        menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
+
+                                        <EpistoButton
+                                            className="mildShadow"
+                                            style={{
+                                                color: "--epistoTeal",
+                                                background: "var(--transparentWhite70)",
+                                                border: "none"
+                                            }}
+                                            variant="outlined"
+                                            onClick={() => continueCourse()}
+                                            icon={
+                                                <img
+                                                    alt=""
+                                                    src={getAssetUrl("/icons/play2.svg")}
+                                                    style={{
+                                                        width: "25px",
+                                                        height: "25px",
+                                                    }} />
+                                            } />
+                                    </NavbarButton>}
+                            </Flex>}
 
                     {/* shop and notification buttons */}
-                    <Flex
+                    {!isMinimalMode && <Flex
                         pr={isLowHeight ? 0 : "10px"}
                         align="center"
                         mr={isLowHeight ? 0 : "15px"}>
@@ -272,7 +290,7 @@ const DesktopNavbar = (props: {
                             cursor="pointer"
                             className="square50"
                             ref={ref}></ProfileImage>}
-                    </Flex>
+                    </Flex>}
                 </>
             }
 

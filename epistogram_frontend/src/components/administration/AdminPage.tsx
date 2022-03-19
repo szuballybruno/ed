@@ -13,6 +13,7 @@ import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AdminOverviewTablePage } from './AdminOverviewTablePage';
 import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
+import { AdminCourseControl } from './courses/AdminCourseControl';
 import { AdminCourseListSubpage } from "./courses/AdminCourseListSubpage";
 import { AdminInteractiveCourseSubpage } from './courses/AdminInteractiveCourseSubpage';
 import CourseStatisticsSubpage from "./courses/CourseStatisticsSubpage";
@@ -115,18 +116,7 @@ const AdminPage = () => {
                 <ProtectedRoute
                     path={administrationRoutes.coursesRoute.route}
                     isAuthorizedToView={x => x.canAccessCourseAdministration}
-                    render={() => <Switch>
-                        {getRoute(administrationRoutes.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.videoStatsRoute, <VideoStatisticsSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editExamRoute, <EditExamSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editExamQuestionRoute, <EditQuestionSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editModuleRoute, <EditModuleSubpage />)}
-                    </Switch>} />
+                    render={() => <AdminCourseControl />} />
 
                 {/* shop administartion */}
                 <ProtectedRoute

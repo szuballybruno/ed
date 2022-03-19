@@ -51,10 +51,11 @@ export const AdminBreadcrumbsHeader = (props: {
     children?: ReactNode,
     breadcrumbs?: ReactNode[],
     subRouteLabel?: string,
+    viewSwitchChecked?: boolean,
     viewSwitchFunction?: (checked: boolean) => void
 } & FlexProps) => {
 
-    const { subRouteLabel, children, breadcrumbs, viewSwitchFunction, ...css } = props;
+    const { subRouteLabel, children, breadcrumbs, viewSwitchChecked, viewSwitchFunction, ...css } = props;
 
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
     const location = useLocation()
@@ -85,7 +86,9 @@ export const AdminBreadcrumbsHeader = (props: {
         mb="20px"
         direction={"column"}>
 
-        <Flex justify="space-between">
+        <Flex
+            justify="space-between"
+            minH="38px">
             {/* breadcrumbs */}
             {breadcrumbs
                 ? <Breadcrumbs>
@@ -103,7 +106,7 @@ export const AdminBreadcrumbsHeader = (props: {
                         title={subRoute.title} />}
                 </Breadcrumbs>}
 
-            <FormGroup>
+            {viewSwitchFunction && <FormGroup>
 
                 <FormControl style={{
                     flexDirection: "row",
@@ -111,7 +114,7 @@ export const AdminBreadcrumbsHeader = (props: {
                 }}>
                     <List />
                     <Switch
-                        checked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
+                        checked={viewSwitchChecked}
                         onChange={(e) => {
                             if (!viewSwitchFunction)
                                 return
@@ -120,7 +123,7 @@ export const AdminBreadcrumbsHeader = (props: {
                         }} />
                     <GridOn />
                 </FormControl>
-            </FormGroup>
+            </FormGroup>}
         </Flex>
 
 

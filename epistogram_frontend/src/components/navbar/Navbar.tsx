@@ -11,10 +11,11 @@ const Navbar = (props: {
     hideLinks?: boolean,
     showLogo?: boolean,
     isLowHeight?: boolean,
+    isMinimalMode?: boolean,
     backgroundContent?: any
 }) => {
 
-    const { backgroundContent, hideLinks, isLowHeight, showLogo } = props;
+    const { backgroundContent, hideLinks, isLowHeight, isMinimalMode, showLogo } = props;
     const isDesktop = useIsDesktopView();
     const currentCourseItemCode = useCurrentCourseItemCode();
 
@@ -24,6 +25,7 @@ const Navbar = (props: {
         currentCourseItemCode={currentCourseItemCode?.currentCourseItemCode}
         hideLinks={!!hideLinks}
         isLowHeight={isLowHeight}
+        isMinimalMode={isMinimalMode}
         showLogo={showLogo} />;
 
     // render mobile
