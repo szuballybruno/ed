@@ -141,7 +141,11 @@ const DummyLearningCourseStatsModified = () => <GridItem
     </FlexFloat>
 </GridItem>
 
-const UserStatisticsProgressWithLabel = () => {
+const UserStatisticsProgressWithLabel = (props: {
+    title: string,
+    value: number
+}) => {
+
     return <Flex
         w="100%"
         mt="10px"
@@ -149,12 +153,14 @@ const UserStatisticsProgressWithLabel = () => {
         align="center"
         p="5px">
 
-        <EpistoFont fontSize={"fontExtraSmall"}>
-            Kurzusok időben való teljesítése
+        <EpistoFont style={{
+            minWidth: 100
+        }} fontSize={"fontExtraSmall"}>
+            {props.title}
         </EpistoFont>
 
         <LinearProgress
-            value={95}
+            value={props.value}
             variant="determinate"
             style={{
                 width: "80%",
@@ -169,7 +175,7 @@ const UserStatisticsProgressWithLabel = () => {
             }}
             fontSize={"fontSmall"}>
 
-            95
+            {props.value}
         </EpistoFont>
     </Flex>
 }
@@ -276,7 +282,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             <Image
                                 h={"120px"}
                                 w={"120px"}
-                                src={getAssetUrl("images/happyfacechart.png")} />
+                                src={getAssetUrl("/images/happyfacechart.png")} />
 
                             <Flex direction="column" p="10px">
                                 <EpistoFont
@@ -306,11 +312,11 @@ export const AdminUserStatisticsSubpage = (props: {
                         </Flex>
                         <Flex w="100%" mt="20px" direction="column">
 
-                            <UserStatisticsProgressWithLabel />
-                            <UserStatisticsProgressWithLabel />
-                            <UserStatisticsProgressWithLabel />
-                            <UserStatisticsProgressWithLabel />
-                            <UserStatisticsProgressWithLabel />
+                            <UserStatisticsProgressWithLabel title="Elköteleződés" value={95} />
+                            <UserStatisticsProgressWithLabel title="Teljesítmény" value={67} />
+                            <UserStatisticsProgressWithLabel title="Produktivitás" value={81} />
+                            <UserStatisticsProgressWithLabel title="Elmélyülés" value={83} />
+                            <UserStatisticsProgressWithLabel title="Közösségi aktivitás" value={78} />
                         </Flex>
                     </Flex>
                     <Flex
@@ -320,7 +326,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         <Flex h="150px">
 
                             <StatisticsCard
-                                iconPath={getAssetUrl("images/watchedvideos3Dsmaller.png")}
+                                iconPath={getAssetUrl("images/learningreport01.png")}
                                 value={"13"}
                                 suffix={"óra"}
                                 style={{
@@ -328,14 +334,16 @@ export const AdminUserStatisticsSubpage = (props: {
                                 }}
                                 title={"Aktívan eltöltött idő a platformon"} />
                             <StatisticsCard
-                                iconPath={getAssetUrl("images/watchedvideos3Dsmaller.png")}
+                                iconPath={getAssetUrl("images/learningreport02.png")}
                                 value={"38"}
                                 suffix={"db"}
                                 title={"megtekintett videók a hónapban"} />
                         </Flex>
                         <Flex p="10px">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. In harum dolorem, illum eos ex labore consequuntur, ea tempora dolor maiores quo repudiandae, non vitae beatae nam perspiciatis pariatur dolores consequatur.
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. In harum dolorem, illum eos ex labore consequuntur, ea tempora dolor maiores quo repudiandae, non vitae beatae nam perspiciatis pariatur dolores consequatur.
+                            A hallgató elköteleződése 4 mérőszám összeségéből áll össze.
+                            Vizsgáljuk a belépésének gyakoriságát, az aktivitásának intenzitását, a platformelhagyást, valamint a lemorzsolódást is.
+                            Az elköteleződési szint magasan tartása kulcsfontosságú, hiszen a felhasználónak azt kell éreznie, hogy valóban értéket kap a tanulás során, és nem csak kötelező rosszként éli meg a képzési folyamatot.
+                            Csökkenő elköteleződés esetén kérdéseket teszünk fel neki, ezt pedig összehasonlítjuk a kurzuselhagyási és értékelési adatokkal, ezáltal pedig felderíthető, melyek azok a kritikus pontok a tananyagban, melyek javításra szorulnak.
                         </Flex>
 
                     </Flex>
@@ -351,23 +359,75 @@ export const AdminUserStatisticsSubpage = (props: {
             </EditSection>
 
             <EditSection title="Átlagos haladás a tanfolyamokon">
-                <Flex p="10px 0" minH="400px">
-                    <Flex flex="1">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam, officiis? Magnam aliquam dolorem consequatur laborum, incidunt sequi ipsam velit maiores aspernatur tenetur nesciunt dolor earum consequuntur! Minus facere reiciendis distinctio!
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam, officiis? Magnam aliquam dolorem consequatur laborum, incidunt sequi ipsam velit maiores aspernatur tenetur nesciunt dolor earum consequuntur! Minus facere reiciendis distinctio!
-                    </Flex>
-                    <Flex
-                        className="roundBorders"
-                        flex="1"
-                        p="10px"
+                <Flex>
+                    <div
+                        style={{
+                            minWidth: 600,
+                            width: "50%",
+                            marginRight: "10px",
+                            display: "grid",
+                            boxSizing: "border-box",
+                            gap: "10px",
+                            gridAutoFlow: "row dense",
+                            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                            gridAutoRows: "160px"
+                        }}>
+
+                        {/* total completed video count */}
+                        <StatisticsCard
+                            title={"Megválaszolt tudást vizsgáló kérdések száma"}
+                            value={"39"}
+                            suffix={"db"}
+                            iconPath={getAssetUrl("images/learningreport03.png")}
+                            isOpenByDefault={false} />
+
+                        {/* total playback time */}
+                        <StatisticsCard
+                            title={"Helyes válaszok aránya"}
+                            value={"27"}
+                            suffix={"%"}
+                            iconPath={getAssetUrl("images/learningreport04.png")}
+                            isOpenByDefault={false} />
+
+                        {/* total given answer count  */}
+                        <StatisticsCard
+                            title={"Reakcióidő"}
+                            value={"Átlagos"}
+                            suffix={""}
+                            iconPath={getAssetUrl("images/learningreport05.png")}
+                            isOpenByDefault={false} />
+
+                        {/* correct answer rate  */}
+                        <StatisticsCard
+                            title={"Átlagos napi megtekintett videók"}
+                            value={"6.5"}
+                            suffix={"db/nap"}
+                            iconPath={getAssetUrl("images/learningreport06.png")}
+                            isOpenByDefault={false} />
+
+
+
+
+                    </div>
+                    {/* chart item  */}
+                    <FlexFloat
+                        background="var(--transparentWhite70)"
+                        //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
                         direction="column"
-                        background="var(--transparentWhite70)">
+                        p="10px"
+                        minWidth={250}
+                        style={{
+                            gridColumn: `auto / span 2`,
+                            gridRow: `auto / span 2`
+                        }}>
 
                         {userProgressData && userProgressData.days.length > 0
                             ? <UserProgressChart userProgress={userProgressData} />
                             : <NoProgressChartYet />}
-                    </Flex>
+
+                    </FlexFloat>
                 </Flex>
+
             </EditSection>
 
             <EditSection title="Aktivitások">
@@ -379,7 +439,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         boxSizing: "border-box",
                         gap: "10px",
                         gridAutoFlow: "row dense",
-                        gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                        gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
                         gridAutoRows: "160px"
                     }}>
 
@@ -405,34 +465,34 @@ export const AdminUserStatisticsSubpage = (props: {
 
                     {/* total completed video count */}
                     <StatisticsCard
-                        title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
-                        value={userStats ? userStats.completedVideoCount + "" : "0"}
-                        suffix={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.suffix}
-                        iconPath={getAssetUrl("images/watchedvideos3Dsmaller.png")}
+                        title={"Leggyakoribb aktív idősáv"}
+                        value={"17-19"}
+                        suffix={"óra között"}
+                        iconPath={getAssetUrl("images/learningreport07.png")}
                         isOpenByDefault={false} />
 
                     {/* total playback time */}
                     <StatisticsCard
-                        title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
-                        value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + "" : "0"}
-                        suffix={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.suffix}
-                        iconPath={getAssetUrl("images/watch3D.png")}
+                        title={"Teljesített vizsgák száma"}
+                        value={"8"}
+                        suffix={"db"}
+                        iconPath={getAssetUrl("images/learningreport08.png")}
                         isOpenByDefault={false} />
 
                     {/* total given answer count  */}
                     <StatisticsCard
-                        title={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.title}
-                        value={userStats ? userStats.totalGivenAnswerCount + "" : "0"}
-                        suffix={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.suffix}
-                        iconPath={getAssetUrl("images/answeredquestions3D.png")}
+                        title={"Egy belépés átlagos hossza"}
+                        value={"42"}
+                        suffix={"perc"}
+                        iconPath={getAssetUrl("images/learningreport09.png")}
                         isOpenByDefault={false} />
 
                     {/* correct answer rate  */}
                     <StatisticsCard
-                        title={translatableTexts.homePage.statsSummary.correctAnswerRate.title}
-                        value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + "" : "0"}
-                        suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
-                        iconPath={getAssetUrl("images/rightanswer3D.png")}
+                        title={"Ismétlésre ajánlott videó"}
+                        value={"13"}
+                        suffix={"db"}
+                        iconPath={getAssetUrl("images/learningreport10.png")}
                         isOpenByDefault={false} />
                 </div>
             </EditSection>

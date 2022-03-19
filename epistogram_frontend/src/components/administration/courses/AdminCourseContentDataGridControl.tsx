@@ -2,6 +2,8 @@ import { Flex } from "@chakra-ui/react";
 import { Delete, Edit, Equalizer } from "@mui/icons-material";
 import { GridRowsProp } from "@mui/x-data-grid";
 import { GridColDef, DataGridPro } from "@mui/x-data-grid-pro";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { useNavigation } from "../../../services/core/navigatior";
 import { CourseAdminItemShortDTO, CourseAdminItemShortNewDTO } from "../../../shared/dtos/CourseAdminItemShortDTO";
 import { ModuleAdminShortDTO } from "../../../shared/dtos/ModuleAdminShortDTO";
 import { formatTime } from "../../../static/frontendHelpers";
@@ -25,6 +27,9 @@ export const AdminCourseContentDataGridControl = (props: {
 }) => {
 
     const { selectableModules, items } = props
+
+    const { navigate } = useNavigation()
+    const navToVideoStats = (videoId: number) => navigate(applicationRoutes.administrationRoute.coursesRoute.videoStatsRoute.route, { videoId });
 
     const useGetRowsFromModules = () => items.map((item) => {
         return {
@@ -166,7 +171,10 @@ export const AdminCourseContentDataGridControl = (props: {
                         <Edit />
                     </EpistoButton>
 
-                    <EpistoButton onClick={() => { }}>
+                    <EpistoButton onClick={() => {
+                        if (params.value.type === "video")
+                            navToVideoStats(params.value.id)
+                    }}>
 
                         <Equalizer />
                     </EpistoButton>
