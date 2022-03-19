@@ -137,7 +137,8 @@ export const AdminEditUserSubpage = (props: {
             tabMenuItems={
                 [
                     applicationRoutes.administrationRoute.usersRoute.editRoute,
-                    applicationRoutes.administrationRoute.usersRoute.statsRoute
+                    applicationRoutes.administrationRoute.usersRoute.statsRoute,
+                    applicationRoutes.administrationRoute.usersRoute.courseContentRoute
                 ]
                     .concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
 

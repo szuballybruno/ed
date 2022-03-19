@@ -72,8 +72,13 @@ export const AdminUserControl = () => {
             <AdminUserCourseStatisticsSubpage />
         </Route>
 
-        <Route exact path={usersRoute.courseContentRoute.route}>
-            <AdminUserCourseContentSubpage />
+        <Route
+            exact
+            path={usersRoute.courseContentRoute.route}>
+
+            <AdminUserCourseContentSubpage
+                users={users}
+                refetchUsersFunction={refetchUsers} />
         </Route>
 
         <Route exact path={usersRoute.moduleStatisticsRoute.route}>
