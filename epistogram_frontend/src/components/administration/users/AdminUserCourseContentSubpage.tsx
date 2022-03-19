@@ -51,7 +51,61 @@ export const AdminUserCourseContentSubpage = (props: {
     const [currentMoreInfoDialogTab, setCurrentMoreInfoDialogTab] = useState<number>(0)
 
     const { userStats } = useUserStats(userId);
-    const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(1, true);
+    const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(courseId, true);
+
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList("");
+
+    const getRowsFromVideos = () => courses.map((course) => {
+        return {
+            id: course.courseId,
+            avatar: course.thumbnailImageURL,
+            title: course.title,
+            category: course.category.name,
+            subCategory: course.subCategory.name,
+            videosCount: course.videosCount,
+            editCourse: course.courseId
+        }
+    })
+
+    const videoRows: GridRowsProp = getRowsFromVideos()
+
+    const videoColumns: GridColDef[] = [
+        { field: 'avatar', headerName: 'Thumbnail kép', width: 130, renderCell: (params) => <img src={params.value} /> },
+        { field: 'title', headerName: 'Cím', width: 300, editable: true, resizable: true },
+        { field: 'progress', headerName: 'Haladás', width: 150, resizable: true },
+        { field: 'currentPerformance', headerName: 'Jelenlegi teljesítmény', width: 150, resizable: true },
+        { field: 'watchedVideos', headerName: 'Megtekintett videók', width: 150, resizable: true },
+        { field: 'doneExams', headerName: 'Elvégzett vizsgák', width: 150, resizable: true },
+        { field: 'isFinalExamDone', headerName: 'Kurzuszáró vizsga', width: 150, resizable: true },
+        { field: 'currentTempomatMode', headerName: 'Jelenlegi tempomat mód', width: 150, resizable: true },
+        { field: 'recommendedVideosCount', headerName: 'Ajánlott videók hetente', width: 150, resizable: true }
+    ];
+
+    const getRowsFromExams = () => courses.map((course) => {
+        return {
+            id: course.courseId,
+            avatar: course.thumbnailImageURL,
+            title: course.title,
+            category: course.category.name,
+            subCategory: course.subCategory.name,
+            videosCount: course.videosCount,
+            editCourse: course.courseId
+        }
+    })
+
+    const examRows: GridRowsProp = getRowsFromExams()
+
+    const examColumns: GridColDef[] = [
+        { field: 'avatar', headerName: 'Thumbnail kép', width: 130, renderCell: (params) => <img src={params.value} /> },
+        { field: 'title', headerName: 'Cím', width: 300, editable: true, resizable: true },
+        { field: 'progress', headerName: 'Haladás', width: 150, resizable: true },
+        { field: 'currentPerformance', headerName: 'Jelenlegi teljesítmény', width: 150, resizable: true },
+        { field: 'watchedVideos', headerName: 'Megtekintett videók', width: 150, resizable: true },
+        { field: 'doneExams', headerName: 'Elvégzett vizsgák', width: 150, resizable: true },
+        { field: 'isFinalExamDone', headerName: 'Kurzuszáró vizsga', width: 150, resizable: true },
+        { field: 'currentTempomatMode', headerName: 'Jelenlegi tempomat mód', width: 150, resizable: true },
+        { field: 'recommendedVideosCount', headerName: 'Ajánlott videók hetente', width: 150, resizable: true }
+    ];
 
     const moreInfoDialogTabs = [
         {
@@ -144,13 +198,13 @@ export const AdminUserCourseContentSubpage = (props: {
         {
             title: "Videók",
             component: <Flex>
-                Videók
+                <DataGrid rows={videoRows} columns={videoColumns} />
             </Flex>
         },
         {
             title: "Vizsgák",
             component: <Flex>
-                Vizsgák
+                <DataGrid rows={examRows} columns={examColumns} />
             </Flex>
         },
         {
@@ -177,7 +231,6 @@ export const AdminUserCourseContentSubpage = (props: {
     // TODO: Fix useBriefUserData
     const { userEditData } = useEditUserData(userId);
     const { courseBriefData } = useCourseBriefData(courseId);
-    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList("");
     const { courseContentEditData, courseContentEditDataError, courseContentEditDataState, refetchCourseContentEditData } = useCourseContentEditData(courseId);
 
     const { navigate } = useNavigation()
