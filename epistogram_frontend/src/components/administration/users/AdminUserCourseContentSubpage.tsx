@@ -11,25 +11,17 @@ import { useUserStats } from "../../../services/api/userStatsApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
 import { ModuleAdminShortDTO } from "../../../shared/dtos/ModuleAdminShortDTO";
-import { formatTime, getAssetUrl, roundNumber } from "../../../static/frontendHelpers";
+import { getAssetUrl, roundNumber } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
-import { FlexFloat } from "../../controls/FlexFloat";
 import { TabPanel } from "../../courseDetails/TabPanel";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
-import { EpistoHeader } from "../../EpistoHeader";
 import { NoProgressChartYet } from "../../home/NoProgressChartYet";
 import { UserProgressChart } from "../../home/UserProgressChart";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import { CollapseItem } from "../../universal/CollapseItem";
-import { DragAndDropContext, DropZone, DragItem } from "../../universal/DragAndDrop";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader"
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { AdminCourseList } from "../courses/AdminCourseList"
-import { ChipSmall } from "../courses/CourseEditItemView";
 import { AdminUserList } from "./AdminUserList";
 
 export const AdminUserCourseContentSubpage = (props: {
@@ -291,9 +283,10 @@ export const AdminUserCourseContentSubpage = (props: {
 
                 <EpistoButton
                     variant="outlined"
-                    onClick={() => dialogLogic
-                        .openDialog()
-                    } >
+                    onClick={() => {
+                        navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + userId + "/courses/" + params.value + "/content")
+                        dialogLogic.openDialog()
+                    }} >
                     Bővebben
                 </EpistoButton>
         }
