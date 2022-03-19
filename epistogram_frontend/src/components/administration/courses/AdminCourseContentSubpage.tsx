@@ -431,7 +431,10 @@ export const AdminCourseContentSubpage = (props: {
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
+                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute, {
+                        title: "",
+                        route: ""
+                    }
                 ]}
                 //onSave={handleSaveCourseAsync}
                 direction="column"
