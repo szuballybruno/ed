@@ -107,6 +107,8 @@ export const AdminUserCourseContentSubpage = (props: {
                         <Image flex="1" maxH="200px" objectFit="contain" src={getAssetUrl("/images/donut1.png")} />
 
                         <Image flex="1" maxH="200px" objectFit="contain" src={getAssetUrl("/images/donut2.png")} />
+
+                        <Image flex="1" maxH="200px" objectFit="contain" src={getAssetUrl("/images/donut3.png")} />
                     </Flex>
                     <Flex
                         className="roundBorders"
@@ -128,7 +130,7 @@ export const AdminUserCourseContentSubpage = (props: {
                         boxSizing: "border-box",
                         gap: "10px",
                         gridAutoFlow: "row dense",
-                        gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                        gridTemplateColumns: "repeat(auto-fill, minmax(23%, 1fr))",
                         gridAutoRows: "160px"
                     }}>
 
