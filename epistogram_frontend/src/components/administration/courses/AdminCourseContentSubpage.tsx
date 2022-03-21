@@ -35,6 +35,7 @@ import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItem
 import { Add } from "@mui/icons-material";
 import { EpistoPopper } from "../../controls/EpistoPopper";
 import { AdminCourseContentDataGridControl } from "./AdminCourseContentDataGridControl";
+import { AdminVideoStatisticsModal } from "./modals/AdminVideoStatisticsModal";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
@@ -56,6 +57,9 @@ export const AdminCourseContentSubpage = (props: {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic();
+    const courseItemStatisticsModalLogic = useEpistoDialogLogic({
+        defaultCloseButtonType: "top"
+    })
 
     // state
     const [modules, setModules] = useState<ModuleAdminShortDTO[]>([])
@@ -431,10 +435,7 @@ export const AdminCourseContentSubpage = (props: {
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute, {
-                        title: "",
-                        route: ""
-                    }
+                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
                 ]}
                 //onSave={handleSaveCourseAsync}
                 direction="column"
@@ -469,6 +470,8 @@ export const AdminCourseContentSubpage = (props: {
                 {/* Delete dialog */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
+                <AdminVideoStatisticsModal logic={courseItemStatisticsModalLogic} />
+
                 {/* Add buttons popper */}
                 <EpistoPopper
                     isOpen={isAddButtonsPopperOpen}
@@ -498,7 +501,12 @@ export const AdminCourseContentSubpage = (props: {
                     /* Show course items in DataGrid */
                     ? <Flex flexGrow={1}>
 
-                        <AdminCourseContentDataGridControl selectableModules={modules} items={items} />
+                        <AdminCourseContentDataGridControl
+                            selectableModules={modules}
+                            items={items}
+                            handleItemEdit={() => { }}
+                            handleItemStatistics={() => { courseItemStatisticsModalLogic.openDialog() }}
+                            handleItemRemove={() => { }} />
                     </Flex>
 
                     /* Show course items in list */

@@ -11,7 +11,7 @@ import { EditExamSubpage } from "./EditExamSubpage"
 import { EditModuleSubpage } from "./EditModuleSubpage"
 import { EditQuestionSubpage } from "./EditQuesttionSubpage"
 import { EditVideoSubpage } from "./EditVideoSubpage"
-import { VideoStatisticsSubpage } from "./VideoStatisticsSubpage"
+import { AdminVideoStatisticsModal } from "./modals/AdminVideoStatisticsModal"
 
 export const AdminCourseControl = () => {
     const coursesRoute = applicationRoutes.administrationRoute.coursesRoute
@@ -51,7 +51,6 @@ export const AdminCourseControl = () => {
 
         {getRoute(coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}
         {getRoute(coursesRoute.editVideoRoute, <EditVideoSubpage />)}
-        {getRoute(coursesRoute.videoStatsRoute, <VideoStatisticsSubpage />)}
         {getRoute(coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}
         {getRoute(coursesRoute.editExamRoute, <EditExamSubpage />)}
         {getRoute(coursesRoute.editExamQuestionRoute, <EditQuestionSubpage />)}

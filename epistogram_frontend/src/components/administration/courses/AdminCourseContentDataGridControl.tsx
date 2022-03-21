@@ -23,10 +23,13 @@ import { ChipSmall } from "./CourseEditItemView";
 
 export const AdminCourseContentDataGridControl = (props: {
     selectableModules: ModuleAdminShortDTO[],
-    items: CourseAdminItemShortNewDTO[]
+    items: CourseAdminItemShortNewDTO[],
+    handleItemEdit: (item: CourseAdminItemShortNewDTO) => void,
+    handleItemStatistics: (item: CourseAdminItemShortNewDTO) => void,
+    handleItemRemove: (item: CourseAdminItemShortNewDTO) => void,
 }) => {
 
-    const { selectableModules, items } = props
+    const { selectableModules, items, handleItemEdit, handleItemStatistics, handleItemRemove } = props
 
     const { navigate } = useNavigation()
     const navToVideoStats = (videoId: number) => navigate(applicationRoutes.administrationRoute.coursesRoute.videoStatsRoute.route, { videoId });
@@ -171,10 +174,7 @@ export const AdminCourseContentDataGridControl = (props: {
                         <Edit />
                     </EpistoButton>
 
-                    <EpistoButton onClick={() => {
-                        if (params.value.type === "video")
-                            navToVideoStats(params.value.id)
-                    }}>
+                    <EpistoButton onClick={() => handleItemStatistics(params.value as CourseAdminItemShortNewDTO)}>
 
                         <Equalizer />
                     </EpistoButton>
@@ -189,6 +189,7 @@ export const AdminCourseContentDataGridControl = (props: {
 
     return <DataGridPro
         className="fontExtraSmall"
+        autoHeight
         rows={moduleRows}
         columns={courseItemColumns}
         initialState={{ pinnedColumns: { left: ['orderIndex', 'title'], right: ['item'] } }}
