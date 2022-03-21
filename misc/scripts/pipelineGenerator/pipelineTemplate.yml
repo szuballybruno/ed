@@ -197,7 +197,7 @@ jobs:
         if: always()
         run: |
           gcloud scheduler jobs create http my-job \
-          --schedule="*/1 * * * *" \
+          --schedule="0 0 * * *" \
           --uri="https://$BACKEND_URL$/scheduledjobs/evaluate-user-progress" \
           --http-method=GET --location=europe-west1 \
           --project $GCP_PROJECT_NAME

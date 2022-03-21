@@ -197,7 +197,7 @@ jobs:
         if: always()
         run: |
           gcloud scheduler jobs create http my-job \
-          --schedule="*/1 * * * *" \
+          --schedule="0 0 * * *" \
           --uri="https://api.demo.epistogram.com/scheduledjobs/evaluate-user-progress" \
           --http-method=GET --location=europe-west1 \
           --project $GCP_PROJECT_NAME
