@@ -16,6 +16,7 @@ import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
 import { AdminCourseItemList } from "./AdminCourseItemList"
 
+// Should be moved to modal
 export const VideoStatisticsSubpage = () => {
     const ValueLabelComponent = (props) => {
         const { children, value } = props;
@@ -175,8 +176,11 @@ export const VideoStatisticsSubpage = () => {
                         p="15px"
                         flex="1"
                         background="var(--transparentWhite70)">
+
                         <Flex justify="space-between">
+
                             <EpistoFont fontSize="fontLarge">
+
                                 Videó érthetősége - Ismétlés aránya a videón belül
                             </EpistoFont>
                             <EpistoSelect

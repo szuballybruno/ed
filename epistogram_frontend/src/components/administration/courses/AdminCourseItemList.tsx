@@ -17,6 +17,7 @@ export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
 }
 
+// deprecated because modals
 export const AdminCourseItemList = (props: {
     modules: ModuleAdminShortDTO[]
     navigationFunction: (itemId: number, itemType: CourseItemType) => void

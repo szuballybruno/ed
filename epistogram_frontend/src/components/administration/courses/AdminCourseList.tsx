@@ -20,9 +20,18 @@ export const AdminCourseList = (props: {
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
 
-    return <Flex direction="column">
+    return <Flex
+        className="roundBorders"
+        direction="column"
+        minW="350px"
+        flexBasis="350px"
+        mr="5px"
+        background="var(--transparentWhite90)">
 
-        <EpistoSearch />
+        <EpistoSearch
+            background="white"
+            boxShadow="inset 0px -2px 10px -5px #33333315"
+            borderRadius="7px 0 0 0" />
 
         {/* List of courses */}
         <FlexList flex={1} pb="300px" flexBasis="350px" mt="5px" className="roundBorders" background="var(--transparentWhite70)">

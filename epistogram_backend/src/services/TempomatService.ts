@@ -8,13 +8,11 @@ import { LoggerService } from "./LoggerService";
 import { MapperService } from "./MapperService";
 import { ServiceBase } from "./misc/ServiceBase";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { TaskLockService } from "./TaskLockService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 
 export class TempomatService extends ServiceBase {
 
     private _userCourseBridgeService: UserCourseBridgeService;
-    private _taskLockService: TaskLockService;
     private _loggerService: LoggerService;
     private _eventService: EventService;
 
@@ -22,7 +20,6 @@ export class TempomatService extends ServiceBase {
         ormService: ORMConnectionService,
         mapperService: MapperService,
         courseBridgeServie: UserCourseBridgeService,
-        taskLockService: TaskLockService,
         loggerService: LoggerService,
         eventService: EventService) {
 
@@ -30,7 +27,6 @@ export class TempomatService extends ServiceBase {
 
         this._eventService = eventService;
         this._loggerService = loggerService;
-        this._taskLockService = taskLockService;
         this._userCourseBridgeService = courseBridgeServie;
     }
 
@@ -81,59 +77,35 @@ export class TempomatService extends ServiceBase {
 
         this._loggerService.log("------- Evaluating user progresses... -------");
 
-        // acquire task lock 
-        this._loggerService.log("-- Acquireing task lock... ");
+        // get all user progresses and handle them accordingly 
+        const userCourseProgressViews = await this._ormService
+            .getRepository(UserCourseProgressView)
+            .find();
 
-        const isLockAcquired = await this._taskLockService
-            .acquireTaskLockAsync("user_progress_evaluation");
+        for (let index = 0; index < userCourseProgressViews.length; index++) {
 
-        if (!isLockAcquired) {
+            const userCourseProgressView = userCourseProgressViews[index];
+            const { courseId, userId } = userCourseProgressView;
 
-            this._loggerService.log("-- Failed to acquire task lock, another process is currently locking this task.");
-            this._loggerService.log("-- Job aborted.");
-            return;
-        }
-
-        try {
-
-            this._loggerService.log("-- Task lock acquired successfully.");
-
-            // get all user progresses and handle them accordingly 
-            const userCourseProgressViews = await this._ormService
-                .getRepository(UserCourseProgressView)
-                .find();
-
-            for (let index = 0; index < userCourseProgressViews.length; index++) {
-
-                const userCourseProgressView = userCourseProgressViews[index];
-                const { courseId, userId } = userCourseProgressView;
-
-                this._loggerService.log(`USER PROGRESS EVAL: userId: ${userId} courseId: ${courseId}`);
-
-                await this.recalculateUserProgressAsync(userCourseProgressView);
-            }
-        }
-        finally {
-
-            try {
-
-                await this._taskLockService
-                    .dissolveLockAsync("user_progress_evaluation");
-            }
-            catch (e: any) {
-
-                throw new Error("Fatal error, task lock failed to dissolve! " + e?.message);
-            }
+            this._loggerService.log(`USER PROGRESS EVAL: userId: ${userId} courseId: ${courseId}`);
+            await this.recalculateUserProgressAsync(userCourseProgressView);
         }
     }
 
     async recalculateUserProgressAsync(userCourseProgressView: UserCourseProgressView) {
 
-        // set new recommended items per day
-        await this.recalculateUserRecommendedItemsPerDay(userCourseProgressView)
+        try {
 
-        // handle lag behind 
-        await this.handleLagBehindAsync(userCourseProgressView);
+            // set new recommended items per day
+            await this.recalculateUserRecommendedItemsPerDay(userCourseProgressView)
+
+            // handle lag behind 
+            await this.handleLagBehindAsync(userCourseProgressView);
+        }
+        catch (e: any) {
+
+            console.error(e);
+        }
     }
 
     async recalculateUserRecommendedItemsPerDay(userCourseProgressView: UserCourseProgressView) {

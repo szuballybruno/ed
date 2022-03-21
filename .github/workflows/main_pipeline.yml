@@ -1,44 +1,29 @@
 name: ci_cd_pipeline_main
-
 on:
   push:
     branches: [ main ]
-  # pull_request:
-  #   branches: [ main ]
+env:
+  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-main:latest
+  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-main
+
+  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-main
+  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-main
+  
+  CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
+  GCP_PROJECT_NAME: gifted-country-324010
 
 jobs:
-
-  checkout_build_deploy_and_start:
-    name: CI/CD job for the whole Epistogram applicaiton.
-    runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     node-version: [14.x]
-    env:
-      CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
-      
-      BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-main
-      BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-main
-      
-      FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-main 
-      FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-main
     
+  # BUILD FRONTEND   aa   
+  build_frontend:
+    name: Build frontend
+    runs-on: ubuntu-latest
+
     steps:
-
-      #
-      # CHECKOUT, LOGIN TO GCP
-      #
-      - name: Echo pipeline branch name
-        run: echo main
-
-      - name: Echo image name
-        run: echo $BACKEND_IMAGE_NAME
-
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: main # references the target branch
-          path: main_repository # sets a relative folder to checkout to
+          ref: main
         
       - name: Login to GCP
         uses: google-github-actions/setup-gcloud@master
@@ -49,30 +34,128 @@ jobs:
 
       - name: Configure GCP Docker
         run: gcloud auth configure-docker --quiet
-    
-      #
-      # BUILD & DEPLOY BACKEND 
-      #
+      
+      - name: Set up Docker Buildx for layer caching
+        id: buildx
+        uses: docker/setup-buildx-action@master
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-single-buildx
+
+      - name: Copy proper .env file
+        run: cp -fr ./config/main.env ./.env 
+        working-directory: ./epistogram_frontend
+
+      - name: Append additional values to .env file 
+        run: |
+          echo "" >> ./.env
+          echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
+          echo "REACT_APP_UNDER_MAINTENANCE=false" >> ./.env
+        working-directory: ./epistogram_frontend
+
+      - name: Build frontend container
+        run: |
+          docker buildx build ./epistogram_frontend \
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
+          --builder ${{ steps.buildx.outputs.name }} \
+          --tag $FRONTEND_IMAGE_NAME \
+          --push
+
+  # BUILD BACKEND
+  build_backend: 
+    name: Build backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: main # references the target branch
+        
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+      
+      - name: Set up Docker Buildx for layer caching
+        id: buildx
+        uses: docker/setup-buildx-action@master
+
       - name: Copy proper .env file
         run: |
           cp -fr ./config/main.env ./config.env 
-        working-directory: ./main_repository/epistogram_backend
+        working-directory: ./epistogram_backend
 
       - name: Set .env additional variables
         run: |
           echo "" >> ./config.env
           echo "IS_UNDER_MAINTENANCE=false" >> ./config.env
           cat ./config.env
-        working-directory: ./main_repository/epistogram_backend
+        working-directory: ./epistogram_backend
 
       - name: Build backend container
         run: |
-          docker build -t $BACKEND_IMAGE_NAME .
-        working-directory: ./main_repository/epistogram_backend
+          docker buildx build ./epistogram_backend \
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
+          --builder ${{ steps.buildx.outputs.name }} \
+          --tag $BACKEND_IMAGE_NAME \
+          --push
+  
+  # DEPLOY FRONTEND
+  deploy_frontend:
+    name: Deploy frontend
+    runs-on: ubuntu-latest
+    needs: [build_backend, build_frontend]
+    
+    steps:  
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Push Docker image to GCP Container Registry
-        run: docker push $BACKEND_IMAGE_NAME
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
 
+      - name: Deploy Docker image to GCP CloudRun
+        run: |
+          gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
+          --image $FRONTEND_IMAGE_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --port 80 \
+          --allow-unauthenticated 
+
+  # # DEPLOY BACKEND
+  deploy_backend:
+    name: Deploy backend
+    runs-on: ubuntu-latest
+    needs: [build_backend, build_frontend]
+
+    steps:
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+        
       - name: Deploy Docker image to GCP CloudRun
         run: |
           gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
@@ -87,37 +170,34 @@ jobs:
           --memory 4Gi \
           --cpu 2 \
           --concurrency 200
-          
-      #
-      # BUILD & DEPLOY FRONTEND 
-      #
-      - name: Copy proper .env file
-        run: |
-          cp -fr ./config/main.env ./.env 
-        working-directory: ./main_repository/epistogram_frontend
 
-      - name: Append additional values to .env file 
-        run: |
-          echo "" >> ./.env
-          echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
-          echo "REACT_APP_UNDER_MAINTENANCE=false" >> ./.env
-        working-directory: ./main_repository/epistogram_frontend
+  # DEPLOY JOB SCHEDULER
+  deploy_job_scheduler: 
+    name: Deploy job scheduler
+    runs-on: ubuntu-latest
+    needs: [build_backend, build_frontend]
 
-      - name: Build frontend container
-        run: |
-          docker build -t $FRONTEND_IMAGE_NAME .
-        working-directory: ./main_repository/epistogram_frontend
+    steps:
+    
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Push Docker image to GCP Container Registry
-        run: docker push $FRONTEND_IMAGE_NAME
-
-      - name: Deploy Docker image to GCP CloudRun
+      - name: delete prev job 
         run: |
-          gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
-          --image $FRONTEND_IMAGE_NAME \
-          --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
-          --region europe-west1 \
-          --platform managed \
-          --max-instances 1 \
-          --port 80 \
-          --allow-unauthenticated 
+          gcloud scheduler jobs delete user-progress-eval-job-main \
+          --location=europe-west1 \
+          --project $GCP_PROJECT_NAME \
+          --quiet
+
+      - name: schedule job
+        if: always()
+        run: |
+          gcloud scheduler jobs create http user-progress-eval-job-main \
+          --schedule="0 0 * * *" \
+          --uri="https://api.app.epistogram.com/scheduledjobs/evaluate-user-progress" \
+          --http-method=GET --location=europe-west1 \
+          --project $GCP_PROJECT_NAME

@@ -13,6 +13,7 @@ import { useIntParam } from "../../../static/locationHelpers"
 import { AdminCourseItemList } from "./AdminCourseItemList"
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader"
 
+// deprecated because DataGrid
 export const EditModuleSubpage = () => {
 
     const [moduleName, setModuleName] = useState("");

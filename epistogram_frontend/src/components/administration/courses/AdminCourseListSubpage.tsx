@@ -22,6 +22,7 @@ import { FloatChip } from "../../universal/FloatChip";
 import { AdminListEditHeader } from "../AdminListEditHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
+// deprecated
 export const AdminCourseListSubpage = () => {
 
     const [searchText] = React.useState("");

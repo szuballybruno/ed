@@ -7,10 +7,11 @@ export const ContentPane = (props: {
     hideNavbar?: boolean,
     isNavbarLowHeight?: boolean,
     noMaxWidth?: boolean,
-    showLogo?: boolean
+    showLogo?: boolean,
+    isMinimalMode?: boolean
 } & FlexProps) => {
 
-    const { noPadding, showLogo, noMaxWidth, isNavbarLowHeight, navbarBg, hideNavbar, ...css } = props;
+    const { noPadding, showLogo, noMaxWidth, isNavbarLowHeight, navbarBg, isMinimalMode, hideNavbar, ...css } = props;
 
     return (
         <Flex
@@ -28,6 +29,7 @@ export const ContentPane = (props: {
             {!hideNavbar && <Navbar
                 isLowHeight={isNavbarLowHeight}
                 showLogo={showLogo}
+                isMinimalMode={isMinimalMode}
                 backgroundContent={navbarBg} />}
 
             {props.children}

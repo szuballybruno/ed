@@ -5,10 +5,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import { TextField } from "@mui/material";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { CourseAdminItemShortDTO } from "../../../shared/dtos/CourseAdminItemShortDTO";
+import { CourseAdminItemShortDTO, CourseAdminItemShortNewDTO } from "../../../shared/dtos/CourseAdminItemShortDTO";
 import { CourseContentEditDataDTO } from "../../../shared/dtos/CourseContentEditDataDTO";
 import { ModuleAdminShortDTO } from "../../../shared/dtos/ModuleAdminShortDTO";
 import { useCourseContentEditData, useSaveCourseContentData } from "../../../services/api/courseApiService";
@@ -30,25 +30,39 @@ import { DragAndDropContext, DragItem, DropZone } from "../../universal/DragAndD
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { CourseEditItemView } from "./CourseEditItemView";
 import { AdminCourseList } from "./AdminCourseList";
-import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
-import { GridRowsProp, GridColDef, DataGrid } from "@mui/x-data-grid";
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
+import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItemDTO";
+import { Add } from "@mui/icons-material";
+import { EpistoPopper } from "../../controls/EpistoPopper";
+import { AdminCourseContentDataGridControl } from "./AdminCourseContentDataGridControl";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
 }
 
-export const AdminCourseContentSubpage = () => {
+export const AdminCourseContentSubpage = (props: {
+    courses: CourseAdminListItemDTO[],
+    refetchCoursesFunction: () => void,
+    navigationFunction: (courseId: number) => void
+}) => {
+
+    const { courses, refetchCoursesFunction, navigationFunction } = props
+    const ref = useRef(null);
 
     // util
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
+    const currentCourse = courses.find(course => course.courseId === courseId)
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic();
 
     // state
     const [modules, setModules] = useState<ModuleAdminShortDTO[]>([])
+    const [items, setItems] = useState<CourseAdminItemShortNewDTO[]>([])
     const [openModuleIds, setOpenModuleIds] = useState<number[]>([]);
+    const [isDataGridView, setIsDataGridView] = useState<boolean>(true)
+    const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false)
 
     // http
     const { courseContentEditData, courseContentEditDataError, courseContentEditDataState, refetchCourseContentEditData } = useCourseContentEditData(courseId);
@@ -146,7 +160,7 @@ export const AdminCourseContentSubpage = () => {
     // video or exam 
     const handleAddCourseItemAsync = async (moduleId: number, type: "video" | "exam") => {
 
-        await handleSaveCourseAsync();
+        //await handleSaveCourseAsync();
 
         try {
 
@@ -154,13 +168,16 @@ export const AdminCourseContentSubpage = () => {
 
                 const idResult = await createVideoAsync(moduleId)
                 showNotification(translatableTexts.administration.courseContentSubpage.newVideoAddedSuccessfully);
-                navToVideoEdit(idResult.id);
+                //navToVideoEdit(idResult.id);
+                refetchCourseContentEditData()
             }
+
             else {
 
                 const idResult = await createExamAsync(moduleId);
                 showNotification(translatableTexts.administration.courseContentSubpage.newExamAddedSuccessfully);
-                navToExamEdit(idResult.id);
+                //navToExamEdit(idResult.id);
+                refetchCourseContentEditData()
             }
         } catch (e) {
 
@@ -174,8 +191,7 @@ export const AdminCourseContentSubpage = () => {
 
         setModules([...modules]
             .map(x => {
-                x.items = x.items
-                    .filter(y => y.descriptorCode !== code)
+                x.items = x.items.filter(y => y.descriptorCode !== code)
                 return x;
             }));
     }
@@ -362,56 +378,71 @@ export const AdminCourseContentSubpage = () => {
             return;
 
         setModules(courseContentEditData.modules);
+        setItems(courseContentEditData.modules.map(module => {
+            return module.items.map(item => ({
+                ...item,
+                module: {
+                    id: module.id,
+                    name: module.name
+                }
+            })) as CourseAdminItemShortNewDTO[]
+        }).flat())
         setOpenModuleIds(courseContentEditData.modules.map(x => x.id));
 
     }, [courseContentEditData]);
 
-    const items = modules.map(module => {
-        return module.items
-    }).flat()
+    /**
+     *  Checks if the courseId from params exists in courses. If not, navigate to the first element of courses
+     * 
+     * TODO: Create a better, more reusable check function
+     *   */
+    const checkIfCurrentCourseFromUrl = () => {
+        const isCourseFound = courses.some(course => course.courseId === courseId);
 
-    console.log(items)
-
-    const getRowsFromModules = () => items.map((item) => {
-        return {
-            id: item.id,
-            title: item.title,
-            module: item.moduleId,
-            type: item.type,
-            questionsCount: item.questionCount
+        if (!isCourseFound && courses[0]) {
+            navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courses[0].courseId + "/content")
         }
-    })
-
-    const moduleRows: GridRowsProp = getRowsFromModules()
-
-    const columns: GridColDef[] = [
-        { field: 'id', headerName: 'Azonosító', width: 100 },
-        { field: 'title', headerName: 'Cím', width: 300, editable: true, resizable: true },
-        { field: 'module', headerName: 'Modul neve', width: 150, resizable: true },
-        { field: 'subCategory', headerName: 'Alkategória', width: 150, resizable: true },
-        { field: 'videosCount', headerName: 'Videók száma', width: 150, resizable: true },
-        { field: 'editCourse', headerName: 'Kurzus szerkesztése', width: 150, renderCell: (params) => <EpistoButton variant="outlined" onClick={() => navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + params.value + "/details")}>Szerkesztés</EpistoButton> }
-    ];
+    }
+    checkIfCurrentCourseFromUrl()
 
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseContentEditDataState]}
         error={courseContentEditDataError}
         className="whall">
-        <AdminBreadcrumbsHeader>
-            {/* <AdminCourseList currentCoursePage={"content"} /> */}
 
+        <AdminBreadcrumbsHeader
+            breadcrumbs={[
+                <BreadcrumbLink
+                    title="Kurzusok"
+                    iconComponent={applicationRoutes.administrationRoute.coursesRoute.icon}
+                    to={applicationRoutes.administrationRoute.coursesRoute.route + "/a/content"} />,
+                <BreadcrumbLink
+                    title={"" + currentCourse?.title}
+                    isCurrent />
+            ]}>
+
+            {/* Left side course selector list */}
+            <AdminCourseList
+                courses={courses}
+                navigationFunction={navigationFunction} />
+
+            {/* Right side content */}
             <AdminSubpageHeader
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
+                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute, {
+                        title: "",
+                        route: ""
+                    }
                 ]}
-                onSave={handleSaveCourseAsync}
+                //onSave={handleSaveCourseAsync}
                 direction="column"
                 headerButtons={[
                     {
-                        action: () => handleAddNewModuleAsync(),
-                        title: translatableTexts.administration.courseContentSubpage.addModuleExtended
+                        action: () => setIsAddButtonsPopperOpen(true),//handleAddNewModuleAsync(),
+                        icon: <Add ref={ref} />,
+                        title: translatableTexts.misc.add
                     },
                     {
                         action: () => {
@@ -421,33 +452,58 @@ export const AdminCourseContentSubpage = () => {
                                 examId: pretestExamId
                             })
                         },
-                        title: "Edit pretest exam"
+                        title: "Precourse"
                     },
-                    {
+                    ...!isDataGridView ? [{
                         action: handleOpenCloseAllModules,
                         title: isAnyModulesOpen
                             ? translatableTexts.misc.closeAll
                             : translatableTexts.misc.openAll
-                    }
-                ]}>
+                    }] : []
+                ]}
+                viewSwitchChecked={isDataGridView}
+                viewSwitchFunction={() => {
+                    setIsDataGridView(p => !p)
+                }}>
 
+                {/* Delete dialog */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
-                {/* course items */}
-                <Flex
-                    flex="1"
-                    direction={"column"}
-                    className="roundBorders"
-                    background="var(--transparentWhite70)"
-                    mt="5px">
+                {/* Add buttons popper */}
+                <EpistoPopper
+                    isOpen={isAddButtonsPopperOpen}
+                    target={ref?.current}
+                    placementX="left"
+                    style={{
+                        width: 200,
+                        alignItems: "flex-start"
+                    }}
+                    handleClose={() => setIsAddButtonsPopperOpen(false)}>
 
-                    <DataGrid
-                        getRowClassName={(a) => a.row.type === "exam" ? "dataGridExamRow" : "dataGridVideoRow"}
-                        rows={moduleRows} columns={columns} style={{
-                            background: "var(--transparentWhite70)"
-                        }} />
+                    <EpistoButton>
+                        Modul
+                    </EpistoButton>
+                    <EpistoButton onClick={() => { handleAddCourseItemAsync(Math.min(...modules.map(m => m.id)), "video") }}>
+                        Videó
+                    </EpistoButton>
+                    <EpistoButton onClick={() => { handleAddCourseItemAsync(Math.min(...modules.map(m => m.id)), "exam") }}>
+                        Vizsga
+                    </EpistoButton>
 
-                    <DragAndDropContext onDragEnd={onDragEnd}>
+                </EpistoPopper>
+
+                {/* Show course items in DataGrid or list(will be removed soon) */}
+                {isDataGridView
+
+                    /* Show course items in DataGrid */
+                    ? <Flex flexGrow={1}>
+
+                        <AdminCourseContentDataGridControl selectableModules={modules} items={items} />
+                    </Flex>
+
+                    /* Show course items in list */
+                    : <DragAndDropContext onDragEnd={onDragEnd}>
+
                         <DropZone zoneId="zone-root" groupId="root">
                             {modules
                                 .map((module, moduleIndex) => {
@@ -547,12 +603,8 @@ export const AdminCourseContentSubpage = () => {
                                     </DragItem>
                                 })}
                         </DropZone>
-                    </DragAndDropContext>
-                </Flex>
+                    </DragAndDropContext>}
             </AdminSubpageHeader>
         </AdminBreadcrumbsHeader>
-
-
-
-    </LoadingFrame>
+    </LoadingFrame >
 };

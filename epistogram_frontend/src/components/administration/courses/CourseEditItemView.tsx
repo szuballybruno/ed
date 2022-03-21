@@ -10,7 +10,12 @@ import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 
-export const ChipSmall = (props: { text: string, color?: string, style?: React.CSSProperties }) => {
+export const ChipSmall = (props: {
+    text: string,
+    title?: string,
+    color?: string,
+    style?: React.CSSProperties
+}) => {
 
     const color = props.color ?? "var(--deepBlue)";
 
@@ -18,6 +23,7 @@ export const ChipSmall = (props: { text: string, color?: string, style?: React.C
         <EpistoFont
             classes={["roundBorders"]}
             fontSize="fontSmall"
+            title={props.title}
             style={{
                 border: "1px solid var(--deepBlue)",
                 color: color,
@@ -32,6 +38,7 @@ export const ChipSmall = (props: { text: string, color?: string, style?: React.C
     )
 }
 
+// deprecated because DataGrid
 export const CourseEditItemView = (props: {
     moduleIndex: number,
     index: number,

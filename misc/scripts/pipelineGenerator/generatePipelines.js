@@ -21,13 +21,16 @@ const removeAllFilesInFolder = (directoryPath) => {
 const environemnts = [
     {
         branchName: "main",
+        backendUrl: "api.app.epistogram.com",
         isUnderMaintenance: false
     },
     {
-        branchName: "demo"
+        branchName: "demo",
+        backendUrl: "api.demo.epistogram.com"
     },
     {
-        branchName: "dev"
+        branchName: "dev",
+        backendUrl: "api.dev.epistogram.com"
     }
 ]
 
@@ -48,6 +51,7 @@ environemnts
 
         replaced = replaceAll(replaced, "$BRANCH_NAME$", environemnt.branchName);
         replaced = replaceAll(replaced, "$IS_UNDER_MAINTENANCE$", !!environemnt.isUnderMaintenance);
+        replaced = replaceAll(replaced, "$BACKEND_URL$", environemnt.backendUrl)
 
         fs.writeFileSync(`${outputDirectoryPath}/${environemnt.branchName}_pipeline.yml`, replaced)
     });

@@ -40,6 +40,7 @@ export const EpistoSelect = <T,>(props: {
         value={currentSelectedKey}
         disabled={isDisabled}
         style={{
+            background: "transparent",
             outline: "none",
             padding: "10px 10px",
             marginTop: "5px",

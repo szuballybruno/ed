@@ -20,10 +20,10 @@ export const TempomatModeImage = (props: {
             return getAssetUrl("/images/autopilot.png");
 
         if (mode === "balanced")
-            return getAssetUrl("/images/lightmode.png");
+            return getAssetUrl("/images/balancedmode.png");
 
         if (mode === "light")
-            return getAssetUrl("/images/balancedmode.png");
+            return getAssetUrl("/images/lightmode.png");
 
         if (mode === "strict")
             return getAssetUrl("/images/strictmode.png");

@@ -12,31 +12,14 @@ import { PageRootContainer } from "../PageRootContainer";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AdminOverviewTablePage } from './AdminOverviewTablePage';
-import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
-import { AdminCourseListSubpage } from "./courses/AdminCourseListSubpage";
-import { AdminInteractiveCourseSubpage } from './courses/AdminInteractiveCourseSubpage';
-import CourseStatisticsSubpage from "./courses/CourseStatisticsSubpage";
-import { AdminCourseDetailsSubpage } from "./courses/EditCourseDetailsSubpage";
-import { EditExamSubpage } from './courses/EditExamSubpage';
-import { EditModuleSubpage } from './courses/EditModuleSubpage';
-import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
-import { EditVideoSubpage } from './courses/EditVideoSubpage';
-import { VideoStatisticsSubpage } from './courses/VideoStatisticsSubpage';
+import { AdminCourseControl } from './courses/AdminCourseControl';
 import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
 import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
 import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
 import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
-import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
-import AdminEditUserSubpage from './users/AdminEditUserSubpage';
 import AdminStatistics from "./users/AdminStatisticsSubpage";
 import { AdminUserControl } from './users/AdminUserControl';
-import { AdminUserCourseContentSubpage } from './users/AdminUserCourseContentSubpage';
-import { AdminUserCourseStatisticsSubpage } from './users/AdminUserCourseStatisticsSubpage';
-import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
-import { AdminUserStatisticsSubpage } from "./users/AdminUserStatisticsSubpage";
-import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage";
-import { AdminUserVideoStatistics } from './users/AdminUserVideoStatistics';
 
 const AdminPage = () => {
 
@@ -115,18 +98,7 @@ const AdminPage = () => {
                 <ProtectedRoute
                     path={administrationRoutes.coursesRoute.route}
                     isAuthorizedToView={x => x.canAccessCourseAdministration}
-                    render={() => <Switch>
-                        {getRoute(administrationRoutes.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.videoStatsRoute, <VideoStatisticsSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editExamRoute, <EditExamSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editExamQuestionRoute, <EditQuestionSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editModuleRoute, <EditModuleSubpage />)}
-                    </Switch>} />
+                    render={() => <AdminCourseControl />} />
 
                 {/* shop administartion */}
                 <ProtectedRoute

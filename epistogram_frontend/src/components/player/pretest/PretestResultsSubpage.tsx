@@ -73,25 +73,25 @@ export const PretestResultsSubpage = () => {
                     gridAutoRows="150px" >
 
                     <StatisticsCard
-                        iconPath={getAssetUrl("/images/watchedvideos3Dsmaller.png")}
+                        iconPath={getAssetUrl("/images/pretest1.png")}
                         value={correctAnswerRate.toString()}
                         suffix="%"
                         title="Elért eredmény a felmérő teszten" />
 
                     <StatisticsCard
-                        iconPath={getAssetUrl("/images/watchedvideos3Dsmaller.png")}
+                        iconPath={getAssetUrl("/images/pretest2.png")}
                         value="6"
                         suffix="db"
                         title="Megtekintésre ajánlott napi videó" />
 
                     <StatisticsCard
-                        iconPath={getAssetUrl("/images/watchedvideos3Dsmaller.png")}
+                        iconPath={getAssetUrl("/images/pretest3.png")}
                         value="Kezdő"
                         suffix=""
                         title="Üzemmód ajánlott" />
 
                     <StatisticsCard
-                        iconPath={getAssetUrl("/images/watchedvideos3Dsmaller.png")}
+                        iconPath={getAssetUrl("/images/pretest4.png")}
                         value="Automata"
                         suffix=""
                         title="Megtekintésre ajánlott napi videó" />
@@ -119,7 +119,7 @@ export const PretestResultsSubpage = () => {
                             fontWeight: 600
                         }}>
 
-                        2022.03.14.
+                        2022.04.03.
                     </EpistoFont>
                 </Flex>
                 <Flex
@@ -133,7 +133,8 @@ export const PretestResultsSubpage = () => {
                             maxWidth: 600
                         }}>
 
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sunt temporibus, natus corporis eos maiores nobis at ab consectetur magni? Nobis, dolore. In vitae fugiat recusandae facere quibusdam, laboriosam molestias. Cum.
+                        Mivel kevesebb, mint 50%-ot értél el a felmérő teszten, számodra a Kezdő üzemmódot ajánlanánk. Ebben az esetben folyamatosan haladhatsz a videókkal, de nem tudsz szabadon elindítani újat, csak az éppen aktuálisan következőt (ekkor felnyílik a lakat ikon). A videókban csak addig a pontig tudsz előre tekerni, ameddig már egyszer eljutottál.
+                        Bármikor átválthatsz azonban Haladó módra, ahol ezek a korlátozások megszűnnek!
                     </EpistoFont>
                 </Flex>
                 {

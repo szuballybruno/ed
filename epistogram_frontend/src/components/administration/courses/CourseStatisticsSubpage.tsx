@@ -5,16 +5,51 @@ import { EpistoGrid } from "../../controls/EpistoGrid";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { DashboardSection } from "../../universal/DashboardSection";
 import { VideoHotspotsChart } from "../../universal/VideoHotspotsChart";
-import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminCourseList } from "./AdminCourseList";
 import { AdminCourseItemList } from "./AdminCourseItemList";
+import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItemDTO";
+import { useParams } from "react-router-dom";
+import { useNavigation } from "../../../services/core/navigatior";
 
-const CourseStatisticsSubpage = () => {
+const CourseStatisticsSubpage = (props: {
+    courses: CourseAdminListItemDTO[],
+    refetchCoursesFunction: () => void,
+    navigationFunction: (courseId: number) => void
+}) => {
+    const { courses, refetchCoursesFunction, navigationFunction } = props
 
-    return <AdminBreadcrumbsHeader>
+    const params = useParams<{ courseId: string }>();
+    const courseId = parseInt(params.courseId);
+
+    const currentCourse = courses.find(course => course.courseId === courseId)
+
+    const { navigate } = useNavigation();
+
+    const checkIfCurrentCourseFromUrl = () => {
+        const isCourseFound = courses.some(course => course.courseId === courseId);
+
+        if (!isCourseFound && courses[0]) {
+            navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courses[0].courseId + "/content")
+        }
+    }
+    checkIfCurrentCourseFromUrl()
+
+    return <AdminBreadcrumbsHeader breadcrumbs={[
+        <BreadcrumbLink
+            title="Kurzusok"
+            iconComponent={applicationRoutes.administrationRoute.coursesRoute.icon}
+            to={applicationRoutes.administrationRoute.coursesRoute.route + "/a/content"} />,
+        <BreadcrumbLink
+            title={"" + currentCourse?.title}
+            isCurrent />
+    ]}>
 
         {/* <AdminCourseList currentCoursePage={"statistics"} /> */}
+        <AdminCourseList
+            courses={courses}
+            navigationFunction={navigationFunction} />
 
         <AdminSubpageHeader
             tabMenuItems={[

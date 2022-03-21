@@ -22,6 +22,7 @@ export const PlayerPage = () => {
             <ContentPane
                 width="var(--playerWidth)"
                 margin="auto"
+                isMinimalMode
                 showLogo>
 
                 <Switch>

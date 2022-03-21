@@ -6,16 +6,17 @@ import { inviteUserAsync } from '../../../services/api/registrationApiService';
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { EditUserControl } from "./EditUserControl";
+import { AdminEditUserControl } from "./AdminEditUserControl";
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { AdminUserList } from './AdminUserList';
 import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
 
 const AdminAddUserSubpage = (props: {
-    users: AdminPageUserDTO[]
+    users: AdminPageUserDTO[],
+    refetchUsersFunction: () => void
 }) => {
 
-    const { users } = props
+    const { users, refetchUsersFunction } = props
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
 
@@ -35,6 +36,8 @@ const AdminAddUserSubpage = (props: {
             await inviteUserAsync(createInvitedUserDTO);
 
             showNotification("Felhasználó sikeresen hozzáadva");
+            refetchUsersFunction()
+            navigate(applicationRoutes.administrationRoute.usersRoute.route + "/a/edit")
 
             // TODO return added user's id
             //navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + user.id + "/edit")
@@ -60,13 +63,13 @@ const AdminAddUserSubpage = (props: {
 
         <AdminUserList
             users={users}
-            navigationFunction={() => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route)
+            navigationFunction={(userId) => {
+                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId })
             }} />
-        <AdminSubpageHeader background="var(--transparentWhite70)" className='roundBorders'>
-            <EditUserControl
+        <AdminSubpageHeader background="var(--transparentWhite10)" className='roundBorders'>
+            <AdminEditUserControl
                 editDTO={null}
-                saveUserAsync={submitAddUserRequestAsync}></EditUserControl>
+                saveUserAsync={submitAddUserRequestAsync}></AdminEditUserControl>
         </AdminSubpageHeader>
     </AdminBreadcrumbsHeader>
 };
