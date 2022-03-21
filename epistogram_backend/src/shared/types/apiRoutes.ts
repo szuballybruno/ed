@@ -15,6 +15,10 @@ export const apiRoutes = {
         getCourseOverviewData: '/misc/get-course-overview-data'
     },
 
+    scheduledJobs: {
+        evaluateUserProgress: "/scheduledjobs/evaluate-user-progress"
+    },
+
     teacherInfo: {
         getTeacherInfo: "/teacherinfo/get-teacher-info",
         saveTeacherInfo: "/teacherinfo/save-teacher-info"

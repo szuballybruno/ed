@@ -88,9 +88,9 @@ import { PlaybackService } from './services/PlaybackService';
 import { PlaybackController } from './api/PlaybackController';
 import { TempomatService } from './services/TempomatService';
 import { TempomatController } from './api/TempomatController';
-import { ScheduledJobService } from './services/ScheduledJobService';
 import { TaskLockService } from './services/TaskLockService';
 import { randomInt } from 'crypto';
+import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerController';
 
 (async () => {
 
@@ -150,7 +150,6 @@ import { randomInt } from 'crypto';
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
-    const scheduledJobService = new ScheduledJobService();
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -180,6 +179,7 @@ import { randomInt } from 'crypto';
     const userProgressController = new UserProgressController(userProgressService);
     const playbackController = new PlaybackController(playbackService);
     const tempomatController = new TempomatController(tempomatService);
+    const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -188,17 +188,6 @@ import { randomInt } from 'crypto';
     initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
-
-    // initailize jobs
-    scheduledJobService
-        .scheduleJob(
-            {
-                // seconds: "*/20",
-                minutes: "0",
-                hours: "0"
-            },
-            () => tempomatService
-                .evaluateUserProgressesAsync());
 
     // initialize express
     const expressServer = express();
@@ -224,6 +213,9 @@ import { randomInt } from 'crypto';
     addEndpoint(apiRoutes.misc.getOrganizations, miscController.getOrganizationsAction);
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
     addEndpoint(apiRoutes.misc.getCourseOverviewData, miscController.getCourseOverviewDataAction);
+
+    // scheduled jobs
+    addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: false });
 
     // teacher info
     addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ["administrator"] });
