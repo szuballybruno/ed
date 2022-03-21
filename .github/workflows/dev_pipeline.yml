@@ -198,6 +198,6 @@ jobs:
         run: |
           gcloud scheduler jobs create http my-job \
           --schedule="*/1 * * * *" \
-          --uri="https://dev.epistogram.com/scheduledjobs/evaluate-user-progress" \
+          --uri="https://api.dev.epistogram.com/scheduledjobs/evaluate-user-progress" \
           --http-method=GET --location=europe-west1 \
           --project $GCP_PROJECT_NAME
