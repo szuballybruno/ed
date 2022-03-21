@@ -5,12 +5,10 @@ import { useUserListQuery } from "../../../services/api/userApiService"
 import AdminAddUserSubpage from "./AdminAddUserSubpage"
 import AdminEditUserSubpage from "./AdminEditUserSubpage"
 import { AdminUserCourseContentSubpage } from "./AdminUserCourseContentSubpage"
-import { AdminUserCourseStatisticsSubpage } from "./AdminUserCourseStatisticsSubpage"
-import { AdminUserDataGridSubpage } from "./AdminUserDataGridSubpage"
+import { AdminUserDataGridSubpage } from "./dataGrids/AdminUsersDataGridSubpage"
 import { AdminUserListSubpage } from "./AdminUserListSubpage"
-import { AdminUserStatisticsSubpage } from "./AdminUserStatisticsSubpage"
+import { AdminUserStatisticsSubpage } from "./AdminUserLearningOverviewSubpage"
 import { AdminUserTeacherInfoSubpage } from "./AdminUserTeacherInfoSubpage"
-import { AdminUserVideoStatistics } from "./AdminUserVideoStatistics"
 
 export const AdminUserControl = () => {
     const usersRoute = applicationRoutes.administrationRoute.usersRoute
@@ -32,7 +30,9 @@ export const AdminUserControl = () => {
     return <Switch>
 
         {/* Route /administration/users */}
-        <Route exact path={usersRoute.route}>
+        <Route
+            exact
+            path={usersRoute.route}>
 
             <AdminUserDataGridSubpage users={users} />
         </Route>
@@ -64,14 +64,14 @@ export const AdminUserControl = () => {
         </Route>
 
         {/* Route /administration/users/:userId/teacherinfo */}
-        <Route exact path={usersRoute.teacherInfoRoute.route}>
+        <Route
+            exact
+            path={usersRoute.teacherInfoRoute.route}>
+
             <AdminUserTeacherInfoSubpage users={users} />
         </Route>
 
-        <Route exact path={usersRoute.courseStatisticsRoute.route}>
-            <AdminUserCourseStatisticsSubpage />
-        </Route>
-
+        {/* Route /administration/users/:userId/courses */}
         <Route
             exact
             path={usersRoute.courseContentRoute.route}>
@@ -79,18 +79,6 @@ export const AdminUserControl = () => {
             <AdminUserCourseContentSubpage
                 users={users}
                 refetchUsersFunction={refetchUsers} />
-        </Route>
-
-        <Route exact path={usersRoute.moduleStatisticsRoute.route}>
-            <AdminUserVideoStatistics />
-        </Route>
-
-        <Route exact path={usersRoute.videoStatisticsRoute.route}>
-            <AdminUserVideoStatistics />
-        </Route>
-
-        <Route exact path={usersRoute.examStatisticsRoute.route}>
-            <AdminUserVideoStatistics />
         </Route>
     </Switch >
 }

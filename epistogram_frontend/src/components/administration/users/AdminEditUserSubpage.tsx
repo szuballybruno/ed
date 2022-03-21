@@ -13,7 +13,7 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { EditUserControl } from './EditUserControl';
+import { AdminEditUserControl } from './AdminEditUserControl';
 import { AdminUserList } from './AdminUserList';
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { useNavigation } from '../../../services/core/navigatior';
@@ -37,7 +37,7 @@ export const AdminEditUserSubpage = (props: {
     const showError = useShowErrorDialog();
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
-    const navigateToUserCourses = () => navigate(`${applicationRoutes.administrationRoute.usersRoute.route}/${editedUserId}/courses/:courseId/statistics`)
+    const navigateToUserCourses = () => navigate(`${applicationRoutes.administrationRoute.usersRoute.route}/${editedUserId}/courses`)
     const location = useLocation()
 
     const handleSaveUserAsync = async (dto: UserEditDTO) => {
@@ -88,13 +88,12 @@ export const AdminEditUserSubpage = (props: {
 
     const bulkEditButtons = [
         {
-            title: "Összes megtekintett kurzus",
-            icon: <List style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
-            action: () => navigateToUserCourses()
-        },
-        {
             title: "Hozzáadás",
-            icon: <Add style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
+            icon: <Add
+                style={{
+                    margin: "0 3px 0 0",
+                    padding: "0 0 1px 0"
+                }} />,
             action: () => navigateToAddUser()
         }
     ] as ButtonType[]
@@ -144,7 +143,7 @@ export const AdminEditUserSubpage = (props: {
 
             <EpistoDialog logic={deleteWaningDialogLogic} />
 
-            <EditUserControl
+            <AdminEditUserControl
                 editDTO={userEditData}
                 showDeleteUserDialog={showDeleteUserDialog}
                 saveUserAsync={handleSaveUserAsync} />

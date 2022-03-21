@@ -43,7 +43,7 @@ export const roles = [
     }
 ];
 
-export const EditUserControl = (props: {
+export const AdminEditUserControl = (props: {
     editDTO: UserEditDTO | null,
     saveUserAsync: (editDTO: UserEditDTO) => Promise<void>
     showDeleteUserDialog?: (UserEditDTO: UserEditDTO | null) => void

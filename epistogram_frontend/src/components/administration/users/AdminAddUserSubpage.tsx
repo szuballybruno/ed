@@ -6,7 +6,7 @@ import { inviteUserAsync } from '../../../services/api/registrationApiService';
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { EditUserControl } from "./EditUserControl";
+import { AdminEditUserControl } from "./AdminEditUserControl";
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { AdminUserList } from './AdminUserList';
 import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
@@ -67,9 +67,9 @@ const AdminAddUserSubpage = (props: {
                 navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId })
             }} />
         <AdminSubpageHeader background="var(--transparentWhite10)" className='roundBorders'>
-            <EditUserControl
+            <AdminEditUserControl
                 editDTO={null}
-                saveUserAsync={submitAddUserRequestAsync}></EditUserControl>
+                saveUserAsync={submitAddUserRequestAsync}></AdminEditUserControl>
         </AdminSubpageHeader>
     </AdminBreadcrumbsHeader>
 };

@@ -203,11 +203,7 @@ export const translatableTexts = {
         administrationUserStatistics: "Tanulási jelentés",
         administrationUserTasks: "Feladatok",
         administrationEditTeacherInfo: "Oktató adatai",
-        administrationUserCourseStatistics: "Tanulási jelentés",
-        administrationUserCourseContent: "Tartalom",
-        administrationUserModuleStatistics: "Statisztika",
-        administrationUserVideoStatistics: "Statisztika",
-        administrationUserExamStatistics: "Statisztika",
+        administrationUserCourses: "Felhasználó kurzusai",
 
         administrationCourseAdmin: "Kurzusok",
         administrationAddCourse: "Kurzus hozzáadása",
@@ -220,7 +216,7 @@ export const translatableTexts = {
         administrationEditVideo: "Videó szerkesztése",
         administrationVideoStatistics: "Videó statisztikája",
         administrationEditExam: "Vizsga szerkesztése",
-        administrationEditQuestion: "Kerdes szerkesztése",
+        administrationEditQuestion: "Kérdés szerkesztése",
         administrationEditModule: "Modul szerkesztése",
 
         administrationShopMain: "Shop adminisztráció",
