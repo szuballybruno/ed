@@ -88,7 +88,6 @@ import { PlaybackService } from './services/PlaybackService';
 import { PlaybackController } from './api/PlaybackController';
 import { TempomatService } from './services/TempomatService';
 import { TempomatController } from './api/TempomatController';
-import { TaskLockService } from './services/TaskLockService';
 import { randomInt } from 'crypto';
 import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerController';
 
@@ -145,8 +144,7 @@ import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerControll
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
-    const taskLockService = new TaskLockService(mapperService, ormConnectionService, sqlFunctionService, globalConfig);
-    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, taskLockService, loggerService, eventService);
+    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, loggerService, eventService);
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);

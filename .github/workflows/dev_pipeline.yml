@@ -188,7 +188,7 @@ jobs:
 
       - name: delete prev job 
         run: |
-          gcloud scheduler jobs delete my-job \
+          gcloud scheduler jobs delete user-progress-eval-job-dev \
           --location=europe-west1 \
           --project $GCP_PROJECT_NAME \
           --quiet
@@ -196,7 +196,7 @@ jobs:
       - name: schedule job
         if: always()
         run: |
-          gcloud scheduler jobs create http my-job \
+          gcloud scheduler jobs create http user-progress-eval-job-dev \
           --schedule="0 0 * * *" \
           --uri="https://api.dev.epistogram.com/scheduledjobs/evaluate-user-progress" \
           --http-method=GET --location=europe-west1 \
