@@ -21,16 +21,16 @@ const removeAllFilesInFolder = (directoryPath) => {
 const environemnts = [
     {
         branchName: "main",
-        backendUrl: "app.epistogram.com",
+        backendUrl: "api.app.epistogram.com",
         isUnderMaintenance: false
     },
     {
         branchName: "demo",
-        backendUrl: "demo.epistogram.com"
+        backendUrl: "api.demo.epistogram.com"
     },
     {
         branchName: "dev",
-        backendUrl: "dev.epistogram.com"
+        backendUrl: "api.dev.epistogram.com"
     }
 ]
 
