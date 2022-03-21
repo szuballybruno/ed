@@ -60,14 +60,16 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
 
 export type EpistoDialogLogicType = ReturnType<typeof useEpistoDialogLogic>;
 
-export const EpistoDialog = (props: {
+export type EpistoDialogPropType = {
     logic: EpistoDialogLogicType,
     fullScreenX?: boolean,
     fullScreenY?: boolean,
     buttonComponents?: ReactNode,
     children?: ReactNode,
     sx?: SxProps<any>
-}) => {
+}
+
+export const EpistoDialog = (props: EpistoDialogPropType) => {
 
     const {
         isOpen,
@@ -85,9 +87,11 @@ export const EpistoDialog = (props: {
         aria-describedby="alert-dialog-description"
         maxWidth={fullScreenX ? "xl" : undefined}
         fullWidth={fullScreenX}
+
         sx={sx}
         style={{
-            zIndex: 10000
+            zIndex: 10000,
+            background: "var(--transparentWhite90)"
         }}>
 
         {/* title and content */}

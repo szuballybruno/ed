@@ -1,8 +1,6 @@
 import { Box, Flex, GridItem, Image, Text } from "@chakra-ui/react";
-import { NavigateBefore } from "@mui/icons-material";
+import { Add, List } from "@mui/icons-material";
 import { LinearProgress } from "@mui/material";
-import { title } from "process";
-import React from 'react';
 import { useLocation, useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { ButtonType } from "../../../models/types";
@@ -11,21 +9,15 @@ import { useActiveCourses, useUserProgressData } from "../../../services/api/use
 import { useUserStats } from "../../../services/api/userStatsApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
-import { CourseLearningDTO } from "../../../shared/dtos/CourseLearningDTO";
-import { getAssetUrl, roundNumber, usePaging } from "../../../static/frontendHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
+import { getAssetUrl, usePaging } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoGrid } from "../../controls/EpistoGrid";
 import { FlexFloat } from "../../controls/FlexFloat";
 import { NoProgressChartYet } from "../../home/NoProgressChartYet";
 import { UserProgressChart } from "../../home/UserProgressChart";
-import { LearningCourseStatsTile, SmallStat } from "../../learningInsights/LearningCourseStatsTile";
-import { LearningStatistics } from "../../learningInsights/LearningStatistics";
-import { LinearProgressWithLabel } from "../../signup/ProgressIndicator";
+import { SmallStat } from "../../learningInsights/LearningCourseStatsTile";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import CourseTile from "../../universal/CourseTile";
-import { DashboardSection } from "../../universal/DashboardSection";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "../courses/EditSection";
@@ -186,12 +178,14 @@ export const AdminUserStatisticsSubpage = (props: {
 
     const { users } = props
 
+    const usersRoute = applicationRoutes.administrationRoute.usersRoute
+
     const params = useParams<{ userId: string }>();
     const userId = parseInt(params.userId);
 
     const { navigate } = useNavigation();
-    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
-    const navigateToUserCourses = () => navigate(`${applicationRoutes.administrationRoute.usersRoute.route}/${userId}/courses/:courseId/statistics`)
+    const navigateToAddUser = () => navigate(usersRoute.addRoute.route);
+    const navigateToUserCourses = () => navigate(`${usersRoute.route}/${userId}/courses/:courseId/statistics`)
     const location = useLocation()
 
     const { activeCourses } = useActiveCourses();
@@ -204,65 +198,77 @@ export const AdminUserStatisticsSubpage = (props: {
 
     const bulkEditButtons = [
         {
-            title: "Összes megtekintett kurzus",
-            action: () => navigateToUserCourses()
-        },
-        {
             title: "Hozzáadás",
+            icon: <Add
+                style={{
+                    margin: "0 3px 0 0",
+                    padding: "0 0 1px 0"
+                }} />,
             action: () => navigateToAddUser()
         }
     ] as ButtonType[]
 
     return <AdminBreadcrumbsHeader
-        viewSwitchChecked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
+        viewSwitchChecked={location.pathname === usersRoute.route}
         viewSwitchFunction={() => {
-            navigate(applicationRoutes.administrationRoute.usersRoute.route)
+            navigate(usersRoute.route)
         }}
         subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.statsRoute.route, { userId: userId })
+                navigate(usersRoute.statsRoute.route, { userId: userId })
             }} />
 
         {/* admin header */}
         <AdminSubpageHeader
             direction="column"
-            tabMenuItems={[
-                applicationRoutes.administrationRoute.usersRoute.editRoute,
-                applicationRoutes.administrationRoute.usersRoute.statsRoute
-            ].concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}
+            tabMenuItems={
+                [
+                    usersRoute.editRoute,
+                    usersRoute.statsRoute,
+                    usersRoute.courseContentRoute
+                ]
+                    .concat(
+                        userEditData?.isTeacher
+                            ? usersRoute.teacherInfoRoute
+                            : [])
+            }
             headerButtons={bulkEditButtons}>
 
             {/* learning insights header */}
             <EditSection
                 isFirst
                 title="Tanulási jelentés"
-                rightSideComponent={<Flex justify="center" align="center" my="10px">
+                rightSideComponent={
 
-                    <Image
-                        h="30px"
-                        w="30px"
-                        mr="5px"
-                        src={getAssetUrl("/images/tempomatdatechange.png")}
-                    />
+                    <Flex justify="center" align="center" my="10px">
 
-                    <EpistoFont fontSize={"fontLarge"}>
+                        <Image
+                            h="30px"
+                            w="30px"
+                            mr="5px"
+                            src={getAssetUrl("/images/tempomatdatechange.png")}
+                        />
 
-                        Vizsgált időszak:
-                    </EpistoFont>
+                        <EpistoFont fontSize={"fontLarge"}>
 
-                    <EpistoFont
-                        fontSize={"fontLarge"}
-                        style={{
-                            marginLeft: "5px",
-                            fontWeight: 600
-                        }}>
+                            Vizsgált időszak:
+                        </EpistoFont>
 
-                        2022.03.14.
-                    </EpistoFont>
-                </Flex>}>
+                        <EpistoFont
+                            fontSize={"fontLarge"}
+                            style={{
+                                marginLeft: "5px",
+                                fontWeight: 600
+                            }}>
+
+                            2022.03.14.
+                        </EpistoFont>
+                    </Flex>
+                }>
+
                 <Flex minH="400px">
                     <Flex
                         direction="column"
@@ -362,8 +368,7 @@ export const AdminUserStatisticsSubpage = (props: {
                 <Flex>
                     <div
                         style={{
-                            minWidth: 600,
-                            width: "50%",
+                            width: "80%",
                             marginRight: "10px",
                             display: "grid",
                             boxSizing: "border-box",
