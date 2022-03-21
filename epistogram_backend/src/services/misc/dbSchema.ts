@@ -91,7 +91,6 @@ import { TempomatAdjustmentValue } from "../../models/entity/TempomatAdjustmentV
 import { UserTempomatAdjustmentValueView } from "../../models/views/UserTempomatAdjustmentValueView";
 import { UserCourseBridgeView } from "../../models/views/UserCourseBridgeView";
 import { UserCourseCompletionOriginalEstimationView } from "../../models/views/UserCourseCompletionOriginalEstimationView";
-import { TaskLock } from "../../models/entity/TaskLock";
 
 export const dbSchema = {
 
@@ -288,7 +287,6 @@ export const dbSchema = {
         CourseRatingQuestionUserAnswer,
         UserVideoProgressBridge,
         UserExamProgressBridge,
-        TempomatAdjustmentValue,
-        TaskLock
+        TempomatAdjustmentValue
     ] as any[]
 }
