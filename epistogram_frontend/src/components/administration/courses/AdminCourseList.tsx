@@ -1,10 +1,7 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
-import React, { useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useAdminCourseList, useCreateCourse, useDeleteCourse } from "../../../services/api/courseApiService";
-import { useNavigation } from "../../../services/core/navigatior";
 import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItemDTO";
 import { EpistoSearch } from "../../controls/EpistoSearch";
 import { FlexList } from "../../universal/FlexList";
@@ -12,11 +9,14 @@ import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 
 export const AdminCourseList = (props: {
+    onCourseClick: (courseId: number) => void,
     courses: CourseAdminListItemDTO[]
-    navigationFunction: (courseId: number) => void
 }) => {
-    const { courses, navigationFunction } = props
 
+    // props
+    const { courses, onCourseClick } = props;
+
+    // util
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
 
@@ -39,9 +39,7 @@ export const AdminCourseList = (props: {
                 .map(course => {
 
                     return <FlexListItem
-                        onClick={() => {
-                            navigationFunction(course.courseId)
-                        }}
+                        onClick={() => onCourseClick(course.courseId)}
                         align="center"
                         mb="1"
                         thumbnailContent={

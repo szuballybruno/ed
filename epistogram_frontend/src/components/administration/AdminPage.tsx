@@ -12,7 +12,7 @@ import { PageRootContainer } from "../PageRootContainer";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AdminOverviewTablePage } from './AdminOverviewTablePage';
-import { AdminCourseControl } from './courses/AdminCourseControl';
+import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
 import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
 import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
 import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
@@ -21,7 +21,7 @@ import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
 import AdminStatistics from "./users/AdminStatisticsSubpage";
 import { AdminUserControl } from './users/AdminUserControl';
 
-const AdminPage = () => {
+export const AdminPage = () => {
 
     const homeUrl = applicationRoutes.rootHomeRoute.route;
     const user = useContext(CurrentUserContext)!;
@@ -30,15 +30,17 @@ const AdminPage = () => {
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
         .add(administrationRoutes.usersRoute.editRoute)
-        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute.courseDetailsRoute)
+        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
         .add(administrationRoutes.myCompanyRoute)
         .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.overviewTableRoute)
         .getArray();
 
-    const AdminLeftPane = (props: FlexProps) => {
-        return <Flex
+    return <PageRootContainer>
+
+        {/* admin left pane */}
+        <Flex
             borderRadius="none"
             id="leftPane"
             bg="white"
@@ -50,8 +52,7 @@ const AdminPage = () => {
             padding="25px 15px 0 15px"
             className="dividerBorderRight"
             position="relative"
-            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)"
-            {...props}>
+            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
 
             {/* logo link */}
             <Flex width="100%" alignItems={"center"} justifyContent="center" mt="10px" mb="20px">
@@ -71,19 +72,17 @@ const AdminPage = () => {
                     }} />
             </Flex>
 
-            {props.children}
-        </Flex>
-    }
-
-    return <PageRootContainer>
-
-        <AdminLeftPane>
             <NavigationLinkList
                 isNoText
                 items={menuItems} />
-        </AdminLeftPane>
+        </Flex>
 
-        <ContentPane isNavbarLowHeight noMaxWidth noPadding px="20px">
+        {/* admin content pane */}
+        <ContentPane
+            isNavbarLowHeight
+            noMaxWidth
+            noPadding
+            px="20px">
 
             {/* admin subpages */}
             <Switch>
@@ -98,7 +97,7 @@ const AdminPage = () => {
                 <ProtectedRoute
                     path={administrationRoutes.coursesRoute.route}
                     isAuthorizedToView={x => x.canAccessCourseAdministration}
-                    render={() => <AdminCourseControl />} />
+                    render={() => <CourseAdministartionSubpage />} />
 
                 {/* shop administartion */}
                 <ProtectedRoute
@@ -133,5 +132,3 @@ const AdminPage = () => {
         </ContentPane>
     </PageRootContainer>
 };
-
-export default withRouter(AdminPage);

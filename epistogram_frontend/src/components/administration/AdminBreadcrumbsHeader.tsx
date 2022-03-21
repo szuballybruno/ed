@@ -35,15 +35,16 @@ export const BreadcrumbLink = (props: {
         </EpistoFont>
     </Flex>
 
+    const { to } = props;
+    const isLink = !props.isCurrent && to;
+
     return <Box>
 
-        {/* current is not a link */}
-        {!!props.isCurrent && <Content></Content>}
-
-        {/* otherwise is a link */}
-        {!props.isCurrent && <NavLink to={props.to ?? ""}>
-            {<Content></Content>}
-        </NavLink>}
+        {isLink
+            ? <NavLink to={to!}>
+                <Content />
+            </NavLink>
+            : <Content />}
     </Box>
 }
 

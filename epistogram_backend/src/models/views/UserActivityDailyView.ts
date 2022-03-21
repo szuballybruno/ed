@@ -10,8 +10,5 @@ export class UserSessionDailyView {
     userId: number;
 
     @ViewColumn()
-    date: Date;
-
-    @ViewColumn()
     sessionCount: number;
 }

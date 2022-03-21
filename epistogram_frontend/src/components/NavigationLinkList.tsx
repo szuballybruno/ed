@@ -1,8 +1,7 @@
 import { Flex } from "@chakra-ui/layout";
-import { Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import { isCurrentRoute } from "../static/frontendHelpers";
 import { ApplicationRoute } from "../models/types";
+import { isCurrentRoute } from "../static/frontendHelpers";
 import { EpistoFont } from "./controls/EpistoFont";
 
 export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?: boolean }) => {
@@ -21,7 +20,6 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?
                     key={index}>
                     <Flex
                         p="5px 15px"
-                        // background={isCurrent ? "var(--epistoTeal)" : undefined}
                         align="center">
 
                         {/* icon */}

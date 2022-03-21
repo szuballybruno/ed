@@ -107,7 +107,7 @@ export const AdminCourseUsersSubpage = (props: {
 
     return <AdminBreadcrumbsHeader>
 
-        <AdminCourseList courses={courses} navigationFunction={navigationFunction} />
+        {/* <AdminCourseList courses={[]} onCourseClick={() => { }} /> */}
 
         <AdminSubpageHeader>
             <AdminCourseUsersGrid />

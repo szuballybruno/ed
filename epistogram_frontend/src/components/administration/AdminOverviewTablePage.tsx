@@ -30,12 +30,12 @@ export const AdminOverviewTablePage = () => {
     const courseRows: GridRowsProp = getRowsFromCourses()
 
     const columns: GridColDef[] = [
-        { field: 'avatar', headerName: 'Thumbnail kép', width: 130, renderCell: (params) => <img src={params.value} /> },
-        { field: 'title', headerName: 'Cím', width: 300, editable: true, resizable: true },
-        { field: 'category', headerName: 'Kategória', width: 150, resizable: true },
-        { field: 'subCategory', headerName: 'Alkategória', width: 150, resizable: true },
-        { field: 'videosCount', headerName: 'Videók száma', width: 150, resizable: true },
-        { field: 'editCourse', headerName: 'Kurzus szerkesztése', width: 150, renderCell: (params) => <EpistoButton variant="outlined" onClick={() => navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + params.value + "/details")}>Szerkesztés</EpistoButton> }
+        // { field: 'avatar', headerName: 'Thumbnail kép', width: 130, renderCell: (params) => <img src={params.value} /> },
+        // { field: 'title', headerName: 'Cím', width: 300, editable: true, resizable: true },
+        // { field: 'category', headerName: 'Kategória', width: 150, resizable: true },
+        // { field: 'subCategory', headerName: 'Alkategória', width: 150, resizable: true },
+        // { field: 'videosCount', headerName: 'Videók száma', width: 150, resizable: true },
+        // { field: 'editCourse', headerName: 'Kurzus szerkesztése', width: 150, renderCell: (params) => <EpistoButton variant="outlined" onClick={() => navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + params.value + "/details")}>Szerkesztés</EpistoButton> }
     ];
 
     return <AdminBreadcrumbsHeader>

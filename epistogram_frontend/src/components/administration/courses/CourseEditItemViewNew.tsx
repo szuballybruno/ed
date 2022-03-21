@@ -9,6 +9,7 @@ import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useNavigation } from "../../../services/core/navigatior";
 import { CourseAdminItemShortDTO } from "../../../shared/dtos/CourseAdminItemShortDTO";
 import { formatTime, secondsToTime } from "../../../static/frontendHelpers";
+import { useIntParam } from "../../../static/locationHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
@@ -50,8 +51,7 @@ export const CourseEditItemViewNew = (props: {
     const isVideo = item.type === "video";
     const { navigate } = useNavigation()
 
-    const params = useParams<{ courseId: string }>();
-    const courseId = parseInt(params.courseId);
+    const courseId = useIntParam("courseId");
 
     const chip = (color: any, label: string) => (
         <Chip
@@ -68,7 +68,7 @@ export const CourseEditItemViewNew = (props: {
 
     return <Flex
         onClick={() => {
-            navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courseId + "/" + item.type + "/" + item.id)
+            // navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courseId + "/" + item.type + "/" + item.id)
         }}
         flexDir={"column"}
         flex={1}>
