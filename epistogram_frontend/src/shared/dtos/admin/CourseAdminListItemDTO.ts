@@ -1,5 +1,5 @@
-import { CourseCategoryDTO } from "./CourseCategoryDTO";
-import { UserDTO } from "./UserDTO";
+import { CourseCategoryDTO } from "../CourseCategoryDTO";
+import { UserDTO } from "../UserDTO";
 
 export class CourseAdminListItemDTO {
     courseId: number;

@@ -4,20 +4,18 @@ import { Checkbox, FormControlLabel, RadioGroup } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useIsMatchingCurrentRoute } from "../../../static/frontendHelpers";
-import { AnswerEditDTO } from "../../../shared/dtos/AnswerEditDTO";
+import { useEditQuestionData, useSaveQuestion } from "../../../services/api/questionApiService";
 import { getVirtualId } from "../../../services/core/idService";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { LoadingFrame } from "../../system/LoadingFrame";
+import { AnswerEditDTO } from "../../../shared/dtos/AnswerEditDTO";
+import { useIsMatchingCurrentRoute } from "../../../static/frontendHelpers";
+import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoEntry } from "../../controls/EpistoEntry";
+import { LoadingFrame } from "../../system/LoadingFrame";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { useEditQuestionData, useSaveQuestion } from "../../../services/api/questionApiService";
-import { EpistoButton } from "../../controls/EpistoButton";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
-import { AdminCourseItemList } from "./AdminCourseItemList";
-
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 // deprecated because DataGrid
 export const EditQuestionSubpage = () => {

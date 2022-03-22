@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
 import React, { ReactNode, useContext, useState } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
 import { deleteUserAsync, useUserListQuery } from "../../../services/api/userApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { useShowErrorDialog } from "../../../services/core/notifications";

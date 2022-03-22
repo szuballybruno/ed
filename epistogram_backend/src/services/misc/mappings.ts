@@ -43,14 +43,12 @@ import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
 import { AdminUserListView } from "../../models/views/UserAdminListView";
 import { UserDailyProgressView } from "../../models/views/UserDailyProgressView";
 import { UserStatsView } from "../../models/views/UserStatsView";
-import { AdminPageUserDTO } from "../../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../../shared/dtos/admin/AdminPageUserDTO";
+import { CourseAdminListItemDTO } from "../../shared/dtos/admin/CourseAdminListItemDTO";
+import { CourseContentItemAdminDTO } from "../../shared/dtos/admin/CourseContentItemAdminDTO";
 import { AnswerDTO } from "../../shared/dtos/AnswerDTO";
 import { AnswerEditDTO } from "../../shared/dtos/AnswerEditDTO";
 import { CoinTransactionDTO } from "../../shared/dtos/CoinTransactionDTO";
-import { CourseAdminItemQuestionAnswerDTO } from "../../shared/dtos/CourseAdminItemQuestionAnswerDTO";
-import { CourseAdminItemQuestionDTO } from "../../shared/dtos/CourseAdminItemQuestionDTO";
-import { CourseAdminItemShortDTO } from "../../shared/dtos/CourseAdminItemShortDTO";
-import { CourseAdminListItemDTO } from "../../shared/dtos/CourseAdminListItemDTO";
 import { CourseBriefData } from "../../shared/dtos/CourseBriefData";
 import { CourseCategoryDTO } from "../../shared/dtos/CourseCategoryDTO";
 import { CourseContentEditDataDTO } from "../../shared/dtos/CourseContentEditDataDTO";
@@ -276,44 +274,49 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             } as CourseContentEditDataDTO;
         });
 
-    mapperService
-        .addMap(CourseAdminContentView, ModuleAdminShortDTO, (viewAsModule, items: CourseAdminItemShortDTO[]) => ({
-            id: viewAsModule.moduleId,
-            name: viewAsModule.moduleName,
-            orderIndex: viewAsModule.moduleOrderIndex,
-            code: viewAsModule.moduleCode,
-            items: items
-        }));
+    // mapperService
+    //     .addMap(CourseAdminContentView, ModuleAdminShortDTO, (viewAsModule, items: CourseAdminItemShortDTO[]) => ({
+    //         id: viewAsModule.moduleId,
+    //         name: viewAsModule.moduleName,
+    //         orderIndex: viewAsModule.moduleOrderIndex,
+    //         code: viewAsModule.moduleCode,
+    //         items: items
+    //     }));
+
+    // mapperService
+    //     .addMap(CourseAdminContentView, CourseAdminItemShortDTO, (view, questions: CourseAdminItemQuestionDTO[]) => ({
+    //         id: view.itemId,
+    //         subTitle: view.itemSubtitle,
+    //         title: view.itemTitle,
+    //         orderIndex: view.itemOrderIndex,
+    //         descriptorCode: view.itemCode,
+    //         type: view.videoId ? "video" : "exam",
+    //         questionCount: view.itemQuestionCount,
+    //         videoLength: view.videoLength,
+    //         isFinalExam: view.itemIsFinalExam,
+    //         questions
+    //     }));
 
     mapperService
-        .addMap(CourseAdminContentView, CourseAdminItemShortDTO, (view, questions: CourseAdminItemQuestionDTO[]) => ({
-            id: view.itemId,
-            subTitle: view.itemSubtitle,
-            title: view.itemTitle,
-            orderIndex: view.itemOrderIndex,
-            descriptorCode: view.itemCode,
-            type: view.videoId ? "video" : "exam",
-            questionCount: view.itemQuestionCount,
-            videoLength: view.videoLength,
-            isFinalExam: view.itemIsFinalExam,
-            questions
-        }));
-
-    mapperService
-        .addMap(CourseAdminContentView, CourseAdminItemQuestionDTO, (viewAsQuestion, answers: CourseAdminItemQuestionAnswerDTO[]) => ({
-            questionText: viewAsQuestion.questionText,
-            questionId: viewAsQuestion.questionId,
-            questionShowUpSeconds: viewAsQuestion.questionShowUpSeconds,
-            answerCount: viewAsQuestion.answerCount,
-            correctAnswerCount: viewAsQuestion.correctAnswerCount,
-            answers
-        }));
-
-    mapperService
-        .addMap(CourseAdminContentView, CourseAdminItemQuestionAnswerDTO, viewAsAnswer => ({
-            answerId: viewAsAnswer.answerId,
-            answerIsCorrect: viewAsAnswer.answerIsCorrect,
-            answerText: viewAsAnswer.answerText,
+        .addMap(CourseAdminContentView, CourseContentItemAdminDTO, x => ({
+            courseId: x.courseId,
+            courseTitle: x.courseTitle,
+            examId: x.examId,
+            itemCode: x.itemCode,
+            itemHasProblems: x.itemHasProblems,
+            itemId: x.itemId,
+            itemIsFinalExam: x.itemIsFinalExam,
+            itemIsVideo: x.itemIsVideo,
+            itemOrderIndex: x.itemOrderIndex,
+            itemQuestionCount: x.itemQuestionCount,
+            itemSubtitle: x.itemSubtitle,
+            itemTitle: x.itemTitle,
+            moduleCode: x.moduleCode,
+            moduleId: x.moduleId,
+            moduleName: x.moduleName,
+            moduleOrderIndex: x.moduleOrderIndex,
+            videoId: x.videoId,
+            videoLength: x.videoLength
         }));
 
     mapperService

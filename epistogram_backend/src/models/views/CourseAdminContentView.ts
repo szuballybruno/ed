@@ -7,80 +7,56 @@ import { ViewColumn, ViewEntity } from "typeorm";
 export class CourseAdminContentView {
 
     @ViewColumn()
-    videoCount: number;
-
-    @ViewColumn()
-    examCount: number;
-
-    @ViewColumn()
     courseId: number;
 
     @ViewColumn()
-    videoId: number;
+    courseTitle: string;
 
     @ViewColumn()
-    examId: number;
+	moduleName: string;
 
     @ViewColumn()
-    itemIsVideo: boolean;
+	moduleOrderIndex: number;
 
     @ViewColumn()
-    itemId: number;
+	moduleId: number;
 
     @ViewColumn()
-    moduleId: number;
+	moduleCode: string;
 
     @ViewColumn()
-    itemOrderIndex: number;
+	videoId: number;
 
     @ViewColumn()
-    itemTitle: string;
+	examId: number;
 
     @ViewColumn()
-    itemSubtitle: string;
+	itemIsVideo: boolean;
 
     @ViewColumn()
-    itemIsFinalExam: boolean;
+	itemId: number;
 
     @ViewColumn()
-    itemCode: string;
+	itemOrderIndex: number;
 
     @ViewColumn()
-    moduleName: string;
+	itemTitle: string;
 
     @ViewColumn()
-    moduleOrderIndex: number;
+	itemSubtitle: string;
 
     @ViewColumn()
-    moduleCode: string;
+	itemIsFinalExam: boolean;
 
     @ViewColumn()
-    itemQuestionCount: number;
+	itemCode: string;
 
     @ViewColumn()
-    videoLength: number;
+	itemQuestionCount: number;
 
     @ViewColumn()
-    questionId: number;
-    
-    @ViewColumn()
-	questionText: string;
-    
-    @ViewColumn()
-	questionShowUpSeconds: number;
-    
-    @ViewColumn()
-	answerId: number;
-    
-    @ViewColumn()
-	answerText: string;
+	itemHasProblems: boolean;
 
     @ViewColumn()
-	answerIsCorrect: boolean;
-
-    @ViewColumn()
-    answerCount: number;
-
-    @ViewColumn()
-    correctAnswerCount: number;
+	videoLength: number;
 }

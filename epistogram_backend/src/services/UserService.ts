@@ -1,7 +1,7 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Course } from "../models/entity/Course";
 import { User } from "../models/entity/User";
-import { AdminPageUserDTO } from "../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../shared/dtos/admin/AdminPageUserDTO";
 import { BriefUserDataDTO } from "../shared/dtos/BriefUserDataDTO";
 import { RoleIdEnum } from "../shared/types/sharedTypes";
 import { UserDTO } from "../shared/dtos/UserDTO";

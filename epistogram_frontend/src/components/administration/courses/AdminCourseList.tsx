@@ -2,7 +2,7 @@ import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItemDTO";
+import { CourseAdminListItemDTO } from "../../../shared/dtos/admin/CourseAdminListItemDTO";
 import { EpistoSearch } from "../../controls/EpistoSearch";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";

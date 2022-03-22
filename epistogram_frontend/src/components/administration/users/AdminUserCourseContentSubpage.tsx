@@ -3,7 +3,7 @@ import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useCourseBriefData } from "../../../services/api/courseApiService";
 import { useEditUserData } from "../../../services/api/userApiService";
 import { useNavigation } from "../../../services/core/navigatior";
-import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
 import { useEpistoDialogLogic } from "../../EpistoDialog";
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader"
 import { AdminSubpageHeader } from "../AdminSubpageHeader";

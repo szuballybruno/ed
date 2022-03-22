@@ -10,7 +10,7 @@ import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { EpistoSearch } from "../../controls/EpistoSearch";
 import { useParams } from "react-router-dom";
-import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
 import { Flex } from "@chakra-ui/react";
 
 export const AdminUserList = (props: {
