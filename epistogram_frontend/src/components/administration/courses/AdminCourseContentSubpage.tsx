@@ -1,7 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
 import { TextField } from "@mui/material";
-import { DataGridPro, GridColDef, GridRowsProp } from "@mui/x-data-grid-pro";
 import { useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
