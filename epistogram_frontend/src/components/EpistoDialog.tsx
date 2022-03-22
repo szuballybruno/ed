@@ -90,8 +90,8 @@ export const EpistoDialog = (props: EpistoDialogPropType) => {
 
         sx={sx}
         style={{
-            zIndex: 10000,
-            background: "var(--transparentWhite90)"
+            zIndex: 10000
+            //background: "var(--transparentWhite90)"
         }}>
 
         {/* title and content */}

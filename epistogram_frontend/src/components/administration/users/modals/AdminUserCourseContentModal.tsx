@@ -184,7 +184,7 @@ export const AdminUserCourseContentModal = (props: {
                     }}
                     sx={{
                         "&.MuiTabs-root": {
-                            //background: "var(--transparentIntenseBlue)",
+                            //background: "var(--transparentIntenseBlue85)",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",

@@ -13,7 +13,7 @@ export type EpistoEntryPropsType = {
     isMultiline?: boolean,
     postfix?: string,
     placeholder?: string,
-    labelVariant?: "top" | "normal",
+    labelVariant?: "top" | "normal" | "hidden",
     height?: string,
     name?: string,
     marginTop?: string,
@@ -89,10 +89,11 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         }
 
         <TextField
+            className="mildShadow roundBorders"
             inputRef={ref}
             disabled={disabled}
             size="small"
-            label={labelVariant !== "top" ? label : undefined}
+            label={labelVariant === "normal" ? label : undefined}
             placeholder={placeholder}
             name={name}
             value={value}
@@ -103,7 +104,7 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
             sx={{
                 '& .MuiOutlinedInput-root': {
                     height: height,
-                    background: "var(--transparentWhite90)"
+                    background: "var(--transparentWhite90)",
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                     border: "none"
@@ -124,7 +125,7 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
                 onChanged(x.currentTarget.value);
             }}
             style={{
-                border: "none"
+                //border: "none"
                 // margin: "10px 0px 10px 0px",
                 // padding: "2px"
             }} />

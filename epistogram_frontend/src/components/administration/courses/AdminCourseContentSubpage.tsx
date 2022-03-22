@@ -22,7 +22,7 @@ import { LoadingFrame } from "../../system/LoadingFrame";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { AdminCourseContentDataGridControl } from "./AdminCourseContentDataGridControl";
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
-import { AdminVideoStatisticsModal } from "./modals/AdminVideoStatisticsModal";
+import { AdminVideoItemModal } from "./modals/AdminVideoItemModal";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
@@ -321,7 +321,7 @@ export const AdminCourseContentSubpage = () => {
                 {/* Delete dialog */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
-                <AdminVideoStatisticsModal logic={courseItemStatisticsModalLogic} />
+                <AdminVideoItemModal logic={courseItemStatisticsModalLogic} />
 
                 {/* Add buttons popper */}
                 <EpistoPopper

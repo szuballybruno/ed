@@ -89,7 +89,7 @@ const HomePage = () => {
                         {/* test your knowledge */}
                         <DashboardSection
                             title={translatableTexts.homePage.practiseTitle}
-                            background="var(--transparentIntenseBlue)"
+                            background="var(--transparentIntenseBlue85)"
                             className="largeSoftShadow roundBorders"
                             //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
                             color="white"
