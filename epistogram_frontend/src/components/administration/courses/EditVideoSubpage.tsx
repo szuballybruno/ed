@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/layout";
 import { Delete } from "@mui/icons-material";
 import EditIcon from '@mui/icons-material/Edit';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
@@ -8,23 +8,22 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from "react-player";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { roundNumber } from "../../../static/frontendHelpers";
-import { QuestionDTO } from "../../../shared/dtos/QuestionDTO";
-import { VideoEditDTO } from "../../../shared/dtos/VideoEditDTO";
+import { useSaveVideo, useUploadVideoFileAsync, useVideoEditData } from "../../../services/api/videoApiService";
 import { getVirtualId } from "../../../services/core/idService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { LoadingFrame } from "../../system/LoadingFrame";
+import { QuestionDTO } from "../../../shared/dtos/QuestionDTO";
+import { VideoEditDTO } from "../../../shared/dtos/VideoEditDTO";
+import { roundNumber } from "../../../static/frontendHelpers";
+import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoEntry } from "../../controls/EpistoEntry";
+import { LoadingFrame } from "../../system/LoadingFrame";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "./EditSection";
-import { useSaveVideo, useVideoEditData, useUploadVideoFileAsync } from "../../../services/api/videoApiService";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { AdminCourseItemList } from "./AdminCourseItemList";
-import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 
 const QuestionItem = (props: {
     currentSeconds: number,

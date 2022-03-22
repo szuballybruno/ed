@@ -1,16 +1,12 @@
 import { Flex } from "@chakra-ui/react";
 import { TextField } from "@mui/material";
-import { ModuleAdminShortDTO } from "../../../shared/dtos/ModuleAdminShortDTO";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { EpistoFont } from "../../controls/EpistoFont";
+import { EpistoSearch } from "../../controls/EpistoSearch";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { CollapseItem } from "../../universal/CollapseItem";
-import { EpistoSearch } from "../../controls/EpistoSearch";
-import { ChipSmall } from "./CourseEditItemView";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { formatTime } from "../../../static/frontendHelpers";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {

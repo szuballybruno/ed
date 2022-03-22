@@ -1,26 +1,28 @@
-import { Add } from "@mui/icons-material";
+import { Flex } from "@chakra-ui/react";
+import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
 import { TextField } from "@mui/material";
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useCourseContentEditData, useSaveCourseContentData } from "../../../services/api/courseApiService";
+import { useCourseContentAdminData, useSaveCourseContentData } from "../../../services/api/courseApiService";
 import { useCreateExam, useDeleteExam } from "../../../services/api/examApiService";
 import { useCreateModule, useDeleteModule } from "../../../services/api/moduleApiService";
 import { usePretestExamId } from "../../../services/api/pretestApiService";
 import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { CourseAdminItemShortDTO, CourseAdminItemShortNewDTO } from "../../../shared/dtos/CourseAdminItemShortDTO";
-import { CourseContentEditDataDTO } from "../../../shared/dtos/CourseContentEditDataDTO";
-import { ModuleAdminShortDTO } from "../../../shared/dtos/ModuleAdminShortDTO";
+import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
+import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoDataGrid, GridColumnType, GridRowType } from "../../controls/EpistoDataGrid";
 import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoPopper } from "../../controls/EpistoPopper";
+import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { LoadingFrame } from "../../system/LoadingFrame";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { AdminCourseContentDataGridControl } from "./AdminCourseContentDataGridControl";
+import { AddNewItemPopper } from "./AddNewItemPopper";
+import { ChipSmall } from "./ChipSmall";
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
 import { AdminVideoItemModal } from "./modals/AdminVideoItemModal";
 
@@ -40,13 +42,10 @@ export const AdminCourseContentSubpage = () => {
     const courseItemStatisticsModalLogic = useEpistoDialogLogic({ defaultCloseButtonType: "top" });
 
     // state
-    const [modules, setModules] = useState<ModuleAdminShortDTO[]>([])
-    const [items, setItems] = useState<CourseAdminItemShortNewDTO[]>([])
-    const [openModuleIds, setOpenModuleIds] = useState<number[]>([]);
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false)
 
     // http
-    const { courseContentEditData, courseContentEditDataError, courseContentEditDataState, refetchCourseContentEditData } = useCourseContentEditData(courseId);
+    const { courseContentAdminData, courseContentAdminDataError, courseContentAdminDataState, refreshCourseContentAdminData } = useCourseContentAdminData(courseId);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseContentData();
     const { pretestExamId, pretestExamIdError, pretestExamIdState } = usePretestExamId(courseId);
     const { createVideoAsync } = useCreateVideo();
@@ -56,8 +55,9 @@ export const AdminCourseContentSubpage = () => {
     const { createModuleAsync } = useCreateModule();
     const { deleteModuleAsync } = useDeleteModule();
 
-    // calc 
-    const isAnyModulesOpen = openModuleIds.length > 0;
+    // computed
+    const items = courseContentAdminData?.items ?? [];
+    const modules = courseContentAdminData?.modules ?? [];
 
     // nav
 
@@ -66,88 +66,88 @@ export const AdminCourseContentSubpage = () => {
     // and sets the order indices accordingly 
     const handleSaveCourseAsync = async () => {
 
-        if (!courseContentEditData)
-            return;
+        // if (!courseContentEditData)
+        //     return;
 
-        const orderedModules = [...modules];
+        // const orderedModules = [...modules];
 
-        // set order indices & module ids
-        orderedModules
-            .forEach((m, mIndex) => {
+        // // set order indices & module ids
+        // orderedModules
+        //     .forEach((m, mIndex) => {
 
-                m.orderIndex = mIndex;
+        //         m.orderIndex = mIndex;
 
-                m.items
-                    .forEach((i, iIndex) => {
+        //         m.items
+        //             .forEach((i, iIndex) => {
 
-                        i.moduleId = m.id;
-                        i.orderIndex = iIndex;
-                    });
-            });
+        //                 i.moduleId = m.id;
+        //                 i.orderIndex = iIndex;
+        //             });
+        //     });
 
-        const dto = {
-            courseId: courseId,
-            modules: orderedModules
-        } as CourseContentEditDataDTO;
+        // const dto = {
+        //     courseId: courseId,
+        //     modules: orderedModules
+        // } as CourseContentEditDataDTO;
 
-        try {
+        // try {
 
-            await saveCourseDataAsync(dto);
+        //     await saveCourseDataAsync(dto);
 
-            showNotification(translatableTexts.administration.courseContentSubpage.courseSavedSuccessfully);
-        }
-        catch (e) {
+        //     showNotification(translatableTexts.administration.courseContentSubpage.courseSavedSuccessfully);
+        // }
+        // catch (e) {
 
-            showError(e);
-        }
+        //     showError(e);
+        // }
     }
 
     // adds a course item,
     // video or exam 
     const handleAddCourseItemAsync = async (moduleId: number, type: "video" | "exam") => {
 
-        //await handleSaveCourseAsync();
+        // //await handleSaveCourseAsync();
 
-        try {
+        // try {
 
-            if (type === "video") {
+        //     if (type === "video") {
 
-                const idResult = await createVideoAsync(moduleId)
-                showNotification(translatableTexts.administration.courseContentSubpage.newVideoAddedSuccessfully);
-                //navToVideoEdit(idResult.id);
-                refetchCourseContentEditData()
-            }
+        //         const idResult = await createVideoAsync(moduleId)
+        //         showNotification(translatableTexts.administration.courseContentSubpage.newVideoAddedSuccessfully);
+        //         //navToVideoEdit(idResult.id);
+        //         refetchCourseContentEditData()
+        //     }
 
-            else {
+        //     else {
 
-                const idResult = await createExamAsync(moduleId);
-                showNotification(translatableTexts.administration.courseContentSubpage.newExamAddedSuccessfully);
-                //navToExamEdit(idResult.id);
-                refetchCourseContentEditData()
-            }
-        } catch (e) {
+        //         const idResult = await createExamAsync(moduleId);
+        //         showNotification(translatableTexts.administration.courseContentSubpage.newExamAddedSuccessfully);
+        //         //navToExamEdit(idResult.id);
+        //         refetchCourseContentEditData()
+        //     }
+        // } catch (e) {
 
-            showError(e);
-        }
+        //     showError(e);
+        // }
     }
 
     // removes a course item from the list 
     // non async, does not make API calls 
     const removeCourseItem = (code: string) => {
 
-        setModules([...modules]
-            .map(x => {
-                x.items = x.items.filter(y => y.descriptorCode !== code)
-                return x;
-            }));
+        // setModules([...modules]
+        //     .map(x => {
+        //         x.items = x.items.filter(y => y.descriptorCode !== code)
+        //         return x;
+        //     }));
     }
 
     // deletes a course item 
     // shows warning dialog
-    const handleDeleteCourseItemAsync = async (courseItem: CourseAdminItemShortDTO) => {
+    const handleDeleteCourseItemAsync = async (courseItem: CourseContentItemAdminDTO) => {
 
         // exam
-        if (courseItem.type === "exam") {
+        if (!courseItem.itemIsVideo) {
 
             deleteWarningDialogLogic
                 .openDialog({
@@ -160,9 +160,9 @@ export const AdminCourseContentSubpage = () => {
 
                                 try {
 
-                                    await deleteExamAsync(courseItem.id);
+                                    await deleteExamAsync(courseItem.itemId);
                                     showNotification(translatableTexts.administration.courseContentSubpage.examRemovedSuccessfully);
-                                    removeCourseItem(courseItem.descriptorCode);
+                                    removeCourseItem(courseItem.itemCode);
                                 }
                                 catch (e) {
 
@@ -188,9 +188,9 @@ export const AdminCourseContentSubpage = () => {
 
                                 try {
 
-                                    await deleteVideoAsync(courseItem.id);
+                                    await deleteVideoAsync(courseItem.itemId);
                                     showNotification(translatableTexts.administration.courseContentSubpage.videoRemovedSuccessfully);
-                                    removeCourseItem(courseItem.descriptorCode);
+                                    removeCourseItem(courseItem.itemCode);
                                 }
                                 catch (e) {
 
@@ -201,42 +201,6 @@ export const AdminCourseContentSubpage = () => {
                     ]
                 });
         }
-    }
-
-    // deletes a module,
-    // shows a warning dialog
-    const handleDeleteModule = async (module: ModuleAdminShortDTO) => {
-        deleteWarningDialogLogic
-            .openDialog({
-                title: translatableTexts.administration.courseContentSubpage.doYouReallyRemoveTheModule,
-                description: translatableTexts.administration.courseContentSubpage.uploadedContentWillBeLost,
-                buttons: [
-                    {
-                        title: translatableTexts.administration.courseContentSubpage.removeModule,
-                        action: async () => {
-
-                            try {
-
-                                await deleteModuleAsync(module.id);
-                                showNotification(translatableTexts.administration.courseContentSubpage.moduleRemovedSuccessfully);
-                                setModules(modules.filter(x => x.id !== module.id));
-                            }
-                            catch (e) {
-
-                                showError(e);
-                            }
-                        }
-                    }
-                ]
-            });
-    }
-
-    // navigate to edit module 
-    // saves the changes beforehand
-    const handleEditModule = async (module: ModuleAdminShortDTO) => {
-
-        await handleSaveCourseAsync();
-        navigate(applicationRoutes.administrationRoute.coursesRoute.editModuleRoute.route, { courseId, moduleId: module.id });
     }
 
     // adds a new module to the course 
@@ -252,7 +216,7 @@ export const AdminCourseContentSubpage = () => {
             });
 
             showNotification(translatableTexts.administration.courseContentSubpage.newModuleAddedSuccessfully);
-            await refetchCourseContentEditData();
+            // await refetchCourseContentEditData();
         }
         catch (e) {
 
@@ -260,32 +224,146 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
-    // effects 
-    useEffect(() => {
+    type GridSchema = CourseContentItemAdminDTO & {
+        quickMenu: number;
+        videoFile: string;
+    };
 
-        if (!courseContentEditData)
-            return;
+    const gridRows: GridRowType<GridSchema>[] = items
+        .map((item, index) => {
+            return {
+                id: index,
+                ...item,
+                quickMenu: index,
+                videoFile: "file_" + item.videoId
+            }
+        });
 
-        const items = courseContentEditData
-            .modules
-            .flatMap(module => {
-                return module
-                    .items
-                    .map(item => ({
-                        ...item,
-                        module: {
-                            id: module.id,
-                            name: module.name
-                        }
-                    })) as CourseAdminItemShortNewDTO[]
-            });
+    const gridColumns: GridColumnType<GridSchema>[] = [
+        {
+            field: 'itemOrderIndex',
+            headerName: 'Elhelyezkedés',
+            width: 80,
+            editable: true
+        },
+        {
+            field: 'itemTitle',
+            headerName: 'Cím',
+            width: 220,
+            editable: true,
+            resizable: true
+        },
+        {
+            field: 'itemSubtitle',
+            headerName: 'Alcím',
+            width: 220,
+            resizable: true
+        },
+        {
+            field: 'moduleName',
+            headerName: 'Modul',
+            width: 250,
+            renderCell: (row) => {
 
-        setItems(items);
-    }, [courseContentEditData]);
+                return <EpistoSelect
+                    items={modules}
+                    currentKey={row.moduleId + ""}
+                    onSelected={() => { }}
+                    getDisplayValue={x => "" + x?.name}
+                    getCompareKey={module => "" + module?.id} />
+            },
+            editable: true
+        },
+        {
+            field: 'itemIsVideo',
+            headerName: 'Típus',
+            width: 80,
+            renderCell: (row) => {
+
+                return <ChipSmall
+                    text={row.itemIsVideo
+                        ? "Video"
+                        : "Exam"}
+                    color={row.itemIsVideo
+                        ? "var(--epistoTeal)"
+                        : "var(--intenseYellow)"} />
+            }
+        },
+        {
+            field: 'videoLength',
+            headerName: 'Videó hossza',
+            width: 80,
+            renderCell: (row) => {
+
+                return <ChipSmall
+                    text={formatTime(Math.round(row.videoLength))}
+                    color={row.videoLength > 300
+                        ? "var(--intenseRed)"
+                        : "var(--intenseGreen)"} />
+            }
+        },
+        {
+            field: 'itemHasProblems',
+            headerName: 'Problémák',
+            width: 150,
+            renderCell: (params) => {
+
+                return <></>
+                // <ChipSmall
+                //     title={params.value.issueDescriptions.join()}
+                //     text={`${params.value.issueCounter} probléma`}
+                //     color={params.value.issueCounter > 0 ? "var(--intenseRed)" : "var(--intenseGreen)"} />,
+            },
+            resizable: true
+        },
+        {
+            field: 'videoFile',
+            headerName: 'Videó fájl',
+            width: 180,
+            renderCell: (row) => {
+
+                if (row.videoFile)
+                    return row.videoFile;
+
+                return <EpistoButton
+                    variant="outlined"
+                    onClick={() => { }}>
+
+                    Fájl kiválasztása
+                </EpistoButton >
+            }
+        },
+        {
+            field: 'courseTitle',
+            headerName: 'Gyorshivatkozások',
+            width: 150,
+            renderCell: (row) => {
+
+                return (
+                    <Flex>
+                        <EpistoButton onClick={() => { }}>
+
+                            <Edit />
+                        </EpistoButton>
+
+                        <EpistoButton onClick={() => { }}>
+
+                            <Equalizer />
+                        </EpistoButton>
+
+                        <EpistoButton onClick={() => { }}>
+
+                            <Delete />
+                        </EpistoButton>
+                    </Flex>
+                )
+            }
+        }
+    ];
 
     return <LoadingFrame
-        loadingState={[saveCourseDataState, courseContentEditDataState]}
-        error={courseContentEditDataError}
+        loadingState={[saveCourseDataState, courseContentAdminDataState]}
+        error={courseContentAdminDataError}
         className="whall">
 
         {/* frame */}
@@ -323,37 +401,17 @@ export const AdminCourseContentSubpage = () => {
 
                 <AdminVideoItemModal logic={courseItemStatisticsModalLogic} />
 
-                {/* Add buttons popper */}
-                <EpistoPopper
+                {/* add buttons popper */}
+                <AddNewItemPopper
                     isOpen={isAddButtonsPopperOpen}
-                    target={ref?.current}
-                    placementX="left"
-                    style={{
-                        width: 200,
-                        alignItems: "flex-start"
-                    }}
-                    handleClose={() => setIsAddButtonsPopperOpen(false)}>
+                    ref={ref?.current}
+                    onAddItem={() => { }}
+                    onClose={() => setIsAddButtonsPopperOpen(false)} />
 
-                    <EpistoButton>
-                        Modul
-                    </EpistoButton>
-
-                    <EpistoButton onClick={() => { handleAddCourseItemAsync(Math.min(...modules.map(m => m.id)), "video") }}>
-                        Videó
-                    </EpistoButton>
-
-                    <EpistoButton onClick={() => { handleAddCourseItemAsync(Math.min(...modules.map(m => m.id)), "exam") }}>
-                        Vizsga
-                    </EpistoButton>
-
-                </EpistoPopper>
-
-                <AdminCourseContentDataGridControl
-                    selectableModules={modules}
-                    items={items}
-                    handleItemEdit={() => { }}
-                    handleItemStatistics={() => { courseItemStatisticsModalLogic.openDialog() }}
-                    handleItemRemove={() => { }} />
+                {/* data grid */}
+                <EpistoDataGrid
+                    columns={gridColumns}
+                    rows={gridRows} />
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     </LoadingFrame >

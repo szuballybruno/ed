@@ -15,7 +15,7 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminUserList } from "./AdminUserList";
 import { useEditUserData } from "../../../services/api/userApiService";
-import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
 import { useNavigation } from "../../../services/core/navigatior";
 import { EditSection } from "../courses/EditSection";
 

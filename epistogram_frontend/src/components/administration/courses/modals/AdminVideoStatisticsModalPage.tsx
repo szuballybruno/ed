@@ -1,14 +1,14 @@
-import { Flex, Grid, Divider, Tooltip } from "@chakra-ui/react";
-import { FiberManualRecord } from "@mui/icons-material";
-import { Slider } from "@mui/material";
-import { useState } from "react";
-import ReactPlayer from "react-player";
-import { EpistoFont } from "../../../controls/EpistoFont";
-import { EpistoSelect } from "../../../controls/EpistoSelect";
-import StatisticsCard from "../../../statisticsCard/StatisticsCard";
-import { DashboardSection } from "../../../universal/DashboardSection";
-import { VideoHotspotsChart } from "../../../universal/VideoHotspotsChart";
-import { VideoPieChart } from "../../../universal/VideoPieChart";
+import { Divider, Flex, Grid, Tooltip } from "@chakra-ui/react"
+import { FiberManualRecord } from "@mui/icons-material"
+import { Slider } from "@mui/material"
+import React, { useState } from "react"
+import ReactPlayer from "react-player"
+import { EpistoFont } from "../../../controls/EpistoFont"
+import { EpistoSelect } from "../../../controls/EpistoSelect"
+import StatisticsCard from "../../../statisticsCard/StatisticsCard"
+import { DashboardSection } from "../../../universal/DashboardSection"
+import { VideoHotspotsChart } from "../../../universal/VideoHotspotsChart"
+import { VideoPieChart } from "../../../universal/VideoPieChart"
 
 export const AdminVideoStatisticsModalPage = () => {
 

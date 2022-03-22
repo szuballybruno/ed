@@ -9,7 +9,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from "./AdminEditUserControl";
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { AdminUserList } from './AdminUserList';
-import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 
 const AdminAddUserSubpage = (props: {
     users: AdminPageUserDTO[],

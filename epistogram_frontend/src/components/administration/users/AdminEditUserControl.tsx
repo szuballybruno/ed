@@ -13,7 +13,7 @@ import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { translatableTexts } from "../../../static/translatableTexts";
-import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoEntryNew, useEpistoEntryState } from "../../controls/EpistoEntryNew";

@@ -15,10 +15,10 @@ import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView
 import { CourseModuleOverviewView } from "../models/views/CourseModuleOverviewView";
 import { CourseProgressView } from "../models/views/CourseProgressView";
 import { CourseView } from "../models/views/CourseView";
-import { CourseAdminItemQuestionAnswerDTO } from "../shared/dtos/CourseAdminItemQuestionAnswerDTO";
-import { CourseAdminItemQuestionDTO } from "../shared/dtos/CourseAdminItemQuestionDTO";
-import { CourseAdminItemShortDTO } from "../shared/dtos/CourseAdminItemShortDTO";
-import { CourseAdminListItemDTO } from "../shared/dtos/CourseAdminListItemDTO";
+import { CourseAdminListItemDTO } from "../shared/dtos/admin/CourseAdminListItemDTO";
+import { CourseContentAdminDTO } from "../shared/dtos/admin/CourseContentAdminDTO";
+import { CourseContentItemAdminDTO } from "../shared/dtos/admin/CourseContentItemAdminDTO";
+import { CourseModuleShortDTO } from "../shared/dtos/admin/CourseModuleShortDTO";
 import { CourseBriefData } from "../shared/dtos/CourseBriefData";
 import { CourseContentEditDataDTO } from "../shared/dtos/CourseContentEditDataDTO";
 import { CourseDetailsDTO } from "../shared/dtos/CourseDetailsDTO";
@@ -29,7 +29,6 @@ import { CourseProgressDTO } from "../shared/dtos/CourseProgressDTO";
 import { CourseProgressShortDTO } from "../shared/dtos/CourseProgressShortDTO";
 import { CourseShortDTO } from "../shared/dtos/CourseShortDTO";
 import { CreateCourseDTO } from "../shared/dtos/CreateCourseDTO";
-import { ModuleAdminShortDTO } from "../shared/dtos/ModuleAdminShortDTO";
 import { ModuleDTO } from "../shared/dtos/ModuleDTO";
 import { UserCoursesDataDTO } from "../shared/dtos/UserCoursesDataDTO";
 import { ExamService } from "./ExamService";
@@ -472,63 +471,33 @@ export class CourseService {
      * @param courseId 
      * @returns 
      */
-    async getCourseContentEditDataAsync(courseId: number) {
+    async getCourseContentAdminDataAsync(courseId: number) {
 
-        // get views 
         const views = await this._ormService
             .getRepository(CourseAdminContentView)
             .createQueryBuilder("c")
             .where("c.courseId = :courseId", { courseId: courseId })
             .getMany();
 
-        // first view as admin data 
-        const viewAsAdmin = views
-            .first();
+        const modules = await this._ormService
+            .getRepository(CourseModule)
+            .createQueryBuilder("mo")
+            .where("mo.courseId = :courseId", { courseId })
+            .getMany();
 
-        // modules
-        const modules = views
-            .groupBy(x => x.moduleId)
-            .map(moduleGroup => {
+        const moduleDtos = modules
+            .map(x => ({
+                id: x.id,
+                name: x.name
+            } as CourseModuleShortDTO))
 
-                const viewAsModule = moduleGroup.first;
+        const items = this._mapperService
+            .mapMany(CourseAdminContentView, CourseContentItemAdminDTO, views);
 
-                // items
-                const items = moduleGroup
-                    .items
-                    .filter(x => !!x.itemId)
-                    .groupBy(x => x.itemCode)
-                    .map(itemGroup => {
-
-                        const viewAsItem = itemGroup.first;
-
-                        // questions
-                        const questions = itemGroup
-                            .items
-                            .groupBy(x => x.questionId)
-                            .map(questionGroup => {
-
-                                const viewAsQuestion = questionGroup
-                                    .items
-                                    .first();
-
-                                // answers
-                                const answers = this._mapperService
-                                    .mapMany(CourseAdminContentView, CourseAdminItemQuestionAnswerDTO, questionGroup.items);
-
-                                return this._mapperService
-                                    .map(CourseAdminContentView, CourseAdminItemQuestionDTO, viewAsQuestion, answers);
-                            });
-
-                        return this._mapperService
-                            .map(CourseAdminContentView, CourseAdminItemShortDTO, viewAsItem, questions);
-                    });
-
-                return this._mapperService
-                    .map(CourseAdminContentView, ModuleAdminShortDTO, viewAsModule, items);
-            });
-
-        return this._mapperService
-            .map(CourseAdminContentView, CourseContentEditDataDTO, viewAsAdmin, modules);
+        return {
+            items,
+            modules: moduleDtos
+        } as CourseContentAdminDTO;
     }
 
     /**

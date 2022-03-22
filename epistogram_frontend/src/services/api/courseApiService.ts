@@ -1,6 +1,5 @@
-import { CourseAdminListItemDTO } from "../../shared/dtos/CourseAdminListItemDTO";
+import { CourseAdminListItemDTO } from "../../shared/dtos/admin/CourseAdminListItemDTO";
 import { CourseBriefData } from "../../shared/dtos/CourseBriefData";
-import { CourseContentEditDataDTO } from "../../shared/dtos/CourseContentEditDataDTO";
 import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
 import { CourseDetailsEditDataDTO } from "../../shared/dtos/CourseDetailsEditDataDTO";
 import { CourseProgressShortDTO } from "../../shared/dtos/CourseProgressShortDTO";
@@ -13,6 +12,8 @@ import { CourseModeType } from "../../shared/types/sharedTypes";
 import { UserCoursesDataDTO } from "../../shared/dtos/UserCoursesDataDTO";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
+import { CourseContentItemAdminDTO } from "../../shared/dtos/admin/CourseContentItemAdminDTO";
+import { CourseContentAdminDTO } from "../../shared/dtos/admin/CourseContentAdminDTO";
 
 export const useAdminCourseList = (searchText: string) => {
 
@@ -48,15 +49,15 @@ export const useCourseDetailsEditData = (courseId: number) => {
     }
 }
 
-export const useCourseContentEditData = (courseId: number) => {
+export const useCourseContentAdminData = (courseId: number) => {
 
-    const qr = useReactQuery2<CourseContentEditDataDTO>(apiRoutes.course.getCourseContentEditData, { courseId });
+    const qr = useReactQuery2<CourseContentAdminDTO>(apiRoutes.course.getCourseContentEditData, { courseId });
 
     return {
-        courseContentEditData: qr.data,
-        courseContentEditDataError: qr.error,
-        courseContentEditDataState: qr.state,
-        refetchCourseContentEditData: qr.refetch
+        courseContentAdminData: qr.data,
+        courseContentAdminDataError: qr.error,
+        courseContentAdminDataState: qr.state,
+        refreshCourseContentAdminData: qr.refetch
     }
 }
 
@@ -92,7 +93,7 @@ export const useSaveCourseDetailsData = () => {
 
 export const useSaveCourseContentData = () => {
 
-    const qr = usePostDataUnsafe<CourseContentEditDataDTO, void>(apiRoutes.course.saveCourseContent);
+    const qr = usePostDataUnsafe<any, void>(apiRoutes.course.saveCourseContent);
 
     return {
         saveCourseDataAsync: qr.postDataAsync,

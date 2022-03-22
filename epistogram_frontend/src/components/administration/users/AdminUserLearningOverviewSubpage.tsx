@@ -8,7 +8,7 @@ import { useEditUserData } from "../../../services/api/userApiService";
 import { useActiveCourses, useUserProgressData } from "../../../services/api/userProgressApiService";
 import { useUserStats } from "../../../services/api/userStatsApiService";
 import { useNavigation } from "../../../services/core/navigatior";
-import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
 import { getAssetUrl, usePaging } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
