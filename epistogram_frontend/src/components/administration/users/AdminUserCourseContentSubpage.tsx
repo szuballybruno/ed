@@ -111,10 +111,10 @@ export const AdminUserCourseContentSubpage = (props: {
                             }
                         ]
                     },
-                    completedVideoCount: 0,
-                    totalVideoPlaybackSeconds: 0,
-                    totalGivenAnswerCount: 0,
-                    totalCorrectAnswerRate: 0
+                    completedVideoCount: 48,
+                    totalVideoPlaybackSeconds: 60 * 60 * 3.5,
+                    totalGivenAnswerCount: 39,
+                    totalCorrectAnswerRate: 74
 
                 }}
                 logic={dialogLogic}

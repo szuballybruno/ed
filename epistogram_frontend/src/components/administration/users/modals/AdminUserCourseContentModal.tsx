@@ -147,21 +147,31 @@ export const AdminUserCourseContentModal = (props: {
 
             {/* tabs */}
             <Flex
-                direction="column"
-                background="white"
-                position="absolute"
+                background="rgba(255,255,255,0.97)"
+                direction="row"
+                justify="space-between"
+                position="sticky"
                 w="100%"
                 top="0"
-                p="10px"
+                p="20px 30px 20px 30px"
+                className="mildShadow"
+                zIndex="1000"
                 flex="1">
 
-                <Flex h="100px" direction="column">
-                    <EpistoFont fontSize={"fontHuge"}>
-                        Szubally Brúnó
-                    </EpistoFont>
-                    <EpistoFont fontSize={"fontLarge"}>
-                        Microsoft PowerPoint alapok
-                    </EpistoFont>
+                <Flex align="center">
+                    <Flex h="50px" direction="column" mr="20px">
+                        <EpistoFont fontSize={"fontLarge"} style={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            fontWeight: 600
+                        }}>
+                            Microsoft PowerPoint alapok
+                        </EpistoFont>
+                        <EpistoFont fontSize={"fontMid"}>
+                            Kiss Edina
+                        </EpistoFont>
+                    </Flex>
                 </Flex>
                 <Tabs
                     value={currentTab}
@@ -219,9 +229,6 @@ export const AdminUserCourseContentModal = (props: {
             { /* tab contents */}
             {moreInfoDialogTabs
                 .map((x, index) => <TabPanel
-                    style={{
-                        marginTop: 160
-                    }}
                     value={currentTab}
                     index={index}>
 
