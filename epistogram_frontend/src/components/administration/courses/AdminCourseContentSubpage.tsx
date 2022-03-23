@@ -1,7 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
 import { TextField } from "@mui/material";
-import { DataGridPro, GridColDef, GridRowsProp } from "@mui/x-data-grid-pro";
 import { useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
@@ -26,7 +25,7 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { AddNewItemPopper } from "./AddNewItemPopper";
 import { ChipSmall } from "./ChipSmall";
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
-import { AdminVideoStatisticsModal } from "./modals/AdminVideoStatisticsModal";
+import { AdminVideoItemModal } from "./modals/AdminVideoItemModal";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
@@ -452,8 +451,7 @@ export const AdminCourseContentSubpage = () => {
                 {/* Delete dialog */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
-                {/* video stats */}
-                <AdminVideoStatisticsModal
+                <AdminVideoItemModal
                     logic={courseItemStatisticsModalLogic} />
 
                 {/* add buttons popper */}

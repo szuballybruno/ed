@@ -21,7 +21,8 @@
  
   /* transparent colors */
   
-  --transparentIntenseBlue: rgba(69, 97, 238, 0.847);
+  --transparentIntenseBlue10: rgba(151, 201, 204, 0.4);
+  --transparentIntenseBlue85: rgba(69, 97, 238, 0.847);
   --transparentIntenseTeal: rgba(151, 201, 204, 0.7);
   /*--transparentIntenseTeal: rgba(151, 201, 204, 0.847);*/
 
@@ -29,7 +30,9 @@
 
   --transparentWhite10: rgba(255,255,255,0.1);
   --transparentWhite70: rgba(255,255,255,0.7);
+  --transparentWhite80: rgba(255,255,255,0.8);
   --transparentWhite90: rgba(255,255,255,0.9);
+  --transparentWhite95: rgba(255,255,255,0.95);
 
   /* gradients */
 

@@ -1,14 +1,13 @@
 import { useState } from "react"
-import { Switch, Route } from "react-router"
+import { Route, Switch } from "react-router"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
 import { useUserListQuery } from "../../../services/api/userApiService"
 import AdminAddUserSubpage from "./AdminAddUserSubpage"
 import AdminEditUserSubpage from "./AdminEditUserSubpage"
 import { AdminUserCourseContentSubpage } from "./AdminUserCourseContentSubpage"
-import { AdminUserDataGridSubpage } from "./dataGrids/AdminUsersDataGridSubpage"
-import { AdminUserListSubpage } from "./AdminUserListSubpage"
 import { AdminUserStatisticsSubpage } from "./AdminUserLearningOverviewSubpage"
 import { AdminUserTeacherInfoSubpage } from "./AdminUserTeacherInfoSubpage"
+import { AdminUserDataGridSubpage } from "./dataGrids/AdminUsersDataGridSubpage"
 
 export const AdminUserControl = () => {
     const usersRoute = applicationRoutes.administrationRoute.usersRoute

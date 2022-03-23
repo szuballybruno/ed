@@ -1,17 +1,14 @@
 import { Divider, Flex, Grid, Tooltip } from "@chakra-ui/react"
 import { FiberManualRecord } from "@mui/icons-material"
-import { Slider, Tab, Tabs } from "@mui/material"
+import { Slider } from "@mui/material"
 import React, { useState } from "react"
 import ReactPlayer from "react-player"
 import { EpistoFont } from "../../../controls/EpistoFont"
 import { EpistoSelect } from "../../../controls/EpistoSelect"
-import { TabPanel } from "../../../courseDetails/TabPanel"
-import { EpistoDialog, EpistoDialogPropType } from "../../../EpistoDialog"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
 import { DashboardSection } from "../../../universal/DashboardSection"
 import { VideoHotspotsChart } from "../../../universal/VideoHotspotsChart"
 import { VideoPieChart } from "../../../universal/VideoPieChart"
-import { ChipSmall } from "../ChipSmall"
 
 export const AdminVideoStatisticsModalPage = () => {
 
@@ -309,7 +306,7 @@ export const AdminVideoStatisticsModalPage = () => {
         {/* test your knowledge */}
         <DashboardSection
             title={"Mélypontok"}
-            background="var(--transparentWhite70)"
+            background="var(--transparentWhite80)"
             className="mildShadow roundBorders"
             //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
             color="black"
@@ -327,6 +324,7 @@ export const AdminVideoStatisticsModalPage = () => {
             gridGap={10}>
             <StatisticsCard
                 style={{
+                    background: "var(--transparentWhite80)",
                     paddingLeft: 20,
                     minWidth: 200
                 }}
@@ -335,6 +333,7 @@ export const AdminVideoStatisticsModalPage = () => {
                 suffix="" />
             <StatisticsCard
                 style={{
+                    background: "var(--transparentWhite80)",
                     paddingLeft: 20,
                     minWidth: 200
                 }}
@@ -343,6 +342,7 @@ export const AdminVideoStatisticsModalPage = () => {
                 suffix="db" />
             <StatisticsCard
                 style={{
+                    background: "var(--transparentWhite80)",
                     paddingLeft: 20,
                     minWidth: 200
                 }}
@@ -351,6 +351,7 @@ export const AdminVideoStatisticsModalPage = () => {
                 suffix="" />
             <StatisticsCard
                 style={{
+                    background: "var(--transparentWhite80)",
                     paddingLeft: 20,
                     minWidth: 200
                 }}
@@ -360,7 +361,7 @@ export const AdminVideoStatisticsModalPage = () => {
 
             <DashboardSection
                 title={"Megtekintési arányok"}
-                background="var(--transparentWhite70)"
+                background="var(--transparentWhite80)"
                 className="mildShadow roundBorders"
                 //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
                 color="black"
@@ -406,137 +407,4 @@ export const AdminVideoStatisticsModalPage = () => {
                 suffix="x" />
         </Grid>
     </Flex>
-}
-
-// Should be moved to modal
-export const AdminVideoStatisticsModal = (props: {
-
-} & EpistoDialogPropType) => {
-
-
-    const { ...dialogOptions } = props
-    const [currentTab, setCurrentTab] = useState(0)
-
-
-    const moreInfoDialogTabs = [
-        {
-            title: "Szerkesztés",
-            component: <Flex>
-
-            </Flex>
-        },
-        {
-            title: "Statisztika",
-            component: <AdminVideoStatisticsModalPage />
-        },
-        {
-            title: "Kérdések",
-            component: <Flex>
-
-            </Flex>
-        }
-    ]
-
-    return <EpistoDialog fullScreenX {...dialogOptions}>
-        <Flex
-            overflowY="scroll"
-            className="roundBorders"
-            flex="1"
-            flexDirection="column">
-
-            {/* tabs */}
-            <Flex
-                background="rgba(255,255,255,0.97)"
-                direction="row"
-                justify="space-between"
-                position="sticky"
-                w="100%"
-                top="0"
-                p="20px 30px 20px 30px"
-                className="mildShadow"
-                zIndex="1000"
-                flex="1">
-
-                <Flex align="center">
-                    <Flex h="50px" direction="column" mr="20px">
-                        <EpistoFont fontSize={"fontLarge"} style={{
-                            display: "flex",
-                            alignItems: "center",
-                            flexDirection: "row",
-                            fontWeight: 600
-                        }}>
-                            Új dia hozzáadása
-                            <ChipSmall text="Videó" color="var(--deepBlue)" style={{
-                                marginLeft: 15
-                            }} />
-                        </EpistoFont>
-                        <EpistoFont fontSize={"fontMid"}>
-                            Microsoft PowerPoint alapok
-                        </EpistoFont>
-                    </Flex>
-                </Flex>
-
-                <Tabs
-                    value={currentTab}
-                    onChange={(_, y) => setCurrentTab(y as number)}
-                    className="roundBorders"
-                    TabIndicatorProps={{
-                        style: {
-                            display: "none",
-                        },
-                    }}
-                    sx={{
-                        "&.MuiTabs-root": {
-                            //background: "var(--transparentIntenseBlue)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            height: 45,
-                            minHeight: 0
-                        }
-                    }}>
-
-                    {moreInfoDialogTabs
-                        .map((x, index) => {
-
-                            return <Tab
-                                sx={{
-                                    "&.MuiTab-root": {
-                                        color: "#444",
-                                        cursor: "pointer",
-                                        backgroundColor: "transparent",
-                                        padding: "6px 16px",
-                                        border: "none",
-                                        borderRadius: "5px",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        height: "41px",
-                                        minHeight: "0px"
-                                    },
-                                    "&.MuiTouchRipple-root": {
-                                        lineHeight: "0px"
-                                    },
-                                    "&.Mui-selected": {
-                                        color: "#444",
-                                        fontWeight: "bold",
-                                        background: "var(--transparentIntenseTeal)"
-                                    }
-                                }}
-                                label={x.title}
-                                key={index}
-                                id={`simple-tab-${index}`} />
-                        })}
-                </Tabs>
-            </Flex>
-
-            { /* tab contents */}
-            {moreInfoDialogTabs
-                .map((x, index) => <TabPanel
-                    value={currentTab}
-                    index={index}>
-
-                    {x.component}
-                </TabPanel>)}
-        </Flex>
-    </EpistoDialog>
 }
