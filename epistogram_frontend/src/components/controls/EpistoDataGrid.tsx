@@ -1,4 +1,5 @@
 import { DataGridPro, GridColDef } from "@mui/x-data-grid-pro"
+import { GridInitialStatePro } from "@mui/x-data-grid-pro/models/gridStatePro";
 import { ReactNode } from "react";
 
 export type GridColumnType<TRow> = Omit<GridColDef, 'field' | 'renderCell'> & {
@@ -8,14 +9,22 @@ export type GridColumnType<TRow> = Omit<GridColDef, 'field' | 'renderCell'> & {
 
 export type GridRowType<T> = {
     id: number;
-} & T
+} & T;
+
+export type InitialStateType<TSchema> = {
+    pinnedColumns?: {
+        left?: (keyof TSchema)[],
+        right?: (keyof TSchema)[]
+    }
+}
 
 export const EpistoDataGrid = <TSchema,>(props: {
     rows: GridRowType<TSchema>[],
-    columns: GridColumnType<TSchema>[]
+    columns: GridColumnType<TSchema>[],
+    initialState?: InitialStateType<TSchema>
 }) => {
 
-    const { columns, rows } = props;
+    const { columns, rows, initialState } = props;
 
     const columnsProcessed = columns
         .map(column => {
@@ -35,12 +44,7 @@ export const EpistoDataGrid = <TSchema,>(props: {
         autoHeight
         rows={rows}
         columns={columnsProcessed}
-        initialState={{
-            // pinnedColumns: {
-            //     left: ['orderIndex', 'title'],
-            //     right: ['item']
-            // }
-        }}
+        initialState={initialState as any}
         style={{
             background: "var(--transparentWhite70)"
         }} />

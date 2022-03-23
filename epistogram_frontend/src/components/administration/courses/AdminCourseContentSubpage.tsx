@@ -245,12 +245,14 @@ export const AdminCourseContentSubpage = () => {
     type GridSchema = CourseContentItemAdminDTO & {
         quickMenu: number;
         videoFile: string;
+        rowNumber: number;
     };
 
     const gridRows: GridRowType<GridSchema>[] = items
         .map((item, index) => {
             return {
                 id: index,
+                rowNumber: index,
                 ...item,
                 quickMenu: index,
                 videoFile: "file_" + item.videoId
@@ -258,6 +260,11 @@ export const AdminCourseContentSubpage = () => {
         });
 
     const gridColumns: GridColumnType<GridSchema>[] = [
+        {
+            field: 'rowNumber',
+            headerName: 'Sorszam',
+            width: 80
+        },
         {
             field: 'itemOrderIndex',
             headerName: 'Elhelyezkedés',
@@ -386,7 +393,7 @@ export const AdminCourseContentSubpage = () => {
             }
         },
         {
-            field: 'courseTitle',
+            field: 'quickMenu',
             headerName: 'Gyorshivatkozások',
             width: 150,
             renderCell: (row) => {
@@ -464,7 +471,13 @@ export const AdminCourseContentSubpage = () => {
                 {/* data grid */}
                 <EpistoDataGrid
                     columns={gridColumns}
-                    rows={gridRows} />
+                    rows={gridRows}
+                    initialState={{
+                        pinnedColumns: {
+                            left: ['rowNumber', 'itemTitle'],
+                            right: ['quickMenu']
+                        }
+                    }} />
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     </LoadingFrame >
