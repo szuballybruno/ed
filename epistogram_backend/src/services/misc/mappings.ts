@@ -75,7 +75,6 @@ import { ExamResultQuestionDTO } from "../../shared/dtos/ExamResultQuestionDTO";
 import { ExamResultsDTO } from "../../shared/dtos/ExamResultsDTO";
 import { JobTitleDTO } from "../../shared/dtos/JobTitleDTO";
 import { ModuleAdminEditDTO } from "../../shared/dtos/ModuleAdminEditDTO";
-import { ModuleAdminShortDTO } from "../../shared/dtos/ModuleAdminShortDTO";
 import { ModuleDetailedDTO } from "../../shared/dtos/ModuleDetailedDTO";
 import { ModuleShortDTO } from "../../shared/dtos/ModuleShortDTO";
 import { OrganizationDTO } from "../../shared/dtos/OrganizationDTO";
@@ -265,38 +264,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 categories: courseCategoryDTOs
             } as CourseDetailsEditDataDTO;
         });
-
-    mapperService
-        .addMap(CourseAdminContentView, CourseContentEditDataDTO, (viewAsAdmin, modules: ModuleAdminShortDTO[]) => {
-
-            return {
-                courseId: viewAsAdmin.courseId,
-                modules
-            } as CourseContentEditDataDTO;
-        });
-
-    // mapperService
-    //     .addMap(CourseAdminContentView, ModuleAdminShortDTO, (viewAsModule, items: CourseAdminItemShortDTO[]) => ({
-    //         id: viewAsModule.moduleId,
-    //         name: viewAsModule.moduleName,
-    //         orderIndex: viewAsModule.moduleOrderIndex,
-    //         code: viewAsModule.moduleCode,
-    //         items: items
-    //     }));
-
-    // mapperService
-    //     .addMap(CourseAdminContentView, CourseAdminItemShortDTO, (view, questions: CourseAdminItemQuestionDTO[]) => ({
-    //         id: view.itemId,
-    //         subTitle: view.itemSubtitle,
-    //         title: view.itemTitle,
-    //         orderIndex: view.itemOrderIndex,
-    //         descriptorCode: view.itemCode,
-    //         type: view.videoId ? "video" : "exam",
-    //         questionCount: view.itemQuestionCount,
-    //         videoLength: view.videoLength,
-    //         isFinalExam: view.itemIsFinalExam,
-    //         questions
-    //     }));
 
     mapperService
         .addMap(CourseAdminContentView, CourseContentItemAdminDTO, x => {
