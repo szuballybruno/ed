@@ -291,12 +291,9 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             return {
                 courseId: x.courseId,
-                courseTitle: x.courseTitle,
                 examId: x.examId,
                 itemCode: x.itemCode,
                 itemId: x.itemId,
-                itemIsFinalExam: x.itemIsFinalExam,
-                itemIsVideo: x.itemIsVideo,
                 itemOrderIndex: x.itemOrderIndex,
                 itemSubtitle: x.itemSubtitle,
                 itemTitle: x.itemTitle,
@@ -307,7 +304,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 videoId: x.videoId,
                 errors,
                 warnings,
-                videoLength: x.videoLength
+                videoLength: x.videoLength,
+                itemType: x.itemType
             }
         });
 

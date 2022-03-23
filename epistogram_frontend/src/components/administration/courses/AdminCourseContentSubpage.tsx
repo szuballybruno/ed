@@ -12,6 +12,8 @@ import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiSe
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
+import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseContentItemIssueDTO";
+import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
@@ -149,7 +151,7 @@ export const AdminCourseContentSubpage = () => {
     const handleDeleteCourseItemAsync = async (courseItem: CourseContentItemAdminDTO) => {
 
         // exam
-        if (!courseItem.itemIsVideo) {
+        if (courseItem.itemType === "exam") {
 
             deleteWarningDialogLogic
                 .openDialog({
@@ -226,6 +228,52 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
+    const getIssueText = (dto: CourseContentItemIssueDTO) => {
+
+        if (dto.code === "ans_miss")
+            return `Valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
+
+        if (dto.code === "corr_ans_miss")
+            return `Helyesnek megjelolt valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
+
+        if (dto.code === "questions_missing")
+            return `Kerdesek hianyoznak`;
+
+        if (dto.code === "video_too_long")
+            return `Video tul hosszu`;
+
+        return null;
+    }
+
+    const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
+
+        if (itemType === "exam")
+            return {
+                color: "var(--intenseYellow)",
+                label: "Vizsga"
+            }
+
+        if (itemType === "video")
+            return {
+                color: "var(--epistoTeal)",
+                label: "Video"
+            }
+
+        if (itemType === "pretest")
+            return {
+                color: "purple",
+                label: "Elo-vizsga"
+            }
+
+        if (itemType === "final")
+            return {
+                color: "yellow",
+                label: "Zarovizsga"
+            }
+
+        throw new Error("Unexpected type: " + itemType);
+    }
+
     type GridSchema = CourseContentItemAdminDTO & {
         quickMenu: number;
         videoFile: string;
@@ -246,7 +294,13 @@ export const AdminCourseContentSubpage = () => {
             field: 'itemOrderIndex',
             headerName: 'Elhelyezkedés',
             width: 80,
-            editable: true
+            renderCell: (row) => {
+
+                if (row.itemType === "pretest")
+                    return "-";
+
+                return row.itemOrderIndex;
+            }
         },
         {
             field: 'itemTitle',
@@ -267,28 +321,28 @@ export const AdminCourseContentSubpage = () => {
             width: 250,
             renderCell: (row) => {
 
+                if (row.itemType === "pretest")
+                    return "-";
+
                 return <EpistoSelect
                     items={modules}
                     currentKey={row.moduleId + ""}
                     onSelected={() => { }}
                     getDisplayValue={x => "" + x?.name}
                     getCompareKey={module => "" + module?.id} />
-            },
-            editable: true
+            }
         },
         {
-            field: 'itemIsVideo',
+            field: 'itemType',
             headerName: 'Típus',
-            width: 80,
+            width: 120,
             renderCell: (row) => {
 
+                const { color, label } = getItemTypeValues(row.itemType);
+
                 return <ChipSmall
-                    text={row.itemIsVideo
-                        ? "Video"
-                        : "Exam"}
-                    color={row.itemIsVideo
-                        ? "var(--epistoTeal)"
-                        : "var(--intenseYellow)"} />
+                    text={label}
+                    color={color} />
             }
         },
         {
@@ -297,9 +351,37 @@ export const AdminCourseContentSubpage = () => {
             width: 80,
             renderCell: (row) => {
 
+                if (row.itemType === "exam")
+                    return "-";
+
+                const isLengthWarning = row
+                    .warnings
+                    .any(x => x.code === "video_too_long");
+
                 return <ChipSmall
                     text={formatTime(Math.round(row.videoLength))}
-                    color={row.videoLength > 300
+                    color={isLengthWarning
+                        ? "var(--intenseOrange)"
+                        : "gray"} />
+            }
+        },
+        {
+            field: 'errors',
+            headerName: 'Hibak',
+            width: 100,
+            renderCell: (row) => {
+
+                const hasErrors = row.errors.length > 0;
+
+                return <ChipSmall
+                    text={hasErrors
+                        ? `${row.errors.length} hiba`
+                        : "Nincs hiba"}
+                    tooltip={row
+                        .errors
+                        .map(x => getIssueText(x))
+                        .join("\n")}
+                    color={hasErrors
                         ? "var(--intenseRed)"
                         : "var(--intenseGreen)"} />
             }
@@ -310,11 +392,18 @@ export const AdminCourseContentSubpage = () => {
             width: 150,
             renderCell: (params) => {
 
-                return <></>
-                // <ChipSmall
-                //     title={params.value.issueDescriptions.join()}
-                //     text={`${params.value.issueCounter} probléma`}
-                //     color={params.value.issueCounter > 0 ? "var(--intenseRed)" : "var(--intenseGreen)"} />,
+                const hasWarnings = row.warnings.length > 0;
+
+                if (!hasWarnings)
+                    return "-";
+
+                return <ChipSmall
+                    text={`${row.warnings.length} figy`}
+                    tooltip={row
+                        .warnings
+                        .map(x => getIssueText(x))
+                        .join("\n")}
+                    color={"var(--intenseOrange)"} />
             },
             resizable: true
         }, */
@@ -323,9 +412,6 @@ export const AdminCourseContentSubpage = () => {
             headerName: 'Videó fájl',
             width: 180,
             renderCell: (row) => {
-
-                if (row.videoFile)
-                    return row.videoFile;
 
                 return <EpistoButton
                     variant="outlined"
@@ -336,7 +422,7 @@ export const AdminCourseContentSubpage = () => {
             }
         },
         {
-            field: 'courseTitle',
+            field: 'quickMenu',
             headerName: 'Gyorshivatkozások',
             width: 150,
             renderCell: (row) => {
@@ -344,7 +430,7 @@ export const AdminCourseContentSubpage = () => {
                 return (
                     <Flex>
                         <EpistoButton onClick={() => {
-                            row.itemIsVideo
+                            row.itemType === "video"
                                 ? courseVideoStatisticsModalLogic.openDialog()
                                 : courseExamStatisticsModalLogic.openDialog()
                         }}>
@@ -393,12 +479,8 @@ export const AdminCourseContentSubpage = () => {
                     {
                         action: () => {
 
-                            navigate(applicationRoutes.administrationRoute.coursesRoute.editExamRoute, {
-                                courseId,
-                                examId: pretestExamId
-                            })
                         },
-                        title: "Precourse"
+                        title: "Mentes"
                     }
                 ]}>
 

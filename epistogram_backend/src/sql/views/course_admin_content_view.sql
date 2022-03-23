@@ -58,31 +58,28 @@ question_agg as
 		sq.question_count DESC
 )
 
--- SELECT * FROM question_agg
-
 SELECT 
 	casv.id course_id,
-	casv.title course_title,
 	civ.module_name,
 	civ.module_order_index,
 	civ.module_id,
 	civ.module_code,
 	civ.video_id,
 	civ.exam_id,
-	civ.item_is_video,
 	civ.item_id,
 	civ.item_order_index,
 	civ.item_title,
 	civ.item_subtitle,
-	civ.item_is_final_exam,
 	civ.item_code,
+	civ.item_type,
 	CONCAT_WS(
 		CHR(10), 
 		CASE WHEN qagg.issue_questions_missing THEN 'questions_missing' END, 
 		qagg.question_issues) errors,
 	CONCAT_WS(
 		CHR(10), 
-		CASE WHEN civ.item_is_video AND v.length_seconds > 480 THEN 'video_too_long' END) warnings,
+		CASE WHEN civ.item_type = 'video' AND v.length_seconds > 480 
+			THEN 'video_too_long' END) warnings,
 	v.length_seconds video_length
 FROM public.course_admin_short_view casv
 

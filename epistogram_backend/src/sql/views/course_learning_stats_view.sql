@@ -2,9 +2,10 @@ SELECT
 	cv.*,
 	cstv.total_spent_seconds,
 	(
-		SELECT COUNT(course_id)::integer
-		FROM public.course_item_view cisv
-		WHERE cisv.course_id = cv.id 
+		SELECT 
+			cicv.item_count
+		FROM public.course_item_count_view cicv
+		WHERE cicv.course_id = cv.id 
 	) total_course_item_count,
 	(
 		SELECT COUNT(course_id)::integer
