@@ -13,6 +13,7 @@ import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
 import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseContentItemIssueDTO";
+import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
@@ -148,7 +149,7 @@ export const AdminCourseContentSubpage = () => {
     const handleDeleteCourseItemAsync = async (courseItem: CourseContentItemAdminDTO) => {
 
         // exam
-        if (!courseItem.itemIsVideo) {
+        if (courseItem.itemType === "exam") {
 
             deleteWarningDialogLogic
                 .openDialog({
@@ -242,6 +243,35 @@ export const AdminCourseContentSubpage = () => {
         return null;
     }
 
+    const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
+
+        if (itemType === "exam")
+            return {
+                color: "var(--intenseYellow)",
+                label: "Vizsga"
+            }
+
+        if (itemType === "video")
+            return {
+                color: "var(--epistoTeal)",
+                label: "Video"
+            }
+
+        if (itemType === "pretest")
+            return {
+                color: "purple",
+                label: "Elo-vizsga"
+            }
+
+        if (itemType === "final")
+            return {
+                color: "yellow",
+                label: "Zarovizsga"
+            }
+
+        throw new Error("Unexpected type: " + itemType);
+    }
+
     type GridSchema = CourseContentItemAdminDTO & {
         quickMenu: number;
         videoFile: string;
@@ -269,7 +299,13 @@ export const AdminCourseContentSubpage = () => {
             field: 'itemOrderIndex',
             headerName: 'Elhelyezkedés',
             width: 80,
-            editable: true
+            renderCell: (row) => {
+
+                if (row.itemType === "pretest")
+                    return "-";
+
+                return row.itemOrderIndex;
+            }
         },
         {
             field: 'itemTitle',
@@ -290,28 +326,28 @@ export const AdminCourseContentSubpage = () => {
             width: 250,
             renderCell: (row) => {
 
+                if (row.itemType === "pretest")
+                    return "-";
+
                 return <EpistoSelect
                     items={modules}
                     currentKey={row.moduleId + ""}
                     onSelected={() => { }}
                     getDisplayValue={x => "" + x?.name}
                     getCompareKey={module => "" + module?.id} />
-            },
-            editable: true
+            }
         },
         {
-            field: 'itemIsVideo',
+            field: 'itemType',
             headerName: 'Típus',
-            width: 80,
+            width: 120,
             renderCell: (row) => {
 
+                const { color, label } = getItemTypeValues(row.itemType);
+
                 return <ChipSmall
-                    text={row.itemIsVideo
-                        ? "Video"
-                        : "Exam"}
-                    color={row.itemIsVideo
-                        ? "var(--epistoTeal)"
-                        : "var(--intenseYellow)"} />
+                    text={label}
+                    color={color} />
             }
         },
         {
@@ -319,6 +355,9 @@ export const AdminCourseContentSubpage = () => {
             headerName: 'Videó hossza',
             width: 80,
             renderCell: (row) => {
+
+                if (row.itemType === "exam")
+                    return "-";
 
                 const isLengthWarning = row
                     .warnings
@@ -328,13 +367,13 @@ export const AdminCourseContentSubpage = () => {
                     text={formatTime(Math.round(row.videoLength))}
                     color={isLengthWarning
                         ? "var(--intenseOrange)"
-                        : "var(--intenseGreen)"} />
+                        : "gray"} />
             }
         },
         {
             field: 'errors',
             headerName: 'Hibak',
-            width: 150,
+            width: 100,
             renderCell: (row) => {
 
                 const hasErrors = row.errors.length > 0;
@@ -361,17 +400,16 @@ export const AdminCourseContentSubpage = () => {
 
                 const hasWarnings = row.warnings.length > 0;
 
+                if (!hasWarnings)
+                    return "-";
+
                 return <ChipSmall
-                    text={hasWarnings
-                        ? `${row.warnings.length} figy`
-                        : "Nincs figy"}
+                    text={`${row.warnings.length} figy`}
                     tooltip={row
                         .warnings
                         .map(x => getIssueText(x))
                         .join("\n")}
-                    color={hasWarnings
-                        ? "var(--intenseOrange)"
-                        : "var(--intenseGreen)"} />
+                    color={"var(--intenseOrange)"} />
             },
             resizable: true
         },
@@ -380,9 +418,6 @@ export const AdminCourseContentSubpage = () => {
             headerName: 'Videó fájl',
             width: 180,
             renderCell: (row) => {
-
-                if (row.videoFile)
-                    return row.videoFile;
 
                 return <EpistoButton
                     variant="outlined"
@@ -446,12 +481,8 @@ export const AdminCourseContentSubpage = () => {
                     {
                         action: () => {
 
-                            navigate(applicationRoutes.administrationRoute.coursesRoute.editExamRoute, {
-                                courseId,
-                                examId: pretestExamId
-                            })
                         },
-                        title: "Precourse"
+                        title: "Mentes"
                     }
                 ]}>
 

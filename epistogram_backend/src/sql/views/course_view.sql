@@ -26,6 +26,7 @@ LEFT JOIN public.course_item_view first_civ
 ON first_civ.course_id = course.id
 	AND first_civ.item_order_index = 0
 	AND first_civ.module_order_index = 0 
+	AND first_civ.item_type != 'pretest'
 
 LEFT JOIN public.course_state_view csv
 ON csv.course_id = course.id 

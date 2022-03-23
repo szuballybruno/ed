@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from "typeorm";
+import { CourseItemType } from "../../shared/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,
@@ -8,9 +9,6 @@ export class CourseAdminContentView {
 
     @ViewColumn()
     courseId: number;
-
-    @ViewColumn()
-    courseTitle: string;
 
     @ViewColumn()
 	moduleName: string;
@@ -31,9 +29,6 @@ export class CourseAdminContentView {
 	examId: number;
 
     @ViewColumn()
-	itemIsVideo: boolean;
-
-    @ViewColumn()
 	itemId: number;
 
     @ViewColumn()
@@ -46,9 +41,6 @@ export class CourseAdminContentView {
 	itemSubtitle: string;
 
     @ViewColumn()
-	itemIsFinalExam: boolean;
-
-    @ViewColumn()
 	itemCode: string;
 
     @ViewColumn()
@@ -59,4 +51,7 @@ export class CourseAdminContentView {
 
     @ViewColumn()
 	videoLength: number;
+
+    @ViewColumn()
+    itemType: CourseItemType;
 }

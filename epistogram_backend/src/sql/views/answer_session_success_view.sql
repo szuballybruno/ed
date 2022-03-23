@@ -37,7 +37,7 @@ FROM
 
 	GROUP BY
 		e.id,
-		e.is_final_exam,
+		e.type,
 		ase.id,
 		u.id
 
