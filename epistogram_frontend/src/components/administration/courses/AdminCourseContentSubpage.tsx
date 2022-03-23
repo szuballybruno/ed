@@ -13,6 +13,7 @@ import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiSe
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
+import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseContentItemIssueDTO";
 import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
@@ -225,6 +226,23 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
+    const getIssueText = (dto: CourseContentItemIssueDTO) => {
+
+        if (dto.code === "ans_miss")
+            return `Valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
+
+        if (dto.code === "corr_ans_miss")
+            return `Helyesnek megjelolt valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
+
+        if (dto.code === "questions_missing")
+            return `Kerdesek hianyoznak`;
+
+        if (dto.code === "video_too_long")
+            return `Video tul hosszu`;
+
+        return null;
+    }
+
     type GridSchema = CourseContentItemAdminDTO & {
         quickMenu: number;
         videoFile: string;
@@ -296,24 +314,58 @@ export const AdminCourseContentSubpage = () => {
             width: 80,
             renderCell: (row) => {
 
+                const isLengthWarning = row
+                    .warnings
+                    .any(x => x.code === "video_too_long");
+
                 return <ChipSmall
                     text={formatTime(Math.round(row.videoLength))}
-                    color={row.videoLength > 300
-                        ? "var(--intenseRed)"
+                    color={isLengthWarning
+                        ? "var(--intenseOrange)"
                         : "var(--intenseGreen)"} />
             }
         },
         {
-            field: 'itemHasProblems',
-            headerName: 'Problémák',
+            field: 'errors',
+            headerName: 'Hibak',
             width: 150,
-            renderCell: (params) => {
+            renderCell: (row) => {
 
-                return <></>
-                // <ChipSmall
-                //     title={params.value.issueDescriptions.join()}
-                //     text={`${params.value.issueCounter} probléma`}
-                //     color={params.value.issueCounter > 0 ? "var(--intenseRed)" : "var(--intenseGreen)"} />,
+                const hasErrors = row.errors.length > 0;
+
+                return <ChipSmall
+                    text={hasErrors
+                        ? `${row.errors.length} hiba`
+                        : "Nincs hiba"}
+                    tooltip={row
+                        .errors
+                        .map(x => getIssueText(x))
+                        .join("\n")}
+                    color={hasErrors
+                        ? "var(--intenseRed)"
+                        : "var(--intenseGreen)"} />
+            },
+            resizable: true
+        },
+        {
+            field: 'warnings',
+            headerName: 'Figyelmeztetesek',
+            width: 150,
+            renderCell: (row) => {
+
+                const hasWarnings = row.warnings.length > 0;
+
+                return <ChipSmall
+                    text={hasWarnings
+                        ? `${row.warnings.length} figy`
+                        : "Nincs figy"}
+                    tooltip={row
+                        .warnings
+                        .map(x => getIssueText(x))
+                        .join("\n")}
+                    color={hasWarnings
+                        ? "var(--intenseOrange)"
+                        : "var(--intenseGreen)"} />
             },
             resizable: true
         },
