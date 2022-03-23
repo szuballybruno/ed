@@ -16,7 +16,8 @@ export const AdminSubpageHeader = (props: {
     onSave?: () => void,
     headerButtons?: ButtonType[],
     subRouteLabel?: string,
-    navigationQueryParams?: any
+    navigationQueryParams?: any,
+    isInverseBackground?: boolean
 } & FlexProps) => {
 
     const {
@@ -26,6 +27,7 @@ export const AdminSubpageHeader = (props: {
         navigationQueryParams,
         tabMenuItems,
         onSave,
+        isInverseBackground,
         ...css
     } = props;
 
@@ -67,7 +69,7 @@ export const AdminSubpageHeader = (props: {
     return <Flex
         direction={"column"}
         className="whall roundBorders"
-        background="var(--transparentWhite70)"
+        background={!isInverseBackground ? "var(--transparentWhite70)" : undefined}
         px="5px"
         position="relative">
 
@@ -75,7 +77,7 @@ export const AdminSubpageHeader = (props: {
         {(tabMenuItems || onSave) && (
             <Flex
                 className="roundBorders"
-
+                background={isInverseBackground ? "var(--transparentWhite70)" : undefined}
                 flexDirection="row"
                 alignItems="center"
                 justify={"space-between"}

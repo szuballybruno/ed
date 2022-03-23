@@ -13,6 +13,8 @@ import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { ProtectedRoute } from '../universal/ProtectedRoute';
 import { AdminOverviewTablePage } from './AdminOverviewTablePage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
+import { AdminHomeDetails } from './home/AdminHomeDetails';
+import { AdminHomeOverview } from './home/AdminHomeOverview';
 import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
 import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
 import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
@@ -29,12 +31,13 @@ export const AdminPage = () => {
     const { navigate } = useNavigation();
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
+        .add(administrationRoutes.homeRoute.overviewRoute)
         .add(administrationRoutes.usersRoute.editRoute)
         .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
         .add(administrationRoutes.myCompanyRoute)
-        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.overviewTableRoute)
+        //.addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.overviewTableRoute)
         .getArray();
 
     return <PageRootContainer>
@@ -87,6 +90,11 @@ export const AdminPage = () => {
             {/* admin subpages */}
             <Switch>
 
+                {/* administration home */}
+                {getRoute(administrationRoutes.homeRoute.overviewRoute, <AdminHomeOverview />)}
+                {getRoute(administrationRoutes.homeRoute.detailsRoute, <AdminHomeDetails />)}
+
+
                 {/* user administration */}
                 <Route path={administrationRoutes.usersRoute.route}>
 
@@ -123,11 +131,12 @@ export const AdminPage = () => {
                     <AdminStatistics />
                 </Route>
 
-                <ProtectedRoute
+                {/* Disabled temporarily */}
+                {/* <ProtectedRoute
                     exact
                     path={administrationRoutes.overviewTableRoute.route}
                     isAuthorizedToView={x => x.canAccessCourseAdministration}
-                    render={() => <AdminOverviewTablePage />} />
+                    render={() => <AdminOverviewTablePage />} /> */}
             </Switch>
         </ContentPane>
     </PageRootContainer>

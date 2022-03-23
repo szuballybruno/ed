@@ -12,7 +12,6 @@ import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiSe
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
-import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseContentItemIssueDTO";
 import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
@@ -25,6 +24,7 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { AddNewItemPopper } from "./AddNewItemPopper";
 import { ChipSmall } from "./ChipSmall";
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
+import { AdminExamItemModal } from "./modals/AdminExamItemModal";
 import { AdminVideoItemModal } from "./modals/AdminVideoItemModal";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
@@ -40,7 +40,8 @@ export const AdminCourseContentSubpage = () => {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic();
-    const courseItemStatisticsModalLogic = useEpistoDialogLogic({ defaultCloseButtonType: "top" });
+    const courseVideoStatisticsModalLogic = useEpistoDialogLogic({ defaultCloseButtonType: "top" });
+    const courseExamStatisticsModalLogic = useEpistoDialogLogic({ defaultCloseButtonType: "top" });
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false)
@@ -225,34 +226,15 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
-    const getIssueText = (dto: CourseContentItemIssueDTO) => {
-
-        if (dto.code === "ans_miss")
-            return `Valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
-
-        if (dto.code === "corr_ans_miss")
-            return `Helyesnek megjelolt valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
-
-        if (dto.code === "questions_missing")
-            return `Kerdesek hianyoznak`;
-
-        if (dto.code === "video_too_long")
-            return `Video tul hosszu`;
-
-        return null;
-    }
-
     type GridSchema = CourseContentItemAdminDTO & {
         quickMenu: number;
         videoFile: string;
-        rowNumber: number;
     };
 
     const gridRows: GridRowType<GridSchema>[] = items
         .map((item, index) => {
             return {
                 id: index,
-                rowNumber: index,
                 ...item,
                 quickMenu: index,
                 videoFile: "file_" + item.videoId
@@ -260,11 +242,6 @@ export const AdminCourseContentSubpage = () => {
         });
 
     const gridColumns: GridColumnType<GridSchema>[] = [
-        {
-            field: 'rowNumber',
-            headerName: 'Sorszam',
-            width: 80
-        },
         {
             field: 'itemOrderIndex',
             headerName: 'Elhelyezkedés',
@@ -320,61 +297,27 @@ export const AdminCourseContentSubpage = () => {
             width: 80,
             renderCell: (row) => {
 
-                const isLengthWarning = row
-                    .warnings
-                    .any(x => x.code === "video_too_long");
-
                 return <ChipSmall
                     text={formatTime(Math.round(row.videoLength))}
-                    color={isLengthWarning
-                        ? "var(--intenseOrange)"
-                        : "var(--intenseGreen)"} />
-            }
-        },
-        {
-            field: 'errors',
-            headerName: 'Hibak',
-            width: 150,
-            renderCell: (row) => {
-
-                const hasErrors = row.errors.length > 0;
-
-                return <ChipSmall
-                    text={hasErrors
-                        ? `${row.errors.length} hiba`
-                        : "Nincs hiba"}
-                    tooltip={row
-                        .errors
-                        .map(x => getIssueText(x))
-                        .join("\n")}
-                    color={hasErrors
+                    color={row.videoLength > 300
                         ? "var(--intenseRed)"
                         : "var(--intenseGreen)"} />
-            },
-            resizable: true
-        },
+            }
+        },/* 
         {
-            field: 'warnings',
-            headerName: 'Figyelmeztetesek',
+            field: 'itemHasProblems',
+            headerName: 'Problémák',
             width: 150,
-            renderCell: (row) => {
+            renderCell: (params) => {
 
-                const hasWarnings = row.warnings.length > 0;
-
-                return <ChipSmall
-                    text={hasWarnings
-                        ? `${row.warnings.length} figy`
-                        : "Nincs figy"}
-                    tooltip={row
-                        .warnings
-                        .map(x => getIssueText(x))
-                        .join("\n")}
-                    color={hasWarnings
-                        ? "var(--intenseOrange)"
-                        : "var(--intenseGreen)"} />
+                return <></>
+                // <ChipSmall
+                //     title={params.value.issueDescriptions.join()}
+                //     text={`${params.value.issueCounter} probléma`}
+                //     color={params.value.issueCounter > 0 ? "var(--intenseRed)" : "var(--intenseGreen)"} />,
             },
             resizable: true
-        },
+        }, */
         {
             field: 'videoFile',
             headerName: 'Videó fájl',
@@ -393,14 +336,18 @@ export const AdminCourseContentSubpage = () => {
             }
         },
         {
-            field: 'quickMenu',
+            field: 'courseTitle',
             headerName: 'Gyorshivatkozások',
             width: 150,
             renderCell: (row) => {
 
                 return (
                     <Flex>
-                        <EpistoButton onClick={() => { }}>
+                        <EpistoButton onClick={() => {
+                            row.itemIsVideo
+                                ? courseVideoStatisticsModalLogic.openDialog()
+                                : courseExamStatisticsModalLogic.openDialog()
+                        }}>
 
                             <Edit />
                         </EpistoButton>
@@ -414,7 +361,7 @@ export const AdminCourseContentSubpage = () => {
 
                             <Delete />
                         </EpistoButton>
-                    </Flex>
+                    </Flex >
                 )
             }
         }
@@ -459,7 +406,10 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
                 <AdminVideoItemModal
-                    logic={courseItemStatisticsModalLogic} />
+                    logic={courseVideoStatisticsModalLogic} />
+
+                <AdminExamItemModal
+                    logic={courseExamStatisticsModalLogic} />
 
                 {/* add buttons popper */}
                 <AddNewItemPopper
@@ -471,13 +421,7 @@ export const AdminCourseContentSubpage = () => {
                 {/* data grid */}
                 <EpistoDataGrid
                     columns={gridColumns}
-                    rows={gridRows}
-                    initialState={{
-                        pinnedColumns: {
-                            left: ['rowNumber', 'itemTitle'],
-                            right: ['quickMenu']
-                        }
-                    }} />
+                    rows={gridRows} />
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     </LoadingFrame >

@@ -1,11 +1,11 @@
-import { AdminPanelSettings, Assignment, Business, Equalizer, GraphicEq, GridOn, Home, People, Person, School, Search, Settings, Subscriptions, TableBar } from "@mui/icons-material";
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import { translatableTexts } from "../static/translatableTexts";
-import EventNoteIcon from '@mui/icons-material/EventNote';
+import { AdminPanelSettings, Business, Home, Person, School, Search, Settings, Subscriptions } from "@mui/icons-material";
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { getAssetUrl } from "../static/frontendHelpers";
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import { getAssetUrl } from "../static/frontendHelpers";
+import { translatableTexts } from "../static/translatableTexts";
 
 export const applicationRoutes = {
 
@@ -170,6 +170,22 @@ export const applicationRoutes = {
         route: "/administration",
         icon: <AdminPanelSettings />,
 
+        homeRoute: {
+            title: translatableTexts.routeTitles.administrationHome,
+            route: "/administration/home",
+            icon: <Home className="fontXXL" color={"secondary"} />,
+
+            overviewRoute: {
+                title: translatableTexts.routeTitles.administrationHomeOverview,
+                route: "/administration/home/overview",
+                icon: <Home className="fontXXL" color={"secondary"} />
+            },
+            detailsRoute: {
+                title: translatableTexts.routeTitles.administrationHomeDetails,
+                route: "/administration/home/details"
+            },
+        },
+
         usersRoute: {
             title: translatableTexts.routeTitles.administrationUserAdmin,
             route: "/administration/users",
@@ -303,12 +319,12 @@ export const applicationRoutes = {
             exact: true
         },
 
-        overviewTableRoute: {
+        /* overviewTableRoute: {
             title: "Áttekintés",
             route: "/administration/overview",
             icon: <GridOn className="fontXXL" color={"secondary"} />,
             exact: true
-        },
+        }, */
     },
 
     settingsRoute: {

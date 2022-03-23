@@ -22,12 +22,6 @@ export const AdminVideoItemModal = (props: {
 
     const moreInfoDialogTabs = [
         {
-            title: "Szerkesztés",
-            component: <Flex>
-
-            </Flex>
-        },
-        {
             title: "Statisztika",
             component: <AdminVideoStatisticsModalPage />
         },
