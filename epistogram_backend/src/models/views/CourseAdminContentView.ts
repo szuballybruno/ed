@@ -52,10 +52,10 @@ export class CourseAdminContentView {
 	itemCode: string;
 
     @ViewColumn()
-	itemQuestionCount: number;
+	errors: string;
 
     @ViewColumn()
-	itemHasProblems: boolean;
+	warnings: string;
 
     @ViewColumn()
 	videoLength: number;

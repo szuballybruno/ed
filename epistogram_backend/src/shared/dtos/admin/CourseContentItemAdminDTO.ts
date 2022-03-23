@@ -1,3 +1,5 @@
+import { CourseContentItemIssueDTO } from "./CourseContentItemIssueDTO";
+
 export class CourseContentItemAdminDTO {
     courseId: number;
     courseTitle: string;
@@ -14,7 +16,7 @@ export class CourseContentItemAdminDTO {
 	itemSubtitle: string;
 	itemIsFinalExam: boolean;
 	itemCode: string;
-	itemQuestionCount: number;
-	itemHasProblems: boolean;
+	errors: CourseContentItemIssueDTO[];
+	warnings: CourseContentItemIssueDTO[];
 	videoLength: number;
 }

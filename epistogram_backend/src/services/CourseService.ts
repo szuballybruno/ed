@@ -505,41 +505,41 @@ export class CourseService {
      */
     async saveCourseContentAsync(dto: CourseContentEditDataDTO) {
 
-        // save module order index 
-        await this._ormService
-            .getRepository(CourseModule)
-            .save(dto
-                .modules
-                .map(x => ({
-                    id: x.id,
-                    orderIndex: x.orderIndex
-                } as CourseModule)));
+        // // save module order index 
+        // await this._ormService
+        //     .getRepository(CourseModule)
+        //     .save(dto
+        //         .modules
+        //         .map(x => ({
+        //             id: x.id,
+        //             orderIndex: x.orderIndex
+        //         } as CourseModule)));
 
-        // save video orders
-        await this._ormService
-            .getRepository(Video)
-            .save(dto
-                .modules
-                .flatMap(x => x.items)
-                .filter(x => x.type === "video")
-                .map(x => ({
-                    id: x.id,
-                    orderIndex: x.orderIndex,
-                    moduleId: x.moduleId
-                } as Video)));
+        // // save video orders
+        // await this._ormService
+        //     .getRepository(Video)
+        //     .save(dto
+        //         .modules
+        //         .flatMap(x => x.items)
+        //         .filter(x => x.type === "video")
+        //         .map(x => ({
+        //             id: x.id,
+        //             orderIndex: x.orderIndex,
+        //             moduleId: x.moduleId
+        //         } as Video)));
 
-        // save exam orders
-        await this._ormService
-            .getRepository(Exam)
-            .save(dto
-                .modules
-                .flatMap(x => x.items)
-                .filter(x => x.type === "exam")
-                .map(x => ({
-                    id: x.id,
-                    orderIndex: x.orderIndex,
-                    moduleId: x.moduleId
-                } as Video)));
+        // // save exam orders
+        // await this._ormService
+        //     .getRepository(Exam)
+        //     .save(dto
+        //         .modules
+        //         .flatMap(x => x.items)
+        //         .filter(x => x.type === "exam")
+        //         .map(x => ({
+        //             id: x.id,
+        //             orderIndex: x.orderIndex,
+        //             moduleId: x.moduleId
+        //         } as Video)));
     }
 
     /**

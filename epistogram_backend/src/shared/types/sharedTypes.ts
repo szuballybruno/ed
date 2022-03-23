@@ -51,6 +51,8 @@ export type RoleType = "administrator" | "supervisor" | "user";
 
 export type CourseRatingQuesitonType = "rating_stars" | "range_1_10" | "free_text";
 
+export type CourseContentItemIssueCodeType = "questions_missing" | "video_too_long" | "ans_miss" | "corr_ans_miss";
+
 export const RoleIdEnum = {
     administrator: 1,
     supervisor: 2,
