@@ -17,10 +17,41 @@ import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
-import { usePaging } from '../../static/frontendHelpers';
+import { iterate, usePaging } from '../../static/frontendHelpers';
 import { useXDialogLogic, XDialog } from '../lib/XDialog/XDialog';
-import { useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
+import { Dialog } from '@mui/material';
+
+const HeavyComp = (props: { style?: CSSProperties }) => {
+
+    return <div
+        style={{
+            ...props.style
+        }}>
+
+        {iterate(50000, x => {
+
+            return <div style={{
+                background: "blue",
+                margin: "2px",
+                border: "1px solid green"
+            }}>
+                <div>
+                    hmmm
+                </div>
+                <div>
+                    hmmm2
+
+                    <div>
+                        1-hmmm-1
+                    </div>
+                </div>
+                asd {x}
+            </div>
+        })}
+    </div>
+}
 
 const HomePage = () => {
 
@@ -32,23 +63,38 @@ const HomePage = () => {
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging(activeCourses);
 
-    const logic = useXDialogLogic("asd");
+    // const logic = useXDialogLogic("asd");
+    // const muiLogic = useXDialogLogic("asd2");
 
     return <PageRootContainer>
 
-        <EpistoButton onClick={() => logic.setIsOpen(true)}>
-            open close
+        {/* <EpistoButton onClick={() => logic.setIsOpen(true)}>
+            open dialogx
+        </EpistoButton>
+
+        <EpistoButton onClick={() => muiLogic.setIsOpen(true)}>
+            open mui
         </EpistoButton>
 
         <XDialog logic={logic}>
-            <Flex
-                pos="relative"
-                width="90%"
-                height="90%"
-                bg="white">
-
-            </Flex>
+            <HeavyComp style={{ transform: "translate(-66px, 12px)" }}></HeavyComp>
         </XDialog>
+
+        <Dialog
+            open={muiLogic.isOpen}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            style={{
+                zIndex: 10000
+                //background: "var(--transparentWhite90)"
+            }}>
+
+            <EpistoButton onClick={() => muiLogic.setIsOpen(false)}>
+                close
+            </EpistoButton>
+
+            <HeavyComp style={{ transform: "translate(66px, 12px)" }}></HeavyComp>
+        </Dialog> */}
 
         <LoadingFrame
             width="100%"

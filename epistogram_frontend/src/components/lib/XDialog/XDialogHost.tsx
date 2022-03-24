@@ -22,8 +22,8 @@ export const XDialogHost = (props: {
         setForceUpdate(x => x + 1);
     }
 
-    console.log("cp: ")
-    console.log(contentPoolRef.current);
+    // console.log("cp: ")
+    // console.log(contentPoolRef.current);
 
     const mountContent = (key: string, content: ReactNode) => {
 
@@ -38,8 +38,8 @@ export const XDialogHost = (props: {
         const newItem = { content, key };
         const list = [...contentPoolRef.current, newItem];
 
-        console.log(newItem);
-        console.log(list);
+        // console.log(newItem);
+        // console.log(list);
 
         setContentPool(list);
     }
