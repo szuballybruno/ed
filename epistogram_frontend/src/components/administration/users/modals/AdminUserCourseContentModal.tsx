@@ -1,13 +1,12 @@
 import { Flex, Image } from "@chakra-ui/react"
-import { SxProps, Tab, Tabs } from "@mui/material"
-import { ReactNode, useState } from "react"
-import { DialogOptions } from "../../../../models/types"
+import { Tab, Tabs } from "@mui/material"
+import { useState } from "react"
 import { UserCourseProgressChartDTO } from "../../../../shared/dtos/UserCourseProgressChartDTO"
 import { getAssetUrl, roundNumber } from "../../../../static/frontendHelpers"
 import { translatableTexts } from "../../../../static/translatableTexts"
 import { EpistoFont } from "../../../controls/EpistoFont"
 import { TabPanel } from "../../../courseDetails/TabPanel"
-import { EpistoDialog, EpistoDialogLogicType, EpistoDialogPropType } from "../../../EpistoDialog"
+import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog"
 import { NoProgressChartYet } from "../../../home/NoProgressChartYet"
 import { UserProgressChart } from "../../../home/UserProgressChart"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
@@ -105,10 +104,11 @@ export const AdminUserCourseContentModal = (props: {
         totalVideoPlaybackSeconds: number,
         totalGivenAnswerCount: number,
         totalCorrectAnswerRate: number
-    }
-} & EpistoDialogPropType) => {
+    },
+    dialogLogic: EpistoDialogLogicType
+}) => {
 
-    const { userCourseStatsData: userStats, ...dialogOptions } = props
+    const { userCourseStatsData: userStats, dialogLogic } = props
 
     const [currentTab, setCurrentTab] = useState(0)
 
@@ -138,7 +138,7 @@ export const AdminUserCourseContentModal = (props: {
         }
     ]
 
-    return <EpistoDialog {...dialogOptions}>
+    return <EpistoDialog logic={dialogLogic}>
         <Flex
             overflowY="scroll"
             className="roundBorders"

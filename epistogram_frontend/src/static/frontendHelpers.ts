@@ -227,7 +227,7 @@ export const epochDates = (dateA: Date, dateB: Date) => {
 }
 
 export const usePaging = <T>(
-    items: T[],
+    items: T[] | number,
     onPreviousOverNavigation?: () => void,
     onNextOverNavigation?: () => void) => {
 
@@ -236,11 +236,15 @@ export const usePaging = <T>(
 
     const [currentItemIndex, setCurrentItemIndex] = useState(0);
 
-    const isLast = currentItemIndex === items.length - 1;
+    const max = isNumber(items)
+        ? items as number
+        : (items as any[]).length;
+
+    const isLast = currentItemIndex === max - 1;
     const isFirst = currentItemIndex === 0;
     const currentItem = items[currentItemIndex] as T | null;
-    const progressPercentage = items.length > 0
-        ? currentItemIndex / items.length * 100
+    const progressPercentage = max > 0
+        ? currentItemIndex / max * 100
         : 0;
 
     const next = () => {
@@ -272,7 +276,7 @@ export const usePaging = <T>(
         if (itemIndex < 0)
             throw new Error("Item index is less than 0!");
 
-        if (itemIndex > items.length - 1)
+        if (itemIndex > max - 1)
             throw new Error("Item index is more than the length of the items collection!");
 
         setCurrentItemIndex(itemIndex);
@@ -280,7 +284,7 @@ export const usePaging = <T>(
 
     const jumpToLast = () => {
 
-        setItem(items.length - 1);
+        setItem(max - 1);
     }
 
     return {

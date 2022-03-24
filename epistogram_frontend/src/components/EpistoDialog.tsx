@@ -1,9 +1,9 @@
 import { Flex } from "@chakra-ui/layout";
-import { Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, SxProps } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import { Dialog, SxProps } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { ButtonType, DialogOptions } from "../models/types";
 import { EpistoButton } from "./controls/EpistoButton";
-import { Close } from "@mui/icons-material";
 import { EpistoHeader } from "./EpistoHeader";
 
 export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
@@ -60,16 +60,14 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
 
 export type EpistoDialogLogicType = ReturnType<typeof useEpistoDialogLogic>;
 
-export type EpistoDialogPropType = {
+export const EpistoDialog = (props: {
     logic: EpistoDialogLogicType,
     fullScreenX?: boolean,
     fullScreenY?: boolean,
     buttonComponents?: ReactNode,
     children?: ReactNode,
     sx?: SxProps<any>
-}
-
-export const EpistoDialog = (props: EpistoDialogPropType) => {
+}) => {
 
     const {
         isOpen,

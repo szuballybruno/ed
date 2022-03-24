@@ -145,8 +145,6 @@ export const PractiseQuestions = () => {
     const currentCourseItemCodeWrapper = useCurrentCourseItemCode();
     const currentCourseItemCode = currentCourseItemCodeWrapper?.currentCourseItemCode;
 
-    console.log(currentCourseItemCode);
-
     const handleAnswerQuestionAsync = async (answerId: number[]) => {
 
         await answerQuestionAsync(answerId, practiseQuestion!.questionId);

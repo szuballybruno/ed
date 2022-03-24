@@ -117,8 +117,7 @@ export const AdminUserCourseContentSubpage = (props: {
                     totalCorrectAnswerRate: 74
 
                 }}
-                logic={dialogLogic}
-                fullScreenX />
+                dialogLogic={dialogLogic} />
 
             <AdminUserCoursesDataGridControl
                 handleMoreButton={

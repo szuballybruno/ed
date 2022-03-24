@@ -9,7 +9,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { SignupQuestions } from '../SignupQuestions';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { PageRootContainer } from "../PageRootContainer";
-import { SlidesDisplay } from "../universal/SlidesDisplay";
+import { EpistoPaging } from "../universal/EpistoPaging";
 import { SignupWrapper } from "./SignupWrapper";
 import { ContentPane } from '../ContentPane';
 
@@ -93,7 +93,7 @@ export const SignupPage = () => {
                 noMaxWidth
                 padding={20}>
 
-                <SlidesDisplay
+                <EpistoPaging
                     className="roundBorders largeSoftShadow"
                     alwaysRender={true}
                     width="calc(100% - 150px)"

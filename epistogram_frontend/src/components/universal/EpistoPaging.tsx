@@ -1,6 +1,6 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/react";
 
-export const SlidesDisplay = (props: FlexProps & {
+export const EpistoPaging = (props: FlexProps & {
     slides: ((isCurrent: boolean) => JSX.Element)[],
     index: number,
     alwaysRender?: boolean,
@@ -25,7 +25,9 @@ export const SlidesDisplay = (props: FlexProps & {
 
     return (
         <Flex id="slidesDisplayRoot" {...flex}>
-            {alwaysRender ? renderSlides() : renderCurrentSlide}
+            {alwaysRender
+                ? renderSlides()
+                : renderCurrentSlide}
         </Flex>
     );
 }

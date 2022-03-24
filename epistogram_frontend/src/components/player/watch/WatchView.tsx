@@ -13,7 +13,7 @@ import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoHeader } from "../../EpistoHeader";
 import { NavigateToCourseItemActionType } from "../../universal/CourseItemList";
-import { SlidesDisplay } from "../../universal/SlidesDisplay";
+import { EpistoPaging } from "../../universal/EpistoPaging";
 import { TimeoutFrame } from "../../universal/TimeoutFrame";
 import { VideoQuestionnaire } from "../../universal/VideoQuestionnaire";
 import { CourseItemSelector } from "./CourseItemSelector";
@@ -323,13 +323,13 @@ export const WatchView = (props: {
                     boxShadow: "inset -1px -2px 1px 1px rgba(0,0,0,0.10)"
                 }} />
 
-            <SlidesDisplay
+            <EpistoPaging
                 index={descCommentPaging.currentIndex}
                 slides={[
                     VideoDescription,
                     VideoContents,
                     VideoComments
-                ]}></SlidesDisplay>
+                ]}></EpistoPaging>
         </Box>
     </>
 }

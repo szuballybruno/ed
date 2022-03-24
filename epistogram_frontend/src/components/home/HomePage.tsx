@@ -18,20 +18,37 @@ import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { usePaging } from '../../static/frontendHelpers';
+import { useXDialogLogic, XDialog } from '../lib/XDialog/XDialog';
+import { useState } from 'react';
+import { EpistoButton } from '../controls/EpistoButton';
 
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
     const { navigate } = useNavigation();
 
-    console.log(pageDTO?.currentCourseProgress?.title)
-
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging(activeCourses);
 
+    const logic = useXDialogLogic("asd");
+
     return <PageRootContainer>
+
+        <EpistoButton onClick={() => logic.setIsOpen(true)}>
+            open close
+        </EpistoButton>
+
+        <XDialog logic={logic}>
+            <Flex
+                pos="relative"
+                width="90%"
+                height="90%"
+                bg="white">
+
+            </Flex>
+        </XDialog>
 
         <LoadingFrame
             width="100%"

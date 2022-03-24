@@ -26,8 +26,8 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { AddNewItemPopper } from "./AddNewItemPopper";
 import { ChipSmall } from "./ChipSmall";
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
-import { AdminExamItemModal } from "./modals/AdminExamItemModal";
-import { AdminVideoItemModal } from "./modals/AdminVideoItemModal";
+import { ExamEditDialog } from "./ExamEditDialog";
+import { VideoEditDialog } from "./VideoEditDialog";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
@@ -277,6 +277,7 @@ export const AdminCourseContentSubpage = () => {
     type GridSchema = CourseContentItemAdminDTO & {
         quickMenu: number;
         videoFile: string;
+        rowNumber: number;
     };
 
     const gridRows: GridRowType<GridSchema>[] = items
@@ -285,11 +286,17 @@ export const AdminCourseContentSubpage = () => {
                 id: index,
                 ...item,
                 quickMenu: index,
+                rowNumber: index,
                 videoFile: "file_" + item.videoId
             }
         });
 
     const gridColumns: GridColumnType<GridSchema>[] = [
+        {
+            field: 'rowNumber',
+            headerName: 'Sorszam',
+            width: 80
+        },
         {
             field: 'itemOrderIndex',
             headerName: 'Elhelyezkedés',
@@ -385,28 +392,7 @@ export const AdminCourseContentSubpage = () => {
                         ? "var(--intenseRed)"
                         : "var(--intenseGreen)"} />
             }
-        },/* 
-        {
-            field: 'itemHasProblems',
-            headerName: 'Problémák',
-            width: 150,
-            renderCell: (params) => {
-
-                const hasWarnings = row.warnings.length > 0;
-
-                if (!hasWarnings)
-                    return "-";
-
-                return <ChipSmall
-                    text={`${row.warnings.length} figy`}
-                    tooltip={row
-                        .warnings
-                        .map(x => getIssueText(x))
-                        .join("\n")}
-                    color={"var(--intenseOrange)"} />
-            },
-            resizable: true
-        }, */
+        },
         {
             field: 'videoFile',
             headerName: 'Videó fájl',
@@ -484,14 +470,10 @@ export const AdminCourseContentSubpage = () => {
                     }
                 ]}>
 
-                {/* Delete dialog */}
+                {/* dialogs */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
-
-                <AdminVideoItemModal
-                    logic={courseVideoStatisticsModalLogic} />
-
-                <AdminExamItemModal
-                    logic={courseExamStatisticsModalLogic} />
+                <VideoEditDialog logic={courseVideoStatisticsModalLogic} />
+                <ExamEditDialog logic={courseExamStatisticsModalLogic} />
 
                 {/* add buttons popper */}
                 <AddNewItemPopper
@@ -503,7 +485,13 @@ export const AdminCourseContentSubpage = () => {
                 {/* data grid */}
                 <EpistoDataGrid
                     columns={gridColumns}
-                    rows={gridRows} />
+                    rows={gridRows}
+                    initialState={{
+                        pinnedColumns: {
+                            left: ['rowNumber', 'itemTitle'],
+                            right: ['quickMenu']
+                        }
+                    }} />
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     </LoadingFrame >

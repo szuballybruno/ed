@@ -11,7 +11,7 @@ import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
-import { SlidesDisplay } from "../universal/SlidesDisplay";
+import { EpistoPaging } from "../universal/EpistoPaging";
 
 export const ShopPurchaseConfirmationDialog = (props: {
     dialogLogic: EpistoDialogLogicType,
@@ -151,7 +151,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
     return <EpistoDialog logic={dialogLogic}>
 
-        <SlidesDisplay
+        <EpistoPaging
             slides={[confirmationSlide, feedbackSlide]}
             index={paging.currentIndex}
             justify="center" />
