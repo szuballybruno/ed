@@ -8,14 +8,14 @@ import { useXDialogLogic, XDialog } from "./lib/XDialog/XDialog";
 
 export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions) => {
 
-    const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState(dialogOptions?.title ?? "");
     const [description, setDescription] = useState(dialogOptions?.description ?? "");
     const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? "bottom";
+    const xlogic = useXDialogLogic(key);
 
     const closeDialog = () => {
 
-        setIsOpen(false);
+        xlogic.setIsOpen(false);
     }
 
     const defaultButtons = defaultCloseButtonType === "bottom"
@@ -44,18 +44,18 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
                 setButtons(defaultButtons.concat(opt.buttons ?? []));
         }
 
-        setIsOpen(true);
+        xlogic.setIsOpen(true);
     }
 
     return {
-        isOpen,
+        isOpen: xlogic.isOpen,
         title,
         description,
         buttons,
         dialogOptions,
         openDialog,
         closeDialog,
-        key
+        xlogic
     }
 }
 
@@ -78,10 +78,8 @@ export const EpistoDialog = (props: {
 
     const { children, logic, buttonComponents, fullScreenX, fullScreenY } = props;
 
-    const xlogic = useXDialogLogic(logic.key);
-
     return <XDialog
-        logic={xlogic}>
+        logic={logic.xlogic}>
 
         {/* title and content */}
         <Flex

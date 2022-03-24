@@ -16,7 +16,7 @@ import './index.css';
 import './shared/logic/jsExtensions.ts'; // extensions, important
 import { MainRouting } from "./MainRouting";
 import { PreventMobileFrame } from "./components/system/PreventMobileFrame";
-import { XDialogHost } from "./components/lib/XDialog/XDialog";
+import { XDialogHost } from "./components/lib/XDialog/XDialogHost";
 
 // react query 
 const queryClient = new QueryClient();
