@@ -10,7 +10,7 @@ export const CoinRewardEventHandler = (props: {
 
     const { data } = props;
 
-    const dialogLogic = useEpistoDialogLogic({ defaultCloseButtonType: "none" });
+    const dialogLogic = useEpistoDialogLogic("reward", { defaultCloseButtonType: "none" });
     const [coinRewardAmount, setCoinRewardAmount] = useState(0);
     const [coinRewardLottie, setCoinRewardLottie] = useState("");
     const [coinRewardText, setCoinRewardText] = useState("");

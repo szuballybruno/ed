@@ -41,9 +41,9 @@ export const AdminCourseContentSubpage = () => {
     const courseId = parseInt(params.courseId);
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const deleteWarningDialogLogic = useEpistoDialogLogic();
-    const courseVideoStatisticsModalLogic = useEpistoDialogLogic({ defaultCloseButtonType: "top" });
-    const courseExamStatisticsModalLogic = useEpistoDialogLogic({ defaultCloseButtonType: "top" });
+    const deleteWarningDialogLogic = useEpistoDialogLogic("dvd");
+    const courseVideoStatisticsModalLogic = useEpistoDialogLogic("cvs", { defaultCloseButtonType: "top" });
+    const courseExamStatisticsModalLogic = useEpistoDialogLogic("aaa", { defaultCloseButtonType: "top" });
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false)

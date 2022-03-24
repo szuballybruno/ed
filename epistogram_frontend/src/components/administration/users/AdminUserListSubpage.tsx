@@ -44,7 +44,7 @@ export const AdminUserListSubpage = () => {
 
     const isAllUsersSelected = !users.some(user => !selectedUserIds.some(uid => uid === user.id));
 
-    const deleteWaningDialogLogic = useEpistoDialogLogic();
+    const deleteWaningDialogLogic = useEpistoDialogLogic("delwarn2");
 
     const handleSearch = (value: string) => {
 

@@ -1,8 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import styles from "./XDialog.module.css";
 
-type RenderFnType = () => ReactNode;
-
 type ContentPoolItemType = {
     key: string,
     content: ReactNode
@@ -24,23 +22,35 @@ export const XDialogHost = (props: {
 
     const { children } = props;
 
-    const [contentPool, setContentPool] = useState<ContentPoolItemType[]>([]);
+    const contentPoolRef = useRef<ContentPoolItemType[]>([]);
+    const [, setForceUpdate] = useState(0);
     const [currentKey, setCurrentKey] = useState<string | null>(null);
 
-    // console.log("cp: ")
-    // console.log(contentPool)
+    const setContentPool = (list: ContentPoolItemType[]) => {
+
+        contentPoolRef.current = list;
+        setForceUpdate(x => x + 1);
+    }
+
+    console.log("cp: ")
+    console.log(contentPoolRef.current);
 
     const mountContent = (key: string, content: ReactNode) => {
 
         console.log(`Mounting dialog content '${key}'`)
 
-        if (contentPool.filter(x => x.key === key).length > 0) {
+        if (contentPoolRef.current.filter(x => x.key === key).length > 0) {
 
             console.warn("Mounting dialog content with the same key multiple times! " + key);
             return;
         }
 
-        const list = [...contentPool, { content, key }];
+        const newItem = { content, key };
+        const list = [...contentPoolRef.current, newItem];
+
+        console.log(newItem);
+        console.log(list);
+
         setContentPool(list);
     }
 
@@ -48,13 +58,13 @@ export const XDialogHost = (props: {
 
         console.log(`Unmounting dialog content '${key}'`);
 
-        if (contentPool.filter(x => x.key === key).length === 0) {
+        if (contentPoolRef.current.filter(x => x.key === key).length === 0) {
 
             console.warn("Unmounting dialog content with a key that does not exist! " + key);
             return;
         }
 
-        const filtered = contentPool
+        const filtered = contentPoolRef.current
             .filter(x => x.key !== key);
 
         setContentPool(filtered);
@@ -78,7 +88,8 @@ export const XDialogHost = (props: {
     return <>
 
         <div id="dialog_host_root">
-            {contentPool
+            {contentPoolRef
+                .current
                 .map(x => {
 
                     const isVisible = currentKey === x.key;
@@ -154,7 +165,6 @@ export const XDialog = (props: {
     } = useContext(XDialogContext);
 
     const isReallyOpen = getOpenState(logic.key);
-    const ref = useRef(unmountContent);
 
     // mount / unmount from content pool
     useEffect(() => {
@@ -163,15 +173,9 @@ export const XDialog = (props: {
 
         return () => {
 
-            ref.current(logic.key);
+            unmountContent(logic.key);
         }
     }, []);
-
-    // sync ref with current unmount fn state
-    useEffect(() => {
-
-        ref.current = unmountContent;
-    }, [unmountContent]);
 
     // open close dialog based on logic
     useEffect(() => {

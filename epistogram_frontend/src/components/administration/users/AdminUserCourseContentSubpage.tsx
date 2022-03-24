@@ -27,7 +27,7 @@ export const AdminUserCourseContentSubpage = (props: {
     const { userEditData } = useEditUserData(userId);
     const { courseBriefData } = useCourseBriefData(courseId);
 
-    const dialogLogic = useEpistoDialogLogic({
+    const dialogLogic = useEpistoDialogLogic("sasd", {
         defaultCloseButtonType: "top"
     });
 

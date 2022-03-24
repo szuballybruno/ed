@@ -1,12 +1,12 @@
 import { Flex } from "@chakra-ui/layout";
 import { Close } from "@mui/icons-material";
-import { Dialog, SxProps } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { ButtonType, DialogOptions } from "../models/types";
 import { EpistoButton } from "./controls/EpistoButton";
 import { EpistoHeader } from "./EpistoHeader";
+import { useXDialogLogic, XDialog } from "./lib/XDialog/XDialog";
 
-export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
+export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState(dialogOptions?.title ?? "");
@@ -54,7 +54,8 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
         buttons,
         dialogOptions,
         openDialog,
-        closeDialog
+        closeDialog,
+        key
     }
 }
 
@@ -65,32 +66,22 @@ export const EpistoDialog = (props: {
     fullScreenX?: boolean,
     fullScreenY?: boolean,
     buttonComponents?: ReactNode,
-    children?: ReactNode,
-    sx?: SxProps<any>
+    children?: ReactNode
 }) => {
 
     const {
-        isOpen,
         title,
         description,
         buttons,
         closeDialog,
     } = props.logic;
 
-    const { children, logic, buttonComponents, fullScreenX, fullScreenY, sx } = props;
+    const { children, logic, buttonComponents, fullScreenX, fullScreenY } = props;
 
-    return <Dialog
-        open={isOpen}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        maxWidth={fullScreenX ? "xl" : undefined}
-        fullWidth={fullScreenX}
+    const xlogic = useXDialogLogic(logic.key);
 
-        sx={sx}
-        style={{
-            zIndex: 10000
-            //background: "var(--transparentWhite90)"
-        }}>
+    return <XDialog
+        logic={xlogic}>
 
         {/* title and content */}
         <Flex
@@ -152,5 +143,18 @@ export const EpistoDialog = (props: {
                 {buttonComponents}
             </Flex>
         </>}
-    </Dialog >
+    </XDialog>
 }
+
+{/* <Dialog
+        open={isOpen}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={fullScreenX ? "xl" : undefined}
+        fullWidth={fullScreenX}
+
+        sx={sx}
+        style={{
+            zIndex: 10000
+            //background: "var(--transparentWhite90)"
+        }}></Dialog> */}

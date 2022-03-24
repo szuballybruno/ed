@@ -42,11 +42,11 @@ export const CourseItemSelector = (props: {
     const { setCourseModeAsync } = useSetCourseMode();
 
     // dialog state 
-    const dialogLogic = useEpistoDialogLogic({
+    const dialogLogic = useEpistoDialogLogic("advModeChangWarnDialog", {
         defaultCloseButtonType: "top"
     });
 
-    const tempomatDialogLogic = useEpistoDialogLogic({
+    const tempomatDialogLogic = useEpistoDialogLogic("tempomat", {
         title: "A tanfolyam tempójának beállítása",
         defaultCloseButtonType: "top"
     });

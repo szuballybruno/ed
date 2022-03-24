@@ -16,7 +16,7 @@ import { WatchView } from "./WatchView";
 
 export const WatchSubpage = () => {
 
-    const warningDialogLogic = useEpistoDialogLogic();
+    const warningDialogLogic = useEpistoDialogLogic("warn3");
     const { navigateToPlayer } = useNavigation();
     const { descriptorCode } = useParams<{ descriptorCode: string }>();
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);

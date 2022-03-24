@@ -36,7 +36,7 @@ export const AdminCourseListSubpage = () => {
 
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const warnDialogLogic = useEpistoDialogLogic();
+    const warnDialogLogic = useEpistoDialogLogic("warnDialog");
 
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.coursesRoute.addRoute.route);
 

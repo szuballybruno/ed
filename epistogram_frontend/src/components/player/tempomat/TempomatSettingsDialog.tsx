@@ -33,21 +33,20 @@ export const TempomatSettingsDialog = (props: {
             showError(e);
         }
     }
+    
+    // "& .MuiDialog-container": {
+    //     justifyContent: "center",
+    //     alignItems: "center"
+    // },
+    // ".MuiPaper-root": {
+    //     width: "100%",
+    //     margin: "200px"
+
+    // }
 
     return (
         <EpistoDialog
             fullScreenX
-            sx={{
-                "& .MuiDialog-container": {
-                    justifyContent: "center",
-                    alignItems: "center"
-                },
-                ".MuiPaper-root": {
-                    width: "100%",
-                    margin: "200px"
-
-                }
-            }}
             logic={tempomatDialogLogic}>
 
             <Flex direction="column" align="center" flex="1" >

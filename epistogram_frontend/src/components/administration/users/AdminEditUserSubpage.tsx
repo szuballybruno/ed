@@ -54,9 +54,7 @@ export const AdminEditUserSubpage = (props: {
         }
     }
 
-    const deleteWaningDialogLogic = useEpistoDialogLogic();
-
-
+    const deleteWaningDialogLogic = useEpistoDialogLogic("delwarn");
 
     const showDeleteUserDialog = (user: UserEditDTO | null) => {
         if (!user)
