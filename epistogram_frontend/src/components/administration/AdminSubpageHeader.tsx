@@ -1,21 +1,14 @@
-import { Box, FlexProps } from "@chakra-ui/layout";
-import { Flex, } from "@chakra-ui/react";
+import { FlexProps } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/react";
 import { GridOn, List } from "@mui/icons-material";
-import { FormControl, FormGroup, Tab, Tabs, Switch } from "@mui/material";
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { fontWeight } from "@mui/system";
+import { FormControl, FormGroup, Switch, Tab, Tabs } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { ApplicationRoute, ButtonType } from "../../models/types";
-import { useCourseBriefData } from "../../services/api/courseApiService";
-import { useShopItemBriefData } from "../../services/api/shopApiService";
-import { useBriefUserData } from "../../services/api/userApiService";
 import { useNavigation } from "../../services/core/navigatior";
-import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
+import { useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
 
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: ApplicationRoute[],
@@ -24,8 +17,7 @@ export const AdminSubpageHeader = (props: {
     headerButtons?: ButtonType[],
     subRouteLabel?: string,
     navigationQueryParams?: any,
-    viewSwitchChecked?: boolean,
-    viewSwitchFunction?: () => void
+    isInverseBackground?: boolean
 } & FlexProps) => {
 
     const {
@@ -35,8 +27,7 @@ export const AdminSubpageHeader = (props: {
         navigationQueryParams,
         tabMenuItems,
         onSave,
-        viewSwitchChecked,
-        viewSwitchFunction,
+        isInverseBackground,
         ...css
     } = props;
 
@@ -78,7 +69,7 @@ export const AdminSubpageHeader = (props: {
     return <Flex
         direction={"column"}
         className="whall roundBorders"
-        background="var(--transparentWhite70)"
+        background={!isInverseBackground ? "var(--transparentWhite70)" : undefined}
         px="5px"
         position="relative">
 
@@ -86,7 +77,7 @@ export const AdminSubpageHeader = (props: {
         {(tabMenuItems || onSave) && (
             <Flex
                 className="roundBorders"
-
+                background={isInverseBackground ? "var(--transparentWhite70)" : undefined}
                 flexDirection="row"
                 alignItems="center"
                 justify={"space-between"}
@@ -105,7 +96,7 @@ export const AdminSubpageHeader = (props: {
                         }}
                         sx={{
                             "&.MuiTabs-root": {
-                                //background: "var(--transparentIntenseBlue)",
+                                //background: "var(--transparentIntenseBlue85)",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -166,25 +157,6 @@ export const AdminSubpageHeader = (props: {
                             {x.icon}
                             {x.title}
                         </EpistoButton>)}
-
-                    {viewSwitchFunction && <FormGroup>
-
-                        <FormControl style={{
-                            flexDirection: "row",
-                            alignItems: "center"
-                        }}>
-                            <List />
-                            <Switch
-                                checked={viewSwitchChecked}
-                                onChange={(e) => {
-                                    if (!viewSwitchFunction)
-                                        return
-
-                                    viewSwitchFunction()
-                                }} />
-                            <GridOn />
-                        </FormControl>
-                    </FormGroup>}
 
                     {/* save button */}
                     {onSave && <EpistoButton

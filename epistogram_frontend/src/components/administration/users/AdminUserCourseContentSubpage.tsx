@@ -3,7 +3,7 @@ import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useCourseBriefData } from "../../../services/api/courseApiService";
 import { useEditUserData } from "../../../services/api/userApiService";
 import { useNavigation } from "../../../services/core/navigatior";
-import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
 import { useEpistoDialogLogic } from "../../EpistoDialog";
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader"
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
@@ -27,7 +27,7 @@ export const AdminUserCourseContentSubpage = (props: {
     const { userEditData } = useEditUserData(userId);
     const { courseBriefData } = useCourseBriefData(courseId);
 
-    const dialogLogic = useEpistoDialogLogic({
+    const dialogLogic = useEpistoDialogLogic("sasd", {
         defaultCloseButtonType: "top"
     });
 
@@ -111,14 +111,13 @@ export const AdminUserCourseContentSubpage = (props: {
                             }
                         ]
                     },
-                    completedVideoCount: 0,
-                    totalVideoPlaybackSeconds: 0,
-                    totalGivenAnswerCount: 0,
-                    totalCorrectAnswerRate: 0
+                    completedVideoCount: 48,
+                    totalVideoPlaybackSeconds: 60 * 60 * 3.5,
+                    totalGivenAnswerCount: 39,
+                    totalCorrectAnswerRate: 74
 
                 }}
-                logic={dialogLogic}
-                fullScreenX />
+                dialogLogic={dialogLogic} />
 
             <AdminUserCoursesDataGridControl
                 handleMoreButton={

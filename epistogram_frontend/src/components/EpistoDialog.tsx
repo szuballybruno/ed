@@ -1,21 +1,21 @@
 import { Flex } from "@chakra-ui/layout";
-import { Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, SxProps } from "@mui/material";
+import { Close } from "@mui/icons-material";
 import React, { ReactNode, useState } from "react";
 import { ButtonType, DialogOptions } from "../models/types";
 import { EpistoButton } from "./controls/EpistoButton";
-import { Close } from "@mui/icons-material";
 import { EpistoHeader } from "./EpistoHeader";
+import { useXDialogLogic, XDialog } from "./lib/XDialog/XDialog";
 
-export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
+export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions) => {
 
-    const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState(dialogOptions?.title ?? "");
     const [description, setDescription] = useState(dialogOptions?.description ?? "");
     const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? "bottom";
+    const xlogic = useXDialogLogic(key);
 
     const closeDialog = () => {
 
-        setIsOpen(false);
+        xlogic.setIsOpen(false);
     }
 
     const defaultButtons = defaultCloseButtonType === "bottom"
@@ -44,65 +44,52 @@ export const useEpistoDialogLogic = (dialogOptions?: DialogOptions) => {
                 setButtons(defaultButtons.concat(opt.buttons ?? []));
         }
 
-        setIsOpen(true);
+        xlogic.setIsOpen(true);
     }
 
     return {
-        isOpen,
+        isOpen: xlogic.isOpen,
         title,
         description,
         buttons,
         dialogOptions,
         openDialog,
-        closeDialog
+        closeDialog,
+        xlogic
     }
 }
 
 export type EpistoDialogLogicType = ReturnType<typeof useEpistoDialogLogic>;
 
-export type EpistoDialogPropType = {
+export const EpistoDialog = (props: {
     logic: EpistoDialogLogicType,
     fullScreenX?: boolean,
     fullScreenY?: boolean,
     buttonComponents?: ReactNode,
-    children?: ReactNode,
-    sx?: SxProps<any>
-}
-
-export const EpistoDialog = (props: EpistoDialogPropType) => {
+    children?: ReactNode
+}) => {
 
     const {
-        isOpen,
         title,
         description,
         buttons,
         closeDialog,
     } = props.logic;
 
-    const { children, logic, buttonComponents, fullScreenX, fullScreenY, sx } = props;
+    const { children, logic, buttonComponents, fullScreenX, fullScreenY } = props;
 
-    return <Dialog
-        open={isOpen}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        maxWidth={fullScreenX ? "xl" : undefined}
-        fullWidth={fullScreenX}
+    return <XDialog
+        logic={logic.xlogic}>
 
-        sx={sx}
-        style={{
-            zIndex: 10000,
-            background: "var(--transparentWhite90)"
-        }}>
-
-        {/* title and content */}
+        {/* episto dialog root */}
         <Flex
-            id="dialogTitle"
+            id="episto_dialog_root"
             direction="column"
-            width="100%"
+            width={fullScreenX ? "90%" : undefined}
+            height={fullScreenY ? "90%" : undefined}
             overflow="hidden"
-            minWidth="500px"
-            height={fullScreenY ? "90vh" : undefined}
-            position="relative">
+            position="relative"
+            bg="white">
 
             {title && <EpistoHeader
                 margin="15px"
@@ -133,26 +120,26 @@ export const EpistoDialog = (props: EpistoDialogPropType) => {
                 {/* react node contnet */}
                 {children}
             </Flex>
+
+            {/* buttons */}
+            {buttons.length > 0 && <>
+                <Flex
+                    p="10px"
+                    flexDirection="row-reverse">
+
+                    {buttons
+                        .map(x => <EpistoButton
+                            variant="outlined"
+                            onClick={() => {
+
+                                x.action();
+                                closeDialog();
+                            }}>
+                            {x.title}
+                        </EpistoButton>)}
+                    {buttonComponents}
+                </Flex>
+            </>}
         </Flex>
-
-        {/* buttons */}
-        {buttons.length > 0 && <>
-            <Flex
-                p="10px"
-                flexDirection="row-reverse">
-
-                {buttons
-                    .map(x => <EpistoButton
-                        variant="outlined"
-                        onClick={() => {
-
-                            x.action();
-                            closeDialog();
-                        }}>
-                        {x.title}
-                    </EpistoButton>)}
-                {buttonComponents}
-            </Flex>
-        </>}
-    </Dialog >
+    </XDialog>
 }

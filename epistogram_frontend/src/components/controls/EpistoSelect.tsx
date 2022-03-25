@@ -6,7 +6,8 @@ const defaultKey = "___default___";
 
 export const EpistoSelect = <T,>(props: {
     items: T[],
-    selectedValue: T,
+    selectedValue?: T,
+    currentKey?: string,
     onSelected: (value: T) => void,
     getCompareKey: (item: T) => string,
     getDisplayValue?: (item: T) => string,
@@ -18,6 +19,7 @@ export const EpistoSelect = <T,>(props: {
         items,
         getCompareKey,
         selectedValue,
+        currentKey,
         onSelected,
         getDisplayValue,
         defaultValue,
@@ -32,7 +34,13 @@ export const EpistoSelect = <T,>(props: {
         onSelected(currentItem);
     }
 
-    const currentSelectedKey = selectedValue ? getCompareKey(selectedValue) : defaultKey;
+    const isSelectedSomething = selectedValue || currentKey;
+
+    const currentSelectedKey = isSelectedSomething
+        ? selectedValue
+            ? getCompareKey(selectedValue)
+            : currentKey
+        : defaultKey;
 
     return <select
         className="whall roundBorders"
@@ -48,7 +56,7 @@ export const EpistoSelect = <T,>(props: {
             pointerEvents: isDisabled ? "none" : undefined
         }}>
 
-        {!selectedValue && <option value={defaultKey}>
+        {!isSelectedSomething && <option value={defaultKey}>
             {defaultValue ?? translatableTexts.misc.selectOption}
         </option>}
 

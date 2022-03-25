@@ -1,13 +1,12 @@
 import { Flex, Image } from "@chakra-ui/react"
-import { SxProps, Tab, Tabs } from "@mui/material"
-import { ReactNode, useState } from "react"
-import { DialogOptions } from "../../../../models/types"
+import { Tab, Tabs } from "@mui/material"
+import { useState } from "react"
 import { UserCourseProgressChartDTO } from "../../../../shared/dtos/UserCourseProgressChartDTO"
 import { getAssetUrl, roundNumber } from "../../../../static/frontendHelpers"
 import { translatableTexts } from "../../../../static/translatableTexts"
 import { EpistoFont } from "../../../controls/EpistoFont"
 import { TabPanel } from "../../../courseDetails/TabPanel"
-import { EpistoDialog, EpistoDialogLogicType, EpistoDialogPropType } from "../../../EpistoDialog"
+import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog"
 import { NoProgressChartYet } from "../../../home/NoProgressChartYet"
 import { UserProgressChart } from "../../../home/UserProgressChart"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
@@ -105,10 +104,11 @@ export const AdminUserCourseContentModal = (props: {
         totalVideoPlaybackSeconds: number,
         totalGivenAnswerCount: number,
         totalCorrectAnswerRate: number
-    }
-} & EpistoDialogPropType) => {
+    },
+    dialogLogic: EpistoDialogLogicType
+}) => {
 
-    const { userCourseStatsData: userStats, ...dialogOptions } = props
+    const { userCourseStatsData: userStats, dialogLogic } = props
 
     const [currentTab, setCurrentTab] = useState(0)
 
@@ -138,7 +138,7 @@ export const AdminUserCourseContentModal = (props: {
         }
     ]
 
-    return <EpistoDialog {...dialogOptions}>
+    return <EpistoDialog logic={dialogLogic}>
         <Flex
             overflowY="scroll"
             className="roundBorders"
@@ -147,21 +147,31 @@ export const AdminUserCourseContentModal = (props: {
 
             {/* tabs */}
             <Flex
-                direction="column"
-                background="white"
-                position="absolute"
+                background="rgba(255,255,255,0.97)"
+                direction="row"
+                justify="space-between"
+                position="sticky"
                 w="100%"
                 top="0"
-                p="10px"
+                p="20px 30px 20px 30px"
+                className="mildShadow"
+                zIndex="1000"
                 flex="1">
 
-                <Flex h="100px" direction="column">
-                    <EpistoFont fontSize={"fontHuge"}>
-                        Szubally Brúnó
-                    </EpistoFont>
-                    <EpistoFont fontSize={"fontLarge"}>
-                        Microsoft PowerPoint alapok
-                    </EpistoFont>
+                <Flex align="center">
+                    <Flex h="50px" direction="column" mr="20px">
+                        <EpistoFont fontSize={"fontLarge"} style={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            fontWeight: 600
+                        }}>
+                            Microsoft PowerPoint alapok
+                        </EpistoFont>
+                        <EpistoFont fontSize={"fontMid"}>
+                            Kiss Edina
+                        </EpistoFont>
+                    </Flex>
                 </Flex>
                 <Tabs
                     value={currentTab}
@@ -174,7 +184,7 @@ export const AdminUserCourseContentModal = (props: {
                     }}
                     sx={{
                         "&.MuiTabs-root": {
-                            //background: "var(--transparentIntenseBlue)",
+                            //background: "var(--transparentIntenseBlue85)",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -219,9 +229,6 @@ export const AdminUserCourseContentModal = (props: {
             { /* tab contents */}
             {moreInfoDialogTabs
                 .map((x, index) => <TabPanel
-                    style={{
-                        marginTop: 160
-                    }}
                     value={currentTab}
                     index={index}>
 

@@ -39,6 +39,8 @@ FROM
 	LEFT JOIN public.user_course_bridge ucb
 	ON ucb.user_id = u.id
 		AND ucb.course_id = civ.course_id
+
+	WHERE civ.item_type != 'pretest'
 	
 	ORDER BY
 		user_id,

@@ -8,7 +8,7 @@ export const LagBehindNotificationEventHandler = (props: {
 
     const { data } = props;
 
-    const dialogLogic = useEpistoDialogLogic({
+    const dialogLogic = useEpistoDialogLogic("lagbehind", {
         defaultCloseButtonType: "top"
     });
 

@@ -16,6 +16,7 @@ import './index.css';
 import './shared/logic/jsExtensions.ts'; // extensions, important
 import { MainRouting } from "./MainRouting";
 import { PreventMobileFrame } from "./components/system/PreventMobileFrame";
+import { XDialogHost } from "./components/lib/XDialog/XDialogHost";
 
 // react query 
 const queryClient = new QueryClient();
@@ -67,33 +68,35 @@ ReactDOM.render(
                 <ColorModeScript initialColorMode={"light"} />
                 <ChakraProvider theme={chakraTheme}>
                     <ThemeProvider theme={muiTheme}>
-                        <PreventMobileFrame>
-                            <Switch>
+                        <XDialogHost>
+                            <PreventMobileFrame>
+                                <Switch>
 
-                                {/* under maintanence */}
-                                {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
+                                    {/* under maintanence */}
+                                    {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
 
-                                {/* under maintanence */}
-                                <Route path={applicationRoutes.underMaintanenceRoute.route} component={UnderMaintanence} />
+                                    {/* under maintanence */}
+                                    <Route path={applicationRoutes.underMaintanenceRoute.route} component={UnderMaintanence} />
 
-                                {/* app */}
-                                <Route path="/">
-                                    <AuthenticationFrame>
-                                        <ErrorDialogFrame>
-                                            <NotificationsFrame>
-                                                <EventListener >
-                                                    <MainRouting />
-                                                </EventListener>
-                                            </NotificationsFrame>
-                                        </ErrorDialogFrame>
-                                    </AuthenticationFrame>
-                                </Route>
-                            </Switch>
-                        </PreventMobileFrame>
+                                    {/* app */}
+                                    <Route path="/">
+                                        <AuthenticationFrame>
+                                            <ErrorDialogFrame>
+                                                <NotificationsFrame>
+                                                    <EventListener >
+                                                        <MainRouting />
+                                                    </EventListener>
+                                                </NotificationsFrame>
+                                            </ErrorDialogFrame>
+                                        </AuthenticationFrame>
+                                    </Route>
+                                </Switch>
+                            </PreventMobileFrame>
+                        </XDialogHost>
                     </ThemeProvider>
                 </ChakraProvider>
             </>
         </QueryClientProvider>
-    </BrowserRouter>,
+    </BrowserRouter >,
     document.getElementById('root')
 );

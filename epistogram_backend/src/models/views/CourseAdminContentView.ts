@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from "typeorm";
+import { CourseItemType } from "../../shared/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,
@@ -7,80 +8,50 @@ import { ViewColumn, ViewEntity } from "typeorm";
 export class CourseAdminContentView {
 
     @ViewColumn()
-    videoCount: number;
-
-    @ViewColumn()
-    examCount: number;
-
-    @ViewColumn()
     courseId: number;
 
     @ViewColumn()
-    videoId: number;
+	moduleName: string;
 
     @ViewColumn()
-    examId: number;
+	moduleOrderIndex: number;
 
     @ViewColumn()
-    itemIsVideo: boolean;
+	moduleId: number;
 
     @ViewColumn()
-    itemId: number;
+	moduleCode: string;
 
     @ViewColumn()
-    moduleId: number;
+	videoId: number;
 
     @ViewColumn()
-    itemOrderIndex: number;
+	examId: number;
 
     @ViewColumn()
-    itemTitle: string;
+	itemId: number;
 
     @ViewColumn()
-    itemSubtitle: string;
+	itemOrderIndex: number;
 
     @ViewColumn()
-    itemIsFinalExam: boolean;
+	itemTitle: string;
 
     @ViewColumn()
-    itemCode: string;
+	itemSubtitle: string;
 
     @ViewColumn()
-    moduleName: string;
+	itemCode: string;
 
     @ViewColumn()
-    moduleOrderIndex: number;
+	errors: string;
 
     @ViewColumn()
-    moduleCode: string;
+	warnings: string;
 
     @ViewColumn()
-    itemQuestionCount: number;
+	videoLength: number;
 
     @ViewColumn()
-    videoLength: number;
-
-    @ViewColumn()
-    questionId: number;
-    
-    @ViewColumn()
-	questionText: string;
-    
-    @ViewColumn()
-	questionShowUpSeconds: number;
-    
-    @ViewColumn()
-	answerId: number;
-    
-    @ViewColumn()
-	answerText: string;
-
-    @ViewColumn()
-	answerIsCorrect: boolean;
-
-    @ViewColumn()
-    answerCount: number;
-
-    @ViewColumn()
-    correctAnswerCount: number;
+    itemType: CourseItemType;
 }

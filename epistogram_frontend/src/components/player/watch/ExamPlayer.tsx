@@ -7,7 +7,7 @@ import { usePaging } from "../../../static/frontendHelpers";
 import { ExamGreetSlide } from "../../exam/ExamGreetSlide";
 import { ExamQuestions } from "../../exam/ExamQuestions";
 import { ExamResultsSlide } from "../../exam/ExamResultsSlide";
-import { SlidesDisplay } from "../../universal/SlidesDisplay";
+import { EpistoPaging } from "../../universal/EpistoPaging";
 
 export const ExamPlayer = (props: {
     exam: ExamPlayerDataDTO,
@@ -78,7 +78,7 @@ export const ExamPlayer = (props: {
             goToCourseRating={goToCourseRating} />
     ];
 
-    return <SlidesDisplay
+    return <EpistoPaging
         flex="1"
         slides={slides}
         index={slidesState.currentIndex} />

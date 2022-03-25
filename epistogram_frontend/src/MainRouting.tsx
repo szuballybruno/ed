@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Route, Switch } from "react-router-dom";
-import AdminPage from "./components/administration/AdminPage";
+import { AdminPage } from "./components/administration/AdminPage";
 import AvailableCoursesPage from "./components/AvailableCoursesPage";
 import CourseDetailsPage from "./components/courseDetails/CourseDetailsPage";
 import HomePage from "./components/home/HomePage";

@@ -131,13 +131,10 @@ export class CoinAcquireService {
     private acquireGenericActivityCoin = async (userId: number, activitySessionId: number) => {
 
         // check if it's not more than 3 sessions today
-        const today = trimTimeFromDate(new Date());
-
         const todaysInfo = await this._ormService
             .getRepository(UserSessionDailyView)
             .createQueryBuilder("us")
             .where('us.userId = :userId', { userId })
-            .andWhere("us.date = :today", { today })
             .getOneOrFail();
 
         if (todaysInfo.sessionCount > 3)

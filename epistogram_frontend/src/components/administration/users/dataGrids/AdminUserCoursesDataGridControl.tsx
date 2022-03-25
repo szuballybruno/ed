@@ -1,3 +1,4 @@
+import { DataGrid } from "@mui/x-data-grid";
 import { DataGridPro, GridColDef, GridRowsProp } from "@mui/x-data-grid-pro";
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../../configuration/applicationRoutes";
@@ -63,16 +64,16 @@ export const AdminUserCoursesDataGridControl = (props: {
         }
     ];
 
-    return <DataGridPro
+    return <DataGrid
         rows={rows}
         autoHeight={true}
         columns={columns}
-        initialState={{
-            pinnedColumns: {
-                left: ['thumbnailImage', 'title'],
-                right: ['moreDetails']
-            }
-        }}
+        /*  initialState={{
+             pinnedColumns: {
+                 left: ['thumbnailImage', 'title'],
+                 right: ['moreDetails']
+             }
+         }} */
         sx={{
             '& .MuiDataGrid-columnHeaderTitle': {
                 textOverflow: "clip",

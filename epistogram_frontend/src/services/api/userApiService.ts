@@ -1,4 +1,4 @@
-import { AdminPageUserDTO } from "../../shared/dtos/AdminPageUserDTO";
+import { AdminPageUserDTO } from "../../shared/dtos/admin/AdminPageUserDTO";
 import { BriefUserDataDTO } from "../../shared/dtos/BriefUserDataDTO";
 import { apiRoutes } from "../../shared/types/apiRoutes";
 import { UserEditDTO } from "../../shared/dtos/UserEditDTO";

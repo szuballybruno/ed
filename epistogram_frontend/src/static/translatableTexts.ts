@@ -197,6 +197,10 @@ export const translatableTexts = {
         administration: "Adminisztráció",
         administrationStatistics: "Statisztika",
 
+        administrationHome: "Áttekintés",
+        administrationHomeOverview: "Áttekintés",
+        administrationHomeDetails: "Részletes statisztika",
+
         administrationUserAdmin: "Felhasználók",
         administrationAddUser: "Felhasználó hozzáadása",
         administrationEditUser: "Szerkesztés",

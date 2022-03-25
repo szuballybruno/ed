@@ -18,7 +18,7 @@ import { AdminUserList } from './AdminUserList';
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { useNavigation } from '../../../services/core/navigatior';
 import { ButtonType } from '../../../models/types';
-import { AdminPageUserDTO } from '../../../shared/dtos/AdminPageUserDTO';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { Add, List } from '@mui/icons-material';
@@ -54,9 +54,7 @@ export const AdminEditUserSubpage = (props: {
         }
     }
 
-    const deleteWaningDialogLogic = useEpistoDialogLogic();
-
-
+    const deleteWaningDialogLogic = useEpistoDialogLogic("delwarn");
 
     const showDeleteUserDialog = (user: UserEditDTO | null) => {
         if (!user)

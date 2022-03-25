@@ -14,7 +14,7 @@ env:
 
 jobs:
     
-  # BUILD FRONTEND   aa   
+  # BUILD FRONTEND
   build_frontend:
     name: Build frontend
     runs-on: ubuntu-latest
@@ -26,7 +26,7 @@ jobs:
           ref: $BRANCH_NAME$
         
       - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_email: ${{ secrets.GCP_EMAIL }}
@@ -78,7 +78,7 @@ jobs:
           ref: $BRANCH_NAME$ # references the target branch
         
       - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_email: ${{ secrets.GCP_EMAIL }}
@@ -120,7 +120,7 @@ jobs:
     
     steps:  
       - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_email: ${{ secrets.GCP_EMAIL }}
@@ -147,7 +147,7 @@ jobs:
 
     steps:
       - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_email: ${{ secrets.GCP_EMAIL }}
@@ -180,7 +180,7 @@ jobs:
     steps:
     
       - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_email: ${{ secrets.GCP_EMAIL }}

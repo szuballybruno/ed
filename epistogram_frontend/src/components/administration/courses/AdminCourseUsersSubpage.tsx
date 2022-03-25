@@ -2,8 +2,8 @@ import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
 import { useUserListQuery } from "../../../services/api/userApiService"
 import { useNavigation } from "../../../services/core/navigatior"
-import { AdminPageUserDTO } from "../../../shared/dtos/AdminPageUserDTO"
-import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItemDTO"
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO"
+import { CourseAdminListItemDTO } from "../../../shared/dtos/admin/CourseAdminListItemDTO"
 import { formatTimespan } from "../../../static/frontendHelpers"
 import { EpistoButton } from "../../controls/EpistoButton"
 import { ProfileImage } from "../../ProfileImage"
@@ -107,7 +107,7 @@ export const AdminCourseUsersSubpage = (props: {
 
     return <AdminBreadcrumbsHeader>
 
-        <AdminCourseList courses={courses} navigationFunction={navigationFunction} />
+        {/* <AdminCourseList courses={[]} onCourseClick={() => { }} /> */}
 
         <AdminSubpageHeader>
             <AdminCourseUsersGrid />

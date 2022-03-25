@@ -3,45 +3,35 @@ import { Button, Slider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { ButtonType } from "../../../models/types";
+import { useCourseDetailsEditData, useCreateCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
+import { useNavigation } from "../../../services/core/navigatior";
+import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { CourseCategoryDTO } from "../../../shared/dtos/CourseCategoryDTO";
 import { CourseDetailsEditDataDTO } from "../../../shared/dtos/CourseDetailsEditDataDTO";
 import { HumanSkillBenefitDTO } from "../../../shared/dtos/HumanSkillBenefitDTO";
 import { CourseVisibilityType } from "../../../shared/types/sharedTypes";
-import { useAdminCourseList, useCourseDetailsEditData, useCreateCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { iterate } from "../../../static/frontendHelpers";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { CourseImprovementStatsRadar } from "../../universal/CourseImprovementStatsRadar";
+import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoEntry } from "../../controls/EpistoEntry";
-import { SelectImage } from "../../universal/SelectImage";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { EditSection } from "./EditSection";
-import { SimpleEditList } from "../SimpleEditList";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoSelect } from "../../controls/EpistoSelect";
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
-import { AdminCourseList } from "./AdminCourseList";
-import { useNavigation } from "../../../services/core/navigatior";
-import { ButtonType } from "../../../models/types";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { Add } from "@mui/icons-material";
-import { CourseAdminListItemDTO } from "../../../shared/dtos/CourseAdminListItemDTO";
+import { LoadingFrame } from "../../system/LoadingFrame";
+import { CourseImprovementStatsRadar } from "../../universal/CourseImprovementStatsRadar";
+import { SelectImage } from "../../universal/SelectImage";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { SimpleEditList } from "../SimpleEditList";
+import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
+import { EditSection } from "./EditSection";
 
-export const AdminCourseDetailsSubpage = (props: {
-    courses: CourseAdminListItemDTO[],
-    refetchCoursesFunction: () => void,
-    navigationFunction: (courseId: number) => void
-}) => {
-    const { courses, refetchCoursesFunction, navigationFunction } = props
+export const AdminCourseDetailsSubpage = () => {
 
+    // util
     const params = useParams<{ courseId: string }>();
     const courseId = parseInt(params.courseId);
     const showError = useShowErrorDialog();
 
-    const currentCourse = courses.find(course => course.courseId === courseId)
-
-
-    // api calls
+    // http
     const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = useCourseDetailsEditData(courseId);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseDetailsData();
     const { createCourseAsync, createCourseState } = useCreateCourse();
@@ -127,34 +117,23 @@ export const AdminCourseDetailsSubpage = (props: {
         }
     }
 
-    // TODO: create better, reusable check function
-    const checkIfCurrentCourseFromUrl = () => {
-        const found = courses.some(course => course.courseId === courseId);
+    // const handleCreateCourseAsync = async () => {
 
-        if (!found && courses[0]) {
-            navigate(applicationRoutes.administrationRoute.coursesRoute.route + "/" + courses[0].courseId + "/details")
-        }
-    }
+    //     try {
 
-    checkIfCurrentCourseFromUrl()
+    //         await createCourseAsync({
+    //             title: "Uj kurzus"
+    //         });
 
-    const handleCreateCourseAsync = async () => {
+    //         showNotification("Uj kurzus sikeresen letrehozva!");
 
-        try {
+    //         await refetchCoursesFunction();
+    //     }
+    //     catch (e) {
 
-            await createCourseAsync({
-                title: "Uj kurzus"
-            });
-
-            showNotification("Uj kurzus sikeresen letrehozva!");
-
-            await refetchCoursesFunction();
-        }
-        catch (e) {
-
-            showError(e);
-        }
-    }
+    //         showError(e);
+    //     }
+    // }
 
     // effects 
     useEffect(() => {
@@ -186,11 +165,11 @@ export const AdminCourseDetailsSubpage = (props: {
     }, [courseDetailsEditData]);
 
     const bulkEditButtons = [
-        {
-            title: "Hozzáadás",
-            icon: <Add style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
-            action: () => handleCreateCourseAsync()
-        }
+        // {
+        //     title: "Hozzáadás",
+        //     icon: <Add style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
+        //     action: () => handleCreateCourseAsync()
+        // }
     ] as ButtonType[]
 
     return <LoadingFrame
@@ -199,20 +178,8 @@ export const AdminCourseDetailsSubpage = (props: {
         direction="column"
         className="whall">
 
-        <AdminBreadcrumbsHeader
-            breadcrumbs={[
-                <BreadcrumbLink
-                    title="Kurzusok"
-                    iconComponent={applicationRoutes.administrationRoute.coursesRoute.icon}
-                    to={applicationRoutes.administrationRoute.coursesRoute.route + "/a/details"} />,
-                <BreadcrumbLink
-                    title={"" + currentCourse?.title}
-                    isCurrent />
-            ]}>
-
-            <AdminCourseList
-                courses={courses}
-                navigationFunction={navigationFunction} />
+        {/* frame */}
+        <CourseAdministartionFrame>
 
             {/* admin header */}
             <AdminSubpageHeader
@@ -494,10 +461,10 @@ export const AdminCourseDetailsSubpage = (props: {
                     onClick={() => {
 
                         /* if (showDeleteUserDialog) {
-
+    
                             showDeleteUserDialog(editDTO)
                         } else {
-
+    
                             history.goBack()
                         } */
                     }}
@@ -506,7 +473,6 @@ export const AdminCourseDetailsSubpage = (props: {
                     {translatableTexts.misc.remove}
                 </Button>
             </AdminSubpageHeader>
-        </AdminBreadcrumbsHeader>
-
+        </CourseAdministartionFrame>
     </LoadingFrame >
 }

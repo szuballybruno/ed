@@ -7,7 +7,7 @@ export const ErrorDialogFrame = (props: {
     children: ReactNode
 }) => {
 
-    const dialogLogic = useEpistoDialogLogic();
+    const dialogLogic = useEpistoDialogLogic("errordialog");
     const { children } = props;
 
     return <>

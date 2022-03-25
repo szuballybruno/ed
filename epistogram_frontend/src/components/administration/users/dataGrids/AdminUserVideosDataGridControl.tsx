@@ -1,5 +1,5 @@
 import { DataGridPro, GridColDef, GridRowsProp } from "@mui/x-data-grid-pro"
-import { ChipSmall } from "../../courses/CourseEditItemView"
+import { ChipSmall } from "../../courses/ChipSmall"
 
 export const AdminUserVideosDataGridControl = () => {
     const dummyVideos = [

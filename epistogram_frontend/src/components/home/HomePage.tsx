@@ -17,21 +17,84 @@ import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
-import { usePaging } from '../../static/frontendHelpers';
+import { iterate, usePaging } from '../../static/frontendHelpers';
+import { useXDialogLogic, XDialog } from '../lib/XDialog/XDialog';
+import { CSSProperties, useState } from 'react';
+import { EpistoButton } from '../controls/EpistoButton';
+import { Dialog } from '@mui/material';
+
+const HeavyComp = (props: { style?: CSSProperties }) => {
+
+    return <div
+        style={{
+            ...props.style
+        }}>
+
+        {iterate(50000, x => {
+
+            return <div style={{
+                background: "blue",
+                margin: "2px",
+                border: "1px solid green"
+            }}>
+                <div>
+                    hmmm
+                </div>
+                <div>
+                    hmmm2
+
+                    <div>
+                        1-hmmm-1
+                    </div>
+                </div>
+                asd {x}
+            </div>
+        })}
+    </div>
+}
 
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
     const { navigate } = useNavigation();
 
-    console.log(pageDTO?.currentCourseProgress?.title)
-
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging(activeCourses);
 
+    // const logic = useXDialogLogic("asd");
+    // const muiLogic = useXDialogLogic("asd2");
+
     return <PageRootContainer>
+
+        {/* <EpistoButton onClick={() => logic.setIsOpen(true)}>
+            open dialogx
+        </EpistoButton>
+
+        <EpistoButton onClick={() => muiLogic.setIsOpen(true)}>
+            open mui
+        </EpistoButton>
+
+        <XDialog logic={logic}>
+            <HeavyComp style={{ transform: "translate(-66px, 12px)" }}></HeavyComp>
+        </XDialog>
+
+        <Dialog
+            open={muiLogic.isOpen}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            style={{
+                zIndex: 10000
+                //background: "var(--transparentWhite90)"
+            }}>
+
+            <EpistoButton onClick={() => muiLogic.setIsOpen(false)}>
+                close
+            </EpistoButton>
+
+            <HeavyComp style={{ transform: "translate(66px, 12px)" }}></HeavyComp>
+        </Dialog> */}
 
         <LoadingFrame
             width="100%"
@@ -89,7 +152,7 @@ const HomePage = () => {
                         {/* test your knowledge */}
                         <DashboardSection
                             title={translatableTexts.homePage.practiseTitle}
-                            background="var(--transparentIntenseBlue)"
+                            background="var(--transparentIntenseBlue85)"
                             className="largeSoftShadow roundBorders"
                             //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
                             color="white"

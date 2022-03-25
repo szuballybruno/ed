@@ -59,6 +59,8 @@ export const useNavigation = () => {
         navigateToWatchPrequiz(courseId);
     }
 
+    const navigateToAdminCourseList = () => navigate(applicationRoutes.administrationRoute.coursesRoute);
+
     return {
         history,
         navigate,
@@ -70,6 +72,7 @@ export const useNavigation = () => {
         navigateToWatchPretestResults,
         navigateToCourseRating,
         navigateToCourseOverview,
-        playCourse
+        playCourse,
+        navigateToAdminCourseList
     };
 }

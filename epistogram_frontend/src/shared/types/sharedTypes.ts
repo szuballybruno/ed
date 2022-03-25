@@ -19,7 +19,9 @@ export type TaskObjectiveType = "video" | "playlist" | "course" | "exam";
 export type TaskPriorityType = "normal" | "important" | "urgent";
 export type TaskStatusType = "assigned" | "inProgress" | "submitted" | "rejected" | "completed";
 
-export type CourseItemType = "video" | "exam" | "module";
+export type ExamType = "signup" | "normal" | "pretest" | "final";
+
+export type CourseItemType = ExamType | "video" | "exam" | "module";
 
 export type CourseItemStateType = "completed" | "locked" | "current" | "available";
 
@@ -37,7 +39,6 @@ export type CoinAcquireReasonType =
 
 export type AnswerSessionType = "signup" | "normal" | "practise" | "pretest";
 
-export type ExamType = "signup" | "normal" | "pretest" | "final";
 
 export type CourseStageNameType = "prequiz" | "pretest" | "pretest_results" | "watch" | "finished";
 
@@ -50,6 +51,8 @@ export type CourseVisibilityType = "public" | "private";
 export type RoleType = "administrator" | "supervisor" | "user";
 
 export type CourseRatingQuesitonType = "rating_stars" | "range_1_10" | "free_text";
+
+export type CourseContentItemIssueCodeType = "questions_missing" | "video_too_long" | "ans_miss" | "corr_ans_miss";
 
 export const RoleIdEnum = {
     administrator: 1,
