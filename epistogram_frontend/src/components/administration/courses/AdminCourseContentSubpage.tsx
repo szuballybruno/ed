@@ -30,6 +30,7 @@ import { ChipSmall } from "./ChipSmall";
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
 import { ExamEditDialog } from "./ExamEditDialog";
 import { VideoEditDialog } from "./VideoEditDialog";
+import { useXListMutator } from "./XMutator";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
@@ -256,7 +257,7 @@ export const AdminCourseContentSubpage = () => {
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
     const [gridRows, setGridRows] = useState<RowType[]>([]);
-    // const [gridRows, setGridRows] = useState<RowType[]>([]);
+    // const [gridRowMutations, gridRowMutations] = useState<RowType[]>([]);
 
     // http
     const { courseContentAdminData, courseContentAdminDataError, courseContentAdminDataState, refreshCourseContentAdminData } = useCourseContentAdminData(courseId);
@@ -271,6 +272,34 @@ export const AdminCourseContentSubpage = () => {
 
     // computed
     const modules = courseContentAdminData?.modules ?? [];
+
+    // type ListT = {
+    //     id: number,
+    //     name: string,
+    //     car: string
+    // }
+
+    // const list: ListT[] = [
+    //     {
+    //         id: 1,
+    //         name: "asd1",
+    //         car: "bmw",
+    //     },
+    //     {
+    //         id: 2,
+    //         name: "dwdw2",
+    //         car: "merdzso"
+    //     }
+    // ]
+
+    // const { mutatedData, add, mutate, remove } = useXListMutator(list, x => x.id);
+
+    // console.log(mutatedData);
+
+    // useEffect(() => {
+
+    //     add(3, { car: "audi", name: "ben" });
+    // });
 
     // 
     // FUNCS

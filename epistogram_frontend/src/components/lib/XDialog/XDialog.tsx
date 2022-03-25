@@ -1,4 +1,5 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { XDialogContext } from "./XDialoContext";
 
 export const useXDialogLogic = (key: string) => {
@@ -26,15 +27,17 @@ export const XDialog = (props: {
         unmountContent,
         getOpenState,
         openDialog,
-        closeDialog
+        closeDialog,
+        getHostElement
     } = useContext(XDialogContext);
 
     const isReallyOpen = getOpenState(logic.key);
+    const hostElement = getHostElement(logic.key);
 
     // mount / unmount from content pool
     useEffect(() => {
 
-        mountContent(logic.key, children);
+        mountContent(logic.key);
 
         return () => {
 
@@ -63,6 +66,8 @@ export const XDialog = (props: {
             logic.setIsOpen(isReallyOpen);
     }, [isReallyOpen]);
 
-    // return something 
-    return <></>
+    if (!hostElement)
+        return <></>;
+
+    return createPortal(children, hostElement);
 }

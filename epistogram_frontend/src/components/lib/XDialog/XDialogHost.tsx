@@ -3,9 +3,9 @@ import { XDialogContext } from "./XDialoContext";
 import styles from "./XDialog.module.css";
 
 type ContentPoolItemType = {
-    key: string,
-    content: ReactNode
+    key: string
 }
+
 export const XDialogHost = (props: {
     children: ReactNode
 }) => {
@@ -22,10 +22,7 @@ export const XDialogHost = (props: {
         setForceUpdate(x => x + 1);
     }
 
-    // console.log("cp: ")
-    // console.log(contentPoolRef.current);
-
-    const mountContent = (key: string, content: ReactNode) => {
+    const mountContent = (key: string) => {
 
         console.log(`Mounting dialog content '${key}'`)
 
@@ -35,11 +32,9 @@ export const XDialogHost = (props: {
             return;
         }
 
-        const newItem = { content, key };
+        const newItem = { key };
         const list = [...contentPoolRef.current, newItem];
 
-        // console.log(newItem);
-        // console.log(list);
 
         setContentPool(list);
     }
@@ -75,6 +70,16 @@ export const XDialogHost = (props: {
         closeDialog();
     }
 
+    const getId = (key: string) => {
+
+        return `dialog_host_${key}`;
+    }
+
+    const getHostElement = (key: string): Element => {
+
+        return document.getElementById(getId(key)) as Element;
+    }
+
     return <>
 
         <div id="dialog_host_root">
@@ -85,7 +90,7 @@ export const XDialogHost = (props: {
                     const isVisible = currentKey === x.key;
 
                     return <div
-                        id={`dialog_host_${x.key}`}
+                        id={getId(x.key)}
                         style={{
                             position: "absolute",
                             width: "100vw",
@@ -106,9 +111,6 @@ export const XDialogHost = (props: {
                                 height: "100%"
                             }}
                             onClick={handleOutsideClick} />
-
-                        {/* content */}
-                        {x.content}
                     </div>
                 })}
         </div>
@@ -119,7 +121,8 @@ export const XDialogHost = (props: {
                 openDialog: (key: string) => setCurrentKey(key),
                 mountContent,
                 unmountContent,
-                getOpenState
+                getOpenState,
+                getHostElement
             }}>
 
             {children}
