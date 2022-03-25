@@ -89,7 +89,10 @@ export const EpistoDialog = (props: {
             height={fullScreenY ? "90%" : undefined}
             overflow="hidden"
             position="relative"
-            bg="white">
+            background="rgba(255,255,255,0.7)"
+            backdropFilter="blur(12px)"
+            borderRadius="7px"
+            boxShadow="0px 0px 30px 50px rgba(0,0,0,0.2)">
 
             {title && <EpistoHeader
                 margin="15px"

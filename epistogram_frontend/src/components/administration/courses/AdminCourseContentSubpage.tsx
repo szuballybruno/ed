@@ -68,26 +68,26 @@ const useGridColumnDefinitions = (
 
         if (itemType === "exam")
             return {
-                color: "var(--intenseYellow)",
+                color: "var(--deepOrange)",
                 label: "Vizsga"
             }
 
         if (itemType === "video")
             return {
-                color: "var(--epistoTeal)",
-                label: "Video"
+                color: "var(--deepBlue)",
+                label: "Videó"
             }
 
         if (itemType === "pretest")
             return {
                 color: "purple",
-                label: "Elo-vizsga"
+                label: "Szintfelmérő"
             }
 
         if (itemType === "final")
             return {
-                color: "yellow",
-                label: "Zarovizsga"
+                color: "orange",
+                label: "Záróvizsga"
             }
 
         throw new Error("Unexpected type: " + itemType);
@@ -96,10 +96,10 @@ const useGridColumnDefinitions = (
     const gridColumns: GridColumnType<RowSchema>[] = [
         {
             field: 'rowNumber',
-            headerName: 'Sorszam',
+            headerName: 'Sorszám',
             width: 80
         },
-        {
+        /* {
             field: 'itemOrderIndex',
             headerName: 'Elhelyezkedés',
             width: 80,
@@ -110,7 +110,7 @@ const useGridColumnDefinitions = (
 
                 return row.itemOrderIndex;
             }
-        },
+        }, */
         {
             field: 'itemTitle',
             headerName: 'Cím',
@@ -176,7 +176,7 @@ const useGridColumnDefinitions = (
         },
         {
             field: 'errors',
-            headerName: 'Hibak',
+            headerName: 'Hibák',
             width: 100,
             renderCell: (row) => {
 
@@ -517,7 +517,7 @@ export const AdminCourseContentSubpage = () => {
                         action: () => {
 
                         },
-                        title: "Mentes"
+                        title: "Mentés"
                     }
                 ]}>
 

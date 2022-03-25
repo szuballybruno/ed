@@ -21,9 +21,9 @@ export const AdminExamQuestionsModalPage = () => {
         }]
     }]
 
-    return <Flex p="20px">
+    return <Flex flex="1" p="20px">
         <TableContainer
-            className="roundBorders"
+            className="roundBorders largeSoftShadow"
             style={{
                 minHeight: "100%",
                 padding: "0 20px",
