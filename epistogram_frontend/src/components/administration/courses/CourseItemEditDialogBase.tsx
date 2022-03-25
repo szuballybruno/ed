@@ -29,6 +29,11 @@ export const CourseItemEditDialogBase = (props: {
     //     background: "transparent"
     // }
 
+    const setTab = (index: number) => {
+
+        paging.setItem(index);
+    }
+
     return <EpistoDialog
         logic={dialogLogic}
         fullScreenX
@@ -75,7 +80,7 @@ export const CourseItemEditDialogBase = (props: {
                 {/* tab selector */}
                 <Tabs
                     value={paging.currentIndex}
-                    onChange={(_, y) => paging.setItem(y as number)}
+                    onChange={(_, y) => setTab(y as number)}
                     className="roundBorders"
                     TabIndicatorProps={{
                         style: {

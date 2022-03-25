@@ -21,26 +21,12 @@ declare global {
     interface Date {
         addDays(days: number): Date;
     }
-
-    interface Object {
-        mapProperties(): string[];
-    }
 }
 
 export type Grouping<T> = {
     key: any,
     items: T[],
     first: T
-}
-
-Object.prototype.mapProperties = function () {
-
-    let keys: string[] = [];
-    for (const key in this) {
-        keys.push(key);
-    }
-
-    return keys;
 }
 
 Date.prototype.addDays = function (days: number) {

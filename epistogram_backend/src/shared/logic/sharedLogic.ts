@@ -35,3 +35,13 @@ export const typecheck = (obj: any, type: "function") => {
 
     return false;
 }
+
+export const getKeys = (obj: Object) => {
+
+    let keys: string[] = [];
+    for (const key in obj) {
+        keys.push(key);
+    }
+
+    return keys;
+}

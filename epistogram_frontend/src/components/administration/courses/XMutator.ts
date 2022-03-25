@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { getKeys } from "../../../shared/logic/sharedLogic";
 
 type PropertyMutation<TMutatee> = {
     name: keyof TMutatee,
@@ -69,8 +70,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(list: TMutatee[],
         const mut: Mutation<TMutatee, TKey> = {
             key,
             action: "add",
-            propertyMutators: (obj as Object)
-                .mapProperties()
+            propertyMutators: getKeys(obj as Object)
                 .map(x => ({
                     name: x,
                     value: obj[x]
@@ -94,8 +94,8 @@ export const useXListMutator = <TMutatee extends Object, TKey>(list: TMutatee[],
     }
 
     const mutatedData = list
-        .filter(item => mutations
-            .none(mut => mut.action === "delete" && mut.key === getCompareKey(item)))
+        .filter(item => !mutations
+            .some(mut => mut.action === "delete" && mut.key === getCompareKey(item)))
         .concat(mutations
             .filter(mut => mut.action === "add")
             .map(mut => createObj(mut)));
