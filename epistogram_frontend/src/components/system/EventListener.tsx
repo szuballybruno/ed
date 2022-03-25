@@ -6,7 +6,7 @@ import { LagBehindNotificationEventHandler } from "../event_handlers/LagBehindNo
 
 export type EventHandlerType = {
     eventCode: EventCodeType,
-    handlerComponent: (props: { data: any }) => JSX.Element
+    handlerComponent: (props: { data: any, key: any }) => JSX.Element
 }
 
 export const EventListener = (props: {
@@ -30,7 +30,7 @@ export const EventListener = (props: {
     return <>
 
         {handlerComponents
-            .map(x => {
+            .map((x, index) => {
 
                 const eventData = event
                     ? x.eventCode === event.type
@@ -38,7 +38,7 @@ export const EventListener = (props: {
                         : null
                     : null;
 
-                return x.handlerComponent({ data: eventData });
+                return x.handlerComponent({ data: eventData, key: index });
             })}
 
         {children}

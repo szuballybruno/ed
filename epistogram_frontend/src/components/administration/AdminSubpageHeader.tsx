@@ -108,9 +108,10 @@ export const AdminSubpageHeader = (props: {
                         onChange={(_, route: string) => handleNavigateToTab(route)}>
 
                         {tabMenuItems
-                            .map(tabRoute => {
+                            .map((tabRoute, index) => {
 
                                 return <Tab
+                                    key={index}
                                     sx={{
                                         "&.MuiTab-root": {
                                             color: "#444",
@@ -144,7 +145,8 @@ export const AdminSubpageHeader = (props: {
 
                     {/* header buttons */}
                     {headerButtons && headerButtons
-                        .map(x => <EpistoButton
+                        .map((x, index) => <EpistoButton
+                            key={index}
                             style={{
                                 color: "#555",
                                 marginRight: "10px",

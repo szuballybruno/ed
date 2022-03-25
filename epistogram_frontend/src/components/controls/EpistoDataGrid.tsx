@@ -1,5 +1,4 @@
-import { DataGridPro, GridColDef } from "@mui/x-data-grid-pro"
-import { GridInitialStatePro } from "@mui/x-data-grid-pro/models/gridStatePro";
+import { DataGridPro, GridColDef } from "@mui/x-data-grid-pro";
 import { ReactNode } from "react";
 
 export type GridColumnType<TRow> = Omit<GridColDef, 'field' | 'renderCell'> & {
@@ -21,7 +20,7 @@ export type InitialStateType<TSchema> = {
 export const EpistoDataGrid = <TSchema,>(props: {
     rows: GridRowType<TSchema>[],
     columns: GridColumnType<TSchema>[],
-    onEdit?: (newValue: GridRowType<TSchema>) => void,
+    onEdit?: (field: keyof TSchema, row: GridRowType<TSchema>) => void,
     initialState?: InitialStateType<TSchema>
 }) => {
 
@@ -40,7 +39,7 @@ export const EpistoDataGrid = <TSchema,>(props: {
             } as GridColDef;
         });
 
-    const handleEdit = (id: number, field: keyof TSchema, value: any) => {
+    const handleEdit = <TField extends keyof TSchema,>(id: number, field: TField, value: GridRowType<TSchema>[TField]) => {
 
         if (!onEdit)
             return;
@@ -51,7 +50,7 @@ export const EpistoDataGrid = <TSchema,>(props: {
         const newRow = { ...row };
         newRow[field] = value;
 
-        onEdit(newRow);
+        onEdit(field, newRow);
     }
 
     return <DataGridPro

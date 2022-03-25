@@ -85,11 +85,12 @@ export const XDialogHost = (props: {
         <div id="dialog_host_root">
             {contentPoolRef
                 .current
-                .map(x => {
+                .map((x, index) => {
 
                     const isVisible = currentKey === x.key;
 
                     return <div
+                        key={index}
                         id={getId(x.key)}
                         style={{
                             position: "absolute",

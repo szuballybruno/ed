@@ -3,10 +3,11 @@ import { LagBehindNotificationDTO } from "../../shared/dtos/LagBehindNotificatio
 import { EpistoDialog, useEpistoDialogLogic } from "../EpistoDialog";
 
 export const LagBehindNotificationEventHandler = (props: {
-    data: LagBehindNotificationDTO | null
+    data: LagBehindNotificationDTO | null,
+    key: any
 }) => {
 
-    const { data } = props;
+    const { data, key } = props;
 
     const dialogLogic = useEpistoDialogLogic("lagbehind", {
         defaultCloseButtonType: "top"
@@ -21,7 +22,9 @@ export const LagBehindNotificationEventHandler = (props: {
     }, [data]);
 
     return <>
-        <EpistoDialog logic={dialogLogic}>
+        <EpistoDialog
+            key={key}
+            logic={dialogLogic}>
 
             {data?.lagBehindPercentage}
         </EpistoDialog>

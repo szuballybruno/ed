@@ -304,7 +304,10 @@ const DesktopNavbar = (props: {
                 {mockNotifications
                     .map((x, index) => {
 
-                        return <Flex width={200} flexDirection={"column"}>
+                        return <Flex
+                            key={index}
+                            width={200}
+                            flexDirection={"column"}>
 
                             <Flex
                                 width={200}
@@ -375,9 +378,10 @@ const DesktopNavbar = (props: {
                 </EpistoButton>}
 
                 {userMenuItems
-                    .map(x => {
+                    .map((x, index) => {
 
                         return <EpistoButton
+                            key={index}
                             variant={x.color ? "colored" : undefined}
                             style={{ background: x.color }}
                             onClick={x.onClick}>

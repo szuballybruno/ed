@@ -149,16 +149,16 @@ export const AdminVideoQuestionsModalPage = () => {
             </Flex>
 
         </Flex>
-        
+
         <Flex
             direction="column"
             flex="1"
             mt="5px"
             p="0 20px 100px 20px">
 
-            <AddQuestionWithAnswersComponent isFirst />
-            <AddQuestionWithAnswersComponent />
-            <AddQuestionWithAnswersComponent />
+            <AddQuestionWithAnswersComponent key={1} isFirst />
+            <AddQuestionWithAnswersComponent key={2} />
+            <AddQuestionWithAnswersComponent key={3} />
 
             <EpistoButton
                 variant="outlined"

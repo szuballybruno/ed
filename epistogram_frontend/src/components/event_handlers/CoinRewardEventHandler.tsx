@@ -5,10 +5,11 @@ import { CoinRewardDialog } from "../CoinRewardDialog";
 import { useEpistoDialogLogic } from "../EpistoDialog";
 
 export const CoinRewardEventHandler = (props: {
-    data: EventCoinAcquireNotificationDTO | null
+    data: EventCoinAcquireNotificationDTO | null,
+    key: any
 }) => {
 
-    const { data } = props;
+    const { data, key } = props;
 
     const dialogLogic = useEpistoDialogLogic("reward", { defaultCloseButtonType: "none" });
     const [coinRewardAmount, setCoinRewardAmount] = useState(0);
@@ -43,6 +44,7 @@ export const CoinRewardEventHandler = (props: {
     }, [data]);
 
     return <CoinRewardDialog
+        key={key}
         lottiePath={coinRewardLottie}
         coinRewardAmount={coinRewardAmount}
         dialogLogic={dialogLogic}

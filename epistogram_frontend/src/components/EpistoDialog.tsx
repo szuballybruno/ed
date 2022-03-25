@@ -128,7 +128,8 @@ export const EpistoDialog = (props: {
                     flexDirection="row-reverse">
 
                     {buttons
-                        .map(x => <EpistoButton
+                        .map((x, index) => <EpistoButton
+                            key={index}
                             variant="outlined"
                             onClick={() => {
 

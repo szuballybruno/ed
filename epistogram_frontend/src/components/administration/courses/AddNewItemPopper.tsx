@@ -4,17 +4,17 @@ import { EpistoPopper } from "../../controls/EpistoPopper"
 
 export const AddNewItemPopper = (props: {
     isOpen: boolean,
-    ref: any,
+    targetElement: any,
     onClose: () => void,
     onAddItem: (type: CourseItemType) => void
 }) => {
 
-    const { isOpen, ref, onClose, onAddItem } = props;
+    const { isOpen, targetElement, onClose, onAddItem } = props;
 
     return (
         <EpistoPopper
             isOpen={isOpen}
-            target={ref}
+            target={targetElement}
             placementX="left"
             style={{
                 width: 200,

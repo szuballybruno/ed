@@ -44,14 +44,16 @@ export const PageRootContainer = (props: {
                 gridTemplateColumns="repeat(3, 1fr)"
                 auto={'fill'}>
 
-                {gradients.map((gradient) => {
-                    return <Flex
-                        padding="20px"
-                        filter="blur(8px)"
-                        background={gradient}>
+                {gradients
+                    .map((gradient, index) => {
+                        return <Flex
+                            key={index}
+                            padding="20px"
+                            filter="blur(8px)"
+                            background={gradient}>
 
-                    </Flex>
-                })}
+                        </Flex>
+                    })}
             </EpistoGrid>}
 
         {(!noBackground && backgoundImageSrc) && <Image

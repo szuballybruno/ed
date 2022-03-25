@@ -53,9 +53,11 @@ export const CourseAdministartionFrame = (params: { children?: ReactNode }) => {
             <AdminBreadcrumbsHeader
                 breadcrumbs={[
                     <BreadcrumbLink
+                        key={1}
                         title="Kurzusok"
                         iconComponent={applicationRoutes.administrationRoute.coursesRoute.icon} />,
                     currentCourse && <BreadcrumbLink
+                        key={2}
                         title={currentCourse?.title + ""}
                         isCurrent />
                 ]}>

@@ -36,9 +36,10 @@ export const AdminCourseList = (props: {
         {/* List of courses */}
         <FlexList flex={1} pb="300px" flexBasis="350px" mt="5px" className="roundBorders" background="var(--transparentWhite70)">
             {courses
-                .map(course => {
+                .map((course, index) => {
 
                     return <FlexListItem
+                        key={index}
                         onClick={() => onCourseClick(course.courseId)}
                         align="center"
                         mb="1"

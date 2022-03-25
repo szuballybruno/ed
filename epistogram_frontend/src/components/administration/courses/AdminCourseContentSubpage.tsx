@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
 import { TextField } from "@mui/material";
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useCourseContentAdminData, useSaveCourseContentData } from "../../../services/api/courseApiService";
@@ -14,7 +14,6 @@ import { showNotification, useShowErrorDialog } from "../../../services/core/not
 import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
 import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseContentItemIssueDTO";
 import { CourseModuleShortDTO } from "../../../shared/dtos/admin/CourseModuleShortDTO";
-import { ModuleShortDTO } from "../../../shared/dtos/ModuleShortDTO";
 import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
@@ -40,13 +39,17 @@ type RowSchema = CourseContentItemAdminDTO & {
     quickMenu: number;
     videoFile: string;
     rowNumber: number;
+    errorsWrapper: {
+        errors: CourseContentItemIssueDTO[]
+    };
 };
 
 type RowType = GridRowType<RowSchema>;
 
 const useGridColumnDefinitions = (
     modules: CourseModuleShortDTO[],
-    openDialog: (type: "video" | "exam") => void) => {
+    openDialog: (type: "video" | "exam") => void,
+    removeRow: (key: string) => void) => {
 
     const getIssueText = (dto: CourseContentItemIssueDTO) => {
 
@@ -176,7 +179,7 @@ const useGridColumnDefinitions = (
             }
         },
         {
-            field: 'errors',
+            field: 'errorsWrapper',
             headerName: 'Hibak',
             width: 100,
             renderCell: (row) => {
@@ -229,7 +232,7 @@ const useGridColumnDefinitions = (
                             <Equalizer />
                         </EpistoButton>
 
-                        <EpistoButton onClick={() => { }}>
+                        <EpistoButton onClick={() => removeRow(row.itemCode)}>
 
                             <Delete />
                         </EpistoButton>
@@ -256,8 +259,6 @@ export const AdminCourseContentSubpage = () => {
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
-    const [gridRows, setGridRows] = useState<RowType[]>([]);
-    // const [gridRowMutations, gridRowMutations] = useState<RowType[]>([]);
 
     // http
     const { courseContentAdminData, courseContentAdminDataError, courseContentAdminDataState, refreshCourseContentAdminData } = useCourseContentAdminData(courseId);
@@ -272,34 +273,28 @@ export const AdminCourseContentSubpage = () => {
 
     // computed
     const modules = courseContentAdminData?.modules ?? [];
+    const items = courseContentAdminData?.items ?? [];
 
-    // type ListT = {
-    //     id: number,
-    //     name: string,
-    //     car: string
-    // }
+    const preprocessedItems: RowType[] = items
+        .map((item, index) => {
+            return {
+                id: index,
+                ...item,
+                quickMenu: index,
+                rowNumber: index,
+                videoFile: "file_" + item.videoId,
+                errorsWrapper: {
+                    errors: item.errors
+                }
+            }
+        });
 
-    // const list: ListT[] = [
-    //     {
-    //         id: 1,
-    //         name: "asd1",
-    //         car: "bmw",
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "dwdw2",
-    //         car: "merdzso"
-    //     }
-    // ]
-
-    // const { mutatedData, add, mutate, remove } = useXListMutator(list, x => x.id);
-
-    // console.log(mutatedData);
-
-    // useEffect(() => {
-
-    //     add(3, { car: "audi", name: "ben" });
-    // });
+    const {
+        mutatedData: gridRows,
+        add: addRow,
+        mutate: mutateRow,
+        remove: removeRow
+    } = useXListMutator(preprocessedItems, x => x.itemCode);
 
     // 
     // FUNCS
@@ -480,44 +475,25 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
-    const mutateRow = (newValue: RowType) => {
+    const handleMutateRow = (field: keyof RowType, row: RowType) => {
 
-        const newItems = [...gridRows];
-        const rowIndex = gridRows
-            .findIndex(x => x.id === newValue.id);
-
-        newItems[rowIndex] = newValue;
-
-        setGridRows(newItems);
+        mutateRow(row.itemCode, field, row[field]);
     }
 
-    const gridColumns = useGridColumnDefinitions(modules, openDialog);
+    const handleAddRow = () => {
+
+    }
+
+    const handleRemoveRow = (key: string) => {
+
+        removeRow(key);
+    }
+
+    const gridColumns = useGridColumnDefinitions(modules, openDialog, handleRemoveRow);
 
     //
     // EFFECTS
     //
-
-    // run on first load 
-    useEffect(() => {
-
-        if (!courseContentAdminData)
-            return;
-
-        const gridRows: RowType[] = courseContentAdminData
-            .items
-            .map((item, index) => {
-                return {
-                    id: index,
-                    ...item,
-                    quickMenu: index,
-                    rowNumber: index,
-                    videoFile: "file_" + item.videoId
-                }
-            });
-
-        setGridRows(gridRows);
-
-    }, [courseContentAdminData]);
 
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseContentAdminDataState]}
@@ -558,7 +534,7 @@ export const AdminCourseContentSubpage = () => {
                 {/* add buttons popper */}
                 <AddNewItemPopper
                     isOpen={isAddButtonsPopperOpen}
-                    ref={ref?.current}
+                    targetElement={ref?.current}
                     onAddItem={() => { }}
                     onClose={() => setIsAddButtonsPopperOpen(false)} />
 
@@ -566,13 +542,40 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDataGrid
                     columns={gridColumns}
                     rows={gridRows}
-                    onEdit={mutateRow}
+                    onEdit={handleMutateRow}
                     initialState={{
                         pinnedColumns: {
                             left: ['rowNumber', 'itemTitle'],
                             right: ['quickMenu']
                         }
                     }} />
+
+                {/* <EpistoDataGrid
+                    columns={[
+                        {
+                            field: "name",
+                            editable: true
+                        },
+                        {
+                            field: "aaaa",
+                            editable: true,
+                            renderCell: () => {
+
+                                return (
+                                    <div> asdwd ad </div>
+                                );
+                            }
+                        }
+                    ]}
+                    rows={[
+                        {
+                            id: 1,
+                            name: "hello",
+                            aaaa: {
+                                hmm: <div></div>
+                            }
+                        }
+                    ]} /> */}
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     </LoadingFrame >

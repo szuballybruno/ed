@@ -97,12 +97,14 @@ export const AdminBreadcrumbsHeader = (props: {
                 </Breadcrumbs>
                 : <Breadcrumbs>
                     {currentRoute && <BreadcrumbLink
+                        key={1}
                         isCurrent={!subRoute}
                         to={currentRoute.route}
                         title={currentRoute.title}
                         iconComponent={currentRoute.icon} />}
 
                     {subRoute && <BreadcrumbLink
+                        key={2}
                         isCurrent
                         title={subRoute.title} />}
                 </Breadcrumbs>}

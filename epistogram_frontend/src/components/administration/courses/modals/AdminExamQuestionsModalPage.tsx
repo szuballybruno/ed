@@ -79,8 +79,9 @@ export const AdminExamQuestionsModalPage = () => {
                                 >
                                     {row.questionTitle}
                                 </TableCell>
-                                {row.answers.map(answer => {
+                                {row.answers.map((answer, index) => {
                                     return <TableCell
+                                        key={index}
                                         style={{
                                             color: answer.isCorrect
                                                 ? "var(--deepGreen)"

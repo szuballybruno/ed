@@ -61,9 +61,10 @@ export const EpistoSelect = <T,>(props: {
         </option>}
 
         {items
-            .map((item) => {
+            .map((item, index) => {
 
                 return <option
+                    key={index}
                     value={getCompareKey(item)}>
                     {getDisplayValue
                         ? getDisplayValue(item)

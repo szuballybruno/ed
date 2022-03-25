@@ -14,9 +14,24 @@ type Mutation<TMutatee, TKey> = {
     propertyMutators?: PropertyMutation<TMutatee>[]
 }
 
-export const useXListMutator = <TMutatee extends Object, TKey>(list: TMutatee[], getCompareKey: (obj: TMutatee) => TKey) => {
+type KeyOfType<T, V> = keyof {
+    [P in keyof T as T[P] extends V ? P : never]: any
+}
+
+export const useXListMutator = <TMutatee extends Object, TKey>(
+    list: TMutatee[],
+    getCompareKey: (obj: TMutatee) => TKey) => {
 
     const [mutations, setMutations] = useState<Mutation<TMutatee, TKey>[]>([]);
+
+    const getCompareKeyValue = (obj: TMutatee) => {
+
+        const key = getCompareKey(obj);
+        if (key === null || key === undefined)
+            throw new Error("Can't use null or undeined as object key!");
+
+        return key;
+    }
 
     const mutate = <TPropertyName extends keyof TMutatee>(key: TKey, propertyName: TPropertyName, newValue: TMutatee[TPropertyName]) => {
 
@@ -65,16 +80,23 @@ export const useXListMutator = <TMutatee extends Object, TKey>(list: TMutatee[],
         setMutations([...mutations, mut]);
     }
 
-    const add = (key: TKey, obj: Partial<TMutatee>) => {
+    const add = (obj: Partial<TMutatee>) => {
+
+        const key = getCompareKeyValue(obj as TMutatee);
 
         const mut: Mutation<TMutatee, TKey> = {
             key,
             action: "add",
-            propertyMutators: getKeys(obj as Object)
-                .map(x => ({
-                    name: x,
-                    value: obj[x]
-                } as PropertyMutation<TMutatee>))
+            propertyMutators: getKeys(obj as TMutatee)
+                .map((x): PropertyMutation<TMutatee> => {
+
+                    const newObj = {
+                        name: x,
+                        value: obj[x]
+                    };
+
+                    return newObj;
+                })
         }
 
         setMutations([...mutations, mut]);
@@ -95,7 +117,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(list: TMutatee[],
 
     const mutatedData = list
         .filter(item => !mutations
-            .some(mut => mut.action === "delete" && mut.key === getCompareKey(item)))
+            .some(mut => mut.action === "delete" && mut.key === getCompareKeyValue(item)))
         .concat(mutations
             .filter(mut => mut.action === "add")
             .map(mut => createObj(mut)));
@@ -104,9 +126,16 @@ export const useXListMutator = <TMutatee extends Object, TKey>(list: TMutatee[],
         .filter(mut => mut.action === "update")
         .forEach(mut => {
 
-            overrideProps(mutatedData
-                .single(item => getCompareKey(item) === mut.key), mut.propertyMutators!);
+            const item = mutatedData
+                .firstOrNull(item => getCompareKeyValue(item) === mut.key);
+
+            if (!item)
+                return;
+
+            overrideProps(item, mut.propertyMutators!);
         });
+
+    console.log(mutations);
 
     return {
         mutate,
