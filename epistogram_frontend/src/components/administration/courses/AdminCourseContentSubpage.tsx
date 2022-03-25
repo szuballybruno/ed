@@ -256,7 +256,7 @@ export const AdminCourseContentSubpage = () => {
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
     const [gridRows, setGridRows] = useState<RowType[]>([]);
-    // const [gridRows, setGridRows] = useState<RowType[]>([]);
+    // const [gridRowMutations, gridRowMutations] = useState<RowType[]>([]);
 
     // http
     const { courseContentAdminData, courseContentAdminDataError, courseContentAdminDataState, refreshCourseContentAdminData } = useCourseContentAdminData(courseId);

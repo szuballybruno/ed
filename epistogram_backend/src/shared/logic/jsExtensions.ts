@@ -8,6 +8,7 @@ declare global {
         orderBy(func: (item: T) => number | string | Date): Array<T>;
         groupBy(func: (item: T) => any): Grouping<T>[];
         any(func?: (item: T) => boolean): boolean;
+        none(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
         findLastIndex(func: (item: T) => boolean): number | null;
         single(func: (item: T) => boolean): T;
@@ -20,12 +21,26 @@ declare global {
     interface Date {
         addDays(days: number): Date;
     }
+
+    interface Object {
+        mapProperties(): string[];
+    }
 }
 
 export type Grouping<T> = {
     key: any,
     items: T[],
     first: T
+}
+
+Object.prototype.mapProperties = function () {
+
+    let keys: string[] = [];
+    for (const key in this) {
+        keys.push(key);
+    }
+
+    return keys;
 }
 
 Date.prototype.addDays = function (days: number) {
@@ -139,6 +154,14 @@ Array.prototype.any = function <T>(func?: (item: T) => boolean) {
         return this.some(x => true);
 
     return this.some(func);
+}
+
+Array.prototype.none = function <T>(func?: (item: T) => boolean) {
+
+    if (!func)
+        return this.length === 0;
+
+    return !this.some(func);
 }
 
 Array.prototype.remove = function <T>(func: (item: T) => boolean) {
