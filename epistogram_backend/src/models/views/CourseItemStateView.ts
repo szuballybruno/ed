@@ -1,5 +1,5 @@
 import { ViewColumn, ViewEntity } from "typeorm";
-import { CourseItemStateType, CourseModeType } from "../../shared/types/sharedTypes";
+import { CourseItemStateType, CourseItemType, CourseModeType } from "../../shared/types/sharedTypes";
 
 @ViewEntity({
     synchronize: false,
@@ -18,9 +18,6 @@ export class CourseItemStateView {
 
     @ViewColumn()
     examId: number;
-
-    @ViewColumn()
-    itemIsVideo: boolean;
 
     @ViewColumn()
     itemId: number;
@@ -42,6 +39,9 @@ export class CourseItemStateView {
 
     @ViewColumn()
     itemTitle: string;
+
+    @ViewColumn()
+    itemType: CourseItemType;
 
     @ViewColumn()
     itemSubtitle: string;

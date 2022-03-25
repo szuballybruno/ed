@@ -642,7 +642,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 orderIndex: courseItemView.itemOrderIndex,
                 state: courseItemView.state,
                 descriptorCode: courseItemView.itemCode,
-                type: courseItemView.itemIsVideo ? "video" : "exam"
+                type: courseItemView.itemType === "video" ? "video" : "exam"
             } as CourseItemDTO;
         });
 
