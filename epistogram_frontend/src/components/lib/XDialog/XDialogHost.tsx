@@ -93,7 +93,8 @@ export const XDialogHost = (props: {
                             alignItems: "center",
                             justifyContent: "center",
                             zIndex: 100,
-                            backdropFilter: "blur(2px)"
+                            backdropFilter: "blur(2px)",
+                            background: "#0000000d"
                         }}
                         className={isVisible ? styles.disp_flex : styles.disp_none}>
 

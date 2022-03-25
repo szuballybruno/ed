@@ -113,7 +113,7 @@ export const CourseItemEditDialogBase = (props: {
                                         lineHeight: "0px"
                                     },
                                     "&.Mui-selected": {
-                                        color: "#444",
+                                        color: "white", // "#444",
                                         fontWeight: "bold",
                                         background: "var(--transparentIntenseTeal)"
                                     }

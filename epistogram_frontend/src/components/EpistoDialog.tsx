@@ -81,15 +81,15 @@ export const EpistoDialog = (props: {
     return <XDialog
         logic={logic.xlogic}>
 
-        {/* title and content */}
+        {/* episto dialog root */}
         <Flex
-            id="dialogTitle"
+            id="episto_dialog_root"
             direction="column"
-            width="100%"
+            width={fullScreenX ? "90%" : undefined}
+            height={fullScreenY ? "90%" : undefined}
             overflow="hidden"
-            minWidth="500px"
-            height={fullScreenY ? "90vh" : undefined}
-            position="relative">
+            position="relative"
+            bg="white">
 
             {title && <EpistoHeader
                 margin="15px"
@@ -120,39 +120,26 @@ export const EpistoDialog = (props: {
                 {/* react node contnet */}
                 {children}
             </Flex>
+
+            {/* buttons */}
+            {buttons.length > 0 && <>
+                <Flex
+                    p="10px"
+                    flexDirection="row-reverse">
+
+                    {buttons
+                        .map(x => <EpistoButton
+                            variant="outlined"
+                            onClick={() => {
+
+                                x.action();
+                                closeDialog();
+                            }}>
+                            {x.title}
+                        </EpistoButton>)}
+                    {buttonComponents}
+                </Flex>
+            </>}
         </Flex>
-
-        {/* buttons */}
-        {buttons.length > 0 && <>
-            <Flex
-                p="10px"
-                flexDirection="row-reverse">
-
-                {buttons
-                    .map(x => <EpistoButton
-                        variant="outlined"
-                        onClick={() => {
-
-                            x.action();
-                            closeDialog();
-                        }}>
-                        {x.title}
-                    </EpistoButton>)}
-                {buttonComponents}
-            </Flex>
-        </>}
     </XDialog>
 }
-
-{/* <Dialog
-        open={isOpen}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        maxWidth={fullScreenX ? "xl" : undefined}
-        fullWidth={fullScreenX}
-
-        sx={sx}
-        style={{
-            zIndex: 10000
-            //background: "var(--transparentWhite90)"
-        }}></Dialog> */}

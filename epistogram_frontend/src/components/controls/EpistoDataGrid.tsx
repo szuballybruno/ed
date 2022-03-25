@@ -21,10 +21,11 @@ export type InitialStateType<TSchema> = {
 export const EpistoDataGrid = <TSchema,>(props: {
     rows: GridRowType<TSchema>[],
     columns: GridColumnType<TSchema>[],
+    onEdit?: (newValue: GridRowType<TSchema>) => void,
     initialState?: InitialStateType<TSchema>
 }) => {
 
-    const { columns, rows, initialState } = props;
+    const { columns, rows, onEdit, initialState } = props;
 
     const columnsProcessed = columns
         .map(column => {
@@ -39,12 +40,29 @@ export const EpistoDataGrid = <TSchema,>(props: {
             } as GridColDef;
         });
 
+    const handleEdit = (id: number, field: keyof TSchema, value: any) => {
+
+        if (!onEdit)
+            return;
+
+        const row = rows
+            .single(row => row.id === id);
+
+        const newRow = { ...row };
+        newRow[field] = value;
+
+        onEdit(newRow);
+    }
+
     return <DataGridPro
         className="fontExtraSmall"
         autoHeight
         rows={rows}
         columns={columnsProcessed}
         initialState={initialState as any}
+        onCellEditCommit={onEdit
+            ? x => handleEdit(x.id as any, x.field as any as keyof TSchema, x.value as any)
+            : undefined}
         style={{
             background: "var(--transparentWhite70)"
         }} />

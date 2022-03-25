@@ -14,11 +14,11 @@ export const ExamEditDialog = (props: {
         logic={logic}
         subpages={[
             {
-                content: () => <></>, //<AdminExamQuestionsModalPage />,
+                content: () => <AdminExamQuestionsModalPage />,
                 title: "Kérdések",
             },
             {
-                content: () => <></>, //<AdminVideoStatisticsModalPage />,
+                content: () => <AdminVideoStatisticsModalPage />,
                 title: "Statisztika",
             }
         ]} />
