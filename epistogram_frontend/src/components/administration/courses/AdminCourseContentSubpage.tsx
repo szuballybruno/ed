@@ -232,11 +232,20 @@ const useGridColumnDefinitions = (
                             <Equalizer />
                         </EpistoButton>
 
-                        <EpistoButton onClick={() => removeRow(row.itemCode)}>
+                        <button
+                            onClick={(e) => {
+                             
+                                e.stopPropagation();    
+                                removeRow(row.itemCode);
+                            }}>
+                            D
+                        </button>
+
+                        {/* <EpistoButton onClick={() => removeRow(row.itemCode)}>
 
                             <Delete />
-                        </EpistoButton>
-                    </Flex >
+                        </EpistoButton> */}
+                    </Flex>
                 )
             }
         }
@@ -549,33 +558,6 @@ export const AdminCourseContentSubpage = () => {
                             right: ['quickMenu']
                         }
                     }} />
-
-                {/* <EpistoDataGrid
-                    columns={[
-                        {
-                            field: "name",
-                            editable: true
-                        },
-                        {
-                            field: "aaaa",
-                            editable: true,
-                            renderCell: () => {
-
-                                return (
-                                    <div> asdwd ad </div>
-                                );
-                            }
-                        }
-                    ]}
-                    rows={[
-                        {
-                            id: 1,
-                            name: "hello",
-                            aaaa: {
-                                hmm: <div></div>
-                            }
-                        }
-                    ]} /> */}
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     </LoadingFrame >
