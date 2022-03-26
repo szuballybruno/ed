@@ -1,16 +1,12 @@
-import { Flex } from '@chakra-ui/react';
 import ReactECharts, { EChartsOption } from 'echarts-for-react';
 import React from "react";
-import wrap from 'word-wrap';
-import { PersonalityChartDataDTO } from '../../shared/dtos/PersonalityChartDataDTO';
-import { translatableTexts } from '../../static/translatableTexts';
 
 export const VideoPieChart = () => {
 
-    const averageGraphColor = "#ffa565";
+    /* const averageGraphColor = "#ffa565";
     const userGraphColor = "#97deef";
     const gridColor = "#969fb7";
-    const shadowColor = "rgba(0, 0, 0, .4)";
+    const shadowColor = "rgba(0, 0, 0, .4)"; */
 
     const options = {
         visualMap: {

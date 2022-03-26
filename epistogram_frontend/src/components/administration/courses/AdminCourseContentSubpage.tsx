@@ -14,7 +14,6 @@ import { showNotification, useShowErrorDialog } from "../../../services/core/not
 import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
 import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseContentItemIssueDTO";
 import { CourseModuleShortDTO } from "../../../shared/dtos/admin/CourseModuleShortDTO";
-import { ModuleShortDTO } from "../../../shared/dtos/ModuleShortDTO";
 import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
@@ -30,7 +29,6 @@ import { ChipSmall } from "./ChipSmall";
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
 import { ExamEditDialog } from "./ExamEditDialog";
 import { VideoEditDialog } from "./VideoEditDialog";
-import { useXListMutator } from "./XMutator";
 
 export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
     return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
@@ -532,7 +530,8 @@ export const AdminCourseContentSubpage = () => {
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
+                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
                 ]}
                 //onSave={handleSaveCourseAsync}
                 direction="column"

@@ -3,6 +3,7 @@ import { Switch } from "react-router-dom"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
 import { getRoute } from "../../../MainRouting"
 import { AdminCourseContentSubpage } from "./AdminCourseContentSubpage"
+import { AdminCourseUserProgressSubpage } from "./AdminCourseUserProgressSubpage"
 import { AdminInteractiveCourseSubpage } from "./AdminInteractiveCourseSubpage"
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame"
 import { CourseStatisticsSubpage } from "./CourseStatisticsSubpage"
@@ -19,6 +20,7 @@ export const CourseAdministartionSubpage = () => {
                 {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
                 {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
                 {getRoute(applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
+                {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute, <AdminCourseUserProgressSubpage />)}
 
                 {/* for demo */}
                 {getRoute(applicationRoutes.administrationRoute.coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}

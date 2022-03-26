@@ -10,6 +10,7 @@ import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog"
 import { NoProgressChartYet } from "../../../home/NoProgressChartYet"
 import { UserProgressChart } from "../../../home/UserProgressChart"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
+import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl"
 
 export const AdminUserCourseContentOverviewModalSubpage = (props: {
     userStats: {
@@ -120,8 +121,8 @@ export const AdminUserCourseContentModal = (props: {
         },
         {
             title: "Videók",
-            component: <Flex h="400px">
-
+            component: <Flex>
+                <AdminUserVideosDataGridControl />
             </Flex>
         },
         {
@@ -138,7 +139,7 @@ export const AdminUserCourseContentModal = (props: {
         }
     ]
 
-    return <EpistoDialog logic={dialogLogic}>
+    return <EpistoDialog fullScreenX fullScreenY logic={dialogLogic}>
         <Flex
             overflowY="scroll"
             className="roundBorders"

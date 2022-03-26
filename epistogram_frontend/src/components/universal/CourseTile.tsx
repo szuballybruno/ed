@@ -1,12 +1,10 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import { LinearProgress, Rating } from "@mui/material";
-import React, { ReactNode } from 'react';
-import { formatTimespan, getAssetUrl } from "../../static/frontendHelpers";
-import { CourseShortDTO } from "../../shared/dtos/CourseShortDTO";
-import { FlexFloat } from "../controls/FlexFloat";
-import { Star, StarBorderOutlined, StarOutline } from "@mui/icons-material";
+import React from 'react';
 import { useCourseDetails } from "../../services/api/courseApiService";
+import { CourseShortDTO } from "../../shared/dtos/CourseShortDTO";
+import { formatTimespan, getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
+import { FlexFloat } from "../controls/FlexFloat";
 
 const SmallStat = (props: { iconUrl: string, text: string, title: string }) => {
 

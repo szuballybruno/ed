@@ -447,7 +447,7 @@ VALUES
     ('Saját teóriákat kreálni, ötletelni', false, 15),
 -- 3.2 answers
     ('Specifikus instrukciókat követhetek', true, 16),
-    ('Analizálni kell, és döntéseket hozom ', false, 16),
+    ('Analizálni kell, és döntéseket hoznom ', false, 16),
 -- 3.3 answers
     ('Megoldani egy matematikai problémát egy képlet segítségével', true, 17),
     ('Felfedezni a képlet mögötti logikát', false, 17),

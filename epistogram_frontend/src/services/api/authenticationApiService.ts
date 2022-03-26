@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { fetchNewAccessTokenIntervalInMs, fetchUserIntervalInMs, verboseLogging } from "../../static/Environemnt";
-import { apiRoutes } from "../../shared/types/apiRoutes";
 import { UserDTO } from "../../shared/dtos/UserDTO";
-import { httpGetAsync, usePostData, usePostDataUnsafe } from "../core/httpClient";
+import { apiRoutes } from "../../shared/types/apiRoutes";
+import { fetchNewAccessTokenIntervalInMs, fetchUserIntervalInMs, verboseLogging } from "../../static/Environemnt";
+import { httpGetAsync, usePostDataUnsafe } from "../core/httpClient";
 
 export type AuthenticationStateType = "loading" | "authenticated" | "forbidden";
 

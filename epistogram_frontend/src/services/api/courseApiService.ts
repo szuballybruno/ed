@@ -1,4 +1,5 @@
 import { CourseAdminListItemDTO } from "../../shared/dtos/admin/CourseAdminListItemDTO";
+import { CourseContentAdminDTO } from "../../shared/dtos/admin/CourseContentAdminDTO";
 import { CourseBriefData } from "../../shared/dtos/CourseBriefData";
 import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
 import { CourseDetailsEditDataDTO } from "../../shared/dtos/CourseDetailsEditDataDTO";
@@ -6,14 +7,11 @@ import { CourseProgressShortDTO } from "../../shared/dtos/CourseProgressShortDTO
 import { CourseShortDTO } from "../../shared/dtos/CourseShortDTO";
 import { CreateCourseDTO } from "../../shared/dtos/CreateCourseDTO";
 import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
-import { TextDTO } from "../../shared/dtos/TextDTO";
+import { UserCoursesDataDTO } from "../../shared/dtos/UserCoursesDataDTO";
 import { apiRoutes } from "../../shared/types/apiRoutes";
 import { CourseModeType } from "../../shared/types/sharedTypes";
-import { UserCoursesDataDTO } from "../../shared/dtos/UserCoursesDataDTO";
 import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
-import { CourseContentItemAdminDTO } from "../../shared/dtos/admin/CourseContentItemAdminDTO";
-import { CourseContentAdminDTO } from "../../shared/dtos/admin/CourseContentAdminDTO";
 
 export const useAdminCourseList = (searchText: string) => {
 

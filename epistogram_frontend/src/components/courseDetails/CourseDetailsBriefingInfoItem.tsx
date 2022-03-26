@@ -1,6 +1,5 @@
 import { Flex } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
-import { Typography } from "@mui/material";
 import { isString } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
 

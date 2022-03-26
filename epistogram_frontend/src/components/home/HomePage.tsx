@@ -1,27 +1,24 @@
 import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
+import { CSSProperties } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
+import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
+import { iterate, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
-import { RecommendedQuota } from './RecommendedQuota';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
-import { PractiseQuestions } from './PractiseQuestions';
-import { StatsSummary } from "./StatsSummary";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { CourseItemView } from '../universal/CourseItemList';
-import { CourseProgressDisplay } from './CourseProgressDisplay';
 import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
-import { useActiveCourses } from '../../services/api/userProgressApiService';
-import { iterate, usePaging } from '../../static/frontendHelpers';
-import { useXDialogLogic, XDialog } from '../lib/XDialog/XDialog';
-import { CSSProperties, useState } from 'react';
-import { EpistoButton } from '../controls/EpistoButton';
-import { Dialog } from '@mui/material';
+import { CourseProgressDisplay } from './CourseProgressDisplay';
+import { PractiseQuestions } from './PractiseQuestions';
+import { RecommendedQuota } from './RecommendedQuota';
+import { StatsSummary } from "./StatsSummary";
 
 const HeavyComp = (props: { style?: CSSProperties }) => {
 

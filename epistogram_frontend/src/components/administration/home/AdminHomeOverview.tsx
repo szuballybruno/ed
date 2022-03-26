@@ -3,7 +3,7 @@ import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from "@mui/ico
 import { ReactNode } from "react"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
 import { useActiveCourses } from "../../../services/api/userProgressApiService"
-import { iterate, usePaging } from "../../../static/frontendHelpers"
+import { getAssetUrl, iterate, usePaging } from "../../../static/frontendHelpers"
 import { EpistoButton } from "../../controls/EpistoButton"
 import { EpistoFont } from "../../controls/EpistoFont"
 import { EpistoGrid } from "../../controls/EpistoGrid"
@@ -63,7 +63,7 @@ export const AdminHomeOverview = () => {
                 mt="10px"
                 headerContent={
                     <EpistoButton
-                        variant="colored">
+                        variant="colored">s
                         Összes hallgató
                     </EpistoButton>}>
 
@@ -75,9 +75,32 @@ export const AdminHomeOverview = () => {
                     gap="10"
                     gridTemplateColumns="repeat(3, minmax(0, 1fr))">
 
-                    <StatisticsCard minWidth="180px" p="20px" title="Átlagon felül teljesítenek" value="19" suffix="-en" />
-                    <StatisticsCard minWidth="180px" p="20px" title="Átlagosan teljesítenek" value="89" suffix="-en" />
-                    <StatisticsCard minWidth="180px" p="20px" title="Áttekintés javasolt" value="9" suffix="esetben" />
+                    <StatisticsCard
+                        additionalFunction={() => { }}
+                        minWidth="180px"
+                        p="10px 0"
+                        iconPath={getAssetUrl("/images/teacherdashboard1.png")}
+                        title="Átlagon felül teljesítenek"
+                        value="19"
+                        suffix="-en" />
+
+                    <StatisticsCard
+                        additionalFunction={() => { }}
+                        minWidth="180px"
+                        p="10px 0"
+                        iconPath={getAssetUrl("/images/teacherdashboard2.png")}
+                        title="Átlagosan teljesítenek"
+                        value="89"
+                        suffix="-en" />
+
+                    <StatisticsCard
+                        additionalFunction={() => { }}
+                        minWidth="180px"
+                        p="10px 0"
+                        iconPath={getAssetUrl("/images/teacherdashboard3.png")}
+                        title="Áttekintés javasolt"
+                        value="9"
+                        suffix="esetben" />
                 </EpistoGrid>
 
             </AdminSectionWithButton>
@@ -86,6 +109,7 @@ export const AdminHomeOverview = () => {
                 title="Top beérkező kérdések"
                 mt="10px"
                 headerContent={
+
                     <EpistoButton
                         variant="colored">
                         Összes kérdés
@@ -126,6 +150,7 @@ export const AdminHomeOverview = () => {
         <Flex flex="2" h="fit-content">
             <AdminSectionWithButton
                 m="10px 0 0 10px"
+                flex="1"
                 title="Kurzusok teljesítménye"
                 headerContent={
                     <EpistoButton
@@ -191,12 +216,53 @@ export const AdminHomeOverview = () => {
                     gap="10"
                     gridTemplateColumns="repeat(2, minmax(0, 1fr))">
 
-                    <StatisticsCard minWidth="180px" p="20px" title="Átlagon felül teljesítenek" value="19" suffix="-en" />
-                    <StatisticsCard minWidth="180px" p="20px" title="Átlagosan teljesítenek" value="89" suffix="-en" />
-                    <StatisticsCard minWidth="180px" p="20px" title="Áttekintés javasolt" value="9" suffix="esetben" />
-                    <StatisticsCard minWidth="180px" p="20px" title="Átlagon felül teljesítenek" value="19" suffix="-en" />
-                    <StatisticsCard minWidth="180px" p="20px" title="Átlagosan teljesítenek" value="89" suffix="-en" />
-                    <StatisticsCard minWidth="180px" p="20px" title="Áttekintés javasolt" value="9" suffix="esetben" />
+                    <StatisticsCard
+                        minWidth="180px"
+                        p="10px 0"
+                        iconPath={getAssetUrl("/images/teacherdashboard4.png")}
+                        title="Felhasználó jelenleg"
+                        value="43"
+                        suffix="aktív" />
+
+                    <StatisticsCard
+                        minWidth="180px"
+                        p="10px 0"
+                        iconPath={getAssetUrl("/images/teacherdashboard5.png")}
+                        title="Végezte el a kurzust"
+                        value="32"
+                        suffix="tanuló" />
+
+                    <StatisticsCard
+                        minWidth="180px"
+                        p="10px 0"
+                        iconPath={getAssetUrl("/images/teacherdashboard6.png")}
+                        title="Hagyta félbe a tanfolyamot"
+                        value="13"
+                        suffix="tanuló" />
+
+                    <StatisticsCard
+                        minWidth="180px"
+                        p="10px 0"
+                        iconPath={getAssetUrl("/images/teacherdashboard7.png")}
+                        title="Átlagos teljesítmény"
+                        value="79"
+                        suffix="%" />
+
+                    <StatisticsCard
+                        minWidth="180px"
+                        p="10px 0"
+                        iconPath={getAssetUrl("/images/teacherdashboard8.png")}
+                        title="Nehéznek megjelölve"
+                        value="19"
+                        suffix="videó" />
+
+                    <StatisticsCard
+                        minWidth="180px"
+                        p="10px 0"
+                        iconPath={getAssetUrl("/images/teacherdashboard9.png")}
+                        title="Vár válaszokra a tanártól"
+                        value="8"
+                        suffix="kérdés" />
                 </EpistoGrid>
             </AdminSectionWithButton>
         </Flex>

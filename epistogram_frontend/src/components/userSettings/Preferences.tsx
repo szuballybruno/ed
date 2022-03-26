@@ -1,20 +1,18 @@
-import { Input } from '@chakra-ui/input';
 import { Flex } from '@chakra-ui/layout';
-import { TextField, Typography } from '@mui/material';
 import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
-import { reloadPage } from '../../static/frontendHelpers';
+import { useUploadAvatarFile } from '../../services/api/fileApiService';
+import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
+import { useSaveUserSimple } from '../../services/api/userApiService';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
+import { reloadPage } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoEntry } from '../controls/EpistoEntry';
+import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { LoadingFrame } from '../system/LoadingFrame';
-import { EpistoButton } from '../controls/EpistoButton';
 import { SelectImage } from '../universal/SelectImage';
-import { useUploadAvatarFile } from '../../services/api/fileApiService';
-import { useSaveUserSimple } from '../../services/api/userApiService';
-import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
-import { EpistoEntry } from '../controls/EpistoEntry';
-import { EpistoFont } from '../controls/EpistoFont';
-import { translatableTexts } from '../../static/translatableTexts';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 

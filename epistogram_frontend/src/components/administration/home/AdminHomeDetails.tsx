@@ -8,6 +8,8 @@ import { UserProgressChart } from "../../home/UserProgressChart"
 import StatisticsCard from "../../statisticsCard/StatisticsCard"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
 
+
+
 export const AdminHomeDetails = () => {
 
     const userProgressData = {
@@ -61,6 +63,7 @@ export const AdminHomeDetails = () => {
     }
 
     return <AdminSubpageHeader
+        direction="column"
         isInverseBackground
         tabMenuItems={[{
             route: applicationRoutes.administrationRoute.homeRoute.overviewRoute.route,
@@ -70,17 +73,22 @@ export const AdminHomeDetails = () => {
             title: applicationRoutes.administrationRoute.homeRoute.detailsRoute.title
         }]}>
 
-        <Flex flex="1" mt="10px">
+        <Flex mt="10px">
 
             <Grid
                 className="whall"
                 gap="10px"
-                gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+                gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
                 gridAutoRows="200px"
-                gridAutoFlow="row dense">
+                gridAutoFlow="column dense">
 
                 {/* total completed video count */}
                 <StatisticsCard
+                    additionalInfo={{
+                        change: "up",
+                        value: "32",
+                        suffix: "%"
+                    }}
                     title={"Megválaszolt tudást vizsgáló kérdések száma"}
                     value={"39"}
                     suffix={"db"}
@@ -97,6 +105,11 @@ export const AdminHomeDetails = () => {
 
                 {/* total given answer count  */}
                 <StatisticsCard
+                    additionalInfo={{
+                        change: "down",
+                        value: "20",
+                        suffix: "%"
+                    }}
                     title={"Reakcióidő"}
                     value={"Átlagos"}
                     suffix={""}
@@ -110,7 +123,33 @@ export const AdminHomeDetails = () => {
                     suffix={"db/nap"}
                     iconPath={getAssetUrl("images/learningreport06.png")}
                     isOpenByDefault={false} />
-                {iterate(4, () => <FlexFloat
+
+                <FlexFloat
+                    background="var(--transparentWhite70)"
+                    //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
+                    direction="column"
+                    p="10px"
+                    minWidth={250}
+                    style={{
+                        gridColumn: "span 2",
+                        gridRow: `span 2`
+                    }}>
+
+                    {userProgressData && userProgressData.days.length > 0
+                        ? <UserProgressChart userProgress={userProgressData} />
+                        : <NoProgressChartYet />}
+
+                </FlexFloat>
+            </Grid>
+        </Flex>
+        <Flex mt="10px">
+            <Grid
+                className="whall"
+                gap="10px"
+                gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+                gridAutoRows="200px"
+                gridAutoFlow="column dense">
+                <FlexFloat
                     background="var(--transparentWhite70)"
                     //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
                     direction="column"
@@ -125,7 +164,8 @@ export const AdminHomeDetails = () => {
                         ? <UserProgressChart userProgress={userProgressData} />
                         : <NoProgressChartYet />}
 
-                </FlexFloat>)}
+                </FlexFloat>
+
                 {/* total completed video count */}
                 <StatisticsCard
                     title={"Megválaszolt tudást vizsgáló kérdések száma"}
@@ -157,14 +197,49 @@ export const AdminHomeDetails = () => {
                     suffix={"db/nap"}
                     iconPath={getAssetUrl("images/learningreport06.png")}
                     isOpenByDefault={false} />
-
-
-
-
             </Grid>
+        </Flex>
+        <Flex mt="10px">
+            <Grid
+                className="whall"
+                gap="10px"
+                gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+                gridAutoRows="200px"
+                gridAutoFlow="column dense">
+                <FlexFloat
+                    background="var(--transparentWhite70)"
+                    //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
+                    direction="column"
+                    p="10px"
+                    minWidth={250}
+                    style={{
+                        gridColumn: `span 2`,
+                        gridRow: `span 2`
+                    }}>
 
+                    {userProgressData && userProgressData.days.length > 0
+                        ? <UserProgressChart userProgress={userProgressData} />
+                        : <NoProgressChartYet />}
+
+                </FlexFloat>
+                <FlexFloat
+                    background="var(--transparentWhite70)"
+                    //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
+                    direction="column"
+                    p="10px"
+                    minWidth={250}
+                    style={{
+                        gridColumn: `span 2`,
+                        gridRow: `span 2`
+                    }}>
+
+                    {userProgressData && userProgressData.days.length > 0
+                        ? <UserProgressChart userProgress={userProgressData} />
+                        : <NoProgressChartYet />}
+
+                </FlexFloat>
+            </Grid>
         </Flex>
 
-
-    </AdminSubpageHeader>
+    </AdminSubpageHeader >
 }
