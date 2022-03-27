@@ -18,7 +18,6 @@ export const CourseDetailsSummarySection = (props: {
     return <Flex
         mt={10}
         width="100%"
-        height={500}
         direction={"column"}
         alignItems={"flex-start"}>
 

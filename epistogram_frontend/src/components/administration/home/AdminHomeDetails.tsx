@@ -7,6 +7,10 @@ import { NoProgressChartYet } from "../../home/NoProgressChartYet"
 import { UserProgressChart } from "../../home/UserProgressChart"
 import StatisticsCard from "../../statisticsCard/StatisticsCard"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
+import { MostActiveDaysChart } from "../MostActiveDaysChart"
+import { MostWatchedCoursesChart } from "../MostWatchedCoursesChart"
+import { UserMostActiveTimeRangeChart } from "../UserMostActiveTimeRangeChart"
+import { UserActivityDistributionChart } from "../users/UserActivityDistributionChart"
 
 
 
@@ -92,7 +96,7 @@ export const AdminHomeDetails = () => {
                     title={"Megválaszolt tudást vizsgáló kérdések száma"}
                     value={"39"}
                     suffix={"db"}
-                    iconPath={getAssetUrl("images/learningreport03.png")}
+                    iconPath={getAssetUrl("images/teacherdashboardstatistic1.png")}
                     isOpenByDefault={false} />
 
                 {/* total playback time */}
@@ -100,7 +104,7 @@ export const AdminHomeDetails = () => {
                     title={"Helyes válaszok aránya"}
                     value={"27"}
                     suffix={"%"}
-                    iconPath={getAssetUrl("images/learningreport04.png")}
+                    iconPath={getAssetUrl("images/teacherdashboardstatistic2.png")}
                     isOpenByDefault={false} />
 
                 {/* total given answer count  */}
@@ -113,7 +117,7 @@ export const AdminHomeDetails = () => {
                     title={"Reakcióidő"}
                     value={"Átlagos"}
                     suffix={""}
-                    iconPath={getAssetUrl("images/learningreport05.png")}
+                    iconPath={getAssetUrl("images/teacherdashboardstatistic3.png")}
                     isOpenByDefault={false} />
 
                 {/* correct answer rate  */}
@@ -121,25 +125,20 @@ export const AdminHomeDetails = () => {
                     title={"Átlagos napi megtekintett videók"}
                     value={"6.5"}
                     suffix={"db/nap"}
-                    iconPath={getAssetUrl("images/learningreport06.png")}
+                    iconPath={getAssetUrl("images/teacherdashboardstatistic4.png")}
                     isOpenByDefault={false} />
 
-                <FlexFloat
+                <Flex
+                    className="roundBorders"
+                    align="center"
+                    justify="center"
                     background="var(--transparentWhite70)"
-                    //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
-                    direction="column"
                     p="10px"
-                    minWidth={250}
-                    style={{
-                        gridColumn: "span 2",
-                        gridRow: `span 2`
-                    }}>
+                    gridColumn="auto / span 2"
+                    gridRow="auto / span 2">
 
-                    {userProgressData && userProgressData.days.length > 0
-                        ? <UserProgressChart userProgress={userProgressData} />
-                        : <NoProgressChartYet />}
-
-                </FlexFloat>
+                    <MostActiveDaysChart />
+                </Flex>
             </Grid>
         </Flex>
         <Flex mt="10px">
@@ -149,29 +148,25 @@ export const AdminHomeDetails = () => {
                 gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
                 gridAutoRows="200px"
                 gridAutoFlow="column dense">
-                <FlexFloat
+                <Flex
+                    className="roundBorders"
+                    align="center"
+                    justify="center"
                     background="var(--transparentWhite70)"
-                    //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
-                    direction="column"
                     p="10px"
-                    minWidth={250}
-                    style={{
-                        gridColumn: `span 2`,
-                        gridRow: `span 2`
-                    }}>
+                    gridColumn="auto / span 2"
+                    gridRow="auto / span 2">
 
-                    {userProgressData && userProgressData.days.length > 0
-                        ? <UserProgressChart userProgress={userProgressData} />
-                        : <NoProgressChartYet />}
+                    <UserMostActiveTimeRangeChart />
 
-                </FlexFloat>
+                </Flex>
 
                 {/* total completed video count */}
                 <StatisticsCard
                     title={"Megválaszolt tudást vizsgáló kérdések száma"}
                     value={"39"}
                     suffix={"db"}
-                    iconPath={getAssetUrl("images/learningreport03.png")}
+                    iconPath={getAssetUrl("images/teacherdashboardstatistic5.png")}
                     isOpenByDefault={false} />
 
                 {/* total playback time */}
@@ -179,7 +174,7 @@ export const AdminHomeDetails = () => {
                     title={"Helyes válaszok aránya"}
                     value={"27"}
                     suffix={"%"}
-                    iconPath={getAssetUrl("images/learningreport04.png")}
+                    iconPath={getAssetUrl("images/teacherdashboardstatistic6.png")}
                     isOpenByDefault={false} />
 
                 {/* total given answer count  */}
@@ -187,7 +182,7 @@ export const AdminHomeDetails = () => {
                     title={"Reakcióidő"}
                     value={"Átlagos"}
                     suffix={""}
-                    iconPath={getAssetUrl("images/learningreport05.png")}
+                    iconPath={getAssetUrl("images/teacherdashboardstatistic7.png")}
                     isOpenByDefault={false} />
 
                 {/* correct answer rate  */}
@@ -195,7 +190,7 @@ export const AdminHomeDetails = () => {
                     title={"Átlagos napi megtekintett videók"}
                     value={"6.5"}
                     suffix={"db/nap"}
-                    iconPath={getAssetUrl("images/learningreport06.png")}
+                    iconPath={getAssetUrl("images/teacherdashboardstatistic8.png")}
                     isOpenByDefault={false} />
             </Grid>
         </Flex>
@@ -206,38 +201,32 @@ export const AdminHomeDetails = () => {
                 gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
                 gridAutoRows="200px"
                 gridAutoFlow="column dense">
-                <FlexFloat
+
+                <Flex
+                    className="roundBorders"
+                    align="center"
+                    justify="center"
                     background="var(--transparentWhite70)"
-                    //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
-                    direction="column"
                     p="10px"
-                    minWidth={250}
-                    style={{
-                        gridColumn: `span 2`,
-                        gridRow: `span 2`
-                    }}>
+                    gridColumn="auto / span 2"
+                    gridRow="auto / span 2">
 
-                    {userProgressData && userProgressData.days.length > 0
-                        ? <UserProgressChart userProgress={userProgressData} />
-                        : <NoProgressChartYet />}
+                    <UserActivityDistributionChart title="Felhasználók aktivitása" />
 
-                </FlexFloat>
-                <FlexFloat
+                </Flex>
+
+                <Flex
+                    className="roundBorders"
+                    align="center"
+                    justify="center"
                     background="var(--transparentWhite70)"
-                    //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
-                    direction="column"
                     p="10px"
-                    minWidth={250}
-                    style={{
-                        gridColumn: `span 2`,
-                        gridRow: `span 2`
-                    }}>
+                    gridColumn="auto / span 2"
+                    gridRow="auto / span 2">
 
-                    {userProgressData && userProgressData.days.length > 0
-                        ? <UserProgressChart userProgress={userProgressData} />
-                        : <NoProgressChartYet />}
+                    <MostWatchedCoursesChart title="Legnépszerűbb kurzusok" />
 
-                </FlexFloat>
+                </Flex>
             </Grid>
         </Flex>
 

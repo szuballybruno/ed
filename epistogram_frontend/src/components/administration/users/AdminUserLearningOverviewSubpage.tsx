@@ -25,6 +25,7 @@ import { EditSection } from "../courses/EditSection";
 import { AdminUserList } from "./AdminUserList";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { UserActivityDistributionChart } from "./UserActivityDistributionChart";
 
 const DummyLearningCourseStatsModified = (props: {
     title: string,
@@ -499,11 +500,12 @@ export const AdminUserStatisticsSubpage = (props: {
                             gridRow: `auto / span 2`
                         }}>
 
-                        <Image
+                        <UserActivityDistributionChart />
+                        {/* <Image
                             src={getAssetUrl("images/piechart.png")}
                             w="100%"
                             h="100%"
-                            objectFit="contain" />
+                            objectFit="contain" /> */}
 
                     </FlexFloat>
 
