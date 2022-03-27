@@ -221,6 +221,9 @@ const CourseDetailsPage = () => {
                             { /* tab contents */}
                             {tabs
                                 .map((x, index) => <TabPanel
+                                    style={{
+                                        width: "100%"
+                                    }}
                                     value={currentTab}
                                     index={index}>
 

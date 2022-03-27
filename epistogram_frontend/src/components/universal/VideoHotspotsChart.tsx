@@ -1,12 +1,8 @@
 import ReactECharts, { EChartsOption } from 'echarts-for-react';
 import React from "react";
+import { iterate } from '../../static/frontendHelpers';
 
 export const VideoHotspotsChart = () => {
-
-    /* const averageGraphColor = "#ffa565";
-    const userGraphColor = "#97deef";
-    const gridColor = "#969fb7";
-    const shadowColor = "rgba(0, 0, 0, .4)"; */
 
     const options = {
         dataset: [
@@ -14,10 +10,9 @@ export const VideoHotspotsChart = () => {
                 id: 'dataset_raw',
                 source: [
                     ["Felhasználók száma", "Időpont"],
-                    [70, 12],
-                    [68, 13],
-                    [50, 14],
-                    [30, 15]
+                    ...iterate(300, (index) => {
+                        return [Math.pow(index, 2 + Math.random()) / 1000000, (300 - index)]
+                    })
                 ]
             }
         ],

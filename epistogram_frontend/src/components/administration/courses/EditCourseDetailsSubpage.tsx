@@ -188,7 +188,8 @@ export const AdminCourseDetailsSubpage = () => {
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
+                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
                 ]}
                 headerButtons={bulkEditButtons}>
 

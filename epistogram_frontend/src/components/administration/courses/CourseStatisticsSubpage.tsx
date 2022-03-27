@@ -1,10 +1,14 @@
+import { Flex, Grid } from '@chakra-ui/react';
 import React from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { getAssetUrl } from '../../../static/frontendHelpers';
 import { EpistoGrid } from "../../controls/EpistoGrid";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { DashboardSection } from "../../universal/DashboardSection";
 import { VideoHotspotsChart } from "../../universal/VideoHotspotsChart";
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { CourseViewsInAWeekChart } from '../CourseViewsInAWeekChart';
+import { UserActivityDistributionChart } from '../users/UserActivityDistributionChart';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
 export const CourseStatisticsSubpage = () => {
@@ -13,92 +17,142 @@ export const CourseStatisticsSubpage = () => {
         <CourseAdministartionFrame>
 
             <AdminSubpageHeader
+                direction="column"
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
+                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
                 ]}>
-                <EpistoGrid auto="fill" gap="10" mt="5px" minColumnWidth="250px" gridAutoRows="200px">
+                <Flex mt="10px">
 
-                    <StatisticsCard
-                        style={{
-                            paddingLeft: 20,
-                            minWidth: 200
-                        }}
-                        title="Kezdte el idáig a kurzust"
-                        suffix="fő"
-                        value="30" />
-                    <StatisticsCard
-                        style={{
-                            paddingLeft: 20,
-                            minWidth: 200
-                        }}
-                        title="Alatt teljesítették átlagban"
-                        suffix="óra"
-                        value="12" />
-                    <StatisticsCard
-                        style={{
-                            paddingLeft: 20,
-                            minWidth: 200
-                        }}
-                        title="Teljesítette eddig összesen"
-                        suffix="fő"
-                        value="144" />
-                    <StatisticsCard
-                        style={{
-                            paddingLeft: 20,
-                            minWidth: 200
-                        }}
-                        title="Teljesítette azok közül akik elkezdték"
-                        suffix="%"
-                        value="76" />
-                    <StatisticsCard
-                        style={{
-                            paddingLeft: 20,
-                            minWidth: 200
-                        }}
-                        title="Hagyta félbe"
-                        suffix="fő"
-                        value="32" />
-                    <DashboardSection
-                        title={"Mélypontok"}
-                        background="var(--transparentWhite70)"
-                        className="mildShadow roundBorders"
-                        gridColumn="span 4" // do not remove!!
-                        gridRow="span 2" // do not remove!!
-                        //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
-                        color="black"
-                        showDivider
-                        w="100%">
+                    <Grid
+                        className="whall"
+                        gap="10px"
+                        gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+                        gridAutoRows="200px"
+                        gridAutoFlow="column dense">
 
-                        <VideoHotspotsChart />
-                    </DashboardSection>
-                    <StatisticsCard
-                        style={{
-                            paddingLeft: 20,
-                            minWidth: 200
-                        }}
-                        title="Kalkulált nehézség"
-                        suffix="/5.0"
-                        value="2.5" />
-                    <StatisticsCard
-                        style={{
-                            paddingLeft: 20,
-                            minWidth: 200
-                        }}
-                        title="Nehézség értékelés alapján"
-                        suffix="/5.0"
-                        value="2.5" />
-                    <StatisticsCard
-                        style={{
-                            paddingLeft: 20,
-                            minWidth: 200
-                        }}
-                        title="Tesztek átlagteljesítménye"
-                        suffix="%"
-                        value="80" />
+                        {/* total completed video count */}
+                        <StatisticsCard
+                            additionalInfo={{
+                                change: "up",
+                                value: "32",
+                                suffix: "%"
+                            }}
+                            title={"Megválaszolt tudást vizsgáló kérdések száma"}
+                            value={"39"}
+                            suffix={"db"}
+                            iconPath={getAssetUrl("images/teacherdashboardstatistic1.png")}
+                            isOpenByDefault={false} />
 
-                </EpistoGrid>
+                        {/* total playback time */}
+                        <StatisticsCard
+                            title={"Helyes válaszok aránya"}
+                            value={"27"}
+                            suffix={"%"}
+                            iconPath={getAssetUrl("images/teacherdashboardstatistic2.png")}
+                            isOpenByDefault={false} />
+
+                        {/* total given answer count  */}
+                        <StatisticsCard
+                            additionalInfo={{
+                                change: "down",
+                                value: "20",
+                                suffix: "%"
+                            }}
+                            title={"Reakcióidő"}
+                            value={"Átlagos"}
+                            suffix={""}
+                            iconPath={getAssetUrl("images/teacherdashboardstatistic3.png")}
+                            isOpenByDefault={false} />
+
+                        {/* correct answer rate  */}
+                        <StatisticsCard
+                            title={"Átlagos napi megtekintett videók"}
+                            value={"6.5"}
+                            suffix={"db/nap"}
+                            iconPath={getAssetUrl("images/teacherdashboardstatistic4.png")}
+                            isOpenByDefault={false} />
+
+                        <Flex
+                            className="roundBorders"
+                            align="center"
+                            justify="center"
+                            background="var(--transparentWhite70)"
+                            p="10px"
+                            gridColumn="auto / span 2"
+                            gridRow="auto / span 2">
+
+                            <UserActivityDistributionChart title='Felhasználók tevékenysége' />
+                        </Flex>
+                    </Grid>
+                </Flex>
+                <Flex mt="10px">
+
+                    <Grid
+                        className="whall"
+                        gap="10px"
+                        gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+                        gridAutoRows="200px"
+                        gridAutoFlow="column dense">
+                        <Flex
+                            className="roundBorders"
+                            align="center"
+                            justify="center"
+                            background="var(--transparentWhite70)"
+                            p="10px"
+                            gridColumn="auto / span 2"
+                            gridRow="auto / span 2">
+
+                            <CourseViewsInAWeekChart title='Kurzus megtekintések alakulása' />
+                        </Flex>
+
+                        {/* total completed video count */}
+                        <StatisticsCard
+                            additionalInfo={{
+                                change: "up",
+                                value: "32",
+                                suffix: "%"
+                            }}
+                            title={"Megválaszolt tudást vizsgáló kérdések száma"}
+                            value={"39"}
+                            suffix={"db"}
+                            iconPath={getAssetUrl("images/teacherdashboardstatistic1.png")}
+                            isOpenByDefault={false} />
+
+                        {/* total playback time */}
+                        <StatisticsCard
+                            title={"Helyes válaszok aránya"}
+                            value={"27"}
+                            suffix={"%"}
+                            iconPath={getAssetUrl("images/teacherdashboardstatistic2.png")}
+                            isOpenByDefault={false} />
+
+                        {/* total given answer count  */}
+                        <StatisticsCard
+                            additionalInfo={{
+                                change: "down",
+                                value: "20",
+                                suffix: "%"
+                            }}
+                            title={"Reakcióidő"}
+                            value={"Átlagos"}
+                            suffix={""}
+                            iconPath={getAssetUrl("images/teacherdashboardstatistic3.png")}
+                            isOpenByDefault={false} />
+
+                        {/* correct answer rate  */}
+                        <StatisticsCard
+                            title={"Átlagos napi megtekintett videók"}
+                            value={"6.5"}
+                            suffix={"db/nap"}
+                            iconPath={getAssetUrl("images/teacherdashboardstatistic4.png")}
+                            isOpenByDefault={false} />
+
+
+                    </Grid>
+                </Flex>
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     )
