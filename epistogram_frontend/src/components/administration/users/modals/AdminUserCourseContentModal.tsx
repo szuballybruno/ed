@@ -10,7 +10,10 @@ import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog"
 import { NoProgressChartYet } from "../../../home/NoProgressChartYet"
 import { UserProgressChart } from "../../../home/UserProgressChart"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
+import { UserPerformanceChart } from "../../UserPerformanceChart"
 import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl"
+import { UserActivityDistributionChart } from "../../UserActivityDistributionChart"
+import { UserProgressDonutChart } from "../../UserProgressChart"
 
 export const AdminUserCourseContentOverviewModalSubpage = (props: {
     userStats: {
@@ -27,19 +30,25 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
     return <Flex direction="column" p="20px">
         <Flex>
 
-            <Flex flex="1" align="center">
+            <Flex flex="1" align="stretch">
 
-                <Image flex="1" maxH="200px" objectFit="contain" src={getAssetUrl("/images/donut1.png")} />
+                <Flex flex="1">
 
-                <Image flex="1" maxH="200px" objectFit="contain" src={getAssetUrl("/images/donut2.png")} />
+                    <UserPerformanceChart title="Teljesítmény" />
+                </Flex>
+                <Flex flex="1">
 
-                <Image flex="1" maxH="200px" objectFit="contain" src={getAssetUrl("/images/donut3.png")} />
+                    <UserProgressDonutChart title="Haladás" />
+                </Flex>
+                <Flex flex="1">
+
+                    <UserActivityDistributionChart title="Aktivitás eloszlása" />
+                </Flex>
             </Flex>
 
             <Flex
                 className="roundBorders"
                 flex="1"
-                p="10px"
                 direction="column"
                 background="var(--transparentWhite70)">
 
@@ -55,6 +64,7 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                 maxWidth: "100%",
                 display: "grid",
                 boxSizing: "border-box",
+                marginTop: "20px",
                 gap: "10px",
                 gridAutoFlow: "row dense",
                 gridTemplateColumns: "repeat(auto-fill, minmax(23%, 1fr))",

@@ -90,7 +90,7 @@ export const EpistoDialog = (props: {
             overflow="hidden"
             position="relative"
             background="rgba(255,255,255,0.7)"
-            backdropFilter="blur(12px)"
+            backdropFilter="blur(5px)"
             borderRadius="7px"
             boxShadow="0px 0px 30px 50px rgba(0,0,0,0.2)">
 

@@ -17,7 +17,7 @@ import { FlexListTitleSubtitle } from "./FlexListTitleSubtitle";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { CollapseItem } from "./CollapseItem";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { getAssetUrl } from "../../static/frontendHelpers";
+import { getAssetUrl, getRandomInteger } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
@@ -43,9 +43,19 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
     return <FlexListItem
         isLocked={isLocked}
         onClick={navigate}
-        midContent={<Flex>
+        midContent={<Flex align="center">
+
+            {getRandomInteger(0, 2) % 2 === 0 && <Flex
+                className="roundBorders"
+                h="10px"
+                w="10px"
+                boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
+                p="3px"
+                m="7px 10px 7px -20px"
+                bgColor="var(--mildOrange)" />}
 
             <Flex
+                alignSelf="stretch"
                 className="roundBorders"
                 boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
                 p="3px"

@@ -1,9 +1,10 @@
 import ReactECharts, { EChartsOption } from 'echarts-for-react';
 import React from "react";
 
-export const MostWatchedCoursesChart = (props: {
+export const UserProgressDonutChart = (props: {
     title?: string
 }) => {
+
 
 
     /* const averageGraphColor = "#ffa565";
@@ -15,46 +16,45 @@ export const MostWatchedCoursesChart = (props: {
         title: {
             text: props.title
         },
-        legend: {
+        /* legend: {
             top: '7%',
             left: 'center'
-        },
-        tooltip: {
+        }, */
+        /* tooltip: {
             trigger: 'item'
-        },
+        }, */
         series: [
             {
                 name: 'Kurzus neve',
                 type: 'pie',
-                radius: ['40%', '60%'],
+                radius: ['60%', '80%'],
                 top: 20,
                 avoidLabelOverlap: false,
                 itemStyle: {
-                    borderRadius: 10,
-                    borderColor: '#fff',
-                    borderWidth: 2
+                    borderRadius: 7,
+                    //borderColor: '#fff',
+                    //borderWidth: 2
                 },
                 label: {
-                    show: false,
+                    show: true,
                     position: 'center'
                 },
-                /* emphasis: {
+                emphasis: {
+
                     label: {
+                        formatter: "{b}",
                         show: true,
                         fontSize: '18',
                         fontWeight: 'bold'
                     }
-                }, */
+                },
                 labelLine: {
                     show: false
                 },
-                color: ["#FAF33E", "#55505C", "#5D737E", "#7FC6A4", "#D6F8D6"],
+                color: ["#933E55", "grey"],
                 data: [
-                    { value: 30, name: 'Microsoft Excel Alapok', color: "#FAF33E" },
-                    { value: 25, name: 'Microsoft Word A-Z', color: "#55505C" },
-                    { value: 15, name: 'Asszertív kommunikáció a mindennapokban', color: "#5D737E" },
-                    { value: 13, name: 'Cyberbiztonság az irodában', color: "#7FC6A4" },
-                    { value: 17, name: 'Egyéb kurzusok', color: "#D6F8D6" }
+                    { value: 20, name: "" },
+                    { value: 80, name: 'Haladás 20%' },
                 ]
             }
         ]

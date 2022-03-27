@@ -326,9 +326,9 @@ export const WatchView = (props: {
             <EpistoPaging
                 index={descCommentPaging.currentIndex}
                 slides={[
+                    VideoComments,
                     VideoDescription,
                     VideoContents,
-                    VideoComments
                 ]}></EpistoPaging>
         </Box>
     </>
