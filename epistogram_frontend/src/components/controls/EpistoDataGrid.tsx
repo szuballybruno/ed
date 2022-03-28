@@ -65,6 +65,7 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
         getRowId={x => getKey(x as any) as any}
         columns={columnsProcessed}
         initialState={initialState as any}
+        onCellKeyDown={(x, e) => e.stopPropagation()}
         style={{
             background: "var(--transparentWhite70)"
         }} />
