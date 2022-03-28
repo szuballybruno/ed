@@ -15,11 +15,13 @@ import { showNotification, useShowErrorDialog } from "../../../services/core/not
 import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
 import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseContentItemIssueDTO";
 import { CourseModuleShortDTO } from "../../../shared/dtos/admin/CourseModuleShortDTO";
+import { OmitProperty } from "../../../shared/types/advancedTypes";
 import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoDataGrid, GridColumnType, GridRowType } from "../../controls/EpistoDataGrid";
+import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
@@ -40,17 +42,18 @@ type RowSchema = CourseContentItemAdminDTO & {
     quickMenu: number;
     videoFile: string;
     rowNumber: number;
-    errorsWrapper: {
-        errors: CourseContentItemIssueDTO[]
-    };
+    errorsWrapper: number;
 };
 
 type RowType = GridRowType<RowSchema>;
 
+type EditRowFnType = <TField extends keyof RowType, >(key: string, field: TField, value: RowType[TField]) => void;
+
 const useGridColumnDefinitions = (
     modules: CourseModuleShortDTO[],
     openDialog: (type: "video" | "exam") => void,
-    removeRow: (key: string) => void) => {
+    removeRow: (key: string) => void,
+    editRow: EditRowFnType) => {
 
     const getIssueText = (dto: CourseContentItemIssueDTO) => {
 
@@ -98,42 +101,66 @@ const useGridColumnDefinitions = (
         throw new Error("Unexpected type: " + itemType);
     }
 
-    const gridColumns: GridColumnType<RowSchema>[] = [
-        {
-            field: 'rowNumber',
+    const CellEntry = <TValue extends number | string | null,>(props: {
+        value: TValue,
+        onValueSet: (value: TValue) => void,
+        isInt?: boolean
+    }) => {
+
+        const { value, onValueSet, isInt } = props;
+
+        return <EpistoEntry
+            type={isInt ? "number" : undefined}
+            transparentBackground
+            value={value as any}
+            marginTop="0"
+            style={{ width: "100%" }}
+            onFocusLost={x => onValueSet(x as any)} />
+    }
+
+    const columnDefGen = <TField extends keyof RowSchema,>(
+        field: TField,
+        columnOptions: OmitProperty<GridColumnType<RowSchema, string, TField>, "field">) => {
+
+        return {
+            field,
+            ...columnOptions
+        }
+    }
+
+    const gridColumns: GridColumnType<RowSchema, string, any>[] = [
+        columnDefGen("rowNumber", {
             headerName: 'Sorszam',
             width: 80
-        },
-        {
-            field: 'itemOrderIndex',
+        }),
+        columnDefGen("itemOrderIndex", {
             headerName: 'Elhelyezkedés',
             width: 80,
-            renderCell: (row) => {
+            renderCell: (key, field, row) => {
 
                 if (row.itemType === "pretest")
                     return "-";
 
-                return row.itemOrderIndex;
+                return <CellEntry
+                    onValueSet={val => editRow(key, field, val!)}
+                    value={row.itemOrderIndex ?? null}
+                    isInt />;
             }
-        },
-        {
-            field: 'itemTitle',
+        }),
+        columnDefGen("itemTitle", {
             headerName: 'Cím',
             width: 220,
-            resizable: true,
-            editable: true
-        },
-        {
-            field: 'itemSubtitle',
+            resizable: true
+        }),
+        columnDefGen("itemSubtitle", {
             headerName: 'Alcím',
             width: 220,
             resizable: true
-        },
-        {
-            field: 'moduleName',
+        }),
+        columnDefGen("moduleName", {
             headerName: 'Modul',
             width: 250,
-            renderCell: (row) => {
+            renderCell: (key, field, row) => {
 
                 if (row.itemType === "pretest")
                     return "-";
@@ -145,12 +172,11 @@ const useGridColumnDefinitions = (
                     getDisplayValue={x => "" + x?.name}
                     getCompareKey={module => "" + module?.id} />
             }
-        },
-        {
-            field: 'itemType',
+        }),
+        columnDefGen("itemType", {
             headerName: 'Típus',
             width: 120,
-            renderCell: (row) => {
+            renderCell: (key, field, row) => {
 
                 if (!row.itemType)
                     return "";
@@ -161,12 +187,11 @@ const useGridColumnDefinitions = (
                     text={label}
                     color={color} />
             }
-        },
-        {
-            field: 'videoLength',
+        }),
+        columnDefGen("videoLength", {
             headerName: 'Videó hossza',
             width: 80,
-            renderCell: (row) => {
+            renderCell: (key, field, row) => {
 
                 if (row.itemType === "exam")
                     return "-";
@@ -184,12 +209,11 @@ const useGridColumnDefinitions = (
                         ? "var(--intenseOrange)"
                         : "gray"} />
             }
-        },
-        {
-            field: 'errorsWrapper',
+        }),
+        columnDefGen("errorsWrapper", {
             headerName: 'Hibak',
             width: 100,
-            renderCell: (row) => {
+            renderCell: (key, field, row) => {
 
                 if (!row.errors)
                     return "";
@@ -208,12 +232,11 @@ const useGridColumnDefinitions = (
                         ? "var(--intenseRed)"
                         : "var(--intenseGreen)"} />
             }
-        },
-        {
-            field: 'videoFile',
+        }),
+        columnDefGen("videoFile", {
             headerName: 'Videó fájl',
             width: 180,
-            renderCell: (row) => {
+            renderCell: (key, field, row) => {
 
                 return <EpistoButton
                     variant="outlined"
@@ -222,12 +245,11 @@ const useGridColumnDefinitions = (
                     Fájl kiválasztása
                 </EpistoButton >
             }
-        },
-        {
-            field: 'quickMenu',
+        }),
+        columnDefGen("quickMenu", {
             headerName: 'Gyorshivatkozások',
             width: 150,
-            renderCell: (row) => {
+            renderCell: (key, field, row) => {
 
                 return (
                     <Flex>
@@ -251,7 +273,7 @@ const useGridColumnDefinitions = (
                     </Flex>
                 )
             }
-        }
+        })
     ];
 
     return gridColumns;
@@ -302,9 +324,7 @@ export const AdminCourseContentSubpage = () => {
                 quickMenu: index,
                 rowNumber: index,
                 videoFile: "file_" + item.videoId,
-                errorsWrapper: {
-                    errors: item.errors
-                }
+                errorsWrapper: index
             }
         });
 
@@ -324,172 +344,9 @@ export const AdminCourseContentSubpage = () => {
         }
     }
 
-    // saves everything. considers 
-    // the current order of things in memory,
-    // and sets the order indices accordingly 
-    const handleSaveCourseAsync = async () => {
+    const handleMutateRow: EditRowFnType = (key, field, value) => {
 
-        // if (!courseContentEditData)
-        //     return;
-
-        // const orderedModules = [...modules];
-
-        // // set order indices & module ids
-        // orderedModules
-        //     .forEach((m, mIndex) => {
-
-        //         m.orderIndex = mIndex;
-
-        //         m.items
-        //             .forEach((i, iIndex) => {
-
-        //                 i.moduleId = m.id;
-        //                 i.orderIndex = iIndex;
-        //             });
-        //     });
-
-        // const dto = {
-        //     courseId: courseId,
-        //     modules: orderedModules
-        // } as CourseContentEditDataDTO;
-
-        // try {
-
-        //     await saveCourseDataAsync(dto);
-
-        //     showNotification(translatableTexts.administration.courseContentSubpage.courseSavedSuccessfully);
-        // }
-        // catch (e) {
-
-        //     showError(e);
-        // }
-    }
-
-    // adds a course item,
-    // video or exam 
-    const handleAddCourseItemAsync = async (moduleId: number, type: "video" | "exam") => {
-
-        // //await handleSaveCourseAsync();
-
-        // try {
-
-        //     if (type === "video") {
-
-        //         const idResult = await createVideoAsync(moduleId)
-        //         showNotification(translatableTexts.administration.courseContentSubpage.newVideoAddedSuccessfully);
-        //         //navToVideoEdit(idResult.id);
-        //         refetchCourseContentEditData()
-        //     }
-
-        //     else {
-
-        //         const idResult = await createExamAsync(moduleId);
-        //         showNotification(translatableTexts.administration.courseContentSubpage.newExamAddedSuccessfully);
-        //         //navToExamEdit(idResult.id);
-        //         refetchCourseContentEditData()
-        //     }
-        // } catch (e) {
-
-        //     showError(e);
-        // }
-    }
-
-    // removes a course item from the list 
-    // non async, does not make API calls 
-    const removeCourseItem = (code: string) => {
-
-        // setModules([...modules]
-        //     .map(x => {
-        //         x.items = x.items.filter(y => y.descriptorCode !== code)
-        //         return x;
-        //     }));
-    }
-
-    // deletes a course item 
-    // shows warning dialog
-    const handleDeleteCourseItemAsync = async (courseItem: CourseContentItemAdminDTO) => {
-
-        // exam
-        if (courseItem.itemType === "exam") {
-
-            deleteWarningDialogLogic
-                .openDialog({
-                    title: translatableTexts.administration.courseContentSubpage.doYouReallyRemoveTheExam,
-                    description: translatableTexts.administration.courseContentSubpage.allQuestionsWillBeLost,
-                    buttons: [
-                        {
-                            title: translatableTexts.administration.courseContentSubpage.removeExam,
-                            action: async () => {
-
-                                try {
-
-                                    await deleteExamAsync(courseItem.itemId);
-                                    showNotification(translatableTexts.administration.courseContentSubpage.examRemovedSuccessfully);
-                                    removeCourseItem(courseItem.itemCode);
-                                }
-                                catch (e) {
-
-                                    showError(e);
-                                }
-                            }
-                        }
-                    ]
-                });
-        }
-
-        // video
-        else {
-
-            deleteWarningDialogLogic
-                .openDialog({
-                    title: translatableTexts.administration.courseContentSubpage.doYouReallyRemoveTheVideo,
-                    description: translatableTexts.administration.courseContentSubpage.uploadedVideoWillBeLost,
-                    buttons: [
-                        {
-                            title: translatableTexts.administration.courseContentSubpage.removeVideo,
-                            action: async () => {
-
-                                try {
-
-                                    await deleteVideoAsync(courseItem.itemId);
-                                    showNotification(translatableTexts.administration.courseContentSubpage.videoRemovedSuccessfully);
-                                    removeCourseItem(courseItem.itemCode);
-                                }
-                                catch (e) {
-
-                                    showError(e);
-                                }
-                            }
-                        }
-                    ]
-                });
-        }
-    }
-
-    // adds a new module to the course 
-    // saved instantly
-    const handleAddNewModuleAsync = async () => {
-
-        try {
-
-            await createModuleAsync({
-                courseId: courseId,
-                name: translatableTexts.administration.courseContentSubpage.addModule,
-                orderIndex: modules.length
-            });
-
-            showNotification(translatableTexts.administration.courseContentSubpage.newModuleAddedSuccessfully);
-            // await refetchCourseContentEditData();
-        }
-        catch (e) {
-
-            showError(e);
-        }
-    }
-
-    const handleMutateRow = (field: keyof RowType, row: RowType) => {
-
-        mutateRow(row.itemCode, field as any, row[field]);
+        mutateRow(key, field as any, value);
     }
 
     const handleAddRow = (type: "video" | "exam") => {
@@ -509,7 +366,7 @@ export const AdminCourseContentSubpage = () => {
         removeRow(key);
     }
 
-    const gridColumns = useGridColumnDefinitions(modules, openDialog, handleRemoveRow);
+    const gridColumns = useGridColumnDefinitions(modules, openDialog, handleRemoveRow, handleMutateRow);
 
     //
     // EFFECTS
@@ -562,7 +419,6 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDataGrid
                     columns={gridColumns}
                     rows={gridRows}
-                    onEdit={handleMutateRow}
                     getKey={x => x.itemCode}
                     initialState={{
                         pinnedColumns: {

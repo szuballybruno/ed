@@ -2,14 +2,12 @@ import { DataGridPro, GridCellParams, GridColDef, MuiEvent, useGridApiRef } from
 import { ReactNode } from "react";
 import { EpistoEntry } from "./EpistoEntry";
 
-export type GridColumnType<TRow> = {
-    field: keyof TRow;
-    type?: "int";
+export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
+    field: TField;
     headerName: string;
+    renderCell?: (key: TKey, field: TField, rowData: Partial<TRow>) => ReactNode | string;
     width?: number;
-    editable?: boolean;
     resizable?: boolean;
-    renderCell?: (rowData: Partial<TRow>) => ReactNode | string;
 };
 
 export type GridRowType<T> = {
@@ -25,68 +23,37 @@ export type InitialStateType<TSchema> = {
 
 export const EpistoDataGrid = <TSchema, TKey>(props: {
     rows: GridRowType<TSchema>[],
-    columns: GridColumnType<TSchema>[],
+    columns: GridColumnType<TSchema, TKey, any>[],
     getKey: (row: GridRowType<TSchema>) => TKey,
-    onEdit?: (field: keyof TSchema, row: GridRowType<TSchema>) => void,
     initialState?: InitialStateType<TSchema>
 }) => {
 
-    const { columns, rows, onEdit, initialState, getKey } = props;
+    const { columns, rows, initialState, getKey } = props;
 
-    const handleEdit = <TField extends keyof TSchema,>(key: TKey, field: TField, fieldValue: GridRowType<TSchema>[TField]) => {
+    // const handleEdit = <TField extends keyof TSchema,>(key: TKey, field: TField, fieldValue: GridRowType<TSchema>[TField]) => {
 
-        if (!onEdit)
-            return;
+    //     if (!onEdit)
+    //         return;
 
-        const row = rows
-            .single(row => getKey(row) === key);
+    //     const row = rows
+    //         .single(row => getKey(row) === key);
 
-        const newRow = { ...row };
-        newRow[field] = fieldValue;
+    //     const newRow = { ...row };
+    //     newRow[field] = fieldValue;
 
-        onEdit(field, newRow);
-    }
+    //     onEdit(field, newRow);
+    // }
 
     const columnsProcessed = columns
         .map(column => {
 
-            const { renderCell, editable, ...others } = column;
-
-            const renderFn = (() => {
-
-                if (renderCell)
-                    return (props: any) => renderCell(props.row);
-
-                if (editable)
-                    return (props: any) => {
-
-                        const row = props.row;
-                        const value = row[column.field];
-                        const key = getKey(row);
-
-                        const parseValue = (val: string) => {
-
-                            if (column.type === "int")
-                                return parseInt(val);
-
-                            return val;
-                        }
-
-                        return (
-                            <EpistoEntry
-                                type={column.type === "int" ? "number" : undefined}
-                                transparentBackground
-                                value={value + ""}
-                                marginTop="0"
-                                style={{ width: "100%" }}
-                                onFocusLost={x => handleEdit(key, column.field, parseValue(x) as any)} />
-                        );
-                    }
-            })();
+            const { renderCell, ...others } = column;
 
             return {
                 editable: false,
-                renderCell: renderFn,
+                renderCell: renderCell
+                    ? (props: any) => renderCell(getKey(props.row), column.field, props.row)
+                    : undefined,
                 ...others
             } as GridColDef;
         });
@@ -98,9 +65,6 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
         getRowId={x => getKey(x as any) as any}
         columns={columnsProcessed}
         initialState={initialState as any}
-        onCellEditCommit={onEdit
-            ? x => handleEdit(x.id as any, x.field as any as keyof TSchema, x.value as any)
-            : undefined}
         style={{
             background: "var(--transparentWhite70)"
         }} />

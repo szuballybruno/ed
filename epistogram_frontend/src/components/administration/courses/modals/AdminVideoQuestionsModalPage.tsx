@@ -59,10 +59,10 @@ export const AdminVideoQuestionsModalPage = () => {
 
             <Flex align="center">
 
-                <EpistoEntry
+                {/* <EpistoEntry
                     flex="8"
                     labelVariant="hidden"
-                    label="Válaszok" />
+                    label="Válaszok" /> */}
 
                 <EpistoEntry
                     flex="1"
@@ -96,7 +96,7 @@ export const AdminVideoQuestionsModalPage = () => {
                     key={index}
                     align="center">
 
-                    <EpistoEntry flex="1" labelVariant="hidden" label="Válaszok" />
+                    {/* <EpistoEntry flex="1" labelVariant="hidden" label="Válaszok" /> */}
                     <Flex
                         mt="10px"
                         ml="5px"

@@ -1,16 +1,15 @@
 import { Flex } from "@chakra-ui/layout";
-import { InputAdornment, TextField, Typography } from "@mui/material";
-import { fontSize, padding } from "@mui/system";
-import { forwardRef, useEffect, useState } from "react";
+import { InputAdornment, TextField } from "@mui/material";
+import { Ref, useEffect, useState } from "react";
 import { ClassBuilder } from "../../helpers/classBuilder";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "./EpistoFont";
 
-export type EpistoEntryPropsType = {
-    value?: string,
+export type EpistoEntryPropsType<TValue extends number | string | null> = {
+    value?: TValue,
     label?: string,
-    setValue?: (value: string) => void,
-    onFocusLost?: (value: string) => void,
+    setValue?: (value: TValue) => void,
+    onFocusLost?: (value: TValue) => void,
     disabled?: boolean,
     isMultiline?: boolean,
     postfix?: string,
@@ -28,7 +27,7 @@ export type EpistoEntryPropsType = {
     transparentBackground?: boolean
 }
 
-export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((props: EpistoEntryPropsType, ref) => {
+export const EpistoEntry = <TValue extends number | string | null,>(props: EpistoEntryPropsType<TValue> & { ref?: Ref<HTMLInputElement> }) => {
 
     const {
         label,
@@ -49,13 +48,14 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         errorText,
         setError,
         isMandatory,
-        transparentBackground
+        transparentBackground,
+        ref
     } = props;
 
-    const [currentValue, setCurrentValue] = useState<string>(value ?? "");
+    const [currentValue, setCurrentValue] = useState<TValue>(value ? value as any : "");
 
     // set value 
-    const onChanged = (value: string) => {
+    const onChanged = (value: TValue) => {
 
         setCurrentValue(value);
 
@@ -88,8 +88,19 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         if (value === currentValue)
             return;
 
-        setCurrentValue(value ?? "");
+        if (value === undefined)
+            return;
+
+        setCurrentValue(value);
     }, [value]);
+
+    const handleNewValue = (newVal: string): any => {
+
+        if (type === "number")
+            return parseInt(newVal);
+
+        return newVal;
+    }
 
     return <Flex
         direction="column"
@@ -121,7 +132,7 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
             label={labelVariant === "normal" ? label : undefined}
             placeholder={placeholder}
             name={name}
-            value={currentValue}
+            value={currentValue + ""}
             error={!!errorText}
             helperText={errorText}
             multiline={isMultiline}
@@ -156,7 +167,7 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
                     }
                 }
             }}
-            onBlur={onFocusLost ? (x) => onFocusLost(x.currentTarget.value) : undefined}
-            onChange={x => onChanged(x.currentTarget.value)} />
+            onBlur={onFocusLost ? (x) => onFocusLost(handleNewValue(x.currentTarget.value)) : undefined}
+            onChange={x => onChanged(handleNewValue(x.currentTarget.value))} />
     </Flex >
-});
+};

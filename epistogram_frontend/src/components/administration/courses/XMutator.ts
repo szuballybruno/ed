@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { getKeys } from "../../../shared/logic/sharedLogic";
-import { KeyOfType } from "../../../shared/types/KeyOfType";
+import { KeyOfType } from "../../../shared/types/advancedTypes";
 
 type PropertyMutation<TMutatee> = {
     name: keyof TMutatee,
