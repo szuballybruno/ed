@@ -1,11 +1,18 @@
 import { Typography } from "@mui/material";
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { CSSProperties } from "react";
 import { PagingType } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
+import { EpistoFont } from "./EpistoFont";
 
-export const SegmentedButton = (props: { paging: PagingType<string> }) => {
+export const SegmentedButton = <T,>(props: {
+    paging: PagingType<T>,
+    getDisplayValue?: (item: T) => string,
+    buttonStyle?: CSSProperties
+}) => {
 
-    const { paging } = props;
+    const { paging, getDisplayValue, buttonStyle } = props;
+
+    const disp = getDisplayValue ?? ((item: T) => item);
 
     return <>
         <ToggleButtonGroup style={{
@@ -14,7 +21,7 @@ export const SegmentedButton = (props: { paging: PagingType<string> }) => {
 
             {paging
                 .items
-                .map((buttonText, index) => {
+                .map((item, index) => {
 
                     const isActive = index === paging.currentIndex;
 
@@ -23,14 +30,15 @@ export const SegmentedButton = (props: { paging: PagingType<string> }) => {
                             selected={isActive}
                             style={{
                                 border: "none",
-                                padding: "15px 25px"
+                                padding: "15px 25px",
+                                ...buttonStyle
                             }}
                             key={index}
                             value={index}
                             onClick={() => paging.setItem(index)}>
 
                             <EpistoFont fontSize="fontSmallPlus">
-                                {buttonText}
+                                {disp(item)}
                             </EpistoFont>
                         </ToggleButton>
                     )

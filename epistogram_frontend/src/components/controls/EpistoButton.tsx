@@ -4,6 +4,7 @@ import { CSSProperties, forwardRef, ReactNode } from "react";
 export type EpistoButtonPropsType = {
     children?: string | ReactNode,
     onClick?: () => void,
+    onClickNoPropagation?: () => void,
     size?: string,
     isRound?: boolean,
     padding?: string,
@@ -33,7 +34,8 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         icon,
         isDisabled,
         name,
-        type
+        type,
+        onClickNoPropagation
     } = props;
 
     const { variant: _, ...buttonProps } = props.buttonProps ?? { variant: null };
@@ -53,7 +55,17 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
     };
 
     return <Button
-        onClick={onClick}
+        onClick={(e) => {
+
+            if (onClick)
+                onClick();
+
+            if (onClickNoPropagation){
+
+                e.stopPropagation();
+                onClickNoPropagation();
+            }
+        }}
         name={name}
         variant={getVariant()}
         color="primary"

@@ -91,30 +91,34 @@ export const AdminVideoQuestionsModalPage = () => {
                     <Remove />
                 </Flex>
             </Flex>
-            {iterate(4, () => <Flex align="center">
-
-                <EpistoEntry flex="1" labelVariant="hidden" label="Válaszok" />
+            {iterate(4, (index) => (
                 <Flex
-                    mt="10px"
-                    ml="5px"
-                    className="roundBorders"
-                    background="var(--transparentWhite70)"
-                    align="center"
-                    justify="center">
+                    key={index}
+                    align="center">
 
-                    <Checkbox
-                        sx={{
-                            ".MuiSvgIcon-root": {
-                                width: 22,
-                                height: 22
-                            }
-                        }}
-                        style={{
-                            //color: "var(--transparentIntenseBlue85)"
-                        }} />
+                    <EpistoEntry flex="1" labelVariant="hidden" label="Válaszok" />
+                    <Flex
+                        mt="10px"
+                        ml="5px"
+                        className="roundBorders"
+                        background="var(--transparentWhite70)"
+                        align="center"
+                        justify="center">
+
+                        <Checkbox
+                            sx={{
+                                ".MuiSvgIcon-root": {
+                                    width: 22,
+                                    height: 22
+                                }
+                            }}
+                            style={{
+                                //color: "var(--transparentIntenseBlue85)"
+                            }} />
+                    </Flex>
+
                 </Flex>
-
-            </Flex>)}
+            ))}
         </Flex>
 
 

@@ -5,6 +5,7 @@ import { usePaging } from "../../../static/frontendHelpers"
 import { EpistoFont } from "../../controls/EpistoFont"
 import { EpistoDialog, EpistoDialogLogicType } from "../../EpistoDialog"
 import { EpistoPaging } from "../../universal/EpistoPaging"
+import { SegmentedButton } from "../../controls/SegmentedButton"
 import { ChipSmall } from "./ChipSmall"
 
 export const CourseItemEditDialogBase = (props: {
@@ -58,27 +59,43 @@ export const CourseItemEditDialogBase = (props: {
                 zIndex="1000"
                 flex="1">
 
-                <Flex align="center">
-                    <Flex h="50px" direction="column" mr="20px">
-                        <EpistoFont fontSize={"fontLarge"} style={{
-                            display: "flex",
-                            alignItems: "center",
-                            flexDirection: "row",
-                            fontWeight: 600
-                        }}>
+                <Flex
+                    direction="column">
+
+                    <Flex align="center">
+
+                        <EpistoFont
+                            fontSize={"fontLarge"}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                flexDirection: "row",
+                                fontWeight: 600
+                            }}>
                             Új dia hozzáadása
-                            <ChipSmall text="Videó" color="var(--deepBlue)" style={{
+                        </EpistoFont>
+
+                        <ChipSmall
+                            text="Videó"
+                            color="var(--deepBlue)"
+                            style={{
                                 marginLeft: 15
                             }} />
-                        </EpistoFont>
-                        <EpistoFont fontSize={"fontMid"}>
-                            Microsoft PowerPoint alapok
-                        </EpistoFont>
                     </Flex>
+
+                    <EpistoFont
+                        fontSize={"fontMid"}>
+
+                        Microsoft PowerPoint alapok
+                    </EpistoFont>
                 </Flex>
 
                 {/* tab selector */}
-                <Tabs
+                <SegmentedButton
+                    paging={paging}
+                    getDisplayValue={x => x.title} />
+
+                {/* <Tabs
                     value={paging.currentIndex}
                     onChange={(_, y) => setTab(y as number)}
                     className="roundBorders"
@@ -127,7 +144,7 @@ export const CourseItemEditDialogBase = (props: {
                                 key={index}
                                 id={`simple-tab-${index}`} />
                         })}
-                </Tabs>
+                </Tabs> */}
             </Flex>
 
             {/* tab renderer */}

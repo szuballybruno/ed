@@ -227,24 +227,17 @@ const useGridColumnDefinitions = (
                             <Edit />
                         </EpistoButton>
 
-                        <EpistoButton onClick={() => { }}>
+                        <EpistoButton
+                            onClick={() => { }}>
 
                             <Equalizer />
                         </EpistoButton>
 
-                        <button
-                            onClick={(e) => {
-                             
-                                e.stopPropagation();    
-                                removeRow(row.itemCode);
-                            }}>
-                            D
-                        </button>
-
-                        {/* <EpistoButton onClick={() => removeRow(row.itemCode)}>
+                        <EpistoButton
+                            onClickNoPropagation={() => removeRow(row.itemCode)}>
 
                             <Delete />
-                        </EpistoButton> */}
+                        </EpistoButton>
                     </Flex>
                 )
             }

@@ -38,7 +38,9 @@ export const EventListener = (props: {
                         : null
                     : null;
 
-                return x.handlerComponent({ data: eventData, key: index });
+                return <div key={index}>
+                    {x.handlerComponent({ data: eventData, key: index })}
+                </div>
             })}
 
         {children}
