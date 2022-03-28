@@ -46,8 +46,8 @@ VALUES
     (36, 24, 'Pretest exam course 24', 'Pretest exam course 24 desc', '', 0, NULL, 'pretest'),
     (37, 26, 'Pretest exam course 26', 'Pretest exam course 26 desc', '', 0, NULL, 'pretest'),
     (38, 25, 'Pretest exam course 25', 'Pretest exam course 25 desc', '', 0, NULL, 'pretest'),
-    (39, 28, 'Pretest exam course 28', 'Pretest exam course 28 desc', '', 0, NULL, 'pretest'),
-    (40, 17, 'Pretest exam course 17', 'Pretest exam course 17 desc', '', 0, NULL, 'pretest'),
-    (41, 22, 'Pretest exam course 22', 'Pretest exam course 22 desc', '', 0, NULL, 'pretest'),
+    (39, 28, 'Word', 'Kezdés', '', 0, NULL, 'pretest'),
+    (40, 17, 'OBS', 'Kezdés', '', 0, NULL, 'pretest'),
+    (41, 22, 'PowerPoint', 'Kezdés', '', 0, NULL, 'pretest'),
     (42, 29, 'Pretest exam course 29', 'Pretest exam course 29 desc', '', 0, NULL, 'pretest'),
     (43, 27, 'Microsoft Excel szintfelmérő vizsga', 'Most kiderítjük, hogy megy neked az Excel, majd ez alapján személyre szabjuk számodra a kurzust.', '', 0, NULL, 'pretest');

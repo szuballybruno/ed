@@ -557,7 +557,11 @@ VALUES
 (581, 'Hol tudom testreszabni az Adatérvényesítés hibaüzenetét?', NULL, 2, NULL, NULL, 1, NULL, 43),
 (582, 'Adatimportálásnál miért kell a Power Query-ben a számokat megfelelő formátumúra pl. "Egész szám" beállítani?', NULL, 3, NULL, NULL, 1, NULL, 43),
 (583, 'Mi történik a szűrésnél?', NULL, 4, NULL, NULL, 1, NULL, 43),
-(584, 'Tudom-e szegélyezni az Excel diagramok adatfeliratait?', NULL, 5, NULL, NULL, 1, NULL, 43);
+(584, 'Tudom-e szegélyezni az Excel diagramok adatfeliratait?', NULL, 5, NULL, NULL, 1, NULL, 43),
+
+(585, 'Word', NULL, 5, NULL, NULL, 1, NULL, 39),
+(586, 'OBS', NULL, 5, NULL, NULL, 1, NULL, 40),
+(587, 'PowerPoint', NULL, 5, NULL, NULL, 1, NULL, 41);
 
 /* INSERT INTO public.question
 (
@@ -2616,7 +2620,28 @@ VALUES
 (2185, 'Igen, de csak szaggatott vonallal', NULL, 584),
 (2186, 'Igen, de csak dupla vonallal', NULL, 584),
 (2187, 'Igen', true, 584),
-(2188, 'Nem', NULL, 584);
+(2188, 'Nem', NULL, 584),
+
+/* Precourse exam answers for 
+* PP/Word/OBS courses #28,#17,#22
+* Precourse exam #39,#40,#41
+* Questions #585-587
+*/
+
+(2189, 'a', NULL, 585),
+(2190, 'b', NULL, 585),
+(2191, 'c', true, 585),
+(2192, 'd', NULL, 585),
+
+(2193, 'a', NULL, 586),
+(2194, 'b', NULL, 586),
+(2195, 'c', true, 586),
+(2196, 'd', NULL, 586),
+
+(2197, 'a', NULL, 587),
+(2198, 'b', NULL, 587),
+(2199, 'c', true, 587),
+(2200, 'd', NULL, 587);
 
 /* INSERT INTO public.answer
     (text, is_correct, question_id) 

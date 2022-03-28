@@ -6,12 +6,12 @@ INSERT INTO public.storage_file
 VALUES
     (2, '/courseCoverImages/1.png'),
 (4, '/courseCoverImages/3.png'),
-(5, '/courseCoverImages/4.png'),
+(5, '/courseCoverImages/canva.png'),
 (6, '/courseCoverImages/5.png'),
 (7, '/courseCoverImages/7.png'),
 (8, '/courseCoverImages/6.png'),
 (9, '/courseCoverImages/8.png'),
-(21, 'courseCoverImages/courseCoverImage_10_1635349846207..jpg'),
+(21, 'courseCoverImages/cyber.jpg'),
 (39, 'courseCoverImages/courseCoverImage_15_1635401920887..jpg'),
 (61, 'courseCoverImages/courseCoverImage_2_1635425366973..jpg'),
 (115, 'courseCoverImages/courseCoverImage_18_1635936801554..jpg'),
@@ -52,8 +52,8 @@ INSERT INTO public.course
         shop_items_id
     )
 VALUES
-(4, '2022-01-15 14:18:32.55715+00', 'delete course', '', '', 3.5, 4.5, 0, 'magyar', '', '', '', '', '', 'private', 1, 5, 1, 5, NULL),
-(10, '2022-01-15 16:02:23.130322+00', 'deleete', '', '', 1.5, 3.5, 0, 'magyar', '', '', '', '', '', 'private', 1, 5, 1, 21, NULL),
+(4, '2022-01-15 14:18:32.55715+00', 'Canva Vállalkozásoknak', '', '', 3.5, 4.5, 0, 'magyar', '', '', '', '', '', 'private', 1, 5, 1, 5, NULL),
+(10, '2022-01-15 16:02:23.130322+00', 'Cyberbiztonság az irodában', '', '', 1.5, 3.5, 0, 'magyar', '', '', '', '', '', 'private', 1, 5, 1, 21, NULL),
 (23, '2022-01-14 21:52:26.140736+00', 'Instagram gyorstalpaló', '', '', 1.5, 3.5, 0, 'magyar', '', '', '', '', '', 'private', 1, 10, 1, 163, NULL),
 (24, '2022-01-14 21:52:38.751267+00', 'Google Ads Alapozó', '', '', 1.5, 3.5, 0, 'magyar', '', '', '', '', '', 'private', 1, 4, 1, 165, NULL),
 (26, '2022-01-14 21:52:50.323264+00', 'Adatbányászat Pythonnal', '', '', 1.5, 3.5, 0, 'magyar', '', '', '', '', '', 'private', 1, 3, 1, 167, NULL),
