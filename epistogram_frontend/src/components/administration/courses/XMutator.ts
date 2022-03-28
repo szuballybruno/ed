@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { getKeys } from "../../../shared/logic/sharedLogic";
+import { KeyOfType } from "../../../shared/types/KeyOfType";
 
 type PropertyMutation<TMutatee> = {
     name: keyof TMutatee,
@@ -14,13 +15,10 @@ type Mutation<TMutatee, TKey> = {
     propertyMutators?: PropertyMutation<TMutatee>[]
 }
 
-type KeyOfType<T, V> = keyof {
-    [P in keyof T as T[P] extends V ? P : never]: any
-}
-
 export const useXListMutator = <TMutatee extends Object, TKey>(
     list: TMutatee[],
-    getCompareKey: (obj: TMutatee) => TKey) => {
+    getCompareKey: (obj: TMutatee) => TKey,
+    keyPropertyName: KeyOfType<TMutatee, TKey>) => {
 
     const [mutations, setMutations] = useState<Mutation<TMutatee, TKey>[]>([]);
 
@@ -31,6 +29,11 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             throw new Error("Can't use null or undeined as object key!");
 
         return key;
+    }
+
+    const setCompareKey = (obj: TMutatee, key: TKey) => {
+
+        (obj as any)[keyPropertyName] = key;
     }
 
     const mutate = <TPropertyName extends keyof TMutatee>(key: TKey, propertyName: TPropertyName, newValue: TMutatee[TPropertyName]) => {
@@ -80,9 +83,9 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         setMutations([...mutations, mut]);
     }
 
-    const add = (obj: Partial<TMutatee>) => {
+    const add = (key: TKey, obj: Partial<TMutatee>) => {
 
-        const key = getCompareKeyValue(obj as TMutatee);
+        setCompareKey(obj as TMutatee, key);
 
         const mut: Mutation<TMutatee, TKey> = {
             key,
@@ -116,11 +119,11 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
     }
 
     const mutatedData = list
-        .filter(item => !mutations
-            .some(mut => mut.action === "delete" && mut.key === getCompareKeyValue(item)))
         .concat(mutations
             .filter(mut => mut.action === "add")
-            .map(mut => createObj(mut)));
+            .map(mut => createObj(mut)))
+        .filter(item => !mutations
+            .some(mut => mut.action === "delete" && mut.key === getCompareKeyValue(item)));
 
     mutations
         .filter(mut => mut.action === "update")

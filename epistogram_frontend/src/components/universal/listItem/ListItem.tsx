@@ -50,7 +50,7 @@ const ListItem = (props: {
             <div className={classes.videoMainTitleWrapper}>
 
                 <EpistoFont
-                    fontSize="fontSmallPlus"
+                    fontSize="fontNormal14"
                     isUppercase
                     style={{
                         fontWeight: 500

@@ -123,7 +123,7 @@ export const ExamLayout = (props: {
                             marginRight: "10px"
                         }} />
 
-                    <EpistoFont fontSize={"fontSmallPlus"}>
+                    <EpistoFont fontSize={"fontNormal14"}>
                         {`${Math.round(progressValue)}%`}
                     </EpistoFont>
                 </>}

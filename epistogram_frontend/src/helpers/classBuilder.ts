@@ -1,3 +1,4 @@
+import { isString } from "../static/frontendHelpers";
 
 export type StyleSizeType = "0" | "5" | "10" | "15" | "40";
 
@@ -60,11 +61,17 @@ export class ClassBuilder {
         return this;
     }
 
-    if = (condition: boolean, whenTrue: (b: ClassBuilder) => ClassBuilder) => {
+    if = (condition: boolean, whenTrue: ((b: ClassBuilder) => ClassBuilder) | string) => {
 
         if (condition) {
 
-            whenTrue(this);
+            if (isString(whenTrue)) {
+
+                this.custom(whenTrue as string);
+            } else {
+
+                (whenTrue as (b: ClassBuilder) => ClassBuilder)(this);
+            }
         }
 
         return this;

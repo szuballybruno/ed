@@ -1,6 +1,8 @@
 import { Flex } from "@chakra-ui/layout";
 import { InputAdornment, TextField, Typography } from "@mui/material";
-import { forwardRef, useEffect } from "react";
+import { fontSize, padding } from "@mui/system";
+import { forwardRef, useEffect, useState } from "react";
+import { ClassBuilder } from "../../helpers/classBuilder";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "./EpistoFont";
 
@@ -22,7 +24,8 @@ export type EpistoEntryPropsType = {
     style?: React.CSSProperties,
     errorText?: string | null,
     setError?: (errorText: string | null) => void,
-    isMandatory?: boolean
+    isMandatory?: boolean,
+    transparentBackground?: boolean
 }
 
 export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((props: EpistoEntryPropsType, ref) => {
@@ -45,11 +48,16 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         style,
         errorText,
         setError,
-        isMandatory
+        isMandatory,
+        transparentBackground
     } = props;
+
+    const [currentValue, setCurrentValue] = useState<string>(value ?? "");
 
     // set value 
     const onChanged = (value: string) => {
+
+        setCurrentValue(value);
 
         if (!setValue)
             return;
@@ -74,7 +82,20 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         setError(error);
     }, [value]);
 
-    return <Flex direction="column" mt={marginTop ?? "10px"} flex={flex} style={style}>
+    // set current value to input value 
+    useEffect(() => {
+
+        if (value === currentValue)
+            return;
+
+        setCurrentValue(value ?? "");
+    }, [value]);
+
+    return <Flex
+        direction="column"
+        mt={marginTop ?? "10px"}
+        flex={flex}
+        style={style}>
 
         {labelVariant === "top" && <EpistoFont
             isUppercase
@@ -89,14 +110,18 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
         }
 
         <TextField
-            className="mildShadow roundBorders"
+            className={new ClassBuilder()
+                .if(!transparentBackground, "mildShadow")
+                .custom("roundBorders")
+                .custom("fontNormal14")
+                .build()}
             inputRef={ref}
             disabled={disabled}
             size="small"
             label={labelVariant === "normal" ? label : undefined}
             placeholder={placeholder}
             name={name}
-            value={value}
+            value={currentValue}
             error={!!errorText}
             helperText={errorText}
             multiline={isMultiline}
@@ -104,30 +129,34 @@ export const EpistoEntry = forwardRef<HTMLInputElement, EpistoEntryPropsType>((p
             sx={{
                 '& .MuiOutlinedInput-root': {
                     height: height,
-                    background: "var(--transparentWhite90)",
+                    background: transparentBackground
+                        ? undefined
+                        : "var(--transparentWhite90)",
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                     border: "none"
                 }
             }}
-            InputProps={postfix
-                ? {
-                    endAdornment: <InputAdornment position="end">{postfix}</InputAdornment>
+            InputProps={{
+                endAdornment: postfix
+                    ? (
+                        <InputAdornment
+                            position="end">
+                            {postfix}
+                        </InputAdornment>
+                    )
+                    : undefined,
+                style: {
+                    fontSize: "14px",
+                    padding: 0
+                },
+                sx: {
+                    "& .MuiInputBase-input": {
+                        padding: 0
+                    }
                 }
-                : undefined}
-            onBlur={x => {
-
-                if (onFocusLost)
-                    onFocusLost(x.currentTarget.value);
             }}
-            onChange={x => {
-
-                onChanged(x.currentTarget.value);
-            }}
-            style={{
-                //border: "none"
-                // margin: "10px 0px 10px 0px",
-                // padding: "2px"
-            }} />
+            onBlur={onFocusLost ? (x) => onFocusLost(x.currentTarget.value) : undefined}
+            onChange={x => onChanged(x.currentTarget.value)} />
     </Flex >
 });

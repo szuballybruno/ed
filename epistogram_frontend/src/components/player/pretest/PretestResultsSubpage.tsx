@@ -128,7 +128,7 @@ export const PretestResultsSubpage = () => {
                     align="center">
 
                     <EpistoFont
-                        fontSize="fontSmallPlus"
+                        fontSize="fontNormal14"
                         style={{
                             maxWidth: 600
                         }}>

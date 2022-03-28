@@ -14,7 +14,7 @@ export const FlexListTitleSubtitle = (props: {
     return <Flex direction="column">
 
         <EpistoFont
-            fontSize="fontSmallPlus"
+            fontSize="fontNormal14"
             isUppercase
             style={{
                 fontWeight: props.isSelected ? 700 : 500,

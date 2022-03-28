@@ -9,6 +9,7 @@ import { useCreateExam, useDeleteExam } from "../../../services/api/examApiServi
 import { useCreateModule, useDeleteModule } from "../../../services/api/moduleApiService";
 import { usePretestExamId } from "../../../services/api/pretestApiService";
 import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiService";
+import { getVirtualId } from "../../../services/core/idService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
@@ -119,8 +120,8 @@ const useGridColumnDefinitions = (
             field: 'itemTitle',
             headerName: 'Cím',
             width: 220,
-            editable: true,
-            resizable: true
+            resizable: true,
+            editable: true
         },
         {
             field: 'itemSubtitle',
@@ -151,6 +152,9 @@ const useGridColumnDefinitions = (
             width: 120,
             renderCell: (row) => {
 
+                if (!row.itemType)
+                    return "";
+
                 const { color, label } = getItemTypeValues(row.itemType);
 
                 return <ChipSmall
@@ -166,6 +170,9 @@ const useGridColumnDefinitions = (
 
                 if (row.itemType === "exam")
                     return "-";
+
+                if (!row.warnings || !row.videoLength)
+                    return "";
 
                 const isLengthWarning = row
                     .warnings
@@ -183,6 +190,9 @@ const useGridColumnDefinitions = (
             headerName: 'Hibak',
             width: 100,
             renderCell: (row) => {
+
+                if (!row.errors)
+                    return "";
 
                 const hasErrors = row.errors.length > 0;
 
@@ -234,7 +244,7 @@ const useGridColumnDefinitions = (
                         </EpistoButton>
 
                         <EpistoButton
-                            onClickNoPropagation={() => removeRow(row.itemCode)}>
+                            onClickNoPropagation={() => removeRow(row.itemCode!)}>
 
                             <Delete />
                         </EpistoButton>
@@ -277,7 +287,14 @@ export const AdminCourseContentSubpage = () => {
     const modules = courseContentAdminData?.modules ?? [];
     const items = courseContentAdminData?.items ?? [];
 
-    const preprocessedItems: RowType[] = items
+    const {
+        mutatedData,
+        add: addRow,
+        mutate: mutateRow,
+        remove: removeRow
+    } = useXListMutator(items, x => x.itemCode, "itemCode");
+
+    const gridRows: RowType[] = mutatedData
         .map((item, index) => {
             return {
                 id: index,
@@ -290,13 +307,6 @@ export const AdminCourseContentSubpage = () => {
                 }
             }
         });
-
-    const {
-        mutatedData: gridRows,
-        add: addRow,
-        mutate: mutateRow,
-        remove: removeRow
-    } = useXListMutator(preprocessedItems, x => x.itemCode);
 
     // 
     // FUNCS
@@ -479,11 +489,19 @@ export const AdminCourseContentSubpage = () => {
 
     const handleMutateRow = (field: keyof RowType, row: RowType) => {
 
-        mutateRow(row.itemCode, field, row[field]);
+        mutateRow(row.itemCode, field as any, row[field]);
     }
 
-    const handleAddRow = () => {
+    const handleAddRow = (type: "video" | "exam") => {
 
+        if (type === "exam") {
+
+            addRow("newcode_" + getVirtualId(), { itemType: "exam" });
+        }
+        else {
+
+            addRow("newcode_" + getVirtualId(), { itemType: "video" });
+        }
     }
 
     const handleRemoveRow = (key: string) => {
@@ -537,7 +555,7 @@ export const AdminCourseContentSubpage = () => {
                 <AddNewItemPopper
                     isOpen={isAddButtonsPopperOpen}
                     targetElement={ref?.current}
-                    onAddItem={() => { }}
+                    onAddItem={handleAddRow}
                     onClose={() => setIsAddButtonsPopperOpen(false)} />
 
                 {/* data grid */}
@@ -545,6 +563,7 @@ export const AdminCourseContentSubpage = () => {
                     columns={gridColumns}
                     rows={gridRows}
                     onEdit={handleMutateRow}
+                    getKey={x => x.itemCode}
                     initialState={{
                         pinnedColumns: {
                             left: ['rowNumber', 'itemTitle'],

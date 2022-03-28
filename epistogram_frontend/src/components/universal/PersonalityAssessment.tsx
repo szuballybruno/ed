@@ -94,7 +94,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
 
                         <EpistoFont
                             isUppercase
-                            fontSize="fontSmallPlus"
+                            fontSize="fontNormal14"
                             style={{
                                 marginLeft: 5
                             }}>
@@ -113,7 +113,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                         target={ref?.current}>
 
                         <EpistoFont
-                            fontSize="fontSmallPlus"
+                            fontSize="fontNormal14"
                             style={{
                                 maxWidth: "300px"
                             }}>

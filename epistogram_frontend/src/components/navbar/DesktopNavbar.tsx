@@ -239,7 +239,7 @@ const DesktopNavbar = (props: {
                             variant={"plain"}>
 
                             <EpistoFont
-                                fontSize={"fontSmallPlus"}
+                                fontSize={"fontNormal14"}
                                 isUppercase
                                 style={{
                                     margin: "0 7px",
@@ -324,7 +324,7 @@ const DesktopNavbar = (props: {
                                     }} />
 
                                 <EpistoFont
-                                    fontSize="fontSmallPlus"
+                                    fontSize="fontNormal14"
                                     style={{
                                         marginLeft: "14px",
                                         textAlign: "left"
@@ -364,7 +364,7 @@ const DesktopNavbar = (props: {
                         {applicationRoutes.administrationRoute.icon}
 
                         <EpistoFont
-                            fontSize="fontSmallPlus"
+                            fontSize="fontNormal14"
                             isUppercase
                             style={{
                                 marginLeft: "14px",
@@ -391,7 +391,7 @@ const DesktopNavbar = (props: {
                                 {x.icon}
 
                                 <EpistoFont
-                                    fontSize="fontSmallPlus"
+                                    fontSize="fontNormal14"
                                     isUppercase
                                     style={{
                                         marginLeft: "14px",
@@ -413,7 +413,7 @@ const DesktopNavbar = (props: {
                         padding: "5px",
                         marginTop: "20px"
                     }}
-                    fontSize="fontSmallPlus">
+                    fontSize="fontNormal14">
 
                     {translatableTexts.navbar.version}{currentVersion ?? "1999.01.01.01:01"}
                 </EpistoFont>

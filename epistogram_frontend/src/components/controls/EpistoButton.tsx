@@ -71,7 +71,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         color="primary"
         ref={ref}
         disabled={isDisabled}
-        className={`${className} fontSmallPlus`}
+        className={`${className} fontNormal14`}
         type={type}
         style={{
             overflow: "hidden",

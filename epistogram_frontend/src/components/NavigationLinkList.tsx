@@ -27,7 +27,7 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?
 
                         {/* text */}
                         {!props.isNoText && <EpistoFont
-                            fontSize="fontSmallPlus"
+                            fontSize="fontNormal14"
                             isUppercase
                             style={{
                                 marginLeft: "10px",

@@ -11,7 +11,7 @@ export const LinearProgressWithLabel = (props: LinearProgressProps & { value: nu
         </Box>
         < Box minWidth={35}>
 
-            <EpistoFont fontSize={"fontSmallPlus"}>
+            <EpistoFont fontSize={"fontNormal14"}>
                 {`${Math.round(props.value)}%`}
             </EpistoFont>
         </Box>

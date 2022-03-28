@@ -76,7 +76,7 @@ export const VideoQuestionnaire = (props: {
                 <TimeoutFrame reactTimer={reactTimer}>
                     <EpistoFont
                         isUppercase
-                        fontSize="fontSmallPlus"
+                        fontSize="fontNormal14"
                         style={{
                             position: "relative",
                             margin: "10px"

@@ -37,7 +37,7 @@ export const SegmentedButton = <T,>(props: {
                             value={index}
                             onClick={() => paging.setItem(index)}>
 
-                            <EpistoFont fontSize="fontSmallPlus">
+                            <EpistoFont fontSize="fontNormal14">
                                 {disp(item)}
                             </EpistoFont>
                         </ToggleButton>

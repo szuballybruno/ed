@@ -6,7 +6,7 @@ export const AddNewItemPopper = (props: {
     isOpen: boolean,
     targetElement: any,
     onClose: () => void,
-    onAddItem: (type: CourseItemType) => void
+    onAddItem: (type: "video" | "exam") => void
 }) => {
 
     const { isOpen, targetElement, onClose, onAddItem } = props;

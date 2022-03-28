@@ -304,13 +304,13 @@ export const AdminUserStatisticsSubpage = (props: {
                                     style={{
                                         fontWeight: 600
                                     }}
-                                    fontSize={"fontSmallPlus"}>
+                                    fontSize={"fontNormal14"}>
 
                                     Jól teljesített a hónapban
                                 </EpistoFont>
 
                                 <EpistoFont
-                                    fontSize={"fontSmallPlus"}>
+                                    fontSize={"fontNormal14"}>
 
                                     A tanfolyamokon jól teljesített, és a kitűzött határidőket is többnyire tartani tudta.
                                 </EpistoFont>

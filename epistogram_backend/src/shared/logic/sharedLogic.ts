@@ -36,11 +36,12 @@ export const typecheck = (obj: any, type: "function") => {
     return false;
 }
 
-export const getKeys = (obj: Object) => {
+export const getKeys = <T>(obj: T): (keyof T)[] => {
 
-    let keys: string[] = [];
+    let keys: any[] = [];
     for (const key in obj) {
-        keys.push(key);
+
+        keys.push(key as keyof T);
     }
 
     return keys;

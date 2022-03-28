@@ -201,12 +201,12 @@ export const AdminVideoStatisticsModalPage = () => {
                                     <Flex
                                         justify="space-between">
                                         <EpistoFont
-                                            fontSize="fontSmallPlus">
+                                            fontSize="fontNormal14">
 
                                             3:29
                                         </EpistoFont>
                                         <EpistoFont
-                                            fontSize="fontSmallPlus">
+                                            fontSize="fontNormal14">
 
                                             38 felhasználó
                                         </EpistoFont>
@@ -283,12 +283,12 @@ export const AdminVideoStatisticsModalPage = () => {
                                 <Flex
                                     justify="space-between">
                                     <EpistoFont
-                                        fontSize="fontSmallPlus">
+                                        fontSize="fontNormal14">
 
                                         Helyesen válaszolók aránya
                                     </EpistoFont>
                                     <EpistoFont
-                                        fontSize="fontSmallPlus">
+                                        fontSize="fontNormal14">
 
                                         38%
                                     </EpistoFont>

@@ -171,7 +171,7 @@ export const CourseItemSelector = (props: {
 
                         <EpistoFont
                             isUppercase
-                            fontSize="fontSmallPlus">
+                            fontSize="fontNormal14">
 
                             {translatableTexts.player.courseItemSelector.beginner}
                         </EpistoFont>
@@ -192,7 +192,7 @@ export const CourseItemSelector = (props: {
 
                         <EpistoFont
                             isUppercase
-                            fontSize="fontSmallPlus">
+                            fontSize="fontNormal14">
 
                             {translatableTexts.player.courseItemSelector.advanced}
                         </EpistoFont>
