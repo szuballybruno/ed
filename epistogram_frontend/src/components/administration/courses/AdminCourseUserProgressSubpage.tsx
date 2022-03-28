@@ -36,22 +36,32 @@ export const CircularProgressWithLabel = (
 export const AdminCourseUserProgressSubpage = () => {
     const modules = [
         "Első lépések",
-        "Második lépések",
-        "Már mindent tudok",
-        "Mégegy modul",
-        "Bármennyi modult hozzáadhatok",
-        "Még akkor is ha ki lesznek törölve"
+        "Ismerkedés a függvényekkel",
+        "A formázás alapjai",
+        "Segítség az adatkezelésben",
+        "Munka másokkal",
+        "Formázás felsőfokon",
+        "Munka nagy mennyiségű adattal",
+        "Kreatív adatábrázolás",
+        "Ismerkedés a haladó funkciókkal"
     ]
 
     const users = [
-        "Dikbuh",
-        "Buksi",
-        "Nagyonuser",
-        "Nemtommianeveennek",
-        "Dikbuh",
-        "Buksi",
-        "Nagyonuser",
-        "Nemtommianeveennek"
+        "Bagi Árpád",
+        "Kelecsényi  György",
+        "Zurinka  Gizella",
+        "Dr. Vlaciu Péter",
+        "Rozgonyi Péter",
+        "Lukács Andrea",
+        "Dr. Lepsényi Tamás",
+        "Szabó Péter",
+        "Mányoki Bence",
+        "Benkő Erika",
+        "Zwierczyk Gábor",
+        "Apostagi Károly",
+        "Reichenberger Krisztina",
+        "Borbély Rozália",
+        "Kovács Írisz"
     ]
 
     const gridRows = () => {

@@ -93,17 +93,17 @@ export const AdminHomeDetails = () => {
                         value: "32",
                         suffix: "%"
                     }}
-                    title={"Megválaszolt tudást vizsgáló kérdések száma"}
-                    value={"39"}
-                    suffix={"db"}
+                    title={"Kurzus teljesítési ráta"}
+                    value={"79"}
+                    suffix={"%"}
                     iconPath={getAssetUrl("images/teacherdashboardstatistic1.png")}
                     isOpenByDefault={false} />
 
                 {/* total playback time */}
                 <StatisticsCard
-                    title={"Helyes válaszok aránya"}
-                    value={"27"}
-                    suffix={"%"}
+                    title={"Átlagos tanulással töltött idő/hét"}
+                    value={"3.5"}
+                    suffix={"óra"}
                     iconPath={getAssetUrl("images/teacherdashboardstatistic2.png")}
                     isOpenByDefault={false} />
 
@@ -114,17 +114,17 @@ export const AdminHomeDetails = () => {
                         value: "20",
                         suffix: "%"
                     }}
-                    title={"Reakcióidő"}
-                    value={"Átlagos"}
-                    suffix={""}
+                    title={"Teljesítés a vizsgákon"}
+                    value={"67"}
+                    suffix={"%"}
                     iconPath={getAssetUrl("images/teacherdashboardstatistic3.png")}
                     isOpenByDefault={false} />
 
                 {/* correct answer rate  */}
                 <StatisticsCard
-                    title={"Átlagos napi megtekintett videók"}
-                    value={"6.5"}
-                    suffix={"db/nap"}
+                    title={"Átlagosan eltöltött idő/alkalom"}
+                    value={"38"}
+                    suffix={"perc"}
                     iconPath={getAssetUrl("images/teacherdashboardstatistic4.png")}
                     isOpenByDefault={false} />
 
@@ -163,33 +163,33 @@ export const AdminHomeDetails = () => {
 
                 {/* total completed video count */}
                 <StatisticsCard
-                    title={"Megválaszolt tudást vizsgáló kérdések száma"}
-                    value={"39"}
-                    suffix={"db"}
+                    title={"Átlagosan megtekintett videók naponta"}
+                    value={"6"}
+                    suffix={"videó"}
                     iconPath={getAssetUrl("images/teacherdashboardstatistic5.png")}
                     isOpenByDefault={false} />
 
                 {/* total playback time */}
                 <StatisticsCard
-                    title={"Helyes válaszok aránya"}
-                    value={"27"}
+                    title={"Produktivitás alakulása (produktív folyamatok aránya nő a non produktívhoz képest)"}
+                    value={"38"}
                     suffix={"%"}
                     iconPath={getAssetUrl("images/teacherdashboardstatistic6.png")}
                     isOpenByDefault={false} />
 
                 {/* total given answer count  */}
                 <StatisticsCard
-                    title={"Reakcióidő"}
-                    value={"Átlagos"}
-                    suffix={""}
+                    title={"Lemorzsolódás"}
+                    value={"12"}
+                    suffix={"%"}
                     iconPath={getAssetUrl("images/teacherdashboardstatistic7.png")}
                     isOpenByDefault={false} />
 
                 {/* correct answer rate  */}
                 <StatisticsCard
-                    title={"Átlagos napi megtekintett videók"}
-                    value={"6.5"}
-                    suffix={"db/nap"}
+                    title={"Elköteleződés"}
+                    value={"73"}
+                    suffix={"%"}
                     iconPath={getAssetUrl("images/teacherdashboardstatistic8.png")}
                     isOpenByDefault={false} />
             </Grid>

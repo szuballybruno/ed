@@ -40,18 +40,18 @@ export const CourseStatisticsSubpage = () => {
                                 value: "32",
                                 suffix: "%"
                             }}
-                            title={"Megválaszolt tudást vizsgáló kérdések száma"}
-                            value={"39"}
-                            suffix={"db"}
-                            iconPath={getAssetUrl("images/teacherdashboardstatistic1.png")}
+                            title={"Kurzus teljesítési ráta"}
+                            value={"79"}
+                            suffix={"%"}
+                            iconPath={getAssetUrl("images/coursestaticon1.png")}
                             isOpenByDefault={false} />
 
                         {/* total playback time */}
                         <StatisticsCard
-                            title={"Helyes válaszok aránya"}
-                            value={"27"}
-                            suffix={"%"}
-                            iconPath={getAssetUrl("images/teacherdashboardstatistic2.png")}
+                            title={"Átlagos tanulással töltött idő/hét"}
+                            value={"3.5"}
+                            suffix={"óra"}
+                            iconPath={getAssetUrl("images/coursestaticon2.png")}
                             isOpenByDefault={false} />
 
                         {/* total given answer count  */}
@@ -61,18 +61,18 @@ export const CourseStatisticsSubpage = () => {
                                 value: "20",
                                 suffix: "%"
                             }}
-                            title={"Reakcióidő"}
-                            value={"Átlagos"}
-                            suffix={""}
-                            iconPath={getAssetUrl("images/teacherdashboardstatistic3.png")}
+                            title={"Teljesítés a vizsgákon"}
+                            value={"67"}
+                            suffix={"%"}
+                            iconPath={getAssetUrl("images/coursestaticon3.png")}
                             isOpenByDefault={false} />
 
                         {/* correct answer rate  */}
                         <StatisticsCard
-                            title={"Átlagos napi megtekintett videók"}
-                            value={"6.5"}
-                            suffix={"db/nap"}
-                            iconPath={getAssetUrl("images/teacherdashboardstatistic4.png")}
+                            title={"Átlagosan eltöltött idő/alkalom"}
+                            value={"38"}
+                            suffix={"perc"}
+                            iconPath={getAssetUrl("images/coursestaticon4.png")}
                             isOpenByDefault={false} />
 
                         <Flex
@@ -115,18 +115,18 @@ export const CourseStatisticsSubpage = () => {
                                 value: "32",
                                 suffix: "%"
                             }}
-                            title={"Megválaszolt tudást vizsgáló kérdések száma"}
-                            value={"39"}
-                            suffix={"db"}
-                            iconPath={getAssetUrl("images/teacherdashboardstatistic1.png")}
+                            title={"Átlagosan megtekintett videók naponta"}
+                            value={"6"}
+                            suffix={"videó"}
+                            iconPath={getAssetUrl("images/coursestaticon5.png")}
                             isOpenByDefault={false} />
 
                         {/* total playback time */}
                         <StatisticsCard
-                            title={"Helyes válaszok aránya"}
-                            value={"27"}
+                            title={"Produktivitás alakulása (produktív folyamatok aránya nő a non produktívhoz képest)"}
+                            value={"38"}
                             suffix={"%"}
-                            iconPath={getAssetUrl("images/teacherdashboardstatistic2.png")}
+                            iconPath={getAssetUrl("images/coursestaticon6.png")}
                             isOpenByDefault={false} />
 
                         {/* total given answer count  */}
@@ -136,18 +136,18 @@ export const CourseStatisticsSubpage = () => {
                                 value: "20",
                                 suffix: "%"
                             }}
-                            title={"Reakcióidő"}
-                            value={"Átlagos"}
-                            suffix={""}
-                            iconPath={getAssetUrl("images/teacherdashboardstatistic3.png")}
+                            title={"Lemorzsolódás"}
+                            value={"12"}
+                            suffix={"%"}
+                            iconPath={getAssetUrl("images/coursestaticon7.png")}
                             isOpenByDefault={false} />
 
                         {/* correct answer rate  */}
                         <StatisticsCard
-                            title={"Átlagos napi megtekintett videók"}
-                            value={"6.5"}
-                            suffix={"db/nap"}
-                            iconPath={getAssetUrl("images/teacherdashboardstatistic4.png")}
+                            title={"Elköteleződés"}
+                            value={"73"}
+                            suffix={"%"}
+                            iconPath={getAssetUrl("images/coursestaticon8.png")}
                             isOpenByDefault={false} />
 
 

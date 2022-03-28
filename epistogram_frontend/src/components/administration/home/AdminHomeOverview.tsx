@@ -63,7 +63,7 @@ export const AdminHomeOverview = () => {
                 mt="10px"
                 headerContent={
                     <EpistoButton
-                        variant="colored">s
+                        variant="colored">
                         Összes hallgató
                     </EpistoButton>}>
 
@@ -115,7 +115,10 @@ export const AdminHomeOverview = () => {
                         Összes kérdés
                     </EpistoButton>}>
 
-                {iterate(4, () => <FlexListItem
+
+
+
+                <FlexListItem
                     thumbnailContent={
                         <Flex
                             align="center"
@@ -130,10 +133,44 @@ export const AdminHomeOverview = () => {
                             <EpistoFont style={{
                                 fontWeight: "bold"
                             }}>
-                                Kurzus címe ami akár nagyon hosszú is lehet
+                                Microsoft Excel Alapok
                             </EpistoFont>
                             <EpistoFont>
-                                B... B... B... B... B... B... Béla
+                                Nincs esetleg valamilyen billentyűkombináció arra, hogy gyorsan lehessen oszlopokat elrejteni?
+                            </EpistoFont>
+                        </Flex>
+                    }
+                    endContent={
+                        <EpistoButton>
+                            Ugrás
+                            <ArrowRight />
+                        </EpistoButton>
+                    }>
+                </FlexListItem>
+
+
+
+
+
+                <FlexListItem
+                    thumbnailContent={
+                        <Flex
+                            align="center"
+                            justify="center"
+                            className="square60 circle"
+                            background="var(--mildOrange)">
+
+                            10
+                        </Flex>}
+                    midContent={
+                        <Flex direction="column">
+                            <EpistoFont style={{
+                                fontWeight: "bold"
+                            }}>
+                                Microsoft PowerPoint Alapok
+                            </EpistoFont>
+                            <EpistoFont>
+                                Miután diavetítő módba lépek, a képernyő elsötétül. Ez mitől lehet?
                             </EpistoFont>
                         </Flex>
                     }
@@ -144,7 +181,69 @@ export const AdminHomeOverview = () => {
                         </EpistoButton>
                     }>
 
-                </FlexListItem>)}
+                </FlexListItem>
+
+
+
+
+                <FlexListItem
+                    thumbnailContent={
+                        <Flex
+                            align="center"
+                            justify="center"
+                            className="square60 circle"
+                            background="yellow">
+
+                            8
+                        </Flex>}
+                    midContent={
+                        <Flex direction="column">
+                            <EpistoFont style={{
+                                fontWeight: "bold"
+                            }}>
+                                Microsoft Word Alapok
+                            </EpistoFont>
+                            <EpistoFont>
+                                A formátummásolás címeknél egyszerűen nem akar működni, de csak ott. Mi lehet a probléma?
+                            </EpistoFont>
+                        </Flex>
+                    }
+                    endContent={
+                        <EpistoButton>
+                            Ugrás
+                            <ArrowRight />
+                        </EpistoButton>
+                    }></FlexListItem>
+
+                <FlexListItem
+                    thumbnailContent={
+                        <Flex
+                            align="center"
+                            justify="center"
+                            className="square60 circle"
+                            background="lightgreen">
+
+                            3
+                        </Flex>}
+                    midContent={
+                        <Flex direction="column">
+                            <EpistoFont style={{
+                                fontWeight: "bold"
+                            }}>
+                                OBS Alapok
+                            </EpistoFont>
+                            <EpistoFont>
+                                MAC-et használok, és fekete kijelzőt látok csak, a hangot szépen felveszi, de kép nincs. Mit lehet ilyenkor csinálni?
+                            </EpistoFont>
+                        </Flex>
+                    }
+                    endContent={
+                        <EpistoButton>
+                            Ugrás
+                            <ArrowRight />
+                        </EpistoButton>
+                    }></FlexListItem>
+
             </AdminSectionWithButton>
         </Flex>
         <Flex flex="2" h="fit-content">
@@ -176,7 +275,7 @@ export const AdminHomeOverview = () => {
 
                     <Flex flex="1" direction="column" p="20px">
                         <EpistoFont>
-                            Kurzus Bélája ami név lehet nagyon
+                            Microsoft Excel Alapok
                         </EpistoFont>
                         {/* navigation buttons */}
                         <Flex
