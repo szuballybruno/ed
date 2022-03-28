@@ -36,7 +36,13 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         (obj as any)[keyPropertyName] = key;
     }
 
-    const mutate = <TPropertyName extends keyof TMutatee>(key: TKey, propertyName: TPropertyName, newValue: TMutatee[TPropertyName]) => {
+    const mutate = <TField extends keyof TMutatee>(key: TKey, field: TField, newValue: TMutatee[TField]) => {
+
+        const oldItem = list
+            .firstOrNull(x => getCompareKey(x) === key);
+
+        if (oldItem && oldItem[field] === newValue)
+            return;
 
         const newMutations = [...mutations];
 
@@ -56,7 +62,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
         const propertyMutator = mutation
             .propertyMutators
-            .filter(x => x.name === propertyName)[0];
+            .filter(x => x.name === field)[0];
 
         if (propertyMutator) {
 
@@ -67,7 +73,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
             mutation
                 .propertyMutators
-                .push({ name: propertyName, value: newValue });
+                .push({ name: field, value: newValue });
         }
 
         setMutations(newMutations);
@@ -103,6 +109,28 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         }
 
         setMutations([...mutations, mut]);
+    }
+
+    const isMutated = (key: TKey) => {
+
+        const mut = mutations
+            .firstOrNull(x => x.key === key);
+
+        return (field: keyof TMutatee) => {
+
+            if (!mut)
+                return false;
+
+            if (mut.action === "add")
+                return true;
+
+            if (!mut.propertyMutators)
+                return false;
+
+            return mut
+                .propertyMutators
+                .some(x => x.name === field);
+        }
     }
 
     const overrideProps = (obj: any, propertyMutators: PropertyMutation<TMutatee>[]) => {
@@ -144,6 +172,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         mutate,
         add,
         remove,
+        isMutated,
         mutatedData
     }
 }

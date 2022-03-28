@@ -10,10 +10,6 @@ export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     resizable?: boolean;
 };
 
-export type GridRowType<T> = {
-    id: number;
-} & T;
-
 export type InitialStateType<TSchema> = {
     pinnedColumns?: {
         left?: (keyof TSchema)[],
@@ -22,9 +18,9 @@ export type InitialStateType<TSchema> = {
 }
 
 export const EpistoDataGrid = <TSchema, TKey>(props: {
-    rows: GridRowType<TSchema>[],
+    rows: TSchema[],
     columns: GridColumnType<TSchema, TKey, any>[],
-    getKey: (row: GridRowType<TSchema>) => TKey,
+    getKey: (row: TSchema) => TKey,
     initialState?: InitialStateType<TSchema>
 }) => {
 
@@ -64,6 +60,18 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
         rows={rows}
         getRowId={x => getKey(x as any) as any}
         columns={columnsProcessed}
+        sx={{
+            '& .MuiDataGrid-cell': {
+                outline: "none"
+            },
+            '& .MuiDataGrid-cell:hover': {
+                outline: "none"
+            },
+            '& .MuiDataGrid-cell:focus': {
+                outline: "none"
+            },
+        }}
+        isRowSelectable={x => false}
         initialState={initialState as any}
         onCellKeyDown={(x, e) => e.stopPropagation()}
         style={{

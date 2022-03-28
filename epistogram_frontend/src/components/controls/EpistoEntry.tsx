@@ -106,7 +106,8 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
         direction="column"
         mt={marginTop ?? "10px"}
         flex={flex}
-        style={style}>
+        style={style}
+        justify="center">
 
         {labelVariant === "top" && <EpistoFont
             isUppercase

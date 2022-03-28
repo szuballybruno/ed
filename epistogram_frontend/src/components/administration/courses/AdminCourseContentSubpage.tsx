@@ -11,7 +11,7 @@ import { usePretestExamId } from "../../../services/api/pretestApiService";
 import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiService";
 import { getVirtualId } from "../../../services/core/idService";
 import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
+import { useShowErrorDialog } from "../../../services/core/notifications";
 import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
 import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseContentItemIssueDTO";
 import { CourseModuleShortDTO } from "../../../shared/dtos/admin/CourseModuleShortDTO";
@@ -20,7 +20,7 @@ import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoDataGrid, GridColumnType, GridRowType } from "../../controls/EpistoDataGrid";
+import { EpistoDataGrid, GridColumnType } from "../../controls/EpistoDataGrid";
 import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoSelect } from "../../controls/EpistoSelect";
@@ -45,15 +45,14 @@ type RowSchema = CourseContentItemAdminDTO & {
     errorsWrapper: number;
 };
 
-type RowType = GridRowType<RowSchema>;
-
-type EditRowFnType = <TField extends keyof RowType, >(key: string, field: TField, value: RowType[TField]) => void;
+type EditRowFnType = <TField extends keyof RowSchema, >(key: string, field: TField, value: RowSchema[TField]) => void;
 
 const useGridColumnDefinitions = (
     modules: CourseModuleShortDTO[],
     openDialog: (type: "video" | "exam") => void,
     removeRow: (key: string) => void,
-    editRow: EditRowFnType) => {
+    editRow: EditRowFnType,
+    isModified: (key: string) => (field: keyof RowSchema) => boolean) => {
 
     const getIssueText = (dto: CourseContentItemIssueDTO) => {
 
@@ -104,17 +103,25 @@ const useGridColumnDefinitions = (
     const CellEntry = <TValue extends number | string | null,>(props: {
         value: TValue,
         onValueSet: (value: TValue) => void,
-        isInt?: boolean
+        isInt?: boolean,
+        isModified?: boolean
     }) => {
 
-        const { value, onValueSet, isInt } = props;
+        const { value, onValueSet, isInt, isModified } = props;
 
         return <EpistoEntry
             type={isInt ? "number" : undefined}
             transparentBackground
             value={value as any}
             marginTop="0"
-            style={{ width: "100%" }}
+            style={{
+                width: "100%",
+                height: "100%",
+                background: isModified
+                    ? "#ffffbd"
+                    : undefined,
+                padding: "10px"
+            }}
             onFocusLost={x => onValueSet(x as any)} />
     }
 
@@ -142,6 +149,7 @@ const useGridColumnDefinitions = (
                     return "-";
 
                 return <CellEntry
+                    isModified={isModified(key)(field)}
                     onValueSet={val => editRow(key, field, val!)}
                     value={value ?? null}
                     isInt />;
@@ -151,14 +159,19 @@ const useGridColumnDefinitions = (
             headerName: 'Cím',
             width: 220,
             resizable: true,
-            renderCell: (key, field, value, row) => <CellEntry
+            renderCell: (key, field, value) => <CellEntry
+                isModified={isModified(key)(field)}
                 value={value}
                 onValueSet={x => editRow(key, field, x)} />
         }),
         columnDefGen("itemSubtitle", {
             headerName: 'Alcím',
             width: 220,
-            resizable: true
+            resizable: true,
+            renderCell: (key, field, value) => <CellEntry
+                isModified={isModified(key)(field)}
+                value={value}
+                onValueSet={x => editRow(key, field, x)} />
         }),
         columnDefGen("moduleName", {
             headerName: 'Modul',
@@ -310,20 +323,23 @@ export const AdminCourseContentSubpage = () => {
 
     // computed
     const modules = courseContentAdminData?.modules ?? [];
-    const items = courseContentAdminData?.items ?? [];
+    const items = (courseContentAdminData?.items ?? []) as RowSchema[];
 
     const {
         mutatedData,
         add: addRow,
         mutate: mutateRow,
-        remove: removeRow
+        remove: removeRow,
+        isMutated: isRowModified
     } = useXListMutator(items, x => x.itemCode, "itemCode");
 
-    const gridRows: RowType[] = mutatedData
+    const gridRows: RowSchema[] = mutatedData
         .map((item, index) => {
+
+            const { ...rest } = item;
+
             return {
-                id: index,
-                ...item,
+                ...rest,
                 quickMenu: index,
                 rowNumber: index,
                 videoFile: "file_" + item.videoId,
@@ -369,7 +385,12 @@ export const AdminCourseContentSubpage = () => {
         removeRow(key);
     }
 
-    const gridColumns = useGridColumnDefinitions(modules, openDialog, handleRemoveRow, handleMutateRow);
+    const gridColumns = useGridColumnDefinitions(
+        modules,
+        openDialog,
+        handleRemoveRow,
+        handleMutateRow,
+        isRowModified);
 
     //
     // EFFECTS
