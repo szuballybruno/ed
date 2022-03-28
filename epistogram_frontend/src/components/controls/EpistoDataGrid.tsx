@@ -5,7 +5,7 @@ import { EpistoEntry } from "./EpistoEntry";
 export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     field: TField;
     headerName: string;
-    renderCell?: (key: TKey, field: TField, rowData: Partial<TRow>) => ReactNode | string;
+    renderCell?: (key: TKey, field: TField, value: TRow[TField], rowData: Partial<TRow>) => ReactNode | string;
     width?: number;
     resizable?: boolean;
 };
@@ -52,7 +52,7 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
             return {
                 editable: false,
                 renderCell: renderCell
-                    ? (props: any) => renderCell(getKey(props.row), column.field, props.row)
+                    ? (props: any) => renderCell(getKey(props.row), column.field, props.row[column.field], props.row)
                     : undefined,
                 ...others
             } as GridColDef;

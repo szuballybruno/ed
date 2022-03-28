@@ -136,21 +136,24 @@ const useGridColumnDefinitions = (
         columnDefGen("itemOrderIndex", {
             headerName: 'Elhelyezkedés',
             width: 80,
-            renderCell: (key, field, row) => {
+            renderCell: (key, field, value, row) => {
 
                 if (row.itemType === "pretest")
                     return "-";
 
                 return <CellEntry
                     onValueSet={val => editRow(key, field, val!)}
-                    value={row.itemOrderIndex ?? null}
+                    value={value ?? null}
                     isInt />;
             }
         }),
         columnDefGen("itemTitle", {
             headerName: 'Cím',
             width: 220,
-            resizable: true
+            resizable: true,
+            renderCell: (key, field, value, row) => <CellEntry
+                value={value}
+                onValueSet={x => editRow(key, field, x)} />
         }),
         columnDefGen("itemSubtitle", {
             headerName: 'Alcím',
@@ -160,7 +163,7 @@ const useGridColumnDefinitions = (
         columnDefGen("moduleName", {
             headerName: 'Modul',
             width: 250,
-            renderCell: (key, field, row) => {
+            renderCell: (key, field, value, row) => {
 
                 if (row.itemType === "pretest")
                     return "-";
@@ -176,7 +179,7 @@ const useGridColumnDefinitions = (
         columnDefGen("itemType", {
             headerName: 'Típus',
             width: 120,
-            renderCell: (key, field, row) => {
+            renderCell: (key, field, value, row) => {
 
                 if (!row.itemType)
                     return "";
@@ -191,7 +194,7 @@ const useGridColumnDefinitions = (
         columnDefGen("videoLength", {
             headerName: 'Videó hossza',
             width: 80,
-            renderCell: (key, field, row) => {
+            renderCell: (key, field, value, row) => {
 
                 if (row.itemType === "exam")
                     return "-";
@@ -213,7 +216,7 @@ const useGridColumnDefinitions = (
         columnDefGen("errorsWrapper", {
             headerName: 'Hibak',
             width: 100,
-            renderCell: (key, field, row) => {
+            renderCell: (key, field, value, row) => {
 
                 if (!row.errors)
                     return "";
@@ -249,7 +252,7 @@ const useGridColumnDefinitions = (
         columnDefGen("quickMenu", {
             headerName: 'Gyorshivatkozások',
             width: 150,
-            renderCell: (key, field, row) => {
+            renderCell: (key, field, value, row) => {
 
                 return (
                     <Flex>
