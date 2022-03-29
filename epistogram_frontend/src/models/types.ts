@@ -25,7 +25,8 @@ export type DialogOptions = {
 export type ButtonType = {
     title: string,
     icon?: ReactNode,
-    action: () => void
+    action: () => void,
+    disabled?: boolean
 }
 
 export type VolumeSettingsType = {

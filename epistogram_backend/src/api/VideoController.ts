@@ -35,37 +35,6 @@ export class VideoController {
         this._mapperService = mapperService;
     }
 
-    createVideoAction = async (params: ActionParams) => {
-
-        const dto = withValueOrBadRequest<CreateVideoDTO>(params.req.body);
-
-        const course = await this._ormService
-            .getRepository(Course)
-            .createQueryBuilder("c")
-            .leftJoinAndSelect("c.videos", "v")
-            .leftJoinAndSelect("c.exams", "e")
-            .leftJoinAndSelect("c.modules", "m")
-            .where("m.id = :moduleId", { moduleId: dto.moduleId })
-            .getOneOrFail();
-
-        const courseItemsLength = course.videos.length + course.exams.length;
-
-        const newVideo = {
-            courseId: course.id,
-            moduleId: dto.moduleId,
-            title: dto.title,
-            subtitle: dto.subtitle,
-            description: dto.description,
-            orderIndex: courseItemsLength
-        } as Video;
-
-        await this._videoService.insertVideoAsync(newVideo);
-
-        return {
-            id: newVideo.id
-        } as IdResultDTO;
-    }
-
     deleteVideoAction = async (params: ActionParams) => {
 
         const videoId = withValueOrBadRequest<IdBodyDTO>(params.req.body).id;

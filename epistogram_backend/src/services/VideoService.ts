@@ -13,11 +13,14 @@ import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { VideoRating } from "../models/entity/VideoRating";
 import { UserVideoProgressBridge } from "../models/entity/UserVideoProgressBridge";
+import { Mutation } from "../shared/dtos/mutations/Mutation";
+import { FieldMutation } from "../shared/dtos/mutations/FieldMutation";
+import { QueryServiceBase } from "./misc/ServiceBase";
+import { MapperService } from "./MapperService";
 
-export class VideoService {
+export class VideoService extends QueryServiceBase<Video> {
 
     private _userCourseBridgeService: UserCourseBridgeService;
-    private _ormConnection: ORMConnectionService;
     private _questionAnswerService: QuestionAnswerService;
     private _fileService: FileService;
     private _questionsService: QuestionService;
@@ -29,9 +32,11 @@ export class VideoService {
         questionAnswerService: QuestionAnswerService,
         fileService: FileService,
         questionsService: QuestionService,
-        assetUrlService: UrlService) {
+        assetUrlService: UrlService,
+        mapperService: MapperService) {
 
-        this._ormConnection = ormConnection;
+        super(mapperService, ormConnection, Video);
+
         this._questionAnswerService = questionAnswerService;
         this._userCourseBridgeService = userCourseBridgeService;
         this._fileService = fileService;
@@ -72,14 +77,14 @@ export class VideoService {
             video.lengthSeconds = 0;
         }
 
-        await this._ormConnection
+        await this._ormService
             .getRepository(Video)
             .save(video);
     }
 
     setVideoFileIdAsync = async (videoId: number, videoFileId: number) => {
 
-        await this._ormConnection
+        await this._ormService
             .getRepository(Video)
             .save({
                 id: videoId,
@@ -93,7 +98,7 @@ export class VideoService {
             return;
 
         // delete questions
-        const questions = await this._ormConnection
+        const questions = await this._ormService
             .getRepository(Question)
             .createQueryBuilder("q")
             .where('"video_id" IN (:...videoIds)', { videoIds })
@@ -103,7 +108,7 @@ export class VideoService {
             .deleteQuesitonsAsync(questions.map(x => x.id));
 
         // delete answer sessions
-        await this._ormConnection
+        await this._ormService
             .getOrmConnection()
             .createQueryBuilder()
             .delete()
@@ -122,7 +127,7 @@ export class VideoService {
         }
 
         // delete playback samples 
-        await this._ormConnection
+        await this._ormService
             .getOrmConnection()
             .createQueryBuilder()
             .delete()
@@ -131,7 +136,7 @@ export class VideoService {
             .execute();
 
         // delete ratings 
-        await this._ormConnection
+        await this._ormService
             .getOrmConnection()
             .createQueryBuilder()
             .delete()
@@ -140,7 +145,7 @@ export class VideoService {
             .execute();
 
         // delete playback samples 
-        await this._ormConnection
+        await this._ormService
             .getOrmConnection()
             .createQueryBuilder()
             .delete()
@@ -149,7 +154,7 @@ export class VideoService {
             .execute();
 
         // delete video
-        await this._ormConnection
+        await this._ormService
             .getOrmConnection()
             .createQueryBuilder()
             .delete()
@@ -178,7 +183,7 @@ export class VideoService {
 
         const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
 
-        await this._ormConnection
+        await this._ormService
             .getRepository(Video)
             .save({
                 id: videoId,
@@ -188,7 +193,7 @@ export class VideoService {
 
     setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: number) => {
 
-        await this._ormConnection
+        await this._ormService
             .getRepository(Video)
             .save({
                 id: videoId,
@@ -198,7 +203,7 @@ export class VideoService {
 
     getVideoByIdAsync = async (videoId: number) => {
 
-        const video = await this._ormConnection
+        const video = await this._ormService
             .getRepository(Video)
             .createQueryBuilder("v")
             .where("v.id = :videoId", { videoId })

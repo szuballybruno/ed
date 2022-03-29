@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
 import { TextField } from "@mui/material";
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useCourseContentAdminData, useSaveCourseContentData } from "../../../services/api/courseApiService";
@@ -313,13 +313,6 @@ export const AdminCourseContentSubpage = () => {
     // http
     const { courseContentAdminData, courseContentAdminDataError, courseContentAdminDataState, refreshCourseContentAdminData } = useCourseContentAdminData(courseId);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseContentData();
-    const { pretestExamId, pretestExamIdError, pretestExamIdState } = usePretestExamId(courseId);
-    const { createVideoAsync } = useCreateVideo();
-    const { createExamAsync } = useCreateExam();
-    const { deleteVideoAsync } = useDeleteVideo();
-    const { deleteExamAsync } = useDeleteExam();
-    const { createModuleAsync } = useCreateModule();
-    const { deleteModuleAsync } = useDeleteModule();
 
     // computed
     const modules = courseContentAdminData?.modules ?? [];
@@ -330,7 +323,10 @@ export const AdminCourseContentSubpage = () => {
         add: addRow,
         mutate: mutateRow,
         remove: removeRow,
-        isMutated: isRowModified
+        isMutated: isRowModified,
+        isAnyMutated: isAnyRowsMutated,
+        mutations,
+        resetMutations
     } = useXListMutator(items, x => x.itemCode, "itemCode");
 
     const gridRows: RowSchema[] = mutatedData
@@ -345,11 +341,20 @@ export const AdminCourseContentSubpage = () => {
                 videoFile: "file_" + item.videoId,
                 errorsWrapper: index
             }
-        });
+        })
+        .orderBy(x => x.moduleOrderIndex)
+        .groupBy(x => x.moduleId)
+        .flatMap(x => x
+            .items
+            .orderBy(i => i.itemOrderIndex));
+
+    console.log(gridRows);
 
     // 
     // FUNCS
     // 
+
+    const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
     const openDialog = (type: "video" | "exam") => {
 
@@ -370,19 +375,60 @@ export const AdminCourseContentSubpage = () => {
 
     const handleAddRow = (type: "video" | "exam") => {
 
+        const moduleId = modules[0].id;
+
+        const moduleOrderIndex = gridRows
+            .firstOrNull(x => x.moduleId === moduleId)?.moduleOrderIndex ?? 0;
+
+        const itemOrderIndex = gridRows
+            .filter(x => x.moduleId === moduleId && x.itemType !== "pretest")
+            .length;
+
         if (type === "exam") {
 
-            addRow("newcode_" + getVirtualId(), { itemType: "exam" });
+            addRow("newcode_" + getVirtualId(), {
+                itemType: "exam",
+                moduleId,
+                itemSubtitle: "",
+                itemTitle: "",
+                itemOrderIndex,
+                moduleOrderIndex,
+                courseId
+            });
         }
         else {
 
-            addRow("newcode_" + getVirtualId(), { itemType: "video" });
+            addRow("newcode_" + getVirtualId(), {
+                itemType: "video",
+                moduleId,
+                itemSubtitle: "",
+                itemTitle: "",
+                itemOrderIndex,
+                moduleOrderIndex,
+                courseId
+            });
         }
+
+        closeAddPopper();
     }
 
     const handleRemoveRow = (key: string) => {
 
         removeRow(key);
+    }
+
+    const handleSaveAsync = async () => {
+
+        try {
+
+            await saveCourseDataAsync(mutations);
+            resetMutations();
+            refreshCourseContentAdminData();
+        }
+        catch (e) {
+
+            showError(e);
+        }
     }
 
     const gridColumns = useGridColumnDefinitions(
@@ -411,19 +457,17 @@ export const AdminCourseContentSubpage = () => {
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
                     applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
                 ]}
-                //onSave={handleSaveCourseAsync}
                 direction="column"
                 headerButtons={[
                     {
-                        action: () => setIsAddButtonsPopperOpen(true),//handleAddNewModuleAsync(),
+                        action: () => setIsAddButtonsPopperOpen(true),
                         icon: <Add ref={ref} />,
                         title: translatableTexts.misc.add
                     },
                     {
-                        action: () => {
-
-                        },
-                        title: "Mentes"
+                        action: handleSaveAsync,
+                        title: "Mentes",
+                        disabled: !isAnyRowsMutated
                     }
                 ]}>
 
@@ -437,7 +481,7 @@ export const AdminCourseContentSubpage = () => {
                     isOpen={isAddButtonsPopperOpen}
                     targetElement={ref?.current}
                     onAddItem={handleAddRow}
-                    onClose={() => setIsAddButtonsPopperOpen(false)} />
+                    onClose={closeAddPopper} />
 
                 {/* data grid */}
                 <EpistoDataGrid

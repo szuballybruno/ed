@@ -67,7 +67,7 @@ export class ActionParams {
         this.currentUserId = userId;
     }
 
-    getBody<T>() {
+    getBody<T = any>() {
 
         if (this.isMultipart) {
 
@@ -85,7 +85,7 @@ export class ActionParams {
         }
     }
 
-    getQuery<T>() {
+    getQuery<T = any>() {
 
         const query = withValueOrBadRequest<T>(this.req.query);
         return new SafeObjectWrapper<T>(query);

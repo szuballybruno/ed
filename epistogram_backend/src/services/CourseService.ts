@@ -30,7 +30,10 @@ import { CourseProgressShortDTO } from "../shared/dtos/CourseProgressShortDTO";
 import { CourseShortDTO } from "../shared/dtos/CourseShortDTO";
 import { CreateCourseDTO } from "../shared/dtos/CreateCourseDTO";
 import { ModuleDTO } from "../shared/dtos/ModuleDTO";
+import { FieldMutation } from "../shared/dtos/mutations/FieldMutation";
+import { Mutation } from "../shared/dtos/mutations/Mutation";
 import { UserCoursesDataDTO } from "../shared/dtos/UserCoursesDataDTO";
+import { CourseItemType } from "../shared/types/sharedTypes";
 import { ExamService } from "./ExamService";
 import { FileService } from "./FileService";
 import { MapperService } from "./MapperService";
@@ -503,7 +506,77 @@ export class CourseService {
     /**
      * Saves the course content 
      */
-    async saveCourseContentAsync(dto: CourseContentEditDataDTO) {
+    async saveCourseContentAsync(mutations: Mutation<CourseContentItemAdminDTO, keyof CourseContentItemAdminDTO>[]) {
+
+        const checkItemType = (
+            mutation: Mutation<CourseContentItemAdminDTO, keyof CourseContentItemAdminDTO>,
+            itemType: CourseItemType) => {
+
+            return mutation
+                .fieldMutators
+                .some(fm => fm.field === "itemType" && fm.value === itemType);
+        }
+
+        const mutationToObj = <
+            TMutatee extends Object,
+            TKey extends keyof TMutatee>(
+                mut: Mutation<TMutatee, TKey>): Partial<TMutatee> => {
+
+            const obj = {} as Partial<TMutatee>;
+
+            mut
+                .fieldMutators
+                .forEach(x => obj[x.field] = x.value)
+
+            return obj;
+        }
+
+        // insert new videos
+        const newVideos = mutations
+            .filter(x => x.action === "add")
+            .filter(x => checkItemType(x, "video"))
+            .map((x): Partial<Video> => {
+
+                const mutObject = mutationToObj(x);
+
+                return {
+                    courseId: mutObject.courseId,
+                    moduleId: mutObject.moduleId,
+                    title: mutObject.itemTitle,
+                    subtitle: mutObject.itemSubtitle,
+                    orderIndex: mutObject.itemOrderIndex,
+                    description: "",
+                    lengthSeconds: 0
+                }
+            });
+
+        // insert new videos
+        const newExams = mutations
+            .filter(x => x.action === "add")
+            .filter(x => checkItemType(x, "exam"))
+            .map((x): Partial<Exam> => {
+
+                const mutObject = mutationToObj(x);
+
+                return {
+                    courseId: mutObject.courseId,
+                    moduleId: mutObject.moduleId,
+                    title: mutObject.itemTitle,
+                    subtitle: mutObject.itemSubtitle,
+                    orderIndex: mutObject.itemOrderIndex,
+                    description: "",
+                    type: "normal"
+                }
+            });
+
+        console.log(newVideos)
+        console.log(newExams)
+
+        await this._examService
+            .insertBulkAsync(newExams);
+
+        await this._videoService
+            .insertBulkAsync(newVideos);
 
         // // save module order index 
         // await this._ormService

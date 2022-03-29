@@ -131,7 +131,7 @@ import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerControll
     const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService, mapperService);
     const storageService = new StorageService(globalConfig);
     const fileService = new FileService(userService, storageService, ormConnectionService);
-    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService);
+    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService, mapperService);
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService);
@@ -339,8 +339,6 @@ import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerControll
     addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
 
     // video 
-    addEndpoint(apiRoutes.video.createVideo, videoController.createVideoAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.video.deleteVideo, videoController.deleteVideoAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction, { authorize: ["administrator"] });

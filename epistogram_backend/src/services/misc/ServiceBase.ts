@@ -26,6 +26,13 @@ export class QueryServiceBase<TMainEntity> extends ServiceBase {
         this._mainEntityClass = mainEntityClass;
     }
 
+    public async insertBulkAsync(objs: DeepPartial<TMainEntity>[]) {
+
+        this._ormService
+            .getRepository(this._mainEntityClass)
+            .insert(objs);
+    }
+
     public async updateAsync(obj: DeepPartial<TMainEntity>) {
 
         await this._ormService

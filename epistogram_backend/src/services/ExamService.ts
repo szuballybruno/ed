@@ -11,20 +11,19 @@ import { ExamPlayerDataDTO } from "../shared/dtos/ExamPlayerDataDTO";
 import { MapperService } from "./MapperService";
 import { readItemCode } from "./misc/encodeService";
 import { toExamResultDTO } from "./misc/mappings";
+import { QueryServiceBase } from "./misc/ServiceBase";
 import { QuestionAnswerService } from "./QuestionAnswerService";
 import { QuestionService } from "./QuestionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
 import { UserSessionActivityService } from "./UserSessionActivityService";
 
-export class ExamService {
+export class ExamService extends QueryServiceBase<Exam> {
 
     private _userCourseBridgeService: UserCourseBridgeService;
-    private _ormService: ORMConnectionService;
     private _userSessionActivityService: UserSessionActivityService;
     private _quesitonAnswerService: QuestionAnswerService;
     private _questionsService: QuestionService;
-    private _mapperService: MapperService;
 
     constructor(
         userCourseBridgeService: UserCourseBridgeService,
@@ -34,12 +33,13 @@ export class ExamService {
         questionsService: QuestionService,
         mapperService: MapperService) {
 
+        super(mapperService, ormService, Exam);
+
         this._userCourseBridgeService = userCourseBridgeService;
-        this._ormService = ormService;
         this._userSessionActivityService = userSessionActivityService;
         this._quesitonAnswerService = quesitonAnswerService;
         this._questionsService = questionsService;
-        this._mapperService = mapperService;
+
     }
 
     /**

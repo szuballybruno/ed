@@ -155,6 +155,7 @@ export const AdminSubpageHeader = (props: {
                                 height: 41
                             }}
                             variant="plain"
+                            isDisabled={x.disabled}
                             onClick={x.action}>
                             {x.icon}
                             {x.title}

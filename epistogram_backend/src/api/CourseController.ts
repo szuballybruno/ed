@@ -69,10 +69,12 @@ export class CourseController {
 
     saveCourseContentAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<CourseContentEditDataDTO>(params.req?.body);
+        const mutations = params
+            .getBody()
+            .data;
 
         await this._courseService
-            .saveCourseContentAsync(dto);
+            .saveCourseContentAsync(mutations);
     };
 
     saveCourseThumbnailAction = async (params: ActionParams) => {

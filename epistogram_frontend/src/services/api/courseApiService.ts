@@ -14,6 +14,7 @@ import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
 import { CourseContentItemAdminDTO } from "../../shared/dtos/admin/CourseContentItemAdminDTO";
 import { CourseContentAdminDTO } from "../../shared/dtos/admin/CourseContentAdminDTO";
+import { Mutation } from "../../shared/dtos/mutations/Mutation";
 
 export const useAdminCourseList = (searchText: string) => {
 
@@ -93,7 +94,7 @@ export const useSaveCourseDetailsData = () => {
 
 export const useSaveCourseContentData = () => {
 
-    const qr = usePostDataUnsafe<any, void>(apiRoutes.course.saveCourseContent);
+    const qr = usePostDataUnsafe<Mutation<CourseContentItemAdminDTO, string>[], void>(apiRoutes.course.saveCourseContent);
 
     return {
         saveCourseDataAsync: qr.postDataAsync,
