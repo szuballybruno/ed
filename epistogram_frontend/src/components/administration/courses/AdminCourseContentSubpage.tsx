@@ -1,14 +1,12 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
-import { TextField } from "@mui/material";
-import { useEffect, useRef, useState } from 'react';
+import React from "react";
+import { useEffect } from "react";
+import { useMemo } from "react";
+import { memo, useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useCourseContentAdminData, useSaveCourseContentData } from "../../../services/api/courseApiService";
-import { useCreateExam, useDeleteExam } from "../../../services/api/examApiService";
-import { useCreateModule, useDeleteModule } from "../../../services/api/moduleApiService";
-import { usePretestExamId } from "../../../services/api/pretestApiService";
-import { useCreateVideo, useDeleteVideo } from "../../../services/api/videoApiService";
 import { getVirtualId } from "../../../services/core/idService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { useShowErrorDialog } from "../../../services/core/notifications";
@@ -17,12 +15,11 @@ import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseCont
 import { CourseModuleShortDTO } from "../../../shared/dtos/admin/CourseModuleShortDTO";
 import { OmitProperty } from "../../../shared/types/advancedTypes";
 import { CourseItemType } from "../../../shared/types/sharedTypes";
-import { formatTime } from "../../../static/frontendHelpers";
+import { formatTime, iterate } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoDataGrid, GridColumnType } from "../../controls/EpistoDataGrid";
 import { EpistoEntry } from "../../controls/EpistoEntry";
-import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { LoadingFrame } from "../../system/LoadingFrame";
@@ -33,10 +30,6 @@ import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
 import { ExamEditDialog } from "./ExamEditDialog";
 import { VideoEditDialog } from "./VideoEditDialog";
 import { useXListMutator } from "./XMutator";
-
-export const TextOrInput = (props: { isEditable?: boolean, value: string }) => {
-    return props.isEditable ? <TextField value={props.value} /> : <EpistoFont>{props.value}</EpistoFont>
-}
 
 type RowSchema = CourseContentItemAdminDTO & {
     quickMenu: number;
@@ -122,7 +115,11 @@ const useGridColumnDefinitions = (
                     : undefined,
                 padding: "10px"
             }}
-            onFocusLost={x => onValueSet(x as any)} />
+            onFocusLost={(x, e) => {
+
+                // e.stopPropagation();
+                onValueSet(x as any);
+            }} />
     }
 
     const columnDefGen = <TField extends keyof RowSchema,>(
@@ -348,7 +345,7 @@ export const AdminCourseContentSubpage = () => {
             .items
             .orderBy(i => i.itemOrderIndex));
 
-    console.log(gridRows);
+    // console.log(gridRows);
 
     // 
     // FUNCS

@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/layout";
 import { InputAdornment, TextField } from "@mui/material";
-import { Ref, useEffect, useState } from "react";
+import { FocusEventHandler, Ref, useEffect, useState } from "react";
 import { ClassBuilder } from "../../helpers/classBuilder";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "./EpistoFont";
@@ -9,7 +9,7 @@ export type EpistoEntryPropsType<TValue extends number | string | null> = {
     value?: TValue,
     label?: string,
     setValue?: (value: TValue) => void,
-    onFocusLost?: (value: TValue) => void,
+    onFocusLost?: (value: TValue, event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => void,
     disabled?: boolean,
     isMultiline?: boolean,
     postfix?: string,
@@ -168,7 +168,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
                     }
                 }
             }}
-            onBlur={onFocusLost ? (x) => onFocusLost(handleNewValue(x.currentTarget.value)) : undefined}
+            onBlur={onFocusLost ? (x) => onFocusLost(handleNewValue(x.currentTarget.value), x) : undefined}
             onChange={x => onChanged(handleNewValue(x.currentTarget.value))} />
     </Flex >
 };

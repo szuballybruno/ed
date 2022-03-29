@@ -208,7 +208,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             }, mut.fieldMutators);
         });
 
-    console.log(mutations);
+    // console.log(mutations);
 
     return {
         mutate,

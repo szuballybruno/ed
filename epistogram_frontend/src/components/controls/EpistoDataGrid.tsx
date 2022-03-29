@@ -1,6 +1,5 @@
-import { DataGridPro, GridCellParams, GridColDef, MuiEvent, useGridApiRef } from "@mui/x-data-grid-pro";
+import { DataGridPro, GridColDef } from "@mui/x-data-grid-pro";
 import { ReactNode } from "react";
-import { EpistoEntry } from "./EpistoEntry";
 
 export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     field: TField;
@@ -25,20 +24,6 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
 }) => {
 
     const { columns, rows, initialState, getKey } = props;
-
-    // const handleEdit = <TField extends keyof TSchema,>(key: TKey, field: TField, fieldValue: GridRowType<TSchema>[TField]) => {
-
-    //     if (!onEdit)
-    //         return;
-
-    //     const row = rows
-    //         .single(row => getKey(row) === key);
-
-    //     const newRow = { ...row };
-    //     newRow[field] = fieldValue;
-
-    //     onEdit(field, newRow);
-    // }
 
     const columnsProcessed = columns
         .map(column => {
@@ -73,6 +58,12 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
         }}
         isRowSelectable={x => false}
         initialState={initialState as any}
+        onCellClick={(_, e) => e.stopPropagation()}
+        onCellDoubleClick={(_, e) => e.stopPropagation()}
+        onCellEditStart={(_, e) => e.stopPropagation()}
+        onRowClick={(_, e) => e.stopPropagation()}
+        onRowDoubleClick={(_, e) => e.stopPropagation()}
+        onRowEditStart={(_, e) => e.stopPropagation()}
         onCellKeyDown={(x, e) => e.stopPropagation()}
         style={{
             background: "var(--transparentWhite70)"
