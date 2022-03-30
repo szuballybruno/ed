@@ -1,6 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
-import React from "react";
+import { DataGridPro, GridCellParams, useGridApiRef } from "@mui/x-data-grid-pro";
+import React, { ReactNode } from "react";
 import { useEffect } from "react";
 import { useMemo } from "react";
 import { memo, useRef, useState } from 'react';
@@ -20,6 +21,7 @@ import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoDataGrid, GridColumnType } from "../../controls/EpistoDataGrid";
 import { EpistoEntry } from "../../controls/EpistoEntry";
+import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
 import { LoadingFrame } from "../../system/LoadingFrame";
@@ -30,6 +32,7 @@ import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
 import { ExamEditDialog } from "./ExamEditDialog";
 import { VideoEditDialog } from "./VideoEditDialog";
 import { useXListMutator } from "./XMutator";
+import classses from "./css/AdminCourseContentSubpage.module.css"
 
 type RowSchema = CourseContentItemAdminDTO & {
     quickMenu: number;
@@ -122,6 +125,23 @@ const useGridColumnDefinitions = (
             }} />
     }
 
+    const TextCellRenderer = (props: {
+        children: ReactNode,
+        isMutated: boolean
+    }) => {
+
+        const { children, isMutated } = props;
+
+        return <div
+            className={`${classses.textCell} ${isMutated ? classses.textCellMutated : ""}`}>
+
+            <EpistoFont>
+
+                {children}
+            </EpistoFont>
+        </div>
+    }
+
     const columnDefGen = <TField extends keyof RowSchema,>(
         field: TField,
         columnOptions: OmitProperty<GridColumnType<RowSchema, string, TField>, "field">) => {
@@ -140,61 +160,70 @@ const useGridColumnDefinitions = (
         columnDefGen("itemOrderIndex", {
             headerName: 'Elhelyezkedés',
             width: 80,
-            renderCell: (key, field, value, row) => {
+            editable: true,
+            renderCell: ({ key, field, value }) => {
 
-                if (row.itemType === "pretest")
-                    return "-";
+                return <TextCellRenderer
+                    isMutated={isModified(key)(field)}>
 
-                return <CellEntry
-                    isModified={isModified(key)(field)}
-                    onValueSet={val => editRow(key, field, val!)}
-                    value={value ?? null}
-                    isInt />;
+                    {value}
+                </TextCellRenderer>
             }
         }),
         columnDefGen("itemTitle", {
             headerName: 'Cím',
             width: 220,
             resizable: true,
-            renderCell: (key, field, value) => <CellEntry
-                isModified={isModified(key)(field)}
-                value={value}
-                onValueSet={x => editRow(key, field, x)} />
+            editable: true,
+            renderCell: ({ key, field, value }) => {
+
+                return <TextCellRenderer
+                    isMutated={isModified(key)(field)}>
+
+                    {value}
+                </TextCellRenderer>
+            }
         }),
         columnDefGen("itemSubtitle", {
             headerName: 'Alcím',
             width: 220,
             resizable: true,
-            renderCell: (key, field, value) => <CellEntry
-                isModified={isModified(key)(field)}
-                value={value}
-                onValueSet={x => editRow(key, field, x)} />
-        }),
-        columnDefGen("moduleName", {
-            headerName: 'Modul',
-            width: 250,
-            renderCell: (key, field, value, row) => {
+            editable: true,
+            renderCell: ({ key, field, value }) => {
 
-                if (row.itemType === "pretest")
-                    return "-";
+                return <TextCellRenderer
+                    isMutated={isModified(key)(field)}>
 
-                return <EpistoSelect
-                    items={modules}
-                    currentKey={row.moduleId + ""}
-                    onSelected={() => { }}
-                    getDisplayValue={x => "" + x?.name}
-                    getCompareKey={module => "" + module?.id} />
+                    {value}
+                </TextCellRenderer>
             }
         }),
+        // columnDefGen("moduleName", {
+        //     headerName: 'Modul',
+        //     width: 250,
+        //     editable: true,
+        //     renderEditCell: (key, field, value, row) => {
+
+        //         if (row.itemType === "pretest")
+        //             return "-";
+
+        //         return <EpistoSelect
+        //             items={modules}
+        //             currentKey={row.moduleId + ""}
+        //             onSelected={() => { }}
+        //             getDisplayValue={x => "" + x?.name}
+        //             getCompareKey={module => "" + module?.id} />
+        //     }
+        // }),
         columnDefGen("itemType", {
             headerName: 'Típus',
             width: 120,
-            renderCell: (key, field, value, row) => {
+            renderCell: ({ value }) => {
 
-                if (!row.itemType)
+                if (!value)
                     return "";
 
-                const { color, label } = getItemTypeValues(row.itemType);
+                const { color, label } = getItemTypeValues(value);
 
                 return <ChipSmall
                     text={label}
@@ -204,12 +233,12 @@ const useGridColumnDefinitions = (
         columnDefGen("videoLength", {
             headerName: 'Videó hossza',
             width: 80,
-            renderCell: (key, field, value, row) => {
+            renderCell: ({ value, row }) => {
 
                 if (row.itemType === "exam")
                     return "-";
 
-                if (!row.warnings || !row.videoLength)
+                if (!row.warnings || !value)
                     return "";
 
                 const isLengthWarning = row
@@ -217,7 +246,7 @@ const useGridColumnDefinitions = (
                     .any(x => x.code === "video_too_long");
 
                 return <ChipSmall
-                    text={formatTime(Math.round(row.videoLength))}
+                    text={formatTime(Math.round(value))}
                     color={isLengthWarning
                         ? "var(--intenseOrange)"
                         : "gray"} />
@@ -226,7 +255,7 @@ const useGridColumnDefinitions = (
         columnDefGen("errorsWrapper", {
             headerName: 'Hibak',
             width: 100,
-            renderCell: (key, field, value, row) => {
+            renderCell: ({ row }) => {
 
                 if (!row.errors)
                     return "";
@@ -249,7 +278,7 @@ const useGridColumnDefinitions = (
         columnDefGen("videoFile", {
             headerName: 'Videó fájl',
             width: 180,
-            renderCell: (key, field, row) => {
+            renderCell: ({ row }) => {
 
                 return <EpistoButton
                     variant="outlined"
@@ -262,7 +291,7 @@ const useGridColumnDefinitions = (
         columnDefGen("quickMenu", {
             headerName: 'Gyorshivatkozások',
             width: 150,
-            renderCell: (key, field, value, row) => {
+            renderCell: ({ key, row }) => {
 
                 return (
                     <Flex>
@@ -279,7 +308,7 @@ const useGridColumnDefinitions = (
                         </EpistoButton>
 
                         <EpistoButton
-                            onClickNoPropagation={() => removeRow(row.itemCode!)}>
+                            onClickNoPropagation={() => removeRow(key)}>
 
                             <Delete />
                         </EpistoButton>
@@ -484,6 +513,7 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDataGrid
                     columns={gridColumns}
                     rows={gridRows}
+                    handleEdit={mutateRow}
                     getKey={x => x.itemCode}
                     initialState={{
                         pinnedColumns: {
