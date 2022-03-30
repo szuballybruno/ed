@@ -1,15 +1,39 @@
-import { useState } from "react"
+import { useForceUpdate } from "@chakra-ui/react";
+import { MutableRefObject, useRef, useState } from "react"
 import { FieldMutation } from "../../../shared/dtos/mutations/FieldMutation";
 import { Mutation } from "../../../shared/dtos/mutations/Mutation";
 import { getKeys } from "../../../shared/logic/sharedLogic";
 import { KeyOfType } from "../../../shared/types/advancedTypes";
 
-export const useXListMutator = <TMutatee extends Object, TKey>(
-    list: TMutatee[],
-    getCompareKey: (obj: TMutatee) => TKey,
-    keyPropertyName: KeyOfType<TMutatee, TKey>) => {
+export type OnMutaionHandlerActionType<TMutatee, TKey, TField extends keyof TMutatee> =
+    (params: {
+        key: TKey,
+        field: TField,
+        newValue: TMutatee[TField],
+        item: TMutatee
+    }) => void;
 
-    const [mutations, setMutations] = useState<Mutation<TMutatee, TKey>[]>([]);
+export type OnMutationHandlerType<TMutatee, TKey, TField extends keyof TMutatee> = {
+    action: OnMutaionHandlerActionType<TMutatee, TKey, TField>,
+    field: TField
+}
+
+export const useXListMutator = <TMutatee extends Object, TKey>(
+    items: TMutatee[],
+    getCompareKey: (obj: TMutatee) => TKey,
+    keyPropertyName: KeyOfType<TMutatee, TKey>,
+    onMutationHandlers: MutableRefObject<OnMutationHandlerType<TMutatee, TKey, keyof TMutatee>[]>) => {
+
+    // const [onMutationHandlers, setOnMutationHandlers] = useState<OnMutationHandlerType<TMutatee, TKey, keyof TMutatee>[]>([]);
+    // const [mutations, setMutations] = useState<Mutation<TMutatee, TKey>[]>([]);
+    const forceUpdate = useForceUpdate();
+
+    const mutRef = useRef<Mutation<TMutatee, TKey>[]>([]);
+    const setMutations = (muts: Mutation<TMutatee, TKey>[]) => {
+
+        mutRef.current = muts;
+        forceUpdate();
+    }
 
     const getCompareKeyValue = (obj: TMutatee) => {
 
@@ -20,16 +44,85 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         return key;
     }
 
+    const overrideProps = (obj: any, fieldMutators: FieldMutation<TMutatee, any>[]) => {
+
+        fieldMutators
+            .map(x => obj[x.field] = x.value);
+
+        return obj;
+    }
+
+    const createObj = (mut: Mutation<TMutatee, TKey>): TMutatee => {
+
+        return overrideProps({} as any, mut.fieldMutators!);
+    }
+
+    const mutatedItems = ([...items])
+        .concat(mutRef.current
+            .filter(mut => mut.action === "add")
+            .map(mut => createObj(mut)))
+        .filter(item => !mutRef.current
+            .some(mut => mut.action === "delete" && mut.key === getCompareKeyValue(item)));
+
+    mutRef
+        .current
+        .filter(mut => mut.action === "update")
+        .forEach(mut => {
+
+            const itemIndex = mutatedItems
+                .findIndex(item => getCompareKeyValue(item) === mut.key);
+
+            if (itemIndex === -1)
+                return;
+
+            mutatedItems[itemIndex] = overrideProps({
+                ...mutatedItems[itemIndex]
+            }, mut.fieldMutators);
+        });
+
+    // console.log(mutRef.current);
+
+    const executeMutationHandler = (key: TKey, field: any, newValue: any) => {
+
+        onMutationHandlers
+            .current
+            .filter(x => x.field === field)
+            .forEach(x => x.action({ key, field, newValue, item: mutatedItems.single(x => getCompareKey(x) === key) }));
+    }
+
+    // const addOnMutationHandler = <TField extends keyof TMutatee>(field: TField, action: OnMutaionHandlerActionType<TMutatee, TKey, TField>) => {
+
+    //     setOnMutationHandlers([...onMutationHandlers.filter(x => x.field !== field), { action: action as any, field }]);
+    // }
+
     const setCompareKey = (obj: TMutatee, key: TKey) => {
 
         (obj as any)[keyPropertyName] = key;
     }
 
-    const mutate = <TField extends keyof TMutatee>(key: TKey, field: TField, newValue: TMutatee[TField]) => {
+    const mutate = <TField extends keyof TMutatee>(params: {
+        key: TKey,
+        field: TField,
+        newValue: TMutatee[TField],
+        noOnMutationCallback?: boolean
+    }) => {
 
-        const newMutations = [...mutations];
+        const { field, key, newValue, noOnMutationCallback } = params;
 
-        const originalItem = list
+        if (key === null || key === undefined)
+            throw new Error("Mutation error, key is null or undefined!");
+
+        const setMutationsWithCallback = (muts: Mutation<TMutatee, TKey>[]) => {
+
+            setMutations(muts);
+
+            if (!noOnMutationCallback)
+                executeMutationHandler(key, field, newValue);
+        }
+
+        const newMutations = [...mutRef.current];
+
+        const originalItem = items
             .firstOrNull(x => getCompareKey(x) === key);
 
         // if new mutation value equals to 
@@ -51,7 +144,8 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
             if (existingMutation.fieldMutators.length === 1) {
 
-                setMutations(newMutations
+                console.log(`Removing mutation: ${key}`)
+                setMutationsWithCallback(newMutations
                     .filter(x => x.key !== key));
             }
             else {
@@ -61,7 +155,8 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
                         .fieldMutators
                         .filter(x => x.field !== field);
 
-                setMutations(newMutations);
+                console.log(`Removing field mutation: ${key} - ${field}`)
+                setMutationsWithCallback(newMutations);
             }
 
             return;
@@ -104,16 +199,19 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
                 .push({ field, value: newValue });
         }
 
-        setMutations(newMutations);
+        console.log(`Adding new mutation: ${key} - ${field} - ${newValue}`)
+        setMutationsWithCallback(newMutations);
     }
 
     const remove = (key: TKey) => {
 
+        if (key === null || key === undefined)
+            throw new Error("Mutation error, key is null or undefined!");
 
-        const newList = [...mutations
+        const newList = [...mutRef.current
             .filter(x => x.key !== key)];
 
-        if (mutations.filter(x => x.key === key)[0]?.action !== "add") {
+        if (mutRef.current.filter(x => x.key === key)[0]?.action !== "add") {
 
             const mut: Mutation<TMutatee, TKey> = {
                 key,
@@ -128,6 +226,9 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
     }
 
     const add = (key: TKey, obj: Partial<TMutatee>) => {
+
+        if (key === null || key === undefined)
+            throw new Error("Mutation error, key is null or undefined!");
 
         setCompareKey(obj as TMutatee, key);
 
@@ -146,12 +247,16 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
                 })
         }
 
-        setMutations([...mutations, mut]);
+        setMutations([...mutRef.current, mut]);
     }
 
     const isMutated = (key: TKey) => {
 
-        const mut = mutations
+        if (key === null || key === undefined)
+            throw new Error("Mutation error, key is null or undefined!");
+
+        const mut = mutRef
+            .current
             .firstOrNull(x => x.key === key);
 
         return (field: keyof TMutatee) => {
@@ -173,51 +278,15 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         setMutations([]);
     }
 
-    const overrideProps = (obj: any, fieldMutators: FieldMutation<TMutatee, any>[]) => {
-
-        fieldMutators
-            .map(x => obj[x.field] = x.value);
-
-        return obj;
-    }
-
-    const createObj = (mut: Mutation<TMutatee, TKey>): TMutatee => {
-
-        return overrideProps({} as any, mut.fieldMutators!);
-    }
-
-    const mutatedData = ([...list])
-        .concat(mutations
-            .filter(mut => mut.action === "add")
-            .map(mut => createObj(mut)))
-        .filter(item => !mutations
-            .some(mut => mut.action === "delete" && mut.key === getCompareKeyValue(item)));
-
-    mutations
-        .filter(mut => mut.action === "update")
-        .forEach(mut => {
-
-            const itemIndex = mutatedData
-                .findIndex(item => getCompareKeyValue(item) === mut.key);
-
-            if (itemIndex === -1)
-                return;
-
-            mutatedData[itemIndex] = overrideProps({
-                ...mutatedData[itemIndex]
-            }, mut.fieldMutators);
-        });
-
-    console.log(mutations);
-
     return {
         mutate,
         add,
         remove,
         isMutated,
         resetMutations,
-        mutations,
-        isAnyMutated: mutations.length > 0,
-        mutatedData
+        // addOnMutationHandler,
+        mutations: mutRef.current,
+        isAnyMutated: mutRef.current.length > 0,
+        mutatedData: mutatedItems
     }
 }

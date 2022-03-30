@@ -1,14 +1,30 @@
-import { DataGridPro, GridCellParams, GridColDef, useGridApiRef } from "@mui/x-data-grid-pro";
+import { DataGridPro, GridCellParams, GridColDef, useGridApiContext, useGridApiRef } from "@mui/x-data-grid-pro";
 import { ReactNode, useCallback, useEffect } from "react";
+
+export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
+    key: TKey,
+    field: TField,
+    value: Partial<TRow>[TField],
+    row: Partial<TRow>
+};
+
+export type UseCommitNewValueType<TKey, TRow> = () => {
+    commitNewValue: <TField extends keyof TRow, >(key: TKey, field: TField, value: TRow[TField]) => void
+}
+
+export type RenderEditCellParamsType<TKey, TRow, TField extends keyof TRow> = RenderCellParamsType<TKey, TRow, TField> & {
+    useCommitNewValue: UseCommitNewValueType<TKey, TRow>
+};
 
 export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     field: TField;
     headerName: string;
-    renderCell?: (params: { key: TKey, field: TField, value: Partial<TRow>[TField], row: Partial<TRow> }) => ReactNode | string;
-    renderEditCell?: (params: { key: TKey, field: TField, value: Partial<TRow>[TField], row: Partial<TRow> }) => ReactNode | string;
+    renderCell?: (params: RenderCellParamsType<TKey, TRow, TField>) => ReactNode | string;
+    renderEditCell?: (params: RenderEditCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     width?: number;
     editable?: boolean;
     resizable?: boolean;
+    type?: "int"
 };
 
 export type InitialStateType<TSchema> = {
@@ -31,7 +47,7 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
     const columnsProcessed = columns
         .map(column => {
 
-            const { renderCell, editable, renderEditCell, ...others } = column;
+            const { renderCell, type, editable, renderEditCell, ...others } = column;
 
             const def: GridColDef = {
                 ...others,
@@ -47,17 +63,39 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
                 });
 
             if (renderEditCell)
-                def.renderEditCell = (props: any) => renderEditCell({
-                    key: getKey(props.row),
-                    field: column.field,
-                    value: props.row[column.field],
-                    row: props.row
-                });
+                def.renderEditCell = (props: any) => {
+
+                    const useCommitNewValue = () => {
+
+                        const apiContextRef = useGridApiContext();
+
+                        const commitNewValue = <TField extends keyof TSchema,>(key: TKey, field: TField, value: TSchema[TField]) => {
+
+                            apiContextRef
+                                .current
+                                .setEditCellValue({ id: key as any, field: field as any, value: value as any });
+
+                            apiContextRef
+                                .current
+                                .commitCellChange({ id: key as any, field: field as any });
+                        }
+
+                        return {
+                            commitNewValue
+                        }
+                    }
+
+                    return renderEditCell({
+                        key: getKey(props.row),
+                        field: column.field,
+                        value: props.row[column.field],
+                        row: props.row,
+                        useCommitNewValue
+                    });
+                }
 
             return def;
         });
-
-    console.log(columnsProcessed)
 
     const apiRef = useGridApiRef();
 
@@ -100,52 +138,21 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
         apiRef={apiRef}
         onCellClick={handleCellClick}
         initialState={initialState as any}
-        onCellEditCommit={({ id, value, field }) => handleEdit(id as any, field as any, value as any)}
+        onCellEditCommit={({ id, value, field }) => {
+
+            const column = columns
+                .single(x => x.field === field);
+
+            const val: any = column.type === "int"
+                ? parseInt(value as any)
+                : value;
+
+            handleEdit(id as any, field as any, val);
+        }}
         isRowSelectable={x => false}
         columns={columnsProcessed}
         autoHeight
-        sx={{
-            // '& .MuiDataGrid-cell': {
-            //     outline: "none"
-            // },
-            // '& .MuiDataGrid-cell:hover': {
-            //     outline: "none"
-            // },
-            // '& .MuiDataGrid-cell:focus': {
-            //     outline: "none"
-            // },
-        }}
         style={{
             background: "var(--transparentWhite70)"
         }} />
-
-    // return <DataGridPro
-    //     className="fontExtraSmall"
-    //     autoHeight
-    //     rows={rows}
-    //     getRowId={x => getKey(x as any) as any}
-    //     columns={columnsProcessed}
-    //     sx={{
-    //         // '& .MuiDataGrid-cell': {
-    //         //     outline: "none"
-    //         // },
-    //         // '& .MuiDataGrid-cell:hover': {
-    //         //     outline: "none"
-    //         // },
-    //         // '& .MuiDataGrid-cell:focus': {
-    //         //     outline: "none"
-    //         // },
-    //     }}
-    //     initialState={initialState as any}
-    //     // isRowSelectable={x => false}
-    //     // onCellClick={(_, e) => e.stopPropagation()}
-    //     // onCellDoubleClick={(_, e) => e.stopPropagation()}
-    //     // onCellEditStart={(_, e) => e.stopPropagation()}
-    //     // onRowClick={(_, e) => e.stopPropagation()}
-    //     // onRowDoubleClick={(_, e) => e.stopPropagation()}
-    //     // onRowEditStart={(_, e) => e.stopPropagation()}
-    //     // onCellKeyDown={(x, e) => e.stopPropagation()}
-    //     style={{
-    //         background: "var(--transparentWhite70)"
-    //     }} />
 }

@@ -1,6 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
-import { DataGridPro, GridCellParams, useGridApiRef } from "@mui/x-data-grid-pro";
+import { DataGridPro, GridCellParams, useGridApiContext, useGridApiRef } from "@mui/x-data-grid-pro";
 import React, { ReactNode } from "react";
 import { useEffect } from "react";
 import { useMemo } from "react";
@@ -19,7 +19,7 @@ import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { formatTime, iterate } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoDataGrid, GridColumnType } from "../../controls/EpistoDataGrid";
+import { EpistoDataGrid, GridColumnType, UseCommitNewValueType } from "../../controls/EpistoDataGrid";
 import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoSelect } from "../../controls/EpistoSelect";
@@ -31,7 +31,7 @@ import { ChipSmall } from "./ChipSmall";
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
 import { ExamEditDialog } from "./ExamEditDialog";
 import { VideoEditDialog } from "./VideoEditDialog";
-import { useXListMutator } from "./XMutator";
+import { OnMutationHandlerType, useXListMutator } from "./XMutator";
 import classses from "./css/AdminCourseContentSubpage.module.css"
 
 type RowSchema = CourseContentItemAdminDTO & {
@@ -96,35 +96,6 @@ const useGridColumnDefinitions = (
         throw new Error("Unexpected type: " + itemType);
     }
 
-    const CellEntry = <TValue extends number | string | null,>(props: {
-        value: TValue,
-        onValueSet: (value: TValue) => void,
-        isInt?: boolean,
-        isModified?: boolean
-    }) => {
-
-        const { value, onValueSet, isInt, isModified } = props;
-
-        return <EpistoEntry
-            type={isInt ? "number" : undefined}
-            transparentBackground
-            value={value as any}
-            marginTop="0"
-            style={{
-                width: "100%",
-                height: "100%",
-                background: isModified
-                    ? "#ffffbd"
-                    : undefined,
-                padding: "10px"
-            }}
-            onFocusLost={(x, e) => {
-
-                // e.stopPropagation();
-                onValueSet(x as any);
-            }} />
-    }
-
     const TextCellRenderer = (props: {
         children: ReactNode,
         isMutated: boolean
@@ -140,6 +111,37 @@ const useGridColumnDefinitions = (
                 {children}
             </EpistoFont>
         </div>
+    }
+
+    const SelectEditCellRenderer = (props: {
+        rowKey: string,
+        field: any,
+        row: Partial<RowSchema>,
+        useCommitNewValue: UseCommitNewValueType<string, RowSchema>
+    }) => {
+
+        const { field, rowKey, row, useCommitNewValue } = props;
+        const apiRef = useGridApiContext();
+
+        const [id, setId] = useState<string>(row.moduleId + "");
+
+        return <EpistoSelect
+            items={modules}
+            currentKey={id}
+            onSelected={(value) => {
+
+                setId(value.id + "");
+
+                apiRef
+                    .current
+                    .setEditCellValue({ id: rowKey, field, value: value.id });
+
+                apiRef
+                    .current
+                    .commitCellChange({ id: rowKey, field: field });
+            }}
+            getDisplayValue={x => "" + x?.name}
+            getCompareKey={module => "" + module?.id} />
     }
 
     const columnDefGen = <TField extends keyof RowSchema,>(
@@ -161,6 +163,7 @@ const useGridColumnDefinitions = (
             headerName: 'Elhelyezkedés',
             width: 80,
             editable: true,
+            type: "int",
             renderCell: ({ key, field, value }) => {
 
                 return <TextCellRenderer
@@ -198,23 +201,24 @@ const useGridColumnDefinitions = (
                 </TextCellRenderer>
             }
         }),
-        // columnDefGen("moduleName", {
-        //     headerName: 'Modul',
-        //     width: 250,
-        //     editable: true,
-        //     renderEditCell: (key, field, value, row) => {
+        columnDefGen("moduleId", {
+            headerName: 'Modul',
+            width: 250,
+            editable: true,
+            renderCell: ({ key, field, row, value }) => {
 
-        //         if (row.itemType === "pretest")
-        //             return "-";
+                return <TextCellRenderer
+                    isMutated={isModified(key)(field)}>
 
-        //         return <EpistoSelect
-        //             items={modules}
-        //             currentKey={row.moduleId + ""}
-        //             onSelected={() => { }}
-        //             getDisplayValue={x => "" + x?.name}
-        //             getCompareKey={module => "" + module?.id} />
-        //     }
-        // }),
+                    {row.itemType === "pretest" ? "-" : row.moduleName}
+                </TextCellRenderer>
+            },
+            renderEditCell: (props) => <SelectEditCellRenderer
+                field={props.field}
+                rowKey={props.key}
+                row={props.row}
+                useCommitNewValue={props.useCommitNewValue} />
+        }),
         columnDefGen("itemType", {
             headerName: 'Típus',
             width: 120,
@@ -344,6 +348,10 @@ export const AdminCourseContentSubpage = () => {
     const modules = courseContentAdminData?.modules ?? [];
     const items = (courseContentAdminData?.items ?? []) as RowSchema[];
 
+    const getRowKey = (row: RowSchema) => row.itemCode;
+
+    const mutHandlersRef = useRef<OnMutationHandlerType<RowSchema, string, keyof RowSchema>[]>([]);
+
     const {
         mutatedData,
         add: addRow,
@@ -351,9 +359,10 @@ export const AdminCourseContentSubpage = () => {
         remove: removeRow,
         isMutated: isRowModified,
         isAnyMutated: isAnyRowsMutated,
+        // addOnMutationHandler,
         mutations,
         resetMutations
-    } = useXListMutator(items, x => x.itemCode, "itemCode");
+    } = useXListMutator(items, getRowKey, "itemCode", mutHandlersRef);
 
     const gridRows: RowSchema[] = mutatedData
         .map((item, index) => {
@@ -374,7 +383,41 @@ export const AdminCourseContentSubpage = () => {
             .items
             .orderBy(i => i.itemOrderIndex));
 
-    // console.log(gridRows);
+    mutHandlersRef
+        .current = [
+            {
+                field: "itemOrderIndex",
+                action: ({ key, field, newValue, item }) => {
+
+                    const moduleItems = gridRows
+                        .groupBy(x => x.moduleId)
+                        .filter(x => x.key === item.moduleId)
+                        .flatMap(x => [...x.items])
+                        .filter(x => x.itemType !== "pretest")
+                        .map(x => getRowKey(x) === key ? { ...x, itemOrderIndex: newValue as number + 1 } : x)
+                        .orderBy(x => x.itemOrderIndex);
+
+                    // console.log(moduleItems
+                    //     .map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
+
+                    const indices = moduleItems
+                        .map((item, index) => { item.itemOrderIndex = index; return item; });
+
+                    // console.log(indices
+                    //     .map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
+
+                    indices
+                        .forEach(x => mutateRow({
+                            key: getRowKey(x),
+                            field: "itemOrderIndex",
+                            newValue: x.itemOrderIndex,
+                            noOnMutationCallback: true
+                        }));
+                }
+            }
+        ];
+
+    // console.log(gridRows.map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
 
     // 
     // FUNCS
@@ -396,7 +439,7 @@ export const AdminCourseContentSubpage = () => {
 
     const handleMutateRow: EditRowFnType = (key, field, value) => {
 
-        mutateRow(key, field as any, value);
+        mutateRow({ key, field: field as any, newValue: value });
     }
 
     const handleAddRow = (type: "video" | "exam") => {
@@ -513,8 +556,8 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDataGrid
                     columns={gridColumns}
                     rows={gridRows}
-                    handleEdit={mutateRow}
-                    getKey={x => x.itemCode}
+                    handleEdit={(key, field, value) => mutateRow({ key, field, newValue: value })}
+                    getKey={getRowKey}
                     initialState={{
                         pinnedColumns: {
                             left: ['rowNumber', 'itemTitle'],

@@ -4,13 +4,13 @@ import { translatableTexts } from "../../static/translatableTexts";
 
 const defaultKey = "___default___";
 
-export const EpistoSelect = <T,>(props: {
-    items: T[],
-    selectedValue?: T,
+export const EpistoSelect = <TItem,>(props: {
+    items: TItem[],
+    selectedValue?: TItem,
     currentKey?: string,
-    onSelected: (value: T) => void,
-    getCompareKey: (item: T) => string,
-    getDisplayValue?: (item: T) => string,
+    onSelected: (value: TItem) => void,
+    getCompareKey: (item: TItem) => string,
+    getDisplayValue?: (item: TItem) => string,
     defaultValue?: string,
     isDisabled?: boolean,
 } & BoxProps) => {
