@@ -15,24 +15,11 @@ export type ORMSchemaType = {
     viewEntities: any[]
 }
 
-// type SQLExpression = {
+type Condition<TEntity, TParams> = [keyof TEntity, string, keyof TParams];
 
-// }
+type ExpressionPart<TEntity, TParam> = "WHERE" | "AND" | Condition<TEntity, TParam>;
 
-// class SQLQueryBuilder {
-
-//     // private _expression: [];
-
-//     constructor() {
-
-//         this._expression = [];
-//     }
-
-//     where(condition: string, params: any) {
-
-//         return this;
-//     }
-// }
+type Expression<TEntity, TParam> = ExpressionPart<TEntity, TParam>[];
 
 export class ORMConnectionService {
 
@@ -94,6 +81,16 @@ export class ORMConnectionService {
             .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
     }
 
+    async querySingleNew<TEntity, TParam>(classType: ClassType<TEntity>, alias: string, whereQuery: Expression<TEntity, TParam>, params: TParam) {
+
+
+    }
+
+    getSQLErrorEnding(query: string, params?: any[]) {
+
+        return `Query: ${query}\nValues: ${(params ?? []).map((x, i) => `$${i + 1}: ${x}`)}`;
+    }
+
     async querySingle<T>(classType: ClassType<T>, alias: string, whereQuery: string, params?: any[]) {
 
         const query = this.getQuery(classType, alias, whereQuery);
@@ -101,14 +98,14 @@ export class ORMConnectionService {
         const rows = await this
             .queryManyBase(classType, query, params);
 
-        const errorEndingQueryLog = `\nQuery: ${whereQuery}\nValues: ${(params ?? []).map((x, i) => `$${i + 1}: ${x}`)}`;
+        const errorEndingQueryLog = this.getSQLErrorEnding(query, params);
         const rowCount = rows.length;
 
         if (rowCount === 0)
-            throw new Error(`SQL single query failed, 0 rows has been returned. ${errorEndingQueryLog}`);
+            throw new Error(`SQL single query failed, 0 rows has been returned. \n${errorEndingQueryLog}`);
 
         if (rowCount > 1)
-            throw new Error(`SQL single query failed, more than 1 rows has been returned. ${errorEndingQueryLog}`);
+            throw new Error(`SQL single query failed, more than 1 rows has been returned. \n${errorEndingQueryLog}`);
 
         return rows[0];
     }
@@ -147,7 +144,8 @@ export class ORMConnectionService {
         }
         catch (e: any) {
 
-            throw new Error(`Error occured on SQL server while executing query: ${e.message ?? e}`);
+            const errorEndingQueryLog = this.getSQLErrorEnding(query, params);
+            throw new Error(`Error occured on SQL server while executing query: \n${errorEndingQueryLog}\n Message: ${e.message ?? e}`);
         }
     }
 
