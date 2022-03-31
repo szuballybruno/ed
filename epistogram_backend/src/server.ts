@@ -209,10 +209,10 @@ import { User } from './models/entity/User';
 
     // console.log(user);
 
-    const asd = await practiseQuestionService
-        .getUserPractiseAnswerSession(2);
+    // const asd = await practiseQuestionService
+    //     .getUserPractiseAnswerSession(2);
 
-    console.log(asd);
+    // console.log(asd);
 
     // add middlewares
     expressServer.use(getCORSMiddleware(globalConfig));
