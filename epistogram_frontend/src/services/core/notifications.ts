@@ -1,4 +1,4 @@
-import { ReactNode, useContext } from "react";
+import { useContext } from "react";
 import { toast, ToastOptions, ToastPosition } from 'react-toastify';
 import { ErrorDialogContext } from "../../components/system/DialogFrame";
 

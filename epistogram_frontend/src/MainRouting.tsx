@@ -37,46 +37,46 @@ export const MainRouting = () => {
 
         {/* protected paths */}
         <ProtectedRoute
-            path={applicationRoutes.playerRoute.route}
+            route={applicationRoutes.playerRoute}
             render={() => <PlayerPage />} />
 
         <ProtectedRoute
-            path={applicationRoutes.signupRoute.route}
+            route={applicationRoutes.signupRoute}
             render={() => <SignupPage />}
             ignoreAppAccessProtection={true} />
 
         <ProtectedRoute
-            path={applicationRoutes.administrationRoute.route}
+            route={applicationRoutes.administrationRoute}
             isAuthorizedToView={x => x.canAccessAdministration}
             render={() => <AdminPage />} />
 
         <ProtectedRoute
-            path={applicationRoutes.homeRoute.route}
+            route={applicationRoutes.homeRoute}
             render={() => <HomePage />} />
 
         <ProtectedRoute
-            path={applicationRoutes.shopRoute.route}
+            route={applicationRoutes.shopRoute}
             render={() => <ShopPage />} />
 
         <ProtectedRoute
-            path={applicationRoutes.availableCoursesRoute.route}
+            route={applicationRoutes.availableCoursesRoute}
             render={() => <AvailableCoursesPage />} />
 
         <ProtectedRoute
-            path={applicationRoutes.courseDetailsRoute.route}
+            route={applicationRoutes.courseDetailsRoute}
             render={() => <CourseDetailsPage />} />
 
         <ProtectedRoute
-            path={applicationRoutes.settingsRoute.route}
+            route={applicationRoutes.settingsRoute}
             render={() => <UserSettingsPage />} />
 
         <ProtectedRoute
-            path={applicationRoutes.learningRoute.route}
+            route={applicationRoutes.learningRoute}
             render={() => <LearningInsightsPage />} />
 
         <ProtectedRoute
-            path={applicationRoutes.rootHomeRoute.route}
-            render={() => <HomePage />} exact />
+            route={applicationRoutes.rootHomeRoute}
+            render={() => <HomePage />} />
 
         {/* wrong path */}
         <Route path="*">

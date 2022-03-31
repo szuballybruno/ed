@@ -1,4 +1,3 @@
-import { CourseBriefData } from "../../shared/dtos/CourseBriefData";
 import { CourseShopItemListDTO } from "../../shared/dtos/CourseShopItemListDTO";
 import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
 import { ShopItemAdminShortDTO } from "../../shared/dtos/ShopItemAdminShortDTO";

@@ -4,10 +4,13 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { verboseLogging } from '../../static/Environemnt';
 import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { setPageTitle, useIsMatchingCurrentRoute, useSetPageTitle } from '../../static/frontendHelpers';
+import { ApplicationRoute } from '../../models/types';
 
 export const ProtectedRoute = (props: {
-    path: string,
-    exact?: boolean,
+    route: ApplicationRoute,
+    // path: string,
+    // exact?: boolean,
     isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean
     render: () => ReactNode,
     ignoreAppAccessProtection?: boolean
@@ -16,16 +19,25 @@ export const ProtectedRoute = (props: {
     const authState = useContext(AuthenticationStateContext);
     const refetchUserAsync = useContext(RefetchUserAsyncContext);
     const user = useContext(CurrentUserContext);
-    const { render, isAuthorizedToView, ignoreAppAccessProtection, ...routeProps } = props;
+    const { render, isAuthorizedToView, ignoreAppAccessProtection, route } = props;
 
     if (verboseLogging)
-        console.log(`Navigated to protected route '${props.path}'. Authentication state: ${authState}`);
+        console.log(`Navigated to protected route '${route.route}'. Authentication state: ${authState}`);
 
-    // refetch user on every route render 
+    const isMatchingCurrent = useIsMatchingCurrentRoute();
+
+    const isCurrent = isMatchingCurrent(route);
+
+    useEffect(() => {
+
+        if (isCurrent)
+            setPageTitle(route.title);
+    }, [isCurrent])
 
     return (
         <Route
-            {...routeProps}
+            exact={route.exact}
+            path={route.route}
             render={x => {
 
                 if (verboseLogging)

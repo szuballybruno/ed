@@ -281,7 +281,6 @@ export const applicationRoutes = {
             title: translatableTexts.routeTitles.administrationShopMain,
             route: "/administration/shop",
             icon: <ShoppingCartIcon className="fontXXL" color={"secondary"} />,
-            exact: true,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationShopAdd,
@@ -298,7 +297,6 @@ export const applicationRoutes = {
             title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
             route: "/administration/personality-assessment",
             icon: <SupervisedUserCircleIcon className="fontXXL" color={"secondary"} />,
-            exact: true,
 
             editTips: {
                 title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,

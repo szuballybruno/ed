@@ -103,13 +103,13 @@ export const AdminPage = () => {
 
                 {/* course administartion */}
                 <ProtectedRoute
-                    path={administrationRoutes.coursesRoute.route}
+                    route={administrationRoutes.coursesRoute}
                     isAuthorizedToView={x => x.canAccessCourseAdministration}
                     render={() => <CourseAdministartionSubpage />} />
 
                 {/* shop administartion */}
                 <ProtectedRoute
-                    path={administrationRoutes.shopRoute.route}
+                    route={administrationRoutes.shopRoute}
                     isAuthorizedToView={x => x.canAccessShopAdministration}
                     render={() => <Switch>
                         {getRoute(administrationRoutes.shopRoute, <ShopAdminSubpage />)}
@@ -118,7 +118,7 @@ export const AdminPage = () => {
 
                 {/* personality assessment administartion */}
                 <ProtectedRoute
-                    path={administrationRoutes.personalityAssessmentRoute.route}
+                    route={administrationRoutes.personalityAssessmentRoute}
                     isAuthorizedToView={x => x.canAccessShopAdministration}
                     render={() => <Switch>
                         {getRoute(administrationRoutes.personalityAssessmentRoute, <PersonalityTraitCategoriesSubpage />)}

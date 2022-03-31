@@ -33,6 +33,7 @@ import { ExamEditDialog } from "./ExamEditDialog";
 import { VideoEditDialog } from "./VideoEditDialog";
 import { OnMutationHandlerType, useXListMutator } from "./XMutator";
 import classses from "./css/AdminCourseContentSubpage.module.css"
+import { Mutation } from "../../../shared/dtos/mutations/Mutation";
 
 type RowSchema = CourseContentItemAdminDTO & {
     quickMenu: number;
@@ -490,7 +491,7 @@ export const AdminCourseContentSubpage = () => {
 
         try {
 
-            await saveCourseDataAsync(mutations);
+            await saveCourseDataAsync(mutations as any);
             resetMutations();
             refreshCourseContentAdminData();
         }
