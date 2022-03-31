@@ -75,6 +75,6 @@ export class PractiseQuestionService extends ServiceBase {
         //     .getOneOrFail();
 
         return this._ormService
-            .querySingle(AnswerSession, "as", "WHERE as.type = 'practise' AND as.user_id $1", [userId]);
+            .querySingle(AnswerSession, "ase", "WHERE ase.type = 'practise' AND ase.user_id = $1", [userId]);
     }
 }

@@ -209,6 +209,11 @@ import { User } from './models/entity/User';
 
     // console.log(user);
 
+    const asd = await practiseQuestionService
+        .getUserPractiseAnswerSession(2);
+
+    console.log(asd);
+
     // add middlewares
     expressServer.use(getCORSMiddleware(globalConfig));
     expressServer.use(bodyParser.json({ limit: '32mb' }));
