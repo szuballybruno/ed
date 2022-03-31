@@ -183,7 +183,7 @@ const defaultCharts = {
             orient: "horizontal",
             icon: "circle",
             itemHeight: 10,
-            top: 10,
+            top: 20,
             textStyle: {
                 fontWeight: 700,
                 color: "black"

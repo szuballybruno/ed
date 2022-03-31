@@ -193,7 +193,7 @@ export const LearningStatistics = (props: {
                     value: userStats?.completedVideoCount ?? 0,
                     suffix: "db",
                     title: "Megtekintett videók a hónapban",
-                    isOpenByDefault: true,
+                    isOpenByDefault: false,
                     iconPath: getAssetUrl("statistics_icons/watched_videos.svg"),
                     chart: <EpistoBarChart
                         title="Legaktívabb napok"
