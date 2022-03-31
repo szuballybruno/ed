@@ -39,19 +39,12 @@ const defaultCharts = {
     } as EpistoPieChartOptionsType,
 
     pie: {
-        visualMap: {
-            show: false,
-            min: 80,
-            max: 600,
-            inRange: {
-                colorLightness: [0, 1]
-            }
-        },
         seriesOptions: {
             radius: '70%',
             center: ['50%', '50%'],
-            colors: ["#FB4D3D", "#03CEA4", "#345995", "#EAC435"],
             roseType: 'radius',
+
+            color: ["#FB4D3D", "#03CEA4", "#345995", "#EAC435"],
             label: {
                 color: 'rgba(0,0,0, 0.6)'
             },
@@ -63,10 +56,40 @@ const defaultCharts = {
                 length: 10,
                 length2: 20
             },
-            itemStyle: {/* 
-                    color: ['#c23531', "#c23531", "#c23531"], */
+            itemStyle: {
                 shadowBlur: 200,
-                shadowColor: 'rgba(0, 0, 0, 0.4)'
+                shadowColor: 'transparent'
+            },
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: function (idx) {
+                return Math.random() * 200;
+            }
+        }
+
+    } as EpistoPieChartOptionsType,
+
+    pie2: {
+        seriesOptions: {
+            radius: '40%',
+            center: ['50%', '50%'],
+            roseType: 'radius',
+
+            color: ["#FB4D3D", "#03CEA4", "#345995", "#EAC435"],
+            label: {
+                color: 'rgba(0,0,0, 0.6)'
+            },
+            labelLine: {
+                lineStyle: {
+                    color: 'rgba(255, 255, 255, 0.3)'
+                },
+                smooth: 0.2,
+                length: 10,
+                length2: 20
+            },
+            itemStyle: {
+                shadowBlur: 200,
+                shadowColor: 'transparent'
             },
             animationType: 'scale',
             animationEasing: 'elasticOut',
@@ -80,8 +103,8 @@ const defaultCharts = {
     redRadiusPie: {
         visualMap: {
             show: false,
-            min: 80,
-            max: 600,
+            min: 0,
+            max: 50,
             inRange: {
                 colorLightness: [0, 1]
             }
@@ -103,7 +126,7 @@ const defaultCharts = {
             },
             itemStyle: {
                 color: '#c23531',
-                shadowBlur: 200,
+                shadowBlur: 100,
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
             },
             animationType: 'scale',
@@ -183,7 +206,7 @@ const defaultCharts = {
             orient: "horizontal",
             icon: "circle",
             itemHeight: 10,
-            top: 20,
+            top: 30,
             textStyle: {
                 fontWeight: 700,
                 color: "black"
@@ -208,7 +231,7 @@ const defaultCharts = {
         },
         yAxis: {
             nameLocation: "middle",
-            nameGap: 40,
+            nameGap: 30,
             nameTextStyle: {
                 fontWeight: 600
             },

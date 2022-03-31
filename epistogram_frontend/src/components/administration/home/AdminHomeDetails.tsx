@@ -164,7 +164,7 @@ export const AdminHomeDetails = () => {
                             { value: 17, name: 'Vizsga / tesztkitöltés' },
                             { value: 10, name: 'Kérdések megválaszolása' },
                             { value: 20, name: 'Nincs tevékenység' }]}
-                        options={defaultCharts.pie} />
+                        options={defaultCharts.redRadiusPie} />
                 },
 
                 /* Most watched courses chart */

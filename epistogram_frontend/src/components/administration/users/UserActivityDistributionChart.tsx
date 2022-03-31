@@ -29,6 +29,7 @@ export const UserActivityDistributionChart = (props: {
                 type: 'pie',
                 radius: '70%',
                 center: ['50%', '50%'],
+                color: ["#FB4D3D", "#03CEA4", "#345995", "#EAC435"],
                 data: [
                     { value: 30, name: 'Videók megtekintése', itemStyle: { color: "#FB4D3D" } },
                     { value: 17, name: 'Vizsga / tesztkitöltés', itemStyle: { color: "#03CEA4" } },

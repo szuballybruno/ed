@@ -54,7 +54,16 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                 </Flex>
                 <Flex flex="1">
 
-                    <UserActivityDistributionChart title="Aktivitás eloszlása" />
+                    <EpistoPieChart
+                        title="Aktivitás eloszlása"
+                        isSortValues
+                        segments={[
+                            { value: 30, name: '' },
+                            { value: 17, name: '' },
+                            { value: 10, name: '' },
+                            { value: 20, name: '' }
+                        ]}
+                        options={defaultCharts.pie} />
                 </Flex>
             </Flex>
 

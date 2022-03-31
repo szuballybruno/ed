@@ -5,6 +5,7 @@ import { defaultCharts } from '../../../static/defaultChartOptions';
 import { getAssetUrl } from '../../../static/frontendHelpers';
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { EpistoBarChart } from '../../universal/charts/EpistoBarChart';
+import { EpistoPieChart } from '../../universal/charts/EpistoPieChart';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { UserActivityDistributionChart } from '../users/UserActivityDistributionChart';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
@@ -82,7 +83,16 @@ export const CourseStatisticsSubpage = () => {
                             gridColumn="auto / span 2"
                             gridRow="auto / span 2">
 
-                            <UserActivityDistributionChart title='Felhasználók tevékenysége' />
+                            <EpistoPieChart
+                                title="Aktivitás eloszlása"
+                                isSortValues
+                                segments={[
+                                    { value: 30, name: 'Videók megtekintése' },
+                                    { value: 17, name: 'Vizsga / tesztkitöltés' },
+                                    { value: 10, name: 'Kérdések megválaszolása' },
+                                    { value: 20, name: 'Nincs tevékenység' }
+                                ]}
+                                options={defaultCharts.pie2} />
                         </Flex>
                     </Grid>
                 </Flex>

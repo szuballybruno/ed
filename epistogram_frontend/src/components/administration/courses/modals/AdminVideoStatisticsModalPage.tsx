@@ -392,11 +392,11 @@ export const AdminVideoStatisticsModalPage = () => {
                 <EpistoPieChart
                     title=""
                     segments={[
-                        { value: 335, name: 'Végignézi a videót' },
-                        { value: 310, name: '75%-ig nézi meg a videót' },
-                        { value: 274, name: '50%-ig nézi meg a videót' },
-                        { value: 235, name: '25%-ig nézi meg a videót' },
-                        { value: 400, name: '10%-ig nézi meg a videót' }
+                        { value: 33, name: 'Végignézi a videót' },
+                        { value: 31, name: '75%-ig nézi meg a videót' },
+                        { value: 27, name: '50%-ig nézi meg a videót' },
+                        { value: 23, name: '25%-ig nézi meg a videót' },
+                        { value: 40, name: '10%-ig nézi meg a videót' }
                     ]}
                     isSortValues
                     options={defaultCharts.redRadiusPie} />

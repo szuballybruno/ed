@@ -109,10 +109,11 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
             </EpistoFont>
         </Flex>}
 
-        {props.children}
+
 
         {/* open state */}
         {isOpen && <Flex
+            flex="1"
             className="roundBorders"
             align="center"
             justify="center"
@@ -124,7 +125,7 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
             {/* <EpistoHeader variant="strongSub" text={props.title} /> */}
 
 
-
+            {props.children}
 
         </Flex>}
 
