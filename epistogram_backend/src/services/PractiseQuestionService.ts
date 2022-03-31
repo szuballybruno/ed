@@ -5,19 +5,22 @@ import { PractiseQuestionView } from "../models/views/PractiseQuestionView";
 import { PlayerService } from "./PlayerService";
 import { QuestionAnswerService } from "./QuestionAnswerService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { ServiceBase } from "./misc/ServiceBase";
+import { MapperService } from "./MapperService";
 
-export class PractiseQuestionService {
+export class PractiseQuestionService extends ServiceBase {
 
-    private _ormService: ORMConnectionService;
     private _questionAnswerService: QuestionAnswerService;
     private _playerService: PlayerService;
 
     constructor(
         ormConnection: ORMConnectionService,
         questionAnswerService: QuestionAnswerService,
-        playerService: PlayerService) {
+        playerService: PlayerService,
+        mapperService: MapperService) {
 
-        this._ormService = ormConnection;
+        super(mapperService, ormConnection);
+
         this._questionAnswerService = questionAnswerService;
         this._playerService = playerService;
     }
@@ -64,13 +67,14 @@ export class PractiseQuestionService {
 
     getUserPractiseAnswerSession = async (userId: number) => {
 
-        const userPractiseAnswerSession = await this._ormService
-            .getRepository(AnswerSession)
-            .createQueryBuilder("as")
-            .where("as.type = 'practise'")
-            .andWhere("as.userId = :userId", { userId })
-            .getOneOrFail();
+        // const userPractiseAnswerSession = await this._ormService
+        //     .getRepository(AnswerSession)
+        //     .createQueryBuilder("as")
+        //     .where("as.type = 'practise'")
+        //     .andWhere("as.userId = :userId", { userId })
+        //     .getOneOrFail();
 
-        return userPractiseAnswerSession;
+        return this._ormService
+            .querySingle(AnswerSession, "as", "WHERE as.type = 'practise' AND as.user_id $1", [userId]);
     }
 }

@@ -1,10 +1,12 @@
 import { Connection, ConnectionOptions, createConnection, Repository, SelectQueryBuilder } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { ClassType } from "../../models/Types";
-import { DeepOptionalEntity } from "../../utilities/helpers";
+import { getKeys } from "../../shared/logic/sharedLogic";
+import { DeepOptionalEntity, toSQLSnakeCasing } from "../../utilities/helpers";
 import { GlobalConfiguration } from "../misc/GlobalConfiguration";
 import { log } from "../misc/logger";
 import { SQLBootstrapperService } from "./SQLBootstrapper";
+import { SQLConnectionService } from "./SQLConnectionService";
 
 export type ORMConnection = Connection;
 
@@ -13,16 +15,37 @@ export type ORMSchemaType = {
     viewEntities: any[]
 }
 
+// type SQLExpression = {
+
+// }
+
+// class SQLQueryBuilder {
+
+//     // private _expression: [];
+
+//     constructor() {
+
+//         this._expression = [];
+//     }
+
+//     where(condition: string, params: any) {
+
+//         return this;
+//     }
+// }
+
 export class ORMConnectionService {
 
     private _config: GlobalConfiguration;
     private _schema: ORMSchemaType;
     private _ormConnection: ORMConnection;
+    private _sqlConnectionService: SQLConnectionService;
 
-    constructor(config: GlobalConfiguration, schema: ORMSchemaType) {
+    constructor(config: GlobalConfiguration, schema: ORMSchemaType, sqlConnectionService: SQLConnectionService) {
 
         this._config = config;
         this._schema = schema;
+        this._sqlConnectionService = sqlConnectionService;
     }
 
     connectORMAsync = async () => {
@@ -63,6 +86,69 @@ export class ORMConnectionService {
     getRepository2<T>(classType: ClassType<T>) {
 
         return new MyRepository<T>(classType, this._ormConnection);
+    }
+
+    snakeToCamelCase(snakeCaseString: string) {
+
+        return snakeCaseString
+            .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+    }
+
+    async querySingle<T>(classType: ClassType<T>, alias: string, whereQuery: string, params?: any[]) {
+
+        const query = this.getQuery(classType, alias, whereQuery);
+
+        const rows = await this
+            .queryManyBase(classType, query, params);
+
+        const errorEndingQueryLog = `\nQuery: ${whereQuery}\nValues: ${(params ?? []).map((x, i) => `$${i + 1}: ${x}`)}`;
+        const rowCount = rows.length;
+
+        if (rowCount === 0)
+            throw new Error(`SQL single query failed, 0 rows has been returned. ${errorEndingQueryLog}`);
+
+        if (rowCount > 1)
+            throw new Error(`SQL single query failed, more than 1 rows has been returned. ${errorEndingQueryLog}`);
+
+        return rows[0];
+    }
+
+    async queryMany<T>(classType: ClassType<T>, alias: string, whereQuery: string, params?: any[]) {
+
+        const query = this.getQuery(classType, alias, whereQuery);
+        return this.queryManyBase(classType, query, params);
+    }
+
+    private getQuery<T>(classType: ClassType<T>, alias: string, whereQuery: string) {
+
+        const baseQuery = `SELECT * FROM public.${toSQLSnakeCasing(classType.name)} ${alias}`;
+        return `${baseQuery} ${whereQuery}`;
+    }
+
+    private async queryManyBase<T>(classType: ClassType<T>, query: string, params?: any[]) {
+
+        try {
+            console.log(query);
+
+            const res = await this._sqlConnectionService
+                .executeSQLAsync(query, params);
+
+            return res
+                .rows
+                .map(row => {
+
+                    let obj = {} as any;
+
+                    getKeys(row)
+                        .forEach(key => obj[this.snakeToCamelCase(key)] = row[key]);
+
+                    return obj as T;
+                });
+        }
+        catch (e: any) {
+
+            throw new Error(`Error occured on SQL server while executing query: ${e.message ?? e}`);
+        }
     }
 
     getOrmConnection() {

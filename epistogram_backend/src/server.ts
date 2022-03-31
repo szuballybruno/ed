@@ -90,6 +90,7 @@ import { TempomatService } from './services/TempomatService';
 import { TempomatController } from './api/TempomatController';
 import { randomInt } from 'crypto';
 import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerController';
+import { User } from './models/entity/User';
 
 (async () => {
 
@@ -105,7 +106,7 @@ import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerControll
     const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
-    const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema);
+    const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlConnectionService);
     const userStatsService = new UserStatsService(ormConnectionService, mapperService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService);
     const eventService = new EventService(mapperService, ormConnectionService);
@@ -139,7 +140,7 @@ import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerControll
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
     const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService, userCourseBridgeService, globalConfig);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService);
-    const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService);
+    const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService, mapperService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
     const videoRatingService = new VideoRatingService(ormConnectionService);
