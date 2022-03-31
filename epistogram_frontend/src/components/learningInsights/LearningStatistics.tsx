@@ -1,13 +1,12 @@
 import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
-import { RoundedCornerOutlined } from '@mui/icons-material';
-import React, { ReactNode } from 'react';
-import { Bar } from "react-chartjs-2";
-import { useParams } from 'react-router-dom';
+import React from 'react';
 import { useUserStats } from '../../services/api/userStatsApiService';
+import { defaultCharts } from '../../static/defaultChartOptions';
 import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
-import StatisticsCard from "../statisticsCard/StatisticsCard";
-import classes from './learningStatistics.module.scss';
+import { translatableTexts } from '../../static/translatableTexts';
+import StatisticsCard, { StatisticsCardProps } from "../statisticsCard/StatisticsCard";
+import { EpistoBarChart } from '../universal/charts/EpistoBarChart';
 import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
 
 // The default options that should be included with chartjs data object
@@ -91,21 +90,12 @@ export const chartDefaultOptions = {
     },
 };
 
-type StatisticsGroupType = {
+export type StatisticsGroupType = {
     title: string;
-    items: StatisticsItemType[];
+    items: StatisticsCardProps[];
 }
 
-type StatisticsItemType = {
-    iconPath: string;
-    value: string;
-    suffix: string;
-    title: string;
-    isOpenByDefault: boolean;
-    isDummy?: boolean;
-    large?: boolean;
-    chart?: ReactNode;
-}
+
 
 export const LearningStatistics = (props: {
     userId: number
@@ -142,10 +132,24 @@ export const LearningStatistics = (props: {
                     isOpenByDefault: false,
                     isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/most_preferred_time_range.svg"),
-                    chart: <Bar
-                        className={classes.progressLineChart}
-                        options={chartDefaultOptions}
-                        data={daysWithActivityInTime} />
+                    chart: <EpistoBarChart
+                        title="Legaktívabb idősávok"
+                        xAxisData={[
+                            "6:00",
+                            "9:00",
+                            "12:00",
+                            "15:00",
+                            "18:00",
+                            "21:00",
+                        ]}
+                        xAxisLabel="Idősávok"
+                        yAxisLabel="Belépések száma"
+                        yAxisLabelSuffix="db"
+                        dataset={[{
+                            name: "Jelenlegi hét",
+                            data: [[0, 6], [1, 9], [2, 10], [3, 9], [4, 3], [5, 4]]
+                        }]}
+                        options={defaultCharts.blueGreenBarChart} />
                 },
                 {
                     value: "9-12",
@@ -162,10 +166,23 @@ export const LearningStatistics = (props: {
                     isOpenByDefault: false,
                     isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/most_productive_days.svg"),
-                    chart: <Bar
-                        className={classes.progressLineChart}
-                        options={chartDefaultOptions}
-                        data={howActiveIAm} />
+                    chart: <EpistoBarChart
+                        title="Legaktívabb napok"
+                        dataset={[
+                            {
+                                name: "Jelenlegi hét",
+                                data: [[0, 6], [1, 7], [2, 10], [3, 9], [4, 6], [5, 4], [6, 3]],
+                            },
+                            {
+                                name: "Előző hét",
+                                data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
+                            }
+                        ]}
+                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisLabel="A hét napjai"
+                        yAxisLabel="Belépések száma"
+                        yAxisLabelSuffix="db"
+                        options={defaultCharts.blueGreenBarChart} />
                 },
             ]
         },
@@ -176,12 +193,25 @@ export const LearningStatistics = (props: {
                     value: userStats?.completedVideoCount ?? 0,
                     suffix: "db",
                     title: "Megtekintett videók a hónapban",
-                    isOpenByDefault: false,
+                    isOpenByDefault: true,
                     iconPath: getAssetUrl("statistics_icons/watched_videos.svg"),
-                    chart: <Bar
-                        className={classes.progressLineChart}
-                        options={chartDefaultOptions}
-                        data={howActiveIAm} />
+                    chart: <EpistoBarChart
+                        title="Legaktívabb napok"
+                        dataset={[
+                            {
+                                name: "Jelenlegi hét",
+                                data: [[0, 6], [1, 7], [2, 10], [3, 9], [4, 6], [5, 4], [6, 3]],
+                            },
+                            {
+                                name: "Előző hét",
+                                data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
+                            }
+                        ]}
+                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisLabel="A hét napjai"
+                        yAxisLabel="Belépések száma"
+                        yAxisLabelSuffix="db"
+                        options={defaultCharts.blueGreenBarChart} />
                 },
                 {
                     value: userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) : 0,
@@ -277,18 +307,31 @@ export const LearningStatistics = (props: {
                     isOpenByDefault: false,
                     isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/focus_during_videos.svg"),
-                    large: false,
-                    chart: <Bar
-                        className={classes.progressLineChart}
-                        options={chartDefaultOptions}
-                        data={howActiveIAm} />
+                    chartSize: "normal",
+                    chart: <EpistoBarChart
+                        title="Legaktívabb napok"
+                        dataset={[
+                            {
+                                name: "Jelenlegi hét",
+                                data: [[0, 6], [1, 7], [2, 10], [3, 9], [4, 6], [5, 4], [6, 3]],
+                            },
+                            {
+                                name: "Előző hét",
+                                data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
+                            }
+                        ]}
+                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisLabel="A hét napjai"
+                        yAxisLabel="Belépések száma"
+                        yAxisLabelSuffix="db"
+                        options={defaultCharts.blueGreenBarChart} />
                 },
                 {
                     value: "3.2",
                     suffix: "mp",
                     title: "Reakcióidő fókuszálást vizsgáló kérdésekre",
                     isOpenByDefault: false,
-                    isDummy: true,
+                    isComingSoon: true,
                     iconPath: getAssetUrl("statistics_icons/reaction_time_still_watching.svg"),
                 },
                 {
@@ -296,7 +339,7 @@ export const LearningStatistics = (props: {
                     suffix: "mp",
                     title: "Reakcióidő tudást vizsgáló kérdésekre",
                     isOpenByDefault: false,
-                    isDummy: true,
+                    isComingSoon: true,
                     iconPath: getAssetUrl("statistics_icons/reaction_time_question.svg"),
                 }
             ]
@@ -311,10 +354,23 @@ export const LearningStatistics = (props: {
                     isOpenByDefault: false,
                     isDummy: true,
                     iconPath: getAssetUrl("statistics_icons/acquired_episto_coin.svg"),
-                    chart: <Bar
-                        className={classes.progressLineChart}
-                        options={chartDefaultOptions}
-                        data={howActiveIAm} />
+                    chart: <EpistoBarChart
+                        title="Legaktívabb napok"
+                        dataset={[
+                            {
+                                name: "Jelenlegi hét",
+                                data: [[0, 6], [1, 7], [2, 10], [3, 9], [4, 6], [5, 4], [6, 3]],
+                            },
+                            {
+                                name: "Előző hét",
+                                data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
+                            }
+                        ]}
+                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisLabel="A hét napjai"
+                        yAxisLabel="Belépések száma"
+                        yAxisLabelSuffix="db"
+                        options={defaultCharts.blueGreenBarChart} />
                 }
             ]
         }
@@ -334,17 +390,7 @@ export const LearningStatistics = (props: {
                         .items
                         .map(item => {
 
-                            return <StatisticsCard
-                                title={item.title}
-                                value={item.value}
-                                suffix={item.suffix}
-                                iconPath={item.iconPath}
-                                isOpenByDefault={item.isOpenByDefault}
-                                isComingSoon={item.isDummy}
-                                chartSize={item.large ? "large" : undefined}>
-
-                                {item.chart}
-                            </StatisticsCard>
+                            return <StatisticsCard {...item} />
                         })}
                 </LearningStatisticsSeciton>
             })}

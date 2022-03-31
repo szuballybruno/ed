@@ -22,7 +22,17 @@ export const translatableTexts = {
 
         epistoEntry: {
             shouldntBeEmpty: "Ez a mező nem lehet üres!"
-        }
+        },
+
+        daysOfWeekFromMonday: [
+            "Hétfő",
+            "Kedd",
+            "Szerda",
+            "Csütörtök",
+            "Péntek",
+            "Szombat",
+            "Vasárnap"
+        ]
     },
 
     tempomat: {

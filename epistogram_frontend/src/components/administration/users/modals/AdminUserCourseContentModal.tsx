@@ -2,6 +2,7 @@ import { Flex, Image } from "@chakra-ui/react"
 import { Tab, Tabs } from "@mui/material"
 import { useState } from "react"
 import { UserCourseProgressChartDTO } from "../../../../shared/dtos/UserCourseProgressChartDTO"
+import { defaultCharts } from "../../../../static/defaultChartOptions"
 import { getAssetUrl, roundNumber } from "../../../../static/frontendHelpers"
 import { translatableTexts } from "../../../../static/translatableTexts"
 import { EpistoFont } from "../../../controls/EpistoFont"
@@ -10,10 +11,9 @@ import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog"
 import { NoProgressChartYet } from "../../../home/NoProgressChartYet"
 import { UserProgressChart } from "../../../home/UserProgressChart"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
-import { UserPerformanceChart } from "../../UserPerformanceChart"
+import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart"
 import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl"
-import { UserActivityDistributionChart } from "../../UserActivityDistributionChart"
-import { UserProgressDonutChart } from "../../UserProgressChart"
+import { UserActivityDistributionChart } from "../UserActivityDistributionChart"
 
 export const AdminUserCourseContentOverviewModalSubpage = (props: {
     userStats: {
@@ -34,11 +34,23 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
 
                 <Flex flex="1">
 
-                    <UserPerformanceChart title="Teljesítmény" />
+                    <EpistoPieChart
+                        title="Teljesítmény"
+                        segments={[
+                            { value: 70, name: "Teljesítmény 70%" },
+                            { value: 30, name: '' },
+                        ]}
+                        options={defaultCharts.twoSegmentGreenDoughnut} />
                 </Flex>
                 <Flex flex="1">
 
-                    <UserProgressDonutChart title="Haladás" />
+                    <EpistoPieChart
+                        title="Haladás"
+                        segments={[
+                            { value: 20, name: "" },
+                            { value: 80, name: 'Haladás 20%' },
+                        ]}
+                        options={defaultCharts.twoSegmentRedDoughnut} />
                 </Flex>
                 <Flex flex="1">
 

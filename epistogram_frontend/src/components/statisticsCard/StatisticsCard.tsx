@@ -6,14 +6,14 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 import { EpistoHeader } from '../EpistoHeader';
 
-const StatisticsCard = (props: {
+export type StatisticsCardProps = {
     iconPath?: string
     suffix: string
     title: string
     value?: string
     isOpenByDefault?: boolean
     children?: React.ReactNode
-    chartSize?: string,
+    chartSize?: "normal" | "large",
     isComingSoon?: boolean,
     additionalFunction?: () => void,
     additionalInfo?: {
@@ -21,7 +21,9 @@ const StatisticsCard = (props: {
         suffix: string,
         change: "up" | "stagnate" | "down"
     }
-} & FlexProps) => {
+}
+
+const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
 
     const { iconPath, isComingSoon, children, additionalFunction, additionalInfo, ...css } = props;
 
@@ -107,14 +109,23 @@ const StatisticsCard = (props: {
             </EpistoFont>
         </Flex>}
 
+        {props.children}
+
         {/* open state */}
-        {isOpen && <Flex width="100%" mt="50px" p="0 20px 20px 20px" direction="column">
+        {isOpen && <Flex
+            className="roundBorders"
+            align="center"
+            justify="center"
+            background="var(--transparentWhite70)"
+            p="10px"
+            gridColumn="auto / span 2"
+            gridRow="auto / span 2">
 
-            <EpistoHeader variant="strongSub" text={props.title} />
+            {/* <EpistoHeader variant="strongSub" text={props.title} /> */}
 
-            <Box>
-                {props.children}
-            </Box>
+
+
+
         </Flex>}
 
         {/* closed state */}

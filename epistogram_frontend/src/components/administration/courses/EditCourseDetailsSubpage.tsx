@@ -11,13 +11,14 @@ import { CourseCategoryDTO } from "../../../shared/dtos/CourseCategoryDTO";
 import { CourseDetailsEditDataDTO } from "../../../shared/dtos/CourseDetailsEditDataDTO";
 import { HumanSkillBenefitDTO } from "../../../shared/dtos/HumanSkillBenefitDTO";
 import { CourseVisibilityType } from "../../../shared/types/sharedTypes";
+import { defaultCharts } from "../../../static/defaultChartOptions";
 import { iterate } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { LoadingFrame } from "../../system/LoadingFrame";
-import { CourseImprovementStatsRadar } from "../../universal/CourseImprovementStatsRadar";
+import { EpistoRadarChart } from "../../universal/charts/EpistoRadarChart";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { SimpleEditList } from "../SimpleEditList";
@@ -438,7 +439,22 @@ export const AdminCourseDetailsSubpage = () => {
                                 )} />
                             {/* radar chart */}
                             <Flex mt="30px" minH="300px" align="center" justify="center">
-                                <CourseImprovementStatsRadar stats={humanSkillBenefits} />
+                                <EpistoRadarChart
+                                    title=""
+                                    areas={[{
+                                        name: "Készségek",
+                                        value: humanSkillBenefits.map(x => x.value) ?? []
+                                    }]}
+                                    radarIndicators={humanSkillBenefits.map(x => ({
+                                        name: x.text,
+                                        color: "black",
+                                        max: 10
+                                    }))}
+                                    options={defaultCharts.radar}
+                                    style={{
+                                        width: "400px",
+                                        height: "300px"
+                                    }} />
                             </Flex>
                         </EditSection>
                     </Flex>

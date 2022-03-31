@@ -76,6 +76,7 @@
     ]
   },
   "devDependencies": {
+    "@types/echarts": "^4.9.13",
     "@types/node": "^15.0.2",
     "@types/react": "^17.0.5",
     "@types/react-beautiful-dnd": "^13.1.2",

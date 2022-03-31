@@ -1,11 +1,9 @@
-import { Input } from "@chakra-ui/input";
 import { Flex } from "@chakra-ui/react";
-import { AccessTime, ThumbUpAlt, ThumbUpSharp, Timer } from "@mui/icons-material";
-import { Avatar, Checkbox, Divider, Grid, Paper } from "@mui/material";
+import { AccessTime, ThumbUpAlt } from "@mui/icons-material";
+import { Avatar, Checkbox, Divider } from "@mui/material";
 import React from 'react';
 import { getAssetUrl } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoFont } from "../../controls/EpistoFont";
 
 const Comments = () => {

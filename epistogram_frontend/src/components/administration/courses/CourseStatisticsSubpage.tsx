@@ -1,13 +1,11 @@
 import { Flex, Grid } from '@chakra-ui/react';
 import React from 'react';
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { defaultCharts } from '../../../static/defaultChartOptions';
 import { getAssetUrl } from '../../../static/frontendHelpers';
-import { EpistoGrid } from "../../controls/EpistoGrid";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import { DashboardSection } from "../../universal/DashboardSection";
-import { VideoHotspotsChart } from "../../universal/VideoHotspotsChart";
+import { EpistoBarChart } from '../../universal/charts/EpistoBarChart';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { CourseViewsInAWeekChart } from '../CourseViewsInAWeekChart';
 import { UserActivityDistributionChart } from '../users/UserActivityDistributionChart';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
@@ -105,7 +103,25 @@ export const CourseStatisticsSubpage = () => {
                             gridColumn="auto / span 2"
                             gridRow="auto / span 2">
 
-                            <CourseViewsInAWeekChart title='Kurzus megtekintések alakulása' />
+                            <EpistoBarChart
+                                title='Kurzus megtekintések alakulása'
+                                options={defaultCharts.blueGreenBarChart}
+                                xAxisData={[
+                                    "03. 21.",
+                                    "03. 22.",
+                                    "03. 23.",
+                                    "03. 24.",
+                                    "03. 25.",
+                                    "03. 26.",
+                                    "03. 27.",
+                                    "03. 28.",
+                                ]}
+                                xAxisLabel="A hét napjai"
+                                yAxisLabel="Kurzus megtekintések"
+                                dataset={[{
+                                    name: "Jelenlegi hét",
+                                    data: [[0, 90], [1, 80], [2, 65], [3, 60], [4, 55], [5, 40], [6, 30], [7, 15]]
+                                }]} />
                         </Flex>
 
                         {/* total completed video count */}

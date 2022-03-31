@@ -1,70 +1,190 @@
 import { Flex, Grid } from "@chakra-ui/react"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { getAssetUrl, iterate } from "../../../static/frontendHelpers"
-import { EpistoGrid } from "../../controls/EpistoGrid"
-import { FlexFloat } from "../../controls/FlexFloat"
-import { NoProgressChartYet } from "../../home/NoProgressChartYet"
-import { UserProgressChart } from "../../home/UserProgressChart"
+import { defaultCharts } from "../../../static/defaultChartOptions"
+import { getAssetUrl } from "../../../static/frontendHelpers"
+import { translatableTexts } from "../../../static/translatableTexts"
+import { StatisticsGroupType } from "../../learningInsights/LearningStatistics"
 import StatisticsCard from "../../statisticsCard/StatisticsCard"
+import { EpistoBarChart } from "../../universal/charts/EpistoBarChart"
+import { EpistoPieChart } from "../../universal/charts/EpistoPieChart"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
-import { MostActiveDaysChart } from "../MostActiveDaysChart"
-import { MostWatchedCoursesChart } from "../MostWatchedCoursesChart"
-import { UserMostActiveTimeRangeChart } from "../UserMostActiveTimeRangeChart"
 import { UserActivityDistributionChart } from "../users/UserActivityDistributionChart"
-
-
 
 export const AdminHomeDetails = () => {
 
-    const userProgressData = {
-        startDate: new Date("2022. 04. 10."),
-        estimatedCompletionDate: new Date("2022. 05. 10."),
-        estimatedLengthInDays: 30,
-        days: [
-            {
-                completionDate: new Date("2022. 05. 10."),
-                completedItemCount: 4,
-                completedPercentage: 5,
-                offsetDaysFromStart: 0,
-                completedPercentageSum: 5
-            },
-            {
-                completionDate: new Date("2022. 05. 12."),
-                completedItemCount: 4,
-                completedPercentage: 8,
-                offsetDaysFromStart: 0,
-                completedPercentageSum: 13
-            },
-            {
-                completionDate: new Date("2022. 05. 12."),
-                completedItemCount: 4,
-                completedPercentage: 2,
-                offsetDaysFromStart: 0,
-                completedPercentageSum: 15
-            },
-            {
-                completionDate: new Date("2022. 05. 12."),
-                completedItemCount: 4,
-                completedPercentage: 2,
-                offsetDaysFromStart: 0,
-                completedPercentageSum: 17
-            },
-            {
-                completionDate: new Date("2022. 05. 12."),
-                completedItemCount: 4,
-                completedPercentage: 8,
-                offsetDaysFromStart: 0,
-                completedPercentageSum: 25
-            },
-            {
-                completionDate: new Date("2022. 05. 12."),
-                completedItemCount: 4,
-                completedPercentage: 8,
-                offsetDaysFromStart: 0,
-                completedPercentageSum: 33
-            }
-        ]
-    }
+    const adminHomeDetailsStatistics = [
+        {
+            title: "",
+            items: [
+
+                /* Course completion rate */
+                {
+                    additionalInfo: {
+                        change: "up",
+                        value: "32",
+                        suffix: "%"
+                    },
+                    title: "Kurzus teljesítési ráta",
+                    value: "79",
+                    suffix: "%",
+                    iconPath: getAssetUrl("images/teacherdashboardstatistic1.png"),
+                    isOpenByDefault: false
+                },
+
+                /* Average time spent with learning per week */
+                {
+                    title: "Átlagos tanulással töltött idő/hét",
+                    value: "3.5",
+                    suffix: "óra",
+                    iconPath: getAssetUrl("images/teacherdashboardstatistic2.png"),
+                    isOpenByDefault: false
+                },
+
+                /* Performance on exam */
+                {
+                    additionalInfo: {
+                        change: "down",
+                        value: "20",
+                        suffix: "%"
+                    },
+                    title: "Teljesítés a vizsgákon",
+                    value: "67",
+                    suffix: "%",
+                    iconPath: getAssetUrl("images/teacherdashboardstatistic3.png"),
+                    isOpenByDefault: false
+                },
+
+                /* Average time spent per sessions */
+                {
+                    title: "Átlagosan eltöltött idő/alkalom",
+                    value: "38",
+                    suffix: "perc",
+                    iconPath: getAssetUrl("images/teacherdashboardstatistic4.png"),
+                    isOpenByDefault: false
+                },
+
+                /* Most active days chart */
+                {
+                    isOpenByDefault: true,
+                    children: <EpistoBarChart
+                        title="Legaktívabb napok"
+                        dataset={[
+                            {
+                                name: "Jelenlegi hét",
+                                data: [[0, 6], [1, 7], [2, 10], [3, 9], [4, 6], [5, 4], [6, 3]],
+                            },
+                            {
+                                name: "Előző hét",
+                                data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
+                            }
+                        ]}
+                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisLabel="A hét napjai"
+                        yAxisLabel="Belépések száma"
+                        yAxisLabelSuffix="db"
+                        options={defaultCharts.blueGreenBarChart} />
+                }
+            ]
+        },
+        {
+            title: "",
+            items: [
+
+                /* Most active time ranges chart */
+                {
+                    isOpenByDefault: true,
+                    children: <EpistoBarChart
+                        title="Legaktívabb idősávok"
+                        xAxisData={[
+                            "6:00",
+                            "9:00",
+                            "12:00",
+                            "15:00",
+                            "18:00",
+                            "21:00",
+                        ]}
+                        xAxisLabel="Idősávok"
+                        yAxisLabel="Belépések száma"
+                        yAxisLabelSuffix="db"
+                        dataset={[{
+                            name: "Jelenlegi hét",
+                            data: [[0, 6], [1, 9], [2, 10], [3, 9], [4, 3], [5, 4]]
+                        }]}
+                        options={defaultCharts.blueGreenBarChart} />,
+                },
+
+                /* Average watched videos per day */
+                {
+                    title: "Átlagosan megtekintett videók naponta",
+                    value: "6",
+                    suffix: "videó",
+                    iconPath: getAssetUrl("images/teacherdashboardstatistic5.png"),
+                    isOpenByDefault: false
+                },
+
+                /* Productivity rate */
+                {
+                    title: "Produktivitás alakulása (produktív folyamatok aránya nő a non produktívhoz képest)",
+                    value: "38",
+                    suffix: "%",
+                    iconPath: getAssetUrl("images/teacherdashboardstatistic6.png"),
+                    isOpenByDefault: false
+                },
+
+                /* Dropout rate */
+                {
+                    title: "Lemorzsolódás",
+                    value: "12",
+                    suffix: "%",
+                    iconPath: getAssetUrl("images/teacherdashboardstatistic7.png"),
+                    isOpenByDefault: false,
+                },
+
+                /* Commitment rate */
+                {
+                    title: "Elköteleződés",
+                    value: "73",
+                    suffix: "%",
+                    iconPath: getAssetUrl("images/teacherdashboardstatistic8.png"),
+                    isOpenByDefault: false,
+                }
+            ]
+        }, {
+            title: "",
+            items: [
+
+                /* User activity distribution chart */
+                {
+                    isOpenByDefault: true,
+                    children: <EpistoPieChart
+                        title="Felhasználók aktivitása"
+                        isSortValues
+                        segments={[
+                            { value: 30, name: 'Videók megtekintése' },
+                            { value: 17, name: 'Vizsga / tesztkitöltés' },
+                            { value: 10, name: 'Kérdések megválaszolása' },
+                            { value: 20, name: 'Nincs tevékenység' }]}
+                        options={defaultCharts.pie} />
+                },
+
+                /* Most watched courses chart */
+                {
+                    isOpenByDefault: true,
+                    children: <EpistoPieChart
+                        title="Legnézettebb kurzusok"
+                        isSortValues
+                        segments={[
+                            { value: 30, name: 'Microsoft Excel Alapok' },
+                            { value: 25, name: 'Microsoft Word A-Z' },
+                            { value: 15, name: 'Asszertív kommunikáció a mindennapokban' },
+                            { value: 13, name: 'Cyberbiztonság az irodában' },
+                            { value: 17, name: 'Egyéb kurzusok' }
+                        ]}
+                        options={defaultCharts.donut} />
+                }
+            ]
+        }
+    ] as StatisticsGroupType[]
 
     return <AdminSubpageHeader
         direction="column"
@@ -77,158 +197,22 @@ export const AdminHomeDetails = () => {
             title: applicationRoutes.administrationRoute.homeRoute.detailsRoute.title
         }]}>
 
-        <Flex mt="10px">
+        {adminHomeDetailsStatistics.map(section => {
 
-            <Grid
-                className="whall"
-                gap="10px"
-                gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
-                gridAutoRows="200px"
-                gridAutoFlow="column dense">
+            return <Flex mt="10px">
 
-                {/* total completed video count */}
-                <StatisticsCard
-                    additionalInfo={{
-                        change: "up",
-                        value: "32",
-                        suffix: "%"
-                    }}
-                    title={"Kurzus teljesítési ráta"}
-                    value={"79"}
-                    suffix={"%"}
-                    iconPath={getAssetUrl("images/teacherdashboardstatistic1.png")}
-                    isOpenByDefault={false} />
+                <Grid
+                    className="whall"
+                    gap="10px"
+                    gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+                    gridAutoRows="200px"
+                    gridAutoFlow="column dense">
 
-                {/* total playback time */}
-                <StatisticsCard
-                    title={"Átlagos tanulással töltött idő/hét"}
-                    value={"3.5"}
-                    suffix={"óra"}
-                    iconPath={getAssetUrl("images/teacherdashboardstatistic2.png")}
-                    isOpenByDefault={false} />
-
-                {/* total given answer count  */}
-                <StatisticsCard
-                    additionalInfo={{
-                        change: "down",
-                        value: "20",
-                        suffix: "%"
-                    }}
-                    title={"Teljesítés a vizsgákon"}
-                    value={"67"}
-                    suffix={"%"}
-                    iconPath={getAssetUrl("images/teacherdashboardstatistic3.png")}
-                    isOpenByDefault={false} />
-
-                {/* correct answer rate  */}
-                <StatisticsCard
-                    title={"Átlagosan eltöltött idő/alkalom"}
-                    value={"38"}
-                    suffix={"perc"}
-                    iconPath={getAssetUrl("images/teacherdashboardstatistic4.png")}
-                    isOpenByDefault={false} />
-
-                <Flex
-                    className="roundBorders"
-                    align="center"
-                    justify="center"
-                    background="var(--transparentWhite70)"
-                    p="10px"
-                    gridColumn="auto / span 2"
-                    gridRow="auto / span 2">
-
-                    <MostActiveDaysChart />
-                </Flex>
-            </Grid>
-        </Flex>
-        <Flex mt="10px">
-            <Grid
-                className="whall"
-                gap="10px"
-                gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
-                gridAutoRows="200px"
-                gridAutoFlow="column dense">
-                <Flex
-                    className="roundBorders"
-                    align="center"
-                    justify="center"
-                    background="var(--transparentWhite70)"
-                    p="10px"
-                    gridColumn="auto / span 2"
-                    gridRow="auto / span 2">
-
-                    <UserMostActiveTimeRangeChart />
-
-                </Flex>
-
-                {/* total completed video count */}
-                <StatisticsCard
-                    title={"Átlagosan megtekintett videók naponta"}
-                    value={"6"}
-                    suffix={"videó"}
-                    iconPath={getAssetUrl("images/teacherdashboardstatistic5.png")}
-                    isOpenByDefault={false} />
-
-                {/* total playback time */}
-                <StatisticsCard
-                    title={"Produktivitás alakulása (produktív folyamatok aránya nő a non produktívhoz képest)"}
-                    value={"38"}
-                    suffix={"%"}
-                    iconPath={getAssetUrl("images/teacherdashboardstatistic6.png")}
-                    isOpenByDefault={false} />
-
-                {/* total given answer count  */}
-                <StatisticsCard
-                    title={"Lemorzsolódás"}
-                    value={"12"}
-                    suffix={"%"}
-                    iconPath={getAssetUrl("images/teacherdashboardstatistic7.png")}
-                    isOpenByDefault={false} />
-
-                {/* correct answer rate  */}
-                <StatisticsCard
-                    title={"Elköteleződés"}
-                    value={"73"}
-                    suffix={"%"}
-                    iconPath={getAssetUrl("images/teacherdashboardstatistic8.png")}
-                    isOpenByDefault={false} />
-            </Grid>
-        </Flex>
-        <Flex mt="10px">
-            <Grid
-                className="whall"
-                gap="10px"
-                gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
-                gridAutoRows="200px"
-                gridAutoFlow="column dense">
-
-                <Flex
-                    className="roundBorders"
-                    align="center"
-                    justify="center"
-                    background="var(--transparentWhite70)"
-                    p="10px"
-                    gridColumn="auto / span 2"
-                    gridRow="auto / span 2">
-
-                    <UserActivityDistributionChart title="Felhasználók aktivitása" />
-
-                </Flex>
-
-                <Flex
-                    className="roundBorders"
-                    align="center"
-                    justify="center"
-                    background="var(--transparentWhite70)"
-                    p="10px"
-                    gridColumn="auto / span 2"
-                    gridRow="auto / span 2">
-
-                    <MostWatchedCoursesChart title="Legnépszerűbb kurzusok" />
-
-                </Flex>
-            </Grid>
-        </Flex>
-
+                    {section.items.map(item => {
+                        return <StatisticsCard {...item} />
+                    })}
+                </Grid>
+            </Flex>
+        })}
     </AdminSubpageHeader >
 }
