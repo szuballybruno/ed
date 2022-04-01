@@ -11,25 +11,6 @@ import { EpistoFont } from "../../../controls/EpistoFont";
 
 export const AdminVideoQuestionsModalPage = () => {
 
-    const ValueLabelComponent = (props) => {
-        const { children, value } = props;
-
-        return (
-            <Tooltip
-                className="roundBorders"
-                hasArrow
-                padding="10px"
-                label={value}
-                placement="top"
-                zIndex="9999"
-                h="100px"
-                w="200px">
-
-                {children}
-            </Tooltip >
-        );
-    };
-
     const AddQuestionWithAnswersComponent = (props: {
         isFirst?: boolean
     }) => {
@@ -44,8 +25,8 @@ export const AdminVideoQuestionsModalPage = () => {
             className="roundBorders">
 
             <Flex align="center"
-justify="space-between"
-mt="15px">
+                justify="space-between"
+                mt="15px">
                 <EpistoFont
                     isUppercase
                     fontSize="fontExtraSmall"
@@ -80,8 +61,8 @@ mt="15px">
 
 
             <Flex align="center"
-justify="space-between"
-mt="15px">
+                justify="space-between"
+                mt="15px">
                 <EpistoFont
                     isUppercase
                     fontSize="fontExtraSmall"
@@ -165,7 +146,7 @@ mt="15px">
             p="0 20px 100px 20px">
 
             <AddQuestionWithAnswersComponent key={1}
-isFirst />
+                isFirst />
             <AddQuestionWithAnswersComponent key={2} />
             <AddQuestionWithAnswersComponent key={3} />
 

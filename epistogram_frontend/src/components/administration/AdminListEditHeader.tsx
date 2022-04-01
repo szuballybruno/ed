@@ -119,7 +119,7 @@ export const AdminListEditHeader = (props: {
             <EpistoSelect
                 minWidth={"fit-content"}
                 items={[]}
-                onSelected={x => { }}
+                onSelected={x => { throw new Error("Not implemented!"); }}
                 selectedValue="1"
                 getCompareKey={x => x}
                 defaultValue="Rendezés...">
@@ -129,8 +129,9 @@ export const AdminListEditHeader = (props: {
 
         {/* buttons */}
         {(buttons ?? [])
-            .map(x => (
+            .map((x, index) => (
                 <EpistoButton
+                    key={index}
                     variant="plain"
                     className="margin-right"
                     onClick={x.action}

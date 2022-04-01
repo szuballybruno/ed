@@ -1,7 +1,7 @@
 import { Divider, Flex, Grid, Tooltip } from "@chakra-ui/react";
 import { FiberManualRecord } from "@mui/icons-material";
 import { Slider } from "@mui/material";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import ReactPlayer from "react-player";
 import { defaultCharts } from "../../../../static/defaultChartOptions";
 import { iterate } from "../../../../static/frontendHelpers";
@@ -14,7 +14,7 @@ import { DashboardSection } from "../../../universal/DashboardSection";
 
 export const AdminExamStatisticsModalPage = () => {
 
-    const ValueLabelComponent = (props) => {
+    const ValueLabelComponent = (props: { children: ReactNode, value: any }) => {
         const { children, value } = props;
 
         return (
@@ -35,8 +35,8 @@ export const AdminExamStatisticsModalPage = () => {
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
     return <Flex direction="column"
-overflowY="scroll"
-p="20px">
+        overflowY="scroll"
+        p="20px">
         <Grid
             mt="30px"
             h="120px"
@@ -180,6 +180,7 @@ p="20px">
                             selectedValue={"Ismétlések aránya"}
                             onSelected={() => {
 
+                                throw new Error("Not implemented!");
                             }}
                             getCompareKey={() => "asd"} />
                     </Flex>

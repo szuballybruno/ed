@@ -134,8 +134,9 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
                                 {/* go to edit */}
                                 {rowButtons
-                                    .map(x => (
+                                    .map((x, index) => (
                                         <EpistoButton
+                                            key={index}
                                             variant={"colored"}
                                             onClick={() => x.action(tip)}
                                             className="square30"

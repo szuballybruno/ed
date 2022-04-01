@@ -47,7 +47,7 @@ export const ShopAdminSubpage = () => {
 
     const handleDelete = (id: number) => {
 
-
+        throw new Error("Not implemented!");
     };
 
     const handleAddNewAsync = async () => {
@@ -155,8 +155,9 @@ export const ShopAdminSubpage = () => {
 
                                     {/* go to edit */}
                                     {rowButtons
-                                        .map(x => (
+                                        .map((x, i) => (
                                             <EpistoButton
+                                                key={i}
                                                 variant={"colored"}
                                                 onClick={() => x.action(shopItem)}
                                                 style={{ width: 20, margin: "3px" }}>

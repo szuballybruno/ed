@@ -1,10 +1,7 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
-import { DataGridPro, GridCellParams, useGridApiContext, useGridApiRef } from "@mui/x-data-grid-pro";
-import React, { ReactNode } from "react";
-import { useEffect } from "react";
-import { useMemo } from "react";
-import { memo, useRef, useState } from "react";
+import { useGridApiContext } from "@mui/x-data-grid-pro";
+import React, { ReactNode, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useCourseContentAdminData, useSaveCourseContentData } from "../../../services/api/courseApiService";
@@ -16,11 +13,10 @@ import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseCont
 import { CourseModuleShortDTO } from "../../../shared/dtos/admin/CourseModuleShortDTO";
 import { OmitProperty } from "../../../shared/types/advancedTypes";
 import { CourseItemType } from "../../../shared/types/sharedTypes";
-import { formatTime, iterate } from "../../../static/frontendHelpers";
+import { formatTime } from "../../../static/frontendHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoDataGrid, GridColumnType, UseCommitNewValueType } from "../../controls/EpistoDataGrid";
-import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
@@ -29,11 +25,10 @@ import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { AddNewItemPopper } from "./AddNewItemPopper";
 import { ChipSmall } from "./ChipSmall";
 import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
+import classses from "./css/AdminCourseContentSubpage.module.css";
 import { ExamEditDialog } from "./ExamEditDialog";
 import { VideoEditDialog } from "./VideoEditDialog";
 import { OnMutationHandlerType, useXListMutator } from "./XMutator";
-import classses from "./css/AdminCourseContentSubpage.module.css";
-import { Mutation } from "../../../shared/dtos/mutations/Mutation";
 
 type RowSchema = CourseContentItemAdminDTO & {
     quickMenu: number;
@@ -287,7 +282,7 @@ const useGridColumnDefinitions = (
 
                 return <EpistoButton
                     variant="outlined"
-                    onClick={() => { }}>
+                    onClick={() => { throw new Error("Not implemented!"); }}>
 
                     Fájl kiválasztása
                 </EpistoButton >;
@@ -307,7 +302,7 @@ const useGridColumnDefinitions = (
                         </EpistoButton>
 
                         <EpistoButton
-                            onClick={() => { }}>
+                            onClick={() => { throw new Error("Not implemented!"); }}>
 
                             <Equalizer />
                         </EpistoButton>

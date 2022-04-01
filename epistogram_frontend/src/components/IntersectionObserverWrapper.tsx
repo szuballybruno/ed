@@ -49,9 +49,9 @@ export default function IntersectionObserverWrap(props: { children: JSX.Element[
 
   return (<Flex overflow={"hidden"}>
     <Flex className={classes.toolbarWrapper}
-overflow={"hidden"}
-ref={navRef}
-{...css}>
+      overflow={"hidden"}
+      ref={navRef}
+      {...css}>
       {React.Children.map(props.children, (child: JSX.Element) => {
         return React.cloneElement(child, {
           className: visibilityMap[child?.props["name"]] ? classes.visible : classes.inVisible

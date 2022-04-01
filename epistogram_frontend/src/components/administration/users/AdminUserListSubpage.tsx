@@ -190,8 +190,8 @@ export const AdminUserListSubpage = () => {
     };
 
     return <LoadingFrame loadingState={usersStatus}
-error={usersError}
-className="whall">
+        error={usersError}
+        className="whall">
 
         {/* admin header */}
         <AdminSubpageHeader direction="column">
@@ -228,6 +228,7 @@ className="whall">
                                 subTitle={<Flex wrap="wrap">
                                     {getChips(user)
                                         .map((chip, index) => <FloatChip
+                                            key={index}
                                             name={chip.name}
                                             icon={chip.icon}
                                             padding="5px" />)}
@@ -243,7 +244,8 @@ className="whall">
                                 {/* go to edit */}
                                 {rowButtons
                                     .filter(x => x?.getIsVisible ? x.getIsVisible(user.id) : true)
-                                    .map(x => <EpistoButton
+                                    .map((x, index2) => <EpistoButton
+                                        key={index2}
                                         variant={"colored"}
                                         onClick={() => x.onClick(user)}
                                         style={{ width: 20, margin: "3px" }}>

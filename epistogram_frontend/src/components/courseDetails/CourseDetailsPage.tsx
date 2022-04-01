@@ -118,8 +118,8 @@ const CourseDetailsPage = () => {
 
                 {/* left pane */}
                 <Flex flex="1"
-direction={"column"}
-mr={30}>
+                    direction={"column"}
+                    mr={30}>
 
                     {/* short description */}
                     <Container pr="20px">
@@ -128,7 +128,7 @@ mr={30}>
 
                     {/* briefing info items */}
                     <Flex mt="20px"
-justify="space-evenly">
+                        justify="space-evenly">
 
                         <CourseDetailsBriefingInfoItem
                             icon={getAssetUrl("/course_page_icons/about_category.svg")}
@@ -192,6 +192,7 @@ justify="space-evenly">
 
                                 {tabs
                                     .map((x, index) => <Tab
+                                        key={index}
                                         sx={{
                                             "&.MuiTab-root": {
                                                 color: "#444",
@@ -215,7 +216,6 @@ justify="space-evenly">
                                             }
                                         }}
                                         label={x.title}
-                                        key={index}
                                         id={`simple-tab-${index}`} />)}
                             </Tabs>
                         </Box>
@@ -228,6 +228,7 @@ justify="space-evenly">
                                         width: "100%"
                                     }}
                                     value={currentTab}
+                                    key={index}
                                     index={index}>
 
                                     {courseDetails && x.component}
@@ -238,8 +239,8 @@ justify="space-evenly">
 
                 {/* Right pane */}
                 <Flex direction={"column"}
-minWidth="400px"
-flexBasis="400px">
+                    minWidth="400px"
+                    flexBasis="400px">
                     <Flex
                         direction={"column"}
                         alignItems={"center"}
@@ -251,9 +252,9 @@ flexBasis="400px">
                         borderRadius={10}
                         shadow={"#00000024 0px 0px 5px 0px"}>
                         <Flex width="100%"
-height={230}
-justifyContent={"center"}
-p={10}>
+                            height={230}
+                            justifyContent={"center"}
+                            p={10}>
                             <img
                                 src={courseDetails?.thumbnailURL}
                                 style={{
@@ -265,8 +266,9 @@ p={10}>
 
                         {/* sidebar infos list */}
                         {sidebarInfos
-                            .map(sidebarInfo => (
+                            .map((sidebarInfo, index) => (
                                 <FlexListItem
+                                    key={index}
                                     width="100%"
                                     px={15}
                                     height={40}
@@ -282,7 +284,7 @@ p={10}>
                                     )}
                                     midContent={(
                                         <Flex flex={1}
-p={5}>
+                                            p={5}>
                                             <EpistoFont>
                                                 {sidebarInfo.name}
                                             </EpistoFont>

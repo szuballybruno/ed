@@ -53,10 +53,12 @@ const AdminAddUserSubpage = (props: {
 
     return <AdminBreadcrumbsHeader breadcrumbs={[
         <BreadcrumbLink
+            key={1}
             title="Felhasználók"
             iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
             to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
         <BreadcrumbLink
+            key={2}
             title={"Felhasználó hozzáadása"}
             isCurrent />
     ]}>
@@ -67,7 +69,7 @@ const AdminAddUserSubpage = (props: {
                 navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId });
             }} />
         <AdminSubpageHeader background="var(--transparentWhite10)"
-className='roundBorders'>
+            className='roundBorders'>
             <AdminEditUserControl
                 editDTO={null}
                 saveUserAsync={submitAddUserRequestAsync}></AdminEditUserControl>

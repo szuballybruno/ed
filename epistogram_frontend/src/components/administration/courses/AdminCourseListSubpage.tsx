@@ -128,7 +128,7 @@ export const AdminCourseListSubpage = () => {
         {
             name: "deleteButton",
             text: "Törlés",
-            onClick: () => { }
+            onClick: () => { throw new Error("Not implemented!"); }
         },
         {
             name: "statsButton",
@@ -155,12 +155,12 @@ export const AdminCourseListSubpage = () => {
 
             {/* List of courses */}
             <FlexList flex={1}
-pb="300px"
-mt="5px"
-className="roundBorders"
-background="var(--transparentWhite70)">
+                pb="300px"
+                mt="5px"
+                className="roundBorders"
+                background="var(--transparentWhite70)">
                 {courses
-                    .map(course => {
+                    .map((course, index) => {
 
                         const chips = [] as { name: string, icon: ReactNode }[];
 
@@ -189,6 +189,7 @@ background="var(--transparentWhite70)">
                             });
 
                         return <FlexListItem
+                            key={index}
                             align="center"
                             height={100}
                             mb="1"
@@ -212,6 +213,7 @@ background="var(--transparentWhite70)">
                                         <Flex wrap="wrap">
                                             {chips
                                                 .map((chip, index) => <FloatChip
+                                                    key={index}
                                                     name={chip.name}
                                                     icon={chip.icon}
                                                     padding="5px" />)}
@@ -220,10 +222,10 @@ background="var(--transparentWhite70)">
                                 />
                             }
                             endContent={<Flex align="center"
-justifyContent={"flex-end"}
-height="100%"
-width={165}
-px={10}>
+                                justifyContent={"flex-end"}
+                                height="100%"
+                                width={165}
+                                px={10}>
                                 <EpistoButton
                                     variant={"colored"}
                                     onClick={() => {

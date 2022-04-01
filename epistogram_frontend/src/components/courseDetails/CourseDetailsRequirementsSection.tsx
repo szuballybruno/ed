@@ -1,9 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-import { Typography } from "@mui/material";
 import React from "react";
 import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
-import { mockCourseDetails } from "../../static/mockData";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
@@ -19,17 +17,6 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
         direction="column"
         align="flex-start">
 
-        {/* course requirements description title 
-        <EpistoHeader
-            type="strong"
-            text={translatableTexts.courseDetails.requirementsSection.whenTheCourseGoodForYou}
-            my={10} />
-
-         course requirements description 
-        <EpistoFont>
-            {mockCourseDetails.lorem}
-        </EpistoFont>*/}
-
         {/* technical requirements title */}
         <EpistoHeader
             text={translatableTexts.courseDetails.requirementsSection.technicalRequirementsForCourse}
@@ -41,10 +28,15 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
         <Flex direction="column">
             {courseDetails
                 .technicalRequirements
-                .map(x => (
-                    <Flex align="center">
-                        <SettingsSuggestIcon style={{ color: "var(--deepBlue)", marginRight: "10px" }}
-className="square35" />
+                .map((x, index) => (
+                    <Flex
+                        key={index}
+                        align="center">
+
+                        <SettingsSuggestIcon
+                            style={{ color: "var(--deepBlue)", marginRight: "10px" }}
+                            className="square35" />
+
                         <EpistoFont>
                             {x}
                         </EpistoFont>

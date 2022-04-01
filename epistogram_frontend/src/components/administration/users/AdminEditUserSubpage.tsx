@@ -105,10 +105,12 @@ export const AdminEditUserSubpage = (props: {
         }}
         breadcrumbs={[
             <BreadcrumbLink
+                key={1}
                 title="Felhasználók"
                 iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
                 to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
             <BreadcrumbLink
+                key={2}
                 title={userEditData?.lastName + " " + userEditData?.firstName}
                 isCurrent />
         ]}>

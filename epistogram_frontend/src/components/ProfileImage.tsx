@@ -1,6 +1,5 @@
 import { Image } from "@chakra-ui/image";
 import { Flex, FlexProps } from "@chakra-ui/layout";
-import { Typography } from "@mui/material";
 import { forwardRef, useContext } from "react";
 import { EpistoFont } from "./controls/EpistoFont";
 import { CurrentUserContext } from "./system/AuthenticationFrame";
@@ -8,7 +7,8 @@ import { CurrentUserContext } from "./system/AuthenticationFrame";
 type ProfileImageProps = {
     url: string | null,
     firstName?: string,
-    lastName?: string
+    lastName?: string,
+    className?: string
 } & FlexProps;
 
 export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props: ProfileImageProps, ref) => {

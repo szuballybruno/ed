@@ -29,7 +29,10 @@ const elements = [
     { id: "e2-3", source: "2", target: "3" },
 ];
 
-const CustomNodeComponent = ({ data }) => {
+const CustomNodeComponent = (props: { data: any }) => {
+
+    const { data } = props;
+
     return (
         <Flex
             align="center"
@@ -39,8 +42,8 @@ const CustomNodeComponent = ({ data }) => {
             h="120px"
             background="red">
             <Handle type="target"
-position={Position.Left}
-style={{ borderRadius: 0 }} />
+                position={Position.Left}
+                style={{ borderRadius: 0 }} />
             <div>{data.label}</div>
             <Handle
                 type="source"
@@ -65,19 +68,26 @@ style={{ borderRadius: 0 }} />
 export const AdminInteractiveCourseSubpage = () => {
 
     return <AdminBreadcrumbsHeader>
-        <AdminSubpageHeader direction="row"
-flex="1"
-mb="50px">
-            <Flex flex="1"
-mr="5px"
-background="var(--transparentWhite70)">
-                <ReactFlow nodeTypes={{
-                    special: CustomNodeComponent
-                }}
-elements={elements} />
+        <AdminSubpageHeader
+            direction="row"
+            flex="1"
+            mb="50px">
+
+            <Flex
+                flex="1"
+                mr="5px"
+                background="var(--transparentWhite70)">
+
+                <ReactFlow
+                    nodeTypes={{
+                        special: CustomNodeComponent
+                    }}
+                    elements={elements} />
             </Flex>
-            <Flex flexBasis={"350px"}
-background="var(--transparentWhite70)">
+
+            <Flex
+                flexBasis={"350px"}
+                background="var(--transparentWhite70)">
 
             </Flex>
         </AdminSubpageHeader>

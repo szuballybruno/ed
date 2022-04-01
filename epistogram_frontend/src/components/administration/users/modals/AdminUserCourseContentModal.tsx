@@ -1,4 +1,4 @@
-import { Flex, Image } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { UserCourseProgressChartDTO } from "../../../../shared/dtos/UserCourseProgressChartDTO";
@@ -13,7 +13,6 @@ import { UserProgressChart } from "../../../home/UserProgressChart";
 import StatisticsCard from "../../../statisticsCard/StatisticsCard";
 import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart";
 import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl";
-import { UserActivityDistributionChart } from "../UserActivityDistributionChart";
 
 export const AdminUserCourseContentOverviewModalSubpage = (props: {
     userStats: {
@@ -28,11 +27,11 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
     const { userStats } = props;
 
     return <Flex direction="column"
-p="20px">
+        p="20px">
         <Flex>
 
             <Flex flex="1"
-align="stretch">
+                align="stretch">
 
                 <Flex flex="1">
 
@@ -173,8 +172,8 @@ export const AdminUserCourseContentModal = (props: {
     ];
 
     return <EpistoDialog fullScreenX
-fullScreenY
-logic={dialogLogic}>
+        fullScreenY
+        logic={dialogLogic}>
         <Flex
             overflowY="scroll"
             className="roundBorders"
@@ -196,15 +195,15 @@ logic={dialogLogic}>
 
                 <Flex align="center">
                     <Flex h="50px"
-direction="column"
-mr="20px">
+                        direction="column"
+                        mr="20px">
                         <EpistoFont fontSize={"fontLarge"}
-style={{
-                            display: "flex",
-                            alignItems: "center",
-                            flexDirection: "row",
-                            fontWeight: 600
-                        }}>
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                flexDirection: "row",
+                                fontWeight: 600
+                            }}>
                             Microsoft PowerPoint alapok
                         </EpistoFont>
                         <EpistoFont fontSize={"fontMid"}>
@@ -236,6 +235,7 @@ style={{
                         .map((x, index) => {
 
                             return <Tab
+                                key={index}
                                 sx={{
                                     "&.MuiTab-root": {
                                         color: "#444",
@@ -259,7 +259,6 @@ style={{
                                     }
                                 }}
                                 label={x.title}
-                                key={index}
                                 id={`simple-tab-${index}`} />;
                         })}
                 </Tabs>
@@ -268,6 +267,7 @@ style={{
             { /* tab contents */}
             {moreInfoDialogTabs
                 .map((x, index) => <TabPanel
+                    key={index}
                     value={currentTab}
                     index={index}>
 

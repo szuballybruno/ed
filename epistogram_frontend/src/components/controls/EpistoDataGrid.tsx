@@ -55,15 +55,15 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
             };
 
             if (renderCell)
-                def.renderCell = (props: GridRenderCellParams<any, any, any>) => renderCell({
-                    key: getKey(props.row),
+                def.renderCell = (cellData: GridRenderCellParams<any, any, any>) => renderCell({
+                    key: getKey(cellData.row),
                     field: column.field,
-                    value: props.row[column.field],
-                    row: props.row
+                    value: cellData.row[column.field],
+                    row: cellData.row
                 });
 
             if (renderEditCell)
-                def.renderEditCell = (props: any) => {
+                def.renderEditCell = (cellData: any) => {
 
                     const useCommitNewValue = () => {
 
@@ -86,10 +86,10 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
                     };
 
                     return renderEditCell({
-                        key: getKey(props.row),
+                        key: getKey(cellData.row),
                         field: column.field,
-                        value: props.row[column.field],
-                        row: props.row,
+                        value: cellData.row[column.field],
+                        row: cellData.row,
                         useCommitNewValue
                     });
                 };

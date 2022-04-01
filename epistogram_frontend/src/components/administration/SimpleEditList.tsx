@@ -19,15 +19,16 @@ export const SimpleEditList = <T,>(props: {
 
     return (
         <Flex direction="column"
-mt="30px"
-{...css}>
+            mt="30px"
+            {...css}>
 
             <EpistoLabel isOverline
-text={title}>
+                text={title}>
 
                 <FlexList pb="10px">
                     {items
                         .map((item, index) => <Flex
+                            key={index}
                             align="center"
                             py="5px">
 

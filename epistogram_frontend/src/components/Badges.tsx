@@ -19,22 +19,24 @@ export const Badges = () => {
             justify="flex-start"
             padding="10px">
 
-            {badges.map(badge => <Flex
-                className="roundBorders"
-                background="orange"
-                width="120px"
-                height="120px"
-                ml="10px"
-                justify="center"
-                align="center">
+            {badges
+                .map((badge, index) => <Flex
+                    key={index}
+                    className="roundBorders"
+                    background="orange"
+                    width="120px"
+                    height="120px"
+                    ml="10px"
+                    justify="center"
+                    align="center">
 
-                <img
-                    style={{
-                        width: 100
-                    }}
-                    src={badge}
-                    alt="" />
-            </Flex>)}
+                    <img
+                        style={{
+                            width: 100
+                        }}
+                        src={badge}
+                        alt="" />
+                </Flex>)}
         </Flex>
     );
 };

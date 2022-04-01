@@ -97,8 +97,9 @@ export const PersonalityTraitCategoriesSubpage = () => {
 
                                 {/* go to edit */}
                                 {rowButtons
-                                    .map(x => (
+                                    .map((x, index) => (
                                         <EpistoButton
+                                            key={index}
                                             variant={"colored"}
                                             onClick={() => x.action(personalityTraitCategory)}
                                             style={{ width: 20, margin: "3px" }}>

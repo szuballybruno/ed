@@ -308,7 +308,8 @@ export const EditVideoSubpage = () => {
                         </EpistoButton>
                         <FlexList>
                             {questions
-                                .map(question => <QuestionItem
+                                .map((question, index) => <QuestionItem
+                                    key={index}
                                     navToEditQuestion={navToEditQuestion}
                                     currentSeconds={playedSeconds}
                                     onChanged={(x, y) => setQuestionValues(question.questionId, x, y)}

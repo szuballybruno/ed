@@ -3,12 +3,11 @@ import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from "@mui/ico
 import { ReactNode } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useActiveCourses } from "../../../services/api/userProgressApiService";
-import { getAssetUrl, iterate, usePaging } from "../../../static/frontendHelpers";
+import { getAssetUrl, usePaging } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoGrid } from "../../controls/EpistoGrid";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import { DashboardSection } from "../../universal/DashboardSection";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
@@ -57,7 +56,7 @@ export const AdminHomeOverview = () => {
             title: applicationRoutes.administrationRoute.homeRoute.detailsRoute.title
         }]}>
         <Flex flex="3"
-direction="column">
+            direction="column">
 
             <AdminSectionWithButton
                 title="Top beérkező kérdések"
@@ -77,7 +76,7 @@ direction="column">
                     gridTemplateColumns="repeat(3, minmax(0, 1fr))">
 
                     <StatisticsCard
-                        additionalFunction={() => { }}
+                        additionalFunction={() => { throw new Error("Not implemented!"); }}
                         minWidth="180px"
                         p="10px 0"
                         iconPath={getAssetUrl("/images/teacherdashboard1.png")}
@@ -86,7 +85,7 @@ direction="column">
                         suffix="-en" />
 
                     <StatisticsCard
-                        additionalFunction={() => { }}
+                        additionalFunction={() => { throw new Error("Not implemented!"); }}
                         minWidth="180px"
                         p="10px 0"
                         iconPath={getAssetUrl("/images/teacherdashboard2.png")}
@@ -95,7 +94,7 @@ direction="column">
                         suffix="-en" />
 
                     <StatisticsCard
-                        additionalFunction={() => { }}
+                        additionalFunction={() => { throw new Error("Not implemented!"); }}
                         minWidth="180px"
                         p="10px 0"
                         iconPath={getAssetUrl("/images/teacherdashboard3.png")}
@@ -248,7 +247,7 @@ direction="column">
             </AdminSectionWithButton>
         </Flex>
         <Flex flex="2"
-h="fit-content">
+            h="fit-content">
             <AdminSectionWithButton
                 m="10px 0 0 10px"
                 flex="1"
@@ -276,8 +275,8 @@ h="fit-content">
                     </Flex>
 
                     <Flex flex="1"
-direction="column"
-p="20px">
+                        direction="column"
+                        p="20px">
                         <EpistoFont>
                             Microsoft Excel Alapok
                         </EpistoFont>
@@ -294,6 +293,7 @@ p="20px">
                             {activeCoursesPaging
                                 .items
                                 .map((x, index) => <FiberManualRecord
+                                    key={index}
                                     style={{
                                         width: "10px",
                                         height: "8px",

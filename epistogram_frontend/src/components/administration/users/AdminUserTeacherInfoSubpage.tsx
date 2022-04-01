@@ -99,9 +99,9 @@ export const AdminUserTeacherInfoSubpage = (props: {
     return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
         <AdminUserList users={users}
-navigationFunction={(userId) => {
-            navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: userId });
-        }} />
+            navigationFunction={(userId) => {
+                navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: userId });
+            }} />
 
         {/* admin header */}
         <AdminSubpageHeader
@@ -181,6 +181,7 @@ navigationFunction={(userId) => {
                             {allBadges
                                 .map((badge, index) => {
                                     return <Flex
+                                        key={index}
                                         flexDir={"column"}
                                         justifyContent={"space-between"}
                                         alignItems={"center"}
@@ -193,7 +194,7 @@ navigationFunction={(userId) => {
 
                                         <Flex>
                                             <img src={badge.icon}
-alt={""} />
+                                                alt={""} />
                                         </Flex>
 
                                         <Flex>

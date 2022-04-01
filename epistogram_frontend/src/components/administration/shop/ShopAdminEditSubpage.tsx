@@ -321,9 +321,11 @@ export const ShopAdminEditSubpage = () => {
                             </Flex>
 
                             {discountCodes
-                                .map(x => (
-                                    <Flex m="5px"
-justify="space-between">
+                                .map((x, index) => (
+                                    <Flex
+                                        key={index}
+                                        m="5px"
+                                        justify="space-between">
                                         <EpistoFont>
                                             {x.id ? "id:" + x.id : "Uj"} - {x.code}
                                         </EpistoFont>
@@ -344,10 +346,10 @@ justify="space-between">
 
                         {/* add codes */}
                         <Flex flex="1"
-direction="column">
+                            direction="column">
 
                             <Flex align="center"
-justify="space-between">
+                                justify="space-between">
                                 <EpistoFont>
                                     {`${translatableTexts.administration.shopAdminEditSubpage.addedCodes} ${addedCodes.length}`}
                                 </EpistoFont>

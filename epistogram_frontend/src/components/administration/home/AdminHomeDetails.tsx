@@ -8,7 +8,6 @@ import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { EpistoBarChart } from "../../universal/charts/EpistoBarChart";
 import { EpistoPieChart } from "../../universal/charts/EpistoPieChart";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { UserActivityDistributionChart } from "../users/UserActivityDistributionChart";
 
 export const AdminHomeDetails = () => {
 
@@ -197,22 +196,29 @@ export const AdminHomeDetails = () => {
             title: applicationRoutes.administrationRoute.homeRoute.detailsRoute.title
         }]}>
 
-        {adminHomeDetailsStatistics.map(section => {
+        {adminHomeDetailsStatistics
+            .map((section, index) => {
 
-            return <Flex mt="10px">
+                return <Flex
+                    key={index}
+                    mt="10px">
 
-                <Grid
-                    className="whall"
-                    gap="10px"
-                    gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
-                    gridAutoRows="200px"
-                    gridAutoFlow="column dense">
+                    <Grid
+                        className="whall"
+                        gap="10px"
+                        gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+                        gridAutoRows="200px"
+                        gridAutoFlow="column dense">
 
-                    {section.items.map(item => {
-                        return <StatisticsCard {...item} />;
-                    })}
-                </Grid>
-            </Flex>;
-        })}
+                        {section
+                            .items
+                            .map((item, index) => {
+                                return <StatisticsCard
+                                    key={index}
+                                    {...item} />;
+                            })}
+                    </Grid>
+                </Flex>;
+            })}
     </AdminSubpageHeader >;
 };

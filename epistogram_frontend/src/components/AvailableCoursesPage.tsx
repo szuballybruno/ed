@@ -175,12 +175,12 @@ const AvailableCoursesPage = () => {
                     </ToggleButtonGroup>
 
                     <EpistoSearch flex="5"
-height="40px"
-mx="10px" />
+                        height="40px"
+                        mx="10px" />
 
                     <Select
                         native
-                        onChange={() => { }}
+                        onChange={() => { throw new Error("Not implemented!"); }}
                         className="roundBorders fontSmall mildShadow"
                         inputProps={{
                             name: "A-Z",
@@ -211,15 +211,16 @@ mx="10px" />
                     error={[coursesError]}>
 
                     <Box id="scrollContainer"
-className="whall">
+                        className="whall">
 
                         <EpistoGrid auto="fill"
-gap="15"
-minColumnWidth="250px">
+                            gap="15"
+                            minColumnWidth="250px">
                             {courses
                                 .map((course, index) => {
 
                                     return <GridItem
+                                        key={index}
                                         className="roundBorders"
                                         background="var(--transparentWhite70)">
 

@@ -16,9 +16,10 @@ export const EpistoSearch = (props: {} & InputProps) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "flex-end"
-            }}
-            children={<Search />}
-        />
+            }}>
+            <Search />
+        </InputLeftElement>
+        
         <Input
             className="largeSoftShadow"
             outline="none"

@@ -15,14 +15,14 @@ const finisedExams = [
 export const MyExams = () => {
 
     return <Flex direction="column"
-width="100%">
+        width="100%">
         <DashboardSection variant="noShadow"
-title="Teljesített vizsgáim">
+            title="Teljesített vizsgáim">
             <EpistoGrid auto="fill"
-gap="15px"
-minColumnWidth="330px">
+                gap="15px"
+                minColumnWidth="330px">
                 {finisedExams
-                    .map(x => <ExamTile />)}
+                    .map((x, index) => <ExamTile key={index} />)}
             </EpistoGrid>
         </DashboardSection>
     </Flex>;
