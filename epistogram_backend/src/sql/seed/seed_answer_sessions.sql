@@ -9,8 +9,6 @@ INSERT INTO answer_session
         user_id
     )
 VALUES
-    (NULL, NULL, 'practise', NULL, NULL, 18),
-    (NULL, NULL, 'practise', NULL, NULL, 19),
     (NULL, NULL, 'practise', NULL, NULL, 11),
     (NULL, NULL, 'practise', NULL, NULL, 17),
     (NULL, NULL, 'practise', NULL, NULL, 12),
