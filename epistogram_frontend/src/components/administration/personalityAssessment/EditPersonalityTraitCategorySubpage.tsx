@@ -41,8 +41,8 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
     const handleEdit = (dailyTipId: number) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip, { traitCategoryId, isMax, dailyTipId })
-    }
+        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip, { traitCategoryId, isMax, dailyTipId });
+    };
 
     const handleAddTip = async () => {
 
@@ -56,7 +56,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     const handleDelete = async (dailyTipId: number) => {
 
@@ -70,7 +70,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     const rowButtons = [
         {
@@ -152,4 +152,4 @@ export const EditPersonalityTraitCategorySubpage = () => {
             </AdminSubpageHeader>
         </LoadingFrame>
     );
-}
+};

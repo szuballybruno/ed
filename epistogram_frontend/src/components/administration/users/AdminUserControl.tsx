@@ -1,16 +1,16 @@
-import { useState } from "react"
-import { Route, Switch } from "react-router"
-import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { useUserListQuery } from "../../../services/api/userApiService"
-import AdminAddUserSubpage from "./AdminAddUserSubpage"
-import AdminEditUserSubpage from "./AdminEditUserSubpage"
-import { AdminUserCourseContentSubpage } from "./AdminUserCourseContentSubpage"
-import { AdminUserStatisticsSubpage } from "./AdminUserLearningOverviewSubpage"
-import { AdminUserTeacherInfoSubpage } from "./AdminUserTeacherInfoSubpage"
-import { AdminUserDataGridSubpage } from "./dataGrids/AdminUsersDataGridSubpage"
+import { useState } from "react";
+import { Route, Switch } from "react-router";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { useUserListQuery } from "../../../services/api/userApiService";
+import AdminAddUserSubpage from "./AdminAddUserSubpage";
+import AdminEditUserSubpage from "./AdminEditUserSubpage";
+import { AdminUserCourseContentSubpage } from "./AdminUserCourseContentSubpage";
+import { AdminUserStatisticsSubpage } from "./AdminUserLearningOverviewSubpage";
+import { AdminUserTeacherInfoSubpage } from "./AdminUserTeacherInfoSubpage";
+import { AdminUserDataGridSubpage } from "./dataGrids/AdminUsersDataGridSubpage";
 
 export const AdminUserControl = () => {
-    const usersRoute = applicationRoutes.administrationRoute.usersRoute
+    const usersRoute = applicationRoutes.administrationRoute.usersRoute;
 
     const [searchText, setSearchText] = useState<string | null>(null);
 
@@ -23,7 +23,7 @@ export const AdminUserControl = () => {
 
         if (value.length > 2)
             setSearchText(value);
-    }
+    };
 
 
     return <Switch>
@@ -79,5 +79,5 @@ export const AdminUserControl = () => {
                 users={users}
                 refetchUsersFunction={refetchUsers} />
         </Route>
-    </Switch >
-}
+    </Switch >;
+};

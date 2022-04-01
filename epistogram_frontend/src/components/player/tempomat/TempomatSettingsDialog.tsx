@@ -1,12 +1,12 @@
-import { Divider, Flex, Image } from "@chakra-ui/react"
-import { useSetTempomatMode } from "../../../services/api/tempomatApiService"
-import { useShowErrorDialog } from "../../../services/core/notifications"
-import { TempomatModeType } from "../../../shared/types/sharedTypes"
-import { getAssetUrl } from "../../../static/frontendHelpers"
-import { translatableTexts } from "../../../static/translatableTexts"
-import { EpistoFont } from "../../controls/EpistoFont"
-import { EpistoDialog, EpistoDialogLogicType } from "../../EpistoDialog"
-import { TempomatModeTile } from "./TempomatModeTile"
+import { Divider, Flex, Image } from "@chakra-ui/react";
+import { useSetTempomatMode } from "../../../services/api/tempomatApiService";
+import { useShowErrorDialog } from "../../../services/core/notifications";
+import { TempomatModeType } from "../../../shared/types/sharedTypes";
+import { getAssetUrl } from "../../../static/frontendHelpers";
+import { translatableTexts } from "../../../static/translatableTexts";
+import { EpistoFont } from "../../controls/EpistoFont";
+import { EpistoDialog, EpistoDialogLogicType } from "../../EpistoDialog";
+import { TempomatModeTile } from "./TempomatModeTile";
 
 export const TempomatSettingsDialog = (props: {
     tempomatDialogLogic: EpistoDialogLogicType,
@@ -32,7 +32,7 @@ export const TempomatSettingsDialog = (props: {
 
             showError(e);
         }
-    }
+    };
     
     // "& .MuiDialog-container": {
     //     justifyContent: "center",
@@ -49,7 +49,9 @@ export const TempomatSettingsDialog = (props: {
             fullScreenX
             logic={tempomatDialogLogic}>
 
-            <Flex direction="column" align="center" flex="1" >
+            <Flex direction="column"
+align="center"
+flex="1" >
                 <Divider
                     h="1px"
                     w="calc(100% - 20px)"
@@ -133,5 +135,5 @@ export const TempomatSettingsDialog = (props: {
                 </Flex>
             </Flex>
         </EpistoDialog>
-    )
-}
+    );
+};

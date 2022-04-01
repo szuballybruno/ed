@@ -1,27 +1,27 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import { Flex, FlexProps } from "@chakra-ui/react";
+import React, { useContext } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
-import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getRoute } from "../../MainRouting";
 import { ApplicationRoute } from "../../models/types";
-import { useNavigation } from '../../services/core/navigatior';
-import { ArrayBuilder, getAssetUrl } from '../../static/frontendHelpers';
-import { ContentPane } from '../ContentPane';
-import { NavigationLinkList } from '../NavigationLinkList';
+import { useNavigation } from "../../services/core/navigatior";
+import { ArrayBuilder, getAssetUrl } from "../../static/frontendHelpers";
+import { ContentPane } from "../ContentPane";
+import { NavigationLinkList } from "../NavigationLinkList";
 import { PageRootContainer } from "../PageRootContainer";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { ProtectedRoute } from '../universal/ProtectedRoute';
-import { AdminOverviewTablePage } from './AdminOverviewTablePage';
-import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
-import { AdminHomeDetails } from './home/AdminHomeDetails';
-import { AdminHomeOverview } from './home/AdminHomeOverview';
-import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
-import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
-import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
-import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
-import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
+import { ProtectedRoute } from "../universal/ProtectedRoute";
+import { AdminOverviewTablePage } from "./AdminOverviewTablePage";
+import { CourseAdministartionSubpage } from "./courses/CourseAdministartionSubpage";
+import { AdminHomeDetails } from "./home/AdminHomeDetails";
+import { AdminHomeOverview } from "./home/AdminHomeOverview";
+import { EditDailyTipSubpage } from "./personalityAssessment/EditDailyTipSubpage";
+import { EditPersonalityTraitCategorySubpage } from "./personalityAssessment/EditPersonalityTraitCategorySubpage";
+import { PersonalityTraitCategoriesSubpage } from "./personalityAssessment/PersonalityTraitCategoriesSubpage";
+import { ShopAdminEditSubpage } from "./shop/ShopAdminEditSubpage";
+import { ShopAdminSubpage } from "./shop/ShopAdminSubpage";
 import AdminStatistics from "./users/AdminStatisticsSubpage";
-import { AdminUserControl } from './users/AdminUserControl';
+import { AdminUserControl } from "./users/AdminUserControl";
 
 export const AdminPage = () => {
 
@@ -58,7 +58,11 @@ export const AdminPage = () => {
             boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
 
             {/* logo link */}
-            <Flex width="100%" alignItems={"center"} justifyContent="center" mt="10px" mb="20px">
+            <Flex width="100%"
+alignItems={"center"}
+justifyContent="center"
+mt="10px"
+mb="20px">
                 <img
                     src={getAssetUrl("/images/logo_min.svg")}
                     style={{
@@ -127,7 +131,8 @@ export const AdminPage = () => {
                     </Switch>} />
 
                 {/* statistics */}
-                <Route exact path={administrationRoutes.myCompanyRoute.route}>
+                <Route exact
+path={administrationRoutes.myCompanyRoute.route}>
                     <AdminStatistics />
                 </Route>
 
@@ -139,5 +144,5 @@ export const AdminPage = () => {
                     render={() => <AdminOverviewTablePage />} /> */}
             </Switch>
         </ContentPane>
-    </PageRootContainer>
+    </PageRootContainer>;
 };

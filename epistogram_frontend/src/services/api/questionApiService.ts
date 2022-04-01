@@ -18,7 +18,7 @@ export const useAnswerPractiseQuestion = () => {
         } as AnswerQuestionDTO;
 
         return postDataQuery.postDataAsync(dto);
-    }
+    };
 
     return {
         answerResults: postDataQuery.result,
@@ -26,8 +26,8 @@ export const useAnswerPractiseQuestion = () => {
         answerQuestionState: postDataQuery.state,
         answerQuestionAsync,
         clearAnswerResults: postDataQuery.clearCache
-    }
-}
+    };
+};
 
 export const usePractiseQuestion = () => {
 
@@ -39,19 +39,19 @@ export const usePractiseQuestion = () => {
         practiseQuestionError: qr.error,
         refetchPractiseQuestion: qr.refetch,
     };
-}
+};
 
 export const useEditQuestionData = (questionId: number | null) => {
 
-    const qr = useReactQuery2<QuestionEditDataDTO>(apiRoutes.questions.getQuestionEditData, { questionId }, !!questionId)
+    const qr = useReactQuery2<QuestionEditDataDTO>(apiRoutes.questions.getQuestionEditData, { questionId }, !!questionId);
 
     return {
         questionEditData: qr.data,
         questionEditDataError: qr.error,
         questionEditDataState: qr.state,
         refetchQuestionEditData: qr.refetch
-    }
-}
+    };
+};
 
 export const useSaveQuestion = () => {
 
@@ -61,4 +61,4 @@ export const useSaveQuestion = () => {
         saveQuesitonAsync: qr.postDataAsync,
         saveQuesitonState: qr.state,
     };
-}
+};

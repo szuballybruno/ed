@@ -1,5 +1,5 @@
 import { Flex, FlexProps } from "@chakra-ui/layout";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { LinearProgress, Typography } from "@mui/material";
 import { useNavigation } from "../../services/core/navigatior";
 import { EpistoButton } from "../controls/EpistoButton";
@@ -19,7 +19,7 @@ export const CourseProgressDisplay = (props: {
     const continueCourse = () => {
 
         navigateToPlayer(continueItemCode);
-    }
+    };
 
     return (
         <Flex
@@ -60,4 +60,4 @@ export const CourseProgressDisplay = (props: {
             </Flex>
         </Flex>
     );
-}
+};

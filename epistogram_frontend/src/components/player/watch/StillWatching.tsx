@@ -3,7 +3,7 @@ import { useState } from "react";
 import { hasValue } from "../../../static/frontendHelpers";
 import { StillWatchingAnswer } from "../../universal/StillWatchingAnswer";
 import { QuestionnaireLayout } from "../../universal/QuestionnaireLayout";
-import classes from "./stillWatching.module.scss"
+import classes from "./stillWatching.module.scss";
 
 export const StillWatching = (props: { onClose: () => void, optionIndex: number }) => {
 
@@ -20,7 +20,7 @@ export const StillWatching = (props: { onClose: () => void, optionIndex: number 
             displayName: "sárga kört",
             component: <RadioButtonUnchecked style={{ color: "var(--intenseYellow)", fontSize: "50px" }} />
         }
-    ]
+    ];
 
     const correctOptionIndex = props.optionIndex;
     const correctOption = options[correctOptionIndex];
@@ -30,8 +30,10 @@ export const StillWatching = (props: { onClose: () => void, optionIndex: number 
     return <QuestionnaireLayout buttonWrapperStyles={{
         display: "flex",
         flexDirection: "row",
-    }} loadingProps={{ loadingState: "success" }}
-        title={`Kérlek válaszd ki a ${correctOption.displayName}!`} contentClickable={true}>
+    }}
+loadingProps={{ loadingState: "success" }}
+        title={`Kérlek válaszd ki a ${correctOption.displayName}!`}
+contentClickable={true}>
         {options
             .map((option, index) => <StillWatchingAnswer
                 key={index}
@@ -44,5 +46,5 @@ export const StillWatching = (props: { onClose: () => void, optionIndex: number 
                 }}>
                 {option.component}
             </StillWatchingAnswer>)}
-    </QuestionnaireLayout>
-}
+    </QuestionnaireLayout>;
+};

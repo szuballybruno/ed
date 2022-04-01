@@ -1,8 +1,8 @@
-import ReactECharts from 'echarts-for-react';
+import ReactECharts from "echarts-for-react";
 import React from "react";
-import { EpistoBarChartDatasetType, EpistoBarChartOptionsType } from './types/EpistoBarChartTypes';
-import { EpistoChartXAxisDataType } from './types/EpistoChartCommonTypes';
-import { EpistoLineChartDatasetType, EpistoLineChartOptionsType } from './types/EpistoLineChartTypes';
+import { EpistoBarChartDatasetType, EpistoBarChartOptionsType } from "./types/EpistoBarChartTypes";
+import { EpistoChartXAxisDataType } from "./types/EpistoChartCommonTypes";
+import { EpistoLineChartDatasetType, EpistoLineChartOptionsType } from "./types/EpistoLineChartTypes";
 
 /**
  * Wrapper component for ECharts
@@ -37,13 +37,13 @@ export const EpistoLineChart = (props: {
             yAxis,
             seriesOptions
         }
-    } = props
+    } = props;
 
 
     const defaultStyle = {
         width: "100%",
         height: "100%",
-    }
+    };
 
     return <ReactECharts
         option={{
@@ -90,11 +90,11 @@ export const EpistoLineChart = (props: {
                     {
                         type: "line"
                     }
-                )
+                );
             })
         }}
         style={{
             ...defaultStyle,
             ...style
-        }} />
-}
+        }} />;
+};

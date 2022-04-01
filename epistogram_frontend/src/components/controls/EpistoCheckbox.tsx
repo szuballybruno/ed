@@ -1,4 +1,4 @@
-import { Checkbox } from "@mui/material"
+import { Checkbox } from "@mui/material";
 
 export const EpistoCheckbox = (props: {
     value: boolean,
@@ -14,6 +14,6 @@ export const EpistoCheckbox = (props: {
             style={{
                 background: "white"
             }}
-            onClick={() => { if (setValue) setValue(!value) }} />
-    )
-}
+            onClick={() => { if (setValue) setValue(!value); }} />
+    );
+};

@@ -26,7 +26,7 @@ export const AdminUserList = (props: {
 
     //const [searchText, setSearchText] = useState<string | null>(null);
 
-    const { users, navigationFunction } = props
+    const { users, navigationFunction } = props;
 
 
     /* const handleSearch = (value: string) => {
@@ -81,8 +81,8 @@ export const AdminUserList = (props: {
                             title={`${user.name}`}
                             subTitle={user.email}
                         />}
-                    />
+                    />;
                 })}
         </FlexList>
-    </Flex>
-}
+    </Flex>;
+};

@@ -1,8 +1,8 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useReactTimer } from "../../helpers/reactTimer";
-import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { QuestionDTO } from "../../shared/dtos/QuestionDTO";
 import { useAnswerQuestion } from "../../services/api/playerApiService";
 import { epochDates } from "../../static/frontendHelpers";
 import { QuesitionView } from "../QuestionView";
@@ -30,12 +30,12 @@ export const VideoQuestionnaire = (props: {
         const timeElapsed = epochDates(new Date(), showUpTime);
         await answerQuestionAsync(answerSessionId, answerId, question.questionId, timeElapsed);
         onAnswered();
-    }
+    };
 
     const handleCloseDialog = () => {
 
         onClosed();
-    }
+    };
 
     const reactTimer = useReactTimer(handleCloseDialog, autoCloseSecs * 1000);
 
@@ -66,7 +66,8 @@ export const VideoQuestionnaire = (props: {
             bonusCoinsAcquired={answerResult?.coinAcquires?.bonus ?? null}
             {...css} />
 
-        <Flex display={isAnswered ? undefined : "none"} justify="flex-end">
+        <Flex display={isAnswered ? undefined : "none"}
+justify="flex-end">
 
             <EpistoButton
                 variant="colored"
@@ -87,5 +88,5 @@ export const VideoQuestionnaire = (props: {
                 </TimeoutFrame>
             </EpistoButton>
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

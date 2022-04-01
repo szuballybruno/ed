@@ -1,17 +1,17 @@
-import { Flex } from '@chakra-ui/react';
-import React, { useContext } from 'react';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useNavigation } from '../../services/core/navigatior';
-import { startUserGuide } from '../../services/core/userGuidingService';
+import { Flex } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { useNavigation } from "../../services/core/navigatior";
+import { startUserGuide } from "../../services/core/userGuidingService";
 import { getAssetUrl, usePaging } from "../../static/frontendHelpers";
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFont } from '../controls/EpistoFont';
-import { SignupQuestions } from '../SignupQuestions';
-import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoFont } from "../controls/EpistoFont";
+import { SignupQuestions } from "../SignupQuestions";
+import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
 import { PageRootContainer } from "../PageRootContainer";
 import { EpistoPaging } from "../universal/EpistoPaging";
 import { SignupWrapper } from "./SignupWrapper";
-import { ContentPane } from '../ContentPane';
+import { ContentPane } from "../ContentPane";
 
 export const SignupPage = () => {
 
@@ -27,7 +27,7 @@ export const SignupPage = () => {
 
         slidesState.next();
         refetchUserAsync();
-    }
+    };
 
     const handleGoToHomePage = () => {
 
@@ -35,7 +35,7 @@ export const SignupPage = () => {
 
         console.log("Showing guide...");
         startUserGuide();
-    }
+    };
 
     const GreetSlide = () => <SignupWrapper
         title={translatableTexts.signupPage.greetSlideTitle}
@@ -43,12 +43,12 @@ export const SignupPage = () => {
         description={translatableTexts.signupPage.greetSlideDescription}
         onNext={() => slidesState.next()}
         nextButtonTitle={translatableTexts.signupPage.greetSlideNextButton}>
-    </SignupWrapper>
+    </SignupWrapper>;
 
     const QuestionnaireSlide = () => <SignupQuestions
         onNextOverNavigation={handleGoToSummary}
         onPrevoiusOverNavigation={slidesState.previous}
-        onJumpToResults={slidesState.jumpToLast} />
+        onJumpToResults={slidesState.jumpToLast} />;
 
     const SummarySlide = (isCurrent: boolean) => <SignupWrapper
         currentImage={getAssetUrl("/images/analysis3D.png")}
@@ -74,7 +74,7 @@ export const SignupPage = () => {
         nextButtonTitle={isInvitedUser ? translatableTexts.signupPage.goToHomePage : undefined}
         onNavPrevious={() => slidesState.previous()}
         headerRightButton={isInvitedUser ? { name: translatableTexts.signupPage.goToHomePage, action: handleGoToHomePage } : undefined}>
-    </SignupWrapper >
+    </SignupWrapper >;
 
     const slides = [
         GreetSlide,
@@ -83,7 +83,8 @@ export const SignupPage = () => {
     ];
 
     return (
-        <PageRootContainer noBackground noMaxWidth>
+        <PageRootContainer noBackground
+noMaxWidth>
 
             <ContentPane
                 align="center"

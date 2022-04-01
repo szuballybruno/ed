@@ -1,7 +1,7 @@
 import { Box, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import CircularProgress from "@mui/material/CircularProgress";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { LoadingStateType } from "../../models/types";
 import { isArray } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
@@ -85,7 +85,8 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
             p="30px">
 
             {/* error */}
-            {finalState === "error" && <Flex align="center" direction="column">
+            {finalState === "error" && <Flex align="center"
+direction="column">
                 <ErrorOutlineIcon style={{ width: "100px", height: "100px" }}></ErrorOutlineIcon>
                 <Heading as="h1">Az alkalmazás betöltése sikertelen</Heading>
                 <Text maxWidth="300px">{singleError?.message}</Text>
@@ -98,7 +99,8 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
                 justify="center"
                 align="center">
 
-                <CircularProgress style={{ 'color': 'black' }} size={50} />
+                <CircularProgress style={{ "color": "black" }}
+size={50} />
 
                 <Box pt="20px">
                     <EpistoFont>
@@ -107,8 +109,8 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
                 </Box>
             </Flex>}
         </Flex>}
-    </Flex>
-}
+    </Flex>;
+};
 
 const getLoadingState = (loadingState?: LoadingStateType | LoadingStateType[], error?: any): LoadingStateType => {
 
@@ -137,7 +139,7 @@ const getLoadingState = (loadingState?: LoadingStateType | LoadingStateType[], e
 
         return loadingState as LoadingStateType;
     }
-}
+};
 
 const getError = (error?: any | any[]) => {
 
@@ -148,4 +150,4 @@ const getError = (error?: any | any[]) => {
         return (error as any[])[0];
 
     return error;
-}
+};

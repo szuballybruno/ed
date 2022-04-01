@@ -1,15 +1,15 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
-import { Typography } from '@mui/material';
-import React, { useContext } from 'react';
-import { applicationRoutes } from '../configuration/applicationRoutes';
-import { useNavigation } from '../services/core/navigatior';
-import { startUserGuideHelp } from '../services/core/userGuidingService';
-import { getAssetUrl } from '../static/frontendHelpers';
-import { CurrentUserContext } from './system/AuthenticationFrame';
-import { EpistoButton } from './controls/EpistoButton';
-import { FlexFloat } from './controls/FlexFloat';
-import { EpistoFont } from './controls/EpistoFont';
-import { translatableTexts } from '../static/translatableTexts';
+import { Flex, FlexProps } from "@chakra-ui/react";
+import { Typography } from "@mui/material";
+import React, { useContext } from "react";
+import { applicationRoutes } from "../configuration/applicationRoutes";
+import { useNavigation } from "../services/core/navigatior";
+import { startUserGuideHelp } from "../services/core/userGuidingService";
+import { getAssetUrl } from "../static/frontendHelpers";
+import { CurrentUserContext } from "./system/AuthenticationFrame";
+import { EpistoButton } from "./controls/EpistoButton";
+import { FlexFloat } from "./controls/FlexFloat";
+import { EpistoFont } from "./controls/EpistoFont";
+import { translatableTexts } from "../static/translatableTexts";
 
 export const LeftPane = (props: FlexProps) => {
 
@@ -35,7 +35,10 @@ export const LeftPane = (props: FlexProps) => {
             {...props}>
 
             {/* logo link */}
-            <Flex width="100%" alignItems={"center"} justifyContent="flex-start" mb="20px">
+            <Flex width="100%"
+alignItems={"center"}
+justifyContent="flex-start"
+mb="20px">
                 <img
                     src={getAssetUrl("/images/logo.svg")}
                     style={{
@@ -64,7 +67,8 @@ export const LeftPane = (props: FlexProps) => {
                     objectFit: "contain",
                     zIndex: -1,
                 }}
-                src={getAssetUrl("/images/bg-art-6.png")} alt="" />
+                src={getAssetUrl("/images/bg-art-6.png")}
+alt="" />
 
             {props.children}
 
@@ -79,7 +83,8 @@ export const LeftPane = (props: FlexProps) => {
                     objectFit: "contain",
                     zIndex: -1,
                 }}
-                src={getAssetUrl("/images/bela3D.png")} alt="" />
+                src={getAssetUrl("/images/bela3D.png")}
+alt="" />
 
             {/* tina image */}
             <Flex

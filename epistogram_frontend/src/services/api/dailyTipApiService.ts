@@ -12,8 +12,8 @@ export const useDailyTip = () => {
         dailyTipData: qr.data,
         dailyTipError: qr.error,
         dailyTipState: qr.state
-    }
-}
+    };
+};
 
 export const useDailyTipEditData = (dailyTipId: number) => {
 
@@ -23,8 +23,8 @@ export const useDailyTipEditData = (dailyTipId: number) => {
         dailyTipEditData: qr.data,
         dailyTipEditError: qr.error,
         dailyTipEditState: qr.state
-    }
-}
+    };
+};
 
 export const useSaveDailyTip = () => {
 
@@ -33,8 +33,8 @@ export const useSaveDailyTip = () => {
     return {
         saveDailyTipAsync: qr.postDataAsync,
         saveDailyTipState: qr.state,
-    }
-}
+    };
+};
 
 export const useCreateDailyTip = () => {
 
@@ -43,8 +43,8 @@ export const useCreateDailyTip = () => {
     return {
         createDailyTipAsync: qr.postDataAsync,
         createDailyTipState: qr.state
-    }
-}
+    };
+};
 
 export const useDeleteDailyTip = () => {
 
@@ -53,5 +53,5 @@ export const useDeleteDailyTip = () => {
     return {
         deleteDailyTipAsync: qr.postDataAsync,
         deleteDailyTipState: qr.state
-    }
-}
+    };
+};

@@ -14,14 +14,14 @@ export const AdminUserCoursesDataGridControl = (props: {
     handleMoreButton: () => void
 }) => {
 
-    const { handleMoreButton } = props
+    const { handleMoreButton } = props;
 
     const params = useParams<{ courseId: string, userId: string, }>();
 
     const userId = parseInt(params.userId);
     const courseId = parseInt(params.courseId);
 
-    const { navigate } = useNavigation()
+    const { navigate } = useNavigation();
 
 
 
@@ -36,87 +36,87 @@ export const AdminUserCoursesDataGridControl = (props: {
             subCategory: course.subCategory.name,
             videosCount: course.videosCount,
             moreDetails: course.courseId
-        }
-    })
+        };
+    });
 
-    const rows: GridRowsProp = getRowsFromCourses()
+    const rows: GridRowsProp = getRowsFromCourses();
 
     const columns: GridColDef[] = [
         {
-            field: 'thumbnailImage',
-            headerName: 'Thumbnail kép',
+            field: "thumbnailImage",
+            headerName: "Thumbnail kép",
             width: 130,
             renderCell: (params) => <img src={params.value} />
         },
         {
-            field: 'title',
-            headerName: 'Cím',
+            field: "title",
+            headerName: "Cím",
             width: 300,
             editable: true,
             resizable: true
         },
         {
-            field: 'progress',
-            headerName: 'Haladás',
+            field: "progress",
+            headerName: "Haladás",
             width: 150,
             resizable: true,
             renderCell: () => <CircularProgressWithLabel value={getRandomInteger(0, 100)} />
         },
         {
-            field: 'currentPerformance',
-            headerName: 'Jelenlegi teljesítmény',
+            field: "currentPerformance",
+            headerName: "Jelenlegi teljesítmény",
             width: 150,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(0, 100)
+                const randomNumber = getRandomInteger(0, 100);
                 return <ChipSmall
                     text={`${randomNumber}%`}
-                    color={randomNumber > 40 ? "var(--deepGreen)" : "var(--intenseRed)"} />
+                    color={randomNumber > 40 ? "var(--deepGreen)" : "var(--intenseRed)"} />;
             }
         },
         {
-            field: 'watchedVideos',
-            headerName: 'Megtekintett videók',
+            field: "watchedVideos",
+            headerName: "Megtekintett videók",
             width: 150,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(80, 240)
+                const randomNumber = getRandomInteger(80, 240);
                 return <EpistoFont>
                     {randomNumber}
-                </EpistoFont>
+                </EpistoFont>;
             }
         },
         {
-            field: 'doneExams',
-            headerName: 'Elvégzett vizsgák',
+            field: "doneExams",
+            headerName: "Elvégzett vizsgák",
             width: 150,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(8, 24)
+                const randomNumber = getRandomInteger(8, 24);
                 return <EpistoFont>
                     {randomNumber}
-                </EpistoFont>
+                </EpistoFont>;
             }
         },
         {
-            field: 'isFinalExamDone',
-            headerName: 'Kurzuszáró vizsga',
+            field: "isFinalExamDone",
+            headerName: "Kurzuszáró vizsga",
             width: 150,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(0, 100)
+                const randomNumber = getRandomInteger(0, 100);
                 return <ChipSmall
                     text={`${randomNumber > 40 ? "Elvégezve" : "Nincs elvégezve"}`}
-                    color={randomNumber > 40 ? "var(--deepGreen)" : "var(--intenseRed)"} />
+                    color={randomNumber > 40 ? "var(--deepGreen)" : "var(--intenseRed)"} />;
             }
         },
         {
-            field: 'currentTempomatMode',
-            headerName: 'Jelenlegi tempomat mód',
+            field: "currentTempomatMode",
+            headerName: "Jelenlegi tempomat mód",
             width: 250,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(8, 24)
+                const randomNumber = getRandomInteger(8, 24);
                 return <Flex align="center">
 
                     <Image
@@ -138,31 +138,31 @@ export const AdminUserCoursesDataGridControl = (props: {
                                 ? "Kiegyensúlyozott mód"
                                 : "Szigorú mód"}
                     </EpistoFont>
-                </Flex>
+                </Flex>;
             }
         },
         {
-            field: 'recommendedVideosCount',
-            headerName: 'Ajánlott videók hetente',
+            field: "recommendedVideosCount",
+            headerName: "Ajánlott videók hetente",
             width: 150,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(1, 30)
+                const randomNumber = getRandomInteger(1, 30);
                 return <EpistoFont>
                     {randomNumber}
-                </EpistoFont>
+                </EpistoFont>;
             }
         },
         {
-            field: 'moreDetails',
-            headerName: 'Részletek',
+            field: "moreDetails",
+            headerName: "Részletek",
             width: 150,
             renderCell: (params) =>
 
                 <EpistoButton
                     variant="outlined"
                     onClick={() => {
-                        handleMoreButton()
+                        handleMoreButton();
                     }} >
                     Bővebben
                 </EpistoButton>
@@ -189,7 +189,7 @@ export const AdminUserCoursesDataGridControl = (props: {
              }
          }} */
         sx={{
-            '& .MuiDataGrid-columnHeaderTitle': {
+            "& .MuiDataGrid-columnHeaderTitle": {
                 textOverflow: "clip",
                 whiteSpace: "break-spaces",
                 lineHeight: 1
@@ -197,6 +197,6 @@ export const AdminUserCoursesDataGridControl = (props: {
         }}
         style={{
             background: "var(--transparentWhite70)"
-        }} />
-}
+        }} />;
+};
 

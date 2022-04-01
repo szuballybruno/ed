@@ -89,17 +89,17 @@ export const RoleIdEnum = {
 
         throw new Error("Invalid role type: " + roleType);
     }
-}
+};
 
 export const JobTitleIdEnum = {
     genericUser: 1,
     tester: 2
-}
+};
 
 export const QuestionTypeEnum = {
     singleAnswer: 1,
     multipleAnswers: 2
-}
+};
 
 export type TeacherBadgeNameType = "badge1" | "badge2" | "badge3";
 

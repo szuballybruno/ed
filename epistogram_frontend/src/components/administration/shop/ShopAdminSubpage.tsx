@@ -38,17 +38,17 @@ export const ShopAdminSubpage = () => {
 
             setSelectedIds([]);
         }
-    }
+    };
 
     const handleEdit = (id: number) => {
 
-        navigate(applicationRoutes.administrationRoute.shopRoute.editRoute, { shopItemId: id })
-    }
+        navigate(applicationRoutes.administrationRoute.shopRoute.editRoute, { shopItemId: id });
+    };
 
     const handleDelete = (id: number) => {
 
 
-    }
+    };
 
     const handleAddNewAsync = async () => {
 
@@ -62,7 +62,7 @@ export const ShopAdminSubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     const headerButtons = [
         {
@@ -87,7 +87,7 @@ export const ShopAdminSubpage = () => {
 
             setSelectedIds(selectedIds.filter(x => x !== userId));
         }
-    }
+    };
 
     const rowButtons = [
         {
@@ -172,4 +172,4 @@ export const ShopAdminSubpage = () => {
             </AdminSubpageHeader>
         </LoadingFrame>
     );
-}
+};

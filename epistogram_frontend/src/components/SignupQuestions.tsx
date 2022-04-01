@@ -30,7 +30,7 @@ export const SignupQuestions = (props: {
 
         await saveAnswersAsync(dto);
         await refetchSignupData();
-    }
+    };
 
     const state = useSignupQuestionsState({
         questions: questions,
@@ -55,5 +55,5 @@ export const SignupQuestions = (props: {
         error={signupDataError} >
 
         <SingupQuestionSlides state={state} />
-    </LoadingFrame>
-}
+    </LoadingFrame>;
+};

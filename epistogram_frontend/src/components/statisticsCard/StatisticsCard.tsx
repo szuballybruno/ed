@@ -1,10 +1,10 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Box, Flex, FlexProps } from "@chakra-ui/react";
 import { ArrowDropDown, ArrowDropUp, ArrowRight, ArrowUpward, FiberManualRecord, Lock } from "@mui/icons-material";
-import React, { useState } from 'react';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFont } from '../controls/EpistoFont';
-import { FlexFloat } from '../controls/FlexFloat';
-import { EpistoHeader } from '../EpistoHeader';
+import React, { useState } from "react";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
+import { FlexFloat } from "../controls/FlexFloat";
+import { EpistoHeader } from "../EpistoHeader";
 
 export type StatisticsCardProps = {
     iconPath?: string
@@ -27,15 +27,15 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
 
     const { iconPath, isComingSoon, children, additionalFunction, additionalInfo, ...css } = props;
 
-    const [isOpen, setIsOpen] = useState(!!props.isOpenByDefault)
+    const [isOpen, setIsOpen] = useState(!!props.isOpenByDefault);
 
     const getColorFromChange = (change: "up" | "stagnate" | "down") => {
         return change === "up"
             ? "var(--deepGreen)"
             : change === "stagnate"
                 ? "var(--mildOrange)"
-                : "var(--intenseRed)"
-    }
+                : "var(--intenseRed)";
+    };
 
     const getIconFromChange = (change: "up" | "stagnate" | "down") => {
         return change === "up"
@@ -56,8 +56,8 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                     style={{
                         margin: "3px 0 0 0",
                         padding: 0
-                    }} />
-    }
+                    }} />;
+    };
 
     return <FlexFloat
         background="var(--transparentWhite70)"
@@ -100,7 +100,7 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
             {getIconFromChange(additionalInfo.change)}
 
             <EpistoFont
-                fontSize="fontSmallPlus"
+                fontSize="fontNormal14"
                 style={{
                     fontWeight: 500
                 }}>
@@ -130,7 +130,8 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
         </Flex>}
 
         {/* closed state */}
-        {!isOpen && <Flex flex="1" align="center">
+        {!isOpen && <Flex flex="1"
+align="center">
 
             {/* image */}
             {iconPath && <img
@@ -144,7 +145,8 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                 src={iconPath} />}
 
             {/* texts */}
-            <Flex direction="column" pr="10px">
+            <Flex direction="column"
+pr="10px">
 
                 {/* value and suffix */}
                 <Flex align="flex-end">
@@ -200,7 +202,7 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                 {isOpen ? <FullscreenExit /> : <Fullscreen />}
             </EpistoButton>
         </Box>}*/}
-    </FlexFloat>
+    </FlexFloat>;
 };
 
 export default StatisticsCard;

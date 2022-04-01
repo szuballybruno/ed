@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { MoreVert } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem } from "@mui/material";
-import classes from "./css/stylesheet.module.css"
+import classes from "./css/stylesheet.module.css";
 import { Flex } from "@chakra-ui/react";
 
 export default function OverflowMenu({ children, className, visibilityMap }) {
@@ -23,7 +23,11 @@ export default function OverflowMenu({ children, className, visibilityMap }) {
     return null;
   }
   return (
-    <Flex minWidth={40} width={40} alignItems={"center"} justifyContent={"center"} className={className}>
+    <Flex minWidth={40}
+width={40}
+alignItems={"center"}
+justifyContent={"center"}
+className={className}>
 
       <IconButton
         aria-label="more"
@@ -43,7 +47,8 @@ export default function OverflowMenu({ children, className, visibilityMap }) {
         {React.Children.map(children, (child) => {
           if (!visibilityMap[child.props["name"]]) {
             return (
-              <MenuItem key={child} onClick={handleClose}>
+              <MenuItem key={child}
+onClick={handleClose}>
                 {React.cloneElement(child, {
                   className: `${child.className} ${classes.inOverflowMenu}`
                 })}

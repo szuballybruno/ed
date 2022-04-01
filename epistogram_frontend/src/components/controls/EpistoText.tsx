@@ -24,8 +24,8 @@ export const EpistoText = (props: {
         ref={ref}
         style={css}>
         {props.text}
-    </Typography>
-}
+    </Typography>;
+};
 
 export const useAutoFontSize = (
     ref: RefObject<HTMLSpanElement> | null,
@@ -62,7 +62,7 @@ export const useAutoFontSize = (
 
                 observer.disconnect();
             }
-        }
+        };
     }, [ref, resizeListener]);
 
     const characterCount = text.length;
@@ -77,4 +77,4 @@ export const useAutoFontSize = (
         return maxSize;
 
     return calculatedSize;
-}
+};

@@ -11,8 +11,8 @@ export const apiRoutes = {
         getJobTitles: "/misc/get-job-titles",
         getOrganizations: "/misc/get-organizations",
         getHomePageDTO: "/misc/get-overview-page-dto",
-        getCurrentCourseItemCode: '/misc/get-current-course-item-code',
-        getCourseOverviewData: '/misc/get-course-overview-data'
+        getCurrentCourseItemCode: "/misc/get-current-course-item-code",
+        getCourseOverviewData: "/misc/get-course-overview-data"
     },
 
     scheduledJobs: {
@@ -126,28 +126,28 @@ export const apiRoutes = {
     },
 
     signup: {
-        answerSignupQuestion: '/signup/answer-signup-question',
+        answerSignupQuestion: "/signup/answer-signup-question",
         getSignupData: "/signup/get-signup-data",
         getUserPersonalityData: "/signup/get-user-personality-data"
     },
 
     player: {
-        getPlayerData: '/player/get-player-data',
-        getCourseItems: '/player/get-course-items',
+        getPlayerData: "/player/get-player-data",
+        getCourseItems: "/player/get-course-items",
         answerVideoQuestion: "/questions/answer-video-question"
     },
 
     playback: {
-        saveVideoPlaybackSample: '/playback/save-video-playback-sample',
+        saveVideoPlaybackSample: "/playback/save-video-playback-sample",
     },
 
     course: {
-        getCourseContentEditData: '/course/get-course-content-edit-data',
-        getCourseDetailsEditData: '/course/get-course-details-edit-data',
-        getCourseBriefData: '/course/get-course-brief-data',
-        saveCourseDetails: '/course/save-course-details-data',
-        saveCourseContent: '/course/save-course-content-data',
-        saveCourseThumbnail: '/course/save-course-thumbnail',
+        getCourseContentEditData: "/course/get-course-content-edit-data",
+        getCourseDetailsEditData: "/course/get-course-details-edit-data",
+        getCourseBriefData: "/course/get-course-brief-data",
+        saveCourseDetails: "/course/save-course-details-data",
+        saveCourseContent: "/course/save-course-content-data",
+        saveCourseThumbnail: "/course/save-course-thumbnail",
         getAvailableCourses: "/course/get-available-courses",
         deleteCourse: "/course/delete-course",
         createCourse: "/course/create-course",
@@ -178,7 +178,7 @@ export const apiRoutes = {
         getQuestionEditData: "/questions/get-question-edit-data",
         saveQuestion: "/questions/save-question",
         answerPractiseQuestion: "/questions/answer-practise-question",
-        getPractiseQuestions: '/questions/get-practise-question',
+        getPractiseQuestions: "/questions/get-practise-question",
     },
 
     exam: {
@@ -190,4 +190,4 @@ export const apiRoutes = {
         getExamResults: "/exam/get-exam-results",
         startExam: "/exam/start-exam"
     }
-}
+};

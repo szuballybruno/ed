@@ -1,5 +1,5 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout";
-import DragHandleIcon from '@mui/icons-material/DragHandle';
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { ReactNode } from "react";
 import { DragDropContext, Draggable, DraggableStateSnapshot, Droppable } from "react-beautiful-dnd";
 
@@ -12,7 +12,8 @@ export const DragAndDropList = <T,>(props: {
 
     const { list, setList, getKey, renderListItem, ...css } = props;
 
-    return <Flex id="dragAndDropListRoot" {...css}>
+    return <Flex id="dragAndDropListRoot"
+{...css}>
         <DragDropContext
             onDragEnd={x => {
 
@@ -36,7 +37,8 @@ export const DragAndDropList = <T,>(props: {
                     <div
                         id="dndListRoot"
                         className="whall"
-                        ref={provided.innerRef} {...provided.droppableProps}>
+                        ref={provided.innerRef}
+{...provided.droppableProps}>
 
                         {/* drag list container */}
                         {list
@@ -50,7 +52,9 @@ export const DragAndDropList = <T,>(props: {
                                     draggableId={"draggableId-" + key}
                                     index={listItemIndex}>
                                     {(provided, snapshot) => (
-                                        <Flex ref={provided.innerRef} {...provided.draggableProps} align="center">
+                                        <Flex ref={provided.innerRef}
+{...provided.draggableProps}
+align="center">
 
                                             {/* drag handle */}
                                             <Box
@@ -65,11 +69,11 @@ export const DragAndDropList = <T,>(props: {
                                             {renderListItem(listItem, snapshot, listItemIndex)}
                                         </Flex>
                                     )}
-                                </Draggable>
+                                </Draggable>;
                             })}
                     </div>
                 )}
             </Droppable>
         </DragDropContext>
-    </Flex>
-}
+    </Flex>;
+};

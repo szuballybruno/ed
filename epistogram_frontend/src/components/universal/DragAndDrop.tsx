@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/layout";
 import { BoxProps } from "@chakra-ui/react";
 import { CSSProperties } from "@emotion/serialize";
-import DragHandleIcon from '@mui/icons-material/DragHandle';
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { ReactNode } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
@@ -12,7 +12,8 @@ export const DropZone = (params: {
 
     const { zoneId, children, groupId, ...css } = params;
 
-    return <Droppable droppableId={zoneId} type={groupId}>
+    return <Droppable droppableId={zoneId}
+type={groupId}>
         {(provided, _) => (
             <Box
                 id="asdasdasd"
@@ -24,8 +25,8 @@ export const DropZone = (params: {
                 {provided.placeholder}
             </Box>
         )}
-    </Droppable>
-}
+    </Droppable>;
+};
 
 export const DragItem = (params: {
     itemId: string,
@@ -60,10 +61,10 @@ export const DragItem = (params: {
                 </Box>
 
                 {children}
-            </Flex>
+            </Flex>;
         }}
-    </Draggable>
-}
+    </Draggable>;
+};
 
 export const DragAndDropContext = (props: {
     children: ReactNode,
@@ -78,8 +79,8 @@ export const DragAndDropContext = (props: {
             const destIndex = x.destination?.index;
             const destId = x.destination?.droppableId;
 
-            props.onDragEnd(srcId, destId ?? null, srcIndex, destIndex ?? null)
+            props.onDragEnd(srcId, destId ?? null, srcIndex, destIndex ?? null);
         }}>
         {props.children}
-    </DragDropContext>
-}
+    </DragDropContext>;
+};

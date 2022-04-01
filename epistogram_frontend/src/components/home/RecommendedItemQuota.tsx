@@ -60,5 +60,5 @@ export const RecommendedItemQuota = (props: {
                     height: "5px"
                 }} />
         </Flex>
-    )
-}
+    );
+};

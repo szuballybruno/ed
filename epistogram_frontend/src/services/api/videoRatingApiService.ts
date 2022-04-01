@@ -1,7 +1,7 @@
-import { apiRoutes } from "../../shared/types/apiRoutes"
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { VideoRatingDTO } from "../../shared/dtos/VideoRatingDTO";
 import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe } from "../core/httpClient"
+import { usePostDataUnsafe } from "../core/httpClient";
 
 export const useRateVideoDifficulty = () => {
 
@@ -9,8 +9,8 @@ export const useRateVideoDifficulty = () => {
 
     return {
         rateVideoDifficultyAsync: qr.postDataAsync
-    }
-}
+    };
+};
 
 export const useRateVideoExperience = () => {
 
@@ -18,8 +18,8 @@ export const useRateVideoExperience = () => {
 
     return {
         rateVideoExperienceAsync: qr.postDataAsync
-    }
-}
+    };
+};
 
 export const useVideoRating = (videoId: number) => {
 
@@ -28,5 +28,5 @@ export const useVideoRating = (videoId: number) => {
     return {
         videoRating: qr.data,
         refetchVideoRating: qr.refetch
-    }
-}
+    };
+};

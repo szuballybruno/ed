@@ -68,7 +68,7 @@ export const mockNotifications = [
         title: "Megjelent egy új kurzus",
         timestamp: Date.now()
     }
-]
+];
 
 /**
  * CourseDetails
@@ -126,4 +126,4 @@ export const mockCourseDetails = {
         title: "Kurzus 1",
         subTitle: "Kurzus 2"
     }]
-}
+};

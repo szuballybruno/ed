@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/layout";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Typography } from "@mui/material";
 import { ModuleDetailedDTO } from "../../../shared/dtos/ModuleDetailedDTO";
 import { translatableTexts } from "../../../static/translatableTexts";
@@ -27,7 +27,8 @@ export const ModuleView = (params: {
             align="center"
             justify="center">
 
-            <Flex direction="row" align="center">
+            <Flex direction="row"
+align="center">
 
                 {module?.imageFilePath && <Flex>
                     <img
@@ -57,9 +58,16 @@ export const ModuleView = (params: {
             </Flex>
         </Flex>
 
-        <Flex height="60px" borderTop="1px solid var(--mildGrey)" justify="flex-end" p="10px">
-            <EpistoButton variant="colored" onClick={startModule} padding="0">
-                <Flex className="whall" mx="15px" align="center">
+        <Flex height="60px"
+borderTop="1px solid var(--mildGrey)"
+justify="flex-end"
+p="10px">
+            <EpistoButton variant="colored"
+onClick={startModule}
+padding="0">
+                <Flex className="whall"
+mx="15px"
+align="center">
                     <EpistoFont
                         isUppercase
                         style={{ marginRight: "5px" }}
@@ -72,5 +80,5 @@ export const ModuleView = (params: {
                 </Flex>
             </EpistoButton>
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

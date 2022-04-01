@@ -15,7 +15,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
     const bytesToBeUploaded = file.size;
     const chunksCount = Math.ceil(bytesToBeUploaded / maxChunkSizeBytes);
 
-    console.log(`Starting upload, chunks count: ${chunksCount}...`)
+    console.log(`Starting upload, chunks count: ${chunksCount}...`);
 
     while (uploadedBytesCount < bytesToBeUploaded) {
 
@@ -34,7 +34,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
     }
 
     console.log("Upload finished!");
-}
+};
 
 const getFileChunkAsync = (uploadedBytesCount: number, file: File): Promise<ArrayBuffer> => {
     return new Promise((resolve, reject) => {
@@ -58,16 +58,16 @@ const getFileChunkAsync = (uploadedBytesCount: number, file: File): Promise<Arra
 
                     resolve(reader.result as ArrayBuffer);
                 }
-            }
+            };
 
             reader.onerror = (e) => {
 
                 reject(e);
-            }
+            };
         }
         catch (e) {
 
             reject(e);
         }
-    })
-}
+    });
+};

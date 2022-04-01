@@ -1,8 +1,8 @@
 import { FlexProps } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
 import { Tab, Tabs } from "@mui/material";
-import React, { ReactNode } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { ReactNode } from "react";
+import { useParams } from "react-router-dom";
 import { ApplicationRoute, ButtonType } from "../../models/types";
 import { useNavigation } from "../../services/core/navigatior";
 import { useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
@@ -63,7 +63,7 @@ export const AdminSubpageHeader = (props: {
                 ...navigationQueryParams
             });
         }
-    }
+    };
 
     return <Flex
         direction={"column"}
@@ -134,7 +134,7 @@ export const AdminSubpageHeader = (props: {
                                         }
                                     }}
                                     label={tabRoute.title}
-                                    value={tabRoute.route} />
+                                    value={tabRoute.route} />;
                             })}
                     </Tabs>}
                 </Flex>
@@ -179,5 +179,5 @@ export const AdminSubpageHeader = (props: {
 
             {children}
         </Flex>
-    </Flex >
-}
+    </Flex >;
+};

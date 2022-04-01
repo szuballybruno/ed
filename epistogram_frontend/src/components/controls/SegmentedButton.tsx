@@ -41,8 +41,8 @@ export const SegmentedButton = <T,>(props: {
                                 {disp(item)}
                             </EpistoFont>
                         </ToggleButton>
-                    )
+                    );
                 })}
         </ToggleButtonGroup>
-    </>
-}
+    </>;
+};

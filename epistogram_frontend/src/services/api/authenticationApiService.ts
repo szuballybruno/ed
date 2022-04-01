@@ -14,8 +14,8 @@ export const useLogout = () => {
     return {
         logoutUserState: qr.state,
         logoutUserAsync: qr.postDataAsync
-    }
-}
+    };
+};
 
 export const useUserFetching = (enabled: boolean) => {
 
@@ -27,13 +27,13 @@ export const useUserFetching = (enabled: boolean) => {
         console.log("Background current user fetching set to: " + bgFetchingEnabled);
 
     const queryResult = useQuery(
-        'getCurrentUser',
+        "getCurrentUser",
         () => httpGetAsync(apiRoutes.authentication.getCurrentUser), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: bgFetchingEnabled ? fetchUserIntervalInMs : false,
         enabled: true,
-        notifyOnChangeProps: ['data', 'isSuccess', 'status']
+        notifyOnChangeProps: ["data", "isSuccess", "status"]
     });
 
     const { data: fetchedUser, refetch, isLoading, isFetching, isSuccess, isError } = queryResult;
@@ -62,14 +62,14 @@ export const useUserFetching = (enabled: boolean) => {
 
         // console.log("Refetching user...");
         await refetch();
-    }
+    };
 
     return {
         currentUser: fetchedUser as UserDTO,
         authState,
         refetchUserAsync
     };
-}
+};
 
 export const useLogInUser = () => {
 
@@ -86,13 +86,13 @@ export const useLogInUser = () => {
             email: email,
             password: password
         })
-    }
-}
+    };
+};
 
 export const useRenewUserSessionPooling = () => {
 
     const { isSuccess } = useQuery(
-        ['renewUserSession'],
+        ["renewUserSession"],
         () => httpGetAsync(apiRoutes.authentication.renewUserSession), {
         retry: false,
         refetchOnWindowFocus: false,
@@ -102,4 +102,4 @@ export const useRenewUserSessionPooling = () => {
     });
 
     return { isSuccess };
-}
+};

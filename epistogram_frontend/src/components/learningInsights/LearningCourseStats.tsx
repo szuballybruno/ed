@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
-import React from 'react';
+import React from "react";
 import { useUserCourseData } from "../../services/api/courseApiService";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { DashboardSection } from "../universal/DashboardSection";
@@ -103,7 +103,10 @@ export const LearningCourseStats = () => {
                     p="10px">
 
                     {completedCourses
-                        .map((course, index) => <LearningCourseStatsTile onClickDetails={() => { dialogLogic.openDialog() }} course={course} />)}
+                        .map((course, index) => <LearningCourseStatsTile
+                            key={index}
+                            onClickDetails={() => { dialogLogic.openDialog(); }}
+                            course={course} />)}
 
                 </EpistoGrid>
 
@@ -117,7 +120,9 @@ export const LearningCourseStats = () => {
         </DashboardSection >
 
         {/* in progress courses  */}
-        <DashboardSection width="100%" variant="noShadow" title="Folyamatban lévő kurzusaim">
+        <DashboardSection width="100%"
+variant="noShadow"
+            title="Folyamatban lévő kurzusaim">
             {isAnyCoursesInProgress
                 ? <EpistoGrid
                     minColumnWidth="250px"
@@ -126,7 +131,10 @@ export const LearningCourseStats = () => {
                     p="10px">
                     {inProgressCourses
                         .map((course, index) => {
-                            return <LearningCourseStatsTile onClickDetails={() => { dialogLogic.openDialog() }} course={course} />
+                            return <LearningCourseStatsTile
+                                key={index}
+                                onClickDetails={() => { dialogLogic.openDialog(); }}
+                                course={course} />;
                         })
                     }
                 </EpistoGrid>
@@ -138,5 +146,5 @@ export const LearningCourseStats = () => {
                     </EpistoFont>
                 </Flex>}
         </DashboardSection>
-    </LoadingFrame>
+    </LoadingFrame>;
 };

@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import IntersectionObserverWrap from "../IntersectionObserverWrapper"
+import IntersectionObserverWrap from "../IntersectionObserverWrapper";
 
 export type BulkEditButtonType = { name: string, text: string, onClick: () => void };
 
@@ -29,5 +29,5 @@ export const BulkEditButtons = (props: { buttons: BulkEditButtonType[] }) => {
                 {x.text}
             </Button>)}
 
-    </IntersectionObserverWrap>
-}
+    </IntersectionObserverWrap>;
+};

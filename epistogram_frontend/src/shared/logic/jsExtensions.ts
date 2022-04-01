@@ -32,10 +32,10 @@ export type Grouping<T> = {
 // eslint-disable-next-line no-extend-native
 Date.prototype.addDays = function (days: number) {
 
-    var date = new Date(this.valueOf());
+    const date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.groupBy = function <T>(func: (item: T) => any) {
@@ -61,12 +61,12 @@ Array.prototype.groupBy = function <T>(func: (item: T) => any) {
                         key: key,
                         items: [item],
                         first: item
-                    })
+                    });
             }
         });
 
     return groups;
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.firstOrNull = function <T>(func?: (item: T) => boolean) {
@@ -84,7 +84,7 @@ Array.prototype.firstOrNull = function <T>(func?: (item: T) => boolean) {
         return null;
 
     return first;
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.last = function <T>(func: (item: T) => T) {
@@ -95,7 +95,7 @@ Array.prototype.last = function <T>(func: (item: T) => T) {
         throw new Error("Last operaion found no matching elements!");
 
     return filtered[filtered.length - 1];
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.first = function <T>(func?: (item: T) => boolean) {
@@ -109,7 +109,7 @@ Array.prototype.first = function <T>(func?: (item: T) => boolean) {
         throw new Error("First operaion found no matching elements!");
 
     return filtered[0];
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.single = function <T>(func: (item: T) => T) {
@@ -123,7 +123,7 @@ Array.prototype.single = function <T>(func: (item: T) => T) {
         throw new Error("Single operation found more than one matching element!");
 
     return filtered[0];
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.findLastIndex = function <T>(func: (item: T) => boolean) {
@@ -134,13 +134,13 @@ Array.prototype.findLastIndex = function <T>(func: (item: T) => boolean) {
         return null;
 
     return filtered.length - 1;
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.all = function <T>(func: (item: T) => boolean) {
 
     return !this.some(x => !func(x));
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.any = function <T>(func?: (item: T) => boolean) {
@@ -149,7 +149,7 @@ Array.prototype.any = function <T>(func?: (item: T) => boolean) {
         return this.some(x => true);
 
     return this.some(func);
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.none = function <T>(func?: (item: T) => boolean) {
@@ -158,13 +158,13 @@ Array.prototype.none = function <T>(func?: (item: T) => boolean) {
         return this.length === 0;
 
     return !this.some(func);
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.remove = function <T>(func: (item: T) => boolean) {
 
-    return this.filter(item => !func(item)) as Array<T>
-}
+    return this.filter(item => !func(item)) as Array<T>;
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.orderBy = function <T>(func: (item: T) => number | string | Date) {
@@ -182,7 +182,7 @@ Array.prototype.orderBy = function <T>(func: (item: T) => number | string | Date
         });
 
     return sorted;
-}
+};
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.count = function <T>(func: (item: T) => boolean): number {
@@ -198,4 +198,4 @@ Array.prototype.count = function <T>(func: (item: T) => boolean): number {
     }
 
     return count;
-}
+};

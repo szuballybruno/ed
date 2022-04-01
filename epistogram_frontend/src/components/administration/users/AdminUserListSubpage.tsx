@@ -1,9 +1,9 @@
 import { Flex } from "@chakra-ui/layout";
 import { ApartmentTwoTone, Edit, Email, Equalizer, School, WorkTwoTone } from "@mui/icons-material";
-import AccessibilityIcon from '@mui/icons-material/Accessibility';
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
+import AccessibilityIcon from "@mui/icons-material/Accessibility";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DesktopAccessDisabledIcon from "@mui/icons-material/DesktopAccessDisabled";
 import React, { ReactNode, useContext, useState } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
@@ -23,9 +23,9 @@ import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
 import { FloatChip } from "../../universal/FloatChip";
 import { AdminListEditHeader } from "../AdminListEditHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-import LoginIcon from '@mui/icons-material/Login';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import LoginIcon from "@mui/icons-material/Login";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 
 export const AdminUserListSubpage = () => {
 
@@ -53,7 +53,7 @@ export const AdminUserListSubpage = () => {
 
         if (value.length > 2)
             setSearchText(value);
-    }
+    };
 
     const showDeleteUserDialog = (user: AdminPageUserDTO) => {
 
@@ -79,7 +79,7 @@ export const AdminUserListSubpage = () => {
                     }
                 ]
             });
-    }
+    };
 
     const setSelectedUser = (userId: number, isSelected: boolean) => {
 
@@ -91,7 +91,7 @@ export const AdminUserListSubpage = () => {
 
             setSelectedUserIds(selectedUserIds.filter(x => x !== userId));
         }
-    }
+    };
 
     const selectAllOrNone = (isAll: boolean) => {
 
@@ -102,7 +102,7 @@ export const AdminUserListSubpage = () => {
 
             setSelectedUserIds([]);
         }
-    }
+    };
 
     const headerButtons = [
         {
@@ -125,7 +125,7 @@ export const AdminUserListSubpage = () => {
             text: "Oktatói adatok szerkesztése",
             onClick: () => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: user.id })
         }
-    ]
+    ];
 
     const rowButtons = [
         {
@@ -145,7 +145,7 @@ export const AdminUserListSubpage = () => {
             getIsVisible: (userId: number) => currentUserId !== userId,
             onClick: (user: AdminPageUserDTO) => showDeleteUserDialog(user)
         },
-    ]
+    ];
 
     const getChips = (user: AdminPageUserDTO) => {
 
@@ -187,9 +187,11 @@ export const AdminUserListSubpage = () => {
                 icon: <MonetizationOnIcon />
             })
             .getArray();
-    }
+    };
 
-    return <LoadingFrame loadingState={usersStatus} error={usersError} className="whall">
+    return <LoadingFrame loadingState={usersStatus}
+error={usersError}
+className="whall">
 
         {/* admin header */}
         <AdminSubpageHeader direction="column">
@@ -249,11 +251,11 @@ export const AdminUserListSubpage = () => {
                                         {x.icon}
                                     </EpistoButton>)}
                             </Flex>}
-                        />
+                        />;
                     })}
             </FlexList>
 
             <FloatAddButton onClick={navigateToAddUser} />
         </AdminSubpageHeader>
-    </LoadingFrame>
-}
+    </LoadingFrame>;
+};

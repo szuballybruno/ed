@@ -12,5 +12,5 @@ export const EpistoSearch = (props: {} & InputProps) => {
         borderRadius="5px"
         background="var(--transparentWhite70)"
         {...css}
-    />
-}
+    />;
+};

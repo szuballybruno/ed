@@ -1,7 +1,7 @@
-import { Box, BoxProps, Flex } from "@chakra-ui/layout"
-import { Typography } from "@mui/material"
+import { Box, BoxProps, Flex } from "@chakra-ui/layout";
+import { Typography } from "@mui/material";
 import { useRef, useState } from "react";
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { HiddenFileUploadInput } from "./HiddenFileUploadInput";
 import { Edit } from "@mui/icons-material";
 
@@ -52,5 +52,5 @@ export const SelectImage = (props: {
 
             <Edit />
         </Flex>
-    </Box>
-}
+    </Box>;
+};

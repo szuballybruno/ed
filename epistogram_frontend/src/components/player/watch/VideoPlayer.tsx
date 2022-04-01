@@ -1,16 +1,14 @@
 import { Box, BoxProps } from "@chakra-ui/react";
-import FastForwardIcon from '@mui/icons-material/FastForward';
-import FastRewindIcon from '@mui/icons-material/FastRewind';
-import PauseIcon from '@mui/icons-material/Pause';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import FastForwardIcon from "@mui/icons-material/FastForward";
+import FastRewindIcon from "@mui/icons-material/FastRewind";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
-import { TrackProps } from "react-player/file";
-import useEventListener from 'react-use-event-listener';
+import useEventListener from "react-use-event-listener";
 import screenfull from "screenfull";
-import { SubtitleDTO } from "../../../shared/dtos/SubtitleDTO";
-import { VideoDTO } from "../../../shared/dtos/VideoDTO";
 import { readVolumeSettings, writeVolumeSettings } from "../../../services/core/storageService";
+import { VideoDTO } from "../../../shared/dtos/VideoDTO";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
 import { VideoControls } from "./VideoControls";
 
@@ -23,7 +21,6 @@ export const useVideoPlayerState = (
     limitSeek: boolean) => {
 
     const { url: videoUrl } = videoItem;
-    const { subtitles } = { subtitles: [] as SubtitleDTO[] };
     const playerContainerRef = useRef(null);
     const playerRef = useRef<ReactPlayer>(null);
     const [shouldBePlaying, setShouldBePlaying] = React.useState(true);
@@ -42,11 +39,6 @@ export const useVideoPlayerState = (
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
     const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking;
 
-    const subtileTracks = subtitles
-        .map(x => ({
-
-        } as TrackProps))
-
     const toggleFullScreen = () => {
 
         // @ts-ignore
@@ -63,7 +55,7 @@ export const useVideoPlayerState = (
 
         // @ts-ignore
         playerRef.current.seekTo(seconds);
-    }
+    };
 
     const flashVisualOverlay = (visualOverlayType: VisualOverlayType) => {
 
@@ -74,7 +66,7 @@ export const useVideoPlayerState = (
 
             setIsVisualOverlayVisible(false);
         }, 200);
-    }
+    };
 
     const showControlOverlay = (indefinate?: boolean) => {
 
@@ -92,7 +84,7 @@ export const useVideoPlayerState = (
             }, 2000);
             setControlOverlayTimer(timeout);
         }
-    }
+    };
 
     const toggleShouldBePlaying = () => {
 
@@ -100,7 +92,7 @@ export const useVideoPlayerState = (
         setShouldBePlaying(targetShouldBePlaying);
         showControlOverlay();
         flashVisualOverlay(targetShouldBePlaying ? "start" : "pause");
-    }
+    };
 
     const jump = (right?: boolean) => {
 
@@ -130,7 +122,7 @@ export const useVideoPlayerState = (
 
         showControlOverlay();
         seekToSeconds(seekSeconds);
-    }
+    };
 
     const handleOnVideoEnded = () => {
 
@@ -138,13 +130,13 @@ export const useVideoPlayerState = (
 
         // if (onVideoEnded)
         //     onVideoEnded();
-    }
+    };
 
     //
     // effect
     //
 
-    useEventListener('keydown', (e) => {
+    useEventListener("keydown", (e) => {
 
         if (e.key === " " || e.key === "ArrowLeft" || e.key === "ArrowRight") {
 
@@ -187,7 +179,6 @@ export const useVideoPlayerState = (
         controlOverlayTimer,
         videoUrl,
         shouldBePlaying,
-        subtileTracks,
         controlsVisible,
         playedSeconds,
         videoLength,
@@ -209,8 +200,8 @@ export const useVideoPlayerState = (
         handleOnVideoEnded,
         setVolume,
         setIsMuted
-    }
-}
+    };
+};
 
 export type VideoPlayerStateType = ReturnType<typeof useVideoPlayerState>;
 
@@ -227,7 +218,6 @@ export const VideoPlayer = (props: {
         visualOverlayType,
         controlOverlayTimer,
         videoUrl,
-        subtileTracks,
         controlsVisible,
         playedSeconds,
         videoLength,
@@ -309,7 +299,7 @@ export const VideoPlayer = (props: {
                                     crossOrigin: "true",
                                     onContextMenu: e => e.preventDefault()
                                 },
-                                tracks: subtileTracks,
+                                // tracks: subtileTracks,
                             }
                         }}
                         loop={false}
@@ -345,5 +335,5 @@ export const VideoPlayer = (props: {
 
             {children}
         </Box>
-    )
+    );
 };

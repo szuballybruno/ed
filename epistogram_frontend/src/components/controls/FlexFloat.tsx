@@ -11,5 +11,5 @@ export const FlexFloat = (props: FlexProps & { elevation?: number, variant?: "no
         bg="white"
         {...flexProps} >
         {props.children}
-    </Flex>
-}
+    </Flex>;
+};

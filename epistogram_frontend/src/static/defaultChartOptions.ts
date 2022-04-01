@@ -11,24 +11,24 @@ const defaultCharts = {
     /* Donut chart */
     donut: {
         legend: {
-            top: '7%',
-            left: 'center'
+            top: "7%",
+            left: "center"
         },
         tooltip: {
-            trigger: 'item'
+            trigger: "item"
         },
         seriesOptions: {
-            radius: ['40%', '60%'],
+            radius: ["40%", "60%"],
             top: 20,
             avoidLabelOverlap: false,
             itemStyle: {
                 borderRadius: 10,
-                borderColor: '#fff',
+                borderColor: "#fff",
                 borderWidth: 2
             },
             label: {
                 show: false,
-                position: 'center'
+                position: "center"
             },
             labelLine: {
                 show: false
@@ -40,17 +40,17 @@ const defaultCharts = {
 
     pie: {
         seriesOptions: {
-            radius: '70%',
-            center: ['50%', '50%'],
-            roseType: 'radius',
+            radius: "70%",
+            center: ["50%", "50%"],
+            roseType: "radius",
 
             color: ["#FB4D3D", "#03CEA4", "#345995", "#EAC435"],
             label: {
-                color: 'rgba(0,0,0, 0.6)'
+                color: "rgba(0,0,0, 0.6)"
             },
             labelLine: {
                 lineStyle: {
-                    color: 'rgba(255, 255, 255, 0.3)'
+                    color: "rgba(255, 255, 255, 0.3)"
                 },
                 smooth: 0.2,
                 length: 10,
@@ -58,11 +58,11 @@ const defaultCharts = {
             },
             itemStyle: {
                 shadowBlur: 200,
-                shadowColor: 'transparent'
+                shadowColor: "transparent"
             },
-            animationType: 'scale',
-            animationEasing: 'elasticOut',
-            animationDelay: function (idx) {
+            animationType: "scale",
+            animationEasing: "elasticOut",
+            animationDelay: function () {
                 return Math.random() * 200;
             }
         }
@@ -71,17 +71,17 @@ const defaultCharts = {
 
     pie2: {
         seriesOptions: {
-            radius: '40%',
-            center: ['50%', '50%'],
-            roseType: 'radius',
+            radius: "40%",
+            center: ["50%", "50%"],
+            roseType: "radius",
 
             color: ["#FB4D3D", "#03CEA4", "#345995", "#EAC435"],
             label: {
-                color: 'rgba(0,0,0, 0.6)'
+                color: "rgba(0,0,0, 0.6)"
             },
             labelLine: {
                 lineStyle: {
-                    color: 'rgba(255, 255, 255, 0.3)'
+                    color: "rgba(255, 255, 255, 0.3)"
                 },
                 smooth: 0.2,
                 length: 10,
@@ -89,11 +89,11 @@ const defaultCharts = {
             },
             itemStyle: {
                 shadowBlur: 200,
-                shadowColor: 'transparent'
+                shadowColor: "transparent"
             },
-            animationType: 'scale',
-            animationEasing: 'elasticOut',
-            animationDelay: function (idx) {
+            animationType: "scale",
+            animationEasing: "elasticOut",
+            animationDelay: function () {
                 return Math.random() * 200;
             }
         }
@@ -110,28 +110,28 @@ const defaultCharts = {
             }
         },
         seriesOptions: {
-            radius: '70%',
-            center: ['50%', '50%'],
-            roseType: 'radius',
+            radius: "70%",
+            center: ["50%", "50%"],
+            roseType: "radius",
             label: {
-                color: 'rgba(0,0,0, 0.6)'
+                color: "rgba(0,0,0, 0.6)"
             },
             labelLine: {
                 lineStyle: {
-                    color: 'rgba(255, 255, 255, 0.3)'
+                    color: "rgba(255, 255, 255, 0.3)"
                 },
                 smooth: 0.2,
                 length: 10,
                 length2: 20
             },
             itemStyle: {
-                color: '#c23531',
+                color: "#c23531",
                 shadowBlur: 100,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                shadowColor: "rgba(0, 0, 0, 0.5)"
             },
-            animationType: 'scale',
-            animationEasing: 'elasticOut',
-            animationDelay: function (idx) {
+            animationType: "scale",
+            animationEasing: "elasticOut",
+            animationDelay: function () {
                 return Math.random() * 200;
             }
         }
@@ -140,8 +140,8 @@ const defaultCharts = {
 
     twoSegmentRedDoughnut: {
         seriesOptions: {
-            type: 'pie',
-            radius: ['60%', '80%'],
+            type: "pie",
+            radius: ["60%", "80%"],
             top: 20,
             avoidLabelOverlap: false,
             itemStyle: {
@@ -151,15 +151,15 @@ const defaultCharts = {
             },
             label: {
                 show: true,
-                position: 'center'
+                position: "center"
             },
             emphasis: {
 
                 label: {
                     formatter: "{b}",
                     show: true,
-                    fontSize: '18',
-                    fontWeight: 'bold'
+                    fontSize: "18",
+                    fontWeight: "bold"
                 }
             },
             labelLine: {
@@ -171,8 +171,8 @@ const defaultCharts = {
 
     twoSegmentGreenDoughnut: {
         seriesOptions: {
-            type: 'pie',
-            radius: ['60%', '80%'],
+            type: "pie",
+            radius: ["60%", "80%"],
             top: 20,
             avoidLabelOverlap: false,
             itemStyle: {
@@ -182,15 +182,15 @@ const defaultCharts = {
             },
             label: {
                 show: true,
-                position: 'center'
+                position: "center"
             },
             emphasis: {
 
                 label: {
                     formatter: "{b}",
                     show: true,
-                    fontSize: '18',
-                    fontWeight: 'bold'
+                    fontSize: "18",
+                    fontWeight: "bold"
                 }
             },
             labelLine: {
@@ -219,7 +219,7 @@ const defaultCharts = {
                 fontWeight: 600
             },
             boundaryGap: true,
-            type: 'category',
+            type: "category",
             axisLabel: {
                 show: true,
                 rotate: 0,
@@ -235,10 +235,10 @@ const defaultCharts = {
             nameTextStyle: {
                 fontWeight: 600
             },
-            type: 'value',
+            type: "value",
         },
         seriesOptions: {
-            type: 'bar',
+            type: "bar",
             itemStyle: {
                 shadowColor: "rgba(0, 0, 0, 0.3)",
                 shadowOffsetX: 2,
@@ -251,9 +251,9 @@ const defaultCharts = {
 
     simpleLineChart: {
         tooltip: {
-            trigger: 'axis',
+            trigger: "axis",
             formatter: (params) => {
-                return "Időpont: " + new Date(params[0].axisValue * 1000).toISOString().substr(14, 5) + " <br />Felhasználók akik ezen a ponton elhagyták a videót: " + params[0].data[0]
+                return "Időpont: " + new Date(params[0].axisValue * 1000).toISOString().substr(14, 5) + " <br />Felhasználók akik ezen a ponton elhagyták a videót: " + params[0].data[0];
             }
 
         },
@@ -261,7 +261,7 @@ const defaultCharts = {
             type: "time",
             axisLabel: {
                 formatter: (params) => {
-                    return new Date(params * 1000).toISOString().substr(14, 5)
+                    return new Date(params * 1000).toISOString().substr(14, 5);
                 }
             }
 
@@ -327,6 +327,6 @@ const defaultCharts = {
 
     }
 
-}
+};
 
 export { defaultCharts };

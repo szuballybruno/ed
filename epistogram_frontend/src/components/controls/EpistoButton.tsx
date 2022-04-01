@@ -99,5 +99,5 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         {...buttonProps}>
         {icon}
         {children}
-    </Button>
+    </Button>;
 });

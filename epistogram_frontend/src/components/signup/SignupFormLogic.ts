@@ -16,6 +16,6 @@ export const useRegistrationFinalizationFormState = () => {
         passwordControl,
         setPasswordControl
     };
-}
+};
 
 export type RegFormStateType = ReturnType<typeof useRegistrationFinalizationFormState>

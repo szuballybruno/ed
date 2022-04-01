@@ -10,7 +10,7 @@ export const Badges = () => {
         getAssetUrl("/badges/003-flag.svg"),
         getAssetUrl("/badges/004-certificate.svg"),
         getAssetUrl("/badges/005-trophy.svg")
-    ]
+    ];
 
     return (
 

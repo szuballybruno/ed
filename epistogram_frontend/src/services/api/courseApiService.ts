@@ -24,8 +24,8 @@ export const useAdminCourseList = (searchText: string) => {
         coursesError: qr.error,
         coursesStatus: qr.state,
         refetchCoursesAsync: qr.refetch
-    }
-}
+    };
+};
 
 export const useSetCourseMode = () => {
 
@@ -34,8 +34,8 @@ export const useSetCourseMode = () => {
     return {
         setCourseModeAsync: qr.postDataAsync,
         setCourseModeState: qr.state
-    }
-}
+    };
+};
 
 export const useCourseDetailsEditData = (courseId: number) => {
 
@@ -46,8 +46,8 @@ export const useCourseDetailsEditData = (courseId: number) => {
         courseDetailsEditDataError: qr.error,
         courseDetailsEditDataState: qr.state,
         refetchCourseDetailsEditData: qr.refetch
-    }
-}
+    };
+};
 
 export const useCourseContentAdminData = (courseId: number) => {
 
@@ -58,8 +58,8 @@ export const useCourseContentAdminData = (courseId: number) => {
         courseContentAdminDataError: qr.error,
         courseContentAdminDataState: qr.state,
         refreshCourseContentAdminData: qr.refetch
-    }
-}
+    };
+};
 
 export const useCreateCourse = () => {
 
@@ -69,7 +69,7 @@ export const useCreateCourse = () => {
         createCourseAsync: qr.postDataAsync,
         createCourseState: qr.state,
     };
-}
+};
 
 export const useDeleteCourse = () => {
 
@@ -79,7 +79,7 @@ export const useDeleteCourse = () => {
         deleteCourseAsync: qr.postDataAsync,
         deleteCourseState: qr.state,
     };
-}
+};
 
 export const useSaveCourseDetailsData = () => {
 
@@ -89,7 +89,7 @@ export const useSaveCourseDetailsData = () => {
         saveCourseDataAsync: qr.postDataAsync,
         saveCourseDataState: qr.state,
     };
-}
+};
 
 export const useSaveCourseContentData = () => {
 
@@ -99,7 +99,7 @@ export const useSaveCourseContentData = () => {
         saveCourseDataAsync: qr.postDataAsync,
         saveCourseDataState: qr.state,
     };
-}
+};
 
 export const useUploadCourseThumbnailAsync = () => {
 
@@ -108,8 +108,8 @@ export const useUploadCourseThumbnailAsync = () => {
     return {
         saveCourseThumbnailAsync: (courseId: number, file: File) => qr.postMultipartDataAsync({ courseId }, file),
         saveCourseThumbnailState: qr.state,
-    }
-}
+    };
+};
 
 export const useCourseBriefData = (courseId: number | null) => {
 
@@ -119,8 +119,8 @@ export const useCourseBriefData = (courseId: number | null) => {
         courseBriefData: qr.data,
         courseBriefDataError: qr.error,
         courseBriefDataState: qr.state
-    }
-}
+    };
+};
 
 export const useCourseDetails = (courseId: number) => {
 
@@ -128,8 +128,8 @@ export const useCourseDetails = (courseId: number) => {
 
     return {
         courseDetails: qr.data
-    }
-}
+    };
+};
 
 export const useUserCourses = () => {
 
@@ -139,8 +139,8 @@ export const useUserCourses = () => {
         courses: qr.data ?? [],
         coursesError: qr.error,
         coursesState: qr.state
-    }
-}
+    };
+};
 
 export const useUserCourseData = () => {
 
@@ -150,8 +150,8 @@ export const useUserCourseData = () => {
         coursesData: qr.data,
         coursesDataError: qr.error,
         coursesDataStatus: qr.state
-    }
-}
+    };
+};
 
 export const useCourseProgressShortDtos = () => {
 
@@ -161,5 +161,5 @@ export const useCourseProgressShortDtos = () => {
         courseProgressShortDtos: qr.data ?? [],
         courseProgressShortError: qr.error,
         courseProgressShortState: qr.state
-    }
-}
+    };
+};

@@ -1,4 +1,4 @@
-import { EpistoChartSeriesOptionsType, EpistoChartLegendType, EpistoChartTooltipType } from "./EpistoChartCommonTypes"
+import { EpistoChartSeriesOptionsType, EpistoChartLegendType, EpistoChartTooltipType } from "./EpistoChartCommonTypes";
 
 export type EpistoPieChartDataType = { value: number, name: string }[]
 

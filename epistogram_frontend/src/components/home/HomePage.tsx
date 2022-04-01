@@ -1,23 +1,23 @@
-import { Flex } from '@chakra-ui/layout';
-import { useMediaQuery } from '@chakra-ui/react';
-import { CSSProperties } from 'react';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useOverviewPageDTO } from '../../services/api/miscApiService';
-import { useActiveCourses } from '../../services/api/userProgressApiService';
-import { useNavigation } from '../../services/core/navigatior';
-import { iterate, usePaging } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { ContentPane } from '../ContentPane';
-import { LeftPane } from '../LeftPane';
-import { PageRootContainer } from '../PageRootContainer';
+import { Flex } from "@chakra-ui/layout";
+import { useMediaQuery } from "@chakra-ui/react";
+import { CSSProperties } from "react";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { useOverviewPageDTO } from "../../services/api/miscApiService";
+import { useActiveCourses } from "../../services/api/userProgressApiService";
+import { useNavigation } from "../../services/core/navigatior";
+import { iterate, usePaging } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
+import { ContentPane } from "../ContentPane";
+import { LeftPane } from "../LeftPane";
+import { PageRootContainer } from "../PageRootContainer";
 import { LoadingFrame } from "../system/LoadingFrame";
-import { CourseItemView } from '../universal/CourseItemList';
-import { DashboardSection } from '../universal/DashboardSection';
-import { FlexListItem } from '../universal/FlexListItem';
-import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
-import { CourseProgressDisplay } from './CourseProgressDisplay';
-import { PractiseQuestions } from './PractiseQuestions';
-import { RecommendedQuota } from './RecommendedQuota';
+import { CourseItemView } from "../universal/CourseItemList";
+import { DashboardSection } from "../universal/DashboardSection";
+import { FlexListItem } from "../universal/FlexListItem";
+import { FlexListTitleSubtitle } from "../universal/FlexListTitleSubtitle";
+import { CourseProgressDisplay } from "./CourseProgressDisplay";
+import { PractiseQuestions } from "./PractiseQuestions";
+import { RecommendedQuota } from "./RecommendedQuota";
 import { StatsSummary } from "./StatsSummary";
 
 const HeavyComp = (props: { style?: CSSProperties }) => {
@@ -45,17 +45,17 @@ const HeavyComp = (props: { style?: CSSProperties }) => {
                     </div>
                 </div>
                 asd {x}
-            </div>
+            </div>;
         })}
-    </div>
-}
+    </div>;
+};
 
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
     const { navigate } = useNavigation();
 
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const [isSmallerThan1400] = useMediaQuery("(min-width: 1400px)");
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging(activeCourses);
@@ -116,8 +116,11 @@ const HomePage = () => {
                         mt="5px">
 
                         {(pageDTO.currentCourseProgress.nextItems ?? [])
-                            .map(x => (
-                                <CourseItemView courseItem={x} />))}
+                            .map((x, index) => (
+                                <CourseItemView
+                                    key={index}
+                                    courseItem={x} />
+                            ))}
                     </Flex>
                 </Flex>}
 
@@ -134,7 +137,8 @@ const HomePage = () => {
                             m="7px 10px 7px 0px"
                             bgColor={"var(--epistoTeal)"} />
 
-                        <FlexListTitleSubtitle title={translatableTexts.homePage.availableCoursesLinkTitle} subTitle={translatableTexts.homePage.availableCoursesText} />
+                        <FlexListTitleSubtitle title={translatableTexts.homePage.availableCoursesLinkTitle}
+subTitle={translatableTexts.homePage.availableCoursesText} />
                     </Flex>} />}
             </LeftPane>
 
@@ -184,7 +188,7 @@ const HomePage = () => {
                 </Flex>
             </ContentPane>
         </LoadingFrame>
-    </PageRootContainer>
+    </PageRootContainer>;
 };
 
 export default HomePage;

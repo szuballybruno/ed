@@ -63,7 +63,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
             return;
 
         setValue(value);
-    }
+    };
 
     // set error
     useEffect(() => {
@@ -100,7 +100,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
             return parseInt(newVal);
 
         return newVal;
-    }
+    };
 
     return <Flex
         direction="column"
@@ -139,13 +139,13 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
             multiline={isMultiline}
             type={type}
             sx={{
-                '& .MuiOutlinedInput-root': {
+                "& .MuiOutlinedInput-root": {
                     height: height,
                     background: transparentBackground
                         ? undefined
                         : "var(--transparentWhite90)",
                 },
-                '& .MuiOutlinedInput-notchedOutline': {
+                "& .MuiOutlinedInput-notchedOutline": {
                     border: "none"
                 }
             }}
@@ -170,5 +170,5 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
             }}
             onBlur={onFocusLost ? (x) => onFocusLost(handleNewValue(x.currentTarget.value), x) : undefined}
             onChange={x => onChanged(handleNewValue(x.currentTarget.value))} />
-    </Flex >
+    </Flex >;
 };

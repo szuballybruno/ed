@@ -1,9 +1,9 @@
-import { Flex, Image } from "@chakra-ui/react"
+import { Flex, Image } from "@chakra-ui/react";
 import { height } from "@mui/system";
 import { ReactNode } from "react";
 import { ClassBuilder } from "../../../helpers/classBuilder";
 import { TempomatModeType } from "../../../shared/types/sharedTypes";
-import { EpistoFont } from "../../controls/EpistoFont"
+import { EpistoFont } from "../../controls/EpistoFont";
 import { TempomatModeImage } from "./TempomatModeImage";
 
 export const TempomatModeTile = (props: {
@@ -55,5 +55,5 @@ export const TempomatModeTile = (props: {
 
             {props.description}
         </EpistoFont>
-    </Flex >
-}
+    </Flex >;
+};

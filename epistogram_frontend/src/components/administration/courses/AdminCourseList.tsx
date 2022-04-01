@@ -34,7 +34,12 @@ export const AdminCourseList = (props: {
             borderRadius="7px 0 0 0" />
 
         {/* List of courses */}
-        <FlexList flex={1} pb="300px" flexBasis="350px" mt="5px" className="roundBorders" background="var(--transparentWhite70)">
+        <FlexList flex={1}
+pb="300px"
+flexBasis="350px"
+mt="5px"
+className="roundBorders"
+background="var(--transparentWhite70)">
             {courses
                 .map((course, index) => {
 
@@ -61,8 +66,8 @@ export const AdminCourseList = (props: {
                                 isSelected={course.courseId === courseId}
                             />
                         }
-                    />
+                    />;
                 })}
         </FlexList>
-    </Flex>
-}
+    </Flex>;
+};

@@ -1,5 +1,5 @@
-import { EpistoGrid } from "../controls/EpistoGrid"
-import { FlexFloat } from "../controls/FlexFloat"
+import { EpistoGrid } from "../controls/EpistoGrid";
+import { FlexFloat } from "../controls/FlexFloat";
 
 export const InfoGrid = (props: { infos: string[] }) => {
 
@@ -11,12 +11,13 @@ export const InfoGrid = (props: { infos: string[] }) => {
         gap="5px"
         mt="20px">
         {infos
-            .map(info => <FlexFloat
+            .map((info, i) => <FlexFloat
+                key={i}
                 p="10px"
                 boxShadow="0"
                 borderRadius="0"
                 borderLeft="4px solid var(--epistoTeal)">
                 {info}
             </FlexFloat>)}
-    </EpistoGrid>
-}
+    </EpistoGrid>;
+};

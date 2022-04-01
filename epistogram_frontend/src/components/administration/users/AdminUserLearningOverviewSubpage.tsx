@@ -65,7 +65,8 @@ const DummyLearningCourseStatsModified = (props: {
             </Box>
 
             {/* content */}
-            <Flex p="10px" direction="column">
+            <Flex p="10px"
+direction="column">
 
                 {/* category  */}
                 <Text
@@ -85,7 +86,8 @@ const DummyLearningCourseStatsModified = (props: {
                 </Text>
 
                 {/* small stats */}
-                <Flex mt={7} justify="space-evenly">
+                <Flex mt={7}
+justify="space-evenly">
 
                     {/* spent time  */}
                     <SmallStat
@@ -100,7 +102,7 @@ const DummyLearningCourseStatsModified = (props: {
                     {/* video questions */}
                     <SmallStat
                         iconUrl={getAssetUrl("images/rightanswerontile3D.png")}
-                        text={`2/0`} />
+                        text={"2/0"} />
                 </Flex>
 
                 {/* course progress bar chart */}
@@ -138,7 +140,7 @@ const DummyLearningCourseStatsModified = (props: {
                 </EpistoButton>
             </Flex>
         </FlexFloat>
-    </GridItem>
+    </GridItem>;
 
 const UserStatisticsProgressWithLabel = (props: {
     title: string,
@@ -154,7 +156,8 @@ const UserStatisticsProgressWithLabel = (props: {
 
         <EpistoFont style={{
             minWidth: 100
-        }} fontSize={"fontExtraSmall"}>
+        }}
+fontSize={"fontExtraSmall"}>
             {props.title}
         </EpistoFont>
 
@@ -176,28 +179,28 @@ const UserStatisticsProgressWithLabel = (props: {
 
             {props.value}
         </EpistoFont>
-    </Flex>
-}
+    </Flex>;
+};
 
 export const AdminUserStatisticsSubpage = (props: {
     users: AdminPageUserDTO[]
 }) => {
 
-    const { users } = props
+    const { users } = props;
 
-    const usersRoute = applicationRoutes.administrationRoute.usersRoute
+    const usersRoute = applicationRoutes.administrationRoute.usersRoute;
 
     const params = useParams<{ userId: string }>();
     const userId = parseInt(params.userId);
 
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(usersRoute.addRoute.route);
-    const navigateToUserCourses = () => navigate(`${usersRoute.route}/${userId}/courses/:courseId/statistics`)
-    const location = useLocation()
+    const navigateToUserCourses = () => navigate(`${usersRoute.route}/${userId}/courses/:courseId/statistics`);
+    const location = useLocation();
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging(activeCourses);
-    const activeCourseId = activeCoursesPaging?.currentItem?.courseId ?? null
+    const activeCourseId = activeCoursesPaging?.currentItem?.courseId ?? null;
 
     const { userEditData } = useEditUserData(userId);
     const { userStats } = useUserStats(userId);
@@ -221,19 +224,19 @@ export const AdminUserStatisticsSubpage = (props: {
                 }} />,
             action: () => navigateToAddUser()
         }
-    ] as ButtonType[]
+    ] as ButtonType[];
 
     return <AdminBreadcrumbsHeader
         viewSwitchChecked={location.pathname === usersRoute.route}
         viewSwitchFunction={() => {
-            navigate(usersRoute.route)
+            navigate(usersRoute.route);
         }}
         subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(usersRoute.statsRoute.route, { userId: userId })
+                navigate(usersRoute.statsRoute.route, { userId: userId });
             }} />
 
         {/* admin header */}
@@ -270,7 +273,8 @@ export const AdminUserStatisticsSubpage = (props: {
                             src={getAssetUrl("/images/tempomatdatechange.png")}
                         />
 
-                        <EpistoFont fontSize={"fontLarge"} style={{
+                        <EpistoFont fontSize={"fontLarge"}
+style={{
                             minWidth: 150
                         }}>
 
@@ -278,7 +282,8 @@ export const AdminUserStatisticsSubpage = (props: {
                         </EpistoFont>
 
 
-                        <Tooltip title={"tiptool"} p="20px">
+                        <Tooltip title={"tiptool"}
+p="20px">
                             <DatePicker
                                 dateFormat="yyyy-MM-dd"
                                 calendarStartDay={1}
@@ -325,7 +330,8 @@ export const AdminUserStatisticsSubpage = (props: {
                                 w={"120px"}
                                 src={getAssetUrl("/images/happyfacechart.png")} />
 
-                            <Flex direction="column" p="10px">
+                            <Flex direction="column"
+p="10px">
                                 <EpistoFont
                                     style={{
                                         fontWeight: 600
@@ -351,13 +357,20 @@ export const AdminUserStatisticsSubpage = (props: {
                                 </EpistoFont>
                             </Flex>
                         </Flex>
-                        <Flex w="100%" mt="20px" direction="column">
+                        <Flex w="100%"
+mt="20px"
+direction="column">
 
-                            <UserStatisticsProgressWithLabel title="Elköteleződés" value={95} />
-                            <UserStatisticsProgressWithLabel title="Teljesítmény" value={67} />
-                            <UserStatisticsProgressWithLabel title="Produktivitás" value={81} />
-                            <UserStatisticsProgressWithLabel title="Elmélyülés" value={83} />
-                            <UserStatisticsProgressWithLabel title="Közösségi aktivitás" value={78} />
+                            <UserStatisticsProgressWithLabel title="Elköteleződés"
+value={95} />
+                            <UserStatisticsProgressWithLabel title="Teljesítmény"
+value={67} />
+                            <UserStatisticsProgressWithLabel title="Produktivitás"
+value={81} />
+                            <UserStatisticsProgressWithLabel title="Elmélyülés"
+value={83} />
+                            <UserStatisticsProgressWithLabel title="Közösségi aktivitás"
+value={78} />
                         </Flex>
                     </Flex>
                     <Flex
@@ -392,7 +405,10 @@ export const AdminUserStatisticsSubpage = (props: {
             </EditSection>
 
             <EditSection title="Kurzusok a hónapban">
-                <EpistoGrid auto="fill" gap="15" minColumnWidth="250px" p="10px 0">
+                <EpistoGrid auto="fill"
+gap="15"
+minColumnWidth="250px"
+p="10px 0">
 
                     <DummyLearningCourseStatsModified
                         title="Microsoft Excel Mesterkurzus"
@@ -461,8 +477,8 @@ export const AdminUserStatisticsSubpage = (props: {
                         p="10px"
                         minWidth={250}
                         style={{
-                            gridColumn: `auto / span 2`,
-                            gridRow: `auto / span 2`
+                            gridColumn: "auto / span 2",
+                            gridRow: "auto / span 2"
                         }}>
 
                         {userProgressData && userProgressData.days.length > 0
@@ -496,8 +512,8 @@ export const AdminUserStatisticsSubpage = (props: {
                         p="10px"
                         minWidth={250}
                         style={{
-                            gridColumn: `auto / span 2`,
-                            gridRow: `auto / span 2`
+                            gridColumn: "auto / span 2",
+                            gridRow: "auto / span 2"
                         }}>
 
                         <UserActivityDistributionChart />
@@ -543,5 +559,5 @@ export const AdminUserStatisticsSubpage = (props: {
                 </div>
             </EditSection>
         </AdminSubpageHeader>
-    </AdminBreadcrumbsHeader >
+    </AdminBreadcrumbsHeader >;
 };

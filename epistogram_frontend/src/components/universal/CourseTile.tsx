@@ -1,5 +1,5 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import React from 'react';
+import React from "react";
 import { useCourseDetails } from "../../services/api/courseApiService";
 import { CourseShortDTO } from "../../shared/dtos/CourseShortDTO";
 import { formatTimespan, getAssetUrl } from "../../static/frontendHelpers";
@@ -31,8 +31,8 @@ const SmallStat = (props: { iconUrl: string, text: string, title: string }) => {
 
             {props.text}
         </Text>
-    </Flex>
-}
+    </Flex>;
+};
 
 const CourseTile = (props: {
     course: CourseShortDTO
@@ -59,7 +59,10 @@ const CourseTile = (props: {
         {...css}>
 
         {/* cover image box  */}
-        <Box flex="1" position="relative" minH={150} maxH={150}>
+        <Box flex="1"
+position="relative"
+minH={150}
+maxH={150}>
 
             {/* cover image */}
             <img
@@ -105,23 +108,31 @@ const CourseTile = (props: {
         </Box>
 
         {/* content  */}
-        <Flex p="10px" direction={"column"} flex="1">
+        <Flex p="10px"
+direction={"column"}
+flex="1">
 
-            <Flex direction="column" flex="5">
+            <Flex direction="column"
+flex="5">
 
                 {/* category  */}
-                <Text as="text" fontSize="13px" color="grey">
+                <Text as="text"
+fontSize="13px"
+color="grey">
                     {courseSubCategory}
                 </Text>
 
                 {/* title */}
                 <Flex direction="column">
-                    <Text fontWeight={"600"} fontSize="15px">{courseTitle}</Text>
+                    <Text fontWeight={"600"}
+fontSize="15px">{courseTitle}</Text>
                 </Flex>
             </Flex>
 
             {/* small stats  */}
-            <Flex mt={7} mb="3px" justify="space-between">
+            <Flex mt={7}
+mb="3px"
+justify="space-between">
 
                 {/* length */}
                 <SmallStat
@@ -165,7 +176,7 @@ const CourseTile = (props: {
 
         {/* buttons */}
         {props.children}
-    </FlexFloat>
+    </FlexFloat>;
 };
 
 export default CourseTile;

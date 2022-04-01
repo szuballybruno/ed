@@ -13,7 +13,7 @@ import { translatableTexts } from "./translatableTexts";
 
 export const iterate = <T>(n: number, fn: (index) => T) => {
 
-    let results = [] as T[];
+    const results = [] as T[];
 
     for (let index = 0; index < n; index++) {
 
@@ -21,7 +21,7 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     }
 
     return results;
-}
+};
 
 export const formatTimespan = (seconds: number) => {
 
@@ -33,18 +33,18 @@ export const formatTimespan = (seconds: number) => {
     const formattedSpentTime = `${roundHours > 0 ? roundHours + "h " : ""}${roundMinutes}m`;
 
     return formattedSpentTime;
-}
+};
 
 export const formatTime = (seconds: number) => {
 
     return new Date(seconds * 1000)
-        .toLocaleTimeString('en-GB', {
-            timeZone: 'Etc/UTC',
+        .toLocaleTimeString("en-GB", {
+            timeZone: "Etc/UTC",
             hour12: false,
-            minute: '2-digit',
-            second: '2-digit'
+            minute: "2-digit",
+            second: "2-digit"
         });
-}
+};
 
 export const dateTimeToString = (date: Date | string) => {
 
@@ -55,7 +55,7 @@ export const dateTimeToString = (date: Date | string) => {
         return new Date(date).toLocaleString();
 
     return date.toLocaleString();
-}
+};
 
 export const getUrl = (path: string, params?: any, query?: any) => {
 
@@ -79,7 +79,7 @@ export const getUrl = (path: string, params?: any, query?: any) => {
     }
 
     return replacedPath;
-}
+};
 
 export const getRoleName = (roleId: number) => {
 
@@ -90,7 +90,7 @@ export const getRoleName = (roleId: number) => {
         return translatableTexts.roleNames.supervisor;
 
     return translatableTexts.roleNames.user;
-}
+};
 
 export const roundNumber = (num: number, decimalPlaces?: number) => {
 
@@ -100,7 +100,7 @@ export const roundNumber = (num: number, decimalPlaces?: number) => {
     const multiplier = (decimalPlaces * 10);
 
     return Math.round(num * multiplier) / multiplier;
-}
+};
 
 export const parseIntOrNull = (str: string) => {
 
@@ -115,7 +115,7 @@ export const parseIntOrNull = (str: string) => {
 
         return null;
     }
-}
+};
 
 export const toDateStringFormatted = (date: Date) => {
 
@@ -125,7 +125,7 @@ export const toDateStringFormatted = (date: Date) => {
     const dayIndex = date.getDate();
 
     return `${getMonthName(monthIndex)}. ${dayIndex}`;
-}
+};
 
 export const daysUntil = (firstDate: Date, secondDate: Date) => {
 
@@ -133,7 +133,7 @@ export const daysUntil = (firstDate: Date, secondDate: Date) => {
     const diffDays = Math.round(Math.abs(((firstDate as any) - (secondDate as any)) / oneDay));
 
     return diffDays;
-}
+};
 
 
 /**
@@ -156,7 +156,7 @@ export const getMonthName = (index: number) => {
         "Nov",
         "Dec"
     ][index];
-}
+};
 
 export const disallowWindowNavigation = () => {
     window.onbeforeunload = (event) => {
@@ -164,11 +164,11 @@ export const disallowWindowNavigation = () => {
         // Cancel the event
         // e.preventDefault();
         if (e) {
-            e.returnValue = ''; // Legacy method for cross browser support
+            e.returnValue = ""; // Legacy method for cross browser support
         }
-        return ''; // Legacy method for cross browser support
+        return ""; // Legacy method for cross browser support
     };
-}
+};
 
 export const useIsMatchingCurrentRoute = () => {
 
@@ -188,10 +188,10 @@ export const useIsMatchingCurrentRoute = () => {
     };
 
     return isMatchingCurrentRoute;
-}
+};
 
-export const isString = (obj: any) => typeof obj === 'string' || obj instanceof String;
-export const isNumber = (obj: any) => typeof obj === 'number' || obj instanceof Number;
+export const isString = (obj: any) => typeof obj === "string" || obj instanceof String;
+export const isNumber = (obj: any) => typeof obj === "number" || obj instanceof Number;
 
 export function distinct<T>(array: T[]) {
 
@@ -199,7 +199,7 @@ export function distinct<T>(array: T[]) {
         return self.indexOf(value) === index;
     }
 
-    var unique = array.filter(onlyUnique);
+    const unique = array.filter(onlyUnique);
 
     return unique;
 }
@@ -208,23 +208,23 @@ export const swapItems = (newList: any[], srcIndex: number, destIndex: number) =
 
     newList.splice(destIndex, 0, newList.splice(srcIndex, 1)[0]);
     return newList;
-}
+};
 
 export const insertAtIndex = <T>(arr: T[], index: number, item: T) => {
 
     arr.splice(index, 0, item);
     return arr;
-}
+};
 
 export const isNullOrUndefined = (o: any) => {
 
     return o === undefined || o === null;
-}
+};
 
 export const epochDates = (dateA: Date, dateB: Date) => {
 
     return Math.abs((dateA.getTime() - dateB.getTime()) / 1000);
-}
+};
 
 export const usePaging = <T>(
     items: T[] | number,
@@ -257,7 +257,7 @@ export const usePaging = <T>(
 
             setCurrentItemIndex(currentItemIndex + 1);
         }
-    }
+    };
 
     const previous = () => {
 
@@ -269,7 +269,7 @@ export const usePaging = <T>(
 
             setCurrentItemIndex(currentItemIndex - 1);
         }
-    }
+    };
 
     const setItem = (itemIndex: number) => {
 
@@ -280,12 +280,12 @@ export const usePaging = <T>(
             throw new Error("Item index is more than the length of the items collection!");
 
         setCurrentItemIndex(itemIndex);
-    }
+    };
 
     const jumpToLast = () => {
 
         setItem(max - 1);
-    }
+    };
 
     return {
         items,
@@ -299,7 +299,7 @@ export const usePaging = <T>(
         setItem,
         jumpToLast
     } as PagingType<T>;
-}
+};
 
 export type PagingType<T> = {
 
@@ -325,9 +325,9 @@ export const getQueryParam = (name: string) => {
 
 export const useIsDesktopView = () => {
 
-    const [isDesktopView] = useMediaQuery("(min-width: 980px)")
+    const [isDesktopView] = useMediaQuery("(min-width: 980px)");
     return isDesktopView;
-}
+};
 
 export const useIsScreenWiderThan = (minimumPixels: number) => {
 
@@ -335,7 +335,7 @@ export const useIsScreenWiderThan = (minimumPixels: number) => {
     const isTrue = queryRes[0];
 
     return isTrue;
-}
+};
 
 export const usePasswordEntryState = () => {
 
@@ -380,7 +380,7 @@ export const usePasswordEntryState = () => {
                 setPasswordCompareError(null);
                 return true;
         }
-    }
+    };
 
     useEffect(() => {
 
@@ -396,8 +396,8 @@ export const usePasswordEntryState = () => {
         setPassword,
         setPasswordCompare,
         validate
-    }
-}
+    };
+};
 
 export const useReactQuery = <T>(
     queryKey: any[],
@@ -415,7 +415,7 @@ export const useReactQuery = <T>(
     });
 
     const { status, refetch, isFetching, data, ...queryResult2 } = queryResult;
-    const advancedStatus = isFetching ? "loading" : status as LoadingStateType
+    const advancedStatus = isFetching ? "loading" : status as LoadingStateType;
 
     return {
         status: advancedStatus,
@@ -425,12 +425,12 @@ export const useReactQuery = <T>(
         },
         data: data ?? null,
         ...queryResult2
-    }
-}
+    };
+};
 
 export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean) => {
 
-    var queryValues = queryParams ? Object.values(queryParams) : [];
+    const queryValues = queryParams ? Object.values(queryParams) : [];
 
     const queryResult = useQuery(
         [url, ...queryValues],
@@ -464,7 +464,7 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
     };
 
     return result;
-}
+};
 
 export const getAssetUrl = (path: string) => assetStorageUrl + ("/" + path).replace("//", "/");
 
@@ -480,7 +480,7 @@ export const hasValue = (obj: any) => {
         return false;
 
     return true;
-}
+};
 
 export class ArrayBuilder<T> {
 
@@ -516,25 +516,25 @@ export const reloadPage = () => window.location.reload();
 export const isBetweenThreshold = (valueA: number, valueB: number, threshold: number) => {
 
     return (valueA - threshold) < valueB && valueB < (valueA + threshold);
-}
+};
 
 export const getRandomInteger = (min: number, max: number) => {
 
     return Math.floor(Math.random() * (max - min)) + min;
-}
+};
 
 export const secondsToTime = (e: any) => {
-    let h = Math.floor(e / 3600).toString().padStart(2, '0'),
-        m = Math.floor(e % 3600 / 60).toString().padStart(2, '0'),
-        s = Math.floor(e % 60).toString().padStart(2, '0');
+    const h = Math.floor(e / 3600).toString().padStart(2, "0"),
+        m = Math.floor(e % 3600 / 60).toString().padStart(2, "0"),
+        s = Math.floor(e % 60).toString().padStart(2, "0");
 
-    return h !== '00' ? h + ':' + m + ':' + s : m + ':' + s;
-}
+    return h !== "00" ? h + ":" + m + ":" + s : m + ":" + s;
+};
 
 export const isArray = (obj: any) => {
 
     return Array.isArray(obj);
-}
+};
 
 export const objToArray = (obj: any) => {
 
@@ -549,7 +549,7 @@ export const objToArray = (obj: any) => {
     }
 
     return properties;
-}
+};
 
 export const isCurrentRoute = (route: string) => window.location.pathname === route;
 
@@ -569,20 +569,20 @@ export const getEventValueCallback = (callback: (value: any) => void) => {
     const inputChangeHandler = (e: React.ChangeEvent<{ value: unknown, name?: string }>) => {
 
         callback(e.currentTarget.value);
-    }
+    };
 
     return inputChangeHandler;
-}
+};
 
 export const getEventFileCallback = (callback: (value: any) => void) => {
 
     const inputChangeHandler = (e: React.ChangeEvent<{ files: unknown, name?: string }>) => {
 
         callback(e.currentTarget.files);
-    }
+    };
 
     return inputChangeHandler;
-}
+};
 
 export const getErrorTypeByHTTPCode = (code: number): ErrorCodeType => {
 
@@ -596,17 +596,17 @@ export const getErrorTypeByHTTPCode = (code: number): ErrorCodeType => {
         return "forbidden";
 
     return "http error";
-}
+};
 
 export const useForceUpdate = () => {
-    const [value, setValue] = useState(0); // integer state
+    const [, setValue] = useState(0); // integer state
     return () => setValue(value => value + 1); // update the state to force render
-}
+};
 
 export const setPageTitle = (title: string) => {
 
     document.title = title;
-}
+};
 
 export const useSetPageTitle = (title: string) => {
     
@@ -614,4 +614,4 @@ export const useSetPageTitle = (title: string) => {
 
         setPageTitle(title);
     }, []);
-}
+};

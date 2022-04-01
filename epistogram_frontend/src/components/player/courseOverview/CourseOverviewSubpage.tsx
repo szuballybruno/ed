@@ -60,12 +60,14 @@ export const CourseOverviewSubpage = () => {
             title: "A kurzuszáró vizsgád eredménye",
             suffix: "%"
         }
-    ]
+    ];
 
     console.log(courseOverviewData);
 
     return (
-        <ExamLayout headerCenterText={"A kurzus során elért eredményed"} handleNext={() => { }}
+        <ExamLayout
+            headerCenterText={"A kurzus során elért eredményed"}
+            handleNext={() => { console.log("TODO"); }}
             nextButtonTitle={translatableTexts.exam.continueCourse}
             footerButtons={[
                 {
@@ -77,19 +79,29 @@ export const CourseOverviewSubpage = () => {
             ]}
             showNextButton={false}>
 
-            <Flex direction="column" className="whall" p="20px 0">
+            <Flex
+                direction="column"
+                className="whall"
+                p="20px 0">
 
-                <EpistoGrid minColumnWidth={"250px"} gap={"10"} auto={"fill"} w="100%">
-                    {courseStatsOverviewData.map((item) => {
-                        return <StatisticsCard
-                            suffix={item.suffix}
-                            title={item.title}
-                            value={isNullOrUndefined(item.value) ? undefined : item.value + ""}
-                            height={150}
-                            p="10px 10px 10px 30px" />
-                    })}
+                <EpistoGrid
+                    minColumnWidth={"250px"}
+                    gap={"10"}
+                    auto={"fill"}
+w="100%">
+
+                    {courseStatsOverviewData
+                        .map((item, index) => {
+                            return <StatisticsCard
+                                key={index}
+                                suffix={item.suffix}
+                                title={item.title}
+                                value={isNullOrUndefined(item.value) ? undefined : item.value + ""}
+                                height={150}
+                                p="10px 10px 10px 30px" />;
+                        })}
                 </EpistoGrid>
             </Flex>
         </ExamLayout>
     );
-}
+};

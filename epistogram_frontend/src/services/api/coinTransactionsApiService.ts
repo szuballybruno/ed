@@ -11,8 +11,8 @@ export const useCoinTransactions = () => {
         coinTransactions: qr.data ?? [],
         coinTransactionsError: qr.error,
         coinTransactionsStatus: qr.state
-    }
-}
+    };
+};
 
 export const useCoinBalance = () => {
 
@@ -23,8 +23,8 @@ export const useCoinBalance = () => {
         coinBalanceError: qr.error,
         coinBalanceStatus: qr.state,
         refetchCoinBalance: qr.refetch
-    }
-}
+    };
+};
 
 export const useCoinBalanceOfUser = (userId: number) => {
 
@@ -35,8 +35,8 @@ export const useCoinBalanceOfUser = (userId: number) => {
         coinBalanceError: qr.error,
         coinBalanceStatus: qr.state,
         refetchCoinBalance: qr.refetch
-    }
-}
+    };
+};
 
 export const useGiftCoinsToUser = () => {
 
@@ -45,5 +45,5 @@ export const useGiftCoinsToUser = () => {
     return {
         giftCoinsToUserAsync: qr.postDataAsync,
         giftCoinsToUserState: qr.state
-    }
-}
+    };
+};

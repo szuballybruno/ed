@@ -13,8 +13,8 @@ export const useCourseRatingGroups = (courseId: number) => {
         courseRatingGroupsState: qr.state,
         courseRatingGroupsError: qr.error,
         refetchCourseRatingGroupsAsync: qr.refetch
-    }
-}
+    };
+};
 
 export const useSaveCourseRatingGroupAnswers = () => {
 
@@ -23,5 +23,5 @@ export const useSaveCourseRatingGroupAnswers = () => {
     return {
         saveCourseRatingGroupAnswers: qr.postDataAsync,
         saveCourseRatingGroupAnswersState: qr.state
-    }
-}
+    };
+};

@@ -1,9 +1,9 @@
 import { AdminPanelSettings, Business, Home, Person, School, Search, Settings, Subscriptions } from "@mui/icons-material";
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import { getAssetUrl } from "../static/frontendHelpers";
 import { translatableTexts } from "../static/translatableTexts";
 
@@ -173,12 +173,14 @@ export const applicationRoutes = {
         homeRoute: {
             title: translatableTexts.routeTitles.administrationHome,
             route: "/administration/home",
-            icon: <Home className="fontXXL" color={"secondary"} />,
+            icon: <Home className="fontXXL"
+color={"secondary"} />,
 
             overviewRoute: {
                 title: translatableTexts.routeTitles.administrationHomeOverview,
                 route: "/administration/home/overview",
-                icon: <Home className="fontXXL" color={"secondary"} />
+                icon: <Home className="fontXXL"
+color={"secondary"} />
             },
             detailsRoute: {
                 title: translatableTexts.routeTitles.administrationHomeDetails,
@@ -189,7 +191,8 @@ export const applicationRoutes = {
         usersRoute: {
             title: translatableTexts.routeTitles.administrationUserAdmin,
             route: "/administration/users",
-            icon: <Person className="fontXXL" color={"secondary"} />,
+            icon: <Person className="fontXXL"
+color={"secondary"} />,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationAddUser,
@@ -199,7 +202,8 @@ export const applicationRoutes = {
             editRoute: {
                 title: translatableTexts.routeTitles.administrationEditUser,
                 route: "/administration/users/:userId/edit",
-                icon: <Person className="fontXXL" color={"secondary"} />,
+                icon: <Person className="fontXXL"
+color={"secondary"} />,
             },
 
             statsRoute: {
@@ -221,7 +225,8 @@ export const applicationRoutes = {
         coursesRoute: {
             title: translatableTexts.routeTitles.administrationCourseAdmin,
             route: "/administration/courses",
-            icon: <Subscriptions className="fontXXL" color={"secondary"} />,
+            icon: <Subscriptions className="fontXXL"
+color={"secondary"} />,
             exact: true,
 
             addRoute: {
@@ -231,7 +236,8 @@ export const applicationRoutes = {
             courseDetailsRoute: {
                 title: translatableTexts.routeTitles.administrationCourseDetails,
                 route: "/administration/courses/:courseId/details",
-                icon: <Subscriptions className="fontXXL" color={"secondary"} />,
+                icon: <Subscriptions className="fontXXL"
+color={"secondary"} />,
             },
             courseContentRoute: {
                 title: translatableTexts.routeTitles.administrationCourseContent,
@@ -284,7 +290,8 @@ export const applicationRoutes = {
         shopRoute: {
             title: translatableTexts.routeTitles.administrationShopMain,
             route: "/administration/shop",
-            icon: <ShoppingCartIcon className="fontXXL" color={"secondary"} />,
+            icon: <ShoppingCartIcon className="fontXXL"
+color={"secondary"} />,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationShopAdd,
@@ -300,7 +307,8 @@ export const applicationRoutes = {
         personalityAssessmentRoute: {
             title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
             route: "/administration/personality-assessment",
-            icon: <SupervisedUserCircleIcon className="fontXXL" color={"secondary"} />,
+            icon: <SupervisedUserCircleIcon className="fontXXL"
+color={"secondary"} />,
 
             editTips: {
                 title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,
@@ -317,7 +325,8 @@ export const applicationRoutes = {
         myCompanyRoute: {
             title: "Céges statisztika",
             route: "/administration/mycompany",
-            icon: <Business className="fontXXL" color={"secondary"} />,
+            icon: <Business className="fontXXL"
+color={"secondary"} />,
             exact: true
         },
 
@@ -358,4 +367,4 @@ export const applicationRoutes = {
             icon: <AttachMoneyIcon />
         }
     }
-}
+};

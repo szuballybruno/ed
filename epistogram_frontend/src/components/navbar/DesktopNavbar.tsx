@@ -1,6 +1,6 @@
 import { Box, Divider, Flex, useMediaQuery } from "@chakra-ui/react";
-import LogoutIcon from '@mui/icons-material/Logout';
-import React, { useContext, useRef, useState } from 'react';
+import LogoutIcon from "@mui/icons-material/Logout";
+import React, { useContext, useRef, useState } from "react";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { ApplicationRoute } from "../../models/types";
 import { useLogout } from "../../services/api/authenticationApiService";
@@ -49,8 +49,8 @@ const DesktopNavbar = (props: {
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();
 
-    const [isSmallerThan1180] = useMediaQuery('(min-width: 1180px)');
-    const [isSmallerThan1000] = useMediaQuery('(min-width: 1000px)');
+    const [isSmallerThan1180] = useMediaQuery("(min-width: 1180px)");
+    const [isSmallerThan1000] = useMediaQuery("(min-width: 1000px)");
 
     const handleLogout = async () => {
 
@@ -62,7 +62,7 @@ const DesktopNavbar = (props: {
 
             showError(e);
         }
-    }
+    };
 
     const userMenuItems = [
         {
@@ -91,7 +91,7 @@ const DesktopNavbar = (props: {
     const handleNavToCoinTransactions = () => {
 
         navigate(applicationRoutes.settingsRoute.coinTransactionsRoute.route);
-    }
+    };
 
     return (
         <Flex
@@ -134,21 +134,22 @@ const DesktopNavbar = (props: {
                                         variant="plain"
                                         key={index}
                                         onClick={() => {
-                                            navigate(item.route)
+                                            navigate(item.route);
                                         }}>
                                         {item.icon}
-                                    </EpistoButton>
+                                    </EpistoButton>;
                                 })}
                         </Flex>
                         : (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo)
-                            ? <Flex height="50px" flex="1 0 600px">
+                            ? <Flex height="50px"
+flex="1 0 600px">
 
                                 {menuItems
                                     .map((item, index) => {
                                         return <NavbarButton
                                             key={index}
                                             menuName={item.title}
-                                            menuPath={item.route} />
+                                            menuPath={item.route} />;
                                     })}
 
                                 {/* continue watching with or without text  */}
@@ -189,10 +190,10 @@ const DesktopNavbar = (props: {
                                             variant="plain"
                                             key={index}
                                             onClick={() => {
-                                                navigate(item.route)
+                                                navigate(item.route);
                                             }}>
                                             {item.icon}
-                                        </EpistoButton>
+                                        </EpistoButton>;
                                     })}
 
                                 {/* continue watching  */}
@@ -234,7 +235,7 @@ const DesktopNavbar = (props: {
                                 fontStyle: "normal"
                             }}
                             onClick={() => {
-                                navigate("/shop")
+                                navigate("/shop");
                             }}
                             variant={"plain"}>
 
@@ -334,8 +335,10 @@ const DesktopNavbar = (props: {
                                 </EpistoFont>
                             </Flex>
 
-                            {index + 1 < mockNotifications.length && <Divider height={1} width="100%" bgColor={"grey"} />}
-                        </Flex>
+                            {index + 1 < mockNotifications.length && <Divider height={1}
+width="100%"
+bgColor={"grey"} />}
+                        </Flex>;
                     })}
             </EpistoPopper>
 
@@ -351,15 +354,19 @@ const DesktopNavbar = (props: {
                     <EpistoConinInfo height="45px" />
                 </EpistoButton>
 
-                <Divider height={1} width="100%" bgColor={"black"} />
+                <Divider height={1}
+width="100%"
+bgColor={"black"} />
 
                 {user?.userActivity?.canAccessAdministration && <EpistoButton
                     variant={undefined}
                     onClick={() => {
-                        navigate(applicationRoutes.administrationRoute.homeRoute.overviewRoute.route)
+                        navigate(applicationRoutes.administrationRoute.homeRoute.overviewRoute.route);
                     }}>
 
-                    <Flex className="whall" m="5px" align="center">
+                    <Flex className="whall"
+m="5px"
+align="center">
 
                         {applicationRoutes.administrationRoute.icon}
 
@@ -386,7 +393,9 @@ const DesktopNavbar = (props: {
                             style={{ background: x.color }}
                             onClick={x.onClick}>
 
-                            <Flex className="whall" m="5px" align="center">
+                            <Flex className="whall"
+m="5px"
+align="center">
 
                                 {x.icon}
 
@@ -402,7 +411,7 @@ const DesktopNavbar = (props: {
                                     {x.name}
                                 </EpistoFont>
                             </Flex>
-                        </EpistoButton>
+                        </EpistoButton>;
                     })}
                 {/* version */}
                 <EpistoFont

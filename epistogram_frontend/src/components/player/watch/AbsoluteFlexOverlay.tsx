@@ -1,5 +1,5 @@
-import { Flex, FlexProps } from "@chakra-ui/react"
-import { ReactNode } from "react"
+import { Flex, FlexProps } from "@chakra-ui/react";
+import { ReactNode } from "react";
 
 export const AbsoluteFlexOverlay = (props: {
     children: ReactNode,
@@ -22,5 +22,5 @@ export const AbsoluteFlexOverlay = (props: {
         pointerEvents={isVisible && hasPointerEvents ? "all" : "none"}
         {...css}>
         {isVisible && children}
-    </Flex>
-}
+    </Flex>;
+};

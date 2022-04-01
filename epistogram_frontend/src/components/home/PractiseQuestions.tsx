@@ -17,16 +17,20 @@ import { useCurrentCourseItemCode } from "../../services/api/miscApiService";
 import { EpistoFont } from "../controls/EpistoFont";
 
 const NoQuestionsAvailable = () => {
-    const { navigate } = useNavigation()
+    const { navigate } = useNavigation();
     return <Flex pr="20px">
 
         <Flex direction={"column"}>
 
-            <Text as={"text"} p={"20px 20px 10px 10px"} fontSize="13px">
+            <Text as={"text"}
+p={"20px 20px 10px 10px"}
+fontSize="13px">
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
             </Text>
 
-            <Text as={"text"} p={"10px 20px 10px 10px"} fontSize="13px">
+            <Text as={"text"}
+p={"10px 20px 10px 10px"}
+fontSize="13px">
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
                 <Text
                     as="text"
@@ -47,12 +51,12 @@ const NoQuestionsAvailable = () => {
                     objectFit: "contain",
                 }} />
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};
 
 const InitialGreetings = () => {
 
-    const { navigate } = useNavigation()
+    const { navigate } = useNavigation();
     const firstName = useContext(CurrentUserContext)!.firstName;
 
     return <Flex
@@ -106,7 +110,7 @@ const InitialGreetings = () => {
                 <EpistoButton
                     variant={"colored"}
                     onClick={() => {
-                        navigate(applicationRoutes.availableCoursesRoute.route)
+                        navigate(applicationRoutes.availableCoursesRoute.route);
                     }}>
 
                     {translatableTexts.practiseQuestions.goToCourses}
@@ -119,11 +123,11 @@ const InitialGreetings = () => {
                 autoplay
                 loop
                 src={getAssetUrl("lottie_json/initial_greetings.json")}
-                style={{ height: '300px', width: '300px' }}
+                style={{ height: "300px", width: "300px" }}
             />
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};
 
 export const PractiseQuestions = () => {
 
@@ -148,13 +152,13 @@ export const PractiseQuestions = () => {
     const handleAnswerQuestionAsync = async (answerId: number[]) => {
 
         await answerQuestionAsync(answerId, practiseQuestion!.questionId);
-    }
+    };
 
     const handleNextQuestion = () => {
 
         clearAnswerResults();
         refetchPractiseQuestion();
-    }
+    };
 
     const isCorrectAnswer = answerResults?.isCorrect;
     const isAnswered = !!answerResults;
@@ -170,7 +174,8 @@ export const PractiseQuestions = () => {
         {/* if practise question is found */}
         {practiseQuestion
             ? (
-                <Flex className="whall" wrap="wrap">
+                <Flex className="whall"
+wrap="wrap">
 
                     <Flex
                         position="absolute"
@@ -239,5 +244,5 @@ export const PractiseQuestions = () => {
             : currentCourseItemCode
                 ? <NoQuestionsAvailable />
                 : <InitialGreetings />}
-    </LoadingFrame>
-}
+    </LoadingFrame>;
+};

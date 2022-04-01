@@ -16,7 +16,7 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
     const closeDialog = () => {
 
         xlogic.setIsOpen(false);
-    }
+    };
 
     const defaultButtons = defaultCloseButtonType === "bottom"
         ? [
@@ -45,7 +45,7 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
         }
 
         xlogic.setIsOpen(true);
-    }
+    };
 
     return {
         isOpen: xlogic.isOpen,
@@ -56,8 +56,8 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
         openDialog,
         closeDialog,
         xlogic
-    }
-}
+    };
+};
 
 export type EpistoDialogLogicType = ReturnType<typeof useEpistoDialogLogic>;
 
@@ -145,5 +145,5 @@ export const EpistoDialog = (props: {
                 </Flex>
             </>}
         </Flex>
-    </XDialog>
-}
+    </XDialog>;
+};

@@ -5,7 +5,7 @@ import { useEditUserData } from "../../../services/api/userApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
 import { useEpistoDialogLogic } from "../../EpistoDialog";
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader"
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { AdminUserList } from "./AdminUserList";
 import { AdminUserCoursesDataGridControl } from "./dataGrids/AdminUserCoursesDataGridControl";
@@ -16,7 +16,7 @@ export const AdminUserCourseContentSubpage = (props: {
     refetchUsersFunction: () => void
 }) => {
 
-    const { users, refetchUsersFunction } = props
+    const { users, refetchUsersFunction } = props;
 
     const params = useParams<{ courseId: string, userId: string, }>();
 
@@ -31,7 +31,7 @@ export const AdminUserCourseContentSubpage = (props: {
         defaultCloseButtonType: "top"
     });
 
-    const { navigate } = useNavigation()
+    const { navigate } = useNavigation();
 
     return <AdminBreadcrumbsHeader breadcrumbs={[
         <BreadcrumbLink
@@ -47,7 +47,7 @@ export const AdminUserCourseContentSubpage = (props: {
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute.route, { userId: userId })
+                navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute.route, { userId: userId });
             }} />
 
         <AdminSubpageHeader
@@ -124,5 +124,5 @@ export const AdminUserCourseContentSubpage = (props: {
                     () => dialogLogic.openDialog()
                 } />
         </AdminSubpageHeader >
-    </AdminBreadcrumbsHeader >
-}
+    </AdminBreadcrumbsHeader >;
+};

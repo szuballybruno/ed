@@ -1,4 +1,4 @@
-import { PasswordValidationIssueType } from "../types/sharedTypes"
+import { PasswordValidationIssueType } from "../types/sharedTypes";
 
 export const validatePassowrd = (password: string, passwordControl: string): PasswordValidationIssueType | null => {
 
@@ -21,28 +21,28 @@ export const validatePassowrd = (password: string, passwordControl: string): Pas
         return "hasNoNumber";
 
     return null;
-}
+};
 
 export const textContainsNumber = (text: string) => {
 
     return /\d/.test(text);
-}
+};
 
 export const typecheck = (obj: any, type: "function") => {
 
     if (type === "function")
-        return typeof obj === 'function';
+        return typeof obj === "function";
 
     return false;
-}
+};
 
 export const getKeys = <T>(obj: T): (keyof T)[] => {
 
-    let keys: any[] = [];
+    const keys: any[] = [];
     for (const key in obj) {
 
         keys.push(key as keyof T);
     }
 
     return keys;
-}
+};

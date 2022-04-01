@@ -1,24 +1,22 @@
 import { Box, Flex } from "@chakra-ui/react";
-
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import DoneIcon from '@mui/icons-material/Done';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LockIcon from '@mui/icons-material/Lock';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import { Typography } from "@mui/material";
-import { useEffect, useState } from 'react';
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import DoneIcon from "@mui/icons-material/Done";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import LockIcon from "@mui/icons-material/Lock";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { useEffect, useState } from "react";
+import { useNavigation } from "../../services/core/navigatior";
 import { CourseItemDTO } from "../../shared/dtos/CourseItemDTO";
 import { ModuleDTO } from "../../shared/dtos/ModuleDTO";
-import { useNavigation } from "../../services/core/navigatior";
+import { getAssetUrl, getRandomInteger } from "../../static/frontendHelpers";
 import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
+import { CollapseItem } from "./CollapseItem";
 import { FlexList } from "./FlexList";
 import { FlexListItem } from "./FlexListItem";
 import { FlexListTitleSubtitle } from "./FlexListTitleSubtitle";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { CollapseItem } from "./CollapseItem";
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { getAssetUrl, getRandomInteger } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
@@ -34,11 +32,11 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
         ? 5
         : type === "video"
             ? 0
-            : 3
+            : 3;
 
     const borderColor = type === "exam"
         ? "var(--intenseOrange)"
-        : "var(--epistoTeal)"
+        : "var(--epistoTeal)";
 
     return <FlexListItem
         isLocked={isLocked}
@@ -62,7 +60,8 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
                 m="7px 10px 7px 0px"
                 bgColor={borderColor} />
 
-            <FlexListTitleSubtitle title={title} subTitle={subTitle} />
+            <FlexListTitleSubtitle title={title}
+subTitle={subTitle} />
         </Flex>}
         endContent={<Flex
             align="center"
@@ -94,8 +93,8 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
                         color: "var(--mildGreen)"
                     }} />}
         </Flex>}>
-    </FlexListItem>
-}
+    </FlexListItem>;
+};
 
 export const CourseItemList = (props: {
     modules: ModuleDTO[]
@@ -143,7 +142,7 @@ export const CourseItemList = (props: {
     const startModule = (code: string) => {
 
         navigateToPlayer(code);
-    }
+    };
 
     // selection changed
     useEffect(() => {
@@ -168,7 +167,7 @@ export const CourseItemList = (props: {
             overflowY="scroll">
 
             {modules
-                .map(module => {
+                .map((module, index) => {
 
                     const isLocked = module.state === "locked";
                     const isStartable = (module.state === "available" || module.state === "completed");
@@ -179,13 +178,14 @@ export const CourseItemList = (props: {
                     const headercolor = isSelected ? "white" : undefined;
 
                     return <CollapseItem
+                        key={index}
                         isOpen={isOpen}
                         style={{
                             pointerEvents: isLocked || unclickable ? "none" : "all",
                             color: isLocked ? "gray" : undefined
                         }}
                         header={() => <Flex
-                            bg={isSelected ? `var(--deepBlue)` : undefined}
+                            bg={isSelected ? "var(--deepBlue)" : undefined}
                             color={headercolor}
                             justify="space-between"
                             borderBottom="1px solid var(--mildGrey)"
@@ -225,15 +225,17 @@ export const CourseItemList = (props: {
                             </Box>
                         </Flex>}>
 
-                        <FlexList id="courseItemListContainer" p="10px" height="100%">
+                        <FlexList id="courseItemListContainer"
+p="10px"
+height="100%">
                             {module
                                 .items
                                 .map((courseItem, index) => <CourseItemView
                                     key={index}
                                     courseItem={courseItem} />)}
                         </FlexList>
-                    </CollapseItem>
+                    </CollapseItem>;
                 })}
         </Flex>
     );
-}
+};

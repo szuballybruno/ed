@@ -7,7 +7,7 @@ export const useIntParam = (name: string) => {
         return null;
 
     return parseInt(param);
-}
+};
 
 export const useBoolParam = (name: string) => {
 
@@ -18,7 +18,7 @@ export const useBoolParam = (name: string) => {
         throw new Error("Failed to parse boolean url param!");
 
     return value === "true";
-}
+};
 
 export const useSetQueryParams = () => {
 
@@ -32,8 +32,8 @@ export const useSetQueryParams = () => {
                 pathname: location.pathname,
                 search: stringifyQueryObject(query)
             });
-    }
-}
+    };
+};
 
 export const stringifyQueryObject = (queryObj: any) => {
 
@@ -53,4 +53,4 @@ export const stringifyQueryObject = (queryObj: any) => {
     }
 
     return qs;
-}
+};

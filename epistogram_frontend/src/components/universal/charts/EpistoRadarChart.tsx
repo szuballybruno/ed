@@ -1,5 +1,5 @@
-import ReactECharts from 'echarts-for-react';
-import { EpistoRadarChartDataType, EpistoRadarChartOptionsType } from './types/EpistoRadarChartTypes';
+import ReactECharts from "echarts-for-react";
+import { EpistoRadarChartDataType, EpistoRadarChartOptionsType } from "./types/EpistoRadarChartTypes";
 
 export const EpistoRadarChart = (props: {
     title: string,
@@ -26,13 +26,13 @@ export const EpistoRadarChart = (props: {
             radar,
             seriesOptions
         }
-    } = props
+    } = props;
 
 
     const defaultStyle = {
         width: "100%",
         height: "100%",
-    }
+    };
 
     return <ReactECharts
         option={{
@@ -86,5 +86,5 @@ export const EpistoRadarChart = (props: {
         style={{
             ...defaultStyle,
             ...style
-        }} />
-}
+        }} />;
+};

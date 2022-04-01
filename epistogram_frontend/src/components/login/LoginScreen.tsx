@@ -1,6 +1,6 @@
 import { Box, Flex } from "@chakra-ui/layout";
 import { Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { useLogInUser } from "../../services/api/authenticationApiService";
 import { useNavigation } from "../../services/core/navigatior";
@@ -77,7 +77,7 @@ const LoginScreen = () => {
     const handleValidation = () => {
 
         // TODO
-    }
+    };
 
     // watch for auth state change
     // and navigate to home page if athenticated
@@ -321,7 +321,7 @@ const LoginScreen = () => {
                     alt="" />
             </LoadingFrame>
         </Flex>
-    </PageRootContainer>
+    </PageRootContainer>;
 };
 
-export default LoginScreen
+export default LoginScreen;

@@ -41,8 +41,8 @@ export const AdminCourseDetailsSubpage = () => {
     const categories = courseDetailsEditData?.categories ?? [];
     const teachers = courseDetailsEditData?.teachers ?? [];
 
-    const [title, setTitle] = useState("")
-    const [thumbnailSrc, setThumbnailSrc] = useState("")
+    const [title, setTitle] = useState("");
+    const [thumbnailSrc, setThumbnailSrc] = useState("");
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
     const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
     const [subCategory, setSubCategory] = useState<CourseCategoryDTO | null>(null);
@@ -116,7 +116,7 @@ export const AdminCourseDetailsSubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     // const handleCreateCourseAsync = async () => {
 
@@ -171,7 +171,7 @@ export const AdminCourseDetailsSubpage = () => {
         //     icon: <Add style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
         //     action: () => handleCreateCourseAsync()
         // }
-    ] as ButtonType[]
+    ] as ButtonType[];
 
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseDetailsEditDataState, saveCourseThumbnailState]}
@@ -195,10 +195,13 @@ export const AdminCourseDetailsSubpage = () => {
                 headerButtons={bulkEditButtons}>
 
                 {/* Course edit */}
-                <Flex direction="row" flex="1">
+                <Flex direction="row"
+flex="1">
 
                     {/* left pane  */}
-                    <Flex direction="column" flex="1" mr="5px">
+                    <Flex direction="column"
+flex="1"
+mr="5px">
 
                         {/* Basic info section */}
                         <EditSection
@@ -206,13 +209,16 @@ export const AdminCourseDetailsSubpage = () => {
                             title="Alapadatok">
 
                             {/* Thumbnail image */}
-                            <EpistoLabel isOverline text="Borítókép">
+                            <EpistoLabel isOverline
+text="Borítókép">
                                 <SelectImage
                                     width="192px"
                                     height="108px"
                                     setImageFile={setThumbnailImageFile}
                                     setImageSource={setThumbnailSrc}>
-                                    <Image className="whall" objectFit="cover" src={thumbnailSrc} />
+                                    <Image className="whall"
+objectFit="cover"
+src={thumbnailSrc} />
                                 </SelectImage>
                             </EpistoLabel>
 
@@ -353,7 +359,9 @@ export const AdminCourseDetailsSubpage = () => {
                     </Flex>
 
                     {/* right pane  */}
-                    <Flex direction="column" flex="1" ml="5px">
+                    <Flex direction="column"
+flex="1"
+ml="5px">
 
                         <EditSection
                             isFirst
@@ -438,7 +446,10 @@ export const AdminCourseDetailsSubpage = () => {
                                     </Flex>
                                 )} />
                             {/* radar chart */}
-                            <Flex mt="30px" minH="300px" align="center" justify="center">
+                            <Flex mt="30px"
+minH="300px"
+align="center"
+justify="center">
                                 <EpistoRadarChart
                                     title=""
                                     areas={[{
@@ -464,7 +475,7 @@ export const AdminCourseDetailsSubpage = () => {
                     variant="contained"
                     color={"secondary"}
                     onClick={() => {
-                        handleSaveCourseAsync()
+                        handleSaveCourseAsync();
                     }}
                     style={{ margin: "20px 20px 0 20px" }}>
 
@@ -491,5 +502,5 @@ export const AdminCourseDetailsSubpage = () => {
                 </Button>
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
-    </LoadingFrame >
-}
+    </LoadingFrame >;
+};

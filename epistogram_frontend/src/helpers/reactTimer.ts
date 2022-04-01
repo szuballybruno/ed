@@ -43,25 +43,25 @@ export const useReactTimer = (endCallback: () => void, delayMiliseconds: number,
 
         timer.start();
         forceUpdate();
-    }
+    };
 
     const pause = () => {
 
         timer.pause();
         forceUpdate();
-    }
+    };
 
     const reset = () => {
 
         timer.reset();
         forceUpdate();
-    }
+    };
 
     const restart = () => {
 
         timer.restart();
         forceUpdate();
-    }
+    };
 
     return {
         isEnded: timer.isEnded,
@@ -74,7 +74,7 @@ export const useReactTimer = (endCallback: () => void, delayMiliseconds: number,
         pause,
         reset,
         restart
-    }
-}
+    };
+};
 
 export type ReactTimerType = ReturnType<typeof useReactTimer>;

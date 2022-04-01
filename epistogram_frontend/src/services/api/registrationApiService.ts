@@ -22,13 +22,13 @@ export const useRegisterUser = () => {
                 lastName,
                 emailAddress
             } as RegisterUserViaPublicTokenDTO);
-    }
+    };
 
     return {
         registerUserState: postDataResult.state,
         registerUserAsync
-    }
-}
+    };
+};
 
 export const useRegisterInvitedUser = () => {
 
@@ -45,13 +45,13 @@ export const useRegisterInvitedUser = () => {
                 password,
                 passwordCompare
             } as RegisterUserViaInvitationTokenDTO);
-    }
+    };
 
     return {
         registerInvitedUserState: postDataResult.state,
         registerInvitedUserAsync
-    }
-}
+    };
+};
 
 export const useRegisterUserViaActivationCode = () => {
 
@@ -70,15 +70,15 @@ export const useRegisterUserViaActivationCode = () => {
                 firstName,
                 lastName
             } as RegisterUserViaActivationCodeDTO);
-    }
+    };
 
     return {
         registerUserViaActivationCodeState: postDataResult.state,
         registerUserViaActivationCodeAsync
-    }
-}
+    };
+};
 
 export const inviteUserAsync = (dto: CreateInvitedUserDTO) => {
 
     return httpPostAsync(apiRoutes.registration.inviteUser, dto);
-}
+};

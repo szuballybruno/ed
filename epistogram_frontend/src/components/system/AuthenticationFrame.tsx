@@ -3,7 +3,7 @@ import { hotjar } from "react-hotjar";
 import { isLocalhost, oneSignalAppId, verboseLogging } from "../../static/Environemnt";
 import { UserDTO } from "../../shared/dtos/UserDTO";
 import setTheme from "../../services/core/setTheme";
-import OneSignal from 'react-onesignal';
+import OneSignal from "react-onesignal";
 import { useLocation } from "react-router-dom";
 import { AuthenticationStateType, useRenewUserSessionPooling, useUserFetching } from "../../services/api/authenticationApiService";
 
@@ -20,7 +20,7 @@ export const AuthenticationFrame = (props) => {
     if (!isLocalhost) {
 
         console.log("Initing hotjar");
-        hotjar.initialize(2675412, 6)
+        hotjar.initialize(2675412, 6);
     }
 
     // initialzie OneSignal
@@ -62,5 +62,5 @@ export const AuthenticationFrame = (props) => {
                 {props.children}
             </CurrentUserContext.Provider>
         </RefetchUserAsyncContext.Provider>
-    </AuthenticationStateContext.Provider> as JSX.Element
-}
+    </AuthenticationStateContext.Provider> as JSX.Element;
+};

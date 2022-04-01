@@ -20,20 +20,25 @@ import { ApplicationRoute } from "./models/types";
 
 export const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
 
-    return <Route exact={route.exact} path={route.route}>
+    return <Route exact={route.exact}
+path={route.route}>
         {renderRoute}
-    </Route>
-}
+    </Route>;
+};
 
 export const MainRouting = () => {
 
     return <Switch>
 
         {/* unprotected paths  */}
-        <Route path={applicationRoutes.loginRoute.route} component={LoginScreen} />
-        <Route path={applicationRoutes.setNewPasswordRoute.route} component={SetNewPasswordPage} />
-        <Route path={applicationRoutes.registrationRoute.route} component={RegistrationPage} />
-        <Route path={applicationRoutes.registerViaActivationCodeRoute.route} component={RegisterViaActivationCodePage} />
+        <Route path={applicationRoutes.loginRoute.route}
+component={LoginScreen} />
+        <Route path={applicationRoutes.setNewPasswordRoute.route}
+component={SetNewPasswordPage} />
+        <Route path={applicationRoutes.registrationRoute.route}
+component={RegistrationPage} />
+        <Route path={applicationRoutes.registerViaActivationCodeRoute.route}
+component={RegisterViaActivationCodePage} />
 
         {/* protected paths */}
         <ProtectedRoute
@@ -83,5 +88,5 @@ export const MainRouting = () => {
             <NotFound />
         </Route>
 
-    </Switch>
-}
+    </Switch>;
+};

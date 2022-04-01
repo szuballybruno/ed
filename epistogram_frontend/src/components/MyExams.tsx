@@ -10,16 +10,20 @@ const finisedExams = [
     {
         title: ".Net programozás haladó"
     }
-]
+];
 
 export const MyExams = () => {
 
-    return <Flex direction="column" width="100%">
-        <DashboardSection variant="noShadow" title="Teljesített vizsgáim">
-            <EpistoGrid auto="fill" gap="15px" minColumnWidth="330px">
+    return <Flex direction="column"
+width="100%">
+        <DashboardSection variant="noShadow"
+title="Teljesített vizsgáim">
+            <EpistoGrid auto="fill"
+gap="15px"
+minColumnWidth="330px">
                 {finisedExams
                     .map(x => <ExamTile />)}
             </EpistoGrid>
         </DashboardSection>
-    </Flex>
-}
+    </Flex>;
+};

@@ -18,7 +18,8 @@ export const EditSection = (props: {
         mt="10px"
         {...css}>
 
-        <Flex align="flex-start" justify="space-between">
+        <Flex align="flex-start"
+justify="space-between">
 
             <EpistoFont
                 fontSize={"fontHuge"}
@@ -40,5 +41,5 @@ export const EditSection = (props: {
             m="5px 10px 0px 0" /> */}
 
         {children}
-    </Flex>
-}
+    </Flex>;
+};

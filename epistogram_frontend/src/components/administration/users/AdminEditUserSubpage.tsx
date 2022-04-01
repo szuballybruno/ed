@@ -1,25 +1,25 @@
-import { Add } from '@mui/icons-material';
-import React from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { ButtonType } from '../../../models/types';
-import { deleteUserAsync, useEditUserData, useSaveUser } from '../../../services/api/userApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { AdminEditUserControl } from './AdminEditUserControl';
-import { AdminUserList } from './AdminUserList';
+import { Add } from "@mui/icons-material";
+import React from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { ButtonType } from "../../../models/types";
+import { deleteUserAsync, useEditUserData, useSaveUser } from "../../../services/api/userApiService";
+import { useNavigation } from "../../../services/core/navigatior";
+import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
+import { UserEditDTO } from "../../../shared/dtos/UserEditDTO";
+import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { AdminEditUserControl } from "./AdminEditUserControl";
+import { AdminUserList } from "./AdminUserList";
 
 export const AdminEditUserSubpage = (props: {
     users: AdminPageUserDTO[],
     refetchUsersFunction: () => void
 }) => {
 
-    const { users, refetchUsersFunction } = props
+    const { users, refetchUsersFunction } = props;
 
     const params = useParams<{ userId: string }>();
     const editedUserId = parseInt(params.userId);
@@ -28,8 +28,8 @@ export const AdminEditUserSubpage = (props: {
     const showError = useShowErrorDialog();
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
-    const navigateToUserCourses = () => navigate(`${applicationRoutes.administrationRoute.usersRoute.route}/${editedUserId}/courses`)
-    const location = useLocation()
+    const navigateToUserCourses = () => navigate(`${applicationRoutes.administrationRoute.usersRoute.route}/${editedUserId}/courses`);
+    const location = useLocation();
 
     const handleSaveUserAsync = async (dto: UserEditDTO) => {
 
@@ -43,13 +43,13 @@ export const AdminEditUserSubpage = (props: {
 
             showError(e);
         }
-    }
+    };
 
     const deleteWaningDialogLogic = useEpistoDialogLogic("delwarn");
 
     const showDeleteUserDialog = (user: UserEditDTO | null) => {
         if (!user)
-            return
+            return;
 
         deleteWaningDialogLogic
             .openDialog({
@@ -73,7 +73,7 @@ export const AdminEditUserSubpage = (props: {
                     }
                 ]
             });
-    }
+    };
 
     const bulkEditButtons = [
         {
@@ -85,23 +85,23 @@ export const AdminEditUserSubpage = (props: {
                 }} />,
             action: () => navigateToAddUser()
         }
-    ] as ButtonType[]
+    ] as ButtonType[];
 
     const checkIfCurrentUserFromUrl = () => {
         const isUserFound = users.some(user => user.id === editedUserId);
 
         if (!isUserFound && users[0]) {
-            navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + users[0].id + "/edit")
+            navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + users[0].id + "/edit");
         }
-    }
-    checkIfCurrentUserFromUrl()
+    };
+    checkIfCurrentUserFromUrl();
 
 
 
     return <AdminBreadcrumbsHeader
         viewSwitchChecked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
         viewSwitchFunction={() => {
-            navigate(applicationRoutes.administrationRoute.usersRoute.route)
+            navigate(applicationRoutes.administrationRoute.usersRoute.route);
         }}
         breadcrumbs={[
             <BreadcrumbLink
@@ -116,7 +116,7 @@ export const AdminEditUserSubpage = (props: {
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId })
+                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId });
             }} />
 
         <AdminSubpageHeader
@@ -138,7 +138,7 @@ export const AdminEditUserSubpage = (props: {
                 saveUserAsync={handleSaveUserAsync} />
 
         </AdminSubpageHeader>
-    </AdminBreadcrumbsHeader>
+    </AdminBreadcrumbsHeader>;
 };
 
 export default AdminEditUserSubpage;

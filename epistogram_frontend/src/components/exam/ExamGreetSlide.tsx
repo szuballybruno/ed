@@ -25,7 +25,10 @@ export const ExamGreetSlide = (props: {
         handleNext={startExam}
         nextButtonTitle={translatableTexts.exam.startExam}>
 
-        <Flex direction="column" align="center" flex="1" className="whall">
+        <Flex direction="column"
+align="center"
+flex="1"
+className="whall">
             <img
                 src={getAssetUrl("/images/examCover.png")}
                 alt={""}
@@ -73,5 +76,5 @@ export const ExamGreetSlide = (props: {
                 </Flex>
             </>}
         </Flex>
-    </ExamLayout>
-}
+    </ExamLayout>;
+};

@@ -1,16 +1,16 @@
-import { Flex, FlexProps } from "@chakra-ui/react"
-import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from "@mui/icons-material"
-import { ReactNode } from "react"
-import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { useActiveCourses } from "../../../services/api/userProgressApiService"
-import { getAssetUrl, iterate, usePaging } from "../../../static/frontendHelpers"
-import { EpistoButton } from "../../controls/EpistoButton"
-import { EpistoFont } from "../../controls/EpistoFont"
-import { EpistoGrid } from "../../controls/EpistoGrid"
-import StatisticsCard from "../../statisticsCard/StatisticsCard"
-import { DashboardSection } from "../../universal/DashboardSection"
-import { FlexListItem } from "../../universal/FlexListItem"
-import { AdminSubpageHeader } from "../AdminSubpageHeader"
+import { Flex, FlexProps } from "@chakra-ui/react";
+import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from "@mui/icons-material";
+import { ReactNode } from "react";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { useActiveCourses } from "../../../services/api/userProgressApiService";
+import { getAssetUrl, iterate, usePaging } from "../../../static/frontendHelpers";
+import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoFont } from "../../controls/EpistoFont";
+import { EpistoGrid } from "../../controls/EpistoGrid";
+import StatisticsCard from "../../statisticsCard/StatisticsCard";
+import { DashboardSection } from "../../universal/DashboardSection";
+import { FlexListItem } from "../../universal/FlexListItem";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
 
 export const AdminHomeOverview = () => {
     const AdminSectionWithButton = (props: {
@@ -18,7 +18,7 @@ export const AdminHomeOverview = () => {
         children?: ReactNode,
         headerContent?: ReactNode
     } & FlexProps) => {
-        const { title, children, headerContent, ...css } = props
+        const { title, children, headerContent, ...css } = props;
         return <Flex
             direction="column"
             className="roundBorders"
@@ -40,8 +40,8 @@ export const AdminHomeOverview = () => {
             </Flex>
 
             {children}
-        </Flex>
-    }
+        </Flex>;
+    };
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging(activeCourses);
@@ -56,7 +56,8 @@ export const AdminHomeOverview = () => {
             route: applicationRoutes.administrationRoute.homeRoute.detailsRoute.route,
             title: applicationRoutes.administrationRoute.homeRoute.detailsRoute.title
         }]}>
-        <Flex flex="3" direction="column">
+        <Flex flex="3"
+direction="column">
 
             <AdminSectionWithButton
                 title="Top beérkező kérdések"
@@ -246,7 +247,8 @@ export const AdminHomeOverview = () => {
 
             </AdminSectionWithButton>
         </Flex>
-        <Flex flex="2" h="fit-content">
+        <Flex flex="2"
+h="fit-content">
             <AdminSectionWithButton
                 m="10px 0 0 10px"
                 flex="1"
@@ -273,7 +275,9 @@ export const AdminHomeOverview = () => {
                             className="roundBorders" />
                     </Flex>
 
-                    <Flex flex="1" direction="column" p="20px">
+                    <Flex flex="1"
+direction="column"
+p="20px">
                         <EpistoFont>
                             Microsoft Excel Alapok
                         </EpistoFont>
@@ -365,5 +369,5 @@ export const AdminHomeOverview = () => {
                 </EpistoGrid>
             </AdminSectionWithButton>
         </Flex>
-    </AdminSubpageHeader>
-}
+    </AdminSubpageHeader>;
+};

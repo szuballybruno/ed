@@ -77,7 +77,7 @@ export const RegisterViaActivationCodePage = () => {
                 showError(e);
             }
         }
-    }
+    };
 
     return <PageRootContainer>
 
@@ -238,7 +238,9 @@ export const RegisterViaActivationCodePage = () => {
                                 color: "var(--epistoTeal)"
                             }}>
 
-                            <a href="https://pcworld.hu/elofizetes" target="_blank">
+                            <a href="https://pcworld.hu/elofizetes"
+target="_blank"
+rel="noreferrer">
 
                                 {translatableTexts.registerViaActivationCodePage.buySubscription}
                             </a>
@@ -316,5 +318,5 @@ export const RegisterViaActivationCodePage = () => {
                     alt="" />
             </Flex>
         </Flex >
-    </PageRootContainer >
-}
+    </PageRootContainer >;
+};

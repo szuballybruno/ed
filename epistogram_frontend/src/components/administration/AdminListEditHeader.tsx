@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/layout"
-import { Close } from "@mui/icons-material"
-import { ButtonType } from "../../models/types"
-import { EpistoButton } from "../controls/EpistoButton"
-import { EpistoCheckbox } from "../controls/EpistoCheckbox"
-import { EpistoFont } from "../controls/EpistoFont"
-import { EpistoSearch } from "../controls/EpistoSearch"
-import { EpistoSelect } from "../controls/EpistoSelect"
-import { BulkEditButtons, BulkEditButtonType } from "./BulkEditButtons"
+import { Flex } from "@chakra-ui/layout";
+import { Close } from "@mui/icons-material";
+import { ButtonType } from "../../models/types";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoCheckbox } from "../controls/EpistoCheckbox";
+import { EpistoFont } from "../controls/EpistoFont";
+import { EpistoSearch } from "../controls/EpistoSearch";
+import { EpistoSelect } from "../controls/EpistoSelect";
+import { BulkEditButtons, BulkEditButtonType } from "./BulkEditButtons";
 
 export const AdminListEditHeader = (props: {
     isAllSelected?: boolean,
@@ -41,7 +41,7 @@ export const AdminListEditHeader = (props: {
                 onClick={() => {
 
                     if (selectAllOrNone)
-                        selectAllOrNone(true)
+                        selectAllOrNone(true);
                 }}>
 
                 <div className="h-flex align-center fontLight">
@@ -62,7 +62,7 @@ export const AdminListEditHeader = (props: {
                 onClick={() => {
 
                     if (selectAllOrNone)
-                        selectAllOrNone(false)
+                        selectAllOrNone(false);
                 }}>
 
                 <div className="h-flex align-center fontLight">
@@ -107,7 +107,7 @@ export const AdminListEditHeader = (props: {
                 onChange={(x) => {
 
                     if (onSearchChanged)
-                        onSearchChanged(x.target.value)
+                        onSearchChanged(x.target.value);
                 }} />
         </Flex>
 
@@ -141,5 +141,5 @@ export const AdminListEditHeader = (props: {
                     {x.title}
                 </EpistoButton>
             ))}
-    </Flex >
-}
+    </Flex >;
+};

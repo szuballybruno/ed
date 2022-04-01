@@ -1,20 +1,20 @@
-import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
-import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { useUserListQuery } from "../../../services/api/userApiService"
-import { useNavigation } from "../../../services/core/navigatior"
-import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO"
-import { CourseAdminListItemDTO } from "../../../shared/dtos/admin/CourseAdminListItemDTO"
-import { formatTimespan } from "../../../static/frontendHelpers"
-import { EpistoButton } from "../../controls/EpistoButton"
-import { ProfileImage } from "../../ProfileImage"
-import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader"
-import { AdminSubpageHeader } from "../AdminSubpageHeader"
-import { AdminCourseList } from "./AdminCourseList"
+import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { useUserListQuery } from "../../../services/api/userApiService";
+import { useNavigation } from "../../../services/core/navigatior";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
+import { CourseAdminListItemDTO } from "../../../shared/dtos/admin/CourseAdminListItemDTO";
+import { formatTimespan } from "../../../static/frontendHelpers";
+import { EpistoButton } from "../../controls/EpistoButton";
+import { ProfileImage } from "../../ProfileImage";
+import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { AdminCourseList } from "./AdminCourseList";
 
 export const AdminCourseUsersGrid = () => {
 
-    const { users } = useUserListQuery("")
-    const { navigate } = useNavigation()
+    const { users } = useUserListQuery("");
+    const { navigate } = useNavigation();
 
     const getRowsFromUsers = () => users.map((user) => {
         return {
@@ -28,15 +28,15 @@ export const AdminCourseUsersGrid = () => {
             module: user.email,
             coinBalance: `${user.coinBalance} EC`,
             totalSpentTimeSeconds: formatTimespan(user.totalSpentTimeSeconds)
-        }
-    })
+        };
+    });
 
-    const userRows: GridRowsProp = getRowsFromUsers()
+    const userRows: GridRowsProp = getRowsFromUsers();
 
     const userColumns: GridColDef[] = [
         {
-            field: 'avatar',
-            headerName: 'Profilkép',
+            field: "avatar",
+            headerName: "Profilkép",
             width: 90,
             renderCell: (params) =>
 
@@ -50,32 +50,32 @@ export const AdminCourseUsersGrid = () => {
                     lastName={params.value.lastName} />
         },
         {
-            field: 'name',
-            headerName: 'Név',
+            field: "name",
+            headerName: "Név",
             width: 250,
             editable: true
         },
         {
-            field: 'email',
-            headerName: 'E-mail',
+            field: "email",
+            headerName: "E-mail",
             width: 200,
             editable: true
         },
         {
-            field: 'coinBalance',
-            headerName: 'Egyenleg',
+            field: "coinBalance",
+            headerName: "Egyenleg",
             width: 100,
             editable: true
         },
         {
-            field: 'totalSpentTimeSeconds',
-            headerName: 'Teljes platformon eltöltött idő',
+            field: "totalSpentTimeSeconds",
+            headerName: "Teljes platformon eltöltött idő",
             width: 200,
             editable: true
         },
         {
-            field: 'id',
-            headerName: 'Tanulási jelentés',
+            field: "id",
+            headerName: "Tanulási jelentés",
             width: 180,
             renderCell: (params) =>
 
@@ -94,8 +94,8 @@ export const AdminCourseUsersGrid = () => {
         rowHeight={80}
         style={{
             background: "var(--transparentWhite70)"
-        }} />
-}
+        }} />;
+};
 
 export const AdminCourseUsersSubpage = (props: {
     courses: CourseAdminListItemDTO[],
@@ -103,7 +103,7 @@ export const AdminCourseUsersSubpage = (props: {
     navigationFunction: (courseId: number) => void
 }) => {
 
-    const { courses, navigationFunction } = props
+    const { courses, navigationFunction } = props;
 
     return <AdminBreadcrumbsHeader>
 
@@ -113,5 +113,5 @@ export const AdminCourseUsersSubpage = (props: {
             <AdminCourseUsersGrid />
         </AdminSubpageHeader>
 
-    </AdminBreadcrumbsHeader>
-}
+    </AdminBreadcrumbsHeader>;
+};

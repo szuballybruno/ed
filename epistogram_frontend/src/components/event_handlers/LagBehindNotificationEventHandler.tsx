@@ -28,5 +28,5 @@ export const LagBehindNotificationEventHandler = (props: {
 
             {data?.lagBehindPercentage}
         </EpistoDialog>
-    </>
-}
+    </>;
+};

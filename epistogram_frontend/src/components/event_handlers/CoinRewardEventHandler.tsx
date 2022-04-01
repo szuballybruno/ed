@@ -48,5 +48,5 @@ export const CoinRewardEventHandler = (props: {
         lottiePath={coinRewardLottie}
         coinRewardAmount={coinRewardAmount}
         dialogLogic={dialogLogic}
-        text={coinRewardText} />
-}
+        text={coinRewardText} />;
+};

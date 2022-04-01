@@ -35,5 +35,5 @@ export const PlayerPage = () => {
                 </Switch>
             </ContentPane>
         </PageRootContainer >
-    )
+    );
 };

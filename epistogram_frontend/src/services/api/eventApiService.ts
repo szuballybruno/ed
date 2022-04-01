@@ -11,7 +11,7 @@ export const useEventListener = () => {
     const authState = useContext(AuthenticationStateContext);
 
     const { data } = useQuery(
-        ['eventListenerQuery'],
+        ["eventListenerQuery"],
         () => httpGetAsync(apiRoutes.event.getUnfulfilledEvent), {
         retry: false,
         refetchOnWindowFocus: false,
@@ -24,4 +24,4 @@ export const useEventListener = () => {
     return {
         event: data as null | EventDTO
     };
-}
+};

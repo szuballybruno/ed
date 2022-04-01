@@ -60,5 +60,5 @@ export const FlexListItem = (props: FlexProps & {
         </Flex>
 
         {endContent}
-    </Flex>
-}
+    </Flex>;
+};

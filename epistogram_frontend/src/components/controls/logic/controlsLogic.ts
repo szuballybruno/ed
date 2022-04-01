@@ -7,4 +7,4 @@ export const validateAllEntries = (entryStates: EpistoEntryStateType[]) => {
         .some(x => !x);
 
     return isValid;
-}
+};

@@ -19,7 +19,7 @@ export const useShopItems = () => {
         shopItemsError: qr.error,
         refetchShopItems: qr.refetch
     };
-}
+};
 
 export const useShopItemCategories = () => {
 
@@ -30,7 +30,7 @@ export const useShopItemCategories = () => {
         shopItemCategoriesState: qr.state,
         shopItemCategoriesError: qr.error
     };
-}
+};
 
 export const useAdminShopItems = () => {
 
@@ -41,7 +41,7 @@ export const useAdminShopItems = () => {
         adminShopItemsState: qr.state,
         adminShopItemsError: qr.error
     };
-}
+};
 
 export const useShopItemEditData = (shopItemId: number) => {
 
@@ -53,7 +53,7 @@ export const useShopItemEditData = (shopItemId: number) => {
         shopItemEditDataError: qr.error,
         refetchItemEditData: qr.refetch
     };
-}
+};
 
 export const useShopItemBriefData = (shopItemId: number | null) => {
 
@@ -63,8 +63,8 @@ export const useShopItemBriefData = (shopItemId: number | null) => {
         shopItemBriefData: qr.data,
         shopItemBriefDataError: qr.error,
         shopItemBriefDataState: qr.state
-    }
-}
+    };
+};
 
 export const usePrivateCourses = () => {
 
@@ -74,8 +74,8 @@ export const usePrivateCourses = () => {
         privateCourses: qr.data ?? [],
         privateCoursesError: qr.error,
         privateCoursesState: qr.state
-    }
-}
+    };
+};
 
 export const usePurchaseShopItem = () => {
 
@@ -91,7 +91,7 @@ export const usePurchaseShopItem = () => {
         purchaseShopItemState: qr.state,
         purchaseShopItemResult: qr.result
     };
-}
+};
 
 export const useSaveShopItem = () => {
 
@@ -101,7 +101,7 @@ export const useSaveShopItem = () => {
         saveShopItemAsync: qr.postMultipartDataAsync,
         saveShopItemState: qr.state
     };
-}
+};
 
 export const useCreateShopItem = () => {
 
@@ -114,4 +114,4 @@ export const useCreateShopItem = () => {
         },
         createShopItemState: qr.state
     };
-}
+};

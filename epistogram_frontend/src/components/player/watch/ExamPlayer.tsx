@@ -42,23 +42,23 @@ export const ExamPlayer = (props: {
 
             showError(e);
         }
-    }
+    };
 
     const handleExamFinished = () => {
 
         slidesState.next();
-    }
+    };
 
     const goToCourseRating = () => {
 
         navigateToCourseRating(courseId);
-    }
+    };
 
     const handleContinueCourse = () => {
 
         setIsExamInProgress(false);
         continueCourse();
-    }
+    };
 
     const slides = [
         () => <ExamGreetSlide
@@ -81,5 +81,5 @@ export const ExamPlayer = (props: {
     return <EpistoPaging
         flex="1"
         slides={slides}
-        index={slidesState.currentIndex} />
-}
+        index={slidesState.currentIndex} />;
+};

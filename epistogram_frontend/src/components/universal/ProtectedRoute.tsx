@@ -1,11 +1,11 @@
-import React, { ReactNode, useContext, useEffect } from 'react';
-import { Redirect, Route, useLocation } from 'react-router-dom';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { verboseLogging } from '../../static/Environemnt';
-import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
-import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
-import { setPageTitle, useIsMatchingCurrentRoute, useSetPageTitle } from '../../static/frontendHelpers';
-import { ApplicationRoute } from '../../models/types';
+import React, { ReactNode, useContext, useEffect } from "react";
+import { Redirect, Route, useLocation } from "react-router-dom";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { verboseLogging } from "../../static/Environemnt";
+import { UserActivityDTO } from "../../shared/dtos/UserActivityDTO";
+import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
+import { setPageTitle, useIsMatchingCurrentRoute, useSetPageTitle } from "../../static/frontendHelpers";
+import { ApplicationRoute } from "../../models/types";
 
 export const ProtectedRoute = (props: {
     route: ApplicationRoute,
@@ -32,7 +32,7 @@ export const ProtectedRoute = (props: {
 
         if (isCurrent)
             setPageTitle(route.title);
-    }, [isCurrent])
+    }, [isCurrent]);
 
     return (
         <Route
@@ -47,19 +47,19 @@ export const ProtectedRoute = (props: {
                 if (authState === "loading") {
 
                     console.log("Returning loading div...");
-                    return <div></div>
+                    return <div></div>;
                 }
 
                 // check authentication 
                 if (authState === "forbidden") {
 
                     console.log("Forbidden, redirecting...");
-                    return <Redirect to={applicationRoutes.loginRoute.route} />
+                    return <Redirect to={applicationRoutes.loginRoute.route} />;
                 }
 
                 // redirect to signup if application is not accessable yets
                 if (!user!.userActivity.canAccessApplication && !ignoreAppAccessProtection)
-                    return <Redirect to={applicationRoutes.signupRoute.route} />
+                    return <Redirect to={applicationRoutes.signupRoute.route} />;
 
                 // redirect to home if external authorization check fails
                 const externalCheck = isAuthorizedToView
@@ -67,7 +67,7 @@ export const ProtectedRoute = (props: {
                     : true;
 
                 if (!externalCheck)
-                    return <Redirect to={applicationRoutes.homeRoute.route} />
+                    return <Redirect to={applicationRoutes.homeRoute.route} />;
 
                 return render();
             }} />

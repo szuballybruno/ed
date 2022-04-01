@@ -1,12 +1,12 @@
-import { Flex, FlexProps } from "@chakra-ui/layout"
-import { ArrowBack, ArrowForward, FiberManualRecord } from "@mui/icons-material"
-import { useDailyTip } from "../../services/api/dailyTipApiService"
-import { useRecommendedItemQuota } from "../../services/api/userProgressApiService"
-import { UserActiveCourseDTO } from "../../shared/dtos/UserActiveCourseDTO"
-import { PagingType } from "../../static/frontendHelpers"
-import { EpistoButton } from "../controls/EpistoButton"
-import { EpistoFont } from "../controls/EpistoFont"
-import { RecommendedItemQuota } from "./RecommendedItemQuota"
+import { Flex, FlexProps } from "@chakra-ui/layout";
+import { ArrowBack, ArrowForward, FiberManualRecord } from "@mui/icons-material";
+import { useDailyTip } from "../../services/api/dailyTipApiService";
+import { useRecommendedItemQuota } from "../../services/api/userProgressApiService";
+import { UserActiveCourseDTO } from "../../shared/dtos/UserActiveCourseDTO";
+import { PagingType } from "../../static/frontendHelpers";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
+import { RecommendedItemQuota } from "./RecommendedItemQuota";
 
 export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserActiveCourseDTO> } & FlexProps) => {
 
@@ -19,7 +19,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
     if (!currentCourse)
         return <Flex>
             TODO NO ACTIVE COURSE SCREEN
-        </Flex>
+        </Flex>;
 
     return <Flex
         direction="column"
@@ -76,6 +76,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
             {activeCoursesPaging
                 .items
                 .map((x, index) => <FiberManualRecord
+                    key={index}
                     style={{
                         width: "10px",
                         height: "8px",
@@ -101,5 +102,5 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
                 {dailyTipData?.description}
             </EpistoFont>
         </Flex>}
-    </Flex >
-}
+    </Flex >;
+};

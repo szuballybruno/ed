@@ -13,9 +13,9 @@ import { LoadingFrame } from "../../system/LoadingFrame";
 import { EpistoEntry } from "../../controls/EpistoEntry";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import LockIcon from '@mui/icons-material/Lock';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import LockIcon from "@mui/icons-material/Lock";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoSelect } from "../../controls/EpistoSelect";
@@ -71,7 +71,7 @@ export const ShopAdminEditSubpage = () => {
             } as DiscountCodeDTO));
     })();
 
-    console.log(coverFilePath)
+    console.log(coverFilePath);
 
     // func
 
@@ -89,7 +89,7 @@ export const ShopAdminEditSubpage = () => {
 
         setDiscountCodes(discountCodes
             .concat(addedCodes));
-    }
+    };
 
     const handleSaveAsync = async () => {
 
@@ -117,19 +117,19 @@ export const ShopAdminEditSubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     const handleDeleteAll = () => {
 
         setDiscountCodes(discountCodes
             .filter(x => x.isUsed));
-    }
+    };
 
     const handleDelete = (code: DiscountCodeDTO) => {
 
         setDiscountCodes(discountCodes
             .filter(x => x !== code));
-    }
+    };
 
     // set defaults
     useEffect(() => {
@@ -322,7 +322,8 @@ export const ShopAdminEditSubpage = () => {
 
                             {discountCodes
                                 .map(x => (
-                                    <Flex m="5px" justify="space-between">
+                                    <Flex m="5px"
+justify="space-between">
                                         <EpistoFont>
                                             {x.id ? "id:" + x.id : "Uj"} - {x.code}
                                         </EpistoFont>
@@ -342,9 +343,11 @@ export const ShopAdminEditSubpage = () => {
                         </Flex>
 
                         {/* add codes */}
-                        <Flex flex="1" direction="column">
+                        <Flex flex="1"
+direction="column">
 
-                            <Flex align="center" justify="space-between">
+                            <Flex align="center"
+justify="space-between">
                                 <EpistoFont>
                                     {`${translatableTexts.administration.shopAdminEditSubpage.addedCodes} ${addedCodes.length}`}
                                 </EpistoFont>
@@ -370,4 +373,4 @@ export const ShopAdminEditSubpage = () => {
             </AdminSubpageHeader>
         </LoadingFrame>
     );
-}
+};

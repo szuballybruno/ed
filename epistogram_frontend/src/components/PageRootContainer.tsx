@@ -1,7 +1,7 @@
-import { Flex, FlexProps, Image } from '@chakra-ui/react';
-import React, { ReactNode, useEffect } from 'react';
-import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
-import { EpistoGrid } from './controls/EpistoGrid';
+import { Flex, FlexProps, Image } from "@chakra-ui/react";
+import React, { ReactNode, useEffect } from "react";
+import { gradientBackgroundGenerator } from "../services/core/gradientBackgroundGenerator";
+import { EpistoGrid } from "./controls/EpistoGrid";
 
 export const PageRootContainer = (props: {
     children: ReactNode,
@@ -17,7 +17,7 @@ export const PageRootContainer = (props: {
         document.title = "EpistoGram";
     }, []);
 
-    const gradients = gradientBackgroundGenerator()
+    const gradients = gradientBackgroundGenerator();
 
     return <Flex
         id="pageRootContainer"
@@ -39,10 +39,10 @@ export const PageRootContainer = (props: {
                 h="100vh"
                 zIndex="-1"
                 filter="blur(50px)"
-                minColumnWidth={'33%'}
+                minColumnWidth={"33%"}
                 gap={"0"}
                 gridTemplateColumns="repeat(3, 1fr)"
-                auto={'fill'}>
+                auto={"fill"}>
 
                 {gradients
                     .map((gradient, index) => {
@@ -52,7 +52,7 @@ export const PageRootContainer = (props: {
                             filter="blur(8px)"
                             background={gradient}>
 
-                        </Flex>
+                        </Flex>;
                     })}
             </EpistoGrid>}
 
@@ -65,5 +65,5 @@ export const PageRootContainer = (props: {
 
         {props.children}
 
-    </Flex>
+    </Flex>;
 };

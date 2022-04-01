@@ -1,16 +1,16 @@
-import { Divider, Flex, Grid, Tooltip } from "@chakra-ui/react"
-import { FiberManualRecord } from "@mui/icons-material"
-import { Slider } from "@mui/material"
-import React, { useState } from "react"
-import ReactPlayer from "react-player"
-import { defaultCharts } from "../../../../static/defaultChartOptions"
-import { iterate } from "../../../../static/frontendHelpers"
-import { EpistoFont } from "../../../controls/EpistoFont"
-import { EpistoSelect } from "../../../controls/EpistoSelect"
-import StatisticsCard from "../../../statisticsCard/StatisticsCard"
-import { EpistoLineChart } from "../../../universal/charts/EpistoLineChart"
-import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart"
-import { DashboardSection } from "../../../universal/DashboardSection"
+import { Divider, Flex, Grid, Tooltip } from "@chakra-ui/react";
+import { FiberManualRecord } from "@mui/icons-material";
+import { Slider } from "@mui/material";
+import React, { useState } from "react";
+import ReactPlayer from "react-player";
+import { defaultCharts } from "../../../../static/defaultChartOptions";
+import { iterate } from "../../../../static/frontendHelpers";
+import { EpistoFont } from "../../../controls/EpistoFont";
+import { EpistoSelect } from "../../../controls/EpistoSelect";
+import StatisticsCard from "../../../statisticsCard/StatisticsCard";
+import { EpistoLineChart } from "../../../universal/charts/EpistoLineChart";
+import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart";
+import { DashboardSection } from "../../../universal/DashboardSection";
 
 export const AdminExamStatisticsModalPage = () => {
 
@@ -31,10 +31,12 @@ export const AdminExamStatisticsModalPage = () => {
                 {children}
             </Tooltip >
         );
-    }
+    };
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
-    return <Flex direction="column" overflowY="scroll" p="20px">
+    return <Flex direction="column"
+overflowY="scroll"
+p="20px">
         <Grid
             mt="30px"
             h="120px"
@@ -203,12 +205,12 @@ export const AdminExamStatisticsModalPage = () => {
                                     <Flex
                                         justify="space-between">
                                         <EpistoFont
-                                            fontSize="fontSmallPlus">
+                                            fontSize="fontNormal14">
 
                                             3:29
                                         </EpistoFont>
                                         <EpistoFont
-                                            fontSize="fontSmallPlus">
+                                            fontSize="fontNormal14">
 
                                             38 felhasználó
                                         </EpistoFont>
@@ -285,12 +287,12 @@ export const AdminExamStatisticsModalPage = () => {
                                 <Flex
                                     justify="space-between">
                                     <EpistoFont
-                                        fontSize="fontSmallPlus">
+                                        fontSize="fontNormal14">
 
                                         Helyesen válaszolók aránya
                                     </EpistoFont>
                                     <EpistoFont
-                                        fontSize="fontSmallPlus">
+                                        fontSize="fontNormal14">
 
                                         38%
                                     </EpistoFont>
@@ -322,7 +324,7 @@ export const AdminExamStatisticsModalPage = () => {
                     {
                         name: "Dataset",
                         data: iterate(300, (index) => {
-                            return [(300 - index), Math.pow(index, 2 + Math.random()) / 1000000]
+                            return [(300 - index), Math.pow(index, 2 + Math.random()) / 1000000];
                         })
                     }
                 ]}
@@ -393,11 +395,11 @@ export const AdminExamStatisticsModalPage = () => {
                 <EpistoPieChart
                     title=""
                     segments={[
-                        { value: 335, name: 'Végignézi a videót' },
-                        { value: 310, name: '75%-ig nézi meg a videót' },
-                        { value: 274, name: '50%-ig nézi meg a videót' },
-                        { value: 235, name: '25%-ig nézi meg a videót' },
-                        { value: 400, name: '10%-ig nézi meg a videót' }
+                        { value: 335, name: "Végignézi a videót" },
+                        { value: 310, name: "75%-ig nézi meg a videót" },
+                        { value: 274, name: "50%-ig nézi meg a videót" },
+                        { value: 235, name: "25%-ig nézi meg a videót" },
+                        { value: 400, name: "10%-ig nézi meg a videót" }
                     ]}
                     isSortValues
                     options={defaultCharts.redRadiusPie} />
@@ -436,5 +438,5 @@ export const AdminExamStatisticsModalPage = () => {
                 value="1.3"
                 suffix="x" />
         </Grid>
-    </Flex>
-}
+    </Flex>;
+};

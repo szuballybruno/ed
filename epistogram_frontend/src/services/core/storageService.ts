@@ -3,7 +3,7 @@ import { VolumeSettingsType } from "../../models/types";
 export const writeVolumeSettings = (volumeSettings: VolumeSettingsType) => {
 
     writeStorage("volume_settings", JSON.stringify(volumeSettings));
-}
+};
 
 export const readVolumeSettings = () => {
 
@@ -19,14 +19,14 @@ export const readVolumeSettings = () => {
 
         return null;
     }
-}
+};
 
 const writeStorage = (key: string, data: any) => {
 
     window.localStorage.setItem(key, data);
-}
+};
 
 const readStorage = <TData>(key: string) => {
 
     return window.localStorage.getItem(key) as any as TData | null;
-}
+};

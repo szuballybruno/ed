@@ -8,4 +8,4 @@ export const FlexList = (props: FlexProps) => {
         {...props}>
         {props.children}
     </Flex>;
-}
+};

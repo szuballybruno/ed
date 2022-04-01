@@ -1,7 +1,7 @@
 import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
 import { ArrowBack } from "@mui/icons-material";
 import { Typography } from "@mui/material";
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
 import { getAssetUrl, hasValue, isString, useIsDesktopView } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
@@ -41,7 +41,7 @@ export const SignupWrapper = (props: {
     const onNext = props.onNext;
 
     const isDesktop = useIsDesktopView();
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1350px)');
+    const [isSmallerThan1400] = useMediaQuery("(min-width: 1350px)");
 
     return <Flex
         id="signupWrapperRoot"
@@ -71,7 +71,8 @@ export const SignupWrapper = (props: {
                 justify={"center"}
                 align={"center"}>
 
-                <Image maxH={50} src={getAssetUrl("/images/logo.svg")} />
+                <Image maxH={50}
+src={getAssetUrl("/images/logo.svg")} />
             </Flex>
 
             {/* header top */}
@@ -87,7 +88,8 @@ export const SignupWrapper = (props: {
                     justifyContent={"center"}
                     alignItems={"center"}>
 
-                    <Image maxH={80} src={getAssetUrl("/images/logo.svg")} />
+                    <Image maxH={80}
+src={getAssetUrl("/images/logo.svg")} />
                 </Flex>
 
             </Flex>
@@ -122,10 +124,15 @@ export const SignupWrapper = (props: {
                     height="400"
                     justifyContent={isDesktop ? "flex-end" : "center"}>
 
-                    <Image maxW={350} minWidth="300px" maxH="300px" height="100%" style={{
+                    <Image maxW={350}
+minWidth="300px"
+maxH="300px"
+height="100%"
+style={{
                         objectFit: "contain",
                         margin: "0 30px"
-                    }} src={currentImage!} />
+                    }}
+src={currentImage!} />
                 </Flex>}
 
                 {/* question content */}
@@ -149,7 +156,8 @@ export const SignupWrapper = (props: {
                     {hasDescription && <Box maxWidth="400px">
                         {
                             isString(description!)
-                                ? <EpistoFont isMultiline classes={["fontNormal14"]}>
+                                ? <EpistoFont isMultiline
+classes={["fontNormal14"]}>
                                     {description!}
                                 </EpistoFont>
                                 : description
@@ -195,7 +203,9 @@ export const SignupWrapper = (props: {
                 <ArrowBack />
             </EpistoButton>}
 
-            <Box id="footerBox" flex="1" mx="20">
+            <Box id="footerBox"
+flex="1"
+mx="20">
                 {props.bottomComponent}
             </Box>
 
@@ -231,7 +241,8 @@ export const SignupWrapper = (props: {
                 objectFit: "contain",
                 zIndex: -1,
             }}
-            src={getAssetUrl("/images/bg-art-2.png")} alt="" />
+            src={getAssetUrl("/images/bg-art-2.png")}
+alt="" />
 
         {/* magic powder top right */}
         <img
@@ -244,6 +255,7 @@ export const SignupWrapper = (props: {
                 objectFit: "contain",
                 zIndex: -1,
             }}
-            src={getAssetUrl("/images/bg-art-6.png")} alt="" />
-    </Flex>
+            src={getAssetUrl("/images/bg-art-6.png")}
+alt="" />
+    </Flex>;
 };

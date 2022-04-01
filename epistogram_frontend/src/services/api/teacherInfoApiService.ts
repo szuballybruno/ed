@@ -9,8 +9,8 @@ export const useTeacherInfoEditData = (userId: number) => {
 
     return {
         teacherInfoEditData: qr.data
-    }
-}
+    };
+};
 
 export const useSaveTeacherInfoData = () => {
 
@@ -19,5 +19,5 @@ export const useSaveTeacherInfoData = () => {
     return {
         saveTeacherInfoAsync: qr.postDataAsync,
         saveTeacherInfoState: qr.state
-    }
-}
+    };
+};

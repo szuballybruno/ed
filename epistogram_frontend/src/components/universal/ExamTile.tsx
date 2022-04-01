@@ -29,7 +29,7 @@ export const ExamTile = (props: {
                 65%-os eredmény
             </Text>
         </Flex>
-    </Flex>
+    </Flex>;
 
     const ExamTileTopPercentLabel = () => <Flex
         position="absolute"
@@ -52,7 +52,7 @@ export const ExamTile = (props: {
                 top 30% cégen belül
             </Text>
         </Flex>
-    </Flex>
+    </Flex>;
 
     return <Flex
         className="whall"
@@ -152,7 +152,8 @@ export const ExamTile = (props: {
                                 }}
                             />
 
-                            <Text as={"text"} color={"grey"}>{"52 perc"}</Text>
+                            <Text as={"text"}
+color={"grey"}>{"52 perc"}</Text>
                         </Flex>
 
                         <Flex
@@ -170,7 +171,8 @@ export const ExamTile = (props: {
                                     margin: "0 2px 0 4px"
                                 }}
                             />
-                            <Text as={"text"} color={"grey"}>{"65%-os eredmény"}</Text>
+                            <Text as={"text"}
+color={"grey"}>{"65%-os eredmény"}</Text>
                         </Flex>
                     </Flex>
 
@@ -251,5 +253,5 @@ export const ExamTile = (props: {
                 </EpistoButton>
             </Flex>
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

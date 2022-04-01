@@ -16,5 +16,5 @@ export const ErrorDialogFrame = (props: {
         <ErrorDialogContext.Provider value={dialogLogic}>
             {children}
         </ErrorDialogContext.Provider>
-    </>
-}
+    </>;
+};

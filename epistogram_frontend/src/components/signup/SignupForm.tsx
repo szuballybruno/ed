@@ -36,4 +36,4 @@ export const SignupForm = (props: { regFormState: RegFormStateType }) => {
             </div>
         </form>
     );
-}
+};

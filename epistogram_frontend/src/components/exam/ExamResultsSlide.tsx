@@ -1,7 +1,7 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { ExamPlayerDataDTO } from "../../shared/dtos/ExamPlayerDataDTO";
 import { useExamResults } from "../../services/api/examApiService";
@@ -9,7 +9,7 @@ import { useNavigation } from "../../services/core/navigatior";
 import { ArrayBuilder } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoFont } from "../controls/EpistoFont";
-import { ExamLayout } from './ExamLayout';
+import { ExamLayout } from "./ExamLayout";
 import { ExamResultStats } from "./ExamResultStats";
 import { QuestionAnswer } from "./QuestionAnswer";
 
@@ -35,7 +35,7 @@ export const ExamResultsSlide = (props: {
 
         if (exam.isFinalExam)
             setIsExamInProgress(false);
-    }, [exam])
+    }, [exam]);
 
     return <ExamLayout
         headerCenterText={exam.title}
@@ -56,7 +56,9 @@ export const ExamResultsSlide = (props: {
             .getArray()}
         showNextButton={!exam.isFinalExam}>
 
-        <Flex direction="column" className="whall" p="20px">
+        <Flex direction="column"
+className="whall"
+            p="20px">
 
             {/* title */}
             <Text
@@ -75,7 +77,10 @@ export const ExamResultsSlide = (props: {
                 correctAnswerRate={correctPercentage} />
 
             {/* results */}
-            <Flex id="resultsRoot" flex="1" overflow="hidden" direction="column">
+            <Flex id="resultsRoot"
+flex="1"
+                overflow="hidden"
+direction="column">
 
                 {/* list header */}
                 <Flex
@@ -117,7 +122,8 @@ export const ExamResultsSlide = (props: {
                                 return "var(--mildRed)";
                             })();
 
-                            return <Accordion>
+                            return <Accordion
+                                key={index}>
 
                                 {/* question */}
                                 <AccordionSummary
@@ -155,17 +161,18 @@ export const ExamResultsSlide = (props: {
                                             .map((answer, index) => {
 
                                                 return <QuestionAnswer
+                                                    key={index}
                                                     margin="5px"
                                                     answerText={answer.answerText}
                                                     isSelected={answer.isGiven}
-                                                    isCorrect={answer.isCorrect} />
+                                                    isCorrect={answer.isCorrect} />;
                                             })}
                                     </Flex>
                                 </AccordionDetails>
-                            </Accordion>
+                            </Accordion>;
                         })}
                 </Flex>
             </Flex>
         </Flex>
-    </ExamLayout>
+    </ExamLayout>;
 };

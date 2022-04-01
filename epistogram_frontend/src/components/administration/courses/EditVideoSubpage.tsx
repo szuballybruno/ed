@@ -1,10 +1,10 @@
 import { Flex } from "@chakra-ui/layout";
 import { Delete } from "@mui/icons-material";
-import EditIcon from '@mui/icons-material/Edit';
-import LiveHelpIcon from '@mui/icons-material/LiveHelp';
-import TimerIcon from '@mui/icons-material/Timer';
+import EditIcon from "@mui/icons-material/Edit";
+import LiveHelpIcon from "@mui/icons-material/LiveHelp";
+import TimerIcon from "@mui/icons-material/Timer";
 import { Slider } from "@mui/material";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
@@ -83,8 +83,8 @@ const QuestionItem = (props: {
                 <Delete className="square30" />
             </EpistoButton>
         </Flex >}
-        pr="20px" />
-}
+        pr="20px" />;
+};
 
 // deprecated because DataGrid
 export const EditVideoSubpage = () => {
@@ -115,7 +115,7 @@ export const EditVideoSubpage = () => {
     const setQuestionListOrdered = (newList: QuestionDTO[]) => {
 
         setQuestions(newList.orderBy(x => x.showUpTimeSeconds ?? 0));
-    }
+    };
 
     useEffect(() => {
 
@@ -161,7 +161,7 @@ export const EditVideoSubpage = () => {
             showError(e);
             return false;
         }
-    }
+    };
 
     const marks = questions
         .map(x => ({
@@ -180,12 +180,12 @@ export const EditVideoSubpage = () => {
         } as QuestionDTO;
 
         setQuestionListOrdered([...questions, newQuestion]);
-    }
+    };
 
     const handleDeleteQuestion = (deletedId: number) => {
 
         setQuestionListOrdered(questions.filter(x => x.questionId !== deletedId));
-    }
+    };
 
     const setQuestionValues = (questionId: number, text: string, showUpSeconds: number) => {
 
@@ -196,7 +196,7 @@ export const EditVideoSubpage = () => {
         question.showUpTimeSeconds = showUpSeconds;
 
         setQuestionListOrdered(newList);
-    }
+    };
 
     const navToEditQuestion = async (questionId: number) => {
 
@@ -204,8 +204,8 @@ export const EditVideoSubpage = () => {
         if (!isSuccessful)
             return;
 
-        navigate(applicationRoutes.administrationRoute.coursesRoute.editVideoQuestionRoute.route, { questionId, videoId, courseId })
-    }
+        navigate(applicationRoutes.administrationRoute.coursesRoute.editVideoQuestionRoute.route, { questionId, videoId, courseId });
+    };
 
     return <LoadingFrame
         loadingState={[saveVideoState, videoEditDataState, saveVideoFileState]}
@@ -322,5 +322,5 @@ export const EditVideoSubpage = () => {
         </AdminBreadcrumbsHeader>
 
 
-    </LoadingFrame >
-}
+    </LoadingFrame >;
+};

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { toast, ToastOptions, ToastPosition } from 'react-toastify';
+import { toast, ToastOptions, ToastPosition } from "react-toastify";
 import { ErrorDialogContext } from "../../components/system/DialogFrame";
 
 export type NotificationType = "error" | "info" | "warning";
@@ -11,7 +11,7 @@ const defaultNotiProps = {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-}
+};
 
 export const showNotification = (text: string, type?: NotificationType, options?: ToastOptions) => {
 
@@ -21,7 +21,7 @@ export const showNotification = (text: string, type?: NotificationType, options?
         type: type === "warning" ? "warning" : "info",
         ...(options ?? {})
     });
-}
+};
 
 export const useShowErrorDialog = () => {
 
@@ -36,7 +36,7 @@ export const useShowErrorDialog = () => {
                 title: title ?? "Hiba",
                 description: asAny.message ?? asAny ?? "Ismeretlen hiba, kerlek probald ujra kesobb!."
             });
-    }
+    };
 
     return showErrorDialog;
-}
+};

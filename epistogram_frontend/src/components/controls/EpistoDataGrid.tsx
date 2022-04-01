@@ -1,4 +1,4 @@
-import { DataGridPro, GridCellParams, GridColDef, useGridApiContext, useGridApiRef } from "@mui/x-data-grid-pro";
+import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from "@mui/x-data-grid-pro";
 import { ReactNode, useCallback, useEffect } from "react";
 
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
@@ -55,7 +55,7 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
             };
 
             if (renderCell)
-                def.renderCell = (props: any) => renderCell({
+                def.renderCell = (props: GridRenderCellParams<any, any, any>) => renderCell({
                     key: getKey(props.row),
                     field: column.field,
                     value: props.row[column.field],
@@ -78,12 +78,12 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
                             apiContextRef
                                 .current
                                 .commitCellChange({ id: key as any, field: field as any });
-                        }
+                        };
 
                         return {
                             commitNewValue
-                        }
-                    }
+                        };
+                    };
 
                     return renderEditCell({
                         key: getKey(props.row),
@@ -92,7 +92,7 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
                         row: props.row,
                         useCommitNewValue
                     });
-                }
+                };
 
             return def;
         });
@@ -154,5 +154,5 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
         autoHeight
         style={{
             background: "var(--transparentWhite70)"
-        }} />
-}
+        }} />;
+};

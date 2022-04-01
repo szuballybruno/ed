@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { Bar, Doughnut, Line, Pie, Radar } from "react-chartjs-2";
 import { getAssetUrl } from "../../../static/frontendHelpers";
 import { Flex } from "@chakra-ui/react";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { LearningStatisticsSeciton } from '../../learningInsights/LearningStatisticsSeciton';
+import { LearningStatisticsSeciton } from "../../learningInsights/LearningStatisticsSeciton";
 
 
 const AdminStatistics = () => {
     function getColors(length: number) {
-        let pallet = [
+        const pallet = [
             "#7dabe8",
             "#a8c0e7",
             "#478dea",
@@ -18,7 +18,7 @@ const AdminStatistics = () => {
             "#6199e3",
             "#bfcde0",
         ];
-        let colors: string[] = [];
+        const colors: string[] = [];
 
         for (let i = 0; i < length; i++) {
             colors.push(pallet[i % pallet.length]);
@@ -30,13 +30,13 @@ const AdminStatistics = () => {
         labels: ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"],
         datasets: [
             {
-                label: 'Múlt hét',
+                label: "Múlt hét",
                 fill: false,
                 backgroundColor: "#067daf",
                 borderColor: "#067daf",
                 data: [83, 120, 140, 170, 30, 20, 10],
             }, {
-                label: 'Jelenlegi hét',
+                label: "Jelenlegi hét",
                 fill: false,
                 backgroundColor: "#067daf",
                 borderColor: "#067daf",
@@ -49,28 +49,55 @@ const AdminStatistics = () => {
         <Flex>
             <AdminSubpageHeader direction="column">
                 <LearningStatisticsSeciton title={"Leggyakoribb adatok"}>
-                    <StatisticsCard suffix={"%"} value={"95"} title={"Kurzus teljesítési ráta"} iconPath={getAssetUrl("company_statistics_icons/course_progress_rate.svg")} />
-                    <StatisticsCard suffix={"perc"} value={"38"} title={"Átlagosan eltöltött idő/belépés"} iconPath={getAssetUrl("company_statistics_icons/spent_time_login.svg")} />
-                    <StatisticsCard suffix={"óra"} value={"3,15"} title={"Átlagos tanulással töltött idő/hét"} iconPath={getAssetUrl("company_statistics_icons/spent_time_learning_week.svg")} />
-                    <StatisticsCard suffix={"%"} value={"70"} title={"Belépési arány a héten"} iconPath={getAssetUrl("company_statistics_icons/login_ratio_week.svg")} />
-                    <StatisticsCard suffix={"%"} value={"54"} title={"Teljesítés a vizsgákon"} iconPath={getAssetUrl("company_statistics_icons/exam_progress.svg")} />
-                    <StatisticsCard suffix={"%"} value={"80"} title={"Átlagos fókusztartás"} iconPath={getAssetUrl("company_statistics_icons/focus.svg")} />
-                    <StatisticsCard suffix={"%"} value={"3"} title={"Felejtési görbe javulása"} iconPath={getAssetUrl("company_statistics_icons/knowledge_graph.svg")} />
-                    <StatisticsCard suffix={"pont"} value={"8.5"} title={"Munkavállalói feedback"} iconPath={getAssetUrl("company_statistics_icons/workers_feedback.svg")} />
+                    <StatisticsCard suffix={"%"}
+value={"95"}
+title={"Kurzus teljesítési ráta"}
+iconPath={getAssetUrl("company_statistics_icons/course_progress_rate.svg")} />
+                    <StatisticsCard suffix={"perc"}
+value={"38"}
+title={"Átlagosan eltöltött idő/belépés"}
+iconPath={getAssetUrl("company_statistics_icons/spent_time_login.svg")} />
+                    <StatisticsCard suffix={"óra"}
+value={"3,15"}
+title={"Átlagos tanulással töltött idő/hét"}
+iconPath={getAssetUrl("company_statistics_icons/spent_time_learning_week.svg")} />
+                    <StatisticsCard suffix={"%"}
+value={"70"}
+title={"Belépési arány a héten"}
+iconPath={getAssetUrl("company_statistics_icons/login_ratio_week.svg")} />
+                    <StatisticsCard suffix={"%"}
+value={"54"}
+title={"Teljesítés a vizsgákon"}
+iconPath={getAssetUrl("company_statistics_icons/exam_progress.svg")} />
+                    <StatisticsCard suffix={"%"}
+value={"80"}
+title={"Átlagos fókusztartás"}
+iconPath={getAssetUrl("company_statistics_icons/focus.svg")} />
+                    <StatisticsCard suffix={"%"}
+value={"3"}
+title={"Felejtési görbe javulása"}
+iconPath={getAssetUrl("company_statistics_icons/knowledge_graph.svg")} />
+                    <StatisticsCard suffix={"pont"}
+value={"8.5"}
+title={"Munkavállalói feedback"}
+iconPath={getAssetUrl("company_statistics_icons/workers_feedback.svg")} />
                 </LearningStatisticsSeciton>
 
                 <LearningStatisticsSeciton title={"Grafikonok"}>
-                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                    <StatisticsCard isOpenByDefault
+suffix={""}
+title={""}
+value={""}>
                         <Bar options={{
                             responsive: true,
                             plugins: {
                                 title: {
                                     display: true,
-                                    text: 'Legaktívabb napok'
+                                    text: "Legaktívabb napok"
                                 },
                             },
                             interaction: {
-                                mode: 'index',
+                                mode: "index",
                                 intersect: false
                             },
                             scales: {
@@ -78,7 +105,7 @@ const AdminStatistics = () => {
                                     display: true,
                                     title: {
                                         display: true,
-                                        text: 'A hét napjai'
+                                        text: "A hét napjai"
                                     }
                                 },
                                 y: {
@@ -86,15 +113,19 @@ const AdminStatistics = () => {
                                     max: 180,
                                     title: {
                                         display: true,
-                                        text: 'Belépések száma'
+                                        text: "Belépések száma"
                                     }
                                 }
                             }
-                        }} data={dadata1} />
+                        }}
+data={dadata1} />
                     </StatisticsCard>
 
 
-                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                    <StatisticsCard isOpenByDefault
+suffix={""}
+title={""}
+value={""}>
                         <Pie
                             options={{
                                 responsive: true,
@@ -102,14 +133,15 @@ const AdminStatistics = () => {
                                 plugins: {
                                     title: {
                                         display: true,
-                                        text: 'Aktivitás átlagos felosztása'
+                                        text: "Aktivitás átlagos felosztása"
                                     },
                                 },
-                            }} /*type={"pie"}*/ data={{
-                                labels: ['Videók megtekintése', 'Kérdések megválaszolása', 'Vizsgakitöltés', 'Nincs tevékenység'],
+                            }}
+data={{
+                                labels: ["Videók megtekintése", "Kérdések megválaszolása", "Vizsgakitöltés", "Nincs tevékenység"],
                                 datasets: [
                                     {
-                                        label: 'Aktivitás átlagos felosztása',
+                                        label: "Aktivitás átlagos felosztása",
                                         data: [56, 5, 19, 20],
                                         backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
                                     }
@@ -118,7 +150,10 @@ const AdminStatistics = () => {
                     </StatisticsCard>
 
 
-                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                    <StatisticsCard isOpenByDefault
+suffix={""}
+title={""}
+value={""}>
                         <Radar
                             options={{
                                 responsive: true,
@@ -126,7 +161,7 @@ const AdminStatistics = () => {
                                 plugins: {
                                     title: {
                                         display: true,
-                                        text: 'Felhasználók átlagos tanulási stílusa'
+                                        text: "Felhasználók átlagos tanulási stílusa"
                                     },
                                     legend: {
                                         display: false
@@ -140,16 +175,16 @@ const AdminStatistics = () => {
                             }}
                             data={{
                                 labels: [
-                                    'Egyedüli',
-                                    'Hangos kimondás',
-                                    'Elméleti',
-                                    'Vizuális alapú',
-                                    'Analitikus',
-                                    'Szociális',
-                                    'Térbeli elhelyezés',
-                                    'Gyakorlati',
-                                    'Audió alapú',
-                                    'Kreatív'
+                                    "Egyedüli",
+                                    "Hangos kimondás",
+                                    "Elméleti",
+                                    "Vizuális alapú",
+                                    "Analitikus",
+                                    "Szociális",
+                                    "Térbeli elhelyezés",
+                                    "Gyakorlati",
+                                    "Audió alapú",
+                                    "Kreatív"
                                 ],
                                 datasets: [
                                     {
@@ -161,7 +196,10 @@ const AdminStatistics = () => {
                     </StatisticsCard>
 
 
-                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                    <StatisticsCard isOpenByDefault
+suffix={""}
+title={""}
+value={""}>
                         <Doughnut
                             options={{
                                 responsive: true,
@@ -169,14 +207,15 @@ const AdminStatistics = () => {
                                 plugins: {
                                     title: {
                                         display: true,
-                                        text: 'Legnépszerűbb kurzusok'
+                                        text: "Legnépszerűbb kurzusok"
                                     },
                                 },
-                            }} /*type={"pie"}*/ data={{
-                                labels: ['Excel', 'Word', 'Power Point', 'B2B Sales Masterclass'],
+                            }}
+data={{
+                                labels: ["Excel", "Word", "Power Point", "B2B Sales Masterclass"],
                                 datasets: [
                                     {
-                                        label: 'Aktivitás átlagos felosztása',
+                                        label: "Aktivitás átlagos felosztása",
                                         data: [34, 19, 15, 32],
                                         backgroundColor: ["mediumseagreen", "#7de8b2", "#7dabe8", "#a47de8", "#d4e87d", "#dd7de8"],
                                     }
@@ -184,20 +223,23 @@ const AdminStatistics = () => {
                             }} />
                     </StatisticsCard>
 
-                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                    <StatisticsCard isOpenByDefault
+suffix={""}
+title={""}
+value={""}>
                         <Bar options={{
                             responsive: true,
                             plugins: {
                                 title: {
                                     display: true,
-                                    text: 'Legaktívabb idősávok'
+                                    text: "Legaktívabb idősávok"
                                 },
                                 legend: {
                                     display: false
                                 }
                             },
                             interaction: {
-                                mode: 'index',
+                                mode: "index",
                                 intersect: false
                             },
                             scales: {
@@ -205,7 +247,7 @@ const AdminStatistics = () => {
                                     display: true,
                                     title: {
                                         display: false,
-                                        text: 'A hét napjai'
+                                        text: "A hét napjai"
                                     }
                                 },
                                 y: {
@@ -213,15 +255,16 @@ const AdminStatistics = () => {
                                     max: 360,
                                     title: {
                                         display: true,
-                                        text: 'Belépések száma'
+                                        text: "Belépések száma"
                                     }
                                 }
                             }
-                        }} data={{
+                        }}
+data={{
                             labels: ["6:00", "9:00", "12:00", "15:00", "17:00", "19:00", "21:00"],
                             datasets: [
                                 {
-                                    label: 'Múlt hét',
+                                    label: "Múlt hét",
                                     fill: false,
                                     backgroundColor: getColors(7),
                                     borderColor: "#067daf",
@@ -232,17 +275,20 @@ const AdminStatistics = () => {
                     </StatisticsCard>
 
 
-                    <StatisticsCard isOpenByDefault suffix={""} title={""} value={""}>
+                    <StatisticsCard isOpenByDefault
+suffix={""}
+title={""}
+value={""}>
                         <Line options={{
                             responsive: true,
                             plugins: {
                                 title: {
                                     display: true,
-                                    text: 'Kiosztott feladatok megoldása'
+                                    text: "Kiosztott feladatok megoldása"
                                 },
                             },
                             interaction: {
-                                mode: 'index',
+                                mode: "index",
                                 intersect: false
                             },
                             scales: {
@@ -250,7 +296,7 @@ const AdminStatistics = () => {
                                     display: true,
                                     title: {
                                         display: false,
-                                        text: 'Month'
+                                        text: "Month"
                                     }
                                 },
                                 y: {
@@ -259,15 +305,16 @@ const AdminStatistics = () => {
                                     min: 0,
                                     title: {
                                         display: false,
-                                        text: 'Value'
+                                        text: "Value"
                                     }
                                 }
                             }
-                        }} data={{
+                        }}
+data={{
                             labels: ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"],
                             datasets: [
                                 {
-                                    label: 'Megoldott feladatok száma',
+                                    label: "Megoldott feladatok száma",
                                     fill: false,
                                     backgroundColor: "#067daf",
                                     borderColor: "#067daf",
@@ -275,7 +322,7 @@ const AdminStatistics = () => {
                                     lineTension: 0.5,
                                     data: [3, 8, 19, 13, 4, 8, 2],
                                 }, {
-                                    label: 'Elutasított feladatok száma',
+                                    label: "Elutasított feladatok száma",
                                     fill: false,
                                     backgroundColor: "#d9617d",
                                     borderColor: "#D9617D",
@@ -283,7 +330,7 @@ const AdminStatistics = () => {
                                     lineTension: 0.5,
                                     data: [1, 5, 8, 3, 3, 4, 7],
                                 }, {
-                                    label: 'Kiosztásra került feladatok száma',
+                                    label: "Kiosztásra került feladatok száma",
                                     backgroundColor: "#7DE8B2FF",
                                     borderColor: "#7DE8B2FF",
                                     //@ts-ignore
@@ -291,7 +338,7 @@ const AdminStatistics = () => {
                                     data: [5, 22, 8, 2, 14, 1, 0],
                                     fill: false,
                                 }, {
-                                    label: 'Beadott feladatok száma',
+                                    label: "Beadott feladatok száma",
                                     backgroundColor: "#E8BD7DFF",
                                     borderColor: "#E8BD7DFF",
                                     //@ts-ignore

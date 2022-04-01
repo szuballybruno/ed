@@ -35,7 +35,7 @@ export const PretestResultsSubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     return (
         <LoadingFrame
@@ -98,7 +98,9 @@ export const PretestResultsSubpage = () => {
 
                 </EpistoGrid>
 
-                <Flex justify="center" align="center" my="10px">
+                <Flex justify="center"
+align="center"
+my="10px">
 
                     <Image
                         h="30px"
@@ -164,5 +166,5 @@ export const PretestResultsSubpage = () => {
             </Flex>
 
         </LoadingFrame >
-    )
-}
+    );
+};

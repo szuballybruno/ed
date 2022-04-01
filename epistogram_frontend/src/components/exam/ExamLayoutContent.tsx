@@ -55,5 +55,5 @@ export const ExamLayoutContent = (props: {
                 {children}
             </Flex>
         </Flex>
-    )
-}
+    );
+};

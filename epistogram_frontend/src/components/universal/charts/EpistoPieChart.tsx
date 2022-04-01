@@ -1,5 +1,5 @@
-import ReactECharts from 'echarts-for-react';
-import { EpistoPieChartDataType, EpistoPieChartOptionsType } from './types/EpistoPieChartTypes';
+import ReactECharts from "echarts-for-react";
+import { EpistoPieChartDataType, EpistoPieChartOptionsType } from "./types/EpistoPieChartTypes";
 
 export const EpistoPieChart = (props: {
     title: string,
@@ -20,13 +20,13 @@ export const EpistoPieChart = (props: {
             tooltip,
             seriesOptions
         }
-    } = props
+    } = props;
 
 
     const defaultStyle = {
         width: "100%",
         height: "100%",
-    }
+    };
 
 
     console.log({
@@ -58,7 +58,7 @@ export const EpistoPieChart = (props: {
                                     {
                                         color: seriesOptions.color ? seriesOptions.color[index] : ""
                                     })
-                                : d
+                                : d;
                         })
                         : segments.map((d, index) => {
                             return seriesOptions.color
@@ -67,7 +67,7 @@ export const EpistoPieChart = (props: {
                                     {
                                         color: seriesOptions.color ? seriesOptions.color[index] : ""
                                     })
-                                : d
+                                : d;
                         }).sort((a, b) => {
                             return a.value - b.value;
                         })
@@ -77,7 +77,7 @@ export const EpistoPieChart = (props: {
                     type: "pie"
                 })
         ]
-    })
+    });
 
     return <ReactECharts
         option={{
@@ -112,7 +112,7 @@ export const EpistoPieChart = (props: {
                                             },
                                             color: seriesOptions.color ? seriesOptions.color[index] : undefined
                                         })
-                                    : d
+                                    : d;
                             })
                             : segments.map((d, index) => {
                                 return seriesOptions.color
@@ -124,7 +124,7 @@ export const EpistoPieChart = (props: {
                                             },
                                             color: seriesOptions.color ? seriesOptions.color[index] : undefined
                                         })
-                                    : d
+                                    : d;
                             }).sort((a, b) => {
                                 return a.value - b.value;
                             })
@@ -138,5 +138,5 @@ export const EpistoPieChart = (props: {
         style={{
             ...defaultStyle,
             ...style
-        }} />
-}
+        }} />;
+};

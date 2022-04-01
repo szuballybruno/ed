@@ -1,4 +1,4 @@
-import { EpistoChartLegendType, EpistoChartSeriesOptionsType, EpistoChartTooltipType, EpistoChartXAxisType, EpistoChartYAxisType } from "./EpistoChartCommonTypes"
+import { EpistoChartLegendType, EpistoChartSeriesOptionsType, EpistoChartTooltipType, EpistoChartXAxisType, EpistoChartYAxisType } from "./EpistoChartCommonTypes";
 
 export type EpistoBarChartDataType = number[][]
 

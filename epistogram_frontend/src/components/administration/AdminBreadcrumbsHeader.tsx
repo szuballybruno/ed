@@ -1,7 +1,7 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/react"
+import { Box, Flex, FlexProps } from "@chakra-ui/react";
 import { GridOn, List } from "@mui/icons-material";
 import { FormControlLabel, FormGroup, Switch, styled, FormControl } from "@mui/material";
-import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Breadcrumbs from "@mui/material/Breadcrumbs";
 import { ReactNode, useState } from "react";
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
@@ -19,7 +19,9 @@ export const BreadcrumbLink = (props: {
 }) => {
 
     const Content = () => <Flex>
-        {props.iconComponent && <Flex width={27} height="100%" m={"2px 10px 2px 2px"}>
+        {props.iconComponent && <Flex width={27}
+height="100%"
+m={"2px 10px 2px 2px"}>
             {props.iconComponent}
         </Flex>}
 
@@ -33,7 +35,7 @@ export const BreadcrumbLink = (props: {
             }}>
             {props.title}
         </EpistoFont>
-    </Flex>
+    </Flex>;
 
     const { to } = props;
     const isLink = !props.isCurrent && to;
@@ -45,8 +47,8 @@ export const BreadcrumbLink = (props: {
                 <Content />
             </NavLink>
             : <Content />}
-    </Box>
-}
+    </Box>;
+};
 
 export const AdminBreadcrumbsHeader = (props: {
     children?: ReactNode,
@@ -59,7 +61,7 @@ export const AdminBreadcrumbsHeader = (props: {
     const { subRouteLabel, children, breadcrumbs, viewSwitchChecked, viewSwitchFunction, ...css } = props;
 
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
-    const location = useLocation()
+    const location = useLocation();
 
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
     const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
@@ -120,9 +122,9 @@ export const AdminBreadcrumbsHeader = (props: {
                         checked={viewSwitchChecked}
                         onChange={(e) => {
                             if (!viewSwitchFunction)
-                                return
+                                return;
 
-                            viewSwitchFunction(e.currentTarget.checked)
+                            viewSwitchFunction(e.currentTarget.checked);
                         }} />
                     <GridOn />
                 </FormControl>
@@ -140,5 +142,5 @@ export const AdminBreadcrumbsHeader = (props: {
 
             {children}
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

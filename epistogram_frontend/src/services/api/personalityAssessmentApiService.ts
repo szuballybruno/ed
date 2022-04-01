@@ -13,7 +13,7 @@ export const usePersonalityTraitCategories = () => {
         personalityTraitCategoriesError: qr.error,
         refetchPersonalityTraitCategories: qr.refetch
     };
-}
+};
 
 export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: number, isMax: boolean) => {
 
@@ -27,4 +27,4 @@ export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: n
         personalityTraitCategoryDetailsError: qr.error,
         refetchPersonalityTraitCategoryDetails: qr.refetch
     };
-}
+};

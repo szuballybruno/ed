@@ -1,19 +1,19 @@
-import { Flex, Image } from "@chakra-ui/react"
-import { Tab, Tabs } from "@mui/material"
-import { useState } from "react"
-import { UserCourseProgressChartDTO } from "../../../../shared/dtos/UserCourseProgressChartDTO"
-import { defaultCharts } from "../../../../static/defaultChartOptions"
-import { getAssetUrl, roundNumber } from "../../../../static/frontendHelpers"
-import { translatableTexts } from "../../../../static/translatableTexts"
-import { EpistoFont } from "../../../controls/EpistoFont"
-import { TabPanel } from "../../../courseDetails/TabPanel"
-import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog"
-import { NoProgressChartYet } from "../../../home/NoProgressChartYet"
-import { UserProgressChart } from "../../../home/UserProgressChart"
-import StatisticsCard from "../../../statisticsCard/StatisticsCard"
-import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart"
-import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl"
-import { UserActivityDistributionChart } from "../UserActivityDistributionChart"
+import { Flex, Image } from "@chakra-ui/react";
+import { Tab, Tabs } from "@mui/material";
+import { useState } from "react";
+import { UserCourseProgressChartDTO } from "../../../../shared/dtos/UserCourseProgressChartDTO";
+import { defaultCharts } from "../../../../static/defaultChartOptions";
+import { getAssetUrl, roundNumber } from "../../../../static/frontendHelpers";
+import { translatableTexts } from "../../../../static/translatableTexts";
+import { EpistoFont } from "../../../controls/EpistoFont";
+import { TabPanel } from "../../../courseDetails/TabPanel";
+import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog";
+import { NoProgressChartYet } from "../../../home/NoProgressChartYet";
+import { UserProgressChart } from "../../../home/UserProgressChart";
+import StatisticsCard from "../../../statisticsCard/StatisticsCard";
+import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart";
+import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl";
+import { UserActivityDistributionChart } from "../UserActivityDistributionChart";
 
 export const AdminUserCourseContentOverviewModalSubpage = (props: {
     userStats: {
@@ -25,12 +25,14 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
     }
 }) => {
 
-    const { userStats } = props
+    const { userStats } = props;
 
-    return <Flex direction="column" p="20px">
+    return <Flex direction="column"
+p="20px">
         <Flex>
 
-            <Flex flex="1" align="stretch">
+            <Flex flex="1"
+align="stretch">
 
                 <Flex flex="1">
 
@@ -38,7 +40,7 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                         title="Teljesítmény"
                         segments={[
                             { value: 70, name: "Teljesítmény 70%" },
-                            { value: 30, name: '' },
+                            { value: 30, name: "" },
                         ]}
                         options={defaultCharts.twoSegmentGreenDoughnut} />
                 </Flex>
@@ -48,7 +50,7 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                         title="Haladás"
                         segments={[
                             { value: 20, name: "" },
-                            { value: 80, name: 'Haladás 20%' },
+                            { value: 80, name: "Haladás 20%" },
                         ]}
                         options={defaultCharts.twoSegmentRedDoughnut} />
                 </Flex>
@@ -58,10 +60,10 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                         title="Aktivitás eloszlása"
                         isSortValues
                         segments={[
-                            { value: 30, name: '' },
-                            { value: 17, name: '' },
-                            { value: 10, name: '' },
-                            { value: 20, name: '' }
+                            { value: 30, name: "" },
+                            { value: 17, name: "" },
+                            { value: 10, name: "" },
+                            { value: 20, name: "" }
                         ]}
                         options={defaultCharts.pie} />
                 </Flex>
@@ -124,8 +126,8 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                 iconPath={getAssetUrl("images/rightanswer3D.png")}
                 isOpenByDefault={false} />
         </div>
-    </Flex>
-}
+    </Flex>;
+};
 
 
 
@@ -140,9 +142,9 @@ export const AdminUserCourseContentModal = (props: {
     dialogLogic: EpistoDialogLogicType
 }) => {
 
-    const { userCourseStatsData: userStats, dialogLogic } = props
+    const { userCourseStatsData: userStats, dialogLogic } = props;
 
-    const [currentTab, setCurrentTab] = useState(0)
+    const [currentTab, setCurrentTab] = useState(0);
 
 
     const moreInfoDialogTabs = [
@@ -168,9 +170,11 @@ export const AdminUserCourseContentModal = (props: {
                 Kommentek/kérdések
             </Flex>
         }
-    ]
+    ];
 
-    return <EpistoDialog fullScreenX fullScreenY logic={dialogLogic}>
+    return <EpistoDialog fullScreenX
+fullScreenY
+logic={dialogLogic}>
         <Flex
             overflowY="scroll"
             className="roundBorders"
@@ -191,8 +195,11 @@ export const AdminUserCourseContentModal = (props: {
                 flex="1">
 
                 <Flex align="center">
-                    <Flex h="50px" direction="column" mr="20px">
-                        <EpistoFont fontSize={"fontLarge"} style={{
+                    <Flex h="50px"
+direction="column"
+mr="20px">
+                        <EpistoFont fontSize={"fontLarge"}
+style={{
                             display: "flex",
                             alignItems: "center",
                             flexDirection: "row",
@@ -253,7 +260,7 @@ export const AdminUserCourseContentModal = (props: {
                                 }}
                                 label={x.title}
                                 key={index}
-                                id={`simple-tab-${index}`} />
+                                id={`simple-tab-${index}`} />;
                         })}
                 </Tabs>
             </Flex>
@@ -267,5 +274,5 @@ export const AdminUserCourseContentModal = (props: {
                     {x.component}
                 </TabPanel>)}
         </Flex>
-    </EpistoDialog>
-}
+    </EpistoDialog>;
+};

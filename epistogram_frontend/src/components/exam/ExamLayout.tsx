@@ -32,7 +32,7 @@ export const ExamLayout = (props: {
         {iconFront}
         {title}
         {icon}
-    </EpistoButton>
+    </EpistoButton>;
 
     return <Flex
         className="whall"
@@ -69,7 +69,8 @@ export const ExamLayout = (props: {
                 </Text>
             </Flex>
 
-            <Flex minWidth="200" justify="flex-end">
+            <Flex minWidth="200"
+justify="flex-end">
                 {exitExamAction && <EpistoButton
                     onClick={exitExamAction}
                     style={{
@@ -136,5 +137,5 @@ export const ExamLayout = (props: {
             {/* continue button */}
             {showNextButton && footerButton(nextButtonTitle, handleNext, <ArrowForward />)}
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

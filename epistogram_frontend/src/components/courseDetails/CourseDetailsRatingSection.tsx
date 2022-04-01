@@ -4,10 +4,11 @@ import React from "react";
 import { EpistoFont } from "../controls/EpistoFont";
 
 export const CourseDetailsRatingSection = () => {
-    const mockRatingProgresses = [60, 20, 10, 0, 0]
+    const mockRatingProgresses = [60, 20, 10, 0, 0];
 
     const CourseDetailsRatingItem = () => {
-        return <Flex width="100%" mt={20}>
+        return <Flex width="100%"
+            mt={20}>
             <Flex height="100%">
                 <Flex width={70}
                     height={70}
@@ -23,8 +24,11 @@ export const CourseDetailsRatingSection = () => {
                     </EpistoFont>
                 </Flex>
             </Flex>
-            <Flex flex={1} flexDir={"column"}>
-                <Flex height={70} alignItems={"center"} justifyContent={"space-between"}>
+            <Flex flex={1}
+                flexDir={"column"}>
+                <Flex height={70}
+                    alignItems={"center"}
+                    justifyContent={"space-between"}>
                     <Flex flexDir={"column"}>
                         <EpistoFont style={{
                             fontWeight: "bold",
@@ -39,7 +43,8 @@ export const CourseDetailsRatingSection = () => {
                         </EpistoFont>
                     </Flex>
                     <Flex>
-                        <Rating value={5} style={{ color: "var(--epistoTeal)" }} />
+                        <Rating value={5}
+                            style={{ color: "var(--epistoTeal)" }} />
                     </Flex>
                 </Flex>
                 <Flex mt={20}>
@@ -50,13 +55,22 @@ export const CourseDetailsRatingSection = () => {
                     </EpistoFont>
                 </Flex>
             </Flex>
-        </Flex>
-    }
+        </Flex>;
+    };
 
-    return <Flex mt={10} width="100%" height={500} direction={"column"} alignItems={"flex-start"}>
-        <Flex width="100%" height={170}>
+    return <Flex mt={10}
+        width="100%"
+        height={500}
+        direction={"column"}
+        alignItems={"flex-start"}>
+        <Flex width="100%"
+            height={170}>
             <Paper>
-                <Flex width={170} height={170} flexDir={"column"} alignItems={"center"} justifyContent={"center"}>
+                <Flex width={170}
+                    height={170}
+                    flexDir={"column"}
+                    alignItems={"center"}
+                    justifyContent={"center"}>
 
                     <EpistoFont
                         style={{
@@ -75,27 +89,46 @@ export const CourseDetailsRatingSection = () => {
                     </EpistoFont>
                 </Flex>
             </Paper>
-            <Flex height={170} flex={1} px={20} flexDir={"column"} justifyContent={"space-evenly"}>
-                {mockRatingProgresses.map(x => <LinearProgress style={{
-                    width: "100%",
-                    height: 10,
-                    borderRadius: 5,
-                }} value={x} variant={"determinate"} />)}
+            <Flex height={170}
+                flex={1}
+                px={20}
+                flexDir={"column"}
+                justifyContent={"space-evenly"}>
+                {mockRatingProgresses
+                    .map((x, index) => <LinearProgress
+                        key={index}
+                        style={{
+                            width: "100%",
+                            height: 10,
+                            borderRadius: 5,
+                        }}
+                        value={x}
+                        variant={"determinate"} />)}
             </Flex>
-            <Flex width={170} height={170} flexDir={"column"} alignItems={"center"} justifyContent={"center"}>
-                <Rating value={5} style={{ color: "var(--epistoTeal)" }} />
-                <Rating value={4} style={{ color: "var(--epistoTeal)" }} />
-                <Rating value={3} style={{ color: "var(--epistoTeal)" }} />
-                <Rating value={2} style={{ color: "var(--epistoTeal)" }} />
-                <Rating value={1} style={{ color: "var(--epistoTeal)" }} />
+            <Flex width={170}
+                height={170}
+                flexDir={"column"}
+                alignItems={"center"}
+                justifyContent={"center"}>
+                <Rating value={5}
+                    style={{ color: "var(--epistoTeal)" }} />
+                <Rating value={4}
+                    style={{ color: "var(--epistoTeal)" }} />
+                <Rating value={3}
+                    style={{ color: "var(--epistoTeal)" }} />
+                <Rating value={2}
+                    style={{ color: "var(--epistoTeal)" }} />
+                <Rating value={1}
+                    style={{ color: "var(--epistoTeal)" }} />
             </Flex>
         </Flex>
-        <Flex width="100%" flexDir={"column"}>
+        <Flex width="100%"
+            flexDir={"column"}>
             <CourseDetailsRatingItem />
             <CourseDetailsRatingItem />
             <CourseDetailsRatingItem />
             <CourseDetailsRatingItem />
             <CourseDetailsRatingItem />
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

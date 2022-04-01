@@ -8,5 +8,5 @@ export const useUploadAvatarFile = () => {
     return {
         postAvatarFileAsync: (file: File) => postMultipartDataAsync(undefined, file),
         postAvatarFileState: state
-    }
-}
+    };
+};

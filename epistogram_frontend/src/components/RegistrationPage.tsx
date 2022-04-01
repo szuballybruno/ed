@@ -18,7 +18,7 @@ export const RegistrationPage = () => {
     const token = getQueryParam("token");
     const isInvited = getQueryParam("isInvited") === "true";
 
-    const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false)
+    const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
 
     // registration
     const [lastName, setLastName] = useState("");
@@ -67,7 +67,7 @@ export const RegistrationPage = () => {
 
             showErrorDialog(translatableTexts.registrationPage.unknownErrorTryAgain);
         }
-    }
+    };
 
     return <Flex
         background="var(--gradientBlueBackground)"
@@ -91,8 +91,12 @@ export const RegistrationPage = () => {
             boxShadow="#00000024 10px 30px 50px 0px">
 
 
-            <Flex width="100%" maxH={50} my="25px" justifyContent={"center"}>
-                <Image width="50%" src={getAssetUrl("/images/logo.svg")} />
+            <Flex width="100%"
+maxH={50}
+my="25px"
+justifyContent={"center"}>
+                <Image width="50%"
+src={getAssetUrl("/images/logo.svg")} />
             </Flex>
 
             {!isInvited && <EpistoFont>{translatableTexts.registrationPage.learningStyleSurvey}</EpistoFont>}
@@ -153,7 +157,8 @@ export const RegistrationPage = () => {
                 </TextField>
             </>}
 
-            <Flex direction={"row"} alignItems={"center"}>
+            <Flex direction={"row"}
+alignItems={"center"}>
 
                 <Checkbox
                     checked={acceptPrivacyPolicy}
@@ -194,5 +199,5 @@ export const RegistrationPage = () => {
                 {translatableTexts.registrationPage.letsStart}
             </EpistoButton>
         </LoadingFrame>
-    </Flex>
-}
+    </Flex>;
+};

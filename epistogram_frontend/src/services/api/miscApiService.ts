@@ -12,7 +12,7 @@ export const useCurrentCourseItemCode = () => {
     return {
         currentCourseItemCode: qr.data
     };
-}
+};
 
 export const useCourseOverviewData = () => {
 
@@ -21,7 +21,7 @@ export const useCourseOverviewData = () => {
     return {
         courseOverviewData: qr.data
     };
-}
+};
 
 export const useJobTitles = () => {
 
@@ -31,8 +31,8 @@ export const useJobTitles = () => {
         jobTitles: queryRes.data ?? [],
         jobTitlesStatus: queryRes.state,
         jobTitlesError: queryRes.error
-    }
-}
+    };
+};
 
 export const useOverviewPageDTO = () => {
 
@@ -42,8 +42,8 @@ export const useOverviewPageDTO = () => {
         pageDTO: queryRes.data,
         status: queryRes.state,
         error: queryRes.error
-    }
-}
+    };
+};
 
 export const useOrganizations = () => {
 
@@ -52,5 +52,5 @@ export const useOrganizations = () => {
     return {
         organizations: qr.data ?? [],
         organizationsState: qr.state
-    }
-}
+    };
+};

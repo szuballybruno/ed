@@ -45,7 +45,7 @@ export const EditDailyTipSubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     // effect 
     useEffect(() => {
@@ -89,4 +89,4 @@ export const EditDailyTipSubpage = () => {
             </AdminSubpageHeader>
         </LoadingFrame>
     );
-}
+};

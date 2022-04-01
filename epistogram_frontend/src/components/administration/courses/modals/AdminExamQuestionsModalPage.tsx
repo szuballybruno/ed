@@ -1,6 +1,6 @@
-import { Flex } from "@chakra-ui/react"
-import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
-import { useEffect, useState } from "react"
+import { Flex } from "@chakra-ui/react";
+import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { useEffect, useState } from "react";
 
 
 export const AdminExamQuestionsModalPage = () => {
@@ -19,9 +19,10 @@ export const AdminExamQuestionsModalPage = () => {
             title: "Válasz 4",
             isCorrect: false
         }]
-    }]
+    }];
 
-    return <Flex flex="1" p="20px">
+    return <Flex flex="1"
+p="20px">
         <TableContainer
             className="roundBorders largeSoftShadow"
             style={{
@@ -32,7 +33,7 @@ export const AdminExamQuestionsModalPage = () => {
             <Table
                 sx={{ minWidth: 750 }}
                 aria-labelledby="tableTitle"
-                size={'medium'}
+                size={"medium"}
             >
                 <TableHead>
                     <TableRow>
@@ -97,7 +98,7 @@ export const AdminExamQuestionsModalPage = () => {
                                             }} />
 
                                         {answer.title}
-                                    </TableCell>
+                                    </TableCell>;
                                 })}
                             </TableRow>
                         );
@@ -105,5 +106,5 @@ export const AdminExamQuestionsModalPage = () => {
                 </TableBody>
             </Table >
         </TableContainer >
-    </Flex >
-}
+    </Flex >;
+};

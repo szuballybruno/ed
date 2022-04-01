@@ -1,14 +1,14 @@
-import { Flex, Grid } from '@chakra-ui/react';
-import React from 'react';
+import { Flex, Grid } from "@chakra-ui/react";
+import React from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { defaultCharts } from '../../../static/defaultChartOptions';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { defaultCharts } from "../../../static/defaultChartOptions";
+import { getAssetUrl } from "../../../static/frontendHelpers";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import { EpistoBarChart } from '../../universal/charts/EpistoBarChart';
-import { EpistoPieChart } from '../../universal/charts/EpistoPieChart';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { UserActivityDistributionChart } from '../users/UserActivityDistributionChart';
-import { CourseAdministartionFrame } from './CourseAdministartionFrame';
+import { EpistoBarChart } from "../../universal/charts/EpistoBarChart";
+import { EpistoPieChart } from "../../universal/charts/EpistoPieChart";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { UserActivityDistributionChart } from "../users/UserActivityDistributionChart";
+import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
 
 export const CourseStatisticsSubpage = () => {
 
@@ -87,10 +87,10 @@ export const CourseStatisticsSubpage = () => {
                                 title="Aktivitás eloszlása"
                                 isSortValues
                                 segments={[
-                                    { value: 30, name: 'Videók megtekintése' },
-                                    { value: 17, name: 'Vizsga / tesztkitöltés' },
-                                    { value: 10, name: 'Kérdések megválaszolása' },
-                                    { value: 20, name: 'Nincs tevékenység' }
+                                    { value: 30, name: "Videók megtekintése" },
+                                    { value: 17, name: "Vizsga / tesztkitöltés" },
+                                    { value: 10, name: "Kérdések megválaszolása" },
+                                    { value: 20, name: "Nincs tevékenység" }
                                 ]}
                                 options={defaultCharts.pie2} />
                         </Flex>
@@ -181,5 +181,5 @@ export const CourseStatisticsSubpage = () => {
                 </Flex>
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
-    )
+    );
 };

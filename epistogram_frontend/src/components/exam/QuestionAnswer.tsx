@@ -21,10 +21,10 @@ export const QuestionAnswer = (props: {
             return "rgba(124,192,194,0.34)";
 
         if (isSelected)
-            return "var(--mildRed)"
+            return "var(--mildRed)";
 
         return undefined;
-    }
+    };
 
     return <FlexFloat
         alignItems={"center"}
@@ -47,5 +47,5 @@ export const QuestionAnswer = (props: {
         <EpistoFont fontSize="fontNormal14">
             {answerText}
         </EpistoFont>
-    </FlexFloat>
-}
+    </FlexFloat>;
+};

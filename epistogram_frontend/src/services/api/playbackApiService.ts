@@ -13,10 +13,10 @@ export const usePostVideoPlaybackSample = () => {
             fromSeconds: fromPlayedSeconds,
             toSeconds: toPlayedSeconds
         });
-    }
+    };
 
     return {
         postVideoPlaybackSampleAsync,
         videoSamplingResult: qr.result
-    }
-}
+    };
+};

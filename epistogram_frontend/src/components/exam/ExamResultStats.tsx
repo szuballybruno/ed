@@ -1,8 +1,8 @@
-import { Flex } from "@chakra-ui/react"
-import { getAssetUrl } from "../../static/frontendHelpers"
+import { Flex } from "@chakra-ui/react";
+import { getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import { EpistoGrid } from "../controls/EpistoGrid";
-import StatisticsCard from "../statisticsCard/StatisticsCard"
+import StatisticsCard from "../statisticsCard/StatisticsCard";
 
 export const ExamResultStats = (props: {
     correctAnswerRate: number,
@@ -45,5 +45,5 @@ export const ExamResultStats = (props: {
             suffix={translatableTexts.exam.examResultStats.fromAllUsers.suffix}
             title={translatableTexts.exam.examResultStats.fromAllUsers.title}
             value={"top 20"} />
-    </EpistoGrid>
-}
+    </EpistoGrid>;
+};

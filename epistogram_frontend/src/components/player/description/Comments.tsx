@@ -1,14 +1,16 @@
 import { Flex } from "@chakra-ui/react";
 import { AccessTime, ThumbUpAlt } from "@mui/icons-material";
 import { Avatar, Checkbox, Divider } from "@mui/material";
-import React from 'react';
+import React from "react";
 import { getAssetUrl } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 
 const Comments = () => {
     return (
-        <Flex direction={"column"} minH={600} pb="100px">
+        <Flex direction={"column"}
+minH={600}
+pb="100px">
             <EpistoFont
                 style={{
                     margin: "50px 0 10px 0",
@@ -19,11 +21,14 @@ const Comments = () => {
                 {"Kommentek & Kérdések"}
             </EpistoFont>
             <Flex direction="column">
-                <Flex p="10px" align="center">
+                <Flex p="10px"
+align="center">
                     <Flex mr="10px">
-                        <Avatar alt="Szubally Brúnó" src={getAssetUrl("userAvatars/user_avatar_7.png")} />
+                        <Avatar alt="Szubally Brúnó"
+src={getAssetUrl("userAvatars/user_avatar_7.png")} />
                     </Flex>
-                    <Flex flex="1" direction="column">
+                    <Flex flex="1"
+direction="column">
                         <EpistoFont>
                             Szubally Brúnó
                         </EpistoFont>
@@ -55,7 +60,9 @@ const Comments = () => {
                         Ide írd a kommentedet/kérdésedet{" "}
                     </p>
                 </EpistoFont>
-                <Flex justify="space-between" align="center" m="10px 0">
+                <Flex justify="space-between"
+align="center"
+m="10px 0">
                     <Flex direction="column">
                         <Flex align="center">
                             <Checkbox />
@@ -77,13 +84,16 @@ const Comments = () => {
                     </Flex>
                 </Flex>
             </Flex>
-            <Divider variant="fullWidth" style={{ margin: "10px 0 20px 0" }} />
+            <Divider variant="fullWidth"
+style={{ margin: "10px 0 20px 0" }} />
             <Flex>
                 <Flex p="20px">
-                    <Avatar alt="Surányi Ildikó" src={getAssetUrl("userAvatars/user_avatar_1.png")} />
+                    <Avatar alt="Surányi Ildikó"
+src={getAssetUrl("userAvatars/user_avatar_1.png")} />
                 </Flex>
                 <Flex direction="column">
-                    <Flex justify="space-between" align="center">
+                    <Flex justify="space-between"
+align="center">
 
                         <h4 style={{ margin: 0, textAlign: "left" }}>Surányi Ildikó</h4>
                         <EpistoButton className="fontSmall">
@@ -105,13 +115,17 @@ const Comments = () => {
                 </Flex>
             </Flex>
 
-            <Flex pl="20px" mt="30px">
-                <Divider variant="fullWidth" orientation="vertical" />
+            <Flex pl="20px"
+mt="30px">
+                <Divider variant="fullWidth"
+orientation="vertical" />
                 <Flex p="20px">
-                    <Avatar alt="Keresztúri Melinda" src={getAssetUrl("userAvatars/user_avatar_7.png")} />
+                    <Avatar alt="Keresztúri Melinda"
+src={getAssetUrl("userAvatars/user_avatar_7.png")} />
                 </Flex>
                 <Flex direction="column">
-                    <Flex justify="space-between" align="center">
+                    <Flex justify="space-between"
+align="center">
 
                         <h4 style={{ margin: 0, textAlign: "left" }}>Keresztúri Melinda</h4>
                         <EpistoButton className="fontSmall">
@@ -132,13 +146,17 @@ const Comments = () => {
                     </p>
                 </Flex>
             </Flex>
-            <Flex pl="20px" mt="30px">
-                <Divider variant="fullWidth" orientation="vertical" />
+            <Flex pl="20px"
+mt="30px">
+                <Divider variant="fullWidth"
+orientation="vertical" />
                 <Flex p="20px">
-                    <Avatar alt="Remy Sharp" src={getAssetUrl("userAvatars/user_avatar_5.png")} />
+                    <Avatar alt="Remy Sharp"
+src={getAssetUrl("userAvatars/user_avatar_5.png")} />
                 </Flex>
                 <Flex direction="column">
-                    <Flex justify="space-between" align="center">
+                    <Flex justify="space-between"
+align="center">
 
                         <h4 style={{ margin: 0, textAlign: "left" }}>
                             Oláh Mihály
@@ -164,10 +182,12 @@ const Comments = () => {
 
             <Flex mt="30px">
                 <Flex p="20px">
-                    <Avatar alt="Remy Sharp" src={getAssetUrl("userAvatars/user_avatar_3.png")} />
+                    <Avatar alt="Remy Sharp"
+src={getAssetUrl("userAvatars/user_avatar_3.png")} />
                 </Flex>
                 <Flex direction="column">
-                    <Flex justify="space-between" align="center">
+                    <Flex justify="space-between"
+align="center">
 
                         <h4 style={{ margin: 0, textAlign: "left" }}>Kiss Andrea</h4>
                         <EpistoButton className="fontSmall">
@@ -190,13 +210,17 @@ const Comments = () => {
                 </Flex>
             </Flex>
 
-            <Flex pl="20px" mt="30px">
-                <Divider variant="fullWidth" orientation="vertical" />
+            <Flex pl="20px"
+mt="30px">
+                <Divider variant="fullWidth"
+orientation="vertical" />
                 <Flex p="20px">
-                    <Avatar alt="Remy Sharp" src={getAssetUrl("userAvatars/user_avatar_4.png")} />
+                    <Avatar alt="Remy Sharp"
+src={getAssetUrl("userAvatars/user_avatar_4.png")} />
                 </Flex>
                 <Flex direction="column">
-                    <Flex justify="space-between" align="center">
+                    <Flex justify="space-between"
+align="center">
 
                         <h4 style={{ margin: 0, textAlign: "left" }}>
                             Radeczky Richárd
@@ -221,7 +245,7 @@ const Comments = () => {
                 </Flex>
             </Flex>
         </Flex>
-    )
+    );
 };
 
 export default Comments;

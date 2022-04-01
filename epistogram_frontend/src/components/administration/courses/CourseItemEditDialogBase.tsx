@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react"
-import { Tab, Tabs } from "@mui/material"
-import React from "react"
-import { usePaging } from "../../../static/frontendHelpers"
-import { EpistoFont } from "../../controls/EpistoFont"
-import { EpistoDialog, EpistoDialogLogicType } from "../../EpistoDialog"
-import { EpistoPaging } from "../../universal/EpistoPaging"
-import { SegmentedButton } from "../../controls/SegmentedButton"
-import { ChipSmall } from "./ChipSmall"
+import { Flex } from "@chakra-ui/react";
+import { Tab, Tabs } from "@mui/material";
+import React from "react";
+import { usePaging } from "../../../static/frontendHelpers";
+import { EpistoFont } from "../../controls/EpistoFont";
+import { EpistoDialog, EpistoDialogLogicType } from "../../EpistoDialog";
+import { EpistoPaging } from "../../universal/EpistoPaging";
+import { SegmentedButton } from "../../controls/SegmentedButton";
+import { ChipSmall } from "./ChipSmall";
 
 export const CourseItemEditDialogBase = (props: {
     subpages: ({
@@ -33,7 +33,7 @@ export const CourseItemEditDialogBase = (props: {
     const setTab = (index: number) => {
 
         paging.setItem(index);
-    }
+    };
 
     return <EpistoDialog
         logic={dialogLogic}
@@ -153,5 +153,5 @@ export const CourseItemEditDialogBase = (props: {
                 slides={subpages.map(x => x.content)} />
         </Flex>
 
-    </EpistoDialog>
-}
+    </EpistoDialog>;
+};

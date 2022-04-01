@@ -43,17 +43,19 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
             showError(e);
         }
-    }
+    };
 
     // reset paging when dialog is closed 
     useEffect(() => {
 
         if (!dialogLogic.isOpen)
             paging.setItem(0);
-    }, [dialogLogic.isOpen])
+    }, [dialogLogic.isOpen]);
 
     const confirmationSlide = () => (
-        <Flex direction="column" align="center" w="500px">
+        <Flex direction="column"
+align="center"
+w="500px">
 
             <EpistoFont
                 classes={["dividerBorderBottom"]}
@@ -153,5 +155,5 @@ export const ShopPurchaseConfirmationDialog = (props: {
             slides={[confirmationSlide, feedbackSlide]}
             index={paging.currentIndex}
             justify="center" />
-    </EpistoDialog>
-}
+    </EpistoDialog>;
+};

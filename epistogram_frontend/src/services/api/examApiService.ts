@@ -17,8 +17,8 @@ export const useEditExamData = (examId: number) => {
         examEditDataError: qr.error,
         examEditDataState: qr.state,
         refetchEditDataAsync: qr.refetch
-    }
-}
+    };
+};
 
 export const useDeleteExam = () => {
 
@@ -27,8 +27,8 @@ export const useDeleteExam = () => {
     return {
         deleteExamAsync: (examId: number) => qr.postDataAsync({ id: examId }),
         deleteExamState: qr.state,
-    }
-}
+    };
+};
 
 export const useCreateExam = () => {
 
@@ -41,8 +41,8 @@ export const useCreateExam = () => {
             title: ""
         }),
         createExamState: qr.state,
-    }
-}
+    };
+};
 
 export const useSaveExam = () => {
 
@@ -51,8 +51,8 @@ export const useSaveExam = () => {
     return {
         saveExamAsync: qr.postDataAsync,
         saveExamState: qr.state,
-    }
-}
+    };
+};
 
 export const useStartExam = () => {
 
@@ -61,8 +61,8 @@ export const useStartExam = () => {
     return {
         startExamAsync: qr.postDataAsync,
         startExamState: qr.state,
-    }
-}
+    };
+};
 
 export const useSaveExamAnswer = () => {
 
@@ -73,8 +73,8 @@ export const useSaveExamAnswer = () => {
         saveExamAnswerState: qr.state,
         answerResult: qr.result ?? null,
         clearExamAnswerCache: qr.clearCache
-    }
-}
+    };
+};
 
 export const useExamResults = (answerSessionId: number) => {
 
@@ -84,5 +84,5 @@ export const useExamResults = (answerSessionId: number) => {
         examResults: qr.data,
         examResultsError: qr.error,
         examResultsState: qr.state
-    }
-}
+    };
+};

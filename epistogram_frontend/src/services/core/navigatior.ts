@@ -18,9 +18,9 @@ export const useNavigation = () => {
             console.log("Navigating to: " + replacedPath);
 
         history.push(replacedPath);
-    }
+    };
 
-    const openNewTab = (url: string) => (window as any).open(url, '_blank').focus();
+    const openNewTab = (url: string) => (window as any).open(url, "_blank").focus();
 
     const navigateToPlayer = (descriptorCode: string) => navigate(applicationRoutes.playerRoute.watchRoute, { descriptorCode });
 
@@ -57,7 +57,7 @@ export const useNavigation = () => {
         }
 
         navigateToWatchPrequiz(courseId);
-    }
+    };
 
     const navigateToAdminCourseList = () => navigate(applicationRoutes.administrationRoute.coursesRoute);
 
@@ -75,4 +75,4 @@ export const useNavigation = () => {
         playCourse,
         navigateToAdminCourseList
     };
-}
+};

@@ -1,8 +1,8 @@
 import { Box, Flex } from "@chakra-ui/layout";
 import { Input } from "@chakra-ui/react";
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import { Typography } from "@mui/material";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useRequestPasswordChange } from "../../services/api/passwordChangeApiService";
 import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
 import { getEventValueCallback } from "../../static/frontendHelpers";
@@ -39,7 +39,7 @@ export const LoginPasswordResetDialog = (params: {
 
             showError(e);
         }
-    }
+    };
 
     return (
         <EpistoDialog logic={passwordResetDialogLogic}>
@@ -131,4 +131,4 @@ export const LoginPasswordResetDialog = (params: {
             </Flex>
         </EpistoDialog>
     );
-}
+};

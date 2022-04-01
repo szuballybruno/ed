@@ -1,6 +1,6 @@
 import { Box, Container, Flex } from "@chakra-ui/react";
 import { Tab, Tabs } from "@mui/material";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCourseDetails } from "../../services/api/courseApiService";
 import { useNavigation } from "../../services/core/navigatior";
@@ -34,7 +34,7 @@ const CourseDetailsPage = () => {
     const handlePlayCourse = async () => {
 
         playCourse(courseId, courseDetails!.stageName, courseDetails!.currentItemCode);
-    }
+    };
 
     const tabs = [
         {
@@ -117,7 +117,9 @@ const CourseDetailsPage = () => {
             <Flex>
 
                 {/* left pane */}
-                <Flex flex="1" direction={"column"} mr={30}>
+                <Flex flex="1"
+direction={"column"}
+mr={30}>
 
                     {/* short description */}
                     <Container pr="20px">
@@ -125,7 +127,8 @@ const CourseDetailsPage = () => {
                     </Container>
 
                     {/* briefing info items */}
-                    <Flex mt="20px" justify="space-evenly">
+                    <Flex mt="20px"
+justify="space-evenly">
 
                         <CourseDetailsBriefingInfoItem
                             icon={getAssetUrl("/course_page_icons/about_category.svg")}
@@ -166,7 +169,7 @@ const CourseDetailsPage = () => {
 
 
                         {/* tab button headers */}
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <Tabs
                                 className="roundBorders"
                                 TabIndicatorProps={{
@@ -234,7 +237,9 @@ const CourseDetailsPage = () => {
                 </Flex>
 
                 {/* Right pane */}
-                <Flex direction={"column"} minWidth="400px" flexBasis="400px">
+                <Flex direction={"column"}
+minWidth="400px"
+flexBasis="400px">
                     <Flex
                         direction={"column"}
                         alignItems={"center"}
@@ -245,7 +250,10 @@ const CourseDetailsPage = () => {
                         borderWidth={1}
                         borderRadius={10}
                         shadow={"#00000024 0px 0px 5px 0px"}>
-                        <Flex width="100%" height={230} justifyContent={"center"} p={10}>
+                        <Flex width="100%"
+height={230}
+justifyContent={"center"}
+p={10}>
                             <img
                                 src={courseDetails?.thumbnailURL}
                                 style={{
@@ -273,7 +281,8 @@ const CourseDetailsPage = () => {
                                             alt={""} />
                                     )}
                                     midContent={(
-                                        <Flex flex={1} p={5}>
+                                        <Flex flex={1}
+p={5}>
                                             <EpistoFont>
                                                 {sidebarInfo.name}
                                             </EpistoFont>
@@ -327,7 +336,7 @@ const CourseDetailsPage = () => {
             <Flex
                 _before={{
                     position: "absolute",
-                    content: `""`,
+                    content: "\"\"",
                     top: -400,
                     left: 500,
                     width: 1000,
@@ -345,7 +354,7 @@ const CourseDetailsPage = () => {
                 backgroundClip={"padding-box"} />
 
         </ContentPane>
-    </PageRootContainer>
+    </PageRootContainer>;
 };
 
 export default CourseDetailsPage;

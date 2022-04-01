@@ -20,7 +20,7 @@ import { EpistoSearch } from "./universal/EpistoSearch";
 
 const AvailableCoursesPage = () => {
 
-    const history = useHistory()
+    const history = useHistory();
 
     const [searchText, setSearchText] = React.useState("");
     const [searchCategory, setSearchCategory] = React.useState("");
@@ -32,14 +32,14 @@ const AvailableCoursesPage = () => {
     const { playCourse, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();
 
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const [isSmallerThan1400] = useMediaQuery("(min-width: 1400px)");
 
     const clearFilters = () => {
         setSearchCategory("");
         setSearchText("");
         setIsFeatured(false);
         setIsRecommended(false);
-    }
+    };
 
     const categoryOptions = distinct(courses
         .map((course, index) => course.subCategoryName));
@@ -47,12 +47,12 @@ const AvailableCoursesPage = () => {
     const navigateToDetailsPage = (course: CourseShortDTO) => {
 
         navigateToCourseDetails(course.courseId, course.currentItemCode ?? undefined);
-    }
+    };
 
     const handlePlayCourse = async (course: CourseShortDTO) => {
 
         playCourse(course.courseId, course.stageName, course.currentItemCode);
-    }
+    };
 
     return <PageRootContainer>
 
@@ -91,7 +91,7 @@ const AvailableCoursesPage = () => {
                                     border: "none"
                                 }}
                                 onClick={() => {
-                                    setSearchCategory(categoryOption)
+                                    setSearchCategory(categoryOption);
                                 }}
                                 key={index}>
                                 <Flex
@@ -103,7 +103,7 @@ const AvailableCoursesPage = () => {
                                     bgColor="var(--epistoTeal)" />
 
                                 {categoryOption}
-                            </ToggleButton>
+                            </ToggleButton>;
                         })}
                 </ToggleButtonGroup>
             </Flex>
@@ -174,15 +174,17 @@ const AvailableCoursesPage = () => {
                         </ToggleButton>
                     </ToggleButtonGroup>
 
-                    <EpistoSearch flex="5" height="40px" mx="10px" />
+                    <EpistoSearch flex="5"
+height="40px"
+mx="10px" />
 
                     <Select
                         native
                         onChange={() => { }}
                         className="roundBorders fontSmall mildShadow"
                         inputProps={{
-                            name: 'A-Z',
-                            id: 'outlined-age-native-simple',
+                            name: "A-Z",
+                            id: "outlined-age-native-simple",
                         }}
                         sx={{
                             "& .MuiOutlinedInput-notchedOutline": {
@@ -208,9 +210,12 @@ const AvailableCoursesPage = () => {
                     loadingState={[coursesState]}
                     error={[coursesError]}>
 
-                    <Box id="scrollContainer" className="whall">
+                    <Box id="scrollContainer"
+className="whall">
 
-                        <EpistoGrid auto="fill" gap="15" minColumnWidth="250px">
+                        <EpistoGrid auto="fill"
+gap="15"
+minColumnWidth="250px">
                             {courses
                                 .map((course, index) => {
 
@@ -241,14 +246,14 @@ const AvailableCoursesPage = () => {
                                                 </EpistoButton>
                                             </Flex>
                                         </CourseTile>
-                                    </GridItem>
+                                    </GridItem>;
                                 })}
                         </EpistoGrid>
                     </Box>
                 </LoadingFrame>
             </Flex>
         </ContentPane>
-    </PageRootContainer >
-}
+    </PageRootContainer >;
+};
 
-export default AvailableCoursesPage
+export default AvailableCoursesPage;

@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useAdminCourseList } from "../../services/api/courseApiService";
 import { useNavigation } from "../../services/core/navigatior";
@@ -10,7 +10,7 @@ export const AdminOverviewTablePage = () => {
 
     const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList(searchText + "");
 
-    const { navigate } = useNavigation()
+    const { navigate } = useNavigation();
 
 
     const getRowsFromCourses = () => courses.map((course) => {
@@ -22,10 +22,10 @@ export const AdminOverviewTablePage = () => {
             subCategory: course.subCategory.name,
             videosCount: course.videosCount,
             editCourse: course.courseId
-        }
-    })
+        };
+    });
 
-    const courseRows: GridRowsProp = getRowsFromCourses()
+    const courseRows: GridRowsProp = getRowsFromCourses();
 
     const columns: GridColDef[] = [
         // { field: 'avatar', headerName: 'Thumbnail kép', width: 130, renderCell: (params) => <img src={params.value} /> },
@@ -37,8 +37,10 @@ export const AdminOverviewTablePage = () => {
     ];
 
     return <AdminBreadcrumbsHeader>
-        <DataGrid rows={courseRows} columns={columns} style={{
+        <DataGrid rows={courseRows}
+columns={columns}
+style={{
             background: "var(--transparentWhite70)"
         }} />
-    </AdminBreadcrumbsHeader>
-}
+    </AdminBreadcrumbsHeader>;
+};

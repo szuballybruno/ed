@@ -10,8 +10,8 @@ export const useXDialogLogic = (key: string) => {
         key,
         isOpen,
         setIsOpen
-    }
-}
+    };
+};
 
 export type XDialogLogicType = ReturnType<typeof useXDialogLogic>;
 
@@ -42,7 +42,7 @@ export const XDialog = (props: {
         return () => {
 
             unmountContent(logic.key);
-        }
+        };
     }, []);
 
     // open close dialog based on logic
@@ -70,4 +70,4 @@ export const XDialog = (props: {
         return <></>;
 
     return createPortal(children, hostElement);
-}
+};

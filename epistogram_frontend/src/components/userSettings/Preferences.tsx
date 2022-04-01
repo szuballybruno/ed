@@ -1,18 +1,18 @@
-import { Flex } from '@chakra-ui/layout';
-import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
-import { useUploadAvatarFile } from '../../services/api/fileApiService';
-import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
-import { useSaveUserSimple } from '../../services/api/userApiService';
-import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
-import { reloadPage } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoEntry } from '../controls/EpistoEntry';
-import { EpistoFont } from '../controls/EpistoFont';
-import { ProfileImage } from '../ProfileImage';
+import { Flex } from "@chakra-ui/layout";
+import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { useUploadAvatarFile } from "../../services/api/fileApiService";
+import { useRequestPasswordChangeAuthenticated } from "../../services/api/passwordChangeApiService";
+import { useSaveUserSimple } from "../../services/api/userApiService";
+import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
+import { reloadPage } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoEntry } from "../controls/EpistoEntry";
+import { EpistoFont } from "../controls/EpistoFont";
+import { ProfileImage } from "../ProfileImage";
 import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
-import { LoadingFrame } from '../system/LoadingFrame';
-import { SelectImage } from '../universal/SelectImage';
+import { LoadingFrame } from "../system/LoadingFrame";
+import { SelectImage } from "../universal/SelectImage";
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -27,8 +27,8 @@ const EditField = (props: { children: ReactNode, label: string }) => {
             {props.label}
         </EpistoFont>
         {props.children}
-    </Flex>
-}
+    </Flex>;
+};
 
 export const Preferences = () => {
 
@@ -59,7 +59,7 @@ export const Preferences = () => {
         lastName !== user.lastName,
         phoneNumber !== user.phoneNumber,
         avatarFile !== null
-    ].some(x => x)
+    ].some(x => x);
 
     const saveChangesAsync = async () => {
 
@@ -90,7 +90,7 @@ export const Preferences = () => {
 
             showErrorDialog(e);
         }
-    }
+    };
 
     const handleRequestChangePasswordAsync = async () => {
 
@@ -106,7 +106,7 @@ export const Preferences = () => {
 
             showErrorDialog(e);
         }
-    }
+    };
 
     useEffect(() => {
 
@@ -125,7 +125,10 @@ export const Preferences = () => {
         loadingState={[saveUserSimpleState, postAvatarFileState, requestChangePasswordState]}>
 
         {/* profile image selector */}
-        <Flex justify="center" width="100%" maxW="500px">
+        <Flex
+            justify="center"
+            width="100%"
+            maxW="500px">
 
             <SelectImage
                 className='circle'
@@ -144,7 +147,12 @@ export const Preferences = () => {
         </Flex>
 
         {/* inputs container */}
-        <Flex direction="column" justify="flex-start" flex="1" width="100%" maxW="500px">
+        <Flex
+            direction="column"
+            justify="flex-start"
+            flex="1"
+width="100%"
+            maxW="500px">
 
             <EpistoEntry
                 label={translatableTexts.preferences.lastName}
@@ -206,7 +214,8 @@ export const Preferences = () => {
                         labelVariant='top'
                         setValue={setCurrentPassword} />
 
-                    <Flex mt="20px" width="100%">
+                    <Flex mt="20px"
+width="100%">
 
                         <EpistoButton
                             variant="colored"
@@ -252,5 +261,5 @@ export const Preferences = () => {
                 {translatableTexts.preferences.saveChanges}
             </EpistoButton>}
         </Flex>
-    </LoadingFrame>
-}
+    </LoadingFrame>;
+};

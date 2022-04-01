@@ -11,7 +11,8 @@ const NavbarButton = (props: {
     const { menuPath, menuName, children, ...css } = props;
     const { navigate } = useNavigation();
 
-    return <Flex margin="0 5px 0 5px" {...css}>
+    return <Flex margin="0 5px 0 5px"
+{...css}>
         {children
             ? children
             : <EpistoButton
@@ -21,7 +22,7 @@ const NavbarButton = (props: {
 
                 {menuName}
             </EpistoButton>}
-    </Flex>
-}
+    </Flex>;
+};
 
-export default NavbarButton
+export default NavbarButton;

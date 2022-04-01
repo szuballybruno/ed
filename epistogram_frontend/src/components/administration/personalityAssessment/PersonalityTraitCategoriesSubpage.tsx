@@ -25,8 +25,8 @@ export const PersonalityTraitCategoriesSubpage = () => {
 
     const handleEdit = (traitCategoryId: number, isMax: boolean) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips, { traitCategoryId, isMax })
-    }
+        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips, { traitCategoryId, isMax });
+    };
 
     const rowButtons = [
         {
@@ -41,7 +41,7 @@ export const PersonalityTraitCategoriesSubpage = () => {
             num = truncateTo(num - threshold, threshold);
 
         return num;
-    }
+    };
 
     const colors = personalityTraitCategories
         .map(x => x.id)
@@ -112,4 +112,4 @@ export const PersonalityTraitCategoriesSubpage = () => {
             </AdminSubpageHeader>
         </LoadingFrame>
     );
-}
+};

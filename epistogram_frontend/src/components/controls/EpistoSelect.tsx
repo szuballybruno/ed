@@ -32,7 +32,7 @@ export const EpistoSelect = <TItem,>(props: {
         const currentItem = items.filter(x => getCompareKey(x) === key)[0];
 
         onSelected(currentItem);
-    }
+    };
 
     const isSelectedSomething = selectedValue || currentKey;
 
@@ -69,7 +69,7 @@ export const EpistoSelect = <TItem,>(props: {
                     {getDisplayValue
                         ? getDisplayValue(item)
                         : "" + item}
-                </option>
+                </option>;
             })}
-    </select>
+    </select>;
 };

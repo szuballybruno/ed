@@ -16,7 +16,7 @@ export const useUserListQuery = (searchText: string | null) => {
         usersError: queryResult.error,
         refetchUsers: queryResult.refetch,
     };
-}
+};
 
 export const useSaveUserSimple = () => {
 
@@ -25,8 +25,8 @@ export const useSaveUserSimple = () => {
     return {
         saveUserSimpleState: postDataResult.state,
         saveUserSimpleAsync: postDataResult.postDataAsync
-    }
-}
+    };
+};
 
 export const useSaveUser = () => {
 
@@ -35,8 +35,8 @@ export const useSaveUser = () => {
     return {
         saveUserStatus: queryRes.state,
         saveUserAsync: queryRes.postDataAsync
-    }
-}
+    };
+};
 
 export const useEditUserData = (editedUserId: number) => {
 
@@ -47,8 +47,8 @@ export const useEditUserData = (editedUserId: number) => {
         userEditDataStatus: queryRes.state,
         userEditDataError: queryRes.error,
         refetchEditUserData: queryRes.refetch
-    }
-}
+    };
+};
 
 export const useBriefUserData = (userId: number | null) => {
 
@@ -58,10 +58,10 @@ export const useBriefUserData = (userId: number | null) => {
         briefUserData: queryRes.data,
         briefUserDataStatus: queryRes.state,
         briefUserDataError: queryRes.error
-    }
-}
+    };
+};
 
 export const deleteUserAsync = (userId: number) => {
 
     return httpPostAsync(apiRoutes.user.deleteUser, { userId });
-}
+};

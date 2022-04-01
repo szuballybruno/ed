@@ -1,11 +1,11 @@
-import { Flex, useMediaQuery } from '@chakra-ui/react';
-import React from 'react';
+import { Flex, useMediaQuery } from "@chakra-ui/react";
+import React from "react";
 import { LearningCurves } from "./LearningCurves";
-import { PersonalityAssessment } from './universal/PersonalityAssessment';
+import { PersonalityAssessment } from "./universal/PersonalityAssessment";
 
 export const LearningInsightsOverview = () => {
     
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const [isSmallerThan1400] = useMediaQuery("(min-width: 1400px)");
 
     return <Flex
         direction="column"
@@ -17,5 +17,5 @@ export const LearningInsightsOverview = () => {
 
         {/* learning curves */}
         <LearningCurves />
-    </Flex>
+    </Flex>;
 };

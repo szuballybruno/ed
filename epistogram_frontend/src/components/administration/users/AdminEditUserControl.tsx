@@ -1,6 +1,6 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
 import { Button, Checkbox, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import { JobTitleDTO } from "../../../shared/dtos/JobTitleDTO";
 import { OrganizationDTO } from "../../../shared/dtos/OrganizationDTO";
 import { RoleDTO } from "../../../shared/dtos/RoleDTO";
@@ -64,9 +64,9 @@ export const AdminEditUserControl = (props: {
     const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
 
-    const history = useHistory()
+    const history = useHistory();
     const showError = useShowErrorDialog();
-    const location = useLocation()
+    const location = useLocation();
 
     const user = useContext(CurrentUserContext) as UserDTO;
     const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;
@@ -98,10 +98,10 @@ export const AdminEditUserControl = (props: {
         validateFunction: (value) => {
 
             if (value === "0")
-                return "Nem adhatsz hozzá '0' coin-t."
+                return "Nem adhatsz hozzá '0' coin-t.";
 
             if (!parseIntOrNull(value))
-                return "Helytelen formátum"
+                return "Helytelen formátum";
 
             return null;
         }
@@ -124,7 +124,7 @@ export const AdminEditUserControl = (props: {
 
             showError(e);
         }
-    }
+    };
 
     const handleSaveUserAsync = async () => {
 
@@ -140,20 +140,24 @@ export const AdminEditUserControl = (props: {
         } as UserEditDTO;
 
         await saveUserAsync(editedUserDTO);
-    }
+    };
 
-    return <Flex direction="column" flex="1">
+    return <Flex direction="column"
+flex="1">
 
         <Flex flex="1">
 
             {/* left column */}
-            <Flex direction="column" flex="1">
+            <Flex direction="column"
+flex="1">
 
                 {/* basic info section */}
-                <EditSection isFirst title="Alapadatok">
+                <EditSection isFirst
+title="Alapadatok">
 
                     {/* first & last name */}
-                    <Flex flex="1" justify="space-between">
+                    <Flex flex="1"
+justify="space-between">
                         <EpistoEntry
                             style={{
                                 flex: 1,
@@ -273,7 +277,11 @@ export const AdminEditUserControl = (props: {
 
 
             </Flex>
-            <Divider orientation='vertical' h="calc(100% - 20px)" w="1px" background="grey" my="10px" />
+            <Divider orientation='vertical'
+h="calc(100% - 20px)"
+w="1px"
+background="grey"
+my="10px" />
 
             <Box
                 className='roundBorders'
@@ -287,7 +295,8 @@ export const AdminEditUserControl = (props: {
                     error={coinBalanceError}
                     direction="column">
 
-                    <EditSection isFirst title="EpistoCoin">
+                    <EditSection isFirst
+title="EpistoCoin">
                         <EpistoLabel
                             isOverline
                             text="Egyenleg">
@@ -311,9 +320,13 @@ export const AdminEditUserControl = (props: {
                             </EpistoFont>
                         </EpistoLabel>
 
-                        <EpistoLabel width="100%" isOverline text="EpistoCoin hozzáadása">
+                        <EpistoLabel width="100%"
+isOverline
+text="EpistoCoin hozzáadása">
 
-                            <Flex align="center" flex="1" mt="10px">
+                            <Flex align="center"
+flex="1"
+mt="10px">
                                 <EpistoEntryNew
                                     flex="1"
                                     style={{
@@ -343,7 +356,9 @@ export const AdminEditUserControl = (props: {
                     title="Alkalmazás adatai">
 
                     {/* is teacher */}
-                    <EpistoFont isUppercase fontSize="fontExtraSmall" style={{
+                    <EpistoFont isUppercase
+fontSize="fontExtraSmall"
+style={{
                         marginTop: 10,
                         letterSpacing: "1.2px"
                     }}>
@@ -383,15 +398,15 @@ export const AdminEditUserControl = (props: {
 
                 if (showDeleteUserDialog) {
 
-                    showDeleteUserDialog(editDTO)
+                    showDeleteUserDialog(editDTO);
                 } else {
 
-                    history.goBack()
+                    history.goBack();
                 }
             }}
             style={{ margin: "20px 20px 0 20px" }}>
 
             {translatableTexts.misc.remove}
         </Button>
-    </Flex >
+    </Flex >;
 };

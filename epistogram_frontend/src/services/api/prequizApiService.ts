@@ -12,8 +12,8 @@ export const usePrequizQuestions = (courseId: number) => {
         questions: qr.data ?? [],
         questionsState: qr.state,
         questionsError: qr.error
-    }
-}
+    };
+};
 
 export const usePrequizUserAnswer = (questionId: number | null) => {
 
@@ -23,8 +23,8 @@ export const usePrequizUserAnswer = (questionId: number | null) => {
         userAnswer: qr.data,
         userAnswerState: qr.state,
         userAnswerError: qr.error
-    }
-}
+    };
+};
 
 export const useAnswerPrequizQuestion = () => {
 
@@ -38,5 +38,5 @@ export const useAnswerPrequizQuestion = () => {
     return {
         answerPrequizQuestionAsync: qr.postDataAsync,
         answerPrequizQuestionState: qr.state
-    }
-}
+    };
+};

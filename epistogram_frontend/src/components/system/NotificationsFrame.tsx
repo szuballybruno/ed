@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+import React, { ReactNode } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export const NotificationsFrame = (props: { children: ReactNode }) => {
 
@@ -16,7 +16,7 @@ export const NotificationsFrame = (props: { children: ReactNode }) => {
             pauseOnFocusLoss
             draggable
             pauseOnHover />
-    </>
+    </>;
 
     // function SlideTransition(props: TransitionProps) {
     //     return <Slide {...props} direction="right" />;
@@ -51,4 +51,4 @@ export const NotificationsFrame = (props: { children: ReactNode }) => {
     //         {props.children}
     //     </div>
     // );
-}
+};

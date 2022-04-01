@@ -1,5 +1,5 @@
-import { Grid, GridProps } from "@chakra-ui/layout"
-import { ReactNode } from "react"
+import { Grid, GridProps } from "@chakra-ui/layout";
+import { ReactNode } from "react";
 
 export const EpistoGrid = (props: {
     children: ReactNode,
@@ -15,5 +15,5 @@ export const EpistoGrid = (props: {
         gap={gap}
         {...css}>
         {children}
-    </Grid>
-}
+    </Grid>;
+};

@@ -59,5 +59,5 @@ export const CourseDetailsBriefingInfoItem = (props: {
                 {subTitle}
             </EpistoFont>
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

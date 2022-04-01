@@ -1,5 +1,5 @@
 import { Flex, Grid } from "@chakra-ui/react";
-import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from "@mui/icons-material/Done";
 import React from "react";
 import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
 import { defaultCharts } from "../../static/defaultChartOptions";
@@ -47,10 +47,15 @@ export const CourseDetailsSummarySection = (props: {
             mt={40} />
 
         {/* skill benefits */}
-        <Grid templateColumns="50% 50%" gap="10px" width="100%">
+        <Grid templateColumns="50% 50%"
+            gap="10px"
+            width="100%">
+
             {courseDetails
                 .skillBenefits
-                .map((skillBenefit) => <Flex align="center">
+                .map((skillBenefit, index) => <Flex
+                    key={index}
+                    align="center">
 
                     {/* icon */}
                     <DoneIcon
@@ -75,15 +80,18 @@ export const CourseDetailsSummarySection = (props: {
             mt={40} />
 
         {/* humam skill benefits */}
-        <Flex width="100%" mb={100}>
+        <Flex width="100%"
+            mb={100}>
 
             {/* human skill benefits description */}
-            <Flex direction={"column"} minWidth={"50%"} >
+            <Flex direction={"column"}
+                minWidth={"50%"} >
                 {courseDetails.humanSkillBenefitsDescription}
             </Flex>
 
             {/* human skill benefits chart  */}
-            <Flex direction={"column"} minWidth={"50%"}>
+            <Flex direction={"column"}
+                minWidth={"50%"}>
                 <EpistoRadarChart
                     title=""
                     areas={[{
@@ -102,5 +110,5 @@ export const CourseDetailsSummarySection = (props: {
                     }} />
             </Flex>
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

@@ -23,11 +23,11 @@ const instance = (() => {
         baseURL: serverUrl
     });
 
-    axiosInst.defaults.withCredentials = true
+    axiosInst.defaults.withCredentials = true;
 
     axiosInst.defaults.headers = {
-        'Content-Type': 'application/json'
-    }
+        "Content-Type": "application/json"
+    };
 
     return axiosInst;
 })();
@@ -59,7 +59,7 @@ export const httpPostAsync = async (
 
         handleHttpError(error);
     }
-}
+};
 
 export const httpGetAsync = async (urlEnding: string, queryObject?: any) => {
 
@@ -76,7 +76,7 @@ export const httpGetAsync = async (urlEnding: string, queryObject?: any) => {
 
         handleHttpError(e);
     }
-}
+};
 
 export const httpDeleteAsync = async (urlEnding: string) => {
 
@@ -85,7 +85,7 @@ export const httpDeleteAsync = async (urlEnding: string) => {
     });
 
     return new HTTPResponse(axiosResponse.status, axiosResponse.data);
-}
+};
 
 /**
  * Post a json payload, without implicitly handling errors, 
@@ -106,7 +106,7 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
             setState("loading");
 
             const postData = data ? data : undefined;
-            const postResult = await httpPostAsync(url, postData, undefined, undefined) as TResult
+            const postResult = await httpPostAsync(url, postData, undefined, undefined) as TResult;
 
             setState("idle");
             setResult(postResult);
@@ -118,13 +118,13 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
             setState("idle");
             throw e;
         }
-    }
+    };
 
     const clearCache = () => {
 
         setResult(null);
         setState("idle");
-    }
+    };
 
     return {
         postDataAsync,
@@ -132,7 +132,7 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
         result,
         clearCache
     };
-}
+};
 
 /**
  * Post a multipart payload, containing a file, 
@@ -161,13 +161,13 @@ export const usePostMultipartDataUnsafe = <TData>(url: string) => {
             setState("idle");
             throw e;
         }
-    }
+    };
 
     return {
         postMultipartDataAsync,
         state
     };
-}
+};
 
 /**
  * Post a json payload, and implicitly handle errors, 
@@ -199,12 +199,12 @@ export const usePostData = <TData, TResult>(url: string) => {
             setState("error");
             setError(e as ErrorCode);
         }
-    }
+    };
 
     const clearCache = () => {
 
         setResult(null);
-    }
+    };
 
     return {
         postDataAsync,
@@ -213,7 +213,7 @@ export const usePostData = <TData, TResult>(url: string) => {
         result,
         clearCache
     };
-}
+};
 
 /**
  * Post multipart form data. 
@@ -226,12 +226,12 @@ export const usePostData = <TData, TResult>(url: string) => {
  */
 export const postMultipartAsync = async (url: string, file?: File, data?: any) => {
 
-    var formData = new FormData();
+    const formData = new FormData();
 
     // append file data
     if (file) {
 
-        formData.append('file', file);
+        formData.append("file", file);
     }
 
     // append json data 
@@ -244,14 +244,14 @@ export const postMultipartAsync = async (url: string, file?: File, data?: any) =
     return await httpPostAsync(
         url,
         formData,
-        x => x.headers = { ...x.headers, "Content-Type": 'multipart/form-data' });
-}
+        x => x.headers = { ...x.headers, "Content-Type": "multipart/form-data" });
+};
 
 export const addBearerToken = (config: AxiosRequestConfig, bearerToken: string) => {
     config.headers = {
-        'Authorization': "Bearer " + bearerToken
+        "Authorization": "Bearer " + bearerToken
     };
-}
+};
 
 const handleHttpError = (error: any) => {
 
@@ -286,10 +286,10 @@ const handleHttpError = (error: any) => {
         // error type and maybe message as well
         const message = error.message
             ? `Http response code (${responseCode}) did not indicate success. Message: ${error.message}`
-            : `Http response code (${responseCode}) did not indicate success. Code: ${error.code}`
+            : `Http response code (${responseCode}) did not indicate success. Code: ${error.code}`;
 
         // throw with a more informative message
         // and error type
         throw new ErrorCode(message, error.code);
     }
-}
+};

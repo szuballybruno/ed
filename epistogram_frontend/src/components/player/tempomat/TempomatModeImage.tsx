@@ -57,5 +57,5 @@ export const TempomatModeImage = (props: {
             style={style}
             className={new ClassBuilder()
                 .customize(customizeFn)
-                .build()} />
-}
+                .build()} />;
+};

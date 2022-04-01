@@ -1,34 +1,37 @@
-import { Flex } from '@chakra-ui/layout';
-import React from 'react';
-import { Switch } from 'react-router';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { getRoute } from '../../MainRouting';
-import { ContentPane } from '../ContentPane';
-import { LeftPane } from '../LeftPane';
-import { NavigationLinkList } from '../NavigationLinkList';
-import { PageRootContainer } from '../PageRootContainer';
-import { CoinTransactions } from './CoinTransactions';
-import { Preferences } from './Preferences';
+import { Flex } from "@chakra-ui/layout";
+import React from "react";
+import { Switch } from "react-router";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { getRoute } from "../../MainRouting";
+import { ContentPane } from "../ContentPane";
+import { LeftPane } from "../LeftPane";
+import { NavigationLinkList } from "../NavigationLinkList";
+import { PageRootContainer } from "../PageRootContainer";
+import { CoinTransactions } from "./CoinTransactions";
+import { Preferences } from "./Preferences";
 
 const FeaturePreview = () => {
 
     return <Flex className="whall">
-        <iframe src="https://epistogram.com/upcoming-features" className="whall"></iframe>
-    </Flex>
-}
+        <iframe src="https://epistogram.com/upcoming-features"
+className="whall"></iframe>
+    </Flex>;
+};
 
 const DevelopmentNotes = () => {
 
     return <Flex className="whall">
-        <iframe src="https://epistogram.com/release-notes" className="whall"></iframe>
-    </Flex>
-}
+        <iframe src="https://epistogram.com/release-notes"
+className="whall"></iframe>
+    </Flex>;
+};
 
 export const UserSettingsPage = () => {
 
     return <PageRootContainer>
 
-        <LeftPane p="20px" flexBasis="300px" >
+        <LeftPane p="20px"
+flexBasis="300px" >
             <NavigationLinkList
                 items={[
                     applicationRoutes.settingsRoute.preferencesRoute,
@@ -46,5 +49,5 @@ export const UserSettingsPage = () => {
                 {getRoute(applicationRoutes.settingsRoute.developmentNotes, <DevelopmentNotes />)}
             </Switch>
         </ContentPane>
-    </PageRootContainer>
-}
+    </PageRootContainer>;
+};

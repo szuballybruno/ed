@@ -8,7 +8,9 @@ export const EpistoLabel = (props: {
 
     const { text, isOverline, ...css } = props;
 
-    return <Flex mt="10px" direction="column" {...css}>
+    return <Flex mt="10px"
+direction="column"
+{...css}>
         <EpistoFont
             isUppercase={isOverline}
             fontSize={isOverline ? "fontExtraSmall" : undefined}
@@ -21,5 +23,5 @@ export const EpistoLabel = (props: {
         </EpistoFont>
 
         {props.children}
-    </Flex>
-}
+    </Flex>;
+};

@@ -54,7 +54,7 @@ export const SetNewPasswordPage = () => {
 
             showErrorDialog(e);
         }
-    }
+    };
 
     return <PageRootContainer
         align="flex-start"
@@ -74,7 +74,9 @@ export const SetNewPasswordPage = () => {
                 loadingState={setNewPasswordState}
                 minWidth="400px">
 
-                <EpistoHeader text="Új jelszó megadása" mt="30px" alignSelf="center">
+                <EpistoHeader text="Új jelszó megadása"
+mt="30px"
+alignSelf="center">
 
                 </EpistoHeader>
 
@@ -105,5 +107,5 @@ export const SetNewPasswordPage = () => {
                 </EpistoButton>
             </LoadingFrame>
         </ContentPane>
-    </PageRootContainer>
-}
+    </PageRootContainer>;
+};

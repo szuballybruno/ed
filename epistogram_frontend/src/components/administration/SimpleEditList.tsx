@@ -1,11 +1,11 @@
-import { Flex, FlexProps } from "@chakra-ui/react"
-import { Add, Delete } from "@mui/icons-material"
-import { ReactNode } from "react"
-import { EpistoButton } from "../controls/EpistoButton"
-import { EpistoEntry } from "../controls/EpistoEntry"
-import { EpistoFont } from "../controls/EpistoFont"
-import { EpistoLabel } from "../controls/EpistoLabel"
-import { FlexList } from "../universal/FlexList"
+import { Flex, FlexProps } from "@chakra-ui/react";
+import { Add, Delete } from "@mui/icons-material";
+import { ReactNode } from "react";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoEntry } from "../controls/EpistoEntry";
+import { EpistoFont } from "../controls/EpistoFont";
+import { EpistoLabel } from "../controls/EpistoLabel";
+import { FlexList } from "../universal/FlexList";
 
 export const SimpleEditList = <T,>(props: {
     items: T[],
@@ -18,9 +18,12 @@ export const SimpleEditList = <T,>(props: {
     const { items, title, setItems, initialValue, renderChild, ...css } = props;
 
     return (
-        <Flex direction="column" mt="30px" {...css}>
+        <Flex direction="column"
+mt="30px"
+{...css}>
 
-            <EpistoLabel isOverline text={title}>
+            <EpistoLabel isOverline
+text={title}>
 
                 <FlexList pb="10px">
                     {items
@@ -74,5 +77,5 @@ export const SimpleEditList = <T,>(props: {
 
 
         </Flex>
-    )
-}
+    );
+};

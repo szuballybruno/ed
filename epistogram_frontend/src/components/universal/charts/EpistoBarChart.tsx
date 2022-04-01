@@ -1,7 +1,7 @@
-import ReactECharts from 'echarts-for-react';
+import ReactECharts from "echarts-for-react";
 import React from "react";
-import { EpistoBarChartDatasetType, EpistoBarChartOptionsType } from './types/EpistoBarChartTypes';
-import { EpistoChartXAxisDataType } from './types/EpistoChartCommonTypes';
+import { EpistoBarChartDatasetType, EpistoBarChartOptionsType } from "./types/EpistoBarChartTypes";
+import { EpistoChartXAxisDataType } from "./types/EpistoChartCommonTypes";
 
 /**
  * Wrapper component for ECharts
@@ -36,13 +36,13 @@ export const EpistoBarChart = (props: {
             yAxis,
             seriesOptions
         }
-    } = props
+    } = props;
 
 
     const defaultStyle = {
         width: "100%",
         height: "100%",
-    }
+    };
 
     return <ReactECharts
         option={{
@@ -86,11 +86,11 @@ export const EpistoBarChart = (props: {
                 return Object.assign(
                     d,
                     seriesOptions
-                )
+                );
             })
         }}
         style={{
             ...defaultStyle,
             ...style
-        }} />
-}
+        }} />;
+};

@@ -20,11 +20,11 @@ export const XDialogHost = (props: {
 
         contentPoolRef.current = list;
         setForceUpdate(x => x + 1);
-    }
+    };
 
     const mountContent = (key: string) => {
 
-        console.log(`Mounting dialog content '${key}'`)
+        console.log(`Mounting dialog content '${key}'`);
 
         if (contentPoolRef.current.filter(x => x.key === key).length > 0) {
 
@@ -37,7 +37,7 @@ export const XDialogHost = (props: {
 
 
         setContentPool(list);
-    }
+    };
 
     const unmountContent = (key: string) => {
 
@@ -53,32 +53,32 @@ export const XDialogHost = (props: {
             .filter(x => x.key !== key);
 
         setContentPool(filtered);
-    }
+    };
 
     const getOpenState = (key: string) => {
 
         return currentKey === key;
-    }
+    };
 
     const closeDialog = () => {
 
         setCurrentKey(null);
-    }
+    };
 
     const handleOutsideClick = () => {
 
         closeDialog();
-    }
+    };
 
     const getId = (key: string) => {
 
         return `dialog_host_${key}`;
-    }
+    };
 
     const getHostElement = (key: string): Element => {
 
         return document.getElementById(getId(key)) as Element;
-    }
+    };
 
     return <>
 
@@ -111,7 +111,7 @@ export const XDialogHost = (props: {
                                 height: "100%"
                             }}
                             onClick={handleOutsideClick} />
-                    </div>
+                    </div>;
                 })}
         </div>
 
@@ -127,5 +127,5 @@ export const XDialogHost = (props: {
 
             {children}
         </XDialogContext.Provider>
-    </>
-}
+    </>;
+};

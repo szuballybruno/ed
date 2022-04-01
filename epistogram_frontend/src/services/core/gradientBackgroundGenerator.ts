@@ -1,4 +1,4 @@
-import { getRandomInteger } from "../../static/frontendHelpers"
+import { getRandomInteger } from "../../static/frontendHelpers";
 
 /**
  * @param centerColor The main color of each grid item
@@ -50,9 +50,9 @@ export type GridGradientOptions = {
 
 export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
 
-    const defaultRadius = 1000
-    const defaultCenterColor = "0,100,255"
-    const defaultBackgroundColor = "rgba(0, 100, 255, 0.1)"
+    const defaultRadius = 1000;
+    const defaultCenterColor = "0,100,255";
+    const defaultBackgroundColor = "rgba(0, 100, 255, 0.1)";
 
     {/* Default gradient options */ }
     const gradientOptions: GradientType[] = [
@@ -136,7 +136,7 @@ export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
             minOpacity: options?.bottomRight?.minOpacity ?? 0.4,
             maxOpacity: options?.bottomRight?.maxOpacity ?? 0.5
         }
-    ]
+    ];
 
     const createRadialGradient = (gradient: GradientType) => {
 
@@ -148,10 +148,10 @@ export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
             minOpacity,
             maxOpacity,
             backgroundColor
-        } = gradient
+        } = gradient;
 
-        return `radial-gradient(${radius}px circle at ${offsetX || "center"} ${offsetY || ""}, rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)}), ${backgroundColor})`
-    }
+        return `radial-gradient(${radius}px circle at ${offsetX || "center"} ${offsetY || ""}, rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)}), ${backgroundColor})`;
+    };
 
-    return gradientOptions.map(option => createRadialGradient(option))
-}
+    return gradientOptions.map(option => createRadialGradient(option));
+};

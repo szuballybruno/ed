@@ -25,5 +25,5 @@ export const ChipSmall = (props: {
 
             {text}
         </EpistoFont>
-    )
-}
+    );
+};

@@ -1,7 +1,7 @@
-import { Flex } from '@chakra-ui/react';
-import ReactECharts, { EChartsOption } from 'echarts-for-react';
-import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgressChartDTO';
-import { iterate } from '../../static/frontendHelpers';
+import { Flex } from "@chakra-ui/react";
+import ReactECharts, { EChartsOption } from "echarts-for-react";
+import { UserCourseProgressChartDTO } from "../../shared/dtos/UserCourseProgressChartDTO";
+import { iterate } from "../../static/frontendHelpers";
 
 export const UserProgressChart = (props: {
     userProgress: UserCourseProgressChartDTO
@@ -53,7 +53,7 @@ export const UserProgressChart = (props: {
                 fontWeight: "bold"
             },
             boundaryGap: false,
-            type: 'category',
+            type: "category",
             data: dates,
             axisLabel: {
                 show: true,
@@ -72,9 +72,9 @@ export const UserProgressChart = (props: {
             nameTextStyle: {
                 fontWeight: "bold"
             },
-            type: 'value',
+            type: "value",
             axisLabel: {
-                formatter: '{value}%'
+                formatter: "{value}%"
             }
         },
         series: [
@@ -82,7 +82,7 @@ export const UserProgressChart = (props: {
                 name: "Becsült haladás",
                 data: dates
                     .map((_, index) => (100 / dates.length) * (index + 1)),
-                type: 'line',
+                type: "line",
                 symbolSize: 10,
                 symbol: "circle",
                 lineStyle: {
@@ -96,7 +96,7 @@ export const UserProgressChart = (props: {
             {
                 name: "Valós haladás",
                 data: actualProgress,
-                type: 'line'
+                type: "line"
             }
         ]
     } as EChartsOption;
@@ -107,5 +107,5 @@ export const UserProgressChart = (props: {
                 className="whall"
                 option={option}></ReactECharts>
         </Flex>
-    )
-}
+    );
+};

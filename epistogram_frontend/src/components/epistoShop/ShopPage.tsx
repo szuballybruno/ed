@@ -33,7 +33,7 @@ export const ShopPage = () => {
 
     const confirmationDilaogLogic = useEpistoDialogLogic("confirm", { defaultCloseButtonType: "top" });
 
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const [isSmallerThan1400] = useMediaQuery("(min-width: 1400px)");
 
     const filteredItems = shopItems
         .filter(x => x.shopItemCategoryId === categoryFilterId || categoryFilterId === -1);
@@ -44,7 +44,7 @@ export const ShopPage = () => {
 
         setCurrentShopItem(item);
         confirmationDilaogLogic.openDialog();
-    }
+    };
 
     return <PageRootContainer>
 
@@ -58,7 +58,9 @@ export const ShopPage = () => {
             }} />
 
         {/* category filters left pane */}
-        <LeftPane direction="column" align="stretch">
+        <LeftPane
+            direction="column"
+            align="stretch">
 
             {/* categories title */}
             <EpistoFont
@@ -112,7 +114,7 @@ export const ShopPage = () => {
                                 bgColor="var(--epistoTeal)" />
 
                             {category.name}
-                        </ToggleButton>
+                        </ToggleButton>;
                     })}
             </ToggleButtonGroup>
         </LeftPane>
@@ -136,7 +138,10 @@ export const ShopPage = () => {
                     p="20px 0">
 
                     {/* user coin balance */}
-                    <Flex align="center" flex="3" pr="20px" minWidth="300px">
+                    <Flex align="center"
+                        flex="3"
+                        pr="20px"
+                        minWidth="300px">
                         <ProfileImage
                             url={user.avatarUrl}
                             cursor="pointer"
@@ -145,7 +150,8 @@ export const ShopPage = () => {
                                 minWidth: 50
                             }} />
 
-                        <EpistoFont style={{ margin: "0 0 0 10px" }} fontSize="fontSmall">
+                        <EpistoFont style={{ margin: "0 0 0 10px" }}
+                            fontSize="fontSmall">
                             Aktuális EpistoCoin egyenleged:
                         </EpistoFont>
 
@@ -153,16 +159,18 @@ export const ShopPage = () => {
                     </Flex>
 
                     {/* search */}
-                    <EpistoSearch height="40px" mx="10px" flex="5" />
+                    <EpistoSearch height="40px"
+                        mx="10px"
+                        flex="5" />
 
                     {/* order settings  */}
                     <Select
                         native
-                        onChange={() => { }}
+                        onChange={() => { throw new Error("Not implemented"); }} // TODO
                         className="roundBorders fontSmall mildShadow"
                         inputProps={{
-                            name: 'A-Z',
-                            id: 'outlined-age-native-simple',
+                            name: "A-Z",
+                            id: "outlined-age-native-simple",
                         }}
                         sx={{
                             "& .MuiOutlinedInput-notchedOutline": {
@@ -196,13 +204,13 @@ export const ShopPage = () => {
                         {filteredItems
                             .map((shopItem, index) => {
 
-                                return <GridItem>
+                                return <GridItem key={index}>
                                     <ShopItem
                                         shopItem={shopItem}
                                         isSufficientFundsAvailable={coinBalance >= shopItem.coinPrice}
                                         handlePurchaseItem={handlePurchaseItem}
                                         key={index} />
-                                </GridItem>
+                                </GridItem>;
                             })}
                     </EpistoGrid>
                 </Box>}
@@ -214,5 +222,5 @@ export const ShopPage = () => {
                 </Flex>}
             </Flex>
         </ContentPane>
-    </PageRootContainer>
-}
+    </PageRootContainer>;
+};

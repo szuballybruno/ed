@@ -1,6 +1,6 @@
 import { CourseItemType } from "../../../shared/types/sharedTypes";
-import { EpistoButton } from "../../controls/EpistoButton"
-import { EpistoPopper } from "../../controls/EpistoPopper"
+import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoPopper } from "../../controls/EpistoPopper";
 
 export const AddNewItemPopper = (props: {
     isOpen: boolean,
@@ -35,5 +35,5 @@ export const AddNewItemPopper = (props: {
             </EpistoButton>
 
         </EpistoPopper>
-    )
-}
+    );
+};

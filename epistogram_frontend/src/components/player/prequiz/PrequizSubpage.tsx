@@ -57,12 +57,12 @@ export const PrequizSubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     const handleBackAsync = () => {
 
         paging.previous();
-    }
+    };
 
     useEffect(() => {
 
@@ -76,7 +76,7 @@ export const PrequizSubpage = () => {
     useEffect(() => {
 
         setNumericValue(question?.minValue ?? 0);
-    }, [question?.minValue])
+    }, [question?.minValue]);
 
     return (
         <ExamLayout
@@ -102,7 +102,8 @@ export const PrequizSubpage = () => {
                 title={question?.text ?? ""}>
 
                 {question?.isNumeric
-                    ? <Flex direction="column" align="center">
+                    ? <Flex direction="column"
+align="center">
                         <Flex justify="space-between">
                             <EpistoFont>
                                 {question.minLabel}
@@ -153,12 +154,13 @@ export const PrequizSubpage = () => {
                                 const isAnswerSelected = answer.id === selectedAnswerId;
 
                                 return <QuestionAnswer
+                                    key={index}
                                     onClick={() => setSelectedAnswerId(answer.id)}
                                     answerText={answer.text}
-                                    isSelected={isAnswerSelected} />
+                                    isSelected={isAnswerSelected} />;
                             })}
                     </Grid>}
             </ExamLayoutContent>
         </ExamLayout >
-    )
-}
+    );
+};

@@ -28,5 +28,5 @@ export const EpistoSearch = (props: {} & InputProps) => {
             background="var(--transparentWhite70)"
             {...css}
         />
-    </InputGroup>
-}
+    </InputGroup>;
+};

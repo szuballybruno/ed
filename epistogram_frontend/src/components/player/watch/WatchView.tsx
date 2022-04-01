@@ -92,12 +92,12 @@ export const WatchView = (props: {
     const enableNewDialogPopups = () => {
 
         setTimeout(() => setShowNewDialogsEnabled(true), 2000);
-    }
+    };
 
     const handleVideoCompletedStateChanged = () => {
 
         refetchPlayerData();
-    }
+    };
 
     // handle autoplay timeout if video ended
     useEffect(() => {
@@ -171,7 +171,7 @@ export const WatchView = (props: {
         const remainingLength = videoLength - stillWatchingDialogShowUpThresholdSecs;
         const dialogCount = Math.floor(remainingLength / stillWatchingDialogDelaySecs);
 
-        let dialogShowUpSeconds = [] as StillWatchingDialogMarker[];
+        const dialogShowUpSeconds = [] as StillWatchingDialogMarker[];
         for (let index = 1; index <= dialogCount + 1; index++) {
 
             dialogShowUpSeconds.push({
@@ -235,7 +235,8 @@ export const WatchView = (props: {
                 </AbsoluteFlexOverlay>
 
                 {/* questionnaire */}
-                <AbsoluteFlexOverlay isVisible={isQuestionVisible} hasPointerEvents={true}>
+                <AbsoluteFlexOverlay isVisible={isQuestionVisible}
+hasPointerEvents={true}>
                     <OverlayDialog
                         showCloseButton={false}>
                         <VideoQuestionnaire
@@ -254,7 +255,8 @@ export const WatchView = (props: {
                 </AbsoluteFlexOverlay>
 
                 {/* still watching */}
-                <AbsoluteFlexOverlay isVisible={!!currentStillWatchingMarker} hasPointerEvents={true}>
+                <AbsoluteFlexOverlay isVisible={!!currentStillWatchingMarker}
+hasPointerEvents={true}>
                     <OverlayDialog showCloseButton={false}>
                         <StillWatching
                             optionIndex={currentStillWatchingMarker?.answerOptionIndex!}
@@ -296,7 +298,8 @@ export const WatchView = (props: {
                 flexWrap="wrap"
                 align="center">
 
-                <Flex direction="column" flex="5">
+                <Flex direction="column"
+flex="5">
 
                     <EpistoFont
                         fontSize="fontLargePlus"
@@ -307,7 +310,8 @@ export const WatchView = (props: {
                         {video!.title}
                     </EpistoFont>
 
-                    <EpistoHeader variant="sub" text={video!.subTitle} />
+                    <EpistoHeader variant="sub"
+text={video!.subTitle} />
                 </Flex>
 
                 {/* ratings */}
@@ -331,6 +335,6 @@ export const WatchView = (props: {
                     VideoContents,
                 ]}></EpistoPaging>
         </Box>
-    </>
-}
+    </>;
+};
 

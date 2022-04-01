@@ -5,4 +5,4 @@ export const getVirtualId = () => {
     virtaulIdCounter -= 1;
 
     return virtaulIdCounter;
-}
+};

@@ -39,8 +39,8 @@ export const StatsSummary = (props: {
             p="10px"
             minWidth={250}
             style={{
-                gridColumn: `auto / span 2`,
-                gridRow: `auto / span 2`
+                gridColumn: "auto / span 2",
+                gridRow: "auto / span 2"
             }} >
 
             {userProgressData && userProgressData.days.length > 0
@@ -79,5 +79,5 @@ export const StatsSummary = (props: {
             suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
             iconPath={getAssetUrl("images/rightanswer3D.png")}
             isOpenByDefault={false} />
-    </div>
-}
+    </div>;
+};

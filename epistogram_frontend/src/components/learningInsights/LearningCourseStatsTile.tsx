@@ -1,6 +1,6 @@
 import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { LinearProgress } from "@mui/material";
-import React from 'react';
+import React from "react";
 import { CourseLearningDTO } from "../../shared/dtos/CourseLearningDTO";
 import { useNavigation } from "../../services/core/navigatior";
 import { formatTimespan, getAssetUrl, roundNumber } from "../../static/frontendHelpers";
@@ -30,8 +30,8 @@ export const SmallStat = (props: { iconUrl: string, text: string }) => {
 
             {props.text}
         </Text>
-    </Flex>
-}
+    </Flex>;
+};
 
 export const LearningCourseStatsTile = (props: {
     course: CourseLearningDTO,
@@ -74,7 +74,7 @@ export const LearningCourseStatsTile = (props: {
 
             navigateToPlayer(currentItemCode);
         }
-    }
+    };
 
     return <FlexFloat
         className="whall"
@@ -140,7 +140,8 @@ export const LearningCourseStatsTile = (props: {
         </Box>
 
         {/* content */}
-        <Flex p="10px" direction="column">
+        <Flex p="10px"
+direction="column">
 
             {/* category  */}
             <Text
@@ -160,7 +161,8 @@ export const LearningCourseStatsTile = (props: {
             </Text>
 
             {/* small stats */}
-            <Flex mt={7} justify="space-evenly">
+            <Flex mt={7}
+justify="space-evenly">
 
                 {/* spent time  */}
                 <SmallStat
@@ -220,5 +222,5 @@ export const LearningCourseStatsTile = (props: {
                 {isComplete ? "Újrakezdem" : "Folytatom"}
             </EpistoButton>
         </Flex>
-    </FlexFloat>
+    </FlexFloat>;
 };

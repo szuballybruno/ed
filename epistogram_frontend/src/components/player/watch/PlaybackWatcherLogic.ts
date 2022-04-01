@@ -44,7 +44,7 @@ export const usePlaybackWatcher = (
 
             postVideoPlaybackSampleAsync(lastSampleSeconds, playedSeconds);
         }
-    }
+    };
 
     // force sample at playback changes
     useEffect(() => {
@@ -77,5 +77,5 @@ export const usePlaybackWatcher = (
                 setMaxWatchedSeconds(videoSamplingResult.maxWathcedSeconds);
 
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [videoSamplingResult?.isWatchedStateChanged, videoSamplingResult?.maxWathcedSeconds])
-}
+        }, [videoSamplingResult?.isWatchedStateChanged, videoSamplingResult?.maxWathcedSeconds]);
+};

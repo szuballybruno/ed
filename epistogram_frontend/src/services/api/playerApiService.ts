@@ -15,8 +15,8 @@ export const usePlayerData = (descriptorCode: string) => {
         playerDataStatus: queryResult.state,
         playerDataError: queryResult.error,
         refetchPlayerData: queryResult.refetch
-    }
-}
+    };
+};
 
 export const useCourseItemList = (descriptorCode: string, isEnabled: boolean) => {
 
@@ -27,8 +27,8 @@ export const useCourseItemList = (descriptorCode: string, isEnabled: boolean) =>
         courseItemListStatus: qr.state,
         courseItemListError: qr.error,
         refetchCourseItemList: qr.refetch
-    }
-}
+    };
+};
 
 export const useAnswerQuestion = () => {
 
@@ -44,12 +44,12 @@ export const useAnswerQuestion = () => {
         } as AnswerQuestionDTO;
 
         return queryRes.postDataAsync(dto);
-    }
+    };
 
     return {
         answerResult: queryRes.result,
         answerQuestionError: queryRes.error,
         answerQuestionState: queryRes.state,
         answerQuestionAsync
-    }
-}
+    };
+};

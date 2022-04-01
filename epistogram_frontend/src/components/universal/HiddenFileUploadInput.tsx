@@ -31,14 +31,14 @@ export const HiddenFileUploadInput = forwardRef<HTMLInputElement, HiddenFileUplo
 
             // image
             if (type === "image") {
-                var reader = new FileReader();
+                const reader = new FileReader();
 
                 reader.onloadend = () => {
 
                     const src = reader.result as any;
 
                     onFileSelected(file, src);
-                }
+                };
 
                 reader.readAsDataURL(file);
             }
@@ -48,5 +48,5 @@ export const HiddenFileUploadInput = forwardRef<HTMLInputElement, HiddenFileUplo
 
                 onFileSelected(file, "");
             }
-        }} />
+        }} />;
 });

@@ -50,5 +50,5 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
                 {signature.toUpperCase()}
             </EpistoFont>
         </Flex>
-    </Flex >
+    </Flex >;
 });

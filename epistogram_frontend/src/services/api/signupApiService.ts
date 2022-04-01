@@ -15,7 +15,7 @@ export const usePersonalityData = () => {
         personalityDataState: qr.state,
         personalityDataError: qr.error
     };
-}
+};
 
 export const useSignupData = () => {
 
@@ -27,7 +27,7 @@ export const useSignupData = () => {
         signupDataError: qr.error,
         refetchSignupData: qr.refetch
     };
-}
+};
 
 export const useAnswerSignupQuestion = () => {
 
@@ -38,4 +38,4 @@ export const useAnswerSignupQuestion = () => {
         saveAnswersAsync: qr.postDataAsync,
         correctAnswerId: qr.result?.answerId ?? null
     };
-}
+};

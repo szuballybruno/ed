@@ -1,14 +1,18 @@
-import { Flex } from "@chakra-ui/layout"
-import { Typography } from "@mui/material"
-import { getAssetUrl } from "../static/frontendHelpers"
-import { EpistoFont } from "./controls/EpistoFont"
-import { EpistoHeader } from "./EpistoHeader"
+import { Flex } from "@chakra-ui/layout";
+import { Typography } from "@mui/material";
+import { getAssetUrl } from "../static/frontendHelpers";
+import { EpistoFont } from "./controls/EpistoFont";
+import { EpistoHeader } from "./EpistoHeader";
 
 export const UnderMaintanence = () => {
 
-    return <Flex align="center" justify="center" width="100vw" height="100vh">
+    return <Flex align="center"
+justify="center"
+width="100vw"
+height="100vh">
 
-        <Flex direction="column" align="center">
+        <Flex direction="column"
+align="center">
             <img
                 alt=""
                 style={{
@@ -25,8 +29,9 @@ export const UnderMaintanence = () => {
 
             <EpistoFont>
 
-                Ha bármilyen kérdésed lenne, írj bátran a <a style={{color: "blue"}} href="mailto:support@epistogram.com">support@epistogram.com</a> e-mail címre
+                Ha bármilyen kérdésed lenne, írj bátran a <a style={{color: "blue"}}
+href="mailto:support@epistogram.com">support@epistogram.com</a> e-mail címre
             </EpistoFont>
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

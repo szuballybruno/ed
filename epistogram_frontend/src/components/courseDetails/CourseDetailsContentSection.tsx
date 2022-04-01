@@ -16,15 +16,18 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
         const remainingSeconds = roundNumber(seconds - (minutes * 60));
 
         return `${minutes}m ${remainingSeconds}s`;
-    }
+    };
 
-    return <Flex direction={"column"} mt={10}>
+    return <Flex direction={"column"}
+        mt={10}>
 
         {courseDetails
             .modules
             .map((module, index) => {
 
-                return <Accordion defaultExpanded={index === 0}>
+                return <Accordion
+                    key={index}
+                    defaultExpanded={index === 0}>
 
                     <AccordionSummary
                         expandIcon={<ExpandMore />}>
@@ -37,7 +40,10 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
                     <AccordionDetails>
                         {module
                             .videos
-                            .map(video => <Flex align="center" justify="space-between">
+                            .map((video, index) => <Flex
+                                key={index}
+                                align="center"
+                                justify="space-between">
 
                                 <Flex align="center">
                                     {/* icon */}
@@ -45,7 +51,7 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
                                         src={getAssetUrl("images/videosdatasheetd3D.png")}
                                         alt={""}
                                         className="square50"
-                                        style={{ margin: '10px', objectFit: "contain" }} />
+                                        style={{ margin: "10px", objectFit: "contain" }} />
 
                                     {/* name */}
                                     <EpistoFont
@@ -63,7 +69,7 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
                                 </EpistoFont>
                             </Flex>)}
                     </AccordionDetails>
-                </Accordion>
+                </Accordion>;
             })}
-    </Flex >
-}
+    </Flex >;
+};

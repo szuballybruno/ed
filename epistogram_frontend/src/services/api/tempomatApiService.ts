@@ -1,6 +1,6 @@
-import { apiRoutes } from "../../shared/types/apiRoutes"
+import { apiRoutes } from "../../shared/types/apiRoutes";
 import { TempomatModeType } from "../../shared/types/sharedTypes";
-import { useReactQuery2 } from "../../static/frontendHelpers"
+import { useReactQuery2 } from "../../static/frontendHelpers";
 import { usePostDataUnsafe } from "../core/httpClient";
 
 export const useTempomatMode = (courseId: number, enabled: boolean) => {
@@ -10,8 +10,8 @@ export const useTempomatMode = (courseId: number, enabled: boolean) => {
     return {
         tempomatMode: qr.data ?? null,
         refetchTempomatMode: qr.refetch
-    }
-}
+    };
+};
 
 export const useSetTempomatMode = () => {
 
@@ -19,5 +19,5 @@ export const useSetTempomatMode = () => {
 
     return {
         setTempomatMode: qr.postDataAsync
-    }
-}
+    };
+};

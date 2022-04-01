@@ -1,5 +1,5 @@
-import { FieldMutation } from "./FieldMutation"
-import { MutationActionType } from "./MutationActionType"
+import { FieldMutation } from "./FieldMutation";
+import { MutationActionType } from "./MutationActionType";
 
 export type Mutation<TMutatee, TKey> = {
     key: TKey,

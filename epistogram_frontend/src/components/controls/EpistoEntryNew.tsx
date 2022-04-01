@@ -49,7 +49,7 @@ export const useEpistoEntryState = (options?: {
 
         if (initialState)
             setInitialState(false);
-    }
+    };
 
     // effects 
 
@@ -67,8 +67,8 @@ export const useEpistoEntryState = (options?: {
         validate,
         setValue: setValue2,
         setError
-    }
-}
+    };
+};
 
 export type EpistoEntryStateType = ReturnType<typeof useEpistoEntryState>;
 
@@ -116,7 +116,10 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
         value
     } = state;
 
-    return <Flex direction="column" mt={marginTop ?? "10px"} flex={flex} style={style}>
+    return <Flex direction="column"
+mt={marginTop ?? "10px"}
+flex={flex}
+style={style}>
 
         {labelVariant === "top" && <EpistoFont
             isUppercase
@@ -141,11 +144,11 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
             multiline={isMultiline}
             type={type}
             sx={{
-                '& .MuiOutlinedInput-root': {
+                "& .MuiOutlinedInput-root": {
                     height: height,
                     background: "var(--transparentWhite90)"
                 },
-                '& .MuiOutlinedInput-notchedOutline': {
+                "& .MuiOutlinedInput-notchedOutline": {
                     border: "none"
                 }
             }}
@@ -168,5 +171,5 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
                 // margin: "10px 0px 10px 0px",
                 // padding: "2px"
             }} />
-    </Flex>
+    </Flex>;
 });

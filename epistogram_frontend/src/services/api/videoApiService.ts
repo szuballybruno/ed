@@ -25,8 +25,8 @@ export const useCreateVideo = () => {
         },
         createVideoState: qr.state,
         createVideoResult: qr.result
-    }
-}
+    };
+};
 
 export const useDeleteVideo = () => {
 
@@ -40,8 +40,8 @@ export const useDeleteVideo = () => {
             });
         },
         deleteVideoState: qr.state
-    }
-}
+    };
+};
 
 export const useSaveVideo = () => {
 
@@ -50,8 +50,8 @@ export const useSaveVideo = () => {
     return {
         saveVideoAsync: qr.postDataAsync,
         saveVideoState: qr.state
-    }
-}
+    };
+};
 
 export const useVideoEditData = (videoId: number) => {
 
@@ -62,8 +62,8 @@ export const useVideoEditData = (videoId: number) => {
         videoEditDataState: qr.state,
         videoEditDataError: qr.error,
         refetchVideoEditDataAsync: qr.refetch
-    }
-}
+    };
+};
 
 export const useUploadVideoFileAsync = () => {
 
@@ -84,10 +84,10 @@ export const useUploadVideoFileAsync = () => {
         }
 
         setUploadState("success");
-    }
+    };
 
     return {
         saveVideoFileAsync: saveVideoFileAsync,
         saveVideoFileState: uploadState
-    }
-}
+    };
+};

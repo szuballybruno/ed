@@ -9,12 +9,12 @@ export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) 
     const pauseTimeout = () => {
 
         reactTimer.pause();
-    }
+    };
 
     const resumeTimeout = () => {
 
         reactTimer.start();
-    }
+    };
 
     return <Flex
         position="relative"
@@ -37,5 +37,5 @@ export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) 
         <Box position="relative">
             {children}
         </Box>
-    </Flex>
-}
+    </Flex>;
+};

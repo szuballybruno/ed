@@ -1,23 +1,23 @@
-import { Divider, Flex } from '@chakra-ui/layout';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { Radio, RadioGroup } from '@mui/material';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useSetCourseMode } from '../../../services/api/courseApiService';
-import { useTempomatMode } from '../../../services/api/tempomatApiService';
-import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
+import { Divider, Flex } from "@chakra-ui/layout";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { Radio, RadioGroup } from "@mui/material";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useSetCourseMode } from "../../../services/api/courseApiService";
+import { useTempomatMode } from "../../../services/api/tempomatApiService";
+import { useRecommendedItemQuota } from "../../../services/api/userProgressApiService";
 import { useShowErrorDialog } from "../../../services/core/notifications";
-import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
+import { ModuleDTO } from "../../../shared/dtos/ModuleDTO";
 import { CourseItemStateType, CourseModeType } from "../../../shared/types/sharedTypes";
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoPopper } from '../../controls/EpistoPopper';
-import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
-import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { translatableTexts } from "../../../static/translatableTexts";
+import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoFont } from "../../controls/EpistoFont";
+import { EpistoPopper } from "../../controls/EpistoPopper";
+import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
+import { RecommendedItemQuota } from "../../home/RecommendedItemQuota";
+import { CurrentUserContext } from "../../system/AuthenticationFrame";
 import { CourseItemList } from "../../universal/CourseItemList";
-import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
-import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
+import { TempomatSettingsDialog } from "../tempomat/TempomatSettingsDialog";
+import { TempomatTempoInfo } from "../tempomat/TempomatTempoInfo";
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -64,7 +64,7 @@ export const CourseItemSelector = (props: {
                     }
                 ]
             });
-    }
+    };
 
     const setCourseMode = async (mode: CourseModeType) => {
 
@@ -78,7 +78,7 @@ export const CourseItemSelector = (props: {
 
             showErrorDialog(translatableTexts.player.courseItemSelector.switchingCourseModeFailed);
         }
-    }
+    };
 
     // effect
 
@@ -158,7 +158,9 @@ export const CourseItemSelector = (props: {
                     position: "relative"
                 }}>
 
-                <Flex height="100px" padding="20px" justify="center">
+                <Flex height="100px"
+padding="20px"
+justify="center">
 
                     <EpistoButton
                         variant="outlined"
@@ -176,7 +178,8 @@ export const CourseItemSelector = (props: {
                             {translatableTexts.player.courseItemSelector.beginner}
                         </EpistoFont>
 
-                        <Radio size="small" value="beginner" />
+                        <Radio size="small"
+value="beginner" />
                     </EpistoButton>
 
                     <EpistoButton
@@ -197,7 +200,8 @@ export const CourseItemSelector = (props: {
                             {translatableTexts.player.courseItemSelector.advanced}
                         </EpistoFont>
 
-                        <Radio size="small" value="advanced" />
+                        <Radio size="small"
+value="advanced" />
                     </EpistoButton>
                 </Flex>
 
@@ -231,5 +235,5 @@ export const CourseItemSelector = (props: {
         </EpistoPopper>
 
         <CourseItemList modules={modules}></CourseItemList>
-    </>
-}
+    </>;
+};

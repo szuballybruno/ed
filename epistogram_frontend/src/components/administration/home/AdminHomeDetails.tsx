@@ -1,14 +1,14 @@
-import { Flex, Grid } from "@chakra-ui/react"
-import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { defaultCharts } from "../../../static/defaultChartOptions"
-import { getAssetUrl } from "../../../static/frontendHelpers"
-import { translatableTexts } from "../../../static/translatableTexts"
-import { StatisticsGroupType } from "../../learningInsights/LearningStatistics"
-import StatisticsCard from "../../statisticsCard/StatisticsCard"
-import { EpistoBarChart } from "../../universal/charts/EpistoBarChart"
-import { EpistoPieChart } from "../../universal/charts/EpistoPieChart"
-import { AdminSubpageHeader } from "../AdminSubpageHeader"
-import { UserActivityDistributionChart } from "../users/UserActivityDistributionChart"
+import { Flex, Grid } from "@chakra-ui/react";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { defaultCharts } from "../../../static/defaultChartOptions";
+import { getAssetUrl } from "../../../static/frontendHelpers";
+import { translatableTexts } from "../../../static/translatableTexts";
+import { StatisticsGroupType } from "../../learningInsights/LearningStatistics";
+import StatisticsCard from "../../statisticsCard/StatisticsCard";
+import { EpistoBarChart } from "../../universal/charts/EpistoBarChart";
+import { EpistoPieChart } from "../../universal/charts/EpistoPieChart";
+import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { UserActivityDistributionChart } from "../users/UserActivityDistributionChart";
 
 export const AdminHomeDetails = () => {
 
@@ -160,10 +160,10 @@ export const AdminHomeDetails = () => {
                         title="Felhasználók aktivitása"
                         isSortValues
                         segments={[
-                            { value: 30, name: 'Videók megtekintése' },
-                            { value: 17, name: 'Vizsga / tesztkitöltés' },
-                            { value: 10, name: 'Kérdések megválaszolása' },
-                            { value: 20, name: 'Nincs tevékenység' }]}
+                            { value: 30, name: "Videók megtekintése" },
+                            { value: 17, name: "Vizsga / tesztkitöltés" },
+                            { value: 10, name: "Kérdések megválaszolása" },
+                            { value: 20, name: "Nincs tevékenység" }]}
                         options={defaultCharts.redRadiusPie} />
                 },
 
@@ -174,17 +174,17 @@ export const AdminHomeDetails = () => {
                         title="Legnézettebb kurzusok"
                         isSortValues
                         segments={[
-                            { value: 30, name: 'Microsoft Excel Alapok' },
-                            { value: 25, name: 'Microsoft Word A-Z' },
-                            { value: 15, name: 'Asszertív kommunikáció a mindennapokban' },
-                            { value: 13, name: 'Cyberbiztonság az irodában' },
-                            { value: 17, name: 'Egyéb kurzusok' }
+                            { value: 30, name: "Microsoft Excel Alapok" },
+                            { value: 25, name: "Microsoft Word A-Z" },
+                            { value: 15, name: "Asszertív kommunikáció a mindennapokban" },
+                            { value: 13, name: "Cyberbiztonság az irodában" },
+                            { value: 17, name: "Egyéb kurzusok" }
                         ]}
                         options={defaultCharts.donut} />
                 }
             ]
         }
-    ] as StatisticsGroupType[]
+    ] as StatisticsGroupType[];
 
     return <AdminSubpageHeader
         direction="column"
@@ -209,10 +209,10 @@ export const AdminHomeDetails = () => {
                     gridAutoFlow="column dense">
 
                     {section.items.map(item => {
-                        return <StatisticsCard {...item} />
+                        return <StatisticsCard {...item} />;
                     })}
                 </Grid>
-            </Flex>
+            </Flex>;
         })}
-    </AdminSubpageHeader >
-}
+    </AdminSubpageHeader >;
+};

@@ -1,12 +1,12 @@
-import { Flex, Tooltip } from "@chakra-ui/react"
-import { Add, Remove, Timer } from "@mui/icons-material"
-import { Checkbox } from "@mui/material"
-import { useState } from "react"
-import ReactPlayer from "react-player"
-import { iterate } from "../../../../static/frontendHelpers"
-import { EpistoButton } from "../../../controls/EpistoButton"
-import { EpistoEntry } from "../../../controls/EpistoEntry"
-import { EpistoFont } from "../../../controls/EpistoFont"
+import { Flex, Tooltip } from "@chakra-ui/react";
+import { Add, Remove, Timer } from "@mui/icons-material";
+import { Checkbox } from "@mui/material";
+import { useState } from "react";
+import ReactPlayer from "react-player";
+import { iterate } from "../../../../static/frontendHelpers";
+import { EpistoButton } from "../../../controls/EpistoButton";
+import { EpistoEntry } from "../../../controls/EpistoEntry";
+import { EpistoFont } from "../../../controls/EpistoFont";
 
 
 export const AdminVideoQuestionsModalPage = () => {
@@ -28,12 +28,12 @@ export const AdminVideoQuestionsModalPage = () => {
                 {children}
             </Tooltip >
         );
-    }
+    };
 
     const AddQuestionWithAnswersComponent = (props: {
         isFirst?: boolean
     }) => {
-        const { isFirst } = props
+        const { isFirst } = props;
         return <Flex
             p="10px"
             h="330px"
@@ -43,7 +43,9 @@ export const AdminVideoQuestionsModalPage = () => {
             background="var(--transparentIntenseBlue10)"
             className="roundBorders">
 
-            <Flex align="center" justify="space-between" mt="15px">
+            <Flex align="center"
+justify="space-between"
+mt="15px">
                 <EpistoFont
                     isUppercase
                     fontSize="fontExtraSmall"
@@ -77,7 +79,9 @@ export const AdminVideoQuestionsModalPage = () => {
             </Flex>
 
 
-            <Flex align="center" justify="space-between" mt="15px">
+            <Flex align="center"
+justify="space-between"
+mt="15px">
                 <EpistoFont
                     isUppercase
                     fontSize="fontExtraSmall"
@@ -119,10 +123,10 @@ export const AdminVideoQuestionsModalPage = () => {
 
                 </Flex>
             ))}
-        </Flex>
+        </Flex>;
 
 
-    }
+    };
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
     return <Flex
@@ -160,7 +164,8 @@ export const AdminVideoQuestionsModalPage = () => {
             mt="5px"
             p="0 20px 100px 20px">
 
-            <AddQuestionWithAnswersComponent key={1} isFirst />
+            <AddQuestionWithAnswersComponent key={1}
+isFirst />
             <AddQuestionWithAnswersComponent key={2} />
             <AddQuestionWithAnswersComponent key={3} />
 
@@ -186,5 +191,5 @@ export const AdminVideoQuestionsModalPage = () => {
 
             Mentés
         </EpistoButton>
-    </Flex >
-}
+    </Flex >;
+};

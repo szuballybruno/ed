@@ -1,13 +1,13 @@
-import { Flex } from "@chakra-ui/react"
-import { ReactNode } from "react"
-import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { useAdminCourseList } from "../../../services/api/courseApiService"
-import { useNavigation } from "../../../services/core/navigatior"
-import { useIsMatchingCurrentRoute } from "../../../static/frontendHelpers"
-import { useIntParam } from "../../../static/locationHelpers"
-import { EpistoFont } from "../../controls/EpistoFont"
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader"
-import { AdminCourseList } from "./AdminCourseList"
+import { Flex } from "@chakra-ui/react";
+import { ReactNode } from "react";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { useAdminCourseList } from "../../../services/api/courseApiService";
+import { useNavigation } from "../../../services/core/navigatior";
+import { useIsMatchingCurrentRoute } from "../../../static/frontendHelpers";
+import { useIntParam } from "../../../static/locationHelpers";
+import { EpistoFont } from "../../controls/EpistoFont";
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
+import { AdminCourseList } from "./AdminCourseList";
 
 export const CourseAdministartionFrame = (params: { children?: ReactNode }) => {
 
@@ -42,7 +42,7 @@ export const CourseAdministartionFrame = (params: { children?: ReactNode }) => {
         })();
 
         navigate(url, { courseId });
-    }
+    };
 
     return (
         <Flex
@@ -85,5 +85,5 @@ export const CourseAdministartionFrame = (params: { children?: ReactNode }) => {
 
             </AdminBreadcrumbsHeader>
         </Flex>
-    )
-}
+    );
+};

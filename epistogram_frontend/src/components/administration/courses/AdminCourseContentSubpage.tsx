@@ -4,7 +4,7 @@ import { DataGridPro, GridCellParams, useGridApiContext, useGridApiRef } from "@
 import React, { ReactNode } from "react";
 import { useEffect } from "react";
 import { useMemo } from "react";
-import { memo, useRef, useState } from 'react';
+import { memo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useCourseContentAdminData, useSaveCourseContentData } from "../../../services/api/courseApiService";
@@ -32,7 +32,7 @@ import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
 import { ExamEditDialog } from "./ExamEditDialog";
 import { VideoEditDialog } from "./VideoEditDialog";
 import { OnMutationHandlerType, useXListMutator } from "./XMutator";
-import classses from "./css/AdminCourseContentSubpage.module.css"
+import classses from "./css/AdminCourseContentSubpage.module.css";
 import { Mutation } from "../../../shared/dtos/mutations/Mutation";
 
 type RowSchema = CourseContentItemAdminDTO & {
@@ -60,13 +60,13 @@ const useGridColumnDefinitions = (
             return `Helyesnek megjelolt valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
 
         if (dto.code === "questions_missing")
-            return `Kerdesek hianyoznak`;
+            return "Kerdesek hianyoznak";
 
         if (dto.code === "video_too_long")
-            return `Video tul hosszu`;
+            return "Video tul hosszu";
 
         return null;
-    }
+    };
 
     const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
 
@@ -74,28 +74,28 @@ const useGridColumnDefinitions = (
             return {
                 color: "var(--deepOrange)",
                 label: "Vizsga"
-            }
+            };
 
         if (itemType === "video")
             return {
                 color: "var(--deepBlue)",
                 label: "Videó"
-            }
+            };
 
         if (itemType === "pretest")
             return {
                 color: "purple",
                 label: "Szintfelmérő"
-            }
+            };
 
         if (itemType === "final")
             return {
                 color: "orange",
                 label: "Záróvizsga"
-            }
+            };
 
         throw new Error("Unexpected type: " + itemType);
-    }
+    };
 
     const TextCellRenderer = (props: {
         children: ReactNode,
@@ -111,8 +111,8 @@ const useGridColumnDefinitions = (
 
                 {children}
             </EpistoFont>
-        </div>
-    }
+        </div>;
+    };
 
     const SelectEditCellRenderer = (props: {
         rowKey: string,
@@ -142,8 +142,8 @@ const useGridColumnDefinitions = (
                     .commitCellChange({ id: rowKey, field: field });
             }}
             getDisplayValue={x => "" + x?.name}
-            getCompareKey={module => "" + module?.id} />
-    }
+            getCompareKey={module => "" + module?.id} />;
+    };
 
     const columnDefGen = <TField extends keyof RowSchema,>(
         field: TField,
@@ -152,16 +152,16 @@ const useGridColumnDefinitions = (
         return {
             field,
             ...columnOptions
-        }
-    }
+        };
+    };
 
     const gridColumns: GridColumnType<RowSchema, string, any>[] = [
         columnDefGen("rowNumber", {
-            headerName: 'Sorszam',
+            headerName: "Sorszam",
             width: 80
         }),
         columnDefGen("itemOrderIndex", {
-            headerName: 'Elhelyezkedés',
+            headerName: "Elhelyezkedés",
             width: 80,
             editable: true,
             type: "int",
@@ -171,11 +171,11 @@ const useGridColumnDefinitions = (
                     isMutated={isModified(key)(field)}>
 
                     {value}
-                </TextCellRenderer>
+                </TextCellRenderer>;
             }
         }),
         columnDefGen("itemTitle", {
-            headerName: 'Cím',
+            headerName: "Cím",
             width: 220,
             resizable: true,
             editable: true,
@@ -185,11 +185,11 @@ const useGridColumnDefinitions = (
                     isMutated={isModified(key)(field)}>
 
                     {value}
-                </TextCellRenderer>
+                </TextCellRenderer>;
             }
         }),
         columnDefGen("itemSubtitle", {
-            headerName: 'Alcím',
+            headerName: "Alcím",
             width: 220,
             resizable: true,
             editable: true,
@@ -199,11 +199,11 @@ const useGridColumnDefinitions = (
                     isMutated={isModified(key)(field)}>
 
                     {value}
-                </TextCellRenderer>
+                </TextCellRenderer>;
             }
         }),
         columnDefGen("moduleId", {
-            headerName: 'Modul',
+            headerName: "Modul",
             width: 250,
             editable: true,
             renderCell: ({ key, field, row, value }) => {
@@ -212,7 +212,7 @@ const useGridColumnDefinitions = (
                     isMutated={isModified(key)(field)}>
 
                     {row.itemType === "pretest" ? "-" : row.moduleName}
-                </TextCellRenderer>
+                </TextCellRenderer>;
             },
             renderEditCell: (props) => <SelectEditCellRenderer
                 field={props.field}
@@ -221,7 +221,7 @@ const useGridColumnDefinitions = (
                 useCommitNewValue={props.useCommitNewValue} />
         }),
         columnDefGen("itemType", {
-            headerName: 'Típus',
+            headerName: "Típus",
             width: 120,
             renderCell: ({ value }) => {
 
@@ -232,11 +232,11 @@ const useGridColumnDefinitions = (
 
                 return <ChipSmall
                     text={label}
-                    color={color} />
+                    color={color} />;
             }
         }),
         columnDefGen("videoLength", {
-            headerName: 'Videó hossza',
+            headerName: "Videó hossza",
             width: 80,
             renderCell: ({ value, row }) => {
 
@@ -254,11 +254,11 @@ const useGridColumnDefinitions = (
                     text={formatTime(Math.round(value))}
                     color={isLengthWarning
                         ? "var(--intenseOrange)"
-                        : "gray"} />
+                        : "gray"} />;
             }
         }),
         columnDefGen("errorsWrapper", {
-            headerName: 'Hibak',
+            headerName: "Hibak",
             width: 100,
             renderCell: ({ row }) => {
 
@@ -277,11 +277,11 @@ const useGridColumnDefinitions = (
                         .join("\n")}
                     color={hasErrors
                         ? "var(--intenseRed)"
-                        : "var(--intenseGreen)"} />
+                        : "var(--intenseGreen)"} />;
             }
         }),
         columnDefGen("videoFile", {
-            headerName: 'Videó fájl',
+            headerName: "Videó fájl",
             width: 180,
             renderCell: ({ row }) => {
 
@@ -290,11 +290,11 @@ const useGridColumnDefinitions = (
                     onClick={() => { }}>
 
                     Fájl kiválasztása
-                </EpistoButton >
+                </EpistoButton >;
             }
         }),
         columnDefGen("quickMenu", {
-            headerName: 'Gyorshivatkozások',
+            headerName: "Gyorshivatkozások",
             width: 150,
             renderCell: ({ key, row }) => {
 
@@ -318,13 +318,13 @@ const useGridColumnDefinitions = (
                             <Delete />
                         </EpistoButton>
                     </Flex>
-                )
+                );
             }
         })
     ];
 
     return gridColumns;
-}
+};
 
 export const AdminCourseContentSubpage = () => {
 
@@ -376,7 +376,7 @@ export const AdminCourseContentSubpage = () => {
                 rowNumber: index,
                 videoFile: "file_" + item.videoId,
                 errorsWrapper: index
-            }
+            };
         })
         .orderBy(x => x.moduleOrderIndex)
         .groupBy(x => x.moduleId)
@@ -436,12 +436,12 @@ export const AdminCourseContentSubpage = () => {
 
             examEditDialogLogic.openDialog();
         }
-    }
+    };
 
     const handleMutateRow: EditRowFnType = (key, field, value) => {
 
         mutateRow({ key, field: field as any, newValue: value });
-    }
+    };
 
     const handleAddRow = (type: "video" | "exam") => {
 
@@ -480,12 +480,12 @@ export const AdminCourseContentSubpage = () => {
         }
 
         closeAddPopper();
-    }
+    };
 
     const handleRemoveRow = (key: string) => {
 
         removeRow(key);
-    }
+    };
 
     const handleSaveAsync = async () => {
 
@@ -499,7 +499,7 @@ export const AdminCourseContentSubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     const gridColumns = useGridColumnDefinitions(
         modules,
@@ -562,11 +562,11 @@ export const AdminCourseContentSubpage = () => {
                     getKey={getRowKey}
                     initialState={{
                         pinnedColumns: {
-                            left: ['rowNumber', 'itemTitle'],
-                            right: ['quickMenu']
+                            left: ["rowNumber", "itemTitle"],
+                            right: ["quickMenu"]
                         }
                     }} />
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
-    </LoadingFrame >
+    </LoadingFrame >;
 };

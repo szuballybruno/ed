@@ -1,4 +1,5 @@
 import { Flex, useMediaQuery } from "@chakra-ui/react";
+import { ReactNode } from "react";
 import { isLocalhost } from "../../static/Environemnt";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
@@ -105,13 +106,13 @@ const MobileBlock = () => {
             Küldés
         </EpistoButton>*/}
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};
 
-export const PreventMobileFrame = (props) => {
+export const PreventMobileFrame = (props: { children: ReactNode }) => {
 
-    const [isNarrowerThan1024] = useMediaQuery('(max-width: 1124px)');
-    const [isLowerThan600] = useMediaQuery('(max-height: 600px)')
+    const [isNarrowerThan1024] = useMediaQuery("(max-width: 1124px)");
+    const [isLowerThan600] = useMediaQuery("(max-height: 600px)");
 
     const isScreenTooSmall = isNarrowerThan1024 || isLowerThan600;
     const showMobileBlock = isScreenTooSmall && !isLocalhost;
@@ -123,5 +124,5 @@ export const PreventMobileFrame = (props) => {
 
         {/* application content */}
         {props.children}
-    </>
-}
+    </>;
+};

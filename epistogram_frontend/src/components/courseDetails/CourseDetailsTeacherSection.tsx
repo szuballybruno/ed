@@ -1,12 +1,10 @@
 import { Flex } from "@chakra-ui/react";
-import { EpistoHeader } from "../EpistoHeader";
 import React from "react";
-import { Typography } from "@mui/material";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { EpistoButton } from "../controls/EpistoButton";
 import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
-import { ProfileImage } from "../ProfileImage";
+import { getAssetUrl } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
+import { EpistoHeader } from "../EpistoHeader";
+import { ProfileImage } from "../ProfileImage";
 
 export const CourseDetailsTeacherSection = (props: {
     courseDetails: CourseDetailsDTO
@@ -60,7 +58,8 @@ export const CourseDetailsTeacherSection = (props: {
                     className="square50" />
 
                 {/* details */}
-                <Flex flexDir={"column"} marginLeft="10px">
+                <Flex flexDir={"column"}
+                    marginLeft="10px">
 
                     {/* full name */}
                     <EpistoFont
@@ -86,9 +85,10 @@ export const CourseDetailsTeacherSection = (props: {
                 {courseDetails
                     .teacherData
                     .teacherBadges
-                    .map(badge => {
+                    .map((badge, index) => {
 
                         return <Flex
+                            key={index}
                             direction="column"
                             align="center"
                             p="10px"
@@ -108,7 +108,7 @@ export const CourseDetailsTeacherSection = (props: {
 
                                 {badge}
                             </EpistoFont>
-                        </Flex>
+                        </Flex>;
                     })}
             </Flex>
         </Flex>
@@ -119,7 +119,8 @@ export const CourseDetailsTeacherSection = (props: {
             justifyContent={"space-between"}>
 
             {infoCards
-                .map(infoCard => <Flex
+                .map((infoCard, index) => <Flex
+                    key={index}
                     width={160}
                     mx={20}
                     alignItems={"center"}>
@@ -154,5 +155,5 @@ export const CourseDetailsTeacherSection = (props: {
                 {courseDetails.teacherData.teacherFullName} további kurzusai
             </EpistoButton>
         </Flex>*/}
-    </Flex>
-}
+    </Flex>;
+};

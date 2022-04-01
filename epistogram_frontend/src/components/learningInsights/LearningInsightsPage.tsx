@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { LearningInsightsOverview } from "../LearningInsightsOverview";
 import { NavigationLinkList } from "../NavigationLinkList";
@@ -30,7 +30,8 @@ const LearningInsightsPage = () => {
 
             <Switch>
 
-                <Route path={applicationRoutes.learningRoute.route} exact>
+                <Route path={applicationRoutes.learningRoute.route}
+exact>
                     <LearningInsightsOverview />
                 </Route>
                 <Route path={applicationRoutes.learningRoute.myStatisticsRoute.route}>
@@ -41,6 +42,6 @@ const LearningInsightsPage = () => {
                 </Route>
             </Switch>
         </ContentPane>
-    </PageRootContainer>
+    </PageRootContainer>;
 };
-export default LearningInsightsPage
+export default LearningInsightsPage;

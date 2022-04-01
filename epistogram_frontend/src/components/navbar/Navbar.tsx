@@ -42,8 +42,8 @@ const Navbar = (props: {
                     </div>
                 </NavLink>
             </div>
-        </div>
-    }
+        </div>;
+    };
 
     return <FlexFloat
         id="flexFloat-navbarRoot"
@@ -58,7 +58,7 @@ const Navbar = (props: {
         {isDesktop
             ? renderDesktopNavbar()
             : renderMobileNavbar()}
-    </FlexFloat>
-}
+    </FlexFloat>;
+};
 
 export default Navbar;

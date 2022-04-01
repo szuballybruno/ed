@@ -38,7 +38,7 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?
                         </EpistoFont>}
 
                     </Flex>
-                </NavLink>
+                </NavLink>;
             })}
-    </Flex >
-}
+    </Flex >;
+};

@@ -33,5 +33,5 @@ export const FlexListTitleSubtitle = (props: {
                 {props.subTitle}
             </EpistoFont>
             : props.subTitle}
-    </Flex>
-}
+    </Flex>;
+};

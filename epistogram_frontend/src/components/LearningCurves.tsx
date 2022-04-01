@@ -19,9 +19,9 @@ export const LearningCurves = () => {
     const a11yProps = (index: number) => {
         return {
             id: `simple-tab-${index}`,
-            'aria-controls': `simple-tabpanel-${index}`,
+            "aria-controls": `simple-tabpanel-${index}`,
         };
-    }
+    };
 
     return <Flex
         direction="row"
@@ -100,7 +100,8 @@ export const LearningCurves = () => {
                 </EpistoFont>
             </TabPanel>
 
-            <TabPanel value={currentTab} index={1}>
+            <TabPanel value={currentTab}
+index={1}>
 
                 <EpistoFont fontSize="fontSmall">
 
@@ -119,8 +120,8 @@ export const LearningCurves = () => {
             flex="1"
             minWidth={250}
             style={{
-                gridColumn: `auto / span 2`,
-                gridRow: `auto / span 2`
+                gridColumn: "auto / span 2",
+                gridRow: "auto / span 2"
             }} >
 
             {/* learning curve image */}
@@ -140,5 +141,5 @@ export const LearningCurves = () => {
                 {translatableTexts.homePage.noStatsYet}
             </EpistoFont>
         </FlexFloat>
-    </Flex>
-}
+    </Flex>;
+};

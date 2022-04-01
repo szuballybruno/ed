@@ -1,8 +1,8 @@
 import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
 import { PretestDataDTO } from "../../shared/dtos/PretestDataDTO";
 import { PretestResultDTO } from "../../shared/dtos/PretestResultDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes"
-import { useReactQuery2 } from "../../static/frontendHelpers"
+import { apiRoutes } from "../../shared/types/apiRoutes";
+import { useReactQuery2 } from "../../static/frontendHelpers";
 
 export const usePretestData = (courseId: number) => {
 
@@ -12,8 +12,8 @@ export const usePretestData = (courseId: number) => {
         pretestData: qr.data,
         pretestDataError: qr.error,
         pretestDataState: qr.state
-    }
-}
+    };
+};
 
 export const usePretestResults = (courseId: number) => {
 
@@ -23,8 +23,8 @@ export const usePretestResults = (courseId: number) => {
         pretestResults: qr.data,
         pretestResultsError: qr.error,
         pretestResultsState: qr.state
-    }
-}
+    };
+};
 
 export const usePretestExamId = (courseId: number) => {
 
@@ -34,5 +34,5 @@ export const usePretestExamId = (courseId: number) => {
         pretestExamId: qr.data?.id ?? null,
         pretestExamIdError: qr.error,
         pretestExamIdState: qr.state
-    }
-}
+    };
+};

@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import { Typography } from "@mui/material";
 import React from "react";
 import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
@@ -43,12 +43,13 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
                 .technicalRequirements
                 .map(x => (
                     <Flex align="center">
-                        <SettingsSuggestIcon style={{ color: "var(--deepBlue)", marginRight: "10px" }} className="square35" />
+                        <SettingsSuggestIcon style={{ color: "var(--deepBlue)", marginRight: "10px" }}
+className="square35" />
                         <EpistoFont>
                             {x}
                         </EpistoFont>
                     </Flex>
                 ))}
         </Flex>
-    </Flex>
-}
+    </Flex>;
+};

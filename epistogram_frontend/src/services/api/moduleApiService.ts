@@ -11,7 +11,7 @@ export const useCreateModule = () => {
     return {
         createModuleAsync: qr.postDataAsync,
     };
-}
+};
 
 export const useDeleteModule = () => {
 
@@ -20,7 +20,7 @@ export const useDeleteModule = () => {
     return {
         deleteModuleAsync: (moduleId: number) => qr.postDataAsync({ moduleId }),
     };
-}
+};
 
 export const useSaveModule = () => {
 
@@ -29,7 +29,7 @@ export const useSaveModule = () => {
     return {
         saveModuleAsync: qr.postMultipartDataAsync
     };
-}
+};
 
 export const useModuleEditData = (moduleId: number) => {
 
@@ -40,5 +40,5 @@ export const useModuleEditData = (moduleId: number) => {
         moduleEditDataError: qr.error,
         moduleEditDataState: qr.state,
         refetchModuleEditDataAsync: qr.refetch
-    }
-}
+    };
+};

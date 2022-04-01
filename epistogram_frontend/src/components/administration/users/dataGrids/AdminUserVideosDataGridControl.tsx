@@ -1,8 +1,8 @@
-import { DataGrid } from "@mui/x-data-grid"
-import { DataGridPro, GridColDef, GridRowsProp } from "@mui/x-data-grid-pro"
-import { getRandomInteger } from "../../../../static/frontendHelpers"
-import { EpistoFont } from "../../../controls/EpistoFont"
-import { ChipSmall } from "../../courses/ChipSmall"
+import { DataGrid } from "@mui/x-data-grid";
+import { DataGridPro, GridColDef, GridRowsProp } from "@mui/x-data-grid-pro";
+import { getRandomInteger } from "../../../../static/frontendHelpers";
+import { EpistoFont } from "../../../controls/EpistoFont";
+import { ChipSmall } from "../../courses/ChipSmall";
 
 export const AdminUserVideosDataGridControl = () => {
     const dummyVideos = [
@@ -117,7 +117,7 @@ export const AdminUserVideosDataGridControl = () => {
             lastWatchTime: "2022.02.16.",
         },
 
-    ]
+    ];
 
     const getRowsFromVideos = () => dummyVideos.map((video) => {
         return {
@@ -129,50 +129,50 @@ export const AdminUserVideosDataGridControl = () => {
             isAnsweredCorrectly: video.isAnsweredCorrectly,
             reactionTime: video.reactionTime,
             lastWatchTime: video.lastWatchTime
-        }
-    })
+        };
+    });
 
-    const videoRows: GridRowsProp = getRowsFromVideos()
+    const videoRows: GridRowsProp = getRowsFromVideos();
 
     const videoColumns: GridColDef[] = [
         {
-            field: 'title',
-            headerName: 'Cím',
+            field: "title",
+            headerName: "Cím",
             width: 300
         },
         {
-            field: 'videoLength',
-            headerName: 'Videó hossz',
+            field: "videoLength",
+            headerName: "Videó hossz",
             width: 120,
             editable: true,
             resizable: true
         },
         {
-            field: 'allSpentTime',
-            headerName: 'Összes eltöltött idő', width: 150,
+            field: "allSpentTime",
+            headerName: "Összes eltöltött idő", width: 150,
             resizable: true
         },
         {
-            field: 'replaysCount',
-            headerName: 'Ismétlések száma',
+            field: "replaysCount",
+            headerName: "Ismétlések száma",
             width: 150,
             resizable: true
         },
         {
-            field: 'replayRecommended',
-            headerName: 'Ismétlésre ajánlott',
+            field: "replayRecommended",
+            headerName: "Ismétlésre ajánlott",
             width: 150,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(0, 100)
+                const randomNumber = getRandomInteger(0, 100);
                 return <ChipSmall
                     text={`${randomNumber < 20 ? "Igen" : "Nem"}`}
-                    color={randomNumber > 20 ? "var(--deepGreen)" : "var(--intenseRed)"} />
+                    color={randomNumber > 20 ? "var(--deepGreen)" : "var(--intenseRed)"} />;
             }
         },
         {
-            field: 'isAnsweredCorrectly',
-            headerName: 'Helyesen válaszolt?',
+            field: "isAnsweredCorrectly",
+            headerName: "Helyesen válaszolt?",
             width: 150,
             resizable: true,
             renderCell: (params) =>
@@ -183,8 +183,8 @@ export const AdminUserVideosDataGridControl = () => {
                         : "var(--intenseRed)"} />
         },
         {
-            field: 'reactionTime',
-            headerName: 'Reakcióidő',
+            field: "reactionTime",
+            headerName: "Reakcióidő",
             width: 150,
             resizable: true,
             renderCell: (params) => <ChipSmall
@@ -201,8 +201,8 @@ export const AdminUserVideosDataGridControl = () => {
                 } />
         },
         {
-            field: 'lastWatchTime',
-            headerName: 'Utolsó megtekintés ideje',
+            field: "lastWatchTime",
+            headerName: "Utolsó megtekintés ideje",
             width: 150,
             resizable: true
         }
@@ -210,5 +210,5 @@ export const AdminUserVideosDataGridControl = () => {
     return <DataGrid
         autoHeight
         rows={videoRows}
-        columns={videoColumns} />
-}
+        columns={videoColumns} />;
+};

@@ -14,7 +14,7 @@ export const PretestSubpage = () => {
     const goToFirstWatchItem = () => {
 
         navigateToWatchPretestResults(courseId);
-    }
+    };
 
     return (
         <LoadingFrame
@@ -27,5 +27,5 @@ export const PretestSubpage = () => {
                 onExamFinished={goToFirstWatchItem}
                 hideLoading />}
         </LoadingFrame>
-    )
-}
+    );
+};

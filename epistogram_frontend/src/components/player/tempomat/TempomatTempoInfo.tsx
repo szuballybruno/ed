@@ -1,10 +1,10 @@
-import { Flex } from "@chakra-ui/react"
-import { InfoOutlined } from "@mui/icons-material"
-import { TempomatModeType } from "../../../shared/types/sharedTypes"
-import { getAssetUrl } from "../../../static/frontendHelpers"
-import { EpistoButton } from "../../controls/EpistoButton"
-import { EpistoFont } from "../../controls/EpistoFont"
-import { TempomatModeImage } from "./TempomatModeImage"
+import { Flex } from "@chakra-ui/react";
+import { InfoOutlined } from "@mui/icons-material";
+import { TempomatModeType } from "../../../shared/types/sharedTypes";
+import { getAssetUrl } from "../../../static/frontendHelpers";
+import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoFont } from "../../controls/EpistoFont";
+import { TempomatModeImage } from "./TempomatModeImage";
 
 export const TempomatTempoInfo = (props: {
     onClick: () => void,
@@ -80,5 +80,5 @@ export const TempomatTempoInfo = (props: {
                 </Flex>
             </EpistoButton>
         </Flex>
-    )
-}
+    );
+};

@@ -23,14 +23,14 @@ export const AdminUserTeacherInfoSubpage = (props: {
     users: AdminPageUserDTO[]
 }) => {
 
-    const { users } = props
+    const { users } = props;
 
     const params = useParams<{ userId: string }>();
     const editedUserId = parseInt(params.userId);
     const { teacherInfoEditData } = useTeacherInfoEditData(editedUserId);
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveTeacherInfoAsync, saveTeacherInfoState } = useSaveTeacherInfoData();
-    const { navigate } = useNavigation()
+    const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
 
     const [skills, setSkills] = useState("");
@@ -94,12 +94,13 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
             showError(e);
         }
-    }
+    };
 
     return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
-        <AdminUserList users={users} navigationFunction={(userId) => {
-            navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: userId })
+        <AdminUserList users={users}
+navigationFunction={(userId) => {
+            navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: userId });
         }} />
 
         {/* admin header */}
@@ -191,7 +192,8 @@ export const AdminUserTeacherInfoSubpage = (props: {
                                         m={5}>
 
                                         <Flex>
-                                            <img src={badge.icon} alt={""} />
+                                            <img src={badge.icon}
+alt={""} />
                                         </Flex>
 
                                         <Flex>
@@ -213,7 +215,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
                                                 {badge.name}
                                             </EpistoFont>
                                         </Flex>
-                                    </Flex>
+                                    </Flex>;
                                 })}
                         </Flex>
                     </EpistoLabel>
@@ -231,5 +233,5 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
             </Flex>
         </AdminSubpageHeader>
-    </AdminBreadcrumbsHeader>
-}
+    </AdminBreadcrumbsHeader>;
+};

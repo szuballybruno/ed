@@ -1,11 +1,11 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
 import { Equalizer, ShortText, ViewList } from "@mui/icons-material";
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import CategoryIcon from '@mui/icons-material/Category';
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import CategoryIcon from "@mui/icons-material/Category";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
-import VideocamIcon from '@mui/icons-material/Videocam';
+import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
+import VideocamIcon from "@mui/icons-material/Videocam";
 import React, { ReactNode, useState } from "react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useAdminCourseList, useCreateCourse, useDeleteCourse } from "../../../services/api/courseApiService";
@@ -53,7 +53,7 @@ export const AdminCourseListSubpage = () => {
 
             setSelectedCourseIds(selectedCourseIds.filter(x => x !== courseId));
         }
-    }
+    };
 
     const selectAllOrNone = (isAll: boolean) => {
 
@@ -64,7 +64,7 @@ export const AdminCourseListSubpage = () => {
 
             setSelectedCourseIds([]);
         }
-    }
+    };
 
     const handleDeleteCourseAsync = async (courseId: number) => {
 
@@ -91,8 +91,8 @@ export const AdminCourseListSubpage = () => {
                         }
                     }
                 ]
-            })
-    }
+            });
+    };
 
     const handleCreateCourseAsync = async () => {
 
@@ -110,7 +110,7 @@ export const AdminCourseListSubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     const singleSelectedCourse = courses.filter(x => x.courseId === selectedCourseIds[0])[0];
 
@@ -135,7 +135,7 @@ export const AdminCourseListSubpage = () => {
             text: "Statisztika megjelenítése",
             onClick: () => navigate(administrationRoutes.coursesRoute.statisticsCourseRoute.route, { courseId: singleSelectedCourse.courseId })
         }
-    ]
+    ];
 
     return <LoadingFrame
         loadingState={[coursesStatus, createCourseState, deleteCourseState]}
@@ -154,7 +154,11 @@ export const AdminCourseListSubpage = () => {
                 itemLabel="kurzus" />
 
             {/* List of courses */}
-            <FlexList flex={1} pb="300px" mt="5px" className="roundBorders" background="var(--transparentWhite70)">
+            <FlexList flex={1}
+pb="300px"
+mt="5px"
+className="roundBorders"
+background="var(--transparentWhite70)">
                 {courses
                     .map(course => {
 
@@ -176,13 +180,13 @@ export const AdminCourseListSubpage = () => {
                             {
                                 name: course.examCount + "",
                                 icon: <AssignmentIcon />
-                            })
+                            });
 
                         chips.push(
                             {
                                 name: course.videosCount + "",
                                 icon: <VideocamIcon />
-                            })
+                            });
 
                         return <FlexListItem
                             align="center"
@@ -215,11 +219,15 @@ export const AdminCourseListSubpage = () => {
                                     }
                                 />
                             }
-                            endContent={<Flex align="center" justifyContent={"flex-end"} height="100%" width={165} px={10}>
+                            endContent={<Flex align="center"
+justifyContent={"flex-end"}
+height="100%"
+width={165}
+px={10}>
                                 <EpistoButton
                                     variant={"colored"}
                                     onClick={() => {
-                                        navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: course.courseId })
+                                        navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: course.courseId });
                                     }}
                                     style={{ width: 20 }}>
                                     <ShortText style={{ width: "20px", height: "20px" }} />
@@ -228,7 +236,7 @@ export const AdminCourseListSubpage = () => {
                                 <EpistoButton
                                     variant={"colored"}
                                     onClick={() => {
-                                        navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: course.courseId })
+                                        navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: course.courseId });
                                     }}
                                     style={{ width: 20, marginLeft: 5 }}>
                                     <ViewList style={{ width: "20px", height: "20px" }} />
@@ -237,7 +245,7 @@ export const AdminCourseListSubpage = () => {
                                 <EpistoButton
                                     variant="colored"
                                     onClick={() => {
-                                        navigate(administrationRoutes.coursesRoute.statisticsCourseRoute.route, { courseId: course.courseId })
+                                        navigate(administrationRoutes.coursesRoute.statisticsCourseRoute.route, { courseId: course.courseId });
                                     }}
                                     style={{ width: 20, marginLeft: 5 }} >
                                     <Equalizer style={{ width: "20px", height: "20px" }} />
@@ -250,11 +258,11 @@ export const AdminCourseListSubpage = () => {
                                     <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>
                                 </EpistoButton>
                             </Flex>}
-                        />
+                        />;
                     })}
             </FlexList>
 
             <FloatAddButton onClick={handleCreateCourseAsync} />
         </AdminSubpageHeader>
-    </LoadingFrame>
-}
+    </LoadingFrame>;
+};

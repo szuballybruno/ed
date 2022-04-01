@@ -40,9 +40,9 @@ export const EventListener = (props: {
 
                 return <div key={index}>
                     {x.handlerComponent({ data: eventData, key: index })}
-                </div>
+                </div>;
             })}
 
         {children}
-    </>
-}
+    </>;
+};

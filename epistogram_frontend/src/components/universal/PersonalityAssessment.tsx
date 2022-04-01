@@ -31,7 +31,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
             description: x.activeDescription
         }));
 
-    const [openAccordions, setOpenAccordions] = useState([0])
+    const [openAccordions, setOpenAccordions] = useState([0]);
 
     const allOrAllButOneAccordionsClosed = openAccordions.length <= 1;
 
@@ -87,7 +87,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                             flex: 3
                         }}
                         onClick={() => {
-                            setIsShowHelperPopper(true)
+                            setIsShowHelperPopper(true);
                         }}
                         ref={ref}
                         icon={<InfoOutlined />}>
@@ -108,7 +108,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                         placementX="left"
                         isOpen={isShowHelperPopper}
                         handleClose={() => {
-                            setIsShowHelperPopper(false)
+                            setIsShowHelperPopper(false);
                         }}
                         target={ref?.current}>
 
@@ -136,13 +136,13 @@ export const PersonalityAssessment = (props: FlexProps) => {
                             if (allOrAllButOneAccordionsClosed) {
 
                                 setOpenAccordions(personalityDescriptionAccordions
-                                    .map((_, index) => index))
+                                    .map((_, index) => index));
                             }
 
                             // close all 
                             else {
 
-                                setOpenAccordions([0])
+                                setOpenAccordions([0]);
                             }
                         }}>
 
@@ -160,18 +160,22 @@ export const PersonalityAssessment = (props: FlexProps) => {
                         .map((item, index) => {
 
                             return <AccordionItem
+                                key={index}
                                 className="roundBorders mildShadow"
                                 p="10px 10px"
                                 mb="10px"
                                 background="var(--transparentWhite70)"
                                 onClick={() => {
-                                    setOpenAccordions([index])
+                                    setOpenAccordions([index]);
                                 }}>
 
                                 {/* header */}
                                 <AccordionButton>
 
-                                    <Box flex='1' fontWeight="500" fontSize="15px" textAlign='left'>
+                                    <Box flex='1'
+fontWeight="500"
+fontSize="15px"
+textAlign='left'>
                                         {item.title}
                                     </Box>
 
@@ -179,14 +183,16 @@ export const PersonalityAssessment = (props: FlexProps) => {
                                 </AccordionButton>
 
                                 {/* content  */}
-                                <AccordionPanel pb={4} mt="10px" fontSize="13px">
+                                <AccordionPanel pb={4}
+mt="10px"
+fontSize="13px">
 
                                     {item.description}
                                 </AccordionPanel>
-                            </AccordionItem>
+                            </AccordionItem>;
                         })}
                 </Accordion>
             </Flex>
         </Flex>
-    </LoadingFrame >
-}
+    </LoadingFrame >;
+};

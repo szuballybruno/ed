@@ -1,6 +1,6 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
 import { QuestionDTO } from "../shared/dtos/QuestionDTO";
 import { showNotification } from "../services/core/notifications";
@@ -40,7 +40,7 @@ export const QuesitionView = (props: {
 
         setSelectedAnswerId(answerId);
         await answerQuesitonAsync([answerId]);
-    }
+    };
 
     // reset when question id changed 
     useEffect(() => {
@@ -118,5 +118,5 @@ export const QuesitionView = (props: {
                 className="square25"
                 style={{ margin: "0px 0px 4px 4px" }} />
         </Flex>}
-    </QuestionnaireLayout>
-}
+    </QuestionnaireLayout>;
+};

@@ -11,18 +11,19 @@ export const CircularProgressWithLabel = (
     props: CircularProgressProps & { value: number },
 ) => {
     return (
-        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-            <CircularProgress variant="determinate" {...props} />
+        <Box sx={{ position: "relative", display: "inline-flex" }}>
+            <CircularProgress variant="determinate"
+{...props} />
             <Box
                 sx={{
                     top: 0,
                     left: 0,
                     bottom: 0,
                     right: 0,
-                    position: 'absolute',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    position: "absolute",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                 }}
             >
                 <EpistoFont>
@@ -31,7 +32,7 @@ export const CircularProgressWithLabel = (
             </Box>
         </Box>
     );
-}
+};
 
 export const AdminCourseUserProgressSubpage = () => {
     const modules = [
@@ -44,7 +45,7 @@ export const AdminCourseUserProgressSubpage = () => {
         "Munka nagy mennyiségű adattal",
         "Kreatív adatábrázolás",
         "Ismerkedés a haladó funkciókkal"
-    ]
+    ];
 
     const users = [
         "Bagi Árpád",
@@ -62,15 +63,15 @@ export const AdminCourseUserProgressSubpage = () => {
         "Reichenberger Krisztina",
         "Borbély Rozália",
         "Kovács Írisz"
-    ]
+    ];
 
     const gridRows = () => {
 
         return users.map((user, index) => {
-            let userWithIndex = {
+            const userWithIndex = {
                 id: index,
                 userFullName: user
-            }
+            };
 
             Object.assign(userWithIndex,
                 Object.fromEntries(
@@ -78,12 +79,12 @@ export const AdminCourseUserProgressSubpage = () => {
                         `modul${i}`,
                         getRandomInteger(0, 100)
                     ])
-                ))
+                ));
 
-            return userWithIndex
-        })
+            return userWithIndex;
+        });
 
-    }
+    };
 
     const gridColumns: {
         field: string,
@@ -93,13 +94,13 @@ export const AdminCourseUserProgressSubpage = () => {
         renderCell?: (params: any) => any
     }[] = [
             {
-                field: 'id',
+                field: "id",
                 width: 80,
                 hide: true
             },
             {
-                field: 'userFullName',
-                headerName: '',
+                field: "userFullName",
+                headerName: "",
                 width: 220,
             }
         ];
@@ -120,10 +121,10 @@ export const AdminCourseUserProgressSubpage = () => {
                                 ? "var(--mildOrange)"
                                 : "var(--deepGreen)"
                     }}
-                    value={params.value} />
+                    value={params.value} />;
             }
-        })
-    })
+        });
+    });
 
 
     return <CourseAdministartionFrame>
@@ -138,7 +139,8 @@ export const AdminCourseUserProgressSubpage = () => {
             //onSave={handleSaveCourseAsync}
             direction="column">
 
-            <DataGrid rows={gridRows()} columns={gridColumns} />
+            <DataGrid rows={gridRows()}
+columns={gridColumns} />
         </AdminSubpageHeader>
-    </CourseAdministartionFrame>
-}
+    </CourseAdministartionFrame>;
+};

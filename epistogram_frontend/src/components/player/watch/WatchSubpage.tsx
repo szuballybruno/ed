@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { usePlayerData } from "../../../services/api/playerApiService";
 import { useNavigation } from "../../../services/core/navigatior";
@@ -42,7 +42,7 @@ export const WatchSubpage = () => {
     const nextItemState = playerData?.nextItemState ?? null;
     const isPlayerLoaded = playerDataStatus === "success";
 
-    console.log("nextItemCode: " + nextItemCode)
+    console.log("nextItemCode: " + nextItemCode);
 
     // redirect if current item should be locked 
     useEffect(() => {
@@ -76,7 +76,7 @@ export const WatchSubpage = () => {
                     }
                 ],
             });
-    }
+    };
 
     const isDesktopView = useIsDesktopView();
 
@@ -86,7 +86,7 @@ export const WatchSubpage = () => {
 
         if (nextItemCode)
             navigateToPlayer(nextItemCode);
-    }
+    };
 
     return (
         <>
@@ -98,10 +98,12 @@ export const WatchSubpage = () => {
                 direction="column"
                 error={[playerDataError]}>
 
-                <Flex px="20px" mb="50px">
+                <Flex px="20px"
+mb="50px">
 
                     {/* main column */}
-                    <Box id="mainColumn" className="whall" >
+                    <Box id="mainColumn"
+className="whall" >
 
                         {video && <WatchView
                             isPlayerLoaded={isPlayerLoaded}
@@ -123,7 +125,8 @@ export const WatchSubpage = () => {
                             courseId={courseId!}
                             exam={exam} />}
 
-                        <ModuleView module={module} startModule={handleContinueCourse} />
+                        <ModuleView module={module}
+startModule={handleContinueCourse} />
                     </Box>
 
                     {/* right sidebar */}
@@ -159,5 +162,5 @@ export const WatchSubpage = () => {
 
             </LoadingFrame>
         </>
-    )
-}
+    );
+};

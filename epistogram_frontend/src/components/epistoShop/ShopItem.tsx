@@ -5,7 +5,7 @@ import React from "react";
 import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
 import { getAssetUrl } from "../../static/frontendHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
-import StarsIcon from '@mui/icons-material/Stars';
+import StarsIcon from "@mui/icons-material/Stars";
 import { useNavigation } from "../../services/core/navigatior";
 import { EpistoButton } from "../controls/EpistoButton";
 import { FlexFloat } from "../controls/FlexFloat";
@@ -33,7 +33,7 @@ export const ShopItem = (props: {
 
             openNewTab(detailsUrl);
         }
-    }
+    };
 
     return <FlexFloat
         className="whall roundBorders"
@@ -47,7 +47,10 @@ export const ShopItem = (props: {
         {...css}>
 
         {/* cover image box */}
-        <Box flex="7" position="relative" minH={150} maxH={150}>
+        <Box flex="7"
+position="relative"
+minH={150}
+maxH={150}>
 
             {/* cover image */}
             <img
@@ -56,7 +59,7 @@ export const ShopItem = (props: {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    position: 'absolute'
+                    position: "absolute"
                 }}
                 src={coverFilePath}
                 alt="" />
@@ -121,12 +124,16 @@ export const ShopItem = (props: {
         </Box>
 
         {/* title */}
-        <Box flex="3" flexBasis="80px" zIndex={1}>
+        <Box flex="3"
+flexBasis="80px"
+zIndex={1}>
 
-            <Flex direction="column" p="10px" >
+            <Flex direction="column"
+p="10px" >
 
                 {/* category  */}
-                <EpistoFont classes={["fontGrey"]} fontSize="fontSmall">
+                <EpistoFont classes={["fontGrey"]}
+fontSize="fontSmall">
                     {shopItemCategoryName}
                 </EpistoFont>
 
@@ -144,7 +151,9 @@ export const ShopItem = (props: {
 
         {/* prices */}
         {!isPurchased &&
-            <Flex alignItems={"center"} justifyContent={"center"} mb="5px">
+            <Flex alignItems={"center"}
+justifyContent={"center"}
+mb="5px">
                 <Flex alignItems={"center"}>
                     <LocalOffer style={{
                         height: 17,
@@ -161,7 +170,8 @@ export const ShopItem = (props: {
                             height: 20,
                             margin: 2
                         }}
-                        src={getAssetUrl("/images/epistoCoin.png")} alt={""} />
+                        src={getAssetUrl("/images/epistoCoin.png")}
+alt={""} />
 
                     {/* currency price
                 {currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}*/}
@@ -169,7 +179,8 @@ export const ShopItem = (props: {
             </Flex>}
 
         {/* buttons */}
-        <Flex height="40px" margin="5px 5px 5px 5px">
+        <Flex height="40px"
+margin="5px 5px 5px 5px">
 
             {/* item details */}
             <EpistoButton
@@ -192,5 +203,5 @@ export const ShopItem = (props: {
                         : translatableTexts.shop.buy}
             </EpistoButton>}
         </Flex>
-    </FlexFloat>
-}
+    </FlexFloat>;
+};

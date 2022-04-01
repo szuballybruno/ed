@@ -19,14 +19,17 @@ export const EpistoPopper = (props: {
         onClose={handleClose}
         // BackdropComponent={() => <Box></Box>}
         anchorOrigin={{
-            vertical: 'bottom',
+            vertical: "bottom",
             horizontal: placementX ?? "center",
         }}
         elevation={0}
         className="normalizeChild">
 
-        <FlexFloat style={style} borderRadius="10px" direction="column" p="20px">
+        <FlexFloat style={style}
+borderRadius="10px"
+direction="column"
+p="20px">
             {children}
         </FlexFloat>
-    </Popover>
-}
+    </Popover>;
+};

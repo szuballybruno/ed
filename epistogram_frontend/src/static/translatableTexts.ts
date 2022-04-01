@@ -69,7 +69,7 @@ export const translatableTexts = {
         unknownErrorTryAgain: "Ismeretlen hiba történt, kérjük próbálkozzon újra!",
 
         learningStyleSurvey: "Tanulási stílust felmérő kérdőív",
-        setPasswordDescription: `Itt tudod megadni (lehetőleg) erős jelszavadat. \n \n Fontos, hogy minimum 6 karakterből álljon, és tartalmaznia kell minimum egy számot! \n \n Ha esetleg megszakadna a regisztrációs folyamat (például elmegy az internet, vagy bármi egyéb probléma adódik), ne aggódj, az e-mailedre küldött (ezt, amit most megnyitottál) linkre kattintva folytathatod, ugyanakkor ebben az esetben ismét meg kell adnod a jelszavad.`,
+        setPasswordDescription: "Itt tudod megadni (lehetőleg) erős jelszavadat. \n \n Fontos, hogy minimum 6 karakterből álljon, és tartalmaznia kell minimum egy számot! \n \n Ha esetleg megszakadna a regisztrációs folyamat (például elmegy az internet, vagy bármi egyéb probléma adódik), ne aggódj, az e-mailedre küldött (ezt, amit most megnyitottál) linkre kattintva folytathatod, ugyanakkor ebben az esetben ismét meg kell adnod a jelszavad.",
 
         firstNameLabel: "Keresztnév",
         lastNameLabel: "Vezetéknév",
@@ -78,7 +78,7 @@ export const translatableTexts = {
         passwordAgainLabel: "Jelszó mégegyszer",
 
         privacyPolicyDescriptionParts: [
-            `Elfogadom az`,
+            "Elfogadom az",
             "Adatkezelési Nyilatkozat",
             "ban foglaltakat"
         ],
@@ -121,9 +121,9 @@ export const translatableTexts = {
         greetSlideNextButton: "Tovább",
 
         summarySlideDescriptionParts: [
-            `Az előző kérdőív segítségével azt vizsgáltuk, milyen módszerekkel érzed komfortosnak a tanulást.`,
-            `\n A platformunk további adatokat gyűjt majd arról, milyen típusú tananyagokban haladsz a legjobban, mely idősávokban vagy a leghatékonyabb, a felméréssel kombinálva pedig hamarosan személyre szabott tippeket is kapsz majd, valamint a tanulás sebessége és a módszereink is a te igényeidhez fognak idomulni. \n \n`,
-            `Most pedig nem maradt más dolgod, mint a lenti gombra kattintani, és elkezdeni a tanulást!`
+            "Az előző kérdőív segítségével azt vizsgáltuk, milyen módszerekkel érzed komfortosnak a tanulást.",
+            "\n A platformunk további adatokat gyűjt majd arról, milyen típusú tananyagokban haladsz a legjobban, mely idősávokban vagy a leghatékonyabb, a felméréssel kombinálva pedig hamarosan személyre szabott tippeket is kapsz majd, valamint a tanulás sebessége és a módszereink is a te igényeidhez fognak idomulni. \n \n",
+            "Most pedig nem maradt más dolgod, mint a lenti gombra kattintani, és elkezdeni a tanulást!"
         ],
         goToHomePage: "Irány a platform!"
     },
@@ -348,16 +348,16 @@ export const translatableTexts = {
             whatSkillsTheCourseImproving: "Milyen készségeket fejleszt a tanfolyam?",
             averageLearningStyle: "Felhasználók átlagos tanulási stílusa",
             averageLearningStyleChartLabels: [
-                'Egyedüli',
-                'Hangos kimondás',
-                'Elméleti',
-                'Vizuális alapú',
-                'Analitikus',
-                'Szociális',
-                'Térbeli elhelyezés',
-                'Gyakorlati',
-                'Audió alapú',
-                'Kreatív'
+                "Egyedüli",
+                "Hangos kimondás",
+                "Elméleti",
+                "Vizuális alapú",
+                "Analitikus",
+                "Szociális",
+                "Térbeli elhelyezés",
+                "Gyakorlati",
+                "Audió alapú",
+                "Kreatív"
             ]
         },
 
@@ -366,16 +366,16 @@ export const translatableTexts = {
             howMuchDoesTheCourseFitsYou: "Mennyire illik hozzád ez a kurzus",
             averageLearningStyle: "Felhasználók átlagos tanulási stílusa",
             averageLearningStyleChartLabels: [
-                'Egyedüli',
-                'Hangos kimondás',
-                'Elméleti',
-                'Vizuális alapú',
-                'Analitikus',
-                'Szociális',
-                'Térbeli elhelyezés',
-                'Gyakorlati',
-                'Audió alapú',
-                'Kreatív'
+                "Egyedüli",
+                "Hangos kimondás",
+                "Elméleti",
+                "Vizuális alapú",
+                "Analitikus",
+                "Szociális",
+                "Térbeli elhelyezés",
+                "Gyakorlati",
+                "Audió alapú",
+                "Kreatív"
             ],
             technicalRequirementsForCourse: "Milyen technikai követelményei vannak a kurzusnak?"
         }
@@ -531,4 +531,4 @@ export const translatableTexts = {
             moduleRemovedSuccessfully: "Modul sikeresen törölve!"
         }
     }
-}
+};

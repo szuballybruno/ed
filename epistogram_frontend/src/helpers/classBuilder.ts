@@ -16,7 +16,7 @@ export class ClassBuilder {
     build = () => {
 
         return this._classes.join(" ");
-    }
+    };
 
     appendBuilder = (builder?: ClassBuilder) => {
 
@@ -24,14 +24,14 @@ export class ClassBuilder {
             this._classes = this._classes.concat(builder._classes);
 
         return this;
-    }
+    };
 
     appendList = (classes: string[]) => {
 
         this._classes = this._classes.concat(classes);
 
         return this;
-    }
+    };
 
     customize = (fn?: ClassBuilderCustomizationFnType) => {
 
@@ -39,13 +39,13 @@ export class ClassBuilder {
             fn(this);
 
         return this;
-    }
+    };
 
     custom = (className: string) => {
 
         this.addClass(className);
         return this;
-    }
+    };
 
     ifElse = (condition: boolean, whenTrue: (b: ClassBuilder) => ClassBuilder, whenFalse: (b: ClassBuilder) => ClassBuilder) => {
 
@@ -59,7 +59,7 @@ export class ClassBuilder {
         }
 
         return this;
-    }
+    };
 
     if = (condition: boolean, whenTrue: ((b: ClassBuilder) => ClassBuilder) | string) => {
 
@@ -75,7 +75,7 @@ export class ClassBuilder {
         }
 
         return this;
-    }
+    };
 
     private addClass(name: string, arg1?: string, arg2?: string, arg3?: string, arg4?: string) {
 
@@ -91,11 +91,11 @@ export class ClassBuilder {
         if (arg4)
             name += "-" + arg4;
 
-        this._classes.push(name)
+        this._classes.push(name);
     }
 }
 
 export const createClassBuiler = () => {
 
     return new ClassBuilder();
-}
+};

@@ -40,7 +40,7 @@ export const useSignupQuestionsState = (options: {
             clearAnswerCache();
 
         questionnaireState.next();
-    }
+    };
 
     return {
         currentQuestion,
@@ -51,8 +51,8 @@ export const useSignupQuestionsState = (options: {
         questionnaireProgressbarValue,
         answerQuestionAsync,
         allowQuickNext
-    }
-}
+    };
+};
 
 export type SignupQuestionsStateType = ReturnType<typeof useSignupQuestionsState>;
 
@@ -84,7 +84,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
 
             showError(e);
         }
-    }
+    };
 
     {/*const Testasd = () => {
         return <FlexFloat
@@ -123,7 +123,9 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
-            upperComponent={<Flex alignItems={"center"} justifyContent={"flex-end"} width={"30%"}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
+            upperComponent={<Flex alignItems={"center"}
+justifyContent={"flex-end"}
+width={"30%"}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
 
             <RadioGroup
                 id="answers"
@@ -151,5 +153,5 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
                         label={answer.answerText} />)}
             </RadioGroup>
         </SignupWrapper>}
-    </>
-}
+    </>;
+};

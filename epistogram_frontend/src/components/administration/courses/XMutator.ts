@@ -1,5 +1,5 @@
 import { useForceUpdate } from "@chakra-ui/react";
-import { MutableRefObject, useRef, useState } from "react"
+import { MutableRefObject, useRef } from "react";
 import { FieldMutation } from "../../../shared/dtos/mutations/FieldMutation";
 import { Mutation } from "../../../shared/dtos/mutations/Mutation";
 import { getKeys } from "../../../shared/logic/sharedLogic";
@@ -33,7 +33,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
         mutRef.current = muts;
         forceUpdate();
-    }
+    };
 
     const getCompareKeyValue = (obj: TMutatee) => {
 
@@ -42,7 +42,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             throw new Error("Can't use null or undeined as object key!");
 
         return key;
-    }
+    };
 
     const overrideProps = (obj: any, fieldMutators: FieldMutation<TMutatee, any>[]) => {
 
@@ -50,12 +50,12 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             .map(x => obj[x.field] = x.value);
 
         return obj;
-    }
+    };
 
     const createObj = (mut: Mutation<TMutatee, TKey>): TMutatee => {
 
         return overrideProps({} as any, mut.fieldMutators!);
-    }
+    };
 
     const mutatedItems = ([...items])
         .concat(mutRef.current
@@ -88,7 +88,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             .current
             .filter(x => x.field === field)
             .forEach(x => x.action({ key, field, newValue, item: mutatedItems.single(x => getCompareKey(x) === key) }));
-    }
+    };
 
     // const addOnMutationHandler = <TField extends keyof TMutatee>(field: TField, action: OnMutaionHandlerActionType<TMutatee, TKey, TField>) => {
 
@@ -98,7 +98,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
     const setCompareKey = (obj: TMutatee, key: TKey) => {
 
         (obj as any)[keyPropertyName] = key;
-    }
+    };
 
     const mutate = <TField extends keyof TMutatee>(params: {
         key: TKey,
@@ -118,7 +118,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
             if (!noOnMutationCallback)
                 executeMutationHandler(key, field, newValue);
-        }
+        };
 
         const newMutations = [...mutRef.current];
 
@@ -144,7 +144,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
             if (existingMutation.fieldMutators.length === 1) {
 
-                console.log(`Removing mutation: ${key}`)
+                console.log(`Removing mutation: ${key}`);
                 setMutationsWithCallback(newMutations
                     .filter(x => x.key !== key));
             }
@@ -155,7 +155,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
                         .fieldMutators
                         .filter(x => x.field !== field);
 
-                console.log(`Removing field mutation: ${key} - ${field}`)
+                console.log(`Removing field mutation: ${key} - ${field}`);
                 setMutationsWithCallback(newMutations);
             }
 
@@ -199,9 +199,9 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
                 .push({ field, value: newValue });
         }
 
-        console.log(`Adding new mutation: ${key} - ${field} - ${newValue}`)
+        console.log(`Adding new mutation: ${key} - ${field} - ${newValue}`);
         setMutationsWithCallback(newMutations);
-    }
+    };
 
     const remove = (key: TKey) => {
 
@@ -217,13 +217,13 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
                 key,
                 action: "delete",
                 fieldMutators: []
-            }
+            };
 
             newList.push(mut);
         }
 
         setMutations(newList);
-    }
+    };
 
     const add = (key: TKey, obj: Partial<TMutatee>) => {
 
@@ -245,10 +245,10 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
                     return newObj;
                 })
-        }
+        };
 
         setMutations([...mutRef.current, mut]);
-    }
+    };
 
     const isMutated = (key: TKey) => {
 
@@ -270,13 +270,13 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             return mut
                 .fieldMutators
                 .some(x => x.field === field);
-        }
-    }
+        };
+    };
 
     const resetMutations = () => {
 
         setMutations([]);
-    }
+    };
 
     return {
         mutate,
@@ -288,5 +288,5 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         mutations: mutRef.current,
         isAnyMutated: mutRef.current.length > 0,
         mutatedData: mutatedItems
-    }
-}
+    };
+};

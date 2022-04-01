@@ -28,7 +28,7 @@ export const CourseRatingSubpage = () => {
         undefined,
         () => {
 
-            console.log('asdasdaw');
+            console.log("asdasdaw");
             navigateToCourseOverview(courseId);
         });
 
@@ -44,7 +44,7 @@ export const CourseRatingSubpage = () => {
     const handleBackAsync = () => {
 
         paging.previous();
-    }
+    };
 
     const handleNextAsync = async () => {
 
@@ -67,7 +67,7 @@ export const CourseRatingSubpage = () => {
 
             showError(e);
         }
-    }
+    };
 
     useEffect(() => {
 
@@ -81,13 +81,13 @@ export const CourseRatingSubpage = () => {
                     quesitionId: question.id,
                     text: question.answerText,
                     value: question.answerValue
-                }
+                };
             }));
     }, [currentQuestions]);
 
     return (
         <LoadingFrame
-            error={[courseRatingGroupsError]} 
+            error={[courseRatingGroupsError]}
             height="100%">
 
             <ExamLayout
@@ -113,7 +113,7 @@ export const CourseRatingSubpage = () => {
                         width="100%">
 
                         {currentQuestions
-                            .map(question => {
+                            .map((question, index) => {
 
                                 const currentAnswer = questionAnswers
                                     .firstOrNull(x => x.quesitionId === question.id);
@@ -128,10 +128,11 @@ export const CourseRatingSubpage = () => {
                                     newAnswers[index].value = value;
 
                                     setQuestionAnswers(newAnswers);
-                                }
+                                };
 
                                 return (
                                     <Flex
+                                        key={index}
                                         direction="column"
                                         mb="25px"
                                         width="60%"
@@ -169,11 +170,11 @@ export const CourseRatingSubpage = () => {
                                                 }} />
                                         </>}
                                     </Flex>
-                                )
+                                );
                             })}
                     </Flex>
                 </ExamLayoutContent>
             </ExamLayout >
         </LoadingFrame >
-    )
-}
+    );
+};

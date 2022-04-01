@@ -1,13 +1,13 @@
-import { Flex } from "@chakra-ui/react"
-import { Switch } from "react-router-dom"
-import { applicationRoutes } from "../../../configuration/applicationRoutes"
-import { getRoute } from "../../../MainRouting"
-import { AdminCourseContentSubpage } from "./AdminCourseContentSubpage"
-import { AdminCourseUserProgressSubpage } from "./AdminCourseUserProgressSubpage"
-import { AdminInteractiveCourseSubpage } from "./AdminInteractiveCourseSubpage"
-import { CourseAdministartionFrame } from "./CourseAdministartionFrame"
-import { CourseStatisticsSubpage } from "./CourseStatisticsSubpage"
-import { AdminCourseDetailsSubpage } from "./EditCourseDetailsSubpage"
+import { Flex } from "@chakra-ui/react";
+import { Switch } from "react-router-dom";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { getRoute } from "../../../MainRouting";
+import { AdminCourseContentSubpage } from "./AdminCourseContentSubpage";
+import { AdminCourseUserProgressSubpage } from "./AdminCourseUserProgressSubpage";
+import { AdminInteractiveCourseSubpage } from "./AdminInteractiveCourseSubpage";
+import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
+import { CourseStatisticsSubpage } from "./CourseStatisticsSubpage";
+import { AdminCourseDetailsSubpage } from "./EditCourseDetailsSubpage";
 
 export const CourseAdministartionSubpage = () => {
 
@@ -26,5 +26,5 @@ export const CourseAdministartionSubpage = () => {
                 {getRoute(applicationRoutes.administrationRoute.coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}
             </Switch>
         </Flex>
-    )
-}
+    );
+};

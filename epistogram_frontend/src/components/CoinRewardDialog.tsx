@@ -42,13 +42,16 @@ export const CoinRewardDialog = (props: {
                 {text}
             </EpistoFont>
 
-            <Flex align="flex-end" mt="10px">
+            <Flex align="flex-end"
+mt="10px">
                 
-                <EpistoFont fontSize="fontGiant" style={{ color: "var(--epistoTeal)", fontWeight: "bold" }}>
+                <EpistoFont fontSize="fontGiant"
+style={{ color: "var(--epistoTeal)", fontWeight: "bold" }}>
                     {coinRewardAmount}
                 </EpistoFont>
 
-                <EpistoFont classes={["fontDark"]} style={{ margin: "0px 0px 4px 4px" }}>
+                <EpistoFont classes={["fontDark"]}
+style={{ margin: "0px 0px 4px 4px" }}>
                     EpistoCoin
                 </EpistoFont>
 
@@ -66,5 +69,5 @@ export const CoinRewardDialog = (props: {
                 </EpistoButton>
             </Flex>
         </Flex>
-    </EpistoDialog>
-}
+    </EpistoDialog>;
+};

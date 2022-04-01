@@ -1,12 +1,12 @@
-import { Flex } from '@chakra-ui/layout';
-import { useMediaQuery } from '@chakra-ui/react';
-import React from 'react';
-import { useUserStats } from '../../services/api/userStatsApiService';
-import { defaultCharts } from '../../static/defaultChartOptions';
-import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
+import { Flex } from "@chakra-ui/layout";
+import { useMediaQuery } from "@chakra-ui/react";
+import React from "react";
+import { useUserStats } from "../../services/api/userStatsApiService";
+import { defaultCharts } from "../../static/defaultChartOptions";
+import { getAssetUrl, roundNumber } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
 import StatisticsCard, { StatisticsCardProps } from "../statisticsCard/StatisticsCard";
-import { EpistoBarChart } from '../universal/charts/EpistoBarChart';
+import { EpistoBarChart } from "../universal/charts/EpistoBarChart";
 import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
 
 // The default options that should be included with chartjs data object
@@ -14,27 +14,27 @@ import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
 export const chartDefaultDataOptions = {
     fill: false,
     tension: 0.5,
-}
+};
 
 // The default color sets for chartjs charts
 
 export const chartColorSets = {
     colorOne: {
-        backgroundColor: 'rgb(63,178,181)',
-        borderColor: 'rgba(13,104,140,0.2)',
+        backgroundColor: "rgb(63,178,181)",
+        borderColor: "rgba(13,104,140,0.2)",
     },
     colorTwo: {
-        backgroundColor: 'rgb(215,33,163)',
-        borderColor: 'rgba(139,0,155,0.2)',
+        backgroundColor: "rgb(215,33,163)",
+        borderColor: "rgba(139,0,155,0.2)",
     }
-}
+};
 
 // Labels for current charts
 
 export const labels = {
-    timeSections: ['0:00-3:00', '3:00-6:00', '6:00-9:00', '9:00-12:00', '12:00-15:00', '15:00-18:00', '18:00-21:00', '21:00-0:00'],
-    daysOfTheWeek: ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap']
-}
+    timeSections: ["0:00-3:00", "3:00-6:00", "6:00-9:00", "9:00-12:00", "12:00-15:00", "15:00-18:00", "18:00-21:00", "21:00-0:00"],
+    daysOfTheWeek: ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"]
+};
 
 // Two example chart data object
 
@@ -42,7 +42,7 @@ export const daysWithActivityInTime = {
     labels: labels.timeSections,
     datasets: [
         {
-            label: 'Napok száma amikor ebben az idősávban volt aktivitásom',
+            label: "Napok száma amikor ebben az idősávban volt aktivitásom",
             data: [0, 0, 1, 1, 3, 3, 1, 0],
             ...chartDefaultDataOptions,
             ...chartColorSets.colorOne
@@ -53,12 +53,12 @@ export const howActiveIAm = {
     labels: labels.daysOfTheWeek,
     datasets: [
         {
-            label: 'Belépések száma naponta (átlag)',
+            label: "Belépések száma naponta (átlag)",
             data: [1, 2, 3, 1, 2, 4, 1],
             ...chartDefaultDataOptions,
             ...chartColorSets.colorOne
         }, {
-            label: 'Sessiönök hossza naponta (átlag, óra)',
+            label: "Sessiönök hossza naponta (átlag, óra)",
             data: [0.67, 2.2, 4.23, 1.75, 0.5, 2, 4],
             ...chartDefaultDataOptions,
             ...chartColorSets.colorTwo
@@ -102,7 +102,7 @@ export const LearningStatistics = (props: {
 }) => {
 
     const { userId } = props;
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const [isSmallerThan1400] = useMediaQuery("(min-width: 1400px)");
 
     // http
     const { userStats } = useUserStats(userId);
@@ -383,16 +383,21 @@ export const LearningStatistics = (props: {
         minWidth={isSmallerThan1400 ? "1060px" : undefined}>
 
         {statistics
-            .map(statisticSectionData => {
+            .map((statisticSectionData, index) => {
 
-                return <LearningStatisticsSeciton title={statisticSectionData.title}>
+                return <LearningStatisticsSeciton
+                    key={index}
+                    title={statisticSectionData.title}>
+
                     {statisticSectionData
                         .items
-                        .map(item => {
+                        .map((item, i2) => {
 
-                            return <StatisticsCard {...item} />
+                            return <StatisticsCard
+                                key={i2}
+                                {...item} />;
                         })}
-                </LearningStatisticsSeciton>
+                </LearningStatisticsSeciton>;
             })}
-    </Flex>
+    </Flex>;
 };

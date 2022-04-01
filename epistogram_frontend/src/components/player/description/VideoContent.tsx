@@ -1,12 +1,8 @@
 import { Image } from "@chakra-ui/image";
 import { Box } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
-import {
-    CalendarToday,
-    Download, FileCopy
-} from "@mui/icons-material";
-import { Typography } from "@mui/material";
-import React from 'react';
+import { CalendarToday, Download, FileCopy } from "@mui/icons-material";
+import React from "react";
 import { getAssetUrl } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
@@ -23,8 +19,10 @@ export const VideoContent = () => {
             name: "2021. 05. 12.",
             icon: <CalendarToday />
         }
-    ]
-    return <Flex minH={600} direction={"column"} width="100%">
+    ];
+    return <Flex minH={600}
+direction={"column"}
+width="100%">
         <FlexListItem
             align="center"
             p="5px"
@@ -33,16 +31,19 @@ export const VideoContent = () => {
                 src={getAssetUrl("file_extension_icons/001-xlsx-1.svg")}
                 objectFit="cover"
                 m="10px" />}
-            midContent={<Flex className="whall" direction="column">
+            midContent={<Flex className="whall"
+direction="column">
                 <Flex ml={10}>
                     <EpistoFont>
                         {"Munkafüzet1.xlsx"}
                     </EpistoFont>
                 </Flex>
                 <Box>
-                    <Flex wrap="wrap" mt="10px">
+                    <Flex wrap="wrap"
+mt="10px">
                         {chips
                             .map((chip, index) => <FloatChip
+                                key={index}
                                 name={chip.name}
                                 icon={chip.icon}
                                 padding="5px" />)}
@@ -50,11 +51,12 @@ export const VideoContent = () => {
                 </Box>
             </Flex>}
             endContent={<Flex align="center">
-                <EpistoButton variant="colored" style={{ padding: "3px" }}>
+                <EpistoButton variant="colored"
+style={{ padding: "3px" }}>
                     <Download className="square25" />
                 </EpistoButton>
             </Flex>}>
 
         </FlexListItem>
-    </Flex>
+    </Flex>;
 };

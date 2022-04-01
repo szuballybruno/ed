@@ -55,7 +55,7 @@ export const ExamQuestions = (props: {
 
             showError(e);
         }
-    }
+    };
 
     const setAnswerSelectedState = (answerId: number, isSelected: boolean) => {
 
@@ -75,7 +75,7 @@ export const ExamQuestions = (props: {
             setSelectedAnswerIds(selectedAnswerIds
                 .filter(x => x !== answerId));
         }
-    }
+    };
 
     return <LoadingFrame
         className="whall"
@@ -156,13 +156,14 @@ export const ExamQuestions = (props: {
                                     .some(x => x === answer.answerId);
 
                                 return <QuestionAnswer
+                                    key={index}
                                     onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
                                     answerText={answer.answerText}
-                                    isSelected={isAnswerSelected} />
+                                    isSelected={isAnswerSelected} />;
                             })}
                     </Grid>
                 </Flex>
             </Flex>
         </ExamLayout>
-    </LoadingFrame>
-}
+    </LoadingFrame>;
+};

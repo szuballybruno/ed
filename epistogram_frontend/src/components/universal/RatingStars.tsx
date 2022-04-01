@@ -19,7 +19,7 @@ export const RatingStars = (props: {
         <Flex>
             {iterate(5, (index) => (
                 <img
-                    onMouseEnter={() => { setIsHovered({ hovered: true, index: index }) }}
+                    onMouseEnter={() => { setIsHovered({ hovered: true, index: index }); }}
                     onMouseLeave={() => setIsHovered({ hovered: false, index: 0 })}
                     onClick={() => setSelectedIndex(index)}
                     src={iconUrl ? iconUrl : getAssetUrl("images/star3D.png")}
@@ -40,5 +40,5 @@ export const RatingStars = (props: {
                     }} />
             ))}
         </Flex>
-    </>
-}
+    </>;
+};

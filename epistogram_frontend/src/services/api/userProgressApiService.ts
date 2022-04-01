@@ -12,8 +12,8 @@ export const useUserProgressData = (courseId: number, enabled: boolean) => {
         userProgressData: qr.data,
         userProgressDataState: qr.state,
         userProgressDataError: qr.error
-    }
-}
+    };
+};
 
 export const useRecommendedItemQuota = (courseId: number, enabled: boolean) => {
 
@@ -24,8 +24,8 @@ export const useRecommendedItemQuota = (courseId: number, enabled: boolean) => {
         recommendedItemQuotaState: qr.state,
         recommendedItemQuotaError: qr.error,
         refetchRecommendedItemQuota: qr.refetch
-    }
-}
+    };
+};
 
 export const useActiveCourses = () => {
 
@@ -35,5 +35,5 @@ export const useActiveCourses = () => {
         activeCourses: qr.data ?? [],
         activeCoursesState: qr.state,
         activeCoursesError: qr.error
-    }
-}
+    };
+};

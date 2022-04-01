@@ -1,7 +1,7 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
-import { EpistoText } from '../controls/EpistoText';
-import { LoadingFrame, LoadingFramePropsType } from '../system/LoadingFrame';
+import { Box, Flex, FlexProps } from "@chakra-ui/react";
+import React, { ReactNode } from "react";
+import { EpistoText } from "../controls/EpistoText";
+import { LoadingFrame, LoadingFramePropsType } from "../system/LoadingFrame";
 
 export const QuestionnaireLayout = (props: {
     title: string,
@@ -16,7 +16,11 @@ export const QuestionnaireLayout = (props: {
     const { title, answerAction, contentClickable, children, loadingProps, onlyShowAnswers, buttonWrapperStyles, ...css } = props;
 
     return (
-        <Flex id="questionnaireLayoutRoot" direction="column" p="0 0 20px 0" align="center" {...css}>
+        <Flex id="questionnaireLayoutRoot"
+direction="column"
+p="0 0 20px 0"
+align="center"
+{...css}>
 
             {/* header */}
             <Flex
@@ -50,4 +54,4 @@ export const QuestionnaireLayout = (props: {
             </LoadingFrame>
         </Flex>
     );
-}
+};
