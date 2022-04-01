@@ -137,7 +137,7 @@ export class ORMConnectionService {
                     let obj = {} as any;
 
                     getKeys(row)
-                        .forEach(key => obj[this.snakeToCamelCase(key)] = row[key]);
+                        .forEach(key => obj[this.snakeToCamelCase(key as string)] = row[key]);
 
                     return obj as T;
                 });

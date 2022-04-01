@@ -1,5 +1,5 @@
 /* Seed answer_sessions */
-INSERT INTO answer_sessions
+INSERT INTO answer_session
     (
         start_date, 
         end_date, 
