@@ -159,7 +159,12 @@ export const AdminCourseDetailsSubpage = () => {
         setHumanSkillBenefitsDescription(courseDetailsEditData.humanSkillBenefitsDescription);
         setSkillBenefits(courseDetailsEditData.skillBenefits);
         setTechnicalRequirements(courseDetailsEditData.technicalRequirements);
-        setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits);
+        courseDetailsEditData.humanSkillBenefits.length === 0
+            ? iterate(10, () => ({
+                text: "",
+                value: 0
+            }))
+            : setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits)
         setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + "");
         setTechnicalRequirementsDescription(courseDetailsEditData.technicalRequirementsDescription + "");
 
@@ -443,7 +448,7 @@ export const AdminCourseDetailsSubpage = () => {
                                     title=""
                                     areas={[{
                                         name: "Készségek",
-                                        value: humanSkillBenefits.map(x => x.value) ?? []
+                                        value: humanSkillBenefits.map(x => x.value)
                                     }]}
                                     radarIndicators={humanSkillBenefits.map(x => ({
                                         name: x.text,

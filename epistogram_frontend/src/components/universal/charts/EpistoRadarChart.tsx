@@ -1,6 +1,13 @@
 import ReactECharts from 'echarts-for-react';
 import { EpistoRadarChartDataType, EpistoRadarChartOptionsType } from './types/EpistoRadarChartTypes';
 
+/**
+ * Wrapper component for ECharts
+ **
+ * All chart options:
+ * @see Docs: https://echarts.apache.org/en/option.html#title
+ */
+
 export const EpistoRadarChart = (props: {
     title: string,
     isSortValues?: boolean,
@@ -33,6 +40,55 @@ export const EpistoRadarChart = (props: {
         width: "100%",
         height: "100%",
     }
+
+    console.log({
+        title: {
+            show: !!title,
+            text: title
+        },
+        radar:
+            radar
+                ? Object.assign(
+                    {
+                        indicator: radarIndicators
+                    },
+                    radar
+                )
+                : undefined,
+        legend:
+            legend
+                ? Object.assign(
+                    {
+                        show: true,
+                        data: areas.map((data) => ({
+                            name: data.name
+                        }))
+                    },
+                    legend)
+                : undefined,
+        tooltip: tooltip,
+        visualMap: visualMap,
+        series: [
+            Object.assign(
+                {
+                    data: areas.map((data, index) => ({
+                        value: data.value,
+                        name: data.name,
+                        lineStyle: {
+                            color: seriesOptions.color[index],
+                            shadowColor: seriesOptions.color[index]
+                        },
+                        areaStyle: {
+                            color: seriesOptions.color[index]
+                        }
+                    }))
+                },
+                seriesOptions,
+                {
+                    type: "radar"
+                })
+        ]
+    })
 
     return <ReactECharts
         option={{
