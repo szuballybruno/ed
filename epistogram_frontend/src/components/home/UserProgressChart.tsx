@@ -14,7 +14,10 @@ export const UserProgressChart = (props: {
     const dates = iterate(courseLengthDays, index => {
 
         const date = new Date(userProgress.startDate).addDays(index);
-        return date.toLocaleDateString();
+        return date.toLocaleDateString(undefined, {
+            month: '2-digit',
+            day: '2-digit'
+        })
     });
 
     const actualProgress = userProgress
