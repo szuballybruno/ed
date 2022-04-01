@@ -15,7 +15,6 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?
                 const isCurrent = isCurrentRoute(menuItem.route);
 
                 return <NavLink
-                    exact
                     to={menuItem.route}
                     key={index}>
                     <Flex

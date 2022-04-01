@@ -2,7 +2,6 @@ import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { matchPath, useLocation } from "react-router-dom";
 import { ApplicationRoute, LoadingStateType } from "../models/types";
 import { httpGetAsync } from "../services/core/httpClient";
 import { validatePassowrd } from "../shared/logic/sharedLogic";
@@ -10,6 +9,7 @@ import { ErrorCodeType, RoleIdEnum } from "../shared/types/sharedTypes";
 import { assetStorageUrl } from "./Environemnt";
 import { stringifyQueryObject } from "./locationHelpers";
 import { translatableTexts } from "./translatableTexts";
+import * as RouterDom from "react-router-dom";
 
 export const iterate = <T>(n: number, fn: (index) => T) => {
 
@@ -172,22 +172,26 @@ export const disallowWindowNavigation = () => {
 
 export const useIsMatchingCurrentRoute = () => {
 
-    const currentPath = useLocation().pathname;
+    // const matchPath = RouterDom.useMatch();
+    // const currentPath = useLocation().pathname;
 
-    const isMatchingCurrentRoute = (route: ApplicationRoute, exactOverride?: boolean) => {
+    // const isMatchingCurrentRoute = (route: ApplicationRoute, exactOverride?: boolean) => {
 
-        const match = matchPath(
-            currentPath,
-            {
-                path: route.route,
-                exact: exactOverride !== undefined ? exactOverride : !!route.exact,
-                strict: false
-            });
+    //     const match = matchPath(
+    //         currentPath,
+    //         {
+    //             path: route.route,
+    //             exact: exactOverride !== undefined ? exactOverride : !!route.exact,
+    //             strict: false
+    //         });
 
-        return !!match;
-    };
+    //     return !!match;
+    // };
 
-    return isMatchingCurrentRoute;
+    // TODO
+    return (asd: any, asd2?: any) => false; 
+
+    // return isMatchingCurrentRoute;
 };
 
 export const isString = (obj: any) => typeof obj === "string" || obj instanceof String;
@@ -609,7 +613,7 @@ export const setPageTitle = (title: string) => {
 };
 
 export const useSetPageTitle = (title: string) => {
-    
+
     useEffect(() => {
 
         setPageTitle(title);

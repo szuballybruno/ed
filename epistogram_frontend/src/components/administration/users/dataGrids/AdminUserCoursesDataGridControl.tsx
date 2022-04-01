@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useAdminCourseList } from "../../../../services/api/courseApiService";
 import { useNavigation } from "../../../../services/core/navigatior";
 import { getAssetUrl, getRandomInteger } from "../../../../static/frontendHelpers";
+import { useIntParam } from "../../../../static/locationHelpers";
 import { EpistoButton } from "../../../controls/EpistoButton";
 import { EpistoFont } from "../../../controls/EpistoFont";
 import { CircularProgressWithLabel } from "../../courses/AdminCourseUserProgressSubpage";
@@ -16,14 +17,8 @@ export const AdminUserCoursesDataGridControl = (props: {
 
     const { handleMoreButton } = props;
 
-    const params = useParams<{ courseId: string, userId: string, }>();
-
-    const userId = parseInt(params.userId);
-    const courseId = parseInt(params.courseId);
-
-    const { navigate } = useNavigation();
-
-
+    const userId = useIntParam("userId");
+    const courseId = useIntParam("courseId");
 
     const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList("");
 

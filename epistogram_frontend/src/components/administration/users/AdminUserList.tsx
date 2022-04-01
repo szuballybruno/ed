@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useNavigation } from "../../../services/core/navigatior";
 import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
+import { useIntParam } from "../../../static/locationHelpers";
 import { EpistoSearch } from "../../controls/EpistoSearch";
 import { ProfileImage } from "../../ProfileImage";
 import { CurrentUserContext } from "../../system/AuthenticationFrame";
@@ -15,8 +16,7 @@ export const AdminUserList = (props: {
     users: AdminPageUserDTO[],
     navigationFunction: (userId: number) => void
 }) => {
-    const params = useParams<{ userId: string }>();
-    const userId = parseInt(params.userId);
+    const userId = useIntParam("userId")!;
 
     const user = useContext(CurrentUserContext)!;
     const currentUserId = user.id;

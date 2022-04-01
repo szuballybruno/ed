@@ -1,4 +1,4 @@
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { CourseStageNameType } from "../../shared/types/sharedTypes";
 import { ApplicationRoute } from "../../models/types";
@@ -7,7 +7,7 @@ import { getUrl } from "../../static/frontendHelpers";
 
 export const useNavigation = () => {
 
-    const history = useHistory();
+    const domNavigate = useNavigate();
 
     const navigate = (path: string | ApplicationRoute, params?: any, query?: any) => {
 
@@ -17,7 +17,7 @@ export const useNavigation = () => {
         if (verboseLogging)
             console.log("Navigating to: " + replacedPath);
 
-        history.push(replacedPath);
+        domNavigate(replacedPath);
     };
 
     const openNewTab = (url: string) => (window as any).open(url, "_blank").focus();

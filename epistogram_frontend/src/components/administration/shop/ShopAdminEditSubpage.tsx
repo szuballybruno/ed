@@ -21,13 +21,13 @@ import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { translatableTexts } from "../../../static/translatableTexts";
+import { useIntParam } from "../../../static/locationHelpers";
 
 export const ShopAdminEditSubpage = () => {
 
     //util
     const { navigate } = useNavigation();
-    const params = useParams<{ shopItemId: string }>();
-    const shopItemId = parseInt(params.shopItemId);
+    const shopItemId = useIntParam("shopItemId")!;
     const showError = useShowErrorDialog();
 
     // http

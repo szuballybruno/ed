@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { usePlayerData } from "../../../services/api/playerApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { useIsDesktopView } from "../../../static/frontendHelpers";
+import { useIntParam, useStringParam } from "../../../static/locationHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { FlexFloat } from "../../controls/FlexFloat";
 import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
@@ -18,7 +19,7 @@ export const WatchSubpage = () => {
 
     const warningDialogLogic = useEpistoDialogLogic("warn3");
     const { navigateToPlayer } = useNavigation();
-    const { descriptorCode } = useParams<{ descriptorCode: string }>();
+    const descriptorCode = useStringParam("descriptorCode")!;
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
     // get player page data
@@ -99,11 +100,11 @@ export const WatchSubpage = () => {
                 error={[playerDataError]}>
 
                 <Flex px="20px"
-mb="50px">
+                    mb="50px">
 
                     {/* main column */}
                     <Box id="mainColumn"
-className="whall" >
+                        className="whall" >
 
                         {video && <WatchView
                             isPlayerLoaded={isPlayerLoaded}
@@ -126,7 +127,7 @@ className="whall" >
                             exam={exam} />}
 
                         <ModuleView module={module}
-startModule={handleContinueCourse} />
+                            startModule={handleContinueCourse} />
                     </Box>
 
                     {/* right sidebar */}

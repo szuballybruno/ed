@@ -1,5 +1,4 @@
 import { Flex } from "@chakra-ui/react";
-import { Switch } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { getRoute } from "../../../MainRouting";
 import { AdminCourseContentSubpage } from "./AdminCourseContentSubpage";
@@ -15,16 +14,14 @@ export const CourseAdministartionSubpage = () => {
         <Flex>
 
             {/* content pane */}
-            <Switch>
-                {getRoute(applicationRoutes.administrationRoute.coursesRoute, <CourseAdministartionFrame />)}
-                {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
-                {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
-                {getRoute(applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
-                {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute, <AdminCourseUserProgressSubpage />)}
+            {getRoute(applicationRoutes.administrationRoute.coursesRoute, <CourseAdministartionFrame />)}
+            {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
+            {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
+            {getRoute(applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
+            {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute, <AdminCourseUserProgressSubpage />)}
 
-                {/* for demo */}
-                {getRoute(applicationRoutes.administrationRoute.coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}
-            </Switch>
+            {/* for demo */}
+            {getRoute(applicationRoutes.administrationRoute.coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}
         </Flex>
     );
 };

@@ -1,6 +1,6 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import React, { useContext } from "react";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getRoute } from "../../MainRouting";
 import { ApplicationRoute } from "../../models/types";
@@ -11,7 +11,6 @@ import { NavigationLinkList } from "../NavigationLinkList";
 import { PageRootContainer } from "../PageRootContainer";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { ProtectedRoute } from "../universal/ProtectedRoute";
-import { AdminOverviewTablePage } from "./AdminOverviewTablePage";
 import { CourseAdministartionSubpage } from "./courses/CourseAdministartionSubpage";
 import { AdminHomeDetails } from "./home/AdminHomeDetails";
 import { AdminHomeOverview } from "./home/AdminHomeOverview";
@@ -59,10 +58,10 @@ export const AdminPage = () => {
 
             {/* logo link */}
             <Flex width="100%"
-alignItems={"center"}
-justifyContent="center"
-mt="10px"
-mb="20px">
+                alignItems={"center"}
+                justifyContent="center"
+                mt="10px"
+                mb="20px">
                 <img
                     src={getAssetUrl("/images/logo_min.svg")}
                     style={{
@@ -91,58 +90,54 @@ mb="20px">
             noPadding
             px="20px">
 
-            {/* admin subpages */}
-            <Switch>
-
-                {/* administration home */}
-                {getRoute(administrationRoutes.homeRoute.overviewRoute, <AdminHomeOverview />)}
-                {getRoute(administrationRoutes.homeRoute.detailsRoute, <AdminHomeDetails />)}
+            {/* administration home */}
+            {getRoute(administrationRoutes.homeRoute.overviewRoute, <AdminHomeOverview />)}
+            {getRoute(administrationRoutes.homeRoute.detailsRoute, <AdminHomeDetails />)}
 
 
-                {/* user administration */}
-                <Route path={administrationRoutes.usersRoute.route}>
+            {/* user administration */}
+            <Route path={administrationRoutes.usersRoute.route}>
 
-                    <AdminUserControl />
-                </Route>
+                <AdminUserControl />
+            </Route>
 
-                {/* course administartion */}
-                <ProtectedRoute
-                    route={administrationRoutes.coursesRoute}
-                    isAuthorizedToView={x => x.canAccessCourseAdministration}
-                    render={() => <CourseAdministartionSubpage />} />
+            {/* course administartion */}
+            <ProtectedRoute
+                route={administrationRoutes.coursesRoute}
+                isAuthorizedToView={x => x.canAccessCourseAdministration}
+                render={() => <CourseAdministartionSubpage />} />
 
-                {/* shop administartion */}
-                <ProtectedRoute
-                    route={administrationRoutes.shopRoute}
-                    isAuthorizedToView={x => x.canAccessShopAdministration}
-                    render={() => <Switch>
-                        {getRoute(administrationRoutes.shopRoute, <ShopAdminSubpage />)}
-                        {getRoute(administrationRoutes.shopRoute.editRoute, <ShopAdminEditSubpage />)}
-                    </Switch>} />
+            {/* shop administartion */}
+            <ProtectedRoute
+                route={administrationRoutes.shopRoute}
+                isAuthorizedToView={x => x.canAccessShopAdministration}
+                render={() => <>
+                    {getRoute(administrationRoutes.shopRoute, <ShopAdminSubpage />)}
+                    {getRoute(administrationRoutes.shopRoute.editRoute, <ShopAdminEditSubpage />)}
+                </>} />
 
-                {/* personality assessment administartion */}
-                <ProtectedRoute
-                    route={administrationRoutes.personalityAssessmentRoute}
-                    isAuthorizedToView={x => x.canAccessShopAdministration}
-                    render={() => <Switch>
-                        {getRoute(administrationRoutes.personalityAssessmentRoute, <PersonalityTraitCategoriesSubpage />)}
-                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTips, <EditPersonalityTraitCategorySubpage />)}
-                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTips.editTip, <EditDailyTipSubpage />)}
-                    </Switch>} />
+            {/* personality assessment administartion */}
+            <ProtectedRoute
+                route={administrationRoutes.personalityAssessmentRoute}
+                isAuthorizedToView={x => x.canAccessShopAdministration}
+                render={() => <>
+                    {getRoute(administrationRoutes.personalityAssessmentRoute, <PersonalityTraitCategoriesSubpage />)}
+                    {getRoute(administrationRoutes.personalityAssessmentRoute.editTips, <EditPersonalityTraitCategorySubpage />)}
+                    {getRoute(administrationRoutes.personalityAssessmentRoute.editTips.editTip, <EditDailyTipSubpage />)}
+                </>} />
 
-                {/* statistics */}
-                <Route exact
-path={administrationRoutes.myCompanyRoute.route}>
-                    <AdminStatistics />
-                </Route>
+            {/* statistics */}
+            <Route
+                path={administrationRoutes.myCompanyRoute.route}>
+                <AdminStatistics />
+            </Route>
 
-                {/* Disabled temporarily */}
-                {/* <ProtectedRoute
+            {/* Disabled temporarily */}
+            {/* <ProtectedRoute
                     exact
                     path={administrationRoutes.overviewTableRoute.route}
                     isAuthorizedToView={x => x.canAccessCourseAdministration}
                     render={() => <AdminOverviewTablePage />} /> */}
-            </Switch>
         </ContentPane>
     </PageRootContainer>;
 };

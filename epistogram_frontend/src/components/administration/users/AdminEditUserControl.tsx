@@ -1,29 +1,29 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
-import { Button, Checkbox, Typography } from "@mui/material";
+import { Button, Checkbox } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { useCoinBalanceOfUser, useGiftCoinsToUser } from "../../../services/api/coinTransactionsApiService";
+import { useJobTitles, useOrganizations } from "../../../services/api/miscApiService";
+import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { JobTitleDTO } from "../../../shared/dtos/JobTitleDTO";
 import { OrganizationDTO } from "../../../shared/dtos/OrganizationDTO";
 import { RoleDTO } from "../../../shared/dtos/RoleDTO";
 import { UserDTO } from "../../../shared/dtos/UserDTO";
 import { UserEditDTO } from "../../../shared/dtos/UserEditDTO";
-import { useJobTitles, useOrganizations } from "../../../services/api/miscApiService";
-import { CurrentUserContext } from "../../system/AuthenticationFrame";
-import { EpistoEntry } from "../../controls/EpistoEntry";
-import { EpistoSelect } from "../../controls/EpistoSelect";
-import { EpistoLabel } from "../../controls/EpistoLabel";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoEntryNew, useEpistoEntryState } from "../../controls/EpistoEntryNew";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { useCoinBalanceOfUser, useGiftCoinsToUser } from "../../../services/api/coinTransactionsApiService";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
 import { parseIntOrNull } from "../../../static/frontendHelpers";
-import { EditSection } from "../courses/EditSection";
+import { useIntParam } from "../../../static/locationHelpers";
+import { translatableTexts } from "../../../static/translatableTexts";
+import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoEntry } from "../../controls/EpistoEntry";
+import { EpistoEntryNew, useEpistoEntryState } from "../../controls/EpistoEntryNew";
+import { EpistoFont } from "../../controls/EpistoFont";
+import { EpistoLabel } from "../../controls/EpistoLabel";
+import { EpistoSelect } from "../../controls/EpistoSelect";
+import { CurrentUserContext } from "../../system/AuthenticationFrame";
+import { LoadingFrame } from "../../system/LoadingFrame";
 import { EpistoConinImage } from "../../universal/EpistoCoinImage";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
+import { EditSection } from "../courses/EditSection";
 
 export const roles = [
     {
@@ -51,9 +51,7 @@ export const AdminEditUserControl = (props: {
 
     const { editDTO, saveUserAsync, showDeleteUserDialog } = props;
 
-
-    const params = useParams<{ userId: string }>();
-    const editedUserId = parseInt(params.userId);
+    const editedUserId = useIntParam("userId")!;
 
     // editable fields
     const [firstName, setFirstName] = useState("");
@@ -64,7 +62,6 @@ export const AdminEditUserControl = (props: {
     const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
 
-    const history = useHistory();
     const showError = useShowErrorDialog();
     const location = useLocation();
 
@@ -90,8 +87,6 @@ export const AdminEditUserControl = (props: {
         setSelectedOrganization(editDTO.organization);
         setIsTeacher(editDTO.isTeacher);
     }, [editDTO]);
-
-
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -143,21 +138,21 @@ export const AdminEditUserControl = (props: {
     };
 
     return <Flex direction="column"
-flex="1">
+        flex="1">
 
         <Flex flex="1">
 
             {/* left column */}
             <Flex direction="column"
-flex="1">
+                flex="1">
 
                 {/* basic info section */}
                 <EditSection isFirst
-title="Alapadatok">
+                    title="Alapadatok">
 
                     {/* first & last name */}
                     <Flex flex="1"
-justify="space-between">
+                        justify="space-between">
                         <EpistoEntry
                             style={{
                                 flex: 1,
@@ -278,10 +273,10 @@ justify="space-between">
 
             </Flex>
             <Divider orientation='vertical'
-h="calc(100% - 20px)"
-w="1px"
-background="grey"
-my="10px" />
+                h="calc(100% - 20px)"
+                w="1px"
+                background="grey"
+                my="10px" />
 
             <Box
                 className='roundBorders'
@@ -296,7 +291,7 @@ my="10px" />
                     direction="column">
 
                     <EditSection isFirst
-title="EpistoCoin">
+                        title="EpistoCoin">
                         <EpistoLabel
                             isOverline
                             text="Egyenleg">
@@ -321,12 +316,12 @@ title="EpistoCoin">
                         </EpistoLabel>
 
                         <EpistoLabel width="100%"
-isOverline
-text="EpistoCoin hozzáadása">
+                            isOverline
+                            text="EpistoCoin hozzáadása">
 
                             <Flex align="center"
-flex="1"
-mt="10px">
+                                flex="1"
+                                mt="10px">
                                 <EpistoEntryNew
                                     flex="1"
                                     style={{
@@ -357,11 +352,11 @@ mt="10px">
 
                     {/* is teacher */}
                     <EpistoFont isUppercase
-fontSize="fontExtraSmall"
-style={{
-                        marginTop: 10,
-                        letterSpacing: "1.2px"
-                    }}>
+                        fontSize="fontExtraSmall"
+                        style={{
+                            marginTop: 10,
+                            letterSpacing: "1.2px"
+                        }}>
                         {translatableTexts.administration.editUserControl.selectAsTeacher}
                     </EpistoFont>
 
@@ -401,7 +396,8 @@ style={{
                     showDeleteUserDialog(editDTO);
                 } else {
 
-                    history.goBack();
+                    throw new Error("Not implemented!")
+                    // history.goBack();
                 }
             }}
             style={{ margin: "20px 20px 0 20px" }}>

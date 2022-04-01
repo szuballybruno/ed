@@ -4,7 +4,7 @@ import { ThemeProvider } from "@mui/system";
 import React from "react";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthenticationFrame } from "./components/system/AuthenticationFrame";
 import { ErrorDialogFrame } from "./components/system/DialogFrame";
 import { EventListener } from "./components/system/EventListener";
@@ -62,43 +62,45 @@ const muiTheme = createTheme({
 });
 
 ReactDOM.render(
-    <BrowserRouter getUserConfirmation={(msg, callback) => { console.log("What??"); }}>
-        <QueryClientProvider client={queryClient}>
-            <>
-                <ColorModeScript initialColorMode={"light"} />
-                <ChakraProvider theme={chakraTheme}>
-                    <ThemeProvider theme={muiTheme}>
-                        <XDialogHost>
-                            <PreventMobileFrame>
-                                <Switch>
+    <QueryClientProvider client={queryClient}>
+        <>
+            <ColorModeScript initialColorMode={"light"} />
+            <ChakraProvider theme={chakraTheme}>
+                <ThemeProvider theme={muiTheme}>
+                    <XDialogHost>
+                        <PreventMobileFrame>
+                            <BrowserRouter>
+                                <Routes>
 
                                     {/* under maintanence */}
-                                    {isUnderMaintenance && <Route path="/"
-component={UnderMaintanence} />}
+                                    {isUnderMaintenance && <Route
+                                        path="/"
+                                        element={UnderMaintanence} />}
 
                                     {/* under maintanence */}
-                                    <Route path={applicationRoutes.underMaintanenceRoute.route}
-component={UnderMaintanence} />
+                                    <Route
+                                        path={applicationRoutes.underMaintanenceRoute.route}
+                                        element={UnderMaintanence} />
 
                                     {/* app */}
                                     <Route path="/">
                                         <AuthenticationFrame>
                                             <ErrorDialogFrame>
                                                 <NotificationsFrame>
-                                                    <EventListener >
+                                                    <EventListener>
                                                         <MainRouting />
                                                     </EventListener>
                                                 </NotificationsFrame>
                                             </ErrorDialogFrame>
                                         </AuthenticationFrame>
                                     </Route>
-                                </Switch>
-                            </PreventMobileFrame>
-                        </XDialogHost>
-                    </ThemeProvider>
-                </ChakraProvider>
-            </>
-        </QueryClientProvider>
-    </BrowserRouter >,
+                                </Routes>
+                            </BrowserRouter >
+                        </PreventMobileFrame>
+                    </XDialogHost>
+                </ThemeProvider>
+            </ChakraProvider>
+        </>
+    </QueryClientProvider>,
     document.getElementById("root")
 );

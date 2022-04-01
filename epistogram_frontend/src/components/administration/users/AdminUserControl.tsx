@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Route, Switch } from "react-router";
+import { Route } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useUserListQuery } from "../../../services/api/userApiService";
 import AdminAddUserSubpage from "./AdminAddUserSubpage";
@@ -26,11 +26,10 @@ export const AdminUserControl = () => {
     };
 
 
-    return <Switch>
+    return <>
 
         {/* Route /administration/users */}
         <Route
-            exact
             path={usersRoute.route}>
 
             <AdminUserDataGridSubpage users={users} />
@@ -46,7 +45,6 @@ export const AdminUserControl = () => {
 
         {/* Route /administration/users/:userId/edit */}
         <Route
-            exact
             path={usersRoute.editRoute.route}>
 
             <AdminEditUserSubpage
@@ -56,7 +54,6 @@ export const AdminUserControl = () => {
 
         {/* Route /administration/users/:userId/statistics */}
         <Route
-            exact
             path={usersRoute.statsRoute.route}>
 
             <AdminUserStatisticsSubpage users={users} />
@@ -64,7 +61,6 @@ export const AdminUserControl = () => {
 
         {/* Route /administration/users/:userId/teacherinfo */}
         <Route
-            exact
             path={usersRoute.teacherInfoRoute.route}>
 
             <AdminUserTeacherInfoSubpage users={users} />
@@ -72,12 +68,11 @@ export const AdminUserControl = () => {
 
         {/* Route /administration/users/:userId/courses */}
         <Route
-            exact
             path={usersRoute.courseContentRoute.route}>
 
             <AdminUserCourseContentSubpage
                 users={users}
                 refetchUsersFunction={refetchUsers} />
         </Route>
-    </Switch >;
+    </>;
 };

@@ -26,6 +26,7 @@ import { AdminUserList } from "./AdminUserList";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { UserActivityDistributionChart } from "./UserActivityDistributionChart";
+import { useIntParam } from "../../../static/locationHelpers";
 
 const DummyLearningCourseStatsModified = (props: {
     title: string,
@@ -190,8 +191,7 @@ export const AdminUserStatisticsSubpage = (props: {
 
     const usersRoute = applicationRoutes.administrationRoute.usersRoute;
 
-    const params = useParams<{ userId: string }>();
-    const userId = parseInt(params.userId);
+    const userId = useIntParam("userId")!;
 
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(usersRoute.addRoute.route);

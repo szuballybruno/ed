@@ -1,8 +1,8 @@
 import { Image } from "@chakra-ui/image";
 import { Flex } from "@chakra-ui/layout";
 import React from "react";
-import { useParams } from "react-router-dom";
 import { CourseAdminListItemDTO } from "../../../shared/dtos/admin/CourseAdminListItemDTO";
+import { useIntParam } from "../../../static/locationHelpers";
 import { EpistoSearch } from "../../controls/EpistoSearch";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
@@ -17,8 +17,7 @@ export const AdminCourseList = (props: {
     const { courses, onCourseClick } = props;
 
     // util
-    const params = useParams<{ courseId: string }>();
-    const courseId = parseInt(params.courseId);
+    const courseId = useIntParam("courseId");
 
     return <Flex
         className="roundBorders"

@@ -6,6 +6,7 @@ import { useCourseDetails } from "../../services/api/courseApiService";
 import { useNavigation } from "../../services/core/navigatior";
 import { useShowErrorDialog } from "../../services/core/notifications";
 import { formatTimespan, getAssetUrl, getQueryParam } from "../../static/frontendHelpers";
+import { useIntParam } from "../../static/locationHelpers";
 import { translatableTexts } from "../../static/translatableTexts";
 import { ContentPane } from "../ContentPane";
 import { EpistoButton } from "../controls/EpistoButton";
@@ -23,8 +24,7 @@ import { TabPanel } from "./TabPanel";
 
 const CourseDetailsPage = () => {
 
-    const params = useParams<{ courseId: string }>();
-    const courseId = parseInt(params.courseId);
+    const courseId = useIntParam("courseId")!;
     const [currentTab, setCurrentTab] = useState(0);
     const { playCourse } = useNavigation();
     const showError = useShowErrorDialog();

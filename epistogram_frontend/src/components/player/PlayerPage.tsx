@@ -1,4 +1,3 @@
-import { Switch } from "react-router";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
 import { getRoute } from "../../MainRouting";
 import { ContentPane } from "../ContentPane";
@@ -25,14 +24,12 @@ export const PlayerPage = () => {
                 isMinimalMode
                 showLogo>
 
-                <Switch>
-                    {getRoute(applicationRoutes.playerRoute.prequizRoute, <PrequizSubpage />)}
-                    {getRoute(applicationRoutes.playerRoute.pretestRoute, <PretestSubpage />)}
-                    {getRoute(applicationRoutes.playerRoute.pretestResultsRoute, <PretestResultsSubpage />)}
-                    {getRoute(applicationRoutes.playerRoute.watchRoute, <WatchSubpage />)}
-                    {getRoute(applicationRoutes.playerRoute.courseRatingRoute, <CourseRatingSubpage />)}
-                    {getRoute(applicationRoutes.playerRoute.courseOverviewRoute, <CourseOverviewSubpage />)}
-                </Switch>
+                {getRoute(applicationRoutes.playerRoute.prequizRoute, <PrequizSubpage />)}
+                {getRoute(applicationRoutes.playerRoute.pretestRoute, <PretestSubpage />)}
+                {getRoute(applicationRoutes.playerRoute.pretestResultsRoute, <PretestResultsSubpage />)}
+                {getRoute(applicationRoutes.playerRoute.watchRoute, <WatchSubpage />)}
+                {getRoute(applicationRoutes.playerRoute.courseRatingRoute, <CourseRatingSubpage />)}
+                {getRoute(applicationRoutes.playerRoute.courseOverviewRoute, <CourseOverviewSubpage />)}
             </ContentPane>
         </PageRootContainer >
     );

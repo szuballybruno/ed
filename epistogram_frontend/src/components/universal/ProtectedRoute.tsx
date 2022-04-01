@@ -1,75 +1,88 @@
-import React, { ReactNode, useContext, useEffect } from "react";
-import { Redirect, Route, useLocation } from "react-router-dom";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { verboseLogging } from "../../static/Environemnt";
-import { UserActivityDTO } from "../../shared/dtos/UserActivityDTO";
-import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
-import { setPageTitle, useIsMatchingCurrentRoute, useSetPageTitle } from "../../static/frontendHelpers";
+import React, { ReactNode } from "react";
+import { Route } from "react-router-dom";
 import { ApplicationRoute } from "../../models/types";
+import { UserActivityDTO } from "../../shared/dtos/UserActivityDTO";
 
-export const ProtectedRoute = (props: {
+export const Proute2 = (props: {
     route: ApplicationRoute,
-    // path: string,
-    // exact?: boolean,
     isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean
     render: () => ReactNode,
     ignoreAppAccessProtection?: boolean
 }) => {
 
-    const authState = useContext(AuthenticationStateContext);
-    const refetchUserAsync = useContext(RefetchUserAsyncContext);
-    const user = useContext(CurrentUserContext);
     const { render, isAuthorizedToView, ignoreAppAccessProtection, route } = props;
 
-    if (verboseLogging)
-        console.log(`Navigated to protected route '${route.route}'. Authentication state: ${authState}`);
+    return <Route
+        path={"/asd"}>
 
-    const isMatchingCurrent = useIsMatchingCurrentRoute();
+        <div>proute 2</div>
+    </Route>;
+};
 
-    const isCurrent = isMatchingCurrent(route);
+export const ProtectedRoute = (props: {
+    route: ApplicationRoute,
+    isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean
+    render: () => ReactNode,
+    ignoreAppAccessProtection?: boolean
+}) => {
 
-    useEffect(() => {
+    const { render, isAuthorizedToView, ignoreAppAccessProtection, route } = props;
 
-        if (isCurrent)
-            setPageTitle(route.title);
-    }, [isCurrent]);
+    // const authState = useContext(AuthenticationStateContext);
+    // const refetchUserAsync = useContext(RefetchUserAsyncContext);
+    // const user = useContext(CurrentUserContext);
+
+    // if (verboseLogging)
+    //     console.log(`Navigated to protected route '${route.route}'. Authentication state: ${authState}`);
+
+    // const isMatchingCurrent = useIsMatchingCurrentRoute();
+
+    // const isCurrent = isMatchingCurrent(route);
+
+    // useEffect(() => {
+
+    //     if (isCurrent)
+    //         setPageTitle(route.title);
+    // }, [isCurrent]);
 
     return (
         <Route
-            exact={route.exact}
-            path={route.route}
-            render={x => {
+            // exact={route.exact}
+            // path={route.route}
+            path={"/asd"}
+            element={x => {
 
-                if (verboseLogging)
-                    console.log("Auth state: " + authState);
+                return <div>{route.route}</div>;
+                // if (verboseLogging)
+                //     console.log("Auth state: " + authState);
 
-                // if loading return blank page
-                if (authState === "loading") {
+                // // if loading return blank page
+                // if (authState === "loading") {
 
-                    console.log("Returning loading div...");
-                    return <div></div>;
-                }
+                //     console.log("Returning loading div...");
+                //     return <div></div>;
+                // }
 
-                // check authentication 
-                if (authState === "forbidden") {
+                // // check authentication 
+                // if (authState === "forbidden") {
 
-                    console.log("Forbidden, redirecting...");
-                    return <Redirect to={applicationRoutes.loginRoute.route} />;
-                }
+                //     console.log("Forbidden, redirecting...");
+                //     return <Redirect to={applicationRoutes.loginRoute.route} />;
+                // }
 
-                // redirect to signup if application is not accessable yets
-                if (!user!.userActivity.canAccessApplication && !ignoreAppAccessProtection)
-                    return <Redirect to={applicationRoutes.signupRoute.route} />;
+                // // redirect to signup if application is not accessable yets
+                // if (!user!.userActivity.canAccessApplication && !ignoreAppAccessProtection)
+                //     return <Redirect to={applicationRoutes.signupRoute.route} />;
 
-                // redirect to home if external authorization check fails
-                const externalCheck = isAuthorizedToView
-                    ? isAuthorizedToView(user!.userActivity)
-                    : true;
+                // // redirect to home if external authorization check fails
+                // const externalCheck = isAuthorizedToView
+                //     ? isAuthorizedToView(user!.userActivity)
+                //     : true;
 
-                if (!externalCheck)
-                    return <Redirect to={applicationRoutes.homeRoute.route} />;
+                // if (!externalCheck)
+                //     return <Redirect to={applicationRoutes.homeRoute.route} />;
 
-                return render();
+                // return render();
             }} />
     );
 };

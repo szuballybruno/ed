@@ -1,7 +1,6 @@
 import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
 import { Select, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React from "react";
-import { useHistory } from "react-router";
 import { useUserCourses } from "../services/api/courseApiService";
 import { useNavigation } from "../services/core/navigatior";
 import { useShowErrorDialog } from "../services/core/notifications";
@@ -19,8 +18,6 @@ import CourseTile from "./universal/CourseTile";
 import { EpistoSearch } from "./universal/EpistoSearch";
 
 const AvailableCoursesPage = () => {
-
-    const history = useHistory();
 
     const [searchText, setSearchText] = React.useState("");
     const [searchCategory, setSearchCategory] = React.useState("");

@@ -1,4 +1,4 @@
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 export const useIntParam = (name: string) => {
 
@@ -7,6 +7,15 @@ export const useIntParam = (name: string) => {
         return null;
 
     return parseInt(param);
+};
+
+export const useStringParam = (name: string) => {
+
+    const param = useParams()[name];
+    if (!param)
+        return null;
+
+    return param;
 };
 
 export const useBoolParam = (name: string) => {
@@ -22,16 +31,17 @@ export const useBoolParam = (name: string) => {
 
 export const useSetQueryParams = () => {
 
-    const history = useHistory();
     const location = useLocation();
 
     return (query: any) => {
-        
-        history
-            .push({
-                pathname: location.pathname,
-                search: stringifyQueryObject(query)
-            });
+
+        // window
+        //     .history
+        //     .pushState({
+        //         query
+        //         pathname: location.pathname,
+        //         search: stringifyQueryObject(query)
+        //     });
     };
 };
 

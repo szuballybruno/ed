@@ -15,6 +15,7 @@ import { showNotification, useShowErrorDialog } from "../../../services/core/not
 import { QuestionDTO } from "../../../shared/dtos/QuestionDTO";
 import { VideoEditDTO } from "../../../shared/dtos/VideoEditDTO";
 import { roundNumber } from "../../../static/frontendHelpers";
+import { useIntParam } from "../../../static/locationHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoEntry } from "../../controls/EpistoEntry";
 import { LoadingFrame } from "../../system/LoadingFrame";
@@ -97,9 +98,8 @@ export const EditVideoSubpage = () => {
     const videoUploadInputRef = useRef<HTMLInputElement>(null);
     const showError = useShowErrorDialog();
 
-    const params = useParams<{ videoId: string, courseId: string }>();
-    const videoId = parseInt(params.videoId);
-    const courseId = parseInt(params.courseId);
+    const videoId = useIntParam("videoId")!;
+    const courseId = useIntParam("courseId")!;
 
     const { navigate } = useNavigation();
 

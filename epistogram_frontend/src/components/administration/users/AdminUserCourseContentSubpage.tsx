@@ -4,6 +4,7 @@ import { useCourseBriefData } from "../../../services/api/courseApiService";
 import { useEditUserData } from "../../../services/api/userApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
+import { useIntParam } from "../../../static/locationHelpers";
 import { useEpistoDialogLogic } from "../../EpistoDialog";
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
@@ -18,10 +19,8 @@ export const AdminUserCourseContentSubpage = (props: {
 
     const { users, refetchUsersFunction } = props;
 
-    const params = useParams<{ courseId: string, userId: string, }>();
-
-    const userId = parseInt(params.userId);
-    const courseId = parseInt(params.courseId);
+    const userId = useIntParam("userId")!;
+    const courseId = useIntParam("courseId")!;
 
     // TODO: Fix useBriefUserData
     const { userEditData } = useEditUserData(userId);

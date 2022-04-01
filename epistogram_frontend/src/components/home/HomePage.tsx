@@ -20,36 +20,6 @@ import { PractiseQuestions } from "./PractiseQuestions";
 import { RecommendedQuota } from "./RecommendedQuota";
 import { StatsSummary } from "./StatsSummary";
 
-const HeavyComp = (props: { style?: CSSProperties }) => {
-
-    return <div
-        style={{
-            ...props.style
-        }}>
-
-        {iterate(50000, x => {
-
-            return <div style={{
-                background: "blue",
-                margin: "2px",
-                border: "1px solid green"
-            }}>
-                <div>
-                    hmmm
-                </div>
-                <div>
-                    hmmm2
-
-                    <div>
-                        1-hmmm-1
-                    </div>
-                </div>
-                asd {x}
-            </div>;
-        })}
-    </div>;
-};
-
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
@@ -60,38 +30,7 @@ const HomePage = () => {
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging(activeCourses);
 
-    // const logic = useXDialogLogic("asd");
-    // const muiLogic = useXDialogLogic("asd2");
-
     return <PageRootContainer>
-
-        {/* <EpistoButton onClick={() => logic.setIsOpen(true)}>
-            open dialogx
-        </EpistoButton>
-
-        <EpistoButton onClick={() => muiLogic.setIsOpen(true)}>
-            open mui
-        </EpistoButton>
-
-        <XDialog logic={logic}>
-            <HeavyComp style={{ transform: "translate(-66px, 12px)" }}></HeavyComp>
-        </XDialog>
-
-        <Dialog
-            open={muiLogic.isOpen}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            style={{
-                zIndex: 10000
-                //background: "var(--transparentWhite90)"
-            }}>
-
-            <EpistoButton onClick={() => muiLogic.setIsOpen(false)}>
-                close
-            </EpistoButton>
-
-            <HeavyComp style={{ transform: "translate(66px, 12px)" }}></HeavyComp>
-        </Dialog> */}
 
         <LoadingFrame
             width="100%"
@@ -138,7 +77,7 @@ const HomePage = () => {
                             bgColor={"var(--epistoTeal)"} />
 
                         <FlexListTitleSubtitle title={translatableTexts.homePage.availableCoursesLinkTitle}
-subTitle={translatableTexts.homePage.availableCoursesText} />
+                            subTitle={translatableTexts.homePage.availableCoursesText} />
                     </Flex>} />}
             </LeftPane>
 

@@ -23,14 +23,14 @@ const NoQuestionsAvailable = () => {
         <Flex direction={"column"}>
 
             <Text as={"text"}
-p={"20px 20px 10px 10px"}
-fontSize="13px">
+                p={"20px 20px 10px 10px"}
+                fontSize="13px">
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
             </Text>
 
             <Text as={"text"}
-p={"10px 20px 10px 10px"}
-fontSize="13px">
+                p={"10px 20px 10px 10px"}
+                fontSize="13px">
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
                 <Text
                     as="text"
@@ -175,7 +175,7 @@ export const PractiseQuestions = () => {
         {practiseQuestion
             ? (
                 <Flex className="whall"
-wrap="wrap">
+                    wrap="wrap">
 
                     <Flex
                         position="absolute"

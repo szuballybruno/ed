@@ -13,6 +13,7 @@ import { HumanSkillBenefitDTO } from "../../../shared/dtos/HumanSkillBenefitDTO"
 import { CourseVisibilityType } from "../../../shared/types/sharedTypes";
 import { defaultCharts } from "../../../static/defaultChartOptions";
 import { iterate } from "../../../static/frontendHelpers";
+import { useIntParam } from "../../../static/locationHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoLabel } from "../../controls/EpistoLabel";
@@ -28,8 +29,7 @@ import { EditSection } from "./EditSection";
 export const AdminCourseDetailsSubpage = () => {
 
     // util
-    const params = useParams<{ courseId: string }>();
-    const courseId = parseInt(params.courseId);
+    const courseId = useIntParam("courseId")!;
     const showError = useShowErrorDialog();
 
     // http

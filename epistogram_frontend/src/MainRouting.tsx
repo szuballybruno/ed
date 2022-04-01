@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { AdminPage } from "./components/administration/AdminPage";
 import AvailableCoursesPage from "./components/AvailableCoursesPage";
 import CourseDetailsPage from "./components/courseDetails/CourseDetailsPage";
@@ -13,35 +13,54 @@ import { RegistrationPage } from "./components/RegistrationPage";
 import { SetNewPasswordPage } from "./components/SetNewPasswordPage";
 import { ShopPage } from "./components/epistoShop/ShopPage";
 import { SignupPage } from "./components/signup/SignupPage";
-import { ProtectedRoute } from "./components/universal/ProtectedRoute";
+import { ProtectedRoute, Proute2 } from "./components/universal/ProtectedRoute";
 import { UserSettingsPage } from "./components/userSettings/UserSettingsPage";
 import { applicationRoutes } from "./configuration/applicationRoutes";
 import { ApplicationRoute } from "./models/types";
 
 export const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
 
-    return <Route exact={route.exact}
-path={route.route}>
+    return <Route
+        path={route.route}>
         {renderRoute}
     </Route>;
 };
 
 export const MainRouting = () => {
 
-    return <Switch>
+    return <>
 
         {/* unprotected paths  */}
-        <Route path={applicationRoutes.loginRoute.route}
-component={LoginScreen} />
-        <Route path={applicationRoutes.setNewPasswordRoute.route}
-component={SetNewPasswordPage} />
-        <Route path={applicationRoutes.registrationRoute.route}
-component={RegistrationPage} />
-        <Route path={applicationRoutes.registerViaActivationCodeRoute.route}
-component={RegisterViaActivationCodePage} />
+        <Route
+            path={applicationRoutes.loginRoute.route}
+            element={LoginScreen} />
+
+        <Route
+            path={applicationRoutes.setNewPasswordRoute.route}
+            element={SetNewPasswordPage} />
+
+        <Route
+            path={applicationRoutes.registrationRoute.route}
+            element={RegistrationPage} />
+
+        <Route
+            path={applicationRoutes.registerViaActivationCodeRoute.route}
+            element={RegisterViaActivationCodePage} />
 
         {/* protected paths */}
-        <ProtectedRoute
+        {/* <ProtectedRoute
+            route={applicationRoutes.playerRoute}
+            render={() => <div>player</div>}></ProtectedRoute> */}
+
+        <Proute2
+            route={applicationRoutes.playerRoute}
+            render={() => <div>render</div>}></Proute2>
+
+        <Route path={applicationRoutes.playerRoute.route}>
+            player route
+        </Route>
+
+        {/* <ProtectedRoute
             route={applicationRoutes.playerRoute}
             render={() => <PlayerPage />} />
 
@@ -53,13 +72,13 @@ component={RegisterViaActivationCodePage} />
         <ProtectedRoute
             route={applicationRoutes.administrationRoute}
             isAuthorizedToView={x => x.canAccessAdministration}
-            render={() => <AdminPage />} />
+            render={() => <AdminPage />} /> */}
 
-        <ProtectedRoute
+        {/* <ProtectedRoute
             route={applicationRoutes.homeRoute}
-            render={() => <HomePage />} />
+            render={() => <HomePage />} /> */}
 
-        <ProtectedRoute
+        {/* <ProtectedRoute
             route={applicationRoutes.shopRoute}
             render={() => <ShopPage />} />
 
@@ -81,12 +100,12 @@ component={RegisterViaActivationCodePage} />
 
         <ProtectedRoute
             route={applicationRoutes.rootHomeRoute}
-            render={() => <HomePage />} />
+            render={() => <HomePage />} /> */}
 
         {/* wrong path */}
         <Route path="*">
             <NotFound />
         </Route>
 
-    </Switch>;
+    </>;
 };

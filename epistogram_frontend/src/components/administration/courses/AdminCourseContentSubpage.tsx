@@ -2,7 +2,6 @@ import { Flex } from "@chakra-ui/react";
 import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
 import { useGridApiContext } from "@mui/x-data-grid-pro";
 import React, { ReactNode, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { useCourseContentAdminData, useSaveCourseContentData } from "../../../services/api/courseApiService";
 import { getVirtualId } from "../../../services/core/idService";
@@ -14,6 +13,7 @@ import { CourseModuleShortDTO } from "../../../shared/dtos/admin/CourseModuleSho
 import { OmitProperty } from "../../../shared/types/advancedTypes";
 import { CourseItemType } from "../../../shared/types/sharedTypes";
 import { formatTime } from "../../../static/frontendHelpers";
+import { useIntParam } from "../../../static/locationHelpers";
 import { translatableTexts } from "../../../static/translatableTexts";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoDataGrid, GridColumnType, UseCommitNewValueType } from "../../controls/EpistoDataGrid";
@@ -325,8 +325,7 @@ export const AdminCourseContentSubpage = () => {
 
     // util
     const ref = useRef(null);
-    const params = useParams<{ courseId: string }>();
-    const courseId = parseInt(params.courseId);
+    const courseId = useIntParam("courseId")!;
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic("dvd");
