@@ -22,7 +22,17 @@ export const translatableTexts = {
 
         epistoEntry: {
             shouldntBeEmpty: "Ez a mező nem lehet üres!"
-        }
+        },
+
+        daysOfWeekFromMonday: [
+            "Hétfő",
+            "Kedd",
+            "Szerda",
+            "Csütörtök",
+            "Péntek",
+            "Szombat",
+            "Vasárnap"
+        ]
     },
 
     tempomat: {
@@ -215,6 +225,7 @@ export const translatableTexts = {
         administrationCourseContent: "Tartalom",
         administrationCoursePretest: "Pretest",
         administrationCourseStatistics: "Statisztika",
+        administrationCourseUserProgress: "Egyének haladása",
         administrationInteractiveCourse: "Interaktív kurzus",
         administrationAddVideo: "Videó hozzáadása",
         administrationEditVideo: "Videó szerkesztése",

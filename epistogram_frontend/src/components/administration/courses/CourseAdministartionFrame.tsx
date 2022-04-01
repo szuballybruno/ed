@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import { ReactNode } from "react"
 import { applicationRoutes } from "../../../configuration/applicationRoutes"
 import { useAdminCourseList } from "../../../services/api/courseApiService"
@@ -79,7 +79,7 @@ export const CourseAdministartionFrame = (params: { children?: ReactNode }) => {
                             style={{
                                 marginTop: "50px"
                             }}>
-                            Please select a course
+                            Kérlek válassz ki egy kurzust
                         </EpistoFont>
                     </Flex>}
 

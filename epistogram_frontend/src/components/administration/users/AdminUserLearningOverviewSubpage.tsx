@@ -1,6 +1,7 @@
-import { Box, Flex, GridItem, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, GridItem, Image, Text, Tooltip } from "@chakra-ui/react";
 import { Add, List } from "@mui/icons-material";
 import { LinearProgress } from "@mui/material";
+import { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { ButtonType } from "../../../models/types";
@@ -22,116 +23,122 @@ import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "../courses/EditSection";
 import { AdminUserList } from "./AdminUserList";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { UserActivityDistributionChart } from "./UserActivityDistributionChart";
 
-const DummyLearningCourseStatsModified = () => <GridItem
+const DummyLearningCourseStatsModified = (props: {
+    title: string,
+    thumbnailImageUrl: string
+}) => <GridItem
     className="roundBorders"
     background="var(--transparentWhite70)">
 
-    <FlexFloat
-        className="whall"
-        direction="column"
-        borderRadius="10px"
-        position="relative"
-        overflow="hidden"
-        shadow={"0 0 10px 1px #CCC"}
-        background="var(--transparentWhite70)"
-        p="5"
-        justifyContent="space-between">
-
-        {/* cover image box */}
-        <Box
-            flex="1"
+        <FlexFloat
+            className="whall"
+            direction="column"
+            borderRadius="10px"
             position="relative"
-            minHeight={150}
-            maxHeight={150}>
+            overflow="hidden"
+            shadow={"0 0 10px 1px #CCC"}
+            background="var(--transparentWhite70)"
+            p="5"
+            justifyContent="space-between">
 
-            {/* cover image */}
-            <img
-                className="whall"
-                style={{
-                    objectFit: "cover",
-                    borderRadius: 10,
-                    position: "absolute"
-                }}
-                src={getAssetUrl("courseCoverImages/4.png")}
-                alt="" />
-        </Box>
+            {/* cover image box */}
+            <Box
+                flex="1"
+                position="relative"
+                minHeight={150}
+                maxHeight={150}>
 
-        {/* content */}
-        <Flex p="10px" direction="column">
-
-            {/* category  */}
-            <Text
-                as="text"
-                color="grey">
-
-                Irodai alkalmazások
-            </Text>
-
-            {/* title */}
-            <Text
-                as="h6"
-                fontWeight={"bold"}
-                fontSize="large">
-
-                Microsoft Excel Mesterkurzus
-            </Text>
-
-            {/* small stats */}
-            <Flex mt={7} justify="space-evenly">
-
-                {/* spent time  */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/time3D.png")}
-                    text={"2m"} />
-
-                {/* videos  */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/videos3D.png")}
-                    text={"18/1"} />
-
-                {/* video questions */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/rightanswerontile3D.png")}
-                    text={`2/0`} />
-            </Flex>
-
-            {/* course progress bar chart */}
-            <Flex
-                direction={"row"}
-                alignItems={"center"}
-                mt={7}
-                width="100%"
-                height="10px">
-
-                <LinearProgress
-                    variant="determinate"
+                {/* cover image */}
+                <img
+                    className="whall"
                     style={{
-                        width: "100%",
+                        objectFit: "cover",
+                        borderRadius: 10,
+                        position: "absolute"
                     }}
-                    value={70} />
+                    src={props.thumbnailImageUrl}
+                    alt="" />
+            </Box>
 
-                <Flex m="0 5px 0 20px">
-                    {`${70}%`}
+            {/* content */}
+            <Flex p="10px" direction="column">
+
+                {/* category  */}
+                <Text
+                    as="text"
+                    color="grey">
+
+                    Irodai alkalmazások
+                </Text>
+
+                {/* title */}
+                <Text
+                    as="h6"
+                    fontWeight={"bold"}
+                    fontSize="large">
+
+                    {props.title}
+                </Text>
+
+                {/* small stats */}
+                <Flex mt={7} justify="space-evenly">
+
+                    {/* spent time  */}
+                    <SmallStat
+                        iconUrl={getAssetUrl("images/time3D.png")}
+                        text={"2m"} />
+
+                    {/* videos  */}
+                    <SmallStat
+                        iconUrl={getAssetUrl("images/videos3D.png")}
+                        text={"18/1"} />
+
+                    {/* video questions */}
+                    <SmallStat
+                        iconUrl={getAssetUrl("images/rightanswerontile3D.png")}
+                        text={`2/0`} />
                 </Flex>
 
+                {/* course progress bar chart */}
+                <Flex
+                    direction={"row"}
+                    alignItems={"center"}
+                    mt={7}
+                    width="100%"
+                    height="10px">
+
+                    <LinearProgress
+                        variant="determinate"
+                        style={{
+                            width: "100%",
+                        }}
+                        value={70} />
+
+                    <Flex m="0 5px 0 20px">
+                        {`${70}%`}
+                    </Flex>
+
+                </Flex>
             </Flex>
-        </Flex>
 
-        {/* buttons */}
-        <Flex mt="10px">
+            {/* buttons */}
+            <Flex mt="10px">
 
 
-            {/* start course */}
-            <EpistoButton
-                variant="colored"
-                style={{ flex: "1" }}>
+                {/* start course */}
+                <EpistoButton
+                    variant="colored"
+                    style={{ flex: "1" }}>
 
-                Részletek
-            </EpistoButton>
-        </Flex>
-    </FlexFloat>
-</GridItem>
+                    Részletek
+                </EpistoButton>
+            </Flex>
+        </FlexFloat>
+    </GridItem>
 
 const UserStatisticsProgressWithLabel = (props: {
     title: string,
@@ -196,6 +203,14 @@ export const AdminUserStatisticsSubpage = (props: {
     const { userStats } = useUserStats(userId);
     const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(1, true);
 
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(null);
+    const onChange = (dates) => {
+        const [start, end] = dates;
+        setStartDate(start);
+        setEndDate(end);
+    };
+
     const bulkEditButtons = [
         {
             title: "Hozzáadás",
@@ -243,7 +258,10 @@ export const AdminUserStatisticsSubpage = (props: {
                 title="Tanulási jelentés"
                 rightSideComponent={
 
-                    <Flex justify="center" align="center" my="10px">
+                    <Flex
+                        justify="center"
+                        align="center"
+                        my="10px">
 
                         <Image
                             h="30px"
@@ -252,12 +270,29 @@ export const AdminUserStatisticsSubpage = (props: {
                             src={getAssetUrl("/images/tempomatdatechange.png")}
                         />
 
-                        <EpistoFont fontSize={"fontLarge"}>
+                        <EpistoFont fontSize={"fontLarge"} style={{
+                            minWidth: 150
+                        }}>
 
                             Vizsgált időszak:
                         </EpistoFont>
 
-                        <EpistoFont
+
+                        <Tooltip title={"tiptool"} p="20px">
+                            <DatePicker
+                                dateFormat="yyyy-MM-dd"
+                                calendarStartDay={1}
+                                selected={startDate}
+                                onChange={onChange}
+                                startDate={startDate}
+                                endDate={endDate}
+                                selectsRange
+                            />
+                        </Tooltip>
+
+
+
+                        {/*  <EpistoFont
                             fontSize={"fontLarge"}
                             style={{
                                 marginLeft: "5px",
@@ -265,7 +300,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             }}>
 
                             2022.03.14.
-                        </EpistoFont>
+                        </EpistoFont> */}
                     </Flex>
                 }>
 
@@ -359,13 +394,17 @@ export const AdminUserStatisticsSubpage = (props: {
             <EditSection title="Kurzusok a hónapban">
                 <EpistoGrid auto="fill" gap="15" minColumnWidth="250px" p="10px 0">
 
-                    <DummyLearningCourseStatsModified />
-                    <DummyLearningCourseStatsModified />
+                    <DummyLearningCourseStatsModified
+                        title="Microsoft Excel Mesterkurzus"
+                        thumbnailImageUrl={getAssetUrl("courseCoverImages/4.png")} />
+                    <DummyLearningCourseStatsModified
+                        title="Microsoft PowerPoint Mesterkurzus"
+                        thumbnailImageUrl={getAssetUrl("courseCoverImages/courseCoverImage_22_1639469876995..jpg")} />
                 </EpistoGrid>
             </EditSection>
 
             <EditSection title="Átlagos haladás a tanfolyamokon">
-                <Flex>
+                <Flex p="10px 0">
                     <div
                         style={{
                             width: "80%",
@@ -442,6 +481,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         maxWidth: "100%",
                         display: "grid",
                         boxSizing: "border-box",
+                        padding: "10px 0",
                         gap: "10px",
                         gridAutoFlow: "row dense",
                         gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
@@ -460,11 +500,12 @@ export const AdminUserStatisticsSubpage = (props: {
                             gridRow: `auto / span 2`
                         }}>
 
-                        <Image
+                        <UserActivityDistributionChart />
+                        {/* <Image
                             src={getAssetUrl("images/piechart.png")}
                             w="100%"
                             h="100%"
-                            objectFit="contain" />
+                            objectFit="contain" /> */}
 
                     </FlexFloat>
 

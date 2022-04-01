@@ -2,6 +2,7 @@ import { Flex, Image } from "@chakra-ui/react"
 import { Tab, Tabs } from "@mui/material"
 import { useState } from "react"
 import { UserCourseProgressChartDTO } from "../../../../shared/dtos/UserCourseProgressChartDTO"
+import { defaultCharts } from "../../../../static/defaultChartOptions"
 import { getAssetUrl, roundNumber } from "../../../../static/frontendHelpers"
 import { translatableTexts } from "../../../../static/translatableTexts"
 import { EpistoFont } from "../../../controls/EpistoFont"
@@ -10,6 +11,9 @@ import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog"
 import { NoProgressChartYet } from "../../../home/NoProgressChartYet"
 import { UserProgressChart } from "../../../home/UserProgressChart"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
+import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart"
+import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl"
+import { UserActivityDistributionChart } from "../UserActivityDistributionChart"
 
 export const AdminUserCourseContentOverviewModalSubpage = (props: {
     userStats: {
@@ -26,19 +30,46 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
     return <Flex direction="column" p="20px">
         <Flex>
 
-            <Flex flex="1" align="center">
+            <Flex flex="1" align="stretch">
 
-                <Image flex="1" maxH="200px" objectFit="contain" src={getAssetUrl("/images/donut1.png")} />
+                <Flex flex="1">
 
-                <Image flex="1" maxH="200px" objectFit="contain" src={getAssetUrl("/images/donut2.png")} />
+                    <EpistoPieChart
+                        title="Teljesítmény"
+                        segments={[
+                            { value: 70, name: "Teljesítmény 70%" },
+                            { value: 30, name: '' },
+                        ]}
+                        options={defaultCharts.twoSegmentGreenDoughnut} />
+                </Flex>
+                <Flex flex="1">
 
-                <Image flex="1" maxH="200px" objectFit="contain" src={getAssetUrl("/images/donut3.png")} />
+                    <EpistoPieChart
+                        title="Haladás"
+                        segments={[
+                            { value: 20, name: "" },
+                            { value: 80, name: 'Haladás 20%' },
+                        ]}
+                        options={defaultCharts.twoSegmentRedDoughnut} />
+                </Flex>
+                <Flex flex="1">
+
+                    <EpistoPieChart
+                        title="Aktivitás eloszlása"
+                        isSortValues
+                        segments={[
+                            { value: 30, name: '' },
+                            { value: 17, name: '' },
+                            { value: 10, name: '' },
+                            { value: 20, name: '' }
+                        ]}
+                        options={defaultCharts.pie} />
+                </Flex>
             </Flex>
 
             <Flex
                 className="roundBorders"
                 flex="1"
-                p="10px"
                 direction="column"
                 background="var(--transparentWhite70)">
 
@@ -54,6 +85,7 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                 maxWidth: "100%",
                 display: "grid",
                 boxSizing: "border-box",
+                marginTop: "20px",
                 gap: "10px",
                 gridAutoFlow: "row dense",
                 gridTemplateColumns: "repeat(auto-fill, minmax(23%, 1fr))",
@@ -120,8 +152,8 @@ export const AdminUserCourseContentModal = (props: {
         },
         {
             title: "Videók",
-            component: <Flex h="400px">
-
+            component: <Flex>
+                <AdminUserVideosDataGridControl />
             </Flex>
         },
         {
@@ -138,7 +170,7 @@ export const AdminUserCourseContentModal = (props: {
         }
     ]
 
-    return <EpistoDialog logic={dialogLogic}>
+    return <EpistoDialog fullScreenX fullScreenY logic={dialogLogic}>
         <Flex
             overflowY="scroll"
             className="roundBorders"

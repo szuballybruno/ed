@@ -1,7 +1,6 @@
 import { FlexProps } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
-import { GridOn, List } from "@mui/icons-material";
-import { FormControl, FormGroup, Switch, Tab, Tabs } from "@mui/material";
+import { Tab, Tabs } from "@mui/material";
 import React, { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApplicationRoute, ButtonType } from "../../models/types";

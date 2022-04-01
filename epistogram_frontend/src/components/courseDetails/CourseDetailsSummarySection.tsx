@@ -1,13 +1,12 @@
 import { Flex, Grid } from "@chakra-ui/react";
 import DoneIcon from '@mui/icons-material/Done';
-import { Typography } from "@mui/material";
 import React from "react";
 import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
+import { defaultCharts } from "../../static/defaultChartOptions";
 import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
-import { CourseImprovementStatsRadar } from "../universal/CourseImprovementStatsRadar";
+import { EpistoRadarChart } from "../universal/charts/EpistoRadarChart";
 
 export const CourseDetailsSummarySection = (props: {
     courseDetails: CourseDetailsDTO
@@ -18,7 +17,6 @@ export const CourseDetailsSummarySection = (props: {
     return <Flex
         mt={10}
         width="100%"
-        height={500}
         direction={"column"}
         alignItems={"flex-start"}>
 
@@ -86,7 +84,22 @@ export const CourseDetailsSummarySection = (props: {
 
             {/* human skill benefits chart  */}
             <Flex direction={"column"} minWidth={"50%"}>
-                <CourseImprovementStatsRadar stats={courseDetails?.humanSkillBenefits ?? []} />
+                <EpistoRadarChart
+                    title=""
+                    areas={[{
+                        name: "Készségek",
+                        value: courseDetails?.humanSkillBenefits.map(x => x.value) ?? []
+                    }]}
+                    radarIndicators={courseDetails.humanSkillBenefits.map(x => ({
+                        name: x.text,
+                        color: "black",
+                        max: 10
+                    }))}
+                    options={defaultCharts.radar}
+                    style={{
+                        width: "400px",
+                        height: "300px"
+                    }} />
             </Flex>
         </Flex>
     </Flex>

@@ -1,6 +1,5 @@
 import { Flex } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
-import { Typography } from "@mui/material";
 import { isString } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
 
@@ -16,7 +15,8 @@ export const CourseDetailsBriefingInfoItem = (props: {
         direction={"row"}
         width={200}
         height={60}
-        bg={"white"}
+        background="var(--transparentWhite70)"
+        backdropFilter="blur(7px)"
         mr="5px"
         borderWidth={1}
         borderRadius={5}

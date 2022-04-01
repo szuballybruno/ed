@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useForceUpdate } from "../static/frontendHelpers";
 import { AdvancedTimer } from "./advancedTimer";
 

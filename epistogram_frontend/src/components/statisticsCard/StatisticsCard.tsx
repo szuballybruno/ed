@@ -1,24 +1,63 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
-import { Lock } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp, ArrowRight, ArrowUpward, FiberManualRecord, Lock } from "@mui/icons-material";
 import React, { useState } from 'react';
+import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 import { EpistoHeader } from '../EpistoHeader';
 
-const StatisticsCard = (props: {
+export type StatisticsCardProps = {
     iconPath?: string
     suffix: string
     title: string
     value?: string
     isOpenByDefault?: boolean
     children?: React.ReactNode
-    chartSize?: string,
-    isComingSoon?: boolean
-} & FlexProps) => {
+    chartSize?: "normal" | "large",
+    isComingSoon?: boolean,
+    additionalFunction?: () => void,
+    additionalInfo?: {
+        value: string,
+        suffix: string,
+        change: "up" | "stagnate" | "down"
+    }
+}
 
-    const { iconPath, isComingSoon, children, ...css } = props;
+const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
+
+    const { iconPath, isComingSoon, children, additionalFunction, additionalInfo, ...css } = props;
 
     const [isOpen, setIsOpen] = useState(!!props.isOpenByDefault)
+
+    const getColorFromChange = (change: "up" | "stagnate" | "down") => {
+        return change === "up"
+            ? "var(--deepGreen)"
+            : change === "stagnate"
+                ? "var(--mildOrange)"
+                : "var(--intenseRed)"
+    }
+
+    const getIconFromChange = (change: "up" | "stagnate" | "down") => {
+        return change === "up"
+            ? <ArrowDropUp
+                style={{
+                    margin: "3px 0 0 0",
+                    padding: 0
+                }} />
+            : change === "stagnate"
+                ? <FiberManualRecord
+                    style={{
+                        height: 10,
+                        width: 10,
+                        margin: "2px 3px 0 0",
+                        padding: 0
+                    }} />
+                : <ArrowDropDown
+                    style={{
+                        margin: "3px 0 0 0",
+                        padding: 0
+                    }} />
+    }
 
     return <FlexFloat
         background="var(--transparentWhite70)"
@@ -50,14 +89,44 @@ const StatisticsCard = (props: {
             }} />
         </Flex>}
 
+        {additionalInfo && <Flex
+            align="center"
+            p="5px 10px 5px 0"
+            position="absolute"
+            top="0"
+            right="0"
+            color={getColorFromChange(additionalInfo.change)}>
+
+            {getIconFromChange(additionalInfo.change)}
+
+            <EpistoFont
+                fontSize="fontSmallPlus"
+                style={{
+                    fontWeight: 500
+                }}>
+
+                {[additionalInfo?.value, additionalInfo?.suffix]}
+            </EpistoFont>
+        </Flex>}
+
+
+
         {/* open state */}
-        {isOpen && <Flex width="100%" mt="50px" p="0 20px 20px 20px" direction="column">
+        {isOpen && <Flex
+            flex="1"
+            className="roundBorders"
+            align="center"
+            justify="center"
+            background="var(--transparentWhite70)"
+            p="10px"
+            gridColumn="auto / span 2"
+            gridRow="auto / span 2">
 
-            <EpistoHeader variant="strongSub" text={props.title} />
+            {/* <EpistoHeader variant="strongSub" text={props.title} /> */}
 
-            <Box>
-                {props.children}
-            </Box>
+
+            {props.children}
+
         </Flex>}
 
         {/* closed state */}
@@ -108,6 +177,17 @@ const StatisticsCard = (props: {
                 </EpistoFont>
             </Flex>
         </Flex>}
+
+        {additionalFunction && <EpistoButton
+            onClick={() => additionalFunction()}
+            style={{
+                position: "absolute",
+                right: 0,
+                bottom: 0
+            }}>
+
+            <ArrowRight />
+        </EpistoButton>}
 
         {/* open / close button 
         {children && <Box position="absolute">

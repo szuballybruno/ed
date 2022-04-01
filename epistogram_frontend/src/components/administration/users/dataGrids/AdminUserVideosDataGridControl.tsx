@@ -1,4 +1,7 @@
+import { DataGrid } from "@mui/x-data-grid"
 import { DataGridPro, GridColDef, GridRowsProp } from "@mui/x-data-grid-pro"
+import { getRandomInteger } from "../../../../static/frontendHelpers"
+import { EpistoFont } from "../../../controls/EpistoFont"
 import { ChipSmall } from "../../courses/ChipSmall"
 
 export const AdminUserVideosDataGridControl = () => {
@@ -10,7 +13,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "3:10",
             replaysCount: "1.6x",
             isAnsweredCorrectly: "Igen",
-            reactionTime: "11.2 mp",
+            reactionTime: 11.2,
             lastWatchTime: "2022.02.12.",
         },
         {
@@ -20,7 +23,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "4:00",
             replaysCount: "0",
             isAnsweredCorrectly: "Nem",
-            reactionTime: "8 mp",
+            reactionTime: 8,
             lastWatchTime: "2022.02.12",
         },
         {
@@ -30,7 +33,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "9:10",
             replaysCount: "2.2x",
             isAnsweredCorrectly: "Igen",
-            reactionTime: "13.2 mp",
+            reactionTime: 13.2,
             lastWatchTime: "2022.02.12.",
         },
         {
@@ -40,7 +43,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "4:10",
             replaysCount: "1.9",
             isAnsweredCorrectly: "Nem",
-            reactionTime: "19.2 mp",
+            reactionTime: 19.2,
             lastWatchTime: "2022.02.12.",
         },
         {
@@ -50,7 +53,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "2:30",
             replaysCount: "0",
             isAnsweredCorrectly: "Igen",
-            reactionTime: "5.2 mp",
+            reactionTime: 5.2,
             lastWatchTime: "2022.02.12.",
         },
         {
@@ -60,7 +63,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "12:30",
             replaysCount: "3.8x",
             isAnsweredCorrectly: "Igen",
-            reactionTime: "12.2 mp",
+            reactionTime: 12.2,
             lastWatchTime: "2022.02.13.",
         },
         {
@@ -70,7 +73,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "11:30",
             replaysCount: "2.2x",
             isAnsweredCorrectly: "Nem",
-            reactionTime: "15.2 mp",
+            reactionTime: 15.2,
             lastWatchTime: "2022.02.13.",
         },
         {
@@ -80,7 +83,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "2:02",
             replaysCount: "0",
             isAnsweredCorrectly: "Igen",
-            reactionTime: "9.1 mp",
+            reactionTime: 9.1,
             lastWatchTime: "2022.02.14.",
         },
         {
@@ -90,7 +93,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "3:30",
             replaysCount: "1.52x",
             isAnsweredCorrectly: "Igen",
-            reactionTime: "10.1 mp",
+            reactionTime: 10.1,
             lastWatchTime: "2022.02.14.",
         },
         {
@@ -100,7 +103,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "4:25",
             replaysCount: "0",
             isAnsweredCorrectly: "Igen",
-            reactionTime: "7.7 mp",
+            reactionTime: 7.7,
             lastWatchTime: "2022.02.15.",
         },
         {
@@ -110,7 +113,7 @@ export const AdminUserVideosDataGridControl = () => {
             allSpentTime: "4:7",
             replaysCount: "0",
             isAnsweredCorrectly: "Nem",
-            reactionTime: "22.2 mp",
+            reactionTime: 22.2,
             lastWatchTime: "2022.02.16.",
         },
 
@@ -156,6 +159,18 @@ export const AdminUserVideosDataGridControl = () => {
             resizable: true
         },
         {
+            field: 'replayRecommended',
+            headerName: 'Ismétlésre ajánlott',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                const randomNumber = getRandomInteger(0, 100)
+                return <ChipSmall
+                    text={`${randomNumber < 20 ? "Igen" : "Nem"}`}
+                    color={randomNumber > 20 ? "var(--deepGreen)" : "var(--intenseRed)"} />
+            }
+        },
+        {
             field: 'isAnsweredCorrectly',
             headerName: 'Helyesen válaszolt?',
             width: 150,
@@ -171,7 +186,19 @@ export const AdminUserVideosDataGridControl = () => {
             field: 'reactionTime',
             headerName: 'Reakcióidő',
             width: 150,
-            resizable: true
+            resizable: true,
+            renderCell: (params) => <ChipSmall
+                text={params.value < 10
+                    ? "Átlagon felüli"
+                    : params.value < 15 && params.value >= 10
+                        ? "Átlagos"
+                        : "Átlag alatti"}
+                color={params.value < 10
+                    ? "var(--deepGreen)"
+                    : params.value < 15 && params.value >= 10
+                        ? "var(--mildOrange)"
+                        : "var(--intenseRed)"
+                } />
         },
         {
             field: 'lastWatchTime',
@@ -180,5 +207,8 @@ export const AdminUserVideosDataGridControl = () => {
             resizable: true
         }
     ];
-    return <DataGridPro rows={videoRows} columns={videoColumns} />
+    return <DataGrid
+        autoHeight
+        rows={videoRows}
+        columns={videoColumns} />
 }

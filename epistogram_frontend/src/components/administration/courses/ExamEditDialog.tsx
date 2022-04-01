@@ -2,6 +2,7 @@ import React from "react"
 import { EpistoDialogLogicType } from "../../EpistoDialog"
 import { CourseItemEditDialogBase } from "./CourseItemEditDialogBase"
 import { AdminExamQuestionsModalPage } from "./modals/AdminExamQuestionsModalPage"
+import { AdminExamStatisticsModalPage } from "./modals/AdminExamStatisticsModalPage"
 import { AdminVideoStatisticsModalPage } from "./modals/AdminVideoStatisticsModalPage"
 
 export const ExamEditDialog = (props: {
@@ -18,7 +19,7 @@ export const ExamEditDialog = (props: {
                 title: "Kérdések",
             },
             {
-                content: () => <AdminVideoStatisticsModalPage />,
+                content: () => <AdminExamStatisticsModalPage />,
                 title: "Statisztika",
             }
         ]} />

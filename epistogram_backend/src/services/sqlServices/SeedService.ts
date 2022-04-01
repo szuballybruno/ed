@@ -29,6 +29,7 @@ export class SeedService {
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_courses");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_exams");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_videos");
+        await this._sqlBootstrapperService.executeSeedScriptAsync("seed_answer_sessions");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_questions_video");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_questions_exam");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_daily_tips");
@@ -39,7 +40,7 @@ export class SeedService {
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_prequiz_questions");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_course_rating");
         await this._sqlBootstrapperService.executeSeedScriptAsync("seed_tempomat_adjustment_values");
-        
+
         // recalc seqs
         await this._sqlBootstrapperService.recalcSequencesAsync();
 
@@ -72,11 +73,11 @@ export class SeedService {
         const { invitationToken: it2, createdUser: u2 } = await this._regService
             .createInvitedUserAsync(
                 {
-                    firstName: "Elon",
-                    lastName: "Musk",
+                    firstName: "Péter",
+                    lastName: "Rezsuta",
                     jobTitleId: 1,
                     roleId: RoleIdEnum.user,
-                    email: "elon.musk@email.com",
+                    email: "r.peter@gmail.com",
                     organizationId: 1
                 },
                 true);

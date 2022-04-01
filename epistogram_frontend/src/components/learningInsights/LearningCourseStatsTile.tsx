@@ -34,7 +34,8 @@ export const SmallStat = (props: { iconUrl: string, text: string }) => {
 }
 
 export const LearningCourseStatsTile = (props: {
-    course: CourseLearningDTO
+    course: CourseLearningDTO,
+    onClickDetails: () => void
 } & FlexProps) => {
 
     const { course, children, ...css } = props;
@@ -202,12 +203,13 @@ export const LearningCourseStatsTile = (props: {
         {/* buttons */}
         <Flex mt="10px">
 
-            {/* details 
+            {/* details */}
             <EpistoButton
+                onClick={() => props.onClickDetails()}
                 style={{ flex: "1" }}>
 
-                Statisztika
-            </EpistoButton>*/}
+                Részletek
+            </EpistoButton>
 
             {/* start course */}
             <EpistoButton

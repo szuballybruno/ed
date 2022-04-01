@@ -1,4 +1,4 @@
-INSERT INTO public.question
+/* INSERT INTO public.question
 (
     id,
     question_text, 
@@ -215,4 +215,4 @@ VALUES
 
     ('Prequiz q 1 - answer 1', false, 96), 
     ('Prequiz q 2 - answer 2', false, 96), 
-    ('Prequiz q 3 - answer 3', true, 96);
+    ('Prequiz q 3 - answer 3', true, 96); */

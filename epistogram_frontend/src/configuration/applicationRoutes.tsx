@@ -241,6 +241,10 @@ export const applicationRoutes = {
                 title: translatableTexts.routeTitles.administrationCourseStatistics,
                 route: "/administration/courses/:courseId/statistics"
             },
+            courseUserProgressRoute: {
+                title: translatableTexts.routeTitles.administrationCourseUserProgress,
+                route: "/administration/courses/:courseId/userprogress"
+            },
             interactiveCourseRoute: {
                 title: translatableTexts.routeTitles.administrationInteractiveCourse,
                 route: "/administration/courses/:courseId/editinteractive"

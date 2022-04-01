@@ -1,17 +1,15 @@
-import { useContext, useState } from "react";
+import { Flex } from "@chakra-ui/react";
+import { useContext } from "react";
+import { useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useUserListQuery } from "../../../services/api/userApiService";
 import { useNavigation } from "../../../services/core/navigatior";
+import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
+import { EpistoSearch } from "../../controls/EpistoSearch";
 import { ProfileImage } from "../../ProfileImage";
 import { CurrentUserContext } from "../../system/AuthenticationFrame";
-import { LoadingFrame } from "../../system/LoadingFrame";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
-import { EpistoSearch } from "../../controls/EpistoSearch";
-import { useParams } from "react-router-dom";
-import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
-import { Flex } from "@chakra-ui/react";
 
 export const AdminUserList = (props: {
     users: AdminPageUserDTO[],

@@ -8,7 +8,7 @@ import { translatableTexts } from "../../static/translatableTexts";
 import { LoadingFrame } from "../system/LoadingFrame";
 import { EpistoButton } from "../controls/EpistoButton";
 import { EpistoPopper } from "../controls/EpistoPopper";
-import { PersonalityChart } from "./PersonalityChart";
+import { PersonalityChart } from "./charts/PersonalityChart";
 import { EpistoFont } from "../controls/EpistoFont";
 
 export const PersonalityAssessment = (props: FlexProps) => {

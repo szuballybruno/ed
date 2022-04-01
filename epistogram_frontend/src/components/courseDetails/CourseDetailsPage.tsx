@@ -153,31 +153,84 @@ const CourseDetailsPage = () => {
                     </Flex>
 
                     {/* tabs */}
-                    <Box width="100%" mt={30} mb={50}>
+                    <Flex
+                        direction="column"
+                        flex="1"
+                        width="100%"
+                        mt={30}
+                        mb={50}
+                        background="var(--transparentWhite70)"
+                        className="roundBorders mildShadow"
+                        p="20px"
+                        backdropFilter={"blur(7px)"}>
+
 
                         {/* tab button headers */}
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs
+                                className="roundBorders"
+                                TabIndicatorProps={{
+                                    style: {
+                                        display: "none",
+                                    },
+                                }}
+                                sx={{
+                                    "&.MuiTabs-root": {
+                                        //background: "var(--transparentIntenseBlue85)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        height: 45,
+                                        minHeight: 0
+                                    }
+                                }}
                                 value={currentTab}
                                 onChange={(_, y) => setCurrentTab(y as number)}>
 
                                 {tabs
                                     .map((x, index) => <Tab
+                                        sx={{
+                                            "&.MuiTab-root": {
+                                                color: "#444",
+                                                cursor: "pointer",
+                                                backgroundColor: "transparent",
+                                                padding: "6px 16px",
+                                                border: "none",
+                                                borderRadius: "5px",
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                height: "41px",
+                                                minHeight: "0px"
+                                            },
+                                            "&.MuiTouchRipple-root": {
+                                                lineHeight: "0px"
+                                            },
+                                            "&.Mui-selected": {
+                                                color: "#444",
+                                                fontWeight: "bold",
+                                                background: "var(--transparentIntenseTeal)"
+                                            }
+                                        }}
                                         label={x.title}
                                         key={index}
                                         id={`simple-tab-${index}`} />)}
                             </Tabs>
                         </Box>
 
-                        { /* tab contents */}
-                        {tabs
-                            .map((x, index) => <TabPanel
-                                value={currentTab}
-                                index={index}>
+                        <Flex flex="1">
+                            { /* tab contents */}
+                            {tabs
+                                .map((x, index) => <TabPanel
+                                    style={{
+                                        width: "100%"
+                                    }}
+                                    value={currentTab}
+                                    index={index}>
 
-                                {courseDetails && x.component}
-                            </TabPanel>)}
-                    </Box>
+                                    {courseDetails && x.component}
+                                </TabPanel>)}
+                        </Flex>
+                    </Flex>
                 </Flex>
 
                 {/* Right pane */}

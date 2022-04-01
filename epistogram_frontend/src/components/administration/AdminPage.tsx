@@ -36,7 +36,7 @@ export const AdminPage = () => {
         .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
-        .add(administrationRoutes.myCompanyRoute)
+        //.add(administrationRoutes.myCompanyRoute)
         //.addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.overviewTableRoute)
         .getArray();
 

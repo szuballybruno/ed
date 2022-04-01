@@ -3,12 +3,14 @@ import { FiberManualRecord } from "@mui/icons-material"
 import { Slider } from "@mui/material"
 import React, { useState } from "react"
 import ReactPlayer from "react-player"
+import { defaultCharts } from "../../../../static/defaultChartOptions"
+import { iterate } from "../../../../static/frontendHelpers"
 import { EpistoFont } from "../../../controls/EpistoFont"
 import { EpistoSelect } from "../../../controls/EpistoSelect"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
+import { EpistoLineChart } from "../../../universal/charts/EpistoLineChart"
+import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart"
 import { DashboardSection } from "../../../universal/DashboardSection"
-import { VideoHotspotsChart } from "../../../universal/VideoHotspotsChart"
-import { VideoPieChart } from "../../../universal/VideoPieChart"
 
 export const AdminVideoStatisticsModalPage = () => {
 
@@ -314,7 +316,25 @@ export const AdminVideoStatisticsModalPage = () => {
             m="10px 0 0 0"
             w="100%">
 
-            <VideoHotspotsChart />
+            <EpistoLineChart
+                title=""
+                dataset={[
+                    {
+                        name: "Dataset",
+                        data: iterate(300, (index) => {
+                            return [(300 - index), Math.pow(index, 2 + Math.random()) / 1000000]
+                        })
+                    }
+                ]}
+                xAxisLabel="Időpont"
+                yAxisLabel="Felhasználók"
+                options={defaultCharts.simpleLineChart}
+                style={{
+                    height: "350px",
+                    minHeight: 350,
+                    minWidth: 500,
+                    maxWidth: "100%"
+                }} />
         </DashboardSection>
 
         <Grid
@@ -369,8 +389,17 @@ export const AdminVideoStatisticsModalPage = () => {
                 gridColumn="auto / span 2"
                 gridRow="auto / span 2">
 
-
-                <VideoPieChart />
+                <EpistoPieChart
+                    title=""
+                    segments={[
+                        { value: 33, name: 'Végignézi a videót' },
+                        { value: 31, name: '75%-ig nézi meg a videót' },
+                        { value: 27, name: '50%-ig nézi meg a videót' },
+                        { value: 23, name: '25%-ig nézi meg a videót' },
+                        { value: 40, name: '10%-ig nézi meg a videót' }
+                    ]}
+                    isSortValues
+                    options={defaultCharts.redRadiusPie} />
             </DashboardSection>
 
             <StatisticsCard

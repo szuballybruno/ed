@@ -1,27 +1,18 @@
-import { Box, Divider, Flex } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Add } from '@mui/icons-material';
+import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { deleteUserAsync, useEditUserData, useSaveUser, useUserListQuery } from '../../../services/api/userApiService';
+import { ButtonType } from '../../../models/types';
+import { deleteUserAsync, useEditUserData, useSaveUser } from '../../../services/api/userApiService';
+import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { parseIntOrNull } from '../../../static/frontendHelpers';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoLabel } from '../../controls/EpistoLabel';
-import { LoadingFrame } from '../../system/LoadingFrame';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
 import { AdminUserList } from './AdminUserList';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
-import { useNavigation } from '../../../services/core/navigatior';
-import { ButtonType } from '../../../models/types';
-import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import { Add, List } from '@mui/icons-material';
 
 export const AdminEditUserSubpage = (props: {
     users: AdminPageUserDTO[],

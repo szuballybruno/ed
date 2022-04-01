@@ -72,26 +72,26 @@ const useGridColumnDefinitions = (
 
         if (itemType === "exam")
             return {
-                color: "var(--intenseYellow)",
+                color: "var(--deepOrange)",
                 label: "Vizsga"
             }
 
         if (itemType === "video")
             return {
-                color: "var(--epistoTeal)",
-                label: "Video"
+                color: "var(--deepBlue)",
+                label: "Videó"
             }
 
         if (itemType === "pretest")
             return {
                 color: "purple",
-                label: "Elo-vizsga"
+                label: "Szintfelmérő"
             }
 
         if (itemType === "final")
             return {
-                color: "yellow",
-                label: "Zarovizsga"
+                color: "orange",
+                label: "Záróvizsga"
             }
 
         throw new Error("Unexpected type: " + itemType);
@@ -525,7 +525,8 @@ export const AdminCourseContentSubpage = () => {
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute
+                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
                 ]}
                 direction="column"
                 headerButtons={[

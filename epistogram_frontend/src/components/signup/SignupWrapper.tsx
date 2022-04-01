@@ -6,7 +6,6 @@ import { getAssetUrl, hasValue, isString, useIsDesktopView } from "../../static/
 import { EpistoFont } from "../controls/EpistoFont";
 import { EpistoHeader } from "../EpistoHeader";
 import { EpistoButton } from "../controls/EpistoButton";
-import classes from "./signupWrapper.module.scss";
 
 export const SignupWrapper = (props: {
     children?: ReactNode,

@@ -1,18 +1,20 @@
-import { Flex } from '@chakra-ui/react';
 import ReactECharts, { EChartsOption } from 'echarts-for-react';
 import React from "react";
-import wrap from 'word-wrap';
-import { PersonalityChartDataDTO } from '../../shared/dtos/PersonalityChartDataDTO';
-import { translatableTexts } from '../../static/translatableTexts';
 
-export const VideoPieChart = () => {
+export const UserActivityDistributionChart = (props: {
+    title?: string
+}) => {
 
-    const averageGraphColor = "#ffa565";
+
+    /* const averageGraphColor = "#ffa565";
     const userGraphColor = "#97deef";
     const gridColor = "#969fb7";
-    const shadowColor = "rgba(0, 0, 0, .4)";
+    const shadowColor = "rgba(0, 0, 0, .4)"; */
 
     const options = {
+        title: {
+            text: props.title
+        },
         visualMap: {
             show: false,
             min: 80,
@@ -27,12 +29,12 @@ export const VideoPieChart = () => {
                 type: 'pie',
                 radius: '70%',
                 center: ['50%', '50%'],
+                color: ["#FB4D3D", "#03CEA4", "#345995", "#EAC435"],
                 data: [
-                    { value: 335, name: 'Végignézi a videót' },
-                    { value: 310, name: '75%-ig nézi meg a videót' },
-                    { value: 274, name: '50%-ig nézi meg a videót' },
-                    { value: 235, name: '25%-ig nézi meg a videót' },
-                    { value: 400, name: '10%-ig nézi meg a videót' }
+                    { value: 30, name: 'Videók megtekintése', itemStyle: { color: "#FB4D3D" } },
+                    { value: 17, name: 'Vizsga / tesztkitöltés', itemStyle: { color: "#03CEA4" } },
+                    { value: 10, name: 'Kérdések megválaszolása', itemStyle: { color: "#345995" } },
+                    { value: 20, name: 'Nincs tevékenység', itemStyle: { color: "#EAC435" } }
                 ].sort(function (a, b) {
                     return a.value - b.value;
                 }),
@@ -48,10 +50,10 @@ export const VideoPieChart = () => {
                     length: 10,
                     length2: 20
                 },
-                itemStyle: {
-                    color: '#c23531',
+                itemStyle: {/* 
+                    color: ['#c23531', "#c23531", "#c23531"], */
                     shadowBlur: 200,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    shadowColor: 'rgba(0, 0, 0, 0.4)'
                 },
                 animationType: 'scale',
                 animationEasing: 'elasticOut',
@@ -66,7 +68,7 @@ export const VideoPieChart = () => {
     return <ReactECharts
         option={options}
         style={{
-            minWidth: 500,
-            maxWidth: "100%"
+            width: "100%",
+            height: "100%"
         }} />
 }

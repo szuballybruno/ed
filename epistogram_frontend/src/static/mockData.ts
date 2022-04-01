@@ -1,6 +1,4 @@
 import { CurrentTasksDTO } from "../shared/dtos/CurrentTasksDTO";
-import { ShopCategoryDTO } from "../shared/dtos/ShopCategoryDTO";
-import { getAssetUrl } from "./frontendHelpers";
 
 /**
  * Tasks

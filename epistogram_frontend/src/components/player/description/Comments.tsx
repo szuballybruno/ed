@@ -1,73 +1,225 @@
-import { Input } from "@chakra-ui/input";
 import { Flex } from "@chakra-ui/react";
-import { Avatar, Divider, Grid, Paper } from "@mui/material";
+import { AccessTime, ThumbUpAlt } from "@mui/icons-material";
+import { Avatar, Checkbox, Divider } from "@mui/material";
 import React from 'react';
 import { getAssetUrl } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
+import { EpistoFont } from "../../controls/EpistoFont";
 
 const Comments = () => {
     return (
-        <Flex direction={"column"} minH={600}>
-            <Flex width="100%" height={40} mt={5}>
-                <Input
-                    width="100%"
+        <Flex direction={"column"} minH={600} pb="100px">
+            <EpistoFont
+                style={{
+                    margin: "50px 0 10px 0",
+                    fontWeight: "500"
+                }}
+                fontSize={"fontHuge"}>
 
-                    outline="none"
-                    padding="10px"
-                    placeholder="Hozzászólás írása"
-                    border="1px solid var(--mildGrey)"
-                    borderRadius="5px" />
-                <EpistoButton style={{ marginLeft: 10 }} variant={"outlined"}>
-                    Küldés
-                </EpistoButton>
+                {"Kommentek & Kérdések"}
+            </EpistoFont>
+            <Flex direction="column">
+                <Flex p="10px" align="center">
+                    <Flex mr="10px">
+                        <Avatar alt="Szubally Brúnó" src={getAssetUrl("userAvatars/user_avatar_7.png")} />
+                    </Flex>
+                    <Flex flex="1" direction="column">
+                        <EpistoFont>
+                            Szubally Brúnó
+                        </EpistoFont>
+                        <Flex align="center">
+                            <AccessTime style={{
+                                height: 20,
+                                width: 20,
+                                margin: "0 10px 0 0"
+                            }} />
+                            <EpistoFont fontSize="fontSmall">
+                                2022. 03. 28. 10:05
+                            </EpistoFont>
+                        </Flex>
+                    </Flex>
+                    <Flex>
+                        <EpistoButton variant="outlined">
+                            Visszavonás
+                        </EpistoButton>
+                    </Flex>
+                </Flex>
+                <EpistoFont
+                    className="roundBorders mildShadow"
+                    style={{
+                        background: "var(--transparentWhite90)",
+                        padding: "20px"
+                    }}>
+
+                    <p style={{ textAlign: "left", color: "lightgray" }}>
+                        Ide írd a kommentedet/kérdésedet{" "}
+                    </p>
+                </EpistoFont>
+                <Flex justify="space-between" align="center" m="10px 0">
+                    <Flex direction="column">
+                        <Flex align="center">
+                            <Checkbox />
+                            <EpistoFont>
+                                Ez egy kérdés
+                            </EpistoFont>
+                        </Flex>
+                        <Flex align="center">
+                            <Checkbox />
+                            <EpistoFont>
+                                Anoním közzététel
+                            </EpistoFont>
+                        </Flex>
+                    </Flex>
+                    <Flex>
+                        <EpistoButton variant="colored">
+                            Közzététel
+                        </EpistoButton>
+                    </Flex>
+                </Flex>
             </Flex>
-            <Paper style={{ padding: "40px 20px" }}>
-                <Grid container wrap="nowrap" spacing={2}>
-                    <Grid item>
-                        <Avatar alt="Remy Sharp" src={getAssetUrl("userAvatars/user_avatar_2.png")} />
-                    </Grid>
-                    <Grid justifyContent="left" item xs zeroMinWidth>
-                        <h4 style={{ margin: 0, textAlign: "left" }}>Michel Michel</h4>
-                        <p style={{ textAlign: "left" }}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-                            luctus ut est sed faucibus. Duis bibendum ac ex vehicula laoreet.
-                            Suspendisse congue vulputate lobortis. Pellentesque at interdum
-                            tortor. Quisque arcu quam, malesuada vel mauris et, posuere
-                            sagittis ipsum. Aliquam ultricies a ligula nec faucibus. In elit
-                            metus, efficitur lobortis nisi quis, molestie porttitor metus.
-                            Pellentesque et neque risus. Aliquam vulputate, mauris vitae
-                            tincidunt interdum, mauris mi vehicula urna, nec feugiat quam
-                            lectus vitae ex.{" "}
-                        </p>
-                        <p style={{ textAlign: "left", color: "gray" }}>
-                            posted 1 minute ago
-                        </p>
-                    </Grid>
-                </Grid>
-                <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
-                <Grid container wrap="nowrap" spacing={2}>
-                    <Grid item>
-                        <Avatar alt="Remy Sharp" src={getAssetUrl("userAvatars/user_avatar_3.png")} />
-                    </Grid>
-                    <Grid justifyContent="left" item xs zeroMinWidth>
-                        <h4 style={{ margin: 0, textAlign: "left" }}>Michel Michel</h4>
-                        <p style={{ textAlign: "left" }}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-                            luctus ut est sed faucibus. Duis bibendum ac ex vehicula laoreet.
-                            Suspendisse congue vulputate lobortis. Pellentesque at interdum
-                            tortor. Quisque arcu quam, malesuada vel mauris et, posuere
-                            sagittis ipsum. Aliquam ultricies a ligula nec faucibus. In elit
-                            metus, efficitur lobortis nisi quis, molestie porttitor metus.
-                            Pellentesque et neque risus. Aliquam vulputate, mauris vitae
-                            tincidunt interdum, mauris mi vehicula urna, nec feugiat quam
-                            lectus vitae ex.{" "}
-                        </p>
-                        <p style={{ textAlign: "left", color: "gray" }}>
-                            posted 1 minute ago
-                        </p>
-                    </Grid>
-                </Grid>
-            </Paper>
+            <Divider variant="fullWidth" style={{ margin: "10px 0 20px 0" }} />
+            <Flex>
+                <Flex p="20px">
+                    <Avatar alt="Surányi Ildikó" src={getAssetUrl("userAvatars/user_avatar_1.png")} />
+                </Flex>
+                <Flex direction="column">
+                    <Flex justify="space-between" align="center">
+
+                        <h4 style={{ margin: 0, textAlign: "left" }}>Surányi Ildikó</h4>
+                        <EpistoButton className="fontSmall">
+                            <ThumbUpAlt style={{
+                                height: 20,
+                                width: 20,
+                                marginRight: 5
+                            }} />
+                            Tetszik
+                        </EpistoButton>
+                    </Flex>
+                    <p style={{ textAlign: "left" }}>
+                        Nagyon hasznos videó volt! Egy olyan kérdésem lenne, hogy nincs esetleg valamilyen billentyűkombináció arra, hogy gyorsan lehessen oszlopokat elrejteni?
+                        {" "}
+                    </p>
+                    <p style={{ textAlign: "left", color: "gray" }}>
+                        posted 1 minute ago
+                    </p>
+                </Flex>
+            </Flex>
+
+            <Flex pl="20px" mt="30px">
+                <Divider variant="fullWidth" orientation="vertical" />
+                <Flex p="20px">
+                    <Avatar alt="Keresztúri Melinda" src={getAssetUrl("userAvatars/user_avatar_7.png")} />
+                </Flex>
+                <Flex direction="column">
+                    <Flex justify="space-between" align="center">
+
+                        <h4 style={{ margin: 0, textAlign: "left" }}>Keresztúri Melinda</h4>
+                        <EpistoButton className="fontSmall">
+                            <ThumbUpAlt style={{
+                                height: 20,
+                                width: 20,
+                                marginRight: 5
+                            }} />
+                            Tetszik
+                        </EpistoButton>
+                    </Flex>
+                    <p style={{ textAlign: "left" }}>
+                        Én erre a CTRL + 0-t szoktam használni!
+                        {" "}
+                    </p>
+                    <p style={{ textAlign: "left", color: "gray" }}>
+                        posted 1 minute ago
+                    </p>
+                </Flex>
+            </Flex>
+            <Flex pl="20px" mt="30px">
+                <Divider variant="fullWidth" orientation="vertical" />
+                <Flex p="20px">
+                    <Avatar alt="Remy Sharp" src={getAssetUrl("userAvatars/user_avatar_5.png")} />
+                </Flex>
+                <Flex direction="column">
+                    <Flex justify="space-between" align="center">
+
+                        <h4 style={{ margin: 0, textAlign: "left" }}>
+                            Oláh Mihály
+                        </h4>
+                        <EpistoButton className="fontSmall">
+                            <ThumbUpAlt style={{
+                                height: 20,
+                                width: 20,
+                                marginRight: 5
+                            }} />
+                            Tetszik
+                        </EpistoButton>
+                    </Flex>
+                    <p style={{ textAlign: "left" }}>
+                        Pontosan, ahogyan Melinda írja, ha pedig sorokat szeretnél elrejteni, úgy a CTRL + 9 kombinációt ajánlom.
+                        {" "}
+                    </p>
+                    <p style={{ textAlign: "left", color: "gray" }}>
+                        posted 1 minute ago
+                    </p>
+                </Flex>
+            </Flex>
+
+            <Flex mt="30px">
+                <Flex p="20px">
+                    <Avatar alt="Remy Sharp" src={getAssetUrl("userAvatars/user_avatar_3.png")} />
+                </Flex>
+                <Flex direction="column">
+                    <Flex justify="space-between" align="center">
+
+                        <h4 style={{ margin: 0, textAlign: "left" }}>Kiss Andrea</h4>
+                        <EpistoButton className="fontSmall">
+                            <ThumbUpAlt style={{
+                                height: 20,
+                                width: 20,
+                                marginRight: 5
+                            }} />
+                            Tetszik
+                        </EpistoButton>
+                    </Flex>
+                    <p style={{ textAlign: "left" }}>
+                        Sziasztok! Én használtam a fenti kombinációkat, viszont véletlenül olyan oszlopokat is elrejtettem, amiket nem szerettem volna. Hogyan tudom gyorsan visszahozni őket?
+                        A CTRL + Z parancsot próbáltam, viszont közben dolgoztam máson is, így azokat is vissza akarja vonni :(
+                        {" "}
+                    </p>
+                    <p style={{ textAlign: "left", color: "gray" }}>
+                        posted 1 minute ago
+                    </p>
+                </Flex>
+            </Flex>
+
+            <Flex pl="20px" mt="30px">
+                <Divider variant="fullWidth" orientation="vertical" />
+                <Flex p="20px">
+                    <Avatar alt="Remy Sharp" src={getAssetUrl("userAvatars/user_avatar_4.png")} />
+                </Flex>
+                <Flex direction="column">
+                    <Flex justify="space-between" align="center">
+
+                        <h4 style={{ margin: 0, textAlign: "left" }}>
+                            Radeczky Richárd
+                        </h4>
+                        <EpistoButton className="fontSmall">
+                            <ThumbUpAlt style={{
+                                height: 20,
+                                width: 20,
+                                marginRight: 5
+                            }} />
+                            Tetszik
+                        </EpistoButton>
+                    </Flex>
+                    <p style={{ textAlign: "left" }}>
+
+                        Visszahozni (Felfedés) úgy tudod az oszlopokat, hogy egyben (Shift nyíl) kijelölsz az előtte és utána lévő oszlopban is legalább 1-1 cellát, majd megnyomod a Ctrl Shift 8 kombinációt. (Ez Windowson biztosan működik, Mac-en érdemes utána nézni a megfelelő kombinációnak, de ha erre rákeresel, már segíteni fog)
+                        {" "}
+                    </p>
+                    <p style={{ textAlign: "left", color: "gray" }}>
+                        posted 1 minute ago
+                    </p>
+                </Flex>
+            </Flex>
         </Flex>
     )
 };
