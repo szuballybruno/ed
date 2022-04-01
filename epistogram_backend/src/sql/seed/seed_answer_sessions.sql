@@ -1,5 +1,5 @@
 /* Seed answer_sessions */
-INSERT INTO answer_sessions
+INSERT INTO answer_session
     (
         start_date, 
         end_date, 
@@ -9,8 +9,6 @@ INSERT INTO answer_sessions
         user_id
     )
 VALUES
-    (NULL, NULL, 'practise', NULL, NULL, 18),
-    (NULL, NULL, 'practise', NULL, NULL, 19),
     (NULL, NULL, 'practise', NULL, NULL, 11),
     (NULL, NULL, 'practise', NULL, NULL, 17),
     (NULL, NULL, 'practise', NULL, NULL, 12),
