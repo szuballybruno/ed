@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { getRoute } from "../../../MainRouting";
+import { EpistoRoutes } from "../../universal/EpistoRoutes";
 import { AdminCourseContentSubpage } from "./AdminCourseContentSubpage";
 import { AdminCourseUserProgressSubpage } from "./AdminCourseUserProgressSubpage";
 import { AdminInteractiveCourseSubpage } from "./AdminInteractiveCourseSubpage";
@@ -12,16 +12,33 @@ export const CourseAdministartionSubpage = () => {
 
     return (
         <Flex>
-
-            {/* content pane */}
-            {getRoute(applicationRoutes.administrationRoute.coursesRoute, <CourseAdministartionFrame />)}
-            {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
-            {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
-            {getRoute(applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
-            {getRoute(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute, <AdminCourseUserProgressSubpage />)}
-
-            {/* for demo */}
-            {getRoute(applicationRoutes.administrationRoute.coursesRoute.interactiveCourseRoute, <AdminInteractiveCourseSubpage />)}
+            <EpistoRoutes
+                renderRoutes={[
+                    {
+                        route: applicationRoutes.administrationRoute.coursesRoute,
+                        element: <CourseAdministartionFrame />
+                    },
+                    {
+                        route: applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
+                        element: <AdminCourseDetailsSubpage />
+                    },
+                    {
+                        route: applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
+                        element: <AdminCourseContentSubpage />
+                    },
+                    {
+                        route: applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                        element: <CourseStatisticsSubpage />
+                    },
+                    {
+                        route: applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute,
+                        element: <AdminCourseUserProgressSubpage />
+                    },
+                    {
+                        route: applicationRoutes.administrationRoute.coursesRoute.interactiveCourseRoute,
+                        element: <AdminInteractiveCourseSubpage />
+                    }
+                ]} />
         </Flex>
     );
 };

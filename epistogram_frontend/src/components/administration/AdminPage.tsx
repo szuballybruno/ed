@@ -2,7 +2,6 @@ import { Flex } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { Route } from "react-router-dom";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { getRoute } from "../../MainRouting";
 import { ApplicationRoute } from "../../models/types";
 import { useNavigation } from "../../services/core/navigatior";
 import { ArrayBuilder, getAssetUrl } from "../../static/frontendHelpers";
@@ -10,7 +9,7 @@ import { ContentPane } from "../ContentPane";
 import { NavigationLinkList } from "../NavigationLinkList";
 import { PageRootContainer } from "../PageRootContainer";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { ProtectedRoute } from "../universal/ProtectedRoute";
+import { EpistoRoutes } from "../universal/EpistoRoutes";
 import { CourseAdministartionSubpage } from "./courses/CourseAdministartionSubpage";
 import { AdminHomeDetails } from "./home/AdminHomeDetails";
 import { AdminHomeOverview } from "./home/AdminHomeOverview";
@@ -90,47 +89,81 @@ export const AdminPage = () => {
             noPadding
             px="20px">
 
-            {/* administration home */}
-            {getRoute(administrationRoutes.homeRoute.overviewRoute, <AdminHomeOverview />)}
-            {getRoute(administrationRoutes.homeRoute.detailsRoute, <AdminHomeDetails />)}
+            <EpistoRoutes
+                renderRoutes={[
 
+                    // {/* administration home */ }
+                    {
+                        route: administrationRoutes.homeRoute.overviewRoute,
+                        element: <AdminHomeOverview />
+                    },
+                    {
+                        route: administrationRoutes.homeRoute.detailsRoute,
+                        element: <AdminHomeDetails />
+                    },
 
-            {/* user administration */}
-            <Route path={administrationRoutes.usersRoute.route}>
+                    // user administration
+                    {
+                        route: administrationRoutes.usersRoute,
+                        element: <AdminUserControl />
+                    },
 
-                <AdminUserControl />
-            </Route>
+                    // course administartion
+                    {
+                        route: administrationRoutes.coursesRoute,
+                        element: <CourseAdministartionSubpage />,
+                        protectionLevel: "authorize",
+                        isAuthorizedToView: x => x.canAccessCourseAdministration
+                    },
 
-            {/* course administartion */}
-            <ProtectedRoute
-                route={administrationRoutes.coursesRoute}
-                isAuthorizedToView={x => x.canAccessCourseAdministration}
-                render={() => <CourseAdministartionSubpage />} />
+                    // shop administartion
+                    {
+                        route: administrationRoutes.shopRoute,
+                        element: <EpistoRoutes
+                            renderRoutes={[
+                                {
+                                    route: administrationRoutes.shopRoute,
+                                    element: <ShopAdminSubpage />
+                                },
+                                {
+                                    route: administrationRoutes.shopRoute.editRoute,
+                                    element: <ShopAdminEditSubpage />
+                                }
+                            ]} />,
+                        protectionLevel: "authorize",
+                        isAuthorizedToView: x => x.canAccessShopAdministration
+                    },
 
-            {/* shop administartion */}
-            <ProtectedRoute
-                route={administrationRoutes.shopRoute}
-                isAuthorizedToView={x => x.canAccessShopAdministration}
-                render={() => <>
-                    {getRoute(administrationRoutes.shopRoute, <ShopAdminSubpage />)}
-                    {getRoute(administrationRoutes.shopRoute.editRoute, <ShopAdminEditSubpage />)}
-                </>} />
+                    // personality assessment administartion
+                    {
+                        route: administrationRoutes.shopRoute,
+                        element: <EpistoRoutes
+                            renderRoutes={[
+                                {
+                                    route: administrationRoutes.personalityAssessmentRoute,
+                                    element: <PersonalityTraitCategoriesSubpage />
+                                },
+                                {
+                                    route: administrationRoutes.personalityAssessmentRoute.editTips,
+                                    element: <EditPersonalityTraitCategorySubpage />
+                                },
+                                {
+                                    route: administrationRoutes.personalityAssessmentRoute.editTips.editTip,
+                                    element: <EditDailyTipSubpage />
+                                }
+                            ]} />,
+                        protectionLevel: "authorize",
+                        isAuthorizedToView: x => x.canAccessShopAdministration
+                    },
 
-            {/* personality assessment administartion */}
-            <ProtectedRoute
-                route={administrationRoutes.personalityAssessmentRoute}
-                isAuthorizedToView={x => x.canAccessShopAdministration}
-                render={() => <>
-                    {getRoute(administrationRoutes.personalityAssessmentRoute, <PersonalityTraitCategoriesSubpage />)}
-                    {getRoute(administrationRoutes.personalityAssessmentRoute.editTips, <EditPersonalityTraitCategorySubpage />)}
-                    {getRoute(administrationRoutes.personalityAssessmentRoute.editTips.editTip, <EditDailyTipSubpage />)}
-                </>} />
-
-            {/* statistics */}
-            <Route
-                path={administrationRoutes.myCompanyRoute.route}>
-                <AdminStatistics />
-            </Route>
+                    // statistics
+                    {
+                        route: administrationRoutes.myCompanyRoute,
+                        element: <AdminStatistics/>,
+                        protectionLevel: "authorize",
+                        isAuthorizedToView: x => x.canAccessShopAdministration
+                    }
+                ]} />
 
             {/* Disabled temporarily */}
             {/* <ProtectedRoute

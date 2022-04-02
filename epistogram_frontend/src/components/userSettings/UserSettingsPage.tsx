@@ -1,11 +1,11 @@
 import { Flex } from "@chakra-ui/layout";
 import React from "react";
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { getRoute } from "../../MainRouting";
 import { ContentPane } from "../ContentPane";
 import { LeftPane } from "../LeftPane";
 import { NavigationLinkList } from "../NavigationLinkList";
 import { PageRootContainer } from "../PageRootContainer";
+import { EpistoRoutes } from "../universal/EpistoRoutes";
 import { CoinTransactions } from "./CoinTransactions";
 import { Preferences } from "./Preferences";
 
@@ -40,11 +40,25 @@ export const UserSettingsPage = () => {
         </LeftPane>
 
         <ContentPane>
-
-            {getRoute(applicationRoutes.settingsRoute.preferencesRoute, <Preferences />)}
-            {getRoute(applicationRoutes.settingsRoute.coinTransactionsRoute, <CoinTransactions />)}
-            {getRoute(applicationRoutes.settingsRoute.featurePreviewRoute, <FeaturePreview />)}
-            {getRoute(applicationRoutes.settingsRoute.developmentNotes, <DevelopmentNotes />)}
+            <EpistoRoutes
+                renderRoutes={[
+                    {
+                        route: applicationRoutes.settingsRoute.preferencesRoute,
+                        element: <Preferences />,
+                    },
+                    {
+                        route: applicationRoutes.settingsRoute.coinTransactionsRoute,
+                        element: <CoinTransactions />,
+                    },
+                    {
+                        route: applicationRoutes.settingsRoute.featurePreviewRoute,
+                        element: <FeaturePreview />,
+                    },
+                    {
+                        route: applicationRoutes.settingsRoute.developmentNotes,
+                        element: <DevelopmentNotes />,
+                    }
+                ]} />
         </ContentPane>
     </PageRootContainer>;
 };

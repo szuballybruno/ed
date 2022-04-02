@@ -76,7 +76,7 @@ const app = (
 
                                         // under maintanance 
                                         .addIf(isUnderMaintenance, {
-                                            element: UnderMaintanence,
+                                            element: <UnderMaintanence/>,
                                             route: { route: "*", title: "Maintanance mode" }
                                         })
                                         .addIf(!isUnderMaintenance, {

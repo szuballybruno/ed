@@ -204,7 +204,7 @@ const LoginScreen = () => {
                         <Box width="100%">
 
                             <EpistoEntry
-                                ref={emailRef}
+                                inputRef={emailRef}
                                 labelVariant="top"
                                 label="E-mail"
                                 placeholder="E-mail"
@@ -212,7 +212,7 @@ const LoginScreen = () => {
                                 setValue={handleValidation} />
 
                             <EpistoEntry
-                                ref={pwRef}
+                                inputRef={pwRef}
                                 labelVariant="top"
                                 label="Jelszó"
                                 placeholder="Jelszó"

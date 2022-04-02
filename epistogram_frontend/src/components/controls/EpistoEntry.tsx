@@ -27,7 +27,7 @@ export type EpistoEntryPropsType<TValue extends number | string | null> = {
     transparentBackground?: boolean
 }
 
-export const EpistoEntry = <TValue extends number | string | null,>(props: EpistoEntryPropsType<TValue> & { ref?: Ref<HTMLInputElement> }) => {
+export const EpistoEntry = <TValue extends number | string | null,>(props: EpistoEntryPropsType<TValue> & { inputRef?: Ref<HTMLInputElement> }) => {
 
     const {
         label,
@@ -49,7 +49,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
         setError,
         isMandatory,
         transparentBackground,
-        ref
+        inputRef: ref
     } = props;
 
     const [currentValue, setCurrentValue] = useState<TValue>(value ? value as any : "");

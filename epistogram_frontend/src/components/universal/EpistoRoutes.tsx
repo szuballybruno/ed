@@ -8,7 +8,7 @@ import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext
 export type RenderRoute = {
     element: JSX.Element;
     route: ApplicationRoute;
-    protectionLevel: RouteProtectionLevelType;
+    protectionLevel?: RouteProtectionLevelType;
     isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean;
 }
 
@@ -18,11 +18,12 @@ const verboseLogging = true;
 
 const RouteRenderer = (props: {
     children: JSX.Element,
-    isAuthorizedToView: (userActivity: UserActivityDTO) => boolean,
-    protectionLevel: RouteProtectionLevelType;
+    isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean,
+    protectionLevel?: RouteProtectionLevelType;
 }): JSX.Element => {
 
-    const { children, isAuthorizedToView, protectionLevel } = props;
+    const { children, isAuthorizedToView, protectionLevel: pl } = props;
+    const protectionLevel = pl ?? "open";
 
     const authState = useContext(AuthenticationStateContext);
     const refetchUserAsync = useContext(RefetchUserAsyncContext);

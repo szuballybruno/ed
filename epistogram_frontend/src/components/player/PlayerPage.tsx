@@ -1,7 +1,7 @@
 import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { getRoute } from "../../MainRouting";
 import { ContentPane } from "../ContentPane";
 import { PageRootContainer } from "../PageRootContainer";
+import { EpistoRoutes } from "../universal/EpistoRoutes";
 import { CourseOverviewSubpage } from "./courseOverview/CourseOverviewSubpage";
 import { CourseRatingSubpage } from "./courseRating/CourseRatingSubpage";
 import { PrequizSubpage } from "./prequiz/PrequizSubpage";
@@ -24,12 +24,33 @@ export const PlayerPage = () => {
                 isMinimalMode
                 showLogo>
 
-                {getRoute(applicationRoutes.playerRoute.prequizRoute, <PrequizSubpage />)}
-                {getRoute(applicationRoutes.playerRoute.pretestRoute, <PretestSubpage />)}
-                {getRoute(applicationRoutes.playerRoute.pretestResultsRoute, <PretestResultsSubpage />)}
-                {getRoute(applicationRoutes.playerRoute.watchRoute, <WatchSubpage />)}
-                {getRoute(applicationRoutes.playerRoute.courseRatingRoute, <CourseRatingSubpage />)}
-                {getRoute(applicationRoutes.playerRoute.courseOverviewRoute, <CourseOverviewSubpage />)}
+                <EpistoRoutes
+                    renderRoutes={[
+                        {
+                            route: applicationRoutes.playerRoute.prequizRoute,
+                            element: <PrequizSubpage />
+                        },
+                        {
+                            route: applicationRoutes.playerRoute.pretestRoute,
+                            element: <PretestSubpage />
+                        },
+                        {
+                            route: applicationRoutes.playerRoute.pretestResultsRoute,
+                            element: <PretestResultsSubpage />
+                        },
+                        {
+                            route: applicationRoutes.playerRoute.watchRoute,
+                            element: <WatchSubpage />
+                        },
+                        {
+                            route: applicationRoutes.playerRoute.courseRatingRoute,
+                            element: <CourseRatingSubpage />
+                        },
+                        {
+                            route: applicationRoutes.playerRoute.courseOverviewRoute,
+                            element: <CourseOverviewSubpage />
+                        }
+                    ]} />
             </ContentPane>
         </PageRootContainer >
     );
